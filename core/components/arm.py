@@ -10,7 +10,7 @@ class ArmComponent(BaseComponent):
     def __init__(self, name, side="M", parent=None):
         super(ArmComponent, self).__init__(name, side=side, parent=parent)
 
-        self.positions = [None,None,None]
+        self.positions = [Vec3(5.0, 20.0, 0.0), Vec3(8.535533905932736, 16.46446609406726, -2.5), Vec3(12.071067811865474, 12.92893218813452, 0.0)]
         self.componentXfo = Xfo()
         self.upVXfo = Xfo()
         self.boneData = {
@@ -269,34 +269,36 @@ class ArmComponent(BaseComponent):
 
         super(ArmComponent, self)._build()
 
-       # ====================
+        # ====================
         # Calculate positions
         # ====================
         self.getComponentXfo()
         self.getUpVXfo()
         self.getBoneData()
 
-        # =================
-        # Find Hierarchies
-        # =================
-        ioHrc = self.findChild("arm_io_hrc")
-        ctrlHrc = self.findChild("arm_ctrl_hrc")
-        armatureHrc = self.findChild("arm_armature_hrc")
+
+        # ===================
+        # Create Hierarchies
+        # ===================
+        armatureLayer = self.addLayer("armature")
+        ctrlLayer = self.addLayer("controls")
+        ioLayer = self.addLayer("io")
+
 
         # ============
         # Setup Ctrls
         # ============
 
         # Setup Attributes
-        ioHrc.addAttributeGroup("DisplayInfo_Arm_Settings")
-        ioHrc.attributes["DisplayInfo_Arm_Settings"] = self.attributes["default"]
+        ioLayer.addAttributeGroup("DisplayInfo_Arm_Settings")
+        ioLayer.attributes["DisplayInfo_Arm_Settings"] = self.attributes["default"]
 
         # Creat Inputs
-        clavicleKineIn = elements.Null("_".join(["arm", self.side, "clavicle_kineIn"]), parent=ioHrc)
+        clavicleKineIn = elements.Null("_".join(["arm", self.side, "clavicle_kineIn"]), parent=ioLayer)
         clavicleKineIn.setGlobalTranslation(self.positions[0])
 
         # Create Controls
-        ikHandleZero = elements.Group("_".join(["arm", self.side, "ikHandle_ctrl_zero"]), parent=ctrlHrc)
+        ikHandleZero = elements.Group("_".join(["arm", self.side, "ikHandle_ctrl_zero"]), parent=ctrlLayer)
         ikHandleZero.setLocalTranslation(self.boneData["wrist"]["xfo"].tr)
 
         ikHandleCtrl = elements.Control("_".join(["arm", self.side, "ikHandle_ctrl"]), "pin", parent=ikHandleZero)
@@ -305,7 +307,7 @@ class ArmComponent(BaseComponent):
         ikHandleCtrl.rotOffset = [-90,0,0]
         ikHandleCtrl.sclOffset = [1.5,1.5,1.5]
 
-        upVZero = elements.Group("_".join(["arm", self.side, "upV_ctrl_zero"]), parent=ctrlHrc)
+        upVZero = elements.Group("_".join(["arm", self.side, "upV_ctrl_zero"]), parent=ctrlLayer)
         upVZero.setLocalTranslation(self.upVXfo.tr)
 
         upVCtrl = elements.Control("_".join(["arm", self.side, "upV_ctrl"]), "triangle", parent=upVZero)
@@ -314,7 +316,7 @@ class ArmComponent(BaseComponent):
         upVCtrl.rotOffset = [0,-90,0]
         upVCtrl.posOffset = [0,0,-1]
 
-        bicepFKZero = elements.Group("_".join(["arm", self.side, "bicepFK_ctrl_zero"]), parent=ctrlHrc)
+        bicepFKZero = elements.Group("_".join(["arm", self.side, "bicepFK_ctrl_zero"]), parent=ctrlLayer)
         bicepFKZero.setLocalTranslation(self.boneData["bicep"]["xfo"].tr)
         bicepFKZero.setGlobalRotation(self.boneData["bicep"]["xfo"].rot)
 
@@ -333,15 +335,15 @@ class ArmComponent(BaseComponent):
         forearmFKCtrl.sclOffset = [self.boneData["forearm"]["length"] * self.sideScale,1,1]
 
         # Setup SRTs
-        bicepKineOut = elements.Null("_".join(["arm", self.side, "bicep_kineOut"]), parent=ioHrc)
+        bicepKineOut = elements.Null("_".join(["arm", self.side, "bicep_kineOut"]), parent=ioLayer)
         bicepKineOut.setLocalTranslation(self.boneData["bicep"]["xfo"].tr)
         bicepKineOut.setGlobalRotation(self.boneData["bicep"]["xfo"].rot)
 
-        forearmKineOut = elements.Null("_".join(["arm", self.side, "forearm_kineOut"]), parent=ioHrc)
+        forearmKineOut = elements.Null("_".join(["arm", self.side, "forearm_kineOut"]), parent=ioLayer)
         forearmKineOut.setLocalTranslation(self.boneData["forearm"]["xfo"].tr)
         forearmKineOut.setGlobalRotation(self.boneData["forearm"]["xfo"].rot)
 
-        wristKineOut = elements.Null("_".join(["arm", self.side, "wrist_kineOut"]), parent=ioHrc)
+        wristKineOut = elements.Null("_".join(["arm", self.side, "wrist_kineOut"]), parent=ioLayer)
         wristKineOut.setLocalTranslation(self.boneData["wrist"]["xfo"].tr)
         wristKineOut.setGlobalRotation(self.boneData["wrist"]["xfo"].rot)
 
@@ -350,17 +352,17 @@ class ArmComponent(BaseComponent):
         # ===============
 
         # Setup Joints
-        bicepJnt = elements.Joint("_".join(["arm", self.side, "bicep_jnt"]), parent=armatureHrc)
+        bicepJnt = elements.Joint("_".join(["arm", self.side, "bicep_jnt"]), parent=armatureLayer)
         bicepJnt.setLocalTranslation(Vec3(0,0,0))
         bicepJnt.setGlobalRotation(self.boneData["bicep"]["xfo"].rot)
         bicepJnt.addConstraint("bicepJntToKineOut", "pose", [bicepKineOut])
 
-        forearmJnt = elements.Joint("_".join(["arm", self.side, "forearm_jnt"]), parent=armatureHrc)
+        forearmJnt = elements.Joint("_".join(["arm", self.side, "forearm_jnt"]), parent=armatureLayer)
         forearmJnt.setLocalTranslation(Vec3(4,0,-3))
         forearmJnt.setGlobalRotation(self.boneData["forearm"]["xfo"].rot)
         forearmJnt.addConstraint("forearmJntToKineOut", "pose", [forearmKineOut])
 
-        wristJnt = elements.Joint("_".join(["arm", self.side, "wrist_jnt"]), parent=armatureHrc)
+        wristJnt = elements.Joint("_".join(["arm", self.side, "wrist_jnt"]), parent=armatureLayer)
         wristJnt.setLocalTranslation(Vec3(8,0,0))
         wristJnt.setGlobalRotation(self.boneData["wrist"]["xfo"].rot)
         wristJnt.addConstraint("wristJntToKineOut", "pose", [wristKineOut])
@@ -371,16 +373,3 @@ class ArmComponent(BaseComponent):
     def _postBuild(self):
 
         super(ArmComponent, self)._postBuild()
-
-
-    def buildDef(self):
-        """Builds the Rig Definition and stores to rigDef attribute.
-
-        Return:
-        Dictionary of object data.
-        """
-
-        for eachChild in self.children:
-            self.definition["components"][eachChild] = component.buildDefinition()
-
-        return self.definition

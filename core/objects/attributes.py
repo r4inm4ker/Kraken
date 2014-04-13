@@ -13,18 +13,42 @@ StringAttribute - String Attribute.
 class Attribute(object):
     """Base Attribute object."""
 
-    def __init__(self, name, attrType, value):
+    __kType__ = "Attribute"
+
+    def __init__(self, name, value):
         super(Attribute, self).__init__()
         self.name = name
-        self.attrType = attrType
         self.value = value
+        self.definition = {}
+
+
+    def buildDef(self):
+        """Builds the object's definition and stores to definition attribute.
+
+        Return:
+        Dictionary of object data.
+        """
+
+        self.definition["name"] = self.name
+        self.definition["value"] = self.value
+        self.definition["type"] = self.__kType__
+
+        if hasattr(self, "min"):
+            self.definition["min"] = self.min
+
+        if hasattr(self, "max"):
+            self.definition["max"] = self.min
+
+        return self.definition
 
 
 class BoolAttribute(Attribute):
     """Boolean Attribute. Implemented value type checking and limiting."""
 
+    __kType__ = "BooleanAttribute"
+
     def __init__(self, name, value):
-        super(BoolAttribute, self).__init__(name, "bool", value)
+        super(BoolAttribute, self).__init__(name, value)
         assert type(value) is bool, "Value is not of type 'bool'."
 
 
@@ -46,8 +70,10 @@ class BoolAttribute(Attribute):
 class FloatAttribute(Attribute):
     """Float Attribute. Implemented value type checking and limiting."""
 
+    __kType__ = "FloatAttribute"
+
     def __init__(self, name, value, minValue, maxValue):
-        super(FloatAttribute, self).__init__(name, "float", value)
+        super(FloatAttribute, self).__init__(name, value)
         self.min = minValue
         self.max = maxValue
 
@@ -79,8 +105,10 @@ class FloatAttribute(Attribute):
 class IntegerAttribute(Attribute):
     """Float Attribute. Implemented value type checking and limiting."""
 
+    __kType__ = "IntegerAttribute"
+
     def __init__(self, name, value, minValue, maxValue):
-        super(IntegerAttribute, self).__init__(name, "int", value)
+        super(IntegerAttribute, self).__init__(name, value)
         self.min = minValue
         self.max = maxValue
 
@@ -112,8 +140,10 @@ class IntegerAttribute(Attribute):
 class StringAttribute(Attribute):
     """String Attribute. Implemented value type checking."""
 
+    __kType__ = "StringAttribute"
+
     def __init__(self, name, value):
-        super(StringAttribute, self).__init__(name, "string", value)
+        super(StringAttribute, self).__init__(name, value)
         assert type(value) is str, "Value is not of type 'string'."
 
 

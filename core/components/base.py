@@ -9,6 +9,7 @@ import json
 
 from kraken.core.maths import *
 from kraken.core.objects import elements
+from kraken.core.objects import layers
 
 
 class BaseComponent(elements.SceneObject):
@@ -31,8 +32,12 @@ class BaseComponent(elements.SceneObject):
         self.side = side
         self.sideScale = 1.0
         self.ctrlColor = "green"
-        self.layer = None
+        self.layers = {}
         self.spliceOps = {}
+        self.definition = {
+                           "layers":{},
+                           "io":{}
+                          }
 
 
     # ===================
@@ -50,6 +55,26 @@ class BaseComponent(elements.SceneObject):
         self._side = value
 
     side = property(getSide, setSide)
+
+
+    # ================
+    # Layer Functions
+    # ================
+    def addLayer(self, layerName):
+        """Adds a layer to the component.
+
+        Arguments:
+        layerName -- String, name of the layer.
+
+        Return:
+        New layer.
+
+        """
+
+        newLayer = layers.Layer(layerName, self)
+        self.layers[layerName] = newLayer
+
+        return newLayer
 
 
     # ======================
@@ -124,3 +149,18 @@ class BaseComponent(elements.SceneObject):
             self.ctrlColor = "red"
 
         return True
+
+
+    def buildDef(self):
+        """Builds the Rig Definition and stores to definition attribute.
+
+        Return:
+        Dictionary of object data.
+        """
+
+        self.build()
+
+        for eachLayer in self.layers:
+            self.definition["layers"][eachLayer] = self.layers[eachLayer].buildDef()
+
+        return self.definition

@@ -28,7 +28,7 @@ class Container(object):
         component -- Component to add to this container.
 
         Return:
-        Component that was added to the container.
+        True if added successfully.
         """
 
         if component.name in self.components.keys():
@@ -38,7 +38,7 @@ class Container(object):
         self.components[component.name] = component
         component.container = self
 
-        return component
+        return True
 
 
     def removeComponent(self, componentName):
@@ -67,13 +67,13 @@ class Container(object):
     # Build Functions
     # ================
     def buildDef(self):
-        """Builds the Rig Definition and stores to rigDef attribute.
+        """Builds the Rig Definition and stores to definition attribute.
 
         Return:
         Dictionary of object data.
         """
 
         for eachComponent in self.components:
-            self.definition["components"][eachComponent] = component.buildDefinition()
+            self.definition["components"][eachComponent] = self.components[eachComponent].buildDef()
 
         return self.definition

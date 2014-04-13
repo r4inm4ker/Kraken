@@ -15,13 +15,14 @@ from kraken.core.maths import matrix
 class Xfo(object):
     """Transform object."""
 
-    def __init__(self, scl=None, rot=None, tr=None):
+    def __init__(self, scl=None, rot=None, tr=None, ro=0):
         super(Xfo, self).__init__()
         self.scl = vec.Vec3(1,1,1)
         self.rot = rotation.Quat()
         self.tr = vec.Vec3()
+        self.ro = 0
 
-        self.set(scl=scl, rot=rot, tr=tr)
+        self.set(scl=scl, rot=rot, tr=tr, ro=ro)
 
 
     def __str__(self):
@@ -48,7 +49,7 @@ class Xfo(object):
         return self
 
 
-    def set(self, scl=None, rot=None, tr=None):
+    def set(self, scl=None, rot=None, tr=None, ro=0):
         """Sets values of the transform.
 
         Return:
@@ -77,6 +78,7 @@ class Xfo(object):
         self.scl.set(scl.x, scl.y, scl.z)
         self.rot.set(rot.v, rot.w)
         self.tr.set(tr.x, tr.y, tr.z)
+        self.ro = ro
 
         return self
 

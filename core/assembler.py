@@ -78,11 +78,3 @@ class Assembler(object):
         self.definition["definition"] = self.container.buildDef()
 
         return self.definition
-
-
-from kraken.core.objects.containers import *
-
-assembler = Assembler()
-container = Container("MyContainer")
-assembler.container = container
-print json.dumps(assembler.buildDef())

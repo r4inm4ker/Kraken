@@ -36,7 +36,6 @@ class SceneObject(object):
         """
 
         super(SceneObject, self).__init__()
-        self.description = None
         self.name = name
         self.parent = parent
         self.layer = None
@@ -48,6 +47,7 @@ class SceneObject(object):
         self.attributes["default"] = OrderedDict()
         self.xfo = xfo.Xfo()
         self.constraints = OrderedDict()
+        self.definition = {}
 
         if parent:
             parent.addChild(self)
@@ -451,13 +451,13 @@ class SceneObject(object):
             raise KeyError(name + " is already a constraint on object: " + self.name)
 
         if constraintType == "scale":
-            newConstraint = constraints.ScaleConstraint(name, constraintType, constrainers)
+            newConstraint = constraints.ScaleConstraint(name, constrainers)
         elif constraintType == "orientation":
-            newConstraint = constraints.OrientationConstraint(name, constraintType, constrainers)
+            newConstraint = constraints.OrientationConstraint(name, constrainers)
         elif constraintType == "position":
-            newConstraint = constraints.PositionConstraint(name, constraintType, constrainers)
+            newConstraint = constraints.PositionConstraint(name, constrainers)
         elif constraintType == "pose":
-            newConstraint = constraints.PoseConstraint(name, constraintType, constrainers)
+            newConstraint = constraints.PoseConstraint(name, constrainers)
         else:
             raise ValueError("Invalid constraint type: " + constraintType)
 
@@ -524,12 +524,12 @@ class SceneObject(object):
 
 
     def _build(self):
-        """Builds element description.
+        """Builds element definition.
 
         Implement in sub-classes.
 
         Return:
-        Description of the element.
+        definition of the element.
 
         """
 
@@ -540,7 +540,7 @@ class SceneObject(object):
         """Method sequence to build the element's desription.
 
         Return:
-        self.description
+        self.definition
 
         """
 
@@ -548,7 +548,7 @@ class SceneObject(object):
         self._build()
         self._postBuild()
 
-        return self.description
+        return self.definition
 
 
     def _postBuild(self):
@@ -765,7 +765,25 @@ class SceneObject(object):
         Dictionary of object data.
         """
 
-        pass
+        self.build()
+
+        self.definition["type"] = self.__kType__
+
+        if self.parent is not None and self.parent.__kType__ != "Layer":
+            self.definition["parent"] = self.parent.name
+
+        if self.layer is not None:
+            self.definition["layer"] = self.layer.name
+
+        self.definition["attributes"] = self.attributes
+        self.definition["xfo"] = {
+                                  "scl":self.xfo.scl.toArray(),
+                                  "rot":[self.xfo.rot.v.toArray(),self.xfo.rot.w],
+                                  "tr":self.xfo.tr.toArray(),
+                                  "ro":self.xfo.ro
+                                 }
+
+        return self.definition
 
 
 class Group(SceneObject):
@@ -799,13 +817,13 @@ class Group(SceneObject):
 
 
     def build(self):
-        """Build element's description."""
+        """Build element's definition."""
 
         self._preBuild()
         self._build()
         self._postBuild()
 
-        return self.description
+        return self.definition
 
 
     def _postBuild(self):
@@ -847,13 +865,13 @@ class Null(SceneObject):
 
 
     def build(self):
-        """Build element's description."""
+        """Build element's definition."""
 
         self._preBuild()
         self._build()
         self._postBuild()
 
-        return self.description
+        return self.definition
 
 
     def _postBuild(self):
@@ -1101,13 +1119,13 @@ class Control(SceneObject):
 
 
     def build(self):
-        """Build element's description."""
+        """Build element's definition."""
 
         self._preBuild()
         self._build()
         self._postBuild()
 
-        return self.description
+        return self.definition
 
 
     def _postBuild(self):
@@ -1151,13 +1169,13 @@ class Chain(SceneObject):
 
 
     def build(self):
-        """Build element's description."""
+        """Build element's definition."""
 
         self._preBuild()
         self._build()
         self._postBuild()
 
-        return self.description
+        return self.definition
 
 
     def _postBuild(self):
@@ -1199,78 +1217,18 @@ class Joint(SceneObject):
 
 
     def build(self):
-        """Build element's description."""
+        """Build element's definition."""
 
         self._preBuild()
         self._build()
         self._postBuild()
 
-        return self.description
+        return self.definition
 
 
     def _postBuild(self):
         """Post-build operations."""
 
         super(Joint, self)._postBuild()
-
-        return True
-
-
-class Asset(SceneObject):
-    """Asset object."""
-
-    __kType__ = "Asset"
-
-    def __init__(self, name, parent=None):
-        """Initializes Asset / namespace object.
-
-        Arguments:
-        name -- String, Name of Asset object.
-
-        Keyword Arguments:
-        parent -- Object, Parent object to create object under.
-
-        """
-
-        super(Asset, self).__init__(name, parent=parent)
-        self.groups = {}
-
-
-    # =================
-    # Build operations
-    # =================
-    def _preBuild(self):
-        """Pre-build operations."""
-
-        super(Asset, self)._preBuild()
-
-        return True
-
-
-    def _build(self):
-        """Builds element in Softimage
-
-        Return:
-        True if successful.
-
-        """
-
-        return True
-
-
-    def build(self):
-        """Build element's description."""
-
-        self._preBuild()
-        self._build()
-        self._postBuild()
-
-        return self.description
-
-
-    def _postBuild(self):
-        """Post-build operations."""
-
-        super(Asset, self)._postBuild()
 
         return True
