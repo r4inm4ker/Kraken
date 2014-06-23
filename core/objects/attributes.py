@@ -13,64 +13,47 @@ StringAttribute - String Attribute.
 class Attribute(object):
     """Base Attribute object."""
 
-    __kType__ = "Attribute"
-
     def __init__(self, name, value):
         super(Attribute, self).__init__()
         self.name = name
         self.value = value
-        self.definition = {}
 
 
-    def buildDef(self):
-        """Builds the object's definition and stores to definition attribute.
+    def getName(self):
+        return self.name
 
-        Return:
-        Dictionary of object data.
-        """
 
-        self.definition["name"] = self.name
-        self.definition["value"] = self.value
-        self.definition["type"] = self.__kType__
+    def getValue(self):
+        return self.value
 
-        if hasattr(self, "min"):
-            self.definition["min"] = self.min
+    def setValue(self, value):
+        self.value = value
 
-        if hasattr(self, "max"):
-            self.definition["max"] = self.min
-
-        return self.definition
+        return True
 
 
 class BoolAttribute(Attribute):
     """Boolean Attribute. Implemented value type checking and limiting."""
-
-    __kType__ = "BooleanAttribute"
 
     def __init__(self, name, value):
         super(BoolAttribute, self).__init__(name, value)
         assert type(value) is bool, "Value is not of type 'bool'."
 
 
-    def __setattr__(self, key, value):
+    def setValue(self, value):
         """Ensures 'value' attribute is correct type and within min and max range."""
 
-        if not self.__dict__.has_key(key):
-            super(BoolAttribute, self).__setattr__(key, value)
-        elif self.__dict__.has_key(key):
-            if key == "value":
-                if type(value) is not bool:
-                    raise TypeError("Value is not of type 'bool'.")
-            else:
-                super(BoolAttribute, self).__setattr__(key, value)
-        else:
-            self.__setitem__(key, value)
+        if type(value) is not bool:
+            raise TypeError("Value is not of type 'bool'.")
+
+        super(BoolAttribute, self).setValue(value)
+
+
+        return True
 
 
 class FloatAttribute(Attribute):
     """Float Attribute. Implemented value type checking and limiting."""
-
-    __kType__ = "FloatAttribute"
 
     def __init__(self, name, value, minValue, maxValue):
         super(FloatAttribute, self).__init__(name, value)
@@ -82,30 +65,24 @@ class FloatAttribute(Attribute):
         assert self.value <= self.max, "Value is greater than attribute maximum."
 
 
-    def __setattr__(self, key, value):
+    def setValue(self, value):
         """Ensures 'value' attribute is correct type and within min and max range."""
 
-        if not self.__dict__.has_key(key):
-            super(FloatAttribute, self).__setattr__(key, value)
-        elif self.__dict__.has_key(key):
-            if key == "value":
-                if type(value) not in (int, float):
-                    raise TypeError("Value is not of type 'int' or 'float'.")
+        if type(value) not in (int, float):
+            raise TypeError("Value is not of type 'int' or 'float'.")
 
-                if value < self.min:
-                    raise ValueError("Value is less than attribute minimum.")
-                elif value > self.max:
-                    raise ValueError("Value is greater than attribute maximum.")
-            else:
-                super(FloatAttribute, self).__setattr__(key, value)
-        else:
-            self.__setitem__(key, value)
+        if value < self.min:
+            raise ValueError("Value is less than attribute minimum.")
+        elif value > self.max:
+            raise ValueError("Value is greater than attribute maximum.")
+
+        super(FloatAttribute, self).setValue(value)
+
+        return True
 
 
 class IntegerAttribute(Attribute):
     """Float Attribute. Implemented value type checking and limiting."""
-
-    __kType__ = "IntegerAttribute"
 
     def __init__(self, name, value, minValue, maxValue):
         super(IntegerAttribute, self).__init__(name, value)
@@ -117,46 +94,35 @@ class IntegerAttribute(Attribute):
         assert self.value <= self.max, "Value is greater than attribute maximum."
 
 
-    def __setattr__(self, key, value):
+    def setValue(self, value):
         """Ensures 'value' attribute is correct type and within min and max range."""
 
-        if not self.__dict__.has_key(key):
-            super(IntegerAttribute, self).__setattr__(key, value)
-        elif self.__dict__.has_key(key):
-            if key == "value":
-                if type(value) is not int:
-                    raise TypeError("Value is not of type 'int'.")
+        if type(value) not in (int):
+            raise TypeError("Value is not of type 'int'.")
 
-                if value < self.min:
-                    raise ValueError("Value is less than attribute minimum.")
-                elif value > self.max:
-                    raise ValueError("Value is greater than attribute maximum.")
-            else:
-                super(IntegerAttribute, self).__setattr__(key, value)
-        else:
-            self.__setitem__(key, value)
+        if value < self.min:
+            raise ValueError("Value is less than attribute minimum.")
+        elif value > self.max:
+            raise ValueError("Value is greater than attribute maximum.")
+
+        super(IntegerAttribute, self).setValue(value)
+
+        return True
 
 
 class StringAttribute(Attribute):
     """String Attribute. Implemented value type checking."""
 
-    __kType__ = "StringAttribute"
-
     def __init__(self, name, value):
         super(StringAttribute, self).__init__(name, value)
         assert type(value) is str, "Value is not of type 'string'."
 
+    def setValue(self, value):
+        """Ensures 'value' attribute is correct type and within min and max range."""
 
-    def __setattr__(self, key, value):
-        """Ensures 'value' attribute is of the correct type."""
+        if type(value) not in (str):
+            raise TypeError("Value is not of type 'str'.")
 
-        if not self.__dict__.has_key(key):
-            super(StringAttribute, self).__setattr__(key, value)
-        elif self.__dict__.has_key(key):
-            if key == "value":
-                if type(value) is not str:
-                    raise TypeError("Value is not of type 'string'.")
-            else:
-                super(StringAttribute, self).__setattr__(key, value)
-        else:
-            self.__setitem__(key, value)
+        super(IntegerAttribute, self).setValue(value)
+
+        return True
