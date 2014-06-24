@@ -1,1 +1,0 @@
-"""Kraken - Softimage - Elements."""
