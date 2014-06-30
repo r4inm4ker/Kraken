@@ -5,6 +5,7 @@ BaseControl - Base Control.
 
 """
 
+from kraken.core.maths import Vec3
 from kraken.core.objects.controls.base_control import BaseControl
 
 
@@ -21,5 +22,4 @@ class SquareControl(BaseControl):
         """
 
         super(SquareControl, self).__init__(name, parent=parent)
-        self.setControlPoints = [[1, 0, -1], [1, 0, 1], [-1, 0, 1], [-1, 0, -1]]
-        self.setClosed(True)
+        self.addCurveSection([Vec3(1, 0, -1), Vec3(1, 0, 1), Vec3(-1, 0, 1), Vec3(-1, 0, -1)], True)

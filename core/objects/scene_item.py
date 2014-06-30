@@ -16,14 +16,22 @@ class SceneItem(object):
         self.name = name
         self.parent = parent
         self.children = []
+        self.flags = {}
         self.attributes = []
         self.xfo = Xfo()
 
 
+    # =============
+    # Name methods
+    # =============
     def getName(self):
         """Returns the name of the object as a string."""
 
         return self.name
+
+
+    def buildName(self):
+        return self.getName()                
 
 
     # ===============
@@ -153,20 +161,48 @@ class SceneItem(object):
         return None
 
 
-    def getChildrenByType(self, type):
+    def getChildrenByType(self, childType):
         """Returns all children that are of the specified type.
 
+        Arguments:
+        childType -- Type, the object type to search for.
+
         Return:
-        Child objects of the specified type.
+        Array of child objects of the specified type.
         None if no objects of specified type are found.
         """
 
-        childrenOfType = None
-
-        # Do magic here
+        childrenOfType = []
+        for eachChild in self.children:
+            if isinstance(eachChild, childType):
+                childrenOfType.append(eachChild)
 
         return childrenOfType
 
+
+    # =============
+    # Flag Methods
+    # =============
+    def setFlag(self, name, value):
+        self.flags[name] = value
+
+        return True
+
+
+    def testFlag(self, name):
+
+        if name in self.flags:
+            return True
+
+        return False
+
+    def clearFlag(self, name):
+
+        if name in self.flags:
+            del self.flags[name]
+            return True
+
+        return False
 
     # ==================
     # Attribute Methods
@@ -183,6 +219,7 @@ class SceneItem(object):
             return False
 
         return True
+
 
     def addAttribute(self, attribute):
         """Adds an attribute to this object.

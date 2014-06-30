@@ -14,9 +14,9 @@ class BaseComponent(SceneItem):
     """Kraken Base Component object."""
 
     def __init__(self, name, parent=None, side='M'):
-        super(Component, self).__init__(name, parent)
+        super(BaseComponent, self).__init__(name, parent)
         self.side = side
-        self.componentXfos = []
+        self.xfos = {}
         self.inputs = []
         self.outputs = []
 
@@ -52,28 +52,28 @@ class BaseComponent(SceneItem):
     # ======================
     # Component Xfo Methods
     # ======================
-    def checkComponentXfoIndex(self, index):
-        """Checks if the supplied index is valid.
+    def hasXfo(self, name):
+        """Checks if the supplied name is valid.
 
         Arguments:
-        index -- Integer, index of the component to return.
+        name -- String, name of the component to return.
 
         Return:
         True if valid.
         """
 
-        if index > len(self.componentXfos):
-            raise IndexError("'" + str(index) + "' is out of the range of 'componentXfos'.")
+        if name not in self.xfos.keys():
             return False
 
         return True
 
 
-    def addComponentXfo(self, xfo=None):
+    def addXfo(self, name, xfo=None):
         """Adds an Xfo to the component xfo array.
 
         Arguments:
-        xfo -- Xfo, transform to add to the componentXfos array.
+        name -- String, name of the xfo.
+        xfo -- Xfo, transform to add to the xfos array.
                Default Xfo if not supplied.
 
         Return:
@@ -83,75 +83,66 @@ class BaseComponent(SceneItem):
         if xfo is None:
             xfo = Xfo()
 
-        self.componentXfos.append(xfo)
+        self.xfos[name] = xfo
 
-        return self.componentXfos[-1]
+        return self.xfos[name]
 
 
-    def removeComponentXfo(self, index):
-        """Removes a componentXfo from this object at the specified index.
+    def removeXfo(self, name):
+        """Removes a componentXfo from this object at the specified name.
 
         Arguments:
-        index -- Integer, index of the componentXfo to remove.
+        name -- String, name of the componentXfo to remove.
 
         Return:
         True if successful.
         """
 
-        if self.checkComponentXfoIndex(index) is not True:
-            return False
+        if self.hasXfo(name) is not True:
+            raise KeyError("'" + name + "' is not a valid xfo.")
 
-        del self.componentXfos[index]
+        del self.xfos[name]
 
         return True
 
 
-    def getNumComponentXfos(self):
-        """Returns the number of componentXfos for this object."""
+    def getNumXfos(self):
+        """Returns the number of xfos for this object."""
 
-        return len(self.componentXfos)
-
-
-    def getComponentXfos(self):
-        """Returns the componentXfos array.
-
-        Return:
-        Array of componentXfos for this object.
-        """
-        return self.componentXfos
+        return len(self.xfos.items())
 
 
-    def getComponentXfoByIndex(self, index):
-        """Returns a componentXfo by the specified index.
+    def getXfo(self, name):
+        """Returns a componentXfo by the specified name.
 
         Arguments:
-        index -- Integer, index of the componentXfo you wish to be returned.
+        name -- String, name of the componentXfo you wish to be returned.
 
         Return:
-        componentXfo as specified index.
+        componentXfo as specified name.
         """
 
-        if self.checkComponentXfoIndex(index) is not True:
-            return False
+        if self.hasXfo(name) is not True:
+            raise KeyError("'" + name + "' is not a valid xfo.")
 
-        return self.componentXfos[index]
+        return self.xfos[name]
 
 
-    def setComponentXfo(self, index, xfo):
-        """Set the componenXfo at the specified index.
+    def setXfo(self, name, xfo):
+        """Set the componenXfo at the specified name.
 
         Arguments:
-        index -- Integer, index of the componentXfo to set.
-        xfo -- Xfo, transform to set at the specified index.
+        name -- String, name of the componentXfo to set.
+        xfo -- Xfo, transform to set at the specified name.
 
         Return:
         True if successful.
         """
 
-        if self.checkComponentXfoIndex(index) is not True:
-            return False
+        if self.hasXfo(name) is not True:
+            raise KeyError("'" + name + "' is not a valid xfo.")
 
-        self.componentXfos[index] = xfo
+        self.xfos[name] = xfo
 
         return True
 
@@ -159,23 +150,23 @@ class BaseComponent(SceneItem):
     # ==================
     # Component Methods
     # ==================
-    def getComponent(self, index):
-        """Returns the component at the specified index.
+    def getComponent(self, name):
+        """Returns the component with the specified name.
 
         Arguments:
-        index -- Integer, index of the component to return.
+        name -- String, name of the component to return.
 
         Return:
-        Component at specified index.
+        Component with specified name.
         """
 
-        return self.getChildrenByType(Component)[index]
+        return self.getChildrenByType(BaseComponent)[name]
 
 
     def getNumComponents(self):
         """Return the number of components in this object as an Integer."""
 
-        return len(self.getChildrenByType(Component))
+        return len(self.getChildrenByType(BaseComponent))
 
 
     def addComponent(self, component):
@@ -193,17 +184,17 @@ class BaseComponent(SceneItem):
         return True
 
 
-    def removeComponentByIndex(self, index):
+    def removeComponentByIndex(self, name):
         """Remove the component with the specified name from this object.
 
         Arguments:
-        index -- Integer, index of the component to remove.
+        name -- String, name of the component to remove.
 
         Return:
         True if successful.
         """
 
-        # Check if index is valid, then remove.
+        # Check if name is valid, then remove.
 
         return True
 

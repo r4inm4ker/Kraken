@@ -5,7 +5,7 @@ BoolAttribute - Base Attribute.
 
 """
 
-from BaseAttribute import BaseAttribute
+from base_attribute import BaseAttribute
 
 
 class BoolAttribute(BaseAttribute):

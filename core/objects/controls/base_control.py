@@ -11,7 +11,7 @@ from kraken.core.objects.curve import Curve
 class BaseControl(Curve):
     """Base Control object."""
 
-    def __init__(self, name, parent=None, controlPoints=None):
+    def __init__(self, name, parent=None):
         """Initializes base control object.
 
         Arguments:
@@ -20,4 +20,11 @@ class BaseControl(Curve):
 
         """
 
-        super(BaseControl, self).__init__(name, parent=parent, controlPoints=controlPoints)
+        super(BaseControl, self).__init__(name, parent=parent)
+
+
+    # =============
+    # Name Methods
+    # =============
+    def buildName(self):
+        return '_'.join([self.getName(), self.getSide(), 'ctrl'])

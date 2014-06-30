@@ -5,7 +5,7 @@ StringAttribute - Base Attribute.
 
 """
 
-from BaseAttribute import BaseAttribute
+from base_attribute import BaseAttribute
 
 
 class StringAttribute(BaseAttribute):
