@@ -1,4 +1,9 @@
+"""Kraken - objects.component output module.
 
+Classes:
+ComponentOutput -- Component output representation.
+
+"""
 
 class ComponentOutput(object):
     """docstring for ComponentOutput"""
@@ -13,8 +18,8 @@ class ComponentOutput(object):
     # ===================
     # Connection Methods
     # ===================
-    def addConnection(self, componentInput):
-        self.connections.append(componentInput)
+    def addConnection(self, componentOutput):
+        self.connections.append(componentOutput)
 
         return True
 

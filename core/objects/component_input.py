@@ -1,4 +1,9 @@
+"""Kraken - objects.component input module.
 
+Classes:
+ComponentInput -- Component input representation.
+
+"""
 
 class ComponentInput(object):
     """docstring for ComponentInput"""

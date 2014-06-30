@@ -5,7 +5,7 @@ BaseControl - Base Control.
 
 """
 
-from kraken.core.objects.Curve import Curve
+from kraken.core.objects.curve import Curve
 
 
 class BaseControl(Curve):

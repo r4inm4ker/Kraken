@@ -1,4 +1,4 @@
-"""Kraken - objects.compoent module.
+"""Kraken - objects.component module.
 
 Classes:
 Component -- Component representation.
@@ -7,7 +7,7 @@ Component -- Component representation.
 
 from collections import OrderedDict
 from kraken.core.maths import *
-from SceneItem import SceneItem
+from kraken.core.objects.scene_item import SceneItem
 
 
 class BaseComponent(SceneItem):

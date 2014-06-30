@@ -5,7 +5,7 @@ Curve - Curve.
 
 """
 
-from SceneItem import SceneItem
+from kraken.core.objects.scene_item import SceneItem
 
 
 class Curve(SceneItem):
@@ -22,7 +22,7 @@ class Curve(SceneItem):
         """
 
         super(Curve, self).__init__(name, parent=parent)
-        self.controlPoints = []
+        self.controlPoints = controlPoints
         self.closed = closed
 
 
