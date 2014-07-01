@@ -25,20 +25,30 @@ class SceneItem(object):
     # Name methods
     # =============
     def getName(self):
-        """Returns the name of the object as a string."""
+        """Returns the name of the object as a string.
+
+        Return:
+        String of the object's name.
+
+        """
 
         return self.name
 
 
     def buildName(self):
-        return self.getName()                
+        return self.getName()
 
 
     # ===============
     # Parent Methods
     # ===============
     def getParent(self):
-        """Returns the parent of the object as an object."""
+        """Returns the parent of the object as an object.
+
+        Return:
+        Parent of this object.
+
+        """
 
         return self.parent
 
@@ -51,6 +61,7 @@ class SceneItem(object):
 
         Return:
         True if successful.
+
         """
 
         self.parent = parent
@@ -66,6 +77,7 @@ class SceneItem(object):
 
         Arguments:
         index -- Integer, child index to check.
+
         """
 
         if index > len(self.children):
@@ -83,6 +95,7 @@ class SceneItem(object):
 
         Return:
         True if successful.
+
         """
 
         if child.name in [x.name for x in self.children]:
@@ -99,6 +112,10 @@ class SceneItem(object):
 
         Arguments:
         index -- Integer, index of child to remove.
+
+        Return:
+        True if successful.
+
         """
 
         if self.checkChildIndex(index) is not True:
@@ -114,6 +131,10 @@ class SceneItem(object):
 
         Arguments:
         name -- String, name of child to remove.
+
+        Return:
+        True if successful.
+
         """
 
         removeIndex = None
@@ -132,13 +153,23 @@ class SceneItem(object):
 
 
     def getNumChildren(self):
-        """Returns the number of children this object has as an integer."""
+        """Returns the number of children this object has as an integer.
+
+        Return:
+        Integer of the number of children of this object.
+
+        """
 
         return len(self.children)
 
 
     def getChildByIndex(self, index):
-        """Returns the child object at specified index."""
+        """Returns the child object at specified index.
+
+        Return:
+        Child object at specified index.
+
+        """
 
         if self.checkChildIndex(index) is not True:
             return False
@@ -152,6 +183,7 @@ class SceneItem(object):
         Return:
         Object if found.
         None if not found.
+
         """
 
         for eachChild in self.children:
@@ -170,6 +202,7 @@ class SceneItem(object):
         Return:
         Array of child objects of the specified type.
         None if no objects of specified type are found.
+
         """
 
         childrenOfType = []
@@ -183,13 +216,29 @@ class SceneItem(object):
     # =============
     # Flag Methods
     # =============
-    def setFlag(self, name, value):
-        self.flags[name] = value
+    def setFlag(self, name):
+        """Sets the flag of the specified name.
+
+        Return:
+        True if successful.
+
+        """
+
+        self.flags[name] = True
 
         return True
 
 
     def testFlag(self, name):
+        """Tests if the specified flag is set.
+
+        Arguments:
+        name -- String, name of the flag to test.
+
+        Return:
+        True if flag is set, false otherwise.
+
+        """
 
         if name in self.flags:
             return True
@@ -197,6 +246,15 @@ class SceneItem(object):
         return False
 
     def clearFlag(self, name):
+        """Clears the flag of the specified name.
+
+        Arguments:
+        name -- String, name of the flag to clear.
+
+        Return:
+        True if successful.
+
+        """
 
         if name in self.flags:
             del self.flags[name]
@@ -212,6 +270,10 @@ class SceneItem(object):
 
         Arguments:
         index -- Integer, attribute index to check.
+
+        Return:
+        True if successful.
+
         """
 
         if index > len(self.attributes):
@@ -229,6 +291,7 @@ class SceneItem(object):
 
         Return:
         True if successful.
+
         """
 
         if attribute.name in [x.name for x in self.attributes]:
@@ -248,6 +311,7 @@ class SceneItem(object):
 
         Return:
         True if successful.
+
         """
 
         if self.checkAttributeIndex(index) is not True:
@@ -266,6 +330,7 @@ class SceneItem(object):
 
         Return:
         True if successful.
+
         """
 
         removeIndex = None
@@ -283,7 +348,12 @@ class SceneItem(object):
 
 
     def getNumAttributes(self):
-        """Returns the number of attributes as an integer."""
+        """Returns the number of attributes as an integer.
+
+        Return:
+        Integer of the number of attributes on this object.
+
+        """
 
         return len(self.attributes)
 
@@ -297,6 +367,7 @@ class SceneItem(object):
         Return:
         Attribute at the specified index.
         False if not a valid index.
+
         """
 
         if self.checkAttributeIndex(index) is not True:
@@ -314,6 +385,7 @@ class SceneItem(object):
         Return:
         Attribute with the specified name.
         None if not found.
+
         """
 
         for eachAttribute in self.attributes:

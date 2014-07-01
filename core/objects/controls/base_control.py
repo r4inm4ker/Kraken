@@ -21,10 +21,3 @@ class BaseControl(Curve):
         """
 
         super(BaseControl, self).__init__(name, parent=parent)
-
-
-    # =============
-    # Name Methods
-    # =============
-    def buildName(self):
-        return '_'.join([self.getName(), self.getSide(), 'ctrl'])

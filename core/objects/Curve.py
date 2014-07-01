@@ -21,13 +21,18 @@ class Curve(SceneItem):
         """
 
         super(Curve, self).__init__(name, parent=parent)
-        
+
         self.controlPoints = []
         self.closed = []
 
 
     def getControlPoints(self):
-        """Returns the control points."""
+        """Returns the control points of the curve.
+
+        Return:
+        Array of Vec3 positions.
+
+        """
 
         return self.controlPoints
 

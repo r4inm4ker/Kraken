@@ -23,42 +23,68 @@ class SIBuilder(BaseBuilder):
 
 
     def buildAttributes(self, sceneItem, object3D):
+        """Builds attributes on the DCC object.
+
+        Arguments:
+        sceneItem -- SceneItem, kraken object to build attributes for.
+        object3D -- DCC Object, DCC object to build attributes on.
+
+        Return:
+        True if successful.
+
+        """
 
         for i in xrange(sceneItem.getNumAttributes()):
             attribute = sceneItem.getAttributeByIndex(i)
 
             if isinstance(attribute, FloatAttribute):
-                log(attribute.name)
+                pass
+                # log(attribute.name)
 
             elif isinstance(attribute, BoolAttribute):
-                log(attribute.name)
+                pass
+                # log(attribute.name)
 
             elif isinstance(attribute, IntegerAttribute):
-                log(attribute.name)
+                pass
+                # log(attribute.name)
 
             elif isinstance(attribute, StringAttribute):
-                log(attribute.name)
+                pass
+                # log(attribute.name)
 
-        return
+        return True
 
 
     def buildHierarchy(self, sceneItem, parentObject3D, component=None):
+        """Builds the hierarchy for the supplied sceneItem.
 
-        object3D = None
+        Arguments:
+        sceneItem -- SceneItem, kraken object to build.
+        parentObject3D -- DCC Object, object that is the parent of the created object.
+        component -- Component, component that this object belongs to.
+
+        Return:
+        DCC object that was created.
+
+        """
 
         if sceneItem.testFlag('guide'):
             return None
 
+        object3D = None
+        objectName = self.buildName(sceneItem, component=component)
+
         # Build Object
         if isinstance(sceneItem, BaseComponent):
-            object3D = parentObject3D.AddNull(self.buildName(sceneItem, component=None))
+            object3D = parentObject3D.AddNull(objectName)
             component = sceneItem
 
         elif isinstance(sceneItem, Curve):
-            object3D = parentObject3D.AddNull(self.buildName(sceneItem, component=component))
+            object3D = parentObject3D.AddNull(objectName)
 
         elif isinstance(sceneItem, BaseControl):
-            object3D = parentObject3D.AddNull(self.buildName(sceneItem, component=component))
+            object3D = parentObject3D.AddNull(objectName)
 
         else:
             raise NotImplementedError(sceneItem.getName() + ' has an unsupported type: ' + str(type(sceneItem)))
@@ -76,6 +102,17 @@ class SIBuilder(BaseBuilder):
 
 
     def buildName(self, sceneItem, component=None):
+        """Builds the name for the sceneItem that is passed.
+
+        Arguments:
+        sceneItem -- SceneItem, kraken object to build the name for.
+        component -- Component, component that this object belongs to.
+
+        Return:
+        Built name as a string.
+        None if it fails.
+
+        """
 
         if isinstance(sceneItem, BaseComponent):
             return '_'.join([sceneItem.getName(), sceneItem.getSide(), 'hrc'])
@@ -87,11 +124,12 @@ class SIBuilder(BaseBuilder):
             componentName = component.getName()
             side = component.getSide()
 
+        if isinstance(sceneItem, BaseControl):
+            return '_'.join([componentName, sceneItem.getName(), side, 'ctrl'])
+
         elif isinstance(sceneItem, Curve):
             return '_'.join([componentName, sceneItem.getName(), side, 'crv'])
 
-        elif isinstance(sceneItem, BaseControl):
-            return '_'.join([componentName, sceneItem.getName(), side, 'ctrl'])
         else:
             raise NotImplementedError('buildName() not implemented for ' + str(type(sceneItem)))
 
@@ -106,18 +144,19 @@ class SIBuilder(BaseBuilder):
 
         Return:
         True if successful.
+
         """
 
         scnRoot = si.ActiveProject3.ActiveScene.Root
 
-        containerNull = scnRoot.AddNull(container.name)
+        containerNull = scnRoot.AddModel(None, container.name)
 
-        armatureLayer = containerNull.AddNull(container.name + "_armature")
-        controlLayer = containerNull.AddNull(container.name + "_controls")
-        geometryLayer = containerNull.AddNull(container.name + "_geometry")
+        armatureLayer = containerNull.AddModel(None, container.name + "_armature")
+        controlLayer = containerNull.AddModel(None, container.name + "_controls")
+        geometryLayer = containerNull.AddModel(None, container.name + "_geometry")
 
         # Create Each Component
         for eachComponent in container.getChildrenByType(BaseComponent):
-            self.buildHierarchy(eachComponent, controlLayer)
+            self.buildHierarchy(eachComponent, controlLayer, component=None)
 
         return True

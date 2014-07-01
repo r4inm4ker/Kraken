@@ -8,10 +8,10 @@ from kraken.tests.arm_rig import ArmRig
 from kraken.core import builders
 
 
-from kraken.core.builders import si_builder
+from kraken.builders import si_builder
 reload(si_builder)
 
-from kraken.core.builders.si_builder import SIBuilder
+from kraken.builders.si_builder import SIBuilder
 
 myArm = ArmRig("myArm")
 

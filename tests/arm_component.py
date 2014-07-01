@@ -28,7 +28,7 @@ class ArmComponent(BaseComponent):
         # Setup Xfos
         bicepXfo = Xfo()
         bicepXfo.tr = Vec3(5.0, 20.0, 0.0)
-        
+
         forearmXfo = Xfo()
         forearmXfo.tr = Vec3(8.535533905932736, 16.46446609406726, -2.5)
 
@@ -42,15 +42,15 @@ class ArmComponent(BaseComponent):
 
         # Add Guide Controls
         bicepGuideCtrl = NullControl('bicepGuideCtrl')
-        bicepGuideCtrl.setFlag("guide", True)
+        bicepGuideCtrl.setFlag("guide")
         self.addChild(bicepGuideCtrl)
-        
+
         forearmGuideCtrl = NullControl('forearmGuideCtrl')
-        forearmGuideCtrl.setFlag("guide", True)
+        forearmGuideCtrl.setFlag("guide")
         self.addChild(forearmGuideCtrl)
-        
+
         wristGuideCtrl = NullControl('wristGuideCtrl')
-        wristGuideCtrl.setFlag("guide", True)
+        wristGuideCtrl.setFlag("guide")
         self.addChild(wristGuideCtrl)
 
         # Guide Splice Op Code

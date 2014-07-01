@@ -16,7 +16,15 @@ class StringAttribute(BaseAttribute):
         assert type(value) is str, "Value is not of type 'string'."
 
     def setValue(self, value):
-        """Ensures 'value' attribute is correct type and within min and max range."""
+        """Sets the value of the attribute.
+
+        Arguments:
+        value -- Value to set the attribute to.
+
+        Return:
+        True if successful.
+
+        """
 
         if type(value) not in (str):
             raise TypeError("Value is not of type 'str'.")
