@@ -1,17 +1,10 @@
 from kraken.tests import arm_component
-reload(arm_component)
-
 from kraken.tests import arm_rig
-reload(arm_rig)
 
 from kraken.tests.arm_rig import ArmRig
-from kraken.core import builders
 
-
-from kraken.builders import si_builder
+from kraken.plugins.si_plugin.builder import SIBuilder
 reload(si_builder)
-
-from kraken.builders.si_builder import SIBuilder
 
 myArm = ArmRig("myArm")
 

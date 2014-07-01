@@ -8,7 +8,7 @@ from kraken.core.objects.attributes.float_attribute import FloatAttribute
 from kraken.core.objects.attributes.integer_attribute import IntegerAttribute
 from kraken.core.objects.attributes.string_attribute import StringAttribute
 
-from base_builder import BaseBuilder
+from kraken.core.builders.base_builder import BaseBuilder
 from win32com.client import Dispatch
 
 si = Dispatch("XSI.Application").Application
