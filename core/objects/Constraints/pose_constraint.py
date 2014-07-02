@@ -5,7 +5,7 @@ PoseConstraint - Pose Constraint.
 
 """
 
-import BaseConstraint
+from base_constraint import BaseConstraint
 
 
 class PoseConstraint(BaseConstraint):

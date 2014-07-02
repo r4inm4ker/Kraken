@@ -57,7 +57,7 @@ class SceneItem(object):
         """Sets the parent attribute of this object.
 
         Arguments:
-        parent -- Object, object that is the paret of this one.
+        parent -- Object, object that is the parent of this one.
 
         Return:
         True if successful.
@@ -82,7 +82,6 @@ class SceneItem(object):
 
         if index > len(self.children):
             raise IndexError("'" + str(index) + "' is out of the range of 'children' array.")
-            return False
 
         return True
 
@@ -145,9 +144,8 @@ class SceneItem(object):
 
         if removeIndex is None:
             raise ValueError("'" + name + "' is not a valid child of this object.")
-            return False
 
-        self.removeChildByIndex(i)
+        self.removeChildByIndex(removeIndex)
 
         return True
 
@@ -278,7 +276,6 @@ class SceneItem(object):
 
         if index > len(self.attributes):
             raise IndexError("'" + str(index) + "' is out of the range of 'attributes' array.")
-            return False
 
         return True
 

@@ -5,7 +5,6 @@ Component -- Component representation.
 
 """
 
-from collections import OrderedDict
 from kraken.core.maths import *
 from kraken.core.objects.scene_item import SceneItem
 
@@ -42,7 +41,6 @@ class BaseComponent(SceneItem):
 
         if side not in ["L", "M", "R"]:
             raise ValueError("'" + side + "' is not a valid side.")
-            return False
 
         self.side = side
 

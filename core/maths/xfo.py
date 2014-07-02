@@ -4,9 +4,6 @@ Classes:
 Xfo -- Transform.
 """
 
-import math
-import json
-
 from kraken.core.maths import vec
 from kraken.core.maths import rotation
 from kraken.core.maths import matrix

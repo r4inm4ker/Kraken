@@ -1,22 +1,21 @@
+"""Kraken SI - SI Builder module.
+
+Classes:
+SIBuilder -- Component representation.
+
+"""
 
 from kraken.core.objects.curve import Curve
 from kraken.core.objects.component import BaseComponent
 from kraken.core.objects.controls.base_control import BaseControl
-
-from kraken.core.objects.attributes.bool_attribute import BoolAttribute
-from kraken.core.objects.attributes.float_attribute import FloatAttribute
-from kraken.core.objects.attributes.integer_attribute import IntegerAttribute
-from kraken.core.objects.attributes.string_attribute import StringAttribute
-
+from kraken.core.objects.attributes import *
 from kraken.core.builders.base_builder import BaseBuilder
-from win32com.client import Dispatch
 
-si = Dispatch("XSI.Application").Application
-log = si.LogMessage
+from utils import *
 
 
 class SIBuilder(BaseBuilder):
-    """Softimage Builder"""
+    """Builder object for building Kraken objects in Softimage."""
 
     def __init__(self):
         super(SIBuilder, self).__init__()

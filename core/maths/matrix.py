@@ -5,8 +5,6 @@ Matrix33 -- Matrix 3 transform object.
 Matrix44 -- Matrix 4 transform object.
 """
 
-import math
-
 from kraken.core.maths import vec
 
 

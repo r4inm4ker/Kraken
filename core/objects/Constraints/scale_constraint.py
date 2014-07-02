@@ -5,7 +5,7 @@ ScaleConstraint - Scale Constraint.
 
 """
 
-import BaseConstraint
+from base_constraint import BaseConstraint
 
 
 class ScaleConstraint(BaseConstraint):

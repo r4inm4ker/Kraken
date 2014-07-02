@@ -9,7 +9,6 @@ Asset -- Namespace object.
 
 """
 
-import json
 from collections import OrderedDict
 
 from kraken.core.objects import attributes
@@ -134,7 +133,6 @@ class SceneObject(object):
 
         if name in self.attributes.keys():
             raise KeyError("Attribute group with name " + name + " already exists.")
-            return False
 
         self.attributes[name] = OrderedDict()
 
@@ -203,7 +201,7 @@ class SceneObject(object):
             print "'" + name + "' is not a valid attribute in attribute group '" + group + "'."
             return None
 
-        self.attributes[group][name]
+        self.attributes[group][name] = value
 
         return self.attributes[group][name]
 
@@ -481,7 +479,7 @@ class SceneObject(object):
             print "'" + name + "' is not a valid constraint."
             return None
 
-        return self.constraints[group][name]
+        return self.constraints[name]
 
 
     def removeConstraint(self, name):
@@ -498,7 +496,7 @@ class SceneObject(object):
         if name not in self.constraints.keys():
             raise KeyError("'" + name + "' is not a valid constraint.")
 
-        del self.constraints[group][name]
+        del self.constraints[name]
 
 
     def _buildConstraints(self):

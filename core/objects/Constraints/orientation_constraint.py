@@ -5,7 +5,7 @@ OrientationConstraint - Orientation Constraint.
 
 """
 
-import BaseConstraint
+from base_constraint import BaseConstraint
 
 
 class OrientationConstraint(BaseConstraint):

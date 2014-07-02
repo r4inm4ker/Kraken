@@ -7,7 +7,6 @@ Vec4 -- Vector 4 object.
 """
 
 import math
-import json
 
 
 class Vec2(object):

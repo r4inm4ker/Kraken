@@ -6,7 +6,6 @@ Quat -- Quaternion rotation.
 """
 
 import math
-import json
 
 from kraken.core.maths import vec
 from kraken.core.maths import matrix

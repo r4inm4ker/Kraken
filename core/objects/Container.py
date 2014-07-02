@@ -10,7 +10,7 @@ from kraken.core.objects.component import BaseComponent
 
 
 class Container(SceneItem):
-    """docstring for Container"""
+    """Container object."""
 
     def __init__(self, name):
         super(Container, self).__init__(name, None)

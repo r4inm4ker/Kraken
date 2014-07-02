@@ -215,6 +215,11 @@ pip-log.txt
 .mr.developer.cfg
 
 
+#################
+## PyCharm
+#################
+.idea/
+
 ###########
 ## Custom
 ###########
