@@ -145,6 +145,22 @@ class SIBuilder(BaseBuilder):
         return None
 
 
+    def buildTransform(self, sceneItem):
+        """Translates the transform to Softimage transform.
+
+        Arguments:
+        sceneItem -- Object: object to set the transform on.
+
+        Return:
+        True if successful.
+
+        """
+
+
+
+        return True
+
+
     def build(self, container):
         """Builds the supplied container into a DCC representation.
 
