@@ -1,4 +1,4 @@
-"""Kraken - objects.Curve module.
+"""Kraken - objects.curve module.
 
 Classes:
 Curve - Curve.

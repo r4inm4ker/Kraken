@@ -6,9 +6,13 @@ SIBuilder -- Component representation.
 """
 
 from kraken.core.objects.curve import Curve
+from kraken.core.objects.layer import Layer
 from kraken.core.objects.component import BaseComponent
 from kraken.core.objects.controls.base_control import BaseControl
-from kraken.core.objects.attributes import *
+from kraken.core.objects.attributes.bool_attribute import BoolAttribute
+from kraken.core.objects.attributes.float_attribute import FloatAttribute
+from kraken.core.objects.attributes.integer_attribute import IntegerAttribute
+from kraken.core.objects.attributes.string_attribute import StringAttribute
 from kraken.core.builders.base_builder import BaseBuilder
 
 from utils import *
@@ -75,7 +79,10 @@ class SIBuilder(BaseBuilder):
         objectName = self.buildName(sceneItem, component=component)
 
         # Build Object
-        if isinstance(sceneItem, BaseComponent):
+        if isinstance(sceneItem, Layer):
+            object3D = parentObject3D.AddModel(None, objectName)
+
+        elif isinstance(sceneItem, BaseComponent):
             object3D = parentObject3D.AddNull(objectName)
             component = sceneItem
 
@@ -123,7 +130,10 @@ class SIBuilder(BaseBuilder):
             componentName = component.getName()
             side = component.getSide()
 
-        if isinstance(sceneItem, BaseControl):
+        if isinstance(sceneItem, Layer):
+            return '_'.join([sceneItem.parent.getName(), sceneItem.getName()])
+
+        elif isinstance(sceneItem, BaseControl):
             return '_'.join([componentName, sceneItem.getName(), side, 'ctrl'])
 
         elif isinstance(sceneItem, Curve):
@@ -150,12 +160,8 @@ class SIBuilder(BaseBuilder):
 
         containerNull = scnRoot.AddModel(None, container.name)
 
-        armatureLayer = containerNull.AddModel(None, container.name + "_armature")
-        controlLayer = containerNull.AddModel(None, container.name + "_controls")
-        geometryLayer = containerNull.AddModel(None, container.name + "_geometry")
-
         # Create Each Component
-        for eachComponent in container.getChildrenByType(BaseComponent):
-            self.buildHierarchy(eachComponent, controlLayer, component=None)
+        for eachLayer in container.getChildrenByType(Layer):
+            self.buildHierarchy(eachLayer, containerNull, component=None)
 
         return True

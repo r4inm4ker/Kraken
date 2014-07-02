@@ -1,5 +1,5 @@
-__all__ = ['BaseAttribute',
-           'BoolAttribute',
-           'FloatAttribute',
-           'IntegerAttribute',
-           'StringAttribute']
+__all__ = ['base_attribute',
+           'bool_attribute',
+           'float_attribute',
+           'integer_attribute',
+           'string_attribute']

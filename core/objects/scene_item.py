@@ -1,4 +1,4 @@
-"""Kraken - objects.SceneItem module.
+"""Kraken - objects.scene_item module.
 
 Classes:
 SceneItem - Base SceneItem Object.
