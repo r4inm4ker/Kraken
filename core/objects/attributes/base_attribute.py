@@ -8,6 +8,8 @@ BaseAttribute - Base Attribute.
 class BaseAttribute(object):
     """Base Attribute object."""
 
+    __kType__ = "Attribute"
+
     def __init__(self, name, value):
         super(BaseAttribute, self).__init__()
         self.name = name

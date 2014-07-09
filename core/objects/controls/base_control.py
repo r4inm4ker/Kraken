@@ -11,6 +11,8 @@ from kraken.core.objects.curve import Curve
 class BaseControl(Curve):
     """Base Control object."""
 
+    __kType__ = "Control"
+
     def __init__(self, name, parent=None):
         """Initializes base control object.
 

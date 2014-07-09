@@ -8,6 +8,8 @@ ComponentInput -- Component input representation.
 class ComponentInput(object):
     """Component Input Object."""
 
+    __kType__ = "ComponentInput"
+
     def __init__(self, name, dataType):
         super(ComponentInput, self).__init__()
         self.name = name

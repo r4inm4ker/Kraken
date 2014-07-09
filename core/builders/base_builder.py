@@ -16,12 +16,12 @@ class BaseBuilder(object):
         super(BaseBuilder, self).__init__()
 
 
-    def buildAttributes(self, sceneItem, object3D):
+    def buildAttributes(self, sceneItem, node):
         """Builds attributes on the DCC object.
 
         Arguments:
         sceneItem -- SceneItem, kraken object to build attributes for.
-        object3D -- DCC Object, DCC object to build attributes on.
+        node -- DCC Object, DCC object to build attributes on.
 
         Return:
         True if successful.
@@ -31,12 +31,12 @@ class BaseBuilder(object):
         return True
 
 
-    def buildHierarchy(self, sceneItem, parentObject3D, component=None):
+    def buildHierarchy(self, sceneItem, parentNode, component=None):
         """Builds the hierarchy for the supplied sceneItem.
 
         Arguments:
         sceneItem -- SceneItem, kraken object to build.
-        parentObject3D -- DCC Object, object that is the parent of the created object.
+        parentNode -- DCC Object, object that is the parent of the created object.
         component -- Component, component that this object belongs to.
 
         Return:
@@ -44,9 +44,9 @@ class BaseBuilder(object):
 
         """
 
-        object3D = None
+        node = None
 
-        return object3D
+        return node
 
 
     def buildName(self, sceneItem, component=None):

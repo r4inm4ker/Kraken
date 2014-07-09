@@ -12,6 +12,8 @@ from kraken.core.objects.scene_item import SceneItem
 class BaseComponent(SceneItem):
     """Kraken Base Component object."""
 
+    __kType__ = "Component"
+
     def __init__(self, name, parent=None, side='M'):
         super(BaseComponent, self).__init__(name, parent)
         self.side = side

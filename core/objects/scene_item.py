@@ -11,6 +11,8 @@ from kraken.core.maths import *
 class SceneItem(object):
     """Kraken base object type for any 3D object."""
 
+    __kType__ = "SceneItem"
+
     def __init__(self, name, parent=None):
         super(SceneItem, self).__init__()
         self.name = name
@@ -19,6 +21,7 @@ class SceneItem(object):
         self.flags = {}
         self.attributes = []
         self.xfo = Xfo()
+        self.node = None
 
 
     # =============
@@ -390,3 +393,48 @@ class SceneItem(object):
                 return eachAttribute
 
         return None
+
+
+    # =============
+    # Node Methods
+    # =============
+    def setNode(self, node):
+        """Sets the node attribute to point to the node in the DCC which it
+        represents.
+
+        Arguments:
+        node -- Object / String, pointer to the object in the DCC.
+
+        Return:
+        True if successful.
+
+        """
+
+        self.node = node
+
+        return True
+
+
+    def getNode(self):
+        """Returns the node attribute.
+
+        Return:
+        Node value.
+
+        """
+
+        return self.node
+
+
+    # ==============
+    # kType Methods
+    # ==============
+    def getKType(self):
+        """Returns the kType of this object.
+
+        Return:
+        True if successful.
+
+        """
+
+        return self.__kType__

@@ -9,6 +9,8 @@ BaseConstraint - Base Constraint.
 class BaseConstraint(object):
     """Base Constraint object."""
 
+    __kType__ = "Constraint"
+
     def __init__(self, name, constrainers, maintainOffset=False):
         """Initializes base constraint object.
 

@@ -11,6 +11,8 @@ from kraken.core.objects.scene_item import SceneItem
 class Curve(SceneItem):
     """Curve object."""
 
+    __kType__ = "Curve"
+
     def __init__(self, name, parent=None):
         """Initializes the curve object.
 

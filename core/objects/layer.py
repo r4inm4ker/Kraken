@@ -10,6 +10,8 @@ from kraken.core.objects.scene_item import SceneItem
 class Layer(SceneItem):
     """Layer object."""
 
+    __kType__ = "Layer"
+
     def __init__(self, name, parent=None):
         super(Layer, self).__init__(name, parent=parent)
 

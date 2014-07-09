@@ -8,6 +8,8 @@ ComponentOutput -- Component output representation.
 class ComponentOutput(object):
     """Component Output object."""
 
+    __kType__ = "ComponentOutput"
+
     def __init__(self, name, dataType):
         super(ComponentOutput, self).__init__()
         self.name = name

@@ -25,12 +25,12 @@ class SIBuilder(BaseBuilder):
         super(SIBuilder, self).__init__()
 
 
-    def buildAttributes(self, sceneItem, object3D):
+    def buildAttributes(self, sceneItem, node):
         """Builds attributes on the DCC object.
 
         Arguments:
         sceneItem -- SceneItem, kraken object to build attributes for.
-        object3D -- DCC Object, DCC object to build attributes on.
+        node -- DCC Object, DCC object to build attributes on.
 
         Return:
         True if successful.
@@ -59,12 +59,12 @@ class SIBuilder(BaseBuilder):
         return True
 
 
-    def buildHierarchy(self, sceneItem, parentObject3D, component=None):
+    def buildHierarchy(self, sceneItem, parentNode, component=None):
         """Builds the hierarchy for the supplied sceneItem.
 
         Arguments:
         sceneItem -- SceneItem, kraken object to build.
-        parentObject3D -- DCC Object, object that is the parent of the created object.
+        parentNode -- DCC Object, object that is the parent of the created object.
         component -- Component, component that this object belongs to.
 
         Return:
@@ -75,36 +75,37 @@ class SIBuilder(BaseBuilder):
         if sceneItem.testFlag('guide'):
             return None
 
-        object3D = None
+        node = None
         objectName = self.buildName(sceneItem, component=component)
+        kType = sceneItem.getKType()
 
         # Build Object
-        if isinstance(sceneItem, Layer):
-            object3D = parentObject3D.AddModel(None, objectName)
+        if kType == "Layer":
+            node = parentNode.AddModel(None, objectName)
 
-        elif isinstance(sceneItem, BaseComponent):
-            object3D = parentObject3D.AddNull(objectName)
+        elif kType == "Component":
+            node = parentNode.AddNull(objectName)
             component = sceneItem
 
-        elif isinstance(sceneItem, Curve):
-            object3D = parentObject3D.AddNull(objectName)
+        elif kType == "Curve":
+            node = parentNode.AddNull(objectName)
+            # TODO: Actually create curve objects.
 
-        elif isinstance(sceneItem, BaseControl):
-            object3D = parentObject3D.AddNull(objectName)
+        elif kType == "Control":
+            node = parentNode.AddNull(objectName)
 
         else:
             raise NotImplementedError(sceneItem.getName() + ' has an unsupported type: ' + str(type(sceneItem)))
 
-        # Build Attributes
-        if object3D is not None:
-            self.buildAttributes(sceneItem, object3D)
+        sceneItem.setNode(node)
+        self.buildAttributes(sceneItem, node)
 
         # Build children
         for i in xrange(sceneItem.getNumChildren()):
             child = sceneItem.getChildByIndex(i)
-            self.buildHierarchy(child, object3D, component)
+            self.buildHierarchy(child, node, component)
 
-        return object3D
+        return node
 
 
     def buildName(self, sceneItem, component=None):
@@ -172,12 +173,19 @@ class SIBuilder(BaseBuilder):
 
         """
 
-        scnRoot = si.ActiveProject3.ActiveScene.Root
+        try:
+            si.BeginUndo("Kraken SI Build: " + container.name)
 
-        containerNull = scnRoot.AddModel(None, container.name)
+            scnRoot = si.ActiveProject3.ActiveScene.Root
 
-        # Create Each Component
-        for eachLayer in container.getChildrenByType(Layer):
-            self.buildHierarchy(eachLayer, containerNull, component=None)
+            containerNull = scnRoot.AddModel(None, container.name)
+            container.setNode(containerNull)
+
+            # Create Each Component
+            for eachLayer in container.getChildrenByType(Layer):
+                self.buildHierarchy(eachLayer, containerNull, component=None)
+
+        finally:
+            si.EndUndo()
 
         return True
