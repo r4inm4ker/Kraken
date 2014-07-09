@@ -99,6 +99,7 @@ class SIBuilder(BaseBuilder):
 
         sceneItem.setNode(node)
         self.buildAttributes(sceneItem, node)
+        self.buildTransform(sceneItem)
 
         # Build children
         for i in xrange(sceneItem.getNumChildren()):
@@ -157,9 +158,35 @@ class SIBuilder(BaseBuilder):
 
         """
 
+        xfo = XSIMath.CreateTransform()
+        scl = XSIMath.CreateVector3(sceneItem.xfo.scl.x, sceneItem.xfo.scl.y, sceneItem.xfo.scl.z)
+        quat = XSIMath.CreateQuaternion(sceneItem.xfo.rot.w, sceneItem.xfo.rot.v.x, sceneItem.xfo.rot.v.y, sceneItem.xfo.rot.v.z)
+        tr = XSIMath.CreateVector3(sceneItem.xfo.tr.x, sceneItem.xfo.tr.y, sceneItem.xfo.tr.z)
+
+        xfo.SetScaling(scl)
+        xfo.SetRotationFromQuaternion(quat)
+        xfo.SetTranslation(tr)
+
+        sceneItem.node.Kinematics.Global.PutTransform2(None, xfo)
+
+        return True
+
+
+    def buildConstraints(self, sceneItem):
+        """Builds constraints for the supplied sceneItem.
+
+        Arguments:
+        sceneItem -- Object, scene item to create constraints for.
+
+        Return:
+        True if successful.
+
+        """
+
 
 
         return True
+
 
 
     def build(self, container):
