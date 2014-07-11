@@ -40,18 +40,18 @@ class Curve(SceneItem):
 
 
     def addCurveSection(self, controlPoints, closed=False):
-      """Sets the control points of the control.
+        """Sets the control points of the control.
 
-      Arguments:
-      controlPoints -- Array, array of Vec3 objects of point positions.
-      closed -- Boolean, whether the sub-curve is closed or not.
+        Arguments:
+        controlPoints -- Array, array of Vec3 objects of point positions.
+        closed -- Boolean, whether the sub-curve is closed or not.
 
-      Return:
-      True if successful.
+        Return:
+        True if successful.
 
-      """
+        """
 
-      self.controlPoints.append(controlPoints)
-      self.closed.append(closed)
+        self.controlPoints.append(controlPoints)
+        self.closed.append(closed)
 
-      return True
+        return True
