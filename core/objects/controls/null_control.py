@@ -1,7 +1,7 @@
 """Kraken - objects.Controls.NullControl module.
 
 Classes:
-BaseControl - Base Control.
+NullControl - Null Control.
 
 """
 
@@ -10,7 +10,7 @@ from kraken.core.objects.controls.base_control import BaseControl
 
 
 class NullControl(BaseControl):
-    """Square Control object."""
+    """Null Control object."""
 
     def __init__(self, name, parent=None):
         """Initializes base control object.
@@ -22,4 +22,6 @@ class NullControl(BaseControl):
         """
 
         super(NullControl, self).__init__(name, parent=parent)
-        self.addCurveSection([Vec3(1, 0, -1), Vec3(1, 0, 1), Vec3(-1, 0, 1), Vec3(-1, 0, -1)], True)
+        self.addCurveSection([Vec3(-1.0, 0.0, 0.0), Vec3(1.0, 0.0, 0.0)], False)
+        self.addCurveSection([Vec3(-1.0, -1.0, 0.0), Vec3(0.0, 1.0, 0.0)], False)
+        self.addCurveSection([Vec3(-1.0, -1.0, -1.0), Vec3(0.0, 0.0, 1.0)], False)

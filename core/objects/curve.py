@@ -39,6 +39,35 @@ class Curve(SceneItem):
         return self.controlPoints
 
 
+    # ======================
+    # Curve Section Methods
+    # ======================
+    def getNumCurveSections(self):
+        """Returns the number of curve sections on this object.
+
+        Return:
+        Integner, number of curve sections in this object.
+
+        """
+
+        return len(self.controlPoints)
+
+
+
+    def getCurveSectionClosed(self, index):
+        """Returns whether the curve section is closed or not.
+
+        Arguments:
+        index -- Integer, index of the curve section to query.
+
+        Return:
+        True or False if the section is closed.
+
+        """
+
+        return self.closed[index]
+
+
     def addCurveSection(self, controlPoints, closed=False):
         """Sets the control points of the control.
 

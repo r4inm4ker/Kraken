@@ -25,6 +25,64 @@ class SIBuilder(BaseBuilder):
         super(SIBuilder, self).__init__()
 
 
+    # ===================
+    # Node Build Methods
+    # ===================
+    def buildCurveNode(self, parentNode, sceneItem, name):
+        """Builds a Curve object.
+
+        Arguments:
+        parentNode -- Object, sceneItem that represents the parent of this object.
+        sceneItem -- Object, sceneItem that represents a curve to be built.
+        name -- String, name of the object being created.
+
+        Return:
+        node that is created.
+
+        """
+
+        for e, eachCurveSection in enumerate(sceneItem.getControlPoints()):
+
+            points = sceneItem.getControlPoints()[e]
+
+            formattedPoints = []
+            for i in xrange(3):
+
+                axisPositions = []
+                for p, eachPnt in enumerate(points):
+                    if p < len(points):
+                        axisPositions.append(eachPnt.toArray()[i])
+
+                formattedPoints.append(axisPositions)
+
+            formattedPoints.append([1.0] * len(points))
+
+            # Scale, rotate, translation shape
+            ctrlPnts = []
+            ctrlPnts.append([x for x in formattedPoints[0]])
+            ctrlPnts.append([x for x in formattedPoints[1]])
+            ctrlPnts.append([x for x in formattedPoints[2]])
+            ctrlPnts.append(formattedPoints[3])
+
+            if sceneItem.getCurveSectionClosed(e) is True:
+                knots = list(xrange(len(ctrlPnts) + 1))
+            else:
+                knots = list(xrange(len(ctrlPnts)))
+
+            if e == 0:
+                node = parentNode.AddNurbsCurve(ctrlPnts, knots, sceneItem.getCurveSectionClosed(e), 1, 1, constants.siSINurbs)
+                sceneItem.setNode(node)
+            else:
+                sceneItem.getNode().ActivePrimitive.Geometry.AddCurve(ctrlPnts, knots, sceneItem.getCurveSectionClosed(e), 1, 1)
+
+        node.Name = name
+
+        return node
+
+
+    # ======================
+    # Generic Build Methods
+    # ======================
     def buildAttributes(self, sceneItem, node):
         """Builds attributes on the DCC object.
 
@@ -82,22 +140,26 @@ class SIBuilder(BaseBuilder):
         # Build Object
         if kType == "Layer":
             node = parentNode.AddModel(None, objectName)
+            sceneItem.setNode(node)
 
         elif kType == "Component":
             node = parentNode.AddNull(objectName)
             component = sceneItem
+            sceneItem.setNode(node)
 
         elif kType == "Curve":
-            node = parentNode.AddNull(objectName)
+            node = self.buildCurveNode(parentNode, sceneItem, objectName)
+            # node = parentNode.AddNull(objectName)
             # TODO: Actually create curve objects.
 
         elif kType == "Control":
-            node = parentNode.AddNull(objectName)
+            node = self.buildCurveNode(parentNode, sceneItem, objectName)
+            # node = parentNode.AddNull(objectName)
 
         else:
             raise NotImplementedError(sceneItem.getName() + ' has an unsupported type: ' + str(type(sceneItem)))
 
-        sceneItem.setNode(node)
+
         self.buildAttributes(sceneItem, node)
         self.buildTransform(sceneItem)
 

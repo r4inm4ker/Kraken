@@ -5,6 +5,7 @@ from kraken.core.objects.attributes.string_attribute import StringAttribute
 from kraken.core.objects.component import BaseComponent
 from kraken.core.objects.controls.cube_control  import CubeControl
 from kraken.core.objects.controls.circle_control  import  CircleControl
+from kraken.core.objects.controls.square_control  import  SquareControl
 from kraken.core.objects.controls.null_control  import  NullControl
 
 
@@ -63,13 +64,16 @@ class ArmComponent(BaseComponent):
         """
 
         # Add Rig Controls
-        bicepFKCtrl = CubeControl('bicepFKCtrl', parent=self)
+        bicepFKCtrl = SquareControl('bicepFKCtrl', parent=self)
+        bicepFKCtrl.xfo = bicepXfo
         self.addChild(bicepFKCtrl)
 
-        forearmFKCtrl = CubeControl('forearmFKCtrl', parent=self)
+        forearmFKCtrl = NullControl('forearmFKCtrl', parent=self)
+        forearmFKCtrl.xfo = forearmXfo
         self.addChild(forearmFKCtrl)
 
         wristIKCtrl = CircleControl('wristIKCtrl', parent=self)
+        wristIKCtrl.xfo = wristXfo
         self.addChild(wristIKCtrl)
 
         componentSpliceCode = """require Math;"""
