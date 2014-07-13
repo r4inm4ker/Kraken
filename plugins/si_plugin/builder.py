@@ -205,7 +205,7 @@ class SIBuilder(BaseBuilder):
         return True
 
 
-    def preBuild(self):
+    def _preBuild(self):
         """Pre-Build commands.
 
         Return:
@@ -235,7 +235,7 @@ class SIBuilder(BaseBuilder):
         return True
 
 
-    def postBuild(self):
+    def _postBuild(self):
         """Post-Build commands.
 
         Return:

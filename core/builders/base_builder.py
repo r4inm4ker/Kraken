@@ -248,19 +248,6 @@ class BaseBuilder(object):
 
         """
 
-        self.preBuild()
-
-        return True
-
-
-    def preBuild(self):
-        """Pre-Build commands.
-
-        Return:
-        True if successful.
-
-        """
-
         return True
 
 
@@ -298,19 +285,6 @@ class BaseBuilder(object):
 
     def _postBuild(self):
         """Protected Post-Build method.
-
-        Return:
-        True if successful.
-
-        """
-
-        self.postBuild()
-
-        return True
-
-
-    def postBuild(self):
-        """Post-Build commands.
 
         Return:
         True if successful.
