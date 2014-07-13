@@ -18,7 +18,7 @@ from kraken.core.builders.base_builder import BaseBuilder
 from kraken.plugins.si_plugin.utils import *
 
 
-class SIBuilder(BaseBuilder):
+class Builder(BaseBuilder):
     """Builder object for building Kraken objects in Softimage."""
 
     def __init__(self):
@@ -33,7 +33,7 @@ class SIBuilder(BaseBuilder):
 
         Arguments:
         parentNode -- Object, sceneItem that represents the parent of this object.
-        sceneItem -- Object, sceneItem that represents a curve to be built.
+        sceneItem -- Object, sceneItem that represents a container to be built.
         objectName -- String, name of the object being created.
 
         Return:
@@ -53,7 +53,7 @@ class SIBuilder(BaseBuilder):
 
         Arguments:
         parentNode -- Object, sceneItem that represents the parent of this object.
-        sceneItem -- Object, sceneItem that represents a curve to be built.
+        sceneItem -- Object, sceneItem that represents a layer to be built.
         objectName -- String, name of the object being created.
 
         Return:
@@ -68,12 +68,32 @@ class SIBuilder(BaseBuilder):
         return node
 
 
+    def buildGroupNode(self, parentNode, sceneItem, objectName):
+        """Builds a locator / null object.
+
+        Arguments:
+        parentNode -- Node, parent node of this object.
+        sceneItem -- Object, sceneItem that represents a group to be built.
+        objectName -- String, name of the object being created.
+
+        Return:
+        Node that is created.
+
+        """
+
+        node = parentNode.AddNull()
+        node.Name = objectName
+        sceneItem.setNode(node)
+
+        return node
+
+
     def buildLocatorNode(self, parentNode, sceneItem, objectName):
         """Builds a locator / null object.
 
         Arguments:
         parentNode -- Node, parent node of this object.
-        sceneItem -- Object, locator / null object to be built.
+        sceneItem -- Object, sceneItem that represents a locator / null to be built.
         objectName -- String, name of the object being created.
 
         Return:
