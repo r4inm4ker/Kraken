@@ -1,7 +1,7 @@
-"""Kraken SI - SI Builder module.
+"""Kraken Maya - Maya Builder module.
 
 Classes:
-SIBuilder -- Component representation.
+MayaBuilder -- Component representation.
 
 """
 
@@ -15,14 +15,14 @@ from kraken.core.objects.attributes.integer_attribute import IntegerAttribute
 from kraken.core.objects.attributes.string_attribute import StringAttribute
 from kraken.core.builders.base_builder import BaseBuilder
 
-from kraken.plugins.si_plugin.utils import *
+from kraken.plugins.maya_plugin.utils import *
 
 
-class SIBuilder(BaseBuilder):
-    """Builder object for building Kraken objects in Softimage."""
+class MayaBuilder(BaseBuilder):
+    """Builder object for building Kraken objects in Maya."""
 
     def __init__(self):
-        super(SIBuilder, self).__init__()
+        super(MayaBuilder, self).__init__()
 
 
     # ===================
@@ -101,7 +101,7 @@ class SIBuilder(BaseBuilder):
 
         """
 
-        # Format points for Softimage
+        # Format points for Maya
         points = sceneItem.getControlPoints()
 
         curvePoints = []
@@ -167,7 +167,7 @@ class SIBuilder(BaseBuilder):
     # Build Methods
     # ==============
     def buildTransform(self, sceneItem):
-        """Translates the transform to Softimage transform.
+        """Translates the transform to Maya transform.
 
         Arguments:
         sceneItem -- Object: object to set the transform on.
