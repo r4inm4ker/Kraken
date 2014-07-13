@@ -205,8 +205,11 @@ class SIBuilder(BaseBuilder):
         return True
 
 
-    def _preBuild(self):
+    def _preBuild(self, container):
         """Pre-Build commands.
+
+        Arguments:
+        container -- Container, kraken container object to build.
 
         Return:
         True if successful.

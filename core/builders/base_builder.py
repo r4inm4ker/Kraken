@@ -240,8 +240,11 @@ class BaseBuilder(object):
         return None
 
 
-    def _preBuild(self):
+    def _preBuild(self, container):
         """Protected Pre-Build method.
+
+        Arguments:
+        container -- Container, kraken container object to build.
 
         Return:
         True if successful.
@@ -274,7 +277,7 @@ class BaseBuilder(object):
         """
 
         try:
-            self._preBuild()
+            self._preBuild(container)
             self._build(container)
 
         finally:
