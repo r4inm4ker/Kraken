@@ -11,6 +11,8 @@ from base_attribute import BaseAttribute
 class ColorAttribute(BaseAttribute):
     """Color Attribute."""
 
+    __kType__ = "ColorAttribute"
+
     def __init__(self, name, value):
         super(ColorAttribute, self).__init__(name, value)
         assert type(value) is bool, "Value is not of type 'bool'."

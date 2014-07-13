@@ -28,187 +28,144 @@ class SIBuilder(BaseBuilder):
     # ===================
     # Node Build Methods
     # ===================
-    def buildCurveNode(self, parentNode, sceneItem, name):
+    def buildContainerNode(self, parentNode, sceneItem, objectName):
+        """Builds a container / namespace object.
+
+        Arguments:
+        parentNode -- Object, sceneItem that represents the parent of this object.
+        sceneItem -- Object, sceneItem that represents a curve to be built.
+        objectName -- String, name of the object being created.
+
+        Return:
+        Node that is created..
+
+        """
+
+        node = parentNode.AddModel(None, objectName)
+        node.Name = objectName
+        sceneItem.setNode(node)
+
+        return node
+
+
+    def buildLayerNode(self, parentNode, sceneItem, objectName):
+        """Builds a layer object.
+
+        Arguments:
+        parentNode -- Object, sceneItem that represents the parent of this object.
+        sceneItem -- Object, sceneItem that represents a curve to be built.
+        objectName -- String, name of the object being created.
+
+        Return:
+        Node that is created..
+
+        """
+
+        node = parentNode.AddModel(None, objectName)
+        node.Name = objectName
+        sceneItem.setNode(node)
+
+        return node
+
+
+    def buildLocatorNode(self, parentNode, sceneItem, objectName):
+        """Builds a locator / null object.
+
+        Arguments:
+        parentNode -- Node, parent node of this object.
+        sceneItem -- Object, locator / null object to be built.
+        objectName -- String, name of the object being created.
+
+        Return:
+        Node that is created.
+
+        """
+
+        node = parentNode.AddNull()
+        node.Name = objectName
+        sceneItem.setNode(node)
+
+        return node
+
+
+    def buildCurveNode(self, parentNode, sceneItem, objectName):
         """Builds a Curve object.
 
         Arguments:
         parentNode -- Object, sceneItem that represents the parent of this object.
         sceneItem -- Object, sceneItem that represents a curve to be built.
-        name -- String, name of the object being created.
+        objectName -- String, name of the object being created.
 
         Return:
-        node that is created.
+        Node that is created.
 
         """
 
-        for e, eachCurveSection in enumerate(sceneItem.getControlPoints()):
+        # Format points for Softimage
+        points = sceneItem.getControlPoints()
 
-            points = sceneItem.getControlPoints()[e]
+        curvePoints = []
+        for eachSubCurve in points:
+            subCurvePoints = [x.toArray() for x in eachSubCurve]
 
             formattedPoints = []
             for i in xrange(3):
-
                 axisPositions = []
-                for p, eachPnt in enumerate(points):
-                    if p < len(points):
-                        axisPositions.append(eachPnt.toArray()[i])
+                for p, eachPnt in enumerate(subCurvePoints):
+                    if p < len(subCurvePoints):
+                        axisPositions.append(eachPnt[i])
 
                 formattedPoints.append(axisPositions)
 
-            formattedPoints.append([1.0] * len(points))
+            formattedPoints.append([1.0] * len(subCurvePoints))
+            curvePoints.append(formattedPoints)
 
-            # Scale, rotate, translation shape
-            ctrlPnts = []
-            ctrlPnts.append([x for x in formattedPoints[0]])
-            ctrlPnts.append([x for x in formattedPoints[1]])
-            ctrlPnts.append([x for x in formattedPoints[2]])
-            ctrlPnts.append(formattedPoints[3])
+        # Build the curve
+        for i, eachCurveSection in enumerate(curvePoints):
 
-            if sceneItem.getCurveSectionClosed(e) is True:
-                knots = list(xrange(len(ctrlPnts) + 1))
+            # Create knots
+            if sceneItem.getCurveSectionClosed(i) is True:
+                knots = list(xrange(len(eachCurveSection) + 1))
             else:
-                knots = list(xrange(len(ctrlPnts)))
+                knots = list(xrange(len(eachCurveSection) + 2))
 
-            if e == 0:
-                node = parentNode.AddNurbsCurve(ctrlPnts, knots, sceneItem.getCurveSectionClosed(e), 1, 1, constants.siSINurbs)
+            if i == 0:
+                node = parentNode.AddNurbsCurve(list(eachCurveSection), list(xrange(len(eachCurveSection[0]) + 1)), sceneItem.getCurveSectionClosed(i), 1, constants.siNonUniformParameterization, constants.siSINurbs)
                 sceneItem.setNode(node)
             else:
-                sceneItem.getNode().ActivePrimitive.Geometry.AddCurve(ctrlPnts, knots, sceneItem.getCurveSectionClosed(e), 1, 1)
+                sceneItem.getNode().ActivePrimitive.Geometry.AddCurve(eachCurveSection, list(xrange(len(eachCurveSection[0]))), sceneItem.getCurveSectionClosed(i), 1, constants.siNonUniformParameterization)
 
-        node.Name = name
-
-        return node
-
-
-    # ======================
-    # Generic Build Methods
-    # ======================
-    def buildAttributes(self, sceneItem, node):
-        """Builds attributes on the DCC object.
-
-        Arguments:
-        sceneItem -- SceneItem, kraken object to build attributes for.
-        node -- DCC Object, DCC object to build attributes on.
-
-        Return:
-        True if successful.
-
-        """
-
-        for i in xrange(sceneItem.getNumAttributes()):
-            attribute = sceneItem.getAttributeByIndex(i)
-
-            if isinstance(attribute, FloatAttribute):
-                pass
-                # log(attribute.name)
-
-            elif isinstance(attribute, BoolAttribute):
-                pass
-                # log(attribute.name)
-
-            elif isinstance(attribute, IntegerAttribute):
-                pass
-                # log(attribute.name)
-
-            elif isinstance(attribute, StringAttribute):
-                pass
-                # log(attribute.name)
-
-        return True
-
-
-    def buildHierarchy(self, sceneItem, parentNode, component=None):
-        """Builds the hierarchy for the supplied sceneItem.
-
-        Arguments:
-        sceneItem -- SceneItem, kraken object to build.
-        parentNode -- DCC Object, object that is the parent of the created object.
-        component -- Component, component that this object belongs to.
-
-        Return:
-        DCC object that was created.
-
-        """
-
-        if sceneItem.testFlag('guide'):
-            return None
-
-        node = None
-        objectName = self.buildName(sceneItem, component=component)
-        kType = sceneItem.getKType()
-
-        # Build Object
-        if kType == "Layer":
-            node = parentNode.AddModel(None, objectName)
-            sceneItem.setNode(node)
-
-        elif kType == "Component":
-            node = parentNode.AddNull(objectName)
-            component = sceneItem
-            sceneItem.setNode(node)
-
-        elif kType == "Curve":
-            node = self.buildCurveNode(parentNode, sceneItem, objectName)
-            # node = parentNode.AddNull(objectName)
-            # TODO: Actually create curve objects.
-
-        elif kType == "Control":
-            node = self.buildCurveNode(parentNode, sceneItem, objectName)
-            # node = parentNode.AddNull(objectName)
-
-        else:
-            raise NotImplementedError(sceneItem.getName() + ' has an unsupported type: ' + str(type(sceneItem)))
-
-
-        self.buildAttributes(sceneItem, node)
-        self.buildTransform(sceneItem)
-
-        # Build children
-        for i in xrange(sceneItem.getNumChildren()):
-            child = sceneItem.getChildByIndex(i)
-            self.buildHierarchy(child, node, component)
+        node.Name = objectName
 
         return node
 
 
-    def buildName(self, sceneItem, component=None):
-        """Builds the name for the sceneItem that is passed.
-
-        Arguments:
-        sceneItem -- SceneItem, kraken object to build the name for.
-        component -- Component, component that this object belongs to.
-
-        Return:
-        Built name as a string.
-        None if it fails.
-
-        """
-
-        if isinstance(sceneItem, BaseComponent):
-            return '_'.join([sceneItem.getName(), sceneItem.getSide(), 'hrc'])
-
-        componentName = ""
-        side = ""
-
-        if component is not None:
-            componentName = component.getName()
-            side = component.getSide()
-
-        if isinstance(sceneItem, Layer):
-            return '_'.join([sceneItem.parent.getName(), sceneItem.getName()])
-
-        elif isinstance(sceneItem, BaseControl):
-            return '_'.join([componentName, sceneItem.getName(), side, 'ctrl'])
-
-        elif isinstance(sceneItem, Curve):
-            return '_'.join([componentName, sceneItem.getName(), side, 'crv'])
-
-        else:
-            raise NotImplementedError('buildName() not implemented for ' + str(type(sceneItem)))
-
-        return None
+    # ========================
+    # Attribute Build Methods
+    # ========================
+    def buildBoolAttributeNode(self):
+        pass
 
 
+    def buildColorAttributeNode(self):
+        pass
+
+
+    def buildFloatAttributeNode(self):
+        pass
+
+
+    def buildIntegerAttributeNode(self):
+        pass
+
+
+    def buildStringAttributeNode(self):
+        pass
+
+
+    # ==============
+    # Build Methods
+    # ==============
     def buildTransform(self, sceneItem):
         """Translates the transform to Softimage transform.
 
@@ -245,13 +202,23 @@ class SIBuilder(BaseBuilder):
 
         """
 
+        return True
 
+
+    def preBuild(self):
+        """Pre-Build commands.
+
+        Return:
+        True if successful.
+
+        """
+
+        si.BeginUndo("Kraken SI Build: " + container.name)
 
         return True
 
 
-
-    def build(self, container):
+    def _build(self, container):
         """Builds the supplied container into a DCC representation.
 
         Arguments:
@@ -262,19 +229,20 @@ class SIBuilder(BaseBuilder):
 
         """
 
-        try:
-            si.BeginUndo("Kraken SI Build: " + container.name)
+        scnRoot = si.ActiveProject3.ActiveScene.Root
+        self.buildHierarchy(container, scnRoot, component=None)
 
-            scnRoot = si.ActiveProject3.ActiveScene.Root
+        return True
 
-            containerNull = scnRoot.AddModel(None, container.name)
-            container.setNode(containerNull)
 
-            # Create Each Component
-            for eachLayer in container.getChildrenByType(Layer):
-                self.buildHierarchy(eachLayer, containerNull, component=None)
+    def postBuild(self):
+        """Post-Build commands.
 
-        finally:
-            si.EndUndo()
+        Return:
+        True if successful.
+
+        """
+
+        si.EndUndo()
 
         return True
