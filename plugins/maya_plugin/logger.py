@@ -6,6 +6,7 @@ import maya.OpenMaya as OpenMaya
 
 LOGGER_PREFIX = 'kraken.mayaLogger'
 
+thing = "blah"
 
 class MayaLogger(logging.Logger):
 
