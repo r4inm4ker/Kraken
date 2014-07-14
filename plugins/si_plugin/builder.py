@@ -1,7 +1,7 @@
 """Kraken SI - SI Builder module.
 
 Classes:
-SIBuilder -- Component representation.
+Builder -- Component representation.
 
 """
 
@@ -22,7 +22,7 @@ class Builder(BaseBuilder):
     """Builder object for building Kraken objects in Softimage."""
 
     def __init__(self):
-        super(SIBuilder, self).__init__()
+        super(Builder, self).__init__()
 
 
     # ===================
@@ -42,10 +42,14 @@ class Builder(BaseBuilder):
         """
 
         node = parentNode.AddModel(None, objectName)
+
+        if sceneItem.getShapeVisibility() is False:
+            node.Properties("Visibility").Parameters("viewvis").Value = False
+
         node.Name = objectName
         sceneItem.setNode(node)
 
-        return node
+        return sceneItem.node
 
 
     def buildLayerNode(self, parentNode, sceneItem, objectName):
@@ -62,10 +66,14 @@ class Builder(BaseBuilder):
         """
 
         node = parentNode.AddModel(None, objectName)
+
+        if sceneItem.getShapeVisibility() is False:
+            node.Properties("Visibility").Parameters("viewvis").Value = False
+
         node.Name = objectName
         sceneItem.setNode(node)
 
-        return node
+        return sceneItem.node
 
 
     def buildGroupNode(self, parentNode, sceneItem, objectName):
@@ -82,10 +90,14 @@ class Builder(BaseBuilder):
         """
 
         node = parentNode.AddNull()
+
+        if sceneItem.getShapeVisibility() is False:
+            node.Properties("Visibility").Parameters("viewvis").Value = False
+
         node.Name = objectName
         sceneItem.setNode(node)
 
-        return node
+        return sceneItem.node
 
 
     def buildLocatorNode(self, parentNode, sceneItem, objectName):
@@ -105,7 +117,7 @@ class Builder(BaseBuilder):
         node.Name = objectName
         sceneItem.setNode(node)
 
-        return node
+        return sceneItem.node
 
 
     def buildCurveNode(self, parentNode, sceneItem, objectName):
@@ -155,32 +167,87 @@ class Builder(BaseBuilder):
             else:
                 sceneItem.getNode().ActivePrimitive.Geometry.AddCurve(eachCurveSection, list(xrange(len(eachCurveSection[0]))), sceneItem.getCurveSectionClosed(i), 1, constants.siNonUniformParameterization)
 
-        node.Name = objectName
+        sceneItem.node.Name = objectName
 
-        return node
+        return sceneItem.node
 
 
     # ========================
     # Attribute Build Methods
     # ========================
     def buildBoolAttributeNode(self):
-        pass
+        """Builds a Bool attribute.
+
+        Return:
+        True if successful.
+
+        """
+
+        return True
 
 
     def buildColorAttributeNode(self):
-        pass
+        """Builds a Color attribute.
+
+        Return:
+        True if successful.
+
+        """
+
+        return True
 
 
     def buildFloatAttributeNode(self):
-        pass
+        """Builds a Float attribute.
+
+        Return:
+        True if successful.
+
+        """
+
+        return True
 
 
     def buildIntegerAttributeNode(self):
-        pass
+        """Builds a Integer attribute.
+
+        Return:
+        True if successful.
+
+        """
+
+        return True
 
 
     def buildStringAttributeNode(self):
-        pass
+        """Builds a String attribute.
+
+        Return:
+        True if successful.
+
+        """
+
+        return True
+
+
+    # ===================
+    # Visibility Methods
+    # ===================
+    def buildVisibility(self, sceneItem):
+        """Sets the visibility of the object after its been created.
+
+        Arguments:
+        Arguments -- Type, information.
+
+        Return:
+        True if successful.
+
+        """
+
+        if sceneItem.getShapeVisibility() is False:
+            sceneItem.node.Properties("Visibility").Parameters("viewvis").Value = False
+
+        return True
 
 
     # ==============

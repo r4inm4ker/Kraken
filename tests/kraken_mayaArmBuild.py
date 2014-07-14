@@ -10,5 +10,5 @@ from kraken.plugins.maya_plugin.builder import Builder
 
 myArm = ArmRig("myArm")
 
-siBuilder = Builder()
-siBuilder.build(myArm)
+builder = Builder()
+builder.build(myArm)

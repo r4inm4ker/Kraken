@@ -46,7 +46,7 @@ class Builder(BaseBuilder):
         pm.rename(node, objectName)
         sceneItem.setNode(node)
 
-        return node
+        return sceneItem.node
 
 
     def buildLayerNode(self, parentNode, sceneItem, objectName):
@@ -67,7 +67,7 @@ class Builder(BaseBuilder):
         pm.rename(node, objectName)
         sceneItem.setNode(node)
 
-        return node
+        return sceneItem.node
 
 
     def buildGroupNode(self, parentNode, sceneItem, objectName):
@@ -88,7 +88,7 @@ class Builder(BaseBuilder):
         pm.rename(node, objectName)
         sceneItem.setNode(node)
 
-        return node
+        return sceneItem.node
 
 
     def buildLocatorNode(self, parentNode, sceneItem, objectName):
@@ -109,7 +109,7 @@ class Builder(BaseBuilder):
         pm.rename(node, objectName)
         sceneItem.setNode(node)
 
-        return node
+        return sceneItem.node
 
 
     def buildCurveNode(self, parentNode, sceneItem, objectName):
@@ -153,30 +153,85 @@ class Builder(BaseBuilder):
         pm.rename(node, objectName)
         sceneItem.setNode(node)
 
-        return node
+        return sceneItem.node
 
 
     # ========================
     # Attribute Build Methods
     # ========================
     def buildBoolAttributeNode(self):
-        pass
+        """Builds a Bool attribute.
+
+        Return:
+        True if successful.
+
+        """
+
+        return True
 
 
     def buildColorAttributeNode(self):
-        pass
+        """Builds a Color attribute.
+
+        Return:
+        True if successful.
+
+        """
+
+        return True
 
 
     def buildFloatAttributeNode(self):
-        pass
+        """Builds a Float attribute.
+
+        Return:
+        True if successful.
+
+        """
+
+        return True
 
 
     def buildIntegerAttributeNode(self):
-        pass
+        """Builds a Integer attribute.
+
+        Return:
+        True if successful.
+
+        """
+
+        return True
 
 
     def buildStringAttributeNode(self):
-        pass
+        """Builds a String attribute.
+
+        Return:
+        True if successful.
+
+        """
+
+        return True
+
+
+    # ===================
+    # Visibility Methods
+    # ===================
+    def buildVisibility(self, sceneItem):
+        """Sets the visibility of the object after its been created.
+
+        Arguments:
+        Arguments -- Type, information.
+
+        Return:
+        True if successful.
+
+        """
+
+        if sceneItem.getShapeVisibility() is False:
+            pass
+
+        return True
 
 
     # ==============

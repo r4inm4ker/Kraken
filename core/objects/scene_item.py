@@ -22,6 +22,8 @@ class SceneItem(object):
         self.attributes = []
         self.xfo = Xfo()
         self.node = None
+        self.visibility = True
+        self.shapeVisibility = True
 
 
     # =============
@@ -263,6 +265,7 @@ class SceneItem(object):
 
         return False
 
+
     # ==================
     # Attribute Methods
     # ==================
@@ -438,3 +441,60 @@ class SceneItem(object):
         """
 
         return self.__kType__
+
+
+    # ===================
+    # Visibility Methods
+    # ===================
+    def getVisibility(self):
+        """Returns the visibility status of the scene item.
+
+        Return:
+        Boolean, visible or not.
+
+        """
+
+        return self.visibility
+
+
+    def setVisibility(self, value):
+        """Sets the visibility of the scene object.
+
+        Arguments:
+        value -- Boolean, value of the visibility of the object.
+
+        Return:
+        True if successful.
+
+        """
+
+        self.visibility = value
+
+        return True
+
+
+    def getShapeVisibility(self):
+        """Returns the shape visibility status of the scene item.
+
+        Return:
+        Boolean, visible or not.
+
+        """
+
+        return self.shapeVisibility
+
+
+    def setShapeVisibility(self, value):
+        """Sets the shape visibility of the scene object.
+
+        Arguments:
+        value -- Boolean, value of the visibility of the object.
+
+        Return:
+        True if successful.
+
+        """
+
+        self.shapeVisibility = value
+
+        return True

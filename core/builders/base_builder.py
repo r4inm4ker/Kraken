@@ -24,7 +24,7 @@ class BaseBuilder(object):
 
         Arguments:
         parentNode -- Object, sceneItem that represents the parent of this object.
-        sceneItem -- Object, sceneItem that represents a curve to be built.
+        sceneItem -- Object, sceneItem that represents a container to be built.
         objectName -- String, name of the object being created.
 
         Return:
@@ -40,11 +40,27 @@ class BaseBuilder(object):
 
         Arguments:
         parentNode -- Object, sceneItem that represents the parent of this object.
-        sceneItem -- Object, sceneItem that represents a curve to be built.
+        sceneItem -- Object, sceneItem that represents a layer to be built.
         objectName -- String, name of the object being created.
 
         Return:
         Node that is created..
+
+        """
+
+        return None
+
+
+    def buildGroupNode(self, parentNode, sceneItem, objectName):
+        """Builds a group object.
+
+        Arguments:
+        parentNode -- Node, parent node of this object.
+        sceneItem -- Object, sceneItem that represents a group to be built.
+        objectName -- String, name of the object being created.
+
+        Return:
+        Node that is created.
 
         """
 
@@ -56,7 +72,7 @@ class BaseBuilder(object):
 
         Arguments:
         parentNode -- Node, parent node of this object.
-        sceneItem -- Object, locator / null object to be built.
+        sceneItem -- Object, sceneItem that represents a locator / null to be built.
         objectName -- String, name of the object being created.
 
         Return:
@@ -87,23 +103,58 @@ class BaseBuilder(object):
     # Attribute Build Methods
     # ========================
     def buildBoolAttributeNode(self):
-        pass
+        """Builds a Bool attribute.
+
+        Return:
+        True if successful.
+
+        """
+
+        return True
 
 
     def buildColorAttributeNode(self):
-        pass
+        """Builds a Color attribute.
+
+        Return:
+        True if successful.
+
+        """
+
+        return True
 
 
     def buildFloatAttributeNode(self):
-        pass
+        """Builds a Float attribute.
+
+        Return:
+        True if successful.
+
+        """
+
+        return True
 
 
     def buildIntegerAttributeNode(self):
-        pass
+        """Builds a Integer attribute.
+
+        Return:
+        True if successful.
+
+        """
+
+        return True
 
 
     def buildStringAttributeNode(self):
-        pass
+        """Builds a String attribute.
+
+        Return:
+        True if successful.
+
+        """
+
+        return True
 
 
     # ==============
@@ -127,16 +178,16 @@ class BaseBuilder(object):
             kType = attribute.getKType()
 
             if kType == "FloatAttribute":
-                print kType
+                print sceneItem.name
 
             elif kType == "BoolAttribute":
-                print kType
+                print sceneItem.name
 
             elif kType == "IntegerAttribute":
-                print kType
+                print sceneItem.name
 
             elif kType == "StringAttribute":
-                print kType
+                print sceneItem.name
 
         return True
 
@@ -169,7 +220,7 @@ class BaseBuilder(object):
             node = self.buildLayerNode(parentNode, sceneItem, objectName)
 
         elif kType == "Component":
-            node = self.buildLocatorNode(parentNode, sceneItem, objectName)
+            node = self.buildGroupNode(parentNode, sceneItem, objectName)
             component = sceneItem
 
         elif kType == "SceneItem":
@@ -186,6 +237,7 @@ class BaseBuilder(object):
 
         self.buildAttributes(sceneItem)
         self.buildTransform(sceneItem)
+        self.buildVisibility(sceneItem)
 
         # Build children
         for i in xrange(sceneItem.getNumChildren()):
@@ -240,6 +292,29 @@ class BaseBuilder(object):
         return None
 
 
+    # ===================
+    # Visibility Methods
+    # ===================
+    def buildVisibility(self, sceneItem):
+        """Sets the visibility of the object after its been created.
+
+        Arguments:
+        Arguments -- Type, information.
+
+        Return:
+        True if successful.
+
+        """
+
+        if sceneItem.getShapeVisibility() is False:
+            sceneItem.node.Properties("Visibility").Parameters("viewvis").Value = False
+
+        return True
+
+
+    # ==============
+    # Build Methods
+    # ==============
     def _preBuild(self, container):
         """Protected Pre-Build method.
 
