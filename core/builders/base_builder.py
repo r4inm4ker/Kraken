@@ -178,16 +178,16 @@ class BaseBuilder(object):
             kType = attribute.getKType()
 
             if kType == "FloatAttribute":
-                print sceneItem.name
+                print sceneItem.attributes[i].name
 
             elif kType == "BoolAttribute":
-                print sceneItem.name
+                print sceneItem.attributes[i].name
 
             elif kType == "IntegerAttribute":
-                print sceneItem.name
+                print sceneItem.attributes[i].name
 
             elif kType == "StringAttribute":
-                print sceneItem.name
+                print sceneItem.attributes[i].name
 
         return True
 

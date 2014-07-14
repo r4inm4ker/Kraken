@@ -229,7 +229,11 @@ class Builder(BaseBuilder):
         """
 
         if sceneItem.getShapeVisibility() is False:
-            pass
+
+            # Get shape node, if it exists, hide it.
+            shape = sceneItem.node.getShape()
+            if shape is not None:
+                shape.visibility.set(False)
 
         return True
 

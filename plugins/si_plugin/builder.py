@@ -42,10 +42,6 @@ class Builder(BaseBuilder):
         """
 
         node = parentNode.AddModel(None, objectName)
-
-        if sceneItem.getShapeVisibility() is False:
-            node.Properties("Visibility").Parameters("viewvis").Value = False
-
         node.Name = objectName
         sceneItem.setNode(node)
 
@@ -66,10 +62,6 @@ class Builder(BaseBuilder):
         """
 
         node = parentNode.AddModel(None, objectName)
-
-        if sceneItem.getShapeVisibility() is False:
-            node.Properties("Visibility").Parameters("viewvis").Value = False
-
         node.Name = objectName
         sceneItem.setNode(node)
 
@@ -90,10 +82,6 @@ class Builder(BaseBuilder):
         """
 
         node = parentNode.AddNull()
-
-        if sceneItem.getShapeVisibility() is False:
-            node.Properties("Visibility").Parameters("viewvis").Value = False
-
         node.Name = objectName
         sceneItem.setNode(node)
 
@@ -157,15 +145,15 @@ class Builder(BaseBuilder):
 
             # Create knots
             if sceneItem.getCurveSectionClosed(i) is True:
-                knots = list(xrange(len(eachCurveSection) + 1))
+                knots = list(xrange(len(eachCurveSection[i]) + 1))
             else:
-                knots = list(xrange(len(eachCurveSection) + 2))
+                knots = list(xrange(len(eachCurveSection[i])))
 
             if i == 0:
-                node = parentNode.AddNurbsCurve(list(eachCurveSection), list(xrange(len(eachCurveSection[0]) + 1)), sceneItem.getCurveSectionClosed(i), 1, constants.siNonUniformParameterization, constants.siSINurbs)
+                node = parentNode.AddNurbsCurve(list(eachCurveSection), knots, sceneItem.getCurveSectionClosed(i), 1, constants.siNonUniformParameterization, constants.siSINurbs)
                 sceneItem.setNode(node)
             else:
-                sceneItem.getNode().ActivePrimitive.Geometry.AddCurve(eachCurveSection, list(xrange(len(eachCurveSection[0]))), sceneItem.getCurveSectionClosed(i), 1, constants.siNonUniformParameterization)
+                sceneItem.getNode().ActivePrimitive.Geometry.AddCurve(eachCurveSection, knots, sceneItem.getCurveSectionClosed(i), 1, constants.siNonUniformParameterization)
 
         sceneItem.node.Name = objectName
 
