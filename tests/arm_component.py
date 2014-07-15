@@ -15,43 +15,26 @@ class ArmComponent(BaseComponent):
     def __init__(self, name, parent=None, side='M'):
         super(ArmComponent, self).__init__(name, parent, side)
 
+        self.addInput(ComponentInput('armParent'))
+        self.addOutput(ComponentInput('wrist'))
+
         # Setup component attributes
-        self.addAttribute(FloatAttribute("bone1Len", 1.0, minValue=0.0, maxValue=100.0))
-        self.addAttribute(FloatAttribute("bone2Len", 1.0, minValue=0.0, maxValue=100.0))
-        self.addAttribute(FloatAttribute("fkik", 1.0, minValue=0.0, maxValue=1.0))
-        self.addAttribute(FloatAttribute("softDist", 0.5, minValue=0.0, maxValue=1.0))
-        self.addAttribute(BoolAttribute("softIK", True))
-        self.addAttribute(BoolAttribute("stretch", True))
-        self.addAttribute(FloatAttribute("stretchBlend", 1.0, minValue=0.0, maxValue=1.0))
-        self.addAttribute(StringAttribute("Side", self.side))
         self.addAttribute(BoolAttribute("toggleDebugging", True))
-
-        # Setup Xfos
-        bicepXfo = Xfo()
-        bicepXfo.tr = Vec3(5.0, 20.0, 0.0)
-
-        forearmXfo = Xfo()
-        forearmXfo.tr = Vec3(8.535533905932736, 16.46446609406726, -2.5)
-
-        wristXfo = Xfo()
-        wristXfo.tr = Vec3(12.071067811865474, 12.92893218813452, 0.0)
-
-        # Add xfos
-        self.addXfo("bicep", bicepXfo)
-        self.addXfo("forearm", forearmXfo)
-        self.addXfo("wrist", wristXfo)
 
         # Add Guide Controls
         bicepGuideCtrl = NullControl('bicepGuideCtrl')
         bicepGuideCtrl.setFlag("guide")
+        bicepGuideCtrl.xfo.tr = Vec3(5.0, 20.0, 0.0)
         self.addChild(bicepGuideCtrl)
 
         forearmGuideCtrl = NullControl('forearmGuideCtrl')
         forearmGuideCtrl.setFlag("guide")
+        forearmGuideCtrl.xfo.tr = Vec3(8.5, 16.4, -2.5)
         self.addChild(forearmGuideCtrl)
 
         wristGuideCtrl = NullControl('wristGuideCtrl')
         wristGuideCtrl.setFlag("guide")
+        wristGuideCtrl.xfo.tr = Vec3(12.0, 12.9, 0.0)
         self.addChild(wristGuideCtrl)
 
         # Guide Splice Op Code
@@ -63,22 +46,43 @@ class ArmComponent(BaseComponent):
 
         """
 
-    def buildRig(self):
+    def buildRig(self, parent):
 
-        
+        # component = super(ArmComponent, self).buildRig()
+        component = BaseComponent(self.getName(), parent, self.getSide())
 
-        # # Add Rig Controls
-        # bicepFKCtrl = SquareControl('bicepFKCtrl', parent=self)
-        # bicepFKCtrl.xfo = bicepXfo
-        # self.addChild(bicepFKCtrl)
+        # Setup component attributes
+        component.addAttribute(FloatAttribute("bone1Len", 1.0, minValue=0.0, maxValue=100.0))
+        component.addAttribute(FloatAttribute("bone2Len", 1.0, minValue=0.0, maxValue=100.0))
+        component.addAttribute(FloatAttribute("fkik", 1.0, minValue=0.0, maxValue=1.0))
+        component.addAttribute(FloatAttribute("softDist", 0.5, minValue=0.0, maxValue=1.0))
+        component.addAttribute(BoolAttribute("softIK", True))
+        component.addAttribute(BoolAttribute("stretch", True))
+        component.addAttribute(FloatAttribute("stretchBlend", 1.0, minValue=0.0, maxValue=1.0))
+        component.addAttribute(StringAttribute("Side", self.side))
+        component.addAttribute(BoolAttribute("toggleDebugging", True))
 
-        # forearmFKCtrl = NullControl('forearmFKCtrl', parent=self)
-        # forearmFKCtrl.xfo = forearmXfo
-        # self.addChild(forearmFKCtrl)
 
-        # wristIKCtrl = CircleControl('wristIKCtrl', parent=self)
-        # wristIKCtrl.xfo = wristXfo
-        # self.addChild(wristIKCtrl)
+        bicepGuideCtrl = self.getChildByName('bicepGuideCtrl')
+        forearmGuideCtrl = self.getChildByName('forearmGuideCtrl')
+        wristGuideCtrl = self.getChildByName('wristGuideCtrl')
+
+
+        # Math here...
+
+
+        # Add Rig Controls
+        bicepFKCtrl = SquareControl('bicepFKCtrl', parent=self)
+        bicepFKCtrl.xfo = bicepGuideCtrl.xfo
+        self.addChild(bicepFKCtrl)
+
+        forearmFKCtrl = NullControl('forearmFKCtrl', parent=self)
+        forearmFKCtrl.xfo = forearmGuideCtrl.xfo
+        self.addChild(forearmFKCtrl)
+
+        wristIKCtrl = CircleControl('wristIKCtrl', parent=self)
+        wristIKCtrl.xfo = wristGuideCtrl.xfo
+        self.addChild(wristIKCtrl)
 
         # componentSpliceCode = """require Math;"""
 

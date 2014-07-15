@@ -16,6 +16,14 @@ class Container(SceneItem):
 
     def __init__(self, name):
         super(Container, self).__init__(name, None)
-        self.layers = []
 
         self.setShapeVisibility(False)
+
+
+
+
+    # def buildRig(self):
+
+    #     container = Container(self.getName())
+
+    #     for 

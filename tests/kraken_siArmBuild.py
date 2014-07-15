@@ -12,3 +12,13 @@ myArm = ArmRig("myArm")
 
 builder = Builder()
 builder.build(myArm)
+
+# Editing happens here....
+
+# now we can save out a preset....
+json = myArm.save()
+
+# delte the guide/go to a new scene.
+
+builder = Builder()
+builder.build(json)
