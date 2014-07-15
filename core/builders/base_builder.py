@@ -17,6 +17,10 @@ class BaseBuilder(object):
 
         self._buildElements = []
 
+    def _registerPair(self, sceneItem, dccSceneItem):
+        self._buildElements.append( { 'src': sceneItem, 'tgt': dccSceneItem } )
+
+
     def _getDCCSceneItem(self, sceneItem):
         """Given a sceneItem, returns the built dcc scene item.
 
@@ -36,7 +40,7 @@ class BaseBuilder(object):
     # ===================
     # Node Build Methods
     # ===================
-    def buildContainerNode(self, parentNode, sceneItem, objectName):
+    def buildContainerNode(self, sceneItem, objectName):
         """Builds a container / namespace object.
 
         Arguments:
@@ -52,7 +56,7 @@ class BaseBuilder(object):
         return None
 
 
-    def buildLayerNode(self, parentNode, sceneItem, objectName):
+    def buildLayerNode(self, sceneItem, objectName):
         """Builds a layer object.
 
         Arguments:
@@ -68,7 +72,7 @@ class BaseBuilder(object):
         return None
 
 
-    def buildGroupNode(self, parentNode, sceneItem, objectName):
+    def buildGroupNode(self, sceneItem, objectName):
         """Builds a group object.
 
         Arguments:
@@ -84,7 +88,7 @@ class BaseBuilder(object):
         return None
 
 
-    def buildLocatorNode(self, parentNode, sceneItem, objectName):
+    def buildLocatorNode(self, sceneItem, objectName):
         """Builds a locator / null object.
 
         Arguments:
@@ -100,7 +104,7 @@ class BaseBuilder(object):
         return None
 
 
-    def buildCurveNode(self, parentNode, sceneItem, objectName):
+    def buildCurveNode(self, sceneItem, objectName):
         """Builds a Curve object.
 
         Arguments:
@@ -210,7 +214,7 @@ class BaseBuilder(object):
         return True
 
 
-    def buildHierarchy(self, sceneItem, parentNode, component=None):
+    def buildHierarchy(self, sceneItem, component=None):
         """Builds the hierarchy for the supplied sceneItem.
 
         Arguments:
@@ -232,30 +236,30 @@ class BaseBuilder(object):
 
         # Build Object
         if kType == "Container":
-            node = self.buildContainerNode(parentNode, sceneItem, objectName)
+            node = self.buildContainerNode(sceneItem, objectName)
 
         elif kType == "Layer":
-            node = self.buildLayerNode(parentNode, sceneItem, objectName)
+            node = self.buildLayerNode(sceneItem, objectName)
 
         elif kType == "Component":
-            node = self.buildGroupNode(parentNode, sceneItem, objectName)
+            node = self.buildGroupNode(sceneItem, objectName)
             component = sceneItem
 
         elif kType == "SceneItem":
-            node = self.buildLocatorNode(parentNode, sceneItem, objectName)
+            node = self.buildLocatorNode(sceneItem, objectName)
 
         elif kType == "Curve":
-            node = self.buildCurveNode(parentNode, sceneItem, objectName)
+            node = self.buildCurveNode(sceneItem, objectName)
 
         elif kType == "Control":
-            node = self.buildCurveNode(parentNode, sceneItem, objectName)
+            node = self.buildCurveNode(sceneItem, objectName)
 
         else:
             raise NotImplementedError(sceneItem.getName() + ' has an unsupported type: ' + str(type(sceneItem)))
 
         self.buildAttributes(sceneItem)
-        self.buildTransform(sceneItem)
-        self.buildVisibility(sceneItem)
+        self.setTransform(sceneItem)
+        self.setVisibility(sceneItem)
 
         # Build children
         for i in xrange(sceneItem.getNumChildren()):
@@ -313,7 +317,7 @@ class BaseBuilder(object):
     # ===================
     # Visibility Methods
     # ===================
-    def buildVisibility(self, sceneItem):
+    def setVisibility(self, sceneItem):
         """Sets the visibility of the object after its been created.
 
         Arguments:

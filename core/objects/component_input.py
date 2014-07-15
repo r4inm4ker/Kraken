@@ -10,7 +10,7 @@ class ComponentInput(object):
 
     __kType__ = "ComponentInput"
 
-    def __init__(self, name, dataType):
+    def __init__(self, name, dataType='Xfo'):
         super(ComponentInput, self).__init__()
         self.name = name
         self.dataType = dataType
@@ -30,6 +30,13 @@ class ComponentInput(object):
         True if successful.
 
         """
+
+        from component_output import ComponentOutput
+        if type(componentOutput) != ComponentOutput:
+            raise Exception("Output components can only be connected to input components. connection type:'" + str(type(componentOutput))+"'")
+
+        if self.dataType != componentOutput.dataType:
+            raise Exception("Connected component output data type:'" +componentOutput.dataType+"' does not match this component data type:'" + self.dataType)
 
         self.connection = componentOutput
         componentOutput.addConnection(self)

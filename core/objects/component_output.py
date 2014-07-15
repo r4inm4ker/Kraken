@@ -10,7 +10,7 @@ class ComponentOutput(object):
 
     __kType__ = "ComponentOutput"
 
-    def __init__(self, name, dataType):
+    def __init__(self, name, dataType='Xfo'):
         super(ComponentOutput, self).__init__()
         self.name = name
         self.dataType = dataType
@@ -20,34 +20,43 @@ class ComponentOutput(object):
     # ===================
     # Connection Methods
     # ===================
-    def addConnection(self, componentOutput):
+    def addConnection(self, componentInput):
         """Adds a connection to this object.
 
         Arguments:
-        componentOutput -- Object, component output object to add.
+        componentInput -- Object, component input object to add.
 
         Return:
         True if successful.
 
         """
 
-        self.connections.append(componentOutput)
+        from component_input import ComponentInput
+        if type(componentInput) != ComponentInput:
+            raise Exception("Output components can only be connected to input components. connection type:'" + str(type(componentInput))+"'")
+
+        if self.dataType != componentInput.dataType:
+            raise Exception("Connected component input data type:'" +componentInput.dataType+"' does not match this component data type:'" + self.dataType)
+
+        self.connections.append(componentInput)
 
         return True
 
 
-    def removeConnection(self, instance):
+    def removeConnection(self, connection):
         """Removes the connection to the output that is set.
 
         Arguments:
-        instance -- Object, connection to remove.
+        connection -- Object, connection to remove.
 
         Return:
         True if successful.
 
         """
 
-        index = self.connections.index(instance)
+        index = self.connections.index(connection)
+        if index == -1:
+            raise Exception("")
         del self.connections[index]
 
         return True

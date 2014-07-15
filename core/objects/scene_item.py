@@ -398,37 +398,6 @@ class SceneItem(object):
         return None
 
 
-    # =============
-    # Node Methods
-    # =============
-    def setNode(self, node):
-        """Sets the node attribute to point to the node in the DCC which it
-        represents.
-
-        Arguments:
-        node -- Object / String, pointer to the object in the DCC.
-
-        Return:
-        True if successful.
-
-        """
-
-        self.node = node
-
-        return True
-
-
-    def getNode(self):
-        """Returns the node attribute.
-
-        Return:
-        Node value.
-
-        """
-
-        return self.node
-
-
     # ==============
     # kType Methods
     # ==============
@@ -498,3 +467,8 @@ class SceneItem(object):
         self.shapeVisibility = value
 
         return True
+
+
+    def buildRig(self, parent):
+        pass
+        # sceneItem = self.__class__()

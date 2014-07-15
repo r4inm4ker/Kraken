@@ -17,7 +17,6 @@ class BaseComponent(SceneItem):
     def __init__(self, name, parent=None, side='M'):
         super(BaseComponent, self).__init__(name, parent)
         self.side = side
-        self.xfos = {}
         self.inputs = []
         self.outputs = []
 
@@ -49,105 +48,6 @@ class BaseComponent(SceneItem):
         self.side = side
 
         return True
-
-
-    # ======================
-    # Component Xfo Methods
-    # ======================
-    def hasXfo(self, name):
-        """Checks if the supplied name is valid.
-
-        Arguments:
-        name -- String, name of the component to return.
-
-        Return:
-        True if valid.
-        """
-
-        if name not in self.xfos.keys():
-            return False
-
-        return True
-
-
-    def addXfo(self, name, xfo=None):
-        """Adds an Xfo to the component xfo array.
-
-        Arguments:
-        name -- String, name of the xfo.
-        xfo -- Xfo, transform to add to the xfos array.
-               Default Xfo if not supplied.
-
-        Return:
-        Transform that was added.
-        """
-
-        if xfo is None:
-            xfo = Xfo()
-
-        self.xfos[name] = xfo
-
-        return self.xfos[name]
-
-
-    def removeXfo(self, name):
-        """Removes a componentXfo from this object at the specified name.
-
-        Arguments:
-        name -- String, name of the componentXfo to remove.
-
-        Return:
-        True if successful.
-        """
-
-        if self.hasXfo(name) is not True:
-            raise KeyError("'" + name + "' is not a valid xfo.")
-
-        del self.xfos[name]
-
-        return True
-
-
-    def getNumXfos(self):
-        """Returns the number of xfos for this object."""
-
-        return len(self.xfos.items())
-
-
-    def getXfo(self, name):
-        """Returns a componentXfo by the specified name.
-
-        Arguments:
-        name -- String, name of the componentXfo you wish to be returned.
-
-        Return:
-        componentXfo as specified name.
-        """
-
-        if self.hasXfo(name) is not True:
-            raise KeyError("'" + name + "' is not a valid xfo.")
-
-        return self.xfos[name]
-
-
-    def setXfo(self, name, xfo):
-        """Set the componenXfo at the specified name.
-
-        Arguments:
-        name -- String, name of the componentXfo to set.
-        xfo -- Xfo, transform to set at the specified name.
-
-        Return:
-        True if successful.
-        """
-
-        if self.hasXfo(name) is not True:
-            raise KeyError("'" + name + "' is not a valid xfo.")
-
-        self.xfos[name] = xfo
-
-        return True
-
 
     # ==================
     # Component Methods
@@ -219,17 +119,18 @@ class BaseComponent(SceneItem):
     # ==============
     # Input Methods
     # ==============
-    def addInput(self, input):
+    def addInput(self, componentInput):
         """Add ComponentInput to this object.
 
         Arguments:
-        input -- ComponentInput, input object to add.
+        componentInput -- ComponentInput, input object to add.
 
         Return:
         True if successful.
         """
 
-        # Check if input already part of object.
+        # TODO: Check if input already part of object.
+        self.inputs.append(componentInput)
 
         return True
 
@@ -244,7 +145,7 @@ class BaseComponent(SceneItem):
         True if successful.
         """
 
-        # Check if index is valid, then remove.
+        # TODO: Check if index is valid, then remove.
 
         return True
 
@@ -252,7 +153,7 @@ class BaseComponent(SceneItem):
     # ==============
     # Output Methods
     # ==============
-    def addOutput(self, output):
+    def addOutput(self, componentOutput):
         """Add ComponentOutput to this object.
 
         Arguments:
@@ -262,8 +163,8 @@ class BaseComponent(SceneItem):
         True if successful.
         """
 
-        # Check if output already part of object.
-
+        # TODO: Check if output already part of object.
+        self.outputs.append(componentOutput)
         return True
 
 
@@ -277,6 +178,19 @@ class BaseComponent(SceneItem):
         True if successful.
         """
 
-        # Check if index is valid, then remove.
+        # TODO: Check if index is valid, then remove.
 
         return True
+
+
+    def addOperatorBinding(self, operatorBinding):
+        
+
+
+    def buildRig(self, parent):
+
+        component = BaseComponent()
+
+    def save
+
+    def load

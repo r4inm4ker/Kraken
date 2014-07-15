@@ -217,7 +217,7 @@ class Builder(BaseBuilder):
     # ===================
     # Visibility Methods
     # ===================
-    def buildVisibility(self, sceneItem):
+    def setVisibility(self, sceneItem):
         """Sets the visibility of the object after its been created.
 
         Arguments:
@@ -241,7 +241,7 @@ class Builder(BaseBuilder):
     # ==============
     # Build Methods
     # ==============
-    def buildTransform(self, sceneItem):
+    def setTransform(self, sceneItem):
         """Translates the transform to Maya transform.
 
         Arguments:

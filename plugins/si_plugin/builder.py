@@ -28,7 +28,7 @@ class Builder(BaseBuilder):
     # ===================
     # Node Build Methods
     # ===================
-    def buildContainerNode(self, parentNode, sceneItem, objectName):
+    def buildContainerNode(self, sceneItem, objectName):
         """Builds a container / namespace object.
 
         Arguments:
@@ -43,16 +43,15 @@ class Builder(BaseBuilder):
 
         parentNode = self.getDCCSceneItem(sceneItem.getParent())
 
-        node = parentNode.AddModel(None, objectName)
-        node.Name = objectName
-        sceneItem.setNode(node)
+        dccSceneItem = parentNode.AddModel(None, objectName)
+        dccSceneItem.Name = objectName
 
-        self._buildElements.append( { 'src': sceneItem, 'tgt': node } )
+        self._registerPair( sceneItem, dccSceneItem )
 
-        return sceneItem.node
+        return dccSceneItem
 
 
-    def buildLayerNode(self, parentNode, sceneItem, objectName):
+    def buildLayerNode(self, sceneItem, objectName):
         """Builds a layer object.
 
         Arguments:
@@ -66,14 +65,14 @@ class Builder(BaseBuilder):
         """
         parentNode = self.getDCCSceneItem(sceneItem.getParent())
 
-        node = parentNode.AddModel(None, objectName)
-        node.Name = objectName
-        sceneItem.setNode(node)
+        dccSceneItem = parentNode.AddModel(None, objectName)
+        dccSceneItem.Name = objectName
+        self._registerPair( sceneItem, dccSceneItem )
 
-        return sceneItem.node
+        return dccSceneItem
 
 
-    def buildGroupNode(self, parentNode, sceneItem, objectName):
+    def buildGroupNode(self, sceneItem, objectName):
         """Builds a locator / null object.
 
         Arguments:
@@ -87,14 +86,14 @@ class Builder(BaseBuilder):
         """
         parentNode = self.getDCCSceneItem(sceneItem.getParent())
 
-        node = parentNode.AddNull()
-        node.Name = objectName
-        sceneItem.setNode(node)
+        dccSceneItem = parentNode.AddNull()
+        dccSceneItem.Name = objectName
+        self._registerPair( sceneItem, dccSceneItem )
 
-        return sceneItem.node
+        return dccSceneItem
 
 
-    def buildLocatorNode(self, parentNode, sceneItem, objectName):
+    def buildLocatorNode(self, sceneItem, objectName):
         """Builds a locator / null object.
 
         Arguments:
@@ -108,14 +107,14 @@ class Builder(BaseBuilder):
         """
         parentNode = self.getDCCSceneItem(sceneItem.getParent())
 
-        node = parentNode.AddNull()
-        node.Name = objectName
-        sceneItem.setNode(node)
+        dccSceneItem = parentNode.AddNull()
+        dccSceneItem.Name = objectName
+        self._registerPair( sceneItem, dccSceneItem )
 
-        return sceneItem.node
+        return dccSceneItem
 
 
-    def buildCurveNode(self, parentNode, sceneItem, objectName):
+    def buildCurveNode(self, sceneItem, objectName):
         """Builds a Curve object.
 
         Arguments:
@@ -128,6 +127,7 @@ class Builder(BaseBuilder):
 
         """
         parentNode = self.getDCCSceneItem(sceneItem.getParent())
+        dccSceneItem = None
 
         # Format points for Softimage
         points = sceneItem.getControlPoints()
@@ -158,14 +158,13 @@ class Builder(BaseBuilder):
                 knots = list(xrange(len(eachCurveSection[i])))
 
             if i == 0:
-                node = parentNode.AddNurbsCurve(list(eachCurveSection), knots, sceneItem.getCurveSectionClosed(i), 1, constants.siNonUniformParameterization, constants.siSINurbs)
-                sceneItem.setNode(node)
+                dccSceneItem = parentNode.AddNurbsCurve(list(eachCurveSection), knots, sceneItem.getCurveSectionClosed(i), 1, constants.siNonUniformParameterization, constants.siSINurbs)
+                self._registerPair( sceneItem, dccSceneItem )
             else:
-                sceneItem.getNode().ActivePrimitive.Geometry.AddCurve(eachCurveSection, knots, sceneItem.getCurveSectionClosed(i), 1, constants.siNonUniformParameterization)
+                dccSceneItem.ActivePrimitive.Geometry.AddCurve(eachCurveSection, knots, sceneItem.getCurveSectionClosed(i), 1, constants.siNonUniformParameterization)
 
-        sceneItem.node.Name = objectName
-
-        return sceneItem.node
+        dccSceneItem.Name = objectName
+        return dccSceneItem
 
 
     # ========================
@@ -229,7 +228,7 @@ class Builder(BaseBuilder):
     # ===================
     # Visibility Methods
     # ===================
-    def buildVisibility(self, sceneItem):
+    def setVisibility(self, sceneItem):
         """Sets the visibility of the object after its been created.
 
         Arguments:
@@ -241,7 +240,7 @@ class Builder(BaseBuilder):
         """
 
         if sceneItem.getShapeVisibility() is False:
-            sceneItem.node.Properties("Visibility").Parameters("viewvis").Value = False
+            dccSceneItem.Properties("Visibility").Parameters("viewvis").Value = False
 
         return True
 
@@ -249,7 +248,7 @@ class Builder(BaseBuilder):
     # ==============
     # Build Methods
     # ==============
-    def buildTransform(self, sceneItem):
+    def setTransform(self, sceneItem):
         """Translates the transform to Softimage transform.
 
         Arguments:
@@ -260,6 +259,8 @@ class Builder(BaseBuilder):
 
         """
 
+        dccSceneItem = self.getDCCSceneItem(sceneItem)
+        
         xfo = XSIMath.CreateTransform()
         scl = XSIMath.CreateVector3(sceneItem.xfo.scl.x, sceneItem.xfo.scl.y, sceneItem.xfo.scl.z)
         quat = XSIMath.CreateQuaternion(sceneItem.xfo.rot.w, sceneItem.xfo.rot.v.x, sceneItem.xfo.rot.v.y, sceneItem.xfo.rot.v.z)
@@ -269,7 +270,7 @@ class Builder(BaseBuilder):
         xfo.SetRotationFromQuaternion(quat)
         xfo.SetTranslation(tr)
 
-        sceneItem.node.Kinematics.Global.PutTransform2(None, xfo)
+        dccSceneItem.Kinematics.Global.PutTransform2(None, xfo)
 
         return True
 
