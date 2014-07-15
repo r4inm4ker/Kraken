@@ -28,7 +28,7 @@ class Builder(BaseBuilder):
     # ===================
     # Node Build Methods
     # ===================
-    def buildContainerNode(self, sceneItem, objectName):
+    def buildContainer(self, sceneItem, objectName):
         """Builds a container / namespace object.
 
         Arguments:
@@ -53,7 +53,7 @@ class Builder(BaseBuilder):
         return dccSceneItem
 
 
-    def buildLayerNode(self, sceneItem, objectName):
+    def buildLayer(self, sceneItem, objectName):
         """Builds a layer object.
 
         Arguments:
@@ -74,7 +74,7 @@ class Builder(BaseBuilder):
         return dccSceneItem
 
 
-    def buildGroupNode(self, sceneItem, objectName):
+    def buildGroup(self, sceneItem, objectName):
         """Builds a locator / null object.
 
         Arguments:
@@ -94,7 +94,7 @@ class Builder(BaseBuilder):
         return dccSceneItem
 
 
-    def buildLocatorNode(self, sceneItem, objectName):
+    def buildLocator(self, sceneItem, objectName):
         """Builds a locator / null object.
 
         Arguments:
@@ -114,7 +114,7 @@ class Builder(BaseBuilder):
         return dccSceneItem
 
 
-    def buildCurveNode(self, sceneItem, objectName):
+    def buildCurve(self, sceneItem, objectName):
         """Builds a Curve object.
 
         Arguments:
@@ -169,7 +169,7 @@ class Builder(BaseBuilder):
     # ========================
     # Attribute Build Methods
     # ========================
-    def buildBoolAttributeNode(self):
+    def buildBoolAttribute(self):
         """Builds a Bool attribute.
 
         Return:
@@ -180,7 +180,7 @@ class Builder(BaseBuilder):
         return True
 
 
-    def buildColorAttributeNode(self):
+    def buildColorAttribute(self):
         """Builds a Color attribute.
 
         Return:
@@ -191,7 +191,7 @@ class Builder(BaseBuilder):
         return True
 
 
-    def buildFloatAttributeNode(self):
+    def buildFloatAttribute(self):
         """Builds a Float attribute.
 
         Return:
@@ -202,7 +202,7 @@ class Builder(BaseBuilder):
         return True
 
 
-    def buildIntegerAttributeNode(self):
+    def buildIntegerAttribute(self):
         """Builds a Integer attribute.
 
         Return:
@@ -213,7 +213,7 @@ class Builder(BaseBuilder):
         return True
 
 
-    def buildStringAttributeNode(self):
+    def buildStringAttribute(self):
         """Builds a String attribute.
 
         Return:

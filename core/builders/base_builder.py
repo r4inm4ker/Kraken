@@ -64,7 +64,7 @@ class BaseBuilder(object):
     # ===================
     # Node Build Methods
     # ===================
-    def buildContainerNode(self, kSceneItem, objectName):
+    def buildContainer(self, kSceneItem, objectName):
         """Builds a container / namespace object.
 
         Arguments:
@@ -72,14 +72,14 @@ class BaseBuilder(object):
         objectName -- String, name of the object being created.
 
         Return:
-        Node that is created..
+        DCC Scene Item that is created.
 
         """
 
         return None
 
 
-    def buildLayerNode(self, kSceneItem, objectName):
+    def buildLayer(self, kSceneItem, objectName):
         """Builds a layer object.
 
         Arguments:
@@ -87,14 +87,14 @@ class BaseBuilder(object):
         objectName -- String, name of the object being created.
 
         Return:
-        Node that is created..
+        DCC Scene Item that is created.
 
         """
 
         return None
 
 
-    def buildGroupNode(self, kSceneItem, objectName):
+    def buildGroup(self, kSceneItem, objectName):
         """Builds a group object.
 
         Arguments:
@@ -102,14 +102,14 @@ class BaseBuilder(object):
         objectName -- String, name of the object being created.
 
         Return:
-        Node that is created.
+        DCC Scene Item that is created.
 
         """
 
         return None
 
 
-    def buildLocatorNode(self, kSceneItem, objectName):
+    def buildLocator(self, kSceneItem, objectName):
         """Builds a locator / null object.
 
         Arguments:
@@ -117,14 +117,14 @@ class BaseBuilder(object):
         objectName -- String, name of the object being created.
 
         Return:
-        Node that is created.
+        DCC Scene Item that is created.
 
         """
 
         return None
 
 
-    def buildCurveNode(self, kSceneItem, objectName):
+    def buildCurve(self, kSceneItem, objectName):
         """Builds a Curve object.
 
         Arguments:
@@ -132,7 +132,7 @@ class BaseBuilder(object):
         objectName -- String, name of the object being created.
 
         Return:
-        Node that is created.
+        DCC Scene Item that is created.
 
         """
 
@@ -142,7 +142,7 @@ class BaseBuilder(object):
     # ========================
     # Attribute Build Methods
     # ========================
-    def buildBoolAttributeNode(self):
+    def buildBoolAttribute(self):
         """Builds a Bool attribute.
 
         Return:
@@ -153,7 +153,7 @@ class BaseBuilder(object):
         return True
 
 
-    def buildColorAttributeNode(self):
+    def buildColorAttribute(self):
         """Builds a Color attribute.
 
         Return:
@@ -164,7 +164,7 @@ class BaseBuilder(object):
         return True
 
 
-    def buildFloatAttributeNode(self):
+    def buildFloatAttribute(self):
         """Builds a Float attribute.
 
         Return:
@@ -175,7 +175,7 @@ class BaseBuilder(object):
         return True
 
 
-    def buildIntegerAttributeNode(self):
+    def buildIntegerAttribute(self):
         """Builds a Integer attribute.
 
         Return:
@@ -186,7 +186,7 @@ class BaseBuilder(object):
         return True
 
 
-    def buildStringAttributeNode(self):
+    def buildStringAttribute(self):
         """Builds a String attribute.
 
         Return:
@@ -197,9 +197,23 @@ class BaseBuilder(object):
         return True
 
 
-    # ==============
-    # Build Methods
-    # ==============
+    def buildAttributeGroup(self, kSceneItem):
+        """Builds attribute groups on the DCC object.
+
+        Arguments:
+        kSceneItem -- SceneItem, kraken object to build the attribute group on.
+
+        Return:
+        True if successful.
+
+        """
+
+        return True
+
+
+    # =====================
+    # Build Object Methods
+    # =====================
     def buildAttributes(self, kSceneItem):
         """Builds attributes on the DCC object.
 
@@ -213,22 +227,26 @@ class BaseBuilder(object):
 
         dccSceneItem = self._getDCCSceneItem(kSceneItem)
 
-        for i in xrange(kSceneItem.getNumAttributes()):
-            attribute = kSceneItem.getAttributeByIndex(i)
-            kType = attribute.getKType()
+        for i in xrange(kSceneItem.getNumAttributeGroups()):
+            attributeGroup = kSceneItem.getAttributeGroupByIndex(i)
 
-            if kType == "FloatAttribute":
-                self.buildFloatAttributeNode
-                print kSceneItem.attributes[i].name
+            self.buildAttributeGroup(kSceneItem)
 
-            elif kType == "BoolAttribute":
-                print kSceneItem.attributes[i].name
+            for j in xrange(attributeGroup.getNumAttributes()):
+                attribute = attributeGroup.getAttributeByIndex(i)
+                kType = attribute.getKType()
 
-            elif kType == "IntegerAttribute":
-                print kSceneItem.attributes[i].name
+                if kType == "FloatAttribute":
+                    self.buildFloatAttribute()
 
-            elif kType == "StringAttribute":
-                print kSceneItem.attributes[i].name
+                elif kType == "BoolAttribute":
+                    self.buildBoolAttribute()
+
+                elif kType == "IntegerAttribute":
+                    self.buildIntegerAttribute()
+
+                elif kType == "StringAttribute":
+                    self.buildStringAttribute()
 
         return True
 
@@ -251,23 +269,23 @@ class BaseBuilder(object):
 
         # Build Object
         if kType == "Container":
-            dccSceneItem = self.buildContainerNode(kSceneItem, objectName)
+            dccSceneItem = self.buildContainer(kSceneItem, objectName)
 
         elif kType == "Layer":
-            dccSceneItem = self.buildLayerNode(kSceneItem, objectName)
+            dccSceneItem = self.buildLayer(kSceneItem, objectName)
 
         elif kType == "Component":
-            dccSceneItem = self.buildGroupNode(kSceneItem, objectName)
+            dccSceneItem = self.buildGroup(kSceneItem, objectName)
             component = kSceneItem
 
         elif kType == "SceneItem":
-            dccSceneItem = self.buildLocatorNode(kSceneItem, objectName)
+            dccSceneItem = self.buildLocator(kSceneItem, objectName)
 
         elif kType == "Curve":
-            dccSceneItem = self.buildCurveNode(kSceneItem, objectName)
+            dccSceneItem = self.buildCurve(kSceneItem, objectName)
 
         elif kType == "Control":
-            dccSceneItem = self.buildCurveNode(kSceneItem, objectName)
+            dccSceneItem = self.buildCurve(kSceneItem, objectName)
 
         else:
             raise NotImplementedError(kSceneItem.getName() + ' has an unsupported type: ' + str(type(kSceneItem)))
@@ -647,7 +665,7 @@ class BaseBuilder(object):
 
         """
 
-        for i in xrange(kSceneItem.getNumAttributes()):
+        for i in xrange(kSceneItem.getNumAttributeGroups()):
             attribute = kSceneItem.getAttributeByIndex(i)
             kType = attribute.getKType()
 

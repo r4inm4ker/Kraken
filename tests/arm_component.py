@@ -23,8 +23,11 @@ class ArmComponent(BaseComponent):
         self.addInput(ComponentInput('armParent'))
         self.addOutput(ComponentInput('wrist'))
 
+
+        defaultAttrGroup = self.getAttributeGroupByName("")
+
         # Setup component attributes
-        self.addAttribute(BoolAttribute("toggleDebugging", True))
+        defaultAttrGroup.addAttribute(BoolAttribute("toggleDebugging", True))
 
         # Add Guide Controls
         bicepGuideCtrl = NullControl('bicepGuideCtrl')

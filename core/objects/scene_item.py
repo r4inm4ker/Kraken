@@ -6,6 +6,7 @@ SceneItem - Base SceneItem Object.
 """
 
 from kraken.core.maths import *
+from kraken.core.objects.attributes.attribute_group import AttributeGroup
 
 
 class SceneItem(object):
@@ -19,11 +20,14 @@ class SceneItem(object):
         self.parent = parent
         self.children = []
         self.flags = {}
-        self.attributes = []
+        self.attributeGroups = []
         self.xfo = Xfo()
         self.node = None
         self.visibility = True
         self.shapeVisibility = True
+
+        defaultAttrGroup = AttributeGroup("")
+        self.addAttributeGroup(defaultAttrGroup)
 
 
     # =============
@@ -266,10 +270,10 @@ class SceneItem(object):
         return False
 
 
-    # ==================
-    # Attribute Methods
-    # ==================
-    def checkAttributeIndex(self, index):
+    # ========================
+    # Attribute Group Methods
+    # ========================
+    def checkAttributeGroupIndex(self, index):
         """Checks the supplied index is valid.
 
         Arguments:
@@ -280,13 +284,13 @@ class SceneItem(object):
 
         """
 
-        if index > len(self.attributes):
-            raise IndexError("'" + str(index) + "' is out of the range of 'attributes' array.")
+        if index > len(self.attributeGroups):
+            raise IndexError("'" + str(index) + "' is out of the range of 'attributeGroups' array.")
 
         return True
 
 
-    def addAttribute(self, attribute):
+    def addAttributeGroup(self, attribute):
         """Adds an attribute to this object.
 
         Arguments:
@@ -297,16 +301,16 @@ class SceneItem(object):
 
         """
 
-        if attribute.name in [x.name for x in self.attributes]:
+        if attribute.name in [x.name for x in self.attributeGroups]:
             raise IndexError("Child with " + attribute.name + " already exists as a attribute.")
 
-        self.attributes.append(attribute)
+        self.attributeGroups.append(attribute)
         attribute.setParent(self)
 
         return True
 
 
-    def removeAttributeByIndex(self, index):
+    def removeAttributeGroupByIndex(self, index):
         """Removes attribute at specified index.
 
         Arguments:
@@ -317,15 +321,15 @@ class SceneItem(object):
 
         """
 
-        if self.checkAttributeIndex(index) is not True:
+        if self.checkAttributeGroupIndex(index) is not True:
             return False
 
-        del self.attributes[index]
+        del self.attributeGroups[index]
 
         return True
 
 
-    def removeAttributeByName(self, name):
+    def removeAttributeGroupByName(self, name):
         """Removes the attribute with the specified name.
 
         Arguments:
@@ -338,52 +342,52 @@ class SceneItem(object):
 
         removeIndex = None
 
-        for i, eachAttribute in enumerate(self.attributes):
-            if eachAttribute.name == name:
+        for i, eachAttributeGroup in enumerate(self.attributeGroups):
+            if eachAttributeGroup.name == name:
                 removeIndex = i
 
         if removeIndex is None:
             return False
 
-        self.removeAttributeByIndex(removeIndex)
+        self.removeAttributeGroupByIndex(removeIndex)
 
         return True
 
 
-    def getNumAttributes(self):
-        """Returns the number of attributes as an integer.
+    def getNumAttributeGroups(self):
+        """Returns the number of attributeGroups as an integer.
 
         Return:
-        Integer of the number of attributes on this object.
+        Integer of the number of attributeGroups on this object.
 
         """
 
-        return len(self.attributes)
+        return len(self.attributeGroups)
 
 
-    def getAttributeByIndex(self, index):
+    def getAttributeGroupByIndex(self, index):
         """Returns the attribute at the specified index.
 
         Arguments:
         index -- Integer, index of the attribute to return.
 
         Return:
-        Attribute at the specified index.
+        AttributeGroup at the specified index.
         False if not a valid index.
 
         """
 
-        if self.checkAttributeIndex(index) is not True:
+        if self.checkAttributeGroupIndex(index) is not True:
             return False
 
-        return self.attributes[index]
+        return self.attributeGroups[index]
 
 
-    def getAttributeByName(self, name):
-        """Return the attribute with the specified name.
+    def getAttributeGroupByName(self, name):
+        """Return the attribute group with the specified name.
 
         Arguments:
-        name -- String, name of the attribute to return.
+        name -- String, name of the attribute group to return.
 
         Return:
         Attribute with the specified name.
@@ -391,9 +395,9 @@ class SceneItem(object):
 
         """
 
-        for eachAttribute in self.attributes:
-            if eachAttribute.name == name:
-                return eachAttribute
+        for eachAttributeGroup in self.attributeGroups:
+            if eachAttributeGroup.name == name:
+                return eachAttributeGroup
 
         return None
 
