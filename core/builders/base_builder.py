@@ -15,6 +15,23 @@ class BaseBuilder(object):
     def __init__(self):
         super(BaseBuilder, self).__init__()
 
+        self._buildElements = []
+
+    def _getDCCSceneItem(self, sceneItem):
+        """Given a sceneItem, returns the built dcc scene item.
+
+        Arguments:
+        sceneItem -- Object, sceneItem to base the search.
+
+        Return:
+        Object, the DCC Scene Item that corresponds to the given scene item
+        """
+
+        for builtElement in self._buildElements:
+            if builtElement['src'] == sceneItem:
+                return builtElement['tgt']
+
+        return None
 
     # ===================
     # Node Build Methods
@@ -178,6 +195,7 @@ class BaseBuilder(object):
             kType = attribute.getKType()
 
             if kType == "FloatAttribute":
+                self.buildFloatAttributeNode
                 print sceneItem.attributes[i].name
 
             elif kType == "BoolAttribute":
@@ -370,3 +388,225 @@ class BaseBuilder(object):
         """
 
         return True
+
+
+
+    # =======================
+    # Synchrnization Methods
+    # =======================
+    def synchronizeName(self, sceneItem, dccSceneItem):
+        """Synchronizes the name between the dcc scene item and the corresponding kraken scene item.
+
+        Arguments:
+        sceneItem -- Object, sceneItem that represents a container to be built.
+        dccSceneItem -- Object, the element in the host DCC application
+
+        Return:
+        True if the synchronization was successful.
+
+        """
+
+        return False
+
+    def synchronizeContainerNode(self, sceneItem, dccSceneItem):
+        """Synchronizes a container / namespace with the corresponding kraken scene item.
+
+        Arguments:
+        sceneItem -- Object, sceneItem that represents a container to be built.
+        dccSceneItem -- Object, the element in the host DCC application
+
+        Return:
+        True if the synchronization was successful.
+
+        """
+
+        return False
+
+
+    def synchronizeLayerNode(self, sceneItem, dccSceneItem):
+        """Synchronizes a layer object with the corresponding kraken scene item.
+
+        Arguments:
+        sceneItem -- Object, sceneItem that represents a layer to be built.
+        dccSceneItem -- Object, the element in the host DCC application
+
+        Return:
+        True if the synchronization was successful.
+
+        """
+
+        return False
+
+
+    def synchronizeGroupNode(self, sceneItem, dccSceneItem):
+        """Synchronizes a group object with the corresponding kraken scene item.
+
+        Arguments:
+        sceneItem -- Object, sceneItem that represents a group to be built.
+        dccSceneItem -- Object, the element in the host DCC application
+
+        Return:
+        True if the synchronization was successful.
+
+        """
+
+        return False
+
+
+    def synchronizeLocatorNode(self, sceneItem, dccSceneItem):
+        """Synchronizes a locator / null object with the corresponding kraken scene item.
+
+        Arguments:
+        sceneItem -- Object, sceneItem that represents a locator / null to be built.
+        dccSceneItem -- Object, the element in the host DCC application
+
+        Return:
+        True if the synchronization was successful.
+
+        """
+
+        return False
+
+
+    def synchronizeCurveNode(self, sceneItem, dccSceneItem):
+        """Synchronizes a Curve object with the corresponding kraken scene item.
+
+        Arguments:
+        sceneItem -- Object, sceneItem that represents a curve to be built.
+        dccSceneItem -- Object, the element in the host DCC application
+
+        Return:
+        True if the synchronization was successful.
+
+        """
+
+        return False
+
+
+    # ========================
+    # Attribute Build Methods
+    # ========================
+    def synchronizeBoolAttributeNode(self):
+        """Synchronizes a Bool attribute with the corresponding kraken scene item.
+
+        Return:
+        True if the synchronization was successful.
+
+        """
+
+        return True
+
+
+    def synchronizeColorAttributeNode(self):
+        """Synchronizes a Color attribute with the corresponding kraken scene item.
+
+        Return:
+        True if the synchronization was successful.
+
+        """
+
+        return True
+
+
+    def synchronizeFloatAttributeNode(self):
+        """Synchronizes a Float attribute with the corresponding kraken scene item.
+
+        Return:
+        True if the synchronization was successful.
+
+        """
+
+        return True
+
+
+    def synchronizeIntegerAttributeNode(self):
+        """Synchronizes a Integer attribute with the corresponding kraken scene item.
+
+        Return:
+        True if the synchronization was successful.
+
+        """
+
+        return True
+
+
+    def synchronizeStringAttributeNode(self):
+        """Synchronizes a String attribute with the corresponding kraken scene item.
+
+        Return:
+        True if the synchronization was successful.
+
+        """
+
+        return True
+
+
+    # ==============
+    # Build Methods
+    # ==============
+    def synchronizeAttributes(self, sceneItem, dccSceneItem):
+        """Synchronizes attributes on the DCC object.
+
+        Arguments:
+        sceneItem -- SceneItem, kraken object to build attributes for.
+
+        Return:
+        True if the synchronization was successful.
+
+        """
+
+        for i in xrange(sceneItem.getNumAttributes()):
+            attribute = sceneItem.getAttributeByIndex(i)
+            kType = attribute.getKType()
+
+            if kType == "FloatAttribute":
+                print sceneItem.attributes[i].name
+
+            elif kType == "BoolAttribute":
+                print sceneItem.attributes[i].name
+
+            elif kType == "IntegerAttribute":
+                print sceneItem.attributes[i].name
+
+            elif kType == "StringAttribute":
+                print sceneItem.attributes[i].name
+
+        return True
+
+
+
+    def synchronize(self):
+        """Synchronizes the Kraken hierarchy with the DCC data
+
+        Return:
+        True if the synchronization was successful.
+
+        """
+
+        for builtElement in self._buildElements:
+            dccSceneItem = builtElement['tgt']
+            sceneItem = builtElement['src']
+
+            kType = sceneItem.getKType()
+
+            # Build Object
+            if kType == "Container":
+                self.synchronizeContainerNode(sceneItem, dccSceneItem)
+
+            elif kType == "Layer":
+                self.synchronizeLayerNode(sceneItem, dccSceneItem)
+
+            elif kType == "Component":
+                self.synchronizeGroupNode(sceneItem, dccSceneItem)
+
+            elif kType == "SceneItem":
+                self.synchronizeLocatorNode(sceneItem, dccSceneItem)
+
+            elif kType == "Curve":
+                self.synchronizeCurveNode(sceneItem, dccSceneItem)
+
+            elif kType == "Control":
+                self.synchronizeCurveNode(sceneItem, dccSceneItem)
+
+            else:
+                raise NotImplementedError(sceneItem.getName() + ' has an unsupported type: ' + str(type(sceneItem)))

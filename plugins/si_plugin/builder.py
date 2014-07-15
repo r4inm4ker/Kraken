@@ -41,9 +41,13 @@ class Builder(BaseBuilder):
 
         """
 
+        parentNode = self.getDCCSceneItem(sceneItem.getParent())
+
         node = parentNode.AddModel(None, objectName)
         node.Name = objectName
         sceneItem.setNode(node)
+
+        self._buildElements.append( { 'src': sceneItem, 'tgt': node } )
 
         return sceneItem.node
 
@@ -60,6 +64,7 @@ class Builder(BaseBuilder):
         Node that is created..
 
         """
+        parentNode = self.getDCCSceneItem(sceneItem.getParent())
 
         node = parentNode.AddModel(None, objectName)
         node.Name = objectName
@@ -80,6 +85,7 @@ class Builder(BaseBuilder):
         Node that is created.
 
         """
+        parentNode = self.getDCCSceneItem(sceneItem.getParent())
 
         node = parentNode.AddNull()
         node.Name = objectName
@@ -100,6 +106,7 @@ class Builder(BaseBuilder):
         Node that is created.
 
         """
+        parentNode = self.getDCCSceneItem(sceneItem.getParent())
 
         node = parentNode.AddNull()
         node.Name = objectName
@@ -120,6 +127,7 @@ class Builder(BaseBuilder):
         Node that is created.
 
         """
+        parentNode = self.getDCCSceneItem(sceneItem.getParent())
 
         # Format points for Softimage
         points = sceneItem.getControlPoints()
@@ -324,3 +332,7 @@ class Builder(BaseBuilder):
         si.EndUndo()
 
         return True
+
+
+
+

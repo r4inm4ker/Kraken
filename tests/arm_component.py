@@ -63,20 +63,26 @@ class ArmComponent(BaseComponent):
 
         """
 
-        # Add Rig Controls
-        bicepFKCtrl = SquareControl('bicepFKCtrl', parent=self)
-        bicepFKCtrl.xfo = bicepXfo
-        self.addChild(bicepFKCtrl)
+    def buildRig(self):
 
-        forearmFKCtrl = NullControl('forearmFKCtrl', parent=self)
-        forearmFKCtrl.xfo = forearmXfo
-        self.addChild(forearmFKCtrl)
+        
 
-        wristIKCtrl = CircleControl('wristIKCtrl', parent=self)
-        wristIKCtrl.xfo = wristXfo
-        self.addChild(wristIKCtrl)
+        # # Add Rig Controls
+        # bicepFKCtrl = SquareControl('bicepFKCtrl', parent=self)
+        # bicepFKCtrl.xfo = bicepXfo
+        # self.addChild(bicepFKCtrl)
 
-        componentSpliceCode = """require Math;"""
+        # forearmFKCtrl = NullControl('forearmFKCtrl', parent=self)
+        # forearmFKCtrl.xfo = forearmXfo
+        # self.addChild(forearmFKCtrl)
+
+        # wristIKCtrl = CircleControl('wristIKCtrl', parent=self)
+        # wristIKCtrl.xfo = wristXfo
+        # self.addChild(wristIKCtrl)
+
+        # componentSpliceCode = """require Math;"""
+
+        return container
 
 
 if __name__ == "__main__":
