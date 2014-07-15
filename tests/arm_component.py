@@ -1,8 +1,13 @@
 from kraken.core.maths import *
+
 from kraken.core.objects.attributes.float_attribute import FloatAttribute
 from kraken.core.objects.attributes.bool_attribute import BoolAttribute
 from kraken.core.objects.attributes.string_attribute import StringAttribute
+
 from kraken.core.objects.component import BaseComponent
+from kraken.core.objects.component_input import ComponentInput
+from kraken.core.objects.component_output import ComponentOutput
+
 from kraken.core.objects.controls.cube_control  import CubeControl
 from kraken.core.objects.controls.circle_control  import  CircleControl
 from kraken.core.objects.controls.square_control  import  SquareControl
@@ -23,17 +28,14 @@ class ArmComponent(BaseComponent):
 
         # Add Guide Controls
         bicepGuideCtrl = NullControl('bicepGuideCtrl')
-        bicepGuideCtrl.setFlag("guide")
         bicepGuideCtrl.xfo.tr = Vec3(5.0, 20.0, 0.0)
         self.addChild(bicepGuideCtrl)
 
         forearmGuideCtrl = NullControl('forearmGuideCtrl')
-        forearmGuideCtrl.setFlag("guide")
         forearmGuideCtrl.xfo.tr = Vec3(8.5, 16.4, -2.5)
         self.addChild(forearmGuideCtrl)
 
         wristGuideCtrl = NullControl('wristGuideCtrl')
-        wristGuideCtrl.setFlag("guide")
         wristGuideCtrl.xfo.tr = Vec3(12.0, 12.9, 0.0)
         self.addChild(wristGuideCtrl)
 
@@ -91,4 +93,4 @@ class ArmComponent(BaseComponent):
 
 if __name__ == "__main__":
     armLeft = ArmComponent("myArm", side='L')
-    print armLeft.getXfo("bicep")
+    print armLeft.getNumChildren()

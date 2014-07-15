@@ -1,14 +1,14 @@
 from kraken.tests import arm_component
 from kraken.tests import arm_rig
-
 from kraken.tests.arm_rig import ArmRig
 
-from kraken.plugins.si_plugin import builder
-reload(builder)
+from kraken.core.builders import base_builder
+reload(base_builder)
 
-from kraken.plugins.si_plugin.builder import Builder
+from kraken.core.builders.base_builder import BaseBuilder
+
 
 myArm = ArmRig("myArm")
 
-builder = Builder()
+builder = BaseBuilder()
 builder.build(myArm)

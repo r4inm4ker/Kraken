@@ -32,7 +32,6 @@ class Builder(BaseBuilder):
         """Builds a container / namespace object.
 
         Arguments:
-        parentNode -- Object, sceneItem that represents the parent of this object.
         sceneItem -- Object, sceneItem that represents a container to be built.
         objectName -- String, name of the object being created.
 
@@ -41,12 +40,15 @@ class Builder(BaseBuilder):
 
         """
 
-        parentNode = self.getDCCSceneItem(sceneItem.getParent())
+        parentNode = self._getDCCSceneItem(sceneItem.getParent())
+
+        if parentNode is None:
+            parentNode = si.ActiveProject3.ActiveScene.Root
 
         dccSceneItem = parentNode.AddModel(None, objectName)
         dccSceneItem.Name = objectName
 
-        self._registerPair( sceneItem, dccSceneItem )
+        self._registerSceneItemPair(sceneItem, dccSceneItem)
 
         return dccSceneItem
 
@@ -55,7 +57,6 @@ class Builder(BaseBuilder):
         """Builds a layer object.
 
         Arguments:
-        parentNode -- Object, sceneItem that represents the parent of this object.
         sceneItem -- Object, sceneItem that represents a layer to be built.
         objectName -- String, name of the object being created.
 
@@ -63,11 +64,12 @@ class Builder(BaseBuilder):
         Node that is created..
 
         """
-        parentNode = self.getDCCSceneItem(sceneItem.getParent())
+
+        parentNode = self._getDCCSceneItem(sceneItem.getParent())
 
         dccSceneItem = parentNode.AddModel(None, objectName)
         dccSceneItem.Name = objectName
-        self._registerPair( sceneItem, dccSceneItem )
+        self._registerSceneItemPair(sceneItem, dccSceneItem)
 
         return dccSceneItem
 
@@ -76,7 +78,6 @@ class Builder(BaseBuilder):
         """Builds a locator / null object.
 
         Arguments:
-        parentNode -- Node, parent node of this object.
         sceneItem -- Object, sceneItem that represents a group to be built.
         objectName -- String, name of the object being created.
 
@@ -84,11 +85,11 @@ class Builder(BaseBuilder):
         Node that is created.
 
         """
-        parentNode = self.getDCCSceneItem(sceneItem.getParent())
+        parentNode = self._getDCCSceneItem(sceneItem.getParent())
 
         dccSceneItem = parentNode.AddNull()
         dccSceneItem.Name = objectName
-        self._registerPair( sceneItem, dccSceneItem )
+        self._registerSceneItemPair(sceneItem, dccSceneItem)
 
         return dccSceneItem
 
@@ -97,7 +98,6 @@ class Builder(BaseBuilder):
         """Builds a locator / null object.
 
         Arguments:
-        parentNode -- Node, parent node of this object.
         sceneItem -- Object, sceneItem that represents a locator / null to be built.
         objectName -- String, name of the object being created.
 
@@ -105,11 +105,11 @@ class Builder(BaseBuilder):
         Node that is created.
 
         """
-        parentNode = self.getDCCSceneItem(sceneItem.getParent())
+        parentNode = self._getDCCSceneItem(sceneItem.getParent())
 
         dccSceneItem = parentNode.AddNull()
         dccSceneItem.Name = objectName
-        self._registerPair( sceneItem, dccSceneItem )
+        self._registerSceneItemPair(sceneItem, dccSceneItem)
 
         return dccSceneItem
 
@@ -118,7 +118,6 @@ class Builder(BaseBuilder):
         """Builds a Curve object.
 
         Arguments:
-        parentNode -- Object, sceneItem that represents the parent of this object.
         sceneItem -- Object, sceneItem that represents a curve to be built.
         objectName -- String, name of the object being created.
 
@@ -126,7 +125,7 @@ class Builder(BaseBuilder):
         Node that is created.
 
         """
-        parentNode = self.getDCCSceneItem(sceneItem.getParent())
+        parentNode = self._getDCCSceneItem(sceneItem.getParent())
         dccSceneItem = None
 
         # Format points for Softimage
@@ -159,7 +158,7 @@ class Builder(BaseBuilder):
 
             if i == 0:
                 dccSceneItem = parentNode.AddNurbsCurve(list(eachCurveSection), knots, sceneItem.getCurveSectionClosed(i), 1, constants.siNonUniformParameterization, constants.siSINurbs)
-                self._registerPair( sceneItem, dccSceneItem )
+                self._registerSceneItemPair(sceneItem, dccSceneItem)
             else:
                 dccSceneItem.ActivePrimitive.Geometry.AddCurve(eachCurveSection, knots, sceneItem.getCurveSectionClosed(i), 1, constants.siNonUniformParameterization)
 
@@ -239,6 +238,8 @@ class Builder(BaseBuilder):
 
         """
 
+        dccSceneItem = self._getDCCSceneItem(sceneItem)
+
         if sceneItem.getShapeVisibility() is False:
             dccSceneItem.Properties("Visibility").Parameters("viewvis").Value = False
 
@@ -259,8 +260,8 @@ class Builder(BaseBuilder):
 
         """
 
-        dccSceneItem = self.getDCCSceneItem(sceneItem)
-        
+        dccSceneItem = self._getDCCSceneItem(sceneItem)
+
         xfo = XSIMath.CreateTransform()
         scl = XSIMath.CreateVector3(sceneItem.xfo.scl.x, sceneItem.xfo.scl.y, sceneItem.xfo.scl.z)
         quat = XSIMath.CreateQuaternion(sceneItem.xfo.rot.w, sceneItem.xfo.rot.v.x, sceneItem.xfo.rot.v.y, sceneItem.xfo.rot.v.z)
@@ -316,8 +317,7 @@ class Builder(BaseBuilder):
 
         """
 
-        scnRoot = si.ActiveProject3.ActiveScene.Root
-        self.buildHierarchy(container, scnRoot, component=None)
+        self.buildHierarchy(container, component=None)
 
         return True
 
@@ -333,7 +333,3 @@ class Builder(BaseBuilder):
         si.EndUndo()
 
         return True
-
-
-
-

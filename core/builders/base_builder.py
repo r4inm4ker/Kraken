@@ -5,6 +5,9 @@ BaseBuilder -- Base builder object to build objects in DCC.
 
 """
 
+from kraken.core import logger as pyLogger
+logger = pyLogger.getLogger("pyLogger")
+
 
 class BaseBuilder(object):
     """BaseBuilder object for building objects in DCC's. Sub-class per DCC in
@@ -14,38 +17,58 @@ class BaseBuilder(object):
 
     def __init__(self):
         super(BaseBuilder, self).__init__()
-
         self._buildElements = []
 
-    def _registerPair(self, sceneItem, dccSceneItem):
-        self._buildElements.append( { 'src': sceneItem, 'tgt': dccSceneItem } )
 
-
-    def _getDCCSceneItem(self, sceneItem):
-        """Given a sceneItem, returns the built dcc scene item.
+    def _registerSceneItemPair(self, kSceneItem, dccSceneItem):
+        """Registers a pairing between the kraken scene item and the dcc scene item
+        for querying later.
 
         Arguments:
-        sceneItem -- Object, sceneItem to base the search.
+        kSceneItem -- Object, kraken scene item that you want to pair.
+        dccSceneItem -- Object, dcc scene item that you want to pair.
+
+        Return:
+        True if successful.
+
+        """
+
+        pairing = {
+                   'src': kSceneItem,
+                   'tgt': dccSceneItem
+                  }
+
+        self._buildElements.append(pairing)
+
+        return True
+
+
+    def _getDCCSceneItem(self, kSceneItem):
+        """Given a kSceneItem, returns the built dcc scene item.
+
+        Arguments:
+        kSceneItem -- Object, kSceneItem to base the search.
 
         Return:
         Object, the DCC Scene Item that corresponds to the given scene item
+
         """
 
         for builtElement in self._buildElements:
-            if builtElement['src'] == sceneItem:
+            if builtElement['src'] == kSceneItem:
                 return builtElement['tgt']
 
         return None
 
+
     # ===================
     # Node Build Methods
     # ===================
-    def buildContainerNode(self, sceneItem, objectName):
+    def buildContainerNode(self, kSceneItem, objectName):
         """Builds a container / namespace object.
 
         Arguments:
-        parentNode -- Object, sceneItem that represents the parent of this object.
-        sceneItem -- Object, sceneItem that represents a container to be built.
+        kSceneItem -- Object, kSceneItem that represents a container to be built.
         objectName -- String, name of the object being created.
 
         Return:
@@ -56,12 +79,11 @@ class BaseBuilder(object):
         return None
 
 
-    def buildLayerNode(self, sceneItem, objectName):
+    def buildLayerNode(self, kSceneItem, objectName):
         """Builds a layer object.
 
         Arguments:
-        parentNode -- Object, sceneItem that represents the parent of this object.
-        sceneItem -- Object, sceneItem that represents a layer to be built.
+        kSceneItem -- Object, kSceneItem that represents a layer to be built.
         objectName -- String, name of the object being created.
 
         Return:
@@ -72,12 +94,11 @@ class BaseBuilder(object):
         return None
 
 
-    def buildGroupNode(self, sceneItem, objectName):
+    def buildGroupNode(self, kSceneItem, objectName):
         """Builds a group object.
 
         Arguments:
-        parentNode -- Node, parent node of this object.
-        sceneItem -- Object, sceneItem that represents a group to be built.
+        kSceneItem -- Object, kSceneItem that represents a group to be built.
         objectName -- String, name of the object being created.
 
         Return:
@@ -88,12 +109,11 @@ class BaseBuilder(object):
         return None
 
 
-    def buildLocatorNode(self, sceneItem, objectName):
+    def buildLocatorNode(self, kSceneItem, objectName):
         """Builds a locator / null object.
 
         Arguments:
-        parentNode -- Node, parent node of this object.
-        sceneItem -- Object, sceneItem that represents a locator / null to be built.
+        kSceneItem -- Object, kSceneItem that represents a locator / null to be built.
         objectName -- String, name of the object being created.
 
         Return:
@@ -104,12 +124,11 @@ class BaseBuilder(object):
         return None
 
 
-    def buildCurveNode(self, sceneItem, objectName):
+    def buildCurveNode(self, kSceneItem, objectName):
         """Builds a Curve object.
 
         Arguments:
-        parentNode -- Object, sceneItem that represents the parent of this object.
-        sceneItem -- Object, sceneItem that represents a curve to be built.
+        kSceneItem -- Object, kSceneItem that represents a curve to be built.
         objectName -- String, name of the object being created.
 
         Return:
@@ -181,45 +200,44 @@ class BaseBuilder(object):
     # ==============
     # Build Methods
     # ==============
-    def buildAttributes(self, sceneItem):
+    def buildAttributes(self, kSceneItem):
         """Builds attributes on the DCC object.
 
         Arguments:
-        sceneItem -- SceneItem, kraken object to build attributes for.
+        kSceneItem -- SceneItem, kraken object to build attributes for.
 
         Return:
         True if successful.
 
         """
 
-        node = sceneItem.getNode()
+        dccSceneItem = self._getDCCSceneItem(kSceneItem)
 
-        for i in xrange(sceneItem.getNumAttributes()):
-            attribute = sceneItem.getAttributeByIndex(i)
+        for i in xrange(kSceneItem.getNumAttributes()):
+            attribute = kSceneItem.getAttributeByIndex(i)
             kType = attribute.getKType()
 
             if kType == "FloatAttribute":
                 self.buildFloatAttributeNode
-                print sceneItem.attributes[i].name
+                print kSceneItem.attributes[i].name
 
             elif kType == "BoolAttribute":
-                print sceneItem.attributes[i].name
+                print kSceneItem.attributes[i].name
 
             elif kType == "IntegerAttribute":
-                print sceneItem.attributes[i].name
+                print kSceneItem.attributes[i].name
 
             elif kType == "StringAttribute":
-                print sceneItem.attributes[i].name
+                print kSceneItem.attributes[i].name
 
         return True
 
 
-    def buildHierarchy(self, sceneItem, component=None):
-        """Builds the hierarchy for the supplied sceneItem.
+    def buildHierarchy(self, kSceneItem, component=None):
+        """Builds the hierarchy for the supplied kSceneItem.
 
         Arguments:
-        sceneItem -- SceneItem, kraken object to build.
-        parentNode -- DCC Object, object that is the parent of the created object.
+        kSceneItem -- SceneItem, kraken object to build.
         component -- Component, component that this object belongs to.
 
         Return:
@@ -227,53 +245,50 @@ class BaseBuilder(object):
 
         """
 
-        if sceneItem.testFlag('guide'):
-            return None
-
-        node = None
-        objectName = self.buildName(sceneItem, component=component)
-        kType = sceneItem.getKType()
+        dccSceneItem = None
+        objectName = self.buildName(kSceneItem, component=component)
+        kType = kSceneItem.getKType()
 
         # Build Object
         if kType == "Container":
-            node = self.buildContainerNode(sceneItem, objectName)
+            dccSceneItem = self.buildContainerNode(kSceneItem, objectName)
 
         elif kType == "Layer":
-            node = self.buildLayerNode(sceneItem, objectName)
+            dccSceneItem = self.buildLayerNode(kSceneItem, objectName)
 
         elif kType == "Component":
-            node = self.buildGroupNode(sceneItem, objectName)
-            component = sceneItem
+            dccSceneItem = self.buildGroupNode(kSceneItem, objectName)
+            component = kSceneItem
 
         elif kType == "SceneItem":
-            node = self.buildLocatorNode(sceneItem, objectName)
+            dccSceneItem = self.buildLocatorNode(kSceneItem, objectName)
 
         elif kType == "Curve":
-            node = self.buildCurveNode(sceneItem, objectName)
+            dccSceneItem = self.buildCurveNode(kSceneItem, objectName)
 
         elif kType == "Control":
-            node = self.buildCurveNode(sceneItem, objectName)
+            dccSceneItem = self.buildCurveNode(kSceneItem, objectName)
 
         else:
-            raise NotImplementedError(sceneItem.getName() + ' has an unsupported type: ' + str(type(sceneItem)))
+            raise NotImplementedError(kSceneItem.getName() + ' has an unsupported type: ' + str(type(kSceneItem)))
 
-        self.buildAttributes(sceneItem)
-        self.setTransform(sceneItem)
-        self.setVisibility(sceneItem)
+        self.buildAttributes(kSceneItem)
+        self.setTransform(kSceneItem)
+        self.setVisibility(kSceneItem)
 
         # Build children
-        for i in xrange(sceneItem.getNumChildren()):
-            child = sceneItem.getChildByIndex(i)
-            self.buildHierarchy(child, node, component)
+        for i in xrange(kSceneItem.getNumChildren()):
+            child = kSceneItem.getChildByIndex(i)
+            self.buildHierarchy(child, component)
 
-        return node
+        return dccSceneItem
 
 
-    def buildName(self, sceneItem, component=None):
-        """Builds the name for the sceneItem that is passed.
+    def buildName(self, kSceneItem, component=None):
+        """Builds the name for the kSceneItem that is passed.
 
         Arguments:
-        sceneItem -- SceneItem, kraken object to build the name for.
+        kSceneItem -- SceneItem, kraken object to build the name for.
         component -- Component, component that this object belongs to.
 
         Return:
@@ -284,32 +299,32 @@ class BaseBuilder(object):
 
         componentName = ""
         side = ""
-        kType = sceneItem.getKType()
+        kType = kSceneItem.getKType()
 
         if component is not None:
             componentName = component.getName()
             side = component.getSide()
 
         if kType == "Component":
-            return '_'.join([sceneItem.getName(), sceneItem.getSide(), 'hrc'])
+            return '_'.join([kSceneItem.getName(), kSceneItem.getSide(), 'hrc'])
 
         elif kType == "Container":
-            return '_'.join([sceneItem.getName()])
+            return '_'.join([kSceneItem.getName()])
 
         elif kType == "Layer":
-            return '_'.join([sceneItem.parent.getName(), sceneItem.getName()])
+            return '_'.join([kSceneItem.parent.getName(), kSceneItem.getName()])
 
         elif kType == "SceneItem":
-            return '_'.join([componentName, sceneItem.getName(), side, 'null'])
+            return '_'.join([componentName, kSceneItem.getName(), side, 'null'])
 
         elif kType == "Curve":
-            return '_'.join([componentName, sceneItem.getName(), side, 'crv'])
+            return '_'.join([componentName, kSceneItem.getName(), side, 'crv'])
 
         elif kType == "Control":
-            return '_'.join([componentName, sceneItem.getName(), side, 'ctrl'])
+            return '_'.join([componentName, kSceneItem.getName(), side, 'ctrl'])
 
         else:
-            raise NotImplementedError('buildName() not implemented for ' + str(type(sceneItem)))
+            raise NotImplementedError('buildName() not implemented for ' + str(type(kSceneItem)))
 
         return None
 
@@ -317,7 +332,7 @@ class BaseBuilder(object):
     # ===================
     # Visibility Methods
     # ===================
-    def setVisibility(self, sceneItem):
+    def setVisibility(self, kSceneItem):
         """Sets the visibility of the object after its been created.
 
         Arguments:
@@ -328,8 +343,10 @@ class BaseBuilder(object):
 
         """
 
-        if sceneItem.getShapeVisibility() is False:
-            sceneItem.node.Properties("Visibility").Parameters("viewvis").Value = False
+        if kSceneItem.getShapeVisibility() is False:
+            pass
+
+            # Re-implement in DCC builders.
 
         return True
 
@@ -337,6 +354,40 @@ class BaseBuilder(object):
     # ==============
     # Build Methods
     # ==============
+    def setTransform(self, sceneItem):
+        """Translates the transform to Softimage transform.
+
+        Arguments:
+        sceneItem -- Object: object to set the transform on.
+
+        Return:
+        True if successful.
+
+        """
+
+        dccSceneItem = self._getDCCSceneItem(sceneItem)
+
+        # Re-implement in DCC builders.
+
+        return True
+
+
+    def buildConstraints(self, sceneItem):
+        """Builds constraints for the supplied sceneItem.
+
+        Arguments:
+        sceneItem -- Object, scene item to create constraints for.
+
+        Return:
+        True if successful.
+
+        """
+
+        # Re-implement in DCC builders.
+
+        return True
+
+
     def _preBuild(self, container):
         """Protected Pre-Build method.
 
@@ -358,6 +409,8 @@ class BaseBuilder(object):
         True if successful.
 
         """
+
+        self.buildHierarchy(container, component=None)
 
         return True
 
@@ -395,14 +448,14 @@ class BaseBuilder(object):
 
 
 
-    # =======================
-    # Synchrnization Methods
-    # =======================
-    def synchronizeName(self, sceneItem, dccSceneItem):
+    # ==============================
+    # Synchrnization Object Methods
+    # ==============================
+    def synchronizeName(self, kSceneItem, dccSceneItem):
         """Synchronizes the name between the dcc scene item and the corresponding kraken scene item.
 
         Arguments:
-        sceneItem -- Object, sceneItem that represents a container to be built.
+        kSceneItem -- Object, kSceneItem that represents a container to be built.
         dccSceneItem -- Object, the element in the host DCC application
 
         Return:
@@ -412,11 +465,12 @@ class BaseBuilder(object):
 
         return False
 
-    def synchronizeContainerNode(self, sceneItem, dccSceneItem):
+
+    def synchronizeContainerNode(self, kSceneItem, dccSceneItem):
         """Synchronizes a container / namespace with the corresponding kraken scene item.
 
         Arguments:
-        sceneItem -- Object, sceneItem that represents a container to be built.
+        kSceneItem -- Object, kSceneItem that represents a container to be built.
         dccSceneItem -- Object, the element in the host DCC application
 
         Return:
@@ -427,11 +481,11 @@ class BaseBuilder(object):
         return False
 
 
-    def synchronizeLayerNode(self, sceneItem, dccSceneItem):
+    def synchronizeLayerNode(self, kSceneItem, dccSceneItem):
         """Synchronizes a layer object with the corresponding kraken scene item.
 
         Arguments:
-        sceneItem -- Object, sceneItem that represents a layer to be built.
+        kSceneItem -- Object, kSceneItem that represents a layer to be built.
         dccSceneItem -- Object, the element in the host DCC application
 
         Return:
@@ -442,11 +496,11 @@ class BaseBuilder(object):
         return False
 
 
-    def synchronizeGroupNode(self, sceneItem, dccSceneItem):
+    def synchronizeGroupNode(self, kSceneItem, dccSceneItem):
         """Synchronizes a group object with the corresponding kraken scene item.
 
         Arguments:
-        sceneItem -- Object, sceneItem that represents a group to be built.
+        kSceneItem -- Object, kSceneItem that represents a group to be built.
         dccSceneItem -- Object, the element in the host DCC application
 
         Return:
@@ -457,11 +511,11 @@ class BaseBuilder(object):
         return False
 
 
-    def synchronizeLocatorNode(self, sceneItem, dccSceneItem):
+    def synchronizeLocatorNode(self, kSceneItem, dccSceneItem):
         """Synchronizes a locator / null object with the corresponding kraken scene item.
 
         Arguments:
-        sceneItem -- Object, sceneItem that represents a locator / null to be built.
+        kSceneItem -- Object, kSceneItem that represents a locator / null to be built.
         dccSceneItem -- Object, the element in the host DCC application
 
         Return:
@@ -472,11 +526,11 @@ class BaseBuilder(object):
         return False
 
 
-    def synchronizeCurveNode(self, sceneItem, dccSceneItem):
+    def synchronizeCurveNode(self, kSceneItem, dccSceneItem):
         """Synchronizes a Curve object with the corresponding kraken scene item.
 
         Arguments:
-        sceneItem -- Object, sceneItem that represents a curve to be built.
+        kSceneItem -- Object, kSceneItem that represents a curve to be built.
         dccSceneItem -- Object, the element in the host DCC application
 
         Return:
@@ -487,9 +541,46 @@ class BaseBuilder(object):
         return False
 
 
-    # ========================
-    # Attribute Build Methods
-    # ========================
+    def synchronize(self):
+        """Synchronizes the Kraken hierarchy with the DCC data
+
+        Return:
+        True if the synchronization was successful.
+
+        """
+
+        for builtElement in self._buildElements:
+            dccSceneItem = builtElement['tgt']
+            kSceneItem = builtElement['src']
+
+            kType = kSceneItem.getKType()
+
+            # Build Object
+            if kType == "Container":
+                self.synchronizeContainerNode(kSceneItem, dccSceneItem)
+
+            elif kType == "Layer":
+                self.synchronizeLayerNode(kSceneItem, dccSceneItem)
+
+            elif kType == "Component":
+                self.synchronizeGroupNode(kSceneItem, dccSceneItem)
+
+            elif kType == "SceneItem":
+                self.synchronizeLocatorNode(kSceneItem, dccSceneItem)
+
+            elif kType == "Curve":
+                self.synchronizeCurveNode(kSceneItem, dccSceneItem)
+
+            elif kType == "Control":
+                self.synchronizeCurveNode(kSceneItem, dccSceneItem)
+
+            else:
+                raise NotImplementedError(kSceneItem.getName() + ' has an unsupported type: ' + str(type(kSceneItem)))
+
+
+    # ==============================
+    # Synchronize Attribute Methods
+    # ==============================
     def synchronizeBoolAttributeNode(self):
         """Synchronizes a Bool attribute with the corresponding kraken scene item.
 
@@ -545,72 +636,31 @@ class BaseBuilder(object):
         return True
 
 
-    # ==============
-    # Build Methods
-    # ==============
-    def synchronizeAttributes(self, sceneItem, dccSceneItem):
+    def synchronizeAttributes(self, kSceneItem, dccSceneItem):
         """Synchronizes attributes on the DCC object.
 
         Arguments:
-        sceneItem -- SceneItem, kraken object to build attributes for.
+        kSceneItem -- SceneItem, kraken object to build attributes for.
 
         Return:
         True if the synchronization was successful.
 
         """
 
-        for i in xrange(sceneItem.getNumAttributes()):
-            attribute = sceneItem.getAttributeByIndex(i)
+        for i in xrange(kSceneItem.getNumAttributes()):
+            attribute = kSceneItem.getAttributeByIndex(i)
             kType = attribute.getKType()
 
             if kType == "FloatAttribute":
-                print sceneItem.attributes[i].name
+                print kSceneItem.attributes[i].name
 
             elif kType == "BoolAttribute":
-                print sceneItem.attributes[i].name
+                print kSceneItem.attributes[i].name
 
             elif kType == "IntegerAttribute":
-                print sceneItem.attributes[i].name
+                print kSceneItem.attributes[i].name
 
             elif kType == "StringAttribute":
-                print sceneItem.attributes[i].name
+                print kSceneItem.attributes[i].name
 
         return True
-
-
-
-    def synchronize(self):
-        """Synchronizes the Kraken hierarchy with the DCC data
-
-        Return:
-        True if the synchronization was successful.
-
-        """
-
-        for builtElement in self._buildElements:
-            dccSceneItem = builtElement['tgt']
-            sceneItem = builtElement['src']
-
-            kType = sceneItem.getKType()
-
-            # Build Object
-            if kType == "Container":
-                self.synchronizeContainerNode(sceneItem, dccSceneItem)
-
-            elif kType == "Layer":
-                self.synchronizeLayerNode(sceneItem, dccSceneItem)
-
-            elif kType == "Component":
-                self.synchronizeGroupNode(sceneItem, dccSceneItem)
-
-            elif kType == "SceneItem":
-                self.synchronizeLocatorNode(sceneItem, dccSceneItem)
-
-            elif kType == "Curve":
-                self.synchronizeCurveNode(sceneItem, dccSceneItem)
-
-            elif kType == "Control":
-                self.synchronizeCurveNode(sceneItem, dccSceneItem)
-
-            else:
-                raise NotImplementedError(sceneItem.getName() + ' has an unsupported type: ' + str(type(sceneItem)))

@@ -28,11 +28,10 @@ class Builder(BaseBuilder):
     # ===================
     # Node Build Methods
     # ===================
-    def buildContainerNode(self, parentNode, sceneItem, objectName):
+    def buildContainerNode(self, sceneItem, objectName):
         """Builds a container / namespace object.
 
         Arguments:
-        parentNode -- Object, sceneItem that represents the parent of this object.
         sceneItem -- Object, sceneItem that represents a container to be built.
         objectName -- String, name of the object being created.
 
@@ -41,19 +40,21 @@ class Builder(BaseBuilder):
 
         """
 
-        node = pm.group(name="group", em=True)
-        pm.parent(node, parentNode)
-        pm.rename(node, objectName)
-        sceneItem.setNode(node)
+        parentNode = self._getDCCSceneItem(sceneItem.getParent())
 
-        return sceneItem.node
+        dccSceneItem = pm.group(name="group", em=True)
+        pm.parent(dccSceneItem, parentNode)
+        pm.rename(dccSceneItem, objectName)
+
+        self._registerSceneItemPair(sceneItem, dccSceneItem)
+
+        return dccSceneItem
 
 
-    def buildLayerNode(self, parentNode, sceneItem, objectName):
+    def buildLayerNode(self, sceneItem, objectName):
         """Builds a layer object.
 
         Arguments:
-        parentNode -- Object, sceneItem that represents the parent of this object.
         sceneItem -- Object, sceneItem that represents a layer to be built.
         objectName -- String, name of the object being created.
 
@@ -62,19 +63,21 @@ class Builder(BaseBuilder):
 
         """
 
-        node = pm.group(name="group", em=True)
-        pm.parent(node, parentNode)
-        pm.rename(node, objectName)
-        sceneItem.setNode(node)
+        parentNode = self._getDCCSceneItem(sceneItem.getParent())
 
-        return sceneItem.node
+        dccSceneItem = pm.group(name="group", em=True)
+        pm.parent(dccSceneItem, parentNode)
+        pm.rename(dccSceneItem, objectName)
+
+        self._registerSceneItemPair(sceneItem, dccSceneItem)
+
+        return dccSceneItem
 
 
-    def buildGroupNode(self, parentNode, sceneItem, objectName):
+    def buildGroupNode(self, sceneItem, objectName):
         """Builds a group object.
 
         Arguments:
-        parentNode -- Node, parent node of this object.
         sceneItem -- Object, sceneItem that represents a group to be built.
         objectName -- String, name of the object being created.
 
@@ -83,19 +86,21 @@ class Builder(BaseBuilder):
 
         """
 
-        node = pm.group(name="group", em=True)
-        pm.parent(node, parentNode)
-        pm.rename(node, objectName)
-        sceneItem.setNode(node)
+        parentNode = self._getDCCSceneItem(sceneItem.getParent())
 
-        return sceneItem.node
+        dccSceneItem = pm.group(name="group", em=True)
+        pm.parent(dccSceneItem, parentNode)
+        pm.rename(dccSceneItem, objectName)
+
+        self._registerSceneItemPair(sceneItem, dccSceneItem)
+
+        return dccSceneItem
 
 
-    def buildLocatorNode(self, parentNode, sceneItem, objectName):
+    def buildLocatorNode(self, sceneItem, objectName):
         """Builds a locator / null object.
 
         Arguments:
-        parentNode -- Node, parent node of this object.
         sceneItem -- Object, locator / null object to be built.
         objectName -- String, name of the object being created.
 
@@ -104,19 +109,21 @@ class Builder(BaseBuilder):
 
         """
 
-        node = pm.spaceLocator(name="locator")
-        pm.parent(node, parentNode)
-        pm.rename(node, objectName)
-        sceneItem.setNode(node)
+        parentNode = self._getDCCSceneItem(sceneItem.getParent())
 
-        return sceneItem.node
+        dccSceneItem = pm.spaceLocator(name="locator")
+        pm.parent(dccSceneItem, parentNode)
+        pm.rename(dccSceneItem, objectName)
+
+        self._registerSceneItemPair(sceneItem, dccSceneItem)
+
+        return dccSceneItem
 
 
-    def buildCurveNode(self, parentNode, sceneItem, objectName):
+    def buildCurveNode(self, sceneItem, objectName):
         """Builds a Curve object.
 
         Arguments:
-        parentNode -- Object, sceneItem that represents the parent of this object.
         sceneItem -- Object, sceneItem that represents a curve to be built.
         objectName -- String, name of the object being created.
 
@@ -124,6 +131,8 @@ class Builder(BaseBuilder):
         Node that is created.
 
         """
+
+        parentNode = self._getDCCSceneItem(sceneItem.getParent())
 
         # Format points for Maya
         points = sceneItem.getControlPoints()
@@ -148,12 +157,13 @@ class Builder(BaseBuilder):
                 pm.parent(currentSubCurve.getShape(), mainCurve, relative=True, shape=True)
                 pm.delete(currentSubCurve)
 
-        node = mainCurve
-        pm.parent(node, parentNode)
-        pm.rename(node, objectName)
-        sceneItem.setNode(node)
+        dccSceneItem = mainCurve
+        pm.parent(dccSceneItem, parentNode)
+        pm.rename(dccSceneItem, objectName)
 
-        return sceneItem.node
+        self._registerSceneItemPair(sceneItem, dccSceneItem)
+
+        return dccSceneItem
 
 
     # ========================
@@ -228,10 +238,12 @@ class Builder(BaseBuilder):
 
         """
 
+        dccSceneItem = self._getDCCSceneItem(sceneItem)
+
         if sceneItem.getShapeVisibility() is False:
 
             # Get shape node, if it exists, hide it.
-            shape = sceneItem.node.getShape()
+            shape = dccSceneItem.getShape()
             if shape is not None:
                 shape.visibility.set(False)
 
@@ -252,10 +264,12 @@ class Builder(BaseBuilder):
 
         """
 
+        dccSceneItem = self._getDCCSceneItem(sceneItem)
+
         quat = dt.Quaternion(sceneItem.xfo.rot.v.x, sceneItem.xfo.rot.v.y, sceneItem.xfo.rot.v.z, sceneItem.xfo.rot.w)
-        sceneItem.node.setScale(dt.Vector(sceneItem.xfo.scl.x, sceneItem.xfo.scl.y, sceneItem.xfo.scl.z))
-        sceneItem.node.setTranslation(dt.Vector(sceneItem.xfo.tr.x, sceneItem.xfo.tr.y, sceneItem.xfo.tr.z), "world")
-        sceneItem.node.setRotation(quat, "world")
+        dccSceneItem.setScale(dt.Vector(sceneItem.xfo.scl.x, sceneItem.xfo.scl.y, sceneItem.xfo.scl.z))
+        dccSceneItem.setTranslation(dt.Vector(sceneItem.xfo.tr.x, sceneItem.xfo.tr.y, sceneItem.xfo.tr.z), "world")
+        dccSceneItem.setRotation(quat, "world")
 
         pm.select(clear=True)
 
@@ -301,7 +315,7 @@ class Builder(BaseBuilder):
 
         """
 
-        self.buildHierarchy(container, None, component=None)
+        self.buildHierarchy(container, component=None)
 
         return True
 
