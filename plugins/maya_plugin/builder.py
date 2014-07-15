@@ -1,4 +1,4 @@
-"""Kraken SI - SI Builder module.
+"""Kraken Maya - Maya Builder module.
 
 Classes:
 Builder -- Component representation.
@@ -15,11 +15,11 @@ from kraken.core.objects.attributes.integer_attribute import IntegerAttribute
 from kraken.core.objects.attributes.string_attribute import StringAttribute
 from kraken.core.builders.base_builder import BaseBuilder
 
-from kraken.plugins.si_plugin.utils import *
+from kraken.plugins.maya_plugin.utils import *
 
 
 class Builder(BaseBuilder):
-    """Builder object for building Kraken objects in Softimage."""
+    """Builder object for building Kraken objects in Maya."""
 
     def __init__(self):
         super(Builder, self).__init__()
@@ -41,8 +41,9 @@ class Builder(BaseBuilder):
 
         """
 
-        node = parentNode.AddModel(None, objectName)
-        node.Name = objectName
+        node = pm.group(name="group", em=True)
+        pm.parent(node, parentNode)
+        pm.rename(node, objectName)
         sceneItem.setNode(node)
 
         return sceneItem.node
@@ -61,15 +62,16 @@ class Builder(BaseBuilder):
 
         """
 
-        node = parentNode.AddModel(None, objectName)
-        node.Name = objectName
+        node = pm.group(name="group", em=True)
+        pm.parent(node, parentNode)
+        pm.rename(node, objectName)
         sceneItem.setNode(node)
 
         return sceneItem.node
 
 
     def buildGroupNode(self, parentNode, sceneItem, objectName):
-        """Builds a locator / null object.
+        """Builds a group object.
 
         Arguments:
         parentNode -- Node, parent node of this object.
@@ -81,8 +83,9 @@ class Builder(BaseBuilder):
 
         """
 
-        node = parentNode.AddNull()
-        node.Name = objectName
+        node = pm.group(name="group", em=True)
+        pm.parent(node, parentNode)
+        pm.rename(node, objectName)
         sceneItem.setNode(node)
 
         return sceneItem.node
@@ -93,7 +96,7 @@ class Builder(BaseBuilder):
 
         Arguments:
         parentNode -- Node, parent node of this object.
-        sceneItem -- Object, sceneItem that represents a locator / null to be built.
+        sceneItem -- Object, locator / null object to be built.
         objectName -- String, name of the object being created.
 
         Return:
@@ -101,8 +104,9 @@ class Builder(BaseBuilder):
 
         """
 
-        node = parentNode.AddNull()
-        node.Name = objectName
+        node = pm.spaceLocator(name="locator")
+        pm.parent(node, parentNode)
+        pm.rename(node, objectName)
         sceneItem.setNode(node)
 
         return sceneItem.node
@@ -121,41 +125,33 @@ class Builder(BaseBuilder):
 
         """
 
-        # Format points for Softimage
+        # Format points for Maya
         points = sceneItem.getControlPoints()
 
+        # Scale, rotate, translation shape
         curvePoints = []
         for eachSubCurve in points:
-            subCurvePoints = [x.toArray() for x in eachSubCurve]
-
-            formattedPoints = []
-            for i in xrange(3):
-                axisPositions = []
-                for p, eachPnt in enumerate(subCurvePoints):
-                    if p < len(subCurvePoints):
-                        axisPositions.append(eachPnt[i])
-
-                formattedPoints.append(axisPositions)
-
-            formattedPoints.append([1.0] * len(subCurvePoints))
+            formattedPoints = [x.toArray() for x in eachSubCurve]
             curvePoints.append(formattedPoints)
 
-        # Build the curve
-        for i, eachCurveSection in enumerate(curvePoints):
+        mainCurve = None
+        for i, eachSubCurve in enumerate(curvePoints):
+            currentSubCurve = pm.curve(per=False, point=curvePoints[i], degree=1) #, knot=[x for x in xrange(len(curvePoints[i]))])
 
-            # Create knots
-            if sceneItem.getCurveSectionClosed(i) is True:
-                knots = list(xrange(len(eachCurveSection[i]) + 1))
-            else:
-                knots = list(xrange(len(eachCurveSection[i])))
+            if sceneItem.getCurveSectionClosed(i):
+                pm.closeCurve(currentSubCurve, preserveShape=True, replaceOriginal=True)
 
-            if i == 0:
-                node = parentNode.AddNurbsCurve(list(eachCurveSection), knots, sceneItem.getCurveSectionClosed(i), 1, constants.siNonUniformParameterization, constants.siSINurbs)
-                sceneItem.setNode(node)
-            else:
-                sceneItem.getNode().ActivePrimitive.Geometry.AddCurve(eachCurveSection, knots, sceneItem.getCurveSectionClosed(i), 1, constants.siNonUniformParameterization)
+            if mainCurve is None:
+                mainCurve = currentSubCurve
 
-        sceneItem.node.Name = objectName
+            if i > 0:
+                pm.parent(currentSubCurve.getShape(), mainCurve, relative=True, shape=True)
+                pm.delete(currentSubCurve)
+
+        node = mainCurve
+        pm.parent(node, parentNode)
+        pm.rename(node, objectName)
+        sceneItem.setNode(node)
 
         return sceneItem.node
 
@@ -233,7 +229,11 @@ class Builder(BaseBuilder):
         """
 
         if sceneItem.getShapeVisibility() is False:
-            sceneItem.node.Properties("Visibility").Parameters("viewvis").Value = False
+
+            # Get shape node, if it exists, hide it.
+            shape = sceneItem.node.getShape()
+            if shape is not None:
+                shape.visibility.set(False)
 
         return True
 
@@ -242,7 +242,7 @@ class Builder(BaseBuilder):
     # Build Methods
     # ==============
     def buildTransform(self, sceneItem):
-        """Translates the transform to Softimage transform.
+        """Translates the transform to Maya transform.
 
         Arguments:
         sceneItem -- Object: object to set the transform on.
@@ -252,16 +252,12 @@ class Builder(BaseBuilder):
 
         """
 
-        xfo = XSIMath.CreateTransform()
-        scl = XSIMath.CreateVector3(sceneItem.xfo.scl.x, sceneItem.xfo.scl.y, sceneItem.xfo.scl.z)
-        quat = XSIMath.CreateQuaternion(sceneItem.xfo.rot.w, sceneItem.xfo.rot.v.x, sceneItem.xfo.rot.v.y, sceneItem.xfo.rot.v.z)
-        tr = XSIMath.CreateVector3(sceneItem.xfo.tr.x, sceneItem.xfo.tr.y, sceneItem.xfo.tr.z)
+        quat = dt.Quaternion(sceneItem.xfo.rot.v.x, sceneItem.xfo.rot.v.y, sceneItem.xfo.rot.v.z, sceneItem.xfo.rot.w)
+        sceneItem.node.setScale(dt.Vector(sceneItem.xfo.scl.x, sceneItem.xfo.scl.y, sceneItem.xfo.scl.z))
+        sceneItem.node.setTranslation(dt.Vector(sceneItem.xfo.tr.x, sceneItem.xfo.tr.y, sceneItem.xfo.tr.z), "world")
+        sceneItem.node.setRotation(quat, "world")
 
-        xfo.SetScaling(scl)
-        xfo.SetRotationFromQuaternion(quat)
-        xfo.SetTranslation(tr)
-
-        sceneItem.node.Kinematics.Global.PutTransform2(None, xfo)
+        pm.select(clear=True)
 
         return True
 
@@ -291,8 +287,6 @@ class Builder(BaseBuilder):
 
         """
 
-        si.BeginUndo("Kraken SI Build: " + container.name)
-
         return True
 
 
@@ -307,8 +301,7 @@ class Builder(BaseBuilder):
 
         """
 
-        scnRoot = si.ActiveProject3.ActiveScene.Root
-        self.buildHierarchy(container, scnRoot, component=None)
+        self.buildHierarchy(container, None, component=None)
 
         return True
 
@@ -320,7 +313,5 @@ class Builder(BaseBuilder):
         True if successful.
 
         """
-
-        si.EndUndo()
 
         return True

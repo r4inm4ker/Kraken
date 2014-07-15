@@ -3,10 +3,10 @@ from kraken.tests import arm_rig
 
 from kraken.tests.arm_rig import ArmRig
 
-from kraken.plugins.si_plugin import builder
+from kraken.plugins.maya_plugin import builder
 reload(builder)
 
-from kraken.plugins.si_plugin.builder import Builder
+from kraken.plugins.maya_plugin.builder import Builder
 
 myArm = ArmRig("myArm")
 

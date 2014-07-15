@@ -21,6 +21,8 @@ class BaseComponent(SceneItem):
         self.inputs = []
         self.outputs = []
 
+        self.setShapeVisibility(False)
+
 
     # =============
     # Side Methods

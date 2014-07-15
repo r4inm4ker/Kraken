@@ -86,3 +86,17 @@ class BaseAttribute(object):
         self.parent = parent
 
         return True
+
+
+    # ==============
+    # kType Methods
+    # ==============
+    def getKType(self):
+        """Returns the kType of this object.
+
+        Return:
+        True if successful.
+
+        """
+
+        return self.__kType__

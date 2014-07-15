@@ -11,6 +11,8 @@ from base_attribute import BaseAttribute
 class FloatAttribute(BaseAttribute):
     """Float Attribute. Implemented value type checking and limiting."""
 
+    __kType__ = "FloatAttribute"
+
     def __init__(self, name, value, minValue, maxValue):
         super(FloatAttribute, self).__init__(name, value)
         self.min = minValue
