@@ -47,14 +47,6 @@ class ArmComponent(BaseComponent):
         wristGuideCtrl.xfo.tr = Vec3(12.0, 12.9, 0.0)
         self.addChild(wristGuideCtrl)
 
-        # Guide Splice Op Code
-        guideSpliceOps = []
-
-        guideSpliceCode = """
-          drawLine(bicep.tr, forearm.tr, Color(1.0, 0.0, 0.0));
-          drawLine(forearm.tr, wrist.tr, Color(1.0, 0.0, 0.0));
-
-        """
 
     def buildRig(self, parent):
 

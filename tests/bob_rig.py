@@ -1,9 +1,9 @@
-
 from kraken.core.objects.container import Container
 from kraken.core.objects.layer import Layer
 from arm_component import ArmComponent
 
-class ArmRig(Container):
+
+class Rig(Container):
     """Test Arm Component"""
 
     def __init__(self, name):
@@ -24,4 +24,4 @@ class ArmRig(Container):
 
 
 if __name__ == "__main__":
-    armRig = ArmRig("myArm")
+    bobRig = Rig("char_bob")
