@@ -17,6 +17,20 @@ class ComponentOutput(object):
         self.connections = []
 
 
+    # =============
+    # Name methods
+    # =============
+    def getName(self):
+        """Returns the name of the object as a string.
+
+        Return:
+        String of the object's name.
+
+        """
+
+        return self.name
+
+
     # ===================
     # Connection Methods
     # ===================
@@ -31,12 +45,12 @@ class ComponentOutput(object):
 
         """
 
-        from component_input import ComponentInput
-        if type(componentInput) != ComponentInput:
-            raise Exception("Output components can only be connected to input components. connection type:'" + str(type(componentInput))+"'")
+
+        if componentInput.getKType() != "ComponentInput":
+            raise Exception("Output components can only be connected to input components. connection type:'" + str(type(componentInput)) + "'")
 
         if self.dataType != componentInput.dataType:
-            raise Exception("Connected component input data type:'" +componentInput.dataType+"' does not match this component data type:'" + self.dataType)
+            raise Exception("Connected component input data type:'" + componentInput.dataType + "' does not match this component data type:'" + self.dataType)
 
         self.connections.append(componentInput)
 
@@ -85,3 +99,17 @@ class ComponentOutput(object):
         """
 
         return self.connections[index]
+
+
+    # ==============
+    # kType Methods
+    # ==============
+    def getKType(self):
+        """Returns the kType of this object.
+
+        Return:
+        True if successful.
+
+        """
+
+        return self.__kType__

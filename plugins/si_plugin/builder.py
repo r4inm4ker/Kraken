@@ -7,7 +7,7 @@ Builder -- Component representation.
 
 from kraken.core.objects.curve import Curve
 from kraken.core.objects.layer import Layer
-from kraken.core.objects.component import BaseComponent
+from kraken.core.objects.components.base_component import BaseComponent
 from kraken.core.objects.controls.base_control import BaseControl
 from kraken.core.objects.attributes.bool_attribute import BoolAttribute
 from kraken.core.objects.attributes.float_attribute import FloatAttribute
@@ -153,9 +153,9 @@ class Builder(BaseBuilder):
 
             # Create knots
             if kSceneItem.getCurveSectionClosed(i) is True:
-                knots = list(xrange(len(eachCurveSection[i]) + 1))
+                knots = list(xrange(len(eachCurveSection[0]) + 1))
             else:
-                knots = list(xrange(len(eachCurveSection[i])))
+                knots = list(xrange(len(eachCurveSection[0])))
 
             if i == 0:
                 dccSceneItem = parentNode.AddNurbsCurve(list(eachCurveSection), knots, kSceneItem.getCurveSectionClosed(i), 1, constants.siNonUniformParameterization, constants.siSINurbs)

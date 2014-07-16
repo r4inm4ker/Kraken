@@ -22,4 +22,4 @@ class SquareControl(BaseControl):
         """
 
         super(SquareControl, self).__init__(name, parent=parent)
-        self.addCurveSection([Vec3(1.0, 0.0, -1.0), Vec3(1.0, 0.0, 1.0), Vec3(-1.0, 0.0, 1.0), Vec3(-1.0, 0.0, -1.0)], True)
+        self.addCurveSection([Vec3(0.5, 0.0, -0.5), Vec3(0.5, 0.0, 0.5), Vec3(-0.5, 0.0, 0.5), Vec3(-0.5, 0.0, -0.5)], True)

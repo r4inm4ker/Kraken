@@ -160,10 +160,10 @@ class SceneItem(object):
 
 
     def getNumChildren(self):
-        """Returns the number of children this object has as an integer.
+        """Returns the number of children this object has.
 
         Return:
-        Integer of the number of children of this object.
+        Integer, number of children of this object.
 
         """
 

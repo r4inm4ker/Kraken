@@ -142,9 +142,12 @@ class BaseBuilder(object):
     # ========================
     # Attribute Build Methods
     # ========================
-    def buildBoolAttribute(self):
+    def buildBoolAttribute(self, kSceneItem):
         """Builds a Bool attribute.
 
+        Arguments:
+        kSceneItem -- Object, kSceneItem that represents a string attribute to be built.
+
         Return:
         True if successful.
 
@@ -153,9 +156,12 @@ class BaseBuilder(object):
         return True
 
 
-    def buildColorAttribute(self):
+    def buildColorAttribute(self, kSceneItem):
         """Builds a Color attribute.
 
+        Arguments:
+        kSceneItem -- Object, kSceneItem that represents a string attribute to be built.
+
         Return:
         True if successful.
 
@@ -164,9 +170,12 @@ class BaseBuilder(object):
         return True
 
 
-    def buildFloatAttribute(self):
+    def buildFloatAttribute(self, kSceneItem):
         """Builds a Float attribute.
 
+        Arguments:
+        kSceneItem -- Object, kSceneItem that represents a string attribute to be built.
+
         Return:
         True if successful.
 
@@ -175,9 +184,12 @@ class BaseBuilder(object):
         return True
 
 
-    def buildIntegerAttribute(self):
+    def buildIntegerAttribute(self, kSceneItem):
         """Builds a Integer attribute.
 
+        Arguments:
+        kSceneItem -- Object, kSceneItem that represents a string attribute to be built.
+
         Return:
         True if successful.
 
@@ -186,8 +198,11 @@ class BaseBuilder(object):
         return True
 
 
-    def buildStringAttribute(self):
+    def buildStringAttribute(self, kSceneItem):
         """Builds a String attribute.
+
+        Arguments:
+        kSceneItem -- Object, kSceneItem that represents a string attribute to be built.
 
         Return:
         True if successful.

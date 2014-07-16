@@ -7,7 +7,7 @@ Builder -- Component representation.
 
 from kraken.core.objects.curve import Curve
 from kraken.core.objects.layer import Layer
-from kraken.core.objects.component import BaseComponent
+from kraken.core.objects.components.base_component import BaseComponent
 from kraken.core.objects.controls.base_control import BaseControl
 from kraken.core.objects.attributes.bool_attribute import BoolAttribute
 from kraken.core.objects.attributes.float_attribute import FloatAttribute
