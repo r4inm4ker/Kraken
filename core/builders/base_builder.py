@@ -225,28 +225,30 @@ class BaseBuilder(object):
 
         """
 
-        dccSceneItem = self._getDCCSceneItem(kSceneItem)
-
         for i in xrange(kSceneItem.getNumAttributeGroups()):
             attributeGroup = kSceneItem.getAttributeGroupByIndex(i)
 
-            self.buildAttributeGroup(kSceneItem)
+            attributeCount = attributeGroup.getNumAttributes()
+            if attributeCount < 1:
+                continue
 
-            for j in xrange(attributeGroup.getNumAttributes()):
-                attribute = attributeGroup.getAttributeByIndex(i)
+            self.buildAttributeGroup(attributeGroup)
+
+            for j in xrange(attributeCount):
+                attribute = attributeGroup.getAttributeByIndex(j)
                 kType = attribute.getKType()
 
                 if kType == "FloatAttribute":
-                    self.buildFloatAttribute()
+                    self.buildFloatAttribute(attribute)
 
                 elif kType == "BoolAttribute":
-                    self.buildBoolAttribute()
+                    self.buildBoolAttribute(attribute)
 
                 elif kType == "IntegerAttribute":
-                    self.buildIntegerAttribute()
+                    self.buildIntegerAttribute(attribute)
 
                 elif kType == "StringAttribute":
-                    self.buildStringAttribute()
+                    self.buildStringAttribute(attribute)
 
         return True
 

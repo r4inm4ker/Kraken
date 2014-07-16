@@ -290,22 +290,22 @@ class SceneItem(object):
         return True
 
 
-    def addAttributeGroup(self, attribute):
-        """Adds an attribute to this object.
+    def addAttributeGroup(self, attributeGroup):
+        """Adds an attributeGroup to this object.
 
         Arguments:
-        attribute -- Object, attribute object to add to this object.
+        attributeGroup -- Object, Attribute Group object to add to this object.
 
         Return:
         True if successful.
 
         """
 
-        if attribute.name in [x.name for x in self.attributeGroups]:
-            raise IndexError("Child with " + attribute.name + " already exists as a attribute.")
+        if attributeGroup.name in [x.name for x in self.attributeGroups]:
+            raise IndexError("Child with " + attributeGroup.name + " already exists as a attributeGroup.")
 
-        self.attributeGroups.append(attribute)
-        attribute.setParent(self)
+        self.attributeGroups.append(attributeGroup)
+        attributeGroup.setParent(self)
 
         return True
 

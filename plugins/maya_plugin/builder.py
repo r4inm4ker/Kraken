@@ -28,11 +28,11 @@ class Builder(BaseBuilder):
     # ===================
     # Node Build Methods
     # ===================
-    def buildContainer(self, sceneItem, objectName):
+    def buildContainer(self, kSceneItem, objectName):
         """Builds a container / namespace object.
 
         Arguments:
-        sceneItem -- Object, sceneItem that represents a container to be built.
+        kSceneItem -- Object, kSceneItem that represents a container to be built.
         objectName -- String, name of the object being created.
 
         Return:
@@ -40,22 +40,22 @@ class Builder(BaseBuilder):
 
         """
 
-        parentNode = self._getDCCSceneItem(sceneItem.getParent())
+        parentNode = self._getDCCSceneItem(kSceneItem.getParent())
 
         dccSceneItem = pm.group(name="group", em=True)
         pm.parent(dccSceneItem, parentNode)
         pm.rename(dccSceneItem, objectName)
 
-        self._registerSceneItemPair(sceneItem, dccSceneItem)
+        self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
         return dccSceneItem
 
 
-    def buildLayer(self, sceneItem, objectName):
+    def buildLayer(self, kSceneItem, objectName):
         """Builds a layer object.
 
         Arguments:
-        sceneItem -- Object, sceneItem that represents a layer to be built.
+        kSceneItem -- Object, kSceneItem that represents a layer to be built.
         objectName -- String, name of the object being created.
 
         Return:
@@ -63,22 +63,22 @@ class Builder(BaseBuilder):
 
         """
 
-        parentNode = self._getDCCSceneItem(sceneItem.getParent())
+        parentNode = self._getDCCSceneItem(kSceneItem.getParent())
 
         dccSceneItem = pm.group(name="group", em=True)
         pm.parent(dccSceneItem, parentNode)
         pm.rename(dccSceneItem, objectName)
 
-        self._registerSceneItemPair(sceneItem, dccSceneItem)
+        self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
         return dccSceneItem
 
 
-    def buildGroup(self, sceneItem, objectName):
+    def buildGroup(self, kSceneItem, objectName):
         """Builds a group object.
 
         Arguments:
-        sceneItem -- Object, sceneItem that represents a group to be built.
+        kSceneItem -- Object, kSceneItem that represents a group to be built.
         objectName -- String, name of the object being created.
 
         Return:
@@ -86,22 +86,22 @@ class Builder(BaseBuilder):
 
         """
 
-        parentNode = self._getDCCSceneItem(sceneItem.getParent())
+        parentNode = self._getDCCSceneItem(kSceneItem.getParent())
 
         dccSceneItem = pm.group(name="group", em=True)
         pm.parent(dccSceneItem, parentNode)
         pm.rename(dccSceneItem, objectName)
 
-        self._registerSceneItemPair(sceneItem, dccSceneItem)
+        self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
         return dccSceneItem
 
 
-    def buildLocator(self, sceneItem, objectName):
+    def buildLocator(self, kSceneItem, objectName):
         """Builds a locator / null object.
 
         Arguments:
-        sceneItem -- Object, locator / null object to be built.
+        kSceneItem -- Object, locator / null object to be built.
         objectName -- String, name of the object being created.
 
         Return:
@@ -109,22 +109,22 @@ class Builder(BaseBuilder):
 
         """
 
-        parentNode = self._getDCCSceneItem(sceneItem.getParent())
+        parentNode = self._getDCCSceneItem(kSceneItem.getParent())
 
         dccSceneItem = pm.spaceLocator(name="locator")
         pm.parent(dccSceneItem, parentNode)
         pm.rename(dccSceneItem, objectName)
 
-        self._registerSceneItemPair(sceneItem, dccSceneItem)
+        self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
         return dccSceneItem
 
 
-    def buildCurve(self, sceneItem, objectName):
+    def buildCurve(self, kSceneItem, objectName):
         """Builds a Curve object.
 
         Arguments:
-        sceneItem -- Object, sceneItem that represents a curve to be built.
+        kSceneItem -- Object, kSceneItem that represents a curve to be built.
         objectName -- String, name of the object being created.
 
         Return:
@@ -132,10 +132,10 @@ class Builder(BaseBuilder):
 
         """
 
-        parentNode = self._getDCCSceneItem(sceneItem.getParent())
+        parentNode = self._getDCCSceneItem(kSceneItem.getParent())
 
         # Format points for Maya
-        points = sceneItem.getControlPoints()
+        points = kSceneItem.getControlPoints()
 
         # Scale, rotate, translation shape
         curvePoints = []
@@ -147,7 +147,7 @@ class Builder(BaseBuilder):
         for i, eachSubCurve in enumerate(curvePoints):
             currentSubCurve = pm.curve(per=False, point=curvePoints[i], degree=1) #, knot=[x for x in xrange(len(curvePoints[i]))])
 
-            if sceneItem.getCurveSectionClosed(i):
+            if kSceneItem.getCurveSectionClosed(i):
                 pm.closeCurve(currentSubCurve, preserveShape=True, replaceOriginal=True)
 
             if mainCurve is None:
@@ -161,7 +161,7 @@ class Builder(BaseBuilder):
         pm.parent(dccSceneItem, parentNode)
         pm.rename(dccSceneItem, objectName)
 
-        self._registerSceneItemPair(sceneItem, dccSceneItem)
+        self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
         return dccSceneItem
 
@@ -169,20 +169,32 @@ class Builder(BaseBuilder):
     # ========================
     # Attribute Build Methods
     # ========================
-    def buildBoolAttribute(self):
+    def buildBoolAttribute(self, kSceneItem):
         """Builds a Bool attribute.
 
+        Arguments:
+        kSceneItem -- Object, kSceneItem that represents a boolean attribute to be built.
+
         Return:
         True if successful.
 
         """
 
+        parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent().getParent())
+        parentDCCSceneItem.addAttr(kSceneItem.getName(), niceName=kSceneItem.getName(), attributeType="bool", defaultValue=kSceneItem.getValue(), keyable=True)
+        dccSceneItem = parentDCCSceneItem.attr(kSceneItem.getName())
+
+        self._registerSceneItemPair(kSceneItem, dccSceneItem)
+
         return True
 
 
-    def buildColorAttribute(self):
+    def buildColorAttribute(self, kSceneItem):
         """Builds a Color attribute.
 
+        Arguments:
+        kSceneItem -- Object, kSceneItem that represents a color attribute to be built.
+
         Return:
         True if successful.
 
@@ -191,35 +203,92 @@ class Builder(BaseBuilder):
         return True
 
 
-    def buildFloatAttribute(self):
+    def buildFloatAttribute(self, kSceneItem):
         """Builds a Float attribute.
 
+        Arguments:
+        kSceneItem -- Object, kSceneItem that represents a float attribute to be built.
+
         Return:
         True if successful.
 
         """
 
+        parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent().getParent())
+        parentDCCSceneItem.addAttr(kSceneItem.getName(), niceName=kSceneItem.getName(), attributeType="float", defaultValue=kSceneItem.getValue(), minValue=kSceneItem.min, maxValue=kSceneItem.max, keyable=True)
+        dccSceneItem = parentDCCSceneItem.attr(kSceneItem.getName())
+
+        # dccSceneItem = parentDCCSceneItem + "." + kSceneItem.getName()
+
+        self._registerSceneItemPair(kSceneItem, dccSceneItem)
+
         return True
 
 
-    def buildIntegerAttribute(self):
+    def buildIntegerAttribute(self, kSceneItem):
         """Builds a Integer attribute.
 
+        Arguments:
+        kSceneItem -- Object, kSceneItem that represents a integer attribute to be built.
+
         Return:
         True if successful.
 
         """
+
+        parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent().getParent())
+        parentDCCSceneItem.addAttr(kSceneItem.getName(), niceName=kSceneItem.getName(), attributeType="long", defaultValue=kSceneItem.getValue(), minValue=kSceneItem.min, maxValue=kSceneItem.max, keyable=True)
+        parentDCCSceneItem.attr(kSceneItem.getName())
+        dccSceneItem = parentDCCSceneItem.attr(kSceneItem.getName())
+
+        self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
         return True
 
 
-    def buildStringAttribute(self):
+    def buildStringAttribute(self, kSceneItem):
         """Builds a String attribute.
+
+        Arguments:
+        kSceneItem -- Object, kSceneItem that represents a string attribute to be built.
 
         Return:
         True if successful.
 
         """
+
+        parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent().getParent())
+        parentDCCSceneItem.addAttr(kSceneItem.getName(), niceName=kSceneItem.getName(), dataType="string")
+        dccSceneItem = parentDCCSceneItem.attr(kSceneItem.getName())
+        dccSceneItem.set(kSceneItem.getValue())
+
+        self._registerSceneItemPair(kSceneItem, dccSceneItem)
+
+        return True
+
+
+    def buildAttributeGroup(self, kSceneItem):
+        """Builds attribute groups on the DCC object.
+
+        Arguments:
+        kSceneItem -- SceneItem, kraken object to build the attribute group on.
+
+        Return:
+        True if successful.
+
+        """
+
+        parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
+
+        groupName = kSceneItem.getName()
+        if groupName == "":
+            groupName = "Settings"
+
+        parentDCCSceneItem.addAttr(groupName, niceName=groupName, attributeType="enum", enumName="-----", keyable=True)
+        dccSceneItem = parentDCCSceneItem.attr(groupName)
+        pm.setAttr(parentDCCSceneItem + "." + groupName, lock=True)
+
+        self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
         return True
 
@@ -227,7 +296,7 @@ class Builder(BaseBuilder):
     # ===================
     # Visibility Methods
     # ===================
-    def setVisibility(self, sceneItem):
+    def setVisibility(self, kSceneItem):
         """Sets the visibility of the object after its been created.
 
         Arguments:
@@ -238,9 +307,9 @@ class Builder(BaseBuilder):
 
         """
 
-        dccSceneItem = self._getDCCSceneItem(sceneItem)
+        dccSceneItem = self._getDCCSceneItem(kSceneItem)
 
-        if sceneItem.getShapeVisibility() is False:
+        if kSceneItem.getShapeVisibility() is False:
 
             # Get shape node, if it exists, hide it.
             shape = dccSceneItem.getShape()
@@ -253,22 +322,22 @@ class Builder(BaseBuilder):
     # ==============
     # Build Methods
     # ==============
-    def setTransform(self, sceneItem):
+    def setTransform(self, kSceneItem):
         """Translates the transform to Maya transform.
 
         Arguments:
-        sceneItem -- Object: object to set the transform on.
+        kSceneItem -- Object: object to set the transform on.
 
         Return:
         True if successful.
 
         """
 
-        dccSceneItem = self._getDCCSceneItem(sceneItem)
+        dccSceneItem = self._getDCCSceneItem(kSceneItem)
 
-        quat = dt.Quaternion(sceneItem.xfo.rot.v.x, sceneItem.xfo.rot.v.y, sceneItem.xfo.rot.v.z, sceneItem.xfo.rot.w)
-        dccSceneItem.setScale(dt.Vector(sceneItem.xfo.scl.x, sceneItem.xfo.scl.y, sceneItem.xfo.scl.z))
-        dccSceneItem.setTranslation(dt.Vector(sceneItem.xfo.tr.x, sceneItem.xfo.tr.y, sceneItem.xfo.tr.z), "world")
+        quat = dt.Quaternion(kSceneItem.xfo.rot.v.x, kSceneItem.xfo.rot.v.y, kSceneItem.xfo.rot.v.z, kSceneItem.xfo.rot.w)
+        dccSceneItem.setScale(dt.Vector(kSceneItem.xfo.scl.x, kSceneItem.xfo.scl.y, kSceneItem.xfo.scl.z))
+        dccSceneItem.setTranslation(dt.Vector(kSceneItem.xfo.tr.x, kSceneItem.xfo.tr.y, kSceneItem.xfo.tr.z), "world")
         dccSceneItem.setRotation(quat, "world")
 
         pm.select(clear=True)
@@ -276,11 +345,11 @@ class Builder(BaseBuilder):
         return True
 
 
-    def buildConstraints(self, sceneItem):
-        """Builds constraints for the supplied sceneItem.
+    def buildConstraints(self, kSceneItem):
+        """Builds constraints for the supplied kSceneItem.
 
         Arguments:
-        sceneItem -- Object, scene item to create constraints for.
+        kSceneItem -- Object, scene item to create constraints for.
 
         Return:
         True if successful.

@@ -1,6 +1,7 @@
 from kraken.core.maths import *
 
 from kraken.core.objects.attributes.float_attribute import FloatAttribute
+from kraken.core.objects.attributes.integer_attribute import IntegerAttribute
 from kraken.core.objects.attributes.bool_attribute import BoolAttribute
 from kraken.core.objects.attributes.string_attribute import StringAttribute
 
@@ -28,6 +29,10 @@ class ArmComponent(BaseComponent):
 
         # Setup component attributes
         defaultAttrGroup.addAttribute(BoolAttribute("toggleDebugging", True))
+        defaultAttrGroup.addAttribute(BoolAttribute("testBool", True))
+        defaultAttrGroup.addAttribute(FloatAttribute("testFloat", 3.2, 0.0, 10.0))
+        defaultAttrGroup.addAttribute(IntegerAttribute("testInteger", 83, 0, 100))
+        defaultAttrGroup.addAttribute(StringAttribute("testString", "Hello World"))
 
         # Add Guide Controls
         bicepGuideCtrl = NullControl('bicepGuideCtrl')
