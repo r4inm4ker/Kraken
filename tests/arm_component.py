@@ -37,14 +37,17 @@ class ArmComponent(BaseComponent):
         # Add Guide Controls
         bicepGuideCtrl = NullControl('bicepGuideCtrl')
         bicepGuideCtrl.xfo.tr = Vec3(5.0, 20.0, 0.0)
+        bicepGuideCtrl.setColor("yellow")
         self.addChild(bicepGuideCtrl)
 
         forearmGuideCtrl = NullControl('forearmGuideCtrl')
         forearmGuideCtrl.xfo.tr = Vec3(8.5, 16.4, -2.5)
+        forearmGuideCtrl.setColor("yellow")
         self.addChild(forearmGuideCtrl)
 
         wristGuideCtrl = NullControl('wristGuideCtrl')
         wristGuideCtrl.xfo.tr = Vec3(12.0, 12.9, 0.0)
+        wristGuideCtrl.setColor("yellow")
         self.addChild(wristGuideCtrl)
 
         # Setup component constraints
@@ -70,7 +73,6 @@ class ArmComponent(BaseComponent):
         component.addAttribute(FloatAttribute("stretchBlend", 1.0, minValue=0.0, maxValue=1.0))
         component.addAttribute(StringAttribute("Side", self.side))
         component.addAttribute(BoolAttribute("toggleDebugging", True))
-
 
         bicepGuideCtrl = self.getChildByName('bicepGuideCtrl')
         forearmGuideCtrl = self.getChildByName('forearmGuideCtrl')

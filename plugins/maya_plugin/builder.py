@@ -397,6 +397,32 @@ class Builder(BaseBuilder):
         return True
 
 
+    # ================
+    # Display Methods
+    # ================
+    def setObjectColor(self, kSceneItem):
+        """Sets the color on the dccSceneItem.
+
+        Arguments:
+        kSceneItem -- Object, kraken object to set the color on.
+
+        Return:
+        True if successful.
+
+        """
+
+        dccSceneItem = self._getDCCSceneItem(kSceneItem)
+
+        objectColor = kSceneItem.getColor()
+        if objectColor not in self.VALID_COLORS.keys():
+            return False
+
+        dccSceneItem.overrideEnabled.set(True)
+        dccSceneItem.overrideColor.set(self.VALID_COLORS[objectColor][0])
+
+        return True
+
+
     # ==================
     # Transform Methods
     # ==================

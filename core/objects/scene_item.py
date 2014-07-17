@@ -23,7 +23,7 @@ class SceneItem(object):
         self.attributeGroups = []
         self.constraints = []
         self.xfo = Xfo()
-        self.node = None
+        self.color = None
         self.visibility = True
         self.shapeVisibility = True
 
@@ -607,6 +607,31 @@ class SceneItem(object):
         return True
 
 
-    def buildRig(self, parent):
-        pass
-        # sceneItem = self.__class__()
+    # ================
+    # Display Methods
+    # ================
+    def setColor(self, color):
+        """Sets the color of this object.
+
+        Arguments:
+        color -- String, name of the color you wish to set.
+
+        Return:
+        True if successful.
+
+        """
+
+        self.color = color
+
+        return True
+
+
+    def getColor(self):
+        """Returns the color of the object.
+
+        Return:
+        String, color of the object.
+
+        """
+
+        return self.color

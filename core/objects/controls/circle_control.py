@@ -22,4 +22,4 @@ class CircleControl(BaseControl):
         """
 
         super(CircleControl, self).__init__(name, parent=parent)
-        self.addCurveSection([Vec3(0.35, 0.0, -0.35), Vec3(0.5, 0.0, 0.0), Vec3(0.35, 0.0, 0.35), Vec3(0.0, 0.0, 0.5), Vec3(-0.35, 0.0, 0.35), Vec3(-0.5, 0.0, 0.0), Vec3(-0.35, 0.0, -0.35), Vec3(0.0, 0.0, -0.5)], False)
+        self.addCurveSection([Vec3(0.35, 0.0, -0.35), Vec3(0.5, 0.0, 0.0), Vec3(0.35, 0.0, 0.35), Vec3(0.0, 0.0, 0.5), Vec3(-0.35, 0.0, 0.35), Vec3(-0.5, 0.0, 0.0), Vec3(-0.35, 0.0, -0.35), Vec3(0.0, 0.0, -0.5)], True)

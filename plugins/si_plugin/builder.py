@@ -404,6 +404,34 @@ class Builder(BaseBuilder):
         return True
 
 
+    # ================
+    # Display Methods
+    # ================
+    def setObjectColor(self, kSceneItem):
+        """Sets the color on the dccSceneItem.
+
+        Arguments:
+        kSceneItem -- Object, kraken object to set the color on.
+
+        Return:
+        True if successful.
+
+        """
+
+        dccSceneItem = self._getDCCSceneItem(kSceneItem)
+
+        objectColor = kSceneItem.getColor()
+        if objectColor not in self.VALID_COLORS.keys():
+            return False
+
+        displayProperty = dccSceneItem.AddProperty("Display Property")
+        displayProperty.Parameters("wirecolorr").Value = self.VALID_COLORS[objectColor][1][0]
+        displayProperty.Parameters("wirecolorg").Value = self.VALID_COLORS[objectColor][1][1]
+        displayProperty.Parameters("wirecolorb").Value = self.VALID_COLORS[objectColor][1][2]
+
+        return True
+
+
     # ==================
     # Transform Methods
     # ==================
