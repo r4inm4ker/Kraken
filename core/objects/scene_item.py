@@ -253,6 +253,7 @@ class SceneItem(object):
 
         return False
 
+
     def clearFlag(self, name):
         """Clears the flag of the specified name.
 

@@ -127,6 +127,9 @@ class Builder(BaseBuilder):
 
         """
         parentNode = self._getDCCSceneItem(kSceneItem.getParent())
+        if parentNode is None:
+            parentNode = si.ActiveProject3.ActiveScene.Root
+
         dccSceneItem = None
 
         # Format points for Softimage
@@ -170,30 +173,30 @@ class Builder(BaseBuilder):
     # ========================
     # Attribute Build Methods
     # ========================
-    def buildBoolAttribute(self, kSceneItem):
+    def buildBoolAttribute(self, kAttribute):
         """Builds a Bool attribute.
 
         Arguments:
-        kSceneItem -- Object, kSceneItem that represents a boolean attribute to be built.
+        kAttribute -- Object, kAttribute that represents a boolean attribute to be built.
 
         Return:
         True if successful.
 
         """
 
-        parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
-        dccSceneItem = parentDCCSceneItem.AddParameter2(kSceneItem.getName(), constants.siBool, kSceneItem.getValue(), "", "", "", "", constants.siClassifUnknown, 2053, kSceneItem.getName())
+        parentDCCSceneItem = self._getDCCSceneItem(kAttribute.getParent())
+        dccSceneItem = parentDCCSceneItem.AddParameter2(kAttribute.getName(), constants.siBool, kAttribute.getValue(), "", "", "", "", constants.siClassifUnknown, 2053, kAttribute.getName())
 
-        self._registerSceneItemPair(kSceneItem, dccSceneItem)
+        self._registerSceneItemPair(kAttribute, dccSceneItem)
 
         return True
 
 
-    def buildColorAttribute(self, kSceneItem):
+    def buildColorAttribute(self, kAttribute):
         """Builds a Color attribute.
 
         Arguments:
-        kSceneItem -- Object, kSceneItem that represents a color attribute to be built.
+        kAttribute -- Object, kAttribute that represents a color attribute to be built.
 
         Return:
         True if successful.
@@ -203,83 +206,83 @@ class Builder(BaseBuilder):
         return True
 
 
-    def buildFloatAttribute(self, kSceneItem):
+    def buildFloatAttribute(self, kAttribute):
         """Builds a Float attribute.
 
         Arguments:
-        kSceneItem -- Object, kSceneItem that represents a float attribute to be built.
+        kAttribute -- Object, kAttribute that represents a float attribute to be built.
 
         Return:
         True if successful.
 
         """
 
-        parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
-        dccSceneItem = parentDCCSceneItem.AddParameter2(kSceneItem.getName(), constants.siDouble, kSceneItem.getValue(), kSceneItem.min, kSceneItem.max, kSceneItem.min, kSceneItem.max, constants.siClassifUnknown, 2053, kSceneItem.getName())
+        parentDCCSceneItem = self._getDCCSceneItem(kAttribute.getParent())
+        dccSceneItem = parentDCCSceneItem.AddParameter2(kAttribute.getName(), constants.siDouble, kAttribute.getValue(), kAttribute.min, kAttribute.max, kAttribute.min, kAttribute.max, constants.siClassifUnknown, 2053, kAttribute.getName())
 
-        self._registerSceneItemPair(kSceneItem, dccSceneItem)
+        self._registerSceneItemPair(kAttribute, dccSceneItem)
 
         return True
 
 
-    def buildIntegerAttribute(self, kSceneItem):
+    def buildIntegerAttribute(self, kAttribute):
         """Builds a Integer attribute.
 
         Arguments:
-        kSceneItem -- Object, kSceneItem that represents a integer attribute to be built.
+        kAttribute -- Object, kAttribute that represents a integer attribute to be built.
 
         Return:
         True if successful.
 
         """
 
-        parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
-        dccSceneItem = parentDCCSceneItem.AddParameter2(kSceneItem.getName(), constants.siInt4, kSceneItem.getValue(), kSceneItem.min, kSceneItem.max, kSceneItem.min, kSceneItem.max, constants.siClassifUnknown, 2053, kSceneItem.getName())
+        parentDCCSceneItem = self._getDCCSceneItem(kAttribute.getParent())
+        dccSceneItem = parentDCCSceneItem.AddParameter2(kAttribute.getName(), constants.siInt4, kAttribute.getValue(), kAttribute.min, kAttribute.max, kAttribute.min, kAttribute.max, constants.siClassifUnknown, 2053, kAttribute.getName())
 
-        self._registerSceneItemPair(kSceneItem, dccSceneItem)
+        self._registerSceneItemPair(kAttribute, dccSceneItem)
 
         return True
 
 
-    def buildStringAttribute(self, kSceneItem):
+    def buildStringAttribute(self, kAttribute):
         """Builds a String attribute.
 
         Arguments:
-        kSceneItem -- Object, kSceneItem that represents a string attribute to be built.
+        kAttribute -- Object, kAttribute that represents a string attribute to be built.
 
         Return:
         True if successful.
 
         """
 
-        parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
-        dccSceneItem = parentDCCSceneItem.AddParameter2(kSceneItem.getName(), constants.siString, kSceneItem.getValue(), "", "", "", "", constants.siClassifUnknown, 2053, kSceneItem.getName())
+        parentDCCSceneItem = self._getDCCSceneItem(kAttribute.getParent())
+        dccSceneItem = parentDCCSceneItem.AddParameter2(kAttribute.getName(), constants.siString, kAttribute.getValue(), "", "", "", "", constants.siClassifUnknown, 2053, kAttribute.getName())
 
-        self._registerSceneItemPair(kSceneItem, dccSceneItem)
+        self._registerSceneItemPair(kAttribute, dccSceneItem)
 
         return True
 
 
-    def buildAttributeGroup(self, kSceneItem):
+    def buildAttributeGroup(self, kAttributeGroup):
         """Builds attribute groups on the DCC object.
 
         Arguments:
-        kSceneItem -- SceneItem, kraken object to build the attribute group on.
+        kAttributeGroup -- SceneItem, kraken object to build the attribute group on.
 
         Return:
         True if successful.
 
         """
 
-        parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
+        parentDCCSceneItem = self._getDCCSceneItem(kAttributeGroup.getParent())
 
-        groupName = kSceneItem.getName()
+        groupName = kAttributeGroup.getName()
         if groupName == "":
             groupName = "Settings"
 
         dccSceneItem = parentDCCSceneItem.AddProperty("CustomParameterSet", False, groupName)
 
-        self._registerSceneItemPair(kSceneItem, dccSceneItem)
+        self._registerSceneItemPair(kAttributeGroup, dccSceneItem)
 
         return True
 
@@ -287,94 +290,94 @@ class Builder(BaseBuilder):
     # =========================
     # Constraint Build Methods
     # =========================
-    def buildOrientationConstraint(self, kSceneItem):
-        """Builds an orientation constraint represented by the kSceneItem.
+    def buildOrientationConstraint(self, kConstraint):
+        """Builds an orientation constraint represented by the kConstraint.
 
         Arguments:
-        kSceneItem -- Object, kraken constraint object to build.
+        kConstraint -- Object, kraken constraint object to build.
 
         Return:
         dccSceneItem that was created.
 
         """
 
-        parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
+        parentDCCSceneItem = self._getDCCSceneItem(kConstraint.getParent())
 
         constrainers = getCollection()
-        for eachConstrainer in kSceneItem.getConstrainers():
+        for eachConstrainer in kConstraint.getConstrainers():
             constrainers.AddItems(self._getDCCSceneItem(eachConstrainer))
 
-        dccSceneItem = parentDCCSceneItem.Kinematics.AddConstraint("Orientation", constrainers, kSceneItem.getMaintainOffset())
-        self._registerSceneItemPair(kSceneItem, dccSceneItem)
+        dccSceneItem = parentDCCSceneItem.Kinematics.AddConstraint("Orientation", constrainers, kConstraint.getMaintainOffset())
+        self._registerSceneItemPair(kConstraint, dccSceneItem)
 
         return dccSceneItem
 
 
-    def buildPoseConstraint(self, kSceneItem):
-        """Builds an pose constraint represented by the kSceneItem.
+    def buildPoseConstraint(self, kConstraint):
+        """Builds an pose constraint represented by the kConstraint.
 
         Arguments:
-        kSceneItem -- Object, kraken constraint object to build.
+        kConstraint -- Object, kraken constraint object to build.
 
         Return:
         True if successful.
 
         """
 
-        parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
+        parentDCCSceneItem = self._getDCCSceneItem(kConstraint.getParent())
 
         constrainers = getCollection()
-        for eachConstrainer in kSceneItem.getConstrainers():
+        for eachConstrainer in kConstraint.getConstrainers():
             constrainers.AddItems(self._getDCCSceneItem(eachConstrainer))
 
-        dccSceneItem = parentDCCSceneItem.Kinematics.AddConstraint("Pose", constrainers, kSceneItem.getMaintainOffset())
-        self._registerSceneItemPair(kSceneItem, dccSceneItem)
+        dccSceneItem = parentDCCSceneItem.Kinematics.AddConstraint("Pose", constrainers, kConstraint.getMaintainOffset())
+        self._registerSceneItemPair(kConstraint, dccSceneItem)
 
         return dccSceneItem
 
 
-    def buildPositionConstraint(self, kSceneItem):
-        """Builds an position constraint represented by the kSceneItem.
+    def buildPositionConstraint(self, kConstraint):
+        """Builds an position constraint represented by the kConstraint.
 
         Arguments:
-        kSceneItem -- Object, kraken constraint object to build.
+        kConstraint -- Object, kraken constraint object to build.
 
         Return:
         True if successful.
 
         """
 
-        parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
+        parentDCCSceneItem = self._getDCCSceneItem(kConstraint.getParent())
 
         constrainers = getCollection()
-        for eachConstrainer in kSceneItem.getConstrainers():
+        for eachConstrainer in kConstraint.getConstrainers():
             constrainers.AddItems(self._getDCCSceneItem(eachConstrainer))
 
-        dccSceneItem = parentDCCSceneItem.Kinematics.AddConstraint("Position", constrainers, kSceneItem.getMaintainOffset())
-        self._registerSceneItemPair(kSceneItem, dccSceneItem)
+        dccSceneItem = parentDCCSceneItem.Kinematics.AddConstraint("Position", constrainers, kConstraint.getMaintainOffset())
+        self._registerSceneItemPair(kConstraint, dccSceneItem)
 
         return dccSceneItem
 
 
-    def buildScaleConstraint(self, kSceneItem):
-        """Builds an scale constraint represented by the kSceneItem.
+    def buildScaleConstraint(self, kConstraint):
+        """Builds an scale constraint represented by the kConstraint.
 
         Arguments:
-        kSceneItem -- Object, kraken constraint object to build.
+        kConstraint -- Object, kraken constraint object to build.
 
         Return:
         True if successful.
 
         """
 
-        parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
+        parentDCCSceneItem = self._getDCCSceneItem(kConstraint.getParent())
 
         constrainers = getCollection()
-        for eachConstrainer in kSceneItem.getConstrainers():
+        for eachConstrainer in kConstraint.getConstrainers():
             constrainers.AddItems(self._getDCCSceneItem(eachConstrainer))
 
-        dccSceneItem = parentDCCSceneItem.Kinematics.AddConstraint("Scaling", constrainers, kSceneItem.getMaintainOffset())
-        self._registerSceneItemPair(kSceneItem, dccSceneItem)
+        dccSceneItem = parentDCCSceneItem.Kinematics.AddConstraint("Scaling", constrainers, kConstraint.getMaintainOffset())
+        self._registerSceneItemPair(kConstraint, dccSceneItem)
 
         return dccSceneItem
 
