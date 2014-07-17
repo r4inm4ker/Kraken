@@ -299,7 +299,12 @@ class Builder(BaseBuilder):
         """
 
         parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
-        dccSceneItem = None # Add constraint object here.
+
+        constrainers = getCollection()
+        for eachConstrainer in kSceneItem.getConstrainers():
+            constrainers.AddItems(self._getDCCSceneItem(eachConstrainer))
+
+        dccSceneItem = parentDCCSceneItem.Kinematics.AddConstraint("Orientation", constrainers, kSceneItem.getMaintainOffset())
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
         return dccSceneItem
@@ -340,7 +345,12 @@ class Builder(BaseBuilder):
         """
 
         parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
-        dccSceneItem = None # Add constraint object here.
+
+        constrainers = getCollection()
+        for eachConstrainer in kSceneItem.getConstrainers():
+            constrainers.AddItems(self._getDCCSceneItem(eachConstrainer))
+
+        dccSceneItem = parentDCCSceneItem.Kinematics.AddConstraint("Position", constrainers, kSceneItem.getMaintainOffset())
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
         return dccSceneItem
@@ -358,7 +368,12 @@ class Builder(BaseBuilder):
         """
 
         parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
-        dccSceneItem = None # Add constraint object here.
+
+        constrainers = getCollection()
+        for eachConstrainer in kSceneItem.getConstrainers():
+            constrainers.AddItems(self._getDCCSceneItem(eachConstrainer))
+
+        dccSceneItem = parentDCCSceneItem.Kinematics.AddConstraint("Scaling", constrainers, kSceneItem.getMaintainOffset())
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
         return dccSceneItem

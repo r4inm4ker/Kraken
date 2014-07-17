@@ -308,7 +308,7 @@ class Builder(BaseBuilder):
         """
 
         parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
-        dccSceneItem = None # Add constraint object here.
+        dccSceneItem = pm.orientConstraint([self._getDCCSceneItem(x) for x in kSceneItem.getConstrainers()], parentDCCSceneItem, name=kSceneItem.getName() + "_ori_cns", maintainOffset=kSceneItem.getMaintainOffset())
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
         return dccSceneItem
@@ -326,7 +326,10 @@ class Builder(BaseBuilder):
         """
 
         parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
-        dccSceneItem = None # Add constraint object here.
+
+        dccSceneItem = pm.parentConstraint([self._getDCCSceneItem(x) for x in kSceneItem.getConstrainers()], parentDCCSceneItem, name=kSceneItem.getName() + "_par_cns", maintainOffset=kSceneItem.getMaintainOffset())
+        pm.scaleConstraint([self._getDCCSceneItem(x) for x in kSceneItem.getConstrainers()], parentDCCSceneItem, name=kSceneItem.getName() + "_scl_cns", maintainOffset=kSceneItem.getMaintainOffset())
+
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
         return dccSceneItem
@@ -344,7 +347,7 @@ class Builder(BaseBuilder):
         """
 
         parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
-        dccSceneItem = None # Add constraint object here.
+        dccSceneItem = pm.pointConstraint([self._getDCCSceneItem(x) for x in kSceneItem.getConstrainers()], parentDCCSceneItem, name=kSceneItem.getName() + "_pos_cns", maintainOffset=kSceneItem.getMaintainOffset())
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
         return dccSceneItem
@@ -362,7 +365,7 @@ class Builder(BaseBuilder):
         """
 
         parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
-        dccSceneItem = None # Add constraint object here.
+        dccSceneItem = pm.scaleConstraint([self._getDCCSceneItem(x) for x in kSceneItem.getConstrainers()], parentDCCSceneItem, name=kSceneItem.getName() + "_scl_cns", maintainOffset=kSceneItem.getMaintainOffset())
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
         return dccSceneItem
