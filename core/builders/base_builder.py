@@ -10,7 +10,7 @@ logger = pyLogger.getLogger("pyLogger")
 
 
 class BaseBuilder(object):
-    """BaseBuilder object for building objects in DCC's. Sub-class per DCC in
+    """BaseBuilder object for building objects in DCC's. Sub-class per DCC in a
     plugin.
 
     """
@@ -226,6 +226,81 @@ class BaseBuilder(object):
         return True
 
 
+    # =========================
+    # Constraint Build Methods
+    # =========================
+    def buildOrientationConstraint(self, kSceneItem):
+        """Builds an orientation constraint represented by the kSceneItem.
+
+        Arguments:
+        kSceneItem -- Object, kraken constraint object to build.
+
+        Return:
+        dccSceneItem that was created.
+
+        """
+
+        parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
+        dccSceneItem = None # Add constraint object here.
+        self._registerSceneItemPair(kSceneItem, dccSceneItem)
+
+        return dccSceneItem
+
+
+    def buildPoseConstraint(self, kSceneItem):
+        """Builds an pose constraint represented by the kSceneItem.
+
+        Arguments:
+        kSceneItem -- Object, kraken constraint object to build.
+
+        Return:
+        True if successful.
+
+        """
+
+        parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
+        dccSceneItem = None # Add constraint object here.
+        self._registerSceneItemPair(kSceneItem, dccSceneItem)
+
+        return dccSceneItem
+
+
+    def buildPositionConstraint(self, kSceneItem):
+        """Builds an position constraint represented by the kSceneItem.
+
+        Arguments:
+        kSceneItem -- Object, kraken constraint object to build.
+
+        Return:
+        True if successful.
+
+        """
+
+        parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
+        dccSceneItem = None # Add constraint object here.
+        self._registerSceneItemPair(kSceneItem, dccSceneItem)
+
+        return dccSceneItem
+
+
+    def buildScaleConstraint(self, kSceneItem):
+        """Builds an scale constraint represented by the kSceneItem.
+
+        Arguments:
+        kSceneItem -- Object, kraken constraint object to build.
+
+        Return:
+        True if successful.
+
+        """
+
+        parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
+        dccSceneItem = None # Add constraint object here.
+        self._registerSceneItemPair(kSceneItem, dccSceneItem)
+
+        return dccSceneItem
+
+
     # =====================
     # Build Object Methods
     # =====================
@@ -319,6 +394,47 @@ class BaseBuilder(object):
         return dccSceneItem
 
 
+    def buildConstraints(self, kSceneItem):
+        """Builds constraints for the supplied kSceneItem.
+
+        Arguments:
+        kSceneItem -- Object, kraken scene item to create constraints for.
+
+        Return:
+        True if successful.
+
+        """
+
+        dccSceneItem = None
+        for i in xrange(kSceneItem.getNumConstraints()):
+
+            constraint = kSceneItem.getConstraintByIndex(i)
+            kType = constraint.getKType()
+
+            # Build Object
+            if kType == "OrientationConstraint":
+                dccSceneItem = self.buildOrientationConstraint(constraint)
+
+            elif kType == "PoseConstraint":
+                dccSceneItem = self.buildPoseConstraint(constraint)
+
+            elif kType == "PositionConstraint":
+                dccSceneItem = self.buildPositionConstraint(constraint)
+
+            elif kType == "ScaleConstraint":
+                dccSceneItem = self.buildScaleConstraint(constraint)
+
+            else:
+                raise NotImplementedError(constraint.getName() + ' has an unsupported type: ' + str(type(constraint)))
+
+        # Build children
+        for i in xrange(kSceneItem.getNumChildren()):
+            child = kSceneItem.getChildByIndex(i)
+            self.buildConstraints(child)
+
+        return dccSceneItem
+
+
     def buildName(self, kSceneItem, component=None):
         """Builds the name for the kSceneItem that is passed.
 
@@ -386,48 +502,35 @@ class BaseBuilder(object):
         return True
 
 
-    # ==============
-    # Build Methods
-    # ==============
-    def setTransform(self, sceneItem):
+    # ==================
+    # Transform Methods
+    # ==================
+    def setTransform(self, kSceneItem):
         """Translates the transform to Softimage transform.
 
         Arguments:
-        sceneItem -- Object: object to set the transform on.
+        kSceneItem -- Object: object to set the transform on.
 
         Return:
         True if successful.
 
         """
 
-        dccSceneItem = self._getDCCSceneItem(sceneItem)
+        dccSceneItem = self._getDCCSceneItem(kSceneItem)
 
         # Re-implement in DCC builders.
 
         return True
 
 
-    def buildConstraints(self, sceneItem):
-        """Builds constraints for the supplied sceneItem.
-
-        Arguments:
-        sceneItem -- Object, scene item to create constraints for.
-
-        Return:
-        True if successful.
-
-        """
-
-        # Re-implement in DCC builders.
-
-        return True
-
-
-    def _preBuild(self, container):
+    # ==============
+    # Build Methods
+    # ==============
+    def _preBuild(self, kSceneItem):
         """Protected Pre-Build method.
 
         Arguments:
-        container -- Container, kraken container object to build.
+        kSceneItem -- Object, kraken kSceneItem object to build.
 
         Return:
         True if successful.
@@ -437,24 +540,28 @@ class BaseBuilder(object):
         return True
 
 
-    def _build(self, container):
+    def _build(self, kSceneItem):
         """Protected build method.
 
+        Arguments:
+        kSceneItem -- Object, kraken kSceneItem object to build.
+
         Return:
         True if successful.
 
         """
 
-        self.buildHierarchy(container, component=None)
+        self.buildHierarchy(kSceneItem, component=None)
+        self.buildConstraints(kSceneItem)
 
         return True
 
 
-    def build(self, container):
-        """Builds the supplied container into a DCC representation.
+    def build(self, kSceneItem):
+        """Builds the supplied kSceneItem into a DCC representation.
 
         Arguments:
-        container -- Container, kraken container object to build.
+        kSceneItem -- Object, kraken kSceneItem object to build.
 
         Return:
         True if successful.
@@ -462,8 +569,8 @@ class BaseBuilder(object):
         """
 
         try:
-            self._preBuild(container)
-            self._build(container)
+            self._preBuild(kSceneItem)
+            self._build(kSceneItem)
 
         finally:
             self._postBuild()

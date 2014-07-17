@@ -5,6 +5,8 @@ from kraken.core.objects.attributes.integer_attribute import IntegerAttribute
 from kraken.core.objects.attributes.bool_attribute import BoolAttribute
 from kraken.core.objects.attributes.string_attribute import StringAttribute
 
+from kraken.core.objects.constraints.pose_constraint import PoseConstraint
+
 from kraken.core.objects.components.base_component import BaseComponent
 from kraken.core.objects.components.component_input import ComponentInput
 from kraken.core.objects.components.component_output import ComponentOutput
@@ -44,6 +46,13 @@ class ArmComponent(BaseComponent):
         wristGuideCtrl = NullControl('wristGuideCtrl')
         wristGuideCtrl.xfo.tr = Vec3(12.0, 12.9, 0.0)
         self.addChild(wristGuideCtrl)
+
+        # Setup component constraints
+        testConstraint = PoseConstraint("wristToBicep")
+        testConstraint.setMaintainOffset(True)
+        testConstraint.addConstrainer(bicepGuideCtrl)
+        wristGuideCtrl.addConstraint(testConstraint)
+
 
 
     def buildRig(self, parent):

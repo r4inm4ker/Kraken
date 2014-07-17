@@ -21,6 +21,7 @@ class SceneItem(object):
         self.children = []
         self.flags = {}
         self.attributeGroups = []
+        self.constraints = []
         self.xfo = Xfo()
         self.node = None
         self.visibility = True
@@ -398,6 +399,138 @@ class SceneItem(object):
         for eachAttributeGroup in self.attributeGroups:
             if eachAttributeGroup.name == name:
                 return eachAttributeGroup
+
+        return None
+
+
+    # ========================
+    # Attribute Group Methods
+    # ========================
+    def checkConstraintIndex(self, index):
+        """Checks the supplied index is valid.
+
+        Arguments:
+        index -- Integer, constraint index to check.
+
+        Return:
+        True if successful.
+
+        """
+
+        if index > len(self.constraints):
+            raise IndexError("'" + str(index) + "' is out of the range of 'constraints' array.")
+
+        return True
+
+
+    def addConstraint(self, constraint):
+        """Adds an constraint to this object.
+
+        Arguments:
+        constraint -- Object, Constraint object to add to this object.
+
+        Return:
+        True if successful.
+
+        """
+
+        if constraint.name in [x.name for x in self.constraints]:
+            raise IndexError("Constraint with name '" + constraint.name + "'' already exists as a constraint.")
+
+        self.constraints.append(constraint)
+        constraint.setParent(self)
+
+        return True
+
+
+    def removeConstraintByIndex(self, index):
+        """Removes constraint at specified index.
+
+        Arguments:
+        index -- Integer, index of constraint to remove.
+
+        Return:
+        True if successful.
+
+        """
+
+        if self.checkConstraintIndex(index) is not True:
+            return False
+
+        del self.constraints[index]
+
+        return True
+
+
+    def removeConstraintByName(self, name):
+        """Removes the constraint with the specified name.
+
+        Arguments:
+        name -- String, name of the constraint to remove.
+
+        Return:
+        True if successful.
+
+        """
+
+        removeIndex = None
+
+        for i, eachConstraint in enumerate(self.constraints):
+            if eachConstraint.name == name:
+                removeIndex = i
+
+        if removeIndex is None:
+            return False
+
+        self.removeConstraintByIndex(removeIndex)
+
+        return True
+
+
+    def getNumConstraints(self):
+        """Returns the number of constraints as an integer.
+
+        Return:
+        Integer of the number of constraints on this object.
+
+        """
+
+        return len(self.constraints)
+
+
+    def getConstraintByIndex(self, index):
+        """Returns the constraint at the specified index.
+
+        Arguments:
+        index -- Integer, index of the constraint to return.
+
+        Return:
+        Constraint at the specified index.
+        False if not a valid index.
+
+        """
+
+        if self.checkConstraintIndex(index) is not True:
+            return False
+
+        return self.constraints[index]
+
+
+    def getConstraintByName(self, name):
+        """Return the constraint group with the specified name.
+
+        Arguments:
+        name -- String, name of the constraint group to return.
+
+        Return:
+        Attribute with the specified name.
+        None if not found.
+
+        """
+
+        for eachConstraint in self.constraints:
+            if eachConstraint.name == name:
+                return eachConstraint
 
         return None
 

@@ -284,6 +284,86 @@ class Builder(BaseBuilder):
         return True
 
 
+    # =========================
+    # Constraint Build Methods
+    # =========================
+    def buildOrientationConstraint(self, kSceneItem):
+        """Builds an orientation constraint represented by the kSceneItem.
+
+        Arguments:
+        kSceneItem -- Object, kraken constraint object to build.
+
+        Return:
+        dccSceneItem that was created.
+
+        """
+
+        parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
+        dccSceneItem = None # Add constraint object here.
+        self._registerSceneItemPair(kSceneItem, dccSceneItem)
+
+        return dccSceneItem
+
+
+    def buildPoseConstraint(self, kSceneItem):
+        """Builds an pose constraint represented by the kSceneItem.
+
+        Arguments:
+        kSceneItem -- Object, kraken constraint object to build.
+
+        Return:
+        True if successful.
+
+        """
+
+        parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
+
+        constrainers = getCollection()
+        for eachConstrainer in kSceneItem.getConstrainers():
+            constrainers.AddItems(self._getDCCSceneItem(eachConstrainer))
+
+        dccSceneItem = parentDCCSceneItem.Kinematics.AddConstraint("Pose", constrainers, kSceneItem.getMaintainOffset())
+        self._registerSceneItemPair(kSceneItem, dccSceneItem)
+
+        return dccSceneItem
+
+
+    def buildPositionConstraint(self, kSceneItem):
+        """Builds an position constraint represented by the kSceneItem.
+
+        Arguments:
+        kSceneItem -- Object, kraken constraint object to build.
+
+        Return:
+        True if successful.
+
+        """
+
+        parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
+        dccSceneItem = None # Add constraint object here.
+        self._registerSceneItemPair(kSceneItem, dccSceneItem)
+
+        return dccSceneItem
+
+
+    def buildScaleConstraint(self, kSceneItem):
+        """Builds an scale constraint represented by the kSceneItem.
+
+        Arguments:
+        kSceneItem -- Object, kraken constraint object to build.
+
+        Return:
+        True if successful.
+
+        """
+
+        parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
+        dccSceneItem = None # Add constraint object here.
+        self._registerSceneItemPair(kSceneItem, dccSceneItem)
+
+        return dccSceneItem
+
+
     # ===================
     # Visibility Methods
     # ===================
@@ -306,9 +386,9 @@ class Builder(BaseBuilder):
         return True
 
 
-    # ==============
-    # Build Methods
-    # ==============
+    # ==================
+    # Transform Methods
+    # ==================
     def setTransform(self, kSceneItem):
         """Translates the transform to Softimage transform.
 
@@ -336,48 +416,21 @@ class Builder(BaseBuilder):
         return True
 
 
-    def buildConstraints(self, kSceneItem):
-        """Builds constraints for the supplied kSceneItem.
-
-        Arguments:
-        kSceneItem -- Object, scene item to create constraints for.
-
-        Return:
-        True if successful.
-
-        """
-
-        return True
-
-
-    def _preBuild(self, container):
+    # ==============
+    # Build Methods
+    # ==============
+    def _preBuild(self, kSceneItem):
         """Pre-Build commands.
 
         Arguments:
-        container -- Container, kraken container object to build.
+        kSceneItem -- Object, kraken kSceneItem object to build.
 
         Return:
         True if successful.
 
         """
 
-        si.BeginUndo("Kraken SI Build: " + container.name)
-
-        return True
-
-
-    def _build(self, container):
-        """Builds the supplied container into a DCC representation.
-
-        Arguments:
-        container -- Container, kraken container object to build.
-
-        Return:
-        True if successful.
-
-        """
-
-        self.buildHierarchy(container, component=None)
+        si.BeginUndo("Kraken SI Build: " + kSceneItem.name)
 
         return True
 

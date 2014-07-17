@@ -15,7 +15,6 @@ class BaseConstraint(object):
 
     def __init__(self, name):
         super(BaseConstraint, self).__init__()
-        assert type(constrainers) is list, "'constrainers' argument must be a list!"
 
         self.name = name
         self.constrainee = None
@@ -37,9 +36,65 @@ class BaseConstraint(object):
         return self.name
 
 
+    # ===============
+    # Parent Methods
+    # ===============
+    def getParent(self):
+        """Returns the paret of this attribute.
+
+        Return:
+        Parent object of this attribute.
+
+        """
+
+        return self.parent
+
+
+    def setParent(self, parent):
+        """Sets the paret of this attribute.
+
+        Arguments:
+        parent -- Object, parent object of this attribute.
+
+        Return:
+        True if successful.
+
+        """
+
+        self.parent = parent
+
+        return True
+
+
     # ===================
     # Constraint Methods
     # ===================
+    def getMaintainOffset(self):
+        """Returns the whether the constraint should maintain offset when it's
+        built or not.
+
+        Return:
+        Boolean, whether the constraint should maintain offset or not.
+
+        """
+
+        return self.maintainOffset
+
+
+    def setMaintainOffset(self, value):
+        """Sets the constraint to maintain offset when creating the constraint.
+
+        Arguments:
+        value -- Boolean, whether the constraint should maintain offset or not.
+
+        Return:
+        True if successful.
+
+        """
+
+        self.maintainOffset = value
+
+
     def addConstrainer(self, kSceneItem):
         """Adds a constrainer object to this constraint.
 
@@ -76,6 +131,17 @@ class BaseConstraint(object):
         """
 
         return True
+
+
+    def getConstrainers(self):
+        """Returns the constrainers of this constraint.
+
+        Return:
+        List, constrainer objects.
+
+        """
+
+        return self.constrainers
 
 
     # ==============
