@@ -17,6 +17,9 @@ class BaseAttribute(object):
         self.parent = None
 
 
+    # =============
+    # Name Methods
+    # =============
     def getName(self):
         """Returns the name of the attribute.
 

@@ -22,4 +22,9 @@ class CubeControl(BaseControl):
         """
 
         super(CubeControl, self).__init__(name, parent=parent)
-        self.addCurveSection([Vec3(1, 0, -1), Vec3(1, 0, 1), Vec3(-1, 0, 1), Vec3(-1, 0, -1)], True)
+        self.addCurveSection([Vec3(-0.5, -0.5, -0.5), Vec3(-0.5, 0.5, -0.5), Vec3(0.5, 0.5, -0.5), Vec3(0.5, -0.5, -0.5)], True)
+        self.addCurveSection([Vec3(-0.5, -0.5, 0.5), Vec3(-0.5, 0.5, 0.5), Vec3(0.5, 0.5, 0.5), Vec3(0.5, -0.5, 0.5)], True)
+        self.addCurveSection([Vec3(-0.5, -0.5, -0.5), Vec3(-0.5, -0.5, 0.5)], False)
+        self.addCurveSection([Vec3(0.5, -0.5, -0.5), Vec3(0.5, -0.5, 0.5)], False)
+        self.addCurveSection([Vec3(-0.5, 0.5, -0.5), Vec3(-0.5, 0.5, 0.5)], False)
+        self.addCurveSection([Vec3(0.5, 0.5, -0.5), Vec3(0.5, 0.5, 0.5)], False)
