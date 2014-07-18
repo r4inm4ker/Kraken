@@ -14,7 +14,7 @@ class ComponentOutputAttr(BaseAttribute):
     __kType__ = "ComponentOutputAttr"
 
     def __init__(self, name, dataType='Attribute'):
-        super(ComponentOutputAttr, self).__init__()
+        super(ComponentOutputAttr, self).__init__(name, None)
         self.name = name
         self.dataType = dataType
         self.connections = []

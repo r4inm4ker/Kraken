@@ -14,7 +14,7 @@ class ComponentInputAttr(BaseAttribute):
     __kType__ = "ComponentInputAttr"
 
     def __init__(self, name, dataType='Attribute'):
-        super(ComponentInputAttr, self).__init__()
+        super(ComponentInputAttr, self).__init__(name, None)
         self.name = name
         self.dataType = dataType
         self.connection = None

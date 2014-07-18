@@ -24,7 +24,6 @@ class BaseComponent(SceneItem):
 
         self.setShapeVisibility(False)
 
-
         inputHrc = HierarchyGroup('inputs')
         inputAttrGrp = AttributeGroup('inputAttrs')
         inputHrc.addAttributeGroup(inputAttrGrp)
@@ -32,7 +31,7 @@ class BaseComponent(SceneItem):
 
         outputHrc = HierarchyGroup('outputs')
         outputAttrGrp = AttributeGroup('outputAttrs')
-        outputHrc.addAttributeGroup(inputAttrGrp)
+        outputHrc.addAttributeGroup(outputAttrGrp)
         self.addChild(outputHrc)
 
 
@@ -98,7 +97,7 @@ class BaseComponent(SceneItem):
         """
 
         inputHrc = self.getChildByName('inputs')
-        inputAttrsGrp = self.getAttributeGroupByName('inputAttrs')
+        inputAttrsGrp = inputHrc.getAttributeGroupByName('inputAttrs')
 
         if componentInput.getKType() not in ["ComponentInputXfo", "ComponentInputAttr"]:
             raise Exception("'componentInput' argument is not a 'ComponentInput' object. Invalid type:'" + componentInput.getKType() + "'")
@@ -236,7 +235,7 @@ class BaseComponent(SceneItem):
         """
 
         outputHrc = self.getChildByName('outputs')
-        outputAttrsGrp = self.getAttributeGroupByName('outputAttrs')
+        outputAttrsGrp = outputHrc.getAttributeGroupByName('outputAttrs')
 
         if componentOutput.getKType()  not in ["ComponentOutputXfo", "ComponentOutputAttr"]:
             raise Exception("'componentOutput' argument is not a 'ComponentOutput' object. Invalid type:'" + componentOutput.getKType() + "'")

@@ -52,6 +52,8 @@ class ArmComponent(BaseComponent):
         clavicleEndInput = ComponentInputXfo('clavicleEnd')
         armEndOutput = ComponentOutputXfo('armEnd')
 
+        armFollowBodyInputAttr = ComponentInputAttr('followBody')
+
         # Constraint outputs
         armEndOutputConstraint = PoseConstraint('_'.join([armEndOutput.getName(), 'To', wristGuideCtrl.getName()]))
         armEndOutputConstraint.addConstrainer(wristGuideCtrl)
@@ -59,6 +61,8 @@ class ArmComponent(BaseComponent):
 
         self.addInput(clavicleEndInput)
         self.addOutput(armEndOutput)
+
+        self.addInput(armFollowBodyInputAttr)
 
 
     def buildRig(self, parent):

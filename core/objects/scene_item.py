@@ -398,7 +398,7 @@ class SceneItem(object):
         """
 
         for eachAttributeGroup in self.attributeGroups:
-            if eachAttributeGroup.name == name:
+            if eachAttributeGroup.getName() == name:
                 return eachAttributeGroup
 
         return None
