@@ -5,62 +5,48 @@ from kraken.core.objects.attributes.integer_attribute import IntegerAttribute
 from kraken.core.objects.attributes.bool_attribute import BoolAttribute
 from kraken.core.objects.attributes.string_attribute import StringAttribute
 
-from kraken.core.objects.constraints.pose_constraint import PoseConstraint
-
 from kraken.core.objects.components.base_component import BaseComponent
 from kraken.core.objects.components.component_input import ComponentInput
 from kraken.core.objects.components.component_output import ComponentOutput
 
 from kraken.core.objects.controls.cube_control  import CubeControl
 from kraken.core.objects.controls.circle_control  import  CircleControl
+from kraken.core.objects.controls.sphere_control  import  SphereControl
+from kraken.core.objects.controls.pin_control  import  PinControl
 from kraken.core.objects.controls.square_control  import  SquareControl
 from kraken.core.objects.controls.null_control  import  NullControl
 
 
-class ArmComponent(BaseComponent):
+class ClavicleComponent(BaseComponent):
     """Arm Component Test"""
 
     def __init__(self, name, parent=None, side='M'):
-        super(ArmComponent, self).__init__(name, parent, side)
+        super(ClavicleComponent, self).__init__(name, parent, side)
 
         # Setup Component Inputs and Outputs
-        clavicleEndInput = ComponentInput('clavicleEnd')
-        armEndOutput = ComponentOutput('armEnd')
+        spineEndInput = ComponentInput('spineEnd')
+        clavicleEndOutput = ComponentOutput('clavicleEnd')
 
-        self.addInput(clavicleEndInput)
-        self.addOutput(armEndOutput)
+        self.addInput(spineEndInput)
+        self.addOutput(clavicleEndOutput)
 
         # Setup component attributes
         defaultAttrGroup = self.getAttributeGroupByIndex(0)
         defaultAttrGroup.addAttribute(BoolAttribute("toggleDebugging", True))
 
         # Add Guide Controls
-        bicepGuideCtrl = NullControl('bicepGuideCtrl')
-        bicepGuideCtrl.xfo.tr = Vec3(5.0, 20.0, 0.0)
-        bicepGuideCtrl.setColor("yellow")
-        self.addChild(bicepGuideCtrl)
+        clavicleOriginGuideCtrl = SphereControl('clavicleOriginGuideCtrl')
+        clavicleOriginGuideCtrl.xfo.tr = Vec3(1.0, 18.0, 1.0)
+        self.addChild(clavicleOriginGuideCtrl)
 
-        forearmGuideCtrl = NullControl('forearmGuideCtrl')
-        forearmGuideCtrl.xfo.tr = Vec3(8.5, 16.4, -2.5)
-        forearmGuideCtrl.setColor("yellow")
-        self.addChild(forearmGuideCtrl)
-
-        wristGuideCtrl = NullControl('wristGuideCtrl')
-        wristGuideCtrl.xfo.tr = Vec3(12.0, 12.9, 0.0)
-        wristGuideCtrl.setColor("yellow")
-        self.addChild(wristGuideCtrl)
-
-        # Setup component constraints
-        testConstraint = PoseConstraint("wristToBicep")
-        testConstraint.setMaintainOffset(True)
-        testConstraint.addConstrainer(bicepGuideCtrl)
-        wristGuideCtrl.addConstraint(testConstraint)
-
+        clavicleInsertGuideCtrl = CircleControl('clavicleInsertGuideCtrl')
+        clavicleInsertGuideCtrl.xfo.tr = Vec3(5.0, 20.0, 0.0)
+        self.addChild(clavicleInsertGuideCtrl)
 
 
     def buildRig(self, parent):
 
-        # component = super(ArmComponent, self).buildRig()
+        # component = super(ClavicleComponent, self).buildRig()
         component = BaseComponent(self.getName(), parent, self.getSide())
 
         # Setup component attributes
@@ -73,6 +59,7 @@ class ArmComponent(BaseComponent):
         component.addAttribute(FloatAttribute("stretchBlend", 1.0, minValue=0.0, maxValue=1.0))
         component.addAttribute(StringAttribute("Side", self.side))
         component.addAttribute(BoolAttribute("toggleDebugging", True))
+
 
         bicepGuideCtrl = self.getChildByName('bicepGuideCtrl')
         forearmGuideCtrl = self.getChildByName('forearmGuideCtrl')
@@ -101,5 +88,5 @@ class ArmComponent(BaseComponent):
 
 
 if __name__ == "__main__":
-    armLeft = ArmComponent("myArm", side='L')
+    armLeft = ClavicleComponent("myClavicle", side='L')
     print armLeft.getNumChildren()

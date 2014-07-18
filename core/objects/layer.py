@@ -6,6 +6,7 @@ Layer - Layer object that gets added to containers for organizing the rig.
 """
 
 from kraken.core.objects.scene_item import SceneItem
+from kraken.core.objects.components.base_component import BaseComponent
 
 class Layer(SceneItem):
     """Layer object."""
