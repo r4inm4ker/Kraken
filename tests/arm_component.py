@@ -25,13 +25,6 @@ class ArmComponent(BaseComponent):
     def __init__(self, name, parent=None, side='M'):
         super(ArmComponent, self).__init__(name, parent, side)
 
-        # Setup Component Inputs and Outputs
-        clavicleEndInput = ComponentInputXfo('clavicleEnd')
-        armEndOutput = ComponentOutputXfo('armEnd')
-
-        self.addInput(clavicleEndInput)
-        self.addOutput(armEndOutput)
-
         # Setup component attributes
         defaultAttrGroup = self.getAttributeGroupByIndex(0)
         defaultAttrGroup.addAttribute(BoolAttribute("toggleDebugging", True))
@@ -53,10 +46,19 @@ class ArmComponent(BaseComponent):
         self.addChild(wristGuideCtrl)
 
         # Setup component constraints
-        testConstraint = PoseConstraint("wristToBicep")
-        testConstraint.setMaintainOffset(True)
-        testConstraint.addConstrainer(bicepGuideCtrl)
-        wristGuideCtrl.addConstraint(testConstraint)
+
+
+        # Setup Component Inputs and Outputs
+        clavicleEndInput = ComponentInputXfo('clavicleEnd')
+        armEndOutput = ComponentOutputXfo('armEnd')
+
+        # Constraint outputs
+        armEndOutputConstraint = PoseConstraint('_'.join([armEndOutput.getName(), 'To', wristGuideCtrl.getName()]))
+        armEndOutputConstraint.addConstrainer(wristGuideCtrl)
+        armEndOutput.addConstraint(armEndOutputConstraint)
+
+        self.addInput(clavicleEndInput)
+        self.addOutput(armEndOutput)
 
 
     def buildRig(self, parent):

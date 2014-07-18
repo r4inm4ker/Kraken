@@ -86,9 +86,6 @@ class Builder(BaseBuilder):
 
         """
 
-        for i in xrange(kSceneItem.getNumChildren()):
-            log(kSceneItem.getChildByIndex(i))
-
         parentNode = self._getDCCSceneItem(kSceneItem.getParent())
 
         dccSceneItem = parentNode.AddNull()

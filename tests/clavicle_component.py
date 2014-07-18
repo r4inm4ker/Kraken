@@ -5,6 +5,8 @@ from kraken.core.objects.attributes.integer_attribute import IntegerAttribute
 from kraken.core.objects.attributes.bool_attribute import BoolAttribute
 from kraken.core.objects.attributes.string_attribute import StringAttribute
 
+from kraken.core.objects.constraints.pose_constraint import PoseConstraint
+
 from kraken.core.objects.components.base_component import BaseComponent
 from kraken.core.objects.components.component_inputXfo import ComponentInputXfo
 from kraken.core.objects.components.component_inputAttribute import ComponentInputAttr
@@ -25,13 +27,6 @@ class ClavicleComponent(BaseComponent):
     def __init__(self, name, parent=None, side='M'):
         super(ClavicleComponent, self).__init__(name, parent, side)
 
-        # Setup Component Inputs and Outputs
-        spineEndInput = ComponentInputXfo('spineEnd')
-        clavicleEndOutput = ComponentOutputXfo('clavicleEnd')
-
-        self.addInput(spineEndInput)
-        self.addOutput(clavicleEndOutput)
-
         # Setup component attributes
         defaultAttrGroup = self.getAttributeGroupByIndex(0)
         defaultAttrGroup.addAttribute(BoolAttribute("toggleDebugging", True))
@@ -44,6 +39,18 @@ class ClavicleComponent(BaseComponent):
         clavicleInsertGuideCtrl = CircleControl('clavicleInsertGuideCtrl')
         clavicleInsertGuideCtrl.xfo.tr = Vec3(5.0, 20.0, 0.0)
         self.addChild(clavicleInsertGuideCtrl)
+
+        # Setup Component Inputs and Outputs
+        spineEndInput = ComponentInputXfo('spineEnd')
+        clavicleEndOutput = ComponentOutputXfo('clavicleEnd')
+
+        # Constraint outputs
+        clavicleEndConstraint = PoseConstraint('_'.join([clavicleEndOutput.getName(), 'To', clavicleInsertGuideCtrl.getName()]))
+        clavicleEndConstraint.addConstrainer(clavicleInsertGuideCtrl)
+        clavicleEndOutput.addConstraint(clavicleEndConstraint)
+
+        self.addInput(spineEndInput)
+        self.addOutput(clavicleEndOutput)
 
 
     def buildRig(self, parent):

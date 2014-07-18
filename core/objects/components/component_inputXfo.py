@@ -6,6 +6,7 @@ ComponentInputXfo -- Component input representation.
 """
 
 from kraken.core.objects.scene_item import SceneItem
+from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
 
 class ComponentInputXfo(SceneItem):
@@ -57,6 +58,10 @@ class ComponentInputXfo(SceneItem):
         self.connection = componentOutput
         componentOutput.addConnection(self)
 
+        inputConstraint = PoseConstraint('_'.join([componentOutput.getName(), 'To', self.getName()]))
+        inputConstraint.addConstrainer(componentOutput)
+        self.addConstraint(inputConstraint)
+
         return True
 
 
@@ -73,6 +78,7 @@ class ComponentInputXfo(SceneItem):
 
         self.connection.removeConnection(self)
         self.setConnection(None)
+        self.removeConstraintByIndex(0)
 
         return True
 

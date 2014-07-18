@@ -6,6 +6,7 @@ ComponentOutputXfo -- Component output representation.
 """
 
 from kraken.core.objects.scene_item import SceneItem
+from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
 
 class ComponentOutputXfo(SceneItem):

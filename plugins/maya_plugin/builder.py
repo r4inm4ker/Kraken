@@ -464,6 +464,9 @@ class Builder(BaseBuilder):
 
         """
 
+        print kSceneItem.getName()
+        print type(kSceneItem)
+
         dccSceneItem = self._getDCCSceneItem(kSceneItem)
 
         quat = dt.Quaternion(kSceneItem.xfo.rot.v.x, kSceneItem.xfo.rot.v.y, kSceneItem.xfo.rot.v.z, kSceneItem.xfo.rot.w)
