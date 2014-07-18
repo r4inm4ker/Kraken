@@ -7,6 +7,7 @@ Component -- Component representation.
 
 from kraken.core.maths import *
 from kraken.core.objects.scene_item import SceneItem
+from kraken.core.objects.attributes.attribute_group import AttributeGroup
 from kraken.core.objects.hierarchy_group import HierarchyGroup
 
 
@@ -23,8 +24,16 @@ class BaseComponent(SceneItem):
 
         self.setShapeVisibility(False)
 
-        self.addChild(HierarchyGroup('inputs'))
-        self.addChild(HierarchyGroup('outputs'))
+
+        inputHrc = HierarchyGroup('inputs')
+        inputAttrGrp = AttributeGroup('inputAttrs')
+        inputHrc.addAttributeGroup(inputAttrGrp)
+        self.addChild(inputHrc)
+
+        outputHrc = HierarchyGroup('outputs')
+        outputAttrGrp = AttributeGroup('outputAttrs')
+        outputHrc.addAttributeGroup(inputAttrGrp)
+        self.addChild(outputHrc)
 
 
     # =============
@@ -88,11 +97,25 @@ class BaseComponent(SceneItem):
 
         """
 
-        if componentInput.getKType() != "ComponentInput":
+        inputHrc = self.getChildByName('inputs')
+        inputAttrsGrp = self.getAttributeGroupByName('inputAttrs')
+
+        if componentInput.getKType() not in ["ComponentInputXfo", "ComponentInputAttr"]:
             raise Exception("'componentInput' argument is not a 'ComponentInput' object. Invalid type:'" + componentInput.getKType() + "'")
 
         if componentInput in self.inputs:
             raise Exception("'componentInput' argument is already an input! Invalid object: '" + componentInput.getName() + "'")
+
+        if componentInput.getDataType() == 'Xfo':
+            inputHrc.children.append(componentInput)
+            componentInput.setParent(inputHrc)
+
+        elif componentInput.getDataType() == 'Attribute':
+            inputAttrsGrp.attributes.append(componentInput)
+            componentInput.setParent(inputAttrsGrp)
+
+        else:
+            raise Exception("'componentInput' argument is not a valid 'dataType' object. " + componentInput.getName() + " has 'dataType':'" + componentInput.getDataType() + "'")
 
         self.inputs.append(componentInput)
 
@@ -212,11 +235,25 @@ class BaseComponent(SceneItem):
 
         """
 
-        if componentOutput.getKType() != "ComponentOutput":
+        outputHrc = self.getChildByName('outputs')
+        outputAttrsGrp = self.getAttributeGroupByName('outputAttrs')
+
+        if componentOutput.getKType()  not in ["ComponentOutputXfo", "ComponentOutputAttr"]:
             raise Exception("'componentOutput' argument is not a 'ComponentOutput' object. Invalid type:'" + componentOutput.getKType() + "'")
 
         if componentOutput in self.outputs:
             raise Exception("'componentOutput' argument is already an input! Invalid object: '" + componentOutput.getName() + "'")
+
+        if componentOutput.getDataType() == 'Xfo':
+            outputHrc.children.append(componentOutput)
+            componentOutput.setParent(outputHrc)
+
+        elif componentOutput.getDataType() == 'Attribute':
+            outputAttrsGrp.attributes.append(componentOutput)
+            componentOutput.setParent(outputAttrsGrp)
+
+        else:
+            raise Exception("'componentOutput' argument is not a valid 'dataType' object. " + componentOutput.getName() + " has 'dataType':'" + componentOutput.getDataType() + "'")
 
         self.outputs.append(componentOutput)
 

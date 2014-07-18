@@ -6,8 +6,10 @@ from kraken.core.objects.attributes.bool_attribute import BoolAttribute
 from kraken.core.objects.attributes.string_attribute import StringAttribute
 
 from kraken.core.objects.components.base_component import BaseComponent
-from kraken.core.objects.components.component_input import ComponentInput
-from kraken.core.objects.components.component_output import ComponentOutput
+from kraken.core.objects.components.component_inputXfo import ComponentInputXfo
+from kraken.core.objects.components.component_inputAttribute import ComponentInputAttr
+from kraken.core.objects.components.component_outputXfo import ComponentOutputXfo
+from kraken.core.objects.components.component_outputAttribute import ComponentOutputAttr
 
 from kraken.core.objects.controls.cube_control  import CubeControl
 from kraken.core.objects.controls.circle_control  import  CircleControl
@@ -24,8 +26,8 @@ class ClavicleComponent(BaseComponent):
         super(ClavicleComponent, self).__init__(name, parent, side)
 
         # Setup Component Inputs and Outputs
-        spineEndInput = ComponentInput('spineEnd')
-        clavicleEndOutput = ComponentOutput('clavicleEnd')
+        spineEndInput = ComponentInputXfo('spineEnd')
+        clavicleEndOutput = ComponentOutputXfo('clavicleEnd')
 
         self.addInput(spineEndInput)
         self.addOutput(clavicleEndOutput)

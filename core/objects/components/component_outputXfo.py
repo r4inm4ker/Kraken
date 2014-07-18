@@ -1,34 +1,37 @@
-"""Kraken - objects.component output module.
+"""Kraken - objects.components.component_outputXfo output module.
 
 Classes:
-ComponentOutput -- Component output representation.
+ComponentOutputXfo -- Component output representation.
 
 """
 
-class ComponentOutput(object):
+from kraken.core.objects.scene_item import SceneItem
+
+
+class ComponentOutputXfo(SceneItem):
     """Component Output object."""
 
-    __kType__ = "ComponentOutput"
+    __kType__ = "ComponentOutputXfo"
 
     def __init__(self, name, dataType='Xfo'):
-        super(ComponentOutput, self).__init__()
+        super(ComponentOutputXfo, self).__init__(name, None)
         self.name = name
         self.dataType = dataType
         self.connections = []
 
 
-    # =============
-    # Name methods
-    # =============
-    def getName(self):
-        """Returns the name of the object as a string.
+    # =================
+    # DataType Methods
+    # =================
+    def getDataType(self):
+        """Returns the data type for this input.
 
         Return:
-        String of the object's name.
+        String, data type of this input.
 
         """
 
-        return self.name
+        return self.dataType
 
 
     # ===================
@@ -45,8 +48,7 @@ class ComponentOutput(object):
 
         """
 
-
-        if componentInput.getKType() != "ComponentInput":
+        if componentInput.getKType() not in ["ComponentInputXfo", "ComponentInputAttr"]:
             raise Exception("Output components can only be connected to input components. connection type:'" + str(type(componentInput)) + "'")
 
         if self.dataType != componentInput.dataType:
@@ -99,17 +101,3 @@ class ComponentOutput(object):
         """
 
         return self.connections[index]
-
-
-    # ==============
-    # kType Methods
-    # ==============
-    def getKType(self):
-        """Returns the kType of this object.
-
-        Return:
-        True if successful.
-
-        """
-
-        return self.__kType__

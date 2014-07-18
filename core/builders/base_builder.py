@@ -367,6 +367,9 @@ class BaseBuilder(object):
 
         """
 
+        if hasattr(kSceneItem, 'getNumAttributeGroups') is False:
+            return False
+
         for i in xrange(kSceneItem.getNumAttributeGroups()):
             attributeGroup = kSceneItem.getAttributeGroupByIndex(i)
 
@@ -422,6 +425,12 @@ class BaseBuilder(object):
             dccSceneItem = self.buildGroup(kSceneItem, objectName)
             component = kSceneItem
 
+        elif kType == "ComponentInputXfo":
+            dccSceneItem = self.buildLocator(kSceneItem, objectName)
+
+        elif kType == "ComponentOutputXfo":
+            dccSceneItem = self.buildLocator(kSceneItem, objectName)
+
         elif kType == "HierarchyGroup":
             dccSceneItem = self.buildHierarchyGroup(kSceneItem, objectName)
 
@@ -442,6 +451,9 @@ class BaseBuilder(object):
         self.setVisibility(kSceneItem)
         self.setObjectColor(kSceneItem)
 
+        if hasattr(kSceneItem, 'getNumChildren') is False:
+            return dccSceneItem
+
         # Build children
         for i in xrange(kSceneItem.getNumChildren()):
             child = kSceneItem.getChildByIndex(i)
@@ -460,6 +472,9 @@ class BaseBuilder(object):
         True if successful.
 
         """
+
+        if hasattr(kSceneItem, 'getNumChildren') is False:
+            return False
 
         dccSceneItem = None
         for i in xrange(kSceneItem.getNumConstraints()):
@@ -488,7 +503,7 @@ class BaseBuilder(object):
             child = kSceneItem.getChildByIndex(i)
             self.buildConstraints(child)
 
-        return dccSceneItem
+        return True
 
 
     def buildName(self, kSceneItem, component=None):
@@ -520,6 +535,18 @@ class BaseBuilder(object):
 
         elif kType == "Component":
             return '_'.join([kSceneItem.getName(), kSceneItem.getSide(), 'hrc'])
+
+        elif kType == "ComponentInputXfo":
+            return '_'.join([componentName, side, kSceneItem.getName(), 'srtIn'])
+
+        elif kType == "ComponentInputAttr":
+            return '_'.join([componentName, side, kSceneItem.getName(), 'attrIn'])
+
+        elif kType == "ComponentOutputXfo":
+            return '_'.join([componentName, side, kSceneItem.getName(), 'srtOut'])
+
+        elif kType == "ComponentOutputAttr":
+            return '_'.join([componentName, side, kSceneItem.getName(), 'attrOut'])
 
         elif kType == "HierarchyGroup":
             return '_'.join([componentName, side, kSceneItem.getName(), 'hrc'])
@@ -557,6 +584,9 @@ class BaseBuilder(object):
         True if successful.
 
         """
+
+        if hasattr(kSceneItem, 'getShapeVisibility') is False:
+            return False
 
         if kSceneItem.getShapeVisibility() is False:
             pass

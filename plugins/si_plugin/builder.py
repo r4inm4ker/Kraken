@@ -86,6 +86,9 @@ class Builder(BaseBuilder):
 
         """
 
+        for i in xrange(kSceneItem.getNumChildren()):
+            log(kSceneItem.getChildByIndex(i))
+
         parentNode = self._getDCCSceneItem(kSceneItem.getParent())
 
         dccSceneItem = parentNode.AddNull()
@@ -96,8 +99,6 @@ class Builder(BaseBuilder):
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
         return dccSceneItem
-
-        return None
 
 
     def buildGroup(self, kSceneItem, objectName):
@@ -132,6 +133,7 @@ class Builder(BaseBuilder):
         Node that is created.
 
         """
+
         parentNode = self._getDCCSceneItem(kSceneItem.getParent())
 
         dccSceneItem = parentNode.AddNull()
