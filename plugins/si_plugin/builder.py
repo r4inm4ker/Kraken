@@ -25,9 +25,9 @@ class Builder(BaseBuilder):
         super(Builder, self).__init__()
 
 
-    # ===================
-    # Node Build Methods
-    # ===================
+    # ========================
+    # SceneItem Build Methods
+    # ========================
     def buildContainer(self, kSceneItem, objectName):
         """Builds a container / namespace object.
 

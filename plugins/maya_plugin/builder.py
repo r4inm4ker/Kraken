@@ -25,9 +25,9 @@ class Builder(BaseBuilder):
         super(Builder, self).__init__()
 
 
-    # ===================
-    # Node Build Methods
-    # ===================
+    # ========================
+    # SceneItem Build Methods
+    # ========================
     def buildContainer(self, kSceneItem, objectName):
         """Builds a container / namespace object.
 
@@ -92,7 +92,7 @@ class Builder(BaseBuilder):
         pm.parent(dccSceneItem, parentNode)
         pm.rename(dccSceneItem, objectName)
 
-        lockXfo(dccSceneItem)
+        lockObjXfo(dccSceneItem)
 
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 

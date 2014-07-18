@@ -10,4 +10,18 @@ logger = mayaLogger.getLogger("mayaLogger")
 
 
 def lockObjXfo(dccSceneItem):
-    pass
+    """Locks the dccSceneItem's transform parameters.
+
+    Arguments:
+    dccSceneItem -- Object, DCC object to lock transform parameters on.
+
+    Return:
+    True if successful.
+
+    """
+
+    localXfoParams = ['tx', 'ty', 'tz', 'rx', 'ry', 'rz', 'sx', 'sy', 'sz']
+    for eachParam in localXfoParams:
+        pm.setAttr(dccSceneItem.longName() + "." + eachParam, lock=True, keyable=False, channelBox=False)
+
+    return True

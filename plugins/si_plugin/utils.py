@@ -24,6 +24,15 @@ def getCollection():
 
 
 def lockObjXfo(dccSceneItem):
+    """Locks the dccSceneItem's transform parameters.
+
+    Arguments:
+    dccSceneItem -- Object, DCC object to lock transform parameters on.
+
+    Return:
+    True if successful.
+
+    """
 
     localXfoParams = ['posx', 'posy', 'posz', 'rotx', 'roty', 'rotz', 'sclx', 'scly', 'sclz']
     for eachParam in localXfoParams:
@@ -34,3 +43,5 @@ def lockObjXfo(dccSceneItem):
         param.SetLock(constants.siLockLevelManipulation)
 
     si.SetKeyableAttributes(dccSceneItem, "kine.local.pos.posx,kine.local.pos.posy,kine.local.pos.posz,kine.local.ori.euler.rotx,kine.local.ori.euler.roty,kine.local.ori.euler.rotz,kine.local.scl.sclx,kine.local.scl.scly,kine.local.scl.sclz", constants.siKeyableAttributeClear)
+
+    return True

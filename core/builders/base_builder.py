@@ -98,9 +98,9 @@ class BaseBuilder(object):
         return None
 
 
-    # ===================
-    # Node Build Methods
-    # ===================
+    # ========================
+    # SceneItem Build Methods
+    # ========================
     def buildContainer(self, kSceneItem, objectName):
         """Builds a container / namespace object.
 
