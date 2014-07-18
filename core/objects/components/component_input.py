@@ -49,7 +49,7 @@ class ComponentInput(object):
             raise Exception("Output components can only be connected to input components. connection type:'" + componentOutput.getKType() + "'")
 
         if self.dataType != componentOutput.dataType:
-            raise Exception("Connected component output data type:'" +componentOutput.dataType+"' does not match this component data type:'" + self.dataType)
+            raise Exception("Connected component output data type:'" + componentOutput.dataType + "' does not match this component data type:'" + self.dataType)
 
         self.connection = componentOutput
         componentOutput.addConnection(self)

@@ -21,3 +21,16 @@ def getCollection():
     """Returns an XSICollection object."""
 
     return Dispatch("XSI.Collection")
+
+
+def lockObjXfo(dccSceneItem):
+
+    localXfoParams = ['posx', 'posy', 'posz', 'rotx', 'roty', 'rotz', 'sclx', 'scly', 'sclz']
+    for eachParam in localXfoParams:
+        param = dccSceneItem.Parameters(eachParam)
+        if param.IsLocked():
+            continue
+
+        param.SetLock(constants.siLockLevelManipulation)
+
+    si.SetKeyableAttributes(dccSceneItem, "kine.local.pos.posx,kine.local.pos.posy,kine.local.pos.posz,kine.local.ori.euler.rotx,kine.local.ori.euler.roty,kine.local.ori.euler.rotz,kine.local.scl.sclx,kine.local.scl.scly,kine.local.scl.sclz", constants.siKeyableAttributeClear)

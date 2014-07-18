@@ -57,7 +57,6 @@ class ArmComponent(BaseComponent):
         wristGuideCtrl.addConstraint(testConstraint)
 
 
-
     def buildRig(self, parent):
 
         # component = super(ArmComponent, self).buildRig()

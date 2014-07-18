@@ -7,3 +7,7 @@ from maya import cmds
 from kraken.plugins.maya_plugin import logger as mayaLogger
 
 logger = mayaLogger.getLogger("mayaLogger")
+
+
+def lockObjXfo(dccSceneItem):
+    pass

@@ -131,6 +131,21 @@ class BaseBuilder(object):
         return None
 
 
+    def buildHierarchyGroup(self, kSceneItem, objectName):
+        """Builds a hierarchy group object.
+
+        Arguments:
+        kSceneItem -- Object, kSceneItem that represents a group to be built.
+        objectName -- String, name of the object being created.
+
+        Return:
+        DCC Scene Item that is created.
+
+        """
+
+        return None
+
+
     def buildGroup(self, kSceneItem, objectName):
         """Builds a group object.
 
@@ -407,6 +422,9 @@ class BaseBuilder(object):
             dccSceneItem = self.buildGroup(kSceneItem, objectName)
             component = kSceneItem
 
+        elif kType == "HierarchyGroup":
+            dccSceneItem = self.buildHierarchyGroup(kSceneItem, objectName)
+
         elif kType == "SceneItem":
             dccSceneItem = self.buildLocator(kSceneItem, objectName)
 
@@ -494,14 +512,20 @@ class BaseBuilder(object):
             componentName = component.getName()
             side = component.getSide()
 
-        if kType == "Component":
-            return '_'.join([kSceneItem.getName(), kSceneItem.getSide(), 'hrc'])
-
-        elif kType == "Container":
+        if kType == "Container":
             return '_'.join([kSceneItem.getName()])
 
         elif kType == "Layer":
             return '_'.join([kSceneItem.parent.getName(), kSceneItem.getName()])
+
+        elif kType == "Component":
+            return '_'.join([kSceneItem.getName(), kSceneItem.getSide(), 'hrc'])
+
+        elif kType == "HierarchyGroup":
+            return '_'.join([componentName, side, kSceneItem.getName(), 'hrc'])
+
+        elif kType == "Locator":
+            return '_'.join([componentName, kSceneItem.getName(), side, 'null'])
 
         elif kType == "SceneItem":
             return '_'.join([componentName, kSceneItem.getName(), side, 'null'])

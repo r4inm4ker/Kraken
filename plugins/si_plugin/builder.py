@@ -74,6 +74,32 @@ class Builder(BaseBuilder):
         return dccSceneItem
 
 
+    def buildHierarchyGroup(self, kSceneItem, objectName):
+        """Builds a hierarchy group object.
+
+        Arguments:
+        kSceneItem -- Object, kSceneItem that represents a group to be built.
+        objectName -- String, name of the object being created.
+
+        Return:
+        DCC Scene Item that is created.
+
+        """
+
+        parentNode = self._getDCCSceneItem(kSceneItem.getParent())
+
+        dccSceneItem = parentNode.AddNull()
+        dccSceneItem.Name = objectName
+
+        lockObjXfo(dccSceneItem)
+
+        self._registerSceneItemPair(kSceneItem, dccSceneItem)
+
+        return dccSceneItem
+
+        return None
+
+
     def buildGroup(self, kSceneItem, objectName):
         """Builds a locator / null object.
 

@@ -7,6 +7,7 @@ Component -- Component representation.
 
 from kraken.core.maths import *
 from kraken.core.objects.scene_item import SceneItem
+from kraken.core.objects.hierarchy_group import HierarchyGroup
 
 
 class BaseComponent(SceneItem):
@@ -21,6 +22,9 @@ class BaseComponent(SceneItem):
         self.outputs = []
 
         self.setShapeVisibility(False)
+
+        self.addChild(HierarchyGroup('inputs'))
+        self.addChild(HierarchyGroup('outputs'))
 
 
     # =============
