@@ -356,22 +356,22 @@ class BaseBuilder(object):
     # =====================
     # Build Object Methods
     # =====================
-    def buildAttributes(self, kSceneItem):
+    def buildAttributes(self, kObject):
         """Builds attributes on the DCC object.
 
         Arguments:
-        kSceneItem -- SceneItem, kraken object to build attributes for.
+        kObject -- SceneItem, kraken object to build attributes for.
 
         Return:
         True if successful.
 
         """
 
-        if hasattr(kSceneItem, 'getNumAttributeGroups') is False:
+        if hasattr(kObject, 'getNumAttributeGroups') is False:
             return False
 
-        for i in xrange(kSceneItem.getNumAttributeGroups()):
-            attributeGroup = kSceneItem.getAttributeGroupByIndex(i)
+        for i in xrange(kObject.getNumAttributeGroups()):
+            attributeGroup = kObject.getAttributeGroupByIndex(i)
 
             attributeCount = attributeGroup.getNumAttributes()
             if attributeCount < 1:
@@ -398,11 +398,11 @@ class BaseBuilder(object):
         return True
 
 
-    def buildHierarchy(self, kSceneItem, component=None):
-        """Builds the hierarchy for the supplied kSceneItem.
+    def buildHierarchy(self, kObject, component=None):
+        """Builds the hierarchy for the supplied kObject.
 
         Arguments:
-        kSceneItem -- SceneItem, kraken object to build.
+        kObject -- Object, kraken object to build.
         component -- Component, component that this object belongs to.
 
         Return:
@@ -411,75 +411,72 @@ class BaseBuilder(object):
         """
 
         dccSceneItem = None
-        objectName = self.buildName(kSceneItem, component=component)
-        kType = kSceneItem.getKType()
+        objectName = self.buildName(kObject, component=component)
+        kType = kObject.getKType()
 
         # Build Object
         if kType == "Container":
-            dccSceneItem = self.buildContainer(kSceneItem, objectName)
+            dccSceneItem = self.buildContainer(kObject, objectName)
 
         elif kType == "Layer":
-            dccSceneItem = self.buildLayer(kSceneItem, objectName)
+            dccSceneItem = self.buildLayer(kObject, objectName)
 
         elif kType == "Component":
-            dccSceneItem = self.buildGroup(kSceneItem, objectName)
-            component = kSceneItem
+            dccSceneItem = self.buildGroup(kObject, objectName)
+            component = kObject
 
         elif kType == "ComponentInputXfo":
-            dccSceneItem = self.buildLocator(kSceneItem, objectName)
+            dccSceneItem = self.buildLocator(kObject, objectName)
 
         elif kType == "ComponentOutputXfo":
-            dccSceneItem = self.buildLocator(kSceneItem, objectName)
+            dccSceneItem = self.buildLocator(kObject, objectName)
 
         elif kType == "HierarchyGroup":
-            dccSceneItem = self.buildHierarchyGroup(kSceneItem, objectName)
+            dccSceneItem = self.buildHierarchyGroup(kObject, objectName)
 
         elif kType == "SceneItem":
-            dccSceneItem = self.buildLocator(kSceneItem, objectName)
+            dccSceneItem = self.buildLocator(kObject, objectName)
 
         elif kType == "Curve":
-            dccSceneItem = self.buildCurve(kSceneItem, objectName)
+            dccSceneItem = self.buildCurve(kObject, objectName)
 
         elif kType == "Control":
-            dccSceneItem = self.buildCurve(kSceneItem, objectName)
+            dccSceneItem = self.buildCurve(kObject, objectName)
 
         else:
-            raise NotImplementedError(kSceneItem.getName() + ' has an unsupported type: ' + str(type(kSceneItem)))
+            raise NotImplementedError(kObject.getName() + ' has an unsupported type: ' + str(type(kObject)))
 
-        self.buildAttributes(kSceneItem)
-        self.setTransform(kSceneItem)
-        self.setVisibility(kSceneItem)
-        self.setObjectColor(kSceneItem)
-
-        if hasattr(kSceneItem, 'getNumChildren') is False:
-            return dccSceneItem
+        self.buildAttributes(kObject)
+        self.setTransform(kObject)
+        self.setVisibility(kObject)
+        self.setObjectColor(kObject)
 
         # Build children
-        for i in xrange(kSceneItem.getNumChildren()):
-            child = kSceneItem.getChildByIndex(i)
+        for i in xrange(kObject.getNumChildren()):
+            child = kObject.getChildByIndex(i)
             self.buildHierarchy(child, component)
 
         return dccSceneItem
 
 
-    def buildConstraints(self, kSceneItem):
-        """Builds constraints for the supplied kSceneItem.
+    def buildConstraints(self, kObject):
+        """Builds constraints for the supplied kObject.
 
         Arguments:
-        kSceneItem -- Object, kraken scene item to create constraints for.
+        kObject -- Object, kraken object to create constraints for.
 
         Return:
         True if successful.
 
         """
 
-        if hasattr(kSceneItem, 'getNumChildren') is False:
+        if hasattr(kObject, 'getNumChildren') is False:
             return False
 
         dccSceneItem = None
-        for i in xrange(kSceneItem.getNumConstraints()):
+        for i in xrange(kObject.getNumConstraints()):
 
-            constraint = kSceneItem.getConstraintByIndex(i)
+            constraint = kObject.getConstraintByIndex(i)
             kType = constraint.getKType()
 
             # Build Object
@@ -499,18 +496,18 @@ class BaseBuilder(object):
                 raise NotImplementedError(constraint.getName() + ' has an unsupported type: ' + str(type(constraint)))
 
         # Build children
-        for i in xrange(kSceneItem.getNumChildren()):
-            child = kSceneItem.getChildByIndex(i)
+        for i in xrange(kObject.getNumChildren()):
+            child = kObject.getChildByIndex(i)
             self.buildConstraints(child)
 
         return True
 
 
-    def buildName(self, kSceneItem, component=None):
-        """Builds the name for the kSceneItem that is passed.
+    def buildName(self, kObject, component=None):
+        """Builds the name for the kObject that is passed.
 
         Arguments:
-        kSceneItem -- SceneItem, kraken object to build the name for.
+        kObject -- Object, kraken object to build the name for.
         component -- Component, component that this object belongs to.
 
         Return:
@@ -521,52 +518,52 @@ class BaseBuilder(object):
 
         componentName = ""
         side = ""
-        kType = kSceneItem.getKType()
+        kType = kObject.getKType()
 
         if component is not None:
             componentName = component.getName()
             side = component.getSide()
 
         if kType == "Container":
-            return '_'.join([kSceneItem.getName()])
+            return '_'.join([kObject.getName()])
 
         elif kType == "Layer":
-            return '_'.join([kSceneItem.parent.getName(), kSceneItem.getName()])
+            return '_'.join([kObject.parent.getName(), kObject.getName()])
 
         elif kType == "Component":
-            return '_'.join([kSceneItem.getName(), kSceneItem.getSide(), 'hrc'])
+            return '_'.join([kObject.getName(), kObject.getSide(), 'hrc'])
 
         elif kType == "ComponentInputXfo":
-            return '_'.join([componentName, side, kSceneItem.getName(), 'srtIn'])
+            return '_'.join([componentName, side, kObject.getName(), 'srtIn'])
 
         elif kType == "ComponentInputAttr":
-            return '_'.join([componentName, side, kSceneItem.getName(), 'attrIn'])
+            return '_'.join([componentName, side, kObject.getName(), 'attrIn'])
 
         elif kType == "ComponentOutputXfo":
-            return '_'.join([componentName, side, kSceneItem.getName(), 'srtOut'])
+            return '_'.join([componentName, side, kObject.getName(), 'srtOut'])
 
         elif kType == "ComponentOutputAttr":
-            return '_'.join([componentName, side, kSceneItem.getName(), 'attrOut'])
+            return '_'.join([componentName, side, kObject.getName(), 'attrOut'])
 
         elif kType == "HierarchyGroup":
-            return '_'.join([componentName, side, kSceneItem.getName(), 'hrc'])
+            return '_'.join([componentName, side, kObject.getName(), 'hrc'])
 
         elif kType == "Locator":
-            return '_'.join([componentName, kSceneItem.getName(), side, 'null'])
+            return '_'.join([componentName, kObject.getName(), side, 'null'])
 
         elif kType == "SceneItem":
-            return '_'.join([componentName, kSceneItem.getName(), side, 'null'])
+            return '_'.join([componentName, kObject.getName(), side, 'null'])
 
         elif kType == "Curve":
-            return '_'.join([componentName, kSceneItem.getName(), side, 'crv'])
+            return '_'.join([componentName, kObject.getName(), side, 'crv'])
 
         elif kType == "Control":
-            nameParts = [componentName, kSceneItem.getName(), side, 'ctrl']
+            nameParts = [componentName, kObject.getName(), side, 'ctrl']
             nameParts = [x for x in nameParts if x != ""]
             return '_'.join(nameParts)
 
         else:
-            raise NotImplementedError('buildName() not implemented for ' + str(type(kSceneItem)))
+            raise NotImplementedError('buildName() not implemented for ' + str(type(kObject)))
 
         return None
 

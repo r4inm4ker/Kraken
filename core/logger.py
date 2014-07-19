@@ -7,6 +7,7 @@ LOGGER_PREFIX = 'kraken.pyLogger'
 
 
 class PyLogger(logging.Logger):
+    """Custom Python logger."""
 
     def fatal(self, msg, *args, **kwargs):
         self.log(45, msg, *args, **kwargs)
@@ -16,8 +17,18 @@ class PyLogger(logging.Logger):
 
 
 class PyHandler(logging.Handler):
+    """Logger handler to map messages to correct commands."""
 
     def emit(self, record):
+        """Emit messages using correct commands.
+
+        Arguments:
+        record -- Record, record to emit.
+
+        Return:
+        True if successful.
+
+        """
 
         if isinstance(record.msg, types.StringTypes):
             msg = self.format(record)
@@ -27,8 +38,19 @@ class PyHandler(logging.Handler):
 
         print msg
 
+        return True
+
 
 def getLogger(name=None):
+    """Returns the custom logger or creates it if it doesn't exist.
+
+    Arguments:
+    name -- String, name of the custom logger to get or create.
+
+    Return:
+    Custom logger.
+
+    """
 
     if name is None:
         return logging.getLogger(LOGGER_PREFIX)
@@ -43,11 +65,7 @@ if not hasattr(sys, 'PY_LOGGING_CONFIGURED'):
     logger = logging.getLogger()
     pyHandler = PyHandler()
     pyHandler.setLevel(0)
-    #fileHandler = logging.FileHandler(os.path.join(os.environ['XSI_USERHOME'], 'xsiScriptLog.txt'))
-    #fileHandler.setFormatter(logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s"))
-    #fileHandler.setLevel(45)
     logger.addHandler(pyHandler)
-    #log.addHandler(fileHandler)
     logger.setLevel(0)
     sys.PY_LOGGING_CONFIGURED = True
     logger = getLogger()
