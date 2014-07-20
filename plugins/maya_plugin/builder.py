@@ -98,8 +98,6 @@ class Builder(BaseBuilder):
 
         return dccSceneItem
 
-        return None
-
 
     def buildGroup(self, kSceneItem, objectName):
         """Builds a group object.
@@ -449,9 +447,6 @@ class Builder(BaseBuilder):
         True if successful.
 
         """
-
-        print kSceneItem.getName()
-        print type(kSceneItem)
 
         dccSceneItem = self._getDCCSceneItem(kSceneItem)
 
