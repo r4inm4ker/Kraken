@@ -216,20 +216,6 @@ class Builder(BaseBuilder):
         return True
 
 
-    def buildColorAttribute(self, kAttribute):
-        """Builds a Color attribute.
-
-        Arguments:
-        kAttribute -- Object, kAttribute that represents a color attribute to be built.
-
-        Return:
-        True if successful.
-
-        """
-
-        return True
-
-
     def buildFloatAttribute(self, kAttribute):
         """Builds a Float attribute.
 
