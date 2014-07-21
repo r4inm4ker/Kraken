@@ -122,6 +122,29 @@ class Builder(BaseBuilder):
         return dccSceneItem
 
 
+    def buildJoint(self, kSceneItem, objectName):
+        """Builds a joint object.
+
+        Arguments:
+        kSceneItem -- Object, kSceneItem that represents a joint to be built.
+        objectName -- String, name of the object being created.
+
+        Return:
+        DCC Scene Item that is created.
+
+        """
+
+        parentNode = self._getDCCSceneItem(kSceneItem.getParent())
+
+        dccSceneItem = pm.joint(name="joint")
+        pm.parent(dccSceneItem, parentNode)
+        pm.rename(dccSceneItem, objectName)
+
+        self._registerSceneItemPair(kSceneItem, dccSceneItem)
+
+        return dccSceneItem
+
+
     def buildLocator(self, kSceneItem, objectName):
         """Builds a locator / null object.
 

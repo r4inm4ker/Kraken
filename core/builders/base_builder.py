@@ -161,6 +161,21 @@ class BaseBuilder(object):
         return None
 
 
+    def buildJoint(self, kSceneItem, objectName):
+        """Builds a joint object.
+
+        Arguments:
+        kSceneItem -- Object, kSceneItem that represents a joint to be built.
+        objectName -- String, name of the object being created.
+
+        Return:
+        DCC Scene Item that is created.
+
+        """
+
+        return None
+
+
     def buildLocator(self, kSceneItem, objectName):
         """Builds a locator / null object.
 
@@ -420,6 +435,9 @@ class BaseBuilder(object):
         elif kType == "HierarchyGroup":
             dccSceneItem = self.buildHierarchyGroup(kObject, objectName)
 
+        elif kType == "Joint":
+            dccSceneItem = self.buildJoint(kObject, objectName)
+
         elif kType == "SceneItem":
             dccSceneItem = self.buildLocator(kObject, objectName)
 
@@ -536,6 +554,9 @@ class BaseBuilder(object):
 
         elif kType == "Locator":
             return '_'.join([componentName, kObject.getName(), side, 'null'])
+
+        elif kType == "Joint":
+            return '_'.join([componentName, kObject.getName(), side, 'def'])
 
         elif kType == "SceneItem":
             return '_'.join([componentName, kObject.getName(), side, 'null'])
