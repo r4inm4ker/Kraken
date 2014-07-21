@@ -8,8 +8,10 @@ from kraken.core.objects.attributes.string_attribute import StringAttribute
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
 from kraken.core.objects.components.base_component import BaseComponent
-from kraken.core.objects.components.component_input import ComponentInput
-from kraken.core.objects.components.component_output import ComponentOutput
+from kraken.core.objects.components.component_inputXfo import ComponentInputXfo
+from kraken.core.objects.components.component_inputAttribute import ComponentInputAttr
+from kraken.core.objects.components.component_outputXfo import ComponentOutputXfo
+from kraken.core.objects.components.component_outputAttribute import ComponentOutputAttr
 
 from kraken.core.objects.controls.cube_control  import CubeControl
 from kraken.core.objects.controls.circle_control  import  CircleControl
@@ -22,13 +24,6 @@ class ArmComponent(BaseComponent):
 
     def __init__(self, name, parent=None, side='M'):
         super(ArmComponent, self).__init__(name, parent, side)
-
-        # Setup Component Inputs and Outputs
-        clavicleEndInput = ComponentInput('clavicleEnd')
-        armEndOutput = ComponentOutput('armEnd')
-
-        self.addInput(clavicleEndInput)
-        self.addOutput(armEndOutput)
 
         # Setup component attributes
         defaultAttrGroup = self.getAttributeGroupByIndex(0)
@@ -51,11 +46,23 @@ class ArmComponent(BaseComponent):
         self.addChild(wristGuideCtrl)
 
         # Setup component constraints
-        testConstraint = PoseConstraint("wristToBicep")
-        testConstraint.setMaintainOffset(True)
-        testConstraint.addConstrainer(bicepGuideCtrl)
-        wristGuideCtrl.addConstraint(testConstraint)
 
+
+        # Setup Component Inputs and Outputs
+        clavicleEndInput = ComponentInputXfo('clavicleEnd')
+        armEndOutput = ComponentOutputXfo('armEnd')
+
+        armFollowBodyInputAttr = ComponentInputAttr('followBody')
+
+        # Constraint outputs
+        armEndOutputConstraint = PoseConstraint('_'.join([armEndOutput.getName(), 'To', wristGuideCtrl.getName()]))
+        armEndOutputConstraint.addConstrainer(wristGuideCtrl)
+        armEndOutput.addConstraint(armEndOutputConstraint)
+
+        self.addInput(clavicleEndInput)
+        self.addOutput(armEndOutput)
+
+        self.addInput(armFollowBodyInputAttr)
 
 
     def buildRig(self, parent):

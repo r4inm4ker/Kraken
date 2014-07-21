@@ -3,7 +3,7 @@
 VERSION_MAJOR = 0
 VERSION_MINOR = 0
 VERSION_BUILD = 1
-VERSION_SUFFIX = "beta"
+VERSION_SUFFIX = "alpha"
 
 
 def getVersion():

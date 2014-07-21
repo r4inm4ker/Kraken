@@ -25,9 +25,9 @@ class Builder(BaseBuilder):
         super(Builder, self).__init__()
 
 
-    # ===================
-    # Node Build Methods
-    # ===================
+    # ========================
+    # SceneItem Build Methods
+    # ========================
     def buildContainer(self, kSceneItem, objectName):
         """Builds a container / namespace object.
 
@@ -74,6 +74,30 @@ class Builder(BaseBuilder):
         return dccSceneItem
 
 
+    def buildHierarchyGroup(self, kSceneItem, objectName):
+        """Builds a hierarchy group object.
+
+        Arguments:
+        kSceneItem -- Object, kSceneItem that represents a group to be built.
+        objectName -- String, name of the object being created.
+
+        Return:
+        DCC Scene Item that is created.
+
+        """
+
+        parentNode = self._getDCCSceneItem(kSceneItem.getParent())
+
+        dccSceneItem = parentNode.AddNull()
+        dccSceneItem.Name = objectName
+
+        lockObjXfo(dccSceneItem)
+
+        self._registerSceneItemPair(kSceneItem, dccSceneItem)
+
+        return dccSceneItem
+
+
     def buildGroup(self, kSceneItem, objectName):
         """Builds a locator / null object.
 
@@ -83,6 +107,27 @@ class Builder(BaseBuilder):
 
         Return:
         Node that is created.
+
+        """
+
+        parentNode = self._getDCCSceneItem(kSceneItem.getParent())
+
+        dccSceneItem = parentNode.AddNull()
+        dccSceneItem.Name = objectName
+        self._registerSceneItemPair(kSceneItem, dccSceneItem)
+
+        return dccSceneItem
+
+
+    def buildJoint(self, kSceneItem, objectName):
+        """Builds a joint object.
+
+        Arguments:
+        kSceneItem -- Object, kSceneItem that represents a joint to be built.
+        objectName -- String, name of the object being created.
+
+        Return:
+        DCC Scene Item that is created.
 
         """
 
@@ -106,6 +151,7 @@ class Builder(BaseBuilder):
         Node that is created.
 
         """
+
         parentNode = self._getDCCSceneItem(kSceneItem.getParent())
 
         dccSceneItem = parentNode.AddNull()
@@ -192,20 +238,6 @@ class Builder(BaseBuilder):
         return True
 
 
-    def buildColorAttribute(self, kAttribute):
-        """Builds a Color attribute.
-
-        Arguments:
-        kAttribute -- Object, kAttribute that represents a color attribute to be built.
-
-        Return:
-        True if successful.
-
-        """
-
-        return True
-
-
     def buildFloatAttribute(self, kAttribute):
         """Builds a Float attribute.
 
@@ -277,12 +309,36 @@ class Builder(BaseBuilder):
         parentDCCSceneItem = self._getDCCSceneItem(kAttributeGroup.getParent())
 
         groupName = kAttributeGroup.getName()
+        if groupName == "" and kAttributeGroup.getNumAttributes() < 1:
+            return False
+
         if groupName == "":
             groupName = "Settings"
 
         dccSceneItem = parentDCCSceneItem.AddProperty("CustomParameterSet", False, groupName)
 
         self._registerSceneItemPair(kAttributeGroup, dccSceneItem)
+
+        # Create Attributes on this Attribute Group
+        for i in xrange(kAttributeGroup.getNumAttributes()):
+            kAttribute = kAttributeGroup.getAttributeByIndex(i)
+            kType = kAttribute.getKType()
+
+            if kType == "BoolAttribute":
+                self.buildBoolAttribute(kAttribute)
+
+            elif kType == "FloatAttribute":
+                self.buildFloatAttribute(kAttribute)
+
+            elif kType == "IntegerAttribute":
+                self.buildIntegerAttribute(kAttribute)
+
+            elif kType == "StringAttribute":
+                self.buildStringAttribute(kAttribute)
+
+            else:
+                raise NotImplementedError(kAttribute.getName() + ' has an unsupported type: ' + str(type(kAttribute)))
+
 
         return True
 

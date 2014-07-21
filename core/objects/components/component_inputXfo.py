@@ -1,34 +1,38 @@
-"""Kraken - objects.component input module.
+"""Kraken - objects.components.component_inputXfo input module.
 
 Classes:
-ComponentInput -- Component input representation.
+ComponentInputXfo -- Component input representation.
 
 """
 
-class ComponentInput(object):
+from kraken.core.objects.scene_item import SceneItem
+from kraken.core.objects.constraints.pose_constraint import PoseConstraint
+
+
+class ComponentInputXfo(SceneItem):
     """Component Input Object."""
 
-    __kType__ = "ComponentInput"
+    __kType__ = "ComponentInputXfo"
 
     def __init__(self, name, dataType='Xfo'):
-        super(ComponentInput, self).__init__()
+        super(ComponentInputXfo, self).__init__(name, None)
         self.name = name
         self.dataType = dataType
         self.connection = None
 
 
-    # =============
-    # Name methods
-    # =============
-    def getName(self):
-        """Returns the name of the object as a string.
+    # =================
+    # DataType Methods
+    # =================
+    def getDataType(self):
+        """Returns the data type for this input.
 
         Return:
-        String of the object's name.
+        String, data type of this input.
 
         """
 
-        return self.name
+        return self.dataType
 
 
     # ===================
@@ -45,14 +49,18 @@ class ComponentInput(object):
 
         """
 
-        if componentOutput.getKType() != "ComponentOutput":
+        if componentOutput.getKType() not in ["ComponentOutputXfo", "ComponentOutputAttr"]:
             raise Exception("Output components can only be connected to input components. connection type:'" + componentOutput.getKType() + "'")
 
         if self.dataType != componentOutput.dataType:
-            raise Exception("Connected component output data type:'" +componentOutput.dataType+"' does not match this component data type:'" + self.dataType)
+            raise Exception("Connected component output data type:'" + componentOutput.dataType + "' does not match this component data type:'" + self.dataType)
 
         self.connection = componentOutput
         componentOutput.addConnection(self)
+
+        inputConstraint = PoseConstraint('_'.join([componentOutput.getName(), 'To', self.getName()]))
+        inputConstraint.addConstrainer(componentOutput)
+        self.addConstraint(inputConstraint)
 
         return True
 
@@ -70,6 +78,7 @@ class ComponentInput(object):
 
         self.connection.removeConnection(self)
         self.setConnection(None)
+        self.removeConstraintByIndex(0)
 
         return True
 
@@ -83,17 +92,3 @@ class ComponentInput(object):
         """
 
         return self.connection
-
-
-    # ==============
-    # kType Methods
-    # ==============
-    def getKType(self):
-        """Returns the kType of this object.
-
-        Return:
-        True if successful.
-
-        """
-
-        return self.__kType__

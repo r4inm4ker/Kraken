@@ -25,9 +25,9 @@ class Builder(BaseBuilder):
         super(Builder, self).__init__()
 
 
-    # ===================
-    # Node Build Methods
-    # ===================
+    # ========================
+    # SceneItem Build Methods
+    # ========================
     def buildContainer(self, kSceneItem, objectName):
         """Builds a container / namespace object.
 
@@ -74,6 +74,31 @@ class Builder(BaseBuilder):
         return dccSceneItem
 
 
+    def buildHierarchyGroup(self, kSceneItem, objectName):
+        """Builds a hierarchy group object.
+
+        Arguments:
+        kSceneItem -- Object, kSceneItem that represents a group to be built.
+        objectName -- String, name of the object being created.
+
+        Return:
+        DCC Scene Item that is created.
+
+        """
+
+        parentNode = self._getDCCSceneItem(kSceneItem.getParent())
+
+        dccSceneItem = pm.group(name="group", em=True)
+        pm.parent(dccSceneItem, parentNode)
+        pm.rename(dccSceneItem, objectName)
+
+        lockObjXfo(dccSceneItem)
+
+        self._registerSceneItemPair(kSceneItem, dccSceneItem)
+
+        return dccSceneItem
+
+
     def buildGroup(self, kSceneItem, objectName):
         """Builds a group object.
 
@@ -89,6 +114,29 @@ class Builder(BaseBuilder):
         parentNode = self._getDCCSceneItem(kSceneItem.getParent())
 
         dccSceneItem = pm.group(name="group", em=True)
+        pm.parent(dccSceneItem, parentNode)
+        pm.rename(dccSceneItem, objectName)
+
+        self._registerSceneItemPair(kSceneItem, dccSceneItem)
+
+        return dccSceneItem
+
+
+    def buildJoint(self, kSceneItem, objectName):
+        """Builds a joint object.
+
+        Arguments:
+        kSceneItem -- Object, kSceneItem that represents a joint to be built.
+        objectName -- String, name of the object being created.
+
+        Return:
+        DCC Scene Item that is created.
+
+        """
+
+        parentNode = self._getDCCSceneItem(kSceneItem.getParent())
+
+        dccSceneItem = pm.joint(name="joint")
         pm.parent(dccSceneItem, parentNode)
         pm.rename(dccSceneItem, objectName)
 
@@ -185,20 +233,6 @@ class Builder(BaseBuilder):
         dccSceneItem = parentDCCSceneItem.attr(kAttribute.getName())
 
         self._registerSceneItemPair(kAttribute, dccSceneItem)
-
-        return True
-
-
-    def buildColorAttribute(self, kAttribute):
-        """Builds a Color attribute.
-
-        Arguments:
-        kAttribute -- Object, kAttribute that represents a color attribute to be built.
-
-        Return:
-        True if successful.
-
-        """
 
         return True
 
