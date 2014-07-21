@@ -167,7 +167,7 @@ class SceneItem(object):
         removeIndex = None
 
         for i, eachChild in enumerate(self.children):
-            if eachChild.name == name:
+            if eachChild.getName() == name:
                 removeIndex = i
 
         if removeIndex is None:
@@ -213,7 +213,7 @@ class SceneItem(object):
         """
 
         for eachChild in self.children:
-            if eachChild.name == name:
+            if eachChild.getName() == name:
                 return eachChild
 
         return None
@@ -363,7 +363,7 @@ class SceneItem(object):
         removeIndex = None
 
         for i, eachAttributeGroup in enumerate(self.attributeGroups):
-            if eachAttributeGroup.name == name:
+            if eachAttributeGroup.getName() == name:
                 removeIndex = i
 
         if removeIndex is None:
@@ -496,7 +496,7 @@ class SceneItem(object):
         removeIndex = None
 
         for i, eachConstraint in enumerate(self.constraints):
-            if eachConstraint.name == name:
+            if eachConstraint.getName() == name:
                 removeIndex = i
 
         if removeIndex is None:
@@ -549,7 +549,7 @@ class SceneItem(object):
         """
 
         for eachConstraint in self.constraints:
-            if eachConstraint.name == name:
+            if eachConstraint.getName() == name:
                 return eachConstraint
 
         return None

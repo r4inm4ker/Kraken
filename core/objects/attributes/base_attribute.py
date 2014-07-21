@@ -20,6 +20,22 @@ class BaseAttribute(object):
     # =============
     # Name Methods
     # =============
+    def setName(self, name):
+        """Sets the name of the attribute group.
+
+        Arguments:
+        name -- Sting, name of the attribute group.
+
+        Return:
+        True if successful.
+
+        """
+
+        self.name = name
+
+        return True
+
+
     def getName(self):
         """Returns the name of the attribute.
 

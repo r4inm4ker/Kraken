@@ -159,7 +159,7 @@ class BaseComponent(SceneItem):
         removeIndex = None
 
         for i, eachInput in enumerate(self.inputs):
-            if eachInput.name == name:
+            if eachInput.getName() == name:
                 removeIndex = i
 
         if removeIndex is None:
@@ -298,7 +298,7 @@ class BaseComponent(SceneItem):
         removeIndex = None
 
         for i, eachOutput in enumerate(self.outputs):
-            if eachOutput.name == name:
+            if eachOutput.getName() == name:
                 removeIndex = i
 
         if removeIndex is None:

@@ -16,6 +16,25 @@ class AttributeGroup(object):
         self.attributes = []
 
 
+    # =============
+    # Name Methods
+    # =============
+    def setName(self, name):
+        """Sets the name of the attribute group.
+
+        Arguments:
+        name -- Sting, name of the attribute group.
+
+        Return:
+        True if successful.
+
+        """
+
+        self.name = name
+
+        return True
+
+
     def getName(self):
         """Returns the name of the attribute.
 
@@ -30,17 +49,6 @@ class AttributeGroup(object):
     # ===============
     # Parent Methods
     # ===============
-    def getParent(self):
-        """Returns the paret of this attribute.
-
-        Return:
-        Parent object of this attribute.
-
-        """
-
-        return self.parent
-
-
     def setParent(self, parent):
         """Sets the paret of this attribute.
 
@@ -55,6 +63,17 @@ class AttributeGroup(object):
         self.parent = parent
 
         return True
+
+
+    def getParent(self):
+        """Returns the paret of this attribute.
+
+        Return:
+        Parent object of this attribute.
+
+        """
+
+        return self.parent
 
 
     # ==============
@@ -102,8 +121,8 @@ class AttributeGroup(object):
 
         """
 
-        if attribute.name in [x.name for x in self.attributes]:
-            raise IndexError("Child with " + attribute.name + " already exists as a attribute.")
+        if attribute.getName() in [x.getName() for x in self.attributes]:
+            raise IndexError("Child with " + attribute.getName() + " already exists as a attribute.")
 
         self.attributes.append(attribute)
         attribute.setParent(self)
@@ -144,7 +163,7 @@ class AttributeGroup(object):
         removeIndex = None
 
         for i, eachAttribute in enumerate(self.attributes):
-            if eachAttribute.name == name:
+            if eachAttribute.getName() == name:
                 removeIndex = i
 
         if removeIndex is None:
@@ -197,7 +216,7 @@ class AttributeGroup(object):
         """
 
         for eachAttribute in self.attributes:
-            if eachAttribute.name == name:
+            if eachAttribute.getName() == name:
                 return eachAttribute
 
         return None

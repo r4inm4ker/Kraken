@@ -31,6 +31,20 @@ class ComponentOutput(object):
     # =============
     # Name methods
     # =============
+    def setName(self, name):
+        """Sets the name of this input.
+
+        Arguments:
+        name -- String, name of this input.
+
+        Return:
+        True if successful.
+
+        """
+
+        self.name = name
+
+
     def getName(self):
         """Returns the name of the object as a string.
 
@@ -75,6 +89,20 @@ class ComponentOutput(object):
     # ===============
     # Target Methods
     # ===============
+    def setTarget(self, target):
+        """Sets the taret for this input.
+
+        Arguments:
+        target -- Object, kraken object that is the target of this input.
+
+        Return:
+        True if successful.
+
+        """
+
+        self.target = target
+
+
     def getTarget(self):
         """Returns the target of the input.
 
@@ -114,6 +142,17 @@ class ComponentOutput(object):
         return True
 
 
+    def getSource(self):
+        """Gets the output source object for this input object.
+
+        Return:
+        Connection of this object.
+
+        """
+
+        return self.source
+
+
     def removeSource(self):
         """Removes the source to the output that is set.
 
@@ -130,14 +169,3 @@ class ComponentOutput(object):
         self.setSource(None)
 
         return True
-
-
-    def getSource(self):
-        """Gets the output source object for this input object.
-
-        Return:
-        Connection of this object.
-
-        """
-
-        return self.source
