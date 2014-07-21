@@ -33,12 +33,12 @@ class Builder(BaseBuilder):
 
         """
 
-        parentNode = self._getDCCSceneItem(kSceneItem.getParent())
+        parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
 
-        if parentNode is None:
-            parentNode = si.ActiveProject3.ActiveScene.Root
+        if parentDCCSceneItem is None:
+            parentDCCSceneItem = si.ActiveProject3.ActiveScene.Root
 
-        dccSceneItem = parentNode.AddModel(None, objectName)
+        dccSceneItem = parentDCCSceneItem.AddModel(None, objectName)
         dccSceneItem.Name = objectName
 
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
@@ -58,9 +58,12 @@ class Builder(BaseBuilder):
 
         """
 
-        parentNode = self._getDCCSceneItem(kSceneItem.getParent())
+        parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
 
-        dccSceneItem = parentNode.AddModel(None, objectName)
+        if parentDCCSceneItem is None:
+            parentDCCSceneItem = si.ActiveProject3.ActiveScene.Root
+
+        dccSceneItem = parentDCCSceneItem.AddModel(None, objectName)
         dccSceneItem.Name = objectName
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
@@ -79,9 +82,12 @@ class Builder(BaseBuilder):
 
         """
 
-        parentNode = self._getDCCSceneItem(kSceneItem.getParent())
+        parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
 
-        dccSceneItem = parentNode.AddNull()
+        if parentDCCSceneItem is None:
+            parentDCCSceneItem = si.ActiveProject3.ActiveScene.Root
+
+        dccSceneItem = parentDCCSceneItem.AddNull()
         dccSceneItem.Name = objectName
 
         lockObjXfo(dccSceneItem)
@@ -103,9 +109,12 @@ class Builder(BaseBuilder):
 
         """
 
-        parentNode = self._getDCCSceneItem(kSceneItem.getParent())
+        parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
 
-        dccSceneItem = parentNode.AddNull()
+        if parentDCCSceneItem is None:
+            parentDCCSceneItem = si.ActiveProject3.ActiveScene.Root
+
+        dccSceneItem = parentDCCSceneItem.AddNull()
         dccSceneItem.Name = objectName
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
@@ -124,9 +133,12 @@ class Builder(BaseBuilder):
 
         """
 
-        parentNode = self._getDCCSceneItem(kSceneItem.getParent())
+        parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
 
-        dccSceneItem = parentNode.AddNull()
+        if parentDCCSceneItem is None:
+            parentDCCSceneItem = si.ActiveProject3.ActiveScene.Root
+
+        dccSceneItem = parentDCCSceneItem.AddNull()
         dccSceneItem.Name = objectName
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
@@ -145,9 +157,12 @@ class Builder(BaseBuilder):
 
         """
 
-        parentNode = self._getDCCSceneItem(kSceneItem.getParent())
+        parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
 
-        dccSceneItem = parentNode.AddNull()
+        if parentDCCSceneItem is None:
+            parentDCCSceneItem = si.ActiveProject3.ActiveScene.Root
+
+        dccSceneItem = parentDCCSceneItem.AddNull()
         dccSceneItem.Name = objectName
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
@@ -165,9 +180,10 @@ class Builder(BaseBuilder):
         Node that is created.
 
         """
-        parentNode = self._getDCCSceneItem(kSceneItem.getParent())
-        if parentNode is None:
-            parentNode = si.ActiveProject3.ActiveScene.Root
+        parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
+
+        if parentDCCSceneItem is None:
+            parentDCCSceneItem = si.ActiveProject3.ActiveScene.Root
 
         dccSceneItem = None
 
@@ -200,7 +216,7 @@ class Builder(BaseBuilder):
                 knots = list(xrange(len(eachCurveSection[0])))
 
             if i == 0:
-                dccSceneItem = parentNode.AddNurbsCurve(list(eachCurveSection), knots, kSceneItem.getCurveSectionClosed(i), 1, constants.siNonUniformParameterization, constants.siSINurbs)
+                dccSceneItem = parentDCCSceneItem.AddNurbsCurve(list(eachCurveSection), knots, kSceneItem.getCurveSectionClosed(i), 1, constants.siNonUniformParameterization, constants.siSINurbs)
                 self._registerSceneItemPair(kSceneItem, dccSceneItem)
             else:
                 dccSceneItem.ActivePrimitive.Geometry.AddCurve(eachCurveSection, knots, kSceneItem.getCurveSectionClosed(i), 1, constants.siNonUniformParameterization)
