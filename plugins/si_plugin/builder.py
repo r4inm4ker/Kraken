@@ -5,15 +5,8 @@ Builder -- Component representation.
 
 """
 
-from kraken.core.objects.curve import Curve
-from kraken.core.objects.layer import Layer
-from kraken.core.objects.components.base_component import BaseComponent
-from kraken.core.objects.controls.base_control import BaseControl
-from kraken.core.objects.attributes.bool_attribute import BoolAttribute
-from kraken.core.objects.attributes.float_attribute import FloatAttribute
-from kraken.core.objects.attributes.integer_attribute import IntegerAttribute
-from kraken.core.objects.attributes.string_attribute import StringAttribute
 from kraken.core.builders.base_builder import BaseBuilder
+from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
 from kraken.plugins.si_plugin.utils import *
 
@@ -384,11 +377,11 @@ class Builder(BaseBuilder):
 
         constraineeDCCSceneItem = self._getDCCSceneItem(kConstraint.getConstrainee())
 
-        constrainers = getCollection()
+        constrainingObjs = getCollection()
         for eachConstrainer in kConstraint.getConstrainers():
-            constrainers.AddItems(self._getDCCSceneItem(eachConstrainer))
+            constrainingObjs.AddItems(self._getDCCSceneItem(eachConstrainer))
 
-        dccSceneItem = constraineeDCCSceneItem.Kinematics.AddConstraint("Pose", constrainers, kConstraint.getMaintainOffset())
+        dccSceneItem = constraineeDCCSceneItem.Kinematics.AddConstraint("Pose", constrainingObjs, kConstraint.getMaintainOffset())
         self._registerSceneItemPair(kConstraint, dccSceneItem)
 
         return dccSceneItem
@@ -445,41 +438,50 @@ class Builder(BaseBuilder):
     # ========================
     def buildXfoConnection(self, kConnection):
         """Builds the connection between the xfo and the connection.
-        
+
         Arguments:
         kConnection -- Object, kraken connection to build.
-        
+
         Return:
         True if successful.
-        
-        """
 
-        if kConnection.getSource() is None:
-            continue
+        """
 
         source = kConnection.getSource()
         target = kConnection.getTarget()
 
-        constraint = PoseConstraint('_'.join([target, 'To', source]))
+        if source is None or target is None:
+            raise Exception("Component connection '" + kConnection.getName() + "'is invalid! Missing Source or Target!")
+
+        constraint = PoseConstraint('_'.join([target.getName(), 'To', source.getName()]))
         constraint.setConstrainee(target)
+        constraint.addConstrainer(source)
         dccSceneItem = self.buildPoseConstraint(constraint)
         self._registerSceneItemPair(kConnection, dccSceneItem)
 
-        return None
+        return True
 
 
     def buildAttributeConnection(self, kConnection):
         """Builds the connection between the attribute and the connection.
-        
+
         Arguments:
         kConnection -- Object, kraken connection to build.
-        
+
         Return:
         True if successful.
-        
+
         """
 
-        return None
+        source = kConnection.getSource()
+        target = kConnection.getTarget()
+
+        sourceDCCSceneItem = self._getDCCSceneItem(kConnection.getSource())
+        targetDCCSceneItem = self._getDCCSceneItem(kConnection.getTarget())
+
+        targetDCCSceneItem.AddExpression(sourceDCCSceneItem.FullName)
+
+        return True
 
 
     # ===================

@@ -45,8 +45,26 @@ class SceneItem(object):
         return self.name
 
 
-    def buildName(self):
-        return self.getName()
+    def getFullName(self):
+        """Returns the full hierarchical path to this object.
+
+        Return:
+        String, full name of the object.
+
+        """
+
+        names = []
+        parent = self.getParent()
+        while parent is not None:
+            parent = parent.getParent()
+            if parent is None:
+                break
+
+            names.append(parent.getName())
+
+        fullName = '.'.join(reversed(names))
+
+        return fullName
 
 
     # ===============

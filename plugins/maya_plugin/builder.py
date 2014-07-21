@@ -5,15 +5,8 @@ Builder -- Component representation.
 
 """
 
-from kraken.core.objects.curve import Curve
-from kraken.core.objects.layer import Layer
-from kraken.core.objects.components.base_component import BaseComponent
-from kraken.core.objects.controls.base_control import BaseControl
-from kraken.core.objects.attributes.bool_attribute import BoolAttribute
-from kraken.core.objects.attributes.float_attribute import FloatAttribute
-from kraken.core.objects.attributes.integer_attribute import IntegerAttribute
-from kraken.core.objects.attributes.string_attribute import StringAttribute
 from kraken.core.builders.base_builder import BaseBuilder
+from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
 from kraken.plugins.maya_plugin.utils import *
 
@@ -409,13 +402,13 @@ class Builder(BaseBuilder):
     # ========================
     def buildXfoConnection(self, kConnection):
         """Builds the connection between the xfo and the connection.
-        
+
         Arguments:
         kConnection -- Object, kraken connection to build.
-        
+
         Return:
         True if successful.
-        
+
         """
 
 
@@ -425,13 +418,13 @@ class Builder(BaseBuilder):
 
     def buildAttributeConnection(self, kConnection):
         """Builds the connection between the attribute and the connection.
-        
+
         Arguments:
         kConnection -- Object, kraken connection to build.
-        
+
         Return:
         True if successful.
-        
+
         """
 
         return None

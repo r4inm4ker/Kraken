@@ -42,6 +42,9 @@ class ClavicleComponent(BaseComponent):
         spineEndInput = Locator('spineEnd')
         clavicleEndOutput = Locator('clavicleEnd')
 
+        # Setup componnent Attribute I/O's
+        armFollowBodyOutputAttr = FloatAttribute('followBody', 0.0, 0.0, 1.0)
+
         # Constraint outputs
         clavicleEndConstraint = PoseConstraint('_'.join([clavicleEndOutput.getName(), 'To', clavicleInsertGuideCtrl.getName()]))
         clavicleEndConstraint.addConstrainer(clavicleInsertGuideCtrl)
@@ -50,6 +53,8 @@ class ClavicleComponent(BaseComponent):
         # Add Xfo I/O's
         self.addInput(spineEndInput)
         self.addOutput(clavicleEndOutput)
+
+        self.addOutput(armFollowBodyOutputAttr)
 
 
     def buildRig(self, parent):

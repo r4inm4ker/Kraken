@@ -359,13 +359,13 @@ class BaseBuilder(object):
     # ========================
     def buildXfoConnection(self, kConnection):
         """Builds the connection between the xfo and the connection.
-        
+
         Arguments:
         kConnection -- Object, kraken connection to build.
-        
+
         Return:
         True if successful.
-        
+
         """
 
         return None
@@ -373,17 +373,17 @@ class BaseBuilder(object):
 
     def buildAttributeConnection(self, kConnection):
         """Builds the connection between the attribute and the connection.
-        
+
         Arguments:
         kConnection -- Object, kraken connection to build.
-        
+
         Return:
         True if successful.
-        
+
         """
 
         return None
-        
+
 
     # =====================
     # Build Object Methods
@@ -548,9 +548,15 @@ class BaseBuilder(object):
                 componentInput = kObject.getInputByIndex(i)
 
                 if componentInput.getDataType() == 'Xfo':
-                    self.buildXfoConnection(componentInput)                    
+                    if componentInput.getSource() is None:
+                        continue
+
+                    self.buildXfoConnection(componentInput)
 
                 elif componentInput.getDataType() == 'Attribute':
+                    if componentInput.getSource() is None:
+                        continue
+
                     self.buildAttributeConnection(componentInput)
 
             # Build output connections
@@ -558,9 +564,15 @@ class BaseBuilder(object):
                 componentOutput = kObject.getOutputByIndex(i)
 
                 if componentOutput.getDataType() == 'Xfo':
+                    if componentOutput.getSource() is None:
+                        continue
+
                     self.buildXfoConnection(componentOutput)
 
                 elif componentOutput.getDataType() == 'Attribute':
+                    if componentOutput.getSource() is None:
+                        continue
+
                     self.buildAttributeConnection(componentOutput)
 
         # Build connections for children.

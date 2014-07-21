@@ -20,7 +20,10 @@ XSIFactory = Dispatch("XSI.Factory")
 def getCollection():
     """Returns an XSICollection object."""
 
-    return Dispatch("XSI.Collection")
+    newCollection = Dispatch("XSI.Collection")
+    newCollection.Unique = True
+
+    return newCollection
 
 
 def lockObjXfo(dccSceneItem):
