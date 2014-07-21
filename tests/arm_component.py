@@ -8,10 +8,8 @@ from kraken.core.objects.attributes.string_attribute import StringAttribute
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
 from kraken.core.objects.components.base_component import BaseComponent
-from kraken.core.objects.components.component_inputXfo import ComponentInputXfo
-from kraken.core.objects.components.component_inputAttribute import ComponentInputAttr
-from kraken.core.objects.components.component_outputXfo import ComponentOutputXfo
-from kraken.core.objects.components.component_outputAttribute import ComponentOutputAttr
+
+from kraken.core.objects.locator import Locator
 
 from kraken.core.objects.controls.cube_control  import CubeControl
 from kraken.core.objects.controls.circle_control  import  CircleControl
@@ -45,23 +43,24 @@ class ArmComponent(BaseComponent):
         wristGuideCtrl.setColor("yellow")
         self.addChild(wristGuideCtrl)
 
-        # Setup component constraints
 
+        # Setup component Xfo I/O's
+        clavicleEndInput = Locator('clavicleEnd')
+        armEndOutput = Locator('armEnd')
 
-        # Setup Component Inputs and Outputs
-        clavicleEndInput = ComponentInputXfo('clavicleEnd')
-        armEndOutput = ComponentOutputXfo('armEnd')
-
-        armFollowBodyInputAttr = ComponentInputAttr('followBody')
+        # Setup componnent Attribute I/O's
+        armFollowBodyInputAttr = FloatAttribute('followBody', 0.0, 0.0, 1.0)
 
         # Constraint outputs
         armEndOutputConstraint = PoseConstraint('_'.join([armEndOutput.getName(), 'To', wristGuideCtrl.getName()]))
         armEndOutputConstraint.addConstrainer(wristGuideCtrl)
         armEndOutput.addConstraint(armEndOutputConstraint)
 
+        # Add Xfo I/O's
         self.addInput(clavicleEndInput)
         self.addOutput(armEndOutput)
 
+        # Add Attribute I/O's
         self.addInput(armFollowBodyInputAttr)
 
 

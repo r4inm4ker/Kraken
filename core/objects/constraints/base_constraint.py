@@ -95,6 +95,33 @@ class BaseConstraint(object):
         self.maintainOffset = value
 
 
+    def setConstrainee(self, constrainee):
+        """Sets the constrainee object for this constraint.
+        
+        Arguments:
+        constrainee -- Object, kSceneItem that will be constrained.
+        
+        Return:
+        True if successful.
+        
+        """
+
+        self.constrainee = constrainee
+
+        return True
+
+
+    def getConstrainee(self):
+        """Returns the constrainee object for this constraint.
+        
+        Return:
+        True if successful.
+        
+        """
+
+        return self.constrainee
+
+
     def addConstrainer(self, kSceneItem):
         """Adds a constrainer object to this constraint.
 

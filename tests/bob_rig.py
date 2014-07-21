@@ -31,7 +31,7 @@ class Rig(Container):
         clavicleEndOutput = clavicleComponent.getOutputByName('clavicleEnd')
         armClavicleEndInput = armComponent.getInputByName('clavicleEnd')
 
-        armClavicleEndInput.setConnection(clavicleEndOutput)
+        armClavicleEndInput.setSource(clavicleEndOutput.getTarget())
 
 
 

@@ -7,8 +7,12 @@ Component -- Component representation.
 
 from kraken.core.maths import *
 from kraken.core.objects.scene_item import SceneItem
+from kraken.core.objects.components.component_input import ComponentInput
+from kraken.core.objects.components.component_output import ComponentOutput
 from kraken.core.objects.attributes.attribute_group import AttributeGroup
 from kraken.core.objects.hierarchy_group import HierarchyGroup
+from kraken.core.objects.locator import Locator
+from kraken.core.objects.attributes.base_attribute import BaseAttribute
 
 
 class BaseComponent(SceneItem):
@@ -85,11 +89,11 @@ class BaseComponent(SceneItem):
         return True
 
 
-    def addInput(self, componentInput):
-        """Add ComponentInput to this object.
+    def addInput(self, inputObject):
+        """Add inputObject to this object.
 
         Arguments:
-        componentInput -- ComponentInput, input object to add.
+        inputObject -- Object, input object to add.
 
         Return:
         True if successful.
@@ -99,23 +103,24 @@ class BaseComponent(SceneItem):
         inputHrc = self.getChildByName('inputs')
         inputAttrsGrp = inputHrc.getAttributeGroupByName('inputAttrs')
 
-        if componentInput.getKType() not in ["ComponentInputXfo", "ComponentInputAttr"]:
-            raise Exception("'componentInput' argument is not a 'ComponentInput' object. Invalid type:'" + componentInput.getKType() + "'")
+        if not isinstance(inputObject, (Locator, BaseAttribute)):
+            raise Exception("'inputObject' argument is not a valid object. "
+                + inputObject.getName() + " is of type:" + str(inputObject)
+                + ". Must be an instance of 'Locator' or 'BaseAttribute'.")
 
-        if componentInput in self.inputs:
-            raise Exception("'componentInput' argument is already an input! Invalid object: '" + componentInput.getName() + "'")
+        if inputObject in self.inputs:
+            raise Exception("'inputObject' argument is already an input! Invalid object: '"
+                + inputObject.getName() + "'")
 
-        if componentInput.getDataType() == 'Xfo':
-            inputHrc.children.append(componentInput)
-            componentInput.setParent(inputHrc)
+        if isinstance(inputObject, Locator):
+            inputHrc.children.append(inputObject)
+            inputObject.setParent(inputHrc)
 
-        elif componentInput.getDataType() == 'Attribute':
-            inputAttrsGrp.attributes.append(componentInput)
-            componentInput.setParent(inputAttrsGrp)
+        elif isinstance(inputObject, BaseAttribute):
+            inputAttrsGrp.attributes.append(inputObject)
+            inputObject.setParent(inputAttrsGrp)
 
-        else:
-            raise Exception("'componentInput' argument is not a valid 'dataType' object. " + componentInput.getName() + " has 'dataType':'" + componentInput.getDataType() + "'")
-
+        componentInput = ComponentInput(inputObject.getName(), inputObject)
         self.inputs.append(componentInput)
 
         return True
@@ -200,7 +205,7 @@ class BaseComponent(SceneItem):
         """
 
         for eachInput in self.inputs:
-            if eachInput.name == name:
+            if eachInput.getName() == name:
                 return eachInput
 
         return None
@@ -223,11 +228,11 @@ class BaseComponent(SceneItem):
         return True
 
 
-    def addOutput(self, componentOutput):
-        """Add ComponentOutput to this object.
+    def addOutput(self, outputObject):
+        """Add outputObject to this object.
 
         Arguments:
-        output -- ComponentOutput, output object to add.
+        outputObject -- Object, input object to add.
 
         Return:
         True if successful.
@@ -237,23 +242,24 @@ class BaseComponent(SceneItem):
         outputHrc = self.getChildByName('outputs')
         outputAttrsGrp = outputHrc.getAttributeGroupByName('outputAttrs')
 
-        if componentOutput.getKType()  not in ["ComponentOutputXfo", "ComponentOutputAttr"]:
-            raise Exception("'componentOutput' argument is not a 'ComponentOutput' object. Invalid type:'" + componentOutput.getKType() + "'")
+        if not isinstance(outputObject, (Locator, BaseAttribute)):
+            raise Exception("'outputObject' argument is not a valid object. "
+                + outputObject.getName() + " is of type:" + str(outputObject)
+                + ". Must be an instance of 'Locator' or 'BaseAttribute'.")
 
-        if componentOutput in self.outputs:
-            raise Exception("'componentOutput' argument is already an input! Invalid object: '" + componentOutput.getName() + "'")
+        if outputObject in self.outputs:
+            raise Exception("'outputObject' argument is already an output! Invalid object: '"
+                + outputObject.getName() + "'")
 
-        if componentOutput.getDataType() == 'Xfo':
-            outputHrc.children.append(componentOutput)
-            componentOutput.setParent(outputHrc)
+        if isinstance(outputObject, Locator):
+            outputHrc.children.append(outputObject)
+            outputObject.setParent(outputHrc)
 
-        elif componentOutput.getDataType() == 'Attribute':
-            outputAttrsGrp.attributes.append(componentOutput)
-            componentOutput.setParent(outputAttrsGrp)
+        elif isinstance(outputObject, BaseAttribute):
+            outputAttrsGrp.attributes.append(outputObject)
+            outputObject.setParent(outputAttrsGrp)
 
-        else:
-            raise Exception("'componentOutput' argument is not a valid 'dataType' object. " + componentOutput.getName() + " has 'dataType':'" + componentOutput.getDataType() + "'")
-
+        componentOutput = ComponentOutput(outputObject.getName(), outputObject)
         self.outputs.append(componentOutput)
 
         return True
@@ -338,7 +344,7 @@ class BaseComponent(SceneItem):
         """
 
         for eachOutput in self.outputs:
-            if eachOutput.name == name:
+            if eachOutput.getName() == name:
                 return eachOutput
 
         return None

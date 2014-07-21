@@ -8,10 +8,8 @@ from kraken.core.objects.attributes.string_attribute import StringAttribute
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
 from kraken.core.objects.components.base_component import BaseComponent
-from kraken.core.objects.components.component_inputXfo import ComponentInputXfo
-from kraken.core.objects.components.component_inputAttribute import ComponentInputAttr
-from kraken.core.objects.components.component_outputXfo import ComponentOutputXfo
-from kraken.core.objects.components.component_outputAttribute import ComponentOutputAttr
+
+from kraken.core.objects.locator import Locator
 
 from kraken.core.objects.controls.cube_control  import CubeControl
 from kraken.core.objects.controls.circle_control  import  CircleControl
@@ -40,15 +38,16 @@ class ClavicleComponent(BaseComponent):
         clavicleInsertGuideCtrl.xfo.tr = Vec3(5.0, 20.0, 0.0)
         self.addChild(clavicleInsertGuideCtrl)
 
-        # Setup Component Inputs and Outputs
-        spineEndInput = ComponentInputXfo('spineEnd')
-        clavicleEndOutput = ComponentOutputXfo('clavicleEnd')
+        # Setup Component Xfo I/O's
+        spineEndInput = Locator('spineEnd')
+        clavicleEndOutput = Locator('clavicleEnd')
 
         # Constraint outputs
         clavicleEndConstraint = PoseConstraint('_'.join([clavicleEndOutput.getName(), 'To', clavicleInsertGuideCtrl.getName()]))
         clavicleEndConstraint.addConstrainer(clavicleInsertGuideCtrl)
         clavicleEndOutput.addConstraint(clavicleEndConstraint)
 
+        # Add Xfo I/O's
         self.addInput(spineEndInput)
         self.addOutput(clavicleEndOutput)
 

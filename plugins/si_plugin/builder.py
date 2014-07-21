@@ -324,6 +324,8 @@ class Builder(BaseBuilder):
             kAttribute = kAttributeGroup.getAttributeByIndex(i)
             kType = kAttribute.getKType()
 
+            continue
+
             if kType == "BoolAttribute":
                 self.buildBoolAttribute(kAttribute)
 
@@ -357,13 +359,13 @@ class Builder(BaseBuilder):
 
         """
 
-        parentDCCSceneItem = self._getDCCSceneItem(kConstraint.getParent())
+        constraineeDCCSceneItem = self._getDCCSceneItem(kConstraint.getConstrainee())
 
         constrainers = getCollection()
         for eachConstrainer in kConstraint.getConstrainers():
             constrainers.AddItems(self._getDCCSceneItem(eachConstrainer))
 
-        dccSceneItem = parentDCCSceneItem.Kinematics.AddConstraint("Orientation", constrainers, kConstraint.getMaintainOffset())
+        dccSceneItem = constraineeDCCSceneItem.Kinematics.AddConstraint("Orientation", constrainers, kConstraint.getMaintainOffset())
         self._registerSceneItemPair(kConstraint, dccSceneItem)
 
         return dccSceneItem
@@ -380,13 +382,13 @@ class Builder(BaseBuilder):
 
         """
 
-        parentDCCSceneItem = self._getDCCSceneItem(kConstraint.getParent())
+        constraineeDCCSceneItem = self._getDCCSceneItem(kConstraint.getConstrainee())
 
         constrainers = getCollection()
         for eachConstrainer in kConstraint.getConstrainers():
             constrainers.AddItems(self._getDCCSceneItem(eachConstrainer))
 
-        dccSceneItem = parentDCCSceneItem.Kinematics.AddConstraint("Pose", constrainers, kConstraint.getMaintainOffset())
+        dccSceneItem = constraineeDCCSceneItem.Kinematics.AddConstraint("Pose", constrainers, kConstraint.getMaintainOffset())
         self._registerSceneItemPair(kConstraint, dccSceneItem)
 
         return dccSceneItem
@@ -403,13 +405,13 @@ class Builder(BaseBuilder):
 
         """
 
-        parentDCCSceneItem = self._getDCCSceneItem(kConstraint.getParent())
+        constraineeDCCSceneItem = self._getDCCSceneItem(kConstraint.getConstrainee())
 
         constrainers = getCollection()
         for eachConstrainer in kConstraint.getConstrainers():
             constrainers.AddItems(self._getDCCSceneItem(eachConstrainer))
 
-        dccSceneItem = parentDCCSceneItem.Kinematics.AddConstraint("Position", constrainers, kConstraint.getMaintainOffset())
+        dccSceneItem = constraineeDCCSceneItem.Kinematics.AddConstraint("Position", constrainers, kConstraint.getMaintainOffset())
         self._registerSceneItemPair(kConstraint, dccSceneItem)
 
         return dccSceneItem
@@ -426,16 +428,58 @@ class Builder(BaseBuilder):
 
         """
 
-        parentDCCSceneItem = self._getDCCSceneItem(kConstraint.getParent())
+        constraineeDCCSceneItem = self._getDCCSceneItem(kConstraint.getConstrainee())
 
         constrainers = getCollection()
         for eachConstrainer in kConstraint.getConstrainers():
             constrainers.AddItems(self._getDCCSceneItem(eachConstrainer))
 
-        dccSceneItem = parentDCCSceneItem.Kinematics.AddConstraint("Scaling", constrainers, kConstraint.getMaintainOffset())
+        dccSceneItem = constraineeDCCSceneItem.Kinematics.AddConstraint("Scaling", constrainers, kConstraint.getMaintainOffset())
         self._registerSceneItemPair(kConstraint, dccSceneItem)
 
         return dccSceneItem
+
+
+    # ========================
+    # Component Build Methods
+    # ========================
+    def buildXfoConnection(self, kConnection):
+        """Builds the connection between the xfo and the connection.
+        
+        Arguments:
+        kConnection -- Object, kraken connection to build.
+        
+        Return:
+        True if successful.
+        
+        """
+
+        if kConnection.getSource() is None:
+            continue
+
+        source = kConnection.getSource()
+        target = kConnection.getTarget()
+
+        constraint = PoseConstraint('_'.join([target, 'To', source]))
+        constraint.setConstrainee(target)
+        dccSceneItem = self.buildPoseConstraint(constraint)
+        self._registerSceneItemPair(kConnection, dccSceneItem)
+
+        return None
+
+
+    def buildAttributeConnection(self, kConnection):
+        """Builds the connection between the attribute and the connection.
+        
+        Arguments:
+        kConnection -- Object, kraken connection to build.
+        
+        Return:
+        True if successful.
+        
+        """
+
+        return None
 
 
     # ===================

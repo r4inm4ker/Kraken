@@ -405,7 +405,7 @@ class SceneItem(object):
 
 
     # ========================
-    # Attribute Group Methods
+    # Constraint Methods
     # ========================
     def checkConstraintIndex(self, index):
         """Checks the supplied index is valid.
@@ -440,6 +440,7 @@ class SceneItem(object):
 
         self.constraints.append(constraint)
         constraint.setParent(self)
+        constraint.setConstrainee(self)
 
         return True
 

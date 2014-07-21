@@ -341,8 +341,8 @@ class Builder(BaseBuilder):
 
         """
 
-        parentDCCSceneItem = self._getDCCSceneItem(kConstraint.getParent())
-        dccSceneItem = pm.orientConstraint([self._getDCCSceneItem(x) for x in kConstraint.getConstrainers()], parentDCCSceneItem, name=kConstraint.getName() + "_ori_cns", maintainOffset=kConstraint.getMaintainOffset())
+        constraineeDCCSceneItem = self._getDCCSceneItem(kConstraint.getConstrainee())
+        dccSceneItem = pm.orientConstraint([self._getDCCSceneItem(x) for x in kConstraint.getConstrainers()], constraineeDCCSceneItem, name=kConstraint.getName() + "_ori_cns", maintainOffset=kConstraint.getMaintainOffset())
         self._registerSceneItemPair(kConstraint, dccSceneItem)
 
         return dccSceneItem
@@ -359,10 +359,9 @@ class Builder(BaseBuilder):
 
         """
 
-        parentDCCSceneItem = self._getDCCSceneItem(kConstraint.getParent())
-
-        dccSceneItem = pm.parentConstraint([self._getDCCSceneItem(x) for x in kConstraint.getConstrainers()], parentDCCSceneItem, name=kConstraint.getName() + "_par_cns", maintainOffset=kConstraint.getMaintainOffset())
-        pm.scaleConstraint([self._getDCCSceneItem(x) for x in kConstraint.getConstrainers()], parentDCCSceneItem, name=kConstraint.getName() + "_scl_cns", maintainOffset=kConstraint.getMaintainOffset())
+        constraineeDCCSceneItem = self._getDCCSceneItem(kConstraint.getConstrainee())
+        dccSceneItem = pm.parentConstraint([self._getDCCSceneItem(x) for x in kConstraint.getConstrainers()], constraineeDCCSceneItem, name=kConstraint.getName() + "_par_cns", maintainOffset=kConstraint.getMaintainOffset())
+        pm.scaleConstraint([self._getDCCSceneItem(x) for x in kConstraint.getConstrainers()], constraineeDCCSceneItem, name=kConstraint.getName() + "_scl_cns", maintainOffset=kConstraint.getMaintainOffset())
 
         self._registerSceneItemPair(kConstraint, dccSceneItem)
 
@@ -380,8 +379,8 @@ class Builder(BaseBuilder):
 
         """
 
-        parentDCCSceneItem = self._getDCCSceneItem(kConstraint.getParent())
-        dccSceneItem = pm.pointConstraint([self._getDCCSceneItem(x) for x in kConstraint.getConstrainers()], parentDCCSceneItem, name=kConstraint.getName() + "_pos_cns", maintainOffset=kConstraint.getMaintainOffset())
+        constraineeDCCSceneItem = self._getDCCSceneItem(kConstraint.getConstrainee())
+        dccSceneItem = pm.pointConstraint([self._getDCCSceneItem(x) for x in kConstraint.getConstrainers()], constraineeDCCSceneItem, name=kConstraint.getName() + "_pos_cns", maintainOffset=kConstraint.getMaintainOffset())
         self._registerSceneItemPair(kConstraint, dccSceneItem)
 
         return dccSceneItem
@@ -398,11 +397,44 @@ class Builder(BaseBuilder):
 
         """
 
-        parentDCCSceneItem = self._getDCCSceneItem(kConstraint.getParent())
-        dccSceneItem = pm.scaleConstraint([self._getDCCSceneItem(x) for x in kConstraint.getConstrainers()], parentDCCSceneItem, name=kConstraint.getName() + "_scl_cns", maintainOffset=kConstraint.getMaintainOffset())
+        constraineeDCCSceneItem = self._getDCCSceneItem(kConstraint.getConstrainee())
+        dccSceneItem = pm.scaleConstraint([self._getDCCSceneItem(x) for x in kConstraint.getConstrainers()], constraineeDCCSceneItem, name=kConstraint.getName() + "_scl_cns", maintainOffset=kConstraint.getMaintainOffset())
         self._registerSceneItemPair(kConstraint, dccSceneItem)
 
         return dccSceneItem
+
+
+    # ========================
+    # Component Build Methods
+    # ========================
+    def buildXfoConnection(self, kConnection):
+        """Builds the connection between the xfo and the connection.
+        
+        Arguments:
+        kConnection -- Object, kraken connection to build.
+        
+        Return:
+        True if successful.
+        
+        """
+
+
+
+        return None
+
+
+    def buildAttributeConnection(self, kConnection):
+        """Builds the connection between the attribute and the connection.
+        
+        Arguments:
+        kConnection -- Object, kraken connection to build.
+        
+        Return:
+        True if successful.
+        
+        """
+
+        return None
 
 
     # ===================
