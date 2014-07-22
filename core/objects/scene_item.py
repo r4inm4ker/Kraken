@@ -45,8 +45,26 @@ class SceneItem(object):
         return self.name
 
 
-    def buildName(self):
-        return self.getName()
+    def getFullName(self):
+        """Returns the full hierarchical path to this object.
+
+        Return:
+        String, full name of the object.
+
+        """
+
+        names = []
+        parent = self.getParent()
+        while parent is not None:
+            parent = parent.getParent()
+            if parent is None:
+                break
+
+            names.append(parent.getName())
+
+        fullName = '.'.join(reversed(names))
+
+        return fullName
 
 
     # ===============
@@ -91,7 +109,7 @@ class SceneItem(object):
         """
 
         if index > len(self.children):
-            raise IndexError("'" + str(index) + "' is out of the range of 'children' array.")
+            raise IndexError("'" + str(index) + "' is out of the range of the 'children' array.")
 
         return True
 
@@ -149,7 +167,7 @@ class SceneItem(object):
         removeIndex = None
 
         for i, eachChild in enumerate(self.children):
-            if eachChild.name == name:
+            if eachChild.getName() == name:
                 removeIndex = i
 
         if removeIndex is None:
@@ -195,7 +213,7 @@ class SceneItem(object):
         """
 
         for eachChild in self.children:
-            if eachChild.name == name:
+            if eachChild.getName() == name:
                 return eachChild
 
         return None
@@ -345,7 +363,7 @@ class SceneItem(object):
         removeIndex = None
 
         for i, eachAttributeGroup in enumerate(self.attributeGroups):
-            if eachAttributeGroup.name == name:
+            if eachAttributeGroup.getName() == name:
                 removeIndex = i
 
         if removeIndex is None:
@@ -405,7 +423,7 @@ class SceneItem(object):
 
 
     # ========================
-    # Attribute Group Methods
+    # Constraint Methods
     # ========================
     def checkConstraintIndex(self, index):
         """Checks the supplied index is valid.
@@ -440,6 +458,7 @@ class SceneItem(object):
 
         self.constraints.append(constraint)
         constraint.setParent(self)
+        constraint.setConstrainee(self)
 
         return True
 
@@ -477,7 +496,7 @@ class SceneItem(object):
         removeIndex = None
 
         for i, eachConstraint in enumerate(self.constraints):
-            if eachConstraint.name == name:
+            if eachConstraint.getName() == name:
                 removeIndex = i
 
         if removeIndex is None:
@@ -530,7 +549,7 @@ class SceneItem(object):
         """
 
         for eachConstraint in self.constraints:
-            if eachConstraint.name == name:
+            if eachConstraint.getName() == name:
                 return eachConstraint
 
         return None

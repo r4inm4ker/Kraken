@@ -30,8 +30,11 @@ class Rig(Container):
         # Create component connections
         clavicleEndOutput = clavicleComponent.getOutputByName('clavicleEnd')
         armClavicleEndInput = armComponent.getInputByName('clavicleEnd')
+        armClavicleEndInput.setSource(clavicleEndOutput.getTarget())
 
-        armClavicleEndInput.setConnection(clavicleEndOutput)
+        clavicleFollowBodyOutput = clavicleComponent.getOutputByName('followBody')
+        armFollowBodyInput = armComponent.getInputByName('followBody')
+        armFollowBodyInput.setSource(clavicleFollowBodyOutput.getTarget())
 
 
 

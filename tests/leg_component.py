@@ -13,53 +13,61 @@ from kraken.core.objects.locator import Locator
 
 from kraken.core.objects.controls.cube_control  import CubeControl
 from kraken.core.objects.controls.circle_control  import  CircleControl
-from kraken.core.objects.controls.sphere_control  import  SphereControl
-from kraken.core.objects.controls.pin_control  import  PinControl
 from kraken.core.objects.controls.square_control  import  SquareControl
+from kraken.core.objects.controls.sphere_control  import  SphereControl
 from kraken.core.objects.controls.null_control  import  NullControl
 
 
-class ClavicleComponent(BaseComponent):
-    """Arm Component Test"""
+class LegComponent(BaseComponent):
+    """Leg Component Test"""
 
     def __init__(self, name, parent=None, side='M'):
-        super(ClavicleComponent, self).__init__(name, parent, side)
+        super(LegComponent, self).__init__(name, parent, side)
 
         # Setup component attributes
         defaultAttrGroup = self.getAttributeGroupByIndex(0)
         defaultAttrGroup.addAttribute(BoolAttribute("toggleDebugging", True))
 
         # Add Guide Controls
-        clavicleOriginGuideCtrl = SphereControl('clavicleOriginGuideCtrl')
-        clavicleOriginGuideCtrl.xfo.tr = Vec3(1.0, 18.0, 1.0)
-        self.addChild(clavicleOriginGuideCtrl)
+        femureGuideCtrl = SphereControl('femureGuideCtrl')
+        femureGuideCtrl.xfo.tr = Vec3(2.0, 8.0, 0.0)
+        femureGuideCtrl.setColor("greenBright")
+        self.addChild(femureGuideCtrl)
 
-        clavicleInsertGuideCtrl = CircleControl('clavicleInsertGuideCtrl')
-        clavicleInsertGuideCtrl.xfo.tr = Vec3(5.0, 20.0, 0.0)
-        self.addChild(clavicleInsertGuideCtrl)
+        shinGuideCtrl = SphereControl('shinGuideCtrl')
+        shinGuideCtrl.xfo.tr = Vec3(2.0, 4.5, 1)
+        shinGuideCtrl.setColor("greenBright")
+        self.addChild(shinGuideCtrl)
 
-        # Setup Component Xfo I/O's
-        spineEndInput = Locator('spineEnd')
-        clavicleEndOutput = Locator('clavicleEnd')
+        ankleGuideCtrl = SphereControl('ankleGuideCtrl')
+        ankleGuideCtrl.xfo.tr = Vec3(2.0, 1.0, 0.0)
+        ankleGuideCtrl.setColor("greenBright")
+        self.addChild(ankleGuideCtrl)
+
+
+        # Setup component Xfo I/O's
+        legPelvisInput = Locator('pelvisInput')
+        legEndOutput = Locator('legEnd')
 
         # Setup componnent Attribute I/O's
-        armFollowBodyOutputAttr = FloatAttribute('followBody', 0.0, 0.0, 1.0)
+        legFollowPelvisInputAttr = FloatAttribute('followBody', 0.0, 0.0, 1.0)
 
         # Constraint outputs
-        clavicleEndConstraint = PoseConstraint('_'.join([clavicleEndOutput.getName(), 'To', clavicleInsertGuideCtrl.getName()]))
-        clavicleEndConstraint.addConstrainer(clavicleInsertGuideCtrl)
-        clavicleEndOutput.addConstraint(clavicleEndConstraint)
+        legEndOutputConstraint = PoseConstraint('_'.join([legEndOutput.getName(), 'To', ankleGuideCtrl.getName()]))
+        legEndOutputConstraint.addConstrainer(ankleGuideCtrl)
+        legEndOutput.addConstraint(legEndOutputConstraint)
 
         # Add Xfo I/O's
-        self.addInput(spineEndInput)
-        self.addOutput(clavicleEndOutput)
+        self.addInput(legPelvisInput)
+        self.addOutput(legEndOutput)
 
-        self.addOutput(armFollowBodyOutputAttr)
+        # Add Attribute I/O's
+        self.addInput(legFollowPelvisInputAttr)
 
 
     def buildRig(self, parent):
 
-        # component = super(ClavicleComponent, self).buildRig()
+        # component = super(LegComponent, self).buildRig()
         component = BaseComponent(self.getName(), parent, self.getSide())
 
         # Setup component attributes
@@ -73,10 +81,9 @@ class ClavicleComponent(BaseComponent):
         component.addAttribute(StringAttribute("Side", self.side))
         component.addAttribute(BoolAttribute("toggleDebugging", True))
 
-
-        bicepGuideCtrl = self.getChildByName('bicepGuideCtrl')
-        forearmGuideCtrl = self.getChildByName('forearmGuideCtrl')
-        wristGuideCtrl = self.getChildByName('wristGuideCtrl')
+        femureGuideCtrl = self.getChildByName('femureGuideCtrl')
+        shinGuideCtrl = self.getChildByName('shinGuideCtrl')
+        ankleGuideCtrl = self.getChildByName('ankleGuideCtrl')
 
 
         # ===================================================================
@@ -86,20 +93,20 @@ class ClavicleComponent(BaseComponent):
 
         # Add Rig Controls
         bicepFKCtrl = SquareControl('bicepFKCtrl', parent=self)
-        bicepFKCtrl.xfo = bicepGuideCtrl.xfo
+        bicepFKCtrl.xfo = femureGuideCtrl.xfo
         self.addChild(bicepFKCtrl)
 
         forearmFKCtrl = NullControl('forearmFKCtrl', parent=self)
-        forearmFKCtrl.xfo = forearmGuideCtrl.xfo
+        forearmFKCtrl.xfo = shinGuideCtrl.xfo
         self.addChild(forearmFKCtrl)
 
         wristIKCtrl = CircleControl('wristIKCtrl', parent=self)
-        wristIKCtrl.xfo = wristGuideCtrl.xfo
+        wristIKCtrl.xfo = ankleGuideCtrl.xfo
         self.addChild(wristIKCtrl)
 
         return container
 
 
 if __name__ == "__main__":
-    armLeft = ClavicleComponent("myClavicle", side='L')
+    armLeft = LegComponent("myArm", side='L')
     print armLeft.getNumChildren()

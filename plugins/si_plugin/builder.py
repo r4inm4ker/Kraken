@@ -5,15 +5,8 @@ Builder -- Component representation.
 
 """
 
-from kraken.core.objects.curve import Curve
-from kraken.core.objects.layer import Layer
-from kraken.core.objects.components.base_component import BaseComponent
-from kraken.core.objects.controls.base_control import BaseControl
-from kraken.core.objects.attributes.bool_attribute import BoolAttribute
-from kraken.core.objects.attributes.float_attribute import FloatAttribute
-from kraken.core.objects.attributes.integer_attribute import IntegerAttribute
-from kraken.core.objects.attributes.string_attribute import StringAttribute
 from kraken.core.builders.base_builder import BaseBuilder
+from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
 from kraken.plugins.si_plugin.utils import *
 
@@ -40,12 +33,12 @@ class Builder(BaseBuilder):
 
         """
 
-        parentNode = self._getDCCSceneItem(kSceneItem.getParent())
+        parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
 
-        if parentNode is None:
-            parentNode = si.ActiveProject3.ActiveScene.Root
+        if parentDCCSceneItem is None:
+            parentDCCSceneItem = si.ActiveProject3.ActiveScene.Root
 
-        dccSceneItem = parentNode.AddModel(None, objectName)
+        dccSceneItem = parentDCCSceneItem.AddModel(None, objectName)
         dccSceneItem.Name = objectName
 
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
@@ -65,9 +58,12 @@ class Builder(BaseBuilder):
 
         """
 
-        parentNode = self._getDCCSceneItem(kSceneItem.getParent())
+        parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
 
-        dccSceneItem = parentNode.AddModel(None, objectName)
+        if parentDCCSceneItem is None:
+            parentDCCSceneItem = si.ActiveProject3.ActiveScene.Root
+
+        dccSceneItem = parentDCCSceneItem.AddModel(None, objectName)
         dccSceneItem.Name = objectName
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
@@ -86,9 +82,12 @@ class Builder(BaseBuilder):
 
         """
 
-        parentNode = self._getDCCSceneItem(kSceneItem.getParent())
+        parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
 
-        dccSceneItem = parentNode.AddNull()
+        if parentDCCSceneItem is None:
+            parentDCCSceneItem = si.ActiveProject3.ActiveScene.Root
+
+        dccSceneItem = parentDCCSceneItem.AddNull()
         dccSceneItem.Name = objectName
 
         lockObjXfo(dccSceneItem)
@@ -110,9 +109,12 @@ class Builder(BaseBuilder):
 
         """
 
-        parentNode = self._getDCCSceneItem(kSceneItem.getParent())
+        parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
 
-        dccSceneItem = parentNode.AddNull()
+        if parentDCCSceneItem is None:
+            parentDCCSceneItem = si.ActiveProject3.ActiveScene.Root
+
+        dccSceneItem = parentDCCSceneItem.AddNull()
         dccSceneItem.Name = objectName
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
@@ -131,9 +133,12 @@ class Builder(BaseBuilder):
 
         """
 
-        parentNode = self._getDCCSceneItem(kSceneItem.getParent())
+        parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
 
-        dccSceneItem = parentNode.AddNull()
+        if parentDCCSceneItem is None:
+            parentDCCSceneItem = si.ActiveProject3.ActiveScene.Root
+
+        dccSceneItem = parentDCCSceneItem.AddNull()
         dccSceneItem.Name = objectName
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
@@ -152,9 +157,12 @@ class Builder(BaseBuilder):
 
         """
 
-        parentNode = self._getDCCSceneItem(kSceneItem.getParent())
+        parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
 
-        dccSceneItem = parentNode.AddNull()
+        if parentDCCSceneItem is None:
+            parentDCCSceneItem = si.ActiveProject3.ActiveScene.Root
+
+        dccSceneItem = parentDCCSceneItem.AddNull()
         dccSceneItem.Name = objectName
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
@@ -172,9 +180,10 @@ class Builder(BaseBuilder):
         Node that is created.
 
         """
-        parentNode = self._getDCCSceneItem(kSceneItem.getParent())
-        if parentNode is None:
-            parentNode = si.ActiveProject3.ActiveScene.Root
+        parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
+
+        if parentDCCSceneItem is None:
+            parentDCCSceneItem = si.ActiveProject3.ActiveScene.Root
 
         dccSceneItem = None
 
@@ -207,7 +216,7 @@ class Builder(BaseBuilder):
                 knots = list(xrange(len(eachCurveSection[0])))
 
             if i == 0:
-                dccSceneItem = parentNode.AddNurbsCurve(list(eachCurveSection), knots, kSceneItem.getCurveSectionClosed(i), 1, constants.siNonUniformParameterization, constants.siSINurbs)
+                dccSceneItem = parentDCCSceneItem.AddNurbsCurve(list(eachCurveSection), knots, kSceneItem.getCurveSectionClosed(i), 1, constants.siNonUniformParameterization, constants.siSINurbs)
                 self._registerSceneItemPair(kSceneItem, dccSceneItem)
             else:
                 dccSceneItem.ActivePrimitive.Geometry.AddCurve(eachCurveSection, knots, kSceneItem.getCurveSectionClosed(i), 1, constants.siNonUniformParameterization)
@@ -324,6 +333,8 @@ class Builder(BaseBuilder):
             kAttribute = kAttributeGroup.getAttributeByIndex(i)
             kType = kAttribute.getKType()
 
+            continue
+
             if kType == "BoolAttribute":
                 self.buildBoolAttribute(kAttribute)
 
@@ -357,13 +368,13 @@ class Builder(BaseBuilder):
 
         """
 
-        parentDCCSceneItem = self._getDCCSceneItem(kConstraint.getParent())
+        constraineeDCCSceneItem = self._getDCCSceneItem(kConstraint.getConstrainee())
 
         constrainers = getCollection()
         for eachConstrainer in kConstraint.getConstrainers():
             constrainers.AddItems(self._getDCCSceneItem(eachConstrainer))
 
-        dccSceneItem = parentDCCSceneItem.Kinematics.AddConstraint("Orientation", constrainers, kConstraint.getMaintainOffset())
+        dccSceneItem = constraineeDCCSceneItem.Kinematics.AddConstraint("Orientation", constrainers, kConstraint.getMaintainOffset())
         self._registerSceneItemPair(kConstraint, dccSceneItem)
 
         return dccSceneItem
@@ -380,13 +391,13 @@ class Builder(BaseBuilder):
 
         """
 
-        parentDCCSceneItem = self._getDCCSceneItem(kConstraint.getParent())
+        constraineeDCCSceneItem = self._getDCCSceneItem(kConstraint.getConstrainee())
 
-        constrainers = getCollection()
+        constrainingObjs = getCollection()
         for eachConstrainer in kConstraint.getConstrainers():
-            constrainers.AddItems(self._getDCCSceneItem(eachConstrainer))
+            constrainingObjs.AddItems(self._getDCCSceneItem(eachConstrainer))
 
-        dccSceneItem = parentDCCSceneItem.Kinematics.AddConstraint("Pose", constrainers, kConstraint.getMaintainOffset())
+        dccSceneItem = constraineeDCCSceneItem.Kinematics.AddConstraint("Pose", constrainingObjs, kConstraint.getMaintainOffset())
         self._registerSceneItemPair(kConstraint, dccSceneItem)
 
         return dccSceneItem
@@ -403,13 +414,13 @@ class Builder(BaseBuilder):
 
         """
 
-        parentDCCSceneItem = self._getDCCSceneItem(kConstraint.getParent())
+        constraineeDCCSceneItem = self._getDCCSceneItem(kConstraint.getConstrainee())
 
         constrainers = getCollection()
         for eachConstrainer in kConstraint.getConstrainers():
             constrainers.AddItems(self._getDCCSceneItem(eachConstrainer))
 
-        dccSceneItem = parentDCCSceneItem.Kinematics.AddConstraint("Position", constrainers, kConstraint.getMaintainOffset())
+        dccSceneItem = constraineeDCCSceneItem.Kinematics.AddConstraint("Position", constrainers, kConstraint.getMaintainOffset())
         self._registerSceneItemPair(kConstraint, dccSceneItem)
 
         return dccSceneItem
@@ -426,16 +437,67 @@ class Builder(BaseBuilder):
 
         """
 
-        parentDCCSceneItem = self._getDCCSceneItem(kConstraint.getParent())
+        constraineeDCCSceneItem = self._getDCCSceneItem(kConstraint.getConstrainee())
 
         constrainers = getCollection()
         for eachConstrainer in kConstraint.getConstrainers():
             constrainers.AddItems(self._getDCCSceneItem(eachConstrainer))
 
-        dccSceneItem = parentDCCSceneItem.Kinematics.AddConstraint("Scaling", constrainers, kConstraint.getMaintainOffset())
+        dccSceneItem = constraineeDCCSceneItem.Kinematics.AddConstraint("Scaling", constrainers, kConstraint.getMaintainOffset())
         self._registerSceneItemPair(kConstraint, dccSceneItem)
 
         return dccSceneItem
+
+
+    # ========================
+    # Component Build Methods
+    # ========================
+    def buildXfoConnection(self, kConnection):
+        """Builds the connection between the xfo and the connection.
+
+        Arguments:
+        kConnection -- Object, kraken connection to build.
+
+        Return:
+        True if successful.
+
+        """
+
+        source = kConnection.getSource()
+        target = kConnection.getTarget()
+
+        if source is None or target is None:
+            raise Exception("Component connection '" + kConnection.getName() + "'is invalid! Missing Source or Target!")
+
+        constraint = PoseConstraint('_'.join([target.getName(), 'To', source.getName()]))
+        constraint.setConstrainee(target)
+        constraint.addConstrainer(source)
+        dccSceneItem = self.buildPoseConstraint(constraint)
+        self._registerSceneItemPair(kConnection, dccSceneItem)
+
+        return True
+
+
+    def buildAttributeConnection(self, kConnection):
+        """Builds the connection between the attribute and the connection.
+
+        Arguments:
+        kConnection -- Object, kraken connection to build.
+
+        Return:
+        True if successful.
+
+        """
+
+        source = kConnection.getSource()
+        target = kConnection.getTarget()
+
+        sourceDCCSceneItem = self._getDCCSceneItem(kConnection.getSource())
+        targetDCCSceneItem = self._getDCCSceneItem(kConnection.getTarget())
+
+        targetDCCSceneItem.AddExpression(sourceDCCSceneItem.FullName)
+
+        return True
 
 
     # ===================

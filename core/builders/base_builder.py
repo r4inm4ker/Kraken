@@ -293,7 +293,7 @@ class BaseBuilder(object):
 
         """
 
-        parentDCCSceneItem = self._getDCCSceneItem(kConstraint.getParent())
+        constraineeDCCSceneItem = self._getDCCSceneItem(kConstraint.getConstrainee())
         dccSceneItem = None # Add constraint object here.
         self._registerSceneItemPair(kConstraint, dccSceneItem)
 
@@ -311,7 +311,7 @@ class BaseBuilder(object):
 
         """
 
-        parentDCCSceneItem = self._getDCCSceneItem(kConstraint.getParent())
+        constraineeDCCSceneItem = self._getDCCSceneItem(kConstraint.getConstrainee())
         dccSceneItem = None # Add constraint object here.
         self._registerSceneItemPair(kConstraint, dccSceneItem)
 
@@ -329,7 +329,7 @@ class BaseBuilder(object):
 
         """
 
-        parentDCCSceneItem = self._getDCCSceneItem(kConstraint.getParent())
+        constraineeDCCSceneItem = self._getDCCSceneItem(kConstraint.getConstrainee())
         dccSceneItem = None # Add constraint object here.
         self._registerSceneItemPair(kConstraint, dccSceneItem)
 
@@ -347,11 +347,42 @@ class BaseBuilder(object):
 
         """
 
-        parentDCCSceneItem = self._getDCCSceneItem(kConstraint.getParent())
+        constraineeDCCSceneItem = self._getDCCSceneItem(kConstraint.getConstrainee())
         dccSceneItem = None # Add constraint object here.
         self._registerSceneItemPair(kConstraint, dccSceneItem)
 
         return dccSceneItem
+
+
+    # ========================
+    # Component Build Methods
+    # ========================
+    def buildXfoConnection(self, kConnection):
+        """Builds the connection between the xfo and the connection.
+
+        Arguments:
+        kConnection -- Object, kraken connection to build.
+
+        Return:
+        True if successful.
+
+        """
+
+        return None
+
+
+    def buildAttributeConnection(self, kConnection):
+        """Builds the connection between the attribute and the connection.
+
+        Arguments:
+        kConnection -- Object, kraken connection to build.
+
+        Return:
+        True if successful.
+
+        """
+
+        return None
 
 
     # =====================
@@ -367,9 +398,6 @@ class BaseBuilder(object):
         True if successful.
 
         """
-
-        if hasattr(kObject, 'getNumAttributeGroups') is False:
-            return False
 
         for i in xrange(kObject.getNumAttributeGroups()):
             attributeGroup = kObject.getAttributeGroupByIndex(i)
@@ -426,14 +454,11 @@ class BaseBuilder(object):
             dccSceneItem = self.buildGroup(kObject, objectName)
             component = kObject
 
-        elif kType == "ComponentInputXfo":
-            dccSceneItem = self.buildLocator(kObject, objectName)
-
-        elif kType == "ComponentOutputXfo":
-            dccSceneItem = self.buildLocator(kObject, objectName)
-
         elif kType == "HierarchyGroup":
             dccSceneItem = self.buildHierarchyGroup(kObject, objectName)
+
+        elif kType == "Locator":
+            dccSceneItem = self.buildLocator(kObject, objectName)
 
         elif kType == "Joint":
             dccSceneItem = self.buildJoint(kObject, objectName)
@@ -474,9 +499,6 @@ class BaseBuilder(object):
 
         """
 
-        if hasattr(kObject, 'getNumChildren') is False:
-            return False
-
         dccSceneItem = None
         for i in xrange(kObject.getNumConstraints()):
 
@@ -503,6 +525,60 @@ class BaseBuilder(object):
         for i in xrange(kObject.getNumChildren()):
             child = kObject.getChildByIndex(i)
             self.buildConstraints(child)
+
+        return True
+
+
+    def buildIOConnections(self, kObject):
+        """Builds the connections between the component inputs and outputs of each
+        component.
+
+        Arguments:
+        kObject -- Object, kraken object to create connections for.
+
+        Return:
+        True if successful.
+
+        """
+
+        if kObject.getKType() == 'Component':
+
+            # Build input connections
+            for i in xrange(kObject.getNumInputs()):
+                componentInput = kObject.getInputByIndex(i)
+
+                if componentInput.getDataType() == 'Xfo':
+                    if componentInput.getSource() is None:
+                        continue
+
+                    self.buildXfoConnection(componentInput)
+
+                elif componentInput.getDataType() == 'Attribute':
+                    if componentInput.getSource() is None:
+                        continue
+
+                    self.buildAttributeConnection(componentInput)
+
+            # Build output connections
+            for i in xrange(kObject.getNumOutputs()):
+                componentOutput = kObject.getOutputByIndex(i)
+
+                if componentOutput.getDataType() == 'Xfo':
+                    if componentOutput.getSource() is None:
+                        continue
+
+                    self.buildXfoConnection(componentOutput)
+
+                elif componentOutput.getDataType() == 'Attribute':
+                    if componentOutput.getSource() is None:
+                        continue
+
+                    self.buildAttributeConnection(componentOutput)
+
+        # Build connections for children.
+        for i in xrange(kObject.getNumChildren()):
+            child = kObject.getChildByIndex(i)
+            self.buildIOConnections(child)
 
         return True
 
@@ -668,6 +744,7 @@ class BaseBuilder(object):
 
         self.buildHierarchy(kSceneItem, component=None)
         self.buildConstraints(kSceneItem)
+        self.buildIOConnections(kSceneItem)
 
         return True
 
