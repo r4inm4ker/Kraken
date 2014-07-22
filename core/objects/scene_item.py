@@ -109,7 +109,7 @@ class SceneItem(object):
         """
 
         if index > len(self.children):
-            raise IndexError("'" + str(index) + "' is out of the range of 'children' array.")
+            raise IndexError("'" + str(index) + "' is out of the range of the 'children' array.")
 
         return True
 
