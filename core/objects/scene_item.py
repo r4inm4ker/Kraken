@@ -654,3 +654,74 @@ class SceneItem(object):
         """
 
         return self.color
+
+
+
+    # ================
+    # Persistence Methods
+    # ================
+
+    def jsonEncode(self):
+        """Sets the color of this object.
+
+        Arguments:
+        color -- String, name of the color you wish to set.
+
+        Return:
+        A JSON structure containing the data for this SceneItem.
+
+        """
+
+        jsonData = {
+            '__kType__': self.__kType__,
+            'name': self.name,
+            'parent': self.parent,
+            'children': [],
+            'flags': self.flags,
+            'attributeGroups': [],
+            'constraints': [],
+            'xfo': self.xfo.jsonEncode(),
+            'color': self.color,
+            'visibility': self.visibility,
+            'shapeVisibility': self.shapeVisibility,
+        }
+        for child in self.children:
+            jsonData['children'].append(child.save())
+
+        for attrGroup in self.attributeGroups:
+            jsonData['attributeGroups'].append(attrGroup.save())
+
+        for constr in self.constraints:
+            jsonData['constraints'].append(constr.save())
+
+        return jsonData
+
+
+    def jsonDecode(self, jsonData):
+        """Returns the color of the object.
+
+        Return:
+        String, color of the object.
+
+        """
+        self.name =  jsonData['name']
+        self.parent =  jsonData['parent']
+        self.children =  jsonData['children']
+        self.flags =  jsonData['flags']
+        self.attributeGroups =  jsonData['attributeGroups']
+        self.constraints =  jsonData['constraints']
+        self.xfo =  jsonData['xfo']
+        self.color =  jsonData['color']
+        self.visibility =  jsonData['visibility']
+        self.shapeVisibility =  jsonData['shapeVisibility']
+
+        for child in jsonData['children']:
+            self.addChild(KrakenFactory.construct(child))
+
+        for attrGroup in jsonData['attributeGroups']:
+            self.addAttributeGroup(KrakenFactory.construct(attrGroup))
+
+        for constr in jsonData['constraints']:
+            self.addConstraint(KrakenFactory.construct(constr))
+
+        return self.color
