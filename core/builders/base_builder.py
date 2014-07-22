@@ -385,6 +385,23 @@ class BaseBuilder(object):
         return None
 
 
+    # =========================
+    # Operator Builder Methods
+    # =========================
+    def buildSpliceOperators(self, kOperator):
+        """Builds Splice Operators on the components.
+
+        Arguments:
+        kOperator -- Object, kraken operator that represents a Splice operator.
+
+        Return:
+        True if successful.
+
+        """
+
+        return True
+
+
     # =====================
     # Build Object Methods
     # =====================
@@ -583,6 +600,37 @@ class BaseBuilder(object):
         return True
 
 
+    def buildOperators(self, kObject):
+        """Build operators in the hierarchy.
+
+        Arguments:
+        kObject -- Object, kraken object to create operators for.
+
+        Return:
+        True if successful.
+
+        """
+
+        if kObject.getKType() == 'Component':
+
+            # Build operators
+            for i in xrange(kObject.getNumOperators()):
+                kType = kObject.getKType()
+
+                if kType == 'SpliceOperator':
+                    self.buildSpliceOperators(kObject)
+
+                else:
+                    raise NotImplementedError(kObject.getName() + ' has an unsupported type: ' + str(type(kObject)))
+
+        # Build connections for children.
+        for i in xrange(kObject.getNumChildren()):
+            child = kObject.getChildByIndex(i)
+            self.buildIOConnections(child)
+
+        return True
+
+
     def buildName(self, kObject, component=None):
         """Builds the name for the kObject that is passed.
 
@@ -745,6 +793,7 @@ class BaseBuilder(object):
         self.buildHierarchy(kSceneItem, component=None)
         self.buildConstraints(kSceneItem)
         self.buildIOConnections(kSceneItem)
+        self.buildOperators(kSceneItem)
 
         return True
 

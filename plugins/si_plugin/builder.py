@@ -500,6 +500,23 @@ class Builder(BaseBuilder):
         return True
 
 
+    # =========================
+    # Operator Builder Methods
+    # =========================
+    def buildSpliceOperators(self, kOperator):
+        """Builds Splice Operators on the components.
+
+        Arguments:
+        kOperator -- Object, kraken operator that represents a Splice operator.
+
+        Return:
+        True if successful.
+
+        """
+
+        return True
+
+
     # ===================
     # Visibility Methods
     # ===================
