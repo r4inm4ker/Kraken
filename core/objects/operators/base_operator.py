@@ -14,8 +14,39 @@ class BaseOperator(object):
     def __init__(self, name):
         super(BaseOperator, self).__init__()
         self.name = name
+        self.parent = None
         self.inputs = []
         self.outputs = []
+
+
+    # ===============
+    # Parent Methods
+    # ===============
+    def getParent(self):
+        """Returns the parent of the object as an object.
+
+        Return:
+        Parent of this object.
+
+        """
+
+        return self.parent
+
+
+    def setParent(self, parent):
+        """Sets the parent attribute of this object.
+
+        Arguments:
+        parent -- Object, object that is the parent of this one.
+
+        Return:
+        True if successful.
+
+        """
+
+        self.parent = parent
+
+        return True
 
 
     # ==============
