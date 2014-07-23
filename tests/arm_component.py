@@ -16,6 +16,8 @@ from kraken.core.objects.controls.circle_control  import  CircleControl
 from kraken.core.objects.controls.square_control  import  SquareControl
 from kraken.core.objects.controls.null_control  import  NullControl
 
+from kraken.core.objects.operators.splice_operator import SpliceOperator
+
 
 class ArmComponent(BaseComponent):
     """Arm Component Test"""
@@ -62,6 +64,12 @@ class ArmComponent(BaseComponent):
 
         # Add Attribute I/O's
         self.addInput(armFollowBodyInputAttr)
+
+
+        # Add Splice Op
+        testSpliceOp = SpliceOperator("armSpliceOp")
+
+        self.addOperator(testSpliceOp)
 
 
     def buildRig(self, parent):
