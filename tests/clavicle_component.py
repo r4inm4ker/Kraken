@@ -30,12 +30,14 @@ class ClavicleComponent(BaseComponent):
         defaultAttrGroup.addAttribute(BoolAttribute("toggleDebugging", True))
 
         # Add Guide Controls
-        clavicleOriginGuideCtrl = SphereControl('clavicleOriginGuideCtrl')
+        clavicleOriginGuideCtrl = CircleControl('clavicleOriginGuideCtrl')
         clavicleOriginGuideCtrl.xfo.tr = Vec3(1.0, 18.0, 1.0)
+        clavicleOriginGuideCtrl.setColor("greenBright")
         self.addChild(clavicleOriginGuideCtrl)
 
         clavicleInsertGuideCtrl = CircleControl('clavicleInsertGuideCtrl')
         clavicleInsertGuideCtrl.xfo.tr = Vec3(5.0, 20.0, 0.0)
+        clavicleInsertGuideCtrl.setColor("greenBright")
         self.addChild(clavicleInsertGuideCtrl)
 
         # Setup Component Xfo I/O's
@@ -58,46 +60,7 @@ class ClavicleComponent(BaseComponent):
 
 
     def buildRig(self, parent):
-
-        # component = super(ClavicleComponent, self).buildRig()
-        component = BaseComponent(self.getName(), parent, self.getSide())
-
-        # Setup component attributes
-        component.addAttribute(FloatAttribute("bone1Len", 1.0, minValue=0.0, maxValue=100.0))
-        component.addAttribute(FloatAttribute("bone2Len", 1.0, minValue=0.0, maxValue=100.0))
-        component.addAttribute(FloatAttribute("fkik", 1.0, minValue=0.0, maxValue=1.0))
-        component.addAttribute(FloatAttribute("softDist", 0.5, minValue=0.0, maxValue=1.0))
-        component.addAttribute(BoolAttribute("softIK", True))
-        component.addAttribute(BoolAttribute("stretch", True))
-        component.addAttribute(FloatAttribute("stretchBlend", 1.0, minValue=0.0, maxValue=1.0))
-        component.addAttribute(StringAttribute("Side", self.side))
-        component.addAttribute(BoolAttribute("toggleDebugging", True))
-
-
-        bicepGuideCtrl = self.getChildByName('bicepGuideCtrl')
-        forearmGuideCtrl = self.getChildByName('forearmGuideCtrl')
-        wristGuideCtrl = self.getChildByName('wristGuideCtrl')
-
-
-        # ===================================================================
-        # Process data from guide / json data to calculate xfos for objects.
-        # ===================================================================
-
-
-        # Add Rig Controls
-        bicepFKCtrl = SquareControl('bicepFKCtrl', parent=self)
-        bicepFKCtrl.xfo = bicepGuideCtrl.xfo
-        self.addChild(bicepFKCtrl)
-
-        forearmFKCtrl = NullControl('forearmFKCtrl', parent=self)
-        forearmFKCtrl.xfo = forearmGuideCtrl.xfo
-        self.addChild(forearmFKCtrl)
-
-        wristIKCtrl = CircleControl('wristIKCtrl', parent=self)
-        wristIKCtrl.xfo = wristGuideCtrl.xfo
-        self.addChild(wristIKCtrl)
-
-        return container
+        pass
 
 
 if __name__ == "__main__":

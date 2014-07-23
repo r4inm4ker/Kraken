@@ -11,11 +11,11 @@ from kraken.core.objects.components.base_component import BaseComponent
 
 from kraken.core.objects.locator import Locator
 
-from kraken.core.objects.controls.cube_control  import CubeControl
-from kraken.core.objects.controls.circle_control  import  CircleControl
-from kraken.core.objects.controls.square_control  import  SquareControl
-from kraken.core.objects.controls.sphere_control  import  SphereControl
-from kraken.core.objects.controls.null_control  import  NullControl
+from kraken.core.objects.controls.cube_control import CubeControl
+from kraken.core.objects.controls.circle_control import CircleControl
+from kraken.core.objects.controls.square_control import SquareControl
+from kraken.core.objects.controls.sphere_control import SphereControl
+from kraken.core.objects.controls.null_control import NullControl
 
 
 class LegComponent(BaseComponent):
@@ -30,12 +30,12 @@ class LegComponent(BaseComponent):
 
         # Add Guide Controls
         femureGuideCtrl = SphereControl('femureGuideCtrl')
-        femureGuideCtrl.xfo.tr = Vec3(2.0, 8.0, 0.0)
+        femureGuideCtrl.xfo.tr = Vec3(2.0, 10.0, 0.0)
         femureGuideCtrl.setColor("greenBright")
         self.addChild(femureGuideCtrl)
 
         shinGuideCtrl = SphereControl('shinGuideCtrl')
-        shinGuideCtrl.xfo.tr = Vec3(2.0, 4.5, 1)
+        shinGuideCtrl.xfo.tr = Vec3(2.0, 5.5, 1)
         shinGuideCtrl.setColor("greenBright")
         self.addChild(shinGuideCtrl)
 
