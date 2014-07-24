@@ -67,9 +67,16 @@ class ArmComponent(BaseComponent):
 
 
         # Add Splice Op
-        testSpliceOp = SpliceOperator("armSpliceOp")
+        spliceOp = SpliceOperator("armSpliceOp", "ArmSolver", "extension")
+        spliceOp.setInput("armRoot_input", clavicleEndInput)
+        spliceOp.setInput("followClav_input", followClavInput)
+        spliceOp.setInput("wrist_output", armEndOutput)
+        self.addOperator(spliceOp)
 
-        self.addOperator(testSpliceOp)
+        # Think about how to add multiple operators to the SpliceOp
+        # armSolveKLOp = spliceOp.AddKLOp("armSolve")
+        # armDebugKLOp = spliceOp.AddKLOp("armDebug")
+        # klOp.appendInput
 
 
     def buildRig(self, parent):
