@@ -1,0 +1,31 @@
+require Math;
+require Kraken;
+
+
+object ArmSolver : KrakenSolver {
+};
+
+
+function KrakenSolverArg[] ArmSolver.getArguments(){
+    KrakenSolverArg args[];
+    args.push(KrakenSolverArg('clav', 'in', 'Mat44'));
+    args.push(KrakenSolverArg('blend', 'in', 'Float32'));
+    args.push(KrakenSolverArg('wrist', 'io', 'Mat44'));
+
+    return args;
+}
+
+function ArmSolver.solve(Mat44 clav, Scalar blend, Mat44 wrist){
+    // magic
+}
+
+
+operator solveArmSpliceOp(
+    io ArmSolver solver,
+    in Mat44 armRoot_input,
+    in Scalar followClav_input,
+    io Mat44 wrist_output
+    )
+{
+    solver.solve(armRoot_input, followClav_input, wrist_output);
+}

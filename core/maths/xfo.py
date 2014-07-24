@@ -181,6 +181,20 @@ class Xfo(object):
         return resultXfo
 
 
+    def transformVector(self, v):
+        """Transforms a vector by this xfo.
+
+        Arguments:
+        v -- Vec3, vector to transform.
+
+        Return:
+        Vec3, transformed vector.
+
+        """
+
+        return self.rot.rotateVector(v.multiply(self.scl)).add(self.tr)
+
+
     def isIdentity(self):
         """Check if this Xfo is set to Identity.
 

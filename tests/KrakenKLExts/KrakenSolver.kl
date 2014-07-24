@@ -1,0 +1,6 @@
+require Math;
+require KrakenSolverArg;
+
+interface KrakenSolver{
+    KrakenSolverArg[] getArguments();
+};

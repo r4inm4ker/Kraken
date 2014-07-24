@@ -19,20 +19,45 @@ class BaseOperator(object):
         self.outputs = {}
 
 
-    # ===============
-    # Parent Methods
-    # ===============
-    def getParent(self):
-        """Returns the parent of the object as an object.
+    # =============
+    # Name methods
+    # =============
+    def getName(self):
+        """Returns the name of the object as a string.
 
         Return:
-        Parent of this object.
+        String of the object's name.
 
         """
 
-        return self.parent
+        return self.name
 
 
+    def getFullName(self):
+        """Returns the full hierarchical path to this object.
+
+        Return:
+        String, full name of the object.
+
+        """
+
+        names = []
+        parent = self.getParent()
+        while parent is not None:
+            parent = parent.getParent()
+            if parent is None:
+                break
+
+            names.append(parent.getName())
+
+        fullName = '.'.join(reversed(names))
+
+        return fullName
+
+
+    # ===============
+    # Parent Methods
+    # ===============
     def setParent(self, parent):
         """Sets the parent attribute of this object.
 
@@ -47,6 +72,17 @@ class BaseOperator(object):
         self.parent = parent
 
         return True
+
+
+    def getParent(self):
+        """Returns the parent of the object as an object.
+
+        Return:
+        Parent of this object.
+
+        """
+
+        return self.parent
 
 
     # ==============
@@ -79,6 +115,9 @@ class BaseOperator(object):
         Object, input object.
 
         """
+
+        if name not in self.inputs.keys():
+            raise Exception("Input with name '" + name + "' was not found in operator: " + self.getName() + ".")
 
         return self.inputs[name]
 
@@ -113,5 +152,8 @@ class BaseOperator(object):
         Object, output object.
 
         """
+
+        if name not in self.inputs.keys():
+            raise Exception("Output with name '" + name + "' was not found in operator: " + self.getName() + ".")
 
         return self.outputs[name]

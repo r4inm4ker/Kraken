@@ -31,6 +31,7 @@ class ArmComponent(BaseComponent):
 
         # Add Guide Controls
         bicepGuideCtrl = CubeControl('bicepGuideCtrl')
+        bicepGuideCtrl.rotatePoints(45.0, 0, 0)
         bicepGuideCtrl.xfo.tr = Vec3(5.0, 20.0, 0.0)
         bicepGuideCtrl.setColor("greenBright")
         self.addChild(bicepGuideCtrl)
@@ -69,7 +70,7 @@ class ArmComponent(BaseComponent):
         # Add Splice Op
         spliceOp = SpliceOperator("armSpliceOp", "ArmSolver", "extension")
         spliceOp.setInput("armRoot_input", clavicleEndInput)
-        spliceOp.setInput("followClav_input", followClavInput)
+        spliceOp.setInput("followClav_input", armFollowBodyInputAttr)
         spliceOp.setInput("wrist_output", armEndOutput)
         self.addOperator(spliceOp)
 

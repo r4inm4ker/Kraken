@@ -10,6 +10,8 @@ from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
 from kraken.plugins.si_plugin.utils import *
 
+import FabricEngine.Core as core
+
 
 class Builder(BaseBuilder):
     """Builder object for building Kraken objects in Softimage."""
@@ -514,18 +516,27 @@ class Builder(BaseBuilder):
 
         """
 
-        # Move up!
-        import FabricEngine.Core as core
+        # ==================
 
-        si.fabricSplice('constructClient')
+
+        pass
+
+
+        # ==================
+
+        # Get or construct a Fabric Engine client
         contextID = si.fabricSplice('getClientContextID')
+        if contextID == '':
+            si.fabricSplice('constructClient')
+            contextID = si.fabricSplice('getClientContextID')
+
+        # Connect the Python client to the Softimage client.
         client = core.createClient(contextID)
 
+        # Get the extension to load and create an instance of the object.
         extension = kOperator.getExtension()
         client.loadExtension(extension)
-
         solverTypeName = kOperator.getSolverTypeName()
-
         klType = getattr(client.RT.types, solverTypeName)
 
         try:
@@ -535,10 +546,9 @@ class Builder(BaseBuilder):
             # Else is struct
             solver = klType()
 
-
-        # Find output object
+        # Find operatorOwner to attach Splice Operator to.
         operatorOwner = None
-        args = solver.callMethod('getArguments')
+        args = solver.getArguments("") # <----------------- FIX!!!!
         for i in range(len(args)):
             arg = args[i]
 
@@ -549,28 +559,35 @@ class Builder(BaseBuilder):
         if operatorOwner is None:
             raise Exception("Solver '" + kOperator.getName() + "' has no outputs!")
 
+        # Create Splice Operator
         si.fabricSplice('newSplice', "{\"targets\":\"" + operatorOwner.FullName + ".kine.global" + "\", \"portName\":\"" + arg.name + "\", \"portMode\":\"out\"}", "", "")
 
         # Add the private/non-mayaAttr port that stores the Sovler object
         si.fabricSplice("addInternalPort", operatorOwner.FullName + ".kine.global", "{\"portName\":\"solver\", \"dataType\":\"" + solverTypeName + "\", \"extension\":\"" + kOperator.getExtension() + "\", \"portMode\":\"IO\"}", "")
 
-        opSrc = "";
-        opSrc += "require " + kOperator.getExtension() + ";\n"
-        opSrc += "operator " + kOperator.getName() + "(\n"
+        # Start constructing the source code.
+        opSourceCode = "";
+        opSourceCode += "require " + kOperator.getExtension() + ";\n"
+        opSourceCode += "operator " + kOperator.getName() + "(\n"
 
+        # Get the args from the solver KL object.
         args = solver.callMethod('getArguments')
-        fnCall = "    solver.solve("
+
+        functionCall = "    solver.solve("
         for i in range(len(args)):
             arg = args[i]
 
+            # Get the argument's input from the DCC
             targetObject = self._getDCCSceneItem(kOperator.getOutput(arg.name))
 
+            # Append the suffix based on the argument type, Softimage Only
             if arg.dataType == 'Mat44':
                 connectionSuffix = ".kine.global"
-            elif arg.dataType == 'Boolean':
+            elif arg.dataType in ['Scalar', 'Boolean']:
                 connectionSuffix = ""
-            elif arg.dataType == 'Scalar':
+            else:
                 connectionSuffix = ""
+
 
             # Add the splice Port for each arg.
             if arg.connectionType == 'in':
@@ -579,68 +596,21 @@ class Builder(BaseBuilder):
             elif arg.connectionType == 'io':
                 si.fabricSplice("addOutputPort", operatorOwner.FullName + ".kine.global.SpliceOp", "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\", \"extension\":\"\", \"targets\":\"" + targetObject.FullName + connectionSuffix + "\"}", "")
 
-            # Connect the pports to the inputs/outputs in the rig.
-            opSrc += "    " + arg.connectionType + " " + arg.dataType + arg.name
+
+            # Connect the ports to the inputs/outputs in the rig.
+            opSourceCode += "    " + arg.connectionType + " " + arg.dataType + arg.name
             if i == len(args) - 1:
-                opSrc += "\n"
+                opSourceCode += "\n"
             else:
-                opSrc += ",\n"
-            fnCall += arg.name
+                opSourceCode += ",\n"
+            functionCall += arg.name
 
+        opSourceCode += "    )\n"
+        opSourceCode += "{\n"
+        opSourceCode += functionCall + ");\n"
+        opSourceCode += "}\n"
 
-        opSrc += "    )\n"
-        opSrc += "{\n"
-        opSrc += fnCall + ");\n"
-        opSrc += "}\n"
-
-
-        si.fabricSplice('addKLOperator', , '{"opName": "' + kOperator.getName() + '"}', opSrc)
-
-        # """
-        # require extemnionl;
-        # operator solveArmSpliceOp(
-        #     io ArmSolver solver,
-        #     in Mat44 armRoot_input,
-        #     in Scalar folowClav_input,
-        #     io Mat44 wrist_output
-        #     )
-        # {
-        #     solver.solve(armRoot_input, follow_clavInput, wrist_outPut);
-        # }
-
-        # """
-
-        # """
-        # struct KrakenSolverArg {
-        #     String name;
-        #     String connectionType;
-        #     String dataType;
-        # };
-        # function KrakenSolverArg(String name, String type, String datatype){
-        #     .;;
-        # }
-        # interface KrakenSolver{
-        #     KrakenSolverArg[] getArguments();
-        # }
-
-        # object ArmSolver : KrakenSolver {
-
-        # }
-
-        # function KrakenSolverArg[] ArmSolver.getArguments(){
-        #     KrakenSolverArg ars[];
-        #     args.push(KrakenSolverArg('clav', 'In', 'Mat44'));
-        #     args.push(KrakenSolverArg('blend', 'In', 'Mat44'));
-        #     args.push(KrakenSolverArg('wrist', 'In', 'Mat44'));
-        #     return args;
-        # }
-
-        # function ArmSolver.solve(Mat44 clav, Scalar blend, Mat44 wrist){
-        #     // magic
-        # }
-        # """
-
-
+        #si.fabricSplice('addKLOperator', , '{"opName": "' + kOperator.getName() + '"}', opSourceCode)
 
         return True
 
