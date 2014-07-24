@@ -201,6 +201,8 @@ class BaseControl(Curve):
 
         controlPoints = self.copyControlPoints()
 
+
+        # Do this with a Quat and use .rotateVector() method
         eulerRot = Euler(xRot, yRot, zRot)
 
         rotationMatrix = eulerRot.toMatrix33()
@@ -214,12 +216,7 @@ class BaseControl(Curve):
 
             newSectionPoints = []
             for i, eachPoint in enumerate(eachSection):
-                print eachSection[i]
                 eachPoint = rotationXfo.transformVector(eachPoint)
-                print eachPoint
-
-                print "\n"
-
                 newSectionPoints.append(eachPoint)
 
             newPoints.append(newSectionPoints)
