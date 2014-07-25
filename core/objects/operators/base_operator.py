@@ -86,6 +86,20 @@ class BaseOperator(object):
 
 
     # ==============
+    # kType Methods
+    # ==============
+    def getKType(self):
+        """Returns the kType of this object.
+
+        Return:
+        True if successful.
+
+        """
+
+        return self.__kType__
+
+
+    # ==============
     # Input Methods
     # ==============
     def setInput(self, name, operatorInput):
@@ -153,7 +167,7 @@ class BaseOperator(object):
 
         """
 
-        if name not in self.inputs.keys():
+        if name not in self.outputs.keys():
             raise Exception("Output with name '" + name + "' was not found in operator: " + self.getName() + ".")
 
         return self.outputs[name]

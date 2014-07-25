@@ -8,6 +8,8 @@ BaseBuilder -- Base builder object to build objects in DCC.
 from kraken.core import logger as pyLogger
 logger = pyLogger.getLogger("pyLogger")
 
+from kraken.core.objects.constraints.pose_constraint import PoseConstraint
+
 
 class BaseBuilder(object):
     """BaseBuilder object for building objects in DCC's. Sub-class per DCC in a
@@ -368,6 +370,18 @@ class BaseBuilder(object):
 
         """
 
+        source = kConnection.getSource()
+        target = kConnection.getTarget()
+
+        if source is None or target is None:
+            raise Exception("Component connection '" + kConnection.getName() + "'is invalid! Missing Source or Target!")
+
+        constraint = PoseConstraint('_'.join([target.getName(), 'To', source.getName()]))
+        constraint.setConstrainee(target)
+        constraint.addConstrainer(source)
+        dccSceneItem = self.buildPoseConstraint(constraint)
+        self._registerSceneItemPair(kConnection, dccSceneItem)
+
         return None
 
 
@@ -615,18 +629,19 @@ class BaseBuilder(object):
 
             # Build operators
             for i in xrange(kObject.getNumOperators()):
-                kType = kObject.getKType()
+                operator = kObject.getOperatorByIndex(i)
+                kType = operator.getKType()
 
                 if kType == 'SpliceOperator':
-                    self.buildSpliceOperators(kObject)
+                    self.buildSpliceOperators(operator)
 
                 else:
-                    raise NotImplementedError(kObject.getName() + ' has an unsupported type: ' + str(type(kObject)))
+                    raise NotImplementedError(operator.getName() + ' has an unsupported type: ' + str(type(kObject)))
 
         # Build connections for children.
         for i in xrange(kObject.getNumChildren()):
             child = kObject.getChildByIndex(i)
-            self.buildIOConnections(child)
+            self.buildOperators(child)
 
         return True
 

@@ -67,10 +67,10 @@ class ArmComponent(BaseComponent):
 
 
         # Add Splice Op
-        spliceOp = SpliceOperator("armSpliceOp", "ArmSolver", "extension")
-        spliceOp.setInput("armRoot_input", clavicleEndInput)
-        spliceOp.setInput("followClav_input", armFollowBodyInputAttr)
-        spliceOp.setInput("wrist_output", armEndOutput)
+        spliceOp = SpliceOperator("armSpliceOp", "ArmSolver", "KrakenArmSolver")
+        spliceOp.setInput("clav", clavicleEndInput)
+        spliceOp.setInput("blend", armFollowBodyInputAttr)
+        spliceOp.setOutput("wrist", armEndOutput)
         self.addOperator(spliceOp)
 
         # Think about how to add multiple operators to the SpliceOp
