@@ -31,7 +31,6 @@ class ArmComponent(BaseComponent):
 
         # Add Guide Controls
         bicepGuideCtrl = CubeControl('bicepGuideCtrl')
-        bicepGuideCtrl.rotatePoints(45.0, 0, 0)
         bicepGuideCtrl.xfo.tr = Vec3(5.0, 20.0, 0.0)
         bicepGuideCtrl.setColor("greenBright")
         self.addChild(bicepGuideCtrl)

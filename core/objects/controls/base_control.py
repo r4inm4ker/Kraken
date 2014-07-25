@@ -7,6 +7,7 @@ BaseControl - Base Control.
 
 from kraken.core.maths.xfo import Xfo
 from kraken.core.maths.rotation import Euler
+from kraken.core.maths.rotation import Quat
 from kraken.core.objects.curve import Curve
 
 
@@ -201,22 +202,15 @@ class BaseControl(Curve):
 
         controlPoints = self.copyControlPoints()
 
-
-        # Do this with a Quat and use .rotateVector() method
-        eulerRot = Euler(xRot, yRot, zRot)
-
-        rotationMatrix = eulerRot.toMatrix33()
-
-        rotationXfo = Xfo()
-        rotationXfo.setFromMatrix33(rotationMatrix)
-        rotationXfo.tr.copy(self.xfo.tr)
+        quatRot = Quat()
+        quatRot.setFromEuler(Euler(xRot, yRot, zRot))
 
         newPoints = []
         for eachSection in controlPoints:
 
             newSectionPoints = []
             for i, eachPoint in enumerate(eachSection):
-                eachPoint = rotationXfo.transformVector(eachPoint)
+                eachPoint = quatRot.rotateVector(eachPoint)
                 newSectionPoints.append(eachPoint)
 
             newPoints.append(newSectionPoints)
