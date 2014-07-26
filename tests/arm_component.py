@@ -14,7 +14,7 @@ from kraken.core.objects.locator import Locator
 from kraken.core.objects.controls.cube_control import CubeControl
 from kraken.core.objects.controls.circle_control import CircleControl
 from kraken.core.objects.controls.square_control import SquareControl
-from kraken.core.objects.controls.null_control import NullControl
+from kraken.core.objects.controls.pin_control import PinControl
 
 from kraken.core.objects.operators.splice_operator import SpliceOperator
 
@@ -29,21 +29,22 @@ class ArmComponent(BaseComponent):
         defaultAttrGroup = self.getAttributeGroupByIndex(0)
         defaultAttrGroup.addAttribute(BoolAttribute("toggleDebugging", True))
 
-        # Add Guide Controls
-        bicepGuideCtrl = CubeControl('bicepGuideCtrl')
-        bicepGuideCtrl.xfo.tr = Vec3(5.0, 20.0, 0.0)
-        bicepGuideCtrl.setColor("greenBright")
-        self.addChild(bicepGuideCtrl)
+        # Add Controls
+        bicepFKCtrl = CubeControl('bicepFK')
+        bicepFKCtrl.xfo.tr = Vec3(5.0, 20.0, 0.0)
+        bicepFKCtrl.rotatePoints(-90, 0, 0)
+        bicepFKCtrl.setColor("greenBright")
+        self.addChild(bicepFKCtrl)
 
-        forearmGuideCtrl = CubeControl('forearmGuideCtrl')
-        forearmGuideCtrl.xfo.tr = Vec3(8.5, 16.4, -2.5)
-        forearmGuideCtrl.setColor("greenBright")
-        self.addChild(forearmGuideCtrl)
+        forearmFKCtrl = CubeControl('forearmFK')
+        forearmFKCtrl.xfo.tr = Vec3(8.5, 16.4, -2.5)
+        forearmFKCtrl.setColor("greenBright")
+        self.addChild(forearmFKCtrl)
 
-        wristGuideCtrl = CubeControl('wristGuideCtrl')
-        wristGuideCtrl.xfo.tr = Vec3(12.0, 12.9, 0.0)
-        wristGuideCtrl.setColor("greenBright")
-        self.addChild(wristGuideCtrl)
+        armIKCtrl = PinControl('IK')
+        armIKCtrl.xfo.tr = Vec3(12.0, 12.9, 0.0)
+        armIKCtrl.setColor("greenBright")
+        self.addChild(armIKCtrl)
 
 
         # Setup component Xfo I/O's
@@ -54,8 +55,8 @@ class ArmComponent(BaseComponent):
         armFollowBodyInputAttr = FloatAttribute('followBody', 0.0, 0.0, 1.0)
 
         # Constraint outputs
-        armEndOutputConstraint = PoseConstraint('_'.join([armEndOutput.getName(), 'To', wristGuideCtrl.getName()]))
-        armEndOutputConstraint.addConstrainer(wristGuideCtrl)
+        armEndOutputConstraint = PoseConstraint('_'.join([armEndOutput.getName(), 'To', armIKCtrl.getName()]))
+        armEndOutputConstraint.addConstrainer(armIKCtrl)
         armEndOutput.addConstraint(armEndOutputConstraint)
 
         # Add Xfo I/O's
