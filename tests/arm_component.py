@@ -1,5 +1,12 @@
 from kraken.core.maths import *
 
+
+from kraken.core.maths.vec import Vec3
+from kraken.core.maths.rotation import Quat
+from kraken.core.maths.rotation import Euler
+from kraken.core.maths.xfo import Xfo
+from kraken.core.maths.xfo import xfoFromThreePoints
+
 from kraken.core.objects.attributes.float_attribute import FloatAttribute
 from kraken.core.objects.attributes.integer_attribute import IntegerAttribute
 from kraken.core.objects.attributes.bool_attribute import BoolAttribute
@@ -29,22 +36,61 @@ class ArmComponent(BaseComponent):
         defaultAttrGroup = self.getAttributeGroupByIndex(0)
         defaultAttrGroup.addAttribute(BoolAttribute("toggleDebugging", True))
 
-        # Add Controls
+        # Default values
+        bicepPosition = Vec3(2.27, 15.295, -0.753)
+        forearmPosition = Vec3(5.039, 13.56, -0.859)
+        wristPosition = Vec3(7.1886, 12.2819, 0.4906)
+
+        # Calculate Bicep Xfo
+        rootToWrist = wristPosition.subtract(bicepPosition).unit()
+        rootToElbow = forearmPosition.subtract(bicepPosition).unit()
+        bone1Normal = rootToWrist.cross(rootToElbow).unit()
+        bone1ZAxis = rootToElbow.cross(bone1Normal).unit()
+        bicepXfo = Xfo()
+        bicepXfo.setFromVectors(rootToElbow, bone1Normal, bone1ZAxis, bicepPosition)
+
+        # Calculate Forearm Xfo
+        elbowToWrist = wristPosition.subtract(forearmPosition).unit()
+        elbowToRoot = bicepPosition.subtract(forearmPosition).unit()
+        bone2Normal = elbowToRoot.cross(elbowToWrist).unit()
+        bone2ZAxis = elbowToWrist.cross(bone2Normal).unit()
+        forearmXfo = Xfo()
+        forearmXfo.setFromVectors(elbowToWrist, bone2Normal, bone2ZAxis, forearmPosition)
+
+        # Bicep
         bicepFKCtrl = CubeControl('bicepFK')
-        bicepFKCtrl.xfo.tr = Vec3(5.0, 20.0, 0.0)
-        bicepFKCtrl.rotatePoints(-90, 0, 0)
+        bicepFKCtrl.alignOnXAxis()
+        bicepLen = bicepPosition.subtract(forearmPosition).length()
+        bicepFKCtrl.scalePoints(Vec3(bicepLen, 1.0, 1.0))
         bicepFKCtrl.setColor("greenBright")
-        self.addChild(bicepFKCtrl)
+        bicepFKCtrl.xfo.copy(bicepXfo)
 
+        bicepFKCtrlSrtBuffer = Locator('bicepFKSrtBuffer')
+        self.addChild(bicepFKCtrlSrtBuffer)
+        bicepFKCtrlSrtBuffer.xfo.copy(bicepFKCtrl.xfo)
+        bicepFKCtrlSrtBuffer.addChild(bicepFKCtrl)
+
+        # Forearm
         forearmFKCtrl = CubeControl('forearmFK')
-        forearmFKCtrl.xfo.tr = Vec3(8.5, 16.4, -2.5)
+        forearmFKCtrl.alignOnXAxis()
+        forearmLen = forearmPosition.subtract(wristPosition).length()
+        forearmFKCtrl.scalePoints(Vec3(forearmLen, 1.0, 1.0))
         forearmFKCtrl.setColor("greenBright")
-        self.addChild(forearmFKCtrl)
+        forearmFKCtrl.xfo.copy(forearmXfo)
 
+        forearmFKCtrlSrtBuffer = Locator('forearmFKSrtBuffer')
+        self.addChild(forearmFKCtrlSrtBuffer)
+        forearmFKCtrlSrtBuffer.xfo.copy(forearmFKCtrl.xfo)
+        forearmFKCtrlSrtBuffer.addChild(forearmFKCtrl)
+
+        # Arm IK
         armIKCtrl = PinControl('IK')
-        armIKCtrl.xfo.tr = Vec3(12.0, 12.9, 0.0)
+        armIKCtrl.xfo.tr.copy(wristPosition)
+        armIKCtrl.rotatePoints(90, 0, 0)
         armIKCtrl.setColor("greenBright")
         self.addChild(armIKCtrl)
+
+
 
 
         # Setup component Xfo I/O's

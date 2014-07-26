@@ -5,7 +5,7 @@ SceneItem - Base SceneItem Object.
 
 """
 
-from kraken.core.maths import *
+from kraken.core.maths.xfo import Xfo
 from kraken.core.objects.attributes.attribute_group import AttributeGroup
 
 

@@ -1,4 +1,4 @@
-from kraken.core.maths import *
+from kraken.core.maths.vec import Vec3
 
 from kraken.core.objects.attributes.float_attribute import FloatAttribute
 from kraken.core.objects.attributes.integer_attribute import IntegerAttribute
@@ -29,10 +29,10 @@ class LegComponent(BaseComponent):
         defaultAttrGroup.addAttribute(BoolAttribute("toggleDebugging", True))
 
         # Add Guide Controls
-        femureGuideCtrl = SphereControl('femureGuideCtrl')
-        femureGuideCtrl.xfo.tr = Vec3(2.0, 10.0, 0.0)
-        femureGuideCtrl.setColor("greenBright")
-        self.addChild(femureGuideCtrl)
+        femurGuideCtrl = SphereControl('femurGuideCtrl')
+        femurGuideCtrl.xfo.tr = Vec3(2.0, 10.0, 0.0)
+        femurGuideCtrl.setColor("greenBright")
+        self.addChild(femurGuideCtrl)
 
         shinGuideCtrl = SphereControl('shinGuideCtrl')
         shinGuideCtrl.xfo.tr = Vec3(2.0, 5.5, 1)

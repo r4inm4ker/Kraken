@@ -490,6 +490,8 @@ class Builder(BaseBuilder):
 
         """
 
+        return
+
         try:
             # Get or construct a Fabric Engine client
             contextID = si.fabricSplice('getClientContextID')
@@ -671,6 +673,7 @@ class Builder(BaseBuilder):
 
         xfo = XSIMath.CreateTransform()
         scl = XSIMath.CreateVector3(kSceneItem.xfo.scl.x, kSceneItem.xfo.scl.y, kSceneItem.xfo.scl.z)
+
         quat = XSIMath.CreateQuaternion(kSceneItem.xfo.rot.w, kSceneItem.xfo.rot.v.x, kSceneItem.xfo.rot.v.y, kSceneItem.xfo.rot.v.z)
         tr = XSIMath.CreateVector3(kSceneItem.xfo.tr.x, kSceneItem.xfo.tr.y, kSceneItem.xfo.tr.z)
 
