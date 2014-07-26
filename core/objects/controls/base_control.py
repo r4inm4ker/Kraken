@@ -44,7 +44,6 @@ class BaseControl(Curve):
 
         furthest = 0.0
 
-        # Get furthest X value in points
         controlPoints = self.copyControlPoints()
 
         for eachSection in controlPoints:
@@ -63,7 +62,6 @@ class BaseControl(Curve):
 
         offset = 0.0 - furthest
 
-        # Add offset of furthest X value to all points.
         for eachSection in controlPoints:
             for eachPoint in eachSection:
                 eachPoint.x += offset
@@ -86,7 +84,6 @@ class BaseControl(Curve):
 
         furthest = 0.0
 
-        # Get furthest Y value in points
         controlPoints = self.copyControlPoints()
 
         for eachSection in controlPoints:
@@ -105,7 +102,6 @@ class BaseControl(Curve):
 
         offset = 0.0 - furthest
 
-        # Add offset of furthest Y value to all points.
         for eachSection in controlPoints:
             for eachPoint in eachSection:
                 eachPoint.y += offset
@@ -128,7 +124,6 @@ class BaseControl(Curve):
 
         furthest = 0.0
 
-        # Get furthest Z value in points
         controlPoints = self.copyControlPoints()
 
         for eachSection in controlPoints:
@@ -147,7 +142,6 @@ class BaseControl(Curve):
 
         offset = 0.0 - furthest
 
-        # Add offset of furthest Z value to all points.
         for eachSection in controlPoints:
             for eachPoint in eachSection:
                 eachPoint.z += offset

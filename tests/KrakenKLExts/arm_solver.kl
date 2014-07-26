@@ -9,7 +9,7 @@ object ArmSolver : KrakenSolver {
 function KrakenSolverArg[] ArmSolver.getArguments(){
     KrakenSolverArg args[];
     args.push(KrakenSolverArg('clav', 'in', 'Mat44'));
-    args.push(KrakenSolverArg('blend', 'in', 'Float32'));
+    args.push(KrakenSolverArg('blend', 'in', 'Scalar'));
     args.push(KrakenSolverArg('wrist', 'io', 'Mat44'));
 
     return args;
