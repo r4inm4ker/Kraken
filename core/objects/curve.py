@@ -7,6 +7,8 @@ Curve - Curve.
 
 from kraken.core.objects.scene_item import SceneItem
 
+import copy
+
 
 class Curve(SceneItem):
     """Curve object."""
@@ -56,6 +58,17 @@ class Curve(SceneItem):
         """
 
         return self.controlPoints
+
+
+    def copyControlPoints(self):
+        """Returns the control points of the curve.
+
+        Return:
+        Array of Vec3 positions.
+
+        """
+
+        return copy.deepcopy(self.controlPoints)
 
 
     def appendControlPoints(self, points):

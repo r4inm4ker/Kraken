@@ -14,315 +14,160 @@ class BaseOperator(object):
     def __init__(self, name):
         super(BaseOperator, self).__init__()
         self.name = name
-        self.inputs = []
-        self.outputs = []
+        self.parent = None
+        self.inputs = {}
+        self.outputs = {}
+
+
+    # =============
+    # Name methods
+    # =============
+    def getName(self):
+        """Returns the name of the object as a string.
+
+        Return:
+        String of the object's name.
+
+        """
+
+        return self.name
+
+
+    def getFullName(self):
+        """Returns the full hierarchical path to this object.
+
+        Return:
+        String, full name of the object.
+
+        """
+
+        names = []
+        parent = self.getParent()
+        while parent is not None:
+            parent = parent.getParent()
+            if parent is None:
+                break
+
+            names.append(parent.getName())
+
+        fullName = '.'.join(reversed(names))
+
+        return fullName
+
+
+    # ===============
+    # Parent Methods
+    # ===============
+    def setParent(self, parent):
+        """Sets the parent attribute of this object.
+
+        Arguments:
+        parent -- Object, object that is the parent of this one.
+
+        Return:
+        True if successful.
+
+        """
+
+        self.parent = parent
+
+        return True
+
+
+    def getParent(self):
+        """Returns the parent of the object as an object.
+
+        Return:
+        Parent of this object.
+
+        """
+
+        return self.parent
+
+
+    # ==============
+    # kType Methods
+    # ==============
+    def getKType(self):
+        """Returns the kType of this object.
+
+        Return:
+        True if successful.
+
+        """
+
+        return self.__kType__
 
 
     # ==============
     # Input Methods
     # ==============
-    def checkInputIndex(self, index):
-        """Checks the supplied index is valid.
+    def setInput(self, name, operatorInput):
+        """Sets the input by the given name.
 
         Arguments:
-        index -- Integer, input index to check.
-
-        """
-
-        if index > len(self.inputs):
-            raise IndexError("'" + str(index) + "' is out of the range of the 'inputs' array.")
-
-        return True
-
-
-    def addInput(self, operatorInput):
-        """Adds an input to this operator.
-
-        Arguments:
-        operatorInput -- Object, kraken object to add as an input.
+        name -- String, name of the input.
+        operatorInput -- Object, input object.
 
         Return:
         True if successful.
 
         """
 
-        self.inputs.append(operatorInput)
+        self.inputs[name] = operatorInput
 
         return True
 
 
-    def removeInputByIndex(self, index):
-        """Removes a child from this object by index.
+    def getInput(self, name):
+        """Returns the input with the specified name.
 
         Arguments:
-        index -- Integer, index of child to remove.
+        name -- String, name of the input to get.
 
         Return:
-        True if successful.
+        Object, input object.
 
         """
 
-        if self.checkInputIndex(index) is not True:
-            return False
+        if name not in self.inputs.keys():
+            raise Exception("Input with name '" + name + "' was not found in operator: " + self.getName() + ".")
 
-        del self.inputs[index]
-
-        return True
-
-
-    def removeInputByName(self, name):
-        """Removes a child from this object by name.
-
-        Arguments:
-        name -- String, name of child to remove.
-
-        Return:
-        True if successful.
-
-        """
-
-        removeIndex = None
-
-        for i, eachInput in enumerate(self.inputs):
-            if eachInput.getName() == name:
-                removeIndex = i
-
-        if removeIndex is None:
-            raise ValueError("'" + name + "' is not a valid child of this object.")
-
-        self.removeInputByIndex(removeIndex)
-
-        return True
-
-
-    def getNumInputs(self):
-        """Returns the number of children this object has.
-
-        Return:
-        Integer, number of children of this object.
-
-        """
-
-        return len(self.inputs)
-
-
-    def getInputByIndex(self, index):
-        """Returns the child object at specified index.
-
-        Return:
-        Input object at specified index.
-
-        """
-
-        if self.checkInputIndex(index) is not True:
-            return False
-
-        return self.inputs[index]
-
-
-    def getInputByName(self, name):
-        """Returns the child object with the specified name.
-
-        Return:
-        Object if found.
-        None if not found.
-
-        """
-
-        for eachInput in self.inputs:
-            if eachInput.getName() == name:
-                return eachInput
-
-        return None
-
-
-    def getInputIndex(self, input):
-        """Return the index of the specified input.
-
-        Arguments:
-        input -- Object, input to find the index of.
-
-        Return:
-        True if successful.
-        None if input not found on component.
-
-        """
-
-        for index, eachOp in xrange(self.getNumInputs()):
-            if eachOp is input:
-                return index
-
-        return None
-
-
-    def moveInputToIndex(self, input, index):
-        """Moves an input to the specified index.
-
-        Arguments:
-        input -- Object, input to move.
-        index -- Integer, index position to move the input to.
-
-        Return:
-        True if successful.
-
-        """
-
-        oldIndex = self.getInputIndex(input)
-        self.inputs.insert(index, self.inputs.pop(oldindex))
-
-        return True
+        return self.inputs[name]
 
 
     # ==============
     # Output Methods
     # ==============
-    def checkOutputIndex(self, index):
-        """Checks the supplied index is valid.
+    def setOutput(self, name, operatorOutput):
+        """Sets the output by the given name.
 
         Arguments:
-        index -- Integer, output index to check.
-
-        """
-
-        if index > len(self.outputs):
-            raise IndexError("'" + str(index) + "' is out of the range of the 'outputs' array.")
-
-        return True
-
-
-    def addOutput(self, operatorOutput):
-        """Adds an output to this operator.
-
-        Arguments:
-        operatorOutput -- Object, kraken object to add as an output.
+        name -- String, name of the output.
+        operatorOutput -- Object, output object.
 
         Return:
         True if successful.
 
         """
 
-        self.outputs.append(operatorOutput)
+        self.outputs[name] = operatorOutput
 
         return True
 
 
-    def removeOutputByIndex(self, index):
-        """Removes a output from this object by index.
+    def getOutput(self, name):
+        """Returns the output with the specified name.
 
         Arguments:
-        index -- Integer, index of output to remove.
+        name -- String, name of the output to get.
 
         Return:
-        True if successful.
+        Object, output object.
 
         """
 
-        if self.checkOutputIndex(index) is not True:
-            return False
+        if name not in self.outputs.keys():
+            raise Exception("Output with name '" + name + "' was not found in operator: " + self.getName() + ".")
 
-        del self.outputs[index]
-
-        return True
-
-
-    def removeOutputByName(self, name):
-        """Removes a child from this object by name.
-
-        Arguments:
-        name -- String, name of child to remove.
-
-        Return:
-        True if successful.
-
-        """
-
-        removeIndex = None
-
-        for i, eachOutput in enumerate(self.outputs):
-            if eachOutput.getName() == name:
-                removeIndex = i
-
-        if removeIndex is None:
-            raise ValueError("'" + name + "' is not a valid child of this object.")
-
-        self.removeOutputByIndex(removeIndex)
-
-        return True
-
-
-    def getNumOutputs(self):
-        """Returns the number of children this object has.
-
-        Return:
-        Integer, number of children of this object.
-
-        """
-
-        return len(self.outputs)
-
-
-    def getOutputByIndex(self, index):
-        """Returns the child object at specified index.
-
-        Return:
-        Output object at specified index.
-
-        """
-
-        if self.checkOutputIndex(index) is not True:
-            return False
-
-        return self.outputs[index]
-
-
-    def getOutputByName(self, name):
-        """Returns the child object with the specified name.
-
-        Return:
-        Object if found.
-        None if not found.
-
-        """
-
-        for eachOutput in self.outputs:
-            if eachOutput.getName() == name:
-                return eachOutput
-
-        return None
-
-
-    def getOutputIndex(self, output):
-        """Return the index of the specified output.
-
-        Arguments:
-        output -- Object, output to find the index of.
-
-        Return:
-        True if successful.
-        None if output not found on component.
-
-        """
-
-        for index, eachOp in xrange(self.getNumOutputs()):
-            if eachOp is output:
-                return index
-
-        return None
-
-
-    def moveOutputToIndex(self, output, index):
-        """Moves an output to the specified index.
-
-        Arguments:
-        output -- Object, output to move.
-        index -- Integer, index position to move the output to.
-
-        Return:
-        True if successful.
-
-        """
-
-        oldIndex = self.getOutputIndex(output)
-        self.outputs.insert(index, self.outputs.pop(oldindex))
-
-        return True
+        return self.outputs[name]

@@ -1,4 +1,4 @@
-from kraken.core.maths import *
+from kraken.core.maths.vec import Vec3
 
 from kraken.core.objects.attributes.float_attribute import FloatAttribute
 from kraken.core.objects.attributes.integer_attribute import IntegerAttribute
@@ -34,7 +34,7 @@ class SpineComponent(BaseComponent):
             # Add Guide Controls
             spineGuideCtrl = CubeControl('spineGuideCtrl' + str(i+1).zfill(2))
             spineGuideCtrl.xfo.tr = Vec3(0.0, 10.0 + (i * 3), 0.0)
-            spineGuideCtrl.setColor("yellow")
+            spineGuideCtrl.setColor("purpleLight")
             self.addChild(spineGuideCtrl)
 
         # Setup component Xfo I/O's

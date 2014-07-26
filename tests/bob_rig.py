@@ -1,7 +1,11 @@
 from kraken.core.objects.container import Container
 from kraken.core.objects.layer import Layer
+
 from arm_component import ArmComponent
 from clavicle_component import ClavicleComponent
+from leg_component import LegComponent
+from spine_component import SpineComponent
+from head_component import HeadComponent
 
 
 class Rig(Container):
@@ -21,19 +25,25 @@ class Rig(Container):
         self.addChild(geometryLayer)
 
         # Add Components to Layers
-        clavicleComponent = ClavicleComponent("clavicle", self, side="L")
-        armComponent = ArmComponent("arm", self, side="L")
+        spineComponent = SpineComponent("spine", self)
+        headComponent = HeadComponent("head", self)
+        clavicleLeftComponent = ClavicleComponent("clavicleLeft", self, side="L")
+        armLeftComponent = ArmComponent("armLeft", self, side="L")
+        legLeftComponent = LegComponent("legLeft", self, side="L")
 
-        controlsLayer.addComponent(clavicleComponent)
-        controlsLayer.addComponent(armComponent)
+        controlsLayer.addComponent(spineComponent)
+        controlsLayer.addComponent(headComponent)
+        controlsLayer.addComponent(clavicleLeftComponent)
+        controlsLayer.addComponent(armLeftComponent)
+        controlsLayer.addComponent(legLeftComponent)
 
         # Create component connections
-        clavicleEndOutput = clavicleComponent.getOutputByName('clavicleEnd')
-        armClavicleEndInput = armComponent.getInputByName('clavicleEnd')
+        clavicleEndOutput = clavicleLeftComponent.getOutputByName('clavicleEnd')
+        armClavicleEndInput = armLeftComponent.getInputByName('clavicleEnd')
         armClavicleEndInput.setSource(clavicleEndOutput.getTarget())
 
-        clavicleFollowBodyOutput = clavicleComponent.getOutputByName('followBody')
-        armFollowBodyInput = armComponent.getInputByName('followBody')
+        clavicleFollowBodyOutput = clavicleLeftComponent.getOutputByName('followBody')
+        armFollowBodyInput = armLeftComponent.getInputByName('followBody')
         armFollowBodyInput.setSource(clavicleFollowBodyOutput.getTarget())
 
 

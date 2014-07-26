@@ -8,6 +8,8 @@ BaseBuilder -- Base builder object to build objects in DCC.
 from kraken.core import logger as pyLogger
 logger = pyLogger.getLogger("pyLogger")
 
+from kraken.core.objects.constraints.pose_constraint import PoseConstraint
+
 
 class BaseBuilder(object):
     """BaseBuilder object for building objects in DCC's. Sub-class per DCC in a
@@ -368,6 +370,18 @@ class BaseBuilder(object):
 
         """
 
+        source = kConnection.getSource()
+        target = kConnection.getTarget()
+
+        if source is None or target is None:
+            raise Exception("Component connection '" + kConnection.getName() + "'is invalid! Missing Source or Target!")
+
+        constraint = PoseConstraint('_'.join([target.getName(), 'To', source.getName()]))
+        constraint.setConstrainee(target)
+        constraint.addConstrainer(source)
+        dccSceneItem = self.buildPoseConstraint(constraint)
+        self._registerSceneItemPair(kConnection, dccSceneItem)
+
         return None
 
 
@@ -383,6 +397,23 @@ class BaseBuilder(object):
         """
 
         return None
+
+
+    # =========================
+    # Operator Builder Methods
+    # =========================
+    def buildSpliceOperators(self, kOperator):
+        """Builds Splice Operators on the components.
+
+        Arguments:
+        kOperator -- Object, kraken operator that represents a Splice operator.
+
+        Return:
+        True if successful.
+
+        """
+
+        return True
 
 
     # =====================
@@ -583,6 +614,38 @@ class BaseBuilder(object):
         return True
 
 
+    def buildOperators(self, kObject):
+        """Build operators in the hierarchy.
+
+        Arguments:
+        kObject -- Object, kraken object to create operators for.
+
+        Return:
+        True if successful.
+
+        """
+
+        if kObject.getKType() == 'Component':
+
+            # Build operators
+            for i in xrange(kObject.getNumOperators()):
+                operator = kObject.getOperatorByIndex(i)
+                kType = operator.getKType()
+
+                if kType == 'SpliceOperator':
+                    self.buildSpliceOperators(operator)
+
+                else:
+                    raise NotImplementedError(operator.getName() + ' has an unsupported type: ' + str(type(kObject)))
+
+        # Build connections for children.
+        for i in xrange(kObject.getNumChildren()):
+            child = kObject.getChildByIndex(i)
+            self.buildOperators(child)
+
+        return True
+
+
     def buildName(self, kObject, component=None):
         """Builds the name for the kObject that is passed.
 
@@ -745,6 +808,7 @@ class BaseBuilder(object):
         self.buildHierarchy(kSceneItem, component=None)
         self.buildConstraints(kSceneItem)
         self.buildIOConnections(kSceneItem)
+        self.buildOperators(kSceneItem)
 
         return True
 

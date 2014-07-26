@@ -10,6 +10,8 @@ from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
 from kraken.plugins.maya_plugin.utils import *
 
+import FabricEngine.Core as core
+
 
 class Builder(BaseBuilder):
     """Builder object for building Kraken objects in Maya."""
@@ -400,22 +402,6 @@ class Builder(BaseBuilder):
     # ========================
     # Component Build Methods
     # ========================
-    def buildXfoConnection(self, kConnection):
-        """Builds the connection between the xfo and the connection.
-
-        Arguments:
-        kConnection -- Object, kraken connection to build.
-
-        Return:
-        True if successful.
-
-        """
-
-
-
-        return None
-
-
     def buildAttributeConnection(self, kConnection):
         """Builds the connection between the attribute and the connection.
 
@@ -427,7 +413,138 @@ class Builder(BaseBuilder):
 
         """
 
+        source = kConnection.getSource()
+        target = kConnection.getTarget()
+
+        sourceDCCSceneItem = self._getDCCSceneItem(kConnection.getSource())
+        targetDCCSceneItem = self._getDCCSceneItem(kConnection.getTarget())
+
+        pm.connectAttr(sourceDCCSceneItem, targetDCCSceneItem, force=True)
+
         return None
+
+
+    # =========================
+    # Operator Builder Methods
+    # =========================
+    def buildSpliceOperators(self, kOperator):
+        """Builds Splice Operators on the components.
+
+        Arguments:
+        kOperator -- Object, kraken operator that represents a Splice operator.
+
+        Return:
+        True if successful.
+
+        """
+
+        try:
+            # Get or construct a Fabric Engine client
+            contextID = cmds.fabricSplice('getClientContextID')
+            if contextID == '':
+                cmds.fabricSplice('constructClient')
+                contextID = cmds.fabricSplice('getClientContextID')
+
+            # Connect the Python client to the Softimage client.
+            client = core.createClient({"contextID": contextID})
+
+            # Get the extension to load and create an instance of the object.
+            extension = kOperator.getExtension()
+            client.loadExtension(extension)
+
+            client.loadExtension('KrakenSolver')
+            client.loadExtension('KrakenSolverArg')
+
+            solverTypeName = kOperator.getSolverTypeName()
+            klType = getattr(client.RT.types, solverTypeName)
+
+            try:
+                # Test if object
+                solver = klType.create()
+            except:
+                # Else is struct
+                solver = klType()
+
+            # Create Splice Operator
+            spliceNode = pm.createNode('spliceMayaNode', name=kOperator.getName() + "_SpliceOp")
+
+            # Add the private/non-mayaAttr port that stores the Solver object
+            cmds.fabricSplice("addIOPort", spliceNode, "{\"portName\":\"solver\", \"dataType\":\"" + solverTypeName + "\", \"extension\":\"" + kOperator.getExtension() + "\", \"addMayaAttr\": false}")
+
+            # Start constructing the source code.
+            opSourceCode = "";
+            opSourceCode += "require " + kOperator.getExtension() + ";\n\n"
+            opSourceCode += "operator " + kOperator.getName() + "(\n"
+
+            opSourceCode += "    io " + solverTypeName + " solver,\n"
+
+            # Get the args from the solver KL object.
+            args = solver.getArguments('KrakenSolverArg[]')
+
+            functionCall = "    solver.solve("
+            for i in range(len(args)):
+                arg = args[i]
+
+                # Get the argument's input from the DCC
+                try:
+                    opObject = kOperator.getInput(arg.name)
+                    targetObject = self._getDCCSceneItem(kOperator.getInput(arg.name))
+                except:
+                    opObject = kOperator.getOutput(arg.name)
+                    targetObject = self._getDCCSceneItem(kOperator.getOutput(arg.name))
+
+                # Add the splice Port for each arg.
+                if arg.connectionType == 'in':
+                    cmds.fabricSplice("addInputPort", spliceNode, "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\", \"extension\":\"\", \"addMayaAttr\": true}", "")
+
+                    if opObject.getKType().endswith('Attribute'):
+                        targetObject.connect(spliceNode.attr(arg.name))
+                    elif opObject.getKType().endswith('Locator'):
+
+                        targetObject.attr('worldMatrix').connect(spliceNode.attr(arg.name))
+
+                    else:
+                        raise Exception(opObject.getFullName() + " with type '" + opObject.getKType() + " is not implemented!")
+
+
+                elif arg.connectionType in ['io', 'out']:
+                    cmds.fabricSplice("addOutputPort", spliceNode, "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\", \"extension\":\"\", \"addMayaAttr\": true}", "")
+
+                    if opObject.getKType().endswith('Attribute'):
+                        spliceNode.attr(arg.name).connect(targetObject)
+
+                    elif opObject.getKType().endswith('Locator'): # Change to isinstance() check
+                        decomposeNode = pm.createNode('decomposeMatrix')
+                        spliceNode.attr(arg.name).connect(decomposeNode.attr("inputMatrix"))
+
+                        decomposeNode.attr("outputRotate").connect(targetObject.attr("rotate"))
+                        decomposeNode.attr("outputScale").connect(targetObject.attr("scale"))
+                        decomposeNode.attr("outputTranslate").connect(targetObject.attr("translate"))
+
+
+                # Connect the ports to the inputs/outputs in the rig.
+                opSourceCode += "    " + arg.connectionType + " " + arg.dataType + " " + arg.name
+                if i == len(args) - 1:
+                    opSourceCode += "\n"
+                else:
+                    opSourceCode += ",\n"
+
+                if i == len(args) - 1:
+                    functionCall += arg.name
+                else:
+                    functionCall += arg.name + ", "
+
+            opSourceCode += "    )\n"
+            opSourceCode += "{\n"
+            opSourceCode += functionCall + ");\n"
+            opSourceCode += "}\n"
+
+            cmds.fabricSplice('addKLOperator', spliceNode, '{"opName": "' + kOperator.getName() + '"}', opSourceCode)
+
+        finally:
+            cmds.fabricSplice('destroyClient')
+
+        return True
 
 
     # ===================
