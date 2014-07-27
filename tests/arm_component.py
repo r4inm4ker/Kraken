@@ -9,6 +9,7 @@ from kraken.core.objects.attributes.bool_attribute import BoolAttribute
 from kraken.core.objects.attributes.float_attribute import FloatAttribute
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 from kraken.core.objects.locator import Locator
+from kraken.core.objects.joint import Joint
 from kraken.core.objects.srtBuffer import SrtBuffer
 from kraken.core.objects.controls.cube_control import CubeControl
 from kraken.core.objects.controls.pin_control import PinControl
@@ -22,14 +23,39 @@ class ArmComponent(BaseComponent):
     def __init__(self, name, parent=None, side='M'):
         super(ArmComponent, self).__init__(name, parent, side)
 
+        container = self.getParent()
+        armatureLayer = container.getChildByName('armature')
+
+        # =========
+        # Armature
+        # =========
+        # armatureParent = armatureLayer
+        # if armatureParent is None:
+        #     armatureParent = self
+
+        # bicepDef = Joint('bicep')
+        # armatureParent.addChild(bicepDef)
+
+
+        # =========
+        # Controls
+        # =========
+
         # Setup component attributes
         defaultAttrGroup = self.getAttributeGroupByIndex(0)
         defaultAttrGroup.addAttribute(BoolAttribute("toggleDebugging", True))
 
         # Default values
-        bicepPosition = Vec3(2.27, 15.295, -0.753)
-        forearmPosition = Vec3(5.039, 13.56, -0.859)
-        wristPosition = Vec3(7.1886, 12.2819, 0.4906)
+        if self.getSide() == "R":
+            ctrlColor = "red"
+            bicepPosition = Vec3(-2.27, 15.295, -0.753)
+            forearmPosition = Vec3(-5.039, 13.56, -0.859)
+            wristPosition = Vec3(-7.1886, 12.2819, 0.4906)
+        else:
+            ctrlColor = "greenBright"
+            bicepPosition = Vec3(2.27, 15.295, -0.753)
+            forearmPosition = Vec3(5.039, 13.56, -0.859)
+            wristPosition = Vec3(7.1886, 12.2819, 0.4906)
 
         # Calculate Bicep Xfo
         rootToWrist = wristPosition.subtract(bicepPosition).unit()
@@ -52,7 +78,7 @@ class ArmComponent(BaseComponent):
         bicepFKCtrl.alignOnXAxis()
         bicepLen = bicepPosition.subtract(forearmPosition).length()
         bicepFKCtrl.scalePoints(Vec3(bicepLen, 1.0, 1.0))
-        bicepFKCtrl.setColor("greenBright")
+        bicepFKCtrl.setColor(ctrlColor)
         bicepFKCtrl.xfo.copy(bicepXfo)
 
         bicepFKCtrlSrtBuffer = SrtBuffer('bicepFK')
@@ -65,7 +91,7 @@ class ArmComponent(BaseComponent):
         forearmFKCtrl.alignOnXAxis()
         forearmLen = forearmPosition.subtract(wristPosition).length()
         forearmFKCtrl.scalePoints(Vec3(forearmLen, 1.0, 1.0))
-        forearmFKCtrl.setColor("greenBright")
+        forearmFKCtrl.setColor(ctrlColor)
         forearmFKCtrl.xfo.copy(forearmXfo)
 
         forearmFKCtrlSrtBuffer = SrtBuffer('forearmFK')
@@ -77,7 +103,7 @@ class ArmComponent(BaseComponent):
         armIKCtrl = PinControl('IK')
         armIKCtrl.xfo.tr.copy(wristPosition)
         armIKCtrl.rotatePoints(90, 0, 0)
-        armIKCtrl.setColor("greenBright")
+        armIKCtrl.setColor(ctrlColor)
 
         armIKCtrlSrtBuffer = SrtBuffer('IK')
         armIKCtrlSrtBuffer.xfo.copy(armIKCtrl.xfo)

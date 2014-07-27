@@ -73,6 +73,26 @@ class BaseComponent(SceneItem):
         return True
 
 
+    # ==================
+    # Container Methods
+    # ==================
+    def getContainer(self):
+        """Returns the container of this component if found.
+
+        Return:
+        Object, container.
+        None, if not part of a container.
+
+        """
+
+        container = None
+        parent = self.getParent()
+        if parent.getKType() == 'Container':
+            container = parent
+
+        return container
+
+
     # ==============
     # Input Methods
     # ==============

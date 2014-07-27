@@ -49,7 +49,7 @@ class NeckComponent(BaseComponent):
         self.addChild(neckCtrlSrtBuffer)
 
         # Setup Component Xfo I/O's
-        neckEndInput = Locator('neckEnd')
+        neckEndInput = Locator('neckBase')
         neckEndInput.xfo.copy(neckXfo)
 
         neckOutput = Locator('neckEnd')

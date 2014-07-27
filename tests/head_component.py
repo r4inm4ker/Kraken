@@ -77,22 +77,21 @@ class HeadComponent(BaseComponent):
         jawCtrlSrtBuffer.xfo.copy(jawCtrl.xfo)
         jawCtrlSrtBuffer.addChild(jawCtrl)
 
-
         # Setup Component Xfo I/O's
-        spineEndInput = Locator('spineEnd')
-        clavicleEndOutput = Locator('clavicleEnd')
+        headBaseInput = Locator('headBase')
+        headBaseInput.xfo.copy(headCtrl.xfo)
 
         # Setup componnent Attribute I/O's
         armFollowBodyOutputAttr = FloatAttribute('followBody', 0.0, 0.0, 1.0)
 
-        # Constraint outputs
-        clavicleEndConstraint = PoseConstraint('_'.join([clavicleEndOutput.getName(), 'To', jawCtrl.getName()]))
-        clavicleEndConstraint.addConstrainer(jawCtrl)
-        clavicleEndOutput.addConstraint(clavicleEndConstraint)
+        # Constraint inputs
+        headInputConstraint = PoseConstraint('_'.join([headCtrlSrtBuffer.getName(), 'To', headBaseInput.getName()]))
+        headInputConstraint.setMaintainOffset(True)
+        headInputConstraint.addConstrainer(headBaseInput)
+        headCtrlSrtBuffer.addConstraint(headInputConstraint)
 
         # Add Xfo I/O's
-        self.addInput(spineEndInput)
-        self.addOutput(clavicleEndOutput)
+        self.addInput(headBaseInput)
 
         self.addOutput(armFollowBodyOutputAttr)
 

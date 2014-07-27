@@ -30,28 +30,62 @@ class Rig(Container):
         neckComponent = NeckComponent("neck", self)
         headComponent = HeadComponent("head", self)
         clavicleLeftComponent = ClavicleComponent("clavicleLeft", self, side="L")
+        clavicleRightComponent = ClavicleComponent("clavicleRight", self, side="R")
         armLeftComponent = ArmComponent("armLeft", self, side="L")
+        armRightComponent = ArmComponent("armRight", self, side="R")
         legLeftComponent = LegComponent("legLeft", self, side="L")
+        legRightComponent = LegComponent("legRight", self, side="R")
 
         controlsLayer.addComponent(spineComponent)
         controlsLayer.addComponent(neckComponent)
         controlsLayer.addComponent(headComponent)
         controlsLayer.addComponent(clavicleLeftComponent)
+        controlsLayer.addComponent(clavicleRightComponent)
         controlsLayer.addComponent(armLeftComponent)
+        controlsLayer.addComponent(armRightComponent)
         controlsLayer.addComponent(legLeftComponent)
+        controlsLayer.addComponent(legRightComponent)
 
-        # Create component connections
-        clavicleEndOutput = clavicleLeftComponent.getOutputByName('clavicleEnd')
-        armClavicleEndInput = armLeftComponent.getInputByName('clavicleEnd')
-        armClavicleEndInput.setSource(clavicleEndOutput.getTarget())
-
+        # Neck to Spine
         spineEndOutput = spineComponent.getOutputByName('spineEnd')
-        clavicleSpineEndInput = clavicleLeftComponent.getInputByName('spineEnd')
-        clavicleSpineEndInput.setSource(spineEndOutput.getTarget())
+        neckSpineEndInput = neckComponent.getInputByName('neckBase')
+        neckSpineEndInput.setSource(spineEndOutput.getTarget())
 
-        clavicleFollowBodyOutput = clavicleLeftComponent.getOutputByName('followBody')
-        armFollowBodyInput = armLeftComponent.getInputByName('followBody')
-        armFollowBodyInput.setSource(clavicleFollowBodyOutput.getTarget())
+        # Head to Neck
+        neckEndOutput = neckComponent.getOutputByName('neckEnd')
+        headBaseInput = headComponent.getInputByName('headBase')
+        headBaseInput.setSource(neckEndOutput.getTarget())
+
+        # Clavicle to Spine
+        spineEndOutput = spineComponent.getOutputByName('spineEnd')
+        clavicleLeftSpineEndInput = clavicleLeftComponent.getInputByName('spineEnd')
+        clavicleLeftSpineEndInput.setSource(spineEndOutput.getTarget())
+        clavicleRightSpineEndInput = clavicleRightComponent.getInputByName('spineEnd')
+        clavicleRightSpineEndInput.setSource(spineEndOutput.getTarget())
+
+        # Arm To Clavicle Connections
+        clavicleLeftEndOutput = clavicleLeftComponent.getOutputByName('clavicleEnd')
+        armLeftClavicleEndInput = armLeftComponent.getInputByName('clavicleEnd')
+        armLeftClavicleEndInput.setSource(clavicleLeftEndOutput.getTarget())
+        clavicleRightEndOutput = clavicleRightComponent.getOutputByName('clavicleEnd')
+        armRightClavicleEndInput = armRightComponent.getInputByName('clavicleEnd')
+        armRightClavicleEndInput.setSource(clavicleRightEndOutput.getTarget())
+
+        # Leg To Pelvis Connections
+        spineBaseOutput = spineComponent.getOutputByName('spineBase')
+        legLeftPelvisInput = legLeftComponent.getInputByName('pelvisInput')
+        legLeftPelvisInput.setSource(spineBaseOutput.getTarget())
+        clavicleRightEndOutput = spineComponent.getOutputByName('spineBase')
+        legRightPelvisInput = legRightComponent.getInputByName('pelvisInput')
+        legRightPelvisInput.setSource(clavicleRightEndOutput.getTarget())
+
+        # Arm Attributes to Clavicle
+        clavicleLeftFollowBodyOutput = clavicleLeftComponent.getOutputByName('followBody')
+        armLeftFollowBodyInput = armLeftComponent.getInputByName('followBody')
+        armLeftFollowBodyInput.setSource(clavicleLeftFollowBodyOutput.getTarget())
+        clavicleRightFollowBodyOutput = clavicleRightComponent.getOutputByName('followBody')
+        armRightFollowBodyInput = armRightComponent.getInputByName('followBody')
+        armRightFollowBodyInput.setSource(clavicleRightFollowBodyOutput.getTarget())
 
 
 

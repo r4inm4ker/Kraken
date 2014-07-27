@@ -51,7 +51,7 @@ class SpineComponent(BaseComponent):
         spine02CtrlSrtBuffer = SrtBuffer('spine02SrtBuffer')
         spine02CtrlSrtBuffer.xfo.copy(spine02Ctrl.xfo)
         spine02CtrlSrtBuffer.addChild(spine02Ctrl)
-        spine01Ctrl.addChild(spine02CtrlSrtBuffer)
+        cogCtrl.addChild(spine02CtrlSrtBuffer)
 
         # Spine03
         spine03Ctrl = CircleControl('spine03')
