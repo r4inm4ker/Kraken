@@ -206,8 +206,7 @@ class BaseConstraint(object):
             classHierarchy.append(cls.__name__)
             
         jsonData = {
-            '__kType__': self.__kType__,
-            '__kTypeHierarchy__': classHierarchy,
+            '__typeHierarchy__': classHierarchy,
             'name': self.name,
             'constrainee': self.constrainee.getName(),
             'constrainers': []

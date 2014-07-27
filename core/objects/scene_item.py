@@ -676,11 +676,9 @@ class SceneItem(object):
             if cls == object:
                 break;
             classHierarchy.append(cls.__name__)
-        print classHierarchy
 
         jsonData = {
-            '__kType__': self.__kType__,
-            '__kTypeHierarchy__': classHierarchy,
+            '__typeHierarchy__': classHierarchy,
             'name': self.name,
             'parent': None,
             'children': [],
