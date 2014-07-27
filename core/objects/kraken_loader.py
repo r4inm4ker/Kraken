@@ -1,7 +1,7 @@
-"""KrakenFactory - objects.kraken_factory module.
+"""KrakenLoader - objects.kraken_loader module.
 
 Classes:
-KrakenFactory - Factory for building SceneItems.
+KrakenLoader - Factory for building SceneItems.
 
 """
 from kraken.core.maths import *
@@ -42,22 +42,17 @@ from constraints.scale_constraint import ScaleConstraint
 
 # from operators import * 
 
-class KrakenFactory(object):
+class KrakenLoader(object):
     """Kraken base object type for any 3D object."""
 
 
     def __init__(self):
+        super(KrakenLoader, self).__init__()
 
         # A dictionary of all the built elements during loading.
         self.parentItem = None
         self.builtItems = {}
         self.callbacks = {}
-
-    def encodeValue(self, value):
-        if isinstance(value, MathObject):
-            return value.encodeValue()
-        else:
-            return value
 
     def decodeValue(self, jsonData):
         """Returns a constructed scene item based on the provided name.
@@ -253,7 +248,7 @@ class KrakenFactory(object):
             item = SceneItem(jsonData['name'])
 
         else:
-            raise Exception("KrakenFactory does not support the given type:" + __kType__)
+            raise Exception("KrakenLoader does not support the given type:" + __kType__)
 
         self.registerItem(item)
         item.jsonDecode(self, jsonData)

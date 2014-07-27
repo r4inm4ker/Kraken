@@ -1,6 +1,7 @@
 import json
 from kraken.core.maths import *
-from kraken.core.objects.kraken_factory import KrakenFactory
+from kraken.core.objects.kraken_saver import KrakenSaver
+from kraken.core.objects.kraken_loader import KrakenLoader
 
 from kraken.core.objects.attributes.float_attribute import FloatAttribute
 from kraken.core.objects.attributes.integer_attribute import IntegerAttribute
@@ -111,9 +112,9 @@ class ArmComponent(BaseComponent):
 if __name__ == "__main__":
     armLeft = ArmComponent("myArm", side='L')
     
-    saver = KrakenFactory()
+    saver = KrakenSaver()
     jsonData = armLeft.jsonEncode(saver)
     # print json.dumps(jsonData, indent=2)
 
-    loader = KrakenFactory()
+    loader = KrakenLoader()
     armLeft2 = loader.construct(jsonData)
