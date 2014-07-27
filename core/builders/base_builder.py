@@ -711,7 +711,7 @@ class BaseBuilder(object):
             return '_'.join([componentName, side,  kObject.getName(),'crv'])
 
         elif kType == "Control":
-            nameParts = [componentName, kObject.getName(), side, 'ctrl']
+            nameParts = [componentName, side, kObject.getName(), 'ctrl']
             nameParts = [x for x in nameParts if x != ""]
             return '_'.join(nameParts)
 

@@ -49,7 +49,6 @@ class LegComponent(BaseComponent):
         ankleCtrl = SphereControl('ankle')
         ankleCtrl.xfo.tr.copy(anklePosition)
         ankleCtrl.setColor("greenBright")
-        self.addChild(ankleCtrl)
 
         ankleCtrlSrtBuffer = SrtBuffer('ankle')
         shinCtrl.addChild(ankleCtrlSrtBuffer)
