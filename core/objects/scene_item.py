@@ -717,7 +717,7 @@ class SceneItem(object):
 
         """
 
-        self.parent =  loader.resolveSceneItem(jsonData['parent'])
+        self.parent =  loader.getParentItem()
         self.flags =  jsonData['flags']
         self.xfo =  loader.decodeValue(jsonData['xfo'])
         if 'color' in jsonData and jsonData['color'] is not None:

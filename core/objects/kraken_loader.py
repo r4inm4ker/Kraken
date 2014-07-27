@@ -55,10 +55,10 @@ class KrakenLoader(object):
         self.callbacks = {}
 
     def decodeValue(self, jsonData):
-        """Returns a constructed scene item based on the provided name.
+        """Returns a constructed math value based on the provided json data.
 
         Return:
-        The constructed scene item.
+        The constructed math value
 
         """
         if type(jsonData) is not dict:
@@ -95,12 +95,14 @@ class KrakenLoader(object):
             raise Exception("Unsupported Math type:" + jsonData['__class__'])
         return item
 
+    def getParentItem(self):
+        return self.parentItem
 
     def resolveSceneItem(self, name):
         """Returns a constructed scene item based on the provided name.
 
         Return:
-        The constructed scene item.
+        The resolved scene item.
 
         """
         if name is None:
@@ -251,6 +253,9 @@ class KrakenLoader(object):
             raise Exception("KrakenLoader does not support the given type:" + __kType__)
 
         self.registerItem(item)
+        # Store the item as the parent item before decoding the object
+        # which in turn decodes the children items. 
+        self.parentItem = item
         item.jsonDecode(self, jsonData)
 
         # Fire any registered callbacks for this item. 

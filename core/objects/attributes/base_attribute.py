@@ -164,6 +164,6 @@ class BaseAttribute(object):
         """
         self.name =  jsonData['name']
         self.value =  loader.decodeValue(jsonData['value'])
-        self.parent =  loader.resolveSceneItem(jsonData['parent'])
+        self.parent =  loader.getParentItem()
 
         return True
