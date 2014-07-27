@@ -1,33 +1,22 @@
-from kraken.core.maths import *
-
-
 from kraken.core.maths.vec import Vec3
 from kraken.core.maths.rotation import Quat
 from kraken.core.maths.rotation import Euler
 from kraken.core.maths.xfo import Xfo
-from kraken.core.maths.xfo import xfoFromThreePoints
-
-from kraken.core.objects.attributes.float_attribute import FloatAttribute
-from kraken.core.objects.attributes.integer_attribute import IntegerAttribute
-from kraken.core.objects.attributes.bool_attribute import BoolAttribute
-from kraken.core.objects.attributes.string_attribute import StringAttribute
-
-from kraken.core.objects.constraints.pose_constraint import PoseConstraint
+from kraken.core.maths.xfo import xfoFromDirAndUpV
 
 from kraken.core.objects.components.base_component import BaseComponent
-
+from kraken.core.objects.attributes.bool_attribute import BoolAttribute
+from kraken.core.objects.attributes.float_attribute import FloatAttribute
+from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 from kraken.core.objects.locator import Locator
-
 from kraken.core.objects.controls.cube_control import CubeControl
-from kraken.core.objects.controls.circle_control import CircleControl
-from kraken.core.objects.controls.square_control import SquareControl
 from kraken.core.objects.controls.pin_control import PinControl
 
 from kraken.core.objects.operators.splice_operator import SpliceOperator
 
 
 class ArmComponent(BaseComponent):
-    """Arm Component Test"""
+    """Arm Component"""
 
     def __init__(self, name, parent=None, side='M'):
         super(ArmComponent, self).__init__(name, parent, side)
@@ -79,9 +68,9 @@ class ArmComponent(BaseComponent):
         forearmFKCtrl.xfo.copy(forearmXfo)
 
         forearmFKCtrlSrtBuffer = Locator('forearmFKSrtBuffer')
-        self.addChild(forearmFKCtrlSrtBuffer)
         forearmFKCtrlSrtBuffer.xfo.copy(forearmFKCtrl.xfo)
         forearmFKCtrlSrtBuffer.addChild(forearmFKCtrl)
+        bicepFKCtrl.addChild(forearmFKCtrlSrtBuffer)
 
         # Arm IK
         armIKCtrl = PinControl('IK')
@@ -90,15 +79,20 @@ class ArmComponent(BaseComponent):
         armIKCtrl.setColor("greenBright")
         self.addChild(armIKCtrl)
 
-
-
-
         # Setup component Xfo I/O's
         clavicleEndInput = Locator('clavicleEnd')
+        clavicleEndInput.xfo.copy(bicepXfo)
         armEndOutput = Locator('armEnd')
+        armEndOutput.xfo.tr.copy(wristPosition)
 
         # Setup componnent Attribute I/O's
         armFollowBodyInputAttr = FloatAttribute('followBody', 0.0, 0.0, 1.0)
+
+        # Constraint inputs
+        armRootInputConstraint = PoseConstraint('_'.join([armIKCtrl.getName(), 'To', clavicleEndInput.getName()]))
+        armRootInputConstraint.setMaintainOffset(True)
+        armRootInputConstraint.addConstrainer(clavicleEndInput)
+        bicepFKCtrlSrtBuffer.addConstraint(armRootInputConstraint)
 
         # Constraint outputs
         armEndOutputConstraint = PoseConstraint('_'.join([armEndOutput.getName(), 'To', armIKCtrl.getName()]))

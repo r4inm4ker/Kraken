@@ -5,6 +5,7 @@ from arm_component import ArmComponent
 from clavicle_component import ClavicleComponent
 from leg_component import LegComponent
 from spine_component import SpineComponent
+from neck_component import NeckComponent
 from head_component import HeadComponent
 
 
@@ -26,12 +27,14 @@ class Rig(Container):
 
         # Add Components to Layers
         spineComponent = SpineComponent("spine", self)
+        neckComponent = NeckComponent("neck", self)
         headComponent = HeadComponent("head", self)
         clavicleLeftComponent = ClavicleComponent("clavicleLeft", self, side="L")
         armLeftComponent = ArmComponent("armLeft", self, side="L")
         legLeftComponent = LegComponent("legLeft", self, side="L")
 
         controlsLayer.addComponent(spineComponent)
+        controlsLayer.addComponent(neckComponent)
         controlsLayer.addComponent(headComponent)
         controlsLayer.addComponent(clavicleLeftComponent)
         controlsLayer.addComponent(armLeftComponent)
@@ -41,6 +44,10 @@ class Rig(Container):
         clavicleEndOutput = clavicleLeftComponent.getOutputByName('clavicleEnd')
         armClavicleEndInput = armLeftComponent.getInputByName('clavicleEnd')
         armClavicleEndInput.setSource(clavicleEndOutput.getTarget())
+
+        spineEndOutput = spineComponent.getOutputByName('spineEnd')
+        clavicleSpineEndInput = clavicleLeftComponent.getInputByName('spineEnd')
+        clavicleSpineEndInput.setSource(spineEndOutput.getTarget())
 
         clavicleFollowBodyOutput = clavicleLeftComponent.getOutputByName('followBody')
         armFollowBodyInput = armLeftComponent.getInputByName('followBody')

@@ -178,6 +178,8 @@ class BaseBuilder(object):
         return None
 
 
+
+
     def buildLocator(self, kSceneItem, objectName):
         """Builds a locator / null object.
 
@@ -377,6 +379,7 @@ class BaseBuilder(object):
             raise Exception("Component connection '" + kConnection.getName() + "'is invalid! Missing Source or Target!")
 
         constraint = PoseConstraint('_'.join([target.getName(), 'To', source.getName()]))
+        constraint.setMaintainOffset(True)
         constraint.setConstrainee(target)
         constraint.addConstrainer(source)
         dccSceneItem = self.buildPoseConstraint(constraint)
@@ -487,6 +490,10 @@ class BaseBuilder(object):
 
         elif kType == "HierarchyGroup":
             dccSceneItem = self.buildHierarchyGroup(kObject, objectName)
+
+        elif kType == "SrtBuffer":
+            dccSceneItem = self.buildGroup(kObject, objectName)
+            component = kObject
 
         elif kType == "Locator":
             dccSceneItem = self.buildLocator(kObject, objectName)
@@ -692,16 +699,19 @@ class BaseBuilder(object):
             return '_'.join([componentName, side, kObject.getName(), 'hrc'])
 
         elif kType == "Locator":
-            return '_'.join([componentName, kObject.getName(), side, 'null'])
+            return '_'.join([componentName, side, kObject.getName(), 'null'])
+
+        elif kType == "SrtBuffer":
+            return '_'.join([componentName, side,  kObject.getName(),'srtBuffer'])
 
         elif kType == "Joint":
-            return '_'.join([componentName, kObject.getName(), side, 'def'])
+            return '_'.join([componentName, side, kObject.getName(), 'def'])
 
         elif kType == "SceneItem":
-            return '_'.join([componentName, kObject.getName(), side, 'null'])
+            return '_'.join([componentName, side,  kObject.getName(),'null'])
 
         elif kType == "Curve":
-            return '_'.join([componentName, kObject.getName(), side, 'crv'])
+            return '_'.join([componentName, side,  kObject.getName(),'crv'])
 
         elif kType == "Control":
             nameParts = [componentName, kObject.getName(), side, 'ctrl']
