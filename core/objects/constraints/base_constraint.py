@@ -183,3 +183,45 @@ class BaseConstraint(object):
         """
 
         return self.__kType__
+
+
+
+    # ================
+    # Persistence Methods
+    # ================
+    def jsonEncode(self, saver):
+        """Returns the data for this object encoded as a JSON hierarchy.
+
+        Arguments:
+
+        Return:
+        A JSON structure containing the data for this SceneItem.
+
+        """
+
+        jsonData = {
+            '__kType__': self.__kType__,
+            'name': self.name,
+            'constrainee': self.constrainee.getName(),
+            'constrainers': []
+        }
+        for cnstrnr in self.constrainers:
+            jsonData['constrainers'].append(cnstrnr.getName())
+
+        return jsonData
+
+
+    def jsonDecode(self, loader, jsonData):
+        """Returns the color of the object.
+
+        Return:
+        the decoded object.
+
+        """
+
+        self.parent =  loader.resolveSceneItem(jsonData['parent'])
+
+        for cnstrnr in jsonData['constrainers']:
+            self.addConstrainer(loader.resolveSceneItem(cnstrnr))
+
+        return self.color

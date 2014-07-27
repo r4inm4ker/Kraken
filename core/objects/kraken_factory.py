@@ -27,6 +27,12 @@ class KrakenFactory(object):
         # A dictionary of all the built elements during loading.
         self.builtItems = {}
 
+    def encodeValue(self, value):
+        if isinstance(value, MathObject):
+            return value.encodeValue()
+        else:
+            return value
+
     def decodeValue(self, jsonData):
         """Returns a constructed scene item based on the provided name.
 

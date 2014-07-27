@@ -10,10 +10,11 @@ class AttributeGroup(object):
 
     __kType__ = "AttributeGroup"
 
-    def __init__(self, name):
+    def __init__(self, name, parent = None):
         super(AttributeGroup, self).__init__()
         self.name = name
         self.attributes = []
+        self.parent = parent
 
 
     # =============
@@ -220,3 +221,47 @@ class AttributeGroup(object):
                 return eachAttribute
 
         return None
+
+
+
+
+    # ================
+    # Persistence Methods
+    # ================
+
+    def jsonEncode(self, saver):
+        """Returns the data for this object encoded as a JSON hierarchy.
+
+        Arguments:
+
+        Return:
+        A JSON structure containing the data for this SceneItem.
+
+        """
+
+        jsonData = {
+            '__kType__': self.__kType__,
+            'name': self.name,
+            'parent': self.parent.getName(),
+            'attributes': []
+        }
+        for attr in self.attributes:
+            jsonData['attributes'].append(attr.jsonEncode(saver))
+
+        return jsonData
+
+
+    def jsonDecode(self, loader, jsonData):
+        """Returns the color of the object.
+
+        Return:
+        the decoded object.
+
+        """
+
+        self.parent =  loader.resolveSceneItem(jsonData['parent'])
+
+        for attr in jsonData['attributeGroups']:
+            self.addAttributeGroup(loader.construct(attr))
+
+        return self.color

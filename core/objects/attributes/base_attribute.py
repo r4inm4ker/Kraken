@@ -119,3 +119,45 @@ class BaseAttribute(object):
         """
 
         return self.__kType__
+
+
+
+    # ================
+    # Persistence Methods
+    # ================
+
+    def jsonEncode(self, saver):
+        """Sets the color of this object.
+
+        Arguments:
+
+        Return:
+        A JSON structure containing the data for this SceneItem.
+
+        """
+
+        jsonData = {
+            '__kType__': self.__kType__,
+            'name': self.name,
+            'value': saver.encodeValue(self.value),
+            'parent': None
+        }
+
+        if self.parent is not None:
+            jsonData['parent'] = self.parent.getName()
+
+        return jsonData
+
+
+    def jsonDecode(self, loader, jsonData):
+        """Returns the color of the object.
+
+        Return:
+        the decoded object.
+
+        """
+        self.name =  jsonData['name']
+        self.value =  loader.jsonDecode(jsonData['value'])
+        self.parent =  loader.resolveSceneItem(jsonData['parent'])
+
+        return self.color

@@ -661,11 +661,10 @@ class SceneItem(object):
     # Persistence Methods
     # ================
 
-    def jsonEncode(self):
-        """Sets the color of this object.
+    def jsonEncode(self, saver):
+        """Returns the data for this object encoded as a JSON hierarchy.
 
         Arguments:
-        color -- String, name of the color you wish to set.
 
         Return:
         A JSON structure containing the data for this SceneItem.
@@ -675,7 +674,7 @@ class SceneItem(object):
         jsonData = {
             '__kType__': self.__kType__,
             'name': self.name,
-            'parent': self.parent,
+            'parent': None,
             'children': [],
             'flags': self.flags,
             'attributeGroups': [],
@@ -685,43 +684,44 @@ class SceneItem(object):
             'visibility': self.visibility,
             'shapeVisibility': self.shapeVisibility,
         }
+
+        if self.parent is not None:
+            jsonData['parent'] = self.parent.getName()
+
         for child in self.children:
-            jsonData['children'].append(child.save())
+            jsonData['children'].append(child.jsonEncode(saver))
 
         for attrGroup in self.attributeGroups:
-            jsonData['attributeGroups'].append(attrGroup.save())
+            jsonData['attributeGroups'].append(attrGroup.jsonEncode(saver))
 
         for constr in self.constraints:
-            jsonData['constraints'].append(constr.save())
+            jsonData['constraints'].append(constr.jsonEncode(saver))
 
         return jsonData
 
 
-    def jsonDecode(self, jsonData):
+    def jsonDecode(self, loader, jsonData):
         """Returns the color of the object.
 
         Return:
-        String, color of the object.
+        the decoded object.
 
         """
-        self.name =  jsonData['name']
-        self.parent =  jsonData['parent']
-        self.children =  jsonData['children']
+
+        self.parent =  loader.resolveSceneItem(jsonData['parent'])
         self.flags =  jsonData['flags']
-        self.attributeGroups =  jsonData['attributeGroups']
-        self.constraints =  jsonData['constraints']
-        self.xfo =  jsonData['xfo']
-        self.color =  jsonData['color']
+        self.xfo =  loader.decodeValue(jsonData['xfo'])
+        self.color =  loader.decodeValue(jsonData['color'])
         self.visibility =  jsonData['visibility']
         self.shapeVisibility =  jsonData['shapeVisibility']
 
         for child in jsonData['children']:
-            self.addChild(KrakenFactory.construct(child))
+            self.addChild(loader.construct(child))
 
         for attrGroup in jsonData['attributeGroups']:
-            self.addAttributeGroup(KrakenFactory.construct(attrGroup))
+            self.addAttributeGroup(loader.construct(attrGroup))
 
         for constr in jsonData['constraints']:
-            self.addConstraint(KrakenFactory.construct(constr))
+            self.addConstraint(loader.construct(constr))
 
         return self.color
