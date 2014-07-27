@@ -13,14 +13,26 @@ from joint import Joint
 from layer import Layer
 from locator import Locator
 from scene_item import SceneItem
-from attributes import * 
+
 from attributes.attribute_group import AttributeGroup
 # from attributes.base_attribute import BaseAttribute
+from attributes.bool_attribute import BoolAttribute
 from attributes.float_attribute import FloatAttribute
 from attributes.integer_attribute import IntegerAttribute
 from attributes.string_attribute import StringAttribute
 
 from components import * 
+
+from controls.arrow_control import ArrowControl
+from controls.arrows_control import ArrowsControl
+from controls.circle_control import CircleControl
+from controls.cube_control import CubeControl
+from controls.null_control import NullControl
+from controls.pin_control import PinControl
+from controls.sphere_control import SphereControl
+from controls.square_control import SquareControl
+from controls.triangle_control import TriangleControl
+from controls.base_control import BaseControl
 
 from constraints.orientation_constraint import OrientationConstraint
 from constraints.pose_constraint import PoseConstraint
@@ -28,7 +40,6 @@ from constraints.position_constraint import PositionConstraint
 from constraints.scale_constraint import ScaleConstraint
 
 
-# from constraints import * 
 # from operators import * 
 
 class KrakenFactory(object):
@@ -40,6 +51,7 @@ class KrakenFactory(object):
         # A dictionary of all the built elements during loading.
         self.parentItem = None
         self.builtItems = {}
+        self.callbacks = {}
 
     def encodeValue(self, value):
         if isinstance(value, MathObject):
@@ -113,7 +125,7 @@ class KrakenFactory(object):
         if '__kType__' not in jsonData or 'name' not in jsonData:
             raise Exception("Invalid JSON data for constructing scene item:" + str(jsonData));
 
-        print "construct:" + str(jsonData['__kTypeHierarchy__']) + ":" + jsonData['name']
+        print "construct:" + jsonData['name'] + ":" + str(jsonData['__kTypeHierarchy__'])
 
         ##########################
         ## Controls.
@@ -246,9 +258,31 @@ class KrakenFactory(object):
             raise Exception("KrakenFactory does not support the given type:" + __kType__)
 
         self.registerItem(item)
-        print "self.builtItems:" + str(self.builtItems.keys())
         item.jsonDecode(self, jsonData)
+
+        # Fire any registered callbacks for this item. 
+        # This enables the loading of objects already created,
+        # but dependent on this object to be completed.
+        if item.getName() in self.callbacks:
+            for callback in self.callbacks[item.getName()]:
+                callback(item)
+
         return item
 
     def registerItem(self, item):
         self.builtItems[item.getName()] = item
+
+    def registerConstructionCallback(self, name, callback):
+        """Register a callback to be invoked when the requested item is constructed.
+
+        Return:
+        None
+
+        """
+
+        if name in self.builtItems:
+            callback(self.builtItems[name])
+        else:
+            if name not in self.callbacks:
+                self.callbacks[name] = []
+            self.callbacks[name].append(callback)

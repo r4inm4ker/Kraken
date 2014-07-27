@@ -226,9 +226,9 @@ class BaseConstraint(object):
 
         """
 
-        self.addConstrainer(loader.resolveSceneItem(jsonData['constrainee']))
+        loader.registerConstructionCallback(jsonData['constrainee'], self.setConstrainee)
 
         for cnstrnr in jsonData['constrainers']:
-            self.addConstrainer(loader.resolveSceneItem(cnstrnr))
+            loader.registerConstructionCallback(cnstrnr, self.addConstrainer)
 
         return True
