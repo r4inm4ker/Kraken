@@ -15,3 +15,4 @@ class SrtBuffer(SceneItem):
 
     def __init__(self, name):
         super(SrtBuffer, self).__init__(name, None)
+        self.setShapeVisibility(False)

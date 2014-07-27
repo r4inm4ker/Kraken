@@ -9,6 +9,7 @@ from kraken.core.objects.attributes.bool_attribute import BoolAttribute
 from kraken.core.objects.attributes.float_attribute import FloatAttribute
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 from kraken.core.objects.locator import Locator
+from kraken.core.objects.srtBuffer import SrtBuffer
 from kraken.core.objects.controls.cube_control import CubeControl
 from kraken.core.objects.controls.pin_control import PinControl
 
@@ -54,7 +55,7 @@ class ArmComponent(BaseComponent):
         bicepFKCtrl.setColor("greenBright")
         bicepFKCtrl.xfo.copy(bicepXfo)
 
-        bicepFKCtrlSrtBuffer = Locator('bicepFKSrtBuffer')
+        bicepFKCtrlSrtBuffer = SrtBuffer('bicepFK')
         self.addChild(bicepFKCtrlSrtBuffer)
         bicepFKCtrlSrtBuffer.xfo.copy(bicepFKCtrl.xfo)
         bicepFKCtrlSrtBuffer.addChild(bicepFKCtrl)
@@ -67,7 +68,7 @@ class ArmComponent(BaseComponent):
         forearmFKCtrl.setColor("greenBright")
         forearmFKCtrl.xfo.copy(forearmXfo)
 
-        forearmFKCtrlSrtBuffer = Locator('forearmFKSrtBuffer')
+        forearmFKCtrlSrtBuffer = SrtBuffer('forearmFK')
         forearmFKCtrlSrtBuffer.xfo.copy(forearmFKCtrl.xfo)
         forearmFKCtrlSrtBuffer.addChild(forearmFKCtrl)
         bicepFKCtrl.addChild(forearmFKCtrlSrtBuffer)
@@ -77,7 +78,11 @@ class ArmComponent(BaseComponent):
         armIKCtrl.xfo.tr.copy(wristPosition)
         armIKCtrl.rotatePoints(90, 0, 0)
         armIKCtrl.setColor("greenBright")
-        self.addChild(armIKCtrl)
+
+        armIKCtrlSrtBuffer = SrtBuffer('IK')
+        armIKCtrlSrtBuffer.xfo.copy(armIKCtrl.xfo)
+        armIKCtrlSrtBuffer.addChild(armIKCtrl)
+        self.addChild(armIKCtrlSrtBuffer)
 
         # Setup component Xfo I/O's
         clavicleEndInput = Locator('clavicleEnd')

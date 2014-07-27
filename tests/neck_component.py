@@ -6,6 +6,7 @@ from kraken.core.objects.attributes.float_attribute import FloatAttribute
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 from kraken.core.objects.components.base_component import BaseComponent
 from kraken.core.objects.locator import Locator
+from kraken.core.objects.srtBuffer import SrtBuffer
 from kraken.core.objects.controls.pin_control  import PinControl
 
 
@@ -39,12 +40,10 @@ class NeckComponent(BaseComponent):
         neckCtrl.scalePoints(Vec3(1.25, 1.25, 1.25))
         neckCtrl.translatePoints(Vec3(0, 0, -0.5))
         neckCtrl.rotatePoints(90, 0, 90)
-        # neckLen = neckPosition.subtract(neckEndPosition).length()
-        # neckCtrl.scalePoints(Vec3(neckLen, 1.0, 1.0))
         neckCtrl.xfo.copy(neckXfo)
         neckCtrl.setColor("orange")
 
-        neckCtrlSrtBuffer = Locator('neckSrtBuffer')
+        neckCtrlSrtBuffer = SrtBuffer('neck')
         neckCtrlSrtBuffer.xfo.copy(neckCtrl.xfo)
         neckCtrlSrtBuffer.addChild(neckCtrl)
         self.addChild(neckCtrlSrtBuffer)

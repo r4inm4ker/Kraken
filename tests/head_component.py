@@ -36,7 +36,7 @@ class HeadComponent(BaseComponent):
         headCtrl.xfo.tr.copy(headPosition)
         headCtrl.setColor("yellow")
 
-        headCtrlSrtBuffer = SrtBuffer('headSrtBuffer')
+        headCtrlSrtBuffer = SrtBuffer('head')
         self.addChild(headCtrlSrtBuffer)
         headCtrlSrtBuffer.xfo.copy(headCtrl.xfo)
         headCtrlSrtBuffer.addChild(headCtrl)
@@ -47,7 +47,7 @@ class HeadComponent(BaseComponent):
         eyeLeftCtrl.xfo.tr.copy(eyeLeftPosition)
         eyeLeftCtrl.setColor("blueMedium")
 
-        eyeLeftCtrlSrtBuffer = SrtBuffer('eyeLeftSrtBuffer')
+        eyeLeftCtrlSrtBuffer = SrtBuffer('eyeLeft')
         headCtrl.addChild(eyeLeftCtrlSrtBuffer)
         eyeLeftCtrlSrtBuffer.xfo.copy(eyeLeftCtrl.xfo)
         eyeLeftCtrlSrtBuffer.addChild(eyeLeftCtrl)
@@ -58,7 +58,7 @@ class HeadComponent(BaseComponent):
         eyeRightCtrl.xfo.tr.copy(eyeRightPosition)
         eyeRightCtrl.setColor("blueMedium")
 
-        eyeRightCtrlSrtBuffer = SrtBuffer('eyeRightSrtBuffer')
+        eyeRightCtrlSrtBuffer = SrtBuffer('eyeRight')
         headCtrl.addChild(eyeRightCtrlSrtBuffer)
         eyeRightCtrlSrtBuffer.xfo.copy(eyeRightCtrl.xfo)
         eyeRightCtrlSrtBuffer.addChild(eyeRightCtrl)

@@ -5,6 +5,7 @@ from kraken.core.objects.attributes.float_attribute import FloatAttribute
 from kraken.core.objects.attributes.bool_attribute import BoolAttribute
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 from kraken.core.objects.locator import Locator
+from kraken.core.objects.srtBuffer import SrtBuffer
 from kraken.core.objects.controls.cube_control import CubeControl
 from kraken.core.objects.controls.sphere_control import SphereControl
 
@@ -19,22 +20,41 @@ class LegComponent(BaseComponent):
         defaultAttrGroup = self.getAttributeGroupByIndex(0)
         defaultAttrGroup.addAttribute(BoolAttribute("toggleDebugging", True))
 
-        # Add Guide Controls
-        femurGuideCtrl = SphereControl('femurGuideCtrl')
-        femurGuideCtrl.xfo.tr = Vec3(2.0, 10.0, 0.0)
-        femurGuideCtrl.setColor("greenBright")
-        self.addChild(femurGuideCtrl)
+        # Default values
+        femurPosition = Vec3(2.0, 10.0, 0.0)
+        shinPosition = Vec3(2.0, 5.5, 1)
+        anklePosition = Vec3(2.0, 1.0, 0.0)
 
-        shinGuideCtrl = SphereControl('shinGuideCtrl')
-        shinGuideCtrl.xfo.tr = Vec3(2.0, 5.5, 1)
-        shinGuideCtrl.setColor("greenBright")
-        self.addChild(shinGuideCtrl)
+        # Femur
+        femurCtrl = SphereControl('femur')
+        femurCtrl.xfo.tr.copy(femurPosition)
+        femurCtrl.setColor("greenBright")
 
-        ankleGuideCtrl = SphereControl('ankleGuideCtrl')
-        ankleGuideCtrl.xfo.tr = Vec3(2.0, 1.0, 0.0)
-        ankleGuideCtrl.setColor("greenBright")
-        self.addChild(ankleGuideCtrl)
+        femurCtrlSrtBuffer = SrtBuffer('femur')
+        self.addChild(femurCtrlSrtBuffer)
+        femurCtrlSrtBuffer.xfo.copy(femurCtrl.xfo)
+        femurCtrlSrtBuffer.addChild(femurCtrl)
 
+        # Shin
+        shinCtrl = SphereControl('shin')
+        shinCtrl.xfo.tr.copy(shinPosition)
+        shinCtrl.setColor("greenBright")
+
+        shinCtrlSrtBuffer = SrtBuffer('shin')
+        femurCtrl.addChild(shinCtrlSrtBuffer)
+        shinCtrlSrtBuffer.xfo.copy(shinCtrl.xfo)
+        shinCtrlSrtBuffer.addChild(shinCtrl)
+
+        # Ankle
+        ankleCtrl = SphereControl('ankle')
+        ankleCtrl.xfo.tr.copy(anklePosition)
+        ankleCtrl.setColor("greenBright")
+        self.addChild(ankleCtrl)
+
+        ankleCtrlSrtBuffer = SrtBuffer('ankle')
+        shinCtrl.addChild(ankleCtrlSrtBuffer)
+        ankleCtrlSrtBuffer.xfo.copy(ankleCtrl.xfo)
+        ankleCtrlSrtBuffer.addChild(ankleCtrl)
 
         # Setup component Xfo I/O's
         legPelvisInput = Locator('pelvisInput')
@@ -44,8 +64,8 @@ class LegComponent(BaseComponent):
         legFollowPelvisInputAttr = FloatAttribute('followBody', 0.0, 0.0, 1.0)
 
         # Constraint outputs
-        legEndOutputConstraint = PoseConstraint('_'.join([legEndOutput.getName(), 'To', ankleGuideCtrl.getName()]))
-        legEndOutputConstraint.addConstrainer(ankleGuideCtrl)
+        legEndOutputConstraint = PoseConstraint('_'.join([legEndOutput.getName(), 'To', ankleCtrl.getName()]))
+        legEndOutputConstraint.addConstrainer(ankleCtrl)
         legEndOutput.addConstraint(legEndOutputConstraint)
 
         # Add Xfo I/O's

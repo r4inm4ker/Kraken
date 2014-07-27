@@ -6,6 +6,7 @@ from kraken.core.objects.attributes.float_attribute import FloatAttribute
 from kraken.core.objects.attributes.bool_attribute import BoolAttribute
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 from kraken.core.objects.locator import Locator
+from kraken.core.objects.srtBuffer import SrtBuffer
 from kraken.core.objects.controls.cube_control  import CubeControl
 
 
@@ -43,7 +44,7 @@ class ClavicleComponent(BaseComponent):
         clavicleCtrl.xfo.copy(clavicleXfo)
         clavicleCtrl.setColor("greenBright")
 
-        clavicleCtrlSrtBuffer = Locator('clavicleSrtBuffer')
+        clavicleCtrlSrtBuffer = SrtBuffer('clavicle')
         clavicleCtrlSrtBuffer.xfo.copy(clavicleCtrl.xfo)
         clavicleCtrlSrtBuffer.addChild(clavicleCtrl)
         self.addChild(clavicleCtrlSrtBuffer)

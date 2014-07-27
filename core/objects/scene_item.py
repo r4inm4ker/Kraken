@@ -126,7 +126,7 @@ class SceneItem(object):
         """
 
         if child.name in [x.name for x in self.children]:
-            raise IndexError("Child with " + child.name + " already exists as a child.")
+            raise IndexError("Child with name '" + child.name + "'' already exists as a child.")
 
         self.children.append(child)
         child.setParent(self)

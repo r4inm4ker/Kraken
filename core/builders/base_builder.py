@@ -178,8 +178,6 @@ class BaseBuilder(object):
         return None
 
 
-
-
     def buildLocator(self, kSceneItem, objectName):
         """Builds a locator / null object.
 
@@ -493,7 +491,6 @@ class BaseBuilder(object):
 
         elif kType == "SrtBuffer":
             dccSceneItem = self.buildGroup(kObject, objectName)
-            component = kObject
 
         elif kType == "Locator":
             dccSceneItem = self.buildLocator(kObject, objectName)
