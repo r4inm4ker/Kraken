@@ -4,19 +4,20 @@ Classes:
 Xfo -- Transform.
 """
 
-from kraken.core.maths import vec
-from kraken.core.maths import rotation
-from kraken.core.maths import matrix
+from math_object import MathObject
+from vec import Vec3
+from rotation import Quat
+from matrix import Matrix33, Matrix44
 
 
-class Xfo(object):
+class Xfo(MathObject):
     """Transform object."""
 
     def __init__(self, scl=None, rot=None, tr=None, ro=0):
         super(Xfo, self).__init__()
-        self.scl = vec.Vec3(1,1,1)
-        self.rot = rotation.Quat()
-        self.tr = vec.Vec3()
+        self.scl = Vec3(1,1,1)
+        self.rot = Quat()
+        self.tr = Vec3()
         self.ro = 0
 
         self.set(scl=scl, rot=rot, tr=tr, ro=ro)
@@ -54,23 +55,23 @@ class Xfo(object):
 
         """
 
-        if scl is not None and not isinstance(scl, vec.Vec3):
+        if scl is not None and not isinstance(scl, Vec3):
             raise TypeError("Xfo: Invalid type for 'scl' argument. Must be a Vec3.")
 
-        if rot is not None and not isinstance(rot, rotation.Quat):
+        if rot is not None and not isinstance(rot, Quat):
             raise TypeError("Xfo: Invalid type for 'rot' argument. Must be a Quat.")
 
-        if tr is not None and not isinstance(tr, vec.Vec3):
+        if tr is not None and not isinstance(tr, Vec3):
             raise TypeError("Xfo: Invalid type for 'tr' argument. Must be a Vec3.")
 
         if scl is None:
-            scl = vec.Vec3(1,1,1)
+            scl = Vec3(1,1,1)
 
         if rot is None:
-            rot = rotation.Quat()
+            rot = Quat()
 
         if tr is None:
-            tr = vec.Vec3()
+            tr = Vec3()
 
         self.scl.set(scl.x, scl.y, scl.z)
         self.rot.set(rot.v, rot.w)
@@ -91,7 +92,7 @@ class Xfo(object):
 
         """
 
-        if not isinstance(mat33, matrix.Matrix33):
+        if not isinstance(mat33, Matrix33):
             raise TypeError("Xfo: setFromMatrix33: Invalid type for 'mat33' argument. Must be a Matrix33.")
 
         self.rot.setFromMatrix33(mat33)
@@ -112,7 +113,7 @@ class Xfo(object):
 
         mat44Array = mat44.toArray()
 
-        mat33 = matrix.Matrix33()
+        mat33 = Matrix33()
         mat33.setFromArray([mat44Array[0],mat44Array[1],mat44Array[2],
                              mat44Array[4],mat44Array[5],mat44Array[6],
                              mat44Array[8],mat44Array[9],mat44Array[10]])
@@ -123,9 +124,9 @@ class Xfo(object):
         self.tr.y = mat44Array[13]
         self.tr.z = mat44Array[14]
 
-        self.scl.x = vec.Vec3(mat44Array[0],mat44Array[1],mat44Array[2]).length()
-        self.scl.y = vec.Vec3(mat44Array[4],mat44Array[5],mat44Array[6]).length()
-        self.scl.z = vec.Vec3(mat44Array[8],mat44Array[9],mat44Array[10]).length()
+        self.scl.x = Vec3(mat44Array[0],mat44Array[1],mat44Array[2]).length()
+        self.scl.y = Vec3(mat44Array[4],mat44Array[5],mat44Array[6]).length()
+        self.scl.z = Vec3(mat44Array[8],mat44Array[9],mat44Array[10]).length()
 
         return self
 
@@ -143,7 +144,7 @@ class Xfo(object):
         True if successful.
 
         """
-        mat33 = matrix.Matrix33()
+        mat33 = Matrix33()
         mat33.set(inVec1, inVec2, inVec3)
         self.rot.setFromMatrix33(mat33.transpose())
         self.tr = translation
@@ -159,7 +160,7 @@ class Xfo(object):
 
         """
 
-        self.set(vec.Vec3(), vec.Vec3(), vec.Vec3())
+        self.set(Vec3(), Vec3(), Vec3())
 
         return self
 
@@ -207,27 +208,3 @@ class Xfo(object):
                self.rot.equal(other.rot) and \
                self.tr.equal(other.tr)
 
-
-    def jsonEncode(self):
-        """Encodes object to JSON.
-
-        Return:
-        JSON string.
-
-        """
-
-        d = {
-                "__class__":self.__class__.__name__,
-            }
-
-        attrs = {}
-        for eachItem in self.__dict__.items():
-
-            if hasattr(eachItem[1], "jsonEncode"):
-                attrs[eachItem[0]] = eachItem[1].jsonEncode()
-            else:
-                attrs[eachItem[0]] = eachItem[1]
-
-        d.update(attrs)
-
-        return d

@@ -6,13 +6,14 @@ Quat -- Quaternion rotation.
 """
 
 import math
+from math_object import MathObject
 
 from kraken.core.maths import vec
 from kraken.core.maths import matrix
 from kraken.core.maths import mathUtils
 
 
-class Euler(object):
+class Euler(MathObject):
     """Euler rotation object."""
 
     roMap = {
@@ -178,32 +179,10 @@ class Euler(object):
                abs(self.z - other.z) < precision
 
 
-    def jsonEncode(self):
-        """Encodes object to JSON.
-
-        Return:
-        JSON string.
-
-        """
-
-        d = {
-                "__class__":self.__class__.__name__,
-            }
-
-        attrs = {}
-        for eachItem in self.__dict__.items():
-
-            if hasattr(eachItem[1], "jsonEncode"):
-                attrs[eachItem[0]] = eachItem[1].jsonEncode()
-            else:
-                attrs[eachItem[0]] = eachItem[1]
-
-        d.update(attrs)
-
-        return d
 
 
-class Quat(object):
+
+class Quat(MathObject):
     """Quaternion Rotation object."""
 
     def __init__(self, v=None, w=None):
@@ -668,27 +647,3 @@ class Quat(object):
         return self.v.almostEqual(other.v, precision) and \
                abs(self.w - other.w) < precision
 
-
-    def jsonEncode(self):
-        """Encodes object to JSON.
-
-        Return:
-        JSON string.
-
-        """
-
-        d = {
-                "__class__":self.__class__.__name__,
-            }
-
-        attrs = {}
-        for eachItem in self.__dict__.items():
-
-            if hasattr(eachItem[1], "jsonEncode"):
-                attrs[eachItem[0]] = eachItem[1].jsonEncode()
-            else:
-                attrs[eachItem[0]] = eachItem[1]
-
-        d.update(attrs)
-
-        return d

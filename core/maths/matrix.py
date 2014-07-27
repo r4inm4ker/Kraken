@@ -5,10 +5,10 @@ Matrix33 -- Matrix 3 transform object.
 Matrix44 -- Matrix 4 transform object.
 """
 
+from math_object import MathObject
 from kraken.core.maths import vec
 
-
-class Matrix33(object):
+class Matrix33(MathObject):
     """3x3 Matrix object."""
 
     def __init__(self, row0=None, row1=None, row2=None):
@@ -295,32 +295,8 @@ class Matrix33(object):
         return Matrix33(row0=self.row0.clone(), row1=self.row1.clone(), row2=self.row2.clone())
 
 
-    def jsonEncode(self):
-        """Encodes object to JSON.
 
-        Return:
-        JSON string.
-
-        """
-
-        d = {
-                "__class__":self.__class__.__name__,
-            }
-
-        attrs = {}
-        for eachItem in self.__dict__.items():
-
-            if hasattr(eachItem[1], "jsonEncode"):
-                attrs[eachItem[0]] = eachItem[1].jsonEncode()
-            else:
-                attrs[eachItem[0]] = eachItem[1]
-
-        d.update(attrs)
-
-        return d
-
-
-class Matrix44(object):
+class Matrix44(MathObject):
     """4x4 Matrix object."""
 
     def __init__(self, row0=None, row1=None, row2=None, row3=None):
@@ -651,27 +627,3 @@ class Matrix44(object):
 
         return Matrix44(row0=self.row0.clone(), row1=self.row1.clone(), row2=self.row2.clone(), row3=self.row3.clone())
 
-
-    def jsonEncode(self):
-        """Encodes object to JSON.
-
-        Return:
-        JSON string.
-
-        """
-
-        d = {
-                "__class__":self.__class__.__name__,
-            }
-
-        attrs = {}
-        for eachItem in self.__dict__.items():
-
-            if hasattr(eachItem[1], "jsonEncode"):
-                attrs[eachItem[0]] = eachItem[1].jsonEncode()
-            else:
-                attrs[eachItem[0]] = eachItem[1]
-
-        d.update(attrs)
-
-        return d
