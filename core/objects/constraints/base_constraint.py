@@ -199,8 +199,15 @@ class BaseConstraint(object):
 
         """
 
+        classHierarchy = []
+        for cls in type.mro(type(self)):
+            if cls == object:
+                break;
+            classHierarchy.append(cls.__name__)
+            
         jsonData = {
             '__kType__': self.__kType__,
+            '__kTypeHierarchy__': classHierarchy,
             'name': self.name,
             'constrainee': self.constrainee.getName(),
             'constrainers': []
@@ -215,13 +222,13 @@ class BaseConstraint(object):
         """Returns the color of the object.
 
         Return:
-        the decoded object.
+        True if decoding was successful
 
         """
 
-        self.parent =  loader.resolveSceneItem(jsonData['parent'])
+        self.addConstrainer(loader.resolveSceneItem(jsonData['constrainee']))
 
         for cnstrnr in jsonData['constrainers']:
             self.addConstrainer(loader.resolveSceneItem(cnstrnr))
 
-        return self.color
+        return True

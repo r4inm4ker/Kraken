@@ -113,6 +113,7 @@ if __name__ == "__main__":
     
     saver = KrakenFactory()
     jsonData = armLeft.jsonEncode(saver)
-    print json.dumps(jsonData, indent=2)
+    # print json.dumps(jsonData, indent=2)
 
     loader = KrakenFactory()
+    armLeft2 = loader.construct(jsonData)

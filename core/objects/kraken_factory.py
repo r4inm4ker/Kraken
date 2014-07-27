@@ -14,7 +14,20 @@ from layer import Layer
 from locator import Locator
 from scene_item import SceneItem
 from attributes import * 
+from attributes.attribute_group import AttributeGroup
+# from attributes.base_attribute import BaseAttribute
+from attributes.float_attribute import FloatAttribute
+from attributes.integer_attribute import IntegerAttribute
+from attributes.string_attribute import StringAttribute
+
 from components import * 
+
+from constraints.orientation_constraint import OrientationConstraint
+from constraints.pose_constraint import PoseConstraint
+from constraints.position_constraint import PositionConstraint
+from constraints.scale_constraint import ScaleConstraint
+
+
 # from constraints import * 
 # from operators import * 
 
@@ -25,6 +38,7 @@ class KrakenFactory(object):
     def __init__(self):
 
         # A dictionary of all the built elements during loading.
+        self.parentItem = None
         self.builtItems = {}
 
     def encodeValue(self, value):
@@ -40,6 +54,9 @@ class KrakenFactory(object):
         The constructed scene item.
 
         """
+        if type(jsonData) is not dict:
+            return jsonData
+
         if '__class__' not in jsonData:
             raise Exception("Invalid JSON data for constructing value:" + str(jsonData));
 
@@ -79,9 +96,11 @@ class KrakenFactory(object):
         The constructed scene item.
 
         """
+        if name is None:
+            return None
         if name in self.builtItems:
             return self.builtItems[name]
-        raise Exception("SceneItem not found:" + name)
+        raise Exception("SceneItem not found:" + str(name))
 
 
     def construct(self, jsonData):
@@ -94,95 +113,142 @@ class KrakenFactory(object):
         if '__kType__' not in jsonData or 'name' not in jsonData:
             raise Exception("Invalid JSON data for constructing scene item:" + str(jsonData));
 
-        if jsonData['__kType__'] == "Group":
-            item = Group(jsonData['name'])
+        print "construct:" + str(jsonData['__kTypeHierarchy__']) + ":" + jsonData['name']
 
-        elif jsonData['__kType__'] == "Null":
-            item = Null(jsonData['name'])
+        ##########################
+        ## Controls.
 
-        elif jsonData['__kType__'] == "Control":
-            item = Control(jsonData['name'])
+        if "ArrowControl" in jsonData['__kTypeHierarchy__']:
+            item = ArrowControl(jsonData['name'])
 
-        elif jsonData['__kType__'] == "Chain":
-            item = Chain(jsonData['name'])
+        elif "ArrowsControl" in jsonData['__kTypeHierarchy__']:
+            item = ArrowsControl(jsonData['name'])
 
-        elif jsonData['__kType__'] == "Joint":
-            item = Joint(jsonData['name'])
+        elif "CircleControl" in jsonData['__kTypeHierarchy__']:
+            item = CircleControl(jsonData['name'])
 
-        elif jsonData['__kType__'] == "Container":
-            item = Container(jsonData['name'])
+        elif "CubeControl" in jsonData['__kTypeHierarchy__']:
+            item = CubeControl(jsonData['name'])
 
-        elif jsonData['__kType__'] == "Curve":
-            item = Curve(jsonData['name'])
+        elif "NullControl" in jsonData['__kTypeHierarchy__']:
+            item = NullControl(jsonData['name'])
 
-        elif jsonData['__kType__'] == "HierarchyGroup":
-            item = HierarchyGroup(jsonData['name'])
+        elif "PinControl" in jsonData['__kTypeHierarchy__']:
+            item = PinControl(jsonData['name'])
 
-        elif jsonData['__kType__'] == "Joint":
-            item = Joint(jsonData['name'])
+        elif "SphereControl" in jsonData['__kTypeHierarchy__']:
+            item = SphereControl(jsonData['name'])
 
-        elif jsonData['__kType__'] == "Layer":
-            item = Layer(jsonData['name'])
+        elif "SquareControl" in jsonData['__kTypeHierarchy__']:
+            item = SquareControl(jsonData['name'])
 
-        elif jsonData['__kType__'] == "Locator":
-            item = Locator(jsonData['name'])
+        elif "TriangleControl" in jsonData['__kTypeHierarchy__']:
+            item = TriangleControl(jsonData['name'])
 
-        elif jsonData['__kType__'] == "SceneItem":
-            item = SceneItem(jsonData['name'])
+        elif "BaseControl" in jsonData['__kTypeHierarchy__']:
+            item = BaseControl(jsonData['name'])
 
-        elif jsonData['__kType__'] == "AttributeGroup":
+        ##########################
+        ## Attributes.
+
+        elif "AttributeGroup" in jsonData['__kTypeHierarchy__']:
             item = AttributeGroup(jsonData['name'])
 
-        elif jsonData['__kType__'] == "Attribute":
-            item = Attribute(jsonData['name'])
-
-        elif jsonData['__kType__'] == "BoolAttribute":
+        elif "BoolAttribute" in jsonData['__kTypeHierarchy__']:
             item = BoolAttribute(jsonData['name'])
 
-        elif jsonData['__kType__'] == "FloatAttribute":
+        elif "FloatAttribute" in jsonData['__kTypeHierarchy__']:
             item = FloatAttribute(jsonData['name'])
 
-        elif jsonData['__kType__'] == "IntegerAttribute":
+        elif "IntegerAttribute" in jsonData['__kTypeHierarchy__']:
             item = IntegerAttribute(jsonData['name'])
 
-        elif jsonData['__kType__'] == "StringAttribute":
+        elif "StringAttribute" in jsonData['__kTypeHierarchy__']:
             item = StringAttribute(jsonData['name'])
 
-        elif jsonData['__kType__'] == "Component":
-            item = Component(jsonData['name'])
+        elif "Attribute" in jsonData['__kTypeHierarchy__']:
+            item = Attribute(jsonData['name'])
 
-        elif jsonData['__kType__'] == "ComponentInput":
+        elif "ComponentInput" in jsonData['__kTypeHierarchy__']:
             item = ComponentInput(jsonData['name'])
 
-        elif jsonData['__kType__'] == "ComponentOutput":
+        elif "ComponentOutput" in jsonData['__kTypeHierarchy__']:
             item = ComponentOutput(jsonData['name'])
 
-        elif jsonData['__kType__'] == "BaseConstraint":
-            item = BaseConstraint(jsonData['name'])
+        ##########################
+        ## Constraints.
 
-        elif jsonData['__kType__'] == "OrientationConstraint":
+        elif "OrientationConstraint" in jsonData['__kTypeHierarchy__']:
             item = OrientationConstraint(jsonData['name'])
 
-        elif jsonData['__kType__'] == "PoseConstraint":
+        elif "PoseConstraint" in jsonData['__kTypeHierarchy__']:
             item = PoseConstraint(jsonData['name'])
 
-        elif jsonData['__kType__'] == "PositionConstraint":
+        elif "PositionConstraint" in jsonData['__kTypeHierarchy__']:
             item = PositionConstraint(jsonData['name'])
 
-        elif jsonData['__kType__'] == "ScaleConstraint":
+        elif "ScaleConstraint" in jsonData['__kTypeHierarchy__']:
             item = ScaleConstraint(jsonData['name'])
 
-        elif jsonData['__kType__'] == "Control":
-            item = Control(jsonData['name'])
+        elif "BaseConstraint" in jsonData['__kTypeHierarchy__']:
+            item = BaseConstraint(jsonData['name'])
 
-        elif jsonData['__kType__'] == "Operator":
+
+        ##########################
+        ## Constraints.
+
+        elif "Operator" in jsonData['__kTypeHierarchy__']:
             item = Operator(jsonData['name'])
 
-        elif jsonData['__kType__'] == "OperatorBinding":
+        elif "OperatorBinding" in jsonData['__kTypeHierarchy__']:
             item = OperatorBinding(jsonData['name'])
+
+        ##########################
+        ## SceneItems.
+
+        elif "Group" in jsonData['__kTypeHierarchy__']:
+            item = Group(jsonData['name'])
+
+        elif "Null" in jsonData['__kTypeHierarchy__']:
+            item = Null(jsonData['name'])
+
+        elif "Control" in jsonData['__kTypeHierarchy__']:
+            item = Control(jsonData['name'])
+
+        elif "Chain" in jsonData['__kTypeHierarchy__']:
+            item = Chain(jsonData['name'])
+
+        elif "Joint" in jsonData['__kTypeHierarchy__']:
+            item = Joint(jsonData['name'])
+
+        elif "Container" in jsonData['__kTypeHierarchy__']:
+            item = Container(jsonData['name'])
+
+        elif "Curve" in jsonData['__kTypeHierarchy__']:
+            item = Curve(jsonData['name'])
+
+        elif "HierarchyGroup" in jsonData['__kTypeHierarchy__']:
+            item = HierarchyGroup(jsonData['name'])
+
+        elif "Joint" in jsonData['__kTypeHierarchy__']:
+            item = Joint(jsonData['name'])
+
+        elif "Layer" in jsonData['__kTypeHierarchy__']:
+            item = Layer(jsonData['name'])
+
+        elif "Locator" in jsonData['__kTypeHierarchy__']:
+            item = Locator(jsonData['name'])
+
+        elif "SceneItem" in jsonData['__kTypeHierarchy__']:
+            item = SceneItem(jsonData['name'])
+
         else:
             raise Exception("KrakenFactory does not support the given type:" + __kType__)
 
-        item.jsonDecode(jsonData)
-        self.builtItems[item.getName()] = item
+        self.registerItem(item)
+        print "self.builtItems:" + str(self.builtItems.keys())
+        item.jsonDecode(self, jsonData)
         return item
+
+    def registerItem(self, item):
+        self.builtItems[item.getName()] = item

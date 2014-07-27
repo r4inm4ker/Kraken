@@ -136,8 +136,15 @@ class BaseAttribute(object):
 
         """
 
+        classHierarchy = []
+        for cls in type.mro(type(self)):
+            if cls == object:
+                break;
+            classHierarchy.append(cls.__name__)
+
         jsonData = {
             '__kType__': self.__kType__,
+            '__kTypeHierarchy__': classHierarchy,
             'name': self.name,
             'value': saver.encodeValue(self.value),
             'parent': None
@@ -153,11 +160,11 @@ class BaseAttribute(object):
         """Returns the color of the object.
 
         Return:
-        the decoded object.
+        True if decoding was successful
 
         """
         self.name =  jsonData['name']
-        self.value =  loader.jsonDecode(jsonData['value'])
+        self.value =  loader.decodeValue(jsonData['value'])
         self.parent =  loader.resolveSceneItem(jsonData['parent'])
 
-        return self.color
+        return True

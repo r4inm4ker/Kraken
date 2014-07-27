@@ -239,8 +239,15 @@ class AttributeGroup(object):
 
         """
 
+        classHierarchy = []
+        for cls in type.mro(type(self)):
+            if cls == object:
+                break;
+            classHierarchy.append(cls.__name__)
+
         jsonData = {
             '__kType__': self.__kType__,
+            '__kTypeHierarchy__': classHierarchy,
             'name': self.name,
             'parent': self.parent.getName(),
             'attributes': []
@@ -261,7 +268,7 @@ class AttributeGroup(object):
 
         self.parent =  loader.resolveSceneItem(jsonData['parent'])
 
-        for attr in jsonData['attributeGroups']:
-            self.addAttributeGroup(loader.construct(attr))
+        for attr in jsonData['attributes']:
+            self.addAttribute(loader.construct(attr))
 
-        return self.color
+        return True
