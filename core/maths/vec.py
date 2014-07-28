@@ -7,9 +7,10 @@ Vec4 -- Vector 4 object.
 """
 
 import math
+from math_object import MathObject
 
 
-class Vec2(object):
+class Vec2(MathObject):
     """Vector 2 object."""
 
     def __init__(self, x=0.0, y=0.0):
@@ -378,32 +379,10 @@ class Vec2(object):
                abs(self.y - other.y) < precision
 
 
-    def jsonEncode(self):
-        """Encodes object to JSON.
-
-        Return:
-        JSON string.
-
-        """
-
-        d = {
-                "__class__":self.__class__.__name__,
-            }
-
-        attrs = {}
-        for eachItem in self.__dict__.items():
-
-            if hasattr(eachItem[1], "jsonEncode"):
-                attrs[eachItem[0]] = eachItem[1].jsonEncode()
-            else:
-                attrs[eachItem[0]] = eachItem[1]
-
-        d.update(attrs)
-
-        return d
 
 
-class Vec3(object):
+
+class Vec3(MathObject):
     """Vector 3 object."""
 
     def __init__(self, x=0.0, y=0.0, z=0.0):
@@ -787,32 +766,9 @@ class Vec3(object):
                abs(self.z - other.z) < precision
 
 
-    def jsonEncode(self):
-        """Encodes object to JSON.
-
-        Return:
-        JSON string.
-
-        """
-
-        d = {
-                "__class__":self.__class__.__name__,
-            }
-
-        attrs = {}
-        for eachItem in self.__dict__.items():
-
-            if hasattr(eachItem[1], "jsonEncode"):
-                attrs[eachItem[0]] = eachItem[1].jsonEncode()
-            else:
-                attrs[eachItem[0]] = eachItem[1]
-
-        d.update(attrs)
-
-        return d
 
 
-class Vec4(object):
+class Vec4(MathObject):
     """Vector 4 object."""
 
     def __init__(self, x=0.0, y=0.0, z=0.0, w=0.0):
@@ -1181,27 +1137,3 @@ class Vec4(object):
                abs(self.z - other.z) < precision and \
                abs(self.w - other.w) < precision
 
-
-    def jsonEncode(self):
-        """Encodes object to JSON.
-
-        Return:
-        JSON string.
-
-        """
-
-        d = {
-                "__class__":self.__class__.__name__,
-            }
-
-        attrs = {}
-        for eachItem in self.__dict__.items():
-
-            if hasattr(eachItem[1], "jsonEncode"):
-                attrs[eachItem[0]] = eachItem[1].jsonEncode()
-            else:
-                attrs[eachItem[0]] = eachItem[1]
-
-        d.update(attrs)
-
-        return d

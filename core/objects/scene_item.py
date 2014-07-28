@@ -405,8 +405,8 @@ class SceneItem(object):
 
         """
 
-        if attributeGroup.name in [x.name for x in self.attributeGroups]:
-            raise IndexError("Child with " + attributeGroup.name + " already exists as a attributeGroup.")
+        if attributeGroup.getName() in [x.getName() for x in self.attributeGroups]:
+            raise IndexError("Child with " + attributeGroup.getName() + " already exists as a attributeGroup.")
 
         self.attributeGroups.append(attributeGroup)
         attributeGroup.setParent(self)
@@ -738,3 +738,90 @@ class SceneItem(object):
         """
 
         return self.color
+
+
+
+    # ================
+    # Persistence Methods
+    # ================
+
+    def jsonEncode(self, saver):
+        """Returns the data for this object encoded as a JSON hierarchy.
+
+        Arguments:
+
+        Return:
+        A JSON structure containing the data for this SceneItem.
+
+        """
+
+        classHierarchy = []
+        for cls in type.mro(type(self)):
+            if cls == object:
+                break;
+            classHierarchy.append(cls.__name__)
+
+        jsonData = {
+            '__typeHierarchy__': classHierarchy,
+            'name': self.name,
+            'parent': None,
+            'children': [],
+            'flags': self.flags,
+            'attributeGroups': [],
+            'constraints': [],
+            'xfo': self.xfo.jsonEncode(),
+            'color': self.color,
+            'visibility': self.visibility,
+            'shapeVisibility': self.shapeVisibility,
+        }
+
+        if self.parent is not None:
+            jsonData['parent'] = self.parent.getName()
+
+        if self.color is not None:
+            jsonData['color'] = saver.encodeValue(self.color)
+
+        for child in self.children:
+            jsonData['children'].append(child.jsonEncode(saver))
+
+        for attrGroup in self.attributeGroups:
+            jsonData['attributeGroups'].append(attrGroup.jsonEncode(saver))
+
+        for constr in self.constraints:
+            jsonData['constraints'].append(constr.jsonEncode(saver))
+
+        return jsonData
+
+
+    def jsonDecode(self, loader, jsonData):
+        """Returns the color of the object.
+
+        Return:
+        True if decoding was successful
+
+        """
+
+        self.parent =  loader.getParentItem()
+        self.flags =  jsonData['flags']
+        self.xfo =  loader.decodeValue(jsonData['xfo'])
+        if 'color' in jsonData and jsonData['color'] is not None:
+            self.color =  loader.decodeValue(jsonData['color'])
+        self.visibility =  jsonData['visibility']
+        self.shapeVisibility =  jsonData['shapeVisibility']
+
+        for child in jsonData['children']:
+            self.addChild(loader.construct(child))
+
+        for attrGroup in jsonData['attributeGroups']:
+            # There is one default attribute group assigned to each scene item. 
+            # Load data into the existing item instead of constructing a new one.
+            if attrGroup['name'] == '':
+                loader.registerItem(self.attributeGroups[0])
+                self.attributeGroups[0].jsonDecode(loader, attrGroup)
+            else:
+                self.addAttributeGroup(loader.construct(attrGroup))
+
+        for constr in jsonData['constraints']:
+            self.addConstraint(loader.construct(constr))
+
+        return True

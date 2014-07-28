@@ -13,7 +13,7 @@ class FloatAttribute(BaseAttribute):
 
     __kType__ = "FloatAttribute"
 
-    def __init__(self, name, value, minValue, maxValue):
+    def __init__(self, name, value=0.0, minValue=0.0, maxValue=1.0):
         super(FloatAttribute, self).__init__(name, value)
         self.min = minValue
         self.max = maxValue
