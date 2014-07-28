@@ -112,6 +112,9 @@ class Xfo(MathObject):
 
         """
 
+        if not isinstance(mat44, Matrix44):
+            raise TypeError("Xfo: setFromMatrix44: Invalid type for 'mat44' argument. Must be a Matrix44.")
+
         mat44Array = mat44.toArray()
 
         mat33 = Matrix33()
@@ -277,4 +280,4 @@ def xfoFromThreePoints(base, target, upV):
     #xformDir.AddLocalRotation(rotUtil)
 
     return xformDir
-    
+
