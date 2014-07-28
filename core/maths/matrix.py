@@ -6,7 +6,7 @@ Matrix44 -- Matrix 4 transform object.
 """
 
 from math_object import MathObject
-from kraken.core.maths import vec
+from vec import Vec3, Vec4
 
 class Matrix33(MathObject):
     """3x3 Matrix object."""
@@ -16,9 +16,9 @@ class Matrix33(MathObject):
 
         super(Matrix33, self).__init__()
 
-        self.row0 = vec.Vec3()
-        self.row1 = vec.Vec3()
-        self.row2 = vec.Vec3()
+        self.row0 = Vec3()
+        self.row1 = Vec3()
+        self.row2 = Vec3()
 
         self.components = None
         self.set(row0, row1, row2)
@@ -45,21 +45,21 @@ class Matrix33(MathObject):
 
         if row0 is None:
             self.row0.set(1.0, 0.0, 0.0)
-        elif not isinstance(row0, vec.Vec3):
+        elif not isinstance(row0, Vec3):
             raise TypeError("Matrix33: Invalid 'row0' argument.")
         else:
             self.row0 = row0.clone()
 
         if row1 is None:
             self.row1.set(0.0, 1.0, 0.0)
-        elif not isinstance(row1, vec.Vec3):
+        elif not isinstance(row1, Vec3):
             raise TypeError("Matrix33: Invalid 'row1' argument.")
         else:
             self.row1 = row1.clone()
 
         if row2 is None:
             self.row2.set(0.0, 0.0, 1.0)
-        elif not isinstance(row2, vec.Vec3):
+        elif not isinstance(row2, Vec3):
             raise TypeError("Matrix33: Invalid 'row2' argument.")
         else:
             self.row2 = row2.clone()
@@ -328,29 +328,29 @@ class Matrix44(MathObject):
         """
 
         if row0 is None:
-            self.row0 = vec.Vec4(1.0, 0.0, 0.0, 0.0)
-        elif not isinstance(row0, vec.Vec4):
+            self.row0 = Vec4(1.0, 0.0, 0.0, 0.0)
+        elif not isinstance(row0, Vec4):
             raise TypeError("Matrix44: Invalid 'row0' argument.")
         else:
             self.row0 = row0.clone()
 
         if row1 is None:
-            self.row1 = vec.Vec4(0.0, 1.0, 0.0, 0.0)
-        elif not isinstance(row1, vec.Vec4):
+            self.row1 = Vec4(0.0, 1.0, 0.0, 0.0)
+        elif not isinstance(row1, Vec4):
             raise TypeError("Matrix44: Invalid 'row0' argument.")
         else:
             self.row1 = row1.clone()
 
         if row2 is None:
-            self.row2 = vec.Vec4(0.0, 0.0, 1.0, 0.0)
-        elif not isinstance(row2, vec.Vec4):
+            self.row2 = Vec4(0.0, 0.0, 1.0, 0.0)
+        elif not isinstance(row2, Vec4):
             raise TypeError("Matrix44: Invalid 'row2' argument.")
         else:
             self.row2 = row2.clone()
 
         if row3 is None:
-            self.row3 = vec.Vec4(0.0, 0.0, 0.0, 1.0)
-        elif not isinstance(row3, vec.Vec4):
+            self.row3 = Vec4(0.0, 0.0, 0.0, 1.0)
+        elif not isinstance(row3, Vec4):
             raise TypeError("Matrix44: Invalid 'row3' argument.")
         else:
             self.row3 = row3.clone()
