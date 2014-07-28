@@ -10,6 +10,8 @@ from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
 from kraken.plugins.si_plugin.utils import *
 
+import FabricEngine.Core as core
+
 
 class Builder(BaseBuilder):
     """Builder object for building Kraken objects in Softimage."""
@@ -452,32 +454,6 @@ class Builder(BaseBuilder):
     # ========================
     # Component Build Methods
     # ========================
-    def buildXfoConnection(self, kConnection):
-        """Builds the connection between the xfo and the connection.
-
-        Arguments:
-        kConnection -- Object, kraken connection to build.
-
-        Return:
-        True if successful.
-
-        """
-
-        source = kConnection.getSource()
-        target = kConnection.getTarget()
-
-        if source is None or target is None:
-            raise Exception("Component connection '" + kConnection.getName() + "'is invalid! Missing Source or Target!")
-
-        constraint = PoseConstraint('_'.join([target.getName(), 'To', source.getName()]))
-        constraint.setConstrainee(target)
-        constraint.addConstrainer(source)
-        dccSceneItem = self.buildPoseConstraint(constraint)
-        self._registerSceneItemPair(kConnection, dccSceneItem)
-
-        return True
-
-
     def buildAttributeConnection(self, kConnection):
         """Builds the connection between the attribute and the connection.
 
@@ -496,6 +472,135 @@ class Builder(BaseBuilder):
         targetDCCSceneItem = self._getDCCSceneItem(kConnection.getTarget())
 
         targetDCCSceneItem.AddExpression(sourceDCCSceneItem.FullName)
+
+        return True
+
+
+    # =========================
+    # Operator Builder Methods
+    # =========================
+    def buildSpliceOperators(self, kOperator):
+        """Builds Splice Operators on the components.
+
+        Arguments:
+        kOperator -- Object, kraken operator that represents a Splice operator.
+
+        Return:
+        True if successful.
+
+        """
+
+        return
+
+        try:
+            # Get or construct a Fabric Engine client
+            contextID = si.fabricSplice('getClientContextID')
+            if contextID == '':
+                si.fabricSplice('constructClient')
+                contextID = si.fabricSplice('getClientContextID')
+
+            # Connect the Python client to the Softimage client.
+            client = core.createClient({"contextID": contextID})
+
+            # Get the extension to load and create an instance of the object.
+            extension = kOperator.getExtension()
+            client.loadExtension(extension)
+
+            client.loadExtension('KrakenSolver')
+            client.loadExtension('KrakenSolverArg')
+
+            solverTypeName = kOperator.getSolverTypeName()
+            klType = getattr(client.RT.types, solverTypeName)
+
+            try:
+                # Test if object
+                solver = klType.create()
+            except:
+                # Else is struct
+                solver = klType()
+
+            # Find operatorOwner to attach Splice Operator to.
+            operatorOwner = None
+            operatorOwnerArg = None
+
+            args = solver.getArguments('KrakenSolverArg[]')
+            for i in range(len(args)):
+                arg = args[i]
+
+                if arg.connectionType == 'io' and arg.dataType == 'Mat44':
+
+                    operatorOwner = self._getDCCSceneItem(kOperator.getOutput(arg.name))
+                    operatorOwnerArg = arg.name
+                    break
+
+            if operatorOwner is None:
+                raise Exception("Solver '" + kOperator.getName() + "' has no outputs!")
+
+            # Create Splice Operator
+            si.fabricSplice('newSplice', "{\"targets\":\"" + operatorOwner.FullName + ".kine.global" + "\", \"portName\":\"" + arg.name + "\", \"portMode\":\"out\"}", "", "")
+
+            # Add the private/non-mayaAttr port that stores the Solver object
+            si.fabricSplice("addInternalPort", operatorOwner.FullName + ".kine.global.SpliceOp", "{\"portName\":\"solver\", \"dataType\":\"" + solverTypeName + "\", \"extension\":\"" + kOperator.getExtension() + "\", \"portMode\":\"io\"}", "")
+
+            # Start constructing the source code.
+            opSourceCode = "";
+            opSourceCode += "require " + kOperator.getExtension() + ";\n\n"
+            opSourceCode += "operator " + kOperator.getName() + "(\n"
+
+            opSourceCode += "    io " + solverTypeName + " solver,\n"
+
+            # Get the args from the solver KL object.
+            args = solver.getArguments('KrakenSolverArg[]')
+
+            functionCall = "    solver.solve("
+            for i in range(len(args)):
+                arg = args[i]
+
+                # Get the argument's input from the DCC
+                try:
+                    targetObject = self._getDCCSceneItem(kOperator.getInput(arg.name))
+                except:
+                    targetObject = self._getDCCSceneItem(kOperator.getOutput(arg.name))
+
+                # Append the suffix based on the argument type, Softimage Only
+                if arg.dataType == 'Mat44':
+                    connectionSuffix = ".kine.global"
+                elif arg.dataType in ['Scalar', 'Boolean']:
+                    connectionSuffix = ""
+                else:
+                    connectionSuffix = ""
+
+                # Skip arg if it's the target arg
+                if arg.name != operatorOwnerArg:
+
+                    # Add the splice Port for each arg.
+                    if arg.connectionType == 'in':
+                        si.fabricSplice("addInputPort", operatorOwner.FullName + ".kine.global.SpliceOp", "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\", \"extension\":\"\", \"targets\":\"" + targetObject.FullName + connectionSuffix + "\"}", "")
+
+                    elif arg.connectionType in ['io', 'out']:
+                        si.fabricSplice("addOutputPort", operatorOwner.FullName + ".kine.global.SpliceOp", "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\", \"extension\":\"\", \"targets\":\"" + targetObject.FullName + connectionSuffix + "\"}", "")
+
+                # Connect the ports to the inputs/outputs in the rig.
+                opSourceCode += "    " + arg.connectionType + " " + arg.dataType + " " + arg.name
+                if i == len(args) - 1:
+                    opSourceCode += "\n"
+                else:
+                    opSourceCode += ",\n"
+
+                if i == len(args) - 1:
+                    functionCall += arg.name
+                else:
+                    functionCall += arg.name + ", "
+
+            opSourceCode += "    )\n"
+            opSourceCode += "{\n"
+            opSourceCode += functionCall + ");\n"
+            opSourceCode += "}\n"
+
+            si.fabricSplice('addKLOperator', operatorOwner.FullName + ".kine.global.SpliceOp", '{"opName": "' + kOperator.getName() + '"}', opSourceCode)
+
+        finally:
+            si.fabricSplice('destroyClient')
 
         return True
 
@@ -568,6 +673,7 @@ class Builder(BaseBuilder):
 
         xfo = XSIMath.CreateTransform()
         scl = XSIMath.CreateVector3(kSceneItem.xfo.scl.x, kSceneItem.xfo.scl.y, kSceneItem.xfo.scl.z)
+
         quat = XSIMath.CreateQuaternion(kSceneItem.xfo.rot.w, kSceneItem.xfo.rot.v.x, kSceneItem.xfo.rot.v.y, kSceneItem.xfo.rot.v.z)
         tr = XSIMath.CreateVector3(kSceneItem.xfo.tr.x, kSceneItem.xfo.tr.y, kSceneItem.xfo.tr.z)
 
@@ -594,6 +700,7 @@ class Builder(BaseBuilder):
 
         """
 
+        si.SetValue("preferences.scripting.cmdlog", False, "")
         si.BeginUndo("Kraken SI Build: " + kSceneItem.name)
 
         return True

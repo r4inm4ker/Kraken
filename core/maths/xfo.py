@@ -40,9 +40,10 @@ class Xfo(MathObject):
 
         """
 
-        self.scl = xfo.scl
-        self.rot = xfo.rot
-        self.tr = xfo.tr
+        self.scl.copy(xfo.scl)
+        self.rot.v.copy(xfo.rot.v)
+        self.rot.w = xfo.rot.w
+        self.tr.copy(xfo.tr)
 
         return self
 
@@ -182,6 +183,20 @@ class Xfo(MathObject):
         return resultXfo
 
 
+    def transformVector(self, v):
+        """Transforms a vector by this xfo.
+
+        Arguments:
+        v -- Vec3, vector to transform.
+
+        Return:
+        Vec3, transformed vector.
+
+        """
+
+        return self.rot.rotateVector(v.multiply(self.scl)).add(self.tr)
+
+
     def isIdentity(self):
         """Check if this Xfo is set to Identity.
 
@@ -208,3 +223,58 @@ class Xfo(MathObject):
                self.rot.equal(other.rot) and \
                self.tr.equal(other.tr)
 
+
+# ===============
+# Helper Methods
+# ===============
+def xfoFromThreePoints(base, target, upV):
+    """Creates a transform for base object pointing to target with an upvector upV..
+
+    Arguments:
+    base -- Vec3, base vec3 to use in calculation.
+    target -- Vec3, target vec3 to use in calculation.
+    upV -- Vec3, upV vec3 to use in calculation.
+
+    Return:
+    Xfo, output xfo.
+
+    """
+
+    vecBase = base
+    vecUpV = upV
+    vecTgt = target
+
+    vecX = vecTgt.clone()
+    vecY = vec.Vec3()
+    vecZ = vec.Vec3()
+    vecToTgt = vec.Vec3()
+    vecBaseToUpV = vecUpV.clone()
+
+    vecX = vecX.subtract(vecBase)
+    vecX.normalize()
+
+    vecZ.copy(vecX)
+
+    vecBaseToUpV = vecBaseToUpV.subtract(vecBase)
+    vecBaseToUpV.normalize()
+
+    vecZ = vecZ.cross(vecBaseToUpV)
+    vecZ.normalize()
+
+    vecY.copy(vecZ)
+    vecY = vecY.cross(vecX)
+    vecY.normalize()
+
+    print vecX
+    print vecY
+    print vecZ
+
+    xformDir = Xfo()
+    xformDir.setFromVectors(vecX, vecY, vecZ, vecBase)
+
+    print xformDir
+    #rotUtil = XSIMath.CreateRotation(0, XSIMath.DegreesToRadians(180), 0)
+    #xformDir.AddLocalRotation(rotUtil)
+
+    return xformDir
+    

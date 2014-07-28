@@ -1,5 +1,12 @@
 from kraken.core.maths import *
 
+
+from kraken.core.maths.vec import Vec3
+from kraken.core.maths.rotation import Quat
+from kraken.core.maths.rotation import Euler
+from kraken.core.maths.xfo import Xfo
+from kraken.core.maths.xfo import xfoFromThreePoints
+
 from kraken.core.objects.attributes.float_attribute import FloatAttribute
 from kraken.core.objects.attributes.integer_attribute import IntegerAttribute
 from kraken.core.objects.attributes.bool_attribute import BoolAttribute
@@ -11,10 +18,12 @@ from kraken.core.objects.components.base_component import BaseComponent
 
 from kraken.core.objects.locator import Locator
 
-from kraken.core.objects.controls.cube_control  import CubeControl
-from kraken.core.objects.controls.circle_control  import  CircleControl
-from kraken.core.objects.controls.square_control  import  SquareControl
-from kraken.core.objects.controls.null_control  import  NullControl
+from kraken.core.objects.controls.cube_control import CubeControl
+from kraken.core.objects.controls.circle_control import CircleControl
+from kraken.core.objects.controls.square_control import SquareControl
+from kraken.core.objects.controls.pin_control import PinControl
+
+from kraken.core.objects.operators.splice_operator import SpliceOperator
 
 
 class ArmComponent(BaseComponent):
@@ -27,21 +36,61 @@ class ArmComponent(BaseComponent):
         defaultAttrGroup = self.getAttributeGroupByIndex(0)
         defaultAttrGroup.addAttribute(BoolAttribute("toggleDebugging", True))
 
-        # Add Guide Controls
-        bicepGuideCtrl = NullControl('bicepGuideCtrl')
-        bicepGuideCtrl.xfo.tr = Vec3(5.0, 20.0, 0.0)
-        bicepGuideCtrl.setColor("yellow")
-        self.addChild(bicepGuideCtrl)
+        # Default values
+        bicepPosition = Vec3(2.27, 15.295, -0.753)
+        forearmPosition = Vec3(5.039, 13.56, -0.859)
+        wristPosition = Vec3(7.1886, 12.2819, 0.4906)
 
-        forearmGuideCtrl = NullControl('forearmGuideCtrl')
-        forearmGuideCtrl.xfo.tr = Vec3(8.5, 16.4, -2.5)
-        forearmGuideCtrl.setColor("yellow")
-        self.addChild(forearmGuideCtrl)
+        # Calculate Bicep Xfo
+        rootToWrist = wristPosition.subtract(bicepPosition).unit()
+        rootToElbow = forearmPosition.subtract(bicepPosition).unit()
+        bone1Normal = rootToWrist.cross(rootToElbow).unit()
+        bone1ZAxis = rootToElbow.cross(bone1Normal).unit()
+        bicepXfo = Xfo()
+        bicepXfo.setFromVectors(rootToElbow, bone1Normal, bone1ZAxis, bicepPosition)
 
-        wristGuideCtrl = NullControl('wristGuideCtrl')
-        wristGuideCtrl.xfo.tr = Vec3(12.0, 12.9, 0.0)
-        wristGuideCtrl.setColor("yellow")
-        self.addChild(wristGuideCtrl)
+        # Calculate Forearm Xfo
+        elbowToWrist = wristPosition.subtract(forearmPosition).unit()
+        elbowToRoot = bicepPosition.subtract(forearmPosition).unit()
+        bone2Normal = elbowToRoot.cross(elbowToWrist).unit()
+        bone2ZAxis = elbowToWrist.cross(bone2Normal).unit()
+        forearmXfo = Xfo()
+        forearmXfo.setFromVectors(elbowToWrist, bone2Normal, bone2ZAxis, forearmPosition)
+
+        # Bicep
+        bicepFKCtrl = CubeControl('bicepFK')
+        bicepFKCtrl.alignOnXAxis()
+        bicepLen = bicepPosition.subtract(forearmPosition).length()
+        bicepFKCtrl.scalePoints(Vec3(bicepLen, 1.0, 1.0))
+        bicepFKCtrl.setColor("greenBright")
+        bicepFKCtrl.xfo.copy(bicepXfo)
+
+        bicepFKCtrlSrtBuffer = Locator('bicepFKSrtBuffer')
+        self.addChild(bicepFKCtrlSrtBuffer)
+        bicepFKCtrlSrtBuffer.xfo.copy(bicepFKCtrl.xfo)
+        bicepFKCtrlSrtBuffer.addChild(bicepFKCtrl)
+
+        # Forearm
+        forearmFKCtrl = CubeControl('forearmFK')
+        forearmFKCtrl.alignOnXAxis()
+        forearmLen = forearmPosition.subtract(wristPosition).length()
+        forearmFKCtrl.scalePoints(Vec3(forearmLen, 1.0, 1.0))
+        forearmFKCtrl.setColor("greenBright")
+        forearmFKCtrl.xfo.copy(forearmXfo)
+
+        forearmFKCtrlSrtBuffer = Locator('forearmFKSrtBuffer')
+        self.addChild(forearmFKCtrlSrtBuffer)
+        forearmFKCtrlSrtBuffer.xfo.copy(forearmFKCtrl.xfo)
+        forearmFKCtrlSrtBuffer.addChild(forearmFKCtrl)
+
+        # Arm IK
+        armIKCtrl = PinControl('IK')
+        armIKCtrl.xfo.tr.copy(wristPosition)
+        armIKCtrl.rotatePoints(90, 0, 0)
+        armIKCtrl.setColor("greenBright")
+        self.addChild(armIKCtrl)
+
+
 
 
         # Setup component Xfo I/O's
@@ -52,8 +101,8 @@ class ArmComponent(BaseComponent):
         armFollowBodyInputAttr = FloatAttribute('followBody', 0.0, 0.0, 1.0)
 
         # Constraint outputs
-        armEndOutputConstraint = PoseConstraint('_'.join([armEndOutput.getName(), 'To', wristGuideCtrl.getName()]))
-        armEndOutputConstraint.addConstrainer(wristGuideCtrl)
+        armEndOutputConstraint = PoseConstraint('_'.join([armEndOutput.getName(), 'To', armIKCtrl.getName()]))
+        armEndOutputConstraint.addConstrainer(armIKCtrl)
         armEndOutput.addConstraint(armEndOutputConstraint)
 
         # Add Xfo I/O's
@@ -64,46 +113,21 @@ class ArmComponent(BaseComponent):
         self.addInput(armFollowBodyInputAttr)
 
 
+        # Add Splice Op
+        spliceOp = SpliceOperator("armSpliceOp", "ArmSolver", "KrakenArmSolver")
+        spliceOp.setInput("clav", clavicleEndInput)
+        spliceOp.setInput("blend", armFollowBodyInputAttr)
+        spliceOp.setOutput("wrist", armEndOutput)
+        self.addOperator(spliceOp)
+
+        # Think about how to add multiple operators to the SpliceOp
+        # armSolveKLOp = spliceOp.AddKLOp("armSolve")
+        # armDebugKLOp = spliceOp.AddKLOp("armDebug")
+        # klOp.appendInput
+
+
     def buildRig(self, parent):
-
-        # component = super(ArmComponent, self).buildRig()
-        component = BaseComponent(self.getName(), parent, self.getSide())
-
-        # Setup component attributes
-        component.addAttribute(FloatAttribute("bone1Len", 1.0, minValue=0.0, maxValue=100.0))
-        component.addAttribute(FloatAttribute("bone2Len", 1.0, minValue=0.0, maxValue=100.0))
-        component.addAttribute(FloatAttribute("fkik", 1.0, minValue=0.0, maxValue=1.0))
-        component.addAttribute(FloatAttribute("softDist", 0.5, minValue=0.0, maxValue=1.0))
-        component.addAttribute(BoolAttribute("softIK", True))
-        component.addAttribute(BoolAttribute("stretch", True))
-        component.addAttribute(FloatAttribute("stretchBlend", 1.0, minValue=0.0, maxValue=1.0))
-        component.addAttribute(StringAttribute("Side", self.side))
-        component.addAttribute(BoolAttribute("toggleDebugging", True))
-
-        bicepGuideCtrl = self.getChildByName('bicepGuideCtrl')
-        forearmGuideCtrl = self.getChildByName('forearmGuideCtrl')
-        wristGuideCtrl = self.getChildByName('wristGuideCtrl')
-
-
-        # ===================================================================
-        # Process data from guide / json data to calculate xfos for objects.
-        # ===================================================================
-
-
-        # Add Rig Controls
-        bicepFKCtrl = SquareControl('bicepFKCtrl', parent=self)
-        bicepFKCtrl.xfo = bicepGuideCtrl.xfo
-        self.addChild(bicepFKCtrl)
-
-        forearmFKCtrl = NullControl('forearmFKCtrl', parent=self)
-        forearmFKCtrl.xfo = forearmGuideCtrl.xfo
-        self.addChild(forearmFKCtrl)
-
-        wristIKCtrl = CircleControl('wristIKCtrl', parent=self)
-        wristIKCtrl.xfo = wristGuideCtrl.xfo
-        self.addChild(wristIKCtrl)
-
-        return container
+        pass
 
 
 if __name__ == "__main__":

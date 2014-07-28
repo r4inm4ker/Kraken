@@ -35,7 +35,7 @@ class Euler(MathObject):
         self.z = None
         self.ro = None
 
-        self.set(x, y, z, ro)
+        self.set(mathUtils.degToRad(x), mathUtils.degToRad(y), mathUtils.degToRad(z), ro)
 
 
     def __str__(self):

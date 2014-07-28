@@ -25,6 +25,7 @@ class BaseComponent(SceneItem):
         self.side = side
         self.inputs = []
         self.outputs = []
+        self.operators = []
 
         self.setShapeVisibility(False)
 
@@ -350,18 +351,180 @@ class BaseComponent(SceneItem):
         return None
 
 
-    # =========================
-    # Operator Binding Methods
-    # =========================
-    def addOperatorBinding(self, operatorBinding):
-        """Adds an operator binding to the component.
+    # =================
+    # Operator Methods
+    # =================
+    def checkOperatorIndex(self, index):
+        """Checks the supplied index is valid.
 
         Arguments:
-        operatorBinding -- Object, the operator binding object to add to the component.
+        index -- Integer, operator index to check.
+
+        """
+
+        if index > len(self.operators):
+            raise IndexError("'" + str(index) + "' is out of the range of the 'children' array.")
+
+        return True
+
+
+    def addOperator(self, operator):
+        """Adds a operator to this object.
+
+        Arguments:
+        operator -- Object, object that will be a operator of this object.
 
         Return:
         True if successful.
 
         """
+
+        if operator.name in [x.name for x in self.operators]:
+            raise IndexError("Operator with " + operator.name + " already exists as a operator.")
+
+        self.operators.append(operator)
+        operator.setParent(self)
+
+        return True
+
+
+    def removeOperatorByIndex(self, index):
+        """Removes a operator from this object by index.
+
+        Arguments:
+        index -- Integer, index of operator to remove.
+
+        Return:
+        True if successful.
+
+        """
+
+        if self.checkOperatorIndex(index) is not True:
+            return False
+
+        del self.operators[index]
+
+        return True
+
+
+    def removeOperatorByName(self, name):
+        """Removes a operator from this object by name.
+
+        Arguments:
+        name -- String, name of operator to remove.
+
+        Return:
+        True if successful.
+
+        """
+
+        removeIndex = None
+
+        for i, eachOperator in enumerate(self.operators):
+            if eachOperator.getName() == name:
+                removeIndex = i
+
+        if removeIndex is None:
+            raise ValueError("'" + name + "' is not a valid operator of this object.")
+
+        self.removeOperatorByIndex(removeIndex)
+
+        return True
+
+
+    def getNumOperators(self):
+        """Returns the number of operators this object has.
+
+        Return:
+        Integer, number of operators of this object.
+
+        """
+
+        return len(self.operators)
+
+
+    def getOperatorByIndex(self, index):
+        """Returns the operator object at specified index.
+
+        Return:
+        Operator object at specified index.
+
+        """
+
+        if self.checkOperatorIndex(index) is not True:
+            return False
+
+        return self.operators[index]
+
+
+    def getOperatorByName(self, name):
+        """Returns the operator object with the specified name.
+
+        Return:
+        Object if found.
+        None if not found.
+
+        """
+
+        for eachOperator in self.operators:
+            if eachOperator.getName() == name:
+                return eachOperator
+
+        return None
+
+
+    def getOperatorByType(self, childType):
+        """Returns all children that are of the specified type.
+
+        Arguments:
+        childType -- Type, the object type to search for.
+
+        Return:
+        Array of operator objects of the specified type.
+        None if no objects of specified type are found.
+
+        """
+
+        childrenOfType = []
+        for eachOperator in self.operators:
+            if isinstance(eachOperator, childType):
+                childrenOfType.append(eachOperator)
+
+        return childrenOfType
+
+
+    def getOperatorIndex(self, operator):
+        """Return the index of the specified operator.
+
+        Arguments:
+        operator -- Object, operator to find the index of.
+
+        Return:
+        True if successful.
+        None if operator not found on component.
+
+        """
+
+        for index, eachOp in xrange(self.getNumOperators()):
+            if eachOp is operator:
+                return index
+
+        return None
+
+
+    def moveOperatorToIndex(self, operator, index):
+        """Moves an operator to the specified index.
+
+        Arguments:
+        operator -- Object, operator to move.
+        index -- Integer, index position to move the operator to.
+
+        Return:
+        True if successful.
+
+        """
+
+        oldIndex = self.getOperatorIndex(operator)
+        self.operators.insert(index, self.operators.pop(oldindex))
 
         return True

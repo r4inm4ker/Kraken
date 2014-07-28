@@ -5,7 +5,7 @@ SceneItem - Base SceneItem Object.
 
 """
 
-from kraken.core.maths import *
+from kraken.core.maths.xfo import Xfo
 from kraken.core.objects.attributes.attribute_group import AttributeGroup
 
 
@@ -109,7 +109,7 @@ class SceneItem(object):
         """
 
         if index > len(self.children):
-            raise IndexError("'" + str(index) + "' is out of the range of 'children' array.")
+            raise IndexError("'" + str(index) + "' is out of the range of the 'children' array.")
 
         return True
 
@@ -192,6 +192,9 @@ class SceneItem(object):
     def getChildByIndex(self, index):
         """Returns the child object at specified index.
 
+        Arguments:
+        index -- Integer, index of the child to find.
+
         Return:
         Child object at specified index.
 
@@ -223,7 +226,7 @@ class SceneItem(object):
         """Returns all children that are of the specified type.
 
         Arguments:
-        childType -- Type, the object type to search for.
+        childType -- Class, type of children to find.
 
         Return:
         Array of child objects of the specified type.
@@ -233,10 +236,91 @@ class SceneItem(object):
 
         childrenOfType = []
         for eachChild in self.children:
-            if isinstance(eachChild, childType):
+            if type(eachChild) is childType:
                 childrenOfType.append(eachChild)
 
         return childrenOfType
+
+
+    def findChild(self, name, targetObj=None):
+        """Finds a child by recursively searching the hierarhcy for a child with
+        the given name.
+
+        Arguments:
+        name -- String, name of the child to find.
+        targetObj -- Object, object to search under. Used for recursive searching.
+
+        Return:
+        Object, child if found.
+
+        """
+
+        foundChild = None
+
+        if targetObj == None:
+            targetObj = self
+
+        # Build children
+        for i in xrange(targetObj.getNumChildren()):
+            child = targetObj.getChildByIndex(i)
+
+            if child.getName() == name:
+                foundChild = child
+            else:
+                foundChild = self.findChild(name, child)
+
+            if foundChild is not None:
+                break
+
+        return foundChild
+
+
+    def findChildrenByType(self, objectType, targetObj=None):
+        """Finds a child by recursively searching the hierarhcy for a child with
+        the given name.
+
+        Arguments:
+        objectType -- Class, type of children to find.
+        targetObj -- Object, object to search under. Used for recursive searching.
+
+        Return:
+        List, children of the searched type if found.
+
+        """
+
+        childrenOfType = []
+
+        self._findChildByType(objectType, childrenOfType)
+
+        return childrenOfType
+
+
+    def _findChildByType(self, objectType, foundArray, targetObj=None):
+        """Protected find child by type method.
+
+        Arguments:
+        objectType -- Class, type of children to find.
+        foundArray -- List, list of found children to append to.
+        targetObj -- Object, object to search under. Used for recursive searching.
+
+        Return:
+        True if successful.
+
+        """
+
+        if targetObj == None:
+            targetObj = self
+
+        # Build children
+        for i in xrange(targetObj.getNumChildren()):
+            child = targetObj.getChildByIndex(i)
+
+            if type(child) is objectType:
+                foundArray.append(child)
+
+            newFoundChildren = self._findChildByType(objectType, foundArray, child)
+
+        return
 
 
     # =============
