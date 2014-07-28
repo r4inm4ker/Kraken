@@ -4,7 +4,7 @@ Classes:
 KrakenSaver - Helper class for saving Kraken rigs to JSON representations .
 
 """
-from kraken.core.maths import *
+from kraken.core.maths.math_object import MathObject
 
 
 class KrakenSaver(object):
