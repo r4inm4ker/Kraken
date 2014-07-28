@@ -53,18 +53,10 @@ class SceneItem(object):
 
         """
 
-        names = []
-        parent = self.getParent()
-        while parent is not None:
-            parent = parent.getParent()
-            if parent is None:
-                break
+        if self.parent is not None:
+            return self.parent.getFullName() + '.' + self.getName() 
 
-            names.append(parent.getName())
-
-        fullName = '.'.join(reversed(names))
-
-        return fullName
+        return self.getName()
 
 
     # ===============

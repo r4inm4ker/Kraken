@@ -54,8 +54,10 @@ class KrakenLoader(object):
         super(KrakenLoader, self).__init__()
 
         # A dictionary of all the built elements during loading.
-        self.parentItem = None
         self.builtItems = {}
+        # the most recent item build during loading. This item is the parent
+        # of subsequently built items. 
+        self.parentItems = []
         self.callbacks = {}
 
     def decodeValue(self, jsonData):
@@ -72,35 +74,44 @@ class KrakenLoader(object):
             raise Exception("Invalid JSON data for constructing value:" + str(jsonData));
 
         if jsonData['__class__'] == 'Vec2':
-            item = Vec2()
-            item.jsonDecode(jsonData, self)
+            val = Vec2()
+            val.jsonDecode(jsonData, self)
         elif jsonData['__class__'] == 'Vec3':
-            item = Vec3()
-            item.jsonDecode(jsonData, self)
+            val = Vec3()
+            val.jsonDecode(jsonData, self)
         elif jsonData['__class__'] == 'Vec4':
-            item = Vec4()
-            item.jsonDecode(jsonData, self)
+            val = Vec4()
+            val.jsonDecode(jsonData, self)
         elif jsonData['__class__'] == 'Euler':
-            item = Euler()
-            item.jsonDecode(jsonData, self)
+            val = Euler()
+            val.jsonDecode(jsonData, self)
         elif jsonData['__class__'] == 'Quat':
-            item = Quat()
-            item.jsonDecode(jsonData, self)
+            val = Quat()
+            val.jsonDecode(jsonData, self)
         elif jsonData['__class__'] == 'Xfo':
-            item = Xfo()
-            item.jsonDecode(jsonData, self)
+            val = Xfo()
+            val.jsonDecode(jsonData, self)
         elif jsonData['__class__'] == 'Matrix33':
-            item = Matrix33()
-            item.jsonDecode(jsonData, self)
+            val = Matrix33()
+            val.jsonDecode(jsonData, self)
         elif jsonData['__class__'] == 'Matrix44':
-            item = Matrix44()
-            item.jsonDecode(jsonData, self)
+            val = Matrix44()
+            val.jsonDecode(jsonData, self)
         else:
             raise Exception("Unsupported Math type:" + jsonData['__class__'])
-        return item
+        return val
 
     def getParentItem(self):
-        return self.parentItem
+        """Returns the item that was constructed prior to the current item.
+
+        Return:
+        The stored parent item.
+
+        """
+        
+        if len(self.parentItems) < 2:
+            return None
+        return self.parentItems[-2]
 
     def resolveSceneItem(self, name):
         """Returns a constructed scene item based on the provided name.
@@ -259,20 +270,34 @@ class KrakenLoader(object):
         self.registerItem(item)
         # Store the item as the parent item before decoding the object
         # which in turn decodes the children items. 
-        self.parentItem = item
+        self.parentItems.append(item)
         item.jsonDecode(self, jsonData)
 
-        # Fire any registered callbacks for this item. 
-        # This enables the loading of objects already created,
-        # but dependent on this object to be completed.
-        if item.getName() in self.callbacks:
-            for callback in self.callbacks[item.getName()]:
-                callback(item)
-
+        # Pop the parent item stack, which reverts the current parent item 
+        # to the previous value. 
+        self.parentItems.pop()
         return item
 
     def registerItem(self, item):
-        self.builtItems[item.getName()] = item
+        """Register an item to the loader. If an item is constructed automatically, 
+        then it can be registered so the loader can provide it during resolveSceneItem.
+
+        Return:
+        None
+
+        """
+        if item.getFullName() in self.builtItems:
+            # TODO: resolve using a path, instead of the name.
+            # This will require that all items have a parent specified
+            print "Warning. Non unique names used in Kraken:" + item.getFullName()
+        self.builtItems[item.getFullName()] = item
+        # Fire any registered callbacks for this item. 
+        # This enables the loading of objects already created,
+        # but dependent on this object to be completed.
+        if item.getFullName() in self.callbacks:
+            for callback in self.callbacks[item.getFullName()]:
+                callback(item)
+
 
     def registerConstructionCallback(self, name, callback):
         """Register a callback to be invoked when the requested item is constructed.

@@ -47,6 +47,20 @@ class AttributeGroup(object):
         return self.name
 
 
+
+    def getFullName(self):
+        """Returns the full hierarchical path to this object.
+
+        Return:
+        String, full name of the object.
+
+        """
+            
+        if self.parent is not None:
+            return self.parent.getFullName() + '.' + self.getName() 
+            
+        return self.getName()
+
     # ===============
     # Parent Methods
     # ===============

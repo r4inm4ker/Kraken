@@ -36,6 +36,16 @@ class BaseConstraint(object):
         return self.name
 
 
+    def getFullName(self):
+        """Returns the full hierarchical path to this object.
+
+        Return:
+        String, full name of the object.
+
+        """
+
+        return self.getName()
+
     # ===============
     # Parent Methods
     # ===============
