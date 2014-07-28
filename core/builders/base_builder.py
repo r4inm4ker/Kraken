@@ -696,7 +696,13 @@ class BaseBuilder(object):
             return '_'.join([componentName, side, kObject.getName(), 'hrc'])
 
         elif kType == "Locator":
-            return '_'.join([componentName, side, kObject.getName(), 'null'])
+            parent = kObject.getParent()
+            if parent.getName() == "inputs":
+                return '_'.join([componentName, side, kObject.getName(), 'srtIn'])
+            elif parent.getName() == "outputs":
+                return '_'.join([componentName, side, kObject.getName(), 'srtOut'])
+            else:
+                return '_'.join([componentName, side, kObject.getName(), 'null'])
 
         elif kType == "SrtBuffer":
             return '_'.join([componentName, side,  kObject.getName(),'srtBuffer'])

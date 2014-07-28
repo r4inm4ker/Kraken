@@ -80,6 +80,8 @@ class HeadComponent(BaseComponent):
         # Setup Component Xfo I/O's
         headBaseInput = Locator('headBase')
         headBaseInput.xfo.copy(headCtrl.xfo)
+        headOutput = Locator('head')
+        headOutput.xfo.copy(headCtrl.xfo)
 
         # Setup componnent Attribute I/O's
         armFollowBodyOutputAttr = FloatAttribute('followBody', 0.0, 0.0, 1.0)
@@ -94,6 +96,7 @@ class HeadComponent(BaseComponent):
         self.addInput(headBaseInput)
 
         self.addOutput(armFollowBodyOutputAttr)
+        self.addOutput(headOutput)
 
 
     def buildRig(self, parent):

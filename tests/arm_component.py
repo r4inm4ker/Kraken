@@ -113,6 +113,11 @@ class ArmComponent(BaseComponent):
         # Setup component Xfo I/O's
         clavicleEndInput = Locator('clavicleEnd')
         clavicleEndInput.xfo.copy(bicepXfo)
+
+        bicepOutput = Locator('bicep')
+        bicepOutput.xfo.copy(bicepXfo)
+        forearmOutput = Locator('forearm')
+        forearmOutput.xfo.copy(forearmXfo)
         armEndOutput = Locator('armEnd')
         armEndOutput.xfo.tr.copy(wristPosition)
 
@@ -126,12 +131,14 @@ class ArmComponent(BaseComponent):
         bicepFKCtrlSrtBuffer.addConstraint(armRootInputConstraint)
 
         # Constraint outputs
-        armEndOutputConstraint = PoseConstraint('_'.join([armEndOutput.getName(), 'To', armIKCtrl.getName()]))
-        armEndOutputConstraint.addConstrainer(armIKCtrl)
-        armEndOutput.addConstraint(armEndOutputConstraint)
+        # armEndOutputConstraint = PoseConstraint('_'.join([armEndOutput.getName(), 'To', armIKCtrl.getName()]))
+        # armEndOutputConstraint.addConstrainer(armIKCtrl)
+        # armEndOutput.addConstraint(armEndOutputConstraint)
 
         # Add Xfo I/O's
         self.addInput(clavicleEndInput)
+        self.addOutput(bicepOutput)
+        self.addOutput(forearmOutput)
         self.addOutput(armEndOutput)
 
         # Add Attribute I/O's

@@ -62,7 +62,9 @@ class ClavicleComponent(BaseComponent):
         spineEndInput = Locator('spineEnd')
         spineEndInput.xfo.copy(clavicleXfo)
 
-        clavicleOutput = Locator('clavicleEnd')
+        clavicleEndOutput = Locator('clavicleEnd')
+        clavicleEndOutput.xfo.copy(clavicleXfo)
+        clavicleOutput = Locator('clavicle')
         clavicleOutput.xfo.copy(clavicleXfo)
 
         # Setup componnent Attribute I/O's
@@ -75,12 +77,13 @@ class ClavicleComponent(BaseComponent):
         clavicleCtrlSrtBuffer.addConstraint(clavicleInputConstraint)
 
         # Constraint outputs
-        clavicleEndConstraint = PoseConstraint('_'.join([clavicleOutput.getName(), 'To', clavicleCtrl.getName()]))
+        clavicleEndConstraint = PoseConstraint('_'.join([clavicleEndOutput.getName(), 'To', clavicleCtrl.getName()]))
         clavicleEndConstraint.addConstrainer(clavicleCtrl)
-        clavicleOutput.addConstraint(clavicleEndConstraint)
+        clavicleEndOutput.addConstraint(clavicleEndConstraint)
 
         # Add Xfo I/O's
         self.addInput(spineEndInput)
+        self.addOutput(clavicleEndOutput)
         self.addOutput(clavicleOutput)
 
         self.addOutput(armFollowBodyOutputAttr)

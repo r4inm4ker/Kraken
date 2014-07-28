@@ -136,6 +136,7 @@ class BaseComponent(SceneItem):
         if isinstance(inputObject, Locator):
             inputHrc.children.append(inputObject)
             inputObject.setParent(inputHrc)
+            inputObject.setShapeVisibility(False)
 
         elif isinstance(inputObject, BaseAttribute):
             inputAttrsGrp.attributes.append(inputObject)
@@ -275,6 +276,7 @@ class BaseComponent(SceneItem):
         if isinstance(outputObject, Locator):
             outputHrc.children.append(outputObject)
             outputObject.setParent(outputHrc)
+            outputObject.setShapeVisibility(False)
 
         elif isinstance(outputObject, BaseAttribute):
             outputAttrsGrp.attributes.append(outputObject)

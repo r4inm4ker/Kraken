@@ -51,8 +51,9 @@ class NeckComponent(BaseComponent):
         # Setup Component Xfo I/O's
         neckEndInput = Locator('neckBase')
         neckEndInput.xfo.copy(neckXfo)
-
-        neckOutput = Locator('neckEnd')
+        neckEndOutput = Locator('neckEnd')
+        neckEndOutput.xfo.copy(neckXfo)
+        neckOutput = Locator('neck')
         neckOutput.xfo.copy(neckXfo)
 
         # Setup componnent Attribute I/O's
@@ -65,12 +66,13 @@ class NeckComponent(BaseComponent):
         neckCtrlSrtBuffer.addConstraint(clavicleInputConstraint)
 
         # Constraint outputs
-        neckEndConstraint = PoseConstraint('_'.join([neckOutput.getName(), 'To', neckCtrl.getName()]))
+        neckEndConstraint = PoseConstraint('_'.join([neckEndOutput.getName(), 'To', neckCtrl.getName()]))
         neckEndConstraint.addConstrainer(neckCtrl)
-        neckOutput.addConstraint(neckEndConstraint)
+        neckEndOutput.addConstraint(neckEndConstraint)
 
         # Add Xfo I/O's
         self.addInput(neckEndInput)
+        self.addOutput(neckEndOutput)
         self.addOutput(neckOutput)
 
         self.addOutput(armFollowBodyOutputAttr)

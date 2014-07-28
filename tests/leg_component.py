@@ -86,7 +86,6 @@ class LegComponent(BaseComponent):
             legIKCtrl.rotatePoints(0, -90, 0)
 
         legIKCtrl.setColor(ctrlColor)
-
         legIKCtrlSrtBuffer = SrtBuffer('IK')
         legIKCtrlSrtBuffer.xfo.copy(legIKCtrl.xfo)
         legIKCtrlSrtBuffer.addChild(legIKCtrl)
@@ -95,6 +94,10 @@ class LegComponent(BaseComponent):
         # Setup component Xfo I/O's
         legPelvisInput = Locator('pelvisInput')
         legPelvisInput.xfo.copy(femurXfo)
+        femurOutput = Locator('femur')
+        femurOutput.xfo.copy(femurXfo)
+        shinOutput = Locator('shin')
+        shinOutput.xfo.copy(shinXfo)
         legEndOutput = Locator('legEnd')
         legEndOutput.xfo.tr.copy(anklePosition)
 
@@ -108,12 +111,14 @@ class LegComponent(BaseComponent):
         femurFKCtrlSrtBuffer.addConstraint(legRootInputConstraint)
 
         # Constraint outputs
-        legEndOutputConstraint = PoseConstraint('_'.join([legEndOutput.getName(), 'To', legIKCtrl.getName()]))
-        legEndOutputConstraint.addConstrainer(legIKCtrl)
-        legEndOutput.addConstraint(legEndOutputConstraint)
+        # legEndOutputConstraint = PoseConstraint('_'.join([legEndOutput.getName(), 'To', legIKCtrl.getName()]))
+        # legEndOutputConstraint.addConstrainer(legIKCtrl)
+        # legEndOutput.addConstraint(legEndOutputConstraint)
 
         # Add Xfo I/O's
         self.addInput(legPelvisInput)
+        self.addOutput(femurOutput)
+        self.addOutput(shinOutput)
         self.addOutput(legEndOutput)
 
         # Add Attribute I/O's
