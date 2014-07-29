@@ -1,26 +1,18 @@
 from kraken.core.maths.vec import Vec3
 
-from kraken.core.objects.attributes.float_attribute import FloatAttribute
-from kraken.core.objects.attributes.integer_attribute import IntegerAttribute
-from kraken.core.objects.attributes.bool_attribute import BoolAttribute
-from kraken.core.objects.attributes.string_attribute import StringAttribute
-
-from kraken.core.objects.constraints.pose_constraint import PoseConstraint
-
 from kraken.core.objects.components.base_component import BaseComponent
-
+from kraken.core.objects.attributes.float_attribute import FloatAttribute
+from kraken.core.objects.attributes.bool_attribute import BoolAttribute
+from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 from kraken.core.objects.locator import Locator
-
+from kraken.core.objects.srtBuffer import SrtBuffer
 from kraken.core.objects.controls.cube_control import CubeControl
 from kraken.core.objects.controls.circle_control import CircleControl
 from kraken.core.objects.controls.sphere_control import SphereControl
-from kraken.core.objects.controls.pin_control import PinControl
-from kraken.core.objects.controls.square_control import SquareControl
-from kraken.core.objects.controls.null_control import NullControl
 
 
 class HeadComponent(BaseComponent):
-    """Head Component Test"""
+    """Head Component"""
 
     def __init__(self, name, parent=None, side='M'):
         super(HeadComponent, self).__init__(name, parent, side)
@@ -29,58 +21,82 @@ class HeadComponent(BaseComponent):
         defaultAttrGroup = self.getAttributeGroupByIndex(0)
         defaultAttrGroup.addAttribute(BoolAttribute("toggleDebugging", True))
 
-        # Add Guide Controls
-        headGuideCtrl = CubeControl('headGuideCtrl')
-        headGuideCtrl.xfo.tr = Vec3(0.0, 22.0, 0.0)
-        headGuideCtrl.setColor("yellow")
-        self.addChild(headGuideCtrl)
+        # Default values
+        headPosition = Vec3(0.0, 17.4756, -0.421)
+        headEndPosition = Vec3(0.0, 19.5, -0.421)
+        eyeLeftPosition = Vec3(0.3497, 18.0878, 0.6088)
+        eyeRightPosition = Vec3(-0.3497, 18.0878, 0.6088)
+        jawPosition = Vec3(0.0, 17.613, -0.2731)
 
-        headEndGuideCtrl = CubeControl('headEndGuideCtrl')
-        headEndGuideCtrl.xfo.tr = Vec3(0.0, 25.0, 0.0)
-        headEndGuideCtrl.setColor("yellow")
-        headGuideCtrl.addChild(headEndGuideCtrl)
+        # Head
+        headCtrl = CircleControl('head')
+        headCtrl.rotatePoints(0, 0, 90)
+        headCtrl.scalePoints(Vec3(2.5, 2.5, 2.5))
+        headCtrl.translatePoints(Vec3(0, 1, 0.25))
+        headCtrl.xfo.tr.copy(headPosition)
+        headCtrl.setColor("yellow")
 
+        headCtrlSrtBuffer = SrtBuffer('head')
+        self.addChild(headCtrlSrtBuffer)
+        headCtrlSrtBuffer.xfo.copy(headCtrl.xfo)
+        headCtrlSrtBuffer.addChild(headCtrl)
 
+        # Eye Left
+        eyeLeftCtrl = SphereControl('eyeLeft')
+        eyeLeftCtrl.scalePoints(Vec3(0.5, 0.5, 0.5))
+        eyeLeftCtrl.xfo.tr.copy(eyeLeftPosition)
+        eyeLeftCtrl.setColor("blueMedium")
 
-        eyeLeftGuideCtrl = SphereControl('eyeLeftGuideCtrl')
-        eyeLeftGuideCtrl.xfo.tr = Vec3(1.0, 24.0, 1.5)
-        eyeLeftGuideCtrl.setColor("blueMedium")
-        headGuideCtrl.addChild(eyeLeftGuideCtrl)
+        eyeLeftCtrlSrtBuffer = SrtBuffer('eyeLeft')
+        headCtrl.addChild(eyeLeftCtrlSrtBuffer)
+        eyeLeftCtrlSrtBuffer.xfo.copy(eyeLeftCtrl.xfo)
+        eyeLeftCtrlSrtBuffer.addChild(eyeLeftCtrl)
 
-        eyeRightGuideCtrl = SphereControl('eyeRightGuideCtrl')
-        eyeRightGuideCtrl.xfo.tr = Vec3(-1.0, 24.0, 1.5)
-        eyeRightGuideCtrl.setColor("blueMedium")
-        headGuideCtrl.addChild(eyeRightGuideCtrl)
+        # Eye Right
+        eyeRightCtrl = SphereControl('eyeRight')
+        eyeRightCtrl.scalePoints(Vec3(0.5, 0.5, 0.5))
+        eyeRightCtrl.xfo.tr.copy(eyeRightPosition)
+        eyeRightCtrl.setColor("blueMedium")
 
+        eyeRightCtrlSrtBuffer = SrtBuffer('eyeRight')
+        headCtrl.addChild(eyeRightCtrlSrtBuffer)
+        eyeRightCtrlSrtBuffer.xfo.copy(eyeRightCtrl.xfo)
+        eyeRightCtrlSrtBuffer.addChild(eyeRightCtrl)
 
+        # Jaw
+        jawCtrl = CubeControl('jaw')
+        jawCtrl.alignOnYAxis(negative=True)
+        jawCtrl.alignOnZAxis()
+        jawCtrl.scalePoints(Vec3(1.45, 0.65, 1))
+        jawCtrl.translatePoints(Vec3(0, 0, 0))
+        jawCtrl.xfo.tr.copy(jawPosition)
+        jawCtrl.setColor("orange")
 
-        jawGuideCtrl = CubeControl('jawGuideCtrl')
-        jawGuideCtrl.xfo.tr = Vec3(0.0, 23.0, 0.5)
-        jawGuideCtrl.setColor("orange")
-        self.addChild(jawGuideCtrl)
-
-        jawEndGuideCtrl = CubeControl('jawEndGuideCtrl')
-        jawEndGuideCtrl.xfo.tr = Vec3(0.0, 21.5, 2.5)
-        jawEndGuideCtrl.setColor("orange")
-        jawGuideCtrl.addChild(jawEndGuideCtrl)
+        jawCtrlSrtBuffer = SrtBuffer('jawSrtBuffer')
+        headCtrl.addChild(jawCtrlSrtBuffer)
+        jawCtrlSrtBuffer.xfo.copy(jawCtrl.xfo)
+        jawCtrlSrtBuffer.addChild(jawCtrl)
 
         # Setup Component Xfo I/O's
-        spineEndInput = Locator('spineEnd')
-        clavicleEndOutput = Locator('clavicleEnd')
+        headBaseInput = Locator('headBase')
+        headBaseInput.xfo.copy(headCtrl.xfo)
+        headOutput = Locator('head')
+        headOutput.xfo.copy(headCtrl.xfo)
 
         # Setup componnent Attribute I/O's
         armFollowBodyOutputAttr = FloatAttribute('followBody', 0.0, 0.0, 1.0)
 
-        # Constraint outputs
-        clavicleEndConstraint = PoseConstraint('_'.join([clavicleEndOutput.getName(), 'To', jawGuideCtrl.getName()]))
-        clavicleEndConstraint.addConstrainer(jawGuideCtrl)
-        clavicleEndOutput.addConstraint(clavicleEndConstraint)
+        # Constraint inputs
+        headInputConstraint = PoseConstraint('_'.join([headCtrlSrtBuffer.getName(), 'To', headBaseInput.getName()]))
+        headInputConstraint.setMaintainOffset(True)
+        headInputConstraint.addConstrainer(headBaseInput)
+        headCtrlSrtBuffer.addConstraint(headInputConstraint)
 
         # Add Xfo I/O's
-        self.addInput(spineEndInput)
-        self.addOutput(clavicleEndOutput)
+        self.addInput(headBaseInput)
 
         self.addOutput(armFollowBodyOutputAttr)
+        self.addOutput(headOutput)
 
 
     def buildRig(self, parent):

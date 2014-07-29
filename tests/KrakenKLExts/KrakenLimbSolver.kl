@@ -1,0 +1,49 @@
+require Math;
+require Kraken;
+
+
+object LimbSolver : KrakenSolver {
+};
+
+
+function KrakenSolverArg[] LimbSolver.getArguments(){
+    KrakenSolverArg args[];
+    args.push(KrakenSolverArg('root', 'in', 'Mat44'));
+    args.push(KrakenSolverArg('bone1FK', 'in', 'Mat44'));
+    args.push(KrakenSolverArg('bone2FK', 'in', 'Mat44'));
+    args.push(KrakenSolverArg('bone1Len', 'in', 'Scalar'));
+    args.push(KrakenSolverArg('bone2Len', 'in', 'Scalar'));
+    args.push(KrakenSolverArg('ikTarget', 'in', 'Mat44'));
+    args.push(KrakenSolverArg('blend', 'in', 'Scalar'));
+    args.push(KrakenSolverArg('bone1', 'io', 'Mat44'));
+    args.push(KrakenSolverArg('bone2', 'io', 'Mat44'));
+    args.push(KrakenSolverArg('end', 'io', 'Mat44'));
+
+    return args;
+}
+
+function LimbSolver.solve(
+    root
+    bone1FK
+    bone2FK
+    bone1Len
+    bone2Len
+    ikTarget
+    blend
+    bone1
+    bone2
+    end
+{
+    // magic
+}
+
+
+operator solveArmSpliceOp(
+    io LimbSolver solver,
+    in Mat44 base,
+    in Scalar followClav_input,
+    io Mat44 wrist_output
+    )
+{
+    solver.solve(base, followClav_input, wrist_output);
+}

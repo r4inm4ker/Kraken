@@ -1,0 +1,59 @@
+require Math;
+require Kraken;
+
+
+object SpineSolver : KrakenSolver {
+  Scalar length;
+  Mat44 spine01;
+  Mat44 spine02;
+  Mat44 spine03;
+  Mat44 spine01Out;
+  Mat44 spine02Out;
+  Mat44 spine03Out;
+  Mat44 spine04Out;
+};
+
+
+// Default Constructor
+inline SpineSolver()
+{
+  this.length = 5;
+  this.length = 5;
+  this.length = 5;
+  this.length = 5;
+  this.length = 5;
+  this.length = 5;
+  this.length = 5;
+  this.length = 5;
+}
+
+
+function KrakenSolverArg[] SpineSolver.getArguments(){
+  KrakenSolverArg args[];
+  args.push(KrakenSolverArg('length', 'in', 'Scalar'));
+  args.push(KrakenSolverArg('spine01', 'in', 'Mat44'));
+  args.push(KrakenSolverArg('spine02', 'in', 'Mat44'));
+  args.push(KrakenSolverArg('spine03', 'in', 'Mat44'));
+  args.push(KrakenSolverArg('spine01Out', 'io', 'Mat44'));
+  args.push(KrakenSolverArg('spine02Out', 'io', 'Mat44'));
+  args.push(KrakenSolverArg('spine03Out', 'io', 'Mat44'));
+  args.push(KrakenSolverArg('spine04Out', 'io', 'Mat44'));
+
+  return args;
+}
+
+function SpineSolver.solve()
+{
+    // magic
+}
+
+
+operator solveArmSpliceOp(
+  io SpineSolver solver,
+  in Mat44 base,
+  in Scalar followClav_input,
+  io Mat44 wrist_output
+    )
+{
+    solver.solve(base, followClav_input, wrist_output);
+}

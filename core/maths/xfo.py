@@ -230,7 +230,7 @@ class Xfo(MathObject):
 # ===============
 # Helper Methods
 # ===============
-def xfoFromThreePoints(base, target, upV):
+def xfoFromDirAndUpV(base, target, upV):
     """Creates a transform for base object pointing to target with an upvector upV..
 
     Arguments:
@@ -243,41 +243,12 @@ def xfoFromThreePoints(base, target, upV):
 
     """
 
-    vecBase = base
-    vecUpV = upV
-    vecTgt = target
+    rootToWrist = target.subtract(base).unit()
+    rootToElbow = upV.subtract(base).unit()
+    bone1Normal = rootToWrist.cross(rootToElbow).unit()
+    bone1ZAxis = rootToElbow.cross(bone1Normal).unit()
+    bicepXfo = Xfo()
+    bicepXfo.setFromVectors(rootToElbow, bone1Normal, bone1ZAxis, base)
 
-    vecX = vecTgt.clone()
-    vecY = vec.Vec3()
-    vecZ = vec.Vec3()
-    vecToTgt = vec.Vec3()
-    vecBaseToUpV = vecUpV.clone()
-
-    vecX = vecX.subtract(vecBase)
-    vecX.normalize()
-
-    vecZ.copy(vecX)
-
-    vecBaseToUpV = vecBaseToUpV.subtract(vecBase)
-    vecBaseToUpV.normalize()
-
-    vecZ = vecZ.cross(vecBaseToUpV)
-    vecZ.normalize()
-
-    vecY.copy(vecZ)
-    vecY = vecY.cross(vecX)
-    vecY.normalize()
-
-    print vecX
-    print vecY
-    print vecZ
-
-    xformDir = Xfo()
-    xformDir.setFromVectors(vecX, vecY, vecZ, vecBase)
-
-    print xformDir
-    #rotUtil = XSIMath.CreateRotation(0, XSIMath.DegreesToRadians(180), 0)
-    #xformDir.AddLocalRotation(rotUtil)
-
-    return xformDir
+    return bicepXfo
 
