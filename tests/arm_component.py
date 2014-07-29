@@ -122,6 +122,9 @@ class ArmComponent(BaseComponent):
         self.addChild(armUpVCtrlSrtBuffer)
 
 
+        # =====================
+        # Create Component I/O
+        # =====================
         # Setup component Xfo I/O's
         clavicleEndInput = Locator('clavicleEnd')
         clavicleEndInput.xfo.copy(bicepXfo)
@@ -142,13 +145,11 @@ class ArmComponent(BaseComponent):
         stretchInputAttr = BoolAttribute('stretch', True)
         stretchBlendInputAttr = FloatAttribute('stretchBlend', 0.0, 0.0, 1.0)
         rightSideInputAttr = BoolAttribute('rightSide', False)
-        # rootInputAttr = FloatAttribute('root', 0.0, 0.0, 1.0)
-        # bone1FKInputAttr = FloatAttribute('bone1FK', 0.0, 0.0, 1.0)
-        # bone2FKInputAttr = FloatAttribute('bone2FK', 0.0, 0.0, 1.0)
-        # ikHandleInputAttr = FloatAttribute('ikHandle', 0.0, 0.0, 1.0)
-        # upVInputAttr = FloatAttribute('upV', 0.0, 0.0, 1.0)
 
 
+        # ==============
+        # Constrain I/O
+        # ==============
         # Constraint inputs
         armRootInputConstraint = PoseConstraint('_'.join([armIKCtrl.getName(), 'To', clavicleEndInput.getName()]))
         armRootInputConstraint.setMaintainOffset(True)
@@ -156,10 +157,11 @@ class ArmComponent(BaseComponent):
         bicepFKCtrlSrtBuffer.addConstraint(armRootInputConstraint)
 
         # Constraint outputs
-        # armEndOutputConstraint = PoseConstraint('_'.join([armEndOutput.getName(), 'To', armIKCtrl.getName()]))
-        # armEndOutputConstraint.addConstrainer(armIKCtrl)
-        # armEndOutput.addConstraint(armEndOutputConstraint)
 
+
+        # ==================
+        # Add Component I/O
+        # ==================
         # Add Xfo I/O's
         self.addInput(clavicleEndInput)
         self.addOutput(bicepOutput)
@@ -175,14 +177,16 @@ class ArmComponent(BaseComponent):
         self.addInput(stretchInputAttr)
         self.addInput(stretchBlendInputAttr)
         self.addInput(rightSideInputAttr)
-        # self.addInput(rootInputAttr)
-        # self.addInput(bone1FKInputAttr)
-        # self.addInput(bone2FKInputAttr)
-        # self.addInput(ikHandleInputAttr)
-        # self.addInput(upVInputAttr)
 
+
+        # ===============
+        # Add Splice Ops
+        # ===============
         # Add Splice Op
         spliceOp = SpliceOperator("armSpliceOp", "LimbSolver", "KrakenLimbSolver")
+        self.addOperator(spliceOp)
+
+        # Add Att Inputs
         spliceOp.setInput("bone1Len", bone1LenInputAttr)
         spliceOp.setInput("bone2Len", bone2LenInputAttr)
         spliceOp.setInput("fkik", fkikInputAttr)
@@ -192,22 +196,17 @@ class ArmComponent(BaseComponent):
         spliceOp.setInput("stretchBlend", stretchBlendInputAttr)
         spliceOp.setInput("rightSide", rightSideInputAttr)
 
+        # Add Xfo Inputs
         spliceOp.setInput("root", clavicleEndInput)
         spliceOp.setInput("bone1FK", bicepFKCtrl)
         spliceOp.setInput("bone2FK", forearmFKCtrl)
         spliceOp.setInput("ikHandle", armIKCtrl)
         spliceOp.setInput("upV", armUpVCtrl)
 
+        # Add Xfo Outputs
         spliceOp.setOutput("bone01Out", bicepOutput)
         spliceOp.setOutput("bone02Out", forearmOutput)
         spliceOp.setOutput("bone03Out", armEndOutput)
-
-        self.addOperator(spliceOp)
-
-        # Think about how to add multiple operators to the SpliceOp
-        # armSolveKLOp = spliceOp.AddKLOp("armSolve")
-        # armDebugKLOp = spliceOp.AddKLOp("armDebug")
-        # klOp.appendInput
 
 
     def buildRig(self, parent):
