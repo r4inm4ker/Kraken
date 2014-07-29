@@ -1,0 +1,244 @@
+require Math;
+
+
+object TwoBoneChainSolver
+{
+  Float32 bone1Len;
+  Float32 bone2Len;
+  Float32 fkik;
+  Boolean softIK;
+  Float32 softDist;
+  Boolean stretch;
+  Float32 stretchBlend;
+  Boolean rightSide;
+  Mat44 root;
+  Mat44 bone1FK;
+  Mat44 bone2FK;
+  Mat44 ikHandle;
+  Mat44 upV;
+  Mat44 outMatrices[];
+  Mat33 fkMatrices[];
+  Mat33 ikMatrices[];
+};
+
+
+// Default Constructor
+function TwoBoneChainSolver()
+{
+
+}
+
+function TwoBoneChainSolver(
+  Float32 bone1Len,
+  Float32 bone2Len,
+  Float32 fkik,
+  Boolean softIK,
+  Float32 softDist,
+  Boolean stretch,
+  Float32 stretchBlend,
+  Boolean rightSide,
+  Mat44 root,
+  Mat44 bone1FK,
+  Mat44 bone2FK,
+  Mat44 ikHandle,
+  Mat44 upV
+  )
+{
+    this.bone1Len = bone1Len;
+    this.bone2Len = bone2Len;
+    this.fkik = fkik;
+    this.softIK = softIK;
+    this.softDist = softDist;
+    this.stretch = stretch;
+    this.stretchBlend = stretchBlend;
+    this.rightSide = rightSide;
+    this.root = root;
+    this.bone1FK = bone1FK;
+    this.bone2FK = bone2FK;
+    this.ikHandle = ikHandle;
+    this.upV = upV;
+}
+
+
+// ================
+// Solver Functions
+// ================
+function TwoBoneChainSolver.solveFK!()
+{
+
+  Mat33 rightOffsets[3];
+
+  rightOffsets[0] = this.bone1FK.upperLeft();
+  rightOffsets[1] = this.bone2FK.upperLeft();
+  rightOffsets[2] = this.bone2FK.upperLeft();
+
+  if (this.rightSide) {
+
+    rightOffsets[0] = rightOffsets[0].transpose();
+    rightOffsets[0].row0 = rightOffsets[0].row0.multiplyScalar(-1);
+    rightOffsets[0].row2 = rightOffsets[0].row2.multiplyScalar(-1);
+    rightOffsets[0] = rightOffsets[0].transpose();
+
+    rightOffsets[1] = rightOffsets[1].transpose();
+    rightOffsets[1].row0 = rightOffsets[1].row0.multiplyScalar(-1);
+    rightOffsets[1].row2 = rightOffsets[1].row2.multiplyScalar(-1);
+    rightOffsets[1] = rightOffsets[1].transpose();
+
+    rightOffsets[2] = rightOffsets[2].transpose();
+    rightOffsets[2].row0 = rightOffsets[2].row0.multiplyScalar(-1);
+    rightOffsets[2].row2 = rightOffsets[2].row2.multiplyScalar(-1);
+    rightOffsets[2] = rightOffsets[2].transpose();
+
+  }
+
+  // ==================
+  // Set joint matrices
+  // ==================
+  this.fkMatrices[0] = rightOffsets[0];
+  this.fkMatrices[1] = rightOffsets[1];
+  this.fkMatrices[2] = rightOffsets[2];
+
+}
+
+// example if we need to cache datas
+/*
+struct TwoBoneChainSolver_Cache{
+  Mat44 matrices[];
+};
+function TwoBoneChainSolver.solveIK!(TwoBoneChainSolver_Cache cache)*/
+
+function TwoBoneChainSolver.solveIK!()
+{
+  // Feature Variables
+  Vec3 ikHandleTarget = this.ikHandle.translation();
+
+  // Solve Soft IK position
+  if (this.softIK) {
+
+    Float32 chainLen = this.bone1Len + this.bone2Len;
+    Vec3 rootToIKHandle = (this.ikHandle.translation() - this.root.translation());
+    Float32 curLen = rootToIKHandle.length();
+    Float32 softLen = chainLen - this.softDist;
+    Vec3 softIKPos;
+
+    if ((curLen - softLen) > 0 && this.softDist > 0.0001) {
+
+      // Eulers number = 2.7182818284590452353602874713527
+      softIKPos = rootToIKHandle.clone().unit();
+      softIKPos *= ((1 - pow(2.7182, (-1*(curLen - softLen)/this.softDist))) * this.softDist) + softLen;
+
+      ikHandleTarget = this.root.translation() + softIKPos;
+    }
+  }
+
+  // IK Sovler Utility variables
+  Vec3 root2upv = (this.upV.translation() - this.root.translation()).unit();
+  Vec3 root2eff = (ikHandleTarget - this.root.translation());
+  Vec3 normal = root2eff.cross(root2upv).unit();
+  Float32 hypothenuse = root2eff.setUnit();
+
+
+  // =========================================
+  // Solve boneA orientation using lawOfCosine
+  // =========================================
+  Float32 angleB = Math_lawOfCosine(this.bone1Len, this.bone2Len, hypothenuse);
+  if (angleB.isNaN)
+    angleB = 180;
+  Quat boneAOffset;
+  boneAOffset.setFromAxisAndAngle(normal, angleB);
+  Vec3 boneAX = boneAOffset.rotateVector(root2eff).unit();
+  Vec3 boneAY = normal.cross(boneAX).unit();
+
+
+  // =========================================
+  // Solve boneB orientation using lawOfCosine
+  // =========================================
+  Float32 angleA = Math_lawOfCosine(this.bone2Len, hypothenuse, this.bone1Len);
+  if (angleA.isNaN)
+    angleA = 0;
+  Float32 boneBRot = (Math_degToRad(-180) + (angleB + angleA));
+  Quat boneBOffset;
+  boneBOffset.setFromAxisAndAngle(normal, boneBRot);
+  Vec3 boneBX = boneBOffset.rotateVector(root2eff).unit();
+  Vec3 boneBY = normal.cross(boneBX).unit();
+
+  this.ikMatrices[0].setColumns(boneAX, normal, boneAY.multiplyScalar(-1));
+  this.ikMatrices[1].setColumns(boneBX, normal, boneBY.multiplyScalar(-1));
+  this.ikMatrices[2].setColumns(boneBX, normal, boneBY.multiplyScalar(-1));
+
+
+  // =====================================
+  // Calculate chain extended orientations
+  // =====================================
+  if ((ikHandleTarget - this.root.translation()).length() > (this.bone1Len + this.bone2Len)){
+
+    Vec3 extendedYAxis;
+    extendedYAxis = normal.cross(root2eff.unit()).unit();
+
+    this.ikMatrices[0].setColumns(root2eff.unit(), normal, extendedYAxis.multiplyScalar(-1));
+    this.ikMatrices[1].setColumns(root2eff.unit(), normal, extendedYAxis.multiplyScalar(-1));
+    this.ikMatrices[2] = this.ikHandle.upperLeft();
+  }
+}
+
+
+function TwoBoneChainSolver.solve!()
+{
+    this.outMatrices.resize(3);
+    this.fkMatrices.resize(3);
+    this.ikMatrices.resize(3);
+
+    Xfo outputXfos[3];
+
+    if (this.fkik >= 0.001) {
+      this.solveIK();
+    }
+
+    if (this.fkik <= 1.000) {
+      this.solveFK();
+    }
+
+    Quat fkOris[3];
+    Quat ikOris[3];
+
+    fkOris[0].setFromMat33(this.fkMatrices[0]);
+    ikOris[0].setFromMat33(this.ikMatrices[0]);
+
+    fkOris[1].setFromMat33(this.fkMatrices[1]);
+    ikOris[1].setFromMat33(this.ikMatrices[1]);
+
+    fkOris[2].setFromMat33(this.fkMatrices[1]);
+    ikOris[2].setFromMat33(this.ikMatrices[1]);
+
+    // Feature Variables
+    Float32 bone1Len = this.bone1Len;
+    Float32 bone2Len = this.bone2Len;
+
+    // Set bone lengths from stretch
+    if (this.stretch && this.fkik > 0.001 && (this.ikHandle.translation() - this.root.translation()).length() > (this.bone1Len + this.bone2Len))  { //&& !this.softIK
+
+      Float32 stretchAdd = ((((this.ikHandle.translation() - this.root.translation()).length()) - (this.bone1Len + this.bone2Len)) / 2) * this.stretchBlend;
+
+      bone1Len = this.bone1Len.linearInterpolate((this.bone1Len + stretchAdd), this.fkik);
+      bone2Len = this.bone2Len.linearInterpolate((this.bone2Len + stretchAdd), this.fkik);
+
+    }
+
+    outputXfos[0].ori = fkOris[0].linearInterpolate(ikOris[0], this.fkik);
+    outputXfos[1].ori = fkOris[1].linearInterpolate(ikOris[1], this.fkik);
+    outputXfos[2].ori = fkOris[2].linearInterpolate(ikOris[2], this.fkik);
+
+    outputXfos[0].tr = this.root.translation();
+    outputXfos[1].tr = outputXfos[0].transformVector(Vec3(bone1Len,0,0));
+    outputXfos[2].tr = outputXfos[1].transformVector(Vec3(bone2Len,0,0));
+
+    this.outMatrices[0] = outputXfos[0].toMat44();
+    this.outMatrices[1] = outputXfos[1].toMat44();
+    this.outMatrices[2] = outputXfos[2].toMat44();
+}
+
+
+function String TwoBoneChainSolver.getInfo()
+{
+  return 'Bone 1 Length: ' + this.bone1Len;
+}
