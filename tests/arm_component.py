@@ -110,6 +110,18 @@ class ArmComponent(BaseComponent):
         armIKCtrlSrtBuffer.addChild(armIKCtrl)
         self.addChild(armIKCtrlSrtBuffer)
 
+        # UpV
+        armUpVCtrl = PinControl('UpV')
+        armUpVCtrl.xfo.copy(forearmFKCtrl.xfo)
+        armUpVCtrl.rotatePoints(90, 0, 0)
+        armUpVCtrl.setColor(ctrlColor)
+
+        armUpVCtrlSrtBuffer = SrtBuffer('UpV')
+        armUpVCtrlSrtBuffer.xfo.copy(forearmFKCtrl.xfo)
+        armUpVCtrlSrtBuffer.addChild(armUpVCtrl)
+        self.addChild(armUpVCtrlSrtBuffer)
+
+
         # Setup component Xfo I/O's
         clavicleEndInput = Locator('clavicleEnd')
         clavicleEndInput.xfo.copy(bicepXfo)
@@ -130,11 +142,11 @@ class ArmComponent(BaseComponent):
         stretchInputAttr = BoolAttribute('stretch', True)
         stretchBlendInputAttr = FloatAttribute('stretchBlend', 0.0, 0.0, 1.0)
         rightSideInputAttr = BoolAttribute('rightSide', False)
-        rootInputAttr = FloatAttribute('root', 0.0, 0.0, 1.0)
-        bone1FKInputAttr = FloatAttribute('bone1FK', 0.0, 0.0, 1.0)
-        bone2FKInputAttr = FloatAttribute('bone2FK', 0.0, 0.0, 1.0)
-        ikHandleInputAttr = FloatAttribute('ikHandle', 0.0, 0.0, 1.0)
-        upVInputAttr = FloatAttribute('upV', 0.0, 0.0, 1.0)
+        # rootInputAttr = FloatAttribute('root', 0.0, 0.0, 1.0)
+        # bone1FKInputAttr = FloatAttribute('bone1FK', 0.0, 0.0, 1.0)
+        # bone2FKInputAttr = FloatAttribute('bone2FK', 0.0, 0.0, 1.0)
+        # ikHandleInputAttr = FloatAttribute('ikHandle', 0.0, 0.0, 1.0)
+        # upVInputAttr = FloatAttribute('upV', 0.0, 0.0, 1.0)
 
 
         # Constraint inputs
@@ -163,11 +175,11 @@ class ArmComponent(BaseComponent):
         self.addInput(stretchInputAttr)
         self.addInput(stretchBlendInputAttr)
         self.addInput(rightSideInputAttr)
-        self.addInput(rootInputAttr)
-        self.addInput(bone1FKInputAttr)
-        self.addInput(bone2FKInputAttr)
-        self.addInput(ikHandleInputAttr)
-        self.addInput(upVInputAttr)
+        # self.addInput(rootInputAttr)
+        # self.addInput(bone1FKInputAttr)
+        # self.addInput(bone2FKInputAttr)
+        # self.addInput(ikHandleInputAttr)
+        # self.addInput(upVInputAttr)
 
         # Add Splice Op
         spliceOp = SpliceOperator("armSpliceOp", "LimbSolver", "KrakenLimbSolver")
@@ -179,11 +191,12 @@ class ArmComponent(BaseComponent):
         spliceOp.setInput("stretch", stretchInputAttr)
         spliceOp.setInput("stretchBlend", stretchBlendInputAttr)
         spliceOp.setInput("rightSide", rightSideInputAttr)
-        spliceOp.setInput("root", rootInputAttr)
-        spliceOp.setInput("bone1FK", bone1FKInputAttr)
-        spliceOp.setInput("bone2FK", bone2FKInputAttr)
-        spliceOp.setInput("ikHandle", ikHandleInputAttr)
-        spliceOp.setInput("upV", upVInputAttr)
+
+        spliceOp.setInput("root", clavicleEndInput)
+        spliceOp.setInput("bone1FK", bicepFKCtrl)
+        spliceOp.setInput("bone2FK", forearmFKCtrl)
+        spliceOp.setInput("ikHandle", armIKCtrl)
+        spliceOp.setInput("upV", armUpVCtrl)
 
         spliceOp.setOutput("bone01Out", bicepOutput)
         spliceOp.setOutput("bone02Out", forearmOutput)

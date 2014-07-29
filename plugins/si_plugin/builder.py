@@ -558,8 +558,12 @@ class Builder(BaseBuilder):
 
                 # Get the argument's input from the DCC
                 try:
+                    log("input")
+                    log(arg.name)
                     targetObject = self._getDCCSceneItem(kOperator.getInput(arg.name))
                 except:
+                    log("output")
+                    log(arg.name)
                     targetObject = self._getDCCSceneItem(kOperator.getOutput(arg.name))
 
                 # Append the suffix based on the argument type, Softimage Only
@@ -575,6 +579,9 @@ class Builder(BaseBuilder):
 
                     # Add the splice Port for each arg.
                     if arg.connectionType == 'in':
+
+                        log(targetObject.FullName + connectionSuffix)
+
                         si.fabricSplice("addInputPort", operatorOwner.FullName + ".kine.global.SpliceOp", "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\", \"extension\":\"\", \"targets\":\"" + targetObject.FullName + connectionSuffix + "\"}", "")
 
                     elif arg.connectionType in ['io', 'out']:
