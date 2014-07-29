@@ -46,6 +46,18 @@ class BaseAttribute(object):
 
         return self.name
 
+    def getFullName(self):
+        """Returns the full hierarchical path to this object.
+
+        Return:
+        String, full name of the object.
+
+        """
+            
+        if self.parent is not None:
+            return self.parent.getFullName() + '.' + self.getName()
+            
+        return self.getName()
 
     # ==============
     # Value Methods
@@ -119,3 +131,51 @@ class BaseAttribute(object):
         """
 
         return self.__kType__
+
+
+
+    # ================
+    # Persistence Methods
+    # ================
+
+    def jsonEncode(self, saver):
+        """Sets the color of this object.
+
+        Arguments:
+
+        Return:
+        A JSON structure containing the data for this SceneItem.
+
+        """
+
+        classHierarchy = []
+        for cls in type.mro(type(self)):
+            if cls == object:
+                break;
+            classHierarchy.append(cls.__name__)
+
+        jsonData = {
+            '__typeHierarchy__': classHierarchy,
+            'name': self.name,
+            'value': saver.encodeValue(self.value),
+            'parent': None
+        }
+
+        if self.parent is not None:
+            jsonData['parent'] = self.parent.getName()
+
+        return jsonData
+
+
+    def jsonDecode(self, loader, jsonData):
+        """Returns the color of the object.
+
+        Return:
+        True if decoding was successful
+
+        """
+        self.name =  jsonData['name']
+        self.value =  loader.decodeValue(jsonData['value'])
+        self.parent =  loader.getParentItem()
+
+        return True

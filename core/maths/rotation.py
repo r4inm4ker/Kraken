@@ -6,13 +6,14 @@ Quat -- Quaternion rotation.
 """
 
 import math
+from math_object import MathObject
 
-from kraken.core.maths import vec
-from kraken.core.maths import matrix
-from kraken.core.maths import mathUtils
+from vec import Vec3
+from matrix import Matrix33
+import mathUtils
 
 
-class Euler(object):
+class Euler(MathObject):
     """Euler rotation object."""
 
     roMap = {
@@ -94,30 +95,30 @@ class Euler(object):
         sz = math.sin(self.z)
 
         """
-        rx = matrix.Matrix33(vec.Vec3(1.0, 0.0, 0.0),
-                            vec.Vec3(0.0, cx, -sx),
-                            vec.Vec3(0.0, sx, cx))
+        rx = Matrix33(Vec3(1.0, 0.0, 0.0),
+                            Vec3(0.0, cx, -sx),
+                            Vec3(0.0, sx, cx))
 
-        ry = matrix.Matrix33(vec.Vec3(cy, 0.0, sy),
-                            vec.Vec3(0.0, 1.0, 0.0),
-                            vec.Vec3(-sy, 0.0, cy))
+        ry = Matrix33(Vec3(cy, 0.0, sy),
+                            Vec3(0.0, 1.0, 0.0),
+                            Vec3(-sy, 0.0, cy))
 
-        rz = matrix.Matrix33(vec.Vec3(cz, -sz, 0.0),
-                            vec.Vec3(sz, cz, 0.0),
-                            vec.Vec3(0.0, 0.0, 1.0))
+        rz = Matrix33(Vec3(cz, -sz, 0.0),
+                            Vec3(sz, cz, 0.0),
+                            Vec3(0.0, 0.0, 1.0))
         """
         # =========================================
-        rx = matrix.Matrix33(vec.Vec3(1.0, 0.0, 0.0),
-                            vec.Vec3(0.0, cx, sx),
-                            vec.Vec3(0.0, -sx, cx))
+        rx = Matrix33(Vec3(1.0, 0.0, 0.0),
+                            Vec3(0.0, cx, sx),
+                            Vec3(0.0, -sx, cx))
 
-        ry = matrix.Matrix33(vec.Vec3(cy, 0.0, -sy),
-                            vec.Vec3(0.0, 1.0, 0.0),
-                            vec.Vec3(sy, 0.0, cy))
+        ry = Matrix33(Vec3(cy, 0.0, -sy),
+                            Vec3(0.0, 1.0, 0.0),
+                            Vec3(sy, 0.0, cy))
 
-        rz = matrix.Matrix33(vec.Vec3(cz, sz, 0.0),
-                            vec.Vec3(-sz, cz, 0.0),
-                            vec.Vec3(0.0, 0.0, 1.0))
+        rz = Matrix33(Vec3(cz, sz, 0.0),
+                            Vec3(-sz, cz, 0.0),
+                            Vec3(0.0, 0.0, 1.0))
 
         if self.ro == 0:
             return rx.multiply(ry.multiply(rz))
@@ -178,44 +179,22 @@ class Euler(object):
                abs(self.z - other.z) < precision
 
 
-    def jsonEncode(self):
-        """Encodes object to JSON.
-
-        Return:
-        JSON string.
-
-        """
-
-        d = {
-                "__class__":self.__class__.__name__,
-            }
-
-        attrs = {}
-        for eachItem in self.__dict__.items():
-
-            if hasattr(eachItem[1], "jsonEncode"):
-                attrs[eachItem[0]] = eachItem[1].jsonEncode()
-            else:
-                attrs[eachItem[0]] = eachItem[1]
-
-        d.update(attrs)
-
-        return d
 
 
-class Quat(object):
+
+class Quat(MathObject):
     """Quaternion Rotation object."""
 
     def __init__(self, v=None, w=None):
         super(Quat, self).__init__()
 
-        if v is not None and not isinstance(v, vec.Vec3):
+        if v is not None and not isinstance(v, Vec3):
             raise TypeError("Quat: Invalid type for 'v' argument. Must be a Vec3.")
 
         if w is not None and not isinstance(w, (int, float)):
             raise TypeError("Quat: Invalid type for 'w' argument. Must be a int or float.")
 
-        self.v = vec.Vec3()
+        self.v = Vec3()
         self.w = 1.0
 
         self.set(v,w)
@@ -231,7 +210,7 @@ class Quat(object):
         """Sets the quaternion values."""
 
         if v is None:
-            v = vec.Vec3()
+            v = Vec3()
 
         if w is None:
             w = 1.0
@@ -280,7 +259,7 @@ class Quat(object):
             raise TypeError("Quat: Invalid type for 'e' argument. Must be Euler.")
 
 
-        ordered = vec.Vec3()
+        ordered = Vec3()
 
         if e.ro == 0:
           ordered.set(e.x, -e.y, e.z)
@@ -346,7 +325,7 @@ class Quat(object):
     def setFromAxisAndAngle(self, inVec, radians):
         """Set quaternion from an axis Vec3 and an angle in radians."""
 
-        if not isinstance(inVec, vec.Vec3):
+        if not isinstance(inVec, Vec3):
             raise TypeError("Quat: Invalid type for 'inVec' argument. Must be Vec3.")
 
         if not isinstance(radians, (int, float)):
@@ -455,7 +434,7 @@ class Quat(object):
         zaxis = direction.unit()
         yaxis = zaxis.cross(upvector.unit()).cross(zaxis).unit()
         xaxis = yaxis.cross(zaxis).unit()
-        mat = matrix.Matrix33(xaxis, yaxis, zaxis).transpose()
+        mat = Matrix33(xaxis, yaxis, zaxis).transpose()
         self.setFromMatrix33(mat)
 
         return self
@@ -464,7 +443,7 @@ class Quat(object):
     def toMatrix33(self):
         """Get a Matrix33 from on this quaternion."""
 
-        mat3 = matrix.Matrix33()
+        mat3 = Matrix33()
 
         xx = self.v.x * self.v.x
         xy = self.v.x * self.v.y
@@ -505,7 +484,7 @@ class Quat(object):
 
         self.setUnit()
 
-        ordered = vec.Vec3()
+        ordered = Vec3()
         if rotationOrder is 5:
             ordered.set(self.v.x, -self.v.z, self.v.y)
         elif rotationOrder is 1:
@@ -519,7 +498,7 @@ class Quat(object):
         elif rotationOrder is 4:
             ordered.set(self.v.y, self.v.z, self.v.x)
 
-        euler = vec.Vec3()
+        euler = Vec3()
         test = ordered.x*ordered.y + ordered.z*self.w
         if test > 0.49999: # singularity at north pole
             euler.y = 2.0 * math.atan2(ordered.x, self.w)
@@ -668,27 +647,3 @@ class Quat(object):
         return self.v.almostEqual(other.v, precision) and \
                abs(self.w - other.w) < precision
 
-
-    def jsonEncode(self):
-        """Encodes object to JSON.
-
-        Return:
-        JSON string.
-
-        """
-
-        d = {
-                "__class__":self.__class__.__name__,
-            }
-
-        attrs = {}
-        for eachItem in self.__dict__.items():
-
-            if hasattr(eachItem[1], "jsonEncode"):
-                attrs[eachItem[0]] = eachItem[1].jsonEncode()
-            else:
-                attrs[eachItem[0]] = eachItem[1]
-
-        d.update(attrs)
-
-        return d

@@ -13,7 +13,7 @@ class StringAttribute(BaseAttribute):
 
     __kType__ = "StringAttribute"
 
-    def __init__(self, name, value):
+    def __init__(self, name, value=""):
         super(StringAttribute, self).__init__(name, value)
         assert type(value) is str, "Value is not of type 'string'."
 
