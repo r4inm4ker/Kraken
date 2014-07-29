@@ -659,13 +659,13 @@ class BaseBuilder(object):
 
         """
 
-        componentName = ""
-        side = ""
+        componentNamePrefix = ""
         kType = kObject.getKType()
 
         if component is not None:
             componentName = component.getName()
             side = component.getSide()
+            componentNamePrefix = '_'.join([componentName, side]) + '_'
 
         if kType == "Container":
             return '_'.join([kObject.getName()])
@@ -677,34 +677,34 @@ class BaseBuilder(object):
             return '_'.join([kObject.getName(), kObject.getSide(), 'hrc'])
 
         elif kType == "ComponentInputXfo":
-            return '_'.join([componentName, side, kObject.getName(), 'srtIn'])
+            return componentNamePrefix + '_'.join([kObject.getName(), 'srtIn'])
 
         elif kType == "ComponentInputAttr":
-            return '_'.join([componentName, side, kObject.getName(), 'attrIn'])
+            return componentNamePrefix + '_'.join([kObject.getName(), 'attrIn'])
 
         elif kType == "ComponentOutputXfo":
-            return '_'.join([componentName, side, kObject.getName(), 'srtOut'])
+            return componentNamePrefix + '_'.join([kObject.getName(), 'srtOut'])
 
         elif kType == "ComponentOutputAttr":
-            return '_'.join([componentName, side, kObject.getName(), 'attrOut'])
+            return componentNamePrefix + '_'.join([kObject.getName(), 'attrOut'])
 
         elif kType == "HierarchyGroup":
-            return '_'.join([componentName, side, kObject.getName(), 'hrc'])
+            return componentNamePrefix + '_'.join([kObject.getName(), 'hrc'])
 
         elif kType == "Locator":
-            return '_'.join([componentName, kObject.getName(), side, 'null'])
+            return componentNamePrefix + '_'.join([kObject.getName(), 'null'])
 
         elif kType == "Joint":
-            return '_'.join([componentName, kObject.getName(), side, 'def'])
+            return componentNamePrefix + '_'.join([kObject.getName(), 'def'])
 
         elif kType == "SceneItem":
-            return '_'.join([componentName, kObject.getName(), side, 'null'])
+            return componentNamePrefix + '_'.join([kObject.getName(), 'null'])
 
         elif kType == "Curve":
-            return '_'.join([componentName, kObject.getName(), side, 'crv'])
+            return componentNamePrefix + '_'.join([kObject.getName(), 'crv'])
 
         elif kType == "Control":
-            nameParts = [componentName, kObject.getName(), side, 'ctrl']
+            nameParts = [componentName, side, kObject.getName(), 'ctrl']
             nameParts = [x for x in nameParts if x != ""]
             return '_'.join(nameParts)
 
