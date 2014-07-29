@@ -73,6 +73,40 @@ class BaseComponent(SceneItem):
         return True
 
 
+
+    # =============
+    # Name methods
+    # =============
+
+    def getComponentName(self):
+        """Returns the name of the component used on self and all objects owned by the component
+
+        Return:
+        String, build name of the object.
+
+        """
+
+        return self.getName() + '_' + self.getSide()
+
+
+    def getBuildName(self):
+        """Returns the name used when building the node in the target application.
+
+        Return:
+        String, build name of the object.
+
+        """
+
+        return self.getComponentName() + '_hrc'
+
+
+    def addChild(self, child):
+        super(BaseComponent, self).addChild(child)
+
+        # Assign the child self as the component. 
+        child.setComponent(self)
+
+        return True
     # ==============
     # Input Methods
     # ==============
@@ -123,6 +157,9 @@ class BaseComponent(SceneItem):
 
         componentInput = ComponentInput(inputObject.getName(), inputObject)
         self.inputs.append(componentInput)
+
+        # Assign the componentInput self as the component. 
+        componentInput.setComponent(self)
 
         return True
 
@@ -263,6 +300,9 @@ class BaseComponent(SceneItem):
         componentOutput = ComponentOutput(outputObject.getName(), outputObject)
         self.outputs.append(componentOutput)
 
+        # Assign the componentOutput self as the component. 
+        componentOutput.setComponent(self)
+        
         return True
 
 

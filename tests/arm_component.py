@@ -133,3 +133,11 @@ class ArmComponent(BaseComponent):
 if __name__ == "__main__":
     armLeft = ArmComponent("myArm", side='L')
     print armLeft.getNumChildren()
+
+    def traverseHierarchy(kObject):
+        print kObject.getBuildName()
+        # Build children
+        for i in xrange(kObject.getNumChildren()):
+            child = kObject.getChildByIndex(i)
+            traverseHierarchy(child)
+    traverseHierarchy(armLeft)
