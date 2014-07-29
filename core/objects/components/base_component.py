@@ -100,6 +100,10 @@ class BaseComponent(SceneItem):
         return self.getComponentName() + '_hrc'
 
 
+    # ==============
+    # Child Methods
+    # ==============
+    
     def addChild(self, child):
         super(BaseComponent, self).addChild(child)
 
@@ -107,6 +111,7 @@ class BaseComponent(SceneItem):
         child.setComponent(self)
 
         return True
+
     # ==============
     # Input Methods
     # ==============
@@ -302,7 +307,7 @@ class BaseComponent(SceneItem):
 
         # Assign the componentOutput self as the component. 
         componentOutput.setComponent(self)
-        
+
         return True
 
 
