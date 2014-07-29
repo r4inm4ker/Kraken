@@ -490,8 +490,6 @@ class Builder(BaseBuilder):
 
         """
 
-        return
-
         try:
             # Get or construct a Fabric Engine client
             contextID = si.fabricSplice('getClientContextID')
@@ -543,7 +541,9 @@ class Builder(BaseBuilder):
             si.fabricSplice("addInternalPort", operatorOwner.FullName + ".kine.global.SpliceOp", "{\"portName\":\"solver\", \"dataType\":\"" + solverTypeName + "\", \"extension\":\"" + kOperator.getExtension() + "\", \"portMode\":\"io\"}", "")
 
             # Start constructing the source code.
-            opSourceCode = "";
+            opSourceCode = ""
+            opSourceCode += "require KrakenSolver;\n"
+            opSourceCode += "require KrakenSolverArg;\n"
             opSourceCode += "require " + kOperator.getExtension() + ";\n\n"
             opSourceCode += "operator " + kOperator.getName() + "(\n"
 

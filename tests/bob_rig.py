@@ -80,12 +80,12 @@ class Rig(Container):
         legRightPelvisInput.setSource(clavicleRightEndOutput.getTarget())
 
         # Arm Attributes to Clavicle
-        clavicleLeftFollowBodyOutput = clavicleLeftComponent.getOutputByName('followBody')
-        armLeftFollowBodyInput = armLeftComponent.getInputByName('followBody')
-        armLeftFollowBodyInput.setSource(clavicleLeftFollowBodyOutput.getTarget())
-        clavicleRightFollowBodyOutput = clavicleRightComponent.getOutputByName('followBody')
-        armRightFollowBodyInput = armRightComponent.getInputByName('followBody')
-        armRightFollowBodyInput.setSource(clavicleRightFollowBodyOutput.getTarget())
+        # clavicleLeftFollowBodyOutput = clavicleLeftComponent.getOutputByName('followBody')
+        # armLeftFollowBodyInput = armLeftComponent.getInputByName('followBody')
+        # armLeftFollowBodyInput.setSource(clavicleLeftFollowBodyOutput.getTarget())
+        # clavicleRightFollowBodyOutput = clavicleRightComponent.getOutputByName('followBody')
+        # armRightFollowBodyInput = armRightComponent.getInputByName('followBody')
+        # armRightFollowBodyInput.setSource(clavicleRightFollowBodyOutput.getTarget())
 
 
 

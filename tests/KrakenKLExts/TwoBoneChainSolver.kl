@@ -23,12 +23,12 @@ object TwoBoneChainSolver
 
 
 // Default Constructor
-function TwoBoneChainSolver()
+inline TwoBoneChainSolver()
 {
 
 }
 
-function TwoBoneChainSolver(
+inline TwoBoneChainSolver(
   Float32 bone1Len,
   Float32 bone2Len,
   Float32 fkik,

@@ -472,7 +472,9 @@ class Builder(BaseBuilder):
             cmds.fabricSplice("addIOPort", spliceNode, "{\"portName\":\"solver\", \"dataType\":\"" + solverTypeName + "\", \"extension\":\"" + kOperator.getExtension() + "\", \"addMayaAttr\": false}")
 
             # Start constructing the source code.
-            opSourceCode = "";
+            opSourceCode = ""
+            opSourceCode += "require KrakenSolver;\n"
+            opSourceCode += "require KrakenSolverArg;\n"
             opSourceCode += "require " + kOperator.getExtension() + ";\n\n"
             opSourceCode += "operator " + kOperator.getName() + "(\n"
 
