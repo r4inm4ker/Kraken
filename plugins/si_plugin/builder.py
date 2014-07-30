@@ -579,9 +579,6 @@ class Builder(BaseBuilder):
 
                     # Add the splice Port for each arg.
                     if arg.connectionType == 'in':
-
-                        log(targetObject.FullName + connectionSuffix)
-
                         si.fabricSplice("addInputPort", operatorOwner.FullName + ".kine.global.SpliceOp", "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\", \"extension\":\"\", \"targets\":\"" + targetObject.FullName + connectionSuffix + "\"}", "")
 
                     elif arg.connectionType in ['io', 'out']:

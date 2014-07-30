@@ -13,6 +13,7 @@ from kraken.core.objects.joint import Joint
 from kraken.core.objects.srtBuffer import SrtBuffer
 from kraken.core.objects.controls.cube_control import CubeControl
 from kraken.core.objects.controls.pin_control import PinControl
+from kraken.core.objects.controls.triangle_control import TriangleControl
 
 from kraken.core.objects.operators.splice_operator import SpliceOperator
 
@@ -111,13 +112,23 @@ class ArmComponent(BaseComponent):
         self.addChild(armIKCtrlSrtBuffer)
 
         # UpV
-        armUpVCtrl = PinControl('UpV')
-        armUpVCtrl.xfo.copy(forearmFKCtrl.xfo)
-        armUpVCtrl.rotatePoints(90, 0, 0)
+        armPlaneXfo = xfoFromDirAndUpV(bicepPosition, forearmPosition, wristPosition)
+        armPlaneXfo.tr.copy(forearmPosition)
+
+        upVOffset = Vec3(0, 0, 5)
+        upVOffset = armPlaneXfo.transformVector(upVOffset)
+
+        upVXfo = Xfo()
+        upVXfo.tr.copy(upVOffset)
+
+        armUpVCtrl = TriangleControl('UpV')
+        armUpVCtrl.xfo.copy(upVXfo)
+        armUpVCtrl.alignOnZAxis()
+        armUpVCtrl.rotatePoints(180, 0, 0)
         armUpVCtrl.setColor(ctrlColor)
 
         armUpVCtrlSrtBuffer = SrtBuffer('UpV')
-        armUpVCtrlSrtBuffer.xfo.copy(forearmFKCtrl.xfo)
+        armUpVCtrlSrtBuffer.xfo.copy(upVXfo)
         armUpVCtrlSrtBuffer.addChild(armUpVCtrl)
         self.addChild(armUpVCtrlSrtBuffer)
 

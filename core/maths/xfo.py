@@ -243,12 +243,12 @@ def xfoFromDirAndUpV(base, target, upV):
 
     """
 
-    rootToWrist = target.subtract(base).unit()
-    rootToElbow = upV.subtract(base).unit()
-    bone1Normal = rootToWrist.cross(rootToElbow).unit()
-    bone1ZAxis = rootToElbow.cross(bone1Normal).unit()
-    bicepXfo = Xfo()
-    bicepXfo.setFromVectors(rootToElbow, bone1Normal, bone1ZAxis, base)
+    rootToTarget = target.subtract(base).unit()
+    rootToUpV = upV.subtract(base).unit()
+    normal = rootToUpV.cross(rootToTarget).unit()
+    zAxis = rootToTarget.cross(normal).unit()
+    outXfo = Xfo()
+    outXfo.setFromVectors(rootToTarget, normal, zAxis, base)
 
-    return bicepXfo
+    return outXfo
 

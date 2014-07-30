@@ -6,6 +6,8 @@ Builder -- Component representation.
 """
 
 from kraken.core.builders.base_builder import BaseBuilder
+from kraken.core.objects.scene_item import SceneItem
+from kraken.core.objects.attributes.base_attribute import BaseAttribute
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
 from kraken.plugins.maya_plugin.utils import *
@@ -499,12 +501,10 @@ class Builder(BaseBuilder):
                 if arg.connectionType == 'in':
                     cmds.fabricSplice("addInputPort", spliceNode, "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\", \"extension\":\"\", \"addMayaAttr\": true}", "")
 
-                    if opObject.getKType().endswith('Attribute'):
+                    if isinstance(opObject, BaseAttribute):
                         targetObject.connect(spliceNode.attr(arg.name))
-                    elif opObject.getKType().endswith('Locator'):
-
+                    elif isinstance(opObject, SceneItem):
                         targetObject.attr('worldMatrix').connect(spliceNode.attr(arg.name))
-
                     else:
                         raise Exception(opObject.getFullName() + " with type '" + opObject.getKType() + " is not implemented!")
 
