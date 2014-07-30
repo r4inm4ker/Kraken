@@ -1,6 +1,4 @@
 from kraken.core.maths.vec import Vec3
-from kraken.core.maths.rotation import Quat
-from kraken.core.maths.rotation import Euler
 from kraken.core.maths.xfo import Xfo
 from kraken.core.maths.xfo import xfoFromDirAndUpV
 
@@ -24,8 +22,8 @@ class ArmComponent(BaseComponent):
     def __init__(self, name, parent=None, side='M'):
         super(ArmComponent, self).__init__(name, parent, side)
 
-        container = self.getParent()
-        armatureLayer = container.getChildByName('armature')
+        # container = self.getParent()
+        # armatureLayer = container.getChildByName('armature')
 
         # =========
         # Armature
@@ -103,7 +101,12 @@ class ArmComponent(BaseComponent):
         # Arm IK
         armIKCtrl = PinControl('IK')
         armIKCtrl.xfo.tr.copy(wristPosition)
-        armIKCtrl.rotatePoints(90, 0, 0)
+
+        if self.getSide() == "R":
+            armIKCtrl.rotatePoints(0, 90, 0)
+        else:
+            armIKCtrl.rotatePoints(0, -90, 0)
+
         armIKCtrl.setColor(ctrlColor)
 
         armIKCtrlSrtBuffer = SrtBuffer('IK')
@@ -112,26 +115,21 @@ class ArmComponent(BaseComponent):
         self.addChild(armIKCtrlSrtBuffer)
 
         # UpV
-        armPlaneXfo = xfoFromDirAndUpV(bicepPosition, forearmPosition, wristPosition)
-        armPlaneXfo.tr.copy(forearmPosition)
-
+        upVXfo = xfoFromDirAndUpV(bicepPosition, wristPosition, forearmPosition)
+        upVXfo.tr.copy(forearmPosition)
         upVOffset = Vec3(0, 0, 5)
-        upVOffset = armPlaneXfo.transformVector(upVOffset)
-
-        upVXfo = Xfo()
-        upVXfo.tr.copy(upVOffset)
+        upVOffset = upVXfo.transformVector(upVOffset)
 
         armUpVCtrl = TriangleControl('UpV')
-        armUpVCtrl.xfo.copy(upVXfo)
+        armUpVCtrl.xfo.tr.copy(upVOffset)
         armUpVCtrl.alignOnZAxis()
         armUpVCtrl.rotatePoints(180, 0, 0)
         armUpVCtrl.setColor(ctrlColor)
 
         armUpVCtrlSrtBuffer = SrtBuffer('UpV')
-        armUpVCtrlSrtBuffer.xfo.copy(upVXfo)
+        armUpVCtrlSrtBuffer.xfo.tr.copy(upVOffset)
         armUpVCtrlSrtBuffer.addChild(armUpVCtrl)
         self.addChild(armUpVCtrlSrtBuffer)
-
 
         # =====================
         # Create Component I/O
@@ -139,7 +137,6 @@ class ArmComponent(BaseComponent):
         # Setup component Xfo I/O's
         clavicleEndInput = Locator('clavicleEnd')
         clavicleEndInput.xfo.copy(bicepXfo)
-
         bicepOutput = Locator('bicep')
         bicepOutput.xfo.copy(bicepXfo)
         forearmOutput = Locator('forearm')

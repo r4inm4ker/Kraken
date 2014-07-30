@@ -1,7 +1,7 @@
 require Math;
 require Kraken;
 require TwoBoneChainSolver;
-
+require InlineDrawing;
 
 object LimbSolver : KrakenSolver {
   TwoBoneChainSolver twoBoneChain;
@@ -56,6 +56,9 @@ function LimbSolver.solve!
   io Mat44 bone03Out
   )
 {
+  InlineDrawing draw = OGLInlineDrawing_GetInstance();
+  draw.reset();
+
   this.twoBoneChain = TwoBoneChainSolver();
   this.twoBoneChain.bone1Len = bone1Len;
   this.twoBoneChain.bone2Len = bone2Len;
@@ -76,4 +79,21 @@ function LimbSolver.solve!
   bone01Out = this.twoBoneChain.outMatrices[0];
   bone02Out = this.twoBoneChain.outMatrices[1];
   bone03Out = this.twoBoneChain.outMatrices[2];
+
+  // Debugging
+  Xfo bone01DebugXfo = bone01Out;
+  Xfo bone02DebugXfo = bone02Out;
+  Xfo bone03DebugXfo = bone03Out;
+
+  // InlineDebugShape debugXfos = draw.registerShape(InlineDebugShape('debugXfos'));
+  // debugXfos.reset();
+
+  // drawArrow(draw.getRoot(), 'bone01', bone01DebugXfo, Color(1.0, 0, 0));
+  // debugXfos.drawArrow(draw.getRoot(), 'bone02', bone02DebugXfo, Color(1.0, 0, 0));
+  // debugXfos.drawArrow(draw.getRoot(), 'bone03', bone03DebugXfo, Color(1.0, 0, 0));
+
+  // add instances for both shapes
+  // InlineTransform transfo = draw.getRoot();
+  // red.addInstance(SimpleInlineInstance('debugXfos', transfo, debugPoints));
+
 }

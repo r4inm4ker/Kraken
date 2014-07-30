@@ -558,12 +558,8 @@ class Builder(BaseBuilder):
 
                 # Get the argument's input from the DCC
                 try:
-                    log("input")
-                    log(arg.name)
                     targetObject = self._getDCCSceneItem(kOperator.getInput(arg.name))
                 except:
-                    log("output")
-                    log(arg.name)
                     targetObject = self._getDCCSceneItem(kOperator.getOutput(arg.name))
 
                 # Append the suffix based on the argument type, Softimage Only

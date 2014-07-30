@@ -248,7 +248,7 @@ def xfoFromDirAndUpV(base, target, upV):
     normal = rootToUpV.cross(rootToTarget).unit()
     zAxis = rootToTarget.cross(normal).unit()
     outXfo = Xfo()
-    outXfo.setFromVectors(rootToTarget, normal, zAxis, base)
+    outXfo.setFromVectors(rootToTarget.clone(), normal.clone(), zAxis.clone(), base.clone())
 
     return outXfo
 
