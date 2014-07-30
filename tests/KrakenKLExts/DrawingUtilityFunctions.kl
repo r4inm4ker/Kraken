@@ -98,6 +98,32 @@ function InlineMeshShape getOrCreateMesh(io InlineTransform rootTransform, Strin
   }
 }
 
+
+function InlineTransform drawShadedShapeAtXfo(io InlineTransform rootTransform, String name, InlineShape shape, Color color, Xfo xfo){
+  InlineTransform transform = rootTransform.getChild(name);
+  if(transform == null){
+    transform = StaticInlineTransform(name, rootTransform, xfo);
+
+    InlineDrawing drawing = OGLInlineDrawing_GetInstance();
+    InlineShader shader = drawing.registerShader(OGLSurfaceShader());
+    InlineMaterial mat = shader.getOrCreateMaterial("shaded");
+
+    SimpleInlineInstance instance(name, transform, shape, mat);
+    instance.setInstanceUniform(InlineUniform('u_ambientColor', color));
+    instance.setInstanceUniform(InlineUniform('u_diffuseColor', color));
+    instance.setInstanceUniform(InlineUniform('u_specularFactor', 4.0));
+  }
+  else{
+    SimpleInlineInstance instance = transform.getChild(0);
+    instance.setInstanceUniform(InlineUniform('u_ambientColor', color));
+    instance.setInstanceUniform(InlineUniform('u_diffuseColor', color));
+    instance.setInstanceUniform(InlineUniform('u_specularFactor', 4.0));
+    transform.setLocalXfo(0, xfo);
+  }
+  return transform;
+}
+
+
 function InlineTransform drawFlatShapeAtXfo(io InlineTransform rootTransform, String name, InlineShape shape, Color color, Xfo xfo){
   InlineTransform transform = rootTransform.getChild(name);
   if(transform == null){
@@ -192,7 +218,7 @@ function InlineTransform drawCircle(
   InlineTransform transform = rootTransform.getChild(name);
   if(transform == null){
     InlineDrawing drawing = OGLInlineDrawing_GetInstance();
-    
+
     InlineShader shader = drawing.registerShader(OGLFlatShader());
     InlineMaterial mat = shader.getOrCreateMaterial("flat");
 
@@ -228,7 +254,7 @@ function InlineTransform drawLinesSphere(
   InlineTransform transform = rootTransform.getChild(name);
   if(transform == null){
     InlineDrawing drawing = OGLInlineDrawing_GetInstance();
-    
+
     InlineShader shader = drawing.registerShader(OGLFlatShader());
     InlineMaterial mat = shader.getOrCreateMaterial("flat");
 
@@ -264,7 +290,7 @@ function InlineTransform drawCross(
   InlineTransform transform = rootTransform.getChild(name);
   if(transform == null){
     InlineDrawing drawing = OGLInlineDrawing_GetInstance();
-    
+
     InlineShader shader = drawing.registerShader(OGLFlatShader());
     InlineMaterial mat = shader.getOrCreateMaterial("flat");
 
@@ -301,7 +327,7 @@ function InlineTransform drawRectangle(
   InlineTransform transform = rootTransform.getChild(name);
   if(transform == null){
     InlineDrawing drawing = OGLInlineDrawing_GetInstance();
-    
+
     InlineShader shader = drawing.registerShader(OGLFlatShader());
     InlineMaterial mat = shader.getOrCreateMaterial("flat");
 
@@ -337,7 +363,7 @@ function InlineTransform drawSphere(
   InlineTransform transform = rootTransform.getChild(name);
   if(transform == null){
     InlineDrawing drawing = OGLInlineDrawing_GetInstance();
-    
+
     InlineShader shader = drawing.registerShader(OGLSurfaceShader());
     InlineMaterial mat = shader.getOrCreateMaterial("surface");
 
@@ -371,7 +397,7 @@ function InlineTransform drawArrow(
   InlineTransform transform = rootTransform.getChild(name);
   if(transform == null){
     InlineDrawing drawing = OGLInlineDrawing_GetInstance();
-    
+
     InlineShader shader = drawing.registerShader(OGLSurfaceShader());
     InlineMaterial mat = shader.getOrCreateMaterial("surface");
 
@@ -519,6 +545,44 @@ function InlineLinesShape drawAngle(
   lines.addArc(Xfo(), radius, Vec2(0.0, shapeAngle), 12);
   return linesShape;
 }
+
+
+function InlineMeshShape drawBone(
+  io InlineTransform rootTransform,
+  in String name,
+  in Xfo xfo,
+  in Scalar length,
+  in Scalar radius,
+  in String align
+) {
+
+  PolygonMesh mesh();
+  mesh.drawBone(xfo, length, radius, true);
+  InlineMeshShape boneShape = InlineMeshShape(name, mesh);
+
+  return boneShape;
+}
+
+
+// function InlineDebugShape drawBone(
+//   io InlineTransform rootTransform,
+//   in String name,
+//   in Xfo boneXfo,
+//   in Scalar length,
+//   in Scalar width,
+//   in String align,
+//   in Color color)
+// {
+//   InlineDebugShape shape = InlineDebugShape(name);
+//   shape.reset();
+
+
+
+//   drawShadedShapeAtXfo(rootTransform, name, shape, color, boneXfo);
+
+//   return shape;
+
+// }
 
 
 // function drawSingleBone(
