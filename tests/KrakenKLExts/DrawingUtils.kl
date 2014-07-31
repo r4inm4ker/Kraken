@@ -1,0 +1,42 @@
+require Math;
+require InlineDrawing;
+
+
+function InlineShape constructBoneShape(
+  in Scalar length,
+  in Scalar radius)
+{
+  InlineShape shape();
+  PolygonMesh mesh = PolygonMesh();
+  mesh.drawBone(Xfo(), length, radius, true);
+  shape = InlineMeshShape('rigBone', mesh);
+
+  return shape;
+}
+
+
+function etDrawBone(
+  io InlineTransform rootTransform,
+  in String name,
+  in Xfo xfo,
+  in Scalar length,
+  in Scalar radius,
+  in Color color)
+{
+  InlineDrawing drawing = OGLInlineDrawing_GetInstance();
+  InlineShader shader = drawing.registerShader(OGLSurfaceShader('surface'));
+  InlineMaterial phong = shader.getOrCreateMaterial("phong");
+
+  InlineTransform boneTransform = rootTransform.getChild(name);
+  if(boneTransform == null) {
+    boneTransform = StaticInlineTransform(name, rootTransform, xfo);
+    rootTransform.addChild(boneTransform);
+
+    InlineMeshShape boneShape = constructBoneShape(length, radius);
+    SimpleInlineInstance boneInstance = SimpleInlineInstance(name + 'Instance', boneTransform, boneShape, phong);
+    boneInstance.setInstanceUniform(InlineUniform('u_diffuseColor', color));
+  }
+  else {
+    boneTransform.setLocalXfo(0, xfo);
+  }
+}

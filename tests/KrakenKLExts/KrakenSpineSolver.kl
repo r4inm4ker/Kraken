@@ -1,26 +1,29 @@
 require Math;
 require Kraken;
-require RiggingToolkit;
+
+require rig_Curves;
 require InlineDrawing;
 require DrawingUtils;
 
 object SpineSolver : KrakenSolver {
-  BezierXfo curve;
+  Boolean debug;
+  BezierCubic curve;
 };
 
 
 // Default Constructor
 inline SpineSolver() {
+  this.debug = false;
 }
 
 
 function KrakenSolverArg[] SpineSolver.getArguments(){
   KrakenSolverArg args[];
-  args.push(KrakenSolverArg('maxLength', 'in', 'Scalar'));
-  args.push(KrakenSolverArg('tangentLength', 'in', 'Scalar'));
+  args.push(KrakenSolverArg('debug', 'in', 'Boolean'));
   args.push(KrakenSolverArg('spine01Ctrl', 'in', 'Mat44'));
   args.push(KrakenSolverArg('spine02Ctrl', 'in', 'Mat44'));
   args.push(KrakenSolverArg('spine03Ctrl', 'in', 'Mat44'));
+  args.push(KrakenSolverArg('spine04Ctrl', 'in', 'Mat44'));
   args.push(KrakenSolverArg('spine01Out', 'io', 'Mat44'));
   args.push(KrakenSolverArg('spine02Out', 'io', 'Mat44'));
   args.push(KrakenSolverArg('spine03Out', 'io', 'Mat44'));
@@ -31,31 +34,73 @@ function KrakenSolverArg[] SpineSolver.getArguments(){
 
 function SpineSolver.solve!
 (
-  in Scalar tangentLength,
-  in Scalar maxLength,
+  in Boolean debug,
   in Mat44 spine01Ctrl,
   in Mat44 spine02Ctrl,
   in Mat44 spine03Ctrl,
+  in Mat44 spine04Ctrl,
   io Mat44 spine01Out,
   io Mat44 spine02Out,
   io Mat44 spine03Out,
   io Mat44 spine04Out
   )
 {
-  report("Solving spine!");
 
-  this.curve = BezierXfo();
-  this.curve.tangentLength = tangentLength;
+  // Get cv points from inputs
+  Vec3 cvs[4];
+  cvs[0] = spine01Ctrl.translation;
+  cvs[1] = spine02Ctrl.translation;
+  cvs[2] = spine03Ctrl.translation;
+  cvs[3] = spine04Ctrl.translation;
 
-}
+  // Update curve with new points.
+  this.curve.update(cvs);
 
+  // Evaluate the position and tangents at U
+  Vec3 positions[];
+  Vec3 tangents[];
+  Vec3 normals[];
+  Integer sample = 4;
+  for (Integer i = 0; i<sample; i++)
+  {
+    Float32 u(Float32(i)/(sample - 1));
+    positions.push(this.curve.evalPosM(u));
+    tangents.push(this.curve.evalTanM(u));
+  }
 
-operator solveArmSpliceOp(
-  io SpineSolver solver,
-  in Mat44 base,
-  in Scalar followClav_input,
-  io Mat44 wrist_output
-    )
-{
-    solver.solve(base, followClav_input, wrist_output);
+  // Propagate normal between tranforms Y axis
+  Vec3 initNorm = spine01Ctrl.transpose().row2.toVec3();
+  initNorm.projectOnPlane(tangents[0], true);
+
+  Vec3 endNorm = spine03Ctrl.transpose().row2.toVec3();
+  endNorm.projectOnPlane(tangents[tangents.size - 1], true);
+
+  normals = this.curve.propagateNormal(initNorm, tangents);
+  this.curve.twist(endNorm, normals, tangents);
+
+  // Set output matrices
+  spine01Out = spine01Ctrl;
+  spine02Out.setFromAxes(tangents[1], normals[1], tangents[1].cross(normals[1]), positions[1]);
+  spine03Out.setFromAxes(tangents[2], normals[2], tangents[2].cross(normals[2]), positions[2]);
+  spine04Out = spine04Ctrl;
+
+  // Draw Debugging
+  if (this.debug == true) {
+    InlineDrawing drawing = OGLInlineDrawing_GetInstance();
+    drawing.reset();
+    Vec3 samples[];
+    samples.resize(sample);
+
+    for (Integer i=0; i<sample; i++)
+    {
+      Float32 U = 1.0/Float32(sample-1)*i;
+      samples[i] = curve.evalPosM(U);
+
+      drawVector(drawing.getRoot(), "X_"+"curve"+String(i), samples[i], samples[i]+(tangents[i]*0.5), Color(1.0, 0.0, 0.0, 1.0));
+      //drawVector(drawing.getRoot(), "Z_"+"curve"+String(i), samples[i], samples[i]+(binormal*0.5), Color(0.0, 0.0, 1.0, 1.0));
+      drawVector(drawing.getRoot(), "Y_"+"curve"+String(i), samples[i], samples[i]+(normals[i]*0.5), Color(0.0, 1.0, 0.0, 1.0));
+    }
+    drawCurve(drawing.getRoot(), 'curve', positions, Color(1.0, 0.5, 0.0));
+
+  }
 }

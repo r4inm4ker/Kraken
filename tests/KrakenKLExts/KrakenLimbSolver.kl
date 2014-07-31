@@ -6,6 +6,7 @@ require DrawingUtils;
 
 object LimbSolver : KrakenSolver {
   TwoBoneChainSolver twoBoneChain;
+  InlineTransform rootTransform;
 };
 
 
@@ -90,10 +91,13 @@ function LimbSolver.solve!
   InlineDrawing draw = OGLInlineDrawing_GetInstance();
   draw.reset();
 
-  etDrawBone(draw.getRoot(), 'bone01', bone01DebugXfo, this.twoBoneChain.bone1Len, 0.25, Color(0, 0.5, 0));
-  etDrawBone(draw.getRoot(), 'bone02', bone02DebugXfo, this.twoBoneChain.bone2Len, 0.25, Color(0, 0.5, 0));
-  etDrawBone(draw.getRoot(), 'bone03', bone03DebugXfo, 1, 0.25, Color(0, 0.5, 0));
+  this.rootTransform = StaticInlineTransform('LimbSolver', Xfo());
+  draw.getRoot().addChild(this.rootTransform);
 
-  drawLine(draw.getRoot(), 'upVLine', bone02Out.translation(), this.twoBoneChain.upV.translation(), Color(1.0, 1.0, 0));
+  etDrawBone(this.rootTransform, 'bone01', bone01DebugXfo, this.twoBoneChain.bone1Len, 0.25, Color(0, 0.5, 0));
+  etDrawBone(this.rootTransform, 'bone02', bone02DebugXfo, this.twoBoneChain.bone2Len, 0.25, Color(0, 0.5, 0));
+  etDrawBone(this.rootTransform, 'bone03', bone03DebugXfo, 1, 0.25, Color(0, 0.5, 0));
+
+  drawLine(this.rootTransform, 'upVLine', bone02Out.translation(), this.twoBoneChain.upV.translation(), Color(1.0, 1.0, 0));
 
 }

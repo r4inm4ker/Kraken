@@ -28,14 +28,19 @@ class SpineComponent(BaseComponent):
         # Default values
         cogPosition = Vec3(0.0, 11.1351, -0.1382)
         spine01Position = Vec3(0.0, 11.1351, -0.1382)
-        spine02Position = Vec3(0.0, 12.3085, -0.265)
-        spine03Position = Vec3(0.0, 13.1051, -0.4821)
+        spine02Position = Vec3(0.0, 11.8013, -0.1995)
+        spine03Position = Vec3(0.0, 12.4496, -0.3649)
+        spine04Position = Vec3(0.0, 13.1051, -0.4821)
 
         # COG
         cogCtrl = CircleControl('cog')
         cogCtrl.scalePoints(Vec3(6.0, 6.0, 6.0))
         cogCtrl.xfo.tr.copy(cogPosition)
         cogCtrl.setColor("orange")
+
+        cogCtrlSrtBuffer = SrtBuffer('cog')
+        cogCtrlSrtBuffer.xfo.tr.copy(cogPosition)
+        cogCtrlSrtBuffer.addChild(cogCtrl)
         self.addChild(cogCtrl)
 
         # Spine01
@@ -44,7 +49,7 @@ class SpineComponent(BaseComponent):
         spine01Ctrl.xfo.tr.copy(spine01Position)
         spine01Ctrl.setColor("yellow")
 
-        spine01CtrlSrtBuffer = SrtBuffer('spine01SrtBuffer')
+        spine01CtrlSrtBuffer = SrtBuffer('spine01')
         spine01CtrlSrtBuffer.xfo.copy(spine01Ctrl.xfo)
         spine01CtrlSrtBuffer.addChild(spine01Ctrl)
         cogCtrl.addChild(spine01CtrlSrtBuffer)
@@ -55,10 +60,10 @@ class SpineComponent(BaseComponent):
         spine02Ctrl.xfo.tr.copy(spine02Position)
         spine02Ctrl.setColor("yellow")
 
-        spine02CtrlSrtBuffer = SrtBuffer('spine02SrtBuffer')
+        spine02CtrlSrtBuffer = SrtBuffer('spine02')
         spine02CtrlSrtBuffer.xfo.copy(spine02Ctrl.xfo)
         spine02CtrlSrtBuffer.addChild(spine02Ctrl)
-        cogCtrl.addChild(spine02CtrlSrtBuffer)
+        spine01Ctrl.addChild(spine02CtrlSrtBuffer)
 
         # Spine03
         spine03Ctrl = CircleControl('spine03')
@@ -66,10 +71,21 @@ class SpineComponent(BaseComponent):
         spine03Ctrl.xfo.tr.copy(spine03Position)
         spine03Ctrl.setColor("yellow")
 
-        spine03CtrlSrtBuffer = SrtBuffer('spine03SrtBuffer')
+        spine03CtrlSrtBuffer = SrtBuffer('spine03')
         spine03CtrlSrtBuffer.xfo.copy(spine03Ctrl.xfo)
         spine03CtrlSrtBuffer.addChild(spine03Ctrl)
-        spine02Ctrl.addChild(spine03CtrlSrtBuffer)
+
+        # Spine04
+        spine04Ctrl = CircleControl('spine04')
+        spine04Ctrl.scalePoints(Vec3(4.0, 4.0, 4.0))
+        spine04Ctrl.xfo.tr.copy(spine04Position)
+        spine04Ctrl.setColor("yellow")
+        spine04Ctrl.addChild(spine03CtrlSrtBuffer)
+
+        spine04CtrlSrtBuffer = SrtBuffer('spine04')
+        spine04CtrlSrtBuffer.xfo.copy(spine04Ctrl.xfo)
+        spine04CtrlSrtBuffer.addChild(spine04Ctrl)
+        cogCtrl.addChild(spine04CtrlSrtBuffer)
 
 
         # =====================
@@ -92,8 +108,7 @@ class SpineComponent(BaseComponent):
         spineEndOutput.xfo.tr.copy(spine03Ctrl.xfo.tr)
 
         # Setup componnent Attribute I/O's
-        maxLengthInputAttr = FloatAttribute('maxLength', 3.0, 0.0, 10.0)
-        tangentLengthInputAttr = FloatAttribute('tangentLength', 1.0, 0.0, 5.0)
+        debugInputAttr = BoolAttribute('debug', False)
 
         # ==============
         # Constrain I/O
@@ -122,29 +137,30 @@ class SpineComponent(BaseComponent):
         self.addOutput(spineEndOutput)
 
         # Add Attribute I/O's
+        self.addInput(debugInputAttr)
 
 
         # ===============
         # Add Splice Ops
         # ===============
         # Add Splice Op
-        # spliceOp = SpliceOperator("spineSpliceOp", "SpineSolver", "KrakenSpineSolver")
-        # self.addOperator(spliceOp)
+        spliceOp = SpliceOperator("spineSpliceOp", "SpineSolver", "KrakenSpineSolver")
+        self.addOperator(spliceOp)
 
-        # # Add Att Inputs
-        # spliceOp.setInput("maxLength", maxLengthInputAttr)
-        # spliceOp.setInput("tangentLength", tangentLengthInputAttr)
+        # Add Att Inputs
+        spliceOp.setInput("debug", debugInputAttr)
 
-        # # Add Xfo Inputs
-        # spliceOp.setInput("spine01Ctrl", spine01Ctrl)
-        # spliceOp.setInput("spine02Ctrl", spine02Ctrl)
-        # spliceOp.setInput("spine03Ctrl", spine03Ctrl)
+        # Add Xfo Inputs
+        spliceOp.setInput("spine01Ctrl", spine01Ctrl)
+        spliceOp.setInput("spine02Ctrl", spine02Ctrl)
+        spliceOp.setInput("spine03Ctrl", spine03Ctrl)
+        spliceOp.setInput("spine04Ctrl", spine04Ctrl)
 
-        # # Add Xfo Outputs
-        # spliceOp.setOutput("spine01Out", spine01Output)
-        # spliceOp.setOutput("spine02Out", spine02Output)
-        # spliceOp.setOutput("spine03Out", spine03Output)
-        # spliceOp.setOutput("spine04Out", spine04Output)
+        # Add Xfo Outputs
+        spliceOp.setOutput("spine01Out", spine01Output)
+        spliceOp.setOutput("spine02Out", spine02Output)
+        spliceOp.setOutput("spine03Out", spine03Output)
+        spliceOp.setOutput("spine04Out", spine04Output)
 
 
     def buildRig(self, parent):

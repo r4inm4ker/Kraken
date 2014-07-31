@@ -43,6 +43,21 @@ function InlineLinesShape getOrCreateCurve(io InlineTransform rootTransform, Str
   }
 }
 
+function InlineLinesShape drawVector(
+  io InlineTransform rootTransform,
+  in String name,
+  in Vec3 start,
+  in Vec3 end,
+  in Color color
+){
+  InlineLinesShape linesShape = getOrCreateCurve(rootTransform, name, color);
+  Lines lines = linesShape.getLines();
+  lines.clear();
+  lines.addLine(start, end);
+  return linesShape;
+}
+
+
 function InlineLinesShape drawCurve(
   io InlineTransform rootTransform,
   in String name,

@@ -468,6 +468,28 @@ function CubicBezier.approxHandles!()
 }
 
 
+function CubicBezier.draw(Integer segments, Color color)
+{
+  InlineDrawing drawing = OGLInlineDrawing_GetInstance();
+  drawing.reset();
+  Vec3 samples[];
+  Xfo srt[];
+  samples.resize(segments);
+  for (Integer i = 0; i<segments; i++)
+  {
+    Float32 U = 1.0/Float32(segments-1)*i;
+    samples[i] = this.evalPosM(U);
+    Vec3 tangent = this.evalTanM(U);
+    Vec3 binormal = this.evalNormM(U).cross(this.evalTanM(U)).unit();
+    Vec3 normal = tangent.cross(binormal);
+    drawVector(drawing.getRoot(), "X_"+"curve"+String(i), samples[i], samples[i]+(tangent*0.5), Color(1.0, 0.0, 0.0, 1.0));
+    drawVector(drawing.getRoot(), "Z_"+"curve"+String(i), samples[i], samples[i]+(binormal*0.5), Color(0.0, 0.0, 1.0, 1.0));
+    drawVector(drawing.getRoot(), "Y_"+"curve"+String(i), samples[i], samples[i]+(normal*0.5), Color(0.0, 1.0, 0.0, 1.0));
+  }
+  drawCurve(drawing.getRoot(),'curve', samples, color);
+
+}
+
 operator entry(){
   Vec3 cv[4];
   cv[0]=Vec3(0.0, 0.0, 0.0);

@@ -5,8 +5,10 @@ object CatmullRom : Curve
   Vec3 cv[4];
   Mat44 basis;
   Mat44 coef;
+  Mat44 transform;
   Float32 length;
   String parametrization;
+
 };
 
 
@@ -150,6 +152,14 @@ function Vec3 CatmullRom.evalNormM(Float32 U)
 }
 
 
+function Vec3 CatmullRom.NormalFromUpVector(Float32 U)
+{
+  Vec4 vP(6.0*U, 2.0, 0.0, 0.0);
+
+  return (this.coef * vP * 0.5).toVec3().unit();
+}
+
+
 function Vec3[] CatmullRom.propagateNormal(io Vec3 initNorm, Vec3[] tangents)
 {
   Vec3 normals[];
@@ -193,10 +203,17 @@ function CatmullRom.draw(Integer segments, Color color)
   InlineDrawing drawing = OGLInlineDrawing_GetInstance();
   drawing.reset();
   Vec3 samples[];
+  Xfo srt[];
   samples.resize(segments);
   for (Integer i = 0; i<segments; i++)
-    samples[i] = this.evalPosM(1.0/Float32(segments-1)*i);
+  {
+    Float32 U = 1.0/Float32(segments-1)*i;
+    samples[i] = this.evalPosM(U);
+    drawVector(drawing.getRoot(), "X_"+"curve"+String(i), samples[i], samples[i]+(this.evalTanM(U)*0.5), Color(1.0, 0.0, 0.0, 1.0));
+    drawVector(drawing.getRoot(), "Y_"+"curve"+String(i), samples[i], samples[i]+(this.evalNormM(U).cross(this.evalTanM(U)).unit()*0.5), Color(0.0, 1.0, 0.0, 1.0));
+  }
   drawCurve(drawing.getRoot(),'curve', samples, color);
+
 }
 /*
 operator entry(){
