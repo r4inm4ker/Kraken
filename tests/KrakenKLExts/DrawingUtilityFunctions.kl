@@ -547,20 +547,50 @@ function InlineLinesShape drawAngle(
 }
 
 
-function InlineMeshShape drawBone(
+function InlineMeshShape constructBoneShape(
+  in Xfo boneXfo,
+  in String name,
+  in Scalar length,
+  in Scalar radius)
+{
+  InlineMeshShape shape();
+  PolygonMesh mesh = PolygonMesh();
+  mesh.drawBone(boneXfo, length, radius, true);
+  shape = InlineMeshShape(name, mesh);
+
+  return shape;
+}
+
+
+function etDrawBone(
   io InlineTransform rootTransform,
   in String name,
   in Xfo xfo,
   in Scalar length,
   in Scalar radius,
-  in String align
-) {
+  in Color color)
+{
+  InlineDrawing draw = OGLInlineDrawing_GetInstance();
 
-  PolygonMesh mesh();
-  mesh.drawBone(xfo, length, radius, true);
-  InlineMeshShape boneShape = InlineMeshShape(name, mesh);
+  // create a surface shader
+  InlineShader shader = draw.registerShader(OGLSurfaceShader());
+  InlineMaterial boneMat = shader.getOrCreateMaterial('boneMat');
+  boneMat.setUniform('u_diffuseColor', Color(1.0, 0.0, 0.0));
 
-  return boneShape;
+  // create a shape containing a bone
+  InlineMeshShape shape = draw.getShape('bone');
+  if(shape == null) {
+    shape = constructBoneShape(xfo, name, length, radius);
+    draw.registerShape(shape);
+  }
+
+  SimpleInlineInstance instance(name + 'Instance', rootTransform, shape);
+  instance.setInstanceUniform(InlineUniform('u_ambientColor', color));
+  instance.setInstanceUniform(InlineUniform('u_diffuseColor', color));
+  instance.setInstanceUniform(InlineUniform('u_specularFactor', 4.0));
+
+  // Create instance
+  boneMat.addInstance(instance);
 }
 
 

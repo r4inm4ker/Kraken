@@ -90,13 +90,10 @@ function LimbSolver.solve!
   InlineDrawing draw = OGLInlineDrawing_GetInstance();
   draw.reset();
 
-  InlineMeshShape bone01 = drawBone(draw.getRoot(), 'bone01', Xfo(), this.twoBoneChain.bone1Len, 0.25, "");
-  drawShadedShapeAtXfo(draw.getRoot(), 'bone01Debug', bone01, Color(0, 0.5, 0), bone01DebugXfo);
+  etDrawBone(draw.getRoot(), 'bone01', bone01DebugXfo, this.twoBoneChain.bone1Len, 0.25, Color(0, 0.5, 0));
+  etDrawBone(draw.getRoot(), 'bone02', bone02DebugXfo, this.twoBoneChain.bone2Len, 0.25, Color(0, 0.5, 0));
+  etDrawBone(draw.getRoot(), 'bone03', bone03DebugXfo, 1, 0.25, Color(0, 0.5, 0));
 
-  InlineMeshShape bone02 = drawBone(draw.getRoot(), 'bone02', Xfo(), this.twoBoneChain.bone2Len, 0.25, "");
-  drawShadedShapeAtXfo(draw.getRoot(), 'bone02Debug', bone02, Color(0, 0.5, 0), bone02DebugXfo);
-
-  InlineMeshShape bone03 = drawBone(draw.getRoot(), 'bone03', Xfo(), 1, 0.25, "");
-  drawShadedShapeAtXfo(draw.getRoot(), 'bone03Debug', bone03, Color(0, 0.5, 0), bone03DebugXfo);
+  drawLine(draw.getRoot(), 'upVLine', bone02Out.translation(), this.twoBoneChain.upV.translation(), Color(1.0, 1.0, 0));
 
 }

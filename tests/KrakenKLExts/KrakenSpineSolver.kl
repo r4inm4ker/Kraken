@@ -1,39 +1,26 @@
 require Math;
 require Kraken;
-
+require RiggingToolkit;
+require InlineDrawing;
+require DrawingUtils;
 
 object SpineSolver : KrakenSolver {
-  Scalar length;
-  Mat44 spine01;
-  Mat44 spine02;
-  Mat44 spine03;
-  Mat44 spine01Out;
-  Mat44 spine02Out;
-  Mat44 spine03Out;
-  Mat44 spine04Out;
+  BezierXfo curve;
 };
 
 
 // Default Constructor
-inline SpineSolver()
-{
-  this.length = 5;
-  this.length = 5;
-  this.length = 5;
-  this.length = 5;
-  this.length = 5;
-  this.length = 5;
-  this.length = 5;
-  this.length = 5;
+inline SpineSolver() {
 }
 
 
 function KrakenSolverArg[] SpineSolver.getArguments(){
   KrakenSolverArg args[];
-  args.push(KrakenSolverArg('length', 'in', 'Scalar'));
-  args.push(KrakenSolverArg('spine01', 'in', 'Mat44'));
-  args.push(KrakenSolverArg('spine02', 'in', 'Mat44'));
-  args.push(KrakenSolverArg('spine03', 'in', 'Mat44'));
+  args.push(KrakenSolverArg('maxLength', 'in', 'Scalar'));
+  args.push(KrakenSolverArg('tangentLength', 'in', 'Scalar'));
+  args.push(KrakenSolverArg('spine01Ctrl', 'in', 'Mat44'));
+  args.push(KrakenSolverArg('spine02Ctrl', 'in', 'Mat44'));
+  args.push(KrakenSolverArg('spine03Ctrl', 'in', 'Mat44'));
   args.push(KrakenSolverArg('spine01Out', 'io', 'Mat44'));
   args.push(KrakenSolverArg('spine02Out', 'io', 'Mat44'));
   args.push(KrakenSolverArg('spine03Out', 'io', 'Mat44'));
@@ -42,9 +29,24 @@ function KrakenSolverArg[] SpineSolver.getArguments(){
   return args;
 }
 
-function SpineSolver.solve()
+function SpineSolver.solve!
+(
+  in Scalar tangentLength,
+  in Scalar maxLength,
+  in Mat44 spine01Ctrl,
+  in Mat44 spine02Ctrl,
+  in Mat44 spine03Ctrl,
+  io Mat44 spine01Out,
+  io Mat44 spine02Out,
+  io Mat44 spine03Out,
+  io Mat44 spine04Out
+  )
 {
-    // magic
+  report("Solving spine!")
+
+  this.curve = BezierXfo();
+  this.curve.tangentLength = tangentLength;
+
 }
 
 

@@ -39,7 +39,6 @@ class ArmComponent(BaseComponent):
         # =========
         # Controls
         # =========
-
         # Setup component attributes
         defaultAttrGroup = self.getAttributeGroupByIndex(0)
         defaultAttrGroup.addAttribute(BoolAttribute("toggleDebugging", True))
