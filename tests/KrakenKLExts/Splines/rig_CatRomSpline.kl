@@ -1,0 +1,165 @@
+require rig_Curves;
+
+object CatRomSpline : Spline
+{
+  Vec3 cv[];
+  CatmullRom curve;
+  Float32 length;
+  Float32 tension;
+  Float32 continuity;
+  Float32 bias;
+
+  Vec3 _debugSamples[];
+  Vec3 _debugHandles[];
+  Vec3 _debugHandleLines[];
+  Vec3 _inHandles[];
+  Vec3 _outHandles[];
+  Boolean _debug;
+  Boolean _draw;
+  UInt32 _version;
+  UInt32 _lengthVersion;
+};
+
+
+// Default Constructor
+function CatRomSpline(Vec3 cv[])
+{
+  this.curve = CatmullRom();
+  this.updateCvs(cv);
+  this.length();
+}
+
+
+// ===================
+// Internal Functions
+// ===================
+inline CatRomSpline.incrementVersion!()
+{
+  this._version++;
+}
+
+
+inline CatRomSpline.updateCvs!(Vec3 cv[])
+{
+  this.cv = cv;
+  this.incrementVersion();
+}
+
+
+function Float32 CatRomSpline.length!()
+{
+  if (this._lengthVersion != this._version || this._version == 0) {
+    Integer step = 250;
+    Vec3 pos;
+    Vec3 prevPos;
+    Float32 length = 0;
+
+    for (Size i=0; i < step; i++)
+    {
+      Float32 t = Float32(i) / Float32(step);
+      pos = this.evalPos(t);
+      if (i > 0)
+        length += (pos - prevPos).length();
+      prevPos = pos;
+    }
+
+    this.length = length;
+    this._lengthVersion = this._version;
+  }
+
+  return this.length;
+}
+
+
+// ===================
+// External Functions
+// ===================
+function UInt32 CatRomSpline.getCurrentCurve(Float32 U)
+{
+  Float32 curves = this.cv.size() - 1;
+  Float32 splineTime = U * curves;
+  UInt32 currentCurve = Math_min(floor(splineTime), curves - 1);
+
+  return currentCurve;
+}
+
+
+function Float32 CatRomSpline.getSegmentU(Float32 U)
+{
+  // Rescale U position to curve
+  UInt32 nbCurves = this.cv.size() - 1;
+  Scalar uPerSegment = 1.0 / Scalar(nbCurves);
+  Index segment = floor(U/uPerSegment);
+  if(segment >= nbCurves)
+    segment = nbCurves - 1;
+  Float32 segmentU = (U - Scalar(segment) * uPerSegment) / uPerSegment;
+
+  return segmentU;
+}
+
+function Vec3[4] CatRomSpline.getHandles!(Float32 U)
+{
+  Vec3 cv[4];
+  UInt32 currentCurve = this.getCurrentCurve(U);
+  cv[1] = this.cv[currentCurve];
+
+  if (currentCurve == 0)
+    cv[0] = cv[1];
+  else
+    cv[0] = this.cv[currentCurve-1];
+  cv[1] = this.cv[currentCurve];
+  cv[2] = this.cv[currentCurve+1];
+  if (currentCurve == this.cv.size()-2)
+    cv[3] = cv[2];
+  else
+    cv[3] = this.cv[currentCurve+2];
+
+  return cv;
+}
+
+function Vec3 CatRomSpline.evalPos!(Float32 U)
+{
+  this.curve.update(this.getHandles(U));
+
+  return this.curve.evalPosM(this.getSegmentU(U));
+}
+
+
+function Vec3 CatRomSpline.evalTan!(Float32 U)
+{
+  this.curve.update(this.getHandles(U));
+
+  return this.curve.evalTanM(this.getSegmentU(U));
+}
+
+
+function Vec3 CatRomSpline.evalNorm!(Float32 U)
+{
+  this.curve.update(this.getHandles(U));
+
+  return this.curve.evalNormM(this.getSegmentU(U));
+}
+
+
+function CatRomSpline.aabboxd()
+{
+
+}
+
+
+function Vec3[] CatRomSpline.propagateNormal(
+  io Vec3 initNorm,
+  Vec3[] tangents)
+{
+  Vec3 stuff[];
+  return stuff;
+}
+
+
+function CatRomSpline.twist(
+  Vec3 endNorm,
+  io Vec3[] normals,
+  Vec3[] tangents)
+{
+
+}

@@ -42,7 +42,7 @@ function SpineSolver.solve!
   io Mat44 spine04Out
   )
 {
-  report("Solving spine!")
+  report("Solving spine!");
 
   this.curve = BezierXfo();
   this.curve.tangentLength = tangentLength;

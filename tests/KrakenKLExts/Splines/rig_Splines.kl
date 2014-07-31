@@ -1,0 +1,15 @@
+require Math;
+require rig_Math;
+require rig_Curves;
+
+interface Spline {
+  Vec3 evalPos!(Float32 U);
+  Vec3 evalTan!(Float32 U);
+  Vec3 evalNorm!(Float32 U);
+  /*Float32 length!();
+  aabboxd();
+  Vec3[] propagateNormal(io Vec3 initNorm, Vec3[] tangents);
+  twist(Vec3 endNorm, io Vec3[] normals, Vec3[] tangents);
+  draw!(Boolean active);
+  debug!(Boolean active);*/
+};

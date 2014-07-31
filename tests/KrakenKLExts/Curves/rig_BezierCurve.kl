@@ -1,0 +1,535 @@
+require Math;
+require rig_Math;
+require InlineDrawing;
+
+object CubicBezier : Curve
+{
+  Vec3 cv[4];
+  Mat44 basis;
+  Mat44 coef;
+  Float32 length;
+  Vec3 controls[];
+  Vec3 positions[];
+  Float32 times[];
+  Integer count;
+  Color color;
+};
+
+// Default Constructor
+function CubicBezier()
+{
+  this.basis.set(-1,  3, -3,  1,
+                 3, -6,  3,  0,
+                 -3,  3,  0,  0,
+                 1,  0,  0,  0);
+}
+
+function CubicBezier( Vec3 cv[4])
+{
+  this.basis.set(-1,  3, -3,  1,
+                 3, -6,  3,  0,
+                 -3,  3,  0,  0,
+                 1,  0,  0,  0);
+
+  this.update(cv);
+  this.coef = this.evalCoef();
+  this.length = this.length();
+}
+
+inline CubicBezier.updateCvs!(Vec3 cv[4])
+{
+  this.cv = cv;
+}
+
+inline CubicBezier.update!(Vec3 cv[4])
+{
+  this.updateCvs(cv);
+  this.coef = this.evalCoef();
+}
+
+function CubicBezier.aabboxd()
+{
+  // Find coefficients.
+/* In the form of at^2 + bt + c, reduced from the derivative of:
+* (1 - U)^3 P_0 + 3(1 - U)^2 U P_1 + 3(1 - U) U^2 P_2 + U^3 P_3,
+*
+* Which is:
+* 3(P_1 - P_0)(1 - U)^2 + 6(P_2 - P_1) * U * (1 - U) + 3(P_3 - P_2)U^2
+*
+* Reference: http://www.cs.sunysb.edu/~qin/courses/geometry/4.pdf
+* http://en.wikipedia.org/wiki/Bezier_curve#Examination_of_cases
+* http://www.cs.mtu.edu/~shene/COURSES/cs3621/NOTES/spline/Bezier/bezier-der.html*/
+}
+
+function Float32 CubicBezier.length()
+{
+  Integer step = 250;
+  Vec3 pos;
+  Vec3 prevPos;
+  Float32 length = 0;
+  for (Integer i = 0; i < step; i++)
+  {
+    Float32 t = Float32(i) / Float32(step);
+    pos = this.evalPos(t);
+    if (i > 0)
+      length += (pos - prevPos).length();
+    prevPos = pos;
+  }
+  return length;
+}
+
+function Float32[] CubicBezier.getInflection(Vec3 cv[4]){
+
+  Float32 t[];
+  Vec3 a = cv[1] - cv[0];
+  Vec3 b = cv[2] - cv[1] - a;
+  Vec3 c = cv[3] - cv[2] - a -2*b;
+  Float32 c0=(a.x*b.y)-(a.y*b.x);
+  Float32 c1=(a.x*c.y)-(a.y*c.x);
+  Float32 c2=(b.x*c.y)-(b.y*c.x);
+  Float32 discr = (c1*c1)-(4*c0*c2);
+
+  c2*=2;
+
+  if(round(discr)==0) {
+    Float32 root=-c1/c2;
+    if((root>0) && (root<1))
+      t.push(root);
+  }
+  else if(discr>0)
+  {
+    discr=sqrt(discr);
+
+    Float32 root=(-c1-discr)/c2;
+    if((root>0) && (root<1)) //collect it only if between [0..1]
+      t.push(root);
+
+    root=(-c1+discr)/c2;
+    if((root>0) && (root<1)) { //collect it only if between [0..1]
+      if(t.size > 0 && t[0] > root) {
+        t.push(t[0]);
+        t[0]=root;
+      }
+      else
+        t.push(root);
+    }
+
+    if(t.size() == 2 && (t[0]>t[1])) {
+      Float32 aux=t[0];
+      t[0]=t[1];
+      t[1]=aux;
+    }
+  }
+  else if(c1!=0.0)
+  { // linear equation c1*t+c0=0
+    Float32 root=-c0/c1;
+    if((root>0) && (root<1))
+      t.push(root);
+  }
+  return t;
+}
+
+
+function Vec3 CubicBezier.evalPos(Float32 U)
+{
+    /*Float32 sSquare = pow(U, 2);
+    Float32 sCube = pow(U,3);
+
+    this.coeff[0] = 1.0 - 3.0*U + 3.0*sSquare - sCube;
+    this.coeff[1] = 3.0*U - 6.0*sSquare + 3.0*sCube;
+    this.coeff[2] = 3.0*sSquare - 3.0*sCube;
+    this.coeff[3] = sCube;*/
+
+    Vec3 a = pow(1.0 - U, 3) * this.cv[0];
+    Vec3 b = 3.0*pow(1.0 - U, 2)*U*this.cv[1];
+    Vec3 c = 3.0*(1.0 - U)*pow(U,2)*this.cv[2];
+    Vec3 d = pow(U, 3)*this.cv[3];
+
+    return a+b+c+d;
+}
+
+
+function Vec3 CubicBezier.evalTan(Float32 U)
+{
+    Vec3 a = 3.0*pow(1.0 - U, 2)*(this.cv[1]-this.cv[0]);
+    Vec3 b = 6.0*(1.0 - U)*U*(this.cv[2]-this.cv[1]);
+    Vec3 c = 3.0*pow(U, 2.0)*(this.cv[3]-this.cv[2]);
+
+    return (a+b+c).unit();
+}
+
+
+function Vec3 CubicBezier.evalNorm(Float32 U)
+{
+    Vec3 a = (1.0 - U)*(this.cv[2] - 2*this.cv[1] + this.cv[0]);
+    Vec3 b = U*(this.cv[3] - 2*this.cv[2] + this.cv[1]);
+
+    return (6*(a + b)).unit();
+}
+
+
+function Mat44 CubicBezier.evalCoef()
+{
+  Mat44 mP( this.cv[0].x, this.cv[1].x, this.cv[2].x, this.cv[3].x,
+            this.cv[0].y, this.cv[1].y, this.cv[2].y, this.cv[3].y,
+            this.cv[0].z, this.cv[1].z, this.cv[2].z, this.cv[3].z,
+            0.0, 0.0, 0.0, 1.0);
+
+  return (mP * this.basis);
+}
+
+
+function Vec3 CubicBezier.evalPosM(Float32 U)
+{
+  Scalar tSquare = U * U;
+  Scalar tCube = tSquare * U;
+  Vec4 vP(tCube, tSquare, U, 1.0);
+
+  return (this.coef * vP).toVec3();
+}
+
+
+function Vec3 CubicBezier.evalTanM(Float32 U)
+{
+  Scalar tSquare = U * U;
+  Vec4 vP(3*tSquare, 2*U, 1.0, 0.0);
+
+  return (this.coef * vP).toVec3().unit();
+}
+
+
+function Vec3 CubicBezier.evalNormM(Float32 U)
+{
+  Vec4 vP(6.0*U, 2.0, 0.0, 0.0);
+
+  return (this.coef * vP).toVec3().unit();
+
+}
+
+
+function CubicBezier.draw(Integer segments, Color color)
+{
+  InlineDrawing drawing = OGLInlineDrawing_GetInstance();
+  drawing.reset();
+  Vec3 samples[];
+  samples.resize(segments);
+  for (Integer i = 0; i<segments; i++)
+    samples[i] = this.evalPosM(1.0/Float32(segments-1)*i);
+  drawCurve(drawing.getRoot(),'curve', samples, color);
+}
+
+
+function Vec3[] CubicBezier.propagateNormal(io Vec3 initNorm, Vec3 tangents[])
+{
+  Vec3 normals[];
+  Vec3 prevTan = tangents[0];
+  for (Integer i = 0; i<tangents.size; i++)
+  {
+    if (i>0)
+    {
+      prevTan = tangents[i-1] ;
+      initNorm = normals[i-1] ;
+      Vec3 axis(prevTan.cross(tangents[i]).unit_safe());
+      Float32 alpha = -(tangents[i].angleTo(prevTan));
+      initNorm.rotateVector(axis, alpha);
+    }
+    normals.push(initNorm);
+  }
+  return normals;
+}
+
+function CubicBezier.twist(Vec3 endNorm, io Vec3 normals[], Vec3 tangents[])
+{
+  Integer lastElem(normals.size()-1);
+  Float32 alpha = normals[lastElem].angleTo(endNorm);
+  Float32 dot(normals[lastElem].cross(endNorm).unit().dot(tangents[lastElem]));
+  Float32 sign(dot>0? -1.0 : 1.0);
+  for (Integer i = 0; i<normals.size; i++)
+  {
+    normals[i] = normals[i].rotateVector(tangents[i], sign*(Float32(i) * alpha/(normals.size()-1)));
+  }
+}
+
+//-------------------------------------------------------------------------------
+// @ Bezier::FindParameterByDistance()
+//-------------------------------------------------------------------------------
+// Find parameter s distance in arc length from Q(t1)
+// Returns max float if can't find it
+//
+// This extends the approach in the text and uses a mixture of bisection and
+// Newton-Raphson to find the root.  The result is more stable than Newton-
+// Raphson alone because a) we won't end up with a situation where we divide by
+// zero in the Newton-Raphson step and b) the end result converges faster.
+//
+// See Numerical Recipes or http://www.essentialmath.com/blog for more details.
+//-------------------------------------------------------------------------------
+function Float32 CubicBezier.findParameterByDistance(Float32 t1, Float32 s )
+{
+    // initialize bisection endpoints
+    Float32 a = t1;
+    Float32 b = this.times[this.count-1];
+
+    // ensure that we remain within valid parameter space
+    if ( s >= this.ArcLength(t1, b) )
+        return b;
+    if ( s <= 0.0 )
+        return a;
+
+    // make first guess
+    Float32 p = t1 + s*(this.times[this.count-1]-this.times[0])/this.length;
+
+    // iterate and look for zeros
+    for ( Integer i = 0; i < 32; ++i )
+    {
+        // compute function value and test against zero
+        Float32 func = this.ArcLength(t1, p) - s;
+        if ( abs(func) < 1.0e-03 )
+        {
+            return p;
+        }
+
+         // update bisection endpoints
+        if ( func < 0.0 )
+        {
+            a = p;
+        }
+        else
+        {
+            b = p;
+        }
+
+        // get speed along curve
+        Float32 speed = this.evalTanM(p).length();
+
+        // if result will lie outside [a,b]
+        if ( ((p-a)*speed - func)*((p-b)*speed - func) > -1.0e-3 )
+        {
+            // do bisection
+            p = 0.5*(a+b);
+        }
+        else
+        {
+            // otherwise Newton-Raphson
+            p -= func/speed;
+        }
+    }
+
+    // done iterating, return failure case
+    return -1;
+
+}   // End of CubicBezier.FindParameterByDistance()
+
+
+//-------------------------------------------------------------------------------
+// @ CubicBezier.ArcLength()
+//-------------------------------------------------------------------------------
+// Find length of curve between parameters t1 and t2
+//-------------------------------------------------------------------------------
+function Float32 CubicBezier.ArcLength(Float32 _t1, Float32 _t2 )
+{
+    Float32 t1=_t1;
+    Float32 t2=_t2;
+    if ( t2 <= t1 )
+        return 0.0;
+
+    if ( t1 < this.times[0] )
+        t1 = this.times[0];
+
+    if ( t2 > this.times[this.count-1] )
+        t2 = this.times[this.count-1];
+
+    // find segment and parameter
+    Integer seg1;
+    for ( seg1 = 0; seg1 < this.count-1; ++seg1 )
+    {
+        if ( t1 < this.times[seg1+1] )
+        {
+            break;
+        }
+    }
+    Float32 u1 = (t1 - this.times[seg1])/(this.times[seg1+1] - this.times[seg1]);
+
+    // find segment and parameter
+    Integer seg2;
+    for ( seg2 = 0; seg2 < this.count-1; ++seg2 )
+    {
+        if ( t2 <= this.times[seg2+1] )
+        {
+            break;
+        }
+    }
+    Float32 u2 = (t2 - this.times[seg2])/(this.times[seg2+1] - this.times[seg2]);
+
+    Float32 result;
+    // both parameters lie in one segment
+    if ( seg1 == seg2 )
+    {
+        result = this.segmentArcLength( seg1, u1, u2 );
+    }
+    // parameters cross segments
+    else
+    {
+        result = this.segmentArcLength( seg1, u1, 1.0 );
+        for ( Integer i = seg1+1; i < seg2; ++i )
+            result += this.length;
+        result += this.segmentArcLength( seg2, 0.0, u2 );
+    }
+
+    return result;
+
+}   // End of CubicBezier.ArcLength()
+
+
+//-------------------------------------------------------------------------------
+// @ CubicBezier.segmentArcLength()
+//-------------------------------------------------------------------------------
+// Find length of curve segment between parameters u1 and u2
+//-------------------------------------------------------------------------------
+function Float32 CubicBezier.segmentArcLength( Integer i,  Float32 _u1,  Float32 _u2 )
+{
+    // //ASSERT(i >= 0 && i < this.count-1);
+    Float32 u1 = _u1;
+    Float32 u2 = _u2;
+    if ( u2 <= u1 )
+        return 0.0;
+
+    if ( u1 < 0.0 )
+        u1 = 0.0;
+
+    if ( u2 > 1.0 )
+        u2 = 1.0;
+
+    Vec3 p0 = this.positions[i];
+    Vec3 p1 = this.controls[2*i];
+    Vec3 p2 = this.controls[2*i+1];
+    Vec3 p3 = this.positions[i+1];
+
+    // get control points for subcurve from 0.0 to u2 (de Casteljau's method)
+    Float32 minus_u2 = (1.0 - u2);
+    Vec3 L1 = minus_u2*p0 + u2*p1;
+    Vec3 H = minus_u2*p1 + u2*p2;
+    Vec3 L2 = minus_u2*L1 + u2*H;
+    Vec3 L3 = minus_u2*L2 + u2*(minus_u2*H + u2*(minus_u2*p2 + u2*p3));
+
+    // resubdivide to get control points for subcurve between u1 and u2
+    Float32 minus_u1 = (1.0 - u1);
+    H = minus_u1*L1 + u1*L2;
+    Vec3 R3 = L3;
+    Vec3 R2 = minus_u1*L2 + u1*L3;
+    Vec3 R1 = minus_u1*H + u1*R2;
+    Vec3 R0 = minus_u1*(minus_u1*(minus_u1*p0 + u1*L1) + u1*H) + u1*R1;
+
+    // get length through subdivision
+    return this.SubdivideLength( R0, R1, R2, R3 );
+
+}   // End of CubicBezier.SegmentArcLength()
+
+
+//-------------------------------------------------------------------------------
+// @ CubicBezier.SubdivideLength()
+//-------------------------------------------------------------------------------
+// Get length of Bezier curve using midpoint subdivision
+//-------------------------------------------------------------------------------
+function Float32 CubicBezier.SubdivideLength( Vec3 p0, Vec3 p1, Vec3 p2, Vec3 p3 )
+{
+    // check to see if basically straight
+    Float32 Lmin = p0.distanceTo(p3);
+    Float32 Lmax = p0.distanceTo(p1) + p1.distanceTo(p2) + p2.distanceTo(p3);
+    Float32 diff = Lmin - Lmax;
+
+    if ( diff*diff < 1.0e-3 )
+        return 0.5*(Lmin + Lmax);
+
+    // otherwise get control points for subdivision
+    Vec3 L1 = (p0 + p1) * 0.5;
+    Vec3 H = (p1 + p2) * 0.5;
+    Vec3 L2 = (L1 + H) * 0.5;
+    Vec3 R2 = (p2 + p3) * 0.5;
+    Vec3 R1 = (H + R2) * 0.5;
+    Vec3 mid = (L2 + R1) * 0.5;
+
+    // subdivide
+    return this.SubdivideLength( p0, L1, L2, mid ) + this.SubdivideLength( mid, R1, R2, p3 );
+}
+
+function CubicBezier.approxHandles!()
+{
+  this.controls.resize(2 * (this.count-1));
+  // create approximating control points
+  for ( Integer i = 0; i < this.count-1; ++i )
+  {
+      if ( i > 0 )
+          this.controls[2*i] = this.positions[i] + (this.positions[i+1]-this.positions[i-1])/3.0;
+      if ( i < this.count-2 )
+          this.controls[2*i+1] = this.positions[i+1] - (this.positions[i+2]-this.positions[i])/3.0;
+  }
+  this.controls[0] = this.controls[1] - (this.positions[1] - this.positions[0])/3.0;
+  this.controls[2*this.count-3] = this.controls[2*this.count-4] + (this.positions[this.count-1] - this.positions[this.count-2])/3.0;
+}
+
+
+operator entry(){
+  Vec3 cv[4];
+  cv[0]=Vec3(0.0, 0.0, 0.0);
+  cv[1]=Vec3(0.0, 1.0, 0.0);
+  cv[2]=Vec3(1.0, 1.0, 0.0);
+  cv[3]=Vec3(1.0, 0.0, 0.0);
+  CubicBezier c = CubicBezier(cv);
+  Float32 a = 0.0; Float32 b = 0.5;
+  Float32 perc = c.findParameterByDistance(a, b );
+  report(perc);
+}
+
+
+
+/*
+operator curve(io InlineDrawing debug, io Mat44 matrix, in Mat44 pos[], in Scalar U)
+{
+  CubicBezier b = CubicBezier();
+  Vec3 cvs[4];
+  for (Integer i = 0; i<pos.size; i++)
+  {
+    cvs[i] = pos[i].translation();
+  }
+
+  //Vec3 position(b.evalPos(U));
+  //Vec3 tangent(b.evalTan(U));
+  //Vec3 normal(b.evalNorm(U));
+  //normal.projectOnPlane(tangent, 1);
+
+  // Evaluate the position and tangents array at U
+  Vec3 positions[];
+  Vec3 tangents[];
+  Vec3 normals[];
+  Integer sample = 20;
+  for (Integer i = 0; i<sample+1; i++)
+  {
+    Float32 u(Float32(i)/20.0);
+    positions.push(b.evalPos(u));
+    tangents.push(b.evalTan(u));
+  }
+
+  // Propagate normal between tranforms Y axis
+  Vec3 initNorm = pos[0].transpose().row1.toVec3();
+  Vec3 endNorm = pos[3].transpose().row1.toVec3();
+  normals = b.propagateNormal(initNorm, tangents);
+  b.twist(endNorm, normals, tangents);
+
+  // OGLDebug
+
+  debug.reset();
+  Color boneColor(1,0.1,0.5);
+  InlineShape shape = debug.getNewShape("test");
+  shape.reset();
+  shape.drawLineStrip(positions);
+  shape.drawPoint(position);
+  shape.drawLine(position, position + tangent);
+  shape.drawLine(positions[19], positions[19] + normals[19]);
+  for (Integer i = 0; i<normals.size(); i++)
+  {
+    shape.drawLine(positions[i], positions[i] + normals[i]);
+  }
+  //shape.drawLine(position, position+(normal.cross(tangent)).unit());
+  debug.drawShape("test", boneColor, Xfo(), 0);
+}
+*/

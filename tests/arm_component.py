@@ -130,12 +130,14 @@ class ArmComponent(BaseComponent):
         armUpVCtrlSrtBuffer.addChild(armUpVCtrl)
         self.addChild(armUpVCtrlSrtBuffer)
 
+
         # =====================
         # Create Component I/O
         # =====================
         # Setup component Xfo I/O's
         clavicleEndInput = Locator('clavicleEnd')
         clavicleEndInput.xfo.copy(bicepXfo)
+
         bicepOutput = Locator('bicep')
         bicepOutput.xfo.copy(bicepXfo)
         forearmOutput = Locator('forearm')

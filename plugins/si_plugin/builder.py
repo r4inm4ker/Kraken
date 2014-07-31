@@ -547,12 +547,12 @@ class Builder(BaseBuilder):
             opSourceCode += "require " + kOperator.getExtension() + ";\n\n"
             opSourceCode += "operator " + kOperator.getName() + "(\n"
 
-            opSourceCode += "    io " + solverTypeName + " solver,\n"
+            opSourceCode += "  io " + solverTypeName + " solver,\n"
 
             # Get the args from the solver KL object.
             args = solver.getArguments('KrakenSolverArg[]')
 
-            functionCall = "    solver.solve("
+            functionCall = "  solver.solve("
             for i in range(len(args)):
                 arg = args[i]
 
@@ -581,7 +581,7 @@ class Builder(BaseBuilder):
                         si.fabricSplice("addOutputPort", operatorOwner.FullName + ".kine.global.SpliceOp", "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\", \"extension\":\"\", \"targets\":\"" + targetObject.FullName + connectionSuffix + "\"}", "")
 
                 # Connect the ports to the inputs/outputs in the rig.
-                opSourceCode += "    " + arg.connectionType + " " + arg.dataType + " " + arg.name
+                opSourceCode += "  " + arg.connectionType + " " + arg.dataType + " " + arg.name
                 if i == len(args) - 1:
                     opSourceCode += "\n"
                 else:

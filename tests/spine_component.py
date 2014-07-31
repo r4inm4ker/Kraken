@@ -2,11 +2,14 @@ from kraken.core.maths.vec import Vec3
 
 from kraken.core.objects.components.base_component import BaseComponent
 from kraken.core.objects.attributes.bool_attribute import BoolAttribute
+from kraken.core.objects.attributes.float_attribute import FloatAttribute
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 from kraken.core.objects.locator import Locator
 from kraken.core.objects.joint import Joint
 from kraken.core.objects.srtBuffer import SrtBuffer
 from kraken.core.objects.controls.circle_control  import  CircleControl
+
+from kraken.core.objects.operators.splice_operator import SpliceOperator
 
 
 class SpineComponent(BaseComponent):
@@ -125,23 +128,23 @@ class SpineComponent(BaseComponent):
         # Add Splice Ops
         # ===============
         # Add Splice Op
-        spliceOp = SpliceOperator("spineSpliceOp", "SpineSolver", "KrakenSpineSolver")
-        self.addOperator(spliceOp)
+        # spliceOp = SpliceOperator("spineSpliceOp", "SpineSolver", "KrakenSpineSolver")
+        # self.addOperator(spliceOp)
 
-        # Add Att Inputs
-        spliceOp.setInput("maxLength", maxLengthInputAttr)
-        spliceOp.setInput("tangentLength", tangentLengthInputAttr)
+        # # Add Att Inputs
+        # spliceOp.setInput("maxLength", maxLengthInputAttr)
+        # spliceOp.setInput("tangentLength", tangentLengthInputAttr)
 
-        # Add Xfo Inputs
-        spliceOp.setInput("spine01Ctrl", spine01Ctrl)
-        spliceOp.setInput("spine02Ctrl", spine02Ctrl)
-        spliceOp.setInput("spine03Ctrl", spine03Ctrl)
+        # # Add Xfo Inputs
+        # spliceOp.setInput("spine01Ctrl", spine01Ctrl)
+        # spliceOp.setInput("spine02Ctrl", spine02Ctrl)
+        # spliceOp.setInput("spine03Ctrl", spine03Ctrl)
 
-        # Add Xfo Outputs
-        spliceOp.setOutput("spine01Out", spine01Output)
-        spliceOp.setOutput("spine02Out", spine02Output)
-        spliceOp.setOutput("spine03Out", spine03Output)
-        spliceOp.setOutput("spine04Out", spine04Output)
+        # # Add Xfo Outputs
+        # spliceOp.setOutput("spine01Out", spine01Output)
+        # spliceOp.setOutput("spine02Out", spine02Output)
+        # spliceOp.setOutput("spine03Out", spine03Output)
+        # spliceOp.setOutput("spine04Out", spine04Output)
 
 
     def buildRig(self, parent):

@@ -48,6 +48,10 @@ class NeckComponent(BaseComponent):
         neckCtrlSrtBuffer.addChild(neckCtrl)
         self.addChild(neckCtrlSrtBuffer)
 
+
+        # =====================
+        # Create Component I/O
+        # =====================
         # Setup Component Xfo I/O's
         neckEndInput = Locator('neckBase')
         neckEndInput.xfo.copy(neckXfo)
@@ -57,8 +61,11 @@ class NeckComponent(BaseComponent):
         neckOutput.xfo.copy(neckXfo)
 
         # Setup componnent Attribute I/O's
-        armFollowBodyOutputAttr = FloatAttribute('followBody', 0.0, 0.0, 1.0)
 
+
+        # ==============
+        # Constrain I/O
+        # ==============
         # Constraint inputs
         clavicleInputConstraint = PoseConstraint('_'.join([neckCtrl.getName(), 'To', neckEndInput.getName()]))
         clavicleInputConstraint.setMaintainOffset(True)
@@ -70,12 +77,21 @@ class NeckComponent(BaseComponent):
         neckEndConstraint.addConstrainer(neckCtrl)
         neckEndOutput.addConstraint(neckEndConstraint)
 
+
+        # ==================
+        # Add Component I/O
+        # ==================
         # Add Xfo I/O's
         self.addInput(neckEndInput)
         self.addOutput(neckEndOutput)
         self.addOutput(neckOutput)
 
-        self.addOutput(armFollowBodyOutputAttr)
+        # Add Attribute I/O's
+
+
+        # ===============
+        # Add Splice Ops
+        # ===============
 
 
     def buildRig(self, parent):

@@ -77,26 +77,74 @@ class HeadComponent(BaseComponent):
         jawCtrlSrtBuffer.xfo.copy(jawCtrl.xfo)
         jawCtrlSrtBuffer.addChild(jawCtrl)
 
-        # Setup Component Xfo I/O's
+
+        # =====================
+        # Create Component I/O
+        # =====================
+        # Setup component Xfo I/O's
         headBaseInput = Locator('headBase')
         headBaseInput.xfo.copy(headCtrl.xfo)
+
         headOutput = Locator('head')
         headOutput.xfo.copy(headCtrl.xfo)
+        jawOutput = Locator('jaw')
+        jawOutput.xfo.copy(jawCtrl.xfo)
+        eyeLOutput = Locator('eyeL')
+        eyeLOutput.xfo.copy(eyeLeftCtrl.xfo)
+        eyeROutput = Locator('eyeR')
+        eyeROutput.xfo.copy(eyeRightCtrl.xfo)
 
         # Setup componnent Attribute I/O's
-        armFollowBodyOutputAttr = FloatAttribute('followBody', 0.0, 0.0, 1.0)
 
+
+        # ==============
+        # Constrain I/O
+        # ==============
         # Constraint inputs
         headInputConstraint = PoseConstraint('_'.join([headCtrlSrtBuffer.getName(), 'To', headBaseInput.getName()]))
         headInputConstraint.setMaintainOffset(True)
         headInputConstraint.addConstrainer(headBaseInput)
         headCtrlSrtBuffer.addConstraint(headInputConstraint)
 
+        # Constraint outputs
+        headOutputConstraint = PoseConstraint('_'.join([headOutput.getName(), 'To', headCtrl.getName()]))
+        headOutputConstraint.setMaintainOffset(True)
+        headOutputConstraint.addConstrainer(headCtrl)
+        headOutput.addConstraint(headOutputConstraint)
+
+        jawOutputConstraint = PoseConstraint('_'.join([jawOutput.getName(), 'To', jawCtrl.getName()]))
+        jawOutputConstraint.setMaintainOffset(True)
+        jawOutputConstraint.addConstrainer(jawCtrl)
+        jawOutput.addConstraint(jawOutputConstraint)
+
+        eyeLOutputConstraint = PoseConstraint('_'.join([eyeLOutput.getName(), 'To', eyeLeftCtrl.getName()]))
+        eyeLOutputConstraint.setMaintainOffset(True)
+        eyeLOutputConstraint.addConstrainer(eyeLeftCtrl)
+        eyeLOutput.addConstraint(eyeLOutputConstraint)
+
+        eyeROutputConstraint = PoseConstraint('_'.join([eyeROutput.getName(), 'To', eyeRightCtrl.getName()]))
+        eyeROutputConstraint.setMaintainOffset(True)
+        eyeROutputConstraint.addConstrainer(eyeRightCtrl)
+        eyeROutput.addConstraint(eyeROutputConstraint)
+
+
+        # ==================
+        # Add Component I/O
+        # ==================
         # Add Xfo I/O's
         self.addInput(headBaseInput)
 
-        self.addOutput(armFollowBodyOutputAttr)
         self.addOutput(headOutput)
+        self.addOutput(jawOutput)
+        self.addOutput(eyeLOutput)
+        self.addOutput(eyeROutput)
+
+
+        # ===============
+        # Add Splice Ops
+        # ===============
+        # Add Splice Op
+
 
 
     def buildRig(self, parent):

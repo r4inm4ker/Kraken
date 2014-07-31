@@ -16,8 +16,8 @@ class Rig(Container):
         super(Rig, self).__init__(name)
 
         # Add rig layers
-        armatureLayer = Layer('armature', parent=self)
-        self.addChild(armatureLayer)
+        deformerLayer = Layer('deformers', parent=self)
+        self.addChild(deformerLayer)
 
         controlsLayer = Layer('controls', parent=self)
         self.addChild(controlsLayer)
