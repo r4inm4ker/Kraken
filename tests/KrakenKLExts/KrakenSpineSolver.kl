@@ -1,13 +1,12 @@
 require Math;
 require Kraken;
-
 require rig_Curves;
 require InlineDrawing;
 require DrawingUtils;
 
 object SpineSolver : KrakenSolver {
   Boolean debug;
-  BezierCubic curve;
+  CubicBezier curve;
 };
 
 
@@ -46,6 +45,9 @@ function SpineSolver.solve!
   )
 {
 
+  this.curve = CubicBezier();
+  this.debug = debug;
+
   // Get cv points from inputs
   Vec3 cvs[4];
   cvs[0] = spine01Ctrl.translation;
@@ -80,8 +82,8 @@ function SpineSolver.solve!
 
   // Set output matrices
   spine01Out = spine01Ctrl;
-  spine02Out.setFromAxes(tangents[1], normals[1], tangents[1].cross(normals[1]), positions[1]);
-  spine03Out.setFromAxes(tangents[2], normals[2], tangents[2].cross(normals[2]), positions[2]);
+  spine02Out.setFromVec3(tangents[1], normals[1], tangents[1].cross(normals[1]), positions[1]);
+  spine03Out.setFromVec3(tangents[2], normals[2], tangents[2].cross(normals[2]), positions[2]);
   spine04Out = spine04Ctrl;
 
   // Draw Debugging
@@ -94,13 +96,13 @@ function SpineSolver.solve!
     for (Integer i=0; i<sample; i++)
     {
       Float32 U = 1.0/Float32(sample-1)*i;
-      samples[i] = curve.evalPosM(U);
+      samples[i] = this.curve.evalPosM(U);
 
       drawVector(drawing.getRoot(), "X_"+"curve"+String(i), samples[i], samples[i]+(tangents[i]*0.5), Color(1.0, 0.0, 0.0, 1.0));
       //drawVector(drawing.getRoot(), "Z_"+"curve"+String(i), samples[i], samples[i]+(binormal*0.5), Color(0.0, 0.0, 1.0, 1.0));
       drawVector(drawing.getRoot(), "Y_"+"curve"+String(i), samples[i], samples[i]+(normals[i]*0.5), Color(0.0, 1.0, 0.0, 1.0));
     }
-    drawCurve(drawing.getRoot(), 'curve', positions, Color(1.0, 0.5, 0.0));
+    drawCurve(drawing.getRoot(), 'spineCurve', positions, Color(1.0, 0.5, 0.0));
 
   }
 }
