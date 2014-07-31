@@ -6,6 +6,7 @@ require DrawingUtils;
 
 object LimbSolver : KrakenSolver {
   TwoBoneChainSolver twoBoneChain;
+  String solverName;
 };
 
 
@@ -90,10 +91,10 @@ function LimbSolver.solve!
   InlineDrawing draw = OGLInlineDrawing_GetInstance();
   draw.reset();
 
-  etDrawBone(draw.getRoot(), 'bone01', bone01DebugXfo, this.twoBoneChain.bone1Len, 0.25, Color(0, 0.5, 0));
-  etDrawBone(draw.getRoot(), 'bone02', bone02DebugXfo, this.twoBoneChain.bone2Len, 0.25, Color(0, 0.5, 0));
-  etDrawBone(draw.getRoot(), 'bone03', bone03DebugXfo, 1, 0.25, Color(0, 0.5, 0));
+  etDrawBone(draw.getRoot(), this.solverName + 'bone01', bone01DebugXfo, this.twoBoneChain.bone1Len, 0.25, Color(0, 0.5, 0));
+  etDrawBone(draw.getRoot(), this.solverName + 'bone02', bone02DebugXfo, this.twoBoneChain.bone2Len, 0.25, Color(0, 0.5, 0));
+  etDrawBone(draw.getRoot(), this.solverName + 'bone03', bone03DebugXfo, 1, 0.25, Color(0, 0.5, 0));
 
-  drawLine(draw.getRoot(), 'upVLine', bone02Out.translation(), this.twoBoneChain.upV.translation(), Color(1.0, 1.0, 0));
+  drawLine(draw.getRoot(), this.solverName + 'upVLine', bone02Out.translation(), this.twoBoneChain.upV.translation(), Color(1.0, 1.0, 0));
 
 }
