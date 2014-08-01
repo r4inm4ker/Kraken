@@ -63,7 +63,6 @@ class SceneItem(object):
         return self.getName()
 
 
-
     def getBuildName(self):
         """Returns the name used when building the node in the target application.
 
@@ -107,9 +106,10 @@ class SceneItem(object):
 
         return True
 
-    # ===============
+
+    # ==================
     # Component Methods
-    # ===============
+    # ==================
     def getComponent(self):
         """Returns the component of the object as an object.
 
@@ -788,7 +788,6 @@ class SceneItem(object):
         """
 
         return self.color
-
 
 
     # ====================
