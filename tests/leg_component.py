@@ -128,6 +128,7 @@ class LegComponent(BaseComponent):
         legEndOutput.xfo.tr.copy(anklePosition)
 
         # Setup componnent Attribute I/O's
+        debugInputAttr = BoolAttribute('debug', False)
         bone1LenInputAttr = FloatAttribute('bone1Len', femurLen, 0.0, 100.0)
         bone2LenInputAttr = FloatAttribute('bone2Len', shinLen, 0.0, 100.0)
         fkikInputAttr = FloatAttribute('fkik', 0.0, 0.0, 1.0)
@@ -160,6 +161,7 @@ class LegComponent(BaseComponent):
         self.addOutput(legEndOutput)
 
         # Add Attribute I/O's
+        self.addInput(debugInputAttr)
         self.addInput(bone1LenInputAttr)
         self.addInput(bone2LenInputAttr)
         self.addInput(fkikInputAttr)
@@ -178,6 +180,7 @@ class LegComponent(BaseComponent):
         self.addOperator(spliceOp)
 
         # Add Att Inputs
+        spliceOp.setInput("debug", debugInputAttr)
         spliceOp.setInput("bone1Len", bone1LenInputAttr)
         spliceOp.setInput("bone2Len", bone2LenInputAttr)
         spliceOp.setInput("fkik", fkikInputAttr)

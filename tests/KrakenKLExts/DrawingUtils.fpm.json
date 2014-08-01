@@ -1,6 +1,7 @@
 {
   "code": [
            "DrawingUtils.kl",
-           "DrawingUtilityFunctions.kl"
+           "DrawingUtilityFunctions.kl",
+           "Bone2.kl"
           ]
 }

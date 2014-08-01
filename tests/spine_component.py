@@ -5,7 +5,6 @@ from kraken.core.objects.attributes.bool_attribute import BoolAttribute
 from kraken.core.objects.attributes.float_attribute import FloatAttribute
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 from kraken.core.objects.locator import Locator
-from kraken.core.objects.joint import Joint
 from kraken.core.objects.srtBuffer import SrtBuffer
 from kraken.core.objects.controls.circle_control  import  CircleControl
 
@@ -41,7 +40,7 @@ class SpineComponent(BaseComponent):
         cogCtrlSrtBuffer = SrtBuffer('cog')
         cogCtrlSrtBuffer.xfo.tr.copy(cogPosition)
         cogCtrlSrtBuffer.addChild(cogCtrl)
-        self.addChild(cogCtrl)
+        self.addChild(cogCtrlSrtBuffer)
 
         # Spine01
         spine01Ctrl = CircleControl('spine01')
@@ -92,13 +91,13 @@ class SpineComponent(BaseComponent):
         # Create Component I/O
         # =====================
         # Setup component Xfo I/O's
-        spine01Output = Joint('spine01')
+        spine01Output = Locator('spine01')
         spine01Output.xfo.tr.copy(spine01Ctrl.xfo.tr)
-        spine02Output = Joint('spine02')
+        spine02Output = Locator('spine02')
         spine02Output.xfo.tr.copy(spine01Ctrl.xfo.tr)
-        spine03Output = Joint('spine03')
+        spine03Output = Locator('spine03')
         spine03Output.xfo.tr.copy(spine01Ctrl.xfo.tr)
-        spine04Output = Joint('spine04')
+        spine04Output = Locator('spine04')
         spine04Output.xfo.tr.copy(spine01Ctrl.xfo.tr)
 
         spineBaseOutput = Locator('spineBase')
@@ -121,7 +120,7 @@ class SpineComponent(BaseComponent):
         spineBaseOutput.addConstraint(spineBaseOutputConstraint)
 
         spineEndOutputConstraint = PoseConstraint('_'.join([spineEndOutput.getName(), 'To', 'spineEnd']))
-        spineEndOutputConstraint.addConstrainer(spine03Ctrl)
+        spineEndOutputConstraint.addConstrainer(spine04Ctrl)
         spineEndOutput.addConstraint(spineEndOutputConstraint)
 
 
@@ -144,23 +143,23 @@ class SpineComponent(BaseComponent):
         # Add Splice Ops
         # ===============
         # Add Splice Op
-        # spliceOp = SpliceOperator("spineSpliceOp", "SpineSolver", "KrakenSpineSolver")
-        # self.addOperator(spliceOp)
+        spliceOp = SpliceOperator("spineSpliceOp", "SpineSolver", "KrakenSpineSolver")
+        self.addOperator(spliceOp)
 
-        # # Add Att Inputs
-        # spliceOp.setInput("debug", debugInputAttr)
+        # Add Att Inputs
+        spliceOp.setInput("debug", debugInputAttr)
 
-        # # Add Xfo Inputs
-        # spliceOp.setInput("spine01Ctrl", spine01Ctrl)
-        # spliceOp.setInput("spine02Ctrl", spine02Ctrl)
-        # spliceOp.setInput("spine03Ctrl", spine03Ctrl)
-        # spliceOp.setInput("spine04Ctrl", spine04Ctrl)
+        # Add Xfo Inputs
+        spliceOp.setInput("spine01Ctrl", spine01Ctrl)
+        spliceOp.setInput("spine02Ctrl", spine02Ctrl)
+        spliceOp.setInput("spine03Ctrl", spine03Ctrl)
+        spliceOp.setInput("spine04Ctrl", spine04Ctrl)
 
-        # # Add Xfo Outputs
-        # spliceOp.setOutput("spine01Out", spine01Output)
-        # spliceOp.setOutput("spine02Out", spine02Output)
-        # spliceOp.setOutput("spine03Out", spine03Output)
-        # spliceOp.setOutput("spine04Out", spine04Output)
+        # Add Xfo Outputs
+        spliceOp.setOutput("spine01Out", spine01Output)
+        spliceOp.setOutput("spine02Out", spine02Output)
+        spliceOp.setOutput("spine03Out", spine03Output)
+        spliceOp.setOutput("spine04Out", spine04Output)
 
 
     def buildRig(self, parent):

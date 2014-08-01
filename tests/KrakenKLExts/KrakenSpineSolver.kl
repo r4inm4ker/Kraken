@@ -7,12 +7,18 @@ require DrawingUtils;
 object SpineSolver : KrakenSolver {
   Boolean debug;
   CubicBezier curve;
+  InlineTransform rootTransform;
 };
 
 
 // Default Constructor
 inline SpineSolver() {
   this.debug = false;
+
+  InlineDrawing draw = OGLInlineDrawing_GetInstance();
+  this.rootTransform = StaticInlineTransform('SpineSolver', Xfo());
+  draw.getRoot().addChild(this.rootTransform);
+
 }
 
 
@@ -74,22 +80,32 @@ function SpineSolver.solve!
   Vec3 initNorm = spine01Ctrl.transpose().row2.toVec3();
   initNorm.projectOnPlane(tangents[0], true);
 
-  Vec3 endNorm = spine03Ctrl.transpose().row2.toVec3();
+  Vec3 endNorm = spine04Ctrl.transpose().row2.toVec3();
   endNorm.projectOnPlane(tangents[tangents.size - 1], true);
 
   normals = this.curve.propagateNormal(initNorm, tangents);
   this.curve.twist(endNorm, normals, tangents);
 
   // Set output matrices
-  spine01Out = spine01Ctrl;
+  Quat offsetQuat;
+  offsetQuat.setFromEulerAngles(Vec3(Math_degToRad(90), Math_degToRad(90), 0));
+  Mat33 offsetMat33 = offsetQuat.toMat33();
+
+  Mat44 spine01Matrix;
+  spine01Matrix.setFromMat33(offsetMat33);
+
+  Mat44 spine04Matrix;
+  spine04Matrix.setFromMat33(offsetMat33);
+
+  spine01Out = spine01Ctrl * spine01Matrix;
   spine02Out.setFromVec3(tangents[1], normals[1], tangents[1].cross(normals[1]), positions[1]);
   spine03Out.setFromVec3(tangents[2], normals[2], tangents[2].cross(normals[2]), positions[2]);
-  spine04Out = spine04Ctrl;
+  spine04Out = spine04Ctrl * spine04Matrix;
 
   // Draw Debugging
   if (this.debug == true) {
     InlineDrawing drawing = OGLInlineDrawing_GetInstance();
-    drawing.reset();
+
     Vec3 samples[];
     samples.resize(sample);
 
@@ -104,5 +120,16 @@ function SpineSolver.solve!
     }
     drawCurve(drawing.getRoot(), 'spineCurve', positions, Color(1.0, 0.5, 0.0));
 
+    Xfo bone01DebugXfo = spine01Out;
+    Xfo bone02DebugXfo = spine02Out;
+    Xfo bone03DebugXfo = spine03Out;
+    Xfo bone04DebugXfo = spine04Out;
+
+    etDrawBone(this.rootTransform, 'spineBone01', bone01DebugXfo, 0.5, 0.125, Color(0, 0.5, 0));
+    etDrawBone(this.rootTransform, 'spineBone02', bone02DebugXfo, 0.5, 0.125, Color(0, 0.5, 0));
+    etDrawBone(this.rootTransform, 'spineBone03', bone03DebugXfo, 0.5, 0.125, Color(0, 0.5, 0));
+    etDrawBone(this.rootTransform, 'spineBone04', bone04DebugXfo, 0.5, 0.125, Color(0, 0.5, 0));
   }
+
+
 }

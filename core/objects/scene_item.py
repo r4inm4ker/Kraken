@@ -54,7 +54,7 @@ class SceneItem(object):
         """
 
         if self.parent is not None:
-            return self.parent.getFullName() + '.' + self.getName() 
+            return self.parent.getFullName() + '.' + self.getName()
 
         return self.getName()
 
@@ -117,8 +117,8 @@ class SceneItem(object):
 
         """
 
-        if child.name in [x.name for x in self.children]:
-            raise IndexError("Child with name '" + child.name + "'' already exists as a child.")
+        # if child.getName() in [x.getName() for x in self.children]:
+        #     raise IndexError("Child with name '" + child.getName() + "'' already exists as a child.")
 
         self.children.append(child)
         child.setParent(self)
@@ -498,9 +498,9 @@ class SceneItem(object):
         return None
 
 
-    # ========================
+    # ===================
     # Constraint Methods
-    # ========================
+    # ===================
     def checkConstraintIndex(self, index):
         """Checks the supplied index is valid.
 
@@ -529,8 +529,8 @@ class SceneItem(object):
 
         """
 
-        if constraint.name in [x.name for x in self.constraints]:
-            raise IndexError("Constraint with name '" + constraint.name + "'' already exists as a constraint.")
+        if constraint.getName() in [x.getName() for x in self.constraints]:
+            raise IndexError("Constraint with name '" + constraint.getName() + "'' already exists as a constraint.")
 
         self.constraints.append(constraint)
         constraint.setParent(self)
@@ -733,10 +733,9 @@ class SceneItem(object):
 
 
 
-    # ================
+    # ====================
     # Persistence Methods
-    # ================
-
+    # ====================
     def jsonEncode(self, saver):
         """Returns the data for this object encoded as a JSON hierarchy.
 
@@ -805,7 +804,7 @@ class SceneItem(object):
             self.addChild(loader.construct(child))
 
         for attrGroup in jsonData['attributeGroups']:
-            # There is one default attribute group assigned to each scene item. 
+            # There is one default attribute group assigned to each scene item.
             # Load data into the existing item instead of constructing a new one.
             if attrGroup['name'] == '':
                 loader.registerItem(self.attributeGroups[0])
