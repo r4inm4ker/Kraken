@@ -474,6 +474,10 @@ class BaseBuilder(object):
         objectName = self.buildName(kObject, component=component)
         kType = kObject.getKType()
 
+        # TODO: IMPLEMENT IT!!!
+        # Move the naming into the build* methods for each object type
+        # buildName = kObject.getBuildName()
+
         # Build Object
         if kType == "Container":
             dccSceneItem = self.buildContainer(kObject, objectName)

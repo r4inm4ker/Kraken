@@ -30,6 +30,6 @@ class Container(SceneItem):
         String, build name of the object.
 
         """
-        
-        # The container is generally the root node in the rig. 
-        return self.getName() + '_rig'
+
+        # The container is generally the root node in the rig.
+        return self.getName()
