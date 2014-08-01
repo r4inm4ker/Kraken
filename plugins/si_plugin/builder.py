@@ -23,66 +23,69 @@ class Builder(BaseBuilder):
     # ========================
     # SceneItem Build Methods
     # ========================
-    def buildContainer(self, kSceneItem, objectName):
+    def buildContainer(self, kSceneItem):
         """Builds a container / namespace object.
 
         Arguments:
         kSceneItem -- Object, kSceneItem that represents a container to be built.
-        objectName -- String, name of the object being created.
 
         Return:
         Node that is created..
 
         """
 
+        buildName = kSceneItem.getBuildName()
+
         parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
 
         if parentDCCSceneItem is None:
             parentDCCSceneItem = si.ActiveProject3.ActiveScene.Root
 
-        dccSceneItem = parentDCCSceneItem.AddModel(None, objectName)
-        dccSceneItem.Name = objectName
+        dccSceneItem = parentDCCSceneItem.AddModel(None, buildName)
+        dccSceneItem.Name = buildName
 
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
         return dccSceneItem
 
 
-    def buildLayer(self, kSceneItem, objectName):
+    def buildLayer(self, kSceneItem):
         """Builds a layer object.
 
         Arguments:
         kSceneItem -- Object, kSceneItem that represents a layer to be built.
-        objectName -- String, name of the object being created.
 
         Return:
         Node that is created..
 
         """
 
+        buildName = kSceneItem.getBuildName()
+
         parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
 
         if parentDCCSceneItem is None:
             parentDCCSceneItem = si.ActiveProject3.ActiveScene.Root
 
-        dccSceneItem = parentDCCSceneItem.AddModel(None, objectName)
-        dccSceneItem.Name = objectName
+        dccSceneItem = parentDCCSceneItem.AddModel(None, buildName)
+        dccSceneItem.Name = buildName
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
         return dccSceneItem
 
 
-    def buildHierarchyGroup(self, kSceneItem, objectName):
+    def buildHierarchyGroup(self, kSceneItem):
         """Builds a hierarchy group object.
 
         Arguments:
         kSceneItem -- Object, kSceneItem that represents a group to be built.
-        objectName -- String, name of the object being created.
 
         Return:
         DCC Scene Item that is created.
 
         """
+
+        buildName = kSceneItem.getBuildName()
 
         parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
 
@@ -90,7 +93,7 @@ class Builder(BaseBuilder):
             parentDCCSceneItem = si.ActiveProject3.ActiveScene.Root
 
         dccSceneItem = parentDCCSceneItem.AddNull()
-        dccSceneItem.Name = objectName
+        dccSceneItem.Name = buildName
 
         lockObjXfo(dccSceneItem)
 
@@ -99,17 +102,18 @@ class Builder(BaseBuilder):
         return dccSceneItem
 
 
-    def buildGroup(self, kSceneItem, objectName):
+    def buildGroup(self, kSceneItem):
         """Builds a locator / null object.
 
         Arguments:
         kSceneItem -- Object, kSceneItem that represents a group to be built.
-        objectName -- String, name of the object being created.
 
         Return:
         Node that is created.
 
         """
+
+        buildName = kSceneItem.getBuildName()
 
         parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
 
@@ -117,47 +121,49 @@ class Builder(BaseBuilder):
             parentDCCSceneItem = si.ActiveProject3.ActiveScene.Root
 
         dccSceneItem = parentDCCSceneItem.AddNull()
-        dccSceneItem.Name = objectName
+        dccSceneItem.Name = buildName
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
         return dccSceneItem
 
 
-    def buildJoint(self, kSceneItem, objectName):
+    def buildJoint(self, kSceneItem):
         """Builds a joint object.
 
         Arguments:
         kSceneItem -- Object, kSceneItem that represents a joint to be built.
-        objectName -- String, name of the object being created.
 
         Return:
         DCC Scene Item that is created.
 
         """
 
+        buildName = kSceneItem.getBuildName()
+
         parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
 
         if parentDCCSceneItem is None:
             parentDCCSceneItem = si.ActiveProject3.ActiveScene.Root
 
         dccSceneItem = parentDCCSceneItem.AddNull()
-        dccSceneItem.Name = objectName
+        dccSceneItem.Name = buildName
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
         return dccSceneItem
 
 
-    def buildLocator(self, kSceneItem, objectName):
+    def buildLocator(self, kSceneItem):
         """Builds a locator / null object.
 
         Arguments:
         kSceneItem -- Object, kSceneItem that represents a locator / null to be built.
-        objectName -- String, name of the object being created.
 
         Return:
         Node that is created.
 
         """
+
+        buildName = kSceneItem.getBuildName()
 
         parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
 
@@ -165,23 +171,25 @@ class Builder(BaseBuilder):
             parentDCCSceneItem = si.ActiveProject3.ActiveScene.Root
 
         dccSceneItem = parentDCCSceneItem.AddNull()
-        dccSceneItem.Name = objectName
+        dccSceneItem.Name = buildName
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
         return dccSceneItem
 
 
-    def buildCurve(self, kSceneItem, objectName):
+    def buildCurve(self, kSceneItem):
         """Builds a Curve object.
 
         Arguments:
         kSceneItem -- Object, kSceneItem that represents a curve to be built.
-        objectName -- String, name of the object being created.
 
         Return:
         Node that is created.
 
         """
+
+        buildName = kSceneItem.getBuildName()
+
         parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
 
         if parentDCCSceneItem is None:
@@ -223,7 +231,7 @@ class Builder(BaseBuilder):
             else:
                 dccSceneItem.ActivePrimitive.Geometry.AddCurve(eachCurveSection, knots, kSceneItem.getCurveSectionClosed(i), 1, constants.siNonUniformParameterization)
 
-        dccSceneItem.Name = objectName
+        dccSceneItem.Name = buildName
         return dccSceneItem
 
 

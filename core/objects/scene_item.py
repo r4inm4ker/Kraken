@@ -17,7 +17,7 @@ class SceneItem(object):
     def __init__(self, name, parent=None):
         super(SceneItem, self).__init__()
         self.name = name
-        self.parent = parent
+        self.parent = None
         self.component = None
         self.children = []
         self.flags = {}
@@ -27,6 +27,9 @@ class SceneItem(object):
         self.color = None
         self.visibility = True
         self.shapeVisibility = True
+
+        if parent is not None:
+            parent.addChild(self)
 
         defaultAttrGroup = AttributeGroup("")
         self.addAttributeGroup(defaultAttrGroup)
@@ -70,7 +73,7 @@ class SceneItem(object):
         """
 
         if self.component is not None:
-            return self.component.getComponentName() + '_' + self.getName() 
+            return self.component.getComponentName() + '_' + self.getName()
 
         return self.getName()
 
@@ -165,10 +168,16 @@ class SceneItem(object):
         # if child.getName() in [x.getName() for x in self.children]:
         #     raise IndexError("Child with name '" + child.getName() + "'' already exists as a child.")
 
+        if child.getParent() is not None:
+            parent = child.getParent()
+            for i in xrange(parent.getNumChildren()):
+                if parent.getChildByIndex(i) is child:
+                    parent.removeChildByIndex(i)
+
         self.children.append(child)
         child.setParent(self)
 
-        # Assign the child the same component. 
+        # Assign the child the same component.
         if self.component is not None:
             child.setComponent(self.component)
 

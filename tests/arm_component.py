@@ -22,18 +22,19 @@ class ArmComponent(BaseComponent):
     def __init__(self, name, parent=None, side='M'):
         super(ArmComponent, self).__init__(name, parent, side)
 
-        # container = self.getParent()
-        # armatureLayer = container.getChildByName('armature')
+        container = self.getParent()
+        deformersLayer = container.getChildByName('deformers')
 
         # =========
         # Armature
         # =========
-        # armatureParent = armatureLayer
+        # armatureParent = deformersLayer
         # if armatureParent is None:
         #     armatureParent = self
 
-        # bicepDef = Joint('bicep')
-        # armatureParent.addChild(bicepDef)
+        bicepDef = Joint('bicepBlah')
+        self.addChild(bicepDef)
+        deformersLayer.addChild(bicepDef)
 
 
         # =========

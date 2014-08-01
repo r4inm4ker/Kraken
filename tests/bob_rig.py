@@ -17,13 +17,8 @@ class Rig(Container):
 
         # Add rig layers
         deformerLayer = Layer('deformers', parent=self)
-        self.addChild(deformerLayer)
-
         controlsLayer = Layer('controls', parent=self)
-        self.addChild(controlsLayer)
-
         geometryLayer = Layer('geometry', parent=self)
-        self.addChild(geometryLayer)
 
         # Add Components to Layers
         spineComponent = SpineComponent("spine", self)
@@ -35,16 +30,6 @@ class Rig(Container):
         armRightComponent = ArmComponent("arm", self, side="R")
         legLeftComponent = LegComponent("leg", self, side="L")
         legRightComponent = LegComponent("leg", self, side="R")
-
-        controlsLayer.addComponent(spineComponent)
-        controlsLayer.addComponent(neckComponent)
-        controlsLayer.addComponent(headComponent)
-        controlsLayer.addComponent(clavicleLeftComponent)
-        controlsLayer.addComponent(clavicleRightComponent)
-        controlsLayer.addComponent(armLeftComponent)
-        controlsLayer.addComponent(armRightComponent)
-        controlsLayer.addComponent(legLeftComponent)
-        controlsLayer.addComponent(legRightComponent)
 
         # Neck to Spine
         spineEndOutput = spineComponent.getOutputByName('spineEnd')

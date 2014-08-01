@@ -25,69 +25,72 @@ class Builder(BaseBuilder):
     # ========================
     # SceneItem Build Methods
     # ========================
-    def buildContainer(self, kSceneItem, objectName):
+    def buildContainer(self, kSceneItem):
         """Builds a container / namespace object.
 
         Arguments:
         kSceneItem -- Object, kSceneItem that represents a container to be built.
-        objectName -- String, name of the object being created.
 
         Return:
         Node that is created..
 
         """
 
+        buildName = kSceneItem.getBuildName()
+
         parentNode = self._getDCCSceneItem(kSceneItem.getParent())
 
         dccSceneItem = pm.group(name="group", em=True)
         pm.parent(dccSceneItem, parentNode)
-        pm.rename(dccSceneItem, objectName)
+        pm.rename(dccSceneItem, buildName)
 
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
         return dccSceneItem
 
 
-    def buildLayer(self, kSceneItem, objectName):
+    def buildLayer(self, kSceneItem):
         """Builds a layer object.
 
         Arguments:
         kSceneItem -- Object, kSceneItem that represents a layer to be built.
-        objectName -- String, name of the object being created.
 
         Return:
         Node that is created..
 
         """
 
+        buildName = kSceneItem.getBuildName()
+
         parentNode = self._getDCCSceneItem(kSceneItem.getParent())
 
         dccSceneItem = pm.group(name="group", em=True)
         pm.parent(dccSceneItem, parentNode)
-        pm.rename(dccSceneItem, objectName)
+        pm.rename(dccSceneItem, buildName)
 
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
         return dccSceneItem
 
 
-    def buildHierarchyGroup(self, kSceneItem, objectName):
+    def buildHierarchyGroup(self, kSceneItem):
         """Builds a hierarchy group object.
 
         Arguments:
         kSceneItem -- Object, kSceneItem that represents a group to be built.
-        objectName -- String, name of the object being created.
 
         Return:
         DCC Scene Item that is created.
 
         """
 
+        buildName = kSceneItem.getBuildName()
+
         parentNode = self._getDCCSceneItem(kSceneItem.getParent())
 
         dccSceneItem = pm.group(name="group", em=True)
         pm.parent(dccSceneItem, parentNode)
-        pm.rename(dccSceneItem, objectName)
+        pm.rename(dccSceneItem, buildName)
 
         lockObjXfo(dccSceneItem)
 
@@ -96,86 +99,90 @@ class Builder(BaseBuilder):
         return dccSceneItem
 
 
-    def buildGroup(self, kSceneItem, objectName):
+    def buildGroup(self, kSceneItem):
         """Builds a group object.
 
         Arguments:
         kSceneItem -- Object, kSceneItem that represents a group to be built.
-        objectName -- String, name of the object being created.
 
         Return:
         Node that is created.
 
         """
 
+        buildName = kSceneItem.getBuildName()
+
         parentNode = self._getDCCSceneItem(kSceneItem.getParent())
 
         dccSceneItem = pm.group(name="group", em=True)
         pm.parent(dccSceneItem, parentNode)
-        pm.rename(dccSceneItem, objectName)
+        pm.rename(dccSceneItem, buildName)
 
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
         return dccSceneItem
 
 
-    def buildJoint(self, kSceneItem, objectName):
+    def buildJoint(self, kSceneItem):
         """Builds a joint object.
 
         Arguments:
         kSceneItem -- Object, kSceneItem that represents a joint to be built.
-        objectName -- String, name of the object being created.
 
         Return:
         DCC Scene Item that is created.
 
         """
 
+        buildName = kSceneItem.getBuildName()
+
         parentNode = self._getDCCSceneItem(kSceneItem.getParent())
 
         dccSceneItem = pm.joint(name="joint")
         pm.parent(dccSceneItem, parentNode)
-        pm.rename(dccSceneItem, objectName)
+        pm.rename(dccSceneItem, buildName)
 
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
         return dccSceneItem
 
 
-    def buildLocator(self, kSceneItem, objectName):
+    def buildLocator(self, kSceneItem):
         """Builds a locator / null object.
 
         Arguments:
         kSceneItem -- Object, locator / null object to be built.
-        objectName -- String, name of the object being created.
 
         Return:
         Node that is created.
 
         """
+
+        buildName = kSceneItem.getBuildName()
 
         parentNode = self._getDCCSceneItem(kSceneItem.getParent())
 
         dccSceneItem = pm.spaceLocator(name="locator")
         pm.parent(dccSceneItem, parentNode)
-        pm.rename(dccSceneItem, objectName)
+        pm.rename(dccSceneItem, buildName)
 
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
         return dccSceneItem
 
 
-    def buildCurve(self, kSceneItem, objectName):
+    def buildCurve(self, kSceneItem):
         """Builds a Curve object.
 
         Arguments:
         kSceneItem -- Object, kSceneItem that represents a curve to be built.
-        objectName -- String, name of the object being created.
 
         Return:
         Node that is created.
 
         """
+
+        buildName = kSceneItem.getBuildName()
 
         parentNode = self._getDCCSceneItem(kSceneItem.getParent())
 
@@ -204,7 +211,7 @@ class Builder(BaseBuilder):
 
         dccSceneItem = mainCurve
         pm.parent(dccSceneItem, parentNode)
-        pm.rename(dccSceneItem, objectName)
+        pm.rename(dccSceneItem, buildName)
 
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 

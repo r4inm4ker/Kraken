@@ -20,7 +20,6 @@ class Locator(SceneItem):
     # =============
     # Name methods
     # =============
-
     def getBuildName(self):
         """Returns the name used when building the node in the target application.
 
@@ -28,5 +27,5 @@ class Locator(SceneItem):
         String, build name of the object.
 
         """
-        
+
         return super(Locator, self).getBuildName() + '_null'
