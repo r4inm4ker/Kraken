@@ -144,23 +144,23 @@ class SpineComponent(BaseComponent):
         # Add Splice Ops
         # ===============
         # Add Splice Op
-        spliceOp = SpliceOperator("spineSpliceOp", "SpineSolver", "KrakenSpineSolver")
-        self.addOperator(spliceOp)
+        # spliceOp = SpliceOperator("spineSpliceOp", "SpineSolver", "KrakenSpineSolver")
+        # self.addOperator(spliceOp)
 
-        # Add Att Inputs
-        spliceOp.setInput("debug", debugInputAttr)
+        # # Add Att Inputs
+        # spliceOp.setInput("debug", debugInputAttr)
 
-        # Add Xfo Inputs
-        spliceOp.setInput("spine01Ctrl", spine01Ctrl)
-        spliceOp.setInput("spine02Ctrl", spine02Ctrl)
-        spliceOp.setInput("spine03Ctrl", spine03Ctrl)
-        spliceOp.setInput("spine04Ctrl", spine04Ctrl)
+        # # Add Xfo Inputs
+        # spliceOp.setInput("spine01Ctrl", spine01Ctrl)
+        # spliceOp.setInput("spine02Ctrl", spine02Ctrl)
+        # spliceOp.setInput("spine03Ctrl", spine03Ctrl)
+        # spliceOp.setInput("spine04Ctrl", spine04Ctrl)
 
-        # Add Xfo Outputs
-        spliceOp.setOutput("spine01Out", spine01Output)
-        spliceOp.setOutput("spine02Out", spine02Output)
-        spliceOp.setOutput("spine03Out", spine03Output)
-        spliceOp.setOutput("spine04Out", spine04Output)
+        # # Add Xfo Outputs
+        # spliceOp.setOutput("spine01Out", spine01Output)
+        # spliceOp.setOutput("spine02Out", spine02Output)
+        # spliceOp.setOutput("spine03Out", spine03Output)
+        # spliceOp.setOutput("spine04Out", spine04Output)
 
 
     def buildRig(self, parent):
