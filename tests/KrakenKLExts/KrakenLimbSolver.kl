@@ -11,6 +11,13 @@ object LimbSolver : KrakenSolver {
 
 
 inline LimbSolver() {
+
+  InlineDrawing draw = OGLInlineDrawing_GetInstance();
+  //draw.reset();
+
+  this.rootTransform = StaticInlineTransform('LimbSolver', Xfo());
+  draw.getRoot().addChild(this.rootTransform);
+
 }
 
 
@@ -88,12 +95,6 @@ function LimbSolver.solve!
   bone03DebugXfo = bone03Out;
 
   // Debugging
-  InlineDrawing draw = OGLInlineDrawing_GetInstance();
-  draw.reset();
-
-  this.rootTransform = StaticInlineTransform('LimbSolver', Xfo());
-  draw.getRoot().addChild(this.rootTransform);
-
   etDrawBone(this.rootTransform, 'bone01', bone01DebugXfo, this.twoBoneChain.bone1Len, 0.25, Color(0, 0.5, 0));
   etDrawBone(this.rootTransform, 'bone02', bone02DebugXfo, this.twoBoneChain.bone2Len, 0.25, Color(0, 0.5, 0));
   etDrawBone(this.rootTransform, 'bone03', bone03DebugXfo, 1, 0.25, Color(0, 0.5, 0));
