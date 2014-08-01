@@ -1,14 +1,19 @@
 from kraken.core.maths.vec import Vec3
 from kraken.core.maths.xfo import Xfo
+from kraken.core.maths.xfo import xfoFromDirAndUpV
 
 from kraken.core.objects.components.base_component import BaseComponent
 from kraken.core.objects.attributes.float_attribute import FloatAttribute
 from kraken.core.objects.attributes.bool_attribute import BoolAttribute
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 from kraken.core.objects.locator import Locator
+from kraken.core.objects.joint import Joint
 from kraken.core.objects.srtBuffer import SrtBuffer
 from kraken.core.objects.controls.cube_control import CubeControl
 from kraken.core.objects.controls.pin_control import PinControl
+from kraken.core.objects.controls.triangle_control import TriangleControl
+
+from kraken.core.objects.operators.splice_operator import SpliceOperator
 
 
 class LegComponent(BaseComponent):
@@ -91,6 +96,27 @@ class LegComponent(BaseComponent):
         legIKCtrlSrtBuffer.addChild(legIKCtrl)
         self.addChild(legIKCtrlSrtBuffer)
 
+        # UpV
+        upVXfo = xfoFromDirAndUpV(femurPosition, anklePosition, kneePosition)
+        upVXfo.tr.copy(kneePosition)
+        upVOffset = Vec3(0, 0, 5)
+        upVOffset = upVXfo.transformVector(upVOffset)
+
+        legUpVCtrl = TriangleControl('UpV')
+        legUpVCtrl.xfo.tr.copy(upVOffset)
+        legUpVCtrl.alignOnZAxis()
+        legUpVCtrl.rotatePoints(0, 0, 0)
+        legUpVCtrl.setColor(ctrlColor)
+
+        legUpVCtrlSrtBuffer = SrtBuffer('UpV')
+        legUpVCtrlSrtBuffer.xfo.tr.copy(upVOffset)
+        legUpVCtrlSrtBuffer.addChild(legUpVCtrl)
+        self.addChild(legUpVCtrlSrtBuffer)
+
+
+        # =====================
+        # Create Component I/O
+        # =====================
         # Setup component Xfo I/O's
         legPelvisInput = Locator('pelvisInput')
         legPelvisInput.xfo.copy(femurXfo)
@@ -102,8 +128,20 @@ class LegComponent(BaseComponent):
         legEndOutput.xfo.tr.copy(anklePosition)
 
         # Setup componnent Attribute I/O's
-        legFollowPelvisInputAttr = FloatAttribute('followBody', 0.0, 0.0, 1.0)
+        debugInputAttr = BoolAttribute('debug', False)
+        bone1LenInputAttr = FloatAttribute('bone1Len', femurLen, 0.0, 100.0)
+        bone2LenInputAttr = FloatAttribute('bone2Len', shinLen, 0.0, 100.0)
+        fkikInputAttr = FloatAttribute('fkik', 0.0, 0.0, 1.0)
+        softIKInputAttr = BoolAttribute('softIK', True)
+        softDistInputAttr = FloatAttribute('softDist', 0.5, 0.0, 1.0)
+        stretchInputAttr = BoolAttribute('stretch', True)
+        stretchBlendInputAttr = FloatAttribute('stretchBlend', 0.0, 0.0, 1.0)
+        rightSideInputAttr = BoolAttribute('rightSide', False)
 
+
+        # ==============
+        # Constrain I/O
+        # ==============
         # Constraint inputs
         legRootInputConstraint = PoseConstraint('_'.join([legIKCtrl.getName(), 'To', legPelvisInput.getName()]))
         legRootInputConstraint.setMaintainOffset(True)
@@ -111,10 +149,11 @@ class LegComponent(BaseComponent):
         femurFKCtrlSrtBuffer.addConstraint(legRootInputConstraint)
 
         # Constraint outputs
-        # legEndOutputConstraint = PoseConstraint('_'.join([legEndOutput.getName(), 'To', legIKCtrl.getName()]))
-        # legEndOutputConstraint.addConstrainer(legIKCtrl)
-        # legEndOutput.addConstraint(legEndOutputConstraint)
 
+
+        # ==================
+        # Add Component I/O
+        # ==================
         # Add Xfo I/O's
         self.addInput(legPelvisInput)
         self.addOutput(femurOutput)
@@ -122,7 +161,46 @@ class LegComponent(BaseComponent):
         self.addOutput(legEndOutput)
 
         # Add Attribute I/O's
-        self.addInput(legFollowPelvisInputAttr)
+        self.addInput(debugInputAttr)
+        self.addInput(bone1LenInputAttr)
+        self.addInput(bone2LenInputAttr)
+        self.addInput(fkikInputAttr)
+        self.addInput(softIKInputAttr)
+        self.addInput(softDistInputAttr)
+        self.addInput(stretchInputAttr)
+        self.addInput(stretchBlendInputAttr)
+        self.addInput(rightSideInputAttr)
+
+
+        # ===============
+        # Add Splice Ops
+        # ===============
+        # Add Splice Op
+        spliceOp = SpliceOperator("legSpliceOp", "LimbSolver", "KrakenLimbSolver")
+        self.addOperator(spliceOp)
+
+        # Add Att Inputs
+        spliceOp.setInput("debug", debugInputAttr)
+        spliceOp.setInput("bone1Len", bone1LenInputAttr)
+        spliceOp.setInput("bone2Len", bone2LenInputAttr)
+        spliceOp.setInput("fkik", fkikInputAttr)
+        spliceOp.setInput("softIK", softIKInputAttr)
+        spliceOp.setInput("softDist", softDistInputAttr)
+        spliceOp.setInput("stretch", stretchInputAttr)
+        spliceOp.setInput("stretchBlend", stretchBlendInputAttr)
+        spliceOp.setInput("rightSide", rightSideInputAttr)
+
+        # Add Xfo Inputs
+        spliceOp.setInput("root", legPelvisInput)
+        spliceOp.setInput("bone1FK", femurFKCtrl)
+        spliceOp.setInput("bone2FK", shinFKCtrl)
+        spliceOp.setInput("ikHandle", legIKCtrl)
+        spliceOp.setInput("upV", legUpVCtrl)
+
+        # Add Xfo Outputs
+        spliceOp.setOutput("bone01Out", femurOutput)
+        spliceOp.setOutput("bone02Out", shinOutput)
+        spliceOp.setOutput("bone03Out", legEndOutput)
 
 
     def buildRig(self, parent):

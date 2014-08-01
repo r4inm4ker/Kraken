@@ -16,8 +16,8 @@ class Rig(Container):
         super(Rig, self).__init__(name)
 
         # Add rig layers
-        armatureLayer = Layer('armature', parent=self)
-        self.addChild(armatureLayer)
+        deformerLayer = Layer('deformers', parent=self)
+        self.addChild(deformerLayer)
 
         controlsLayer = Layer('controls', parent=self)
         self.addChild(controlsLayer)
@@ -29,12 +29,12 @@ class Rig(Container):
         spineComponent = SpineComponent("spine", self)
         neckComponent = NeckComponent("neck", self)
         headComponent = HeadComponent("head", self)
-        clavicleLeftComponent = ClavicleComponent("clavicleLeft", self, side="L")
-        clavicleRightComponent = ClavicleComponent("clavicleRight", self, side="R")
-        armLeftComponent = ArmComponent("armLeft", self, side="L")
-        armRightComponent = ArmComponent("armRight", self, side="R")
-        legLeftComponent = LegComponent("legLeft", self, side="L")
-        legRightComponent = LegComponent("legRight", self, side="R")
+        clavicleLeftComponent = ClavicleComponent("clavicle", self, side="L")
+        clavicleRightComponent = ClavicleComponent("clavicle", self, side="R")
+        armLeftComponent = ArmComponent("arm", self, side="L")
+        armRightComponent = ArmComponent("arm", self, side="R")
+        legLeftComponent = LegComponent("leg", self, side="L")
+        legRightComponent = LegComponent("leg", self, side="R")
 
         controlsLayer.addComponent(spineComponent)
         controlsLayer.addComponent(neckComponent)
@@ -80,12 +80,12 @@ class Rig(Container):
         legRightPelvisInput.setSource(clavicleRightEndOutput.getTarget())
 
         # Arm Attributes to Clavicle
-        clavicleLeftFollowBodyOutput = clavicleLeftComponent.getOutputByName('followBody')
-        armLeftFollowBodyInput = armLeftComponent.getInputByName('followBody')
-        armLeftFollowBodyInput.setSource(clavicleLeftFollowBodyOutput.getTarget())
-        clavicleRightFollowBodyOutput = clavicleRightComponent.getOutputByName('followBody')
-        armRightFollowBodyInput = armRightComponent.getInputByName('followBody')
-        armRightFollowBodyInput.setSource(clavicleRightFollowBodyOutput.getTarget())
+        # clavicleLeftFollowBodyOutput = clavicleLeftComponent.getOutputByName('followBody')
+        # armLeftFollowBodyInput = armLeftComponent.getInputByName('followBody')
+        # armLeftFollowBodyInput.setSource(clavicleLeftFollowBodyOutput.getTarget())
+        # clavicleRightFollowBodyOutput = clavicleRightComponent.getOutputByName('followBody')
+        # armRightFollowBodyInput = armRightComponent.getInputByName('followBody')
+        # armRightFollowBodyInput.setSource(clavicleRightFollowBodyOutput.getTarget())
 
 
 

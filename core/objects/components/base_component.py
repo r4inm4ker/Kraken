@@ -264,16 +264,16 @@ class BaseComponent(SceneItem):
         outputHrc = self.getChildByName('outputs')
         outputAttrsGrp = outputHrc.getAttributeGroupByName('outputAttrs')
 
-        if not isinstance(outputObject, (Locator, BaseAttribute)):
+        if not isinstance(outputObject, (SceneItem, BaseAttribute)):
             raise Exception("'outputObject' argument is not a valid object. "
                 + outputObject.getName() + " is of type:" + str(outputObject)
-                + ". Must be an instance of 'Locator' or 'BaseAttribute'.")
+                + ". Must be an instance of 'SceneItem' or 'BaseAttribute'.")
 
         if outputObject in self.outputs:
             raise Exception("'outputObject' argument is already an output! Invalid object: '"
                 + outputObject.getName() + "'")
 
-        if isinstance(outputObject, Locator):
+        if isinstance(outputObject, SceneItem):
             outputHrc.children.append(outputObject)
             outputObject.setParent(outputHrc)
             outputObject.setShapeVisibility(False)

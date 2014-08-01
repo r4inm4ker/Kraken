@@ -1,0 +1,7 @@
+{
+  "code": [
+           "rig_BezierXfo.kl",
+           "rig_Rotation.kl",
+           "rig_MathUtils.kl"
+          ]
+}
