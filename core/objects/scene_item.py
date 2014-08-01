@@ -790,6 +790,25 @@ class SceneItem(object):
         return self.color
 
 
+    # ==================
+    # Transform Methods
+    # ==================
+    def lockAttribute(self, attributeName):
+        pass
+
+
+    def unlockAttribute(self, attributeName):
+        pass
+
+
+    def hideAttribute(self, attributeName):
+        pass
+
+
+    def unhideAttribute(self, attributeName):
+        pass
+
+
     # ====================
     # Persistence Methods
     # ====================
