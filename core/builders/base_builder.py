@@ -377,6 +377,7 @@ class BaseBuilder(object):
             raise Exception("Component connection '" + kConnection.getName() + "'is invalid! Missing Source or Target!")
 
         constraint = PoseConstraint('_'.join([target.getName(), 'To', source.getName()]))
+        constraint.setMaintainOffset(True)
         constraint.setConstrainee(target)
         constraint.addConstrainer(source)
         dccSceneItem = self.buildPoseConstraint(constraint)
@@ -491,6 +492,9 @@ class BaseBuilder(object):
 
         elif kType == "HierarchyGroup":
             dccSceneItem = self.buildHierarchyGroup(kObject, objectName)
+
+        elif kType == "SrtBuffer":
+            dccSceneItem = self.buildGroup(kObject, objectName)
 
         elif kType == "Locator":
             dccSceneItem = self.buildLocator(kObject, objectName)
@@ -696,16 +700,25 @@ class BaseBuilder(object):
             return componentNamePrefix + '_'.join([kObject.getName(), 'hrc'])
 
         elif kType == "Locator":
-            return componentNamePrefix + '_'.join([kObject.getName(), 'null'])
+            parent = kObject.getParent()
+            if parent.getName() == "inputs":
+                return '_'.join([componentName, side, kObject.getName(), 'srtIn'])
+            elif parent.getName() == "outputs":
+                return '_'.join([componentName, side, kObject.getName(), 'srtOut'])
+            else:
+                return '_'.join([componentName, side, kObject.getName(), 'null'])
+
+        elif kType == "SrtBuffer":
+            return '_'.join([componentName, side,  kObject.getName(),'srtBuffer'])
 
         elif kType == "Joint":
-            return componentNamePrefix + '_'.join([kObject.getName(), 'def'])
+            return '_'.join([componentName, side, kObject.getName(), 'def'])
 
         elif kType == "SceneItem":
-            return componentNamePrefix + '_'.join([kObject.getName(), 'null'])
+            return '_'.join([componentName, side,  kObject.getName(),'null'])
 
         elif kType == "Curve":
-            return componentNamePrefix + '_'.join([kObject.getName(), 'crv'])
+            return '_'.join([componentName, side,  kObject.getName(),'crv'])
 
         elif kType == "Control":
             nameParts = [componentName, side, kObject.getName(), 'ctrl']

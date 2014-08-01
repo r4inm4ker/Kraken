@@ -1,0 +1,78 @@
+require Math;
+require rig_Math;
+require InlineDrawing;
+
+interface Curve {
+
+  update!(Vec3 cv[4]);
+
+  Vec3 evalPos(Float32 U);
+  Vec3 evalTan(Float32 U);
+  Vec3 evalNorm(Float32 U);
+  Vec3 evalPosM(Float32 U);
+  Vec3 evalTanM(Float32 U);
+  Vec3 evalNormM(Float32 U);
+  //Float32 length();
+  //aabboxd();
+  Vec3[] propagateNormal(io Vec3 initNorm, Vec3[] tangents);
+  twist(Vec3 endNorm, io Vec3[] normals, Vec3[] tangents);
+};
+
+
+function InlineLinesShape getOrCreateCurve(io InlineTransform rootTransform, String name, Color color){
+  InlineTransform transform = rootTransform.getChild(name);
+  if(transform == null){
+    transform = StaticInlineTransform(name, rootTransform, Xfo());
+
+    Lines lines();
+    InlineLinesShape lineShape(name, lines);
+
+    InlineDrawing drawing = OGLInlineDrawing_GetInstance();
+    InlineShader shader = drawing.registerShader(OGLFlatShader());
+    InlineMaterial mat = shader.getOrCreateMaterial("flat");
+
+    SimpleInlineInstance instance(name, transform, lineShape, mat);
+    instance.setInstanceUniform(InlineUniform('u_color', color));
+    return lineShape;
+  }
+  else{
+    SimpleInlineInstance instance = transform.getChild(0);
+    instance.setInstanceUniform(InlineUniform('u_color', color));
+    InlineLinesShape lineShape = instance.getShape();
+    return lineShape;
+  }
+}
+
+function InlineLinesShape drawVector(
+  io InlineTransform rootTransform,
+  in String name,
+  in Vec3 start,
+  in Vec3 end,
+  in Color color
+){
+  InlineLinesShape linesShape = getOrCreateCurve(rootTransform, name, color);
+  Lines lines = linesShape.getLines();
+  lines.clear();
+  lines.addLine(start, end);
+  return linesShape;
+}
+
+
+function InlineLinesShape drawCurve(
+  io InlineTransform rootTransform,
+  in String name,
+  in Vec3 positions[],
+  in Color color
+){
+  InlineLinesShape linesShape = getOrCreateCurve(rootTransform, name, color);
+  Lines lines = linesShape.getLines();
+  lines.clear();
+  lines.addLineStrip(positions);
+  return linesShape;
+}
+
+/*
+operator entry(){
+  Curve c;
+  report(c);
+}*/

@@ -58,6 +58,7 @@ class Layer(SceneItem):
 
         """
 
+        component.setParent(self)
         return self.addChild(component)
 
 
@@ -72,4 +73,5 @@ class Layer(SceneItem):
 
         """
 
+        component.setParent(None)
         return self.removeChild(componentName)

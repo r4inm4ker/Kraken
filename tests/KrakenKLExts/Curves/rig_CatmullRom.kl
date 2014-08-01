@@ -1,0 +1,222 @@
+require rig_Math;
+
+object CatmullRom : Curve
+{
+  Vec3 cv[4];
+  Mat44 basis;
+  Mat44 coef;
+  Mat44 transform;
+  Float32 length;
+  String parametrization;
+
+};
+
+
+// Default Constructor
+function CatmullRom()
+{
+  this.basis.set(-1,  2, -1,  0,
+                  3, -5,  0, 2,
+                  -3,  4,  1,  0,
+                  1,  -1,  0,  0);
+  //Test cubic hermite
+  /*this.basis.set(2,  -3, 0,  1,
+                 -2, 3,  0, 0,
+                 1, -2,  1,  0,
+                 1, -1,  0,  0);*/
+}
+
+function CatmullRom(Vec3 cv[4])
+{
+  this.basis.set(-1,  2, -1,  0,
+                  3, -5,  0, 2,
+                  -3,  4,  1,  0,
+                  1,  -1,  0,  0);
+  /*this.basis.set(2,  -3, 0,  1,
+                 -2, 3,  0, 0,
+                 1, -2,  1,  0,
+                 1, -1,  0,  0);*/
+  this.update(cv);
+}
+
+
+inline CatmullRom.initCentripetal!(Vec3 cv[4])
+{
+  if (this.parametrization != 'centripetal')
+  this.cv = cv;
+}
+
+
+inline CatmullRom.updateCvs!(Vec3 cv[4])
+{
+  this.cv = cv;
+}
+
+
+inline CatmullRom.update!(Vec3 cv[4])
+{
+  this.updateCvs(cv);
+  this.coef = this.evalCoef();
+}
+
+
+function Float32 CatmullRom.length()
+{
+  Integer step = 250;
+  Vec3 pos;
+  Vec3 prevPos;
+  Float32 length = 0;
+
+  for (Integer i = 0; i < step; i++)
+  {
+    Float32 t = Float32(i) / Float32(step);
+    pos = this.evalPos(t);
+    if (i > 0)
+      length += (pos - prevPos).length();
+    prevPos = pos;
+  }
+
+  return length;
+}
+
+
+function Vec3 CatmullRom.evalPos(Float32 U)
+{
+  Float32 U2 = U*U;
+  Float32 U3 = U2*U;
+
+  Vec3 coef = (2.0 * this.cv[1]) +
+  (this.cv[0].negate() + this.cv[2]) * U +
+  ((2.0 * this.cv[0]) - 5.0 * this.cv[1] + 4.0 * this.cv[2] - this.cv[3]) * U2 +
+  (this.cv[0].negate() + 3.0 * this.cv[1]- 3.0 * this.cv[2] + this.cv[3]) * U3;
+
+  return 0.5*coef;
+}
+
+
+function Vec3 CatmullRom.evalTan(Float32 U)
+{
+  Float32 U2 = U*U;
+  Vec3 coef = (0.5 * (-1 * this.cv[0] + this.cv[2]) +
+              U * (2*this.cv[0] - 5*this.cv[1] + 4*this.cv[2] - this.cv[3]) +
+              U2 * 1.5 * (-1 * this.cv[0] + 3*this.cv[1] - 3*this.cv[2] + this.cv[3])).unit();
+
+  return coef;
+}
+
+
+function Vec3 CatmullRom.evalNorm(Float32 U)
+{
+  Vec3 coef = ((2*this.cv[0] - 5*this.cv[1] + 4*this.cv[2] - this.cv[3]) +
+              U * 3.0 * (-1 * this.cv[0] + 3*this.cv[1] - 3*this.cv[2] + this.cv[3])).unit();
+
+  return coef;
+}
+
+
+function Mat44 CatmullRom.evalCoef()
+{
+  Mat44 mP( this.cv[0].x, this.cv[1].x, this.cv[2].x, this.cv[3].x,
+            this.cv[0].y, this.cv[1].y, this.cv[2].y, this.cv[3].y,
+            this.cv[0].z, this.cv[1].z, this.cv[2].z, this.cv[3].z,
+            0.0, 0.0, 0.0, 1.0);
+
+  return (mP * this.basis);
+}
+
+
+function Vec3 CatmullRom.evalPosM(Float32 U)
+{
+  Scalar tSquare = U * U;
+  Scalar tCube = tSquare * U;
+  Vec4 vP(tCube, tSquare, U, 1.0);
+
+  return (this.coef * vP * 0.5).toVec3();
+}
+
+
+function Vec3 CatmullRom.evalTanM(Float32 U)
+{
+  Scalar tSquare = U * U;
+  Vec4 vP(3*tSquare, 2*U, 1.0, 0.0);
+
+  return (this.coef * vP * 0.5).toVec3().unit();
+}
+
+
+function Vec3 CatmullRom.evalNormM(Float32 U)
+{
+  Vec4 vP(6.0*U, 2.0, 0.0, 0.0);
+
+  return (this.coef * vP * 0.5).toVec3().unit();
+}
+
+
+function Vec3 CatmullRom.NormalFromUpVector(Float32 U)
+{
+  Vec4 vP(6.0*U, 2.0, 0.0, 0.0);
+
+  return (this.coef * vP * 0.5).toVec3().unit();
+}
+
+
+function Vec3[] CatmullRom.propagateNormal(io Vec3 initNorm, Vec3[] tangents)
+{
+  Vec3 normals[];
+  Vec3 prevTan = tangents[0];
+  for (Integer i = 0; i<tangents.size; i++)
+  {
+    if (i>0)
+    {
+      prevTan = tangents[i-1] ;
+      initNorm = normals[i-1] ;
+      Vec3 axis(prevTan.cross(tangents[i]).unit_safe());
+      Float32 alpha = -(tangents[i].angleTo(prevTan));
+      initNorm.rotateVector(axis, alpha);
+    }
+    normals.push(initNorm);
+  }
+  return normals;
+}
+
+
+function CatmullRom.twist(Vec3 endNorm, io Vec3[] normals, Vec3[] tangents)
+{
+  Integer lastElem(normals.size()-1);
+  Float32 alpha = normals[lastElem].angleTo(endNorm);
+  Float32 dot(normals[lastElem].cross(endNorm).unit().dot(tangents[lastElem]));
+  Float32 sign(dot>0? -1.0 : 1.0);
+  for (Integer i = 0; i<normals.size; i++)
+  {
+    normals[i] = normals[i].rotateVector(tangents[i], sign*(Float32(i) * alpha/(normals.size()-1)));
+  }
+}
+
+function CatmullRom.aabboxd()
+{
+
+}
+
+
+function CatmullRom.draw(Integer segments, Color color)
+{
+  InlineDrawing drawing = OGLInlineDrawing_GetInstance();
+  drawing.reset();
+  Vec3 samples[];
+  Xfo srt[];
+  samples.resize(segments);
+  for (Integer i = 0; i<segments; i++)
+  {
+    Float32 U = 1.0/Float32(segments-1)*i;
+    samples[i] = this.evalPosM(U);
+    drawVector(drawing.getRoot(), "X_"+"curve"+String(i), samples[i], samples[i]+(this.evalTanM(U)*0.5), Color(1.0, 0.0, 0.0, 1.0));
+    drawVector(drawing.getRoot(), "Y_"+"curve"+String(i), samples[i], samples[i]+(this.evalNormM(U).cross(this.evalTanM(U)).unit()*0.5), Color(0.0, 1.0, 0.0, 1.0));
+  }
+  drawCurve(drawing.getRoot(),'curve', samples, color);
+
+}
+/*
+operator entry(){
+  CatmullRom c = CatmullRom();
+  report(c);
+}*/
