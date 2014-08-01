@@ -475,6 +475,10 @@ class BaseBuilder(object):
         objectName = self.buildName(kObject, component=component)
         kType = kObject.getKType()
 
+        # TODO: IMPLEMENT IT!!!
+        # Move the naming into the build* methods for each object type
+        # buildName = kObject.getBuildName()
+
         # Build Object
         if kType == "Container":
             dccSceneItem = self.buildContainer(kObject, objectName)
@@ -663,13 +667,13 @@ class BaseBuilder(object):
 
         """
 
-        componentName = ""
-        side = ""
+        componentNamePrefix = ""
         kType = kObject.getKType()
 
         if component is not None:
             componentName = component.getName()
             side = component.getSide()
+            componentNamePrefix = '_'.join([componentName, side]) + '_'
 
         if kType == "Container":
             return '_'.join([kObject.getName()])
@@ -681,19 +685,19 @@ class BaseBuilder(object):
             return '_'.join([kObject.getName(), kObject.getSide(), 'hrc'])
 
         elif kType == "ComponentInputXfo":
-            return '_'.join([componentName, side, kObject.getName(), 'srtIn'])
+            return componentNamePrefix + '_'.join([kObject.getName(), 'srtIn'])
 
         elif kType == "ComponentInputAttr":
-            return '_'.join([componentName, side, kObject.getName(), 'attrIn'])
+            return componentNamePrefix + '_'.join([kObject.getName(), 'attrIn'])
 
         elif kType == "ComponentOutputXfo":
-            return '_'.join([componentName, side, kObject.getName(), 'srtOut'])
+            return componentNamePrefix + '_'.join([kObject.getName(), 'srtOut'])
 
         elif kType == "ComponentOutputAttr":
-            return '_'.join([componentName, side, kObject.getName(), 'attrOut'])
+            return componentNamePrefix + '_'.join([kObject.getName(), 'attrOut'])
 
         elif kType == "HierarchyGroup":
-            return '_'.join([componentName, side, kObject.getName(), 'hrc'])
+            return componentNamePrefix + '_'.join([kObject.getName(), 'hrc'])
 
         elif kType == "Locator":
             parent = kObject.getParent()

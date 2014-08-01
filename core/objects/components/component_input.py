@@ -21,6 +21,7 @@ class ComponentInput(object):
         self.dataType = None
         self.source = None
         self.target = None
+        self.components = None
 
         self.setTarget(connectionObj)
 
@@ -57,6 +58,48 @@ class ComponentInput(object):
 
         return self.name
 
+
+    def getBuildName(self):
+        """Returns the name used when building the node in the target application.
+
+        Return:
+        String, build name of the object.
+
+        """
+
+        if self.component is not None:
+            return self.component.getComponentName() + '_' + self.getName() 
+
+        return self.getName()
+
+    # ===============
+    # Component Methods
+    # ===============
+    def getComponent(self):
+        """Returns the component of the object as an object.
+
+        Return:
+        Component of this object.
+
+        """
+
+        return self.component
+
+
+    def setComponent(self, component):
+        """Sets the component attribute of this object.
+
+        Arguments:
+        component -- Object, object that is the component of this one.
+
+        Return:
+        True if successful.
+
+        """
+
+        self.component = component
+
+        return True
 
     # =================
     # DataType Methods

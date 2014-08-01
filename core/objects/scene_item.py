@@ -18,6 +18,7 @@ class SceneItem(object):
         super(SceneItem, self).__init__()
         self.name = name
         self.parent = parent
+        self.component = None
         self.children = []
         self.flags = {}
         self.attributeGroups = []
@@ -59,6 +60,21 @@ class SceneItem(object):
         return self.getName()
 
 
+
+    def getBuildName(self):
+        """Returns the name used when building the node in the target application.
+
+        Return:
+        String, build name of the object.
+
+        """
+
+        if self.component is not None:
+            return self.component.getComponentName() + '_' + self.getName() 
+
+        return self.getName()
+
+
     # ===============
     # Parent Methods
     # ===============
@@ -85,6 +101,35 @@ class SceneItem(object):
         """
 
         self.parent = parent
+
+        return True
+
+    # ===============
+    # Component Methods
+    # ===============
+    def getComponent(self):
+        """Returns the component of the object as an object.
+
+        Return:
+        Component of this object.
+
+        """
+
+        return self.component
+
+
+    def setComponent(self, component):
+        """Sets the component attribute of this object.
+
+        Arguments:
+        component -- Object, object that is the component of this one.
+
+        Return:
+        True if successful.
+
+        """
+
+        self.component = component
 
         return True
 
@@ -122,6 +167,10 @@ class SceneItem(object):
 
         self.children.append(child)
         child.setParent(self)
+
+        # Assign the child the same component. 
+        if self.component is not None:
+            child.setComponent(self.component)
 
         return True
 
