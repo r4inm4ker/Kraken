@@ -171,8 +171,8 @@ class SceneItem(object):
         if child.getParent() is not None:
             parent = child.getParent()
             for i in xrange(parent.getNumChildren()):
-                if parent.getChildByIndex(i) is child:
-                    parent.removeChildByIndex(i)
+                if child in parent.children:
+                    parent.children.remove(child)
 
         self.children.append(child)
         child.setParent(self)

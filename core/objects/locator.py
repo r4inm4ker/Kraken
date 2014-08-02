@@ -13,8 +13,8 @@ class Locator(SceneItem):
 
     __kType__ = "Locator"
 
-    def __init__(self, name):
-        super(Locator, self).__init__(name, None)
+    def __init__(self, name, parent=None):
+        super(Locator, self).__init__(name, parent=parent)
 
 
     # =============
@@ -28,4 +28,10 @@ class Locator(SceneItem):
 
         """
 
-        return super(Locator, self).getBuildName() + '_null'
+        if self.getParent().getName() == "inputs":
+            return super(Locator, self).getBuildName() + '_srtIn'
+
+        elif self.getParent().getName() == "outputs":
+            return super(Locator, self).getBuildName() + '_srtOut'
+        else:
+            return super(Locator, self).getBuildName() + '_null'

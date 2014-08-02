@@ -95,7 +95,7 @@ class BaseComponent(SceneItem):
 
         """
 
-        return self.getComponentName() + '_hrc'
+        return self.getComponentName() + '_cmp'
 
 
     # ==============
@@ -151,8 +151,7 @@ class BaseComponent(SceneItem):
                 + inputObject.getName() + "'")
 
         if isinstance(inputObject, Locator):
-            inputHrc.children.append(inputObject)
-            inputObject.setParent(inputHrc)
+            inputHrc.addChild(inputObject)
             inputObject.setShapeVisibility(False)
 
         elif isinstance(inputObject, BaseAttribute):
@@ -294,8 +293,7 @@ class BaseComponent(SceneItem):
                 + outputObject.getName() + "'")
 
         if isinstance(outputObject, SceneItem):
-            outputHrc.children.append(outputObject)
-            outputObject.setParent(outputHrc)
+            outputHrc.addChild(outputObject)
             outputObject.setShapeVisibility(False)
 
         elif isinstance(outputObject, BaseAttribute):

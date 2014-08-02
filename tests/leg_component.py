@@ -56,45 +56,42 @@ class LegComponent(BaseComponent):
 
 
         # Femur
-        femurFKCtrl = CubeControl('femurFK')
+        femurFKCtrlSrtBuffer = SrtBuffer('femurFK', parent=self)
+        femurFKCtrlSrtBuffer.xfo.copy(femurXfo)
+
+        femurFKCtrl = CubeControl('femurFK', parent=femurFKCtrlSrtBuffer)
         femurFKCtrl.alignOnXAxis()
         femurLen = femurPosition.subtract(kneePosition).length()
         femurFKCtrl.scalePoints(Vec3(femurLen, 1.0, 1.0))
         femurFKCtrl.setColor(ctrlColor)
         femurFKCtrl.xfo.copy(femurXfo)
 
-        femurFKCtrlSrtBuffer = SrtBuffer('femurFK')
-        self.addChild(femurFKCtrlSrtBuffer)
-        femurFKCtrlSrtBuffer.xfo.copy(femurFKCtrl.xfo)
-        femurFKCtrlSrtBuffer.addChild(femurFKCtrl)
 
         # Shin
-        shinFKCtrl = CubeControl('shinFK')
+        shinFKCtrlSrtBuffer = SrtBuffer('shinFK', parent=femurFKCtrl)
+        shinFKCtrlSrtBuffer.xfo.copy(shinXfo)
+
+        shinFKCtrl = CubeControl('shinFK', parent=shinFKCtrlSrtBuffer)
         shinFKCtrl.alignOnXAxis()
         shinLen = kneePosition.subtract(anklePosition).length()
         shinFKCtrl.scalePoints(Vec3(shinLen, 1.0, 1.0))
         shinFKCtrl.setColor(ctrlColor)
         shinFKCtrl.xfo.copy(shinXfo)
 
-        shinFKCtrlSrtBuffer = SrtBuffer('shinFK')
-        shinFKCtrlSrtBuffer.xfo.copy(shinFKCtrl.xfo)
-        shinFKCtrlSrtBuffer.addChild(shinFKCtrl)
-        femurFKCtrl.addChild(shinFKCtrlSrtBuffer)
 
         # Ankle
-        legIKCtrl = PinControl('IK')
+        legIKCtrlSrtBuffer = SrtBuffer('IK', parent=self)
+        legIKCtrlSrtBuffer.xfo.tr.copy(anklePosition)
+
+        legIKCtrl = PinControl('IK', parent=legIKCtrlSrtBuffer)
         legIKCtrl.xfo.tr.copy(anklePosition)
+        legIKCtrl.setColor(ctrlColor)
 
         if self.getSide() == "R":
             legIKCtrl.rotatePoints(0, 90, 0)
         else:
             legIKCtrl.rotatePoints(0, -90, 0)
 
-        legIKCtrl.setColor(ctrlColor)
-        legIKCtrlSrtBuffer = SrtBuffer('IK')
-        legIKCtrlSrtBuffer.xfo.copy(legIKCtrl.xfo)
-        legIKCtrlSrtBuffer.addChild(legIKCtrl)
-        self.addChild(legIKCtrlSrtBuffer)
 
         # UpV
         upVXfo = xfoFromDirAndUpV(femurPosition, anklePosition, kneePosition)
@@ -102,16 +99,34 @@ class LegComponent(BaseComponent):
         upVOffset = Vec3(0, 0, 5)
         upVOffset = upVXfo.transformVector(upVOffset)
 
-        legUpVCtrl = TriangleControl('UpV')
+        legUpVCtrlSrtBuffer = SrtBuffer('UpV', parent=self)
+        legUpVCtrlSrtBuffer.xfo.tr.copy(upVOffset)
+
+        legUpVCtrl = TriangleControl('UpV', parent=legUpVCtrlSrtBuffer)
         legUpVCtrl.xfo.tr.copy(upVOffset)
         legUpVCtrl.alignOnZAxis()
         legUpVCtrl.rotatePoints(0, 0, 0)
         legUpVCtrl.setColor(ctrlColor)
 
-        legUpVCtrlSrtBuffer = SrtBuffer('UpV')
-        legUpVCtrlSrtBuffer.xfo.tr.copy(upVOffset)
-        legUpVCtrlSrtBuffer.addChild(legUpVCtrl)
-        self.addChild(legUpVCtrlSrtBuffer)
+
+        # ==========
+        # Deformers
+        # ==========
+        container = self.getParent().getParent()
+        deformersLayer = container.getChildByName('deformers')
+
+        femurDef = Joint('femur')
+        femurDef.setComponent(self)
+
+        shinDef = Joint('shin')
+        shinDef.setComponent(self)
+
+        ankleDef = Joint('ankle')
+        ankleDef.setComponent(self)
+
+        deformersLayer.addChild(femurDef)
+        deformersLayer.addChild(shinDef)
+        deformersLayer.addChild(ankleDef)
 
 
         # =====================

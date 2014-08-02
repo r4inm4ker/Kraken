@@ -5,6 +5,7 @@ from kraken.core.objects.attributes.bool_attribute import BoolAttribute
 from kraken.core.objects.attributes.float_attribute import FloatAttribute
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 from kraken.core.objects.locator import Locator
+from kraken.core.objects.joint import Joint
 from kraken.core.objects.srtBuffer import SrtBuffer
 from kraken.core.objects.controls.circle_control  import  CircleControl
 
@@ -87,6 +88,30 @@ class SpineComponent(BaseComponent):
         cogCtrl.addChild(spine04CtrlSrtBuffer)
 
 
+        # ==========
+        # Deformers
+        # ==========
+        container = self.getParent().getParent()
+        deformersLayer = container.getChildByName('deformers')
+
+        spine01Def = Joint('spine01')
+        spine01Def.setComponent(self)
+
+        spine02Def = Joint('spine02')
+        spine02Def.setComponent(self)
+
+        spine03Def = Joint('spine03')
+        spine03Def.setComponent(self)
+
+        spine04Def = Joint('spine04')
+        spine04Def.setComponent(self)
+
+        deformersLayer.addChild(spine01Def)
+        deformersLayer.addChild(spine02Def)
+        deformersLayer.addChild(spine03Def)
+        deformersLayer.addChild(spine04Def)
+
+
         # =====================
         # Create Component I/O
         # =====================
@@ -108,6 +133,7 @@ class SpineComponent(BaseComponent):
 
         # Setup componnent Attribute I/O's
         debugInputAttr = BoolAttribute('debug', False)
+
 
         # ==============
         # Constrain I/O

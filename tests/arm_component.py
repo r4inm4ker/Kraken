@@ -22,21 +22,6 @@ class ArmComponent(BaseComponent):
     def __init__(self, name, parent=None, side='M'):
         super(ArmComponent, self).__init__(name, parent, side)
 
-        container = self.getParent()
-        deformersLayer = container.getChildByName('deformers')
-
-        # =========
-        # Armature
-        # =========
-        # armatureParent = deformersLayer
-        # if armatureParent is None:
-        #     armatureParent = self
-
-        bicepDef = Joint('bicepBlah')
-        self.addChild(bicepDef)
-        deformersLayer.addChild(bicepDef)
-
-
         # =========
         # Controls
         # =========
@@ -94,9 +79,9 @@ class ArmComponent(BaseComponent):
         forearmFKCtrl.xfo.copy(forearmXfo)
 
         forearmFKCtrlSrtBuffer = SrtBuffer('forearmFK')
+        bicepFKCtrl.addChild(forearmFKCtrlSrtBuffer)
         forearmFKCtrlSrtBuffer.xfo.copy(forearmFKCtrl.xfo)
         forearmFKCtrlSrtBuffer.addChild(forearmFKCtrl)
-        bicepFKCtrl.addChild(forearmFKCtrlSrtBuffer)
 
         # Arm IK
         armIKCtrl = PinControl('IK')
@@ -110,9 +95,9 @@ class ArmComponent(BaseComponent):
         armIKCtrl.setColor(ctrlColor)
 
         armIKCtrlSrtBuffer = SrtBuffer('IK')
+        self.addChild(armIKCtrlSrtBuffer)
         armIKCtrlSrtBuffer.xfo.copy(armIKCtrl.xfo)
         armIKCtrlSrtBuffer.addChild(armIKCtrl)
-        self.addChild(armIKCtrlSrtBuffer)
 
         # UpV
         upVXfo = xfoFromDirAndUpV(bicepPosition, wristPosition, forearmPosition)
@@ -127,9 +112,29 @@ class ArmComponent(BaseComponent):
         armUpVCtrl.setColor(ctrlColor)
 
         armUpVCtrlSrtBuffer = SrtBuffer('UpV')
+        self.addChild(armUpVCtrlSrtBuffer)
         armUpVCtrlSrtBuffer.xfo.tr.copy(upVOffset)
         armUpVCtrlSrtBuffer.addChild(armUpVCtrl)
-        self.addChild(armUpVCtrlSrtBuffer)
+
+
+        # ==========
+        # Deformers
+        # ==========
+        container = self.getParent().getParent()
+        deformersLayer = container.getChildByName('deformers')
+
+        bicepDef = Joint('bicep')
+        bicepDef.setComponent(self)
+
+        forearmDef = Joint('forearm')
+        forearmDef.setComponent(self)
+
+        wristDef = Joint('wrist')
+        wristDef.setComponent(self)
+
+        deformersLayer.addChild(bicepDef)
+        deformersLayer.addChild(forearmDef)
+        deformersLayer.addChild(wristDef)
 
 
         # =====================

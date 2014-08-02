@@ -21,15 +21,15 @@ class Rig(Container):
         geometryLayer = Layer('geometry', parent=self)
 
         # Add Components to Layers
-        spineComponent = SpineComponent("spine", self)
-        neckComponent = NeckComponent("neck", self)
-        headComponent = HeadComponent("head", self)
-        clavicleLeftComponent = ClavicleComponent("clavicle", self, side="L")
-        clavicleRightComponent = ClavicleComponent("clavicle", self, side="R")
-        armLeftComponent = ArmComponent("arm", self, side="L")
-        armRightComponent = ArmComponent("arm", self, side="R")
-        legLeftComponent = LegComponent("leg", self, side="L")
-        legRightComponent = LegComponent("leg", self, side="R")
+        spineComponent = SpineComponent("spine", controlsLayer)
+        neckComponent = NeckComponent("neck", controlsLayer)
+        headComponent = HeadComponent("head", controlsLayer)
+        clavicleLeftComponent = ClavicleComponent("clavicle", controlsLayer, side="L")
+        clavicleRightComponent = ClavicleComponent("clavicle", controlsLayer, side="R")
+        armLeftComponent = ArmComponent("arm", controlsLayer, side="L")
+        armRightComponent = ArmComponent("arm", controlsLayer, side="R")
+        legLeftComponent = LegComponent("leg", controlsLayer, side="L")
+        legRightComponent = LegComponent("leg", controlsLayer, side="R")
 
         # Neck to Spine
         spineEndOutput = spineComponent.getOutputByName('spineEnd')
