@@ -12,6 +12,7 @@ from kraken.core.objects.controls.cube_control  import CubeControl
 
 from kraken.core.objects.operators.splice_operator import SpliceOperator
 
+
 class ClavicleComponent(BaseComponent):
     """Clavicle Component"""
 

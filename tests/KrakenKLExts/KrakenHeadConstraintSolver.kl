@@ -1,0 +1,59 @@
+require Math;
+require Kraken;
+require InlineDrawing;
+require DrawingUtils;
+
+object HeadConstraintSolver : KrakenSolver {
+  Boolean debug;
+};
+
+
+// Default Constructor
+inline HeadConstraintSolver() {
+  this.debug = false;
+}
+
+
+// Return Arguments for Kraken
+function KrakenSolverArg[] HeadConstraintSolver.getArguments(){
+  KrakenSolverArg args[];
+  args.push(KrakenSolverArg('debug', 'in', 'Boolean'));
+  args.push(KrakenSolverArg('headConstrainer', 'in', 'Mat44'));
+  args.push(KrakenSolverArg('jawConstrainer', 'in', 'Mat44'));
+  args.push(KrakenSolverArg('eyeLeftConstrainer', 'in', 'Mat44'));
+  args.push(KrakenSolverArg('eyeRightConstrainer', 'in', 'Mat44'));
+  args.push(KrakenSolverArg('headDeformer', 'io', 'Mat44'));
+  args.push(KrakenSolverArg('jawDeformer', 'io', 'Mat44'));
+  args.push(KrakenSolverArg('eyeLeftDeformer', 'io', 'Mat44'));
+  args.push(KrakenSolverArg('eyeRightDeformer', 'io', 'Mat44'));
+  return args;
+}
+
+
+// Solve
+function HeadConstraintSolver.solve!
+(
+  in Boolean debug,
+  in Mat44 headConstrainer,
+  in Mat44 jawConstrainer,
+  in Mat44 eyeLeftConstrainer,
+  in Mat44 eyeRightConstrainer,
+  io Mat44 headDeformer,
+  io Mat44 jawDeformer,
+  io Mat44 eyeLeftDeformer,
+  io Mat44 eyeRightDeformer
+  )
+{
+  this.debug = debug;
+
+  headDeformer = headConstrainer;
+  jawDeformer = jawConstrainer;
+  eyeLeftDeformer = eyeLeftConstrainer;
+  eyeRightDeformer = eyeRightConstrainer;
+
+  // Debugging
+  if (this.debug) {
+    // Do debugging here.
+  }
+
+}

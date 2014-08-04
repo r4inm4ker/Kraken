@@ -560,10 +560,10 @@ class Builder(BaseBuilder):
                 elif arg.connectionType in ['io', 'out']:
                     cmds.fabricSplice("addOutputPort", spliceNode, "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\", \"extension\":\"\", \"addMayaAttr\": true}", "")
 
-                    if opObject.getKType().endswith('Attribute'):
+                    if isinstance(opObject, BaseAttribute):
                         spliceNode.attr(arg.name).connect(targetObject)
 
-                    elif opObject.getKType().endswith('Locator'): # Change to isinstance() check
+                    elif isinstance(opObject, SceneItem):
                         decomposeNode = pm.createNode('decomposeMatrix')
                         spliceNode.attr(arg.name).connect(decomposeNode.attr("inputMatrix"))
 

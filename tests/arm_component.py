@@ -90,13 +90,13 @@ class ArmComponent(BaseComponent):
 
         armIKCtrl = PinControl('IK', parent=armIKCtrlSrtBuffer)
         armIKCtrl.xfo.copy(armIKCtrlSrtBuffer.xfo)
+        armIKCtrl.setColor(ctrlColor)
 
         if self.getSide() == "R":
             armIKCtrl.rotatePoints(0, 90, 0)
         else:
             armIKCtrl.rotatePoints(0, -90, 0)
 
-        armIKCtrl.setColor(ctrlColor)
 
         # Add Component Params to IK control
         armDebugInputAttr = BoolAttribute('debug', True)
@@ -104,7 +104,7 @@ class ArmComponent(BaseComponent):
         armBone2LenInputAttr = FloatAttribute('bone2Len', forearmLen, 0.0, 100.0)
         armFkikInputAttr = FloatAttribute('fkik', 0.0, 0.0, 1.0)
         armSoftIKInputAttr = BoolAttribute('softIK', True)
-        armSoftDistInputAttr = FloatAttribute('softDist', 0.5, 0.0, 1.0)
+        armSoftDistInputAttr = FloatAttribute('softDist', 0.0, 0.0, 1.0)
         armStretchInputAttr = BoolAttribute('stretch', True)
         armStretchBlendInputAttr = FloatAttribute('stretchBlend', 0.0, 0.0, 1.0)
 

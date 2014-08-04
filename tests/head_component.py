@@ -11,6 +11,7 @@ from kraken.core.objects.controls.cube_control import CubeControl
 from kraken.core.objects.controls.circle_control import CircleControl
 from kraken.core.objects.controls.sphere_control import SphereControl
 
+from kraken.core.objects.operators.splice_operator import SpliceOperator
 
 class HeadComponent(BaseComponent):
     """Head Component"""
@@ -120,6 +121,7 @@ class HeadComponent(BaseComponent):
         eyeROutput.xfo.copy(eyeRightCtrl.xfo)
 
         # Setup componnent Attribute I/O's
+        debugInputAttr = BoolAttribute('debug', True)
 
 
         # ==============
@@ -164,12 +166,31 @@ class HeadComponent(BaseComponent):
         self.addOutput(eyeLOutput)
         self.addOutput(eyeROutput)
 
+        # Add Attribute I/O's
+        self.addInput(debugInputAttr)
+
 
         # ===============
         # Add Splice Ops
         # ===============
-        # Add Splice Op
+        # Add Deformer Splice Op
+        spliceOp = SpliceOperator("headDeformerSpliceOp", "HeadConstraintSolver", "KrakenHeadConstraintSolver")
+        self.addOperator(spliceOp)
 
+        # Add Att Inputs
+        spliceOp.setInput("debug", debugInputAttr)
+
+        # Add Xfo Inputstrl)
+        spliceOp.setInput("headConstrainer", headOutput)
+        spliceOp.setInput("jawConstrainer", jawOutput)
+        spliceOp.setInput("eyeLeftConstrainer", eyeLOutput)
+        spliceOp.setInput("eyeRightConstrainer", eyeROutput)
+
+        # Add Xfo Outputs
+        spliceOp.setOutput("headDeformer", headDef)
+        spliceOp.setOutput("jawDeformer", jawDef)
+        spliceOp.setOutput("eyeLeftDeformer", eyeLeftDef)
+        spliceOp.setOutput("eyeRightDeformer", eyeRightDef)
 
 
     def buildRig(self, parent):

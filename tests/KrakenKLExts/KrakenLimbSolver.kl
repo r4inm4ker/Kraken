@@ -107,5 +107,8 @@ function LimbSolver.solve!
 
     drawLine(this.rootTransform, 'upVLine', bone02Out.translation(), this.twoBoneChain.upV.translation(), Color(1.0, 1.0, 0));
   }
+  else {
+    // Figure out how to hide the shapes!!!
+  }
 
 }

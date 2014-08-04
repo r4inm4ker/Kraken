@@ -10,6 +10,8 @@ from kraken.core.objects.joint import Joint
 from kraken.core.objects.srtBuffer import SrtBuffer
 from kraken.core.objects.controls.pin_control  import PinControl
 
+from kraken.core.objects.operators.splice_operator import SpliceOperator
+
 
 class NeckComponent(BaseComponent):
     """Neck Component"""
@@ -74,6 +76,7 @@ class NeckComponent(BaseComponent):
         neckOutput.xfo.copy(neckXfo)
 
         # Setup componnent Attribute I/O's
+        debugInputAttr = BoolAttribute('debug', True)
 
 
         # ==============
@@ -100,11 +103,24 @@ class NeckComponent(BaseComponent):
         self.addOutput(neckOutput)
 
         # Add Attribute I/O's
+        self.addInput(debugInputAttr)
 
 
         # ===============
         # Add Splice Ops
         # ===============
+        # Add Deformer Splice Op
+        spliceOp = SpliceOperator("neckDeformerSpliceOp", "PoseConstraintSolver", "KrakenPoseConstraintSolver")
+        self.addOperator(spliceOp)
+
+        # Add Att Inputs
+        spliceOp.setInput("debug", debugInputAttr)
+
+        # Add Xfo Inputstrl)
+        spliceOp.setInput("constrainer", neckEndOutput)
+
+        # Add Xfo Outputs
+        spliceOp.setOutput("constrainee", neckDef)
 
 
     def buildRig(self, parent):

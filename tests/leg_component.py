@@ -3,9 +3,13 @@ from kraken.core.maths.xfo import Xfo
 from kraken.core.maths.xfo import xfoFromDirAndUpV
 
 from kraken.core.objects.components.base_component import BaseComponent
+
+from kraken.core.objects.attributes.attribute_group import AttributeGroup
 from kraken.core.objects.attributes.float_attribute import FloatAttribute
 from kraken.core.objects.attributes.bool_attribute import BoolAttribute
+
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
+
 from kraken.core.objects.locator import Locator
 from kraken.core.objects.joint import Joint
 from kraken.core.objects.srtBuffer import SrtBuffer
@@ -93,6 +97,28 @@ class LegComponent(BaseComponent):
             legIKCtrl.rotatePoints(0, -90, 0)
 
 
+        # Add Component Params to IK control
+        legDebugInputAttr = BoolAttribute('debug', True)
+        legBone1LenInputAttr = FloatAttribute('bone1Len', femurLen, 0.0, 100.0)
+        legBone2LenInputAttr = FloatAttribute('bone2Len', shinLen, 0.0, 100.0)
+        legFkikInputAttr = FloatAttribute('fkik', 0.0, 0.0, 1.0)
+        legSoftIKInputAttr = BoolAttribute('softIK', True)
+        legSoftDistInputAttr = FloatAttribute('softDist', 0.0, 0.0, 1.0)
+        legStretchInputAttr = BoolAttribute('stretch', True)
+        legStretchBlendInputAttr = FloatAttribute('stretchBlend', 0.0, 0.0, 1.0)
+
+        legSettingsAttrGrp = AttributeGroup("DisplayInfo_LegSettings")
+        legIKCtrl.addAttributeGroup(legSettingsAttrGrp)
+        legSettingsAttrGrp.addAttribute(legDebugInputAttr)
+        legSettingsAttrGrp.addAttribute(legBone1LenInputAttr)
+        legSettingsAttrGrp.addAttribute(legBone2LenInputAttr)
+        legSettingsAttrGrp.addAttribute(legFkikInputAttr)
+        legSettingsAttrGrp.addAttribute(legSoftIKInputAttr)
+        legSettingsAttrGrp.addAttribute(legSoftDistInputAttr)
+        legSettingsAttrGrp.addAttribute(legStretchInputAttr)
+        legSettingsAttrGrp.addAttribute(legStretchBlendInputAttr)
+
+
         # UpV
         upVXfo = xfoFromDirAndUpV(femurPosition, anklePosition, kneePosition)
         upVXfo.tr.copy(kneePosition)
@@ -152,6 +178,16 @@ class LegComponent(BaseComponent):
         stretchInputAttr = BoolAttribute('stretch', True)
         stretchBlendInputAttr = FloatAttribute('stretchBlend', 0.0, 0.0, 1.0)
         rightSideInputAttr = BoolAttribute('rightSide', False)
+
+        # Connect attrs to control attrs
+        debugInputAttr.connect(legDebugInputAttr)
+        bone1LenInputAttr.connect(legBone1LenInputAttr)
+        bone2LenInputAttr.connect(legBone2LenInputAttr)
+        fkikInputAttr.connect(legFkikInputAttr)
+        softIKInputAttr.connect(legSoftIKInputAttr)
+        softDistInputAttr.connect(legSoftDistInputAttr)
+        stretchInputAttr.connect(legStretchInputAttr)
+        stretchBlendInputAttr.connect(legStretchBlendInputAttr)
 
 
         # ==============
@@ -241,5 +277,5 @@ class LegComponent(BaseComponent):
 
 
 if __name__ == "__main__":
-    legLeft = LegComponent("myArm", side='L')
+    legLeft = LegComponent("myLeg", side='L')
     print legLeft.getNumChildren()
