@@ -236,6 +236,8 @@ class Builder(BaseBuilder):
         parentDCCSceneItem.addAttr(kAttribute.getName(), niceName=kAttribute.getName(), attributeType="bool", defaultValue=kAttribute.getValue(), keyable=True)
         dccSceneItem = parentDCCSceneItem.attr(kAttribute.getName())
 
+        print dccSceneItem
+
         self._registerSceneItemPair(kAttribute, dccSceneItem)
 
         return True
@@ -255,8 +257,6 @@ class Builder(BaseBuilder):
         parentDCCSceneItem = self._getDCCSceneItem(kAttribute.getParent().getParent())
         parentDCCSceneItem.addAttr(kAttribute.getName(), niceName=kAttribute.getName(), attributeType="float", defaultValue=kAttribute.getValue(), minValue=kAttribute.min, maxValue=kAttribute.max, keyable=True)
         dccSceneItem = parentDCCSceneItem.attr(kAttribute.getName())
-
-        # dccSceneItem = parentDCCSceneItem + "." + kAttribute.getName()
 
         self._registerSceneItemPair(kAttribute, dccSceneItem)
 
@@ -327,6 +327,50 @@ class Builder(BaseBuilder):
         pm.setAttr(parentDCCSceneItem + "." + groupName, lock=True)
 
         self._registerSceneItemPair(kAttributeGroup, dccSceneItem)
+
+         # Create Attributes on this Attribute Group
+        for i in xrange(kAttributeGroup.getNumAttributes()):
+            kAttribute = kAttributeGroup.getAttributeByIndex(i)
+            kType = kAttribute.getKType()
+
+            if kType == "BoolAttribute":
+                self.buildBoolAttribute(kAttribute)
+
+            elif kType == "FloatAttribute":
+                self.buildFloatAttribute(kAttribute)
+
+            elif kType == "IntegerAttribute":
+                self.buildIntegerAttribute(kAttribute)
+
+            elif kType == "StringAttribute":
+                self.buildStringAttribute(kAttribute)
+
+            else:
+                raise NotImplementedError(kAttribute.getName() + ' has an unsupported type: ' + str(type(kAttribute)))
+
+        return True
+
+
+    def connectAttribute(self, kAttribute):
+        """Connects the driver attribute to this one.
+
+        Arguments:
+        kAttribute -- Object, attribute to connect.
+
+        Return:
+        True if successful.
+
+        """
+
+        if kAttribute.isConnected() is True:
+            print kAttribute.getFullName()
+            print self._getDCCSceneItem(kAttribute.getConnection())
+            print self._getDCCSceneItem(kAttribute)
+
+            driver = self._getDCCSceneItem(kAttribute.getConnection())
+            driven = self._getDCCSceneItem(kAttribute)
+
+            pm.connectAttr(driver, driven, force=True)
 
         return True
 
@@ -421,9 +465,6 @@ class Builder(BaseBuilder):
         True if successful.
 
         """
-
-        source = kConnection.getSource()
-        target = kConnection.getTarget()
 
         sourceDCCSceneItem = self._getDCCSceneItem(kConnection.getSource())
         targetDCCSceneItem = self._getDCCSceneItem(kConnection.getTarget())

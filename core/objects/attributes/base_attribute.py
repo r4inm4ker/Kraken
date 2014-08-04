@@ -15,6 +15,7 @@ class BaseAttribute(object):
         self.name = name
         self.value = value
         self.parent = None
+        self.connection = None
 
 
     # =============
@@ -46,6 +47,7 @@ class BaseAttribute(object):
 
         return self.name
 
+
     def getFullName(self):
         """Returns the full hierarchical path to this object.
 
@@ -53,11 +55,12 @@ class BaseAttribute(object):
         String, full name of the object.
 
         """
-            
+
         if self.parent is not None:
             return self.parent.getFullName() + '.' + self.getName()
-            
+
         return self.getName()
+
 
     # ==============
     # Value Methods
@@ -119,6 +122,62 @@ class BaseAttribute(object):
         return True
 
 
+    # ===================
+    # Connection Methods
+    # ===================
+    def isConnected(self):
+        """Returns whether the attribute is connected or not.
+
+        Return:
+        True if successful.
+
+        """
+
+        if self.connection is None:
+            return False
+
+        return True
+
+    def getConnection(self):
+        """Returns the connected attribute.
+
+        Return:
+        Object, attribute driving this attribute.
+
+        """
+
+        return self.connection
+
+
+    def connect(self, attribute):
+        """Connects this attribute with another.
+
+        Arguments:
+        attribute -- Object, attribute that will drive this one.
+
+        Return:
+        True if successful.
+
+        """
+
+        self.connection = attribute
+
+        return True
+
+
+    def disconnect(self):
+        """Clears the connection of this attribute.
+
+        Return:
+        True if successful.
+
+        """
+
+        self.connection = None
+
+        return True
+
+
     # ==============
     # kType Methods
     # ==============
@@ -133,11 +192,9 @@ class BaseAttribute(object):
         return self.__kType__
 
 
-
-    # ================
+    # ====================
     # Persistence Methods
-    # ================
-
+    # ====================
     def jsonEncode(self, saver):
         """Sets the color of this object.
 

@@ -3,6 +3,7 @@ from kraken.core.maths.xfo import Xfo
 from kraken.core.maths.xfo import xfoFromDirAndUpV
 
 from kraken.core.objects.components.base_component import BaseComponent
+from kraken.core.objects.attributes.attribute_group import AttributeGroup
 from kraken.core.objects.attributes.bool_attribute import BoolAttribute
 from kraken.core.objects.attributes.float_attribute import FloatAttribute
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
@@ -84,8 +85,11 @@ class ArmComponent(BaseComponent):
         forearmFKCtrlSrtBuffer.addChild(forearmFKCtrl)
 
         # Arm IK
-        armIKCtrl = PinControl('IK')
-        armIKCtrl.xfo.tr.copy(wristPosition)
+        armIKCtrlSrtBuffer = SrtBuffer('IK', parent=self)
+        armIKCtrlSrtBuffer.xfo.tr.copy(wristPosition)
+
+        armIKCtrl = PinControl('IK', parent=armIKCtrlSrtBuffer)
+        armIKCtrl.xfo.copy(armIKCtrlSrtBuffer.xfo)
 
         if self.getSide() == "R":
             armIKCtrl.rotatePoints(0, 90, 0)
@@ -94,10 +98,26 @@ class ArmComponent(BaseComponent):
 
         armIKCtrl.setColor(ctrlColor)
 
-        armIKCtrlSrtBuffer = SrtBuffer('IK')
-        self.addChild(armIKCtrlSrtBuffer)
-        armIKCtrlSrtBuffer.xfo.copy(armIKCtrl.xfo)
-        armIKCtrlSrtBuffer.addChild(armIKCtrl)
+        # Add Component Params to IK control
+        armDebugInputAttr = BoolAttribute('debug', True)
+        armBone1LenInputAttr = FloatAttribute('bone1Len', bicepLen, 0.0, 100.0)
+        armBone2LenInputAttr = FloatAttribute('bone2Len', forearmLen, 0.0, 100.0)
+        armFkikInputAttr = FloatAttribute('fkik', 0.0, 0.0, 1.0)
+        armSoftIKInputAttr = BoolAttribute('softIK', True)
+        armSoftDistInputAttr = FloatAttribute('softDist', 0.5, 0.0, 1.0)
+        armStretchInputAttr = BoolAttribute('stretch', True)
+        armStretchBlendInputAttr = FloatAttribute('stretchBlend', 0.0, 0.0, 1.0)
+
+        armSettingsAttrGrp = AttributeGroup("DisplayInfo_ArmSettings")
+        armIKCtrl.addAttributeGroup(armSettingsAttrGrp)
+        armSettingsAttrGrp.addAttribute(armDebugInputAttr)
+        armSettingsAttrGrp.addAttribute(armBone1LenInputAttr)
+        armSettingsAttrGrp.addAttribute(armBone2LenInputAttr)
+        armSettingsAttrGrp.addAttribute(armFkikInputAttr)
+        armSettingsAttrGrp.addAttribute(armSoftIKInputAttr)
+        armSettingsAttrGrp.addAttribute(armSoftDistInputAttr)
+        armSettingsAttrGrp.addAttribute(armStretchInputAttr)
+        armSettingsAttrGrp.addAttribute(armStretchBlendInputAttr)
 
         # UpV
         upVXfo = xfoFromDirAndUpV(bicepPosition, wristPosition, forearmPosition)
@@ -161,6 +181,16 @@ class ArmComponent(BaseComponent):
         stretchInputAttr = BoolAttribute('stretch', True)
         stretchBlendInputAttr = FloatAttribute('stretchBlend', 0.0, 0.0, 1.0)
         rightSideInputAttr = BoolAttribute('rightSide', False)
+
+        # Connect attrs to control attrs
+        debugInputAttr.connect(armDebugInputAttr)
+        bone1LenInputAttr.connect(armBone1LenInputAttr)
+        bone2LenInputAttr.connect(armBone2LenInputAttr)
+        fkikInputAttr.connect(armFkikInputAttr)
+        softIKInputAttr.connect(armSoftIKInputAttr)
+        softDistInputAttr.connect(armSoftDistInputAttr)
+        stretchInputAttr.connect(armStretchInputAttr)
+        stretchBlendInputAttr.connect(armStretchBlendInputAttr)
 
 
         # ==============

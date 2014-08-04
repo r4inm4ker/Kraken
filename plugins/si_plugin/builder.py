@@ -335,15 +335,12 @@ class Builder(BaseBuilder):
             groupName = "Settings"
 
         dccSceneItem = parentDCCSceneItem.AddProperty("CustomParameterSet", False, groupName)
-
         self._registerSceneItemPair(kAttributeGroup, dccSceneItem)
 
         # Create Attributes on this Attribute Group
         for i in xrange(kAttributeGroup.getNumAttributes()):
             kAttribute = kAttributeGroup.getAttributeByIndex(i)
             kType = kAttribute.getKType()
-
-            continue
 
             if kType == "BoolAttribute":
                 self.buildBoolAttribute(kAttribute)
@@ -360,6 +357,24 @@ class Builder(BaseBuilder):
             else:
                 raise NotImplementedError(kAttribute.getName() + ' has an unsupported type: ' + str(type(kAttribute)))
 
+        return True
+
+
+    def connectAttribute(self, kAttribute):
+        """Connects the driver attribute to this one.
+
+        Arguments:
+        kAttribute -- Object, attribute to connect.
+
+        Return:
+        True if successful.
+
+        """
+
+        if kAttribute.isConnected() is True:
+            driver = self._getDCCSceneItem(kAttribute.getConnection())
+            driven = self._getDCCSceneItem(kAttribute)
+            driven.AddExpression(driver.FullName)
 
         return True
 

@@ -277,6 +277,20 @@ class BaseBuilder(object):
         return True
 
 
+    def connectAttribute(self, kAttribute):
+        """Connects the driver attribute to this one.
+
+        Arguments:
+        kAttribute -- Object, attribute to connect.
+
+        Return:
+        True if successful.
+
+        """
+
+        return True
+
+
     # =========================
     # Constraint Build Methods
     # =========================
@@ -435,22 +449,6 @@ class BaseBuilder(object):
                 continue
 
             self.buildAttributeGroup(attributeGroup)
-
-            for j in xrange(attributeCount):
-                attribute = attributeGroup.getAttributeByIndex(j)
-                kType = attribute.getKType()
-
-                if kType == "FloatAttribute":
-                    self.buildFloatAttribute(attribute)
-
-                elif kType == "BoolAttribute":
-                    self.buildBoolAttribute(attribute)
-
-                elif kType == "IntegerAttribute":
-                    self.buildIntegerAttribute(attribute)
-
-                elif kType == "StringAttribute":
-                    self.buildStringAttribute(attribute)
 
         return True
 
@@ -613,6 +611,34 @@ class BaseBuilder(object):
         return True
 
 
+    def buildAttrConnections(self, kObject):
+        """Builds the connections between the component inputs and outputs of each
+        component.
+
+        Arguments:
+        kObject -- Object, kraken object to create connections for.
+
+        Return:
+        True if successful.
+
+        """
+
+        # Build input connections
+        for i in xrange(kObject.getNumAttributeGroups()):
+            attributeGroup = kObject.getAttributeGroupByIndex(i)
+
+            for y in xrange(attributeGroup.getNumAttributes()):
+                attribute = attributeGroup.getAttributeByIndex(y)
+                self.connectAttribute(attribute)
+
+        # Build connections for children.
+        for i in xrange(kObject.getNumChildren()):
+            child = kObject.getChildByIndex(i)
+            self.buildAttrConnections(child)
+
+        return True
+
+
     def buildOperators(self, kObject):
         """Build operators in the hierarchy.
 
@@ -738,6 +764,7 @@ class BaseBuilder(object):
 
         self.buildHierarchy(kSceneItem, component=None)
         self.buildConstraints(kSceneItem)
+        self.buildAttrConnections(kSceneItem)
         self.buildIOConnections(kSceneItem)
         self.buildOperators(kSceneItem)
 
@@ -774,7 +801,6 @@ class BaseBuilder(object):
         """
 
         return True
-
 
 
     # ==============================

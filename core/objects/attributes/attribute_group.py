@@ -10,7 +10,7 @@ class AttributeGroup(object):
 
     __kType__ = "AttributeGroup"
 
-    def __init__(self, name, parent = None):
+    def __init__(self, name, parent=None):
         super(AttributeGroup, self).__init__()
         self.name = name
         self.attributes = []
@@ -47,7 +47,6 @@ class AttributeGroup(object):
         return self.name
 
 
-
     def getFullName(self):
         """Returns the full hierarchical path to this object.
 
@@ -55,11 +54,12 @@ class AttributeGroup(object):
         String, full name of the object.
 
         """
-            
+
         if self.parent is not None:
-            return self.parent.getFullName() + '.' + self.getName() 
-            
+            return self.parent.getFullName() + '.' + self.getName()
+
         return self.getName()
+
 
     # ===============
     # Parent Methods
@@ -237,12 +237,9 @@ class AttributeGroup(object):
         return None
 
 
-
-
-    # ================
+    # ====================
     # Persistence Methods
-    # ================
-
+    # ====================
     def jsonEncode(self, saver):
         """Returns the data for this object encoded as a JSON hierarchy.
 
