@@ -132,7 +132,7 @@ class SpineComponent(BaseComponent):
         spineEndOutput.xfo.tr.copy(spine03Ctrl.xfo.tr)
 
         # Setup componnent Attribute I/O's
-        debugInputAttr = BoolAttribute('debug', False)
+        debugInputAttr = BoolAttribute('debug', True)
 
 
         # ==============
@@ -186,6 +186,27 @@ class SpineComponent(BaseComponent):
         spliceOp.setOutput("spine02Out", spine02Output)
         spliceOp.setOutput("spine03Out", spine03Output)
         spliceOp.setOutput("spine04Out", spine04Output)
+
+
+        # Add Deformer Splice Op
+        spliceOp = SpliceOperator("spineDeformerSpliceOp", "SpineConstraintSolver", "KrakenSpineSolver")
+        self.addOperator(spliceOp)
+
+        # Add Att Inputs
+        spliceOp.setInput("debug", debugInputAttr)
+
+        # Add Xfo Inputstrl)
+        spliceOp.setInput("bone01Constrainer", spine01Output)
+        spliceOp.setInput("bone02Constrainer", spine02Output)
+        spliceOp.setInput("bone03Constrainer", spine03Output)
+        spliceOp.setInput("bone04Constrainer", spine04Output)
+
+        # Add Xfo Outputs
+        spliceOp.setOutput("bone01Deformer", spine01Def)
+        spliceOp.setOutput("bone02Deformer", spine02Def)
+        spliceOp.setOutput("bone03Deformer", spine03Def)
+        spliceOp.setOutput("bone04Deformer", spine04Def)
+
 
 
     def buildRig(self, parent):

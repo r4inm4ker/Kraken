@@ -143,7 +143,7 @@ class LegComponent(BaseComponent):
         legEndOutput.xfo.tr.copy(anklePosition)
 
         # Setup componnent Attribute I/O's
-        debugInputAttr = BoolAttribute('debug', False)
+        debugInputAttr = BoolAttribute('debug', True)
         bone1LenInputAttr = FloatAttribute('bone1Len', femurLen, 0.0, 100.0)
         bone2LenInputAttr = FloatAttribute('bone2Len', shinLen, 0.0, 100.0)
         fkikInputAttr = FloatAttribute('fkik', 0.0, 0.0, 1.0)
@@ -216,6 +216,24 @@ class LegComponent(BaseComponent):
         spliceOp.setOutput("bone01Out", femurOutput)
         spliceOp.setOutput("bone02Out", shinOutput)
         spliceOp.setOutput("bone03Out", legEndOutput)
+
+
+        # Add Deformer Splice Op
+        spliceOp = SpliceOperator("legDeformerSpliceOp", "LimbConstraintSolver", "KrakenLimbSolver")
+        self.addOperator(spliceOp)
+
+        # Add Att Inputs
+        spliceOp.setInput("debug", debugInputAttr)
+
+        # Add Xfo Inputstrl)
+        spliceOp.setInput("bone01Constrainer", femurOutput)
+        spliceOp.setInput("bone02Constrainer", shinOutput)
+        spliceOp.setInput("bone03Constrainer", legEndOutput)
+
+        # Add Xfo Outputs
+        spliceOp.setOutput("bone01Deformer", femurDef)
+        spliceOp.setOutput("bone02Deformer", shinDef)
+        spliceOp.setOutput("bone03Deformer", ankleDef)
 
 
     def buildRig(self, parent):

@@ -1,5 +1,6 @@
 {
   "code": [
-           "KrakenLimbSolver.kl"
+           "KrakenLimbSolver.kl",
+           "KrakenLimbConstraintSolver.kl"
           ]
 }

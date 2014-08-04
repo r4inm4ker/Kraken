@@ -152,7 +152,7 @@ class ArmComponent(BaseComponent):
         armEndOutput.xfo.tr.copy(wristPosition)
 
         # Setup componnent Attribute I/O's
-        debugInputAttr = BoolAttribute('debug', False)
+        debugInputAttr = BoolAttribute('debug', True)
         bone1LenInputAttr = FloatAttribute('bone1Len', bicepLen, 0.0, 100.0)
         bone2LenInputAttr = FloatAttribute('bone2Len', forearmLen, 0.0, 100.0)
         fkikInputAttr = FloatAttribute('fkik', 0.0, 0.0, 1.0)
@@ -199,7 +199,7 @@ class ArmComponent(BaseComponent):
         # ===============
         # Add Splice Ops
         # ===============
-        # Add Splice Op
+        # Add Solver Splice Op
         spliceOp = SpliceOperator("armSpliceOp", "LimbSolver", "KrakenLimbSolver")
         self.addOperator(spliceOp)
 
@@ -225,6 +225,24 @@ class ArmComponent(BaseComponent):
         spliceOp.setOutput("bone01Out", bicepOutput)
         spliceOp.setOutput("bone02Out", forearmOutput)
         spliceOp.setOutput("bone03Out", armEndOutput)
+
+
+        # Add Deformer Splice Op
+        spliceOp = SpliceOperator("armDeformerSpliceOp", "LimbConstraintSolver", "KrakenLimbSolver")
+        self.addOperator(spliceOp)
+
+        # Add Att Inputs
+        spliceOp.setInput("debug", debugInputAttr)
+
+        # Add Xfo Inputstrl)
+        spliceOp.setInput("bone01Constrainer", bicepOutput)
+        spliceOp.setInput("bone02Constrainer", forearmOutput)
+        spliceOp.setInput("bone03Constrainer", armEndOutput)
+
+        # Add Xfo Outputs
+        spliceOp.setOutput("bone01Deformer", bicepDef)
+        spliceOp.setOutput("bone02Deformer", forearmDef)
+        spliceOp.setOutput("bone03Deformer", wristDef)
 
 
     def buildRig(self, parent):

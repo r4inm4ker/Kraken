@@ -1,0 +1,51 @@
+require Math;
+require Kraken;
+require InlineDrawing;
+require DrawingUtils;
+
+object PoseConstraintSolver : KrakenSolver {
+  Boolean debug;
+  InlineTransform rootTransform;
+};
+
+
+// Default Constructor
+inline PoseConstraintSolver() {
+  this.debug = false;
+
+  InlineDrawing draw = OGLInlineDrawing_GetInstance();
+  this.rootTransform = StaticInlineTransform('BonePoseConstraintSolver', Xfo());
+  draw.getRoot().addChild(this.rootTransform);
+}
+
+
+// Return Arguments for Kraken
+function KrakenSolverArg[] PoseConstraintSolver.getArguments(){
+  KrakenSolverArg args[];
+  args.push(KrakenSolverArg('debug', 'in', 'Boolean'));
+  args.push(KrakenSolverArg('constrainer', 'in', 'Mat44'));
+  args.push(KrakenSolverArg('constrainee', 'io', 'Mat44'));
+  return args;
+}
+
+
+// Solve
+function PoseConstraintSolver.solve!
+(
+  in Boolean debug,
+  in Mat44 constrainer,
+  io Mat44 constrainee
+  )
+{
+  this.debug = debug;
+  constrainee = constrainer;
+
+  Xfo debugXfo;
+  debugXfo = constrainer;
+
+  // Debugging
+  if (this.debug) {
+    etDrawBone(this.rootTransform, 'singleBone', debugXfo, 2.0, 0.25, Color(0, 0.5, 0));
+  }
+
+}

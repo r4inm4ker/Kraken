@@ -10,6 +10,7 @@ from kraken.core.objects.joint import Joint
 from kraken.core.objects.srtBuffer import SrtBuffer
 from kraken.core.objects.controls.cube_control  import CubeControl
 
+from kraken.core.objects.operators.splice_operator import SpliceOperator
 
 class ClavicleComponent(BaseComponent):
     """Clavicle Component"""
@@ -87,6 +88,7 @@ class ClavicleComponent(BaseComponent):
         clavicleOutput.xfo.copy(clavicleXfo)
 
         # Setup componnent Attribute I/O's
+        debugInputAttr = BoolAttribute('debug', True)
         armFollowBodyOutputAttr = FloatAttribute('followBody', 0.0, 0.0, 1.0)
 
 
@@ -100,6 +102,10 @@ class ClavicleComponent(BaseComponent):
         clavicleCtrlSrtBuffer.addConstraint(clavicleInputConstraint)
 
         # Constraint outputs
+        clavicleConstraint = PoseConstraint('_'.join([clavicleOutput.getName(), 'To', clavicleCtrl.getName()]))
+        clavicleConstraint.addConstrainer(clavicleCtrl)
+        clavicleOutput.addConstraint(clavicleConstraint)
+
         clavicleEndConstraint = PoseConstraint('_'.join([clavicleEndOutput.getName(), 'To', clavicleCtrl.getName()]))
         clavicleEndConstraint.addConstrainer(clavicleCtrl)
         clavicleEndOutput.addConstraint(clavicleEndConstraint)
@@ -114,12 +120,25 @@ class ClavicleComponent(BaseComponent):
         self.addOutput(clavicleOutput)
 
         # Add Attribute I/O's
+        self.addInput(debugInputAttr)
         self.addOutput(armFollowBodyOutputAttr)
 
 
         # ===============
         # Add Splice Ops
         # ===============
+        # Add Deformer Splice Op
+        spliceOp = SpliceOperator("clavicleDeformerSpliceOp", "PoseConstraintSolver", "KrakenPoseConstraintSolver")
+        self.addOperator(spliceOp)
+
+        # Add Att Inputs
+        spliceOp.setInput("debug", debugInputAttr)
+
+        # Add Xfo Inputstrl)
+        spliceOp.setInput("constrainer", clavicleOutput)
+
+        # Add Xfo Outputs
+        spliceOp.setOutput("constrainee", clavicleDef)
 
 
     def buildRig(self, parent):
