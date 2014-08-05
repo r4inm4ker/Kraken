@@ -90,6 +90,7 @@ class ClavicleComponent(BaseComponent):
 
         # Setup componnent Attribute I/O's
         debugInputAttr = BoolAttribute('debug', True)
+        rightSideInputAttr = BoolAttribute('rightSide', side is 'R')
         armFollowBodyOutputAttr = FloatAttribute('followBody', 0.0, 0.0, 1.0)
 
 
@@ -122,6 +123,7 @@ class ClavicleComponent(BaseComponent):
 
         # Add Attribute I/O's
         self.addInput(debugInputAttr)
+        self.addInput(rightSideInputAttr)
         self.addOutput(armFollowBodyOutputAttr)
 
 
@@ -134,6 +136,7 @@ class ClavicleComponent(BaseComponent):
 
         # Add Att Inputs
         spliceOp.setInput("debug", debugInputAttr)
+        spliceOp.setInput("rightSide", rightSideInputAttr)
 
         # Add Xfo Inputstrl)
         spliceOp.setInput("constrainer", clavicleOutput)

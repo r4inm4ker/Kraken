@@ -77,6 +77,7 @@ class NeckComponent(BaseComponent):
 
         # Setup componnent Attribute I/O's
         debugInputAttr = BoolAttribute('debug', True)
+        rightSideInputAttr = BoolAttribute('rightSide', side is 'R')
 
 
         # ==============
@@ -104,6 +105,7 @@ class NeckComponent(BaseComponent):
 
         # Add Attribute I/O's
         self.addInput(debugInputAttr)
+        self.addInput(rightSideInputAttr)
 
 
         # ===============
@@ -115,6 +117,7 @@ class NeckComponent(BaseComponent):
 
         # Add Att Inputs
         spliceOp.setInput("debug", debugInputAttr)
+        spliceOp.setInput("rightSide", rightSideInputAttr)
 
         # Add Xfo Inputstrl)
         spliceOp.setInput("constrainer", neckEndOutput)

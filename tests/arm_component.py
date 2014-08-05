@@ -180,7 +180,7 @@ class ArmComponent(BaseComponent):
         softDistInputAttr = FloatAttribute('softDist', 0.5, 0.0, 1.0)
         stretchInputAttr = BoolAttribute('stretch', True)
         stretchBlendInputAttr = FloatAttribute('stretchBlend', 0.0, 0.0, 1.0)
-        rightSideInputAttr = BoolAttribute('rightSide', False)
+        rightSideInputAttr = BoolAttribute('rightSide', side is 'R')
 
         # Connect attrs to control attrs
         debugInputAttr.connect(armDebugInputAttr)

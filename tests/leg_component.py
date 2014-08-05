@@ -101,7 +101,7 @@ class LegComponent(BaseComponent):
         legDebugInputAttr = BoolAttribute('debug', True)
         legBone1LenInputAttr = FloatAttribute('bone1Len', femurLen, 0.0, 100.0)
         legBone2LenInputAttr = FloatAttribute('bone2Len', shinLen, 0.0, 100.0)
-        legFkikInputAttr = FloatAttribute('fkik', 0.0, 0.0, 1.0)
+        legFkikInputAttr = FloatAttribute('fkik', 1.0, 0.0, 1.0)
         legSoftIKInputAttr = BoolAttribute('softIK', True)
         legSoftDistInputAttr = FloatAttribute('softDist', 0.0, 0.0, 1.0)
         legStretchInputAttr = BoolAttribute('stretch', True)
@@ -172,12 +172,12 @@ class LegComponent(BaseComponent):
         debugInputAttr = BoolAttribute('debug', True)
         bone1LenInputAttr = FloatAttribute('bone1Len', femurLen, 0.0, 100.0)
         bone2LenInputAttr = FloatAttribute('bone2Len', shinLen, 0.0, 100.0)
-        fkikInputAttr = FloatAttribute('fkik', 0.0, 0.0, 1.0)
+        fkikInputAttr = FloatAttribute('fkik', 1.0, 0.0, 1.0)
         softIKInputAttr = BoolAttribute('softIK', True)
         softDistInputAttr = FloatAttribute('softDist', 0.5, 0.0, 1.0)
         stretchInputAttr = BoolAttribute('stretch', True)
         stretchBlendInputAttr = FloatAttribute('stretchBlend', 0.0, 0.0, 1.0)
-        rightSideInputAttr = BoolAttribute('rightSide', False)
+        rightSideInputAttr = BoolAttribute('rightSide', side is 'R')
 
         # Connect attrs to control attrs
         debugInputAttr.connect(legDebugInputAttr)

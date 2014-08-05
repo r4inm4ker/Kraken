@@ -78,7 +78,7 @@ function LimbSolver.solve!
   this.twoBoneChain.softDist = softDist;
   this.twoBoneChain.stretch = stretch;
   this.twoBoneChain.stretchBlend = stretchBlend;
-  this.twoBoneChain.rightSide = rightSide;
+  // this.twoBoneChain.rightSide = rightSide;
   this.twoBoneChain.root = root;
   this.twoBoneChain.bone1FK = bone1FK;
   this.twoBoneChain.bone2FK = bone2FK;
@@ -100,11 +100,19 @@ function LimbSolver.solve!
   bone03DebugXfo = bone03Out;
 
   // Setup debug shapes
-  etDrawBone(this.rootTransform, 'bone01', bone01DebugXfo, this.twoBoneChain.bone1Len, 0.25, Color(0, 0.5, 0));
-  etDrawBone(this.rootTransform, 'bone02', bone02DebugXfo, this.twoBoneChain.bone2Len, 0.25, Color(0, 0.5, 0));
-  etDrawBone(this.rootTransform, 'bone03', bone03DebugXfo, 1, 0.25, Color(0, 0.5, 0));
+  Color boneColor = Color(1.0, 0.5, 0);
+  if(rightSide) {
+    boneColor.set(0.5, 0, 0, 1.0);
+  }
+  else {
+    boneColor.set(0, 0.5, 0, 1.0);
+  }
+
+  etDrawBone(this.rootTransform, 'bone01', bone01DebugXfo, this.twoBoneChain.bone1Len, 0.25, boneColor);
+  etDrawBone(this.rootTransform, 'bone02', bone02DebugXfo, this.twoBoneChain.bone2Len, 0.25, boneColor);
+  etDrawBone(this.rootTransform, 'bone03', bone03DebugXfo, 1, 0.25, boneColor);
   drawLine(this.rootTransform, 'upVLine', bone02Out.translation(), this.twoBoneChain.upV.translation(), Color(1.0, 1.0, 0));
-  etDrawSegmentedLine(this.rootTransform, 'rootToEffLine', Xfo(), this.twoBoneChain.outMatrices[0].translation, this.twoBoneChain.outMatrices[2].translation, 12, 0.5, Color(0.0, 0.0, 1.0));
+  // etDrawSegmentedLine(this.rootTransform, 'rootToEffLine', Xfo(), this.twoBoneChain.outMatrices[0].translation, this.twoBoneChain.outMatrices[2].translation, 12, 0.5, Color(0.0, 0.0, 1.0));
 
   // Set debugging visibility.
   this.setDebug(this.debug);
