@@ -99,16 +99,41 @@ function LimbSolver.solve!
   bone02DebugXfo = bone02Out;
   bone03DebugXfo = bone03Out;
 
-  // Debugging
-  if (this.debug) {
-    etDrawBone(this.rootTransform, 'bone01', bone01DebugXfo, this.twoBoneChain.bone1Len, 0.25, Color(0, 0.5, 0));
-    etDrawBone(this.rootTransform, 'bone02', bone02DebugXfo, this.twoBoneChain.bone2Len, 0.25, Color(0, 0.5, 0));
-    etDrawBone(this.rootTransform, 'bone03', bone03DebugXfo, 1, 0.25, Color(0, 0.5, 0));
+  // Setup debug shapes
+  etDrawBone(this.rootTransform, 'bone01', bone01DebugXfo, this.twoBoneChain.bone1Len, 0.25, Color(0, 0.5, 0));
+  etDrawBone(this.rootTransform, 'bone02', bone02DebugXfo, this.twoBoneChain.bone2Len, 0.25, Color(0, 0.5, 0));
+  etDrawBone(this.rootTransform, 'bone03', bone03DebugXfo, 1, 0.25, Color(0, 0.5, 0));
+  drawLine(this.rootTransform, 'upVLine', bone02Out.translation(), this.twoBoneChain.upV.translation(), Color(1.0, 1.0, 0));
+  etDrawSegmentedLine(this.rootTransform, 'rootToEffLine', Xfo(), this.twoBoneChain.outMatrices[0].translation, this.twoBoneChain.outMatrices[2].translation, 12, 0.5, Color(0.0, 0.0, 1.0));
 
-    drawLine(this.rootTransform, 'upVLine', bone02Out.translation(), this.twoBoneChain.upV.translation(), Color(1.0, 1.0, 0));
-  }
-  else {
-    // Figure out how to hide the shapes!!!
-  }
+  // Set debugging visibility.
+  this.setDebug(this.debug);
 
+}
+
+
+function LimbSolver.setDebug!(in Boolean active) {
+
+  for(Size i=0; i<this.rootTransform.getChildCount(); i++) {
+
+      InlineTransform transform = this.rootTransform.getChild(i);
+      if(transform) {
+
+        for(Size y=0; y<transform.getChildCount(); y++) {
+
+          InlineInstance instance = transform.getChild(y);
+          if(instance) {
+
+            if(!active) {
+              instance.setActive(false);
+            }
+            else if(active) {
+              instance.setActive(true);
+            }
+
+          }
+        }
+      }
+
+    }
 }
