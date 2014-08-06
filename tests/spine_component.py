@@ -56,7 +56,7 @@ class SpineComponent(BaseComponent):
 
         # Spine02
         spine02Ctrl = CircleControl('spine02')
-        spine02Ctrl.scalePoints(Vec3(3.0, 3.0, 3.0))
+        spine02Ctrl.scalePoints(Vec3(4.5, 4.5, 4.5))
         spine02Ctrl.xfo.tr.copy(spine02Position)
         spine02Ctrl.setColor("blue")
 
@@ -67,7 +67,7 @@ class SpineComponent(BaseComponent):
 
         # Spine03
         spine03Ctrl = CircleControl('spine03')
-        spine03Ctrl.scalePoints(Vec3(3.0, 3.0, 3.0))
+        spine03Ctrl.scalePoints(Vec3(4.5, 4.5, 4.5))
         spine03Ctrl.xfo.tr.copy(spine03Position)
         spine03Ctrl.setColor("blue")
 
@@ -77,7 +77,7 @@ class SpineComponent(BaseComponent):
 
         # Spine04
         spine04Ctrl = CircleControl('spine04')
-        spine04Ctrl.scalePoints(Vec3(4.0, 4.0, 4.0))
+        spine04Ctrl.scalePoints(Vec3(6.0, 6.0, 6.0))
         spine04Ctrl.xfo.tr.copy(spine04Position)
         spine04Ctrl.setColor("yellow")
         spine04Ctrl.addChild(spine03CtrlSrtBuffer)

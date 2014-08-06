@@ -17,7 +17,7 @@
 
             "Solvers/KrakenSolverArg.kl",
             "Solvers/KrakenSolver.kl",
-            "Solvers/TwoBoneChainSolver.kl",
+            "Solvers/KrakenTwoBoneChainSolver.kl",
             "Solvers/KrakenHeadConstraintSolver.kl",
             "Solvers/KrakenLimbConstraintSolver.kl",
             "Solvers/KrakenLimbSolver.kl",

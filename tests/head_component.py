@@ -33,7 +33,7 @@ class HeadComponent(BaseComponent):
         # Head
         headCtrl = CircleControl('head')
         headCtrl.rotatePoints(0, 0, 90)
-        headCtrl.scalePoints(Vec3(2.5, 2.5, 2.5))
+        headCtrl.scalePoints(Vec3(3, 3, 3))
         headCtrl.translatePoints(Vec3(0, 1, 0.25))
         headCtrl.xfo.tr.copy(headPosition)
         headCtrl.setColor("yellow")
@@ -45,7 +45,7 @@ class HeadComponent(BaseComponent):
 
         # Eye Left
         eyeLeftCtrl = SphereControl('eyeLeft')
-        eyeLeftCtrl.scalePoints(Vec3(0.5, 0.5, 0.5))
+        eyeLeftCtrl.scalePoints(Vec3(0.75, 0.75, 0.75))
         eyeLeftCtrl.xfo.tr.copy(eyeLeftPosition)
         eyeLeftCtrl.setColor("blueMedium")
 
@@ -69,8 +69,8 @@ class HeadComponent(BaseComponent):
         jawCtrl = CubeControl('jaw')
         jawCtrl.alignOnYAxis(negative=True)
         jawCtrl.alignOnZAxis()
-        jawCtrl.scalePoints(Vec3(1.45, 0.65, 1))
-        jawCtrl.translatePoints(Vec3(0, 0, 0))
+        jawCtrl.scalePoints(Vec3(1.45, 0.65, 1.25))
+        jawCtrl.translatePoints(Vec3(0, -0.25, 0))
         jawCtrl.xfo.tr.copy(jawPosition)
         jawCtrl.setColor("orange")
 

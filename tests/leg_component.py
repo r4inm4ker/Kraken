@@ -66,7 +66,7 @@ class LegComponent(BaseComponent):
         femurFKCtrl = CubeControl('femurFK', parent=femurFKCtrlSrtBuffer)
         femurFKCtrl.alignOnXAxis()
         femurLen = femurPosition.subtract(kneePosition).length()
-        femurFKCtrl.scalePoints(Vec3(femurLen, 1.0, 1.0))
+        femurFKCtrl.scalePoints(Vec3(femurLen, 1.75, 1.75))
         femurFKCtrl.setColor(ctrlColor)
         femurFKCtrl.xfo.copy(femurXfo)
 
@@ -78,7 +78,7 @@ class LegComponent(BaseComponent):
         shinFKCtrl = CubeControl('shinFK', parent=shinFKCtrlSrtBuffer)
         shinFKCtrl.alignOnXAxis()
         shinLen = kneePosition.subtract(anklePosition).length()
-        shinFKCtrl.scalePoints(Vec3(shinLen, 1.0, 1.0))
+        shinFKCtrl.scalePoints(Vec3(shinLen, 1.5, 1.5))
         shinFKCtrl.setColor(ctrlColor)
         shinFKCtrl.xfo.copy(shinXfo)
 
@@ -88,6 +88,7 @@ class LegComponent(BaseComponent):
         legIKCtrlSrtBuffer.xfo.tr.copy(anklePosition)
 
         legIKCtrl = PinControl('IK', parent=legIKCtrlSrtBuffer)
+        shinFKCtrl.scalePoints(Vec3(1.0, 1.5, 1.5))
         legIKCtrl.xfo.tr.copy(anklePosition)
         legIKCtrl.setColor(ctrlColor)
 

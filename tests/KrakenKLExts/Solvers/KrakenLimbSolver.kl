@@ -3,7 +3,7 @@ require InlineDrawing;
 
 object LimbSolver : KrakenSolver {
   Boolean debug;
-  TwoBoneChainSolver twoBoneChain;
+  KrakenTwoBoneChainSolver twoBoneChain;
   InlineTransform rootTransform;
 };
 
@@ -67,7 +67,7 @@ function LimbSolver.solve!
 {
   this.debug = debug;
 
-  this.twoBoneChain = TwoBoneChainSolver();
+  this.twoBoneChain = KrakenTwoBoneChainSolver();
   this.twoBoneChain.bone1Len = bone1Len;
   this.twoBoneChain.bone2Len = bone2Len;
   this.twoBoneChain.fkik = fkik;

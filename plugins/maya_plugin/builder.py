@@ -236,8 +236,6 @@ class Builder(BaseBuilder):
         parentDCCSceneItem.addAttr(kAttribute.getName(), niceName=kAttribute.getName(), attributeType="bool", defaultValue=kAttribute.getValue(), keyable=True)
         dccSceneItem = parentDCCSceneItem.attr(kAttribute.getName())
 
-        print dccSceneItem
-
         self._registerSceneItemPair(kAttribute, dccSceneItem)
 
         return True
@@ -363,9 +361,6 @@ class Builder(BaseBuilder):
         """
 
         if kAttribute.isConnected() is True:
-            print kAttribute.getFullName()
-            print self._getDCCSceneItem(kAttribute.getConnection())
-            print self._getDCCSceneItem(kAttribute)
 
             driver = self._getDCCSceneItem(kAttribute.getConnection())
             driven = self._getDCCSceneItem(kAttribute)

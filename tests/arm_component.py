@@ -62,7 +62,7 @@ class ArmComponent(BaseComponent):
         bicepFKCtrl = CubeControl('bicepFK')
         bicepFKCtrl.alignOnXAxis()
         bicepLen = bicepPosition.subtract(forearmPosition).length()
-        bicepFKCtrl.scalePoints(Vec3(bicepLen, 1.0, 1.0))
+        bicepFKCtrl.scalePoints(Vec3(bicepLen, 1.75, 1.75))
         bicepFKCtrl.setColor(ctrlColor)
         bicepFKCtrl.xfo.copy(bicepXfo)
 
@@ -75,7 +75,7 @@ class ArmComponent(BaseComponent):
         forearmFKCtrl = CubeControl('forearmFK')
         forearmFKCtrl.alignOnXAxis()
         forearmLen = forearmPosition.subtract(wristPosition).length()
-        forearmFKCtrl.scalePoints(Vec3(forearmLen, 1.0, 1.0))
+        forearmFKCtrl.scalePoints(Vec3(forearmLen, 1.5, 1.5))
         forearmFKCtrl.setColor(ctrlColor)
         forearmFKCtrl.xfo.copy(forearmXfo)
 

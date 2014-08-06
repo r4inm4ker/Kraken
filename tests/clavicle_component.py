@@ -55,7 +55,13 @@ class ClavicleComponent(BaseComponent):
         clavicleCtrl = CubeControl('clavicle', parent=self)
         clavicleCtrl.alignOnXAxis()
         clavicleLen = claviclePosition.subtract(clavicleEndPosition).length()
-        clavicleCtrl.scalePoints(Vec3(clavicleLen, 1.0, 1.0))
+        clavicleCtrl.scalePoints(Vec3(clavicleLen, 0.75, 0.75))
+
+        if side == "R":
+            clavicleCtrl.translatePoints(Vec3(0.0, 0.0, -1.0))
+        else:
+            clavicleCtrl.translatePoints(Vec3(0.0, 0.0, 1.0))
+
         clavicleCtrl.xfo.copy(clavicleXfo)
         clavicleCtrl.setColor(ctrlColor)
 
