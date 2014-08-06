@@ -1,8 +1,5 @@
-require Math;
 require Kraken;
-require rig_Curves;
 require InlineDrawing;
-require DrawingUtils;
 
 object SpineSolver : KrakenSolver {
   Boolean debug;

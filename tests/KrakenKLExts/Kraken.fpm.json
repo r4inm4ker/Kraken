@@ -1,6 +1,28 @@
 {
   "code": [
-           "KrakenSolverArg.kl",
-           "KrakenSolver.kl"
+            "Curves/rig_Curves.kl",
+            "Curves/rig_BezierCurve.kl",
+            "Curves/rig_CatmullRom.kl",
+            "Curves/rig_closestLocationOnCurve.kl",
+
+            "Drawing/DrawingUtilityFunctions.kl",
+            "Drawing/DrawingUtils.kl",
+
+            "Geometry/Bone2.kl",
+
+            "Math/rig_Rotation.kl",
+            "Math/rig_MathUtils.kl",
+
+            "Shaders/OGLKrakenBoneShader.kl",
+
+            "Solvers/KrakenSolverArg.kl",
+            "Solvers/KrakenSolver.kl",
+            "Solvers/TwoBoneChainSolver.kl",
+            "Solvers/KrakenHeadConstraintSolver.kl",
+            "Solvers/KrakenLimbConstraintSolver.kl",
+            "Solvers/KrakenLimbSolver.kl",
+            "Solvers/KrakenPoseConstraintSolver.kl",
+            "Solvers/KrakenSpineConstraintSolver.kl",
+            "Solvers/KrakenSpineSolver.kl"
           ]
 }

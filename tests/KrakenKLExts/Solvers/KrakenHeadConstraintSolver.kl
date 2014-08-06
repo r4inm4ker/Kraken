@@ -1,7 +1,5 @@
-require Math;
 require Kraken;
 require InlineDrawing;
-require DrawingUtils;
 
 object HeadConstraintSolver : KrakenSolver {
   Boolean debug;

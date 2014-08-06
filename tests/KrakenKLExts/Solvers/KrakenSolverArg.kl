@@ -1,4 +1,4 @@
-require Math;
+require Kraken;
 
 struct KrakenSolverArg {
     String name;

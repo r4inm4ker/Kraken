@@ -24,7 +24,7 @@ function etDrawBone(
   in Color color)
 {
   InlineDrawing drawing = OGLInlineDrawing_GetInstance();
-  InlineShader shader = drawing.registerShader(OGLSurfaceShader('surface'));
+  InlineShader shader = drawing.registerShader(OGLSurfaceShader());
   InlineMaterial phong = shader.getOrCreateMaterial("phong");
 
   InlineTransform boneTransform = rootTransform.getChild(name);
@@ -39,4 +39,22 @@ function etDrawBone(
   else {
     boneTransform.setLocalXfo(0, xfo);
   }
+}
+
+
+function InlineLinesShape drawSegmentedLine(
+  io InlineTransform rootTransform,
+  in String name,
+  in Vec3 start,
+  in Vec3 end,
+  in Scalar segmentLength,
+  in Color color)
+{
+  InlineLinesShape linesShape = getOrCreateLines(rootTransform, name, color);
+  Lines lines = linesShape.getLines();
+  lines.clear();
+
+  // Integer numSegments = start.distanceTo(end) / segmentLength;
+  lines.addSegmentedLine(start, end, 12);
+  return linesShape;
 }

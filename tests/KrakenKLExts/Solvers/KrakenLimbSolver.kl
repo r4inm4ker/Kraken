@@ -1,8 +1,5 @@
-require Math;
 require Kraken;
-require TwoBoneChainSolver;
 require InlineDrawing;
-require DrawingUtils;
 
 object LimbSolver : KrakenSolver {
   Boolean debug;
@@ -108,13 +105,24 @@ function LimbSolver.solve!
     boneColor.set(0, 0.5, 0, 1.0);
   }
 
+  Color ikColor = Color(0.5, 0.5, 0.5);
+  ikColor = ikColor.linearInterpolate(Color(1.0, 1.0, 0), fkik);
+
   etDrawBone(this.rootTransform, 'bone01', bone01DebugXfo, this.twoBoneChain.bone1Len, 0.25, boneColor);
   etDrawBone(this.rootTransform, 'bone02', bone02DebugXfo, this.twoBoneChain.bone2Len, 0.25, boneColor);
   etDrawBone(this.rootTransform, 'bone03', bone03DebugXfo, 1, 0.25, boneColor);
-  drawLine(this.rootTransform, 'upVLine', bone02Out.translation(), this.twoBoneChain.upV.translation(), Color(1.0, 1.0, 0));
-  // etDrawSegmentedLine(this.rootTransform, 'rootToEffLine', Xfo(), this.twoBoneChain.outMatrices[0].translation, this.twoBoneChain.outMatrices[2].translation, 12, 0.5, Color(0.0, 0.0, 1.0));
+  drawSegmentedLine(this.rootTransform, 'upVLine', bone02Out.translation(), this.twoBoneChain.upV.translation(), 0.2, ikColor);
+  drawSegmentedLine(this.rootTransform, 'rootToEffLine', bone01DebugXfo.tr, bone03DebugXfo.tr, 0.2, ikColor);
+  // drawLine(this.rootTransform, 'rootToEffLine', bone01DebugXfo.tr, bone03DebugXfo.tr, Color(1.0, 1.0, 0));
 
   // Set debugging visibility.
+  if(fkik < 0.1) {
+    this.setShapeActive('rootToEffLine', false);
+  }
+  else {
+    this.setShapeActive('rootToEffLine', true);
+  }
+
   this.setDebug(this.debug);
 
 }
@@ -139,6 +147,27 @@ function LimbSolver.setDebug!(in Boolean active) {
               instance.setActive(true);
             }
 
+          }
+        }
+      }
+
+    }
+}
+
+function LimbSolver.setShapeActive!(in String name, in Boolean active) {
+
+  for(Size i=0; i<this.rootTransform.getChildCount(); i++) {
+
+      InlineTransform transform = this.rootTransform.getChild(i);
+      if(transform) {
+
+        for(Size y=0; y<transform.getChildCount(); y++) {
+
+          InlineInstance instance = transform.getChild(y);
+          if(instance) {
+            if(instance.getName() == name) {
+              instance.setActive(active);
+            }
           }
         }
       }
