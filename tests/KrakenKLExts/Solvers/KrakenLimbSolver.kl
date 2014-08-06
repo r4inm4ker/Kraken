@@ -113,17 +113,18 @@ function LimbSolver.solve!
   etDrawBone(this.rootTransform, 'bone03', bone03DebugXfo, 1, 0.25, boneColor);
   drawSegmentedLine(this.rootTransform, 'upVLine', bone02Out.translation(), this.twoBoneChain.upV.translation(), 0.2, ikColor);
   drawSegmentedLine(this.rootTransform, 'rootToEffLine', bone01DebugXfo.tr, bone03DebugXfo.tr, 0.2, ikColor);
-  // drawLine(this.rootTransform, 'rootToEffLine', bone01DebugXfo.tr, bone03DebugXfo.tr, Color(1.0, 1.0, 0));
+
+  this.setDebug(this.debug);
 
   // Set debugging visibility.
   if(fkik < 0.1) {
+    this.setShapeActive('upVLine', false);
     this.setShapeActive('rootToEffLine', false);
   }
   else {
+    this.setShapeActive('upVLine', true);
     this.setShapeActive('rootToEffLine', true);
   }
-
-  this.setDebug(this.debug);
 
 }
 
@@ -165,12 +166,12 @@ function LimbSolver.setShapeActive!(in String name, in Boolean active) {
 
           InlineInstance instance = transform.getChild(y);
           if(instance) {
+
             if(instance.getName() == name) {
               instance.setActive(active);
             }
           }
         }
       }
-
     }
 }

@@ -88,7 +88,7 @@ class LegComponent(BaseComponent):
         legIKCtrlSrtBuffer.xfo.tr.copy(anklePosition)
 
         legIKCtrl = PinControl('IK', parent=legIKCtrlSrtBuffer)
-        shinFKCtrl.scalePoints(Vec3(1.0, 1.5, 1.5))
+        legIKCtrl.scalePoints(Vec3(1.0, 1.5, 1.5))
         legIKCtrl.xfo.tr.copy(anklePosition)
         legIKCtrl.setColor(ctrlColor)
 

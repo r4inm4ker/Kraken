@@ -2,6 +2,7 @@ from kraken.core.objects.container import Container
 from kraken.core.objects.layer import Layer
 
 from arm_component import ArmComponent
+from hand_component import HandComponent
 from clavicle_component import ClavicleComponent
 from leg_component import LegComponent
 from spine_component import SpineComponent
@@ -28,6 +29,8 @@ class Rig(Container):
         clavicleRightComponent = ClavicleComponent("clavicle", controlsLayer, side="R")
         armLeftComponent = ArmComponent("arm", controlsLayer, side="L")
         armRightComponent = ArmComponent("arm", controlsLayer, side="R")
+        handLeftComponent = HandComponent("hand", controlsLayer, side="L")
+        handRightComponent = HandComponent("hand", controlsLayer, side="R")
         legLeftComponent = LegComponent("leg", controlsLayer, side="L")
         legRightComponent = LegComponent("leg", controlsLayer, side="R")
 
