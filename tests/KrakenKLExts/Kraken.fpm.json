@@ -23,6 +23,7 @@
             "Solvers/KrakenLimbSolver.kl",
             "Solvers/KrakenPoseConstraintSolver.kl",
             "Solvers/KrakenSpineConstraintSolver.kl",
-            "Solvers/KrakenSpineSolver.kl"
+            "Solvers/KrakenSpineSolver.kl",
+            "Solvers/KrakenHandSolver.kl"
           ]
 }

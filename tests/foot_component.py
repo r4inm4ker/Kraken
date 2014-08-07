@@ -15,11 +15,11 @@ from kraken.core.objects.controls.cube_control  import CubeControl
 from kraken.core.objects.operators.splice_operator import SpliceOperator
 
 
-class HandComponent(BaseComponent):
+class FootComponent(BaseComponent):
     """Hand Component"""
 
     def __init__(self, name, parent=None, side='M'):
-        super(HandComponent, self).__init__(name, parent, side)
+        super(FootComponent, self).__init__(name, parent, side)
 
         # =========
         # Controls
@@ -31,45 +31,45 @@ class HandComponent(BaseComponent):
         # Default values
         if side == 'R':
             ctrlColor = "red"
-            handPosition = Vec3(-7.1886, 12.2819, 0.4906)
-            handUpV = Vec3(-7.7463, 13.1746, 0.4477)
-            handEndPosition = Vec3(-7.945, 11.8321, 0.9655)
+            footPosition = Vec3(-7.1886, 12.2819, 0.4906)
+            footUpV = Vec3(-1.7454, 0.1922, -1.7397)
+            footEndPosition = Vec3(-2.0939, 0.4288, 0.0944)
         else:
             ctrlColor = "greenBright"
-            handPosition = Vec3(7.1886, 12.2819, 0.4906)
-            handUpV = Vec3(7.7463, 13.1746, 0.4477)
-            handEndPosition = Vec3(7.945, 11.8321, 0.9655)
+            footPosition = Vec3(7.1886, 12.2819, 0.4906)
+            footUpV = Vec3(1.7454, 0.1922, -1.7397)
+            footEndPosition = Vec3(2.0939, 0.4288, 0.0944)
 
         # Calculate Clavicle Xfo
-        rootToEnd = handEndPosition.subtract(handPosition).unit()
-        rootToUpV = handUpV.subtract(handPosition).unit()
+        rootToEnd = footEndPosition.subtract(footPosition).unit()
+        rootToUpV = footUpV.subtract(footPosition).unit()
         bone1ZAxis = rootToEnd.cross(rootToUpV).unit()
         bone1Normal = rootToEnd.cross(bone1ZAxis).unit()
-        handXfo = Xfo()
+        footXfo = Xfo()
 
         if side == "R":
-            handQuat = Quat(Vec3(-0.2301, -0.0865, -0.9331), 0.2623)
-            handPos = Vec3(-7.1886, 12.2819, 0.4906)
+            footQuat = Quat(Vec3(0.5695, -0.6377, 0.4190), 0.3053)
+            footPos = Vec3(-1.841, 1.1516, -1.237)
         else:
-            handQuat = Quat(Vec3(-0.0865, -0.2301, -0.2623), 0.9331)
-            handPos = Vec3(7.1886, 12.2819, 0.4906)
+            footQuat = Quat(Vec3(0.6377, -0.5695, 0.3053), 0.4190)
+            footPos = Vec3(1.841, 1.1516, -1.237)
 
-        handXfo.rot = handQuat.clone()
-        handXfo.tr.copy(handPos)
+        footXfo.rot = footQuat.clone()
+        footXfo.tr.copy(footPos)
 
         # Add Controls
-        handCtrlSrtBuffer = SrtBuffer('hand', parent=self)
-        handCtrlSrtBuffer.xfo.copy(handXfo)
+        footCtrlSrtBuffer = SrtBuffer('foot', parent=self)
+        footCtrlSrtBuffer.xfo.copy(footXfo)
 
-        handCtrl = CubeControl('hand', parent=handCtrlSrtBuffer)
-        handCtrl.alignOnXAxis()
-        handCtrl.scalePoints(Vec3(2.0, 0.75, 1.25))
-        handCtrl.xfo.copy(handCtrlSrtBuffer.xfo)
-        handCtrl.setColor(ctrlColor)
+        footCtrl = CubeControl('foot', parent=footCtrlSrtBuffer)
+        footCtrl.alignOnXAxis()
+        footCtrl.scalePoints(Vec3(2.5, 1.5, 0.75))
+        footCtrl.xfo.copy(footCtrlSrtBuffer.xfo)
+        footCtrl.setColor(ctrlColor)
 
         # Rig Ref objects
-        handRefSrt = Locator('handRef', parent=self)
-        handRefSrt.xfo.copy(handCtrlSrtBuffer.xfo)
+        footRefSrt = Locator('footRef', parent=self)
+        footRefSrt.xfo.copy(footCtrlSrtBuffer.xfo)
 
 
         # ==========
@@ -78,25 +78,25 @@ class HandComponent(BaseComponent):
         container = self.getParent().getParent()
         deformersLayer = container.getChildByName('deformers')
 
-        handDef = Joint('hand')
-        handDef.setComponent(self)
+        footDef = Joint('foot')
+        footDef.setComponent(self)
 
-        deformersLayer.addChild(handDef)
+        deformersLayer.addChild(footDef)
 
 
         # =====================
         # Create Component I/O
         # =====================
         # Setup Component Xfo I/O's
-        armEndXfoInput = Locator('armEndXfo')
-        armEndXfoInput.xfo.copy(handCtrlSrtBuffer.xfo)
-        armEndPosInput = Locator('armEndPos')
-        armEndPosInput.xfo.copy(handCtrlSrtBuffer.xfo)
+        legEndXfoInput = Locator('legEndXfo')
+        legEndXfoInput.xfo.copy(footCtrlSrtBuffer.xfo)
+        legEndPosInput = Locator('legEndPos')
+        legEndPosInput.xfo.copy(footCtrlSrtBuffer.xfo)
 
-        handEndOutput = Locator('handEnd')
-        handEndOutput.xfo.copy(handCtrlSrtBuffer.xfo)
-        handOutput = Locator('hand')
-        handOutput.xfo.copy(handCtrlSrtBuffer.xfo)
+        footEndOutput = Locator('handEnd')
+        footEndOutput.xfo.copy(footCtrlSrtBuffer.xfo)
+        footOutput = Locator('hand')
+        footOutput.xfo.copy(footCtrlSrtBuffer.xfo)
 
         # Setup componnent Attribute I/O's
         debugInputAttr = BoolAttribute('debug', True)
@@ -110,23 +110,23 @@ class HandComponent(BaseComponent):
         # Constraint inputs
 
         # Constraint outputs
-        handConstraint = PoseConstraint('_'.join([handOutput.getName(), 'To', handCtrl.getName()]))
-        handConstraint.addConstrainer(handCtrl)
-        handOutput.addConstraint(handConstraint)
+        handConstraint = PoseConstraint('_'.join([footOutput.getName(), 'To', footCtrl.getName()]))
+        handConstraint.addConstrainer(footCtrl)
+        footOutput.addConstraint(handConstraint)
 
-        handEndConstraint = PoseConstraint('_'.join([handEndOutput.getName(), 'To', handCtrl.getName()]))
-        handEndConstraint.addConstrainer(handCtrl)
-        handEndOutput.addConstraint(handEndConstraint)
+        handEndConstraint = PoseConstraint('_'.join([footEndOutput.getName(), 'To', footCtrl.getName()]))
+        handEndConstraint.addConstrainer(footCtrl)
+        footEndOutput.addConstraint(handEndConstraint)
 
 
         # ==================
         # Add Component I/O
         # ==================
         # Add Xfo I/O's
-        self.addInput(armEndXfoInput)
-        self.addInput(armEndPosInput)
-        self.addOutput(handOutput)
-        self.addOutput(handEndOutput)
+        self.addInput(legEndXfoInput)
+        self.addInput(legEndPosInput)
+        self.addOutput(footOutput)
+        self.addOutput(footEndOutput)
 
         # Add Attribute I/O's
         self.addInput(debugInputAttr)
@@ -138,7 +138,7 @@ class HandComponent(BaseComponent):
         # Add Splice Ops
         # ===============
         # Add Hand Solver Splice Op
-        spliceOp = SpliceOperator("handSolverSpliceOp", "HandSolver", "KrakenHandSolver")
+        spliceOp = SpliceOperator("footSolverSpliceOp", "HandSolver", "KrakenHandSolver")
         self.addOperator(spliceOp)
 
         # Add Att Inputs
@@ -147,16 +147,16 @@ class HandComponent(BaseComponent):
         spliceOp.setInput("linkToWorld", linkToWorldInputAttr)
 
         # Add Xfo Inputs)
-        spliceOp.setInput("armEndXfo", armEndXfoInput)
-        spliceOp.setInput("armEndPos", armEndPosInput)
-        spliceOp.setInput("handRef", handRefSrt)
+        spliceOp.setInput("armEndXfo", legEndXfoInput)
+        spliceOp.setInput("armEndPos", legEndPosInput)
+        spliceOp.setInput("handRef", footRefSrt)
 
         # Add Xfo Outputs
-        spliceOp.setOutput("handCtrlSrtBuffer", handCtrlSrtBuffer)
+        spliceOp.setOutput("handCtrlSrtBuffer", footCtrlSrtBuffer)
 
 
         # Add Deformer Splice Op
-        spliceOp = SpliceOperator("handDeformerSpliceOp", "PoseConstraintSolver", "KrakenPoseConstraintSolver")
+        spliceOp = SpliceOperator("footDeformerSpliceOp", "PoseConstraintSolver", "KrakenPoseConstraintSolver")
         self.addOperator(spliceOp)
 
         # Add Att Inputs
@@ -164,10 +164,10 @@ class HandComponent(BaseComponent):
         spliceOp.setInput("rightSide", rightSideInputAttr)
 
         # Add Xfo Inputs)
-        spliceOp.setInput("constrainer", handOutput)
+        spliceOp.setInput("constrainer", footOutput)
 
         # Add Xfo Outputs
-        spliceOp.setOutput("constrainee", handDef)
+        spliceOp.setOutput("constrainee", footDef)
 
 
     def buildRig(self, parent):
@@ -175,5 +175,5 @@ class HandComponent(BaseComponent):
 
 
 if __name__ == "__main__":
-    handLeft = HandComponent("myHand", side='L')
+    handLeft = FootComponent("myFoot", side='L')
     print handLeft.getNumChildren()

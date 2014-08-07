@@ -39,6 +39,7 @@ function KrakenSolverArg[] LimbSolver.getArguments(){
   args.push(KrakenSolverArg('bone01Out', 'io', 'Mat44'));
   args.push(KrakenSolverArg('bone02Out', 'io', 'Mat44'));
   args.push(KrakenSolverArg('bone03Out', 'io', 'Mat44'));
+  args.push(KrakenSolverArg('bone03PosOut', 'io', 'Mat44'));
   return args;
 }
 
@@ -62,7 +63,8 @@ function LimbSolver.solve!
   in Mat44 upV,
   io Mat44 bone01Out,
   io Mat44 bone02Out,
-  io Mat44 bone03Out
+  io Mat44 bone03Out,
+  io Mat44 bone03PosOut
   )
 {
   this.debug = debug;
@@ -88,6 +90,10 @@ function LimbSolver.solve!
   bone02Out = this.twoBoneChain.outMatrices[1];
   bone03Out = this.twoBoneChain.outMatrices[2];
 
+  Mat44 bone03PosMat44;
+  bone03PosMat44.setTranslation(bone03Out.translation);
+  bone03PosOut = bone03PosMat44;
+
   Xfo bone01DebugXfo = Xfo();
   Xfo bone02DebugXfo = Xfo();
   Xfo bone03DebugXfo = Xfo();
@@ -110,7 +116,7 @@ function LimbSolver.solve!
 
   etDrawBone(this.rootTransform, 'bone01', bone01DebugXfo, this.twoBoneChain.bone1Len, 0.25, boneColor);
   etDrawBone(this.rootTransform, 'bone02', bone02DebugXfo, this.twoBoneChain.bone2Len, 0.25, boneColor);
-  etDrawBone(this.rootTransform, 'bone03', bone03DebugXfo, 1, 0.25, boneColor);
+  // etDrawBone(this.rootTransform, 'bone03', bone03DebugXfo, 1, 0.25, boneColor);
   drawSegmentedLine(this.rootTransform, 'upVLine', bone02Out.translation(), this.twoBoneChain.upV.translation(), 0.2, ikColor);
   drawSegmentedLine(this.rootTransform, 'rootToEffLine', bone01DebugXfo.tr, bone03DebugXfo.tr, 0.2, ikColor);
 

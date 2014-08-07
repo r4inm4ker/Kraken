@@ -168,8 +168,16 @@ class ArmComponent(BaseComponent):
         bicepOutput.xfo.copy(bicepXfo)
         forearmOutput = Locator('forearm')
         forearmOutput.xfo.copy(forearmXfo)
-        armEndOutput = Locator('armEnd')
-        armEndOutput.xfo.tr.copy(wristPosition)
+
+        armEndXfo = Xfo()
+        armEndXfo.rot = forearmXfo.rot.clone()
+        armEndXfo.tr.copy(wristPosition)
+        armEndXfoOutput = Locator('armEndXfo')
+        armEndXfoOutput.xfo.copy(armEndXfo)
+
+        armEndPosOutput = Locator('armEndPos')
+        armEndPosOutput.xfo.copy(armEndXfo)
+
 
         # Setup componnent Attribute I/O's
         debugInputAttr = BoolAttribute('debug', True)
@@ -212,7 +220,8 @@ class ArmComponent(BaseComponent):
         self.addInput(clavicleEndInput)
         self.addOutput(bicepOutput)
         self.addOutput(forearmOutput)
-        self.addOutput(armEndOutput)
+        self.addOutput(armEndXfoOutput)
+        self.addOutput(armEndPosOutput)
 
         # Add Attribute I/O's
         self.addInput(debugInputAttr)
@@ -254,7 +263,8 @@ class ArmComponent(BaseComponent):
         # Add Xfo Outputs
         spliceOp.setOutput("bone01Out", bicepOutput)
         spliceOp.setOutput("bone02Out", forearmOutput)
-        spliceOp.setOutput("bone03Out", armEndOutput)
+        spliceOp.setOutput("bone03Out", armEndXfoOutput)
+        spliceOp.setOutput("bone03PosOut", armEndPosOutput)
 
 
         # Add Deformer Splice Op
@@ -264,10 +274,10 @@ class ArmComponent(BaseComponent):
         # Add Att Inputs
         spliceOp.setInput("debug", debugInputAttr)
 
-        # Add Xfo Inputstrl)
+        # Add Xfo Inputs
         spliceOp.setInput("bone01Constrainer", bicepOutput)
         spliceOp.setInput("bone02Constrainer", forearmOutput)
-        spliceOp.setInput("bone03Constrainer", armEndOutput)
+        spliceOp.setInput("bone03Constrainer", armEndXfoOutput)
 
         # Add Xfo Outputs
         spliceOp.setOutput("bone01Deformer", bicepDef)

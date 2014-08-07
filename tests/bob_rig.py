@@ -5,6 +5,7 @@ from arm_component import ArmComponent
 from hand_component import HandComponent
 from clavicle_component import ClavicleComponent
 from leg_component import LegComponent
+from foot_component import FootComponent
 from spine_component import SpineComponent
 from neck_component import NeckComponent
 from head_component import HeadComponent
@@ -33,6 +34,8 @@ class Rig(Container):
         handRightComponent = HandComponent("hand", controlsLayer, side="R")
         legLeftComponent = LegComponent("leg", controlsLayer, side="L")
         legRightComponent = LegComponent("leg", controlsLayer, side="R")
+        footLeftComponent = FootComponent("foot", controlsLayer, side="L")
+        footRightComponent = FootComponent("foot", controlsLayer, side="R")
 
         # Neck to Spine
         spineEndOutput = spineComponent.getOutputByName('spineEnd')
@@ -51,6 +54,21 @@ class Rig(Container):
         clavicleRightSpineEndInput = clavicleRightComponent.getInputByName('spineEnd')
         clavicleRightSpineEndInput.setSource(spineEndOutput.getTarget())
 
+        # Hand To Arm Connections
+        armLeftEndOutput = armLeftComponent.getOutputByName('armEndXfo')
+        handLeftArmEndInput = handLeftComponent.getInputByName('armEndXfo')
+        handLeftArmEndInput.setSource(armLeftEndOutput.getTarget())
+        armLeftEndPosOutput = armLeftComponent.getOutputByName('armEndPos')
+        handLeftArmEndPosInput = handLeftComponent.getInputByName('armEndPos')
+        handLeftArmEndPosInput.setSource(armLeftEndPosOutput.getTarget())
+
+        armRightEndOutput = armRightComponent.getOutputByName('armEndXfo')
+        handRightArmEndInput = handRightComponent.getInputByName('armEndXfo')
+        handRightArmEndInput.setSource(armRightEndOutput.getTarget())
+        armRightEndPosOutput = armRightComponent.getOutputByName('armEndPos')
+        handRightArmEndPosInput = handRightComponent.getInputByName('armEndPos')
+        handRightArmEndPosInput.setSource(armRightEndPosOutput.getTarget())
+
         # Arm To Clavicle Connections
         clavicleLeftEndOutput = clavicleLeftComponent.getOutputByName('clavicleEnd')
         armLeftClavicleEndInput = armLeftComponent.getInputByName('clavicleEnd')
@@ -66,6 +84,21 @@ class Rig(Container):
         clavicleRightEndOutput = spineComponent.getOutputByName('spineBase')
         legRightPelvisInput = legRightComponent.getInputByName('pelvisInput')
         legRightPelvisInput.setSource(clavicleRightEndOutput.getTarget())
+
+        # Foot To Arm Connections
+        legLeftEndOutput = legLeftComponent.getOutputByName('legEndXfo')
+        footLeftArmEndInput = footLeftComponent.getInputByName('legEndXfo')
+        footLeftArmEndInput.setSource(legLeftEndOutput.getTarget())
+        legLeftEndPosOutput = legLeftComponent.getOutputByName('legEndPos')
+        footLeftArmEndPosInput = footLeftComponent.getInputByName('legEndPos')
+        footLeftArmEndPosInput.setSource(legLeftEndPosOutput.getTarget())
+
+        legRightEndOutput = legRightComponent.getOutputByName('legEndXfo')
+        footRightArmEndInput = footRightComponent.getInputByName('legEndXfo')
+        footRightArmEndInput.setSource(legRightEndOutput.getTarget())
+        legRightEndPosOutput = legRightComponent.getOutputByName('legEndPos')
+        footRightArmEndPosInput = footRightComponent.getInputByName('legEndPos')
+        footRightArmEndPosInput.setSource(legRightEndPosOutput.getTarget())
 
         # Arm Attributes to Clavicle
         # clavicleLeftFollowBodyOutput = clavicleLeftComponent.getOutputByName('followBody')

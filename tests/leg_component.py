@@ -88,13 +88,14 @@ class LegComponent(BaseComponent):
         legIKCtrlSrtBuffer.xfo.tr.copy(anklePosition)
 
         legIKCtrl = PinControl('IK', parent=legIKCtrlSrtBuffer)
-        legIKCtrl.scalePoints(Vec3(1.0, 1.5, 1.5))
         legIKCtrl.xfo.tr.copy(anklePosition)
         legIKCtrl.setColor(ctrlColor)
 
         if self.getSide() == "R":
+            legIKCtrl.translatePoints(Vec3(0.0, 0.0, -1.0))
             legIKCtrl.rotatePoints(0, 90, 0)
         else:
+            legIKCtrl.translatePoints(Vec3(0.0, 0.0, 1.0))
             legIKCtrl.rotatePoints(0, -90, 0)
 
 
@@ -162,12 +163,21 @@ class LegComponent(BaseComponent):
         # Setup component Xfo I/O's
         legPelvisInput = Locator('pelvisInput')
         legPelvisInput.xfo.copy(femurXfo)
+
         femurOutput = Locator('femur')
         femurOutput.xfo.copy(femurXfo)
         shinOutput = Locator('shin')
         shinOutput.xfo.copy(shinXfo)
-        legEndOutput = Locator('legEnd')
-        legEndOutput.xfo.tr.copy(anklePosition)
+
+        legEndXfo = Xfo()
+        legEndXfo.rot = shinXfo.rot.clone()
+        legEndXfo.tr.copy(anklePosition)
+        legEndXfoOutput = Locator('legEndXfo')
+        legEndXfoOutput.xfo.copy(legEndXfo)
+
+        legEndPosOutput = Locator('legEndPos')
+        legEndPosOutput.xfo.copy(legEndXfo)
+
 
         # Setup componnent Attribute I/O's
         debugInputAttr = BoolAttribute('debug', True)
@@ -210,7 +220,8 @@ class LegComponent(BaseComponent):
         self.addInput(legPelvisInput)
         self.addOutput(femurOutput)
         self.addOutput(shinOutput)
-        self.addOutput(legEndOutput)
+        self.addOutput(legEndXfoOutput)
+        self.addOutput(legEndPosOutput)
 
         # Add Attribute I/O's
         self.addInput(debugInputAttr)
@@ -252,7 +263,8 @@ class LegComponent(BaseComponent):
         # Add Xfo Outputs
         spliceOp.setOutput("bone01Out", femurOutput)
         spliceOp.setOutput("bone02Out", shinOutput)
-        spliceOp.setOutput("bone03Out", legEndOutput)
+        spliceOp.setOutput("bone03Out", legEndXfoOutput)
+        spliceOp.setOutput("bone03PosOut", legEndPosOutput)
 
 
         # Add Deformer Splice Op
@@ -265,7 +277,7 @@ class LegComponent(BaseComponent):
         # Add Xfo Inputstrl)
         spliceOp.setInput("bone01Constrainer", femurOutput)
         spliceOp.setInput("bone02Constrainer", shinOutput)
-        spliceOp.setInput("bone03Constrainer", legEndOutput)
+        spliceOp.setInput("bone03Constrainer", legEndXfoOutput)
 
         # Add Xfo Outputs
         spliceOp.setOutput("bone01Deformer", femurDef)
