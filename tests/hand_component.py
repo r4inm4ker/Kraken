@@ -1,4 +1,6 @@
 from kraken.core.maths.vec import Vec3
+from kraken.core.maths.rotation import Euler
+from kraken.core.maths.rotation import Quat
 from kraken.core.maths.xfo import Xfo
 
 from kraken.core.objects.components.base_component import BaseComponent
@@ -45,7 +47,15 @@ class HandComponent(BaseComponent):
         bone1Normal = rootToEnd.cross(bone1ZAxis).unit()
         handXfo = Xfo()
 
-        handXfo.setFromVectors(rootToEnd, bone1Normal, bone1ZAxis, handPosition)
+        if side == "R":
+            handQuat = Quat(Vec3(-0.2301, -0.0865, -0.9331), 0.2623)
+            handPos = Vec3(-7.1886, 12.2819, 0.4906)
+        else:
+            handQuat = Quat(Vec3(-0.0865, -0.2301, -0.2623), 0.9331)
+            handPos = Vec3(7.1886, 12.2819, 0.4906)
+
+        handXfo.rot = handQuat.clone()
+        handXfo.tr.copy(handPos)
 
         # Add Controls
         handCtrlSrtBuffer = SrtBuffer('hand', parent=self)
@@ -53,9 +63,8 @@ class HandComponent(BaseComponent):
 
         handCtrl = CubeControl('hand', parent=handCtrlSrtBuffer)
         handCtrl.alignOnXAxis()
-        # handLen = handPosition.subtract(handEndPosition).length()
         handCtrl.scalePoints(Vec3(2.0, 0.75, 1.25))
-        handCtrl.xfo.copy(handXfo)
+        handCtrl.xfo.copy(handCtrlSrtBuffer.xfo)
         handCtrl.setColor(ctrlColor)
 
 
