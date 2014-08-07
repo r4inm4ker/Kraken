@@ -4,9 +4,13 @@ from kraken.core.maths.rotation import Quat
 from kraken.core.maths.xfo import Xfo
 
 from kraken.core.objects.components.base_component import BaseComponent
+
+from kraken.core.objects.attributes.attribute_group import AttributeGroup
 from kraken.core.objects.attributes.float_attribute import FloatAttribute
 from kraken.core.objects.attributes.bool_attribute import BoolAttribute
+
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
+
 from kraken.core.objects.locator import Locator
 from kraken.core.objects.joint import Joint
 from kraken.core.objects.srtBuffer import SrtBuffer
@@ -72,6 +76,16 @@ class FootComponent(BaseComponent):
         footRefSrt.xfo.copy(footCtrlSrtBuffer.xfo)
 
 
+        # Add Component Params to IK control
+        footDebugInputAttr = BoolAttribute('debug', True)
+        footLinkToWorldInputAttr = FloatAttribute('linkToWorld', 1.0, 0.0, 1.0)
+
+        footSettingsAttrGrp = AttributeGroup("DisplayInfo_HandSettings")
+        footCtrl.addAttributeGroup(footSettingsAttrGrp)
+        footSettingsAttrGrp.addAttribute(footDebugInputAttr)
+        footSettingsAttrGrp.addAttribute(footLinkToWorldInputAttr)
+
+
         # ==========
         # Deformers
         # ==========
@@ -102,6 +116,10 @@ class FootComponent(BaseComponent):
         debugInputAttr = BoolAttribute('debug', True)
         rightSideInputAttr = BoolAttribute('rightSide', side is 'R')
         linkToWorldInputAttr = FloatAttribute('linkToWorld', 0.0, 0.0, 1.0)
+
+        # Connect attrs to control attrs
+        debugInputAttr.connect(footDebugInputAttr)
+        linkToWorldInputAttr.connect(footLinkToWorldInputAttr)
 
 
         # ==============

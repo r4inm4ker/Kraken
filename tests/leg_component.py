@@ -92,11 +92,11 @@ class LegComponent(BaseComponent):
         legIKCtrl.setColor(ctrlColor)
 
         if self.getSide() == "R":
-            legIKCtrl.translatePoints(Vec3(0.0, 0.0, -1.0))
             legIKCtrl.rotatePoints(0, 90, 0)
+            legIKCtrl.translatePoints(Vec3(-1.0, 0.0, 0.0))
         else:
-            legIKCtrl.translatePoints(Vec3(0.0, 0.0, 1.0))
             legIKCtrl.rotatePoints(0, -90, 0)
+            legIKCtrl.translatePoints(Vec3(1.0, 0.0, 0.0))
 
 
         # Add Component Params to IK control

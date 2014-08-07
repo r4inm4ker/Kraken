@@ -4,9 +4,13 @@ from kraken.core.maths.rotation import Quat
 from kraken.core.maths.xfo import Xfo
 
 from kraken.core.objects.components.base_component import BaseComponent
+
+from kraken.core.objects.attributes.attribute_group import AttributeGroup
 from kraken.core.objects.attributes.float_attribute import FloatAttribute
 from kraken.core.objects.attributes.bool_attribute import BoolAttribute
+
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
+
 from kraken.core.objects.locator import Locator
 from kraken.core.objects.joint import Joint
 from kraken.core.objects.srtBuffer import SrtBuffer
@@ -72,6 +76,16 @@ class HandComponent(BaseComponent):
         handRefSrt.xfo.copy(handCtrlSrtBuffer.xfo)
 
 
+        # Add Component Params to IK control
+        handDebugInputAttr = BoolAttribute('debug', True)
+        handLinkToWorldInputAttr = FloatAttribute('linkToWorld', 0.0, 0.0, 1.0)
+
+        handSettingsAttrGrp = AttributeGroup("DisplayInfo_HandSettings")
+        handCtrl.addAttributeGroup(handSettingsAttrGrp)
+        handSettingsAttrGrp.addAttribute(handDebugInputAttr)
+        handSettingsAttrGrp.addAttribute(handLinkToWorldInputAttr)
+
+
         # ==========
         # Deformers
         # ==========
@@ -102,6 +116,10 @@ class HandComponent(BaseComponent):
         debugInputAttr = BoolAttribute('debug', True)
         rightSideInputAttr = BoolAttribute('rightSide', side is 'R')
         linkToWorldInputAttr = FloatAttribute('linkToWorld', 0.0, 0.0, 1.0)
+
+        # Connect attrs to control attrs
+        debugInputAttr.connect(handDebugInputAttr)
+        linkToWorldInputAttr.connect(handLinkToWorldInputAttr)
 
 
         # ==============
