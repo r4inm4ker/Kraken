@@ -28,10 +28,12 @@ class Locator(SceneItem):
 
         """
 
-        if self.getParent().getName() == "inputs":
-            return super(Locator, self).getBuildName() + '_srtIn'
-
-        elif self.getParent().getName() == "outputs":
-            return super(Locator, self).getBuildName() + '_srtOut'
+        if self.getParent() is not None:
+            if self.getParent().getName() == "inputs":
+                return super(Locator, self).getBuildName() + '_srtIn'
+            elif self.getParent().getName() == "outputs":
+                return super(Locator, self).getBuildName() + '_srtOut'
+            else:
+                return super(Locator, self).getBuildName() + '_null'
         else:
             return super(Locator, self).getBuildName() + '_null'
