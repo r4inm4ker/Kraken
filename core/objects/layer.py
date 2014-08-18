@@ -17,6 +17,8 @@ class Layer(SceneItem):
         super(Layer, self).__init__(name, parent=parent)
 
         self.setShapeVisibility(False)
+        if parent != None:
+            parent.addChild(self)
 
 
     # ==================

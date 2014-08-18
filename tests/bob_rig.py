@@ -17,13 +17,13 @@ class Rig(Container):
 
         # Add rig layers
         deformerLayer = Layer('deformers', parent=self)
-        self.addChild(deformerLayer)
+        #self.addChild(deformerLayer)
 
         controlsLayer = Layer('controls', parent=self)
-        self.addChild(controlsLayer)
+        #self.addChild(controlsLayer)
 
         geometryLayer = Layer('geometry', parent=self)
-        self.addChild(geometryLayer)
+        #self.addChild(geometryLayer)
 
         # Add Components to Layers
         spineComponent = SpineComponent("spine", self)
