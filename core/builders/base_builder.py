@@ -8,6 +8,8 @@ BaseBuilder -- Base builder object to build objects in DCC.
 from kraken.core import logger as pyLogger
 logger = pyLogger.getLogger("pyLogger")
 
+from kraken.core.objects.constraints.pose_constraint import PoseConstraint
+
 
 class BaseBuilder(object):
     """BaseBuilder object for building objects in DCC's. Sub-class per DCC in a
@@ -57,6 +59,9 @@ class BaseBuilder(object):
         self._buildElements = []
 
 
+    # ====================
+    # Object registration
+    # ====================
     def _registerSceneItemPair(self, kSceneItem, dccSceneItem):
         """Registers a pairing between the kraken scene item and the dcc scene item
         for querying later.
@@ -101,12 +106,11 @@ class BaseBuilder(object):
     # ========================
     # SceneItem Build Methods
     # ========================
-    def buildContainer(self, kSceneItem, objectName):
+    def buildContainer(self, kSceneItem):
         """Builds a container / namespace object.
 
         Arguments:
         kSceneItem -- Object, kSceneItem that represents a container to be built.
-        objectName -- String, name of the object being created.
 
         Return:
         DCC Scene Item that is created.
@@ -116,12 +120,11 @@ class BaseBuilder(object):
         return None
 
 
-    def buildLayer(self, kSceneItem, objectName):
+    def buildLayer(self, kSceneItem):
         """Builds a layer object.
 
         Arguments:
         kSceneItem -- Object, kSceneItem that represents a layer to be built.
-        objectName -- String, name of the object being created.
 
         Return:
         DCC Scene Item that is created.
@@ -131,12 +134,11 @@ class BaseBuilder(object):
         return None
 
 
-    def buildHierarchyGroup(self, kSceneItem, objectName):
+    def buildHierarchyGroup(self, kSceneItem):
         """Builds a hierarchy group object.
 
         Arguments:
         kSceneItem -- Object, kSceneItem that represents a group to be built.
-        objectName -- String, name of the object being created.
 
         Return:
         DCC Scene Item that is created.
@@ -146,12 +148,11 @@ class BaseBuilder(object):
         return None
 
 
-    def buildGroup(self, kSceneItem, objectName):
+    def buildGroup(self, kSceneItem):
         """Builds a group object.
 
         Arguments:
         kSceneItem -- Object, kSceneItem that represents a group to be built.
-        objectName -- String, name of the object being created.
 
         Return:
         DCC Scene Item that is created.
@@ -161,12 +162,11 @@ class BaseBuilder(object):
         return None
 
 
-    def buildJoint(self, kSceneItem, objectName):
+    def buildJoint(self, kSceneItem):
         """Builds a joint object.
 
         Arguments:
         kSceneItem -- Object, kSceneItem that represents a joint to be built.
-        objectName -- String, name of the object being created.
 
         Return:
         DCC Scene Item that is created.
@@ -176,12 +176,11 @@ class BaseBuilder(object):
         return None
 
 
-    def buildLocator(self, kSceneItem, objectName):
+    def buildLocator(self, kSceneItem):
         """Builds a locator / null object.
 
         Arguments:
         kSceneItem -- Object, kSceneItem that represents a locator / null to be built.
-        objectName -- String, name of the object being created.
 
         Return:
         DCC Scene Item that is created.
@@ -191,12 +190,11 @@ class BaseBuilder(object):
         return None
 
 
-    def buildCurve(self, kSceneItem, objectName):
+    def buildCurve(self, kSceneItem):
         """Builds a Curve object.
 
         Arguments:
         kSceneItem -- Object, kSceneItem that represents a curve to be built.
-        objectName -- String, name of the object being created.
 
         Return:
         DCC Scene Item that is created.
@@ -270,6 +268,20 @@ class BaseBuilder(object):
 
         Arguments:
         kAttributeGroup -- SceneItem, kraken object to build the attribute group on.
+
+        Return:
+        True if successful.
+
+        """
+
+        return True
+
+
+    def connectAttribute(self, kAttribute):
+        """Connects the driver attribute to this one.
+
+        Arguments:
+        kAttribute -- Object, attribute to connect.
 
         Return:
         True if successful.
@@ -368,6 +380,19 @@ class BaseBuilder(object):
 
         """
 
+        source = kConnection.getSource()
+        target = kConnection.getTarget()
+
+        if source is None or target is None:
+            raise Exception("Component connection '" + kConnection.getName() + "'is invalid! Missing Source or Target!")
+
+        constraint = PoseConstraint('_'.join([target.getName(), 'To', source.getName()]))
+        constraint.setMaintainOffset(True)
+        constraint.setConstrainee(target)
+        constraint.addConstrainer(source)
+        dccSceneItem = self.buildPoseConstraint(constraint)
+        self._registerSceneItemPair(kConnection, dccSceneItem)
+
         return None
 
 
@@ -383,6 +408,23 @@ class BaseBuilder(object):
         """
 
         return None
+
+
+    # =========================
+    # Operator Builder Methods
+    # =========================
+    def buildSpliceOperators(self, kOperator):
+        """Builds Splice Operators on the components.
+
+        Arguments:
+        kOperator -- Object, kraken operator that represents a Splice operator.
+
+        Return:
+        True if successful.
+
+        """
+
+        return True
 
 
     # =====================
@@ -408,22 +450,6 @@ class BaseBuilder(object):
 
             self.buildAttributeGroup(attributeGroup)
 
-            for j in xrange(attributeCount):
-                attribute = attributeGroup.getAttributeByIndex(j)
-                kType = attribute.getKType()
-
-                if kType == "FloatAttribute":
-                    self.buildFloatAttribute(attribute)
-
-                elif kType == "BoolAttribute":
-                    self.buildBoolAttribute(attribute)
-
-                elif kType == "IntegerAttribute":
-                    self.buildIntegerAttribute(attribute)
-
-                elif kType == "StringAttribute":
-                    self.buildStringAttribute(attribute)
-
         return True
 
 
@@ -440,37 +466,39 @@ class BaseBuilder(object):
         """
 
         dccSceneItem = None
-        objectName = self.buildName(kObject, component=component)
         kType = kObject.getKType()
 
         # Build Object
         if kType == "Container":
-            dccSceneItem = self.buildContainer(kObject, objectName)
+            dccSceneItem = self.buildContainer(kObject)
 
         elif kType == "Layer":
-            dccSceneItem = self.buildLayer(kObject, objectName)
+            dccSceneItem = self.buildLayer(kObject)
 
         elif kType == "Component":
-            dccSceneItem = self.buildGroup(kObject, objectName)
+            dccSceneItem = self.buildGroup(kObject)
             component = kObject
 
         elif kType == "HierarchyGroup":
-            dccSceneItem = self.buildHierarchyGroup(kObject, objectName)
+            dccSceneItem = self.buildHierarchyGroup(kObject)
+
+        elif kType == "SrtBuffer":
+            dccSceneItem = self.buildGroup(kObject)
 
         elif kType == "Locator":
-            dccSceneItem = self.buildLocator(kObject, objectName)
+            dccSceneItem = self.buildLocator(kObject)
 
         elif kType == "Joint":
-            dccSceneItem = self.buildJoint(kObject, objectName)
+            dccSceneItem = self.buildJoint(kObject)
 
         elif kType == "SceneItem":
-            dccSceneItem = self.buildLocator(kObject, objectName)
+            dccSceneItem = self.buildLocator(kObject)
 
         elif kType == "Curve":
-            dccSceneItem = self.buildCurve(kObject, objectName)
+            dccSceneItem = self.buildCurve(kObject)
 
         elif kType == "Control":
-            dccSceneItem = self.buildCurve(kObject, objectName)
+            dccSceneItem = self.buildCurve(kObject)
 
         else:
             raise NotImplementedError(kObject.getName() + ' has an unsupported type: ' + str(type(kObject)))
@@ -583,72 +611,64 @@ class BaseBuilder(object):
         return True
 
 
-    def buildName(self, kObject, component=None):
-        """Builds the name for the kObject that is passed.
+    def buildAttrConnections(self, kObject):
+        """Builds the connections between the component inputs and outputs of each
+        component.
 
         Arguments:
-        kObject -- Object, kraken object to build the name for.
-        component -- Component, component that this object belongs to.
+        kObject -- Object, kraken object to create connections for.
 
         Return:
-        Built name as a string.
-        None if it fails.
+        True if successful.
 
         """
 
-        componentName = ""
-        side = ""
-        kType = kObject.getKType()
+        # Build input connections
+        for i in xrange(kObject.getNumAttributeGroups()):
+            attributeGroup = kObject.getAttributeGroupByIndex(i)
 
-        if component is not None:
-            componentName = component.getName()
-            side = component.getSide()
+            for y in xrange(attributeGroup.getNumAttributes()):
+                attribute = attributeGroup.getAttributeByIndex(y)
+                self.connectAttribute(attribute)
 
-        if kType == "Container":
-            return '_'.join([kObject.getName()])
+        # Build connections for children.
+        for i in xrange(kObject.getNumChildren()):
+            child = kObject.getChildByIndex(i)
+            self.buildAttrConnections(child)
 
-        elif kType == "Layer":
-            return '_'.join([kObject.parent.getName(), kObject.getName()])
+        return True
 
-        elif kType == "Component":
-            return '_'.join([kObject.getName(), kObject.getSide(), 'hrc'])
 
-        elif kType == "ComponentInputXfo":
-            return '_'.join([componentName, side, kObject.getName(), 'srtIn'])
+    def buildOperators(self, kObject):
+        """Build operators in the hierarchy.
 
-        elif kType == "ComponentInputAttr":
-            return '_'.join([componentName, side, kObject.getName(), 'attrIn'])
+        Arguments:
+        kObject -- Object, kraken object to create operators for.
 
-        elif kType == "ComponentOutputXfo":
-            return '_'.join([componentName, side, kObject.getName(), 'srtOut'])
+        Return:
+        True if successful.
 
-        elif kType == "ComponentOutputAttr":
-            return '_'.join([componentName, side, kObject.getName(), 'attrOut'])
+        """
 
-        elif kType == "HierarchyGroup":
-            return '_'.join([componentName, side, kObject.getName(), 'hrc'])
+        if kObject.getKType() == 'Component':
 
-        elif kType == "Locator":
-            return '_'.join([componentName, kObject.getName(), side, 'null'])
+            # Build operators
+            for i in xrange(kObject.getNumOperators()):
+                operator = kObject.getOperatorByIndex(i)
+                kType = operator.getKType()
 
-        elif kType == "Joint":
-            return '_'.join([componentName, kObject.getName(), side, 'def'])
+                if kType == 'SpliceOperator':
+                    self.buildSpliceOperators(operator)
 
-        elif kType == "SceneItem":
-            return '_'.join([componentName, kObject.getName(), side, 'null'])
+                else:
+                    raise NotImplementedError(operator.getName() + ' has an unsupported type: ' + str(type(kObject)))
 
-        elif kType == "Curve":
-            return '_'.join([componentName, kObject.getName(), side, 'crv'])
+        # Build connections for children.
+        for i in xrange(kObject.getNumChildren()):
+            child = kObject.getChildByIndex(i)
+            self.buildOperators(child)
 
-        elif kType == "Control":
-            nameParts = [componentName, kObject.getName(), side, 'ctrl']
-            nameParts = [x for x in nameParts if x != ""]
-            return '_'.join(nameParts)
-
-        else:
-            raise NotImplementedError('buildName() not implemented for ' + str(type(kObject)))
-
-        return None
+        return True
 
 
     # ===================
@@ -744,7 +764,9 @@ class BaseBuilder(object):
 
         self.buildHierarchy(kSceneItem, component=None)
         self.buildConstraints(kSceneItem)
+        self.buildAttrConnections(kSceneItem)
         self.buildIOConnections(kSceneItem)
+        self.buildOperators(kSceneItem)
 
         return True
 
@@ -779,7 +801,6 @@ class BaseBuilder(object):
         """
 
         return True
-
 
 
     # ==============================

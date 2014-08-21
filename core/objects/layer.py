@@ -17,6 +17,8 @@ class Layer(SceneItem):
         super(Layer, self).__init__(name, parent=parent)
 
         self.setShapeVisibility(False)
+        if parent != None:
+            parent.addChild(self)
 
 
     # ==================
@@ -58,6 +60,7 @@ class Layer(SceneItem):
 
         """
 
+        component.setParent(self)
         return self.addChild(component)
 
 
@@ -72,4 +75,5 @@ class Layer(SceneItem):
 
         """
 
+        component.setParent(None)
         return self.removeChild(componentName)

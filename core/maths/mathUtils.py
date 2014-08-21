@@ -5,6 +5,7 @@ Utility functions for math operations.
 
 import math
 
+
 def checkDivisor(value):
     """Checks if value is valid for division
 

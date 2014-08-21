@@ -7,6 +7,8 @@ Curve - Curve.
 
 from kraken.core.objects.scene_item import SceneItem
 
+import copy
+
 
 class Curve(SceneItem):
     """Curve object."""
@@ -14,18 +16,25 @@ class Curve(SceneItem):
     __kType__ = "Curve"
 
     def __init__(self, name, parent=None):
-        """Initializes the curve object.
-
-        Arguments:
-        name -- String, Name of the constraint.
-        parent -- Object, parent object of this object.
-
-        """
-
         super(Curve, self).__init__(name, parent=parent)
 
         self.controlPoints = []
         self.closed = []
+
+
+    # =============
+    # Name methods
+    # =============
+
+    def getBuildName(self):
+        """Returns the name used when building the node in the target application.
+
+        Return:
+        String, build name of the object.
+
+        """
+
+        return super(Curve, self).getBuildName() + '_crv'
 
 
     # ======================
@@ -56,6 +65,17 @@ class Curve(SceneItem):
         """
 
         return self.controlPoints
+
+
+    def copyControlPoints(self):
+        """Returns the control points of the curve.
+
+        Return:
+        Array of Vec3 positions.
+
+        """
+
+        return copy.deepcopy(self.controlPoints)
 
 
     def appendControlPoints(self, points):

@@ -1,0 +1,60 @@
+require Math;
+require InlineDrawing;
+
+
+function InlineShape constructBoneShape(
+  in Scalar length,
+  in Scalar radius)
+{
+  InlineShape shape();
+  PolygonMesh mesh = PolygonMesh();
+  mesh.drawBone2(Xfo(), length, radius, true);
+  shape = InlineMeshShape('rigBone', mesh);
+
+  return shape;
+}
+
+
+function etDrawBone(
+  io InlineTransform rootTransform,
+  in String name,
+  in Xfo xfo,
+  in Scalar length,
+  in Scalar radius,
+  in Color color)
+{
+  InlineDrawing drawing = OGLInlineDrawing_GetInstance();
+  InlineShader shader = drawing.registerShader(OGLSurfaceShader());
+  InlineMaterial phong = shader.getOrCreateMaterial("phong");
+
+  InlineTransform boneTransform = rootTransform.getChild(name);
+  if(boneTransform == null) {
+    boneTransform = StaticInlineTransform(name, rootTransform, xfo);
+    rootTransform.addChild(boneTransform);
+
+    InlineMeshShape boneShape = constructBoneShape(length, radius);
+    SimpleInlineInstance boneInstance = SimpleInlineInstance(name + 'Instance', boneTransform, boneShape, phong);
+    boneInstance.setInstanceUniform(InlineUniform('u_diffuseColor', color));
+  }
+  else {
+    boneTransform.setLocalXfo(0, xfo);
+  }
+}
+
+
+function InlineLinesShape drawSegmentedLine(
+  io InlineTransform rootTransform,
+  in String name,
+  in Vec3 start,
+  in Vec3 end,
+  in Scalar segmentLength,
+  in Color color)
+{
+  InlineLinesShape linesShape = getOrCreateLines(rootTransform, name, color);
+  Lines lines = linesShape.getLines();
+  lines.clear();
+
+  // Integer numSegments = start.distanceTo(end) / segmentLength;
+  lines.addSegmentedLine(start, end, 12);
+  return linesShape;
+}

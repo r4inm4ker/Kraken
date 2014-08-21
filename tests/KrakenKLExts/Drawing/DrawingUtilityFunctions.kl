@@ -1,0 +1,532 @@
+/*
+ *  Copyright 2010-2012 Fabric Engine Inc. All rights reserved.
+ */
+
+
+/*SPHINX-description
+.. versionadded:: 1.13.0
+
+The :ref:`DrawingUtilityFunctions` are a collection of functions that aid in the display of debugging data from KL. 
+
+Example
+---------
+The following example code generates each of the debug shapes. The shaders and materials are automatically generated. 
+
+Note: The DrawingHandle would normally be added as a Port on a Splice node, rather than created directly in the code like this.
+
+.. code-block:: kl
+
+    // Create a handle to manage the lifetime of the drawn elements 
+    DrawingHandle handle();
+
+    InlineTransform root = handle.getRootTransform();
+
+    Size offset = 0;
+    Scalar zPos = -10.0;
+
+    drawLine(root, "Line", Vec3(0.0, 0.0, zPos), Vec3(3.0, 3.0, zPos), randomDarkColor(offset)); zPos += 3.0;
+
+    Vec3 lineStrip[];
+    lineStrip.resize(20);
+    for(Integer i=0 ;i<lineStrip.size; i++)
+      lineStrip[i].set(sin(Scalar(i)/Scalar(lineStrip.size) * 10.0), Scalar(i) * 0.2, zPos);
+
+    drawLineStrip(root, "LineStrip", lineStrip, randomDarkColor(offset)); zPos += 3.0;
+
+    Vec3 points[];
+    points.resize(20);
+    for(Integer i=0 ;i<points.size; i++)
+      points[i].set(sin(Scalar(i)/Scalar(lineStrip.size) * 10.0), Scalar(i) * 0.2, zPos);
+    drawPoints(root, "Points", points, randomDarkColor(offset), 1.3); zPos += 3.0;
+
+    drawCircle(root, "Circle", Xfo(Vec3(0.0, 0.0, zPos)), 1.0, randomDarkColor(offset)); zPos += 5.0;
+    drawLinesSphere(root, "LinesSphere", Xfo(Vec3(0.0, 0.0, zPos)), 1.0, randomDarkColor(offset)); zPos += 5.0;
+    drawCross(root, "Cross", Xfo(Vec3(0.0, 0.0, zPos)), 1.0, randomDarkColor(offset)); zPos += 5.0;
+    drawRectangle(root, "Rectangle", Xfo(Vec3(0.0, 0.0, zPos)), 1.5, 2.5, randomDarkColor(offset)); zPos += 5.0;
+    drawSphere(root, "Sphere", Xfo(Vec3(0.0, 0.0, zPos)), 0.8, randomDarkColor(offset)); zPos += 3.0;
+    
+    drawArrow(root, "Arrow", Xfo(Vec3(0.0, 0.0, zPos)), randomDarkColor(offset)); zPos += 3.0;
+    
+    const Size seed = 1981;
+    Xfo xfo(Vec3(0.0, 0.0, zPos));
+    xfo.ori.setFromEulerAngles(Vec3(
+        mathRandomFloat32(seed, offset++),
+        mathRandomFloat32(seed, offset++),
+        mathRandomFloat32(seed, offset++)
+        ));
+    drawXfo(root, "Xfo", xfo); zPos += 3.0;
+
+    Xfo xfoArray[];
+    xfoArray.resize(10);
+    for(Integer i=0 ;i<xfoArray.size; i++){
+      xfoArray[i].tr.set(sin(Scalar(i)/Scalar(xfoArray.size) * 5.0) * 0.5, (Scalar(i) * 0.8) - 4.0, zPos);
+      xfoArray[i].sc.set(0.6, 0.6, 0.6);
+      
+      xfoArray[i].ori.setFromEulerAngles(Vec3(
+        mathRandomFloat32(seed, offset++),
+        mathRandomFloat32(seed, offset++),
+        mathRandomFloat32(seed, offset++)
+        ));
+    }
+    drawXfoArray(root, "Xfos", xfoArray, randomDarkColor(offset), 0.2); zPos += 5.0;
+
+
+*/
+require Math;
+
+
+function InlineLinesShape getOrCreateLines(io InlineTransform rootTransform, String name, Color color){
+  InlineTransform transform = rootTransform.getChild(name);
+  if(transform == null){
+    transform = StaticInlineTransform(name, rootTransform, Xfo());
+
+    Lines lines();
+    InlineLinesShape lineShape(name, lines);
+
+    InlineDrawing drawing = OGLInlineDrawing_GetInstance();
+    InlineShader shader = drawing.registerShader(OGLFlatShader());
+    InlineMaterial mat = shader.getOrCreateMaterial("flat");
+
+    SimpleInlineInstance instance(name, transform, lineShape, mat);
+    instance.setInstanceUniform(InlineUniform('u_color', color));
+    return lineShape;
+  }
+  else{
+    SimpleInlineInstance instance = transform.getChild(0);
+    instance.setInstanceUniform(InlineUniform('u_color', color));
+    InlineLinesShape lineShape = instance.getShape();
+    return lineShape;
+  }
+}
+
+function InlinePointsShape getOrCreatePoints(io InlineTransform rootTransform, String name, Color color){
+  InlineTransform transform = rootTransform.getChild(name);
+  if(transform == null){
+    transform = StaticInlineTransform(name, rootTransform, Xfo());
+
+    Points points();
+    InlinePointsShape pointsShape(name, points);
+
+    InlineDrawing drawing = OGLInlineDrawing_GetInstance();
+    InlineShader shader = drawing.registerShader(OGLFlatShader());
+    InlineMaterial mat = shader.getOrCreateMaterial("flat");
+
+    SimpleInlineInstance instance(name, transform, pointsShape, mat);
+    instance.setInstanceUniform(InlineUniform('u_color', color));
+    return pointsShape;
+  }
+  else{
+    SimpleInlineInstance instance = transform.getChild(0);
+    instance.setInstanceUniform(InlineUniform('u_color', color));
+    InlinePointsShape pointsShape = instance.getShape();
+    return pointsShape;
+  }
+}
+
+function InlineMeshShape getOrCreateMesh(io InlineTransform rootTransform, String name, Color color){
+  InlineTransform transform = rootTransform.getChild(name);
+  if(transform == null){
+    transform = StaticInlineTransform(name, rootTransform, Xfo());
+
+    PolygonMesh mesh();
+    InlineMeshShape meshShape(name, mesh);
+
+    InlineDrawing drawing = OGLInlineDrawing_GetInstance();
+    InlineShader shader = drawing.registerShader(OGLSurfaceShader());
+    InlineMaterial mat = shader.getOrCreateMaterial("surface");
+
+    SimpleInlineInstance instance(name, transform, meshShape, mat);
+    instance.setInstanceUniform(InlineUniform('u_diffuseColor', color));
+    return meshShape;
+  }
+  else{
+    SimpleInlineInstance instance = transform.getChild(0);
+    instance.setInstanceUniform(InlineUniform('u_diffuseColor', color));
+    InlineMeshShape meshShape = instance.getShape();
+    return meshShape;
+  }
+}
+
+function InlineTransform drawFlatShapeAtXfo(io InlineTransform rootTransform, String name, InlineShape shape, Color color, Xfo xfo){
+  InlineTransform transform = rootTransform.getChild(name);
+  if(transform == null){
+    transform = StaticInlineTransform(name, rootTransform, xfo);
+
+    InlineDrawing drawing = OGLInlineDrawing_GetInstance();
+    InlineShader shader = drawing.registerShader(OGLFlatShader());
+    InlineMaterial mat = shader.getOrCreateMaterial("flat");
+
+    SimpleInlineInstance instance(name, transform, shape, mat);
+    instance.setInstanceUniform(InlineUniform('u_color', color));
+  }
+  else{
+    SimpleInlineInstance instance = transform.getChild(0);
+    instance.setInstanceUniform(InlineUniform('u_color', color));
+    transform.setLocalXfo(0, xfo);
+  }
+  return transform;
+}
+
+function InlineLinesShape drawLine(
+  io InlineTransform rootTransform,
+  in String name,
+  in Vec3 start,
+  in Vec3 end,
+  in Color color
+){
+  InlineLinesShape linesShape = getOrCreateLines(rootTransform, name, color);
+  Lines lines = linesShape.getLines();
+  lines.clear();
+  lines.addLine(start, end);
+  return linesShape;
+}
+
+
+function InlineLinesShape drawLineStrip(
+  io InlineTransform rootTransform,
+  in String name,
+  in Vec3 positions[],
+  in Color color
+){
+  InlineLinesShape linesShape = getOrCreateLines(rootTransform, name, color);
+  Lines lines = linesShape.getLines();
+  lines.clear();
+  lines.addLineStrip(positions);
+  return linesShape;
+}
+
+
+function InlinePointsShape drawPoints(
+  io InlineTransform rootTransform,
+  in String name,
+  in Vec3 positions[],
+  in Color color,
+  in Float32 size
+){
+  InlinePointsShape pointsShape = getOrCreatePoints(rootTransform, name, color);
+  Points points = pointsShape.getPoints();
+  points.clear();
+  for(Size i=0; i<positions.size(); i++)
+    points.addPoint(positions[i]);
+
+  // pointsShape.setPointsSize(size);
+  return pointsShape;
+}
+
+
+function InlineTransform drawCircle(
+  io InlineTransform rootTransform,
+  in String name,
+  in Xfo xfo,
+  in Scalar radius,
+  in Color color
+){
+  Xfo scaledXfo = xfo;
+  scaledXfo.sc.set(radius, radius, radius);
+  InlineTransform transform = rootTransform.getChild(name);
+  if(transform == null){
+    InlineDrawing drawing = OGLInlineDrawing_GetInstance();
+    
+    InlineShader shader = drawing.registerShader(OGLFlatShader());
+    InlineMaterial mat = shader.getOrCreateMaterial("flat");
+
+    InlineLinesShape shape = drawing.getShape('DebugShapes_Circle');
+    if(shape == null){
+      Lines lines();
+      lines.addCircle(Xfo(), 1.0, 12);
+      shape = InlineLinesShape('DebugShapes_Circle', lines);
+      drawing.registerShape(shape);
+    }
+
+    transform = StaticInlineTransform(name, rootTransform, scaledXfo);
+    SimpleInlineInstance instance(name, transform, shape, mat);
+    instance.setInstanceUniform(InlineUniform('u_color', color));
+  }
+  else{
+    SimpleInlineInstance instance = transform.getChild(0);
+    instance.setInstanceUniform(InlineUniform('u_color', color));
+    transform.setLocalXfo(0, scaledXfo);
+  }
+  return transform;
+}
+
+function InlineTransform drawLinesSphere(
+  io InlineTransform rootTransform,
+  in String name,
+  in Xfo xfo,
+  in Scalar radius,
+  in Color color
+){
+  Xfo scaledXfo = xfo;
+  scaledXfo.sc.set(radius, radius, radius);
+  InlineTransform transform = rootTransform.getChild(name);
+  if(transform == null){
+    InlineDrawing drawing = OGLInlineDrawing_GetInstance();
+    
+    InlineShader shader = drawing.registerShader(OGLFlatShader());
+    InlineMaterial mat = shader.getOrCreateMaterial("flat");
+
+    InlineLinesShape shape = drawing.getShape('DebugShapes_LinesSphere');
+    if(shape == null){
+      Lines lines();
+      lines.addSphere(Xfo(), 1.0, 12);
+      shape = InlineLinesShape('DebugShapes_LinesSphere', lines);
+      drawing.registerShape(shape);
+    }
+
+    transform = StaticInlineTransform(name, rootTransform, scaledXfo);
+    SimpleInlineInstance instance(name, transform, shape, mat);
+    instance.setInstanceUniform(InlineUniform('u_color', color));
+  }
+  else{
+    SimpleInlineInstance instance = transform.getChild(0);
+    instance.setInstanceUniform(InlineUniform('u_color', color));
+    transform.setLocalXfo(0, scaledXfo);
+  }
+  return transform;
+}
+
+function InlineTransform drawCross(
+  io InlineTransform rootTransform,
+  in String name,
+  in Xfo xfo,
+  in Scalar size,
+  in Color color
+){
+  Xfo scaledXfo = xfo;
+  scaledXfo.sc.set(size, size, size);
+  InlineTransform transform = rootTransform.getChild(name);
+  if(transform == null){
+    InlineDrawing drawing = OGLInlineDrawing_GetInstance();
+    
+    InlineShader shader = drawing.registerShader(OGLFlatShader());
+    InlineMaterial mat = shader.getOrCreateMaterial("flat");
+
+    InlineLinesShape shape = drawing.getShape('DebugShapes_Cross');
+    if(shape == null){
+      Lines lines();
+      lines.addCross(Xfo(), 1.0);
+      shape = InlineLinesShape('DebugShapes_Cross', lines);
+      drawing.registerShape(shape);
+    }
+
+    transform = StaticInlineTransform(name, rootTransform, scaledXfo);
+    SimpleInlineInstance instance(name, transform, shape, mat);
+    instance.setInstanceUniform(InlineUniform('u_color', color));
+  }
+  else{
+    SimpleInlineInstance instance = transform.getChild(0);
+    instance.setInstanceUniform(InlineUniform('u_color', color));
+    transform.setLocalXfo(0, scaledXfo);
+  }
+  return transform;
+}
+
+function InlineTransform drawRectangle(
+  io InlineTransform rootTransform,
+  in String name,
+  in Xfo xfo,
+  in Scalar length,
+  in Scalar width,
+  in Color color
+){
+  Xfo scaledXfo = xfo;
+  scaledXfo.sc.set(length, 1.0, width);
+  InlineTransform transform = rootTransform.getChild(name);
+  if(transform == null){
+    InlineDrawing drawing = OGLInlineDrawing_GetInstance();
+    
+    InlineShader shader = drawing.registerShader(OGLFlatShader());
+    InlineMaterial mat = shader.getOrCreateMaterial("flat");
+
+    InlineLinesShape shape = drawing.getShape('DebugShapes_Rectangle');
+    if(shape == null){
+      Lines lines();
+      lines.addRectangle(Xfo(), 1.0, 1.0);
+      shape = InlineLinesShape('DebugShapes_Rectangle', lines);
+      drawing.registerShape(shape);
+    }
+
+    transform = StaticInlineTransform(name, rootTransform, scaledXfo);
+    SimpleInlineInstance instance(name, transform, shape, mat);
+    instance.setInstanceUniform(InlineUniform('u_color', color));
+  }
+  else{
+    SimpleInlineInstance instance = transform.getChild(0);
+    instance.setInstanceUniform(InlineUniform('u_color', color));
+    transform.setLocalXfo(0, scaledXfo);
+  }
+  return transform;
+}
+
+// Draws a Sphere using a PolygonMesh at the specified Xfo.
+function InlineTransform drawSphere(
+  io InlineTransform rootTransform,
+  in String name,
+  in Xfo xfo,
+  in Scalar radius,
+  in Color color
+){
+  Xfo scaledXfo = xfo;
+  scaledXfo.sc.set(radius, radius, radius);
+  InlineTransform transform = rootTransform.getChild(name);
+  if(transform == null){
+    InlineDrawing drawing = OGLInlineDrawing_GetInstance();
+    
+    InlineShader shader = drawing.registerShader(OGLSurfaceShader());
+    InlineMaterial mat = shader.getOrCreateMaterial("surface");
+
+    InlineMeshShape shape = drawing.getShape('DebugShapes_Sphere');
+    if(shape == null){
+      PolygonMesh mesh();
+      mesh.addSphere(Xfo(), 1.0, 12, true, false);
+      shape = InlineMeshShape('DebugShapes_Sphere', mesh);
+      drawing.registerShape(shape);
+    }
+
+    transform = StaticInlineTransform(name, rootTransform, scaledXfo);
+    SimpleInlineInstance instance(name, transform, shape, mat);
+    instance.setInstanceUniform(InlineUniform('u_diffuseColor', color));
+  }
+  else{
+    SimpleInlineInstance instance = transform.getChild(0);
+    instance.setInstanceUniform(InlineUniform('u_diffuseColor', color));
+    transform.setLocalXfo(0, scaledXfo);
+  }
+  return transform;
+}
+
+
+// Draws an Arrow using a cylinder and Cone. The size of the displayed arros is driven by the scale factor of the xfo parameter  
+function InlineTransform drawArrow(
+  io InlineTransform rootTransform,
+  in String name,
+  in Xfo xfo,
+  in Color color
+){
+  InlineTransform transform = rootTransform.getChild(name);
+  if(transform == null){
+    InlineDrawing drawing = OGLInlineDrawing_GetInstance();
+    
+    InlineShader shader = drawing.registerShader(OGLSurfaceShader());
+    InlineMaterial mat = shader.getOrCreateMaterial("surface");
+
+    InlineMeshShape shape = drawing.getShape('DebugShapes_Arrow');
+    if(shape == null){
+      PolygonMesh mesh();
+      Size detail = 12;
+      Scalar coneRadius = 0.07;
+      Scalar coneHeight = 0.3;
+      mesh.addCone(Xfo(Vec3(0.0, 0.85, 0.0)), coneRadius, coneHeight, true, detail, true, false);
+      Scalar cylinderRadius = 0.015;
+      Scalar cylinderHeight = 0.85;
+      mesh.addCylinder(Xfo(Vec3(0.0, 0.425, 0.0)), cylinderRadius, cylinderHeight, true, detail, 1, true, false);
+
+      shape = InlineMeshShape('DebugShapes_Arrow', mesh);
+      drawing.registerShape(shape);
+    }
+
+    transform = StaticInlineTransform(name, rootTransform, xfo);
+    SimpleInlineInstance instance(name, transform, shape, mat);
+    instance.setInstanceUniform(InlineUniform('u_diffuseColor', color));
+  }
+  else{
+    transform.setLocalXfo(0, xfo);
+  }
+  return transform;
+}
+
+
+// Draws an Xfo using 3 colored arrows. The size of the displayed Xfo is driven by the scale factor of the xfo parameter 
+function InlineTransform drawXfo(
+  io InlineTransform rootTransform,
+  in String name,
+  in Xfo xfo,
+  in Color color,
+  in Scalar colorBlend
+){
+  InlineTransform transform = rootTransform.getChild(name);
+  if(transform == null){
+    transform = StaticInlineTransform(name, rootTransform, xfo);
+
+    Color red = Color(1.0, 0.0, 0.0).linearInterpolate(color, colorBlend);
+    Color green = Color(0.0, 1.0, 0.0).linearInterpolate(color, colorBlend);
+    Color blue = Color(0.0, 0.0, 1.0).linearInterpolate(color, colorBlend);
+
+    Xfo xaxisXfo();
+    xaxisXfo.ori.setFromEulerAngles(Vec3(0, 0, Math_degToRad(-90)));
+    Xfo zaxisXfo();
+    zaxisXfo.ori.setFromEulerAngles(Vec3(Math_degToRad(90), 0, 0));
+
+    drawArrow(transform, name+"X", xaxisXfo, red);
+    drawArrow(transform, name+"Y", Xfo(), green);
+    drawArrow(transform, name+"Z", zaxisXfo, blue);
+  }
+  else{
+    transform.setLocalXfo(0, xfo);
+  }
+  return transform;
+}
+
+
+function InlineTransform drawXfo(
+  io InlineTransform rootTransform,
+  in String name,
+  in Xfo xfo,
+  in Color color
+){
+  return drawXfo(rootTransform, name, xfo, color, 1.0);
+}
+
+
+function InlineTransform drawXfo(
+  io InlineTransform rootTransform,
+  in String name,
+  in Xfo xfo
+){
+  return drawXfo(rootTransform, name, xfo, Color(1.0, 1.0, 1.0), 0.0);
+}
+
+
+function InlineTransform drawXfoArray(
+  io InlineTransform rootTransform,
+  in String name,
+  in Xfo xfos[],
+  in Color color,
+  in Scalar colorBlend
+){
+  if(xfos.size > 0){
+    InlineTransform transform = drawXfo(rootTransform, name, xfos[0], color, colorBlend);
+    transform.setLocalCount(xfos.size);
+    for(Index i=1; i<xfos.size(); i++)
+      transform.setLocalXfo(i, xfos[i]);
+    return transform;
+  }
+  else{
+    InlineTransform transform = rootTransform.getChild(name);
+    if(transform != null)
+      transform.setLocalCount(0);
+    return transform;
+  }
+}
+
+
+function InlineTransform drawXfoArray(
+  io InlineTransform rootTransform,
+  in String name,
+  in Xfo xfos[],
+  in Color color
+){
+  return drawXfoArray(rootTransform, name, xfos, color, 1.0);
+}
+
+
+function InlineTransform drawXfoArray(
+  io InlineTransform rootTransform,
+  in String name,
+  in Xfo xfos[]
+){
+  return drawXfoArray(rootTransform, name, xfos, Color(1.0, 1.0, 1.0), 0.0);
+}
+
+

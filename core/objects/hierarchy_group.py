@@ -13,7 +13,22 @@ class HierarchyGroup(SceneItem):
 
     __kType__ = "HierarchyGroup"
 
-    def __init__(self, name):
-        super(HierarchyGroup, self).__init__(name, None)
+    def __init__(self, name, parent=None):
+        super(HierarchyGroup, self).__init__(name, parent=parent)
 
         self.setShapeVisibility(False)
+
+
+    # =============
+    # Name methods
+    # =============
+
+    def getBuildName(self):
+        """Returns the name used when building the node in the target application.
+
+        Return:
+        String, build name of the object.
+
+        """
+
+        return super(HierarchyGroup, self).getBuildName() + '_hrc'

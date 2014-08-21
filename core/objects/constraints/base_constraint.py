@@ -19,7 +19,7 @@ class BaseConstraint(object):
         self.name = name
         self.constrainee = None
         self.constrainers = []
-        self.maintainOffset = False
+        self.maintainOffset = True
 
 
     # =============
@@ -35,6 +35,16 @@ class BaseConstraint(object):
 
         return self.name
 
+
+    def getFullName(self):
+        """Returns the full hierarchical path to this object.
+
+        Return:
+        String, full name of the object.
+
+        """
+
+        return self.getName()
 
     # ===============
     # Parent Methods
@@ -97,13 +107,13 @@ class BaseConstraint(object):
 
     def setConstrainee(self, constrainee):
         """Sets the constrainee object for this constraint.
-        
+
         Arguments:
         constrainee -- Object, kSceneItem that will be constrained.
-        
+
         Return:
         True if successful.
-        
+
         """
 
         self.constrainee = constrainee
@@ -113,10 +123,10 @@ class BaseConstraint(object):
 
     def getConstrainee(self):
         """Returns the constrainee object for this constraint.
-        
+
         Return:
         True if successful.
-        
+
         """
 
         return self.constrainee
@@ -183,3 +193,51 @@ class BaseConstraint(object):
         """
 
         return self.__kType__
+
+
+
+    # ================
+    # Persistence Methods
+    # ================
+    def jsonEncode(self, saver):
+        """Returns the data for this object encoded as a JSON hierarchy.
+
+        Arguments:
+
+        Return:
+        A JSON structure containing the data for this SceneItem.
+
+        """
+
+        classHierarchy = []
+        for cls in type.mro(type(self)):
+            if cls == object:
+                break;
+            classHierarchy.append(cls.__name__)
+
+        jsonData = {
+            '__typeHierarchy__': classHierarchy,
+            'name': self.name,
+            'constrainee': self.constrainee.getName(),
+            'constrainers': []
+        }
+        for cnstrnr in self.constrainers:
+            jsonData['constrainers'].append(cnstrnr.getName())
+
+        return jsonData
+
+
+    def jsonDecode(self, loader, jsonData):
+        """Returns the color of the object.
+
+        Return:
+        True if decoding was successful
+
+        """
+
+        loader.registerConstructionCallback(jsonData['constrainee'], self.setConstrainee)
+
+        for cnstrnr in jsonData['constrainers']:
+            loader.registerConstructionCallback(cnstrnr, self.addConstrainer)
+
+        return True

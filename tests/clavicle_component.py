@@ -1,105 +1,160 @@
-from kraken.core.maths import *
-
-from kraken.core.objects.attributes.float_attribute import FloatAttribute
-from kraken.core.objects.attributes.integer_attribute import IntegerAttribute
-from kraken.core.objects.attributes.bool_attribute import BoolAttribute
-from kraken.core.objects.attributes.string_attribute import StringAttribute
-
-from kraken.core.objects.constraints.pose_constraint import PoseConstraint
+from kraken.core.maths.vec import Vec3
+from kraken.core.maths.xfo import Xfo
 
 from kraken.core.objects.components.base_component import BaseComponent
-
+from kraken.core.objects.attributes.float_attribute import FloatAttribute
+from kraken.core.objects.attributes.bool_attribute import BoolAttribute
+from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 from kraken.core.objects.locator import Locator
-
+from kraken.core.objects.joint import Joint
+from kraken.core.objects.srtBuffer import SrtBuffer
 from kraken.core.objects.controls.cube_control  import CubeControl
-from kraken.core.objects.controls.circle_control  import  CircleControl
-from kraken.core.objects.controls.sphere_control  import  SphereControl
-from kraken.core.objects.controls.pin_control  import  PinControl
-from kraken.core.objects.controls.square_control  import  SquareControl
-from kraken.core.objects.controls.null_control  import  NullControl
+
+from kraken.core.objects.operators.splice_operator import SpliceOperator
 
 
 class ClavicleComponent(BaseComponent):
-    """Arm Component Test"""
+    """Clavicle Component"""
 
     def __init__(self, name, parent=None, side='M'):
         super(ClavicleComponent, self).__init__(name, parent, side)
 
+        # =========
+        # Controls
+        # =========
         # Setup component attributes
         defaultAttrGroup = self.getAttributeGroupByIndex(0)
         defaultAttrGroup.addAttribute(BoolAttribute("toggleDebugging", True))
 
-        # Add Guide Controls
-        clavicleOriginGuideCtrl = SphereControl('clavicleOriginGuideCtrl')
-        clavicleOriginGuideCtrl.xfo.tr = Vec3(1.0, 18.0, 1.0)
-        self.addChild(clavicleOriginGuideCtrl)
+        # Default values
+        if side == 'R':
+            ctrlColor = "red"
+            claviclePosition = Vec3(-0.1322, 15.403, -0.5723)
+            clavicleUpV = Vec3()
+            clavicleUpV.copy(claviclePosition)
+            clavicleUpV = clavicleUpV.add(Vec3(0.0, 1.0, 0.0)).unit()
+            clavicleEndPosition = Vec3(-2.27, 15.295, -0.753)
+        else:
+            ctrlColor = "greenBright"
+            claviclePosition = Vec3(0.1322, 15.403, -0.5723)
+            clavicleUpV = Vec3()
+            clavicleUpV.copy(claviclePosition)
+            clavicleUpV = clavicleUpV.add(Vec3(0.0, 1.0, 0.0)).unit()
+            clavicleEndPosition = Vec3(2.27, 15.295, -0.753)
 
-        clavicleInsertGuideCtrl = CircleControl('clavicleInsertGuideCtrl')
-        clavicleInsertGuideCtrl.xfo.tr = Vec3(5.0, 20.0, 0.0)
-        self.addChild(clavicleInsertGuideCtrl)
+        # Calculate Clavicle Xfo
+        rootToEnd = clavicleEndPosition.subtract(claviclePosition).unit()
+        rootToUpV = clavicleUpV.subtract(claviclePosition).unit()
+        bone1ZAxis = rootToUpV.cross(rootToEnd).unit()
+        bone1Normal = bone1ZAxis.cross(rootToEnd).unit()
+        clavicleXfo = Xfo()
 
+        clavicleXfo.setFromVectors(rootToEnd, bone1Normal, bone1ZAxis, claviclePosition)
+
+        # Add Controls
+        clavicleCtrl = CubeControl('clavicle', parent=self)
+        clavicleCtrl.alignOnXAxis()
+        clavicleLen = claviclePosition.subtract(clavicleEndPosition).length()
+        clavicleCtrl.scalePoints(Vec3(clavicleLen, 0.75, 0.75))
+
+        if side == "R":
+            clavicleCtrl.translatePoints(Vec3(0.0, 0.0, -1.0))
+        else:
+            clavicleCtrl.translatePoints(Vec3(0.0, 0.0, 1.0))
+
+        clavicleCtrl.xfo.copy(clavicleXfo)
+        clavicleCtrl.setColor(ctrlColor)
+
+        clavicleCtrlSrtBuffer = SrtBuffer('clavicle', parent=self)
+        clavicleCtrlSrtBuffer.xfo.copy(clavicleCtrl.xfo)
+        clavicleCtrlSrtBuffer.addChild(clavicleCtrl)
+
+
+        # ==========
+        # Deformers
+        # ==========
+        container = self.getParent().getParent()
+        deformersLayer = container.getChildByName('deformers')
+
+        clavicleDef = Joint('clavicle')
+        clavicleDef.setComponent(self)
+
+        deformersLayer.addChild(clavicleDef)
+
+
+        # =====================
+        # Create Component I/O
+        # =====================
         # Setup Component Xfo I/O's
         spineEndInput = Locator('spineEnd')
+        spineEndInput.xfo.copy(clavicleXfo)
+
         clavicleEndOutput = Locator('clavicleEnd')
+        clavicleEndOutput.xfo.copy(clavicleXfo)
+        clavicleOutput = Locator('clavicle')
+        clavicleOutput.xfo.copy(clavicleXfo)
 
         # Setup componnent Attribute I/O's
+        debugInputAttr = BoolAttribute('debug', True)
+        rightSideInputAttr = BoolAttribute('rightSide', side is 'R')
         armFollowBodyOutputAttr = FloatAttribute('followBody', 0.0, 0.0, 1.0)
 
+
+        # ==============
+        # Constrain I/O
+        # ==============
+        # Constraint inputs
+        clavicleInputConstraint = PoseConstraint('_'.join([clavicleCtrl.getName(), 'To', spineEndInput.getName()]))
+        clavicleInputConstraint.setMaintainOffset(True)
+        clavicleInputConstraint.addConstrainer(spineEndInput)
+        clavicleCtrlSrtBuffer.addConstraint(clavicleInputConstraint)
+
         # Constraint outputs
-        clavicleEndConstraint = PoseConstraint('_'.join([clavicleEndOutput.getName(), 'To', clavicleInsertGuideCtrl.getName()]))
-        clavicleEndConstraint.addConstrainer(clavicleInsertGuideCtrl)
+        clavicleConstraint = PoseConstraint('_'.join([clavicleOutput.getName(), 'To', clavicleCtrl.getName()]))
+        clavicleConstraint.addConstrainer(clavicleCtrl)
+        clavicleOutput.addConstraint(clavicleConstraint)
+
+        clavicleEndConstraint = PoseConstraint('_'.join([clavicleEndOutput.getName(), 'To', clavicleCtrl.getName()]))
+        clavicleEndConstraint.addConstrainer(clavicleCtrl)
         clavicleEndOutput.addConstraint(clavicleEndConstraint)
 
+
+        # ==================
+        # Add Component I/O
+        # ==================
         # Add Xfo I/O's
         self.addInput(spineEndInput)
         self.addOutput(clavicleEndOutput)
+        self.addOutput(clavicleOutput)
 
+        # Add Attribute I/O's
+        self.addInput(debugInputAttr)
+        self.addInput(rightSideInputAttr)
         self.addOutput(armFollowBodyOutputAttr)
 
 
+        # ===============
+        # Add Splice Ops
+        # ===============
+        # Add Deformer Splice Op
+        spliceOp = SpliceOperator("clavicleDeformerSpliceOp", "PoseConstraintSolver", "KrakenPoseConstraintSolver")
+        self.addOperator(spliceOp)
+
+        # Add Att Inputs
+        spliceOp.setInput("debug", debugInputAttr)
+        spliceOp.setInput("rightSide", rightSideInputAttr)
+
+        # Add Xfo Inputstrl)
+        spliceOp.setInput("constrainer", clavicleOutput)
+
+        # Add Xfo Outputs
+        spliceOp.setOutput("constrainee", clavicleDef)
+
+
     def buildRig(self, parent):
-
-        # component = super(ClavicleComponent, self).buildRig()
-        component = BaseComponent(self.getName(), parent, self.getSide())
-
-        # Setup component attributes
-        component.addAttribute(FloatAttribute("bone1Len", 1.0, minValue=0.0, maxValue=100.0))
-        component.addAttribute(FloatAttribute("bone2Len", 1.0, minValue=0.0, maxValue=100.0))
-        component.addAttribute(FloatAttribute("fkik", 1.0, minValue=0.0, maxValue=1.0))
-        component.addAttribute(FloatAttribute("softDist", 0.5, minValue=0.0, maxValue=1.0))
-        component.addAttribute(BoolAttribute("softIK", True))
-        component.addAttribute(BoolAttribute("stretch", True))
-        component.addAttribute(FloatAttribute("stretchBlend", 1.0, minValue=0.0, maxValue=1.0))
-        component.addAttribute(StringAttribute("Side", self.side))
-        component.addAttribute(BoolAttribute("toggleDebugging", True))
-
-
-        bicepGuideCtrl = self.getChildByName('bicepGuideCtrl')
-        forearmGuideCtrl = self.getChildByName('forearmGuideCtrl')
-        wristGuideCtrl = self.getChildByName('wristGuideCtrl')
-
-
-        # ===================================================================
-        # Process data from guide / json data to calculate xfos for objects.
-        # ===================================================================
-
-
-        # Add Rig Controls
-        bicepFKCtrl = SquareControl('bicepFKCtrl', parent=self)
-        bicepFKCtrl.xfo = bicepGuideCtrl.xfo
-        self.addChild(bicepFKCtrl)
-
-        forearmFKCtrl = NullControl('forearmFKCtrl', parent=self)
-        forearmFKCtrl.xfo = forearmGuideCtrl.xfo
-        self.addChild(forearmFKCtrl)
-
-        wristIKCtrl = CircleControl('wristIKCtrl', parent=self)
-        wristIKCtrl.xfo = wristGuideCtrl.xfo
-        self.addChild(wristIKCtrl)
-
-        return container
+        pass
 
 
 if __name__ == "__main__":
-    armLeft = ClavicleComponent("myClavicle", side='L')
-    print armLeft.getNumChildren()
+    clavicleLeft = ClavicleComponent("myClavicle", side='L')
+    print clavicleLeft.getNumChildren()

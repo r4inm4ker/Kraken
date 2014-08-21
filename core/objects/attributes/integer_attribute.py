@@ -13,7 +13,7 @@ class IntegerAttribute(BaseAttribute):
 
     __kType__ = "IntegerAttribute"
 
-    def __init__(self, name, value, minValue, maxValue):
+    def __init__(self, name, value=0, minValue=0, maxValue=100):
         super(IntegerAttribute, self).__init__(name, value)
         self.min = minValue
         self.max = maxValue

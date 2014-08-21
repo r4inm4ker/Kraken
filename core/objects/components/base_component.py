@@ -73,6 +73,43 @@ class BaseComponent(SceneItem):
         return True
 
 
+    # =============
+    # Name methods
+    # =============
+    def getComponentName(self):
+        """Returns the name of the component used on self and all objects owned by the component
+
+        Return:
+        String, build name of the object.
+
+        """
+
+        return self.getName() + '_' + self.getSide()
+
+
+    def getBuildName(self):
+        """Returns the name used when building the node in the target application.
+
+        Return:
+        String, build name of the object.
+
+        """
+
+        return self.getComponentName() + '_cmp'
+
+
+    # ==============
+    # Child Methods
+    # ==============
+    def addChild(self, child):
+        super(BaseComponent, self).addChild(child)
+
+        # Assign the child self as the component.
+        child.setComponent(self)
+
+        return True
+
+
     # ==============
     # Input Methods
     # ==============
@@ -114,8 +151,8 @@ class BaseComponent(SceneItem):
                 + inputObject.getName() + "'")
 
         if isinstance(inputObject, Locator):
-            inputHrc.children.append(inputObject)
-            inputObject.setParent(inputHrc)
+            inputHrc.addChild(inputObject)
+            inputObject.setShapeVisibility(False)
 
         elif isinstance(inputObject, BaseAttribute):
             inputAttrsGrp.attributes.append(inputObject)
@@ -123,6 +160,9 @@ class BaseComponent(SceneItem):
 
         componentInput = ComponentInput(inputObject.getName(), inputObject)
         self.inputs.append(componentInput)
+
+        # Assign the componentInput self as the component.
+        componentInput.setComponent(self)
 
         return True
 
@@ -212,9 +252,9 @@ class BaseComponent(SceneItem):
         return None
 
 
-    # ==============
+    # ===============
     # Output Methods
-    # ==============
+    # ===============
     def checkOutputIndex(self, index):
         """Checks the supplied index is valid.
 
@@ -243,18 +283,18 @@ class BaseComponent(SceneItem):
         outputHrc = self.getChildByName('outputs')
         outputAttrsGrp = outputHrc.getAttributeGroupByName('outputAttrs')
 
-        if not isinstance(outputObject, (Locator, BaseAttribute)):
+        if not isinstance(outputObject, (SceneItem, BaseAttribute)):
             raise Exception("'outputObject' argument is not a valid object. "
                 + outputObject.getName() + " is of type:" + str(outputObject)
-                + ". Must be an instance of 'Locator' or 'BaseAttribute'.")
+                + ". Must be an instance of 'SceneItem' or 'BaseAttribute'.")
 
         if outputObject in self.outputs:
             raise Exception("'outputObject' argument is already an output! Invalid object: '"
                 + outputObject.getName() + "'")
 
-        if isinstance(outputObject, Locator):
-            outputHrc.children.append(outputObject)
-            outputObject.setParent(outputHrc)
+        if isinstance(outputObject, SceneItem):
+            outputHrc.addChild(outputObject)
+            outputObject.setShapeVisibility(False)
 
         elif isinstance(outputObject, BaseAttribute):
             outputAttrsGrp.attributes.append(outputObject)
@@ -262,6 +302,9 @@ class BaseComponent(SceneItem):
 
         componentOutput = ComponentOutput(outputObject.getName(), outputObject)
         self.outputs.append(componentOutput)
+
+        # Assign the componentOutput self as the component.
+        componentOutput.setComponent(self)
 
         return True
 

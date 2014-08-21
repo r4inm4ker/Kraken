@@ -10,10 +10,11 @@ class AttributeGroup(object):
 
     __kType__ = "AttributeGroup"
 
-    def __init__(self, name):
+    def __init__(self, name, parent=None):
         super(AttributeGroup, self).__init__()
         self.name = name
         self.attributes = []
+        self.parent = parent
 
 
     # =============
@@ -44,6 +45,20 @@ class AttributeGroup(object):
         """
 
         return self.name
+
+
+    def getFullName(self):
+        """Returns the full hierarchical path to this object.
+
+        Return:
+        String, full name of the object.
+
+        """
+
+        if self.parent is not None:
+            return self.parent.getFullName() + '.' + self.getName()
+
+        return self.getName()
 
 
     # ===============
@@ -220,3 +235,50 @@ class AttributeGroup(object):
                 return eachAttribute
 
         return None
+
+
+    # ====================
+    # Persistence Methods
+    # ====================
+    def jsonEncode(self, saver):
+        """Returns the data for this object encoded as a JSON hierarchy.
+
+        Arguments:
+
+        Return:
+        A JSON structure containing the data for this SceneItem.
+
+        """
+
+        classHierarchy = []
+        for cls in type.mro(type(self)):
+            if cls == object:
+                break;
+            classHierarchy.append(cls.__name__)
+
+        jsonData = {
+            '__typeHierarchy__': classHierarchy,
+            'name': self.name,
+            'parent': self.parent.getName(),
+            'attributes': []
+        }
+        for attr in self.attributes:
+            jsonData['attributes'].append(attr.jsonEncode(saver))
+
+        return jsonData
+
+
+    def jsonDecode(self, loader, jsonData):
+        """Returns the color of the object.
+
+        Return:
+        the decoded object.
+
+        """
+
+        self.parent =  loader.getParentItem()
+
+        for attr in jsonData['attributes']:
+            self.addAttribute(loader.construct(attr))
+
+        return True

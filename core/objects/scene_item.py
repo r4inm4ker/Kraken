@@ -5,7 +5,7 @@ SceneItem - Base SceneItem Object.
 
 """
 
-from kraken.core.maths import *
+from kraken.core.maths.xfo import Xfo
 from kraken.core.objects.attributes.attribute_group import AttributeGroup
 
 
@@ -17,7 +17,8 @@ class SceneItem(object):
     def __init__(self, name, parent=None):
         super(SceneItem, self).__init__()
         self.name = name
-        self.parent = parent
+        self.parent = None
+        self.component = None
         self.children = []
         self.flags = {}
         self.attributeGroups = []
@@ -26,6 +27,9 @@ class SceneItem(object):
         self.color = None
         self.visibility = True
         self.shapeVisibility = True
+
+        if parent is not None:
+            parent.addChild(self)
 
         defaultAttrGroup = AttributeGroup("")
         self.addAttributeGroup(defaultAttrGroup)
@@ -53,18 +57,24 @@ class SceneItem(object):
 
         """
 
-        names = []
-        parent = self.getParent()
-        while parent is not None:
-            parent = parent.getParent()
-            if parent is None:
-                break
+        if self.parent is not None:
+            return self.parent.getFullName() + '.' + self.getName()
 
-            names.append(parent.getName())
+        return self.getName()
 
-        fullName = '.'.join(reversed(names))
 
-        return fullName
+    def getBuildName(self):
+        """Returns the name used when building the node in the target application.
+
+        Return:
+        String, build name of the object.
+
+        """
+
+        if self.component is not None:
+            return self.component.getComponentName() + '_' + self.getName()
+
+        return self.getName()
 
 
     # ===============
@@ -97,6 +107,36 @@ class SceneItem(object):
         return True
 
 
+    # ==================
+    # Component Methods
+    # ==================
+    def getComponent(self):
+        """Returns the component of the object as an object.
+
+        Return:
+        Component of this object.
+
+        """
+
+        return self.component
+
+
+    def setComponent(self, component):
+        """Sets the component attribute of this object.
+
+        Arguments:
+        component -- Object, object that is the component of this one.
+
+        Return:
+        True if successful.
+
+        """
+
+        self.component = component
+
+        return True
+
+
     # ==============
     # Child Methods
     # ==============
@@ -125,11 +165,21 @@ class SceneItem(object):
 
         """
 
-        if child.name in [x.name for x in self.children]:
-            raise IndexError("Child with " + child.name + " already exists as a child.")
+        # if child.getName() in [x.getName() for x in self.children]:
+        #     raise IndexError("Child with name '" + child.getName() + "'' already exists as a child.")
+
+        if child.getParent() is not None:
+            parent = child.getParent()
+            for i in xrange(parent.getNumChildren()):
+                if child in parent.children:
+                    parent.children.remove(child)
 
         self.children.append(child)
         child.setParent(self)
+
+        # Assign the child the same component.
+        if self.component is not None:
+            child.setComponent(self.component)
 
         return True
 
@@ -192,6 +242,9 @@ class SceneItem(object):
     def getChildByIndex(self, index):
         """Returns the child object at specified index.
 
+        Arguments:
+        index -- Integer, index of the child to find.
+
         Return:
         Child object at specified index.
 
@@ -223,7 +276,7 @@ class SceneItem(object):
         """Returns all children that are of the specified type.
 
         Arguments:
-        childType -- Type, the object type to search for.
+        childType -- Class, type of children to find.
 
         Return:
         Array of child objects of the specified type.
@@ -233,10 +286,91 @@ class SceneItem(object):
 
         childrenOfType = []
         for eachChild in self.children:
-            if isinstance(eachChild, childType):
+            if type(eachChild) is childType:
                 childrenOfType.append(eachChild)
 
         return childrenOfType
+
+
+    def findChild(self, name, targetObj=None):
+        """Finds a child by recursively searching the hierarhcy for a child with
+        the given name.
+
+        Arguments:
+        name -- String, name of the child to find.
+        targetObj -- Object, object to search under. Used for recursive searching.
+
+        Return:
+        Object, child if found.
+
+        """
+
+        foundChild = None
+
+        if targetObj == None:
+            targetObj = self
+
+        # Build children
+        for i in xrange(targetObj.getNumChildren()):
+            child = targetObj.getChildByIndex(i)
+
+            if child.getName() == name:
+                foundChild = child
+            else:
+                foundChild = self.findChild(name, child)
+
+            if foundChild is not None:
+                break
+
+        return foundChild
+
+
+    def findChildrenByType(self, objectType, targetObj=None):
+        """Finds a child by recursively searching the hierarhcy for a child with
+        the given name.
+
+        Arguments:
+        objectType -- Class, type of children to find.
+        targetObj -- Object, object to search under. Used for recursive searching.
+
+        Return:
+        List, children of the searched type if found.
+
+        """
+
+        childrenOfType = []
+
+        self._findChildByType(objectType, childrenOfType)
+
+        return childrenOfType
+
+
+    def _findChildByType(self, objectType, foundArray, targetObj=None):
+        """Protected find child by type method.
+
+        Arguments:
+        objectType -- Class, type of children to find.
+        foundArray -- List, list of found children to append to.
+        targetObj -- Object, object to search under. Used for recursive searching.
+
+        Return:
+        True if successful.
+
+        """
+
+        if targetObj == None:
+            targetObj = self
+
+        # Build children
+        for i in xrange(targetObj.getNumChildren()):
+            child = targetObj.getChildByIndex(i)
+
+            if type(child) is objectType:
+                foundArray.append(child)
+
+            newFoundChildren = self._findChildByType(objectType, foundArray, child)
+
+        return
 
 
     # =============
@@ -321,8 +455,8 @@ class SceneItem(object):
 
         """
 
-        if attributeGroup.name in [x.name for x in self.attributeGroups]:
-            raise IndexError("Child with " + attributeGroup.name + " already exists as a attributeGroup.")
+        if attributeGroup.getName() in [x.getName() for x in self.attributeGroups]:
+            raise IndexError("Child with " + attributeGroup.getName() + " already exists as a attributeGroup.")
 
         self.attributeGroups.append(attributeGroup)
         attributeGroup.setParent(self)
@@ -422,9 +556,9 @@ class SceneItem(object):
         return None
 
 
-    # ========================
+    # ===================
     # Constraint Methods
-    # ========================
+    # ===================
     def checkConstraintIndex(self, index):
         """Checks the supplied index is valid.
 
@@ -453,8 +587,8 @@ class SceneItem(object):
 
         """
 
-        if constraint.name in [x.name for x in self.constraints]:
-            raise IndexError("Constraint with name '" + constraint.name + "'' already exists as a constraint.")
+        if constraint.getName() in [x.getName() for x in self.constraints]:
+            raise IndexError("Constraint with name '" + constraint.getName() + "'' already exists as a constraint.")
 
         self.constraints.append(constraint)
         constraint.setParent(self)
@@ -654,3 +788,107 @@ class SceneItem(object):
         """
 
         return self.color
+
+
+    # ==================
+    # Transform Methods
+    # ==================
+    def lockAttribute(self, attributeName):
+        pass
+
+
+    def unlockAttribute(self, attributeName):
+        pass
+
+
+    def hideAttribute(self, attributeName):
+        pass
+
+
+    def unhideAttribute(self, attributeName):
+        pass
+
+
+    # ====================
+    # Persistence Methods
+    # ====================
+    def jsonEncode(self, saver):
+        """Returns the data for this object encoded as a JSON hierarchy.
+
+        Arguments:
+
+        Return:
+        A JSON structure containing the data for this SceneItem.
+
+        """
+
+        classHierarchy = []
+        for cls in type.mro(type(self)):
+            if cls == object:
+                break;
+            classHierarchy.append(cls.__name__)
+
+        jsonData = {
+            '__typeHierarchy__': classHierarchy,
+            'name': self.name,
+            'parent': None,
+            'children': [],
+            'flags': self.flags,
+            'attributeGroups': [],
+            'constraints': [],
+            'xfo': self.xfo.jsonEncode(),
+            'color': self.color,
+            'visibility': self.visibility,
+            'shapeVisibility': self.shapeVisibility,
+        }
+
+        if self.parent is not None:
+            jsonData['parent'] = self.parent.getName()
+
+        if self.color is not None:
+            jsonData['color'] = saver.encodeValue(self.color)
+
+        for child in self.children:
+            jsonData['children'].append(child.jsonEncode(saver))
+
+        for attrGroup in self.attributeGroups:
+            jsonData['attributeGroups'].append(attrGroup.jsonEncode(saver))
+
+        for constr in self.constraints:
+            jsonData['constraints'].append(constr.jsonEncode(saver))
+
+        return jsonData
+
+
+    def jsonDecode(self, loader, jsonData):
+        """Returns the color of the object.
+
+        Return:
+        True if decoding was successful
+
+        """
+
+        self.parent =  loader.getParentItem()
+        self.flags =  jsonData['flags']
+        self.xfo =  loader.decodeValue(jsonData['xfo'])
+        if 'color' in jsonData and jsonData['color'] is not None:
+            self.color =  loader.decodeValue(jsonData['color'])
+        self.visibility =  jsonData['visibility']
+        self.shapeVisibility =  jsonData['shapeVisibility']
+
+        for child in jsonData['children']:
+            self.addChild(loader.construct(child))
+
+        for attrGroup in jsonData['attributeGroups']:
+            # There is one default attribute group assigned to each scene item.
+            # Load data into the existing item instead of constructing a new one.
+            if attrGroup['name'] == '':
+                loader.registerItem(self.attributeGroups[0])
+                self.attributeGroups[0].jsonDecode(loader, attrGroup)
+            else:
+                self.addAttributeGroup(loader.construct(attrGroup))
+
+        for constr in jsonData['constraints']:
+            self.addConstraint(loader.construct(constr))
+
+        return True
