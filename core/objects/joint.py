@@ -13,8 +13,8 @@ class Joint(SceneItem):
 
     __kType__ = "Joint"
 
-    def __init__(self, name):
-        super(Joint, self).__init__(name, None)
+    def __init__(self, name, parent=None):
+        super(Joint, self).__init__(name, parent=parent)
 
 
     # =============
@@ -28,5 +28,5 @@ class Joint(SceneItem):
         String, build name of the object.
 
         """
-        
+
         return super(Joint, self).getBuildName() + '_def'

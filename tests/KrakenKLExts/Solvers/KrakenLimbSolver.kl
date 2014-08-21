@@ -1,12 +1,9 @@
-require Math;
 require Kraken;
-require TwoBoneChainSolver;
 require InlineDrawing;
-require DrawingUtils;
 
 object LimbSolver : KrakenSolver {
   Boolean debug;
-  TwoBoneChainSolver twoBoneChain;
+  KrakenTwoBoneChainSolver twoBoneChain;
   InlineTransform rootTransform;
 };
 
@@ -42,6 +39,7 @@ function KrakenSolverArg[] LimbSolver.getArguments(){
   args.push(KrakenSolverArg('bone01Out', 'io', 'Mat44'));
   args.push(KrakenSolverArg('bone02Out', 'io', 'Mat44'));
   args.push(KrakenSolverArg('bone03Out', 'io', 'Mat44'));
+  args.push(KrakenSolverArg('bone03PosOut', 'io', 'Mat44'));
   return args;
 }
 
@@ -65,12 +63,13 @@ function LimbSolver.solve!
   in Mat44 upV,
   io Mat44 bone01Out,
   io Mat44 bone02Out,
-  io Mat44 bone03Out
+  io Mat44 bone03Out,
+  io Mat44 bone03PosOut
   )
 {
   this.debug = debug;
 
-  this.twoBoneChain = TwoBoneChainSolver();
+  this.twoBoneChain = KrakenTwoBoneChainSolver();
   this.twoBoneChain.bone1Len = bone1Len;
   this.twoBoneChain.bone2Len = bone2Len;
   this.twoBoneChain.fkik = fkik;
@@ -78,7 +77,7 @@ function LimbSolver.solve!
   this.twoBoneChain.softDist = softDist;
   this.twoBoneChain.stretch = stretch;
   this.twoBoneChain.stretchBlend = stretchBlend;
-  this.twoBoneChain.rightSide = rightSide;
+  // this.twoBoneChain.rightSide = rightSide;
   this.twoBoneChain.root = root;
   this.twoBoneChain.bone1FK = bone1FK;
   this.twoBoneChain.bone2FK = bone2FK;
@@ -91,6 +90,10 @@ function LimbSolver.solve!
   bone02Out = this.twoBoneChain.outMatrices[1];
   bone03Out = this.twoBoneChain.outMatrices[2];
 
+  Mat44 bone03PosMat44;
+  bone03PosMat44.setTranslation(bone03Out.translation);
+  bone03PosOut = bone03PosMat44;
+
   Xfo bone01DebugXfo = Xfo();
   Xfo bone02DebugXfo = Xfo();
   Xfo bone03DebugXfo = Xfo();
@@ -99,13 +102,82 @@ function LimbSolver.solve!
   bone02DebugXfo = bone02Out;
   bone03DebugXfo = bone03Out;
 
-  // Debugging
-  if (this.debug) {
-    etDrawBone(this.rootTransform, 'bone01', bone01DebugXfo, this.twoBoneChain.bone1Len, 0.25, Color(0, 0.5, 0));
-    etDrawBone(this.rootTransform, 'bone02', bone02DebugXfo, this.twoBoneChain.bone2Len, 0.25, Color(0, 0.5, 0));
-    etDrawBone(this.rootTransform, 'bone03', bone03DebugXfo, 1, 0.25, Color(0, 0.5, 0));
-
-    drawLine(this.rootTransform, 'upVLine', bone02Out.translation(), this.twoBoneChain.upV.translation(), Color(1.0, 1.0, 0));
+  // Setup debug shapes
+  Color boneColor = Color(1.0, 0.5, 0);
+  if(rightSide) {
+    boneColor.set(0.5, 0, 0, 1.0);
+  }
+  else {
+    boneColor.set(0, 0.5, 0, 1.0);
   }
 
+  Color ikColor = Color(0.5, 0.5, 0.5);
+  ikColor = ikColor.linearInterpolate(Color(1.0, 1.0, 0), fkik);
+
+  etDrawBone(this.rootTransform, 'bone01', bone01DebugXfo, this.twoBoneChain.bone1Len, 0.25, boneColor);
+  etDrawBone(this.rootTransform, 'bone02', bone02DebugXfo, this.twoBoneChain.bone2Len, 0.25, boneColor);
+  // etDrawBone(this.rootTransform, 'bone03', bone03DebugXfo, 1, 0.25, boneColor);
+  drawSegmentedLine(this.rootTransform, 'upVLine', bone02Out.translation(), this.twoBoneChain.upV.translation(), 0.2, ikColor);
+  drawSegmentedLine(this.rootTransform, 'rootToEffLine', bone01DebugXfo.tr, bone03DebugXfo.tr, 0.2, ikColor);
+
+  this.setDebug(this.debug);
+
+  // Set debugging visibility.
+  if(fkik < 0.1) {
+    this.setShapeActive('upVLine', false);
+    this.setShapeActive('rootToEffLine', false);
+  }
+  else {
+    this.setShapeActive('upVLine', true);
+    this.setShapeActive('rootToEffLine', true);
+  }
+
+}
+
+
+function LimbSolver.setDebug!(in Boolean active) {
+
+  for(Size i=0; i<this.rootTransform.getChildCount(); i++) {
+
+      InlineTransform transform = this.rootTransform.getChild(i);
+      if(transform) {
+
+        for(Size y=0; y<transform.getChildCount(); y++) {
+
+          InlineInstance instance = transform.getChild(y);
+          if(instance) {
+
+            if(!active) {
+              instance.setActive(false);
+            }
+            else if(active) {
+              instance.setActive(true);
+            }
+
+          }
+        }
+      }
+
+    }
+}
+
+function LimbSolver.setShapeActive!(in String name, in Boolean active) {
+
+  for(Size i=0; i<this.rootTransform.getChildCount(); i++) {
+
+      InlineTransform transform = this.rootTransform.getChild(i);
+      if(transform) {
+
+        for(Size y=0; y<transform.getChildCount(); y++) {
+
+          InlineInstance instance = transform.getChild(y);
+          if(instance) {
+
+            if(instance.getName() == name) {
+              instance.setActive(active);
+            }
+          }
+        }
+      }
+    }
 }

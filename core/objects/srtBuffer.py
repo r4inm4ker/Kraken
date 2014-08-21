@@ -13,6 +13,20 @@ class SrtBuffer(SceneItem):
 
     __kType__ = "SrtBuffer"
 
-    def __init__(self, name):
-        super(SrtBuffer, self).__init__(name, None)
+    def __init__(self, name, parent=None):
+        super(SrtBuffer, self).__init__(name, parent=parent)
         self.setShapeVisibility(False)
+
+
+    # =============
+    # Name methods
+    # =============
+    def getBuildName(self):
+        """Returns the name used when building the node in the target application.
+
+        Return:
+        String, build name of the object.
+
+        """
+
+        return super(SrtBuffer, self).getBuildName() + '_srtBuffer'

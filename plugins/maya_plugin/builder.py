@@ -25,69 +25,72 @@ class Builder(BaseBuilder):
     # ========================
     # SceneItem Build Methods
     # ========================
-    def buildContainer(self, kSceneItem, objectName):
+    def buildContainer(self, kSceneItem):
         """Builds a container / namespace object.
 
         Arguments:
         kSceneItem -- Object, kSceneItem that represents a container to be built.
-        objectName -- String, name of the object being created.
 
         Return:
         Node that is created..
 
         """
 
+        buildName = kSceneItem.getBuildName()
+
         parentNode = self._getDCCSceneItem(kSceneItem.getParent())
 
         dccSceneItem = pm.group(name="group", em=True)
         pm.parent(dccSceneItem, parentNode)
-        pm.rename(dccSceneItem, objectName)
+        pm.rename(dccSceneItem, buildName)
 
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
         return dccSceneItem
 
 
-    def buildLayer(self, kSceneItem, objectName):
+    def buildLayer(self, kSceneItem):
         """Builds a layer object.
 
         Arguments:
         kSceneItem -- Object, kSceneItem that represents a layer to be built.
-        objectName -- String, name of the object being created.
 
         Return:
         Node that is created..
 
         """
 
+        buildName = kSceneItem.getBuildName()
+
         parentNode = self._getDCCSceneItem(kSceneItem.getParent())
 
         dccSceneItem = pm.group(name="group", em=True)
         pm.parent(dccSceneItem, parentNode)
-        pm.rename(dccSceneItem, objectName)
+        pm.rename(dccSceneItem, buildName)
 
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
         return dccSceneItem
 
 
-    def buildHierarchyGroup(self, kSceneItem, objectName):
+    def buildHierarchyGroup(self, kSceneItem):
         """Builds a hierarchy group object.
 
         Arguments:
         kSceneItem -- Object, kSceneItem that represents a group to be built.
-        objectName -- String, name of the object being created.
 
         Return:
         DCC Scene Item that is created.
 
         """
 
+        buildName = kSceneItem.getBuildName()
+
         parentNode = self._getDCCSceneItem(kSceneItem.getParent())
 
         dccSceneItem = pm.group(name="group", em=True)
         pm.parent(dccSceneItem, parentNode)
-        pm.rename(dccSceneItem, objectName)
+        pm.rename(dccSceneItem, buildName)
 
         lockObjXfo(dccSceneItem)
 
@@ -96,86 +99,90 @@ class Builder(BaseBuilder):
         return dccSceneItem
 
 
-    def buildGroup(self, kSceneItem, objectName):
+    def buildGroup(self, kSceneItem):
         """Builds a group object.
 
         Arguments:
         kSceneItem -- Object, kSceneItem that represents a group to be built.
-        objectName -- String, name of the object being created.
 
         Return:
         Node that is created.
 
         """
 
+        buildName = kSceneItem.getBuildName()
+
         parentNode = self._getDCCSceneItem(kSceneItem.getParent())
 
         dccSceneItem = pm.group(name="group", em=True)
         pm.parent(dccSceneItem, parentNode)
-        pm.rename(dccSceneItem, objectName)
+        pm.rename(dccSceneItem, buildName)
 
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
         return dccSceneItem
 
 
-    def buildJoint(self, kSceneItem, objectName):
+    def buildJoint(self, kSceneItem):
         """Builds a joint object.
 
         Arguments:
         kSceneItem -- Object, kSceneItem that represents a joint to be built.
-        objectName -- String, name of the object being created.
 
         Return:
         DCC Scene Item that is created.
 
         """
 
+        buildName = kSceneItem.getBuildName()
+
         parentNode = self._getDCCSceneItem(kSceneItem.getParent())
 
         dccSceneItem = pm.joint(name="joint")
         pm.parent(dccSceneItem, parentNode)
-        pm.rename(dccSceneItem, objectName)
+        pm.rename(dccSceneItem, buildName)
 
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
         return dccSceneItem
 
 
-    def buildLocator(self, kSceneItem, objectName):
+    def buildLocator(self, kSceneItem):
         """Builds a locator / null object.
 
         Arguments:
         kSceneItem -- Object, locator / null object to be built.
-        objectName -- String, name of the object being created.
 
         Return:
         Node that is created.
 
         """
+
+        buildName = kSceneItem.getBuildName()
 
         parentNode = self._getDCCSceneItem(kSceneItem.getParent())
 
         dccSceneItem = pm.spaceLocator(name="locator")
         pm.parent(dccSceneItem, parentNode)
-        pm.rename(dccSceneItem, objectName)
+        pm.rename(dccSceneItem, buildName)
 
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
         return dccSceneItem
 
 
-    def buildCurve(self, kSceneItem, objectName):
+    def buildCurve(self, kSceneItem):
         """Builds a Curve object.
 
         Arguments:
         kSceneItem -- Object, kSceneItem that represents a curve to be built.
-        objectName -- String, name of the object being created.
 
         Return:
         Node that is created.
 
         """
+
+        buildName = kSceneItem.getBuildName()
 
         parentNode = self._getDCCSceneItem(kSceneItem.getParent())
 
@@ -204,7 +211,7 @@ class Builder(BaseBuilder):
 
         dccSceneItem = mainCurve
         pm.parent(dccSceneItem, parentNode)
-        pm.rename(dccSceneItem, objectName)
+        pm.rename(dccSceneItem, buildName)
 
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
@@ -248,8 +255,6 @@ class Builder(BaseBuilder):
         parentDCCSceneItem = self._getDCCSceneItem(kAttribute.getParent().getParent())
         parentDCCSceneItem.addAttr(kAttribute.getName(), niceName=kAttribute.getName(), attributeType="float", defaultValue=kAttribute.getValue(), minValue=kAttribute.min, maxValue=kAttribute.max, keyable=True)
         dccSceneItem = parentDCCSceneItem.attr(kAttribute.getName())
-
-        # dccSceneItem = parentDCCSceneItem + "." + kAttribute.getName()
 
         self._registerSceneItemPair(kAttribute, dccSceneItem)
 
@@ -320,6 +325,47 @@ class Builder(BaseBuilder):
         pm.setAttr(parentDCCSceneItem + "." + groupName, lock=True)
 
         self._registerSceneItemPair(kAttributeGroup, dccSceneItem)
+
+         # Create Attributes on this Attribute Group
+        for i in xrange(kAttributeGroup.getNumAttributes()):
+            kAttribute = kAttributeGroup.getAttributeByIndex(i)
+            kType = kAttribute.getKType()
+
+            if kType == "BoolAttribute":
+                self.buildBoolAttribute(kAttribute)
+
+            elif kType == "FloatAttribute":
+                self.buildFloatAttribute(kAttribute)
+
+            elif kType == "IntegerAttribute":
+                self.buildIntegerAttribute(kAttribute)
+
+            elif kType == "StringAttribute":
+                self.buildStringAttribute(kAttribute)
+
+            else:
+                raise NotImplementedError(kAttribute.getName() + ' has an unsupported type: ' + str(type(kAttribute)))
+
+        return True
+
+
+    def connectAttribute(self, kAttribute):
+        """Connects the driver attribute to this one.
+
+        Arguments:
+        kAttribute -- Object, attribute to connect.
+
+        Return:
+        True if successful.
+
+        """
+
+        if kAttribute.isConnected() is True:
+
+            driver = self._getDCCSceneItem(kAttribute.getConnection())
+            driven = self._getDCCSceneItem(kAttribute)
+
+            pm.connectAttr(driver, driven, force=True)
 
         return True
 
@@ -415,9 +461,6 @@ class Builder(BaseBuilder):
 
         """
 
-        source = kConnection.getSource()
-        target = kConnection.getTarget()
-
         sourceDCCSceneItem = self._getDCCSceneItem(kConnection.getSource())
         targetDCCSceneItem = self._getDCCSceneItem(kConnection.getTarget())
 
@@ -512,10 +555,10 @@ class Builder(BaseBuilder):
                 elif arg.connectionType in ['io', 'out']:
                     cmds.fabricSplice("addOutputPort", spliceNode, "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\", \"extension\":\"\", \"addMayaAttr\": true}", "")
 
-                    if opObject.getKType().endswith('Attribute'):
+                    if isinstance(opObject, BaseAttribute):
                         spliceNode.attr(arg.name).connect(targetObject)
 
-                    elif opObject.getKType().endswith('Locator'): # Change to isinstance() check
+                    elif isinstance(opObject, SceneItem):
                         decomposeNode = pm.createNode('decomposeMatrix')
                         spliceNode.attr(arg.name).connect(decomposeNode.attr("inputMatrix"))
 

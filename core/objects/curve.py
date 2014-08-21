@@ -16,14 +16,6 @@ class Curve(SceneItem):
     __kType__ = "Curve"
 
     def __init__(self, name, parent=None):
-        """Initializes the curve object.
-
-        Arguments:
-        name -- String, Name of the constraint.
-        parent -- Object, parent object of this object.
-
-        """
-
         super(Curve, self).__init__(name, parent=parent)
 
         self.controlPoints = []
@@ -41,7 +33,7 @@ class Curve(SceneItem):
         String, build name of the object.
 
         """
-        
+
         return super(Curve, self).getBuildName() + '_crv'
 
 

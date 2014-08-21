@@ -1,0 +1,52 @@
+require Kraken;
+require InlineDrawing;
+
+object LimbConstraintSolver : KrakenSolver {
+  Boolean debug;
+};
+
+
+// Default Constructor
+inline LimbConstraintSolver() {
+  this.debug = false;
+}
+
+
+// Return Arguments for Kraken
+function KrakenSolverArg[] LimbConstraintSolver.getArguments(){
+  KrakenSolverArg args[];
+  args.push(KrakenSolverArg('debug', 'in', 'Boolean'));
+  args.push(KrakenSolverArg('bone01Constrainer', 'in', 'Mat44'));
+  args.push(KrakenSolverArg('bone02Constrainer', 'in', 'Mat44'));
+  args.push(KrakenSolverArg('bone03Constrainer', 'in', 'Mat44'));
+  args.push(KrakenSolverArg('bone01Deformer', 'io', 'Mat44'));
+  args.push(KrakenSolverArg('bone02Deformer', 'io', 'Mat44'));
+  args.push(KrakenSolverArg('bone03Deformer', 'io', 'Mat44'));
+  return args;
+}
+
+
+// Solve
+function LimbConstraintSolver.solve!
+(
+  in Boolean debug,
+  in Mat44 bone01Constrainer,
+  in Mat44 bone02Constrainer,
+  in Mat44 bone03Constrainer,
+  io Mat44 bone01Deformer,
+  io Mat44 bone02Deformer,
+  io Mat44 bone03Deformer
+  )
+{
+  this.debug = debug;
+
+  bone01Deformer = bone01Constrainer;
+  bone02Deformer = bone02Constrainer;
+  bone03Deformer = bone03Constrainer;
+
+  // Debugging
+  if (this.debug) {
+    // Do debugging here.
+  }
+
+}

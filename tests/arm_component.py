@@ -3,6 +3,7 @@ from kraken.core.maths.xfo import Xfo
 from kraken.core.maths.xfo import xfoFromDirAndUpV
 
 from kraken.core.objects.components.base_component import BaseComponent
+from kraken.core.objects.attributes.attribute_group import AttributeGroup
 from kraken.core.objects.attributes.bool_attribute import BoolAttribute
 from kraken.core.objects.attributes.float_attribute import FloatAttribute
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
@@ -21,20 +22,6 @@ class ArmComponent(BaseComponent):
 
     def __init__(self, name, parent=None, side='M'):
         super(ArmComponent, self).__init__(name, parent, side)
-
-        # container = self.getParent()
-        # armatureLayer = container.getChildByName('armature')
-
-        # =========
-        # Armature
-        # =========
-        # armatureParent = armatureLayer
-        # if armatureParent is None:
-        #     armatureParent = self
-
-        # bicepDef = Joint('bicep')
-        # armatureParent.addChild(bicepDef)
-
 
         # =========
         # Controls
@@ -75,7 +62,7 @@ class ArmComponent(BaseComponent):
         bicepFKCtrl = CubeControl('bicepFK')
         bicepFKCtrl.alignOnXAxis()
         bicepLen = bicepPosition.subtract(forearmPosition).length()
-        bicepFKCtrl.scalePoints(Vec3(bicepLen, 1.0, 1.0))
+        bicepFKCtrl.scalePoints(Vec3(bicepLen, 1.75, 1.75))
         bicepFKCtrl.setColor(ctrlColor)
         bicepFKCtrl.xfo.copy(bicepXfo)
 
@@ -88,30 +75,49 @@ class ArmComponent(BaseComponent):
         forearmFKCtrl = CubeControl('forearmFK')
         forearmFKCtrl.alignOnXAxis()
         forearmLen = forearmPosition.subtract(wristPosition).length()
-        forearmFKCtrl.scalePoints(Vec3(forearmLen, 1.0, 1.0))
+        forearmFKCtrl.scalePoints(Vec3(forearmLen, 1.5, 1.5))
         forearmFKCtrl.setColor(ctrlColor)
         forearmFKCtrl.xfo.copy(forearmXfo)
 
         forearmFKCtrlSrtBuffer = SrtBuffer('forearmFK')
+        bicepFKCtrl.addChild(forearmFKCtrlSrtBuffer)
         forearmFKCtrlSrtBuffer.xfo.copy(forearmFKCtrl.xfo)
         forearmFKCtrlSrtBuffer.addChild(forearmFKCtrl)
-        bicepFKCtrl.addChild(forearmFKCtrlSrtBuffer)
 
         # Arm IK
-        armIKCtrl = PinControl('IK')
-        armIKCtrl.xfo.tr.copy(wristPosition)
+        armIKCtrlSrtBuffer = SrtBuffer('IK', parent=self)
+        armIKCtrlSrtBuffer.xfo.tr.copy(wristPosition)
+
+        armIKCtrl = PinControl('IK', parent=armIKCtrlSrtBuffer)
+        armIKCtrl.xfo.copy(armIKCtrlSrtBuffer.xfo)
+        armIKCtrl.setColor(ctrlColor)
 
         if self.getSide() == "R":
             armIKCtrl.rotatePoints(0, 90, 0)
         else:
             armIKCtrl.rotatePoints(0, -90, 0)
 
-        armIKCtrl.setColor(ctrlColor)
 
-        armIKCtrlSrtBuffer = SrtBuffer('IK')
-        armIKCtrlSrtBuffer.xfo.copy(armIKCtrl.xfo)
-        armIKCtrlSrtBuffer.addChild(armIKCtrl)
-        self.addChild(armIKCtrlSrtBuffer)
+        # Add Component Params to IK control
+        armDebugInputAttr = BoolAttribute('debug', True)
+        armBone1LenInputAttr = FloatAttribute('bone1Len', bicepLen, 0.0, 100.0)
+        armBone2LenInputAttr = FloatAttribute('bone2Len', forearmLen, 0.0, 100.0)
+        armFkikInputAttr = FloatAttribute('fkik', 0.0, 0.0, 1.0)
+        armSoftIKInputAttr = BoolAttribute('softIK', True)
+        armSoftDistInputAttr = FloatAttribute('softDist', 0.0, 0.0, 1.0)
+        armStretchInputAttr = BoolAttribute('stretch', True)
+        armStretchBlendInputAttr = FloatAttribute('stretchBlend', 0.0, 0.0, 1.0)
+
+        armSettingsAttrGrp = AttributeGroup("DisplayInfo_ArmSettings")
+        armIKCtrl.addAttributeGroup(armSettingsAttrGrp)
+        armSettingsAttrGrp.addAttribute(armDebugInputAttr)
+        armSettingsAttrGrp.addAttribute(armBone1LenInputAttr)
+        armSettingsAttrGrp.addAttribute(armBone2LenInputAttr)
+        armSettingsAttrGrp.addAttribute(armFkikInputAttr)
+        armSettingsAttrGrp.addAttribute(armSoftIKInputAttr)
+        armSettingsAttrGrp.addAttribute(armSoftDistInputAttr)
+        armSettingsAttrGrp.addAttribute(armStretchInputAttr)
+        armSettingsAttrGrp.addAttribute(armStretchBlendInputAttr)
 
         # UpV
         upVXfo = xfoFromDirAndUpV(bicepPosition, wristPosition, forearmPosition)
@@ -126,9 +132,29 @@ class ArmComponent(BaseComponent):
         armUpVCtrl.setColor(ctrlColor)
 
         armUpVCtrlSrtBuffer = SrtBuffer('UpV')
+        self.addChild(armUpVCtrlSrtBuffer)
         armUpVCtrlSrtBuffer.xfo.tr.copy(upVOffset)
         armUpVCtrlSrtBuffer.addChild(armUpVCtrl)
-        self.addChild(armUpVCtrlSrtBuffer)
+
+
+        # ==========
+        # Deformers
+        # ==========
+        container = self.getParent().getParent()
+        deformersLayer = container.getChildByName('deformers')
+
+        bicepDef = Joint('bicep')
+        bicepDef.setComponent(self)
+
+        forearmDef = Joint('forearm')
+        forearmDef.setComponent(self)
+
+        wristDef = Joint('wrist')
+        wristDef.setComponent(self)
+
+        deformersLayer.addChild(bicepDef)
+        deformersLayer.addChild(forearmDef)
+        deformersLayer.addChild(wristDef)
 
 
         # =====================
@@ -142,11 +168,19 @@ class ArmComponent(BaseComponent):
         bicepOutput.xfo.copy(bicepXfo)
         forearmOutput = Locator('forearm')
         forearmOutput.xfo.copy(forearmXfo)
-        armEndOutput = Locator('armEnd')
-        armEndOutput.xfo.tr.copy(wristPosition)
+
+        armEndXfo = Xfo()
+        armEndXfo.rot = forearmXfo.rot.clone()
+        armEndXfo.tr.copy(wristPosition)
+        armEndXfoOutput = Locator('armEndXfo')
+        armEndXfoOutput.xfo.copy(armEndXfo)
+
+        armEndPosOutput = Locator('armEndPos')
+        armEndPosOutput.xfo.copy(armEndXfo)
+
 
         # Setup componnent Attribute I/O's
-        debugInputAttr = BoolAttribute('debug', False)
+        debugInputAttr = BoolAttribute('debug', True)
         bone1LenInputAttr = FloatAttribute('bone1Len', bicepLen, 0.0, 100.0)
         bone2LenInputAttr = FloatAttribute('bone2Len', forearmLen, 0.0, 100.0)
         fkikInputAttr = FloatAttribute('fkik', 0.0, 0.0, 1.0)
@@ -154,7 +188,17 @@ class ArmComponent(BaseComponent):
         softDistInputAttr = FloatAttribute('softDist', 0.5, 0.0, 1.0)
         stretchInputAttr = BoolAttribute('stretch', True)
         stretchBlendInputAttr = FloatAttribute('stretchBlend', 0.0, 0.0, 1.0)
-        rightSideInputAttr = BoolAttribute('rightSide', False)
+        rightSideInputAttr = BoolAttribute('rightSide', side is 'R')
+
+        # Connect attrs to control attrs
+        debugInputAttr.connect(armDebugInputAttr)
+        bone1LenInputAttr.connect(armBone1LenInputAttr)
+        bone2LenInputAttr.connect(armBone2LenInputAttr)
+        fkikInputAttr.connect(armFkikInputAttr)
+        softIKInputAttr.connect(armSoftIKInputAttr)
+        softDistInputAttr.connect(armSoftDistInputAttr)
+        stretchInputAttr.connect(armStretchInputAttr)
+        stretchBlendInputAttr.connect(armStretchBlendInputAttr)
 
 
         # ==============
@@ -176,7 +220,8 @@ class ArmComponent(BaseComponent):
         self.addInput(clavicleEndInput)
         self.addOutput(bicepOutput)
         self.addOutput(forearmOutput)
-        self.addOutput(armEndOutput)
+        self.addOutput(armEndXfoOutput)
+        self.addOutput(armEndPosOutput)
 
         # Add Attribute I/O's
         self.addInput(debugInputAttr)
@@ -193,7 +238,7 @@ class ArmComponent(BaseComponent):
         # ===============
         # Add Splice Ops
         # ===============
-        # Add Splice Op
+        # Add Solver Splice Op
         spliceOp = SpliceOperator("armSpliceOp", "LimbSolver", "KrakenLimbSolver")
         self.addOperator(spliceOp)
 
@@ -218,7 +263,26 @@ class ArmComponent(BaseComponent):
         # Add Xfo Outputs
         spliceOp.setOutput("bone01Out", bicepOutput)
         spliceOp.setOutput("bone02Out", forearmOutput)
-        spliceOp.setOutput("bone03Out", armEndOutput)
+        spliceOp.setOutput("bone03Out", armEndXfoOutput)
+        spliceOp.setOutput("bone03PosOut", armEndPosOutput)
+
+
+        # Add Deformer Splice Op
+        spliceOp = SpliceOperator("armDeformerSpliceOp", "LimbConstraintSolver", "KrakenLimbSolver")
+        self.addOperator(spliceOp)
+
+        # Add Att Inputs
+        spliceOp.setInput("debug", debugInputAttr)
+
+        # Add Xfo Inputs
+        spliceOp.setInput("bone01Constrainer", bicepOutput)
+        spliceOp.setInput("bone02Constrainer", forearmOutput)
+        spliceOp.setInput("bone03Constrainer", armEndXfoOutput)
+
+        # Add Xfo Outputs
+        spliceOp.setOutput("bone01Deformer", bicepDef)
+        spliceOp.setOutput("bone02Deformer", forearmDef)
+        spliceOp.setOutput("bone03Deformer", wristDef)
 
 
     def buildRig(self, parent):

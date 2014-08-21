@@ -1,7 +1,6 @@
-require Math;
+require Kraken;
 
-
-object TwoBoneChainSolver
+object KrakenTwoBoneChainSolver
 {
   Float32 bone1Len;
   Float32 bone2Len;
@@ -23,12 +22,12 @@ object TwoBoneChainSolver
 
 
 // Default Constructor
-inline TwoBoneChainSolver()
+inline KrakenTwoBoneChainSolver()
 {
 
 }
 
-inline TwoBoneChainSolver(
+inline KrakenTwoBoneChainSolver(
   Float32 bone1Len,
   Float32 bone2Len,
   Float32 fkik,
@@ -63,7 +62,7 @@ inline TwoBoneChainSolver(
 // ================
 // Solver Functions
 // ================
-function TwoBoneChainSolver.solveFK!()
+function KrakenTwoBoneChainSolver.solveFK!()
 {
 
   Mat33 rightOffsets[3];
@@ -105,9 +104,9 @@ function TwoBoneChainSolver.solveFK!()
 struct TwoBoneChainSolver_Cache{
   Mat44 matrices[];
 };
-function TwoBoneChainSolver.solveIK!(TwoBoneChainSolver_Cache cache)*/
+function KrakenTwoBoneChainSolver.solveIK!(TwoBoneChainSolver_Cache cache)*/
 
-function TwoBoneChainSolver.solveIK!()
+function KrakenTwoBoneChainSolver.solveIK!()
 {
   // Feature Variables
   Vec3 ikHandleTarget = this.ikHandle.translation();
@@ -182,7 +181,7 @@ function TwoBoneChainSolver.solveIK!()
 }
 
 
-function TwoBoneChainSolver.solve!()
+function KrakenTwoBoneChainSolver.solve!()
 {
     this.outMatrices.resize(3);
     this.fkMatrices.resize(3);
@@ -238,7 +237,7 @@ function TwoBoneChainSolver.solve!()
 }
 
 
-function String TwoBoneChainSolver.getInfo()
+function String KrakenTwoBoneChainSolver.getInfo()
 {
   return 'Bone 1 Length: ' + this.bone1Len;
 }

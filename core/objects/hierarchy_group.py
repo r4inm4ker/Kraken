@@ -13,8 +13,8 @@ class HierarchyGroup(SceneItem):
 
     __kType__ = "HierarchyGroup"
 
-    def __init__(self, name):
-        super(HierarchyGroup, self).__init__(name, None)
+    def __init__(self, name, parent=None):
+        super(HierarchyGroup, self).__init__(name, parent=parent)
 
         self.setShapeVisibility(False)
 
@@ -30,5 +30,5 @@ class HierarchyGroup(SceneItem):
         String, build name of the object.
 
         """
-        
+
         return super(HierarchyGroup, self).getBuildName() + '_hrc'

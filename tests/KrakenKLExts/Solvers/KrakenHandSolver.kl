@@ -1,0 +1,104 @@
+require Kraken;
+require InlineDrawing;
+
+object HandSolver : KrakenSolver {
+  Boolean debug;
+  InlineTransform rootTransform;
+};
+
+
+// Default Constructor
+inline HandSolver() {
+  this.debug = false;
+
+  InlineDrawing draw = OGLInlineDrawing_GetInstance();
+  this.rootTransform = StaticInlineTransform('HandSolver', Xfo());
+  draw.getRoot().addChild(this.rootTransform);
+}
+
+
+// Return Arguments for Kraken
+function KrakenSolverArg[] HandSolver.getArguments(){
+  KrakenSolverArg args[];
+  args.push(KrakenSolverArg('debug', 'in', 'Boolean'));
+  args.push(KrakenSolverArg('rightSide', 'in', 'Boolean'));
+  args.push(KrakenSolverArg('linkToWorld', 'in', 'Scalar'));
+  args.push(KrakenSolverArg('armEndXfo', 'in', 'Mat44'));
+  args.push(KrakenSolverArg('armEndPos', 'in', 'Mat44'));
+  args.push(KrakenSolverArg('handRef', 'in', 'Mat44'));
+  args.push(KrakenSolverArg('handCtrlSrtBuffer', 'io', 'Mat44'));
+  return args;
+}
+
+
+// Solve
+function HandSolver.solve!
+(
+  in Boolean debug,
+  in Boolean rightSide,
+  in Scalar linkToWorld,
+  in Mat44 armEndXfo,
+  in Mat44 armEndPos,
+  in Mat44 handRef,
+  io Mat44 handCtrlSrtBuffer
+  )
+{
+  this.debug = debug;
+
+  Xfo armEndTransform = armEndXfo;
+  Xfo armEndPosTransform = armEndPos;
+  Xfo handRefTransform = handRef;
+
+  Xfo outXfo();
+  outXfo.tr = armEndPosTransform.tr;
+
+  Quat rotBlend();
+  rotBlend = armEndTransform.ori;
+  rotBlend = rotBlend.linearInterpolate(handRefTransform.ori, linkToWorld);
+
+  outXfo.ori = rotBlend;
+
+  handCtrlSrtBuffer = outXfo.toMat44();
+
+  // Setup Debugging Shapes
+  Xfo debugXfo;
+
+  Color boneColor = Color(1.0, 1.0, 0);
+  if(rightSide) {
+    boneColor.set(0.5, 0, 0, 1.0);
+  }
+  else {
+    boneColor.set(0, 0.5, 0, 1.0);
+  }
+
+  // Set debugging visibility.
+  this.setDebug(this.debug);
+
+}
+
+
+function HandSolver.setDebug!(in Boolean active) {
+
+  for(Size i=0; i<this.rootTransform.getChildCount(); i++) {
+
+      InlineTransform transform = this.rootTransform.getChild(i);
+      if(transform) {
+
+        for(Size y=0; y<transform.getChildCount(); y++) {
+
+          InlineInstance instance = transform.getChild(y);
+          if(instance) {
+
+            if(!active) {
+              instance.setActive(false);
+            }
+            else if(active) {
+              instance.setActive(true);
+            }
+
+          }
+        }
+      }
+
+    }
+}

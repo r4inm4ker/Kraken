@@ -5,11 +5,13 @@ from kraken.core.objects.attributes.float_attribute import FloatAttribute
 from kraken.core.objects.attributes.bool_attribute import BoolAttribute
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 from kraken.core.objects.locator import Locator
+from kraken.core.objects.joint import Joint
 from kraken.core.objects.srtBuffer import SrtBuffer
 from kraken.core.objects.controls.cube_control import CubeControl
 from kraken.core.objects.controls.circle_control import CircleControl
 from kraken.core.objects.controls.sphere_control import SphereControl
 
+from kraken.core.objects.operators.splice_operator import SpliceOperator
 
 class HeadComponent(BaseComponent):
     """Head Component"""
@@ -31,7 +33,7 @@ class HeadComponent(BaseComponent):
         # Head
         headCtrl = CircleControl('head')
         headCtrl.rotatePoints(0, 0, 90)
-        headCtrl.scalePoints(Vec3(2.5, 2.5, 2.5))
+        headCtrl.scalePoints(Vec3(3, 3, 3))
         headCtrl.translatePoints(Vec3(0, 1, 0.25))
         headCtrl.xfo.tr.copy(headPosition)
         headCtrl.setColor("yellow")
@@ -43,7 +45,7 @@ class HeadComponent(BaseComponent):
 
         # Eye Left
         eyeLeftCtrl = SphereControl('eyeLeft')
-        eyeLeftCtrl.scalePoints(Vec3(0.5, 0.5, 0.5))
+        eyeLeftCtrl.scalePoints(Vec3(0.75, 0.75, 0.75))
         eyeLeftCtrl.xfo.tr.copy(eyeLeftPosition)
         eyeLeftCtrl.setColor("blueMedium")
 
@@ -67,8 +69,8 @@ class HeadComponent(BaseComponent):
         jawCtrl = CubeControl('jaw')
         jawCtrl.alignOnYAxis(negative=True)
         jawCtrl.alignOnZAxis()
-        jawCtrl.scalePoints(Vec3(1.45, 0.65, 1))
-        jawCtrl.translatePoints(Vec3(0, 0, 0))
+        jawCtrl.scalePoints(Vec3(1.45, 0.65, 1.25))
+        jawCtrl.translatePoints(Vec3(0, -0.25, 0))
         jawCtrl.xfo.tr.copy(jawPosition)
         jawCtrl.setColor("orange")
 
@@ -76,6 +78,30 @@ class HeadComponent(BaseComponent):
         headCtrl.addChild(jawCtrlSrtBuffer)
         jawCtrlSrtBuffer.xfo.copy(jawCtrl.xfo)
         jawCtrlSrtBuffer.addChild(jawCtrl)
+
+
+        # ==========
+        # Deformers
+        # ==========
+        container = self.getParent().getParent()
+        deformersLayer = container.getChildByName('deformers')
+
+        headDef = Joint('head')
+        headDef.setComponent(self)
+
+        jawDef = Joint('jaw')
+        jawDef.setComponent(self)
+
+        eyeLeftDef = Joint('eyeLeft')
+        eyeLeftDef.setComponent(self)
+
+        eyeRightDef = Joint('eyeRight')
+        eyeRightDef.setComponent(self)
+
+        deformersLayer.addChild(headDef)
+        deformersLayer.addChild(jawDef)
+        deformersLayer.addChild(eyeLeftDef)
+        deformersLayer.addChild(eyeRightDef)
 
 
         # =====================
@@ -95,6 +121,8 @@ class HeadComponent(BaseComponent):
         eyeROutput.xfo.copy(eyeRightCtrl.xfo)
 
         # Setup componnent Attribute I/O's
+        debugInputAttr = BoolAttribute('debug', True)
+        rightSideInputAttr = BoolAttribute('rightSide', side is 'R')
 
 
         # ==============
@@ -139,12 +167,33 @@ class HeadComponent(BaseComponent):
         self.addOutput(eyeLOutput)
         self.addOutput(eyeROutput)
 
+        # Add Attribute I/O's
+        self.addInput(debugInputAttr)
+        self.addInput(rightSideInputAttr)
+
 
         # ===============
         # Add Splice Ops
         # ===============
-        # Add Splice Op
+        # Add Deformer Splice Op
+        spliceOp = SpliceOperator("headDeformerSpliceOp", "HeadConstraintSolver", "KrakenHeadConstraintSolver")
+        self.addOperator(spliceOp)
 
+        # Add Att Inputs
+        spliceOp.setInput("debug", debugInputAttr)
+        spliceOp.setInput("rightSide", rightSideInputAttr)
+
+        # Add Xfo Inputstrl)
+        spliceOp.setInput("headConstrainer", headOutput)
+        spliceOp.setInput("jawConstrainer", jawOutput)
+        spliceOp.setInput("eyeLeftConstrainer", eyeLOutput)
+        spliceOp.setInput("eyeRightConstrainer", eyeROutput)
+
+        # Add Xfo Outputs
+        spliceOp.setOutput("headDeformer", headDef)
+        spliceOp.setOutput("jawDeformer", jawDef)
+        spliceOp.setOutput("eyeLeftDeformer", eyeLeftDef)
+        spliceOp.setOutput("eyeRightDeformer", eyeRightDef)
 
 
     def buildRig(self, parent):

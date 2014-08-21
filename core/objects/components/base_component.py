@@ -73,11 +73,9 @@ class BaseComponent(SceneItem):
         return True
 
 
-
     # =============
     # Name methods
     # =============
-
     def getComponentName(self):
         """Returns the name of the component used on self and all objects owned by the component
 
@@ -97,20 +95,20 @@ class BaseComponent(SceneItem):
 
         """
 
-        return self.getComponentName() + '_hrc'
+        return self.getComponentName() + '_cmp'
 
 
     # ==============
     # Child Methods
     # ==============
-    
     def addChild(self, child):
         super(BaseComponent, self).addChild(child)
 
-        # Assign the child self as the component. 
+        # Assign the child self as the component.
         child.setComponent(self)
 
         return True
+
 
     # ==============
     # Input Methods
@@ -153,8 +151,7 @@ class BaseComponent(SceneItem):
                 + inputObject.getName() + "'")
 
         if isinstance(inputObject, Locator):
-            inputHrc.children.append(inputObject)
-            inputObject.setParent(inputHrc)
+            inputHrc.addChild(inputObject)
             inputObject.setShapeVisibility(False)
 
         elif isinstance(inputObject, BaseAttribute):
@@ -164,7 +161,7 @@ class BaseComponent(SceneItem):
         componentInput = ComponentInput(inputObject.getName(), inputObject)
         self.inputs.append(componentInput)
 
-        # Assign the componentInput self as the component. 
+        # Assign the componentInput self as the component.
         componentInput.setComponent(self)
 
         return True
@@ -255,9 +252,9 @@ class BaseComponent(SceneItem):
         return None
 
 
-    # ==============
+    # ===============
     # Output Methods
-    # ==============
+    # ===============
     def checkOutputIndex(self, index):
         """Checks the supplied index is valid.
 
@@ -296,8 +293,7 @@ class BaseComponent(SceneItem):
                 + outputObject.getName() + "'")
 
         if isinstance(outputObject, SceneItem):
-            outputHrc.children.append(outputObject)
-            outputObject.setParent(outputHrc)
+            outputHrc.addChild(outputObject)
             outputObject.setShapeVisibility(False)
 
         elif isinstance(outputObject, BaseAttribute):
@@ -307,7 +303,7 @@ class BaseComponent(SceneItem):
         componentOutput = ComponentOutput(outputObject.getName(), outputObject)
         self.outputs.append(componentOutput)
 
-        # Assign the componentOutput self as the component. 
+        # Assign the componentOutput self as the component.
         componentOutput.setComponent(self)
 
         return True

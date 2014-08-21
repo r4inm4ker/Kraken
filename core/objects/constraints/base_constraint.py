@@ -19,7 +19,7 @@ class BaseConstraint(object):
         self.name = name
         self.constrainee = None
         self.constrainers = []
-        self.maintainOffset = False
+        self.maintainOffset = True
 
 
     # =============
@@ -107,13 +107,13 @@ class BaseConstraint(object):
 
     def setConstrainee(self, constrainee):
         """Sets the constrainee object for this constraint.
-        
+
         Arguments:
         constrainee -- Object, kSceneItem that will be constrained.
-        
+
         Return:
         True if successful.
-        
+
         """
 
         self.constrainee = constrainee
@@ -123,10 +123,10 @@ class BaseConstraint(object):
 
     def getConstrainee(self):
         """Returns the constrainee object for this constraint.
-        
+
         Return:
         True if successful.
-        
+
         """
 
         return self.constrainee
@@ -214,7 +214,7 @@ class BaseConstraint(object):
             if cls == object:
                 break;
             classHierarchy.append(cls.__name__)
-            
+
         jsonData = {
             '__typeHierarchy__': classHierarchy,
             'name': self.name,

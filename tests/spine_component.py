@@ -5,6 +5,7 @@ from kraken.core.objects.attributes.bool_attribute import BoolAttribute
 from kraken.core.objects.attributes.float_attribute import FloatAttribute
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 from kraken.core.objects.locator import Locator
+from kraken.core.objects.joint import Joint
 from kraken.core.objects.srtBuffer import SrtBuffer
 from kraken.core.objects.controls.circle_control  import  CircleControl
 
@@ -55,7 +56,7 @@ class SpineComponent(BaseComponent):
 
         # Spine02
         spine02Ctrl = CircleControl('spine02')
-        spine02Ctrl.scalePoints(Vec3(3.0, 3.0, 3.0))
+        spine02Ctrl.scalePoints(Vec3(4.5, 4.5, 4.5))
         spine02Ctrl.xfo.tr.copy(spine02Position)
         spine02Ctrl.setColor("blue")
 
@@ -66,7 +67,7 @@ class SpineComponent(BaseComponent):
 
         # Spine03
         spine03Ctrl = CircleControl('spine03')
-        spine03Ctrl.scalePoints(Vec3(3.0, 3.0, 3.0))
+        spine03Ctrl.scalePoints(Vec3(4.5, 4.5, 4.5))
         spine03Ctrl.xfo.tr.copy(spine03Position)
         spine03Ctrl.setColor("blue")
 
@@ -76,7 +77,7 @@ class SpineComponent(BaseComponent):
 
         # Spine04
         spine04Ctrl = CircleControl('spine04')
-        spine04Ctrl.scalePoints(Vec3(4.0, 4.0, 4.0))
+        spine04Ctrl.scalePoints(Vec3(6.0, 6.0, 6.0))
         spine04Ctrl.xfo.tr.copy(spine04Position)
         spine04Ctrl.setColor("yellow")
         spine04Ctrl.addChild(spine03CtrlSrtBuffer)
@@ -85,6 +86,30 @@ class SpineComponent(BaseComponent):
         spine04CtrlSrtBuffer.xfo.copy(spine04Ctrl.xfo)
         spine04CtrlSrtBuffer.addChild(spine04Ctrl)
         cogCtrl.addChild(spine04CtrlSrtBuffer)
+
+
+        # ==========
+        # Deformers
+        # ==========
+        container = self.getParent().getParent()
+        deformersLayer = container.getChildByName('deformers')
+
+        spine01Def = Joint('spine01')
+        spine01Def.setComponent(self)
+
+        spine02Def = Joint('spine02')
+        spine02Def.setComponent(self)
+
+        spine03Def = Joint('spine03')
+        spine03Def.setComponent(self)
+
+        spine04Def = Joint('spine04')
+        spine04Def.setComponent(self)
+
+        deformersLayer.addChild(spine01Def)
+        deformersLayer.addChild(spine02Def)
+        deformersLayer.addChild(spine03Def)
+        deformersLayer.addChild(spine04Def)
 
 
         # =====================
@@ -107,7 +132,8 @@ class SpineComponent(BaseComponent):
         spineEndOutput.xfo.tr.copy(spine03Ctrl.xfo.tr)
 
         # Setup componnent Attribute I/O's
-        debugInputAttr = BoolAttribute('debug', False)
+        debugInputAttr = BoolAttribute('debug', True)
+
 
         # ==============
         # Constrain I/O
@@ -160,6 +186,27 @@ class SpineComponent(BaseComponent):
         spliceOp.setOutput("spine02Out", spine02Output)
         spliceOp.setOutput("spine03Out", spine03Output)
         spliceOp.setOutput("spine04Out", spine04Output)
+
+
+        # Add Deformer Splice Op
+        spliceOp = SpliceOperator("spineDeformerSpliceOp", "SpineConstraintSolver", "KrakenSpineSolver")
+        self.addOperator(spliceOp)
+
+        # Add Att Inputs
+        spliceOp.setInput("debug", debugInputAttr)
+
+        # Add Xfo Inputstrl)
+        spliceOp.setInput("bone01Constrainer", spine01Output)
+        spliceOp.setInput("bone02Constrainer", spine02Output)
+        spliceOp.setInput("bone03Constrainer", spine03Output)
+        spliceOp.setInput("bone04Constrainer", spine04Output)
+
+        # Add Xfo Outputs
+        spliceOp.setOutput("bone01Deformer", spine01Def)
+        spliceOp.setOutput("bone02Deformer", spine02Def)
+        spliceOp.setOutput("bone03Deformer", spine03Def)
+        spliceOp.setOutput("bone04Deformer", spine04Def)
+
 
 
     def buildRig(self, parent):
