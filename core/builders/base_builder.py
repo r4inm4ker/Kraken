@@ -468,6 +468,46 @@ class BaseBuilder(object):
         dccSceneItem = None
         kType = kObject.getKType()
 
+        """
+        # PROTOTYPE FOR NAMING TEMPLATES
+
+        kType = kObject.getKType()
+
+        # Validate incoming data
+        if kObject.side not in nameTemplate['sides']:
+            raise ValueError(kObject.name + " has an invalid side: " + kObject.side)
+            return False
+        else:
+            side = kObject.side
+
+        if kObject.component is None:
+            return kObject.name
+
+        # Replace tokens
+        if kType in nameTemplate['formats'].keys():
+            tokenList = nameTemplate['formats'][kType]
+        else:
+            tokenList = nameTemplate['formats']['default']
+
+        for i in xrange(tokenList.count('sep')):
+            tokenList[tokenList.index('sep')] = nameTemplate['separator']
+
+        for i in xrange(tokenList.count('side')):
+            tokenList[tokenList.index('side')] = side
+
+        for i in xrange(tokenList.count('name')):
+            tokenList[tokenList.index('name')] = kObject.name
+
+        for i in xrange(tokenList.count('component')):
+            tokenList[tokenList.index('component')] = kObject.component
+
+        for i in xrange(tokenList.count('type')):
+            tokenList[tokenList.index('type')] = nameTemplate['types'][kType]
+
+        return ''.join(filter(None, tokenList))
+        """
+
+
         # Build Object
         if kType == "Container":
             dccSceneItem = self.buildContainer(kObject)
