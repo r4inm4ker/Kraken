@@ -218,6 +218,53 @@ class Builder(BaseBuilder):
         return dccSceneItem
 
 
+    def buildControl(self, kSceneItem):
+        """Builds a Control object.
+
+        Arguments:
+        kSceneItem -- Object, kSceneItem that represents a control to be built.
+
+        Return:
+        Node that is created.
+
+        """
+
+        buildName = kSceneItem.getBuildName()
+
+        parentNode = self._getDCCSceneItem(kSceneItem.getParent())
+
+        # Format points for Maya
+        points = kSceneItem.getControlPoints()
+
+        # Scale, rotate, translation shape
+        curvePoints = []
+        for eachSubCurve in points:
+            formattedPoints = [x.toArray() for x in eachSubCurve]
+            curvePoints.append(formattedPoints)
+
+        mainCurve = None
+        for i, eachSubCurve in enumerate(curvePoints):
+            currentSubCurve = pm.curve(per=False, point=curvePoints[i], degree=1) #, knot=[x for x in xrange(len(curvePoints[i]))])
+
+            if kSceneItem.getCurveSectionClosed(i):
+                pm.closeCurve(currentSubCurve, preserveShape=True, replaceOriginal=True)
+
+            if mainCurve is None:
+                mainCurve = currentSubCurve
+
+            if i > 0:
+                pm.parent(currentSubCurve.getShape(), mainCurve, relative=True, shape=True)
+                pm.delete(currentSubCurve)
+
+        dccSceneItem = mainCurve
+        pm.parent(dccSceneItem, parentNode)
+        pm.rename(dccSceneItem, buildName)
+
+        self._registerSceneItemPair(kSceneItem, dccSceneItem)
+
+        return dccSceneItem
+
+
     # ========================
     # Attribute Build Methods
     # ========================

@@ -232,6 +232,66 @@ class Builder(BaseBuilder):
                 dccSceneItem.ActivePrimitive.Geometry.AddCurve(eachCurveSection, knots, kSceneItem.getCurveSectionClosed(i), 1, constants.siNonUniformParameterization)
 
         dccSceneItem.Name = buildName
+
+        return dccSceneItem
+
+
+    def buildControl(self, kSceneItem):
+        """Builds a Control object.
+
+        Arguments:
+        kSceneItem -- Object, kSceneItem that represents a control to be built.
+
+        Return:
+        Node that is created.
+
+        """
+
+        buildName = kSceneItem.getBuildName()
+
+        parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
+
+        if parentDCCSceneItem is None:
+            parentDCCSceneItem = si.ActiveProject3.ActiveScene.Root
+
+        dccSceneItem = None
+
+        # Format points for Softimage
+        points = kSceneItem.getControlPoints()
+
+        curvePoints = []
+        for eachSubCurve in points:
+            subCurvePoints = [x.toArray() for x in eachSubCurve]
+
+            formattedPoints = []
+            for i in xrange(3):
+                axisPositions = []
+                for p, eachPnt in enumerate(subCurvePoints):
+                    if p < len(subCurvePoints):
+                        axisPositions.append(eachPnt[i])
+
+                formattedPoints.append(axisPositions)
+
+            formattedPoints.append([1.0] * len(subCurvePoints))
+            curvePoints.append(formattedPoints)
+
+        # Build the curve
+        for i, eachCurveSection in enumerate(curvePoints):
+
+            # Create knots
+            if kSceneItem.getCurveSectionClosed(i) is True:
+                knots = list(xrange(len(eachCurveSection[0]) + 1))
+            else:
+                knots = list(xrange(len(eachCurveSection[0])))
+
+            if i == 0:
+                dccSceneItem = parentDCCSceneItem.AddNurbsCurve(list(eachCurveSection), knots, kSceneItem.getCurveSectionClosed(i), 1, constants.siNonUniformParameterization, constants.siSINurbs)
+                self._registerSceneItemPair(kSceneItem, dccSceneItem)
+            else:
+                dccSceneItem.ActivePrimitive.Geometry.AddCurve(eachCurveSection, knots, kSceneItem.getCurveSectionClosed(i), 1, constants.siNonUniformParameterization)
+
+        dccSceneItem.Name = buildName
+
         return dccSceneItem
 
 

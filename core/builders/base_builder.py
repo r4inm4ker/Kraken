@@ -204,6 +204,20 @@ class BaseBuilder(object):
         return None
 
 
+    def buildControl(self, kSceneItem):
+        """Builds a Control object.
+
+        Arguments:
+        kSceneItem -- Object, kSceneItem that represents a control to be built.
+
+        Return:
+        DCC Scene Item that is created.
+
+        """
+
+        return None
+
+
     # ========================
     # Attribute Build Methods
     # ========================
@@ -453,6 +467,53 @@ class BaseBuilder(object):
         return True
 
 
+    def getBuildName(self, kObject):
+        """Returns the build name for the object.
+
+        Arguments:
+        kObject -- Kraken Object, object to get the build name for.
+
+        Return:
+        String, name to be used in the DCC.
+
+        """
+
+        kType = kObject.getKType()
+
+        # Validate incoming data
+        if kObject.side not in nameTemplate['sides']:
+            raise ValueError(kObject.name + " has an invalid side: " + kObject.side)
+            return False
+        else:
+            side = kObject.side
+
+        if kObject.component is None:
+            return kObject.name
+
+        # Replace tokens
+        if kType in nameTemplate['formats'].keys():
+            tokenList = nameTemplate['formats'][kType]
+        else:
+            tokenList = nameTemplate['formats']['default']
+
+        for i in xrange(tokenList.count('sep')):
+            tokenList[tokenList.index('sep')] = nameTemplate['separator']
+
+        for i in xrange(tokenList.count('side')):
+            tokenList[tokenList.index('side')] = side
+
+        for i in xrange(tokenList.count('name')):
+            tokenList[tokenList.index('name')] = kObject.name
+
+        for i in xrange(tokenList.count('component')):
+            tokenList[tokenList.index('component')] = kObject.component
+
+        for i in xrange(tokenList.count('type')):
+            tokenList[tokenList.index('type')] = nameTemplate['types'][kType]
+
+        return ''.join(filter(None, tokenList))
+
+
     def buildHierarchy(self, kObject, component=None):
         """Builds the hierarchy for the supplied kObject.
 
@@ -467,6 +528,8 @@ class BaseBuilder(object):
 
         dccSceneItem = None
         kType = kObject.getKType()
+
+        # buildName = self.getBuildName(kObject)
 
         # Build Object
         if kType == "Container":
@@ -498,7 +561,7 @@ class BaseBuilder(object):
             dccSceneItem = self.buildCurve(kObject)
 
         elif kType == "Control":
-            dccSceneItem = self.buildCurve(kObject)
+            dccSceneItem = self.buildControl(kObject)
 
         else:
             raise NotImplementedError(kObject.getName() + ' has an unsupported type: ' + str(type(kObject)))
