@@ -204,6 +204,20 @@ class BaseBuilder(object):
         return None
 
 
+    def buildControl(self, kSceneItem):
+        """Builds a Control object.
+
+        Arguments:
+        kSceneItem -- Object, kSceneItem that represents a control to be built.
+
+        Return:
+        DCC Scene Item that is created.
+
+        """
+
+        return None
+
+
     # ========================
     # Attribute Build Methods
     # ========================
@@ -453,23 +467,16 @@ class BaseBuilder(object):
         return True
 
 
-    def buildHierarchy(self, kObject, component=None):
-        """Builds the hierarchy for the supplied kObject.
+    def getBuildName(self, kObject):
+        """Returns the build name for the object.
 
         Arguments:
-        kObject -- Object, kraken object to build.
-        component -- Component, component that this object belongs to.
+        kObject -- Kraken Object, object to get the build name for.
 
         Return:
-        DCC object that was created.
+        String, name to be used in the DCC.
 
         """
-
-        dccSceneItem = None
-        kType = kObject.getKType()
-
-        """
-        # PROTOTYPE FOR NAMING TEMPLATES
 
         kType = kObject.getKType()
 
@@ -505,8 +512,24 @@ class BaseBuilder(object):
             tokenList[tokenList.index('type')] = nameTemplate['types'][kType]
 
         return ''.join(filter(None, tokenList))
+
+
+    def buildHierarchy(self, kObject, component=None):
+        """Builds the hierarchy for the supplied kObject.
+
+        Arguments:
+        kObject -- Object, kraken object to build.
+        component -- Component, component that this object belongs to.
+
+        Return:
+        DCC object that was created.
+
         """
 
+        dccSceneItem = None
+        kType = kObject.getKType()
+
+        # buildName = self.getBuildName(kObject)
 
         # Build Object
         if kType == "Container":
@@ -538,7 +561,7 @@ class BaseBuilder(object):
             dccSceneItem = self.buildCurve(kObject)
 
         elif kType == "Control":
-            dccSceneItem = self.buildCurve(kObject)
+            dccSceneItem = self.buildControl(kObject)
 
         else:
             raise NotImplementedError(kObject.getName() + ' has an unsupported type: ' + str(type(kObject)))

@@ -1,8 +1,0 @@
-{
-  "code": [
-            "rig_Curves.kl",
-            "rig_BezierCurve.kl",
-            "rig_CatmullRom.kl",
-            "rig_closestLocationOnCurve.kl"
-          ]
-}
