@@ -137,18 +137,18 @@ class ClavicleComponent(BaseComponent):
         # Add Splice Ops
         # ===============
         # Add Deformer Splice Op
-        spliceOp = SpliceOperator("clavicleDeformerSpliceOp", "PoseConstraintSolver", "KrakenPoseConstraintSolver")
-        self.addOperator(spliceOp)
+        # spliceOp = SpliceOperator("clavicleDeformerSpliceOp", "PoseConstraintSolver", "KrakenPoseConstraintSolver")
+        # self.addOperator(spliceOp)
 
-        # Add Att Inputs
-        spliceOp.setInput("debug", debugInputAttr)
-        spliceOp.setInput("rightSide", rightSideInputAttr)
+        # # Add Att Inputs
+        # spliceOp.setInput("debug", debugInputAttr)
+        # spliceOp.setInput("rightSide", rightSideInputAttr)
 
-        # Add Xfo Inputstrl)
-        spliceOp.setInput("constrainer", clavicleOutput)
+        # # Add Xfo Inputstrl)
+        # spliceOp.setInput("constrainer", clavicleOutput)
 
-        # Add Xfo Outputs
-        spliceOp.setOutput("constrainee", clavicleDef)
+        # # Add Xfo Outputs
+        # spliceOp.setOutput("constrainee", clavicleDef)
 
 
     def buildRig(self, parent):

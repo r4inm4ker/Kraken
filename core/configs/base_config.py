@@ -13,19 +13,19 @@ class BaseConfig(object):
         super(BaseConfig, self).__init__()
 
         self.nameTemplate = {
-                           "sides": ['L', 'R', 'M'],
-                           "separator": "_",
-                           "types": {
-                                     "default": "null",
-                                     "MyControl": "ctrl",
-                                     "MyObj": "null"
-                                    },
-                           "formats":
-                                     {
-                                      "default": ['component', 'sep', 'side', 'sep', 'name', 'sep', 'type'],
-                                      "MyControl2": ['side', 'sep', 'component', 'sep', 'name', 'sep', 'type']
-                                     }
-                          }
+                             "sides": ['L', 'R', 'M'],
+                             "separator": "_",
+                             "types": {
+                                       "default": "null",
+                                       "MyControl": "ctrl",
+                                       "MyObj": "null"
+                                      },
+                             "formats":
+                                       {
+                                        "default": ['component', 'sep', 'side', 'sep', 'name', 'sep', 'type'],
+                                        "MyControl2": ['side', 'sep', 'component', 'sep', 'name', 'sep', 'type']
+                                       }
+                            }
 
 
     def getNameTemplate(self):

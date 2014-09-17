@@ -156,36 +156,36 @@ class HandComponent(BaseComponent):
         # Add Splice Ops
         # ===============
         # Add Hand Solver Splice Op
-        spliceOp = SpliceOperator("handSolverSpliceOp", "HandSolver", "KrakenHandSolver")
-        self.addOperator(spliceOp)
+        # spliceOp = SpliceOperator("handSolverSpliceOp", "HandSolver", "KrakenHandSolver")
+        # self.addOperator(spliceOp)
 
-        # Add Att Inputs
-        spliceOp.setInput("debug", debugInputAttr)
-        spliceOp.setInput("rightSide", rightSideInputAttr)
-        spliceOp.setInput("linkToWorld", linkToWorldInputAttr)
+        # # Add Att Inputs
+        # spliceOp.setInput("debug", debugInputAttr)
+        # spliceOp.setInput("rightSide", rightSideInputAttr)
+        # spliceOp.setInput("linkToWorld", linkToWorldInputAttr)
 
-        # Add Xfo Inputs)
-        spliceOp.setInput("armEndXfo", armEndXfoInput)
-        spliceOp.setInput("armEndPos", armEndPosInput)
-        spliceOp.setInput("handRef", handRefSrt)
+        # # Add Xfo Inputs)
+        # spliceOp.setInput("armEndXfo", armEndXfoInput)
+        # spliceOp.setInput("armEndPos", armEndPosInput)
+        # spliceOp.setInput("handRef", handRefSrt)
 
-        # Add Xfo Outputs
-        spliceOp.setOutput("handCtrlSrtBuffer", handCtrlSrtBuffer)
+        # # Add Xfo Outputs
+        # spliceOp.setOutput("handCtrlSrtBuffer", handCtrlSrtBuffer)
 
 
-        # Add Deformer Splice Op
-        spliceOp = SpliceOperator("handDeformerSpliceOp", "PoseConstraintSolver", "KrakenPoseConstraintSolver")
-        self.addOperator(spliceOp)
+        # # Add Deformer Splice Op
+        # spliceOp = SpliceOperator("handDeformerSpliceOp", "PoseConstraintSolver", "KrakenPoseConstraintSolver")
+        # self.addOperator(spliceOp)
 
-        # Add Att Inputs
-        spliceOp.setInput("debug", debugInputAttr)
-        spliceOp.setInput("rightSide", rightSideInputAttr)
+        # # Add Att Inputs
+        # spliceOp.setInput("debug", debugInputAttr)
+        # spliceOp.setInput("rightSide", rightSideInputAttr)
 
-        # Add Xfo Inputs)
-        spliceOp.setInput("constrainer", handOutput)
+        # # Add Xfo Inputs)
+        # spliceOp.setInput("constrainer", handOutput)
 
-        # Add Xfo Outputs
-        spliceOp.setOutput("constrainee", handDef)
+        # # Add Xfo Outputs
+        # spliceOp.setOutput("constrainee", handDef)
 
 
     def buildRig(self, parent):

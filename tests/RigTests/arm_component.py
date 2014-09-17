@@ -239,50 +239,50 @@ class ArmComponent(BaseComponent):
         # Add Splice Ops
         # ===============
         # Add Solver Splice Op
-        spliceOp = SpliceOperator("armSpliceOp", "LimbSolver", "KrakenLimbSolver")
-        self.addOperator(spliceOp)
+        # spliceOp = SpliceOperator("armSpliceOp", "LimbSolver", "KrakenLimbSolver")
+        # self.addOperator(spliceOp)
 
-        # Add Att Inputs
-        spliceOp.setInput("debug", debugInputAttr)
-        spliceOp.setInput("bone1Len", bone1LenInputAttr)
-        spliceOp.setInput("bone2Len", bone2LenInputAttr)
-        spliceOp.setInput("fkik", fkikInputAttr)
-        spliceOp.setInput("softIK", softIKInputAttr)
-        spliceOp.setInput("softDist", softDistInputAttr)
-        spliceOp.setInput("stretch", stretchInputAttr)
-        spliceOp.setInput("stretchBlend", stretchBlendInputAttr)
-        spliceOp.setInput("rightSide", rightSideInputAttr)
+        # # Add Att Inputs
+        # spliceOp.setInput("debug", debugInputAttr)
+        # spliceOp.setInput("bone1Len", bone1LenInputAttr)
+        # spliceOp.setInput("bone2Len", bone2LenInputAttr)
+        # spliceOp.setInput("fkik", fkikInputAttr)
+        # spliceOp.setInput("softIK", softIKInputAttr)
+        # spliceOp.setInput("softDist", softDistInputAttr)
+        # spliceOp.setInput("stretch", stretchInputAttr)
+        # spliceOp.setInput("stretchBlend", stretchBlendInputAttr)
+        # spliceOp.setInput("rightSide", rightSideInputAttr)
 
-        # Add Xfo Inputs
-        spliceOp.setInput("root", clavicleEndInput)
-        spliceOp.setInput("bone1FK", bicepFKCtrl)
-        spliceOp.setInput("bone2FK", forearmFKCtrl)
-        spliceOp.setInput("ikHandle", armIKCtrl)
-        spliceOp.setInput("upV", armUpVCtrl)
+        # # Add Xfo Inputs
+        # spliceOp.setInput("root", clavicleEndInput)
+        # spliceOp.setInput("bone1FK", bicepFKCtrl)
+        # spliceOp.setInput("bone2FK", forearmFKCtrl)
+        # spliceOp.setInput("ikHandle", armIKCtrl)
+        # spliceOp.setInput("upV", armUpVCtrl)
 
-        # Add Xfo Outputs
-        spliceOp.setOutput("bone01Out", bicepOutput)
-        spliceOp.setOutput("bone02Out", forearmOutput)
-        spliceOp.setOutput("bone03Out", armEndXfoOutput)
-        spliceOp.setOutput("bone03PosOut", armEndPosOutput)
+        # # Add Xfo Outputs
+        # spliceOp.setOutput("bone01Out", bicepOutput)
+        # spliceOp.setOutput("bone02Out", forearmOutput)
+        # spliceOp.setOutput("bone03Out", armEndXfoOutput)
+        # spliceOp.setOutput("bone03PosOut", armEndPosOutput)
 
 
-        # Add Deformer Splice Op
-        spliceOp = SpliceOperator("armDeformerSpliceOp", "LimbConstraintSolver", "KrakenLimbSolver")
-        self.addOperator(spliceOp)
+        # # Add Deformer Splice Op
+        # spliceOp = SpliceOperator("armDeformerSpliceOp", "LimbConstraintSolver", "KrakenLimbSolver")
+        # self.addOperator(spliceOp)
 
-        # Add Att Inputs
-        spliceOp.setInput("debug", debugInputAttr)
+        # # Add Att Inputs
+        # spliceOp.setInput("debug", debugInputAttr)
 
-        # Add Xfo Inputs
-        spliceOp.setInput("bone01Constrainer", bicepOutput)
-        spliceOp.setInput("bone02Constrainer", forearmOutput)
-        spliceOp.setInput("bone03Constrainer", armEndXfoOutput)
+        # # Add Xfo Inputs
+        # spliceOp.setInput("bone01Constrainer", bicepOutput)
+        # spliceOp.setInput("bone02Constrainer", forearmOutput)
+        # spliceOp.setInput("bone03Constrainer", armEndXfoOutput)
 
-        # Add Xfo Outputs
-        spliceOp.setOutput("bone01Deformer", bicepDef)
-        spliceOp.setOutput("bone02Deformer", forearmDef)
-        spliceOp.setOutput("bone03Deformer", wristDef)
+        # # Add Xfo Outputs
+        # spliceOp.setOutput("bone01Deformer", bicepDef)
+        # spliceOp.setOutput("bone02Deformer", forearmDef)
+        # spliceOp.setOutput("bone03Deformer", wristDef)
 
 
     def buildRig(self, parent):

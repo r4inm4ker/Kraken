@@ -176,24 +176,24 @@ class HeadComponent(BaseComponent):
         # Add Splice Ops
         # ===============
         # Add Deformer Splice Op
-        spliceOp = SpliceOperator("headDeformerSpliceOp", "HeadConstraintSolver", "KrakenHeadConstraintSolver")
-        self.addOperator(spliceOp)
+        # spliceOp = SpliceOperator("headDeformerSpliceOp", "HeadConstraintSolver", "KrakenHeadConstraintSolver")
+        # self.addOperator(spliceOp)
 
-        # Add Att Inputs
-        spliceOp.setInput("debug", debugInputAttr)
-        spliceOp.setInput("rightSide", rightSideInputAttr)
+        # # Add Att Inputs
+        # spliceOp.setInput("debug", debugInputAttr)
+        # spliceOp.setInput("rightSide", rightSideInputAttr)
 
-        # Add Xfo Inputstrl)
-        spliceOp.setInput("headConstrainer", headOutput)
-        spliceOp.setInput("jawConstrainer", jawOutput)
-        spliceOp.setInput("eyeLeftConstrainer", eyeLOutput)
-        spliceOp.setInput("eyeRightConstrainer", eyeROutput)
+        # # Add Xfo Inputstrl)
+        # spliceOp.setInput("headConstrainer", headOutput)
+        # spliceOp.setInput("jawConstrainer", jawOutput)
+        # spliceOp.setInput("eyeLeftConstrainer", eyeLOutput)
+        # spliceOp.setInput("eyeRightConstrainer", eyeROutput)
 
-        # Add Xfo Outputs
-        spliceOp.setOutput("headDeformer", headDef)
-        spliceOp.setOutput("jawDeformer", jawDef)
-        spliceOp.setOutput("eyeLeftDeformer", eyeLeftDef)
-        spliceOp.setOutput("eyeRightDeformer", eyeRightDef)
+        # # Add Xfo Outputs
+        # spliceOp.setOutput("headDeformer", headDef)
+        # spliceOp.setOutput("jawDeformer", jawDef)
+        # spliceOp.setOutput("eyeLeftDeformer", eyeLeftDef)
+        # spliceOp.setOutput("eyeRightDeformer", eyeRightDef)
 
 
     def buildRig(self, parent):
