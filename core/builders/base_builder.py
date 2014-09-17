@@ -7,6 +7,7 @@ BaseBuilder -- Base builder object to build objects in DCC.
 
 from kraken.core import logger as pyLogger
 logger = pyLogger.getLogger("pyLogger")
+from kraken.core.configs.base_config import BaseConfig
 
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
@@ -54,10 +55,13 @@ class BaseBuilder(object):
                    }
 
 
-    def __init__(self):
+    def __init__(self, config=None):
         super(BaseBuilder, self).__init__()
         self._buildElements = []
 
+        if config is None:
+            config = BaseConfig()
+        self.config = config
 
     # ====================
     # Object registration
@@ -106,11 +110,12 @@ class BaseBuilder(object):
     # ========================
     # SceneItem Build Methods
     # ========================
-    def buildContainer(self, kSceneItem):
+    def buildContainer(self, kSceneItem, buildName):
         """Builds a container / namespace object.
 
         Arguments:
         kSceneItem -- Object, kSceneItem that represents a container to be built.
+        buildName -- String, The name to use on the built object.
 
         Return:
         DCC Scene Item that is created.
@@ -120,11 +125,12 @@ class BaseBuilder(object):
         return None
 
 
-    def buildLayer(self, kSceneItem):
+    def buildLayer(self, kSceneItem, buildName):
         """Builds a layer object.
 
         Arguments:
         kSceneItem -- Object, kSceneItem that represents a layer to be built.
+        buildName -- String, The name to use on the built object.
 
         Return:
         DCC Scene Item that is created.
@@ -134,11 +140,12 @@ class BaseBuilder(object):
         return None
 
 
-    def buildHierarchyGroup(self, kSceneItem):
+    def buildHierarchyGroup(self, kSceneItem, buildName):
         """Builds a hierarchy group object.
 
         Arguments:
         kSceneItem -- Object, kSceneItem that represents a group to be built.
+        buildName -- String, The name to use on the built object.
 
         Return:
         DCC Scene Item that is created.
@@ -148,25 +155,27 @@ class BaseBuilder(object):
         return None
 
 
-    def buildGroup(self, kSceneItem):
+    def buildGroup(self, kSceneItem, buildName):
         """Builds a group object.
 
         Arguments:
         kSceneItem -- Object, kSceneItem that represents a group to be built.
+        buildName -- String, The name to use on the built object.
 
         Return:
         DCC Scene Item that is created.
-
+built
         """
 
         return None
 
 
-    def buildJoint(self, kSceneItem):
+    def buildJoint(self, kSceneItem, buildName):
         """Builds a joint object.
 
         Arguments:
         kSceneItem -- Object, kSceneItem that represents a joint to be built.
+        buildName -- String, The name to use on the built object.
 
         Return:
         DCC Scene Item that is created.
@@ -176,11 +185,12 @@ class BaseBuilder(object):
         return None
 
 
-    def buildLocator(self, kSceneItem):
+    def buildLocator(self, kSceneItem, buildName):
         """Builds a locator / null object.
 
         Arguments:
         kSceneItem -- Object, kSceneItem that represents a locator / null to be built.
+        buildName -- String, The name to use on the built object.
 
         Return:
         DCC Scene Item that is created.
@@ -190,11 +200,12 @@ class BaseBuilder(object):
         return None
 
 
-    def buildCurve(self, kSceneItem):
+    def buildCurve(self, kSceneItem, buildName):
         """Builds a Curve object.
 
         Arguments:
         kSceneItem -- Object, kSceneItem that represents a curve to be built.
+        buildName -- String, The name to use on the built object.
 
         Return:
         DCC Scene Item that is created.
@@ -204,11 +215,12 @@ class BaseBuilder(object):
         return None
 
 
-    def buildControl(self, kSceneItem):
+    def buildControl(self, kSceneItem, buildName):
         """Builds a Control object.
 
         Arguments:
         kSceneItem -- Object, kSceneItem that represents a control to be built.
+        buildName -- String, The name to use on the built object.
 
         Return:
         DCC Scene Item that is created.
@@ -479,6 +491,7 @@ class BaseBuilder(object):
         """
 
         kType = kObject.getKType()
+        nameTemplate = self.config.getNameTemplate()
 
         # Validate incoming data
         if kObject.side not in nameTemplate['sides']:
@@ -529,39 +542,39 @@ class BaseBuilder(object):
         dccSceneItem = None
         kType = kObject.getKType()
 
-        # buildName = self.getBuildName(kObject)
+        buildName = self.getBuildName(kObject)
 
         # Build Object
         if kType == "Container":
-            dccSceneItem = self.buildContainer(kObject)
+            dccSceneItem = self.buildContainer(kObject, buildName)
 
         elif kType == "Layer":
-            dccSceneItem = self.buildLayer(kObject)
+            dccSceneItem = self.buildLayer(kObject, buildName)
 
         elif kType == "Component":
-            dccSceneItem = self.buildGroup(kObject)
+            dccSceneItem = self.buildGroup(kObject, buildName)
             component = kObject
 
         elif kType == "HierarchyGroup":
-            dccSceneItem = self.buildHierarchyGroup(kObject)
+            dccSceneItem = self.buildHierarchyGroup(kObject, buildName)
 
         elif kType == "SrtBuffer":
-            dccSceneItem = self.buildGroup(kObject)
+            dccSceneItem = self.buildGroup(kObject, buildName)
 
         elif kType == "Locator":
-            dccSceneItem = self.buildLocator(kObject)
+            dccSceneItem = self.buildLocator(kObject, buildName)
 
         elif kType == "Joint":
-            dccSceneItem = self.buildJoint(kObject)
+            dccSceneItem = self.buildJoint(kObject, buildName)
 
         elif kType == "SceneItem":
-            dccSceneItem = self.buildLocator(kObject)
+            dccSceneItem = self.buildLocator(kObject, buildName)
 
         elif kType == "Curve":
-            dccSceneItem = self.buildCurve(kObject)
+            dccSceneItem = self.buildCurve(kObject, buildName)
 
         elif kType == "Control":
-            dccSceneItem = self.buildControl(kObject)
+            dccSceneItem = self.buildControl(kObject, buildName)
 
         else:
             raise NotImplementedError(kObject.getName() + ' has an unsupported type: ' + str(type(kObject)))

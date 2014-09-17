@@ -25,18 +25,17 @@ class Builder(BaseBuilder):
     # ========================
     # SceneItem Build Methods
     # ========================
-    def buildContainer(self, kSceneItem):
+    def buildContainer(self, kSceneItem, buildName):
         """Builds a container / namespace object.
 
         Arguments:
         kSceneItem -- Object, kSceneItem that represents a container to be built.
+        buildName -- String, The name to use on the built object.
 
         Return:
         Node that is created..
 
         """
-
-        buildName = kSceneItem.getBuildName()
 
         parentNode = self._getDCCSceneItem(kSceneItem.getParent())
 
@@ -49,18 +48,17 @@ class Builder(BaseBuilder):
         return dccSceneItem
 
 
-    def buildLayer(self, kSceneItem):
+    def buildLayer(self, kSceneItem, buildName):
         """Builds a layer object.
 
         Arguments:
         kSceneItem -- Object, kSceneItem that represents a layer to be built.
+        buildName -- String, The name to use on the built object.
 
         Return:
         Node that is created..
 
         """
-
-        buildName = kSceneItem.getBuildName()
 
         parentNode = self._getDCCSceneItem(kSceneItem.getParent())
 
@@ -73,18 +71,17 @@ class Builder(BaseBuilder):
         return dccSceneItem
 
 
-    def buildHierarchyGroup(self, kSceneItem):
+    def buildHierarchyGroup(self, kSceneItem, buildName):
         """Builds a hierarchy group object.
 
         Arguments:
         kSceneItem -- Object, kSceneItem that represents a group to be built.
+        buildName -- String, The name to use on the built object.
 
         Return:
         DCC Scene Item that is created.
 
         """
-
-        buildName = kSceneItem.getBuildName()
 
         parentNode = self._getDCCSceneItem(kSceneItem.getParent())
 
@@ -99,18 +96,17 @@ class Builder(BaseBuilder):
         return dccSceneItem
 
 
-    def buildGroup(self, kSceneItem):
+    def buildGroup(self, kSceneItem, buildName):
         """Builds a group object.
 
         Arguments:
         kSceneItem -- Object, kSceneItem that represents a group to be built.
+        buildName -- String, The name to use on the built object.
 
         Return:
         Node that is created.
 
         """
-
-        buildName = kSceneItem.getBuildName()
 
         parentNode = self._getDCCSceneItem(kSceneItem.getParent())
 
@@ -123,18 +119,17 @@ class Builder(BaseBuilder):
         return dccSceneItem
 
 
-    def buildJoint(self, kSceneItem):
+    def buildJoint(self, kSceneItem, buildName):
         """Builds a joint object.
 
         Arguments:
         kSceneItem -- Object, kSceneItem that represents a joint to be built.
+        buildName -- String, The name to use on the built object.
 
         Return:
         DCC Scene Item that is created.
 
         """
-
-        buildName = kSceneItem.getBuildName()
 
         parentNode = self._getDCCSceneItem(kSceneItem.getParent())
 
@@ -147,18 +142,17 @@ class Builder(BaseBuilder):
         return dccSceneItem
 
 
-    def buildLocator(self, kSceneItem):
+    def buildLocator(self, kSceneItem, buildName):
         """Builds a locator / null object.
 
         Arguments:
         kSceneItem -- Object, locator / null object to be built.
+        buildName -- String, The name to use on the built object.
 
         Return:
         Node that is created.
 
         """
-
-        buildName = kSceneItem.getBuildName()
 
         parentNode = self._getDCCSceneItem(kSceneItem.getParent())
 
@@ -171,18 +165,17 @@ class Builder(BaseBuilder):
         return dccSceneItem
 
 
-    def buildCurve(self, kSceneItem):
+    def buildCurve(self, kSceneItem, buildName):
         """Builds a Curve object.
 
         Arguments:
         kSceneItem -- Object, kSceneItem that represents a curve to be built.
+        buildName -- String, The name to use on the built object.
 
         Return:
         Node that is created.
 
         """
-
-        buildName = kSceneItem.getBuildName()
 
         parentNode = self._getDCCSceneItem(kSceneItem.getParent())
 
@@ -218,18 +211,17 @@ class Builder(BaseBuilder):
         return dccSceneItem
 
 
-    def buildControl(self, kSceneItem):
+    def buildControl(self, kSceneItem, buildName):
         """Builds a Control object.
 
         Arguments:
         kSceneItem -- Object, kSceneItem that represents a control to be built.
+        buildName -- String, The name to use on the built object.
 
         Return:
         Node that is created.
 
         """
-
-        buildName = kSceneItem.getBuildName()
 
         parentNode = self._getDCCSceneItem(kSceneItem.getParent())
 
