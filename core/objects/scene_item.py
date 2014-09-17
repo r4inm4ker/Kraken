@@ -165,6 +165,9 @@ class SceneItem(object):
 
         """
 
+        # TODO: WE NEED UNIQUE NAMES BUT WE HAVE A RESTRICTION CURRENTLY WHEN TWO OBJECTS OF DIFFERENT TYPES
+        # NEED THE SAME NAME. i.e.: 'bicep' control and 'bicep' srtBuffer
+        
         # if child.getName() in [x.getName() for x in self.children]:
         #     raise IndexError("Child with name '" + child.getName() + "'' already exists as a child.")
 
