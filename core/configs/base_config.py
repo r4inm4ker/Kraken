@@ -17,13 +17,14 @@ class BaseConfig(object):
                              "separator": "_",
                              "types": {
                                        "default": "null",
-                                       "MyControl": "ctrl",
-                                       "MyObj": "null"
+                                       "Control": "ctrl",
+                                       "Null": "null"
                                       },
                              "formats":
                                        {
                                         "default": ['component', 'sep', 'side', 'sep', 'name', 'sep', 'type'],
-                                        "MyControl2": ['side', 'sep', 'component', 'sep', 'name', 'sep', 'type']
+                                        "Rig": ['name'],
+                                        "Layer": ['name']
                                        }
                             }
 
