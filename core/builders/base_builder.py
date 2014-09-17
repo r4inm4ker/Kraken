@@ -493,38 +493,30 @@ built
         kType = kObject.getKType()
         nameTemplate = self.config.getNameTemplate()
 
-        # Validate incoming data
-        if kObject.side not in nameTemplate['sides']:
-            raise ValueError(kObject.name + " has an invalid side: " + kObject.side)
-            return False
-        else:
-            side = kObject.side
-
-        if kObject.component is None:
-            return kObject.name
-
-        # Replace tokens
+        # Get the token list for this type of object
         if kType in nameTemplate['formats'].keys():
             tokenList = nameTemplate['formats'][kType]
         else:
             tokenList = nameTemplate['formats']['default']
 
-        for i in xrange(tokenList.count('sep')):
-            tokenList[tokenList.index('sep')] = nameTemplate['separator']
+        # Generate a name by concatenating the resolved tokens together. 
+        builtName = ""
+        if kObject.testFlag('EXPLICIT_NAME'):
+            builtName = kObject.getName()
 
-        for i in xrange(tokenList.count('side')):
-            tokenList[tokenList.index('side')] = side
+        for token in tokenList:
 
-        for i in xrange(tokenList.count('name')):
-            tokenList[tokenList.index('name')] = kObject.name
+            if token is 'sep':
+                builtName += nameTemplate['values']['separator']
+            elif token is 'sides':
+                if isinstance(kObject, BaseComponent):
+                    builtName += kObject.getSide()
+                else:
+                    builtName += kObject.getComponent().getSide()
+            elif token is 'types':
+                builtName += nameTemplate['types'][kType]
 
-        for i in xrange(tokenList.count('component')):
-            tokenList[tokenList.index('component')] = kObject.component
-
-        for i in xrange(tokenList.count('type')):
-            tokenList[tokenList.index('type')] = nameTemplate['types'][kType]
-
-        return ''.join(filter(None, tokenList))
+        return builtName
 
 
     def buildHierarchy(self, kObject, component=None):
