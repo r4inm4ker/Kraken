@@ -26,7 +26,7 @@ class BaseConfig(object):
                                        "HierarchyGroup": "hrc",
                                        "Joint": "def",
                                        "Layer": "",
-                                       "Locator": "null",
+                                       "Locator": "loc",
                                        "SrtBuffer": "srtBuffer"
                                       },
                              "formats":
