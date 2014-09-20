@@ -13,18 +13,28 @@ class BaseConfig(object):
         super(BaseConfig, self).__init__()
 
         self.nameTemplate = {
-                             "sides": ['L', 'R', 'M'],
+                             "locations": ['L', 'R', 'M'],
                              "separator": "_",
                              "types": {
                                        "default": "null",
+                                       "Component": "cmp",
+                                       "ComponentInput": "cmpIn",
+                                       "ComponentOutput": "cmpOut",
+                                       "Container": "",
                                        "Control": "ctrl",
-                                       "Null": "null"
+                                       "Curve": "crv",
+                                       "HierarchyGroup": "hrc",
+                                       "Joint": "def",
+                                       "Layer": "",
+                                       "Locator": "null",
+                                       "SrtBuffer": "srtBuffer"
                                       },
                              "formats":
                                        {
-                                        "default": ['component', 'sep', 'side', 'sep', 'name', 'sep', 'type'],
-                                        "Rig": ['name'],
-                                        "Layer": ['name']
+                                        "default": ['component', 'sep', 'location', 'sep', 'name', 'sep', 'type'],
+                                        "Container": ['name'],
+                                        "Layer": ['name'],
+                                        "Component": ['name', 'sep', 'location', 'sep', 'type']
                                        }
                             }
 

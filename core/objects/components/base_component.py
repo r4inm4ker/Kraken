@@ -20,9 +20,9 @@ class BaseComponent(SceneItem):
 
     __kType__ = "Component"
 
-    def __init__(self, name, parent=None, side='M'):
+    def __init__(self, name, parent=None, location='M'):
         super(BaseComponent, self).__init__(name, parent)
-        self.side = side
+        self.location = location
         self.inputs = []
         self.outputs = []
         self.operators = []
@@ -43,32 +43,29 @@ class BaseComponent(SceneItem):
     # =============
     # Side Methods
     # =============
-    def getSide(self):
-        """Returns the side of the component as a string.
+    def getLocation(self):
+        """Returns the location of the component as a string.
 
         Return:
-        String, the side of the component.
+        String, the location of the component.
 
         """
 
-        return self.side
+        return self.location
 
 
-    def setSide(self, side):
-        """Sets the side of the component.
+    def setSide(self, location):
+        """Sets the location of the component.
 
         Arguments:
-        side -- String, side that the component is on. Valid values: L, M, R.
+        location -- String, location that the component is on. Valid values: L, M, R.
 
         Return:
         True if successful.
 
         """
 
-        if side not in ['L', 'M', 'R']:
-            raise ValueError("'" + side + "' is not a valid side.")
-
-        self.side = side
+        self.location = location
 
         return True
 
@@ -84,7 +81,7 @@ class BaseComponent(SceneItem):
 
         """
 
-        return self.getName() + '_' + self.getSide()
+        return self.getName() + '_' + self.getLocation()
 
 
     def getBuildName(self):

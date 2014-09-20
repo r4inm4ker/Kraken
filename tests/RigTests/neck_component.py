@@ -16,8 +16,8 @@ from kraken.core.objects.operators.splice_operator import SpliceOperator
 class NeckComponent(BaseComponent):
     """Neck Component"""
 
-    def __init__(self, name, parent=None, side='M'):
-        super(NeckComponent, self).__init__(name, parent, side)
+    def __init__(self, name, parent=None, location='M'):
+        super(NeckComponent, self).__init__(name, parent, location)
 
         # Setup component attributes
         defaultAttrGroup = self.getAttributeGroupByIndex(0)
@@ -39,17 +39,15 @@ class NeckComponent(BaseComponent):
         neckXfo.setFromVectors(rootToEnd, bone1Normal, bone1ZAxis, neckPosition)
 
         # Add Guide Controls
-        neckCtrl = PinControl('neck')
+        neckCtrlSrtBuffer = SrtBuffer('neck', parent=self)
+        neckCtrlSrtBuffer.xfo.copy(neckXfo)
+
+        neckCtrl = PinControl('neck', parent=neckCtrlSrtBuffer)
         neckCtrl.scalePoints(Vec3(1.25, 1.25, 1.25))
         neckCtrl.translatePoints(Vec3(0, 0, -0.5))
         neckCtrl.rotatePoints(90, 0, 90)
         neckCtrl.xfo.copy(neckXfo)
         neckCtrl.setColor("orange")
-
-        neckCtrlSrtBuffer = SrtBuffer('neck')
-        neckCtrlSrtBuffer.xfo.copy(neckCtrl.xfo)
-        neckCtrlSrtBuffer.addChild(neckCtrl)
-        self.addChild(neckCtrlSrtBuffer)
 
 
         # ==========
@@ -58,10 +56,8 @@ class NeckComponent(BaseComponent):
         container = self.getParent().getParent()
         deformersLayer = container.getChildByName('deformers')
 
-        neckDef = Joint('neck')
+        neckDef = Joint('neck', parent=deformersLayer)
         neckDef.setComponent(self)
-
-        deformersLayer.addChild(neckDef)
 
 
         # =====================
@@ -77,7 +73,7 @@ class NeckComponent(BaseComponent):
 
         # Setup componnent Attribute I/O's
         debugInputAttr = BoolAttribute('debug', True)
-        rightSideInputAttr = BoolAttribute('rightSide', side is 'R')
+        rightSideInputAttr = BoolAttribute('rightSide', location is 'R')
 
 
         # ==============
@@ -131,5 +127,5 @@ class NeckComponent(BaseComponent):
 
 
 if __name__ == "__main__":
-    neck = NeckComponent("myNeck", side='M')
+    neck = NeckComponent("myNeck", location='M')
     print neck.getNumChildren()

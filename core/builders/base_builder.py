@@ -9,6 +9,7 @@ from kraken.core import logger as pyLogger
 logger = pyLogger.getLogger("pyLogger")
 from kraken.core.configs.base_config import BaseConfig
 
+from kraken.core.objects.components.base_component import BaseComponent
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
 
@@ -164,7 +165,7 @@ class BaseBuilder(object):
 
         Return:
         DCC Scene Item that is created.
-built
+
         """
 
         return None
@@ -495,26 +496,42 @@ built
 
         # Get the token list for this type of object
         if kType in nameTemplate['formats'].keys():
-            tokenList = nameTemplate['formats'][kType]
+            format = nameTemplate['formats'][kType]
         else:
-            tokenList = nameTemplate['formats']['default']
+            format = nameTemplate['formats']['default']
 
-        # Generate a name by concatenating the resolved tokens together. 
+        # Generate a name by concatenating the resolved tokens together.
         builtName = ""
         if kObject.testFlag('EXPLICIT_NAME'):
             builtName = kObject.getName()
 
-        for token in tokenList:
+        for token in format:
 
             if token is 'sep':
-                builtName += nameTemplate['values']['separator']
-            elif token is 'sides':
+                builtName += nameTemplate['separator']
+
+            elif token is 'location':
                 if isinstance(kObject, BaseComponent):
-                    builtName += kObject.getSide()
+                    location = kObject.getLocation()
                 else:
-                    builtName += kObject.getComponent().getSide()
-            elif token is 'types':
+                    location = kObject.getComponent().getLocation()
+
+                if location not in nameTemplate['locations']:
+                    raise ValueError("Invalid location on: " + kObject.getFullName())
+
+                builtName += location
+
+            elif token is 'type':
                 builtName += nameTemplate['types'][kType]
+
+            elif token is 'name':
+                builtName += kObject.getName()
+
+            elif token is 'component':
+                builtName += kObject.getComponent().getName()
+
+            else:
+                raise ValueError("Unresolvabled token '" + token + "' used on: " + kObject.getFullName())
 
         return builtName
 

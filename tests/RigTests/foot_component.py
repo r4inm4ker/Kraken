@@ -22,8 +22,8 @@ from kraken.core.objects.operators.splice_operator import SpliceOperator
 class FootComponent(BaseComponent):
     """Hand Component"""
 
-    def __init__(self, name, parent=None, side='M'):
-        super(FootComponent, self).__init__(name, parent, side)
+    def __init__(self, name, parent=None, location='M'):
+        super(FootComponent, self).__init__(name, parent, location)
 
         # =========
         # Controls
@@ -33,7 +33,7 @@ class FootComponent(BaseComponent):
         defaultAttrGroup.addAttribute(BoolAttribute("toggleDebugging", True))
 
         # Default values
-        if side == 'R':
+        if location == 'R':
             ctrlColor = "red"
             footPosition = Vec3(-7.1886, 12.2819, 0.4906)
             footUpV = Vec3(-1.7454, 0.1922, -1.7397)
@@ -51,7 +51,7 @@ class FootComponent(BaseComponent):
         bone1Normal = rootToEnd.cross(bone1ZAxis).unit()
         footXfo = Xfo()
 
-        if side == "R":
+        if location == "R":
             footQuat = Quat(Vec3(0.5695, -0.6377, 0.4190), 0.3053)
             footPos = Vec3(-1.841, 1.1516, -1.237)
         else:
@@ -114,7 +114,7 @@ class FootComponent(BaseComponent):
 
         # Setup componnent Attribute I/O's
         debugInputAttr = BoolAttribute('debug', True)
-        rightSideInputAttr = BoolAttribute('rightSide', side is 'R')
+        rightSideInputAttr = BoolAttribute('rightSide', location is 'R')
         linkToWorldInputAttr = FloatAttribute('linkToWorld', 0.0, 0.0, 1.0)
 
         # Connect attrs to control attrs
@@ -193,5 +193,5 @@ class FootComponent(BaseComponent):
 
 
 if __name__ == "__main__":
-    handLeft = FootComponent("myFoot", side='L')
+    handLeft = FootComponent("myFoot", location='L')
     print handLeft.getNumChildren()

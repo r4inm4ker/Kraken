@@ -16,8 +16,8 @@ from kraken.core.objects.operators.splice_operator import SpliceOperator
 class ClavicleComponent(BaseComponent):
     """Clavicle Component"""
 
-    def __init__(self, name, parent=None, side='M'):
-        super(ClavicleComponent, self).__init__(name, parent, side)
+    def __init__(self, name, parent=None, location='M'):
+        super(ClavicleComponent, self).__init__(name, parent, location)
 
         # =========
         # Controls
@@ -27,7 +27,7 @@ class ClavicleComponent(BaseComponent):
         defaultAttrGroup.addAttribute(BoolAttribute("toggleDebugging", True))
 
         # Default values
-        if side == 'R':
+        if location == 'R':
             ctrlColor = "red"
             claviclePosition = Vec3(-0.1322, 15.403, -0.5723)
             clavicleUpV = Vec3()
@@ -57,7 +57,7 @@ class ClavicleComponent(BaseComponent):
         clavicleLen = claviclePosition.subtract(clavicleEndPosition).length()
         clavicleCtrl.scalePoints(Vec3(clavicleLen, 0.75, 0.75))
 
-        if side == "R":
+        if location == "R":
             clavicleCtrl.translatePoints(Vec3(0.0, 0.0, -1.0))
         else:
             clavicleCtrl.translatePoints(Vec3(0.0, 0.0, 1.0))
@@ -96,7 +96,7 @@ class ClavicleComponent(BaseComponent):
 
         # Setup componnent Attribute I/O's
         debugInputAttr = BoolAttribute('debug', True)
-        rightSideInputAttr = BoolAttribute('rightSide', side is 'R')
+        rightSideInputAttr = BoolAttribute('rightSide', location is 'R')
         armFollowBodyOutputAttr = FloatAttribute('followBody', 0.0, 0.0, 1.0)
 
 
@@ -156,5 +156,5 @@ class ClavicleComponent(BaseComponent):
 
 
 if __name__ == "__main__":
-    clavicleLeft = ClavicleComponent("myClavicle", side='L')
+    clavicleLeft = ClavicleComponent("myClavicle", location='L')
     print clavicleLeft.getNumChildren()

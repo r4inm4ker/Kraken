@@ -23,15 +23,15 @@ from kraken.core.objects.operators.splice_operator import SpliceOperator
 class LegComponent(BaseComponent):
     """Leg Component"""
 
-    def __init__(self, name, parent=None, side='M'):
-        super(LegComponent, self).__init__(name, parent, side)
+    def __init__(self, name, parent=None, location='M'):
+        super(LegComponent, self).__init__(name, parent, location)
 
         # Setup component attributes
         defaultAttrGroup = self.getAttributeGroupByIndex(0)
         defaultAttrGroup.addAttribute(BoolAttribute("toggleDebugging", True))
 
         # Default values
-        if self.getSide() == "R":
+        if self.getLocation() == "R":
             ctrlColor = "red"
             femurPosition = Vec3(-0.9811, 9.769, -0.4572)
             kneePosition = Vec3(-1.4488, 5.4418, -0.5348)
@@ -91,7 +91,7 @@ class LegComponent(BaseComponent):
         legIKCtrl.xfo.tr.copy(anklePosition)
         legIKCtrl.setColor(ctrlColor)
 
-        if self.getSide() == "R":
+        if self.getLocation() == "R":
             legIKCtrl.rotatePoints(0, 90, 0)
             legIKCtrl.translatePoints(Vec3(-1.0, 0.0, 0.0))
         else:
@@ -188,7 +188,7 @@ class LegComponent(BaseComponent):
         softDistInputAttr = FloatAttribute('softDist', 0.5, 0.0, 1.0)
         stretchInputAttr = BoolAttribute('stretch', True)
         stretchBlendInputAttr = FloatAttribute('stretchBlend', 0.0, 0.0, 1.0)
-        rightSideInputAttr = BoolAttribute('rightSide', side is 'R')
+        rightSideInputAttr = BoolAttribute('rightSide', location is 'R')
 
         # Connect attrs to control attrs
         debugInputAttr.connect(legDebugInputAttr)
@@ -290,5 +290,5 @@ class LegComponent(BaseComponent):
 
 
 if __name__ == "__main__":
-    legLeft = LegComponent("myLeg", side='L')
+    legLeft = LegComponent("myLeg", location='L')
     print legLeft.getNumChildren()

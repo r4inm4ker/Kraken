@@ -16,8 +16,8 @@ from kraken.core.objects.operators.splice_operator import SpliceOperator
 class HeadComponent(BaseComponent):
     """Head Component"""
 
-    def __init__(self, name, parent=None, side='M'):
-        super(HeadComponent, self).__init__(name, parent, side)
+    def __init__(self, name, parent=None, location='M'):
+        super(HeadComponent, self).__init__(name, parent, location)
 
         # Setup component attributes
         defaultAttrGroup = self.getAttributeGroupByIndex(0)
@@ -122,7 +122,7 @@ class HeadComponent(BaseComponent):
 
         # Setup componnent Attribute I/O's
         debugInputAttr = BoolAttribute('debug', True)
-        rightSideInputAttr = BoolAttribute('rightSide', side is 'R')
+        rightSideInputAttr = BoolAttribute('rightSide', location is 'R')
 
 
         # ==============

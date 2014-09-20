@@ -15,8 +15,8 @@ from kraken.core.objects.operators.splice_operator import SpliceOperator
 class SpineComponent(BaseComponent):
     """Spine Component"""
 
-    def __init__(self, name, parent=None, side='M'):
-        super(SpineComponent, self).__init__(name, parent, side)
+    def __init__(self, name, parent=None, location='M'):
+        super(SpineComponent, self).__init__(name, parent, location)
 
         # =========
         # Controls
@@ -33,60 +33,49 @@ class SpineComponent(BaseComponent):
         spine04Position = Vec3(0.0, 13.1051, -0.4821)
 
         # COG
-        cogCtrl = CircleControl('cog')
+        cogCtrlSrtBuffer = SrtBuffer('cog', parent=self)
+        cogCtrlSrtBuffer.xfo.tr.copy(cogPosition)
+
+        cogCtrl = CircleControl('cog', parent=cogCtrlSrtBuffer)
         cogCtrl.scalePoints(Vec3(6.0, 6.0, 6.0))
         cogCtrl.xfo.tr.copy(cogPosition)
         cogCtrl.setColor("orange")
 
-        cogCtrlSrtBuffer = SrtBuffer('cog')
-        cogCtrlSrtBuffer.xfo.tr.copy(cogPosition)
-        cogCtrlSrtBuffer.addChild(cogCtrl)
-        self.addChild(cogCtrlSrtBuffer)
-
         # Spine01
-        spine01Ctrl = CircleControl('spine01')
+        spine01CtrlSrtBuffer = SrtBuffer('spine01', parent=cogCtrl)
+        spine01CtrlSrtBuffer.xfo.tr.copy(spine01Position)
+
+        spine01Ctrl = CircleControl('spine01', parent=spine01CtrlSrtBuffer)
         spine01Ctrl.scalePoints(Vec3(4.0, 4.0, 4.0))
         spine01Ctrl.xfo.tr.copy(spine01Position)
         spine01Ctrl.setColor("yellow")
 
-        spine01CtrlSrtBuffer = SrtBuffer('spine01')
-        spine01CtrlSrtBuffer.xfo.copy(spine01Ctrl.xfo)
-        spine01CtrlSrtBuffer.addChild(spine01Ctrl)
-        cogCtrl.addChild(spine01CtrlSrtBuffer)
-
         # Spine02
-        spine02Ctrl = CircleControl('spine02')
+        spine02CtrlSrtBuffer = SrtBuffer('spine02', parent=spine01Ctrl)
+        spine02CtrlSrtBuffer.xfo.tr.copy(spine02Position)
+
+        spine02Ctrl = CircleControl('spine02', parent=spine02CtrlSrtBuffer)
         spine02Ctrl.scalePoints(Vec3(4.5, 4.5, 4.5))
         spine02Ctrl.xfo.tr.copy(spine02Position)
         spine02Ctrl.setColor("blue")
 
-        spine02CtrlSrtBuffer = SrtBuffer('spine02')
-        spine02CtrlSrtBuffer.xfo.copy(spine02Ctrl.xfo)
-        spine02CtrlSrtBuffer.addChild(spine02Ctrl)
-        spine01Ctrl.addChild(spine02CtrlSrtBuffer)
-
         # Spine03
-        spine03Ctrl = CircleControl('spine03')
+        spine03CtrlSrtBuffer = SrtBuffer('spine03', parent=spine02Ctrl)
+        spine03CtrlSrtBuffer.xfo.tr.copy(spine03Position)
+
+        spine03Ctrl = CircleControl('spine03', parent=spine03CtrlSrtBuffer)
         spine03Ctrl.scalePoints(Vec3(4.5, 4.5, 4.5))
         spine03Ctrl.xfo.tr.copy(spine03Position)
         spine03Ctrl.setColor("blue")
 
-        spine03CtrlSrtBuffer = SrtBuffer('spine03')
-        spine03CtrlSrtBuffer.xfo.copy(spine03Ctrl.xfo)
-        spine03CtrlSrtBuffer.addChild(spine03Ctrl)
-
         # Spine04
-        spine04Ctrl = CircleControl('spine04')
+        spine04CtrlSrtBuffer = SrtBuffer('spine04', parent=cogCtrl)
+        spine04CtrlSrtBuffer.xfo.tr.copy(spine04Position)
+
+        spine04Ctrl = CircleControl('spine04', parent=spine04CtrlSrtBuffer)
         spine04Ctrl.scalePoints(Vec3(6.0, 6.0, 6.0))
         spine04Ctrl.xfo.tr.copy(spine04Position)
         spine04Ctrl.setColor("yellow")
-        spine04Ctrl.addChild(spine03CtrlSrtBuffer)
-
-        spine04CtrlSrtBuffer = SrtBuffer('spine04')
-        spine04CtrlSrtBuffer.xfo.copy(spine04Ctrl.xfo)
-        spine04CtrlSrtBuffer.addChild(spine04Ctrl)
-        cogCtrl.addChild(spine04CtrlSrtBuffer)
-
 
         # ==========
         # Deformers

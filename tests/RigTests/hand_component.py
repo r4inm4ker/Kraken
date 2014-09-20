@@ -22,8 +22,8 @@ from kraken.core.objects.operators.splice_operator import SpliceOperator
 class HandComponent(BaseComponent):
     """Hand Component"""
 
-    def __init__(self, name, parent=None, side='M'):
-        super(HandComponent, self).__init__(name, parent, side)
+    def __init__(self, name, parent=None, location='M'):
+        super(HandComponent, self).__init__(name, parent, location)
 
         # =========
         # Controls
@@ -33,7 +33,7 @@ class HandComponent(BaseComponent):
         defaultAttrGroup.addAttribute(BoolAttribute("toggleDebugging", True))
 
         # Default values
-        if side == 'R':
+        if location == 'R':
             ctrlColor = "red"
             handPosition = Vec3(-7.1886, 12.2819, 0.4906)
             handUpV = Vec3(-7.7463, 13.1746, 0.4477)
@@ -51,7 +51,7 @@ class HandComponent(BaseComponent):
         bone1Normal = rootToEnd.cross(bone1ZAxis).unit()
         handXfo = Xfo()
 
-        if side == "R":
+        if location == "R":
             handQuat = Quat(Vec3(-0.2301, -0.0865, -0.9331), 0.2623)
             handPos = Vec3(-7.1886, 12.2819, 0.4906)
         else:
@@ -114,7 +114,7 @@ class HandComponent(BaseComponent):
 
         # Setup componnent Attribute I/O's
         debugInputAttr = BoolAttribute('debug', True)
-        rightSideInputAttr = BoolAttribute('rightSide', side is 'R')
+        rightSideInputAttr = BoolAttribute('rightSide', location is 'R')
         linkToWorldInputAttr = FloatAttribute('linkToWorld', 0.0, 0.0, 1.0)
 
         # Connect attrs to control attrs
@@ -193,5 +193,5 @@ class HandComponent(BaseComponent):
 
 
 if __name__ == "__main__":
-    handLeft = HandComponent("myHand", side='L')
+    handLeft = HandComponent("myHand", location='L')
     print handLeft.getNumChildren()

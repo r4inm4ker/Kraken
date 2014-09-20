@@ -20,8 +20,8 @@ from kraken.core.objects.operators.splice_operator import SpliceOperator
 class ArmComponent(BaseComponent):
     """Arm Component"""
 
-    def __init__(self, name, parent=None, side='M'):
-        super(ArmComponent, self).__init__(name, parent, side)
+    def __init__(self, name, parent=None, location='M'):
+        super(ArmComponent, self).__init__(name, parent, location)
 
         # =========
         # Controls
@@ -31,7 +31,7 @@ class ArmComponent(BaseComponent):
         defaultAttrGroup.addAttribute(BoolAttribute("toggleDebugging", True))
 
         # Default values
-        if self.getSide() == "R":
+        if self.getLocation() == "R":
             ctrlColor = "red"
             bicepPosition = Vec3(-2.27, 15.295, -0.753)
             forearmPosition = Vec3(-5.039, 13.56, -0.859)
@@ -92,7 +92,7 @@ class ArmComponent(BaseComponent):
         armIKCtrl.xfo.copy(armIKCtrlSrtBuffer.xfo)
         armIKCtrl.setColor(ctrlColor)
 
-        if self.getSide() == "R":
+        if self.getLocation() == "R":
             armIKCtrl.rotatePoints(0, 90, 0)
         else:
             armIKCtrl.rotatePoints(0, -90, 0)
@@ -178,7 +178,6 @@ class ArmComponent(BaseComponent):
         armEndPosOutput = Locator('armEndPos')
         armEndPosOutput.xfo.copy(armEndXfo)
 
-
         # Setup componnent Attribute I/O's
         debugInputAttr = BoolAttribute('debug', True)
         bone1LenInputAttr = FloatAttribute('bone1Len', bicepLen, 0.0, 100.0)
@@ -188,7 +187,7 @@ class ArmComponent(BaseComponent):
         softDistInputAttr = FloatAttribute('softDist', 0.5, 0.0, 1.0)
         stretchInputAttr = BoolAttribute('stretch', True)
         stretchBlendInputAttr = FloatAttribute('stretchBlend', 0.0, 0.0, 1.0)
-        rightSideInputAttr = BoolAttribute('rightSide', side is 'R')
+        rightSideInputAttr = BoolAttribute('rightSide', location is 'R')
 
         # Connect attrs to control attrs
         debugInputAttr.connect(armDebugInputAttr)
@@ -290,7 +289,7 @@ class ArmComponent(BaseComponent):
 
 
 if __name__ == "__main__":
-    armLeft = ArmComponent("myArm", side='L')
+    armLeft = ArmComponent("myArm", location='L')
     print armLeft.getNumChildren()
 
     def traverseHierarchy(kObject):
