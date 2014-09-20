@@ -107,32 +107,37 @@ class SceneItem(object):
         return True
 
 
-    # ===============
+    # ==================
     # Hierarchy Methods
-    # ===============
-    def getLayer(self):
-        """Returns the Layer of the object as an object.
-
-        Return:
-        Layer of this object.
-
-        """
-        layer = self
-        while (layer.__class__.__name__ != 'Layer'):
-            layer = layer.parent
-        return layer
-
+    # ==================
     def getContainer(self):
-        """Returns the Layer of the object as an object.
+        """Returns the Container the object belongs to.
 
         Return:
-        Layer of this object.
+        Object, Container.
 
         """
-        container = self
-        while (container.__class__.__name__ != 'Container'):
-            container = container.parent
-        return container
+
+        parent = self.getParent()
+        while (parent.getKType() != 'Container' and parent is not None):
+            parent = parent.getParent()
+
+        return parent
+
+
+    def getLayer(self):
+        """Returns the Layer the object belongs to.
+
+        Return:
+        Object, Layer this object belongs to.
+
+        """
+
+        parent = self.getParent()
+        while (parent.getKType() != 'Layer' and parent is not None):
+            parent = parent.getParent()
+
+        return parent
 
 
     # ==================
