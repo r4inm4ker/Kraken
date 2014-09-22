@@ -63,20 +63,6 @@ class SceneItem(object):
         return self.getName()
 
 
-    def getBuildName(self):
-        """Returns the name used when building the node in the target application.
-
-        Return:
-        String, build name of the object.
-
-        """
-
-        if self.component is not None:
-            return self.component.getComponentName() + '_' + self.getName()
-
-        return self.getName()
-
-
     # ===============
     # Parent Methods
     # ===============
@@ -198,11 +184,22 @@ class SceneItem(object):
 
         """
 
-        # TODO: WE NEED UNIQUE NAMES BUT WE HAVE A RESTRICTION CURRENTLY WHEN TWO OBJECTS OF DIFFERENT TYPES
-        # NEED THE SAME NAME. i.e.: 'bicep' control and 'bicep' srtBuffer
+        # TODO: Attempted to check for types, but still running into issues
+        # throughout the hierarchy. Need to find a better solution. Possibly have
+        # the children attribute a dictionary sorted by types and check there. But
+        # will still run into clashes. Need another differentiating attribute on
+        # all objects.
 
         # if child.getName() in [x.getName() for x in self.children]:
-        #     raise IndexError("Child with name '" + child.getName() + "'' already exists as a child.")
+
+        #     if child.getKType() == "Component":
+        #         existingChild = self.getChildByName(child.getName())
+        #         if child.getKType() == existingChild.getKType() and child.getLocation() == existingChild.getLocation():
+        #             raise NameError("Child with name '" + child.getFullName() + "', type: '" + child.getKType() + "', and location: '" + child.getLocation() + "' already exists.")
+        #     else:
+        #         existingChild = self.getChildByName(child.getName())
+        #         if child.getKType() == existingChild.getKType():
+        #             raise NameError("Child with name '" + child.getFullName() + "' and type: '" + child.getKType() + "' already exists.")
 
         if child.getParent() is not None:
             parent = child.getParent()

@@ -59,19 +59,6 @@ class ComponentInput(object):
         return self.name
 
 
-    def getBuildName(self):
-        """Returns the name used when building the node in the target application.
-
-        Return:
-        String, build name of the object.
-
-        """
-
-        if self.component is not None:
-            return self.component.getComponentName() + '_' + self.getName() 
-
-        return self.getName()
-
     # ===============
     # Component Methods
     # ===============

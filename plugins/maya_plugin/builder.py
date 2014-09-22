@@ -671,14 +671,12 @@ class Builder(BaseBuilder):
 
         """
 
+        colors = self.config.getColors()
         dccSceneItem = self._getDCCSceneItem(kSceneItem)
-
-        objectColor = kSceneItem.getColor()
-        if objectColor not in self.VALID_COLORS.keys():
-            return False
+        buildColor = self.getBuildColor(kSceneItem)
 
         dccSceneItem.overrideEnabled.set(True)
-        dccSceneItem.overrideColor.set(self.VALID_COLORS[objectColor][0])
+        dccSceneItem.overrideColor.set(colors[buildColor][0])
 
         return True
 

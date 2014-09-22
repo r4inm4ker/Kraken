@@ -32,12 +32,10 @@ class ArmComponent(BaseComponent):
 
         # Default values
         if self.getLocation() == "R":
-            ctrlColor = "red"
             bicepPosition = Vec3(-2.27, 15.295, -0.753)
             forearmPosition = Vec3(-5.039, 13.56, -0.859)
             wristPosition = Vec3(-7.1886, 12.2819, 0.4906)
         else:
-            ctrlColor = "greenBright"
             bicepPosition = Vec3(2.27, 15.295, -0.753)
             forearmPosition = Vec3(5.039, 13.56, -0.859)
             wristPosition = Vec3(7.1886, 12.2819, 0.4906)
@@ -59,30 +57,24 @@ class ArmComponent(BaseComponent):
         forearmXfo.setFromVectors(elbowToWrist, bone2Normal, bone2ZAxis, forearmPosition)
 
         # Bicep
-        bicepFKCtrl = CubeControl('bicepFK')
+        bicepFKCtrlSrtBuffer = SrtBuffer('bicepFK', parent=self)
+        bicepFKCtrlSrtBuffer.xfo.copy(bicepXfo)
+
+        bicepFKCtrl = CubeControl('bicepFK', parent=bicepFKCtrlSrtBuffer)
         bicepFKCtrl.alignOnXAxis()
         bicepLen = bicepPosition.subtract(forearmPosition).length()
         bicepFKCtrl.scalePoints(Vec3(bicepLen, 1.75, 1.75))
-        bicepFKCtrl.setColor(ctrlColor)
         bicepFKCtrl.xfo.copy(bicepXfo)
 
-        bicepFKCtrlSrtBuffer = SrtBuffer('bicepFK')
-        self.addChild(bicepFKCtrlSrtBuffer)
-        bicepFKCtrlSrtBuffer.xfo.copy(bicepFKCtrl.xfo)
-        bicepFKCtrlSrtBuffer.addChild(bicepFKCtrl)
-
         # Forearm
-        forearmFKCtrl = CubeControl('forearmFK')
+        forearmFKCtrlSrtBuffer = SrtBuffer('forearmFK', parent=bicepFKCtrl)
+        forearmFKCtrlSrtBuffer.xfo.copy(forearmXfo)
+
+        forearmFKCtrl = CubeControl('forearmFK', parent=forearmFKCtrlSrtBuffer)
         forearmFKCtrl.alignOnXAxis()
         forearmLen = forearmPosition.subtract(wristPosition).length()
         forearmFKCtrl.scalePoints(Vec3(forearmLen, 1.5, 1.5))
-        forearmFKCtrl.setColor(ctrlColor)
         forearmFKCtrl.xfo.copy(forearmXfo)
-
-        forearmFKCtrlSrtBuffer = SrtBuffer('forearmFK')
-        bicepFKCtrl.addChild(forearmFKCtrlSrtBuffer)
-        forearmFKCtrlSrtBuffer.xfo.copy(forearmFKCtrl.xfo)
-        forearmFKCtrlSrtBuffer.addChild(forearmFKCtrl)
 
         # Arm IK
         armIKCtrlSrtBuffer = SrtBuffer('IK', parent=self)
@@ -90,7 +82,6 @@ class ArmComponent(BaseComponent):
 
         armIKCtrl = PinControl('IK', parent=armIKCtrlSrtBuffer)
         armIKCtrl.xfo.copy(armIKCtrlSrtBuffer.xfo)
-        armIKCtrl.setColor(ctrlColor)
 
         if self.getLocation() == "R":
             armIKCtrl.rotatePoints(0, 90, 0)
@@ -129,10 +120,8 @@ class ArmComponent(BaseComponent):
         armUpVCtrl.xfo.tr.copy(upVOffset)
         armUpVCtrl.alignOnZAxis()
         armUpVCtrl.rotatePoints(180, 0, 0)
-        armUpVCtrl.setColor(ctrlColor)
 
-        armUpVCtrlSrtBuffer = SrtBuffer('UpV')
-        self.addChild(armUpVCtrlSrtBuffer)
+        armUpVCtrlSrtBuffer = SrtBuffer('UpV', parent=self)
         armUpVCtrlSrtBuffer.xfo.tr.copy(upVOffset)
         armUpVCtrlSrtBuffer.addChild(armUpVCtrl)
 
@@ -140,7 +129,7 @@ class ArmComponent(BaseComponent):
         # ==========
         # Deformers
         # ==========
-        container = self.getParent().getParent()
+        container = self.getContainer()
         deformersLayer = container.getChildByName('deformers')
 
         bicepDef = Joint('bicep')
@@ -293,7 +282,7 @@ if __name__ == "__main__":
     print armLeft.getNumChildren()
 
     def traverseHierarchy(kObject):
-        print kObject.getBuildName()
+        print kObject.getFullName()
         # Build children
         for i in xrange(kObject.getNumChildren()):
             child = kObject.getChildByIndex(i)

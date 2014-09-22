@@ -28,20 +28,6 @@ class BaseControl(Curve):
         super(BaseControl, self).__init__(name, parent=parent)
 
 
-    # =============
-    # Name methods
-    # =============
-    def getBuildName(self):
-        """Returns the name used when building the node in the target application.
-
-        Return:
-        String, build name of the object.
-
-        """
-
-        return super(Curve, self).getBuildName() + '_ctrl'
-
-
     # ==============
     # Align Methods
     # ==============

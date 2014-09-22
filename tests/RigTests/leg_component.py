@@ -32,12 +32,10 @@ class LegComponent(BaseComponent):
 
         # Default values
         if self.getLocation() == "R":
-            ctrlColor = "red"
             femurPosition = Vec3(-0.9811, 9.769, -0.4572)
             kneePosition = Vec3(-1.4488, 5.4418, -0.5348)
             anklePosition = Vec3(-1.841, 1.1516, -1.237)
         else:
-            ctrlColor = "greenBright"
             femurPosition = Vec3(0.9811, 9.769, -0.4572)
             kneePosition = Vec3(1.4488, 5.4418, -0.5348)
             anklePosition = Vec3(1.841, 1.1516, -1.237)
@@ -67,7 +65,6 @@ class LegComponent(BaseComponent):
         femurFKCtrl.alignOnXAxis()
         femurLen = femurPosition.subtract(kneePosition).length()
         femurFKCtrl.scalePoints(Vec3(femurLen, 1.75, 1.75))
-        femurFKCtrl.setColor(ctrlColor)
         femurFKCtrl.xfo.copy(femurXfo)
 
 
@@ -79,7 +76,6 @@ class LegComponent(BaseComponent):
         shinFKCtrl.alignOnXAxis()
         shinLen = kneePosition.subtract(anklePosition).length()
         shinFKCtrl.scalePoints(Vec3(shinLen, 1.5, 1.5))
-        shinFKCtrl.setColor(ctrlColor)
         shinFKCtrl.xfo.copy(shinXfo)
 
 
@@ -89,7 +85,6 @@ class LegComponent(BaseComponent):
 
         legIKCtrl = PinControl('IK', parent=legIKCtrlSrtBuffer)
         legIKCtrl.xfo.tr.copy(anklePosition)
-        legIKCtrl.setColor(ctrlColor)
 
         if self.getLocation() == "R":
             legIKCtrl.rotatePoints(0, 90, 0)
@@ -134,13 +129,12 @@ class LegComponent(BaseComponent):
         legUpVCtrl.xfo.tr.copy(upVOffset)
         legUpVCtrl.alignOnZAxis()
         legUpVCtrl.rotatePoints(0, 0, 0)
-        legUpVCtrl.setColor(ctrlColor)
 
 
         # ==========
         # Deformers
         # ==========
-        container = self.getParent().getParent()
+        container = self.getContainer()
         deformersLayer = container.getChildByName('deformers')
 
         femurDef = Joint('femur')

@@ -48,7 +48,6 @@ class SpineComponent(BaseComponent):
         spine01Ctrl = CircleControl('spine01', parent=spine01CtrlSrtBuffer)
         spine01Ctrl.scalePoints(Vec3(4.0, 4.0, 4.0))
         spine01Ctrl.xfo.tr.copy(spine01Position)
-        spine01Ctrl.setColor("yellow")
 
         # Spine02
         spine02CtrlSrtBuffer = SrtBuffer('spine02', parent=spine01Ctrl)
@@ -75,12 +74,11 @@ class SpineComponent(BaseComponent):
         spine04Ctrl = CircleControl('spine04', parent=spine04CtrlSrtBuffer)
         spine04Ctrl.scalePoints(Vec3(6.0, 6.0, 6.0))
         spine04Ctrl.xfo.tr.copy(spine04Position)
-        spine04Ctrl.setColor("yellow")
 
         # ==========
         # Deformers
         # ==========
-        container = self.getParent().getParent()
+        container = self.getContainer()
         deformersLayer = container.getChildByName('deformers')
 
         spine01Def = Joint('spine01')

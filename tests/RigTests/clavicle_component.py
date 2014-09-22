@@ -28,14 +28,12 @@ class ClavicleComponent(BaseComponent):
 
         # Default values
         if location == 'R':
-            ctrlColor = "red"
             claviclePosition = Vec3(-0.1322, 15.403, -0.5723)
             clavicleUpV = Vec3()
             clavicleUpV.copy(claviclePosition)
             clavicleUpV = clavicleUpV.add(Vec3(0.0, 1.0, 0.0)).unit()
             clavicleEndPosition = Vec3(-2.27, 15.295, -0.753)
         else:
-            ctrlColor = "greenBright"
             claviclePosition = Vec3(0.1322, 15.403, -0.5723)
             clavicleUpV = Vec3()
             clavicleUpV.copy(claviclePosition)
@@ -52,7 +50,10 @@ class ClavicleComponent(BaseComponent):
         clavicleXfo.setFromVectors(rootToEnd, bone1Normal, bone1ZAxis, claviclePosition)
 
         # Add Controls
-        clavicleCtrl = CubeControl('clavicle', parent=self)
+        clavicleCtrlSrtBuffer = SrtBuffer('clavicle', parent=self)
+        clavicleCtrlSrtBuffer.xfo.copy(clavicleXfo)
+
+        clavicleCtrl = CubeControl('clavicle', parent=clavicleCtrlSrtBuffer)
         clavicleCtrl.alignOnXAxis()
         clavicleLen = claviclePosition.subtract(clavicleEndPosition).length()
         clavicleCtrl.scalePoints(Vec3(clavicleLen, 0.75, 0.75))
@@ -63,17 +64,12 @@ class ClavicleComponent(BaseComponent):
             clavicleCtrl.translatePoints(Vec3(0.0, 0.0, 1.0))
 
         clavicleCtrl.xfo.copy(clavicleXfo)
-        clavicleCtrl.setColor(ctrlColor)
-
-        clavicleCtrlSrtBuffer = SrtBuffer('clavicle', parent=self)
-        clavicleCtrlSrtBuffer.xfo.copy(clavicleCtrl.xfo)
-        clavicleCtrlSrtBuffer.addChild(clavicleCtrl)
 
 
         # ==========
         # Deformers
         # ==========
-        container = self.getParent().getParent()
+        container = self.getContainer()
         deformersLayer = container.getChildByName('deformers')
 
         clavicleDef = Joint('clavicle')

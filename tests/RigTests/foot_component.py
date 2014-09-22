@@ -34,12 +34,10 @@ class FootComponent(BaseComponent):
 
         # Default values
         if location == 'R':
-            ctrlColor = "red"
             footPosition = Vec3(-7.1886, 12.2819, 0.4906)
             footUpV = Vec3(-1.7454, 0.1922, -1.7397)
             footEndPosition = Vec3(-2.0939, 0.4288, 0.0944)
         else:
-            ctrlColor = "greenBright"
             footPosition = Vec3(7.1886, 12.2819, 0.4906)
             footUpV = Vec3(1.7454, 0.1922, -1.7397)
             footEndPosition = Vec3(2.0939, 0.4288, 0.0944)
@@ -69,7 +67,6 @@ class FootComponent(BaseComponent):
         footCtrl.alignOnXAxis()
         footCtrl.scalePoints(Vec3(2.5, 1.5, 0.75))
         footCtrl.xfo.copy(footCtrlSrtBuffer.xfo)
-        footCtrl.setColor(ctrlColor)
 
         # Rig Ref objects
         footRefSrt = Locator('footRef', parent=self)
@@ -89,7 +86,7 @@ class FootComponent(BaseComponent):
         # ==========
         # Deformers
         # ==========
-        container = self.getParent().getParent()
+        container = self.getContainer()
         deformersLayer = container.getChildByName('deformers')
 
         footDef = Joint('foot')

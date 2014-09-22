@@ -31,42 +31,38 @@ class HeadComponent(BaseComponent):
         jawPosition = Vec3(0.0, 17.613, -0.2731)
 
         # Head
-        headCtrl = CircleControl('head')
+        headCtrlSrtBuffer = SrtBuffer('head', parent=self)
+        headCtrlSrtBuffer.xfo.tr.copy(headPosition)
+
+        headCtrl = CircleControl('head', parent=headCtrlSrtBuffer)
         headCtrl.rotatePoints(0, 0, 90)
         headCtrl.scalePoints(Vec3(3, 3, 3))
         headCtrl.translatePoints(Vec3(0, 1, 0.25))
         headCtrl.xfo.tr.copy(headPosition)
-        headCtrl.setColor("yellow")
-
-        headCtrlSrtBuffer = SrtBuffer('head')
-        self.addChild(headCtrlSrtBuffer)
-        headCtrlSrtBuffer.xfo.copy(headCtrl.xfo)
-        headCtrlSrtBuffer.addChild(headCtrl)
 
         # Eye Left
-        eyeLeftCtrl = SphereControl('eyeLeft')
+        eyeLeftCtrlSrtBuffer = SrtBuffer('eyeLeft', parent=headCtrl)
+        eyeLeftCtrlSrtBuffer.xfo.tr.copy(eyeLeftPosition)
+
+        eyeLeftCtrl = SphereControl('eyeLeft', parent=eyeLeftCtrlSrtBuffer)
         eyeLeftCtrl.scalePoints(Vec3(0.75, 0.75, 0.75))
         eyeLeftCtrl.xfo.tr.copy(eyeLeftPosition)
         eyeLeftCtrl.setColor("blueMedium")
 
-        eyeLeftCtrlSrtBuffer = SrtBuffer('eyeLeft')
-        headCtrl.addChild(eyeLeftCtrlSrtBuffer)
-        eyeLeftCtrlSrtBuffer.xfo.copy(eyeLeftCtrl.xfo)
-        eyeLeftCtrlSrtBuffer.addChild(eyeLeftCtrl)
-
         # Eye Right
-        eyeRightCtrl = SphereControl('eyeRight')
+        eyeRightCtrlSrtBuffer = SrtBuffer('eyeRight', parent=headCtrl)
+        eyeRightCtrlSrtBuffer.xfo.tr.copy(eyeRightPosition)
+
+        eyeRightCtrl = SphereControl('eyeRight', parent=eyeRightCtrlSrtBuffer)
         eyeRightCtrl.scalePoints(Vec3(0.5, 0.5, 0.5))
         eyeRightCtrl.xfo.tr.copy(eyeRightPosition)
         eyeRightCtrl.setColor("blueMedium")
 
-        eyeRightCtrlSrtBuffer = SrtBuffer('eyeRight')
-        headCtrl.addChild(eyeRightCtrlSrtBuffer)
-        eyeRightCtrlSrtBuffer.xfo.copy(eyeRightCtrl.xfo)
-        eyeRightCtrlSrtBuffer.addChild(eyeRightCtrl)
-
         # Jaw
-        jawCtrl = CubeControl('jaw')
+        jawCtrlSrtBuffer = SrtBuffer('jawSrtBuffer', parent=headCtrl)
+        jawCtrlSrtBuffer.xfo.tr.copy(jawPosition)
+
+        jawCtrl = CubeControl('jaw', parent=jawCtrlSrtBuffer)
         jawCtrl.alignOnYAxis(negative=True)
         jawCtrl.alignOnZAxis()
         jawCtrl.scalePoints(Vec3(1.45, 0.65, 1.25))
@@ -74,16 +70,11 @@ class HeadComponent(BaseComponent):
         jawCtrl.xfo.tr.copy(jawPosition)
         jawCtrl.setColor("orange")
 
-        jawCtrlSrtBuffer = SrtBuffer('jawSrtBuffer')
-        headCtrl.addChild(jawCtrlSrtBuffer)
-        jawCtrlSrtBuffer.xfo.copy(jawCtrl.xfo)
-        jawCtrlSrtBuffer.addChild(jawCtrl)
-
 
         # ==========
         # Deformers
         # ==========
-        container = self.getParent().getParent()
+        container = self.getContainer()
         deformersLayer = container.getChildByName('deformers')
 
         headDef = Joint('head')

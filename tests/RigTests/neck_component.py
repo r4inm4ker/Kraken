@@ -53,7 +53,7 @@ class NeckComponent(BaseComponent):
         # ==========
         # Deformers
         # ==========
-        container = self.getParent().getParent()
+        container = self.getContainer()
         deformersLayer = container.getChildByName('deformers')
 
         neckDef = Joint('neck', parent=deformersLayer)

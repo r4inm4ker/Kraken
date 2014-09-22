@@ -34,12 +34,10 @@ class HandComponent(BaseComponent):
 
         # Default values
         if location == 'R':
-            ctrlColor = "red"
             handPosition = Vec3(-7.1886, 12.2819, 0.4906)
             handUpV = Vec3(-7.7463, 13.1746, 0.4477)
             handEndPosition = Vec3(-7.945, 11.8321, 0.9655)
         else:
-            ctrlColor = "greenBright"
             handPosition = Vec3(7.1886, 12.2819, 0.4906)
             handUpV = Vec3(7.7463, 13.1746, 0.4477)
             handEndPosition = Vec3(7.945, 11.8321, 0.9655)
@@ -69,7 +67,6 @@ class HandComponent(BaseComponent):
         handCtrl.alignOnXAxis()
         handCtrl.scalePoints(Vec3(2.0, 0.75, 1.25))
         handCtrl.xfo.copy(handCtrlSrtBuffer.xfo)
-        handCtrl.setColor(ctrlColor)
 
         # Rig Ref objects
         handRefSrt = Locator('handRef', parent=self)
@@ -89,7 +86,7 @@ class HandComponent(BaseComponent):
         # ==========
         # Deformers
         # ==========
-        container = self.getParent().getParent()
+        container = self.getContainer()
         deformersLayer = container.getChildByName('deformers')
 
         handDef = Joint('hand')

@@ -29,15 +29,13 @@ class BaseComponent(SceneItem):
 
         self.setShapeVisibility(False)
 
-        inputHrc = HierarchyGroup('inputs')
+        inputHrc = HierarchyGroup('inputs', parent=self)
         inputAttrGrp = AttributeGroup('inputAttrs')
         inputHrc.addAttributeGroup(inputAttrGrp)
-        self.addChild(inputHrc)
 
-        outputHrc = HierarchyGroup('outputs')
+        outputHrc = HierarchyGroup('outputs', parent=self)
         outputAttrGrp = AttributeGroup('outputAttrs')
         outputHrc.addAttributeGroup(outputAttrGrp)
-        self.addChild(outputHrc)
 
 
     # =============
@@ -54,7 +52,7 @@ class BaseComponent(SceneItem):
         return self.location
 
 
-    def setSide(self, location):
+    def setLocation(self, location):
         """Sets the location of the component.
 
         Arguments:
@@ -82,17 +80,6 @@ class BaseComponent(SceneItem):
         """
 
         return self.getName() + '_' + self.getLocation()
-
-
-    def getBuildName(self):
-        """Returns the name used when building the node in the target application.
-
-        Return:
-        String, build name of the object.
-
-        """
-
-        return self.getComponentName() + '_cmp'
 
 
     # ==============

@@ -716,16 +716,15 @@ class Builder(BaseBuilder):
 
         """
 
+        colors = self.config.getColors()
         dccSceneItem = self._getDCCSceneItem(kSceneItem)
+        buildColor = self.getBuildColor(kSceneItem)
 
-        objectColor = kSceneItem.getColor()
-        if objectColor not in self.VALID_COLORS.keys():
-            return False
-
-        displayProperty = dccSceneItem.AddProperty("Display Property")
-        displayProperty.Parameters("wirecolorr").Value = self.VALID_COLORS[objectColor][1][0]
-        displayProperty.Parameters("wirecolorg").Value = self.VALID_COLORS[objectColor][1][1]
-        displayProperty.Parameters("wirecolorb").Value = self.VALID_COLORS[objectColor][1][2]
+        if buildColor is not None:
+            displayProperty = dccSceneItem.AddProperty("Display Property")
+            displayProperty.Parameters("wirecolorr").Value = colors[buildColor][1][0]
+            displayProperty.Parameters("wirecolorg").Value = colors[buildColor][1][1]
+            displayProperty.Parameters("wirecolorb").Value = colors[buildColor][1][2]
 
         return True
 
