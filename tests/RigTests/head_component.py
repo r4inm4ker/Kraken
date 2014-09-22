@@ -45,7 +45,7 @@ class HeadComponent(BaseComponent):
         eyeLeftCtrlSrtBuffer.xfo.tr.copy(eyeLeftPosition)
 
         eyeLeftCtrl = SphereControl('eyeLeft', parent=eyeLeftCtrlSrtBuffer)
-        eyeLeftCtrl.scalePoints(Vec3(0.75, 0.75, 0.75))
+        eyeLeftCtrl.scalePoints(Vec3(0.5, 0.5, 0.5))
         eyeLeftCtrl.xfo.tr.copy(eyeLeftPosition)
         eyeLeftCtrl.setColor("blueMedium")
 
