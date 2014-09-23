@@ -11,6 +11,7 @@ class BaseConfig(object):
 
     def __init__(self):
         super(BaseConfig, self).__init__()
+        self.explicitNaming = False
 
         # Note: These were taken from Maya and is the least common denominator since
         # you can't set colors by scalar values. :\
@@ -121,6 +122,36 @@ class BaseConfig(object):
         """
 
         return self.nameTemplate
+
+
+    # =========================
+    # Explicity Naming Methods
+    # =========================
+    def getExplicitNaming(self):
+        """Returns the value of the explicit naming attribute.
+
+        Return:
+        Boolean, current value.
+
+        """
+
+        return self.explicitNaming
+
+
+    def setExplicitNaming(self, value):
+        """Set the config to use explicit naming.
+
+        Arguments:
+        value -- Boolean, whether to use explicit naming or not.
+
+        Return:
+        True if successful.
+
+        """
+
+        self.explicitNaming = value
+
+        return True
 
 
     # ===================

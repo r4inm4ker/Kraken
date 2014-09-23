@@ -26,6 +26,7 @@ class BaseBuilder(object):
 
         if config is None:
             config = BaseConfig()
+
         self.config = config
 
     # ====================
@@ -456,7 +457,8 @@ class BaseBuilder(object):
         """
 
         kType = kObject.getKType()
-        nameTemplate = self.config.getNameTemplate()
+        config = self.getConfig()
+        nameTemplate = config.getNameTemplate()
 
         # Get the token list for this type of object
         if kType in nameTemplate['formats'].keys():
@@ -464,11 +466,12 @@ class BaseBuilder(object):
         else:
             format = nameTemplate['formats']['default']
 
+        # If flag is set on object to use explicit name, return it.
+        if config.getExplicitNaming() is True or kObject.testFlag('EXPLICIT_NAME'):
+            return kObject.getName()
+
         # Generate a name by concatenating the resolved tokens together.
         builtName = ""
-        if kObject.testFlag('EXPLICIT_NAME'):
-            builtName = kObject.getName()
-
         for token in format:
 
             if token is 'sep':
@@ -759,7 +762,8 @@ class BaseBuilder(object):
 
         """
 
-        colors = self.config.getColors()
+        config = self.getConfig()
+        colors = config.getColors()
         kType = kSceneItem.getKType()
         component = kSceneItem.getComponent()
         objectColor = kSceneItem.getColor()
@@ -815,6 +819,36 @@ class BaseBuilder(object):
         dccSceneItem = self._getDCCSceneItem(kSceneItem)
 
         # Re-implement in DCC builders.
+
+        return True
+
+
+    # ===============
+    # Config Methods
+    # ===============
+    def getConfig(self):
+        """Gets the current config for the builder.
+
+        Return:
+        Object, config.
+
+        """
+
+        return self.config
+
+
+    def setConfig(self, config):
+        """Sets the builder's config.
+
+        Arguments:
+        config -- Config, the config to use for this builder.
+
+        Return:
+        True if successful.
+
+        """
+
+        self.config = config
 
         return True
 
