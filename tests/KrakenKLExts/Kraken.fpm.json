@@ -9,5 +9,7 @@
 
             "Solvers/KrakenSolverArg.kl",
             "Solvers/KrakenSolver.kl"
+
+            "Solvers/KrakenPoseConstraintSolver.kl"
           ]
 }

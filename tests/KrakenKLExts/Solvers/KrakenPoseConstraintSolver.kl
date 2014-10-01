@@ -1,0 +1,87 @@
+require Kraken;
+require InlineDrawing;
+
+object PoseConstraintSolver : KrakenSolver {
+  Boolean debug;
+  InlineTransform rootTransform;
+};
+
+
+// Default Constructor
+inline PoseConstraintSolver() {
+  this.debug = false;
+
+  InlineDrawing draw = OGLInlineDrawing_GetInstance();
+  this.rootTransform = StaticInlineTransform('BonePoseConstraintSolver', Xfo());
+  draw.getRoot().addChild(this.rootTransform);
+}
+
+
+// Return Arguments for Kraken
+function KrakenSolverArg[] PoseConstraintSolver.getArguments(){
+  KrakenSolverArg args[];
+  args.push(KrakenSolverArg('debug', 'in', 'Boolean'));
+  args.push(KrakenSolverArg('rightSide', 'in', 'Boolean'));
+  args.push(KrakenSolverArg('constrainer', 'in', 'Mat44'));
+  args.push(KrakenSolverArg('constrainee', 'io', 'Mat44'));
+  return args;
+}
+
+
+// Solve
+function PoseConstraintSolver.solve!
+(
+  in Boolean debug,
+  in Boolean rightSide,
+  in Mat44 constrainer,
+  io Mat44 constrainee
+  )
+{
+  this.debug = debug;
+  constrainee = constrainer;
+
+  // Setup Debugging Shapes
+  Xfo debugXfo;
+  debugXfo = constrainer;
+
+  Color boneColor = Color(1.0, 1.0, 0);
+  if(rightSide) {
+    boneColor.set(0.5, 0, 0, 1.0);
+  }
+  else {
+    boneColor.set(0, 0.5, 0, 1.0);
+  }
+
+  etDrawBone(this.rootTransform, 'singleBone', debugXfo, 1.0, 0.25, boneColor);
+
+  // Set debugging visibility.
+  this.setDebug(this.debug);
+
+}
+
+
+function PoseConstraintSolver.setDebug!(in Boolean active) {
+
+  for(Size i=0; i<this.rootTransform.getChildCount(); i++) {
+
+      InlineTransform transform = this.rootTransform.getChild(i);
+      if(transform) {
+
+        for(Size y=0; y<transform.getChildCount(); y++) {
+
+          InlineInstance instance = transform.getChild(y);
+          if(instance) {
+
+            if(!active) {
+              instance.setActive(false);
+            }
+            else if(active) {
+              instance.setActive(true);
+            }
+
+          }
+        }
+      }
+
+    }
+}

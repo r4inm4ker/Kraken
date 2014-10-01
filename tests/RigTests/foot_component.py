@@ -170,19 +170,19 @@ class FootComponent(BaseComponent):
         # spliceOp.setOutput("handCtrlSrtBuffer", footCtrlSrtBuffer)
 
 
-        # # Add Deformer Splice Op
-        # spliceOp = SpliceOperator("footDeformerSpliceOp", "PoseConstraintSolver", "KrakenPoseConstraintSolver")
-        # self.addOperator(spliceOp)
+        # Add Deformer Splice Op
+        spliceOp = SpliceOperator("footDeformerSpliceOp", "PoseConstraintSolver", "KrakenPoseConstraintSolver")
+        self.addOperator(spliceOp)
 
-        # # Add Att Inputs
-        # spliceOp.setInput("debug", debugInputAttr)
-        # spliceOp.setInput("rightSide", rightSideInputAttr)
+        # Add Att Inputs
+        spliceOp.setInput("debug", debugInputAttr)
+        spliceOp.setInput("rightSide", rightSideInputAttr)
 
-        # # Add Xfo Inputs)
-        # spliceOp.setInput("constrainer", footOutput)
+        # Add Xfo Inputs)
+        spliceOp.setInput("constrainer", footOutput)
 
-        # # Add Xfo Outputs
-        # spliceOp.setOutput("constrainee", footDef)
+        # Add Xfo Outputs
+        spliceOp.setOutput("constrainee", footDef)
 
 
     def buildRig(self, parent):
