@@ -107,19 +107,19 @@ class NeckComponent(BaseComponent):
         # ===============
         # Add Splice Ops
         # ===============
-        # Add Deformer Splice Op
-        # spliceOp = SpliceOperator("neckDeformerSpliceOp", "PoseConstraintSolver", "KrakenPoseConstraintSolver")
-        # self.addOperator(spliceOp)
+        Add Deformer Splice Op
+        spliceOp = SpliceOperator("neckDeformerSpliceOp", "PoseConstraintSolver", "KrakenPoseConstraintSolver")
+        self.addOperator(spliceOp)
 
-        # # Add Att Inputs
-        # spliceOp.setInput("debug", debugInputAttr)
-        # spliceOp.setInput("rightSide", rightSideInputAttr)
+        # Add Att Inputs
+        spliceOp.setInput("debug", debugInputAttr)
+        spliceOp.setInput("rightSide", rightSideInputAttr)
 
-        # # Add Xfo Inputstrl)
-        # spliceOp.setInput("constrainer", neckEndOutput)
+        # Add Xfo Inputstrl)
+        spliceOp.setInput("constrainer", neckEndOutput)
 
-        # # Add Xfo Outputs
-        # spliceOp.setOutput("constrainee", neckDef)
+        # Add Xfo Outputs
+        spliceOp.setOutput("constrainee", neckDef)
 
 
     def buildRig(self, parent):

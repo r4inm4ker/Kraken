@@ -170,19 +170,19 @@ class HandComponent(BaseComponent):
         # spliceOp.setOutput("handCtrlSrtBuffer", handCtrlSrtBuffer)
 
 
-        # # Add Deformer Splice Op
-        # spliceOp = SpliceOperator("handDeformerSpliceOp", "PoseConstraintSolver", "KrakenPoseConstraintSolver")
-        # self.addOperator(spliceOp)
+        # Add Deformer Splice Op
+        spliceOp = SpliceOperator("handDeformerSpliceOp", "PoseConstraintSolver", "KrakenPoseConstraintSolver")
+        self.addOperator(spliceOp)
 
-        # # Add Att Inputs
-        # spliceOp.setInput("debug", debugInputAttr)
-        # spliceOp.setInput("rightSide", rightSideInputAttr)
+        # Add Att Inputs
+        spliceOp.setInput("debug", debugInputAttr)
+        spliceOp.setInput("rightSide", rightSideInputAttr)
 
-        # # Add Xfo Inputs)
-        # spliceOp.setInput("constrainer", handOutput)
+        # Add Xfo Inputs)
+        spliceOp.setInput("constrainer", handOutput)
 
-        # # Add Xfo Outputs
-        # spliceOp.setOutput("constrainee", handDef)
+        # Add Xfo Outputs
+        spliceOp.setOutput("constrainee", handDef)
 
 
     def buildRig(self, parent):
