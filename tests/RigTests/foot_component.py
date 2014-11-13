@@ -171,7 +171,7 @@ class FootComponent(BaseComponent):
 
 
         # Add Deformer Splice Op
-        spliceOp = SpliceOperator("footDeformerSpliceOp", "PoseConstraintSolver", "KrakenPoseConstraintSolver")
+        spliceOp = SpliceOperator("footDeformerSpliceOp", "PoseConstraintSolver", "Kraken")
         self.addOperator(spliceOp)
 
         # Add Att Inputs

@@ -1,4 +1,3 @@
-require Kraken;
 
 struct KrakenSolverArg {
     String name;
@@ -8,12 +7,12 @@ struct KrakenSolverArg {
 
 
 // Default Constructor
-function KrakenSolverArg()
+inline KrakenSolverArg()
 {
 
 }
 
-function KrakenSolverArg(
+inline KrakenSolverArg(
   String name,
   String connectionType,
   String dataType)

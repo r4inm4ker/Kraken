@@ -133,7 +133,7 @@ class ClavicleComponent(BaseComponent):
         # Add Splice Ops
         # ===============
         # Add Deformer Splice Op
-        spliceOp = SpliceOperator("clavicleDeformerSpliceOp", "PoseConstraintSolver", "KrakenPoseConstraintSolver")
+        spliceOp = SpliceOperator("clavicleDeformerSpliceOp", "PoseConstraintSolver", "Kraken")
         self.addOperator(spliceOp)
 
         # Add Att Inputs

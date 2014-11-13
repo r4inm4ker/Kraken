@@ -579,8 +579,7 @@ class Builder(BaseBuilder):
             extension = kOperator.getExtension()
             client.loadExtension(extension)
 
-            client.loadExtension('KrakenSolver')
-            client.loadExtension('KrakenSolverArg')
+            client.loadExtension('Kraken')
 
             solverTypeName = kOperator.getSolverTypeName()
             klType = getattr(client.RT.types, solverTypeName)
@@ -617,8 +616,7 @@ class Builder(BaseBuilder):
 
             # Start constructing the source code.
             opSourceCode = ""
-            opSourceCode += "require KrakenSolver;\n"
-            opSourceCode += "require KrakenSolverArg;\n"
+            opSourceCode += "require Kraken;\n"
             opSourceCode += "require " + kOperator.getExtension() + ";\n\n"
             opSourceCode += "operator " + kOperator.getName() + "(\n"
 
