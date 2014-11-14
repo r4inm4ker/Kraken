@@ -171,7 +171,7 @@ class HandComponent(BaseComponent):
 
 
         # Add Deformer Splice Op
-        spliceOp = SpliceOperator("handDeformerSpliceOp", "PoseConstraintSolver", "KrakenPoseConstraintSolver")
+        spliceOp = SpliceOperator("handDeformerSpliceOp", "PoseConstraintSolver", "Kraken")
         self.addOperator(spliceOp)
 
         # Add Att Inputs
