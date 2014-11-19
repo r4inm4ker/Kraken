@@ -15,216 +15,128 @@ class Xfo(MathObject):
 
     def __init__(self, scl=None, rot=None, tr=None, ro=0):
         super(Xfo, self).__init__()
-        self.scl = Vec3(1,1,1)
-        self.rot = Quat()
-        self.tr = Vec3()
-        self.ro = 0
-
-        self.set(scl=scl, rot=rot, tr=tr, ro=ro)
+        client = KC.getInstance().getCoreClient()
+        self.rtval = client.RT.types.Xfo()
 
 
     def __str__(self):
         """String representation of Transform."""
-
         return "Xfo(scl=" + str(self.scl) + ", rot=" + str(self.rot) + ", tr=" + str(self.tr) + ")"
 
+    @property
+    def tr(self):
+        """The 'translation' property."""
+        return self.rtval.tr
 
-    def copy(self, xfo):
-        """Copy the values from input Xfo.
+    @tr.setter
+    def tr(self, value):
+        self.rtval.tr = KC.inst().rtVal('Vec3', value)
 
-        Arguments:
-        xfo -- Xfo, Xfo to copy values from.
+    @property
+    def ori(self):
+        """The 'orientation' property."""
+        return self.rtval.ori
 
-        Return:
-        This Xfo.
-
-        """
-
-        self.scl.copy(xfo.scl)
-        self.rot.v.copy(xfo.rot.v)
-        self.rot.w = xfo.rot.w
-        self.tr.copy(xfo.tr)
-
-        return self
-
-
-    def set(self, scl=None, rot=None, tr=None, ro=0):
-        """Sets values of the transform.
-
-        Return:
-        self
-
-        """
-
-        if scl is not None and not isinstance(scl, Vec3):
-            raise TypeError("Xfo: Invalid type for 'scl' argument. Must be a Vec3.")
-
-        if rot is not None and not isinstance(rot, Quat):
-            raise TypeError("Xfo: Invalid type for 'rot' argument. Must be a Quat.")
-
-        if tr is not None and not isinstance(tr, Vec3):
-            raise TypeError("Xfo: Invalid type for 'tr' argument. Must be a Vec3.")
-
-        if scl is None:
-            scl = Vec3(1,1,1)
-
-        if rot is None:
-            rot = Quat()
-
-        if tr is None:
-            tr = Vec3()
-
-        self.scl.set(scl.x, scl.y, scl.z)
-        self.rot.set(rot.v, rot.w)
-        self.tr.set(tr.x, tr.y, tr.z)
-        self.ro = ro
-
-        return self
+    @ori.setter
+    def ori(self, value):
+        self.rtval.ori = KC.inst().rtVal('Quat', value)
 
 
-    def setFromMatrix33(self, mat33):
-        """Set Xfo values from a Matrix33 object.
+    @property
+    def sc(self):
+        """The 'scaling' property."""
+        return self.rtval.sc
 
-        Arguments:
-        mat33 -- Matrix33 object.
-
-        Return:
-        True if successful.
-
-        """
-
-        if not isinstance(mat33, Matrix33):
-            raise TypeError("Xfo: setFromMatrix33: Invalid type for 'mat33' argument. Must be a Matrix33.")
-
-        self.rot.setFromMatrix33(mat33)
-
-        return True
+    @sc.setter
+    def sc(self, value):
+        self.rtval.sc = KC.inst().rtVal('Vec3', value)
 
 
-    def setFromMatrix44(self, mat44):
-        """Set Xfo values from a Matrix44 object.
+    # Setter from just the rotation
+    def set(self, ori):
+        self.rtval.set('', KC.inst().rtVal('Quat', ori))
 
-        Arguments:
-        mat44 -- Matrix44 object.
+    # Setter from Mat33 (only setting rotation)
+    def set(self, mat):
+        self.rtval.set('', KC.inst().rtVal('Mat33', mat))
 
-        Return:
-        True if successful.
+    # Setter from just the translation
+    def set(self, tr):
+        self.rtval.set('', KC.inst().rtVal('Vec3', tr))
 
-        """
+    # Setter from the translation and rotation
+    def set(self, tr, ori):
+        self.rtval.set('', KC.inst().rtVal('Vec3', tr), KC.inst().rtVal('Quat', ori))
 
-        if not isinstance(mat44, Matrix44):
-            raise TypeError("Xfo: setFromMatrix44: Invalid type for 'mat44' argument. Must be a Matrix44.")
+    # Setter from the translation, rotation and scaling
+    def set(self, tr, ori, sc):
+        self.rtval.set('', KC.inst().rtVal('Vec3', tr), KC.inst().rtVal('Quat', ori), KC.inst().rtVal('Vec3', sc))
 
-        mat44Array = mat44.toArray()
+    # Setter from the orientation, translation and scaling
+    def set(self, ori, tr, sc):
+        self.rtval.set('', KC.inst().rtVal('Quat', ori), KC.inst().rtVal('Vec3', tr), KC.inst().rtVal('Vec3', sc))
 
-        mat33 = Matrix33()
-        mat33.setFromArray([mat44Array[0],mat44Array[1],mat44Array[2],
-                             mat44Array[4],mat44Array[5],mat44Array[6],
-                             mat44Array[8],mat44Array[9],mat44Array[10]])
-
-        self.setFromMatrix33(mat33)
-
-        self.tr.x = mat44Array[12]
-        self.tr.y = mat44Array[13]
-        self.tr.z = mat44Array[14]
-
-        self.scl.x = Vec3(mat44Array[0],mat44Array[1],mat44Array[2]).length()
-        self.scl.y = Vec3(mat44Array[4],mat44Array[5],mat44Array[6]).length()
-        self.scl.z = Vec3(mat44Array[8],mat44Array[9],mat44Array[10]).length()
-
-        return self
-
-
-    def setFromVectors(self, inVec1, inVec2, inVec3, translation):
-        """Set Xfo values from  3 axis vectors and .
-
-        Arguments:
-        inVec1 -- x axis.
-        inVec2 -- y axis.
-        inVec3 -- z axis.
-        translation -- position vector.
-
-        Return:
-        True if successful.
-
-        """
-        mat33 = Matrix33()
-        mat33.set(inVec1, inVec2, inVec3)
-        self.rot.setFromMatrix33(mat33.transpose())
-        self.tr = translation
-
-        return True
-
-
+    # Sets this transform to the identity
     def setIdentity(self):
-        """Sets transform to identity.
+        self.rtval.setIdentity('')
 
-        Return:
-        self
+    # Sets this transform from a given Mat44
+    def setFromMat44(self):
+        self.rtval.setFromMat44('', KC.inst().rtVal('Mat44', m))
 
-        """
+    # Returns this xfo as a Mat44
+    def toMat44(self):
+        return self.rtval.toMat44('Mat44')
 
-        self.set(Vec3(), Vec3(), Vec3())
+    # # Equals operator
+    # def Boolean self, == (Xfo a, Xfo b):
 
-        return self
+
+    # # Not equals operator
+    # def Boolean self, != (Xfo a, Xfo b):
 
 
+
+    # # Multiplies two transforms
+    # def Xfo self, * (in Xfo local, in Xfo global):
+
+
+    # # Multiplies this transform with another one
+    # def  *= self, (in Xfo global):
+
+
+    # Overload method for the multiply operator
     def multiply(self, xfo):
-        """Multiply this transform with input transform.
-
-        Return:
-        New transform.
-
-        """
-
-        resultXfo = Xfo()
-
-        resultXfo.scl = self.scl.multiply(xfo.scl)
-        resultXfo.rot = self.rot.multiply(xfo.rot)
-        resultXfo.tr = self.tr.add(xfo.tr)
-
-        return resultXfo
+        return self.rtval.multiply('Xfo', KC.inst().rtVal('Xfo', xfo))
 
 
+    # Transforms a vector with this transform
     def transformVector(self, v):
-        """Transforms a vector by this xfo.
+        return self.rtval.transformVector('Vec3', KC.inst().rtVal('Vec3', v))
 
-        Arguments:
-        v -- Vec3, vector to transform.
+    # Transforms a vector with this transform
+    def  transformRay(self, ray):
+        return self.rtval.transformRay('Ray', KC.inst().rtVal('Ray', ray))
 
-        Return:
-        Vec3, transformed vector.
+    # Returns the inverse transform of this one
+    def  inverse(self):
+        return self.rtval.inverse('Xfo')
 
-        """
+    # Transforms a vector with this xfo inversely
+    # \note we have 'inverseTransformVector' because Xfos with non-uniform scaling cannot be inverted as Xfos
+    def inverseTransformVector(self, vec):
+        return self.rtval.inverseTransformVector('Vec3', KC.inst().rtVal('Vec3', vec))
 
-        return self.rot.rotateVector(v.multiply(self.scl)).add(self.tr)
-
-
-    def isIdentity(self):
-        """Check if this Xfo is set to Identity.
-
-        Return:
-        True if identity, false if not.
-
-        """
-
-        return self.isEqual(Xfo())
+    # Linearly interpolates this Xfo with another one based on 
+    # a scalar blend value (0.0 to 1.0)
+    def linearInterpolate(self,  other, t):
+        return self.rtval.inverseTransformVector('Xfo', KC.inst().rtVal('Xfo', other), KC.inst().rtVal('Scalar', t))
 
 
-    def isEqual(self, other):
-        """Check if this Xfo is equal to another.
 
-        Return:
-        True if equal, false if not.
 
-        """
 
-        if not isinstance(other, Xfo):
-            raise TypeError("Xfo: Invalid type for 'other' argument. Must be a Xfo.")
 
-        return self.scl.equal(other.scl) and \
-               self.rot.equal(other.rot) and \
-               self.tr.equal(other.tr)
 
 
 # ===============
