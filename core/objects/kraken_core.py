@@ -1,7 +1,7 @@
-"""KrakenSaver - objects.kraken_saver module.
+"""KrakenCore - objects.kraken_core module.
 
 Classes:
-KrakenSaver - Helper class for saving Kraken rigs to JSON representations .
+KrakenCore - Class for constructing the Fabric Engine Core client. 
 
 """
 from kraken.core.maths.math_object import MathObject
@@ -14,12 +14,12 @@ class KrakenCore(object):
     __instance = None
 
     def __init__(self):
-        super(KrakenSaver, self).__init__()
-        this.client = FabricEngine.Core.createClient()
+        super(KrakenCore, self).__init__()
+        self.client = FabricEngine.Core.createClient()
         self.client.loadExtension('Math')
 
     def getCoreClient(self):
-        return client
+        return self.client
 
 
     def constructRTVal(self, dataType, defaultValue=None):
@@ -38,7 +38,7 @@ class KrakenCore(object):
                     memberName = typeDesc['members'][i]['name']
                     memberType = typeDesc['members'][i]['type']
                     if memberName in defaultValue:
-                        setattr(value, memberName, self.constructRTVal(memberType, getattr(defaultValue, memberName))
+                        setattr(value, memberName, self.constructRTVal(memberType, getattr(defaultValue, memberName)))
                 return value
             else:
                 return klType(defaultValue)
@@ -48,14 +48,16 @@ class KrakenCore(object):
             except:
                 return klType()
 
-    def rtVal(self):
-        return self.constructRTVal()
+    def rtVal(self, dataType, defaultValue=None):
+        return self.constructRTVal(dataType, defaultValue)
 
+    @classmethod
     def getInstance(cls):
         if cls.__instance is None:
             cls.__instance = KrakenCore()
         return cls.__instance
 
+    @classmethod
     def inst(cls):
         return cls.getInstance()
 

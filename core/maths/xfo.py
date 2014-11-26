@@ -5,15 +5,15 @@ Xfo -- Transform.
 """
 
 from math_object import MathObject
-from vec import Vec3
-from rotation import Quat
-from matrix import Matrix33, Matrix44
+from kraken.core.objects.kraken_core import KrakenCore as KC
+from vec3 import Vec3
+from quat import Quat
 
 
 class Xfo(MathObject):
     """Transform object."""
 
-    def __init__(self, scl=None, rot=None, tr=None, ro=0):
+    def __init__(self, ori=None, tr=None, sc=None, ro=0):
         super(Xfo, self).__init__()
         client = KC.getInstance().getCoreClient()
         self.rtval = client.RT.types.Xfo()
@@ -21,7 +21,7 @@ class Xfo(MathObject):
 
     def __str__(self):
         """String representation of Transform."""
-        return "Xfo(scl=" + str(self.scl) + ", rot=" + str(self.rot) + ", tr=" + str(self.tr) + ")"
+        return "Xfo(ori=" + str(self.ori) + ", tr=" + str(self.tr) + ", sc=" + str(self.sc) + ")"
 
     @property
     def tr(self):
