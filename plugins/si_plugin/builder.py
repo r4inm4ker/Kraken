@@ -744,12 +744,12 @@ class Builder(BaseBuilder):
         dccSceneItem = self._getDCCSceneItem(kSceneItem)
 
         xfo = XSIMath.CreateTransform()
-        scl = XSIMath.CreateVector3(kSceneItem.xfo.scl.x, kSceneItem.xfo.scl.y, kSceneItem.xfo.scl.z)
+        sc = XSIMath.CreateVector3(kSceneItem.xfo.sc.x, kSceneItem.xfo.sc.y, kSceneItem.xfo.sc.z)
 
         quat = XSIMath.CreateQuaternion(kSceneItem.xfo.rot.w, kSceneItem.xfo.rot.v.x, kSceneItem.xfo.rot.v.y, kSceneItem.xfo.rot.v.z)
         tr = XSIMath.CreateVector3(kSceneItem.xfo.tr.x, kSceneItem.xfo.tr.y, kSceneItem.xfo.tr.z)
 
-        xfo.SetScaling(scl)
+        xfo.SetScaling(sc)
         xfo.SetRotationFromQuaternion(quat)
         xfo.SetTranslation(tr)
 

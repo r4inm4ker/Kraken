@@ -3,8 +3,8 @@ from kraken.core.objects.kraken_loader import KrakenLoader
 
 if __name__ == "__main__":
     tr = Vec3(32,35,234)
-    scl = Vec3(2.3,2.3,2.3)
-    xfo = Xfo(tr=tr, scl=scl)
+    sc = Vec3(2.3,2.3,2.3)
+    xfo = Xfo(tr=tr, sc=sc)
     jsonData = xfo.jsonEncode()
     print "Xfo:" + str(jsonData)
 
