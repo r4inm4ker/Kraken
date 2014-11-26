@@ -4,9 +4,20 @@ Classes:
 MathObject -- A base class for all math types.
 """
 
+import FabricEngine.Core
+import json
 
 class MathObject(object):
     """MathObject object. A base class for all math types"""
+
+    def getTypeName(self, value=None):
+        if value is None:
+            value = self.rtval
+        isRTVal = str(type(value)) == "<type 'PyRTValObject'>"
+        if isRTVal:
+            return json.loads(value.type("Type").jsonDesc("String"))['name']
+        return str(type(value))
+
 
     def jsonEncode(self):
         """Encodes object to JSON.

@@ -27,7 +27,7 @@ class KrakenCore(object):
         klType = getattr(self.client.RT.types, dataType)
         if defaultValue is not None:
             if hasattr(defaultValue, 'rtval'):
-                return defaultValue.rtVal
+                return defaultValue.rtval
             typeDesc = self.client.RT.getRegisteredTypes()[dataType]
             if 'members' in typeDesc:
                 try:

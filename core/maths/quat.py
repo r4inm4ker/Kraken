@@ -18,15 +18,18 @@ class Quat(MathObject):
     def __init__(self, v=None, w=None):
         super(Quat, self).__init__()
 
-        if v is not None and not isinstance(v, Vec3):
-            raise TypeError("Quat: Invalid type for 'v' argument. Must be a Vec3.")
+        if self.getTypeName(v) == 'Quat':
+            self.rtval = v
+        else:
+            if v is not None and not isinstance(v, Vec3):
+                raise TypeError("Quat: Invalid type for 'v' argument. Must be a Vec3.")
 
-        if w is not None and not isinstance(w, (int, float)):
-            raise TypeError("Quat: Invalid type for 'w' argument. Must be a int or float.")
+            if w is not None and not isinstance(w, (int, float)):
+                raise TypeError("Quat: Invalid type for 'w' argument. Must be a int or float.")
 
-        client = KC.getInstance().getCoreClient()
-        self.rtval = client.RT.types.Quat()
-        self.set(v=v, q=q)
+            client = KC.getInstance().getCoreClient()
+            self.rtval = client.RT.types.Quat()
+            self.set(v=v, q=q)
 
 
     def __str__(self):
@@ -36,7 +39,7 @@ class Quat(MathObject):
     @property
     def v(self):
         """I'm the 'v' property."""
-        return self.rtval.v
+        return Vec3(self.rtval.v)
 
     @v.setter
     def v(self, value):

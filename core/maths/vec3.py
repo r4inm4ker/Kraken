@@ -17,8 +17,11 @@ class Vec3(Vec):
 
         super(Vec3, self).__init__()
         client = KC.getInstance().getCoreClient()
-        self.rtval = client.RT.types.Vec3()
-        self.set(x=x, y=y, z=z)
+        if self.getTypeName(x) == 'Vec3':
+            self.rtval = x
+        else:
+            self.rtval = client.RT.types.Vec3()
+            self.set(x=x, y=y, z=z)
 
     def __str__(self):
         """String representation of the Vec3 object."""

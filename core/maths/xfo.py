@@ -13,11 +13,16 @@ from quat import Quat
 class Xfo(MathObject):
     """Transform object."""
 
-    def __init__(self, ori=None, tr=None, sc=None, ro=0):
+    def __init__(self, tr=None, ori=None, sc=None):
         super(Xfo, self).__init__()
         client = KC.getInstance().getCoreClient()
         self.rtval = client.RT.types.Xfo()
-
+        if tr is not None:
+            self.tr = tr
+        if ori is not None:
+            self.ori = ori
+        if sc is not None:
+            self.sc = sc
 
     def __str__(self):
         """String representation of Transform."""
@@ -26,7 +31,7 @@ class Xfo(MathObject):
     @property
     def tr(self):
         """The 'translation' property."""
-        return self.rtval.tr
+        return Vec3(self.rtval.tr)
 
     @tr.setter
     def tr(self, value):
@@ -35,7 +40,7 @@ class Xfo(MathObject):
     @property
     def ori(self):
         """The 'orientation' property."""
-        return self.rtval.ori
+        return Quat(self.rtval.ori)
 
     @ori.setter
     def ori(self, value):
@@ -45,7 +50,7 @@ class Xfo(MathObject):
     @property
     def sc(self):
         """The 'scaling' property."""
-        return self.rtval.sc
+        return Vec3(self.rtval.sc)
 
     @sc.setter
     def sc(self, value):
