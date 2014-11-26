@@ -8,6 +8,7 @@ from math_object import MathObject
 from kraken.core.objects.kraken_core import KrakenCore as KC
 from vec3 import Vec3
 from quat import Quat
+from mat33 import Mat33
 
 
 class Xfo(MathObject):
@@ -112,34 +113,56 @@ class Xfo(MathObject):
 
     # Overload method for the multiply operator
     def multiply(self, xfo):
-        return self.rtval.multiply('Xfo', KC.inst().rtVal('Xfo', xfo))
+        return Xfo(self.rtval.multiply('Xfo', KC.inst().rtVal('Xfo', xfo)))
 
 
     # Transforms a vector with this transform
     def transformVector(self, v):
-        return self.rtval.transformVector('Vec3', KC.inst().rtVal('Vec3', v))
+        return Vec3(self.rtval.transformVector('Vec3', KC.inst().rtVal('Vec3', v)))
 
     # Transforms a vector with this transform
     def  transformRay(self, ray):
-        return self.rtval.transformRay('Ray', KC.inst().rtVal('Ray', ray))
+        return Ray(self.rtval.transformRay('Ray', KC.inst().rtVal('Ray', ray)))
 
     # Returns the inverse transform of this one
     def  inverse(self):
-        return self.rtval.inverse('Xfo')
+        return Xfo(self.rtval.inverse('Xfo'))
 
     # Transforms a vector with this xfo inversely
     # \note we have 'inverseTransformVector' because Xfos with non-uniform scaling cannot be inverted as Xfos
     def inverseTransformVector(self, vec):
-        return self.rtval.inverseTransformVector('Vec3', KC.inst().rtVal('Vec3', vec))
+        return Vec3(self.rtval.inverseTransformVector('Vec3', KC.inst().rtVal('Vec3', vec)))
 
     # Linearly interpolates this Xfo with another one based on 
     # a scalar blend value (0.0 to 1.0)
     def linearInterpolate(self,  other, t):
-        return self.rtval.inverseTransformVector('Xfo', KC.inst().rtVal('Xfo', other), KC.inst().rtVal('Scalar', t))
+        return Xfo(self.rtval.inverseTransformVector('Xfo', KC.inst().rtVal('Xfo', other), KC.inst().rtVal('Scalar', t)))
 
 
 
 
+    def setFromVectors(self, inVec1, inVec2, inVec3, translation):
+        """Set Xfo values from  3 axis vectors and .
+
+        Arguments:
+        inVec1 -- x axis.
+        inVec2 -- y axis.
+        inVec3 -- z axis.
+        translation -- position vector.
+
+        Return:
+        True if successful.
+
+        """
+        mat33 = Mat33()
+        mat33.setRows(inVec1, inVec2, inVec3)
+        print mat33.transpose()
+        self.ori.setFromMat33(mat33.transpose())
+        self.tr = translation
+    # # Equals operator
+    # def Boolean self, == (Xfo a, Xfo b):
+
+        return True
 
 
 
@@ -165,7 +188,7 @@ def xfoFromDirAndUpV(base, target, upV):
     normal = rootToUpV.cross(rootToTarget).unit()
     zAxis = rootToTarget.cross(normal).unit()
     outXfo = Xfo()
-    outXfo.setFromVectors(rootToTarget.clone(), normal.clone(), zAxis.clone(), base.clone())
+    outXfo.setFromVectors(rootToTarget, normal, zAxis, base)
 
     return outXfo
 

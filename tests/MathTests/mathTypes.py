@@ -9,3 +9,6 @@ if __name__ == "__main__":
     print "sc:" + str(sc)
     xfo = Xfo(tr=tr, sc=sc)
     print "xfo:" + str(xfo)
+
+    euler = Euler()
+    print "euler:" + str(euler)

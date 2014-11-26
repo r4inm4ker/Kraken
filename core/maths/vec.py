@@ -95,35 +95,35 @@ class Vec(MathObject):
 
     # Overload method for the add operator
     def add(self, other):
-        return self.rtval.add('Vec', other.rtval)
+        return self.rtval.add(self.typeName(), other.rtval)
 
     # Overload method for the subtract operator
     def subtract(self, other):
-        return self.rtval.subtract('Vec', other.rtval)
+        return self.rtval.subtract(self.typeName(), other.rtval)
 
     # Overload method for the multiply operator
     def multiply(self, other):
-        return self.rtval.multiply('Vec', other.rtval)
+        return self.rtval.multiply(self.typeName(), other.rtval)
 
     # Overload method for the divide operator
     def divide(self, other):
-        return self.rtval.divide('Vec', other.rtval)
+        return self.rtval.divide(self.typeName(), other.rtval)
 
     # Returns the product of this vector and a scalar
     def multiplyScalar(self, other):
-        return self.rtval.multiplyScalar('Vec', KC.inst().rtVal('Scalar', other))
+        return self.rtval.multiplyScalar(self.typeName(), KC.inst().rtVal('Scalar', other))
 
     # Returns the division of this vector and a scalar
     def divideScalar(self, other):
-        return self.rtval.divideScalar('Vec', KC.inst().rtVal('Scalar', other))
+        return self.rtval.divideScalar(self.typeName(), KC.inst().rtVal('Scalar', other))
 
     # Returns the negated version of this vector
     def negate(self):
-        return self.rtval.negate('Vec')
+        return self.rtval.negate(self.typeName())
 
     # Returns the inversed version of this vector
     def inverse(self):
-        return self.rtval.inverse('Vec')
+        return self.rtval.inverse(self.typeName())
 
     # Returns the dot product of this vector and another one
     def dot(self, other):
@@ -131,7 +131,7 @@ class Vec(MathObject):
 
     # Returns the cross product of this vector and another one
     def cross(self, other):
-        return self.rtval.cross('Scalar', other.rtval)
+        return Vec3(self.rtval.cross(self.typeName(), other.rtval))
 
     # Returns the squared length of this vector
     def lengthSquared(self):
@@ -143,11 +143,11 @@ class Vec(MathObject):
 
     # Returns the unit vector of this one, throws and exception if almost zero length
     def unit(self):
-        return self.rtval.unit('Vec')
+        return self.rtval.unit(self.typeName())
 
     # Returns the unit vector of this one, with an arbitrary value if almost zero length
     def unit_safe(self):
-        return self.rtval.unit_safe('Vec')
+        return self.rtval.unit_safe(self.typeName())
 
     # Sets this vector to its unit vector
     # and returns its previous length
@@ -160,7 +160,7 @@ class Vec(MathObject):
     # clamps this vector per component by 
     # a min and max vector
     def clamp(self, min, max):
-        return self.rtval.clamp('Vec', min.rtval, max.rtval)
+        return self.rtval.clamp(self.typeName(), min.rtval, max.rtval)
 
     # Returns the angle (self, in radians) of this vector
     # to another one
@@ -180,7 +180,7 @@ class Vec(MathObject):
     # Linearly interpolates this vector with another one
     # based on a scalar blend value (0.0 to 1.0)
     def linearInterpolate(self, other, t):
-        return self.rtval.linearInterpolate('Vec', KC.inst().rtVal('Scalar', t))
+        return self.rtval.linearInterpolate(self.typeName(), KC.inst().rtVal('Scalar', t))
 
     # Returns the distance of this vector to a line defined
     # by two points on the line
@@ -191,3 +191,4 @@ class Vec(MathObject):
     # by the start and end points of the line segment
     def distanceToSegment(self, segmentP0, segmentP1):
         return self.rtval.distanceToSegment('Scalar', segmentP0.rtval, segmentP1.rtval)
+

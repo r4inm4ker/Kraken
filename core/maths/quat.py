@@ -18,7 +18,7 @@ class Quat(MathObject):
     def __init__(self, v=None, w=None):
         super(Quat, self).__init__()
 
-        if self.getTypeName(v) == 'Quat':
+        if v is not None and self.getTypeName(v) == 'Quat':
             self.rtval = v
         else:
             if v is not None and not isinstance(v, Vec3):
@@ -29,7 +29,7 @@ class Quat(MathObject):
 
             client = KC.getInstance().getCoreClient()
             self.rtval = client.RT.types.Quat()
-            self.set(v=v, q=q)
+            self.set(v=v, w=w)
 
 
     def __str__(self):
@@ -57,7 +57,7 @@ class Quat(MathObject):
 
     # Setter from scalar components
     def set(self, v, w):
-        self.rtval.set(KC.inst().rtVal('Vec3', v), KC.inst().rtVal('Scalar', w))
+        self.rtval.set('', KC.inst().rtVal('Vec3', v), KC.inst().rtVal('Scalar', w))
 
 
     # Set this quat to the identity
@@ -78,13 +78,13 @@ class Quat(MathObject):
         return self.rtval.setFromEuler('Quat', KC.inst().rtVal('Vec3', angles))
 
     # Set this quat to a rotation defined by an axis and an angle (in radians)
-    def  setFromAxisAndAngle(self, axis, angle):
+    def setFromAxisAndAngle(self, axis, angle):
         return self.rtval.setFromAxisAndAngle('Quat', KC.inst().rtVal('Vec3', axis), KC.inst().rtVal('Scalar', angle))
 
     # Set this quat to the rotation described by a 
     # 3x3 rotation matrix
-    def  setFromMat33(self, mat):
-        return self.rtval.setFromEuler('Quat', KC.inst().rtVal('Mat33', mat))
+    def setFromMat33(self, mat):
+        return self.rtval.setFromMat33('Quat', KC.inst().rtVal('Mat33', mat))
 
     # Set the quaternion to the rotation required to rotate the source
     # vector to the destination vector

@@ -10,6 +10,13 @@ import json
 class MathObject(object):
     """MathObject object. A base class for all math types"""
 
+    def clientTypes(self):
+        client = KC.getInstance().getCoreClient()
+        return client.RT.types
+
+    def typeName(self):
+        return str(json.loads(self.rtval.type("Type").jsonDesc("String"))['name'])
+
     def getTypeName(self, value=None):
         if value is None:
             value = self.rtval
