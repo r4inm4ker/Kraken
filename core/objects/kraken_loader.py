@@ -5,10 +5,8 @@ KrakenLoader - Factory for building SceneItems.
 
 """
 
-from kraken.core.maths.vec import Vec2, Vec3, Vec4
-from kraken.core.maths.rotation import Euler, Quat
-from kraken.core.maths.xfo import Xfo
-from kraken.core.maths.matrix import Matrix33, Matrix44
+from kraken.core.maths import Vec2, Vec3, Vec4, Quat, Xfo
+# from kraken.core.maths.matrix import Matrix33, Matrix44
 
 from container import Container
 from curve import Curve

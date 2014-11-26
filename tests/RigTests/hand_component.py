@@ -1,5 +1,6 @@
-from kraken.core.maths.vec import Vec3
-from kraken.core.maths.rotation import Euler
+from kraken.core.maths import Vec3
+from kraken.core.maths import Vec3
+maths import Euler
 from kraken.core.maths.rotation import Quat
 from kraken.core.maths.xfo import Xfo
 

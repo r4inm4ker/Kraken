@@ -1,5 +1,5 @@
 from kraken.core.maths import *
-from kraken.core.objects.kraken_factory import KrakenFactory 
+from kraken.core.objects.kraken_loader import KrakenLoader 
 
 if __name__ == "__main__":
     tr = Vec3(32,35,234)
@@ -8,7 +8,7 @@ if __name__ == "__main__":
     jsonData = xfo.jsonEncode()
     print "Xfo:" + str(jsonData)
 
-    loader = KrakenFactory()
+    loader = KrakenLoader()
     xfo2 = Xfo()
     xfo2.jsonDecode(jsonData, loader)
     print "Xfo2:" + str(xfo2)

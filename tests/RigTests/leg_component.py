@@ -1,4 +1,4 @@
-from kraken.core.maths.vec import Vec3
+from kraken.core.maths import Vec3
 from kraken.core.maths.xfo import Xfo
 from kraken.core.maths.xfo import xfoFromDirAndUpV
 

@@ -1,4 +1,4 @@
-from kraken.core.maths.vec import Vec3
+from kraken.core.maths import Vec3
 
 from kraken.core.objects.components.base_component import BaseComponent
 from kraken.core.objects.attributes.float_attribute import FloatAttribute

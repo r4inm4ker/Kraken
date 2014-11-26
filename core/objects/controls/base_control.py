@@ -5,9 +5,9 @@ BaseControl - Base Control.
 
 """
 
-from kraken.core.maths.xfo import Xfo
-from kraken.core.maths.rotation import Euler
-from kraken.core.maths.rotation import Quat
+from kraken.core.maths import Xfo
+from kraken.core.maths import Euler
+from kraken.core.maths import Quat
 from kraken.core.objects.curve import Curve
 
 
