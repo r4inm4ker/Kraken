@@ -43,6 +43,7 @@ class ArmComponent(BaseComponent):
         # Calculate Bicep Xfo
         rootToWrist = wristPosition.subtract(bicepPosition).unit()
         rootToElbow = forearmPosition.subtract(bicepPosition).unit()
+        print rootToElbow
         bone1Normal = rootToWrist.cross(rootToElbow).unit()
         bone1ZAxis = rootToElbow.cross(bone1Normal).unit()
         bicepXfo = Xfo()
@@ -58,30 +59,30 @@ class ArmComponent(BaseComponent):
 
         # Bicep
         bicepFKCtrlSrtBuffer = SrtBuffer('bicepFK', parent=self)
-        bicepFKCtrlSrtBuffer.xfo.copy(bicepXfo)
+        bicepFKCtrlSrtBuffer.xfo = bicepXfo
 
         bicepFKCtrl = CubeControl('bicepFK', parent=bicepFKCtrlSrtBuffer)
         bicepFKCtrl.alignOnXAxis()
         bicepLen = bicepPosition.subtract(forearmPosition).length()
         bicepFKCtrl.scalePoints(Vec3(bicepLen, 1.75, 1.75))
-        bicepFKCtrl.xfo.copy(bicepXfo)
+        bicepFKCtrl.xfo = bicepXfo
 
         # Forearm
         forearmFKCtrlSrtBuffer = SrtBuffer('forearmFK', parent=bicepFKCtrl)
-        forearmFKCtrlSrtBuffer.xfo.copy(forearmXfo)
+        forearmFKCtrlSrtBuffer.xfo = forearmXfo
 
         forearmFKCtrl = CubeControl('forearmFK', parent=forearmFKCtrlSrtBuffer)
         forearmFKCtrl.alignOnXAxis()
         forearmLen = forearmPosition.subtract(wristPosition).length()
         forearmFKCtrl.scalePoints(Vec3(forearmLen, 1.5, 1.5))
-        forearmFKCtrl.xfo.copy(forearmXfo)
+        forearmFKCtrl.xfo = forearmXfo
 
         # Arm IK
         armIKCtrlSrtBuffer = SrtBuffer('IK', parent=self)
-        armIKCtrlSrtBuffer.xfo.tr.copy(wristPosition)
+        armIKCtrlSrtBuffer.xfo.tr = wristPosition
 
         armIKCtrl = PinControl('IK', parent=armIKCtrlSrtBuffer)
-        armIKCtrl.xfo.copy(armIKCtrlSrtBuffer.xfo)
+        armIKCtrl.xfo = armIKCtrlSrtBuffer.xfo
 
         if self.getLocation() == "R":
             armIKCtrl.rotatePoints(0, 90, 0)
@@ -112,17 +113,17 @@ class ArmComponent(BaseComponent):
 
         # UpV
         upVXfo = xfoFromDirAndUpV(bicepPosition, wristPosition, forearmPosition)
-        upVXfo.tr.copy(forearmPosition)
+        upVXfo.tr = forearmPosition
         upVOffset = Vec3(0, 0, 5)
         upVOffset = upVXfo.transformVector(upVOffset)
 
         armUpVCtrl = TriangleControl('UpV')
-        armUpVCtrl.xfo.tr.copy(upVOffset)
+        armUpVCtrl.xfo.tr = upVOffset
         armUpVCtrl.alignOnZAxis()
         armUpVCtrl.rotatePoints(180, 0, 0)
 
         armUpVCtrlSrtBuffer = SrtBuffer('UpV', parent=self)
-        armUpVCtrlSrtBuffer.xfo.tr.copy(upVOffset)
+        armUpVCtrlSrtBuffer.xfo.tr = upVOffset
         armUpVCtrlSrtBuffer.addChild(armUpVCtrl)
 
 
@@ -151,21 +152,21 @@ class ArmComponent(BaseComponent):
         # =====================
         # Setup component Xfo I/O's
         clavicleEndInput = Locator('clavicleEnd')
-        clavicleEndInput.xfo.copy(bicepXfo)
+        clavicleEndInput.xfo = bicepXfo
 
         bicepOutput = Locator('bicep')
-        bicepOutput.xfo.copy(bicepXfo)
+        bicepOutput.xfo = bicepXfo
         forearmOutput = Locator('forearm')
-        forearmOutput.xfo.copy(forearmXfo)
+        forearmOutput.xfo = forearmXfo
 
         armEndXfo = Xfo()
         armEndXfo.rot = forearmXfo.rot.clone()
-        armEndXfo.tr.copy(wristPosition)
+        armEndXfo.tr = wristPosition
         armEndXfoOutput = Locator('armEndXfo')
-        armEndXfoOutput.xfo.copy(armEndXfo)
+        armEndXfoOutput.xfo = armEndXfo
 
         armEndPosOutput = Locator('armEndPos')
-        armEndPosOutput.xfo.copy(armEndXfo)
+        armEndPosOutput.xfo = armEndXfo
 
         # Setup componnent Attribute I/O's
         debugInputAttr = BoolAttribute('debug', True)
