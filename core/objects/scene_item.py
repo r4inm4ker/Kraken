@@ -105,7 +105,7 @@ class SceneItem(object):
         """
 
         parent = self.getParent()
-        while (parent.getKType() != 'Container' and parent is not None):
+        while (parent is not None and parent.getKType() != 'Container'):
             parent = parent.getParent()
 
         return parent
@@ -120,7 +120,7 @@ class SceneItem(object):
         """
 
         parent = self.getParent()
-        while (parent.getKType() != 'Layer' and parent is not None):
+        while (parent is not None and parent.getKType() != 'Layer'):
             parent = parent.getParent()
 
         return parent
