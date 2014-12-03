@@ -1,4 +1,4 @@
-"""Kraken - maths.rot module.
+"""Kraken - maths.quat module.
 
 Classes:
 Quat -- Quaternion rotation.
@@ -9,7 +9,6 @@ from kraken.core.objects.kraken_core import KrakenCore as KC
 from math_object import MathObject
 
 from vec3 import Vec3
-# from matrix import Matrix33
 
 
 class Quat(MathObject):
