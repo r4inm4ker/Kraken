@@ -43,7 +43,7 @@ class ArmComponent(BaseComponent):
         # Calculate Bicep Xfo
         rootToWrist = wristPosition.subtract(bicepPosition).unit()
         rootToElbow = forearmPosition.subtract(bicepPosition).unit()
-        print rootToElbow
+        
         bone1Normal = rootToWrist.cross(rootToElbow).unit()
         bone1ZAxis = rootToElbow.cross(bone1Normal).unit()
         bicepXfo = Xfo()

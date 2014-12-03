@@ -156,7 +156,6 @@ class Xfo(MathObject):
         """
         mat33 = Mat33()
         mat33.setRows(inVec1, inVec2, inVec3)
-        print mat33.transpose()
         self.ori.setFromMat33(mat33.transpose())
         self.tr = translation
     # # Equals operator
