@@ -7,9 +7,8 @@ Vec3 -- Vector 3 object.
 import math
 from math_object import MathObject
 from kraken.core.objects.kraken_core import KrakenCore as KC
-from vec import Vec
 
-class Vec3(Vec):
+class Vec3(MathObject):
     """Vector 2 object."""
 
     def __init__(self, x=0.0, y=0.0, z=0.0):
