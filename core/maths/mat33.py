@@ -30,7 +30,7 @@ class Mat33(MathObject):
     @property
     def row0(self):
         """I'm the 'row0' property."""
-        return self.rtval.row0
+        return Vec3(self.rtval.row0)
 
     @row0.setter
     def row0(self, value):
@@ -39,7 +39,7 @@ class Mat33(MathObject):
     @property
     def row1(self):
         """I'm the 'row1' property."""
-        return self.rtval.row1
+        return Vec3(self.rtval.row1)
 
     @row1.setter
     def row1(self, value):
@@ -48,7 +48,7 @@ class Mat33(MathObject):
     @property
     def row2(self):
         """I'm the 'row2' property."""
-        return self.rtval.row2
+        return Vec3(self.rtval.row2)
 
     @row2.setter
     def row2(self, value):
@@ -95,94 +95,46 @@ class Mat33(MathObject):
         return self.rtval.add('Boolean', KC.inst().rtVal('Mat33', other))
 
     # # Equals operator
-    # def Boolean == (Mat33 a, Mat33 b) {
-    #   return a.equal(b);
-    # }
+    # def Boolean == (Mat33 a, Mat33 b):
 
     # # Not equals operator
-    # def Boolean != (Mat33 a, Mat33 b) {
-    #   return !a.equal(b);
-    # }
+    # def Boolean != (Mat33 a, Mat33 b):
 
     # # Returns the addition of two matrices
-    # def Mat33 + (Mat33 a, Mat33 b) {
-    #   return Mat33( a.row0 + b.row0, a.row1 + b.row1, a.row2 + b.row2 );
-    # }
+    # def Mat33 + (Mat33 a, Mat33 b):
 
     # # Adds another matrix to this one
-    # def  += (Mat33 other) {
-    #   this = this + other;
-    # }
+    # def  += (Mat33 other):
 
     # # Returns the subtraction of two matrices
-    # def Mat33 - (Mat33 a, Mat33 b) {
-    #   return Mat33( a.row0 - b.row0, a.row1 - b.row1, a.row2 - b.row2 );
-    # }
+    # def Mat33 - (Mat33 a, Mat33 b):
 
     # # Subtracts another matrix from this one
-    # def  -= (Mat33 other) {
-    #   this = this - other;
-    # }
+    # def  -= (Mat33 other):
 
     # # Returns the product of two matrices
-    # function Mat33 * (Mat33 left, Mat33 right) {
-    #   Mat33 result;
-
-    #   result.row0.x = left.row0.x * right.row0.x + left.row0.y * right.row1.x + left.row0.z * right.row2.x;
-    #   result.row0.y = left.row0.x * right.row0.y + left.row0.y * right.row1.y + left.row0.z * right.row2.y;
-    #   result.row0.z = left.row0.x * right.row0.z + left.row0.y * right.row1.z + left.row0.z * right.row2.z;
-
-    #   result.row1.x = left.row1.x * right.row0.x + left.row1.y * right.row1.x + left.row1.z * right.row2.x;
-    #   result.row1.y = left.row1.x * right.row0.y + left.row1.y * right.row1.y + left.row1.z * right.row2.y;
-    #   result.row1.z = left.row1.x * right.row0.z + left.row1.y * right.row1.z + left.row1.z * right.row2.z;
-
-    #   result.row2.x = left.row2.x * right.row0.x + left.row2.y * right.row1.x + left.row2.z * right.row2.x;
-    #   result.row2.y = left.row2.x * right.row0.y + left.row2.y * right.row1.y + left.row2.z * right.row2.y;
-    #   result.row2.z = left.row2.x * right.row0.z + left.row2.y * right.row1.z + left.row2.z * right.row2.z;
-
-    #   return result;
-    # }
+    # function Mat33 * (Mat33 left, Mat33 right):
 
     # # Returns the product of a matrix and a Vec3
-    # def Vec3 * (Mat33 mat33, Vec3 vec3) {
-    #   return Vec3(
-    #     row0.self, x * vec3.x + row0.self, y * vec3.y + row0.self, z * vec3.z,
-    #     row1.self, x * vec3.x + row1.self, y * vec3.y + row1.self, z * vec3.z,
-    #     row2.self, x * vec3.x + row2.self, y * vec3.y + row2.self, z * vec3.z
-    #   );
-    # }
+    # def Vec3 * (Mat33 mat33, Vec3 vec3):
 
     # # Returns the product of a matrix and a scalar
-    # def Mat33 * (Mat33 mat33, Scalar s) {
-    #   return Mat33( row0 self, * s, row1 self, * s, row2 self, * s );
-    # }
+    # def Mat33 * (Mat33 mat33, Scalar s):
 
     # # Returns the product of a scalar and a matrix
-    # def Mat33 * (Scalar s, Mat33 mat33) {
-    #   return Mat33( row0 self, * s, row1 self, * s, row2 self, * s );
-    # }
+    # def Mat33 * (Scalar s, Mat33 mat33):
 
     # # Multiplies this matrix with another one
-    # def  *= (Mat33 other) {
-    #   this = this * other;
-    # }
+    # def  *= (Mat33 other):
 
     # # Multiplies this matrix with a scalar
-    # def  *= (Scalar other) {
-    #   this = this * other;
-    # }
+    # def  *= (Scalar other):
 
     # # Returns the division of a matrix and a scalar
-    # def Mat33 / (Mat33 mat33, Scalar s) {
-    #   if( Boolean(Fabric_Guarded) && Math_badDivisor( s ) )//Perf: check first to avoid building the report string
-    #     Math_reportBadDivisor( s, "divide"self,  );
-    #   return mat33 * (1.0 / s);
-    # }
+    # def Mat33 / (Mat33 mat33, Scalar s):
 
     # # Divides this matrix by a scalar
-    # def  /= (Scalar other) {
-    #   this = this / other;
-    # }
+    # def  /= (Scalar other):
 
     # Overload method for the add operator
     def add(self, other):
@@ -202,7 +154,7 @@ class Mat33(MathObject):
 
     # Returns the product of this matrix and a vector
     def multiplyVector(self, other):
-        return self.rtval.multiplyVector('Vec3', KC.inst().rtVal('Vec3', other))
+        return Vec3(self.rtval.multiplyVector('Vec3', KC.inst().rtVal('Vec3', other)))
 
     # Returns the division of this matrix and a scalar
     def divideScalar(self, other):

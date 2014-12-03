@@ -21,10 +21,46 @@ class Mat44(MathObject):
             self.rtval = KC.inst().rtVal('Mat44')
             self.setRows(row0, row1, row2)
 
-
     def __str__(self):
         """Return a string representation of the 3x3 matrix."""
         return "Mat44(" + str(self.row0) + "," + str(self.row1) + "," + str(self.row2) + "," + str(self.row3) + ")"
+
+    @property
+    def row0(self):
+        """I'm the 'row0' property."""
+        return Vec4(self.rtval.row0)
+
+    @row0.setter
+    def row0(self, value):
+        self.rtval.row0 = KC.inst().rtVal('Scalar', value)
+
+    @property
+    def row1(self):
+        """I'm the 'row1' property."""
+        return Vec4(self.rtval.row1)
+
+    @row1.setter
+    def row1(self, value):
+        self.rtval.row1 = KC.inst().rtVal('Scalar', value)
+
+    @property
+    def row2(self):
+        """I'm the 'row2' property."""
+        return Vec4(self.rtval.row2)
+
+    @row2.setter
+    def row2(self, value):
+        self.rtval.row2 = KC.inst().rtVal('Scalar', value)
+
+    @property
+    def row3(self):
+        """I'm the 'row3' property."""
+        return Vec4(self.rtval.row3)
+
+    @row3.setter
+    def row3(self, value):
+        self.rtval.row3 = KC.inst().rtVal('Scalar', value)
+
 
     # Setter from vectors, row-wise
     def setRows(self, row0, row1, row2):
@@ -66,62 +102,28 @@ class Mat44(MathObject):
         return self.rtval.add('Boolean', KC.inst().rtVal('Mat44', other))
 
     # # Equals operator
-    # def Boolean == (Mat44 a, Mat44 b) {
-    #   return a.equal(b);
-    # }
+    # def Boolean == (Mat44 a, Mat44 b):
 
     # # Not equals operator
-    # def Boolean != (Mat44 a, Mat44 b) {
-    #   return !a.equal(b);
-    # }
+    # def Boolean != (Mat44 a, Mat44 b):
 
     # # Returns the addition of two matrices
-    # def Mat44 + (Mat44 a, Mat44 b) {
-    #   return Mat44( a.row0 + b.row0, a.row1 + b.row1, a.row2 + b.row2 );
-    # }
+    # def Mat44 + (Mat44 a, Mat44 b):
 
     # # Adds another matrix to this one
-    # def  += (Mat44 other) {
-    #   this = this + other;
-    # }
+    # def  += (Mat44 other):
 
     # # Returns the subtraction of two matrices
-    # def Mat44 - (Mat44 a, Mat44 b) {
-    #   return Mat44( a.row0 - b.row0, a.row1 - b.row1, a.row2 - b.row2 );
-    # }
+    # def Mat44 - (Mat44 a, Mat44 b):
 
     # # Subtracts another matrix from this one
-    # def  -= (Mat44 other) {
-    #   this = this - other;
-    # }
+    # def  -= (Mat44 other):
 
     # # Returns the product of two matrices
-    # function Mat44 * (Mat44 left, Mat44 right) {
-    #   Mat44 result;
-
-    #   result.row0.x = left.row0.x * right.row0.x + left.row0.y * right.row1.x + left.row0.z * right.row2.x;
-    #   result.row0.y = left.row0.x * right.row0.y + left.row0.y * right.row1.y + left.row0.z * right.row2.y;
-    #   result.row0.z = left.row0.x * right.row0.z + left.row0.y * right.row1.z + left.row0.z * right.row2.z;
-
-    #   result.row1.x = left.row1.x * right.row0.x + left.row1.y * right.row1.x + left.row1.z * right.row2.x;
-    #   result.row1.y = left.row1.x * right.row0.y + left.row1.y * right.row1.y + left.row1.z * right.row2.y;
-    #   result.row1.z = left.row1.x * right.row0.z + left.row1.y * right.row1.z + left.row1.z * right.row2.z;
-
-    #   result.row2.x = left.row2.x * right.row0.x + left.row2.y * right.row1.x + left.row2.z * right.row2.x;
-    #   result.row2.y = left.row2.x * right.row0.y + left.row2.y * right.row1.y + left.row2.z * right.row2.y;
-    #   result.row2.z = left.row2.x * right.row0.z + left.row2.y * right.row1.z + left.row2.z * right.row2.z;
-
-    #   return result;
-    # }
+    # function Mat44 * (Mat44 left, Mat44 right):
 
     # # Returns the product of a matrix and a Vec3
-    # def Vec3 * (Mat44 mat44, Vec3 vec3) {
-    #   return Vec3(
-    #     row0.self, x * vec3.x + row0.self, y * vec3.y + row0.self, z * vec3.z,
-    #     row1.self, x * vec3.x + row1.self, y * vec3.y + row1.self, z * vec3.z,
-    #     row2.self, x * vec3.x + row2.self, y * vec3.y + row2.self, z * vec3.z
-    #   );
-    # }
+    # def Vec3 * (Mat44 mat44, Vec3 vec3):
 
     # # Returns the product of a matrix and a scalar
     # def Mat44 * (Mat44 mat44, Scalar s) {
@@ -129,55 +131,43 @@ class Mat44(MathObject):
     # }
 
     # # Returns the product of a scalar and a matrix
-    # def Mat44 * (Scalar s, Mat44 mat44) {
-    #   return Mat44( row0 self, * s, row1 self, * s, row2 self, * s );
-    # }
+    # def Mat44 * (Scalar s, Mat44 mat44):
 
     # # Multiplies this matrix with another one
-    # def  *= (Mat44 other) {
-    #   this = this * other;
-    # }
+    # def  *= (Mat44 other):
 
     # # Multiplies this matrix with a scalar
-    # def  *= (Scalar other) {
-    #   this = this * other;
-    # }
+    # def  *= (Scalar other):
 
     # # Returns the division of a matrix and a scalar
-    # def Mat44 / (Mat44 mat44, Scalar s) {
-    #   if( Boolean(Fabric_Guarded) && Math_badDivisor( s ) )//Perf: check first to avoid building the report string
-    #     Math_reportBadDivisor( s, "divide"self,  );
-    #   return mat44 * (1.0 / s);
-    # }
+    # def Mat44 / (Mat44 mat44, Scalar s):
 
     # # Divides this matrix by a scalar
-    # def  /= (Scalar other) {
-    #   this = this / other;
-    # }
+    # def  /= (Scalar other):
 
     # Overload method for the add operator
     def add(self, other):
-        return self.rtval.add('Mat44', KC.inst().rtVal('Mat44', other))
+        return Mat44(self.rtval.add('Mat44', KC.inst().rtVal('Mat44', other)))
 
     # Overload method for the subtract operator
     def subtract(self, other):
-        return self.rtval.subtract('Mat44', KC.inst().rtVal('Mat44', other))
+        return Mat44(self.rtval.subtract('Mat44', KC.inst().rtVal('Mat44', other)))
 
     # Overload method for the multiply operator
     def multiply(self, other):
-        return self.rtval.multiply('Mat44', KC.inst().rtVal('Mat44', other))
+        return Mat44(self.rtval.multiply('Mat44', KC.inst().rtVal('Mat44', other)))
 
     # Returns the product of this matrix and a scalar
     def multiplyScalar(self, other):
-        return self.rtval.multiplyScalar('Mat44', KC.inst().rtVal('Scalar', other))
+        return Mat44(self.rtval.multiplyScalar('Mat44', KC.inst().rtVal('Scalar', other)))
 
     # Returns the product of this matrix and a vector
     def multiplyVector(self, other):
-        return self.rtval.multiplyVector('Vec3', KC.inst().rtVal('Vec3', other))
+        return Vec3(self.rtval.multiplyVector('Vec3', KC.inst().rtVal('Vec3', other)))
 
     # Returns the division of this matrix and a scalar
     def divideScalar(self, other):
-        return self.rtval.divideScalar('Mat44', other)
+        return Mat44(self.rtval.divideScalar('Mat44', other))
 
     # Returns the determinant of this matrix
     def determinant(self):
@@ -185,18 +175,18 @@ class Mat44(MathObject):
 
     # Returns the adjoint matrix of this matrix
     def adjoint(self):
-        return self.rtval.adjoint('Mat44')
+        return Mat44(self.rtval.adjoint('Mat44'))
 
     # Returns the inverse matrix of this matrix
     def inverse(self):
-        return self.rtval.inverse('Mat44')
+        return Mat44(self.rtval.inverse('Mat44'))
 
     def inverse_safe(self):
-        return self.rtval.inverse_safe('Mat44')
+        return Mat44(self.rtval.inverse_safe('Mat44'))
 
     # Returns the transposed matrix of this matrix
     def transpose(self):
-        return self.rtval.transpose('Mat44')
+        return Mat44(self.rtval.transpose('Mat44'))
 
 
 
