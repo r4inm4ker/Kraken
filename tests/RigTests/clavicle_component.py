@@ -29,15 +29,11 @@ class ClavicleComponent(BaseComponent):
         # Default values
         if location == 'R':
             claviclePosition = Vec3(-0.1322, 15.403, -0.5723)
-            clavicleUpV = Vec3()
-            clavicleUpV.copy(claviclePosition)
-            clavicleUpV = clavicleUpV.add(Vec3(0.0, 1.0, 0.0)).unit()
+            clavicleUpV = claviclePosition.add(Vec3(0.0, 1.0, 0.0)).unit()
             clavicleEndPosition = Vec3(-2.27, 15.295, -0.753)
         else:
             claviclePosition = Vec3(0.1322, 15.403, -0.5723)
-            clavicleUpV = Vec3()
-            clavicleUpV.copy(claviclePosition)
-            clavicleUpV = clavicleUpV.add(Vec3(0.0, 1.0, 0.0)).unit()
+            clavicleUpV = claviclePosition.add(Vec3(0.0, 1.0, 0.0)).unit()
             clavicleEndPosition = Vec3(2.27, 15.295, -0.753)
 
         # Calculate Clavicle Xfo
@@ -51,7 +47,7 @@ class ClavicleComponent(BaseComponent):
 
         # Add Controls
         clavicleCtrlSrtBuffer = SrtBuffer('clavicle', parent=self)
-        clavicleCtrlSrtBuffer.xfo.copy(clavicleXfo)
+        clavicleCtrlSrtBuffer.xfo = clavicleXfo
 
         clavicleCtrl = CubeControl('clavicle', parent=clavicleCtrlSrtBuffer)
         clavicleCtrl.alignOnXAxis()
@@ -63,7 +59,7 @@ class ClavicleComponent(BaseComponent):
         else:
             clavicleCtrl.translatePoints(Vec3(0.0, 0.0, 1.0))
 
-        clavicleCtrl.xfo.copy(clavicleXfo)
+        clavicleCtrl.xfo = clavicleXfo
 
 
         # ==========
@@ -83,12 +79,12 @@ class ClavicleComponent(BaseComponent):
         # =====================
         # Setup Component Xfo I/O's
         spineEndInput = Locator('spineEnd')
-        spineEndInput.xfo.copy(clavicleXfo)
+        spineEndInput.xfo = clavicleXfo
 
         clavicleEndOutput = Locator('clavicleEnd')
-        clavicleEndOutput.xfo.copy(clavicleXfo)
+        clavicleEndOutput.xfo = clavicleXfo
         clavicleOutput = Locator('clavicle')
-        clavicleOutput.xfo.copy(clavicleXfo)
+        clavicleOutput.xfo = clavicleXfo
 
         # Setup componnent Attribute I/O's
         debugInputAttr = BoolAttribute('debug', True)

@@ -32,42 +32,42 @@ class HeadComponent(BaseComponent):
 
         # Head
         headCtrlSrtBuffer = SrtBuffer('head', parent=self)
-        headCtrlSrtBuffer.xfo.tr.copy(headPosition)
+        headCtrlSrtBuffer.xfo.tr = headPosition
 
         headCtrl = CircleControl('head', parent=headCtrlSrtBuffer)
         headCtrl.rotatePoints(0, 0, 90)
         headCtrl.scalePoints(Vec3(3, 3, 3))
         headCtrl.translatePoints(Vec3(0, 1, 0.25))
-        headCtrl.xfo.tr.copy(headPosition)
+        headCtrl.xfo.tr = headPosition
 
         # Eye Left
         eyeLeftCtrlSrtBuffer = SrtBuffer('eyeLeft', parent=headCtrl)
-        eyeLeftCtrlSrtBuffer.xfo.tr.copy(eyeLeftPosition)
+        eyeLeftCtrlSrtBuffer.xfo.tr = eyeLeftPosition
 
         eyeLeftCtrl = SphereControl('eyeLeft', parent=eyeLeftCtrlSrtBuffer)
         eyeLeftCtrl.scalePoints(Vec3(0.5, 0.5, 0.5))
-        eyeLeftCtrl.xfo.tr.copy(eyeLeftPosition)
+        eyeLeftCtrl.xfo.tr = eyeLeftPosition
         eyeLeftCtrl.setColor("blueMedium")
 
         # Eye Right
         eyeRightCtrlSrtBuffer = SrtBuffer('eyeRight', parent=headCtrl)
-        eyeRightCtrlSrtBuffer.xfo.tr.copy(eyeRightPosition)
+        eyeRightCtrlSrtBuffer.xfo.tr = eyeRightPosition
 
         eyeRightCtrl = SphereControl('eyeRight', parent=eyeRightCtrlSrtBuffer)
         eyeRightCtrl.scalePoints(Vec3(0.5, 0.5, 0.5))
-        eyeRightCtrl.xfo.tr.copy(eyeRightPosition)
+        eyeRightCtrl.xfo.tr = eyeRightPosition
         eyeRightCtrl.setColor("blueMedium")
 
         # Jaw
         jawCtrlSrtBuffer = SrtBuffer('jawSrtBuffer', parent=headCtrl)
-        jawCtrlSrtBuffer.xfo.tr.copy(jawPosition)
+        jawCtrlSrtBuffer.xfo.tr = jawPosition
 
         jawCtrl = CubeControl('jaw', parent=jawCtrlSrtBuffer)
         jawCtrl.alignOnYAxis(negative=True)
         jawCtrl.alignOnZAxis()
         jawCtrl.scalePoints(Vec3(1.45, 0.65, 1.25))
         jawCtrl.translatePoints(Vec3(0, -0.25, 0))
-        jawCtrl.xfo.tr.copy(jawPosition)
+        jawCtrl.xfo.tr = jawPosition
         jawCtrl.setColor("orange")
 
 
@@ -100,16 +100,16 @@ class HeadComponent(BaseComponent):
         # =====================
         # Setup component Xfo I/O's
         headBaseInput = Locator('headBase')
-        headBaseInput.xfo.copy(headCtrl.xfo)
+        headBaseInput.xfo = headCtrl.xfo
 
         headOutput = Locator('head')
-        headOutput.xfo.copy(headCtrl.xfo)
+        headOutput.xfo = headCtrl.xfo
         jawOutput = Locator('jaw')
-        jawOutput.xfo.copy(jawCtrl.xfo)
+        jawOutput.xfo = jawCtrl.xfo
         eyeLOutput = Locator('eyeL')
-        eyeLOutput.xfo.copy(eyeLeftCtrl.xfo)
+        eyeLOutput.xfo = eyeLeftCtrl.xfo
         eyeROutput = Locator('eyeR')
-        eyeROutput.xfo.copy(eyeRightCtrl.xfo)
+        eyeROutput.xfo = eyeRightCtrl.xfo
 
         # Setup componnent Attribute I/O's
         debugInputAttr = BoolAttribute('debug', True)

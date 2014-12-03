@@ -59,32 +59,32 @@ class LegComponent(BaseComponent):
 
         # Femur
         femurFKCtrlSrtBuffer = SrtBuffer('femurFK', parent=self)
-        femurFKCtrlSrtBuffer.xfo.copy(femurXfo)
+        femurFKCtrlSrtBuffer.xfo = femurXfo
 
         femurFKCtrl = CubeControl('femurFK', parent=femurFKCtrlSrtBuffer)
         femurFKCtrl.alignOnXAxis()
         femurLen = femurPosition.subtract(kneePosition).length()
         femurFKCtrl.scalePoints(Vec3(femurLen, 1.75, 1.75))
-        femurFKCtrl.xfo.copy(femurXfo)
+        femurFKCtrl.xfo = femurXfo
 
 
         # Shin
         shinFKCtrlSrtBuffer = SrtBuffer('shinFK', parent=femurFKCtrl)
-        shinFKCtrlSrtBuffer.xfo.copy(shinXfo)
+        shinFKCtrlSrtBuffer.xfo = shinXfo
 
         shinFKCtrl = CubeControl('shinFK', parent=shinFKCtrlSrtBuffer)
         shinFKCtrl.alignOnXAxis()
         shinLen = kneePosition.subtract(anklePosition).length()
         shinFKCtrl.scalePoints(Vec3(shinLen, 1.5, 1.5))
-        shinFKCtrl.xfo.copy(shinXfo)
+        shinFKCtrl.xfo = shinXfo
 
 
         # Ankle
         legIKCtrlSrtBuffer = SrtBuffer('IK', parent=self)
-        legIKCtrlSrtBuffer.xfo.tr.copy(anklePosition)
+        legIKCtrlSrtBuffer.xfo.tr = anklePosition
 
         legIKCtrl = PinControl('IK', parent=legIKCtrlSrtBuffer)
-        legIKCtrl.xfo.tr.copy(anklePosition)
+        legIKCtrl.xfo.tr = anklePosition
 
         if self.getLocation() == "R":
             legIKCtrl.rotatePoints(0, 90, 0)
@@ -118,15 +118,15 @@ class LegComponent(BaseComponent):
 
         # UpV
         upVXfo = xfoFromDirAndUpV(femurPosition, anklePosition, kneePosition)
-        upVXfo.tr.copy(kneePosition)
+        upVXfo.tr = kneePosition
         upVOffset = Vec3(0, 0, 5)
         upVOffset = upVXfo.transformVector(upVOffset)
 
         legUpVCtrlSrtBuffer = SrtBuffer('UpV', parent=self)
-        legUpVCtrlSrtBuffer.xfo.tr.copy(upVOffset)
+        legUpVCtrlSrtBuffer.xfo.tr = upVOffset
 
         legUpVCtrl = TriangleControl('UpV', parent=legUpVCtrlSrtBuffer)
-        legUpVCtrl.xfo.tr.copy(upVOffset)
+        legUpVCtrl.xfo.tr = upVOffset
         legUpVCtrl.alignOnZAxis()
         legUpVCtrl.rotatePoints(0, 0, 0)
 
@@ -156,21 +156,21 @@ class LegComponent(BaseComponent):
         # =====================
         # Setup component Xfo I/O's
         legPelvisInput = Locator('pelvisInput')
-        legPelvisInput.xfo.copy(femurXfo)
+        legPelvisInput.xfo = femurXfo
 
         femurOutput = Locator('femur')
-        femurOutput.xfo.copy(femurXfo)
+        femurOutput.xfo = femurXfo
         shinOutput = Locator('shin')
-        shinOutput.xfo.copy(shinXfo)
+        shinOutput.xfo = shinXfo
 
         legEndXfo = Xfo()
-        legEndXfo.rot = shinXfo.rot.clone()
-        legEndXfo.tr.copy(anklePosition)
+        legEndXfo.ori = shinXfo.ori
+        legEndXfo.tr = anklePosition
         legEndXfoOutput = Locator('legEndXfo')
-        legEndXfoOutput.xfo.copy(legEndXfo)
+        legEndXfoOutput.xfo = legEndXfo
 
         legEndPosOutput = Locator('legEndPos')
-        legEndPosOutput.xfo.copy(legEndXfo)
+        legEndPosOutput.xfo = legEndXfo
 
 
         # Setup componnent Attribute I/O's

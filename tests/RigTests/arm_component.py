@@ -160,7 +160,7 @@ class ArmComponent(BaseComponent):
         forearmOutput.xfo = forearmXfo
 
         armEndXfo = Xfo()
-        armEndXfo.rot = forearmXfo.rot.clone()
+        armEndXfo.ori = forearmXfo.ori
         armEndXfo.tr = wristPosition
         armEndXfoOutput = Locator('armEndXfo')
         armEndXfoOutput.xfo = armEndXfo
