@@ -194,19 +194,11 @@ class Builder(BaseBuilder):
         points = kSceneItem.getControlPoints()
 
         curvePoints = []
-        for eachSubCurve in points:
-            subCurvePoints = [x.toArray() for x in eachSubCurve]
+        for subCurve in points:
 
             formattedPoints = []
-            for i in xrange(3):
-                axisPositions = []
-                for p, eachPnt in enumerate(subCurvePoints):
-                    if p < len(subCurvePoints):
-                        axisPositions.append(eachPnt[i])
-
-                formattedPoints.append(axisPositions)
-
-            formattedPoints.append([1.0] * len(subCurvePoints))
+            for i, p in enumerate(subCurve):
+                formattedPoints.append([p.x, p.y, p.z, 1.0])
             curvePoints.append(formattedPoints)
 
         # Build the curve
@@ -252,19 +244,11 @@ class Builder(BaseBuilder):
         points = kSceneItem.getControlPoints()
 
         curvePoints = []
-        for eachSubCurve in points:
-            subCurvePoints = [x.toArray() for x in eachSubCurve]
+        for subCurve in points:
 
             formattedPoints = []
-            for i in xrange(3):
-                axisPositions = []
-                for p, eachPnt in enumerate(subCurvePoints):
-                    if p < len(subCurvePoints):
-                        axisPositions.append(eachPnt[i])
-
-                formattedPoints.append(axisPositions)
-
-            formattedPoints.append([1.0] * len(subCurvePoints))
+            for i, p in enumerate(subCurve):
+                formattedPoints.append([p.x, p.y, p.z, 1.0])
             curvePoints.append(formattedPoints)
 
         # Build the curve
