@@ -37,10 +37,10 @@ class Mat44(MathObject):
 
     @property
     def row0(self):
-        """Row 0 property.
+        """Gets row 0 of this matrix.
 
         Return:
-        Vec4, row 0 of the 4x4 matrix.
+        Vec4, row 0 vector.
 
         """
 
@@ -49,17 +49,27 @@ class Mat44(MathObject):
 
     @row0.setter
     def row0(self, value):
-        """Row 0 setter."""
+        """Sets row 0 as the input vector.
+
+        Arguments:
+        value -- Vec4, vector to set row 0 as.
+
+        Return:
+        True if successful.
+
+        """
 
         self.rtval.row0 = KS.inst().rtVal('Scalar', value)
+
+        return True
 
 
     @property
     def row1(self):
-        """Row 1 property.
+        """Gets row 1 of this matrix.
 
         Return:
-        Vec4, row 1 of the 4x4 matrix.
+        Vec4, row 1 vector.
 
         """
 
@@ -68,17 +78,27 @@ class Mat44(MathObject):
 
     @row1.setter
     def row1(self, value):
-        """Row 0 setter."""
+        """Sets row 1 as the input vector.
+
+        Arguments:
+        value -- Vec4, vector to set row 1 as.
+
+        Return:
+        True if successful.
+
+        """
 
         self.rtval.row1 = KS.inst().rtVal('Scalar', value)
+
+        return True
 
 
     @property
     def row2(self):
-        """Row 2 property.
+        """Gets row 2 of this matrix.
 
         Return:
-        Vec4, row 2 of the 4x4 matrix.
+        Vec4, row 2 vector.
 
         """
 
@@ -87,17 +107,27 @@ class Mat44(MathObject):
 
     @row2.setter
     def row2(self, value):
-        """Row 0 setter."""
+        """Sets row 2 as the input vector.
+
+        Arguments:
+        value -- Vec4, vector to set row 2 as.
+
+        Return:
+        True if successful.
+
+        """
 
         self.rtval.row2 = KS.inst().rtVal('Scalar', value)
+
+        return True
 
 
     @property
     def row3(self):
-        """Row 3 property.
+        """Gets row 3 of this matrix.
 
         Return:
-        Vec4, row 3 of the 4x4 matrix.
+        Vec4, row 3 vector.
 
         """
 
@@ -106,9 +136,19 @@ class Mat44(MathObject):
 
     @row3.setter
     def row3(self, value):
-        """Row 0 setter."""
+        """Sets row 3 as the input vector.
+
+        Arguments:
+        value -- Vec4, vector to set row 3 as.
+
+        Return:
+        True if successful.
+
+        """
 
         self.rtval.row3 = KS.inst().rtVal('Scalar', value)
+
+        return True
 
 
     def setRows(self, row0, row1, row2, row3):
@@ -150,7 +190,7 @@ class Mat44(MathObject):
 
 
     def setNull(self):
-        """Sets all components of the matrix to 0.0.
+        """Setting all components of the matrix to 0.0.
 
         Return:
         True if successful.
@@ -381,7 +421,6 @@ class Mat44(MathObject):
         return Mat44(self.rtval.divideScalar('Mat44', other))
 
 
-    # Returns the determinant of this matrix
     def determinant(self):
         """Gets the determinant of this matrix.
 

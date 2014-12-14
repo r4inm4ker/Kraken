@@ -18,33 +18,88 @@ class Vec2(MathObject):
         """Initializes x, y values for Vec2 object."""
 
         super(Vec2, self).__init__()
+
         client = KS.getInstance().getCoreClient()
         self.rtval = client.RT.types.Vec2()
         self.set(x=x, y=y)
 
+
     def __str__(self):
         """String representation of the Vec2 object."""
+
         return "Vec2(" + str(self.x) + "," + str(self.y) + ")"
+
 
     @property
     def x(self):
-        """I'm the 'x' property."""
+        """Gets x value of this vector.
+
+        Return:
+        Scalar, x value of this vector.
+
+        """
+
         return self.rtval.x
+
 
     @x.setter
     def x(self, value):
+        """Sets x value from the input value.
+
+        Arguments:
+        value -- Scalar, value to set the x property as.
+
+        Return:
+        True if successful.
+
+        """
+
         self.rtval.x = KS.inst().rtVal('Scalar', value)
+
+        return True
+
 
     @property
     def y(self):
-        """I'm the 'y' property."""
+        """Gets y value of this vector.
+
+        Return:
+        Scalar, y value of this vector.
+
+        """
+
         return self.rtval.y
+
 
     @y.setter
     def y(self, value):
+        """Sets y value from the input value.
+
+        Arguments:
+        value -- Scalar, value to set the y property as.
+
+        Return:
+        True if successful.
+
+        """
+
         self.rtval.y = KS.inst().rtVal('Scalar', value)
 
+        return True
 
-    # Setter from scalar components
+
     def set(self, x, y):
+        """Sets the x and y value from the input values.
+
+        Arguments:
+        x -- Scalar, value to set the x property as.
+        y -- Scalar, value to set the x property as.
+
+        Return:
+        True if successful.
+
+        """
+
         self.rtval.set(KS.inst().rtVal('Scalar', x), KS.inst().rtVal('Scalar', y))
+
+        return True

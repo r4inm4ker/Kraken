@@ -26,17 +26,15 @@ class Mat33(MathObject):
 
     def __str__(self):
         """Return a string representation of the 3x3 matrix."""
+
         return "Mat33(" + str(self.row0) + "," + str(self.row1) + "," + str(self.row2) + ")"
 
     @property
     def row0(self):
-        """Doc String.
-
-        Arguments:
-        Arguments -- Type, information.
+        """Gets row 0 of this matrix.
 
         Return:
-        True if successful.
+        Vec3, row 0 vector.
 
         """
 
@@ -45,10 +43,10 @@ class Mat33(MathObject):
 
     @row0.setter
     def row0(self, value):
-        """Doc String.
+        """Sets row 0 as the input vector.
 
         Arguments:
-        Arguments -- Type, information.
+        value -- Vec3, vector to set row 0 as.
 
         Return:
         True if successful.
@@ -57,16 +55,15 @@ class Mat33(MathObject):
 
         self.rtval.row0 = KS.inst().rtVal('Scalar', value)
 
+        return True
+
 
     @property
     def row1(self):
-        """Doc String.
-
-        Arguments:
-        Arguments -- Type, information.
+        """Gets row 1 of this matrix.
 
         Return:
-        True if successful.
+        Vec3, row 1 vector.
 
         """
 
@@ -75,10 +72,10 @@ class Mat33(MathObject):
 
     @row1.setter
     def row1(self, value):
-        """Doc String.
+        """Sets row 1 as the input vector.
 
         Arguments:
-        Arguments -- Type, information.
+        value -- Vec3, vector to set row 1 as.
 
         Return:
         True if successful.
@@ -87,16 +84,15 @@ class Mat33(MathObject):
 
         self.rtval.row1 = KS.inst().rtVal('Scalar', value)
 
+        return True
+
 
     @property
     def row2(self):
-        """Doc String.
-
-        Arguments:
-        Arguments -- Type, information.
+        """Gets row 2 of this matrix.
 
         Return:
-        True if successful.
+        Vec3, row 2 vector.
 
         """
 
@@ -105,10 +101,10 @@ class Mat33(MathObject):
 
     @row2.setter
     def row2(self, value):
-        """Doc String.
+        """Sets row 2 as the input vector.
 
         Arguments:
-        Arguments -- Type, information.
+        value -- Vec3, vector to set row 2 as.
 
         Return:
         True if successful.
@@ -117,12 +113,16 @@ class Mat33(MathObject):
 
         self.rtval.row2 = KS.inst().rtVal('Scalar', value)
 
+        return True
+
 
     def setRows(self, row0, row1, row2):
         """Setter from vectors, row-wise.
 
         Arguments:
-        Arguments -- Type, information.
+        row0 -- Vec3, vector to use to set row 0.
+        row1 -- Vec3, vector to use to set row 1.
+        row2 -- Vec3, vector to use to set row 2.
 
         Return:
         True if successful.
@@ -131,12 +131,16 @@ class Mat33(MathObject):
 
         self.rtval.setRows('', KS.inst().rtVal('Vec3', row0), KS.inst().rtVal('Vec3', row1), KS.inst().rtVal('Vec3', row2))
 
+        return True
+
 
     def setColumns(self, col0, col1, col2):
         """Setter from vectors, column-wise.
 
         Arguments:
-        Arguments -- Type, information.
+        col0 -- Vec3, vector to use to set column 0.
+        col1 -- Vec3, vector to use to set column 1.
+        col2 -- Vec3, vector to use to set column 2.
 
         Return:
         True if successful.
@@ -145,12 +149,11 @@ class Mat33(MathObject):
 
         self.rtval.setColumns('', KS.inst().rtVal('Vec3', col0), KS.inst().rtVal('Vec3', col1), KS.inst().rtVal('Vec3', col2))
 
+        return True
+
 
     def setNull(self):
         """Setting all components of the matrix to 0.0.
-
-        Arguments:
-        Arguments -- Type, information.
 
         Return:
         True if successful.
@@ -159,12 +162,11 @@ class Mat33(MathObject):
 
         self.rtval.setNull('')
 
+        return True
+
 
     def setIdentity(self):
-        """Setting this matrix to the identity matrix.
-
-        Arguments:
-        Arguments -- Type, information.
+        """Sets this matrix to the identity matrix.
 
         Return:
         True if successful.
@@ -173,12 +175,14 @@ class Mat33(MathObject):
 
         self.rtval.setIdentity('')
 
+        return True
+
 
     def setDiagonal(self, v):
-        """Setting the diagonal components of this matrix to a scalar.
+        """Sets the diagonal components of this matrix to a scalar.
 
         Arguments:
-        Arguments -- Type, information.
+        v -- Scalar, value to set diagonals to.
 
         Return:
         True if successful.
@@ -187,13 +191,15 @@ class Mat33(MathObject):
 
         self.rtval.setDiagonal('', KS.inst().rtVal('Scalar', v))
 
+        return True
+
 
     def setDiagonal(self, v):
-        """Setting the diagonal components of this matrix to the components of a
+        """Sets the diagonal components of this matrix to the components of a
         vector.
 
         Arguments:
-        Arguments -- Type, information.
+        v -- Vec3, vector to set diagonals to.
 
         Return:
         True if successful.
@@ -202,15 +208,17 @@ class Mat33(MathObject):
 
         self.rtval.setDiagonal('', KS.inst().rtVal('Vec3', v))
 
+        return True
+
 
     def equal(self, other):
-        """Returns true if this matrix is the same as another one.
+        """Checks equality of this Matrix33 with another.
 
         Arguments:
-        Arguments -- Type, information.
+        other -- Mat33, other matrix to check equality with.
 
         Return:
-        True if successful.
+        True if equal.
 
         """
 
@@ -218,13 +226,14 @@ class Mat33(MathObject):
 
 
     def almostEqual(self, other, precision):
-        """Returns true if this matrix is almost equal to the given matrix within the provided precision range.
+        """Checks almost equality of this Matrix33 with another.
 
         Arguments:
-        Arguments -- Type, information.
+        other -- Mat33, other matrix to check equality with.
+        precision -- Scalar, precision value.
 
         Return:
-        True if successful.
+        True if almost equal.
 
         """
 
@@ -232,14 +241,14 @@ class Mat33(MathObject):
 
 
     def almostEqual(self, other):
-        """Returns true if this matrix is almost the same as another one
+        """Checks almost equality of this Matrix33 with another
         (using a default precision).
 
         Arguments:
-        Arguments -- Type, information.
+        other -- Mat33, other matrix to check equality with.
 
         Return:
-        True if successful.
+        True if almost equal.
 
         """
 
@@ -306,10 +315,10 @@ class Mat33(MathObject):
         """Overload method for the add operator.
 
         Arguments:
-        Arguments -- Type, information.
+        other -- Mat33, other matrix to add to this one.
 
         Return:
-        True if successful.
+        Mat33, new Mat33 of the sum of the two Mat33's.
 
         """
 
@@ -320,10 +329,10 @@ class Mat33(MathObject):
         """Overload method for the subtract operator.
 
         Arguments:
-        Arguments -- Type, information.
+        other -- Mat33, other matrix to subtract from this one.
 
         Return:
-        True if successful.
+        Mat33, new Mat33 of the difference of the two Mat33's.
 
         """
 
@@ -334,10 +343,10 @@ class Mat33(MathObject):
         """Overload method for the multiply operator.
 
         Arguments:
-        Arguments -- Type, information.
+        other -- Mat33, other matrix to multiply from this one.
 
         Return:
-        True if successful.
+        Mat33, new Mat33 of the product of the two Mat33's.
 
         """
 
@@ -345,13 +354,13 @@ class Mat33(MathObject):
 
 
     def multiplyScalar(self, other):
-        """Returns the product of this matrix and a scalar.
+        """Product of this matrix and a scalar.
 
         Arguments:
-        Arguments -- Type, information.
+        other -- Scalar, scalar value to multiply this matrix by.
 
         Return:
-        True if successful.
+        Mat33, product of the multiplication of the scalar and this matrix.
 
         """
 
@@ -362,10 +371,10 @@ class Mat33(MathObject):
         """Returns the product of this matrix and a vector.
 
         Arguments:
-        Arguments -- Type, information.
+        other -- Vec3, vector to multiply this matrix by.
 
         Return:
-        True if successful.
+        Vec3, product of the multiplication of the Vec3 and this matrix.
 
         """
 
@@ -373,13 +382,13 @@ class Mat33(MathObject):
 
 
     def divideScalar(self, other):
-        """Returns the division of this matrix and a scalar.
+        """Divides this matrix and a scalar.
 
         Arguments:
-        Arguments -- Type, information.
+        other -- Scalar, value to divide this matrix by.
 
         Return:
-        True if successful.
+        Mat33, quotient of the division of the matrix by the scalar.
 
         """
 
@@ -387,13 +396,10 @@ class Mat33(MathObject):
 
 
     def determinant(self):
-        """Returns the determinant of this matrix.
-
-        Arguments:
-        Arguments -- Type, information.
+        """Gets the determinant of this matrix.
 
         Return:
-        True if successful.
+        Scalar, determinant of this matrix.
 
         """
 
@@ -401,13 +407,10 @@ class Mat33(MathObject):
 
 
     def adjoint(self):
-        """Returns the adjoint matrix of this matrix.
-
-        Arguments:
-        Arguments -- Type, information.
+        """Gets the adjoint matrix of this matrix.
 
         Return:
-        True if successful.
+        Mat33, adjoint of this matrix.
 
         """
 
@@ -415,13 +418,10 @@ class Mat33(MathObject):
 
 
     def inverse(self):
-        """Returns the inverse matrix of this matrix
-
-        Arguments:
-        Arguments -- Type, information.
+        """Get the inverse matrix of this matrix.
 
         Return:
-        True if successful.
+        Mat33, inverse of this matrix.
 
         """
 
@@ -429,13 +429,11 @@ class Mat33(MathObject):
 
 
     def inverse_safe(self):
-        """Doc String.
-
-        Arguments:
-        Arguments -- Type, information.
+        """Get the inverse matrix of this matrix, always checking the
+        determinant value.
 
         Return:
-        True if successful.
+        Mat33, safe inverse of this matrix.
 
         """
 
@@ -443,13 +441,10 @@ class Mat33(MathObject):
 
 
     def transpose(self):
-        """Returns the transposed matrix of this matrix.
-
-        Arguments:
-        Arguments -- Type, information.
+        """Get the transposed matrix of this matrix.
 
         Return:
-        True if successful.
+        Mat33, transpose of this matrix.
 
         """
 
