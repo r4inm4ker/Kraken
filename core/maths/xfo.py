@@ -5,7 +5,7 @@ Xfo -- Transform.
 """
 
 from math_object import MathObject
-from kraken.core.objects.kraken_core import KrakenCore as KC
+from kraken.core.objects.kraken_system import KrakenSystem as KS
 from vec3 import Vec3
 from quat import Quat
 from mat33 import Mat33
@@ -16,7 +16,7 @@ class Xfo(MathObject):
 
     def __init__(self, tr=None, ori=None, sc=None):
         super(Xfo, self).__init__()
-        client = KC.getInstance().getCoreClient()
+        client = KS.getInstance().getCoreClient()
         self.rtval = client.RT.types.Xfo()
         if tr is not None:
             self.tr = tr
@@ -36,7 +36,7 @@ class Xfo(MathObject):
 
     @tr.setter
     def tr(self, value):
-        self.rtval.tr = KC.inst().rtVal('Vec3', value)
+        self.rtval.tr = KS.inst().rtVal('Vec3', value)
 
     @property
     def ori(self):
@@ -45,7 +45,7 @@ class Xfo(MathObject):
 
     @ori.setter
     def ori(self, value):
-        self.rtval.ori = KC.inst().rtVal('Quat', value)
+        self.rtval.ori = KS.inst().rtVal('Quat', value)
 
 
     @property
@@ -55,32 +55,32 @@ class Xfo(MathObject):
 
     @sc.setter
     def sc(self, value):
-        self.rtval.sc = KC.inst().rtVal('Vec3', value)
+        self.rtval.sc = KS.inst().rtVal('Vec3', value)
 
 
     # Setter from just the rotation
     def set(self, ori):
-        self.rtval.set('', KC.inst().rtVal('Quat', ori))
+        self.rtval.set('', KS.inst().rtVal('Quat', ori))
 
     # Setter from Mat33 (only setting rotation)
     def set(self, mat):
-        self.rtval.set('', KC.inst().rtVal('Mat33', mat))
+        self.rtval.set('', KS.inst().rtVal('Mat33', mat))
 
     # Setter from just the translation
     def set(self, tr):
-        self.rtval.set('', KC.inst().rtVal('Vec3', tr))
+        self.rtval.set('', KS.inst().rtVal('Vec3', tr))
 
     # Setter from the translation and rotation
     def set(self, tr, ori):
-        self.rtval.set('', KC.inst().rtVal('Vec3', tr), KC.inst().rtVal('Quat', ori))
+        self.rtval.set('', KS.inst().rtVal('Vec3', tr), KS.inst().rtVal('Quat', ori))
 
     # Setter from the translation, rotation and scaling
     def set(self, tr, ori, sc):
-        self.rtval.set('', KC.inst().rtVal('Vec3', tr), KC.inst().rtVal('Quat', ori), KC.inst().rtVal('Vec3', sc))
+        self.rtval.set('', KS.inst().rtVal('Vec3', tr), KS.inst().rtVal('Quat', ori), KS.inst().rtVal('Vec3', sc))
 
     # Setter from the orientation, translation and scaling
     def set(self, ori, tr, sc):
-        self.rtval.set('', KC.inst().rtVal('Quat', ori), KC.inst().rtVal('Vec3', tr), KC.inst().rtVal('Vec3', sc))
+        self.rtval.set('', KS.inst().rtVal('Quat', ori), KS.inst().rtVal('Vec3', tr), KS.inst().rtVal('Vec3', sc))
 
     # Sets this transform to the identity
     def setIdentity(self):
@@ -88,7 +88,7 @@ class Xfo(MathObject):
 
     # Sets this transform from a given Mat44
     def setFromMat44(self):
-        self.rtval.setFromMat44('', KC.inst().rtVal('Mat44', m))
+        self.rtval.setFromMat44('', KS.inst().rtVal('Mat44', m))
 
     # Returns this xfo as a Mat44
     def toMat44(self):
@@ -113,30 +113,30 @@ class Xfo(MathObject):
 
     # Overload method for the multiply operator
     def multiply(self, xfo):
-        return Xfo(self.rtval.multiply('Xfo', KC.inst().rtVal('Xfo', xfo)))
+        return Xfo(self.rtval.multiply('Xfo', KS.inst().rtVal('Xfo', xfo)))
 
 
     # Transforms a vector with this transform
     def transformVector(self, v):
-        return Vec3(self.rtval.transformVector('Vec3', KC.inst().rtVal('Vec3', v)))
+        return Vec3(self.rtval.transformVector('Vec3', KS.inst().rtVal('Vec3', v)))
 
     # Transforms a vector with this transform
-    def  transformRay(self, ray):
-        return Ray(self.rtval.transformRay('Ray', KC.inst().rtVal('Ray', ray)))
+    def transformRay(self, ray):
+        return Ray(self.rtval.transformRay('Ray', KS.inst().rtVal('Ray', ray)))
 
     # Returns the inverse transform of this one
-    def  inverse(self):
+    def inverse(self):
         return Xfo(self.rtval.inverse('Xfo'))
 
     # Transforms a vector with this xfo inversely
     # \note we have 'inverseTransformVector' because Xfos with non-uniform scaling cannot be inverted as Xfos
     def inverseTransformVector(self, vec):
-        return Vec3(self.rtval.inverseTransformVector('Vec3', KC.inst().rtVal('Vec3', vec)))
+        return Vec3(self.rtval.inverseTransformVector('Vec3', KS.inst().rtVal('Vec3', vec)))
 
-    # Linearly interpolates this Xfo with another one based on 
+    # Linearly interpolates this Xfo with another one based on
     # a scalar blend value (0.0 to 1.0)
     def linearInterpolate(self,  other, t):
-        return Xfo(self.rtval.inverseTransformVector('Xfo', KC.inst().rtVal('Xfo', other), KC.inst().rtVal('Scalar', t)))
+        return Xfo(self.rtval.inverseTransformVector('Xfo', KS.inst().rtVal('Xfo', other), KS.inst().rtVal('Scalar', t)))
 
 
 

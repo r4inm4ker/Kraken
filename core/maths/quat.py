@@ -5,7 +5,7 @@ Quat -- Quaternion rotation.
 """
 
 import math
-from kraken.core.objects.kraken_core import KrakenCore as KC
+from kraken.core.objects.kraken_system import KrakenSystem as KS
 from math_object import MathObject
 
 from vec3 import Vec3
@@ -26,7 +26,7 @@ class Quat(MathObject):
             if w is not None and not isinstance(w, (int, float)):
                 raise TypeError("Quat: Invalid type for 'w' argument. Must be a int or float.")
 
-            client = KC.getInstance().getCoreClient()
+            client = KS.getInstance().getCoreClient()
             self.rtval = client.RT.types.Quat()
             self.set(v=v, w=w)
 
@@ -42,7 +42,7 @@ class Quat(MathObject):
 
     @v.setter
     def v(self, value):
-        self.rtval.v = KC.inst().rtVal('Vec3', value)
+        self.rtval.v = KS.inst().rtVal('Vec3', value)
 
     @property
     def w(self):
@@ -51,12 +51,12 @@ class Quat(MathObject):
 
     @w.setter
     def w(self, value):
-        self.rtval.w = KC.inst().rtVal('Scalar', value)
+        self.rtval.w = KS.inst().rtVal('Scalar', value)
 
 
     # Setter from scalar components
     def set(self, v, w):
-        self.rtval.set('', KC.inst().rtVal('Vec3', v), KC.inst().rtVal('Scalar', w))
+        self.rtval.set('', KS.inst().rtVal('Vec3', v), KS.inst().rtVal('Scalar', w))
 
 
     # Set this quat to the identity
@@ -65,52 +65,52 @@ class Quat(MathObject):
 
     # Set this quat from a euler rotation
     def setFromEuler(self, e):
-        return Quat(self.rtval.setFromEuler('Quat', KC.inst().rtVal('Euler', e)))
+        return Quat(self.rtval.setFromEuler('Quat', KS.inst().rtVal('Euler', e)))
 
     # Set this quat to a given angles vector (in radians) and a rotation order
     def setFromEulerAngles(self, angles, ro):
-        return Quat(self.rtval.setFromEuler('Quat', KC.inst().rtVal('Vec3', angles), KC.inst().rtVal('RotationOrder', ro)))
+        return Quat(self.rtval.setFromEuler('Quat', KS.inst().rtVal('Vec3', angles), KS.inst().rtVal('RotationOrder', ro)))
 
     # Set this quat to a given angles vector (in radians) using
     # the default XYZ rotation order
     def setFromEulerAngles(self, angles):
-        return Quat(self.rtval.setFromEuler('Quat', KC.inst().rtVal('Vec3', angles)))
+        return Quat(self.rtval.setFromEuler('Quat', KS.inst().rtVal('Vec3', angles)))
 
     # Set this quat to a rotation defined by an axis and an angle (in radians)
     def setFromAxisAndAngle(self, axis, angle):
-        return Quat(self.rtval.setFromAxisAndAngle('Quat', KC.inst().rtVal('Vec3', axis), KC.inst().rtVal('Scalar', angle)))
+        return Quat(self.rtval.setFromAxisAndAngle('Quat', KS.inst().rtVal('Vec3', axis), KS.inst().rtVal('Scalar', angle)))
 
-    # Set this quat to the rotation described by a 
+    # Set this quat to the rotation described by a
     # 3x3 rotation matrix
     def setFromMat33(self, mat):
-        return Quat(self.rtval.setFromMat33('Quat', KC.inst().rtVal('Mat33', mat)))
+        return Quat(self.rtval.setFromMat33('Quat', KS.inst().rtVal('Mat33', mat)))
 
     # Set the quaternion to the rotation required to rotate the source
     # vector to the destination vector
     # Function taken from the 'Game Programming Gems' article 'The Shortest Arc Quat' by Stan Melax
     # Both vectors must be units.
     def setFrom2Vectors( sourceDirVec, destDirVec, arbitraryIfAmbiguous=True):
-        return Quat(self.rtval.setFrom2Vectors('Quat', KC.inst().rtVal('Vec3', sourceDirVec), KC.inst().rtVal('Vec3', destDirVec), KC.inst().rtVal('Boolean', arbitraryIfAmbiguous)))
+        return Quat(self.rtval.setFrom2Vectors('Quat', KS.inst().rtVal('Vec3', sourceDirVec), KS.inst().rtVal('Vec3', destDirVec), KS.inst().rtVal('Boolean', arbitraryIfAmbiguous)))
 
     # Set the quat to represent the direction as the Z axis
     # and the upvector pointing along the XY plane.
     def setFromDirectionAndUpvector(self, direction, upvector):
-        return Quat(self.rtval.setFromDirectionAndUpvector('Quat', KC.inst().rtVal('Vec3', direction), KC.inst().rtVal('Vec3', upvector)))
+        return Quat(self.rtval.setFromDirectionAndUpvector('Quat', KS.inst().rtVal('Vec3', direction), KS.inst().rtVal('Vec3', upvector)))
 
     # Returns true if this quaternion is equal
     # to another one
-    def equal (self, other):
-        return self.rtval.equal('Boolean', KC.inst().rtVal('Quat', other))
+    def equal(self, other):
+        return self.rtval.equal('Boolean', KS.inst().rtVal('Quat', other))
 
     # Returns true if this quaternion is
     # almost equal to another one (given a precision)
     def almostEqual(self, other, precision):
-        return self.rtval.almostEqual('Boolean', KC.inst().rtVal('Quat', other), KC.inst().rtVal('Scalar', precision))
+        return self.rtval.almostEqual('Boolean', KS.inst().rtVal('Quat', other), KS.inst().rtVal('Scalar', precision))
 
     # Returns true if this quaternion is
     # almost equal to another one (using a default precision)
     def almostEqual(self, other):
-        return self.rtval.almostEqual('Boolean', KC.inst().rtVal('Quat', other))
+        return self.rtval.almostEqual('Boolean', KS.inst().rtVal('Quat', other))
 
     # # Equals operator
     # def Boolean == (Quat a, Quat b):
@@ -191,37 +191,37 @@ class Quat(MathObject):
 
     # Overload method for the add operator
     def add(self, other):
-        return self.rtval.add('Quat', KC.inst().rtVal('Quat', other))
+        return self.rtval.add('Quat', KS.inst().rtVal('Quat', other))
 
     # Overload method for the subtract operator
     def subtract(self, other):
-        return Quat(self.rtval.subtract('Quat', KC.inst().rtVal('Quat', other)))
+        return Quat(self.rtval.subtract('Quat', KS.inst().rtVal('Quat', other)))
 
     # Overload method for the multiply operator
     def multiply(self, other):
-        return Quat(self.rtval.multiply('Quat', KC.inst().rtVal('Quat', other)))
+        return Quat(self.rtval.multiply('Quat', KS.inst().rtVal('Quat', other)))
 
     # Overload method for the divide operator
     def divide(self, other):
-        return Quat(self.rtval.divide('Quat', KC.inst().rtVal('Quat', other)))
+        return Quat(self.rtval.divide('Quat', KS.inst().rtVal('Quat', other)))
 
     # Returns the product of this quaternion and a scalar
     def multiplyScalar(self, other):
-        return Quat(self.rtval.multiplyScalar('Quat', KC.inst().rtVal('Scalar', other)))
+        return Quat(self.rtval.multiplyScalar('Quat', KS.inst().rtVal('Scalar', other)))
 
     # Returns the division of this quaternion and a scalar
     def divideScalar(self, other):
-        return Quat(self.rtval.divideScalar('Quat', KC.inst().rtVal('Scalar', other)))
+        return Quat(self.rtval.divideScalar('Quat', KS.inst().rtVal('Scalar', other)))
 
     # Rotates a vector by this quaterion.
-    # Don't forget to normalize the quaternion unless 
+    # Don't forget to normalize the quaternion unless
     # you want axial translation as well as rotation.
     def rotateVector(self, v):
-        return Vec3(self.rtval.rotateVector('Vec3', KC.inst().rtVal('Vec3', v)))
+        return Vec3(self.rtval.rotateVector('Vec3', KS.inst().rtVal('Vec3', v)))
 
     # Returns the dot product of this quaternion and another one
     def dot(self, other):
-        return self.rtval.dot('Scalar', KC.inst().rtVal('Quat', other))
+        return self.rtval.dot('Scalar', KS.inst().rtVal('Quat', other))
 
     # Returns the conjugate of this quaternion
     def conjugate(self):
@@ -276,7 +276,7 @@ class Quat(MathObject):
     # Reflects this Quaternion according to the axis provided.
     # \param axisIndex An integer with value of 0 for the X axis, 1 for the Y axis, and 2 for the Z axis.
     def mirror(self, axisIndex):
-        return Vec3(self.rtval.mirror('Vec3', KC.inst().rtVal('Integer', axisIndex)))
+        return Vec3(self.rtval.mirror('Vec3', KS.inst().rtVal('Integer', axisIndex)))
 
     # Returns this quaternion as a 3x3 rotation matrix
     def toMat33(self):
@@ -285,11 +285,11 @@ class Quat(MathObject):
     # Returns this quaternion as a Euler rotation
     # giving a rotation order
     def toEuler(self, rotationOrder ):
-        return Euler(self.rtval.toEuler('Euler', KC.inst().rtVal('RotationOrder', rotationOrder)))
+        return Euler(self.rtval.toEuler('Euler', KS.inst().rtVal('RotationOrder', rotationOrder)))
 
     # Returns this quaternion as a Euler angles using the rotationorder XYZ
     def toEulerAngles(self, order):
-        return Vec3(self.rtval.toEulerAngles('Vec3', KC.inst().rtVal('RotationOrder', rotationOrder)))
+        return Vec3(self.rtval.toEulerAngles('Vec3', KS.inst().rtVal('RotationOrder', rotationOrder)))
 
     # Returns this quaternion as a Euler angles using the rotationorder XYZ
     def toEulerAngles():
@@ -299,12 +299,12 @@ class Quat(MathObject):
     # given a scalar blend value (0.0 to 1.0).
     # \note this and q2 should be unit Quaternions
     def sphericalLinearInterpolate(self, q2, t):
-        return Quat(self.rtval.sphericalLinearInterpolate('Quat', KC.inst().rtVal('Quat', q2), KC.inst().rtVal('Scalar', t)))
+        return Quat(self.rtval.sphericalLinearInterpolate('Quat', KS.inst().rtVal('Quat', q2), KS.inst().rtVal('Scalar', t)))
 
     # Interpolates two quaternions lineally (lerp)
     # with a given blend value (0.0 to 1.0).
     # \note The interpolation of the 2 quaternions will result acceleration and deceleration. Use :kl-ref:`sphericalLinearInterpolate` for an interpolation that does not introduce acceleration.
     def linearInterpolate(self, other, t):
-        return Quat(self.rtval.sphericalLinearInterpolate('Quat', KC.inst().rtVal('Quat', q2), KC.inst().rtVal('Scalar', t)))
+        return Quat(self.rtval.sphericalLinearInterpolate('Quat', KS.inst().rtVal('Quat', q2), KS.inst().rtVal('Scalar', t)))
 
 

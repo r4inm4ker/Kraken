@@ -5,13 +5,12 @@ Euler -- Euler rotation.
 """
 
 import math
-from kraken.core.objects.kraken_core import KrakenCore as KC
+from kraken.core.objects.kraken_system import KrakenSystem as KS
 from math_object import MathObject
 
 
 class Euler(MathObject):
     """Euler rotation object."""
-
 
     def __init__(self, x=None, y=None, z=None, ro=None):
         """Initialize values for x,y,z, and rotation order values."""
@@ -30,7 +29,7 @@ class Euler(MathObject):
         # if ro is not None and not isinstance(ro, (int, float)):
         #     raise TypeError("Euler: Invalid type for 'ro' argument. Must be a int or float.")
 
-        client = KC.getInstance().getCoreClient()
+        client = KS.getInstance().getCoreClient()
         self.rtval = client.RT.types.Euler()
 
         # self.set(x, y, z, ro)
@@ -44,42 +43,134 @@ class Euler(MathObject):
 
     @property
     def x(self):
-        """I'm the 'x' property."""
+        """Doc String.
+
+        Arguments:
+        Arguments -- Type, information.
+
+        Return:
+        True if successful.
+
+        """
+
         return self.rtval.x
+
 
     @x.setter
     def x(self, value):
-        self.rtval.x = KC.inst().rtVal('Scalar', value)
+        """Doc String.
+
+        Arguments:
+        Arguments -- Type, information.
+
+        Return:
+        True if successful.
+
+        """
+
+        self.rtval.x = KS.inst().rtVal('Scalar', value)
+
 
     @property
     def y(self):
-        """I'm the 'y' property."""
+        """Doc String.
+
+        Arguments:
+        Arguments -- Type, information.
+
+        Return:
+        True if successful.
+
+        """
+
         return self.rtval.y
+
 
     @y.setter
     def y(self, value):
-        self.rtval.y = KC.inst().rtVal('Scalar', value)
+        """Doc String.
+
+        Arguments:
+        Arguments -- Type, information.
+
+        Return:
+        True if successful.
+
+        """
+
+        self.rtval.y = KS.inst().rtVal('Scalar', value)
+
 
     @property
     def z(self):
-        """I'm the 'z' property."""
+        """Doc String.
+
+        Arguments:
+        Arguments -- Type, information.
+
+        Return:
+        True if successful.
+
+        """
+
         return self.rtval.z
+
 
     @z.setter
     def z(self, value):
-        self.rtval.z = KC.inst().rtVal('Scalar', value)
+        """Doc String.
+
+        Arguments:
+        Arguments -- Type, information.
+
+        Return:
+        True if successful.
+
+        """
+
+        self.rtval.z = KS.inst().rtVal('Scalar', value)
 
 
     @property
     def ro(self):
-        """I'm the 'ro' property."""
+        """Doc String.
+
+        Arguments:
+        Arguments -- Type, information.
+
+        Return:
+        True if successful.
+
+        """
+
         return self.rtval.ro
+
 
     @ro.setter
     def ro(self, value):
-        self.rtval.ro = KC.inst().rtVal('RotationOrder', value)
+        """Doc String.
+
+        Arguments:
+        Arguments -- Type, information.
+
+        Return:
+        True if successful.
+
+        """
+
+        self.rtval.ro = KS.inst().rtVal('RotationOrder', value)
 
 
     # Setter from scalar components
     def set(self, x, y, z):
-        self.rtval.set(KC.inst().rtVal('Scalar', x), KC.inst().rtVal('Scalar', y), KC.inst().rtVal('Scalar', z))
+        """Doc String.
+
+        Arguments:
+        Arguments -- Type, information.
+
+        Return:
+        True if successful.
+
+        """
+
+        self.rtval.set(KS.inst().rtVal('Scalar', x), KS.inst().rtVal('Scalar', y), KS.inst().rtVal('Scalar', z))

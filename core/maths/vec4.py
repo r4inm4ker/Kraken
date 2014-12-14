@@ -5,8 +5,9 @@ Vec4 -- Vector 4 object.
 """
 
 import math
+from kraken.core.objects.kraken_system import KrakenSystem as KS
 from math_object import MathObject
-from kraken.core.objects.kraken_core import KrakenCore as KC
+
 
 class Vec4(MathObject):
     """Vector 2 object."""
@@ -18,7 +19,7 @@ class Vec4(MathObject):
         if self.getTypeName(x) == 'Vec4':
             self.rtval = x
         else:
-            self.rtval = KC.inst().rtVal('Vec4')
+            self.rtval = KS.inst().rtVal('Vec4')
             self.set(x=x, y=y, z=z, t=t)
 
     def __str__(self):
@@ -32,7 +33,7 @@ class Vec4(MathObject):
 
     @x.setter
     def x(self, value):
-        self.rtval.x = KC.inst().rtVal('Scalar', value)
+        self.rtval.x = KS.inst().rtVal('Scalar', value)
 
     @property
     def y(self):
@@ -41,7 +42,7 @@ class Vec4(MathObject):
 
     @y.setter
     def y(self, value):
-        self.rtval.y = KC.inst().rtVal('Scalar', value)
+        self.rtval.y = KS.inst().rtVal('Scalar', value)
 
     @property
     def z(self):
@@ -50,7 +51,7 @@ class Vec4(MathObject):
 
     @y.setter
     def z(self, value):
-        self.rtval.z = KC.inst().rtVal('Scalar', value)
+        self.rtval.z = KS.inst().rtVal('Scalar', value)
 
     @property
     def t(self):
@@ -59,18 +60,18 @@ class Vec4(MathObject):
 
     @y.setter
     def t(self, value):
-        self.rtval.t = KC.inst().rtVal('Scalar', value)
+        self.rtval.t = KS.inst().rtVal('Scalar', value)
 
 
     # Setter from scalar components
     def set(self, x, y, z, t):
-        self.rtval.set(KC.inst().rtVal('Scalar', x), KC.inst().rtVal('Scalar', y), KC.inst().rtVal('Scalar', z), KC.inst().rtVal('Scalar', t))
+        self.rtval.set(KS.inst().rtVal('Scalar', x), KS.inst().rtVal('Scalar', y), KS.inst().rtVal('Scalar', z), KS.inst().rtVal('Scalar', t))
 
 
 
     # # Setter from same scalar for all components
     # def set(self, value):
-    #     self.rtval.set('', KC.inst().rtVal('Scalar', value))
+    #     self.rtval.set('', KS.inst().rtVal('Scalar', value))
 
     # Sets all components of this vec to 0.0
     def setNull():
@@ -83,7 +84,7 @@ class Vec4(MathObject):
     # Returns true if this vector is the same as another one
     # (given a precision)
     def almostEqual(self, other, precision):
-        return self.rtval.almostEqual('Boolean', other.rtval, KC.inst().rtVal('Scalar', precision))
+        return self.rtval.almostEqual('Boolean', other.rtval, KS.inst().rtVal('Scalar', precision))
 
     # Returns true if this vector is the same as another one
     # (using a default precision)
@@ -92,11 +93,11 @@ class Vec4(MathObject):
 
     # Returns the component of this vector by index
     def component(self, i ):
-        return self.rtval.component('Scalar', KC.inst().rtVal('Size', i))
+        return self.rtval.component('Scalar', KS.inst().rtVal('Size', i))
 
     # Sets the component of this vector by index
     def setComponent(self, i, v ):
-        return self.rtval.setComponent('', KC.inst().rtVal('Size', i), KC.inst().rtVal('Scalar', v))
+        return self.rtval.setComponent('', KS.inst().rtVal('Size', i), KS.inst().rtVal('Scalar', v))
 
     # # Equals operator
     # def Boolean == (Vec a, Vec b):
@@ -165,11 +166,11 @@ class Vec4(MathObject):
 
     # Returns the product of this vector and a scalar
     def multiplyScalar(self, other):
-        return Vec4(self.rtval.multiplyScalar('Vec4', KC.inst().rtVal('Scalar', other)))
+        return Vec4(self.rtval.multiplyScalar('Vec4', KS.inst().rtVal('Scalar', other)))
 
     # Returns the division of this vector and a scalar
     def divideScalar(self, other):
-        return Vec4(self.rtval.divideScalar('Vec4', KC.inst().rtVal('Scalar', other)))
+        return Vec4(self.rtval.divideScalar('Vec4', KS.inst().rtVal('Scalar', other)))
 
     # Returns the negated version of this vector
     def negate(self):
@@ -211,7 +212,7 @@ class Vec4(MathObject):
     def normalize(self):
         return self.rtval.normalize('Scalar')
 
-    # clamps this vector per component by 
+    # clamps this vector per component by
     # a min and max vector
     def clamp(self, min, max):
         return Vec4(self.rtval.clamp('Vec4', min.rtval, max.rtval))
@@ -234,7 +235,7 @@ class Vec4(MathObject):
     # Linearly interpolates this vector with another one
     # based on a scalar blend value (0.0 to 1.0)
     def linearInterpolate(self, other, t):
-        return Vec4(self.rtval.linearInterpolate('Vec4', KC.inst().rtVal('Scalar', t)))
+        return Vec4(self.rtval.linearInterpolate('Vec4', KS.inst().rtVal('Scalar', t)))
 
     # Returns the distance of this vector to a line defined
     # by two points on the line
@@ -246,4 +247,3 @@ class Vec4(MathObject):
     def distanceToSegment(self, segmentP0, segmentP1):
         return self.rtval.distanceToSegment('Scalar', segmentP0.rtval, segmentP1.rtval)
 
-        
