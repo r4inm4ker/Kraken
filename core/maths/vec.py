@@ -1,8 +1,4 @@
-"""Kraken - maths.vec module.
-
-Classes:
-Vec -- Base Vector object.
-"""
+"""Kraken - maths.vec module."""
 
 import math
 

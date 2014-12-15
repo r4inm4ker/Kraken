@@ -5,7 +5,9 @@ Mat44 -- Matrix 3 transform object.
 """
 
 from math_object import MathObject
+from kraken.core.objects.kraken_system import KrakenSystem as KS
 from vec import Vec3, Vec4
+
 
 class Mat44(MathObject):
     """3x3 Matrix object."""
@@ -18,88 +20,277 @@ class Mat44(MathObject):
         if self.getTypeName(row0) == 'Mat44':
             self.rtval = x
         else:
-            self.rtval = KC.inst().rtVal('Mat44')
+            self.rtval = KS.inst().rtVal('Mat44')
             self.setRows(row0, row1, row2)
 
+
     def __str__(self):
-        """Return a string representation of the 3x3 matrix."""
+        """String representation of the 3x3 matrix.
+
+        Return:
+        String.
+
+        """
+
         return "Mat44(" + str(self.row0) + "," + str(self.row1) + "," + str(self.row2) + "," + str(self.row3) + ")"
+
 
     @property
     def row0(self):
-        """I'm the 'row0' property."""
+        """Gets row 0 of this matrix.
+
+        Return:
+        Vec4, row 0 vector.
+
+        """
+
         return Vec4(self.rtval.row0)
+
 
     @row0.setter
     def row0(self, value):
-        self.rtval.row0 = KC.inst().rtVal('Scalar', value)
+        """Sets row 0 as the input vector.
+
+        Arguments:
+        value -- Vec4, vector to set row 0 as.
+
+        Return:
+        True if successful.
+
+        """
+
+        self.rtval.row0 = KS.inst().rtVal('Scalar', value)
+
+        return True
+
 
     @property
     def row1(self):
-        """I'm the 'row1' property."""
+        """Gets row 1 of this matrix.
+
+        Return:
+        Vec4, row 1 vector.
+
+        """
+
         return Vec4(self.rtval.row1)
+
 
     @row1.setter
     def row1(self, value):
-        self.rtval.row1 = KC.inst().rtVal('Scalar', value)
+        """Sets row 1 as the input vector.
+
+        Arguments:
+        value -- Vec4, vector to set row 1 as.
+
+        Return:
+        True if successful.
+
+        """
+
+        self.rtval.row1 = KS.inst().rtVal('Scalar', value)
+
+        return True
+
 
     @property
     def row2(self):
-        """I'm the 'row2' property."""
+        """Gets row 2 of this matrix.
+
+        Return:
+        Vec4, row 2 vector.
+
+        """
+
         return Vec4(self.rtval.row2)
+
 
     @row2.setter
     def row2(self, value):
-        self.rtval.row2 = KC.inst().rtVal('Scalar', value)
+        """Sets row 2 as the input vector.
+
+        Arguments:
+        value -- Vec4, vector to set row 2 as.
+
+        Return:
+        True if successful.
+
+        """
+
+        self.rtval.row2 = KS.inst().rtVal('Scalar', value)
+
+        return True
+
 
     @property
     def row3(self):
-        """I'm the 'row3' property."""
+        """Gets row 3 of this matrix.
+
+        Return:
+        Vec4, row 3 vector.
+
+        """
+
         return Vec4(self.rtval.row3)
+
 
     @row3.setter
     def row3(self, value):
-        self.rtval.row3 = KC.inst().rtVal('Scalar', value)
+        """Sets row 3 as the input vector.
+
+        Arguments:
+        value -- Vec4, vector to set row 3 as.
+
+        Return:
+        True if successful.
+
+        """
+
+        self.rtval.row3 = KS.inst().rtVal('Scalar', value)
+
+        return True
 
 
-    # Setter from vectors, row-wise
-    def setRows(self, row0, row1, row2):
-        self.rtval.setRows('', KC.inst().rtVal('Vec3', row0), KC.inst().rtVal('Vec3', row0), KC.inst().rtVal('Vec3', row2), KC.inst().rtVal('Vec3', row3))
+    def setRows(self, row0, row1, row2, row3):
+        """Set from vectors, row-wise.
 
-    # Setter from vectors, column-wise
+        Arguments:
+        row0 -- Vec4, vector to use for row 0.
+        row1 -- Vec4, vector to use for row 1.
+        row2 -- Vec4, vector to use for row 2.
+        row3 -- Vec4, vector to use for row 3.
+
+        Return:
+        True if successful.
+
+        """
+
+        self.rtval.setRows('', KS.inst().rtVal('Vec4', row0), KS.inst().rtVal('Vec4', row0), KS.inst().rtVal('Vec4', row2), KS.inst().rtVal('Vec4', row3))
+
+        return True
+
+
     def setColumns(self, col0, col1, col2, col3):
-        self.rtval.setColumns('', KC.inst().rtVal('Vec3', col0), KC.inst().rtVal('Vec3', col0), KC.inst().rtVal('Vec3', col2), KC.inst().rtVal('Vec3', col3))
+        """Setter from vectors, column-wise.
 
-    # setting all components of the matrix to 0.0
+        Arguments:
+        col0 -- Vec4, vector to use for column 0.
+        col1 -- Vec4, vector to use for column 1.
+        col2 -- Vec4, vector to use for column 2.
+        col3 -- Vec4, vector to use for column 3.
+
+        Return:
+        True if successful.
+
+        """
+
+        self.rtval.setColumns('', KS.inst().rtVal('Vec4', col0), KS.inst().rtVal('Vec4', col0), KS.inst().rtVal('Vec4', col2), KS.inst().rtVal('Vec4', col3))
+
+        return True
+
+
     def setNull(self):
+        """Setting all components of the matrix to 0.0.
+
+        Return:
+        True if successful.
+
+        """
+
         self.rtval.setNull('')
 
-    # setting this matrix to the identity matrix
+        return True
+
+
     def setIdentity(self):
+        """Sets this matrix to the identity matrix.
+
+        Return:
+        True if successful.
+
+        """
+
         self.rtval.setIdentity('')
 
-    # setting the diagonal components of 
-    # this matrix to a scalar
-    def setDiagonal(self, v):
-        self.rtval.setDiagonal('', KC.inst().rtVal('Scalar', v))
+        return True
 
-    # setting the diagonal components of this
-    # matrix to the components of a vector
-    def setDiagonal(self, v):
-        self.rtval.setDiagonal('', KC.inst().rtVal('Vec3', v))
 
-    # Returns true if this matrix is the same as another one
+    def setDiagonal(self, v):
+        """Sets the diagonal components of this matrix to a scalar.
+
+        Arguments:
+        v -- Scalar, value to set diagonals to.
+
+        Return:
+        True if successful.
+
+        """
+
+        self.rtval.setDiagonal('', KS.inst().rtVal('Scalar', v))
+
+        return True
+
+
+    def setDiagonal(self, v):
+        """Sets the diagonal components of this matrix to the components of a
+        vector.
+
+        Arguments:
+        v -- Vec3, vector to set diagonals to.
+
+        Return:
+        True if successful.
+
+        """
+
+        self.rtval.setDiagonal('', KS.inst().rtVal('Vec3', v))
+
+        return True
+
+
     def equal(self, other):
-        return self.rtval.add('Boolean', KC.inst().rtVal('Mat44', other))
+        """Checks equality of this Matrix44 with another.
 
-    # Returns true if this matrix is almost equal to the given matrix within the provided precision range
+        Arguments:
+        other -- Mat44, other matrix to check equality with.
+
+        Return:
+        True if equal.
+
+        """
+
+        return self.rtval.add('Boolean', KS.inst().rtVal('Mat44', other))
+
+
     def almostEqual(self, other, precision):
-        return self.rtval.add('Boolean', KC.inst().rtVal('Mat44', other), KC.inst().rtVal('Scalar', precision))
+        """Checks almost equality of this Matrix44 with another.
 
-    # Returns true if this matrix is almost the same as another one
-    # (using a default precision)
+        Arguments:
+        other -- Mat44, other matrix to check equality with.
+        precision -- Scalar, precision value.
+
+        Return:
+        True if almost equal.
+
+        """
+
+        return self.rtval.add('Boolean', KS.inst().rtVal('Mat44', other), KS.inst().rtVal('Scalar', precision))
+
+
     def almostEqual(self, other):
-        return self.rtval.add('Boolean', KC.inst().rtVal('Mat44', other))
+        """Checks almost equality of this Matrix44 with another
+        (using a default precision).
+
+        Arguments:
+        other -- Mat44, other matrix to check equality with.
+
+        Return:
+        True if almost equal.
+
+        """
+
+        return self.rtval.add('Boolean', KS.inst().rtVal('Mat44', other))
+
 
     # # Equals operator
     # def Boolean == (Mat44 a, Mat44 b):
@@ -145,48 +336,142 @@ class Mat44(MathObject):
     # # Divides this matrix by a scalar
     # def  /= (Scalar other):
 
-    # Overload method for the add operator
+
     def add(self, other):
-        return Mat44(self.rtval.add('Mat44', KC.inst().rtVal('Mat44', other)))
+        """Overload method for the add operator.
 
-    # Overload method for the subtract operator
+        Arguments:
+        other -- Mat44, other matrix to add to this one.
+
+        Return:
+        Mat44, new Mat44 of the sum of the two Mat44's.
+
+        """
+
+        return Mat44(self.rtval.add('Mat44', KS.inst().rtVal('Mat44', other)))
+
+
     def subtract(self, other):
-        return Mat44(self.rtval.subtract('Mat44', KC.inst().rtVal('Mat44', other)))
+        """Overload method for the subtract operator.
 
-    # Overload method for the multiply operator
+        Arguments:
+        other -- Mat44, other matrix to subtract from this one.
+
+        Return:
+        Mat44, new Mat44 of the difference of the two Mat44's.
+
+        """
+
+        return Mat44(self.rtval.subtract('Mat44', KS.inst().rtVal('Mat44', other)))
+
+
     def multiply(self, other):
-        return Mat44(self.rtval.multiply('Mat44', KC.inst().rtVal('Mat44', other)))
+        """Overload method for the multiply operator.
 
-    # Returns the product of this matrix and a scalar
+        Arguments:
+        other -- Mat44, other matrix to multiply from this one.
+
+        Return:
+        Mat44, new Mat44 of the product of the two Mat44's.
+
+        """
+
+        return Mat44(self.rtval.multiply('Mat44', KS.inst().rtVal('Mat44', other)))
+
+
     def multiplyScalar(self, other):
-        return Mat44(self.rtval.multiplyScalar('Mat44', KC.inst().rtVal('Scalar', other)))
+        """Product of this matrix and a scalar.
 
-    # Returns the product of this matrix and a vector
+        Arguments:
+        other -- Scalar, scalar value to multiply this matrix by.
+
+        Return:
+        Mat44, product of the multiplication of the scalar and this matrix.
+
+        """
+
+        return Mat44(self.rtval.multiplyScalar('Mat44', KS.inst().rtVal('Scalar', other)))
+
+
     def multiplyVector(self, other):
-        return Vec3(self.rtval.multiplyVector('Vec3', KC.inst().rtVal('Vec3', other)))
+        """Returns the product of this matrix and a vector.
 
-    # Returns the division of this matrix and a scalar
+        Arguments:
+        other -- Vec3, vector to multiply this matrix by.
+
+        Return:
+        Vec3, product of the multiplication of the Vec3 and this matrix.
+
+        """
+
+        return Vec3(self.rtval.multiplyVector('Vec3', KS.inst().rtVal('Vec3', other)))
+
+
     def divideScalar(self, other):
+        """Divides this matrix and a scalar.
+
+        Arguments:
+        other -- Scalar, value to divide this matrix by
+
+        Return:
+        Mat44, quotient of the division of the matrix by the scalar.
+
+        """
+
         return Mat44(self.rtval.divideScalar('Mat44', other))
 
-    # Returns the determinant of this matrix
+
     def determinant(self):
+        """Gets the determinant of this matrix.
+
+        Return:
+        Scalar, determinant of this matrix.
+
+        """
+
         return self.rtval.determinant('Scalar')
 
-    # Returns the adjoint matrix of this matrix
+
     def adjoint(self):
+        """Gets the adjoint matrix of this matrix.
+
+        Return:
+        Mat44, adjoint of this matrix.
+
+        """
+
         return Mat44(self.rtval.adjoint('Mat44'))
 
-    # Returns the inverse matrix of this matrix
+
     def inverse(self):
+        """Get the inverse matrix of this matrix.
+
+        Return:
+        Mat44, inverse of this matrix.
+
+        """
+
         return Mat44(self.rtval.inverse('Mat44'))
 
+
     def inverse_safe(self):
+        """Get the inverse matrix of this matrix, always checking the
+        determinant value.
+
+        Return:
+        Mat44, safe inverse of this matrix.
+
+        """
+
         return Mat44(self.rtval.inverse_safe('Mat44'))
 
-    # Returns the transposed matrix of this matrix
+
     def transpose(self):
+        """Get the transposed matrix of this matrix.
+
+        Return:
+        Mat44, transpose of this matrix.
+
+        """
+
         return Mat44(self.rtval.transpose('Mat44'))
-
-
-
