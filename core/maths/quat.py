@@ -391,7 +391,7 @@ class Quat(MathObject):
         """Overload method for the multiply operator.
 
         Arguments:
-        other -- Quat, other quaternion to multiply from this one.
+        other -- Quat, other quaternion to multiply this one by.
 
         Return:
         Quat, new Quat of the product of the two Quat's.
@@ -507,7 +507,7 @@ class Quat(MathObject):
 
 
     def unit(self):
-        """Gets a uni quaternion of this one.
+        """Gets a unit quaternion of this one.
 
         Return:
         Quat, new unit quaternion from this one.

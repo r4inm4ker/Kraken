@@ -2,8 +2,6 @@
 
 Classes:
 Vec2 -- Vector 2 object.
-Vec3 -- Vector 3 object.
-Vec4 -- Vector 4 object.
 """
 
 import math
@@ -19,8 +17,7 @@ class Vec2(MathObject):
 
         super(Vec2, self).__init__()
 
-        client = KS.getInstance().getCoreClient()
-        self.rtval = client.RT.types.Vec2()
+        self.rtval = KS.inst().rtVal('Vec2')
         self.set(x=x, y=y)
 
 
