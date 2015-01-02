@@ -122,72 +122,6 @@ class Xfo(MathObject):
         return True
 
 
-
-    def set(self, ori):
-        """Setter from just the rotation.
-
-        Arguments:
-        ori -- Quat, quaternion to set the orientation by.
-
-        Return:
-        True if successful.
-
-        """
-
-        self.rtval.set('', KS.inst().rtVal('Quat', ori))
-
-        return True
-
-
-    def set(self, mat):
-        """Setter from Mat33 (only setting rotation).
-
-        Arguments:
-        mat -- Mat33, matrix to set the transform by.
-
-        Return:
-        True if successful.
-
-        """
-
-        self.rtval.set('', KS.inst().rtVal('Mat33', mat))
-
-        return True
-
-
-    def set(self, tr):
-        """Setter from just the translation.
-
-        Arguments:
-        tr -- Vec3, vector to set the translation by.
-
-        Return:
-        True if successful.
-
-        """
-
-        self.rtval.set('', KS.inst().rtVal('Vec3', tr))
-
-        return True
-
-
-    def set(self, tr, ori):
-        """Setter from the translation and rotation.
-
-        Arguments:
-        tr -- Vec3, vector to set the translation by.
-        ori -- Quat, quaternion to set the orientation by.
-
-        Return:
-        True if successful.
-
-        """
-
-        self.rtval.set('', KS.inst().rtVal('Vec3', tr), KS.inst().rtVal('Quat', ori))
-
-        return True
-
-
     def set(self, tr, ori, sc):
         """Setter from the translation, rotation and scaling.
 
@@ -204,25 +138,7 @@ class Xfo(MathObject):
         self.rtval.set('', KS.inst().rtVal('Vec3', tr), KS.inst().rtVal('Quat', ori), KS.inst().rtVal('Vec3', sc))
 
         return True
-
-
-    def set(self, ori, tr, sc):
-        """Setter from the orientation, translation and scaling.
-
-        Arguments:
-        ori -- Quat, quaternion to set the orientation by.
-        tr -- Vec3, vector to set the translation by.
-        sc -- Vec3, vector to set the scaling by.
-
-        Return:
-        True if successful.
-
-        """
-
-        self.rtval.set('', KS.inst().rtVal('Quat', ori), KS.inst().rtVal('Vec3', tr), KS.inst().rtVal('Vec3', sc))
-
-        return True
-
+        
 
     def setIdentity(self):
         """Sets this transform to the identity.
