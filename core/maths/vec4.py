@@ -162,11 +162,6 @@ class Vec4(MathObject):
         return True
 
 
-    # # Setter from same scalar for all components
-    # def set(self, value):
-    #     self.rtval.set('', KS.inst().rtVal('Scalar', value))
-
-
     def setNull():
         """Setting all components of the vec3 to 0.0.
 
