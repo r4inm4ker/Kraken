@@ -12,16 +12,17 @@ from vec import Vec3, Vec4
 class Mat44(MathObject):
     """3x3 Matrix object."""
 
-    def __init__(self, row0=None, row1=None, row2=None):
+    def __init__(self, row0=None, row1=None, row2=None, row3=None):
         """Initialize and set values in the 3x3 matrix."""
 
         super(Mat44, self).__init__()
 
-        if self.getTypeName(row0) == 'Mat44':
+        if row0 is not None and self.getTypeName(row0) == 'Mat44':
             self.rtval = x
         else:
             self.rtval = KS.inst().rtVal('Mat44')
-            self.setRows(row0, row1, row2)
+            if row0 is not None and row1 is not None and row2 is not None and row3 is not None:
+                self.setRows(row0, row1, row2, row3)
 
 
     def __str__(self):
@@ -259,7 +260,7 @@ class Mat44(MathObject):
 
         """
 
-        return self.rtval.add('Boolean', KS.inst().rtVal('Mat44', other))
+        return self.rtval.equal('Boolean', KS.inst().rtVal('Mat44', other))
 
 
     def almostEqual(self, other, precision):
@@ -274,7 +275,7 @@ class Mat44(MathObject):
 
         """
 
-        return self.rtval.add('Boolean', KS.inst().rtVal('Mat44', other), KS.inst().rtVal('Scalar', precision))
+        return self.rtval.almostEqual('Boolean', KS.inst().rtVal('Mat44', other), KS.inst().rtVal('Scalar', precision))
 
 
     def almostEqual(self, other):
@@ -289,7 +290,7 @@ class Mat44(MathObject):
 
         """
 
-        return self.rtval.add('Boolean', KS.inst().rtVal('Mat44', other))
+        return self.rtval.almostEqual('Boolean', KS.inst().rtVal('Mat44', other))
 
 
     # # Equals operator

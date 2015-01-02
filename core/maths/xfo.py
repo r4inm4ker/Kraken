@@ -15,16 +15,19 @@ class Xfo(MathObject):
     """Transform object."""
 
     def __init__(self, tr=None, ori=None, sc=None):
-        """Initializes x, y z and t values for Vec4 object."""
+        """Initializes tr, ori and sc values for Xfo object."""
 
         super(Xfo, self).__init__()
-        self.rtval = KS.inst().rtVal('Xfo')
-        if tr is not None:
-            self.tr = tr
-        if ori is not None:
-            self.ori = ori
-        if sc is not None:
-            self.sc = sc
+        if tr is not None and self.getTypeName(tr) == 'Xfo':
+            self.rtval = tr
+        else:
+            self.rtval = KS.inst().rtVal('Xfo')
+            if tr is not None:
+                self.tr = tr
+            if ori is not None:
+                self.ori = ori
+            if sc is not None:
+                self.sc = sc
 
 
     def __str__(self):
@@ -358,7 +361,7 @@ class Xfo(MathObject):
 
         """
 
-        return Xfo(self.rtval.inverseTransformVector('Xfo', KS.inst().rtVal('Xfo', other), KS.inst().rtVal('Scalar', t)))
+        return Xfo(self.rtval.linearInterpolate('Xfo', KS.inst().rtVal('Xfo', other), KS.inst().rtVal('Scalar', t)))
 
 
     def setFromVectors(self, inVec1, inVec2, inVec3, translation):

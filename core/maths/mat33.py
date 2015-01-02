@@ -21,7 +21,8 @@ class Mat33(MathObject):
             self.rtval = row0
         else:
             self.rtval = KS.inst().rtVal('Mat33')
-            self.setRows(row0, row1, row2)
+            if row0 is not None and row1 is not None and row2 is not None:
+                self.setRows(row0, row1, row2)
 
 
     def __str__(self):
@@ -222,10 +223,10 @@ class Mat33(MathObject):
 
         """
 
-        return self.rtval.add('Boolean', KS.inst().rtVal('Mat33', other))
+        return self.rtval.equal('Boolean', KS.inst().rtVal('Mat33', other))
 
 
-    def almostEqual(self, other, precision):
+    def almostEqual(self, other, precision=None):
         """Checks almost equality of this Matrix33 with another.
 
         Arguments:
@@ -236,23 +237,10 @@ class Mat33(MathObject):
         True if almost equal.
 
         """
-
-        return self.rtval.add('Boolean', KS.inst().rtVal('Mat33', other), KS.inst().rtVal('Scalar', precision))
-
-
-    def almostEqual(self, other):
-        """Checks almost equality of this Matrix33 with another
-        (using a default precision).
-
-        Arguments:
-        other -- Mat33, other matrix to check equality with.
-
-        Return:
-        True if almost equal.
-
-        """
-
-        return self.rtval.add('Boolean', KS.inst().rtVal('Mat33', other))
+        if precision is not None:
+            return self.rtval.almostEqual('Boolean', KS.inst().rtVal('Mat33', other), KS.inst().rtVal('Scalar', precision))
+        else:
+            return self.rtval.almostEqual('Boolean', KS.inst().rtVal('Mat33', other))
 
 
     # # Equals operator

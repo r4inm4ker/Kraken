@@ -97,6 +97,6 @@ class Vec2(MathObject):
 
         """
 
-        self.rtval.set(KS.inst().rtVal('Scalar', x), KS.inst().rtVal('Scalar', y))
+        self.rtval.set('', KS.inst().rtVal('Scalar', x), KS.inst().rtVal('Scalar', y))
 
         return True

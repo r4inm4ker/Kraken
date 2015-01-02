@@ -157,7 +157,7 @@ class Vec4(MathObject):
 
         """
 
-        self.rtval.set(KS.inst().rtVal('Scalar', x), KS.inst().rtVal('Scalar', y), KS.inst().rtVal('Scalar', z), KS.inst().rtVal('Scalar', t))
+        self.rtval.set('', KS.inst().rtVal('Scalar', x), KS.inst().rtVal('Scalar', y), KS.inst().rtVal('Scalar', z), KS.inst().rtVal('Scalar', t))
 
         return True
 

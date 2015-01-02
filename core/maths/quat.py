@@ -9,6 +9,7 @@ from kraken.core.objects.kraken_system import KrakenSystem as KS
 from math_object import MathObject
 
 from vec3 import Vec3
+from mat33 import Mat33
 
 
 class Quat(MathObject):
@@ -30,7 +31,8 @@ class Quat(MathObject):
 
             client = KS.getInstance().getCoreClient()
             self.rtval = client.RT.types.Quat()
-            self.set(v=v, w=w)
+            if v is not None and w is not None:
+                self.set(v=v, w=w)
 
 
     def __str__(self):
