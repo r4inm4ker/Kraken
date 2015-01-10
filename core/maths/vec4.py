@@ -5,7 +5,7 @@ Vec4 -- Vector 4 object.
 """
 
 import math
-from kraken.core.objects.kraken_system import KrakenSystem as KS
+from kraken.core.kraken_system import KrakenSystem as KS
 from math_object import MathObject
 
 

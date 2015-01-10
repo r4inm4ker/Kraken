@@ -245,11 +245,14 @@ class Builder(BaseBuilder):
 
         curvePoints = []
         for subCurve in points:
-
+            log("SubCurve: " + str(subCurve))
             formattedPoints = []
             for i, p in enumerate(subCurve):
+                log("Point " + str(i) + ": " + str([p.x, p.y, p.z, 1.0]))
                 formattedPoints.append([p.x, p.y, p.z, 1.0])
             curvePoints.append(formattedPoints)
+
+        log(curvePoints)
 
         # Build the curve
         for i, eachCurveSection in enumerate(curvePoints):
@@ -259,6 +262,9 @@ class Builder(BaseBuilder):
                 knots = list(xrange(len(eachCurveSection[0]) + 1))
             else:
                 knots = list(xrange(len(eachCurveSection[0])))
+
+            log("Curve Section: " + str(eachCurveSection))
+            log("Knots: " + str(knots))
 
             if i == 0:
                 dccSceneItem = parentDCCSceneItem.AddNurbsCurve(list(eachCurveSection), knots, kSceneItem.getCurveSectionClosed(i), 1, constants.siNonUniformParameterization, constants.siSINurbs)

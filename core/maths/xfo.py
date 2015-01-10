@@ -5,7 +5,7 @@ Xfo -- Transform.
 """
 
 from math_object import MathObject
-from kraken.core.objects.kraken_system import KrakenSystem as KS
+from kraken.core.kraken_system import KrakenSystem as KS
 from vec3 import Vec3
 from quat import Quat
 from mat33 import Mat33
@@ -138,7 +138,7 @@ class Xfo(MathObject):
         self.rtval.set('', KS.inst().rtVal('Vec3', tr), KS.inst().rtVal('Quat', ori), KS.inst().rtVal('Vec3', sc))
 
         return True
-        
+
 
     def setIdentity(self):
         """Sets this transform to the identity.
