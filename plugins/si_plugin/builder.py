@@ -194,11 +194,19 @@ class Builder(BaseBuilder):
         points = kSceneItem.getControlPoints()
 
         curvePoints = []
-        for subCurve in points:
+        for eachSubCurve in points:
+            subCurvePoints = [[x.x, x.y, x.z] for x in eachSubCurve]
 
             formattedPoints = []
-            for i, p in enumerate(subCurve):
-                formattedPoints.append([p.x, p.y, p.z, 1.0])
+            for i in xrange(3):
+                axisPositions = []
+                for p, eachPnt in enumerate(subCurvePoints):
+                    if p < len(subCurvePoints):
+                        axisPositions.append(eachPnt[i])
+
+                formattedPoints.append(axisPositions)
+
+            formattedPoints.append([1.0] * len(subCurvePoints))
             curvePoints.append(formattedPoints)
 
         # Build the curve
@@ -244,15 +252,20 @@ class Builder(BaseBuilder):
         points = kSceneItem.getControlPoints()
 
         curvePoints = []
-        for subCurve in points:
-            log("SubCurve: " + str(subCurve))
-            formattedPoints = []
-            for i, p in enumerate(subCurve):
-                log("Point " + str(i) + ": " + str([p.x, p.y, p.z, 1.0]))
-                formattedPoints.append([p.x, p.y, p.z, 1.0])
-            curvePoints.append(formattedPoints)
+        for eachSubCurve in points:
+            subCurvePoints = [[x.x, x.y, x.z] for x in eachSubCurve]
 
-        log(curvePoints)
+            formattedPoints = []
+            for i in xrange(3):
+                axisPositions = []
+                for p, eachPnt in enumerate(subCurvePoints):
+                    if p < len(subCurvePoints):
+                        axisPositions.append(eachPnt[i])
+
+                formattedPoints.append(axisPositions)
+
+            formattedPoints.append([1.0] * len(subCurvePoints))
+            curvePoints.append(formattedPoints)
 
         # Build the curve
         for i, eachCurveSection in enumerate(curvePoints):
@@ -262,9 +275,6 @@ class Builder(BaseBuilder):
                 knots = list(xrange(len(eachCurveSection[0]) + 1))
             else:
                 knots = list(xrange(len(eachCurveSection[0])))
-
-            log("Curve Section: " + str(eachCurveSection))
-            log("Knots: " + str(knots))
 
             if i == 0:
                 dccSceneItem = parentDCCSceneItem.AddNurbsCurve(list(eachCurveSection), knots, kSceneItem.getCurveSectionClosed(i), 1, constants.siNonUniformParameterization, constants.siSINurbs)
