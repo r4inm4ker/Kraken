@@ -6,6 +6,7 @@ BaseControl - Base Control.
 """
 
 from kraken.core.maths import Euler, Quat, Xfo
+from kraken.core.maths import Math_degToRad
 from kraken.core.objects.curve import Curve
 
 
@@ -195,7 +196,7 @@ class BaseControl(Curve):
         controlPoints = self.copyControlPoints()
 
         quatRot = Quat()
-        quatRot.setFromEuler(Euler(xRot, yRot, zRot))
+        quatRot.setFromEuler(Euler(Math_degToRad(xRot), Math_degToRad(yRot), Math_degToRad(zRot)))
 
         newPoints = []
         for eachSection in controlPoints:
