@@ -5,7 +5,7 @@ Quat -- Quaternion rotation.
 """
 
 import math
-from kraken.core.objects.kraken_system import KrakenSystem as KS
+from kraken.core.kraken_system import KrakenSystem as KS
 from math_object import MathObject
 
 from vec3 import Vec3

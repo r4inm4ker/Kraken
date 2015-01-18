@@ -23,7 +23,7 @@ from attributes.float_attribute import FloatAttribute
 from attributes.integer_attribute import IntegerAttribute
 from attributes.string_attribute import StringAttribute
 
-from components import * 
+from components import *
 
 from controls.arrow_control import ArrowControl
 from controls.arrows_control import ArrowsControl
@@ -42,7 +42,7 @@ from constraints.position_constraint import PositionConstraint
 from constraints.scale_constraint import ScaleConstraint
 
 
-# from operators import * 
+# from operators import *
 
 class KrakenLoader(object):
     """Kraken base object type for any 3D object."""
@@ -54,9 +54,10 @@ class KrakenLoader(object):
         # A dictionary of all the built elements during loading.
         self.builtItems = {}
         # the most recent item build during loading. This item is the parent
-        # of subsequently built items. 
+        # of subsequently built items.
         self.parentItems = []
         self.callbacks = {}
+
 
     def decodeValue(self, jsonData):
         """Returns a constructed math value based on the provided json data.
@@ -65,6 +66,7 @@ class KrakenLoader(object):
         The constructed math value
 
         """
+
         if type(jsonData) is not dict:
             return jsonData
 
@@ -97,7 +99,9 @@ class KrakenLoader(object):
             val.jsonDecode(jsonData, self)
         else:
             raise Exception("Unsupported Math type:" + jsonData['__class__'])
+
         return val
+
 
     def getParentItem(self):
         """Returns the item that was constructed prior to the current item.
@@ -106,10 +110,12 @@ class KrakenLoader(object):
         The stored parent item.
 
         """
-        
+
         if len(self.parentItems) < 2:
             return None
+
         return self.parentItems[-2]
+
 
     def resolveSceneItem(self, name):
         """Returns a constructed scene item based on the provided name.
@@ -118,10 +124,12 @@ class KrakenLoader(object):
         The resolved scene item.
 
         """
+
         if name is None:
             return None
         if name in self.builtItems:
             return self.builtItems[name]
+
         raise Exception("SceneItem not found:" + str(name))
 
 
@@ -132,12 +140,13 @@ class KrakenLoader(object):
         The constructed scene item.
 
         """
+
         if '__typeHierarchy__' not in jsonData or 'name' not in jsonData:
             raise Exception("Invalid JSON data for constructing scene item:" + str(jsonData));
 
-        ##########################
-        ## Controls.
-
+        # =========
+        # Controls
+        # =========
         if "ArrowControl" in jsonData['__typeHierarchy__']:
             item = ArrowControl(jsonData['name'])
 
@@ -168,9 +177,9 @@ class KrakenLoader(object):
         elif "BaseControl" in jsonData['__typeHierarchy__']:
             item = BaseControl(jsonData['name'])
 
-        ##########################
-        ## Attributes.
-
+        # ===========
+        # Attributes
+        # ===========
         elif "AttributeGroup" in jsonData['__typeHierarchy__']:
             item = AttributeGroup(jsonData['name'])
 
@@ -195,9 +204,9 @@ class KrakenLoader(object):
         elif "ComponentOutput" in jsonData['__typeHierarchy__']:
             item = ComponentOutput(jsonData['name'])
 
-        ##########################
-        ## Constraints.
-
+        # ============
+        # Constraints
+        # ============
         elif "OrientationConstraint" in jsonData['__typeHierarchy__']:
             item = OrientationConstraint(jsonData['name'])
 
@@ -214,18 +223,19 @@ class KrakenLoader(object):
             item = BaseConstraint(jsonData['name'])
 
 
-        ##########################
-        ## Constraints.
-
+        # ==========
+        # Operators
+        # ==========
         elif "Operator" in jsonData['__typeHierarchy__']:
             item = Operator(jsonData['name'])
 
         elif "OperatorBinding" in jsonData['__typeHierarchy__']:
             item = OperatorBinding(jsonData['name'])
 
-        ##########################
-        ## SceneItems.
 
+        # ============
+        # Scene Items
+        # ============
         elif "Group" in jsonData['__typeHierarchy__']:
             item = Group(jsonData['name'])
 
@@ -267,31 +277,34 @@ class KrakenLoader(object):
 
         self.registerItem(item)
         # Store the item as the parent item before decoding the object
-        # which in turn decodes the children items. 
+        # which in turn decodes the children items.
         self.parentItems.append(item)
         item.jsonDecode(self, jsonData)
 
-        # Pop the parent item stack, which reverts the current parent item 
-        # to the previous value. 
+        # Pop the parent item stack, which reverts the current parent item
+        # to the previous value.
         self.parentItems.pop()
+
         return item
 
+
     def registerItem(self, item):
-        """Register an item to the loader. If an item is constructed automatically, 
+        """Register an item to the loader. If an item is constructed automatically,
         then it can be registered so the loader can provide it during resolveSceneItem.
 
         Return:
         None
 
         """
+
         if item.getFullName() in self.builtItems:
             # TODO: resolve using a path, instead of the name.
             # This will require that all items have a parent specified
             print "Warning. Non unique names used in Kraken:" + item.getFullName()
-            
+
         self.builtItems[item.getFullName()] = item
 
-        # Fire any registered callbacks for this item. 
+        # Fire any registered callbacks for this item.
         # This enables the loading of objects already created,
         # but dependent on this object to be completed.
         if item.getFullName() in self.callbacks:

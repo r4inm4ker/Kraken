@@ -5,7 +5,7 @@ Mat44 -- Matrix 3 transform object.
 """
 
 from math_object import MathObject
-from kraken.core.objects.kraken_system import KrakenSystem as KS
+from kraken.core.kraken_system import KrakenSystem as KS
 from vec import Vec3, Vec4
 
 
