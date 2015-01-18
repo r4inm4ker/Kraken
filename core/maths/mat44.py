@@ -151,6 +151,7 @@ class Mat44(MathObject):
 
         return True
 
+
     def clone(self):
         """Returns a clone of the Mat44.
 
@@ -164,7 +165,9 @@ class Mat44(MathObject):
         mat44.row1 = self.row1.clone();
         mat44.row2 = self.row2.clone();
         mat44.row3 = self.row3.clone();
+
         return mat44
+
 
     def setRows(self, row0, row1, row2, row3):
         """Set from vectors, row-wise.

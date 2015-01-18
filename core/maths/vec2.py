@@ -96,7 +96,9 @@ class Vec2(MathObject):
         vec2 = Vec2();
         vec2.x = self.x;
         vec2.y = self.y;
+
         return vec2
+
 
     def set(self, x, y):
         """Sets the x and y value from the input values.

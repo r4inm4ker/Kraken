@@ -206,6 +206,7 @@ class Euler(MathObject):
         euler.y = self.y;
         euler.z = self.z;
         euler.ro = self.ro;
+
         return euler
 
 

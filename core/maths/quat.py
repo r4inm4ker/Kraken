@@ -43,6 +43,7 @@ class Quat(MathObject):
 
         return "Quat(" + str(self.v) + "," + str(self.w) + ")"
 
+
     @property
     def v(self):
         """Gets vector of this quaternion.
@@ -111,7 +112,9 @@ class Quat(MathObject):
         quat = Quat();
         quat.w = self.w;
         quat.v = self.v.clone();
+
         return quat
+
 
     def set(self, v, w):
         """Sets the quaternion from vector and scalar values.

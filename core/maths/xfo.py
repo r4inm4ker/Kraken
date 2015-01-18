@@ -103,6 +103,7 @@ class Xfo(MathObject):
         Scalar, scaling property of this transform.
 
         """
+
         return Vec3(self.rtval.sc)
 
 
@@ -122,6 +123,7 @@ class Xfo(MathObject):
 
         return True
 
+
     def clone(self):
         """Returns a clone of the Xfo.
 
@@ -134,7 +136,9 @@ class Xfo(MathObject):
         xfo.tr = self.tr.clone();
         xfo.ori = self.ori.clone();
         xfo.sc = self.sc.clone();
+
         return xfo
+
 
     def set(self, tr, ori, sc):
         """Setter from the translation, rotation and scaling.
