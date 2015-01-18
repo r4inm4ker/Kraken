@@ -113,6 +113,19 @@ class Vec3(MathObject):
 
         return True
 
+    def clone(self):
+        """Returns a clone of the Vec3.
+
+        Return:
+        The cloned Vec3
+
+        """
+
+        vec3 = Vec3();
+        vec3.x = self.x;
+        vec3.y = self.y;
+        vec3.z = self.z;
+        return vec3
 
     def set(self, x, y, z):
         """Sets the x, y, and z value from the input values.

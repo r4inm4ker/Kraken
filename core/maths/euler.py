@@ -193,6 +193,22 @@ class Euler(MathObject):
         self.rtval.ro.order = KS.inst().rtVal('Integer', value)
 
 
+    def clone(self):
+        """Returns a clone of the Euler.
+
+        Return:
+        The cloned Euler
+
+        """
+
+        euler = Euler();
+        euler.x = self.x;
+        euler.y = self.y;
+        euler.z = self.z;
+        euler.ro = self.ro;
+        return euler
+
+
     # Setter from scalar components
     def set(self, x, y, z, ro=None):
         """Doc String.
@@ -205,7 +221,6 @@ class Euler(MathObject):
         True if successful.
 
         """
-        print "set(self, x, y, z, ro=None):" + str(ro)
         self.rtval.set('', KS.inst().rtVal('Scalar', x), KS.inst().rtVal('Scalar', y), KS.inst().rtVal('Scalar', z))
         if ro is not None:
             if isinstance(ro, basestring):

@@ -85,6 +85,19 @@ class Vec2(MathObject):
         return True
 
 
+    def clone(self):
+        """Returns a clone of the Vec2.
+
+        Return:
+        The cloned Vec2
+
+        """
+
+        vec2 = Vec2();
+        vec2.x = self.x;
+        vec2.y = self.y;
+        return vec2
+
     def set(self, x, y):
         """Sets the x and y value from the input values.
 

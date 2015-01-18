@@ -116,6 +116,19 @@ class Mat33(MathObject):
 
         return True
 
+    def clone(self):
+        """Returns a clone of the Mat33.
+
+        Return:
+        The cloned Mat33
+
+        """
+
+        mat33 = Mat33();
+        mat33.row0 = self.row0.clone();
+        mat33.row1 = self.row1.clone();
+        mat33.row2 = self.row2.clone();
+        return mat33
 
     def setRows(self, row0, row1, row2):
         """Setter from vectors, row-wise.

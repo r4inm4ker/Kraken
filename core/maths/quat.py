@@ -9,6 +9,7 @@ from kraken.core.objects.kraken_system import KrakenSystem as KS
 from math_object import MathObject
 
 from vec3 import Vec3
+from euler import Euler
 from mat33 import Mat33
 
 
@@ -23,7 +24,7 @@ class Quat(MathObject):
         if v is not None and self.getTypeName(v) == 'Quat':
             self.rtval = v
         else:
-            if v is not None and not isinstance(v, Vec3):
+            if v is not None and not isinstance(v, Vec3) and  not isinstance(v, Euler):
                 raise TypeError("Quat: Invalid type for 'v' argument. Must be a Vec3.")
 
             if w is not None and not isinstance(w, (int, float)):
@@ -31,6 +32,8 @@ class Quat(MathObject):
 
             client = KS.getInstance().getCoreClient()
             self.rtval = client.RT.types.Quat()
+            if v is not None and isinstance(v, Euler):
+                self.setFromEuler(v)
             if v is not None and w is not None:
                 self.set(v=v, w=w)
 
@@ -97,6 +100,18 @@ class Quat(MathObject):
 
         return True
 
+    def clone(self):
+        """Returns a clone of the Quat.
+
+        Return:
+        The cloned Quat
+
+        """
+
+        quat = Quat();
+        quat.w = self.w;
+        quat.v = self.v.clone();
+        return quat
 
     def set(self, v, w):
         """Sets the quaternion from vector and scalar values.

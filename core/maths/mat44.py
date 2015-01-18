@@ -18,7 +18,7 @@ class Mat44(MathObject):
         super(Mat44, self).__init__()
 
         if row0 is not None and self.getTypeName(row0) == 'Mat44':
-            self.rtval = x
+            self.rtval = row0
         else:
             self.rtval = KS.inst().rtVal('Mat44')
             if row0 is not None and row1 is not None and row2 is not None and row3 is not None:
@@ -151,6 +151,20 @@ class Mat44(MathObject):
 
         return True
 
+    def clone(self):
+        """Returns a clone of the Mat44.
+
+        Return:
+        The cloned Mat44
+
+        """
+
+        mat44 = Mat44();
+        mat44.row0 = self.row0.clone();
+        mat44.row1 = self.row1.clone();
+        mat44.row2 = self.row2.clone();
+        mat44.row3 = self.row3.clone();
+        return mat44
 
     def setRows(self, row0, row1, row2, row3):
         """Set from vectors, row-wise.

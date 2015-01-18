@@ -9,6 +9,7 @@ from kraken.core.objects.kraken_system import KrakenSystem as KS
 from vec3 import Vec3
 from quat import Quat
 from mat33 import Mat33
+from mat44 import Mat44
 
 
 class Xfo(MathObject):
@@ -121,6 +122,19 @@ class Xfo(MathObject):
 
         return True
 
+    def clone(self):
+        """Returns a clone of the Xfo.
+
+        Return:
+        The cloned Xfo
+
+        """
+
+        xfo = Xfo();
+        xfo.tr = self.tr.clone();
+        xfo.ori = self.ori.clone();
+        xfo.sc = self.sc.clone();
+        return xfo
 
     def set(self, tr, ori, sc):
         """Setter from the translation, rotation and scaling.
@@ -175,7 +189,7 @@ class Xfo(MathObject):
 
         """
 
-        return self.rtval.toMat44('Mat44')
+        return Mat44(self.rtval.toMat44('Mat44'))
 
     # # Equals operator
     # def Boolean self, == (Xfo a, Xfo b):

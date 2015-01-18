@@ -143,6 +143,21 @@ class Vec4(MathObject):
         self.rtval.t = KS.inst().rtVal('Scalar', value)
 
 
+    def clone(self):
+        """Returns a clone of the Vec4.
+
+        Return:
+        The cloned Vec4
+
+        """
+
+        vec4 = Vec4();
+        vec4.x = self.x;
+        vec4.y = self.y;
+        vec4.z = self.z;
+        return vec4
+
+
     def set(self, x, y, z, t):
         """Sets the x, y, z, and t value from the input values.
 
