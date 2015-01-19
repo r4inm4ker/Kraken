@@ -1,7 +1,4 @@
-from kraken.core.maths.vec import Vec3
-from kraken.core.maths.rotation import Euler
-from kraken.core.maths.rotation import Quat
-from kraken.core.maths.xfo import Xfo
+from kraken.core.maths import Vec3, Vec3, Euler, Quat, Xfo
 
 from kraken.core.objects.components.base_component import BaseComponent
 
@@ -56,21 +53,21 @@ class FootComponent(BaseComponent):
             footQuat = Quat(Vec3(0.6377, -0.5695, 0.3053), 0.4190)
             footPos = Vec3(1.841, 1.1516, -1.237)
 
-        footXfo.rot = footQuat.clone()
-        footXfo.tr.copy(footPos)
+        footXfo.ori = footQuat
+        footXfo.tr = footPos
 
         # Add Controls
         footCtrlSrtBuffer = SrtBuffer('foot', parent=self)
-        footCtrlSrtBuffer.xfo.copy(footXfo)
+        footCtrlSrtBuffer.xfo = footXfo
 
         footCtrl = CubeControl('foot', parent=footCtrlSrtBuffer)
         footCtrl.alignOnXAxis()
         footCtrl.scalePoints(Vec3(2.5, 1.5, 0.75))
-        footCtrl.xfo.copy(footCtrlSrtBuffer.xfo)
+        footCtrl.xfo = footCtrlSrtBuffer.xfo
 
         # Rig Ref objects
         footRefSrt = Locator('footRef', parent=self)
-        footRefSrt.xfo.copy(footCtrlSrtBuffer.xfo)
+        footRefSrt.xfo = footCtrlSrtBuffer.xfo
 
 
         # Add Component Params to IK control
@@ -100,14 +97,14 @@ class FootComponent(BaseComponent):
         # =====================
         # Setup Component Xfo I/O's
         legEndXfoInput = Locator('legEndXfo')
-        legEndXfoInput.xfo.copy(footCtrlSrtBuffer.xfo)
+        legEndXfoInput.xfo = footCtrlSrtBuffer.xfo
         legEndPosInput = Locator('legEndPos')
-        legEndPosInput.xfo.copy(footCtrlSrtBuffer.xfo)
+        legEndPosInput.xfo = footCtrlSrtBuffer.xfo
 
         footEndOutput = Locator('handEnd')
-        footEndOutput.xfo.copy(footCtrlSrtBuffer.xfo)
+        footEndOutput.xfo = footCtrlSrtBuffer.xfo
         footOutput = Locator('hand')
-        footOutput.xfo.copy(footCtrlSrtBuffer.xfo)
+        footOutput.xfo = footCtrlSrtBuffer.xfo
 
         # Setup componnent Attribute I/O's
         debugInputAttr = BoolAttribute('debug', True)

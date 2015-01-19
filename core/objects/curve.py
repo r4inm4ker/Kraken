@@ -60,7 +60,8 @@ class Curve(SceneItem):
 
         """
 
-        return copy.deepcopy(self.controlPoints)
+        # return copy.deepcopy(self.controlPoints)
+        return self.controlPoints
 
 
     def appendControlPoints(self, points):

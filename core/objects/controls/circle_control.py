@@ -5,7 +5,7 @@ BaseControl - Base Control.
 
 """
 
-from kraken.core.maths.vec import Vec3
+from kraken.core.maths import Vec3
 from kraken.core.objects.controls.base_control import BaseControl
 
 

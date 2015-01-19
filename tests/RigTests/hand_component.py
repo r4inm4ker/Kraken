@@ -1,7 +1,5 @@
-from kraken.core.maths.vec import Vec3
-from kraken.core.maths.rotation import Euler
-from kraken.core.maths.rotation import Quat
-from kraken.core.maths.xfo import Xfo
+
+from kraken.core.maths import Vec3, Vec3, Euler, Quat, Xfo
 
 from kraken.core.objects.components.base_component import BaseComponent
 
@@ -56,21 +54,21 @@ class HandComponent(BaseComponent):
             handQuat = Quat(Vec3(-0.0865, -0.2301, -0.2623), 0.9331)
             handPos = Vec3(7.1886, 12.2819, 0.4906)
 
-        handXfo.rot = handQuat.clone()
-        handXfo.tr.copy(handPos)
+        handXfo.ori = handQuat
+        handXfo.tr = handPos
 
         # Add Controls
         handCtrlSrtBuffer = SrtBuffer('hand', parent=self)
-        handCtrlSrtBuffer.xfo.copy(handXfo)
+        handCtrlSrtBuffer.xfo = handXfo
 
         handCtrl = CubeControl('hand', parent=handCtrlSrtBuffer)
         handCtrl.alignOnXAxis()
         handCtrl.scalePoints(Vec3(2.0, 0.75, 1.25))
-        handCtrl.xfo.copy(handCtrlSrtBuffer.xfo)
+        handCtrl.xfo = handCtrlSrtBuffer.xfo
 
         # Rig Ref objects
         handRefSrt = Locator('handRef', parent=self)
-        handRefSrt.xfo.copy(handCtrlSrtBuffer.xfo)
+        handRefSrt.xfo = handCtrlSrtBuffer.xfo
 
 
         # Add Component Params to IK control
@@ -100,14 +98,14 @@ class HandComponent(BaseComponent):
         # =====================
         # Setup Component Xfo I/O's
         armEndXfoInput = Locator('armEndXfo')
-        armEndXfoInput.xfo.copy(handCtrlSrtBuffer.xfo)
+        armEndXfoInput.xfo = handCtrlSrtBuffer.xfo
         armEndPosInput = Locator('armEndPos')
-        armEndPosInput.xfo.copy(handCtrlSrtBuffer.xfo)
+        armEndPosInput.xfo = handCtrlSrtBuffer.xfo
 
         handEndOutput = Locator('handEnd')
-        handEndOutput.xfo.copy(handCtrlSrtBuffer.xfo)
+        handEndOutput.xfo = handCtrlSrtBuffer.xfo
         handOutput = Locator('hand')
-        handOutput.xfo.copy(handCtrlSrtBuffer.xfo)
+        handOutput.xfo = handCtrlSrtBuffer.xfo
 
         # Setup componnent Attribute I/O's
         debugInputAttr = BoolAttribute('debug', True)

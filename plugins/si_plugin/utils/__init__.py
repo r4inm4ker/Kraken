@@ -45,6 +45,6 @@ def lockObjXfo(dccSceneItem):
 
         param.SetLock(constants.siLockLevelManipulation)
 
-    si.SetKeyableAttributes(dccSceneItem, "kine.local.pos.posx,kine.local.pos.posy,kine.local.pos.posz,kine.local.ori.euler.rotx,kine.local.ori.euler.roty,kine.local.ori.euler.rotz,kine.local.scl.sclx,kine.local.scl.scly,kine.local.scl.sclz", constants.siKeyableAttributeClear)
+    si.SetKeyableAttributes(dccSceneItem, "kine.local.pos.posx,kine.local.pos.posy,kine.local.pos.posz,kine.local.ori.euler.rotx,kine.local.ori.euler.roty,kine.local.ori.euler.rotz,kine.local.sc.sclx,kine.local.sc.scly,kine.local.sc.sclz", constants.siKeyableAttributeClear)
 
     return True
