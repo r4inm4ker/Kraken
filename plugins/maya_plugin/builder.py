@@ -566,7 +566,7 @@ class Builder(BaseBuilder):
             args = solver.getArguments('KrakenSolverArg[]')
 
             functionCall = "    solver.solve("
-            for i in range(len(args)):
+            for i in xrange(len(args)):
                 arg = args[i]
 
                 # Get the argument's input from the DCC
