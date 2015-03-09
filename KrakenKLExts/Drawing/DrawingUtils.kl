@@ -8,7 +8,7 @@ function InlineShape constructBoneShape(
 {
   InlineShape shape();
   PolygonMesh mesh = PolygonMesh();
-  mesh.drawBone2(Xfo(), length, radius, true);
+  mesh.drawBone(Xfo(), length, radius, true);
   shape = InlineMeshShape('rigBone', mesh);
 
   return shape;

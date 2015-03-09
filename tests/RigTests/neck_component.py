@@ -1,4 +1,4 @@
-from kraken.core.maths.vec import Vec3
+from kraken.core.maths import Vec3
 from kraken.core.maths.xfo import Xfo
 
 from kraken.core.objects.attributes.bool_attribute import BoolAttribute
@@ -25,9 +25,7 @@ class NeckComponent(BaseComponent):
 
         # Default values
         neckPosition = Vec3(0.0, 16.5572, -0.6915)
-        neckUpV = Vec3()
-        neckUpV.copy(neckPosition)
-        neckUpV = neckUpV.add(Vec3(0.0, 0.0, -1.0)).unit()
+        neckUpV = neckPosition.add(Vec3(0.0, 0.0, -1.0)).unit()
         neckEndPosition = Vec3(0.0, 17.4756, -0.421)
 
         # Calculate Clavicle Xfo
@@ -40,13 +38,13 @@ class NeckComponent(BaseComponent):
 
         # Add Guide Controls
         neckCtrlSrtBuffer = SrtBuffer('neck', parent=self)
-        neckCtrlSrtBuffer.xfo.copy(neckXfo)
+        neckCtrlSrtBuffer.xfo = neckXfo
 
         neckCtrl = PinControl('neck', parent=neckCtrlSrtBuffer)
         neckCtrl.scalePoints(Vec3(1.25, 1.25, 1.25))
         neckCtrl.translatePoints(Vec3(0, 0, -0.5))
         neckCtrl.rotatePoints(90, 0, 90)
-        neckCtrl.xfo.copy(neckXfo)
+        neckCtrl.xfo = neckXfo
         neckCtrl.setColor("orange")
 
 
@@ -65,11 +63,11 @@ class NeckComponent(BaseComponent):
         # =====================
         # Setup Component Xfo I/O's
         neckEndInput = Locator('neckBase')
-        neckEndInput.xfo.copy(neckXfo)
+        neckEndInput.xfo = neckXfo
         neckEndOutput = Locator('neckEnd')
-        neckEndOutput.xfo.copy(neckXfo)
+        neckEndOutput.xfo = neckXfo
         neckOutput = Locator('neck')
-        neckOutput.xfo.copy(neckXfo)
+        neckOutput.xfo = neckXfo
 
         # Setup componnent Attribute I/O's
         debugInputAttr = BoolAttribute('debug', True)
@@ -107,8 +105,8 @@ class NeckComponent(BaseComponent):
         # ===============
         # Add Splice Ops
         # ===============
-        # Add Deformer Splice Op
-        spliceOp = SpliceOperator("neckDeformerSpliceOp", "PoseConstraintSolver", "KrakenPoseConstraintSolver")
+        #Add Deformer Splice Op
+        spliceOp = SpliceOperator("neckDeformerSpliceOp", "PoseConstraintSolver", "Kraken")
         self.addOperator(spliceOp)
 
         # Add Att Inputs

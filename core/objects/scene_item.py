@@ -23,7 +23,7 @@ class SceneItem(object):
         self.flags = {}
         self.attributeGroups = []
         self.constraints = []
-        self.xfo = Xfo()
+        self.__xfo = Xfo()
         self.color = None
         self.visibility = True
         self.shapeVisibility = True
@@ -94,6 +94,50 @@ class SceneItem(object):
 
 
     # ==================
+    # Property Methods
+    # ==================
+
+    @property
+    def xfo(self):
+        """Gets xfo property of this SceneItem.
+
+        Return:
+        Scalar, xfo property of this SceneItem.
+
+        """
+
+        return self.__xfo
+
+
+    @xfo.setter
+    def xfo(self, value):
+        """Sets xfo of this SceneItem.
+
+        Note: In Python, objects are always referenced, meaning to get a unique
+        instance, an explicit clone is required. In KL, structs are passed by
+        value, meaning that every assignment of a struct causes a clone.
+
+        This means that in KL it is impossible for 2 objects to reference the
+        same KL math object. This is an important performance feature of KL.
+
+        The members of the KL Math objects have this property. 2 Xfos cannot
+        share the same tr value. Here we implcitly clone the math object to
+        ensure the same behavior as in KL.
+
+        Arguments:
+        value -- Xfo, vector to set the xfo by.
+
+        Return:
+        True if successful.
+
+        """
+
+        self.__xfo = value.clone()
+
+        return True
+
+
+    # ==================
     # Hierarchy Methods
     # ==================
     def getContainer(self):
@@ -105,7 +149,7 @@ class SceneItem(object):
         """
 
         parent = self.getParent()
-        while (parent.getKType() != 'Container' and parent is not None):
+        while (parent is not None and parent.getKType() != 'Container'):
             parent = parent.getParent()
 
         return parent
@@ -120,7 +164,7 @@ class SceneItem(object):
         """
 
         parent = self.getParent()
-        while (parent.getKType() != 'Layer' and parent is not None):
+        while (parent is not None and parent.getKType() != 'Layer'):
             parent = parent.getParent()
 
         return parent
