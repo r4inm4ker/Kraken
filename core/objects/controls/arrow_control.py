@@ -5,7 +5,7 @@ ArrowControl - Arrow Control.
 
 """
 
-from kraken.core.maths.vec import Vec3
+from kraken.core.maths.vec3 import Vec3
 from kraken.core.objects.controls.base_control import BaseControl
 
 

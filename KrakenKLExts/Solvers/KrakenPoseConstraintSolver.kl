@@ -1,5 +1,5 @@
-require Kraken;
 require InlineDrawing;
+require Geometry;
 
 object PoseConstraintSolver : KrakenSolver {
   Boolean debug;

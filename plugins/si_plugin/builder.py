@@ -195,7 +195,7 @@ class Builder(BaseBuilder):
 
         curvePoints = []
         for eachSubCurve in points:
-            subCurvePoints = [x.toArray() for x in eachSubCurve]
+            subCurvePoints = [[x.x, x.y, x.z] for x in eachSubCurve]
 
             formattedPoints = []
             for i in xrange(3):
@@ -253,7 +253,7 @@ class Builder(BaseBuilder):
 
         curvePoints = []
         for eachSubCurve in points:
-            subCurvePoints = [x.toArray() for x in eachSubCurve]
+            subCurvePoints = [[x.x, x.y, x.z] for x in eachSubCurve]
 
             formattedPoints = []
             for i in xrange(3):
@@ -579,8 +579,7 @@ class Builder(BaseBuilder):
             extension = kOperator.getExtension()
             client.loadExtension(extension)
 
-            client.loadExtension('KrakenSolver')
-            client.loadExtension('KrakenSolverArg')
+            client.loadExtension('Kraken')
 
             solverTypeName = kOperator.getSolverTypeName()
             klType = getattr(client.RT.types, solverTypeName)
@@ -597,7 +596,7 @@ class Builder(BaseBuilder):
             operatorOwnerArg = None
 
             args = solver.getArguments('KrakenSolverArg[]')
-            for i in range(len(args)):
+            for i in xrange(len(args)):
                 arg = args[i]
 
                 if arg.connectionType == 'io' and arg.dataType == 'Mat44':
@@ -617,8 +616,7 @@ class Builder(BaseBuilder):
 
             # Start constructing the source code.
             opSourceCode = ""
-            opSourceCode += "require KrakenSolver;\n"
-            opSourceCode += "require KrakenSolverArg;\n"
+            opSourceCode += "require Kraken;\n"
             opSourceCode += "require " + kOperator.getExtension() + ";\n\n"
             opSourceCode += "operator " + kOperator.getName() + "(\n"
 
@@ -628,7 +626,7 @@ class Builder(BaseBuilder):
             args = solver.getArguments('KrakenSolverArg[]')
 
             functionCall = "  solver.solve("
-            for i in range(len(args)):
+            for i in xrange(len(args)):
                 arg = args[i]
 
                 # Get the argument's input from the DCC
@@ -746,12 +744,12 @@ class Builder(BaseBuilder):
         dccSceneItem = self._getDCCSceneItem(kSceneItem)
 
         xfo = XSIMath.CreateTransform()
-        scl = XSIMath.CreateVector3(kSceneItem.xfo.scl.x, kSceneItem.xfo.scl.y, kSceneItem.xfo.scl.z)
+        sc = XSIMath.CreateVector3(kSceneItem.xfo.sc.x, kSceneItem.xfo.sc.y, kSceneItem.xfo.sc.z)
 
-        quat = XSIMath.CreateQuaternion(kSceneItem.xfo.rot.w, kSceneItem.xfo.rot.v.x, kSceneItem.xfo.rot.v.y, kSceneItem.xfo.rot.v.z)
+        quat = XSIMath.CreateQuaternion(kSceneItem.xfo.ori.w, kSceneItem.xfo.ori.v.x, kSceneItem.xfo.ori.v.y, kSceneItem.xfo.ori.v.z)
         tr = XSIMath.CreateVector3(kSceneItem.xfo.tr.x, kSceneItem.xfo.tr.y, kSceneItem.xfo.tr.z)
 
-        xfo.SetScaling(scl)
+        xfo.SetScaling(sc)
         xfo.SetRotationFromQuaternion(quat)
         xfo.SetTranslation(tr)
 

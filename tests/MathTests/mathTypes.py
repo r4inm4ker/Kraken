@@ -1,14 +1,14 @@
 from kraken.core.maths import *
 from kraken.core.objects.kraken_loader import KrakenLoader 
+import json
 
 if __name__ == "__main__":
     tr = Vec3(32,35,234)
+    print "tr:" + str(tr)
     sc = Vec3(2.3,2.3,2.3)
+    print "sc:" + str(sc)
     xfo = Xfo(tr=tr, sc=sc)
-    jsonData = xfo.jsonEncode()
-    print "Xfo:" + str(jsonData)
+    print "xfo:" + str(xfo)
 
-    loader = KrakenLoader()
-    xfo2 = Xfo()
-    xfo2.jsonDecode(jsonData, loader)
-    print "Xfo2:" + str(xfo2)
+    euler = Euler()
+    print "euler:" + str(euler)
