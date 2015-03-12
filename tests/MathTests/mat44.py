@@ -1,5 +1,4 @@
 from kraken.core.maths import *
-from kraken.core.objects.kraken_loader import KrakenLoader 
 import json
 
 if __name__ == "__main__":
