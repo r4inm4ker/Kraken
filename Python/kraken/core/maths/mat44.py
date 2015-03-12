@@ -18,9 +18,9 @@ class Mat44(MathObject):
         super(Mat44, self).__init__()
 
         if row0 is not None and self.getTypeName(row0) == 'Mat44':
-            self.rtval = row0
+            self._rtval = row0
         else:
-            self.rtval = KS.inst().rtVal('Mat44')
+            self._rtval = KS.inst().rtVal('Mat44')
             if row0 is not None and row1 is not None and row2 is not None and row3 is not None:
                 self.setRows(row0, row1, row2, row3)
 
@@ -45,7 +45,7 @@ class Mat44(MathObject):
 
         """
 
-        return Vec4(self.rtval.row0)
+        return Vec4(self._rtval.row0)
 
 
     @row0.setter
@@ -60,7 +60,7 @@ class Mat44(MathObject):
 
         """
 
-        self.rtval.row0 = KS.inst().rtVal('Scalar', value)
+        self._rtval.row0 = KS.inst().rtVal('Scalar', value)
 
         return True
 
@@ -74,7 +74,7 @@ class Mat44(MathObject):
 
         """
 
-        return Vec4(self.rtval.row1)
+        return Vec4(self._rtval.row1)
 
 
     @row1.setter
@@ -89,7 +89,7 @@ class Mat44(MathObject):
 
         """
 
-        self.rtval.row1 = KS.inst().rtVal('Scalar', value)
+        self._rtval.row1 = KS.inst().rtVal('Scalar', value)
 
         return True
 
@@ -103,7 +103,7 @@ class Mat44(MathObject):
 
         """
 
-        return Vec4(self.rtval.row2)
+        return Vec4(self._rtval.row2)
 
 
     @row2.setter
@@ -118,7 +118,7 @@ class Mat44(MathObject):
 
         """
 
-        self.rtval.row2 = KS.inst().rtVal('Scalar', value)
+        self._rtval.row2 = KS.inst().rtVal('Scalar', value)
 
         return True
 
@@ -132,7 +132,7 @@ class Mat44(MathObject):
 
         """
 
-        return Vec4(self.rtval.row3)
+        return Vec4(self._rtval.row3)
 
 
     @row3.setter
@@ -147,7 +147,7 @@ class Mat44(MathObject):
 
         """
 
-        self.rtval.row3 = KS.inst().rtVal('Scalar', value)
+        self._rtval.row3 = KS.inst().rtVal('Scalar', value)
 
         return True
 
@@ -183,7 +183,7 @@ class Mat44(MathObject):
 
         """
 
-        self.rtval.setRows('', KS.inst().rtVal('Vec4', row0), KS.inst().rtVal('Vec4', row0), KS.inst().rtVal('Vec4', row2), KS.inst().rtVal('Vec4', row3))
+        self._rtval.setRows('', KS.inst().rtVal('Vec4', row0), KS.inst().rtVal('Vec4', row0), KS.inst().rtVal('Vec4', row2), KS.inst().rtVal('Vec4', row3))
 
         return True
 
@@ -202,7 +202,7 @@ class Mat44(MathObject):
 
         """
 
-        self.rtval.setColumns('', KS.inst().rtVal('Vec4', col0), KS.inst().rtVal('Vec4', col0), KS.inst().rtVal('Vec4', col2), KS.inst().rtVal('Vec4', col3))
+        self._rtval.setColumns('', KS.inst().rtVal('Vec4', col0), KS.inst().rtVal('Vec4', col0), KS.inst().rtVal('Vec4', col2), KS.inst().rtVal('Vec4', col3))
 
         return True
 
@@ -215,7 +215,7 @@ class Mat44(MathObject):
 
         """
 
-        self.rtval.setNull('')
+        self._rtval.setNull('')
 
         return True
 
@@ -228,7 +228,7 @@ class Mat44(MathObject):
 
         """
 
-        self.rtval.setIdentity('')
+        self._rtval.setIdentity('')
 
         return True
 
@@ -244,7 +244,7 @@ class Mat44(MathObject):
 
         """
 
-        self.rtval.setDiagonal('', KS.inst().rtVal('Scalar', v))
+        self._rtval.setDiagonal('', KS.inst().rtVal('Scalar', v))
 
         return True
 
@@ -261,7 +261,7 @@ class Mat44(MathObject):
 
         """
 
-        self.rtval.setDiagonal('', KS.inst().rtVal('Vec3', v))
+        self._rtval.setDiagonal('', KS.inst().rtVal('Vec3', v))
 
         return True
 
@@ -277,7 +277,7 @@ class Mat44(MathObject):
 
         """
 
-        return self.rtval.equal('Boolean', KS.inst().rtVal('Mat44', other))
+        return self._rtval.equal('Boolean', KS.inst().rtVal('Mat44', other))
 
 
     def almostEqual(self, other, precision):
@@ -292,7 +292,7 @@ class Mat44(MathObject):
 
         """
 
-        return self.rtval.almostEqual('Boolean', KS.inst().rtVal('Mat44', other), KS.inst().rtVal('Scalar', precision))
+        return self._rtval.almostEqual('Boolean', KS.inst().rtVal('Mat44', other), KS.inst().rtVal('Scalar', precision))
 
 
     def almostEqual(self, other):
@@ -307,7 +307,7 @@ class Mat44(MathObject):
 
         """
 
-        return self.rtval.almostEqual('Boolean', KS.inst().rtVal('Mat44', other))
+        return self._rtval.almostEqual('Boolean', KS.inst().rtVal('Mat44', other))
 
 
     # # Equals operator
@@ -366,7 +366,7 @@ class Mat44(MathObject):
 
         """
 
-        return Mat44(self.rtval.add('Mat44', KS.inst().rtVal('Mat44', other)))
+        return Mat44(self._rtval.add('Mat44', KS.inst().rtVal('Mat44', other)))
 
 
     def subtract(self, other):
@@ -380,7 +380,7 @@ class Mat44(MathObject):
 
         """
 
-        return Mat44(self.rtval.subtract('Mat44', KS.inst().rtVal('Mat44', other)))
+        return Mat44(self._rtval.subtract('Mat44', KS.inst().rtVal('Mat44', other)))
 
 
     def multiply(self, other):
@@ -394,7 +394,7 @@ class Mat44(MathObject):
 
         """
 
-        return Mat44(self.rtval.multiply('Mat44', KS.inst().rtVal('Mat44', other)))
+        return Mat44(self._rtval.multiply('Mat44', KS.inst().rtVal('Mat44', other)))
 
 
     def multiplyScalar(self, other):
@@ -408,7 +408,7 @@ class Mat44(MathObject):
 
         """
 
-        return Mat44(self.rtval.multiplyScalar('Mat44', KS.inst().rtVal('Scalar', other)))
+        return Mat44(self._rtval.multiplyScalar('Mat44', KS.inst().rtVal('Scalar', other)))
 
 
     def multiplyVector(self, other):
@@ -422,7 +422,7 @@ class Mat44(MathObject):
 
         """
 
-        return Vec3(self.rtval.multiplyVector('Vec3', KS.inst().rtVal('Vec3', other)))
+        return Vec3(self._rtval.multiplyVector('Vec3', KS.inst().rtVal('Vec3', other)))
 
 
     def divideScalar(self, other):
@@ -436,7 +436,7 @@ class Mat44(MathObject):
 
         """
 
-        return Mat44(self.rtval.divideScalar('Mat44', other))
+        return Mat44(self._rtval.divideScalar('Mat44', other))
 
 
     def determinant(self):
@@ -447,7 +447,7 @@ class Mat44(MathObject):
 
         """
 
-        return self.rtval.determinant('Scalar')
+        return self._rtval.determinant('Scalar')
 
 
     def adjoint(self):
@@ -458,7 +458,7 @@ class Mat44(MathObject):
 
         """
 
-        return Mat44(self.rtval.adjoint('Mat44'))
+        return Mat44(self._rtval.adjoint('Mat44'))
 
 
     def inverse(self):
@@ -469,7 +469,7 @@ class Mat44(MathObject):
 
         """
 
-        return Mat44(self.rtval.inverse('Mat44'))
+        return Mat44(self._rtval.inverse('Mat44'))
 
 
     def inverse_safe(self):
@@ -481,7 +481,7 @@ class Mat44(MathObject):
 
         """
 
-        return Mat44(self.rtval.inverse_safe('Mat44'))
+        return Mat44(self._rtval.inverse_safe('Mat44'))
 
 
     def transpose(self):
@@ -492,4 +492,4 @@ class Mat44(MathObject):
 
         """
 
-        return Mat44(self.rtval.transpose('Mat44'))
+        return Mat44(self._rtval.transpose('Mat44'))

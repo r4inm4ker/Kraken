@@ -20,9 +20,9 @@ class Xfo(MathObject):
 
         super(Xfo, self).__init__()
         if tr is not None and self.getTypeName(tr) == 'Xfo':
-            self.rtval = tr
+            self._rtval = tr
         else:
-            self.rtval = KS.inst().rtVal('Xfo')
+            self._rtval = KS.inst().rtVal('Xfo')
             if tr is not None:
                 self.tr = tr
             if ori is not None:
@@ -46,7 +46,7 @@ class Xfo(MathObject):
 
         """
 
-        return Vec3(self.rtval.tr)
+        return Vec3(self._rtval.tr)
 
 
     @tr.setter
@@ -61,7 +61,7 @@ class Xfo(MathObject):
 
         """
 
-        self.rtval.tr = KS.inst().rtVal('Vec3', value)
+        self._rtval.tr = KS.inst().rtVal('Vec3', value)
 
         return True
 
@@ -75,7 +75,7 @@ class Xfo(MathObject):
 
         """
 
-        return Quat(self.rtval.ori)
+        return Quat(self._rtval.ori)
 
 
     @ori.setter
@@ -90,7 +90,7 @@ class Xfo(MathObject):
 
         """
 
-        self.rtval.ori = KS.inst().rtVal('Quat', value)
+        self._rtval.ori = KS.inst().rtVal('Quat', value)
 
         return True
 
@@ -104,7 +104,7 @@ class Xfo(MathObject):
 
         """
 
-        return Vec3(self.rtval.sc)
+        return Vec3(self._rtval.sc)
 
 
     @sc.setter
@@ -119,7 +119,7 @@ class Xfo(MathObject):
 
         """
 
-        self.rtval.sc = KS.inst().rtVal('Vec3', value)
+        self._rtval.sc = KS.inst().rtVal('Vec3', value)
 
         return True
 
@@ -153,7 +153,7 @@ class Xfo(MathObject):
 
         """
 
-        self.rtval.set('', KS.inst().rtVal('Vec3', tr), KS.inst().rtVal('Quat', ori), KS.inst().rtVal('Vec3', sc))
+        self._rtval.set('', KS.inst().rtVal('Vec3', tr), KS.inst().rtVal('Quat', ori), KS.inst().rtVal('Vec3', sc))
 
         return True
 
@@ -166,7 +166,7 @@ class Xfo(MathObject):
 
         """
 
-        self.rtval.setIdentity('')
+        self._rtval.setIdentity('')
 
         return True
 
@@ -182,7 +182,7 @@ class Xfo(MathObject):
 
         """
 
-        return Xfo(self.rtval.setFromMat44('Xfo', KS.inst().rtVal('Mat44', m)))
+        return Xfo(self._rtval.setFromMat44('Xfo', KS.inst().rtVal('Mat44', m)))
 
 
     def toMat44(self):
@@ -193,7 +193,7 @@ class Xfo(MathObject):
 
         """
 
-        return Mat44(self.rtval.toMat44('Mat44'))
+        return Mat44(self._rtval.toMat44('Mat44'))
 
     # # Equals operator
     # def Boolean self, == (Xfo a, Xfo b):
@@ -223,7 +223,7 @@ class Xfo(MathObject):
 
         """
 
-        return Xfo(self.rtval.multiply('Xfo', KS.inst().rtVal('Xfo', xfo)))
+        return Xfo(self._rtval.multiply('Xfo', KS.inst().rtVal('Xfo', xfo)))
 
 
     def transformVector(self, v):
@@ -237,7 +237,7 @@ class Xfo(MathObject):
 
         """
 
-        return Vec3(self.rtval.transformVector('Vec3', KS.inst().rtVal('Vec3', v)))
+        return Vec3(self._rtval.transformVector('Vec3', KS.inst().rtVal('Vec3', v)))
 
 
     def transformRay(self, ray):
@@ -251,7 +251,7 @@ class Xfo(MathObject):
 
         """
 
-        return Ray(self.rtval.transformRay('Ray', KS.inst().rtVal('Ray', ray)))
+        return Ray(self._rtval.transformRay('Ray', KS.inst().rtVal('Ray', ray)))
 
 
     def inverse(self):
@@ -262,7 +262,7 @@ class Xfo(MathObject):
 
         """
 
-        return Xfo(self.rtval.inverse('Xfo'))
+        return Xfo(self._rtval.inverse('Xfo'))
 
 
     def inverseTransformVector(self, vec):
@@ -279,7 +279,7 @@ class Xfo(MathObject):
 
         """
 
-        return Vec3(self.rtval.inverseTransformVector('Vec3', KS.inst().rtVal('Vec3', vec)))
+        return Vec3(self._rtval.inverseTransformVector('Vec3', KS.inst().rtVal('Vec3', vec)))
 
 
     def linearInterpolate(self, other, t):
@@ -295,7 +295,7 @@ class Xfo(MathObject):
 
         """
 
-        return Xfo(self.rtval.linearInterpolate('Xfo', KS.inst().rtVal('Xfo', other), KS.inst().rtVal('Scalar', t)))
+        return Xfo(self._rtval.linearInterpolate('Xfo', KS.inst().rtVal('Xfo', other), KS.inst().rtVal('Scalar', t)))
 
 
     def setFromVectors(self, inVec1, inVec2, inVec3, translation):

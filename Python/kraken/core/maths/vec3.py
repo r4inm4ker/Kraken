@@ -17,9 +17,9 @@ class Vec3(MathObject):
 
         super(Vec3, self).__init__()
         if self.getTypeName(x) == 'Vec3':
-            self.rtval = x
+            self._rtval = x
         else:
-            self.rtval = KS.inst().rtVal('Vec3')
+            self._rtval = KS.inst().rtVal('Vec3')
             self.set(x=x, y=y, z=z)
 
 
@@ -38,7 +38,7 @@ class Vec3(MathObject):
 
         """
 
-        return self.rtval.x
+        return self._rtval.x
 
 
     @x.setter
@@ -53,7 +53,7 @@ class Vec3(MathObject):
 
         """
 
-        self.rtval.x = KS.inst().rtVal('Scalar', value)
+        self._rtval.x = KS.inst().rtVal('Scalar', value)
 
         return True
 
@@ -67,7 +67,7 @@ class Vec3(MathObject):
 
         """
 
-        return self.rtval.y
+        return self._rtval.y
 
 
     @y.setter
@@ -82,7 +82,7 @@ class Vec3(MathObject):
 
         """
 
-        self.rtval.y = KS.inst().rtVal('Scalar', value)
+        self._rtval.y = KS.inst().rtVal('Scalar', value)
 
 
     @property
@@ -94,7 +94,7 @@ class Vec3(MathObject):
 
         """
 
-        return self.rtval.z
+        return self._rtval.z
 
 
     @z.setter
@@ -109,7 +109,7 @@ class Vec3(MathObject):
 
         """
 
-        self.rtval.z = KS.inst().rtVal('Scalar', value)
+        self._rtval.z = KS.inst().rtVal('Scalar', value)
 
         return True
 
@@ -143,7 +143,7 @@ class Vec3(MathObject):
 
         """
 
-        self.rtval.set('', KS.inst().rtVal('Scalar', x), KS.inst().rtVal('Scalar', y), KS.inst().rtVal('Scalar', z))
+        self._rtval.set('', KS.inst().rtVal('Scalar', x), KS.inst().rtVal('Scalar', y), KS.inst().rtVal('Scalar', z))
 
         return True
 
@@ -156,7 +156,7 @@ class Vec3(MathObject):
 
         """
 
-        self.rtval.setNull('')
+        self._rtval.setNull('')
 
         return True
 
@@ -172,7 +172,7 @@ class Vec3(MathObject):
 
         """
 
-        return self.rtval.set('Boolean', other.rtval)
+        return self._rtval.set('Boolean', other._rtval)
 
 
     def almostEqual(self, other, precision):
@@ -187,7 +187,7 @@ class Vec3(MathObject):
 
         """
 
-        return self.rtval.almostEqual('Boolean', other.rtval, KS.inst().rtVal('Scalar', precision))
+        return self._rtval.almostEqual('Boolean', other._rtval, KS.inst().rtVal('Scalar', precision))
 
 
     def almostEqual(self, other):
@@ -202,7 +202,7 @@ class Vec3(MathObject):
 
         """
 
-        return self.rtval.almostEqual('Boolean', other.rtval)
+        return self._rtval.almostEqual('Boolean', other._rtval)
 
 
     def component(self, i):
@@ -216,7 +216,7 @@ class Vec3(MathObject):
 
         """
 
-        return self.rtval.component('Scalar', KS.inst().rtVal('Size', i))
+        return self._rtval.component('Scalar', KS.inst().rtVal('Size', i))
 
 
     # Sets the component of this vector by index
@@ -232,7 +232,7 @@ class Vec3(MathObject):
 
         """
 
-        return self.rtval.setComponent('', KS.inst().rtVal('Size', i), KS.inst().rtVal('Scalar', v))
+        return self._rtval.setComponent('', KS.inst().rtVal('Size', i), KS.inst().rtVal('Scalar', v))
 
 
     # # Equals operator
@@ -296,7 +296,7 @@ class Vec3(MathObject):
 
         """
 
-        return Vec3(self.rtval.add('Vec3', other.rtval))
+        return Vec3(self._rtval.add('Vec3', other._rtval))
 
 
     def subtract(self, other):
@@ -310,7 +310,7 @@ class Vec3(MathObject):
 
         """
 
-        return Vec3(self.rtval.subtract('Vec3', other.rtval))
+        return Vec3(self._rtval.subtract('Vec3', other._rtval))
 
 
     def multiply(self, other):
@@ -324,7 +324,7 @@ class Vec3(MathObject):
 
         """
 
-        return Vec3(self.rtval.multiply('Vec3', other.rtval))
+        return Vec3(self._rtval.multiply('Vec3', other._rtval))
 
 
     def divide(self, other):
@@ -338,7 +338,7 @@ class Vec3(MathObject):
 
         """
 
-        return Vec3(self.rtval.divide('Vec3', other.rtval))
+        return Vec3(self._rtval.divide('Vec3', other._rtval))
 
 
     def multiplyScalar(self, other):
@@ -352,7 +352,7 @@ class Vec3(MathObject):
 
         """
 
-        return Vec3(self.rtval.multiplyScalar('Vec3', KS.inst().rtVal('Scalar', other)))
+        return Vec3(self._rtval.multiplyScalar('Vec3', KS.inst().rtVal('Scalar', other)))
 
 
     def divideScalar(self, other):
@@ -366,7 +366,7 @@ class Vec3(MathObject):
 
         """
 
-        return Vec3(self.rtval.divideScalar('Vec3', KS.inst().rtVal('Scalar', other)))
+        return Vec3(self._rtval.divideScalar('Vec3', KS.inst().rtVal('Scalar', other)))
 
 
     def negate(self):
@@ -377,7 +377,7 @@ class Vec3(MathObject):
 
         """
 
-        return Vec3(self.rtval.negate('Vec3'))
+        return Vec3(self._rtval.negate('Vec3'))
 
 
     def inverse(self):
@@ -388,7 +388,7 @@ class Vec3(MathObject):
 
         """
 
-        return Vec3(self.rtval.inverse('Vec3'))
+        return Vec3(self._rtval.inverse('Vec3'))
 
 
     def dot(self, other):
@@ -402,7 +402,7 @@ class Vec3(MathObject):
 
         """
 
-        return self.rtval.dot('Scalar', other.rtval)
+        return self._rtval.dot('Scalar', other._rtval)
 
 
     def cross(self, other):
@@ -416,7 +416,7 @@ class Vec3(MathObject):
 
         """
 
-        return Vec3(self.rtval.cross('Vec3', other.rtval))
+        return Vec3(self._rtval.cross('Vec3', other._rtval))
 
 
     def lengthSquared(self):
@@ -427,7 +427,7 @@ class Vec3(MathObject):
 
         """
 
-        return self.rtval.lengthSquared('Scalar')
+        return self._rtval.lengthSquared('Scalar')
 
 
     def length(self):
@@ -438,7 +438,7 @@ class Vec3(MathObject):
 
         """
 
-        return self.rtval.length('Scalar')
+        return self._rtval.length('Scalar')
 
 
     def unit(self):
@@ -449,7 +449,7 @@ class Vec3(MathObject):
 
         """
 
-        return Vec3(self.rtval.unit('Vec3'))
+        return Vec3(self._rtval.unit('Vec3'))
 
 
     def unit_safe(self):
@@ -461,7 +461,7 @@ class Vec3(MathObject):
 
         """
 
-        return Vec3(self.rtval.unit_safe('Vec3'))
+        return Vec3(self._rtval.unit_safe('Vec3'))
 
 
     def setUnit(self):
@@ -473,7 +473,7 @@ class Vec3(MathObject):
 
         """
 
-        return self.rtval.setUnit('Scalar')
+        return self._rtval.setUnit('Scalar')
 
 
     def normalize(self):
@@ -484,7 +484,7 @@ class Vec3(MathObject):
 
         """
 
-        return self.rtval.normalize('Scalar')
+        return self._rtval.normalize('Scalar')
 
 
     def clamp(self, min, max):
@@ -499,7 +499,7 @@ class Vec3(MathObject):
 
         """
 
-        return Vec3(self.rtval.clamp('Vec3', min.rtval, max.rtval))
+        return Vec3(self._rtval.clamp('Vec3', min._rtval, max._rtval))
 
 
     def unitsAngleTo(self, other):
@@ -514,7 +514,7 @@ class Vec3(MathObject):
 
         """
 
-        return self.rtval.unitsAngleTo('Scalar', other.rtval)
+        return self._rtval.unitsAngleTo('Scalar', other._rtval)
 
 
     def angleTo(self, other):
@@ -528,7 +528,7 @@ class Vec3(MathObject):
 
         """
 
-        return self.rtval.angleTo('Scalar', other.rtval)
+        return self._rtval.angleTo('Scalar', other._rtval)
 
 
     # Returns the distance of this vector to another one
@@ -543,7 +543,7 @@ class Vec3(MathObject):
 
         """
 
-        return self.rtval.distanceTo('Scalar', other.rtval)
+        return self._rtval.distanceTo('Scalar', other._rtval)
 
 
     def linearInterpolate(self, other, t):
@@ -559,7 +559,7 @@ class Vec3(MathObject):
 
         """
 
-        return Vec3(self.rtval.linearInterpolate('Vec3', KS.inst().rtVal('Scalar', t)))
+        return Vec3(self._rtval.linearInterpolate('Vec3', KS.inst().rtVal('Scalar', t)))
 
 
     def distanceToLine(self, lineP0, lineP1):
@@ -575,7 +575,7 @@ class Vec3(MathObject):
 
         """
 
-        return self.rtval.distanceToLine('Scalar', lineP0.rtval, lineP1.rtval)
+        return self._rtval.distanceToLine('Scalar', lineP0._rtval, lineP1._rtval)
 
 
     def distanceToSegment(self, segmentP0, segmentP1):
@@ -591,4 +591,4 @@ class Vec3(MathObject):
 
         """
 
-        return self.rtval.distanceToSegment('Scalar', segmentP0.rtval, segmentP1.rtval)
+        return self._rtval.distanceToSegment('Scalar', segmentP0._rtval, segmentP1._rtval)

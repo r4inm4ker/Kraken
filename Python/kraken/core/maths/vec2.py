@@ -17,7 +17,7 @@ class Vec2(MathObject):
 
         super(Vec2, self).__init__()
 
-        self.rtval = KS.inst().rtVal('Vec2')
+        self._rtval = KS.inst().rtVal('Vec2')
         self.set(x=x, y=y)
 
 
@@ -36,7 +36,7 @@ class Vec2(MathObject):
 
         """
 
-        return self.rtval.x
+        return self._rtval.x
 
 
     @x.setter
@@ -51,7 +51,7 @@ class Vec2(MathObject):
 
         """
 
-        self.rtval.x = KS.inst().rtVal('Scalar', value)
+        self._rtval.x = KS.inst().rtVal('Scalar', value)
 
         return True
 
@@ -65,7 +65,7 @@ class Vec2(MathObject):
 
         """
 
-        return self.rtval.y
+        return self._rtval.y
 
 
     @y.setter
@@ -80,7 +80,7 @@ class Vec2(MathObject):
 
         """
 
-        self.rtval.y = KS.inst().rtVal('Scalar', value)
+        self._rtval.y = KS.inst().rtVal('Scalar', value)
 
         return True
 
@@ -112,6 +112,6 @@ class Vec2(MathObject):
 
         """
 
-        self.rtval.set('', KS.inst().rtVal('Scalar', x), KS.inst().rtVal('Scalar', y))
+        self._rtval.set('', KS.inst().rtVal('Scalar', x), KS.inst().rtVal('Scalar', y))
 
         return True

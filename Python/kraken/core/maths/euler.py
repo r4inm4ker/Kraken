@@ -57,9 +57,9 @@ class Euler(MathObject):
                 raise TypeError("Euler: Invalid type for 'ro' argument. Must be an int or a string.")
 
         if x is not None and self.getTypeName(x) == 'Euler':
-            self.rtval = x
+            self._rtval = x
         else:
-            self.rtval = KS.inst().rtVal('Euler')
+            self._rtval = KS.inst().rtVal('Euler')
             if x is not None and y is not None and z is not None:
                 if ro is not None:
                     self.set(x=x, y=y, z=z, ro=ro)
@@ -86,7 +86,7 @@ class Euler(MathObject):
 
         """
 
-        return self.rtval.x
+        return self._rtval.x
 
 
     @x.setter
@@ -101,7 +101,7 @@ class Euler(MathObject):
 
         """
 
-        self.rtval.x = KS.inst().rtVal('Scalar', value)
+        self._rtval.x = KS.inst().rtVal('Scalar', value)
 
 
     @property
@@ -116,7 +116,7 @@ class Euler(MathObject):
 
         """
 
-        return self.rtval.y
+        return self._rtval.y
 
 
     @y.setter
@@ -131,7 +131,7 @@ class Euler(MathObject):
 
         """
 
-        self.rtval.y = KS.inst().rtVal('Scalar', value)
+        self._rtval.y = KS.inst().rtVal('Scalar', value)
 
 
     @property
@@ -146,7 +146,7 @@ class Euler(MathObject):
 
         """
 
-        return self.rtval.z
+        return self._rtval.z
 
 
     @z.setter
@@ -161,7 +161,7 @@ class Euler(MathObject):
 
         """
 
-        self.rtval.z = KS.inst().rtVal('Scalar', value)
+        self._rtval.z = KS.inst().rtVal('Scalar', value)
 
 
     @property
@@ -176,7 +176,7 @@ class Euler(MathObject):
 
         """
 
-        return rotationOrderIntToStrMapping[self.rtval.ro.order]
+        return rotationOrderIntToStrMapping[self._rtval.ro.order]
 
 
     @ro.setter
@@ -190,7 +190,7 @@ class Euler(MathObject):
         True if successful.
 
         """
-        self.rtval.ro.order = KS.inst().rtVal('Integer', value)
+        self._rtval.ro.order = KS.inst().rtVal('Integer', value)
 
 
     def clone(self):
@@ -222,11 +222,11 @@ class Euler(MathObject):
         True if successful.
 
         """
-        self.rtval.set('', KS.inst().rtVal('Scalar', x), KS.inst().rtVal('Scalar', y), KS.inst().rtVal('Scalar', z))
+        self._rtval.set('', KS.inst().rtVal('Scalar', x), KS.inst().rtVal('Scalar', y), KS.inst().rtVal('Scalar', z))
         if ro is not None:
             if isinstance(ro, basestring):
                 ro = rotationOrderStrToIntMapping[ro]
-            self.rtval.ro.order = KS.inst().rtVal('Integer', ro)
+            self._rtval.ro.order = KS.inst().rtVal('Integer', ro)
 
 
 
@@ -241,7 +241,7 @@ class Euler(MathObject):
 
         """
 
-        return self.rtval.equal('Boolean', KS.inst().rtVal('Euler', other))
+        return self._rtval.equal('Boolean', KS.inst().rtVal('Euler', other))
 
 
     def almostEqual(self, other, precision):
@@ -256,7 +256,7 @@ class Euler(MathObject):
 
         """
 
-        return self.rtval.almostEqual('Boolean', KS.inst().rtVal('Euler', other), KS.inst().rtVal('Scalar', precision))
+        return self._rtval.almostEqual('Boolean', KS.inst().rtVal('Euler', other), KS.inst().rtVal('Scalar', precision))
 
 
     def toMat33(self):
@@ -267,7 +267,7 @@ class Euler(MathObject):
 
         """
 
-        return Mat33(self.rtval.toMat33('Mat33'))
+        return Mat33(self._rtval.toMat33('Mat33'))
 
 
 

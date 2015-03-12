@@ -18,9 +18,9 @@ class Mat33(MathObject):
         super(Mat33, self).__init__()
 
         if row0 is not None and self.getTypeName(row0) == 'Mat33':
-            self.rtval = row0
+            self._rtval = row0
         else:
-            self.rtval = KS.inst().rtVal('Mat33')
+            self._rtval = KS.inst().rtVal('Mat33')
             if row0 is not None and row1 is not None and row2 is not None:
                 self.setRows(row0, row1, row2)
 
@@ -39,7 +39,7 @@ class Mat33(MathObject):
 
         """
 
-        return Vec3(self.rtval.row0)
+        return Vec3(self._rtval.row0)
 
 
     @row0.setter
@@ -54,7 +54,7 @@ class Mat33(MathObject):
 
         """
 
-        self.rtval.row0 = KS.inst().rtVal('Scalar', value)
+        self._rtval.row0 = KS.inst().rtVal('Scalar', value)
 
         return True
 
@@ -68,7 +68,7 @@ class Mat33(MathObject):
 
         """
 
-        return Vec3(self.rtval.row1)
+        return Vec3(self._rtval.row1)
 
 
     @row1.setter
@@ -83,7 +83,7 @@ class Mat33(MathObject):
 
         """
 
-        self.rtval.row1 = KS.inst().rtVal('Scalar', value)
+        self._rtval.row1 = KS.inst().rtVal('Scalar', value)
 
         return True
 
@@ -97,7 +97,7 @@ class Mat33(MathObject):
 
         """
 
-        return Vec3(self.rtval.row2)
+        return Vec3(self._rtval.row2)
 
 
     @row2.setter
@@ -112,7 +112,7 @@ class Mat33(MathObject):
 
         """
 
-        self.rtval.row2 = KS.inst().rtVal('Scalar', value)
+        self._rtval.row2 = KS.inst().rtVal('Scalar', value)
 
         return True
 
@@ -146,7 +146,7 @@ class Mat33(MathObject):
 
         """
 
-        self.rtval.setRows('', KS.inst().rtVal('Vec3', row0), KS.inst().rtVal('Vec3', row1), KS.inst().rtVal('Vec3', row2))
+        self._rtval.setRows('', KS.inst().rtVal('Vec3', row0), KS.inst().rtVal('Vec3', row1), KS.inst().rtVal('Vec3', row2))
 
         return True
 
@@ -164,7 +164,7 @@ class Mat33(MathObject):
 
         """
 
-        self.rtval.setColumns('', KS.inst().rtVal('Vec3', col0), KS.inst().rtVal('Vec3', col1), KS.inst().rtVal('Vec3', col2))
+        self._rtval.setColumns('', KS.inst().rtVal('Vec3', col0), KS.inst().rtVal('Vec3', col1), KS.inst().rtVal('Vec3', col2))
 
         return True
 
@@ -177,7 +177,7 @@ class Mat33(MathObject):
 
         """
 
-        self.rtval.setNull('')
+        self._rtval.setNull('')
 
         return True
 
@@ -190,7 +190,7 @@ class Mat33(MathObject):
 
         """
 
-        self.rtval.setIdentity('')
+        self._rtval.setIdentity('')
 
         return True
 
@@ -206,7 +206,7 @@ class Mat33(MathObject):
 
         """
 
-        self.rtval.setDiagonal('', KS.inst().rtVal('Scalar', v))
+        self._rtval.setDiagonal('', KS.inst().rtVal('Scalar', v))
 
         return True
 
@@ -223,7 +223,7 @@ class Mat33(MathObject):
 
         """
 
-        self.rtval.setDiagonal('', KS.inst().rtVal('Vec3', v))
+        self._rtval.setDiagonal('', KS.inst().rtVal('Vec3', v))
 
         return True
 
@@ -239,7 +239,7 @@ class Mat33(MathObject):
 
         """
 
-        return self.rtval.equal('Boolean', KS.inst().rtVal('Mat33', other))
+        return self._rtval.equal('Boolean', KS.inst().rtVal('Mat33', other))
 
 
     def almostEqual(self, other, precision=None):
@@ -254,9 +254,9 @@ class Mat33(MathObject):
 
         """
         if precision is not None:
-            return self.rtval.almostEqual('Boolean', KS.inst().rtVal('Mat33', other), KS.inst().rtVal('Scalar', precision))
+            return self._rtval.almostEqual('Boolean', KS.inst().rtVal('Mat33', other), KS.inst().rtVal('Scalar', precision))
         else:
-            return self.rtval.almostEqual('Boolean', KS.inst().rtVal('Mat33', other))
+            return self._rtval.almostEqual('Boolean', KS.inst().rtVal('Mat33', other))
 
 
     # # Equals operator
@@ -326,7 +326,7 @@ class Mat33(MathObject):
 
         """
 
-        return Mat33(self.rtval.add('Mat33', KS.inst().rtVal('Mat33', other)))
+        return Mat33(self._rtval.add('Mat33', KS.inst().rtVal('Mat33', other)))
 
 
     def subtract(self, other):
@@ -340,7 +340,7 @@ class Mat33(MathObject):
 
         """
 
-        return Mat33(self.rtval.subtract('Mat33', KS.inst().rtVal('Mat33', other)))
+        return Mat33(self._rtval.subtract('Mat33', KS.inst().rtVal('Mat33', other)))
 
 
     def multiply(self, other):
@@ -354,7 +354,7 @@ class Mat33(MathObject):
 
         """
 
-        return Mat33(self.rtval.multiply('Mat33', KS.inst().rtVal('Mat33', other)))
+        return Mat33(self._rtval.multiply('Mat33', KS.inst().rtVal('Mat33', other)))
 
 
     def multiplyScalar(self, other):
@@ -368,7 +368,7 @@ class Mat33(MathObject):
 
         """
 
-        return Mat33(self.rtval.multiplyScalar('Mat33', KS.inst().rtVal('Scalar', other)))
+        return Mat33(self._rtval.multiplyScalar('Mat33', KS.inst().rtVal('Scalar', other)))
 
 
     def multiplyVector(self, other):
@@ -382,7 +382,7 @@ class Mat33(MathObject):
 
         """
 
-        return Vec3(self.rtval.multiplyVector('Vec3', KS.inst().rtVal('Vec3', other)))
+        return Vec3(self._rtval.multiplyVector('Vec3', KS.inst().rtVal('Vec3', other)))
 
 
     def divideScalar(self, other):
@@ -396,7 +396,7 @@ class Mat33(MathObject):
 
         """
 
-        return Mat33(self.rtval.divideScalar('Mat33', other))
+        return Mat33(self._rtval.divideScalar('Mat33', other))
 
 
     def determinant(self):
@@ -407,7 +407,7 @@ class Mat33(MathObject):
 
         """
 
-        return self.rtval.determinant('Scalar')
+        return self._rtval.determinant('Scalar')
 
 
     def adjoint(self):
@@ -418,7 +418,7 @@ class Mat33(MathObject):
 
         """
 
-        return Mat33(self.rtval.adjoint('Mat33'))
+        return Mat33(self._rtval.adjoint('Mat33'))
 
 
     def inverse(self):
@@ -429,7 +429,7 @@ class Mat33(MathObject):
 
         """
 
-        return Mat33(self.rtval.inverse('Mat33'))
+        return Mat33(self._rtval.inverse('Mat33'))
 
 
     def inverse_safe(self):
@@ -441,7 +441,7 @@ class Mat33(MathObject):
 
         """
 
-        return Mat33(self.rtval.inverse_safe('Mat33'))
+        return Mat33(self._rtval.inverse_safe('Mat33'))
 
 
     def transpose(self):
@@ -452,4 +452,4 @@ class Mat33(MathObject):
 
         """
 
-        return Mat33(self.rtval.transpose('Mat33'))
+        return Mat33(self._rtval.transpose('Mat33'))

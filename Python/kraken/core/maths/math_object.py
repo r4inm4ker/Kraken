@@ -44,7 +44,7 @@ class MathObject(object):
 
         """
 
-        return str(json.loads(self.rtval.type("Type").jsonDesc("String"))['name'])
+        return str(json.loads(self._rtval.type("Type").jsonDesc("String"))['name'])
 
 
     def getTypeName(self, value=None):
@@ -59,9 +59,11 @@ class MathObject(object):
         """
 
         if value is None:
-            value = self.rtval
+            value = self._rtval
+            isRTVal = True
+        else:
+            isRTVal = str(type(value)) == "<type 'PyRTValObject'>"
 
-        isRTVal = str(type(value)) == "<type 'PyRTValObject'>"
         if isRTVal:
             return json.loads(value.type("Type").jsonDesc("String"))['name']
 
@@ -78,15 +80,14 @@ class MathObject(object):
         d = {
                 "__class__":self.__class__.__name__,
             }
-
-        attrs = {}
-        for eachItem in self.__dict__.items():
-            if isinstance(eachItem[1], MathObject):
-                attrs[eachItem[0]] = eachItem[1].jsonEncode()
+            
+        public_attrs = (name for name in dir(self) if not name.startswith('_') and not callable(getattr(self,name)) and name)
+        for name in public_attrs:
+            item = getattr(self, name)
+            if isinstance(item, MathObject):
+                d[name] = item.jsonEncode()
             else:
-                attrs[eachItem[0]] = eachItem[1]
-
-        d.update(attrs)
+                d[name] = item
 
         return d
 
@@ -98,7 +99,6 @@ class MathObject(object):
         True of the decode was successful
 
         """
-
         if jsonData["__class__"] != self.__class__.__name__:
             raise Exception("Error in jsonDecode. Json data specifies a different class:" + jsonData["__class__"] + "!==" + self.__class__.__name__)
 

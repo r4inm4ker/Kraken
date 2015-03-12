@@ -22,7 +22,7 @@ class Quat(MathObject):
         super(Quat, self).__init__()
 
         if v is not None and self.getTypeName(v) == 'Quat':
-            self.rtval = v
+            self._rtval = v
         else:
             if v is not None and not isinstance(v, Vec3) and  not isinstance(v, Euler):
                 raise TypeError("Quat: Invalid type for 'v' argument. Must be a Vec3.")
@@ -31,7 +31,7 @@ class Quat(MathObject):
                 raise TypeError("Quat: Invalid type for 'w' argument. Must be a int or float.")
 
             client = KS.getInstance().getCoreClient()
-            self.rtval = client.RT.types.Quat()
+            self._rtval = client.RT.types.Quat()
             if v is not None and isinstance(v, Euler):
                 self.setFromEuler(v)
             if v is not None and w is not None:
@@ -53,7 +53,7 @@ class Quat(MathObject):
 
         """
 
-        return Vec3(self.rtval.v)
+        return Vec3(self._rtval.v)
 
 
     @v.setter
@@ -68,7 +68,7 @@ class Quat(MathObject):
 
         """
 
-        self.rtval.v = KS.inst().rtVal('Vec3', value)
+        self._rtval.v = KS.inst().rtVal('Vec3', value)
 
         return True
 
@@ -82,7 +82,7 @@ class Quat(MathObject):
 
         """
 
-        return self.rtval.w
+        return self._rtval.w
 
 
     @w.setter
@@ -97,7 +97,7 @@ class Quat(MathObject):
 
         """
 
-        self.rtval.w = KS.inst().rtVal('Scalar', value)
+        self._rtval.w = KS.inst().rtVal('Scalar', value)
 
         return True
 
@@ -128,7 +128,7 @@ class Quat(MathObject):
 
         """
 
-        self.rtval.set('', KS.inst().rtVal('Vec3', v), KS.inst().rtVal('Scalar', w))
+        self._rtval.set('', KS.inst().rtVal('Vec3', v), KS.inst().rtVal('Scalar', w))
 
         return True
 
@@ -141,7 +141,7 @@ class Quat(MathObject):
 
         """
 
-        self.rtval.setIdentity('')
+        self._rtval.setIdentity('')
 
         return True
 
@@ -158,7 +158,7 @@ class Quat(MathObject):
 
         """
 
-        return Quat(self.rtval.setFromEuler('Quat', KS.inst().rtVal('Euler', e)))
+        return Quat(self._rtval.setFromEuler('Quat', KS.inst().rtVal('Euler', e)))
 
 
     def setFromEulerAngles(self, angles, ro):
@@ -173,7 +173,7 @@ class Quat(MathObject):
 
         """
 
-        return Quat(self.rtval.setFromEuler('Quat', KS.inst().rtVal('Vec3', angles), KS.inst().rtVal('RotationOrder', ro)))
+        return Quat(self._rtval.setFromEuler('Quat', KS.inst().rtVal('Vec3', angles), KS.inst().rtVal('RotationOrder', ro)))
 
 
     def setFromEulerAngles(self, angles):
@@ -188,7 +188,7 @@ class Quat(MathObject):
 
         """
 
-        return Quat(self.rtval.setFromEuler('Quat', KS.inst().rtVal('Vec3', angles)))
+        return Quat(self._rtval.setFromEuler('Quat', KS.inst().rtVal('Vec3', angles)))
 
 
     def setFromAxisAndAngle(self, axis, angle):
@@ -204,7 +204,7 @@ class Quat(MathObject):
 
         """
 
-        return Quat(self.rtval.setFromAxisAndAngle('Quat', KS.inst().rtVal('Vec3', axis), KS.inst().rtVal('Scalar', angle)))
+        return Quat(self._rtval.setFromAxisAndAngle('Quat', KS.inst().rtVal('Vec3', axis), KS.inst().rtVal('Scalar', angle)))
 
 
     def setFromMat33(self, mat):
@@ -218,7 +218,7 @@ class Quat(MathObject):
 
         """
 
-        return Quat(self.rtval.setFromMat33('Quat', KS.inst().rtVal('Mat33', mat)))
+        return Quat(self._rtval.setFromMat33('Quat', KS.inst().rtVal('Mat33', mat)))
 
 
     def setFrom2Vectors(sourceDirVec, destDirVec, arbitraryIfAmbiguous=True):
@@ -238,7 +238,7 @@ class Quat(MathObject):
 
         """
 
-        return Quat(self.rtval.setFrom2Vectors('Quat', KS.inst().rtVal('Vec3', sourceDirVec), KS.inst().rtVal('Vec3', destDirVec), KS.inst().rtVal('Boolean', arbitraryIfAmbiguous)))
+        return Quat(self._rtval.setFrom2Vectors('Quat', KS.inst().rtVal('Vec3', sourceDirVec), KS.inst().rtVal('Vec3', destDirVec), KS.inst().rtVal('Boolean', arbitraryIfAmbiguous)))
 
 
     def setFromDirectionAndUpvector(self, direction, upvector):
@@ -254,7 +254,7 @@ class Quat(MathObject):
 
         """
 
-        return Quat(self.rtval.setFromDirectionAndUpvector('Quat', KS.inst().rtVal('Vec3', direction), KS.inst().rtVal('Vec3', upvector)))
+        return Quat(self._rtval.setFromDirectionAndUpvector('Quat', KS.inst().rtVal('Vec3', direction), KS.inst().rtVal('Vec3', upvector)))
 
 
     def equal(self, other):
@@ -268,7 +268,7 @@ class Quat(MathObject):
 
         """
 
-        return self.rtval.equal('Boolean', KS.inst().rtVal('Quat', other))
+        return self._rtval.equal('Boolean', KS.inst().rtVal('Quat', other))
 
 
     def almostEqual(self, other, precision):
@@ -283,7 +283,7 @@ class Quat(MathObject):
 
         """
 
-        return self.rtval.almostEqual('Boolean', KS.inst().rtVal('Quat', other), KS.inst().rtVal('Scalar', precision))
+        return self._rtval.almostEqual('Boolean', KS.inst().rtVal('Quat', other), KS.inst().rtVal('Scalar', precision))
 
 
     def almostEqual(self, other):
@@ -298,7 +298,7 @@ class Quat(MathObject):
 
         """
 
-        return self.rtval.almostEqual('Boolean', KS.inst().rtVal('Quat', other))
+        return self._rtval.almostEqual('Boolean', KS.inst().rtVal('Quat', other))
 
 
     # # Equals operator
@@ -390,7 +390,7 @@ class Quat(MathObject):
 
         """
 
-        return self.rtval.add('Quat', KS.inst().rtVal('Quat', other))
+        return self._rtval.add('Quat', KS.inst().rtVal('Quat', other))
 
 
     def subtract(self, other):
@@ -404,7 +404,7 @@ class Quat(MathObject):
 
         """
 
-        return Quat(self.rtval.subtract('Quat', KS.inst().rtVal('Quat', other)))
+        return Quat(self._rtval.subtract('Quat', KS.inst().rtVal('Quat', other)))
 
 
     def multiply(self, other):
@@ -418,7 +418,7 @@ class Quat(MathObject):
 
         """
 
-        return Quat(self.rtval.multiply('Quat', KS.inst().rtVal('Quat', other)))
+        return Quat(self._rtval.multiply('Quat', KS.inst().rtVal('Quat', other)))
 
 
     def divide(self, other):
@@ -432,7 +432,7 @@ class Quat(MathObject):
 
         """
 
-        return Quat(self.rtval.divide('Quat', KS.inst().rtVal('Quat', other)))
+        return Quat(self._rtval.divide('Quat', KS.inst().rtVal('Quat', other)))
 
 
     def multiplyScalar(self, other):
@@ -446,7 +446,7 @@ class Quat(MathObject):
 
         """
 
-        return Quat(self.rtval.multiplyScalar('Quat', KS.inst().rtVal('Scalar', other)))
+        return Quat(self._rtval.multiplyScalar('Quat', KS.inst().rtVal('Scalar', other)))
 
 
     def divideScalar(self, other):
@@ -460,7 +460,7 @@ class Quat(MathObject):
 
         """
 
-        return Quat(self.rtval.divideScalar('Quat', KS.inst().rtVal('Scalar', other)))
+        return Quat(self._rtval.divideScalar('Quat', KS.inst().rtVal('Scalar', other)))
 
 
     def rotateVector(self, v):
@@ -476,7 +476,7 @@ class Quat(MathObject):
 
         """
 
-        return Vec3(self.rtval.rotateVector('Vec3', KS.inst().rtVal('Vec3', v)))
+        return Vec3(self._rtval.rotateVector('Vec3', KS.inst().rtVal('Vec3', v)))
 
 
     def dot(self, other):
@@ -490,7 +490,7 @@ class Quat(MathObject):
 
         """
 
-        return self.rtval.dot('Scalar', KS.inst().rtVal('Quat', other))
+        return self._rtval.dot('Scalar', KS.inst().rtVal('Quat', other))
 
 
     def conjugate(self):
@@ -501,7 +501,7 @@ class Quat(MathObject):
 
         """
 
-        return self.rtval.conjugate('Quat')
+        return self._rtval.conjugate('Quat')
 
 
     def lengthSquared(self):
@@ -512,7 +512,7 @@ class Quat(MathObject):
 
         """
 
-        return self.rtval.lengthSquared('Scalar')
+        return self._rtval.lengthSquared('Scalar')
 
 
     def length(self):
@@ -523,7 +523,7 @@ class Quat(MathObject):
 
         """
 
-        return self.rtval.length('Scalar')
+        return self._rtval.length('Scalar')
 
 
     def unit(self):
@@ -534,7 +534,7 @@ class Quat(MathObject):
 
         """
 
-        return Quat(self.rtval.unit('Quat'))
+        return Quat(self._rtval.unit('Quat'))
 
 
     def unit_safe(self):
@@ -546,7 +546,7 @@ class Quat(MathObject):
 
         """
 
-        return Quat(self.rtval.unit_safe('Quat'))
+        return Quat(self._rtval.unit_safe('Quat'))
 
 
     def setUnit(self):
@@ -558,7 +558,7 @@ class Quat(MathObject):
 
         """
 
-        return self.rtval.setUnit('Scalar')
+        return self._rtval.setUnit('Scalar')
 
 
     def inverse(self):
@@ -569,7 +569,7 @@ class Quat(MathObject):
 
         """
 
-        return Quat(self.rtval.inverse('Quat'))
+        return Quat(self._rtval.inverse('Quat'))
 
 
     def alignWith(self, other):
@@ -584,7 +584,7 @@ class Quat(MathObject):
 
         """
 
-        return Quat(self.rtval.alignWith('Quat', KS.inst().rtVal('Quat', other)))
+        return Quat(self._rtval.alignWith('Quat', KS.inst().rtVal('Quat', other)))
 
 
     def getAngle(self):
@@ -595,7 +595,7 @@ class Quat(MathObject):
 
         """
 
-        return self.rtval.getAngle('Scalar')
+        return self._rtval.getAngle('Scalar')
 
 
     def getXaxis(self):
@@ -606,7 +606,7 @@ class Quat(MathObject):
 
         """
 
-        return Vec3(self.rtval.getXaxis('Vec3'))
+        return Vec3(self._rtval.getXaxis('Vec3'))
 
 
     def getYaxis(self):
@@ -617,7 +617,7 @@ class Quat(MathObject):
 
         """
 
-        return Vec3(self.rtval.getYaxis('Vec3'))
+        return Vec3(self._rtval.getYaxis('Vec3'))
 
 
     def getZaxis(self):
@@ -628,7 +628,7 @@ class Quat(MathObject):
 
         """
 
-        return Vec3(self.rtval.getZaxis('Vec3'))
+        return Vec3(self._rtval.getZaxis('Vec3'))
 
 
     def mirror(self, axisIndex):
@@ -642,7 +642,7 @@ class Quat(MathObject):
 
         """
 
-        return Quat(self.rtval.mirror('Quat', KS.inst().rtVal('Integer', axisIndex)))
+        return Quat(self._rtval.mirror('Quat', KS.inst().rtVal('Integer', axisIndex)))
 
 
     def toMat33(self):
@@ -653,7 +653,7 @@ class Quat(MathObject):
 
         """
 
-        return Mat33(self.rtval.toMat33('Mat33'))
+        return Mat33(self._rtval.toMat33('Mat33'))
 
 
     def toEuler(self, rotationOrder):
@@ -668,7 +668,7 @@ class Quat(MathObject):
 
         """
 
-        return Euler(self.rtval.toEuler('Euler', KS.inst().rtVal('RotationOrder', rotationOrder)))
+        return Euler(self._rtval.toEuler('Euler', KS.inst().rtVal('RotationOrder', rotationOrder)))
 
 
     def toEulerAngles(self, order):
@@ -682,7 +682,7 @@ class Quat(MathObject):
 
         """
 
-        return Vec3(self.rtval.toEulerAngles('Vec3', KS.inst().rtVal('RotationOrder', rotationOrder)))
+        return Vec3(self._rtval.toEulerAngles('Vec3', KS.inst().rtVal('RotationOrder', rotationOrder)))
 
 
     def toEulerAngles():
@@ -693,7 +693,7 @@ class Quat(MathObject):
 
         """
 
-        return Vec3(self.rtval.toEulerAngles('Vec3'))
+        return Vec3(self._rtval.toEulerAngles('Vec3'))
 
 
     def sphericalLinearInterpolate(self, q2, t):
@@ -711,7 +711,7 @@ class Quat(MathObject):
 
         """
 
-        return Quat(self.rtval.sphericalLinearInterpolate('Quat', KS.inst().rtVal('Quat', q2), KS.inst().rtVal('Scalar', t)))
+        return Quat(self._rtval.sphericalLinearInterpolate('Quat', KS.inst().rtVal('Quat', q2), KS.inst().rtVal('Scalar', t)))
 
 
     def linearInterpolate(self, other, t):
@@ -729,4 +729,4 @@ class Quat(MathObject):
 
         """
 
-        return Quat(self.rtval.sphericalLinearInterpolate('Quat', KS.inst().rtVal('Quat', q2), KS.inst().rtVal('Scalar', t)))
+        return Quat(self._rtval.sphericalLinearInterpolate('Quat', KS.inst().rtVal('Quat', q2), KS.inst().rtVal('Scalar', t)))
