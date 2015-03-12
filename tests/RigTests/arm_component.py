@@ -16,6 +16,7 @@ from kraken.core.objects.controls.triangle_control import TriangleControl
 
 from kraken.core.objects.operators.splice_operator import SpliceOperator
 
+from kraken.helpers.utility_methods import logHierarchy
 
 class ArmComponent(BaseComponent):
     """Arm Component"""
@@ -131,20 +132,21 @@ class ArmComponent(BaseComponent):
         # Deformers
         # ==========
         container = self.getContainer()
-        deformersLayer = container.getChildByName('deformers')
+        if container is not None:
+            deformersLayer = container.getChildByName('deformers')
 
-        bicepDef = Joint('bicep')
-        bicepDef.setComponent(self)
+            bicepDef = Joint('bicep')
+            bicepDef.setComponent(self)
 
-        forearmDef = Joint('forearm')
-        forearmDef.setComponent(self)
+            forearmDef = Joint('forearm')
+            forearmDef.setComponent(self)
 
-        wristDef = Joint('wrist')
-        wristDef.setComponent(self)
+            wristDef = Joint('wrist')
+            wristDef.setComponent(self)
 
-        deformersLayer.addChild(bicepDef)
-        deformersLayer.addChild(forearmDef)
-        deformersLayer.addChild(wristDef)
+            deformersLayer.addChild(bicepDef)
+            deformersLayer.addChild(forearmDef)
+            deformersLayer.addChild(wristDef)
 
 
         # =====================
@@ -280,12 +282,4 @@ class ArmComponent(BaseComponent):
 
 if __name__ == "__main__":
     armLeft = ArmComponent("myArm", location='L')
-    print armLeft.getNumChildren()
-
-    def traverseHierarchy(kObject):
-        print kObject.getFullName()
-        # Build children
-        for i in xrange(kObject.getNumChildren()):
-            child = kObject.getChildByIndex(i)
-            traverseHierarchy(child)
-    traverseHierarchy(armLeft)
+    logHierarchy(armLeft)

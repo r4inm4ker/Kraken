@@ -12,6 +12,8 @@ from kraken.core.objects.controls.circle_control  import  CircleControl
 from kraken.core.objects.operators.splice_operator import SpliceOperator
 
 
+from kraken.helpers.utility_methods import logHierarchy
+
 class SpineComponent(BaseComponent):
     """Spine Component"""
 
@@ -78,8 +80,6 @@ class SpineComponent(BaseComponent):
         # ==========
         # Deformers
         # ==========
-        container = self.getContainer()
-        deformersLayer = container.getChildByName('deformers')
 
         spine01Def = Joint('spine01')
         spine01Def.setComponent(self)
@@ -93,10 +93,13 @@ class SpineComponent(BaseComponent):
         spine04Def = Joint('spine04')
         spine04Def.setComponent(self)
 
-        deformersLayer.addChild(spine01Def)
-        deformersLayer.addChild(spine02Def)
-        deformersLayer.addChild(spine03Def)
-        deformersLayer.addChild(spine04Def)
+        container = self.getContainer()
+        if container is not None:
+            deformersLayer = container.getChildByName('deformers')
+            deformersLayer.addChild(spine01Def)
+            deformersLayer.addChild(spine02Def)
+            deformersLayer.addChild(spine03Def)
+            deformersLayer.addChild(spine04Def)
 
 
         # =====================
@@ -202,4 +205,4 @@ class SpineComponent(BaseComponent):
 
 if __name__ == "__main__":
     spine = SpineComponent("mySpine")
-    print spine.getNumChildren()
+    logHierarchy(spine)

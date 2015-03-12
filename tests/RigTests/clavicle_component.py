@@ -12,6 +12,7 @@ from kraken.core.objects.controls.cube_control  import CubeControl
 
 from kraken.core.objects.operators.splice_operator import SpliceOperator
 
+from kraken.helpers.utility_methods import logHierarchy
 
 class ClavicleComponent(BaseComponent):
     """Clavicle Component"""
@@ -65,14 +66,13 @@ class ClavicleComponent(BaseComponent):
         # ==========
         # Deformers
         # ==========
-        container = self.getContainer()
-        deformersLayer = container.getChildByName('deformers')
-
         clavicleDef = Joint('clavicle')
         clavicleDef.setComponent(self)
 
-        deformersLayer.addChild(clavicleDef)
-
+        container = self.getContainer()
+        if container is not None:
+            deformersLayer = container.getChildByName('deformers')
+            deformersLayer.addChild(clavicleDef)
 
         # =====================
         # Create Component I/O
@@ -149,4 +149,4 @@ class ClavicleComponent(BaseComponent):
 
 if __name__ == "__main__":
     clavicleLeft = ClavicleComponent("myClavicle", location='L')
-    print clavicleLeft.getNumChildren()
+    logHierarchy(clavicleLeft)

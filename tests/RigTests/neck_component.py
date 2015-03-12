@@ -13,6 +13,8 @@ from kraken.core.objects.controls.pin_control  import PinControl
 from kraken.core.objects.operators.splice_operator import SpliceOperator
 
 
+from kraken.helpers.utility_methods import logHierarchy
+
 class NeckComponent(BaseComponent):
     """Neck Component"""
 
@@ -51,12 +53,14 @@ class NeckComponent(BaseComponent):
         # ==========
         # Deformers
         # ==========
-        container = self.getContainer()
-        deformersLayer = container.getChildByName('deformers')
 
-        neckDef = Joint('neck', parent=deformersLayer)
+        neckDef = Joint('neck')
         neckDef.setComponent(self)
 
+        container = self.getContainer()
+        if container is not None:
+            deformersLayer = container.getChildByName('deformers')
+            deformersLayer.addChild(neckDef)
 
         # =====================
         # Create Component I/O
@@ -126,4 +130,4 @@ class NeckComponent(BaseComponent):
 
 if __name__ == "__main__":
     neck = NeckComponent("myNeck", location='M')
-    print neck.getNumChildren()
+    logHierarchy(neck)

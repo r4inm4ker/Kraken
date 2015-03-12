@@ -1,5 +1,6 @@
 from kraken.core.objects.container import Container
 from kraken.core.objects.layer import Layer
+from kraken.helpers.utility_methods import logHierarchy
 
 from arm_component import ArmComponent
 from hand_component import HandComponent
@@ -112,3 +113,4 @@ class Rig(Container):
 
 if __name__ == "__main__":
     bobRig = Rig("char_bob")
+    logHierarchy(bobRig)

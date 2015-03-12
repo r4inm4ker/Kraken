@@ -15,6 +15,7 @@ from kraken.core.objects.controls.cube_control  import CubeControl
 
 from kraken.core.objects.operators.splice_operator import SpliceOperator
 
+from kraken.helpers.utility_methods import logHierarchy
 
 class FootComponent(BaseComponent):
     """Hand Component"""
@@ -83,13 +84,14 @@ class FootComponent(BaseComponent):
         # ==========
         # Deformers
         # ==========
-        container = self.getContainer()
-        deformersLayer = container.getChildByName('deformers')
 
         footDef = Joint('foot')
         footDef.setComponent(self)
 
-        deformersLayer.addChild(footDef)
+        container = self.getContainer()
+        if container is not None:
+            deformersLayer = container.getChildByName('deformers')
+            deformersLayer.addChild(footDef)
 
 
         # =====================
@@ -188,4 +190,4 @@ class FootComponent(BaseComponent):
 
 if __name__ == "__main__":
     handLeft = FootComponent("myFoot", location='L')
-    print handLeft.getNumChildren()
+    logHierarchy(handLeft)

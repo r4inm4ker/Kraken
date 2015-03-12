@@ -20,6 +20,8 @@ from kraken.core.objects.controls.triangle_control import TriangleControl
 from kraken.core.objects.operators.splice_operator import SpliceOperator
 
 
+from kraken.helpers.utility_methods import logHierarchy
+
 class LegComponent(BaseComponent):
     """Leg Component"""
 
@@ -134,8 +136,6 @@ class LegComponent(BaseComponent):
         # ==========
         # Deformers
         # ==========
-        container = self.getContainer()
-        deformersLayer = container.getChildByName('deformers')
 
         femurDef = Joint('femur')
         femurDef.setComponent(self)
@@ -146,9 +146,12 @@ class LegComponent(BaseComponent):
         ankleDef = Joint('ankle')
         ankleDef.setComponent(self)
 
-        deformersLayer.addChild(femurDef)
-        deformersLayer.addChild(shinDef)
-        deformersLayer.addChild(ankleDef)
+        container = self.getContainer()
+        if container is not None:
+            deformersLayer = container.getChildByName('deformers')
+            deformersLayer.addChild(femurDef)
+            deformersLayer.addChild(shinDef)
+            deformersLayer.addChild(ankleDef)
 
 
         # =====================
@@ -285,4 +288,4 @@ class LegComponent(BaseComponent):
 
 if __name__ == "__main__":
     legLeft = LegComponent("myLeg", location='L')
-    print legLeft.getNumChildren()
+    logHierarchy(legLeft)

@@ -13,6 +13,8 @@ from kraken.core.objects.controls.sphere_control import SphereControl
 
 from kraken.core.objects.operators.splice_operator import SpliceOperator
 
+from kraken.helpers.utility_methods import logHierarchy
+
 class HeadComponent(BaseComponent):
     """Head Component"""
 
@@ -74,8 +76,6 @@ class HeadComponent(BaseComponent):
         # ==========
         # Deformers
         # ==========
-        container = self.getContainer()
-        deformersLayer = container.getChildByName('deformers')
 
         headDef = Joint('head')
         headDef.setComponent(self)
@@ -89,10 +89,13 @@ class HeadComponent(BaseComponent):
         eyeRightDef = Joint('eyeRight')
         eyeRightDef.setComponent(self)
 
-        deformersLayer.addChild(headDef)
-        deformersLayer.addChild(jawDef)
-        deformersLayer.addChild(eyeLeftDef)
-        deformersLayer.addChild(eyeRightDef)
+        container = self.getContainer()
+        if container is not None:
+            deformersLayer = container.getChildByName('deformers')
+            deformersLayer.addChild(headDef)
+            deformersLayer.addChild(jawDef)
+            deformersLayer.addChild(eyeLeftDef)
+            deformersLayer.addChild(eyeRightDef)
 
 
         # =====================
@@ -193,4 +196,4 @@ class HeadComponent(BaseComponent):
 
 if __name__ == "__main__":
     head = HeadComponent("myClavicle")
-    print head.getNumChildren()
+    logHierarchy(head)
