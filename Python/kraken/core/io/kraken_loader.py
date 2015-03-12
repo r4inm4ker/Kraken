@@ -275,10 +275,15 @@ class KrakenLoader(object):
         else:
             raise Exception("KrakenLoader does not support the given type:" + __kType__)
 
+        # Before registering or decoding, set the parent so that the full name contains the entire path. 
+        if len(self.parentItems) > 0:
+            item.setParent(self.parentItems[-1])
+
         self.registerItem(item)
         # Store the item as the parent item before decoding the object
         # which in turn decodes the children items.
         self.parentItems.append(item)
+        
         item.jsonDecode(self, jsonData)
 
         # Pop the parent item stack, which reverts the current parent item
@@ -296,7 +301,6 @@ class KrakenLoader(object):
         None
 
         """
-
         if item.getFullName() in self.builtItems:
             # TODO: resolve using a path, instead of the name.
             # This will require that all items have a parent specified

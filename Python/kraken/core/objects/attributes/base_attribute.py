@@ -233,6 +233,5 @@ class BaseAttribute(object):
         """
         self.name =  jsonData['name']
         self.value =  loader.decodeValue(jsonData['value'])
-        self.parent =  loader.getParentItem()
 
         return True

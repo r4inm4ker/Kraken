@@ -276,8 +276,6 @@ class AttributeGroup(object):
 
         """
 
-        self.parent =  loader.getParentItem()
-
         for attr in jsonData['attributes']:
             self.addAttribute(loader.construct(attr))
 
