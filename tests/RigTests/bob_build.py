@@ -1,5 +1,6 @@
+
 from kraken import plugins
-from bob_rig import Rig
+from kraken.tests.bob_rig import Rig
 
 bobRig = Rig("char_bob")
 
