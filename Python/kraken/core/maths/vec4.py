@@ -16,7 +16,7 @@ class Vec4(MathObject):
         """Initializes x, y z and t values for Vec4 object."""
 
         super(Vec4, self).__init__()
-        if self.getTypeName(x) == 'Vec4':
+        if ks.getRTValTypeName(x) == 'Vec4':
             self._rtval = x
         else:
             self._rtval = ks.rtVal('Vec4')

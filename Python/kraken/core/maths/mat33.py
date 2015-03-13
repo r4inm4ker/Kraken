@@ -17,12 +17,15 @@ class Mat33(MathObject):
 
         super(Mat33, self).__init__()
 
-        if row0 is not None and self.getTypeName(row0) == 'Mat33':
+        if ks.getRTValTypeName(row0) == 'Mat33':
             self._rtval = row0
         else:
             self._rtval = ks.rtVal('Mat33')
-            if row0 is not None and row1 is not None and row2 is not None:
-                self.setRows(row0, row1, row2)
+            if type(x) == Mat33:
+                self.set(x=x.x, y=x.y, z=x.z, ro=x.ro)
+            else:
+                if row0 is not None and row1 is not None and row2 is not None:
+                    self.setRows(row0, row1, row2)
 
 
     def __str__(self):

@@ -19,7 +19,7 @@ class Xfo(MathObject):
         """Initializes tr, ori and sc values for Xfo object."""
 
         super(Xfo, self).__init__()
-        if tr is not None and self.getTypeName(tr) == 'Xfo':
+        if ks.getRTValTypeName(tr) == 'Xfo':
             self._rtval = tr
         else:
             self._rtval = ks.rtVal('Xfo')

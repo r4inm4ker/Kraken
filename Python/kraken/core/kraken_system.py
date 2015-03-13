@@ -5,12 +5,13 @@ KrakenSystem - Class for constructing the Fabric Engine Core client.
 
 """
 
+import json
 from kraken.core.maths.math_object import MathObject
 import FabricEngine.Core
 
 
 class KrakenSystem(object):
-    """Kraken base object type for any 3D object."""
+    """The KrakenSystem is a singleton object used to provide an interface with the FabricEngine Core and RTVal system."""
 
     __instance = None
 
@@ -23,13 +24,10 @@ class KrakenSystem(object):
 
 
     def getCoreClient(self):
-        """Doc String.
-
-        Arguments:
-        Arguments -- Type, information.
+        """Returns the Fabric Engine Core Client owned by the KrakenSystem
 
         Return:
-        True if successful.
+        The Fabric Engine Core Client
 
         """
 
@@ -37,13 +35,14 @@ class KrakenSystem(object):
 
 
     def constructRTVal(self, dataType, defaultValue=None):
-        """Doc String.
+        """Constructs a new RTVal using the given name and optional devault value.
 
         Arguments:
-        Arguments -- Type, information.
+        dataType -- The name of the data type to construct.
+        defaultValue -- The default value to use to initialize the RTVal
 
         Return:
-        True if successful.
+        The constructed RTval.
 
         """
 
@@ -76,28 +75,55 @@ class KrakenSystem(object):
 
 
     def rtVal(self, dataType, defaultValue=None):
-        """Doc String.
+        """Constructs a new RTVal using the given name and optional devault value.
 
         Arguments:
-        Arguments -- Type, information.
+        dataType -- The name of the data type to construct.
+        defaultValue -- The default value to use to initialize the RTVal
 
         Return:
-        True if successful.
+        The constructed RTval.
 
         """
 
         return self.constructRTVal(dataType, defaultValue)
 
 
-    @classmethod
-    def getInstance(cls):
-        """Doc String.
+    def isRTVal(self, value):
+        """Returns true if the given value is an RTVal.
 
         Arguments:
-        Arguments -- Type, information.
+        value -- value to test.
 
         Return:
         True if successful.
+
+        """
+
+        return str(type(value)) == "<type 'PyRTValObject'>"
+
+
+    def getRTValTypeName(self, rtval):
+        """Returns the name of the type, handling extracting the name from KL RTVals.
+
+        Arguments:
+        rtval -- the rtval to extract the name from.
+
+        Return:
+        True if successful.
+
+        """
+        if ks.isRTVal(rtval): 
+            return json.loads(rtval.type("Type").jsonDesc("String"))['name']
+        else:
+            return "None"
+
+    @classmethod
+    def getInstance(cls):
+        """This class method returns the singleton instance for the KrakenSystem
+
+        Return:
+        The singleton instance.
 
         """
 
@@ -105,20 +131,5 @@ class KrakenSystem(object):
             cls.__instance = KrakenSystem()
 
         return cls.__instance
-
-
-    @classmethod
-    def inst(cls):
-        """Doc String.
-
-        Arguments:
-        Arguments -- Type, information.
-
-        Return:
-        True if successful.
-
-        """
-
-        return cls.getInstance()
 
 ks = KrakenSystem.getInstance()

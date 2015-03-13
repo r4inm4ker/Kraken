@@ -16,7 +16,7 @@ class Vec3(MathObject):
         """Initializes x, y, z values for Vec3 object."""
 
         super(Vec3, self).__init__()
-        if self.getTypeName(x) == 'Vec3':
+        if ks.getRTValTypeName(x) == 'Vec3':
             self._rtval = x
         else:
             self._rtval = ks.rtVal('Vec3')

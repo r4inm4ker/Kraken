@@ -16,10 +16,11 @@ class Vec2(MathObject):
         """Initializes x, y values for Vec2 object."""
 
         super(Vec2, self).__init__()
-
-        self._rtval = ks.rtVal('Vec2')
-        self.set(x=x, y=y)
-
+        if ks.getRTValTypeName(x) == 'Vec2':
+            self._rtval = x
+        else:
+            self._rtval = ks.rtVal('Vec2')
+            self.set(x=x, y=y)
 
     def __str__(self):
         """String representation of the Vec2 object."""

@@ -17,7 +17,7 @@ class Mat44(MathObject):
 
         super(Mat44, self).__init__()
 
-        if row0 is not None and self.getTypeName(row0) == 'Mat44':
+        if ks.getRTValTypeName(row0) == 'Mat44':
             self._rtval = row0
         else:
             self._rtval = ks.rtVal('Mat44')

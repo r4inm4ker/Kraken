@@ -21,7 +21,7 @@ class Quat(MathObject):
 
         super(Quat, self).__init__()
 
-        if v is not None and self.getTypeName(v) == 'Quat':
+        if ks.getRTValTypeName(v) == 'Quat':
             self._rtval = v
         else:
             if v is not None and not isinstance(v, Vec3) and  not isinstance(v, Euler):
@@ -30,7 +30,7 @@ class Quat(MathObject):
             if w is not None and not isinstance(w, (int, float)):
                 raise TypeError("Quat: Invalid type for 'w' argument. Must be a int or float.")
 
-            self._rtval = ks.constructRTVal('Quat')
+            self._rtval = ks.rtVal('Quat')
             if v is not None and isinstance(v, Euler):
                 self.setFromEuler(v)
             if v is not None and w is not None:
