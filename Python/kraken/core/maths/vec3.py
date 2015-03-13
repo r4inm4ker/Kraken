@@ -20,7 +20,10 @@ class Vec3(MathObject):
             self._rtval = x
         else:
             self._rtval = ks.rtVal('Vec3')
-            self.set(x=x, y=y, z=z)
+            if isinstance(x, Vec3):
+                self.set(x=x.x, y=x.y, z=x.z)
+            else:
+                self.set(x=x, y=y, z=z)
 
 
     def __str__(self):

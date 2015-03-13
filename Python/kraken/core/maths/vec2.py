@@ -20,7 +20,10 @@ class Vec2(MathObject):
             self._rtval = x
         else:
             self._rtval = ks.rtVal('Vec2')
-            self.set(x=x, y=y)
+            if isinstance(x, Vec2):
+                self.set(x=x.x, y=x.y)
+            else:
+                self.set(x=x, y=y)
 
     def __str__(self):
         """String representation of the Vec2 object."""

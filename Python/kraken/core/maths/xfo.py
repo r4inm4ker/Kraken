@@ -23,12 +23,15 @@ class Xfo(MathObject):
             self._rtval = tr
         else:
             self._rtval = ks.rtVal('Xfo')
-            if tr is not None:
-                self.tr = tr
-            if ori is not None:
-                self.ori = ori
-            if sc is not None:
-                self.sc = sc
+            if isinstance(tr, Xfo):
+                self.set(tr=tr.tr, y=tr.ori, z=tr.sc)
+            else:
+                if tr is not None:
+                    self.tr = tr
+                if ori is not None:
+                    self.ori = ori
+                if sc is not None:
+                    self.sc = sc
 
 
     def __str__(self):

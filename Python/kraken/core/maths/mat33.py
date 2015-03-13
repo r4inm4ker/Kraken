@@ -21,11 +21,10 @@ class Mat33(MathObject):
             self._rtval = row0
         else:
             self._rtval = ks.rtVal('Mat33')
-            if type(x) == Mat33:
-                self.set(x=x.x, y=x.y, z=x.z, ro=x.ro)
-            else:
-                if row0 is not None and row1 is not None and row2 is not None:
-                    self.setRows(row0, row1, row2)
+            if isinstance(row0, Mat33):
+                self.setRows(row0=row0.row0, row1=row0.row1, row2=row0.row2)
+            elif row0 is not None and row1 is not None and row2 is not None:
+                self.setRows(row0, row1, row2)
 
 
     def __str__(self):

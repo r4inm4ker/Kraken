@@ -31,9 +31,11 @@ class Quat(MathObject):
                 raise TypeError("Quat: Invalid type for 'w' argument. Must be a int or float.")
 
             self._rtval = ks.rtVal('Quat')
-            if v is not None and isinstance(v, Euler):
+            if isinstance(v, Quat):
+                self.set(v=v.v, w=v.w)
+            elif isinstance(v, Euler):
                 self.setFromEuler(v)
-            if v is not None and w is not None:
+            elif v is not None and w is not None:
                 self.set(v=v, w=w)
 
 

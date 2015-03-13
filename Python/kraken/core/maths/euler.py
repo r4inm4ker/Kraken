@@ -44,7 +44,7 @@ class Euler(MathObject):
         if ks.getRTValTypeName(x) == 'Euler':
             self._rtval = x
         else:
-            
+
             if x is not None and not isinstance(x, (int, float)) and not isinstance(x, Euler):
                 raise TypeError("Euler: Invalid type for 'x' argument. Must be an int or float.")
 
@@ -61,14 +61,13 @@ class Euler(MathObject):
                     raise TypeError("Euler: Invalid type for 'ro' argument. Must be an int or a string.")
 
             self._rtval = ks.rtVal('Euler')
-            if type(x) == Euler:
+            if isinstance(x, Euler):
                 self.set(x=x.x, y=x.y, z=x.z, ro=x.ro)
-            else:
-                if x is not None and y is not None and z is not None:
-                    if ro is not None:
-                        self.set(x=x, y=y, z=z, ro=ro)
-                    else:
-                        self.set(x=x, y=y, z=z)
+            elif x is not None and y is not None and z is not None:
+                if ro is not None:
+                    self.set(x=x, y=y, z=z, ro=ro)
+                else:
+                    self.set(x=x, y=y, z=z)
 
 
 
