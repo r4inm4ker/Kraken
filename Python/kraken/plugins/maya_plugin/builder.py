@@ -4,7 +4,7 @@ Classes:
 Builder -- Component representation.
 
 """
-from kraken.core.kraken_system import KrakenSystem as KS
+
 from kraken.core.builders.base_builder import BaseBuilder
 from kraken.core.objects.scene_item import SceneItem
 from kraken.core.objects.attributes.base_attribute import BaseAttribute
@@ -524,7 +524,13 @@ class Builder(BaseBuilder):
 
         try:
             # Get or construct a Fabric Engine client
-            client = KS.inst().getCoreClient()
+            contextID = cmds.fabricSplice('getClientContextID')
+            if contextID == '':
+                cmds.fabricSplice('constructClient')
+                contextID = cmds.fabricSplice('getClientContextID')
+
+            # Connect the Python client to the Softimage client.
+            client = core.createClient({"contextID": contextID})
 
             # Get the extension to load and create an instance of the object.
             extension = kOperator.getExtension()

@@ -5,7 +5,6 @@ Builder -- Component representation.
 
 """
 
-from kraken.core.kraken_system import KrakenSystem as KS
 from kraken.core.builders.base_builder import BaseBuilder
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
@@ -568,7 +567,13 @@ class Builder(BaseBuilder):
 
         try:
             # Get or construct a Fabric Engine client
-            client = KS.inst().getCoreClient()
+            contextID = si.fabricSplice('getClientContextID')
+            if contextID == '':
+                si.fabricSplice('constructClient')
+                contextID = si.fabricSplice('getClientContextID')
+
+            # Connect the Python client to the Softimage client.
+            client = core.createClient({"contextID": contextID})
 
             # Get the extension to load and create an instance of the object.
             extension = kOperator.getExtension()
