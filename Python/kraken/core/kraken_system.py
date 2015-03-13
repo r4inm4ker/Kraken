@@ -5,9 +5,9 @@ KrakenSystem - Class for constructing the Fabric Engine Core client.
 
 """
 
+import imp
 from kraken.core.maths.math_object import MathObject
 import FabricEngine.Core
-
 
 class KrakenSystem(object):
     """Kraken base object type for any 3D object."""
@@ -18,9 +18,8 @@ class KrakenSystem(object):
         """Initializes the Kraken System object."""
 
         super(KrakenSystem, self).__init__()
-        self.client = FabricEngine.Core.createClient()
-        self.client.loadExtension('Math')
 
+        self.client = None
 
     def getCoreClient(self):
         """Doc String.
@@ -32,6 +31,42 @@ class KrakenSystem(object):
         True if successful.
 
         """
+        if self.client == None:
+            print "getCoreClient:"
+            try:
+                imp.find_module('cmds')
+                host = 'Maya'
+            except ImportError:
+                try:
+                    imp.find_module('sipyutils')
+                    host = 'Softimage'
+                except ImportError:
+                    host = 'Python'
+                    
+            print "host:" + host
+            if host == "Python":
+                self.client = FabricEngine.Core.createClient()
+                self.client.loadExtension('Math')
+
+            elif host == "Maya":
+                contextID = cmds.fabricSplice('getClientContextID')
+                if contextID == '':
+                    cmds.fabricSplice('constructClient')
+                    contextID = cmds.fabricSplice('getClientContextID')
+
+                # Pull out the Splice client.
+                self.client = FabricEngine.Core.createClient({"contextID": contextID})
+
+            elif host == "Softimage":
+                from win32com.client.dynamic import Dispatch
+                si = Dispatch("XSI.Application").Application
+                contextID = si.fabricSplice('getClientContextID')
+                if contextID == '':
+                    si.fabricSplice('constructClient')
+                    contextID = si.fabricSplice('getClientContextID')
+
+                # Pull out the Splice client.
+                self.client = FabricEngine.Core.createClient({"contextID": contextID})
 
         return self.client
 
@@ -46,6 +81,7 @@ class KrakenSystem(object):
         True if successful.
 
         """
+        client = self.getCoreClient()
 
         klType = getattr(self.client.RT.types, dataType)
         if defaultValue is not None:
