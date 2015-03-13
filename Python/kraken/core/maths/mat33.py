@@ -5,7 +5,7 @@ Mat33 -- Matrix 3 transform object.
 """
 
 from math_object import MathObject
-from kraken.core.kraken_system import KrakenSystem as KS
+from kraken.core.kraken_system import ks
 from vec3 import Vec3
 
 
@@ -20,7 +20,7 @@ class Mat33(MathObject):
         if row0 is not None and self.getTypeName(row0) == 'Mat33':
             self._rtval = row0
         else:
-            self._rtval = KS.inst().rtVal('Mat33')
+            self._rtval = ks.rtVal('Mat33')
             if row0 is not None and row1 is not None and row2 is not None:
                 self.setRows(row0, row1, row2)
 
@@ -54,7 +54,7 @@ class Mat33(MathObject):
 
         """
 
-        self._rtval.row0 = KS.inst().rtVal('Scalar', value)
+        self._rtval.row0 = ks.rtVal('Scalar', value)
 
         return True
 
@@ -83,7 +83,7 @@ class Mat33(MathObject):
 
         """
 
-        self._rtval.row1 = KS.inst().rtVal('Scalar', value)
+        self._rtval.row1 = ks.rtVal('Scalar', value)
 
         return True
 
@@ -112,7 +112,7 @@ class Mat33(MathObject):
 
         """
 
-        self._rtval.row2 = KS.inst().rtVal('Scalar', value)
+        self._rtval.row2 = ks.rtVal('Scalar', value)
 
         return True
 
@@ -146,7 +146,7 @@ class Mat33(MathObject):
 
         """
 
-        self._rtval.setRows('', KS.inst().rtVal('Vec3', row0), KS.inst().rtVal('Vec3', row1), KS.inst().rtVal('Vec3', row2))
+        self._rtval.setRows('', ks.rtVal('Vec3', row0), ks.rtVal('Vec3', row1), ks.rtVal('Vec3', row2))
 
         return True
 
@@ -164,7 +164,7 @@ class Mat33(MathObject):
 
         """
 
-        self._rtval.setColumns('', KS.inst().rtVal('Vec3', col0), KS.inst().rtVal('Vec3', col1), KS.inst().rtVal('Vec3', col2))
+        self._rtval.setColumns('', ks.rtVal('Vec3', col0), ks.rtVal('Vec3', col1), ks.rtVal('Vec3', col2))
 
         return True
 
@@ -206,7 +206,7 @@ class Mat33(MathObject):
 
         """
 
-        self._rtval.setDiagonal('', KS.inst().rtVal('Scalar', v))
+        self._rtval.setDiagonal('', ks.rtVal('Scalar', v))
 
         return True
 
@@ -223,7 +223,7 @@ class Mat33(MathObject):
 
         """
 
-        self._rtval.setDiagonal('', KS.inst().rtVal('Vec3', v))
+        self._rtval.setDiagonal('', ks.rtVal('Vec3', v))
 
         return True
 
@@ -239,7 +239,7 @@ class Mat33(MathObject):
 
         """
 
-        return self._rtval.equal('Boolean', KS.inst().rtVal('Mat33', other))
+        return self._rtval.equal('Boolean', ks.rtVal('Mat33', other))
 
 
     def almostEqual(self, other, precision=None):
@@ -254,9 +254,9 @@ class Mat33(MathObject):
 
         """
         if precision is not None:
-            return self._rtval.almostEqual('Boolean', KS.inst().rtVal('Mat33', other), KS.inst().rtVal('Scalar', precision))
+            return self._rtval.almostEqual('Boolean', ks.rtVal('Mat33', other), ks.rtVal('Scalar', precision))
         else:
-            return self._rtval.almostEqual('Boolean', KS.inst().rtVal('Mat33', other))
+            return self._rtval.almostEqual('Boolean', ks.rtVal('Mat33', other))
 
 
     # # Equals operator
@@ -326,7 +326,7 @@ class Mat33(MathObject):
 
         """
 
-        return Mat33(self._rtval.add('Mat33', KS.inst().rtVal('Mat33', other)))
+        return Mat33(self._rtval.add('Mat33', ks.rtVal('Mat33', other)))
 
 
     def subtract(self, other):
@@ -340,7 +340,7 @@ class Mat33(MathObject):
 
         """
 
-        return Mat33(self._rtval.subtract('Mat33', KS.inst().rtVal('Mat33', other)))
+        return Mat33(self._rtval.subtract('Mat33', ks.rtVal('Mat33', other)))
 
 
     def multiply(self, other):
@@ -354,7 +354,7 @@ class Mat33(MathObject):
 
         """
 
-        return Mat33(self._rtval.multiply('Mat33', KS.inst().rtVal('Mat33', other)))
+        return Mat33(self._rtval.multiply('Mat33', ks.rtVal('Mat33', other)))
 
 
     def multiplyScalar(self, other):
@@ -368,7 +368,7 @@ class Mat33(MathObject):
 
         """
 
-        return Mat33(self._rtval.multiplyScalar('Mat33', KS.inst().rtVal('Scalar', other)))
+        return Mat33(self._rtval.multiplyScalar('Mat33', ks.rtVal('Scalar', other)))
 
 
     def multiplyVector(self, other):
@@ -382,7 +382,7 @@ class Mat33(MathObject):
 
         """
 
-        return Vec3(self._rtval.multiplyVector('Vec3', KS.inst().rtVal('Vec3', other)))
+        return Vec3(self._rtval.multiplyVector('Vec3', ks.rtVal('Vec3', other)))
 
 
     def divideScalar(self, other):

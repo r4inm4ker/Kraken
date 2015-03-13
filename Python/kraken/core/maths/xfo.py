@@ -5,7 +5,7 @@ Xfo -- Transform.
 """
 
 from math_object import MathObject
-from kraken.core.kraken_system import KrakenSystem as KS
+from kraken.core.kraken_system import ks
 from vec3 import Vec3
 from quat import Quat
 from mat33 import Mat33
@@ -22,7 +22,7 @@ class Xfo(MathObject):
         if tr is not None and self.getTypeName(tr) == 'Xfo':
             self._rtval = tr
         else:
-            self._rtval = KS.inst().rtVal('Xfo')
+            self._rtval = ks.rtVal('Xfo')
             if tr is not None:
                 self.tr = tr
             if ori is not None:
@@ -61,7 +61,7 @@ class Xfo(MathObject):
 
         """
 
-        self._rtval.tr = KS.inst().rtVal('Vec3', value)
+        self._rtval.tr = ks.rtVal('Vec3', value)
 
         return True
 
@@ -90,7 +90,7 @@ class Xfo(MathObject):
 
         """
 
-        self._rtval.ori = KS.inst().rtVal('Quat', value)
+        self._rtval.ori = ks.rtVal('Quat', value)
 
         return True
 
@@ -119,7 +119,7 @@ class Xfo(MathObject):
 
         """
 
-        self._rtval.sc = KS.inst().rtVal('Vec3', value)
+        self._rtval.sc = ks.rtVal('Vec3', value)
 
         return True
 
@@ -153,7 +153,7 @@ class Xfo(MathObject):
 
         """
 
-        self._rtval.set('', KS.inst().rtVal('Vec3', tr), KS.inst().rtVal('Quat', ori), KS.inst().rtVal('Vec3', sc))
+        self._rtval.set('', ks.rtVal('Vec3', tr), ks.rtVal('Quat', ori), ks.rtVal('Vec3', sc))
 
         return True
 
@@ -182,7 +182,7 @@ class Xfo(MathObject):
 
         """
 
-        return Xfo(self._rtval.setFromMat44('Xfo', KS.inst().rtVal('Mat44', m)))
+        return Xfo(self._rtval.setFromMat44('Xfo', ks.rtVal('Mat44', m)))
 
 
     def toMat44(self):
@@ -223,7 +223,7 @@ class Xfo(MathObject):
 
         """
 
-        return Xfo(self._rtval.multiply('Xfo', KS.inst().rtVal('Xfo', xfo)))
+        return Xfo(self._rtval.multiply('Xfo', ks.rtVal('Xfo', xfo)))
 
 
     def transformVector(self, v):
@@ -237,7 +237,7 @@ class Xfo(MathObject):
 
         """
 
-        return Vec3(self._rtval.transformVector('Vec3', KS.inst().rtVal('Vec3', v)))
+        return Vec3(self._rtval.transformVector('Vec3', ks.rtVal('Vec3', v)))
 
 
     def transformRay(self, ray):
@@ -251,7 +251,7 @@ class Xfo(MathObject):
 
         """
 
-        return Ray(self._rtval.transformRay('Ray', KS.inst().rtVal('Ray', ray)))
+        return Ray(self._rtval.transformRay('Ray', ks.rtVal('Ray', ray)))
 
 
     def inverse(self):
@@ -279,7 +279,7 @@ class Xfo(MathObject):
 
         """
 
-        return Vec3(self._rtval.inverseTransformVector('Vec3', KS.inst().rtVal('Vec3', vec)))
+        return Vec3(self._rtval.inverseTransformVector('Vec3', ks.rtVal('Vec3', vec)))
 
 
     def linearInterpolate(self, other, t):
@@ -295,7 +295,7 @@ class Xfo(MathObject):
 
         """
 
-        return Xfo(self._rtval.linearInterpolate('Xfo', KS.inst().rtVal('Xfo', other), KS.inst().rtVal('Scalar', t)))
+        return Xfo(self._rtval.linearInterpolate('Xfo', ks.rtVal('Xfo', other), ks.rtVal('Scalar', t)))
 
 
     def setFromVectors(self, inVec1, inVec2, inVec3, translation):

@@ -5,7 +5,7 @@ Euler -- Euler rotation.
 """
 
 import math
-from kraken.core.kraken_system import KrakenSystem as KS
+from kraken.core.kraken_system import ks
 from math_object import MathObject
 from mat33 import Mat33
 
@@ -59,7 +59,7 @@ class Euler(MathObject):
         if x is not None and self.getTypeName(x) == 'Euler':
             self._rtval = x
         else:
-            self._rtval = KS.inst().rtVal('Euler')
+            self._rtval = ks.rtVal('Euler')
             if x is not None and y is not None and z is not None:
                 if ro is not None:
                     self.set(x=x, y=y, z=z, ro=ro)
@@ -101,7 +101,7 @@ class Euler(MathObject):
 
         """
 
-        self._rtval.x = KS.inst().rtVal('Scalar', value)
+        self._rtval.x = ks.rtVal('Scalar', value)
 
 
     @property
@@ -131,7 +131,7 @@ class Euler(MathObject):
 
         """
 
-        self._rtval.y = KS.inst().rtVal('Scalar', value)
+        self._rtval.y = ks.rtVal('Scalar', value)
 
 
     @property
@@ -161,7 +161,7 @@ class Euler(MathObject):
 
         """
 
-        self._rtval.z = KS.inst().rtVal('Scalar', value)
+        self._rtval.z = ks.rtVal('Scalar', value)
 
 
     @property
@@ -190,7 +190,7 @@ class Euler(MathObject):
         True if successful.
 
         """
-        self._rtval.ro.order = KS.inst().rtVal('Integer', value)
+        self._rtval.ro.order = ks.rtVal('Integer', value)
 
 
     def clone(self):
@@ -222,11 +222,11 @@ class Euler(MathObject):
         True if successful.
 
         """
-        self._rtval.set('', KS.inst().rtVal('Scalar', x), KS.inst().rtVal('Scalar', y), KS.inst().rtVal('Scalar', z))
+        self._rtval.set('', ks.rtVal('Scalar', x), ks.rtVal('Scalar', y), ks.rtVal('Scalar', z))
         if ro is not None:
             if isinstance(ro, basestring):
                 ro = rotationOrderStrToIntMapping[ro]
-            self._rtval.ro.order = KS.inst().rtVal('Integer', ro)
+            self._rtval.ro.order = ks.rtVal('Integer', ro)
 
 
 
@@ -241,7 +241,7 @@ class Euler(MathObject):
 
         """
 
-        return self._rtval.equal('Boolean', KS.inst().rtVal('Euler', other))
+        return self._rtval.equal('Boolean', ks.rtVal('Euler', other))
 
 
     def almostEqual(self, other, precision):
@@ -256,7 +256,7 @@ class Euler(MathObject):
 
         """
 
-        return self._rtval.almostEqual('Boolean', KS.inst().rtVal('Euler', other), KS.inst().rtVal('Scalar', precision))
+        return self._rtval.almostEqual('Boolean', ks.rtVal('Euler', other), ks.rtVal('Scalar', precision))
 
 
     def toMat33(self):

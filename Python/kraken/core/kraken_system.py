@@ -120,3 +120,5 @@ class KrakenSystem(object):
         """
 
         return cls.getInstance()
+
+ks = KrakenSystem.getInstance()
