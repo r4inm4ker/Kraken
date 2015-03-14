@@ -1,5 +1,5 @@
 from kraken.core.maths import *
-from kraken.core.objects.kraken_loader import KrakenLoader 
+from kraken.core.io.kraken_loader import KrakenLoader 
 
 if __name__ == "__main__":
     tr = Vec3(32,35,234)

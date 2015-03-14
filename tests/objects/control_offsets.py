@@ -1,4 +1,5 @@
 from kraken import plugins
+from kraken.core.maths import *
 from kraken.core.objects.controls.null_control import NullControl
 
 builder = plugins.getBuilder()
