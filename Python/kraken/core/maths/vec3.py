@@ -5,7 +5,7 @@ Vec3 -- Vector 3 object.
 """
 
 import math
-from kraken.core.kraken_system import KrakenSystem as KS
+from kraken.core.kraken_system import ks
 from math_object import MathObject
 
 
@@ -16,11 +16,14 @@ class Vec3(MathObject):
         """Initializes x, y, z values for Vec3 object."""
 
         super(Vec3, self).__init__()
-        if self.getTypeName(x) == 'Vec3':
+        if ks.getRTValTypeName(x) == 'Vec3':
             self._rtval = x
         else:
-            self._rtval = KS.inst().rtVal('Vec3')
-            self.set(x=x, y=y, z=z)
+            self._rtval = ks.rtVal('Vec3')
+            if isinstance(x, Vec3):
+                self.set(x=x.x, y=x.y, z=x.z)
+            else:
+                self.set(x=x, y=y, z=z)
 
 
     def __str__(self):
@@ -53,7 +56,7 @@ class Vec3(MathObject):
 
         """
 
-        self._rtval.x = KS.inst().rtVal('Scalar', value)
+        self._rtval.x = ks.rtVal('Scalar', value)
 
         return True
 
@@ -82,7 +85,7 @@ class Vec3(MathObject):
 
         """
 
-        self._rtval.y = KS.inst().rtVal('Scalar', value)
+        self._rtval.y = ks.rtVal('Scalar', value)
 
 
     @property
@@ -109,7 +112,7 @@ class Vec3(MathObject):
 
         """
 
-        self._rtval.z = KS.inst().rtVal('Scalar', value)
+        self._rtval.z = ks.rtVal('Scalar', value)
 
         return True
 
@@ -143,7 +146,7 @@ class Vec3(MathObject):
 
         """
 
-        self._rtval.set('', KS.inst().rtVal('Scalar', x), KS.inst().rtVal('Scalar', y), KS.inst().rtVal('Scalar', z))
+        self._rtval.set('', ks.rtVal('Scalar', x), ks.rtVal('Scalar', y), ks.rtVal('Scalar', z))
 
         return True
 
@@ -187,7 +190,7 @@ class Vec3(MathObject):
 
         """
 
-        return self._rtval.almostEqual('Boolean', other._rtval, KS.inst().rtVal('Scalar', precision))
+        return self._rtval.almostEqual('Boolean', other._rtval, ks.rtVal('Scalar', precision))
 
 
     def almostEqual(self, other):
@@ -216,7 +219,7 @@ class Vec3(MathObject):
 
         """
 
-        return self._rtval.component('Scalar', KS.inst().rtVal('Size', i))
+        return self._rtval.component('Scalar', ks.rtVal('Size', i))
 
 
     # Sets the component of this vector by index
@@ -232,7 +235,7 @@ class Vec3(MathObject):
 
         """
 
-        return self._rtval.setComponent('', KS.inst().rtVal('Size', i), KS.inst().rtVal('Scalar', v))
+        return self._rtval.setComponent('', ks.rtVal('Size', i), ks.rtVal('Scalar', v))
 
 
     # # Equals operator
@@ -352,7 +355,7 @@ class Vec3(MathObject):
 
         """
 
-        return Vec3(self._rtval.multiplyScalar('Vec3', KS.inst().rtVal('Scalar', other)))
+        return Vec3(self._rtval.multiplyScalar('Vec3', ks.rtVal('Scalar', other)))
 
 
     def divideScalar(self, other):
@@ -366,7 +369,7 @@ class Vec3(MathObject):
 
         """
 
-        return Vec3(self._rtval.divideScalar('Vec3', KS.inst().rtVal('Scalar', other)))
+        return Vec3(self._rtval.divideScalar('Vec3', ks.rtVal('Scalar', other)))
 
 
     def negate(self):
@@ -559,7 +562,7 @@ class Vec3(MathObject):
 
         """
 
-        return Vec3(self._rtval.linearInterpolate('Vec3', KS.inst().rtVal('Scalar', t)))
+        return Vec3(self._rtval.linearInterpolate('Vec3', ks.rtVal('Scalar', t)))
 
 
     def distanceToLine(self, lineP0, lineP1):

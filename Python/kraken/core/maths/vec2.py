@@ -5,7 +5,7 @@ Vec2 -- Vector 2 object.
 """
 
 import math
-from kraken.core.kraken_system import KrakenSystem as KS
+from kraken.core.kraken_system import ks
 from math_object import MathObject
 
 
@@ -16,10 +16,14 @@ class Vec2(MathObject):
         """Initializes x, y values for Vec2 object."""
 
         super(Vec2, self).__init__()
-
-        self._rtval = KS.inst().rtVal('Vec2')
-        self.set(x=x, y=y)
-
+        if ks.getRTValTypeName(x) == 'Vec2':
+            self._rtval = x
+        else:
+            self._rtval = ks.rtVal('Vec2')
+            if isinstance(x, Vec2):
+                self.set(x=x.x, y=x.y)
+            else:
+                self.set(x=x, y=y)
 
     def __str__(self):
         """String representation of the Vec2 object."""
@@ -51,7 +55,7 @@ class Vec2(MathObject):
 
         """
 
-        self._rtval.x = KS.inst().rtVal('Scalar', value)
+        self._rtval.x = ks.rtVal('Scalar', value)
 
         return True
 
@@ -80,7 +84,7 @@ class Vec2(MathObject):
 
         """
 
-        self._rtval.y = KS.inst().rtVal('Scalar', value)
+        self._rtval.y = ks.rtVal('Scalar', value)
 
         return True
 
@@ -112,6 +116,6 @@ class Vec2(MathObject):
 
         """
 
-        self._rtval.set('', KS.inst().rtVal('Scalar', x), KS.inst().rtVal('Scalar', y))
+        self._rtval.set('', ks.rtVal('Scalar', x), ks.rtVal('Scalar', y))
 
         return True
