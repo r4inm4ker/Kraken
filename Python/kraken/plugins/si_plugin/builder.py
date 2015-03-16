@@ -565,29 +565,19 @@ class Builder(BaseBuilder):
         True if successful.
 
         """
-
+        print "buildSpliceOperators:" + kOperator.getName() + ":" + kOperator.getSolverTypeName()
         try:
-            # Load the Fabric Engine client
-            ks.loadCoreClient()
-
-            # Get the extension to load and create an instance of the object.
-            extension = kOperator.getExtension()
-            ks.loadExtension(extension)
-            ks.loadExtension('Kraken')
-
             solverTypeName = kOperator.getSolverTypeName()
-            solver = ks.constructRTVal(solverTypeName)
 
             # Find operatorOwner to attach Splice Operator to.
             operatorOwner = None
             operatorOwnerArg = None
 
-            args = solver.getArguments('KrakenSolverArg[]')
+            args = kOperator.getSolverArgs()
             for i in xrange(len(args)):
                 arg = args[i]
 
                 if arg.connectionType == 'io' and arg.dataType == 'Mat44':
-
                     operatorOwner = self._getDCCSceneItem(kOperator.getOutput(arg.name))
                     operatorOwnerArg = arg.name
                     break
@@ -601,18 +591,7 @@ class Builder(BaseBuilder):
             # Add the private/non-mayaAttr port that stores the Solver object
             si.fabricSplice("addInternalPort", operatorOwner.FullName + ".kine.global.SpliceOp", "{\"portName\":\"solver\", \"dataType\":\"" + solverTypeName + "\", \"extension\":\"" + kOperator.getExtension() + "\", \"portMode\":\"io\"}", "")
 
-            # Start constructing the source code.
-            opSourceCode = ""
-            opSourceCode += "require Kraken;\n"
-            opSourceCode += "require " + kOperator.getExtension() + ";\n\n"
-            opSourceCode += "operator " + kOperator.getName() + "(\n"
-
-            opSourceCode += "  io " + solverTypeName + " solver,\n"
-
-            # Get the args from the solver KL object.
-            args = solver.getArguments('KrakenSolverArg[]')
-
-            functionCall = "  solver.solve("
+            # connect the operator to the objects in the DCC
             for i in xrange(len(args)):
                 arg = args[i]
 
@@ -640,22 +619,8 @@ class Builder(BaseBuilder):
                     elif arg.connectionType in ['io', 'out']:
                         si.fabricSplice("addOutputPort", operatorOwner.FullName + ".kine.global.SpliceOp", "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\", \"extension\":\"\", \"targets\":\"" + targetObject.FullName + connectionSuffix + "\"}", "")
 
-                # Connect the ports to the inputs/outputs in the rig.
-                opSourceCode += "  " + arg.connectionType + " " + arg.dataType + " " + arg.name
-                if i == len(args) - 1:
-                    opSourceCode += "\n"
-                else:
-                    opSourceCode += ",\n"
-
-                if i == len(args) - 1:
-                    functionCall += arg.name
-                else:
-                    functionCall += arg.name + ", "
-
-            opSourceCode += "    )\n"
-            opSourceCode += "{\n"
-            opSourceCode += functionCall + ");\n"
-            opSourceCode += "}\n"
+            # Generate the operator source code.
+            opSourceCode = self._generateSpliceOperatorSourceCode(kOperator)
 
             si.fabricSplice('addKLOperator', operatorOwner.FullName + ".kine.global.SpliceOp", '{"opName": "' + kOperator.getName() + '"}', opSourceCode)
 

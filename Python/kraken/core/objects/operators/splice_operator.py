@@ -6,7 +6,7 @@ SpliceOperator - Splice operator object.
 """
 
 from kraken.core.objects.operators.base_operator import BaseOperator
-
+from kraken.core.kraken_system import ks
 
 class SpliceOperator(BaseOperator):
     """Base Operator representation."""
@@ -24,6 +24,14 @@ class SpliceOperator(BaseOperator):
 
         self.solverTypeName = solverTypeName
         self.extension = extension
+
+        # Load the Fabric Engine client and construct the RTVal for the Solver
+        ks.loadCoreClient()
+        ks.loadExtension('Kraken')
+        ks.loadExtension(self.extension)
+        self.solverRTVal = ks.constructRTVal(self.solverTypeName)
+        self.args = self.solverRTVal.getArguments('KrakenSolverArg[]')
+ 
 
 
     def getSolverTypeName(self):
@@ -46,3 +54,8 @@ class SpliceOperator(BaseOperator):
         """
 
         return self.extension
+
+    def getSolverArgs(self):
+
+        # Get the args from the solver KL object.
+        return self.args

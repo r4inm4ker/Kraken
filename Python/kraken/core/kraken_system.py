@@ -24,6 +24,7 @@ class KrakenSystem(object):
         self.client = None
         self.typeDescs = None
         self.registeredTypes = None
+        self.loadedExtensions = []
 
     def loadCoreClient(self):
         """Loads the Fabric Engine Core Client
@@ -90,10 +91,14 @@ class KrakenSystem(object):
         None
 
         """
-        
-        self.client.loadExtension(extension) 
-        self.registeredTypes = self.client.RT.types
-        self.typeDescs = self.client.RT.getRegisteredTypes()
+        if extension not in self.loadedExtensions:
+            Profiler.getInstance().push("loadExtension:" + extension)
+            self.client.loadExtension(extension) 
+            self.registeredTypes = self.client.RT.types
+            self.typeDescs = self.client.RT.getRegisteredTypes()
+            # Cache the loaded extension so that we aviod refreshing the typeDescs cache(costly)
+            self.loadedExtensions.append(extension)
+            Profiler.getInstance().pop()
 
     def constructRTVal(self, dataType, defaultValue=None):
         """Constructs a new RTVal using the given name and optional devault value.

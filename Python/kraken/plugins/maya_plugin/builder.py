@@ -523,16 +523,7 @@ class Builder(BaseBuilder):
         """
 
         try:
-            # Load the Fabric Engine client
-            ks.loadCoreClient()
-
-            # Get the extension to load and create an instance of the object.
-            extension = kOperator.getExtension()
-            ks.loadExtension(extension)
-            ks.loadExtension('Kraken')
-
             solverTypeName = kOperator.getSolverTypeName()
-            solver = ks.constructRTVal(solverTypeName)
 
             # Create Splice Operator
             spliceNode = pm.createNode('spliceMayaNode', name=kOperator.getName() + "_SpliceOp")
@@ -540,18 +531,8 @@ class Builder(BaseBuilder):
             # Add the private/non-mayaAttr port that stores the Solver object
             cmds.fabricSplice("addIOPort", spliceNode, "{\"portName\":\"solver\", \"dataType\":\"" + solverTypeName + "\", \"extension\":\"" + kOperator.getExtension() + "\", \"addMayaAttr\": false}")
 
-            # Start constructing the source code.
-            opSourceCode = ""
-            opSourceCode += "require Kraken;\n"
-            opSourceCode += "require " + kOperator.getExtension() + ";\n\n"
-            opSourceCode += "operator " + kOperator.getName() + "(\n"
-
-            opSourceCode += "    io " + solverTypeName + " solver,\n"
-
-            # Get the args from the solver KL object.
-            args = solver.getArguments('KrakenSolverArg[]')
-
-            functionCall = "    solver.solve("
+            # connect the operator to the objects in the DCC
+            args = kOperator.getSolverArgs()
             for i in xrange(len(args)):
                 arg = args[i]
 
@@ -574,7 +555,6 @@ class Builder(BaseBuilder):
                     else:
                         raise Exception(opObject.getFullName() + " with type '" + opObject.getKType() + " is not implemented!")
 
-
                 elif arg.connectionType in ['io', 'out']:
                     cmds.fabricSplice("addOutputPort", spliceNode, "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\", \"extension\":\"\", \"addMayaAttr\": true}", "")
 
@@ -589,24 +569,9 @@ class Builder(BaseBuilder):
                         decomposeNode.attr("outputScale").connect(targetObject.attr("scale"))
                         decomposeNode.attr("outputTranslate").connect(targetObject.attr("translate"))
 
-
-                # Connect the ports to the inputs/outputs in the rig.
-                opSourceCode += "    " + arg.connectionType + " " + arg.dataType + " " + arg.name
-                if i == len(args) - 1:
-                    opSourceCode += "\n"
-                else:
-                    opSourceCode += ",\n"
-
-                if i == len(args) - 1:
-                    functionCall += arg.name
-                else:
-                    functionCall += arg.name + ", "
-
-            opSourceCode += "    )\n"
-            opSourceCode += "{\n"
-            opSourceCode += functionCall + ");\n"
-            opSourceCode += "}\n"
-
+            # Generate the operator source code.
+            opSourceCode = self._generateSpliceOperatorSourceCode(kOperator)
+            
             cmds.fabricSplice('addKLOperator', spliceNode, '{"opName": "' + kOperator.getName() + '"}', opSourceCode)
 
         finally:

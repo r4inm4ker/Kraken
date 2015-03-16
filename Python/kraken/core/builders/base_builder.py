@@ -420,6 +420,40 @@ class BaseBuilder(object):
 
         return True
 
+    def _generateSpliceOperatorSourceCode(self, kOperator):
+
+        solverTypeName = kOperator.getSolverTypeName()
+        args = kOperator.getSolverArgs()
+
+        # Start constructing the source code.
+        opSourceCode = ""
+        opSourceCode += "require Kraken;\n"
+        opSourceCode += "require " + kOperator.getExtension() + ";\n\n"
+        opSourceCode += "operator " + kOperator.getName() + "(\n"
+
+        opSourceCode += "    io " + solverTypeName + " solver,\n"
+
+        functionCall = "    solver.solve("
+        for i in xrange(len(args)):
+            arg = args[i]
+            # Connect the ports to the inputs/outputs in the rig.
+            opSourceCode += "    " + arg.connectionType + " " + arg.dataType + " " + arg.name
+            if i == len(args) - 1:
+                opSourceCode += "\n"
+            else:
+                opSourceCode += ",\n"
+
+            if i == len(args) - 1:
+                functionCall += arg.name
+            else:
+                functionCall += arg.name + ", "
+
+        opSourceCode += "    )\n"
+        opSourceCode += "{\n"
+        opSourceCode += functionCall + ");\n"
+        opSourceCode += "}\n"
+
+        return opSourceCode
 
     # =====================
     # Build Object Methods
