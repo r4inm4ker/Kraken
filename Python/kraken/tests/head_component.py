@@ -14,12 +14,15 @@ from kraken.core.objects.controls.sphere_control import SphereControl
 from kraken.core.objects.operators.splice_operator import SpliceOperator
 
 from kraken.helpers.utility_methods import logHierarchy
+from kraken.core.profiler import Profiler
 
 class HeadComponent(BaseComponent):
     """Head Component"""
 
     def __init__(self, name, parent=None, location='M'):
+        Profiler.getInstance().push("Construct Head Component:" + name + " location:" + location)
         super(HeadComponent, self).__init__(name, parent, location)
+        
 
         # Setup component attributes
         defaultAttrGroup = self.getAttributeGroupByIndex(0)
@@ -189,6 +192,7 @@ class HeadComponent(BaseComponent):
         # spliceOp.setOutput("eyeLeftDeformer", eyeLeftDef)
         # spliceOp.setOutput("eyeRightDeformer", eyeRightDef)
 
+        Profiler.getInstance().pop()
 
     def buildRig(self, parent):
         pass

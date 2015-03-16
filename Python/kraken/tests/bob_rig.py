@@ -11,11 +11,13 @@ from spine_component import SpineComponent
 from neck_component import NeckComponent
 from head_component import HeadComponent
 
+from kraken.core.profiler import Profiler
 
 class Rig(Container):
     """Test Arm Component"""
 
     def __init__(self, name):
+        Profiler.getInstance().push("Construct BobRig:" + name)
         super(Rig, self).__init__(name)
 
         # Add rig layers
@@ -109,6 +111,7 @@ class Rig(Container):
         # armRightFollowBodyInput = armRightComponent.getInputByName('followBody')
         # armRightFollowBodyInput.setSource(clavicleRightFollowBodyOutput.getTarget())
 
+        Profiler.getInstance().pop()
 
 
 if __name__ == "__main__":

@@ -12,6 +12,7 @@ from kraken.core.configs.base_config import BaseConfig
 from kraken.core.objects.components.base_component import BaseComponent
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
+from kraken.core.profiler import Profiler
 
 class BaseBuilder(object):
     """BaseBuilder object for building objects in DCC's. Sub-class per DCC in a
@@ -902,12 +903,16 @@ class BaseBuilder(object):
 
         """
 
+        Profiler.getInstance().push("build:" + kSceneItem.getName())
+
         try:
             self._preBuild(kSceneItem)
             self._build(kSceneItem)
 
         finally:
             self._postBuild()
+
+        Profiler.getInstance().pop()
 
         return True
 

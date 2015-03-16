@@ -576,7 +576,7 @@ class Builder(BaseBuilder):
             ks.loadExtension('Kraken')
 
             solverTypeName = kOperator.getSolverTypeName()
-            solver = kraken_system.constructRTVal(solverTypeName)
+            solver = ks.constructRTVal(solverTypeName)
 
             # Find operatorOwner to attach Splice Operator to.
             operatorOwner = None
@@ -659,8 +659,8 @@ class Builder(BaseBuilder):
 
             si.fabricSplice('addKLOperator', operatorOwner.FullName + ".kine.global.SpliceOp", '{"opName": "' + kOperator.getName() + '"}', opSourceCode)
 
-        # finally:
-        #     si.fabricSplice('destroyClient')
+        finally:
+            pass
 
         return True
 

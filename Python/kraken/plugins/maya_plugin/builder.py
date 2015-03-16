@@ -610,7 +610,7 @@ class Builder(BaseBuilder):
             cmds.fabricSplice('addKLOperator', spliceNode, '{"opName": "' + kOperator.getName() + '"}', opSourceCode)
 
         finally:
-            cmds.fabricSplice('destroyClient')
+            pass
 
         return True
 

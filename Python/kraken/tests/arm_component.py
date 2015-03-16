@@ -1,3 +1,5 @@
+
+
 from kraken.core.maths import Vec3
 from kraken.core.maths.xfo import Xfo
 from kraken.core.maths.xfo import xfoFromDirAndUpV
@@ -17,19 +19,21 @@ from kraken.core.objects.controls.triangle_control import TriangleControl
 from kraken.core.objects.operators.splice_operator import SpliceOperator
 
 from kraken.helpers.utility_methods import logHierarchy
+from kraken.core.profiler import Profiler
 
 class ArmComponent(BaseComponent):
     """Arm Component"""
 
     def __init__(self, name, parent=None, location='M'):
+        Profiler.getInstance().push("Construct Arm Component:" + name + " location:" + location)
         super(ArmComponent, self).__init__(name, parent, location)
-
         # =========
         # Controls
         # =========
         # Setup component attributes
         defaultAttrGroup = self.getAttributeGroupByIndex(0)
         defaultAttrGroup.addAttribute(BoolAttribute("toggleDebugging", True))
+
 
         # Default values
         if self.getLocation() == "R":
@@ -275,6 +279,8 @@ class ArmComponent(BaseComponent):
         # spliceOp.setOutput("bone02Deformer", forearmDef)
         # spliceOp.setOutput("bone03Deformer", wristDef)
 
+
+        Profiler.getInstance().pop()
 
     def buildRig(self, parent):
         pass

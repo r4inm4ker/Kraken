@@ -14,11 +14,13 @@ from kraken.core.objects.operators.splice_operator import SpliceOperator
 
 
 from kraken.helpers.utility_methods import logHierarchy
+from kraken.core.profiler import Profiler
 
 class NeckComponent(BaseComponent):
     """Neck Component"""
 
     def __init__(self, name, parent=None, location='M'):
+        Profiler.getInstance().push("Construct Neck Component:" + name + " location:" + location)
         super(NeckComponent, self).__init__(name, parent, location)
 
         # Setup component attributes
@@ -123,6 +125,7 @@ class NeckComponent(BaseComponent):
         # Add Xfo Outputs
         spliceOp.setOutput("constrainee", neckDef)
 
+        Profiler.getInstance().pop()
 
     def buildRig(self, parent):
         pass

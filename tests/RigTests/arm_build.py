@@ -1,15 +1,17 @@
 
 from kraken import plugins
-from kraken.tests.bob_rig import Rig
+import kraken.tests.arm_component
+from kraken.tests.arm_component import ArmComponent
 from kraken.core.profiler import Profiler
 import json
 
-Profiler.getInstance().push("bob_build")
 
-bobRig = Rig("char_bob")
+Profiler.getInstance().push("arm_build")
+
+arm = ArmComponent("arm")
 
 builder = plugins.getBuilder()
-builder.build(bobRig)
+builder.build(arm)
 
 Profiler.getInstance().pop()
 print json.dumps(Profiler.getInstance().generateReport(), sort_keys=False, indent=4, separators=(',', ': '))
