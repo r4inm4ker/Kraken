@@ -1,6 +1,6 @@
 
 from kraken import plugins
-from kraken.tests.bob_rig import Rig
+from kraken.examples.bob_rig import Rig
 from kraken.core.profiler import Profiler
 import json
 

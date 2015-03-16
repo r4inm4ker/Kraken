@@ -2,7 +2,7 @@ from kraken.core.maths import *
 from kraken.core.io.kraken_saver import KrakenSaver
 from kraken.core.io.kraken_loader import KrakenLoader
 
-from kraken.tests.arm_component import ArmComponent
+from kraken.examples.arm_component import ArmComponent
 
 from kraken.helpers.utility_methods import logHierarchy
 
