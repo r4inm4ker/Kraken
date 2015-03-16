@@ -570,7 +570,7 @@ class Builder(BaseBuilder):
                         decomposeNode.attr("outputTranslate").connect(targetObject.attr("translate"))
 
             # Generate the operator source code.
-            opSourceCode = self._generateSpliceOperatorSourceCode(kOperator)
+            opSourceCode = kOperator.generateSourceCode()
             
             cmds.fabricSplice('addKLOperator', spliceNode, '{"opName": "' + kOperator.getName() + '"}', opSourceCode)
 

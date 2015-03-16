@@ -31,8 +31,20 @@ class SpliceOperator(BaseOperator):
         ks.loadExtension(self.extension)
         self.solverRTVal = ks.constructRTVal(self.solverTypeName)
         self.args = self.solverRTVal.getArguments('KrakenSolverArg[]')
- 
 
+        # Initialize the inputs and outsputs based on the given args.
+        for i in xrange(len(self.args)):
+            arg = self.args[i]
+            if arg.connectionType == 'in':
+                if str(arg.dataType).endswith('[]'):
+                    self.inputs[arg.name] = []
+                else:
+                    self.inputs[arg.name] = None
+            else:
+                if str(arg.dataType).endswith('[]'):
+                    self.outputs[arg.name] = []
+                else:
+                    self.outputs[arg.name] = None
 
     def getSolverTypeName(self):
         """Returns the solver type name for this operator.
@@ -59,3 +71,42 @@ class SpliceOperator(BaseOperator):
 
         # Get the args from the solver KL object.
         return self.args
+
+    def generateSourceCode(self):
+
+        solverTypeName = self.getSolverTypeName()
+        args = self.getSolverArgs()
+
+        # Start constructing the source code.
+        opSourceCode = ""
+        opSourceCode += "require Kraken;\n"
+        opSourceCode += "require " + self.getExtension() + ";\n\n"
+        opSourceCode += "operator " + self.getName() + "(\n"
+
+        opSourceCode += "    io " + solverTypeName + " solver,\n"
+
+        functionCall = "    solver.solve("
+        for i in xrange(len(args)):
+            arg = args[i]
+            # Connect the ports to the inputs/outputs in the rig.
+            if arg.connectionType == 'out':
+                opArgType = 'io' 
+            else:
+                opArgType = arg.connectionType
+            opSourceCode += "    " + opArgType + " " + arg.dataType + " " + arg.name
+            if i == len(args) - 1:
+                opSourceCode += "\n"
+            else:
+                opSourceCode += ",\n"
+
+            if i == len(args) - 1:
+                functionCall += arg.name
+            else:
+                functionCall += arg.name + ", "
+
+        opSourceCode += "    )\n"
+        opSourceCode += "{\n"
+        opSourceCode += functionCall + ");\n"
+        opSourceCode += "}\n"
+
+        return opSourceCode

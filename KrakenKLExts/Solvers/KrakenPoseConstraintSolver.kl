@@ -10,7 +10,7 @@ function KrakenSolverArg[] PoseConstraintSolver.getArguments(){
   KrakenSolverArg args[] = this.parent.getArguments();
   args.push(KrakenSolverArg('rightSide', 'in', 'Boolean'));
   args.push(KrakenSolverArg('constrainer', 'in', 'Mat44'));
-  args.push(KrakenSolverArg('constrainee', 'io', 'Mat44'));
+  args.push(KrakenSolverArg('constrainee', 'out', 'Mat44'));
   return args;
 }
 

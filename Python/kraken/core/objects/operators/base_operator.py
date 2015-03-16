@@ -105,8 +105,10 @@ class BaseOperator(object):
         True if successful.
 
         """
-
-        self.inputs[name] = operatorInput
+        if isinstance(self.inputs[name], list):
+            self.inputs[name].append(operatorInput)
+        else:
+            self.inputs[name] = operatorInput
 
         return True
 
@@ -143,7 +145,10 @@ class BaseOperator(object):
 
         """
 
-        self.outputs[name] = operatorOutput
+        if isinstance(self.outputs[name], list):
+            self.outputs[name].append(operatorOutput)
+        else:
+            self.outputs[name] = operatorOutput
 
         return True
 
