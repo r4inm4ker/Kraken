@@ -185,24 +185,24 @@ class SpineComponent(BaseComponent):
         # spliceOp.setOutput("spine04Out", spine04Output)
 
 
-        # # Add Deformer Splice Op
-        # outputsToDeformersSpliceOp = SpliceOperator("spineDeformerSpliceOp", "SpineConstraintSolver", "KrakenSpineSolver")
-        # self.addOperator(outputsToDeformersSpliceOp)
+        # Add Deformer Splice Op
+        outputsToDeformersSpliceOp = SpliceOperator("spineDeformerSpliceOp", "MultiPoseConstraintSolver", "Kraken")
+        self.addOperator(outputsToDeformersSpliceOp)
 
-        # # Add Att Inputs
-        # outputsToDeformersSpliceOp.setInput("debug", debugInputAttr)
+        # Add Att Inputs
+        outputsToDeformersSpliceOp.setInput("debug", debugInputAttr)
 
-        # # Add Xfo Inputstrl)
-        # outputsToDeformersSpliceOp.setInput("bone01Constrainer", spine01Output)
-        # outputsToDeformersSpliceOp.setInput("bone02Constrainer", spine02Output)
-        # outputsToDeformersSpliceOp.setInput("bone03Constrainer", spine03Output)
-        # outputsToDeformersSpliceOp.setInput("bone04Constrainer", spine04Output)
+        # Add Xfo Inputstrl)
+        outputsToDeformersSpliceOp.setInput("constrainers", spine01Output)
+        outputsToDeformersSpliceOp.setInput("constrainers", spine02Output)
+        outputsToDeformersSpliceOp.setInput("constrainers", spine03Output)
+        outputsToDeformersSpliceOp.setInput("constrainers", spine04Output)
 
-        # # Add Xfo Outputs
-        # outputsToDeformersSpliceOp.setOutput("bone01Deformer", spine01Def)
-        # outputsToDeformersSpliceOp.setOutput("bone02Deformer", spine02Def)
-        # outputsToDeformersSpliceOp.setOutput("bone03Deformer", spine03Def)
-        # outputsToDeformersSpliceOp.setOutput("bone04Deformer", spine04Def)
+        # Add Xfo Outputs
+        outputsToDeformersSpliceOp.setOutput("constraineess", spine01Def)
+        outputsToDeformersSpliceOp.setOutput("constraineess", spine02Def)
+        outputsToDeformersSpliceOp.setOutput("constraineess", spine03Def)
+        outputsToDeformersSpliceOp.setOutput("constraineess", spine04Def)
 
         Profiler.getInstance().pop()
 

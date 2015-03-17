@@ -32,7 +32,7 @@ class SpliceOperator(BaseOperator):
         self.solverRTVal = ks.constructRTVal(self.solverTypeName)
         self.args = self.solverRTVal.getArguments('KrakenSolverArg[]')
 
-        # Initialize the inputs and outsputs based on the given args.
+        # Initialize the inputs and outputs based on the given args.
         for i in xrange(len(self.args)):
             arg = self.args[i]
             if arg.connectionType == 'in':
@@ -74,32 +74,34 @@ class SpliceOperator(BaseOperator):
 
     def generateSourceCode(self):
 
-        solverTypeName = self.getSolverTypeName()
-        args = self.getSolverArgs()
-
         # Start constructing the source code.
         opSourceCode = ""
         opSourceCode += "require Kraken;\n"
         opSourceCode += "require " + self.getExtension() + ";\n\n"
         opSourceCode += "operator " + self.getName() + "(\n"
 
-        opSourceCode += "    io " + solverTypeName + " solver,\n"
+        opSourceCode += "    io " + self.solverTypeName + " solver,\n"
 
         functionCall = "    solver.solve("
-        for i in xrange(len(args)):
-            arg = args[i]
+        for i in xrange(len(self.args)):
+            arg = self.args[i]
             # Connect the ports to the inputs/outputs in the rig.
             if arg.connectionType == 'out':
-                opArgType = 'io' 
+                outArgType = 'io' 
             else:
-                opArgType = arg.connectionType
-            opSourceCode += "    " + opArgType + " " + arg.dataType + " " + arg.name
-            if i == len(args) - 1:
+                outArgType = arg.connectionType
+            suffix = ""
+            outDataType = arg.dataType
+            if outDataType.endswith('[]'):
+                outDataType = outDataType[:-2]
+                suffix = "[]"
+            opSourceCode += "    " + outArgType + " " + outDataType + " " + arg.name + suffix
+            if i == len(self.args) - 1:
                 opSourceCode += "\n"
             else:
                 opSourceCode += ",\n"
 
-            if i == len(args) - 1:
+            if i == len(self.args) - 1:
                 functionCall += arg.name
             else:
                 functionCall += arg.name + ", "

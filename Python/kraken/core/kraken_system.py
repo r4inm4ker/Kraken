@@ -8,7 +8,6 @@ KrakenSystem - Class for constructing the Fabric Engine Core client.
 import json
 import imp
 from profiler import Profiler
-from maths.math_object import MathObject
 import FabricEngine.Core
 
 class KrakenSystem(object):
