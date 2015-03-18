@@ -1,10 +1,11 @@
 {
   "code": [
+    "Drawing/DrawingUtils.kl",
     "Solvers/KrakenSolverArg.kl",
     "Solvers/KrakenSolver.kl",
-    "Drawing/DrawingUtils.kl"
     "Solvers/KrakenPoseConstraintSolver.kl",
     "Solvers/KrakenMultiPoseConstraintSolver.kl"
     "Solvers/BezierSpineSolver.kl",
+    "Solvers/NBoneIKSolver.kl"
   ]
 }
