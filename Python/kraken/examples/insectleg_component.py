@@ -40,23 +40,25 @@ class InsectLegComponent(BaseComponent):
 
         if self.getLocation() == "R":
             jointPositions.append(Vec3(-0.9811, 9.769, -0.4572))
-            jointPositions.append(Vec3(-2.4488, 5.4418, -0.5348))
+            jointPositions.append(Vec3(-5.4488, 8.4418, -0.5348))
             jointPositions.append(Vec3(-4.0, 3.1516, -1.237))
-            jointPositions.append(Vec3(-4.841, 0.0, -1.237))
+            jointPositions.append(Vec3(-6.841, 1.0, -1.237))
+            jointPositions.append(Vec3(-9.841, 0.0, -1.237))
         else:
             jointPositions.append(Vec3(0.9811, 9.769, -0.4572))
-            jointPositions.append(Vec3(2.4488, 5.4418, -0.5348))
+            jointPositions.append(Vec3(5.4488, 8.4418, -0.5348))
             jointPositions.append(Vec3(4.0, 3.1516, -1.237))
-            jointPositions.append(Vec3(4.841, 0.0, -1.237))
+            jointPositions.append(Vec3(6.841, 1.0, -1.237))
+            jointPositions.append(Vec3(9.841, 0.0, -1.237))
 
         # Calculate Xfos
-        down = Vec3(0, -1, 0)
+        fw = Vec3(0, 0, 1)
         boneXfos = []
         boneLengths = []
         for i in range(len(jointPositions)-1):
             boneVec = jointPositions[i+1].subtract(jointPositions[i])
             boneLengths.append(boneVec.length())
-            bone1Normal = down.cross(boneVec).unit()
+            bone1Normal = fw.cross(boneVec).unit()
             bone1ZAxis = boneVec.cross(bone1Normal).unit()
             xfo = Xfo()
             xfo.setFromVectors(boneVec.unit(), bone1Normal, bone1ZAxis, jointPositions[i])
@@ -70,7 +72,7 @@ class InsectLegComponent(BaseComponent):
                 parent = self
             else:
                 parent = boneFKCtrls[i-1]
-            print parent
+            
             boneFKCtrlSrtBuffer = SrtBuffer('bone'+str(i)+'FK', parent=parent)
             boneFKCtrlSrtBuffer.xfo = boneXfos[i]
 
@@ -118,13 +120,6 @@ class InsectLegComponent(BaseComponent):
         legSettingsAttrGrp.addAttribute(legStretchBlendInputAttr)
         legSettingsAttrGrp.addAttribute(legTipBoneLenInputAttr)
 
-        # legBoneLenInputAttrs = []
-        # for i in range(len(boneXfos)):
-        #     legBoneLenInputAttr = FloatAttribute('bone'+str(i)+'Len', boneLengths[i], 0.0, boneLengths[i] * 5.0)
-        #     legSettingsAttrGrp.addAttribute(legBoneLenInputAttr)
-        #     legBoneLenInputAttrs.append(legBoneLenInputAttr)
-
-
         # UpV
         upVOffset = boneXfos[1].transformVector(Vec3(0, 0, 5))
 
@@ -135,7 +130,6 @@ class InsectLegComponent(BaseComponent):
         legUpVCtrl.xfo.tr = upVOffset
         legUpVCtrl.alignOnZAxis()
         legUpVCtrl.rotatePoints(0, 0, 0)
-
 
         # ==========
         # Deformers
@@ -197,12 +191,6 @@ class InsectLegComponent(BaseComponent):
 
         tipBoneLenInputAttr.connect(legTipBoneLenInputAttr)
 
-        # boneLenInputAttrs = []
-        # for i in range(len(legBoneLenInputAttrs)):
-        #     boneLenInputAttr = FloatAttribute('bone'+str(i)+'Len', boneLengths[i], 0.0, boneLengths[i] * 5.0)
-        #     boneLenInputAttr.connect(legBoneLenInputAttrs[i])
-        #     boneLenInputAttrs.append(boneLenInputAttr)
-
         # ==============
         # Constrain I/O
         # ==============
@@ -211,9 +199,6 @@ class InsectLegComponent(BaseComponent):
         legRootInputConstraint.setMaintainOffset(True)
         legRootInputConstraint.addConstrainer(rootInput)
         fkCtrlSrtBuffers[0].addConstraint(legRootInputConstraint)
-
-        # Constraint outputs
-
 
         # ==================
         # Add Component I/O
@@ -235,9 +220,6 @@ class InsectLegComponent(BaseComponent):
         self.addInput(rightSideInputAttr)
         self.addInput(tipBoneLenInputAttr)
 
-        # for i in range(len(boneLenInputAttrs)):
-        #     self.addInput(boneLenInputAttrs[i])
-
         # ===============
         # Add Splice Ops
         # ===============
@@ -256,11 +238,7 @@ class InsectLegComponent(BaseComponent):
         # spliceOp.setInput("stretchBlend", stretchBlendInputAttr)
         # spliceOp.setInput("rightSide", rightSideInputAttr)
 
-
-        # # Add Xfo Inputs
-        # spliceOp.setInput("root", rootInput)
-        # spliceOp.setInput("bone1FK", femurFKCtrl)
-        # spliceOp.setInput("bone2FK", shinFKCtrl)
+        # Add Xfo Inputs
         spliceOp.setInput("ikgoal", legIKCtrl)
         # spliceOp.setInput("upV", legUpVCtrl)
 
