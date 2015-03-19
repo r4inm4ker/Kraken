@@ -131,6 +131,9 @@ class SpineComponent(BaseComponent):
         # Setup componnent Attribute I/O's
         debugInputAttr = BoolAttribute('debug', True)
 
+        length = spine01Position.distanceTo(spine02Position) + spine02Position.distanceTo(spine03Position) + spine03Position.distanceTo(spine04Position)
+        lengthInputAttr = FloatAttribute('length', value=length, maxValue=length * 3.0)
+
 
         # ==============
         # Constrain I/O
@@ -160,29 +163,31 @@ class SpineComponent(BaseComponent):
 
         # Add Attribute I/O's
         self.addInput(debugInputAttr)
+        self.addInput(lengthInputAttr)
 
 
         # ===============
         # Add Splice Ops
         # ===============
         # Add Splice Op
-        # spliceOp = SpliceOperator("spineSpliceOp", "SpineSolver", "KrakenSpineSolver")
-        # self.addOperator(spliceOp)
+        bezierSpineSpliceOp = SpliceOperator("spineSpliceOp", "BezierSpineSolver", "Kraken")
+        self.addOperator(bezierSpineSpliceOp)
 
-        # # Add Att Inputs
-        # spliceOp.setInput("debug", debugInputAttr)
+        # Add Att Inputs
+        bezierSpineSpliceOp.setInput("debug", debugInputAttr)
+        bezierSpineSpliceOp.setInput("length", lengthInputAttr)
 
-        # # Add Xfo Inputs
-        # spliceOp.setInput("spine01Ctrl", spine01Ctrl)
-        # spliceOp.setInput("spine02Ctrl", spine02Ctrl)
-        # spliceOp.setInput("spine03Ctrl", spine03Ctrl)
-        # spliceOp.setInput("spine04Ctrl", spine04Ctrl)
+        # Add Xfo Inputs
+        bezierSpineSpliceOp.setInput("base", spine01Ctrl)
+        bezierSpineSpliceOp.setInput("baseHandle", spine02Ctrl)
+        bezierSpineSpliceOp.setInput("tipHandle", spine03Ctrl)
+        bezierSpineSpliceOp.setInput("tip", spine04Ctrl)
 
-        # # Add Xfo Outputs
-        # spliceOp.setOutput("spine01Out", spine01Output)
-        # spliceOp.setOutput("spine02Out", spine02Output)
-        # spliceOp.setOutput("spine03Out", spine03Output)
-        # spliceOp.setOutput("spine04Out", spine04Output)
+        # Add Xfo Outputs
+        bezierSpineSpliceOp.setOutput("outputs", spine01Output)
+        bezierSpineSpliceOp.setOutput("outputs", spine02Output)
+        bezierSpineSpliceOp.setOutput("outputs", spine03Output)
+        bezierSpineSpliceOp.setOutput("outputs", spine04Output)
 
 
         # Add Deformer Splice Op

@@ -24,7 +24,6 @@ function PoseConstraintSolver.solve!
   io Mat44 constrainee
   )
 {
-  report("PoseConstraintSolver.solve");
   constrainee = constrainer;
 
   // Set debugging visibility.
