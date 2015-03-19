@@ -3,6 +3,7 @@
     "Solvers/KrakenSolverArg.kl",
     "Solvers/KrakenSolver.kl",
     "Solvers/KrakenPoseConstraintSolver.kl",
+    "Solvers/KrakenMultiPoseConstraintSolver.kl",
     "Drawing/DrawingUtils.kl"
   ]
 }

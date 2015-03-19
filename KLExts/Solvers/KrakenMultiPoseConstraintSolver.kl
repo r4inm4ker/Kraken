@@ -1,0 +1,37 @@
+require InlineDrawing;
+require Geometry;
+
+object MultiPoseConstraintSolver : KrakenSolver {
+};
+
+
+// Return Arguments for Kraken
+function KrakenSolverArg[] MultiPoseConstraintSolver.getArguments(){
+  KrakenSolverArg args[] = this.parent.getArguments();
+  args.push(KrakenSolverArg('constrainers', 'in', 'Mat44[]'));
+  args.push(KrakenSolverArg('constraineess', 'out', 'Mat44[]'));
+  return args;
+}
+
+
+// Solve
+function MultiPoseConstraintSolver.solve!
+(
+  in Boolean debug,
+  in Mat44 constrainers[],
+  io Mat44 constrainees[]
+  )
+{
+  if(constrainers.size != constrainees.size)
+    throw("Error in MultiPoseConstraintSolver. The number of constrainees does not match the number of constrainers");
+  for(UInt32 i=0; i<constrainers.size; i++)
+    constrainees[i] = constrainers[i];
+
+  // Set debugging visibility.
+  this.setDebug(debug);
+  if(this.debug){
+    Color boneColor(1.0, 1.0, 0);
+    for(UInt32 i=0; i<constrainers.size; i++)
+      etDrawBone(this.handle.rootTransform, 'constraint'+i, constrainees[i], 1.0, 0.25, boneColor);
+  }
+}

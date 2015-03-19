@@ -1,7 +1,6 @@
 
 from kraken import plugins
-import kraken.tests.arm_component
-from kraken.tests.arm_component import ArmComponent
+from kraken.examples.arm_component import ArmComponent
 from kraken.core.profiler import Profiler
 import json
 

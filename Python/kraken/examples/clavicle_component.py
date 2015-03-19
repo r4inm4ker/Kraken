@@ -138,7 +138,7 @@ class ClavicleComponent(BaseComponent):
         spliceOp.setInput("debug", debugInputAttr)
         spliceOp.setInput("rightSide", rightSideInputAttr)
 
-        # Add Xfo Inputstrl)
+        # Add Xfo Inputs
         spliceOp.setInput("constrainer", clavicleOutput)
 
         # Add Xfo Outputs

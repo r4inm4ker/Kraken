@@ -7,6 +7,7 @@ from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 from kraken.core.objects.locator import Locator
 from kraken.core.objects.joint import Joint
 from kraken.core.objects.srtBuffer import SrtBuffer
+from kraken.core.objects.layer import Layer
 from kraken.core.objects.controls.circle_control  import  CircleControl
 
 from kraken.core.objects.operators.splice_operator import SpliceOperator
@@ -98,10 +99,14 @@ class SpineComponent(BaseComponent):
         container = self.getContainer()
         if container is not None:
             deformersLayer = container.getChildByName('deformers')
-            deformersLayer.addChild(spine01Def)
-            deformersLayer.addChild(spine02Def)
-            deformersLayer.addChild(spine03Def)
-            deformersLayer.addChild(spine04Def)
+        else:
+            # When building the spine in a testing scene, generate a 'deformers' layer.
+            deformersLayer = Layer('deformers', parent=self)
+
+        deformersLayer.addChild(spine01Def)
+        deformersLayer.addChild(spine02Def)
+        deformersLayer.addChild(spine03Def)
+        deformersLayer.addChild(spine04Def)
 
 
         # =====================
@@ -180,24 +185,24 @@ class SpineComponent(BaseComponent):
         # spliceOp.setOutput("spine04Out", spine04Output)
 
 
-        # # Add Deformer Splice Op
-        # spliceOp = SpliceOperator("spineDeformerSpliceOp", "SpineConstraintSolver", "KrakenSpineSolver")
-        # self.addOperator(spliceOp)
+        # Add Deformer Splice Op
+        outputsToDeformersSpliceOp = SpliceOperator("spineDeformerSpliceOp", "MultiPoseConstraintSolver", "Kraken")
+        self.addOperator(outputsToDeformersSpliceOp)
 
-        # # Add Att Inputs
-        # spliceOp.setInput("debug", debugInputAttr)
+        # Add Att Inputs
+        outputsToDeformersSpliceOp.setInput("debug", debugInputAttr)
 
-        # # Add Xfo Inputstrl)
-        # spliceOp.setInput("bone01Constrainer", spine01Output)
-        # spliceOp.setInput("bone02Constrainer", spine02Output)
-        # spliceOp.setInput("bone03Constrainer", spine03Output)
-        # spliceOp.setInput("bone04Constrainer", spine04Output)
+        # Add Xfo Inputstrl)
+        outputsToDeformersSpliceOp.setInput("constrainers", spine01Output)
+        outputsToDeformersSpliceOp.setInput("constrainers", spine02Output)
+        outputsToDeformersSpliceOp.setInput("constrainers", spine03Output)
+        outputsToDeformersSpliceOp.setInput("constrainers", spine04Output)
 
-        # # Add Xfo Outputs
-        # spliceOp.setOutput("bone01Deformer", spine01Def)
-        # spliceOp.setOutput("bone02Deformer", spine02Def)
-        # spliceOp.setOutput("bone03Deformer", spine03Def)
-        # spliceOp.setOutput("bone04Deformer", spine04Def)
+        # Add Xfo Outputs
+        outputsToDeformersSpliceOp.setOutput("constraineess", spine01Def)
+        outputsToDeformersSpliceOp.setOutput("constraineess", spine02Def)
+        outputsToDeformersSpliceOp.setOutput("constraineess", spine03Def)
+        outputsToDeformersSpliceOp.setOutput("constraineess", spine04Def)
 
         Profiler.getInstance().pop()
 

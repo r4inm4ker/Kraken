@@ -565,99 +565,105 @@ class Builder(BaseBuilder):
         True if successful.
 
         """
-
         try:
-            # Load the Fabric Engine client
-            ks.loadCoreClient()
-
-            # Get the extension to load and create an instance of the object.
-            extension = kOperator.getExtension()
-            ks.loadExtension(extension)
-            ks.loadExtension('Kraken')
-
             solverTypeName = kOperator.getSolverTypeName()
-            solver = ks.constructRTVal(solverTypeName)
+            args = kOperator.getSolverArgs()
 
             # Find operatorOwner to attach Splice Operator to.
             operatorOwner = None
+            targets = None
             operatorOwnerArg = None
-
-            args = solver.getArguments('KrakenSolverArg[]')
             for i in xrange(len(args)):
                 arg = args[i]
 
-                if arg.connectionType == 'io' and arg.dataType == 'Mat44':
-
-                    operatorOwner = self._getDCCSceneItem(kOperator.getOutput(arg.name))
-                    operatorOwnerArg = arg.name
-                    break
+                if arg.connectionType == 'io' or arg.connectionType == 'out':
+                    if arg.dataType == 'Mat44':
+                        operatorOwner = self._getDCCSceneItem(kOperator.getOutput(arg.name))
+                        targets = operatorOwner.FullName + ".kine.global"
+                        operatorOwnerArg = arg.name
+                        break
+                    elif arg.dataType == 'Mat44[]':
+                        targets = ""
+                        for target in kOperator.getOutput(arg.name):
+                            dccSceneItem = self._getDCCSceneItem(target)
+                            if targets == "":
+                                operatorOwner = dccSceneItem
+                                targets = dccSceneItem.FullName + ".kine.global"
+                            else:
+                                targets = targets + "," + dccSceneItem.FullName + ".kine.global"
+                        operatorOwnerArg = arg.name
+                        break
 
             if operatorOwner is None:
                 raise Exception("Solver '" + kOperator.getName() + "' has no outputs!")
 
+            spliceOpPath = operatorOwner.FullName + ".kine.global.SpliceOp"
+
             # Create Splice Operator
-            si.fabricSplice('newSplice', "{\"targets\":\"" + operatorOwner.FullName + ".kine.global" + "\", \"portName\":\"" + arg.name + "\", \"portMode\":\"out\"}", "", "")
+            si.fabricSplice('newSplice', "{\"targets\":\"" + targets + "\", \"portName\":\"" + arg.name + "\", \"portMode\":\"out\"}", "", "")
 
             # Add the private/non-mayaAttr port that stores the Solver object
-            si.fabricSplice("addInternalPort", operatorOwner.FullName + ".kine.global.SpliceOp", "{\"portName\":\"solver\", \"dataType\":\"" + solverTypeName + "\", \"extension\":\"" + kOperator.getExtension() + "\", \"portMode\":\"io\"}", "")
+            si.fabricSplice("addInternalPort", spliceOpPath, "{\"portName\":\"solver\", \"dataType\":\"" + solverTypeName + "\", \"extension\":\"" + kOperator.getExtension() + "\", \"portMode\":\"io\"}", "")
 
-            # Start constructing the source code.
-            opSourceCode = ""
-            opSourceCode += "require Kraken;\n"
-            opSourceCode += "require " + kOperator.getExtension() + ";\n\n"
-            opSourceCode += "operator " + kOperator.getName() + "(\n"
-
-            opSourceCode += "  io " + solverTypeName + " solver,\n"
-
-            # Get the args from the solver KL object.
-            args = solver.getArguments('KrakenSolverArg[]')
-
-            functionCall = "  solver.solve("
+            # connect the operator to the objects in the DCC
             for i in xrange(len(args)):
                 arg = args[i]
 
-                # Get the argument's input from the DCC
-                try:
-                    targetObject = self._getDCCSceneItem(kOperator.getInput(arg.name))
-                except:
-                    targetObject = self._getDCCSceneItem(kOperator.getOutput(arg.name))
+                # Skip arg if it's the target arg
+                if arg.name == operatorOwnerArg:
+                    continue
 
                 # Append the suffix based on the argument type, Softimage Only
-                if arg.dataType == 'Mat44':
+                if arg.dataType == 'Mat44' or arg.dataType == 'Mat44[]':
                     connectionSuffix = ".kine.global"
                 elif arg.dataType in ['Scalar', 'Boolean']:
                     connectionSuffix = ""
                 else:
                     connectionSuffix = ""
 
-                # Skip arg if it's the target arg
-                if arg.name != operatorOwnerArg:
-
-                    # Add the splice Port for each arg.
+                if arg.dataType.endswith('[]'):
+                    # Get the argument's input from the DCC
+                    # Note: this used to be a try/catch statement, which seemed quite strange to me. 
+                    # I've replaced with a proper test with an exception if the item is not found. 
                     if arg.connectionType == 'in':
-                        si.fabricSplice("addInputPort", operatorOwner.FullName + ".kine.global.SpliceOp", "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\", \"extension\":\"\", \"targets\":\"" + targetObject.FullName + connectionSuffix + "\"}", "")
-
+                        targetObjects = kOperator.getInput(arg.name)
                     elif arg.connectionType in ['io', 'out']:
-                        si.fabricSplice("addOutputPort", operatorOwner.FullName + ".kine.global.SpliceOp", "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\", \"extension\":\"\", \"targets\":\"" + targetObject.FullName + connectionSuffix + "\"}", "")
+                        targetObjects = kOperator.getOutput(arg.name)
 
-                # Connect the ports to the inputs/outputs in the rig.
-                opSourceCode += "  " + arg.connectionType + " " + arg.dataType + " " + arg.name
-                if i == len(args) - 1:
-                    opSourceCode += "\n"
+                    connectionTargets = ""
+                    for i in range(len(targetObjects)):
+                        dccSceneItem = self._getDCCSceneItem(targetObjects[i])
+                        if dccSceneItem is None:
+                            raise Exception("Operator '"+kOperator.getName()+"' or type '"+solverTypeName+"' arg '"+arg.name+"' not connected.");
+                        if i==0:
+                            connectionTargets = dccSceneItem.FullName + connectionSuffix
+                        else:
+                            connectionTargets = connectionTargets + "," + dccSceneItem.FullName + connectionSuffix
                 else:
-                    opSourceCode += ",\n"
+                    # Get the argument's input from the DCC
+                    # Note: this used to be a try/catch statement, which seemed quite strange to me. 
+                    # I've replaced with a proper test with an exception if the item is not found. 
+                    if arg.connectionType == 'in':
+                        dccSceneItem = self._getDCCSceneItem(kOperator.getInput(arg.name))
+                    elif arg.connectionType in ['io', 'out']:
+                        dccSceneItem = self._getDCCSceneItem(kOperator.getOutput(arg.name))
+                    if dccSceneItem is None:
+                        raise Exception("Operator '"+kOperator.getName()+"' or type '"+solverTypeName+"' arg '"+arg.name+"' not connected.");
+                    connectionTargets = dccSceneItem.FullName + connectionSuffix
 
-                if i == len(args) - 1:
-                    functionCall += arg.name
-                else:
-                    functionCall += arg.name + ", "
+                connectionArgs = "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\", \"extension\":\"\", \"targets\":\"" + connectionTargets + "\"}"
 
-            opSourceCode += "    )\n"
-            opSourceCode += "{\n"
-            opSourceCode += functionCall + ");\n"
-            opSourceCode += "}\n"
+                # Add the splice Port for each arg.
+                if arg.connectionType == 'in':
+                    si.fabricSplice("addInputPort", spliceOpPath, connectionArgs, "")
 
-            si.fabricSplice('addKLOperator', operatorOwner.FullName + ".kine.global.SpliceOp", '{"opName": "' + kOperator.getName() + '"}', opSourceCode)
+                elif arg.connectionType in ['io', 'out']:
+                    si.fabricSplice("addOutputPort", spliceOpPath, connectionArgs, "")
+
+            # Generate the operator source code.
+            opSourceCode = kOperator.generateSourceCode()
+
+            si.fabricSplice('addKLOperator', spliceOpPath, '{"opName": "' + kOperator.getName() + '"}', opSourceCode)
 
         finally:
             pass
