@@ -5,6 +5,7 @@ Builder -- Component representation.
 
 """
 
+from kraken.core.kraken_system import ks
 from kraken.core.builders.base_builder import BaseBuilder
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
@@ -566,30 +567,16 @@ class Builder(BaseBuilder):
         """
 
         try:
-            # Get or construct a Fabric Engine client
-            contextID = si.fabricSplice('getClientContextID')
-            if contextID == '':
-                si.fabricSplice('constructClient')
-                contextID = si.fabricSplice('getClientContextID')
-
-            # Connect the Python client to the Softimage client.
-            client = core.createClient({"contextID": contextID})
+            # Load the Fabric Engine client
+            ks.loadCoreClient()
 
             # Get the extension to load and create an instance of the object.
             extension = kOperator.getExtension()
-            client.loadExtension(extension)
-
-            client.loadExtension('Kraken')
+            ks.loadExtension(extension)
+            ks.loadExtension('Kraken')
 
             solverTypeName = kOperator.getSolverTypeName()
-            klType = getattr(client.RT.types, solverTypeName)
-
-            try:
-                # Test if object
-                solver = klType.create()
-            except:
-                # Else is struct
-                solver = klType()
+            solver = ks.constructRTVal(solverTypeName)
 
             # Find operatorOwner to attach Splice Operator to.
             operatorOwner = None
@@ -673,7 +660,7 @@ class Builder(BaseBuilder):
             si.fabricSplice('addKLOperator', operatorOwner.FullName + ".kine.global.SpliceOp", '{"opName": "' + kOperator.getName() + '"}', opSourceCode)
 
         finally:
-            si.fabricSplice('destroyClient')
+            pass
 
         return True
 

@@ -13,11 +13,13 @@ from kraken.core.objects.operators.splice_operator import SpliceOperator
 
 
 from kraken.helpers.utility_methods import logHierarchy
+from kraken.core.profiler import Profiler
 
 class SpineComponent(BaseComponent):
     """Spine Component"""
 
     def __init__(self, name, parent=None, location='M'):
+        Profiler.getInstance().push("Construct Spine Component:" + name + " location:" + location)
         super(SpineComponent, self).__init__(name, parent, location)
 
         # =========
@@ -197,6 +199,7 @@ class SpineComponent(BaseComponent):
         # spliceOp.setOutput("bone03Deformer", spine03Def)
         # spliceOp.setOutput("bone04Deformer", spine04Def)
 
+        Profiler.getInstance().pop()
 
 
     def buildRig(self, parent):

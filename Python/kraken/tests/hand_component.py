@@ -17,11 +17,13 @@ from kraken.core.objects.controls.cube_control  import CubeControl
 from kraken.core.objects.operators.splice_operator import SpliceOperator
 
 from kraken.helpers.utility_methods import logHierarchy
+from kraken.core.profiler import Profiler
 
 class HandComponent(BaseComponent):
     """Hand Component"""
 
     def __init__(self, name, parent=None, location='M'):
+        Profiler.getInstance().push("Construct Hand Component:" + name + " location:" + location)
         super(HandComponent, self).__init__(name, parent, location)
 
         # =========
@@ -183,6 +185,7 @@ class HandComponent(BaseComponent):
         # Add Xfo Outputs
         spliceOp.setOutput("constrainee", handDef)
 
+        Profiler.getInstance().pop()
 
     def buildRig(self, parent):
         pass
