@@ -621,34 +621,40 @@ class Builder(BaseBuilder):
                 else:
                     connectionSuffix = ""
 
+
+                # Get the argument's input from the DCC
+                # Note: this used to be a try/catch statement, which seemed quite strange to me. 
+                # I've replaced with a proper test with an exception if the item is not found. 
+                if arg.connectionType == 'in':
+                    connectedObjects = kOperator.getInput(arg.name)
+                elif arg.connectionType in ['io', 'out']:
+                    connectedObjects = kOperator.getOutput(arg.name)
+
                 if arg.dataType.endswith('[]'):
-                    # Get the argument's input from the DCC
-                    # Note: this used to be a try/catch statement, which seemed quite strange to me. 
-                    # I've replaced with a proper test with an exception if the item is not found. 
-                    if arg.connectionType == 'in':
-                        targetObjects = kOperator.getInput(arg.name)
-                    elif arg.connectionType in ['io', 'out']:
-                        targetObjects = kOperator.getOutput(arg.name)
+
+                    if len(connectedObjects) == 0:
+                        raise Exception("Operator '"+kOperator.getName()+"' or type '"+solverTypeName+"' arg '"+arg.name+"' not connected.");
 
                     connectionTargets = ""
-                    for i in range(len(targetObjects)):
-                        dccSceneItem = self._getDCCSceneItem(targetObjects[i])
+                    for i in range(len(connectedObjects)):
+                        dccSceneItem = self._getDCCSceneItem(connectedObjects[i])
+
                         if dccSceneItem is None:
-                            raise Exception("Operator '"+kOperator.getName()+"' or type '"+solverTypeName+"' arg '"+arg.name+"' not connected.");
+                            raise Exception("Operator '"+kOperator.getName()+"' or type '"+solverTypeName+"' arg '"+arg.name+"' connection is invalid");
+                            
                         if i==0:
                             connectionTargets = dccSceneItem.FullName + connectionSuffix
                         else:
                             connectionTargets = connectionTargets + "," + dccSceneItem.FullName + connectionSuffix
                 else:
-                    # Get the argument's input from the DCC
-                    # Note: this used to be a try/catch statement, which seemed quite strange to me. 
-                    # I've replaced with a proper test with an exception if the item is not found. 
-                    if arg.connectionType == 'in':
-                        dccSceneItem = self._getDCCSceneItem(kOperator.getInput(arg.name))
-                    elif arg.connectionType in ['io', 'out']:
-                        dccSceneItem = self._getDCCSceneItem(kOperator.getOutput(arg.name))
-                    if dccSceneItem is None:
+                    if connectedObjects is None:
                         raise Exception("Operator '"+kOperator.getName()+"' or type '"+solverTypeName+"' arg '"+arg.name+"' not connected.");
+
+                    dccSceneItem = self._getDCCSceneItem(connectedObjects)
+
+                    if dccSceneItem is None:
+                        raise Exception("Operator '"+kOperator.getName()+"' or type '"+solverTypeName+"' arg '"+arg.name+"' connection is invalid.");
+
                     connectionTargets = dccSceneItem.FullName + connectionSuffix
 
                 connectionArgs = "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\", \"extension\":\"\", \"targets\":\"" + connectionTargets + "\"}"

@@ -1,5 +1,4 @@
 require InlineDrawing;
-require Geometry;
 
 object BezierSpineSolver : KrakenSolver {
 };

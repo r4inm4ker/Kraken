@@ -105,6 +105,10 @@ class BaseOperator(object):
         True if successful.
 
         """
+
+        if name not in self.inputs:
+            raise Exception("Input with name '" + name + "' was not found in operator: " + self.getName() + ".")
+
         if isinstance(self.inputs[name], list):
             self.inputs[name].append(operatorInput)
         else:
@@ -124,7 +128,7 @@ class BaseOperator(object):
 
         """
 
-        if name not in self.inputs.keys():
+        if name not in self.inputs:
             raise Exception("Input with name '" + name + "' was not found in operator: " + self.getName() + ".")
 
         return self.inputs[name]
@@ -144,6 +148,9 @@ class BaseOperator(object):
         True if successful.
 
         """
+
+        if name not in self.outputs:
+            raise Exception("Output with name '" + name + "' was not found in operator: " + self.getName() + ".")
 
         if isinstance(self.outputs[name], list):
             self.outputs[name].append(operatorOutput)
