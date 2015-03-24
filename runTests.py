@@ -1,20 +1,11 @@
 
 
-import os
-import sys
-import StringIO
-import contextlib
-
 # Import system modules
 import sys, string, os
 import argparse
 import subprocess
-
-# Parse the commandline args.
-parser = argparse.ArgumentParser()
-parser.add_argument('--file', required=False, help = "The python or kl File to use in the test")
-parser.add_argument('--update', required=False, help = "Force the update of the reference file(s)")
-args = parser.parse_args()
+import StringIO
+import contextlib
 
 
 def checkTestOutput(filepath, output, update):
@@ -65,6 +56,7 @@ def runPytonTest(filepath, update):
 
     checkTestOutput(filepath, output, update)
 
+
 def runKLTest(filepath, update):
     cmdstring = "kl.exe " + filepath
 
@@ -79,7 +71,8 @@ def runKLTest(filepath, update):
         break
     checkTestOutput(filepath, output, update)
 
-def testFile(filepath, update):
+
+def runTest(filepath, update):
     skipile = os.path.splitext(filepath)[0]+'.skip'
     if os.path.exists(skipile):
         print "Test Skipped:" + filepath
@@ -89,17 +82,23 @@ def testFile(filepath, update):
     elif filepath.endswith(".kl"):
         runKLTest( filepath, update )
 
+
+# Parse the commandline args.
+parser = argparse.ArgumentParser()
+parser.add_argument('--file', required=False, help = "The python or kl File to use in the test (optional)")
+parser.add_argument('--update', required=False, action='store_const', const=True, default=False, help = "Force the update of the reference file(s). (optional)")
+args = parser.parse_args()
 update = args.update is not None
 
 if args.file is not None:
     if os.path.exists(args.file):
-        testFile(args.file, update)
+        runTest(args.file, update)
     else:
         filepath = os.path.join(os.path.dirname(os.path.realpath(__file__)), args.file)
-        testFile(filepath, update)
+        runTest(filepath, update)
 else:
     testsDir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'tests')
     for root, dirs, files in os.walk(testsDir):
         for filename in files:
             filepath = os.path.join(root, filename)
-            testFile(filepath, update)
+            runTest(filepath, update)
