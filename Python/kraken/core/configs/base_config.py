@@ -227,16 +227,16 @@ class BaseConfig(object):
     # ==============
     @classmethod
     def getInstance(cls):
-        """This class method returns the singleton instance for the Config
+        """This class method returns the singleton instance for the BaseConfig.
 
         Return:
         The singleton instance.
 
         """
 
-        if Config._instance is None:
+        if BaseConfig._instance is None:
             cls()
-        elif not isinstance(Config._instance, Config):
-            raise Exception("Multiple different Config types have been constructed");
+        elif not isinstance(BaseConfig._instance, BaseConfig):
+            raise Exception("Multiple different BaseConfig types have been constructed.");
 
-        return Config._instance
+        return BaseConfig._instance
