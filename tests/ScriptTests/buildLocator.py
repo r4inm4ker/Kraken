@@ -8,3 +8,5 @@ config.setExplicitNaming(True)
 
 myLoc = Locator("myLocator")
 builder.build(myLoc)
+
+logHierarchy(myLoc)
