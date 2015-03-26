@@ -76,6 +76,7 @@ class BaseConfig(object):
                                        "ComponentInput": "cmpIn",
                                        "ComponentOutput": "cmpOut",
                                        "Container": "",
+                                       "Rig": "",
                                        "Control": "ctrl",
                                        "Curve": "crv",
                                        "HierarchyGroup": "hrc",
@@ -88,6 +89,7 @@ class BaseConfig(object):
                                        {
                                         "default": ["component", "sep", "location", "sep", "name", "sep", "type"],
                                         "Container": ["name"],
+                                        "Rig": ["name"],
                                         "Layer": ["name"],
                                         "Component": ["name", "sep", "location", "sep", "type"]
                                        }

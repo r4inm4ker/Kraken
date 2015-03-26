@@ -526,6 +526,9 @@ class BaseBuilder(object):
         if kType == "Container":
             dccSceneItem = self.buildContainer(kObject, buildName)
 
+        if kType == "Rig":
+            dccSceneItem = self.buildContainer(kObject, buildName)
+
         elif kType == "Layer":
             dccSceneItem = self.buildLayer(kObject, buildName)
 
@@ -1037,6 +1040,9 @@ class BaseBuilder(object):
 
             # Build Object
             if kType == "Container":
+                self.synchronizeContainerNode(kSceneItem, dccSceneItem)
+
+            if kType == "Rig":
                 self.synchronizeContainerNode(kSceneItem, dccSceneItem)
 
             elif kType == "Layer":
