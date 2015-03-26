@@ -84,24 +84,23 @@ class Rig(Container):
         spineBaseOutput = spineComponent.getOutputByName('spineBase')
         legLeftPelvisInput = legLeftComponent.getInputByName('pelvisInput')
         legLeftPelvisInput.setSource(spineBaseOutput.getTarget())
-        clavicleRightEndOutput = spineComponent.getOutputByName('spineBase')
         legRightPelvisInput = legRightComponent.getInputByName('pelvisInput')
-        legRightPelvisInput.setSource(clavicleRightEndOutput.getTarget())
+        legRightPelvisInput.setSource(spineBaseOutput.getTarget())
 
         # Foot To Arm Connections
         legLeftEndOutput = legLeftComponent.getOutputByName('legEndXfo')
-        footLeftArmEndInput = footLeftComponent.getInputByName('legEndXfo')
-        footLeftArmEndInput.setSource(legLeftEndOutput.getTarget())
+        footLeftEndInput = footLeftComponent.getInputByName('legEndXfo')
+        footLeftEndInput.setSource(legLeftEndOutput.getTarget())
         legLeftEndPosOutput = legLeftComponent.getOutputByName('legEndPos')
-        footLeftArmEndPosInput = footLeftComponent.getInputByName('legEndPos')
-        footLeftArmEndPosInput.setSource(legLeftEndPosOutput.getTarget())
+        footLeftEndPosInput = footLeftComponent.getInputByName('legEndPos')
+        footLeftEndPosInput.setSource(legLeftEndPosOutput.getTarget())
 
         legRightEndOutput = legRightComponent.getOutputByName('legEndXfo')
-        footRightArmEndInput = footRightComponent.getInputByName('legEndXfo')
-        footRightArmEndInput.setSource(legRightEndOutput.getTarget())
+        footRightEndInput = footRightComponent.getInputByName('legEndXfo')
+        footRightEndInput.setSource(legRightEndOutput.getTarget())
         legRightEndPosOutput = legRightComponent.getOutputByName('legEndPos')
-        footRightArmEndPosInput = footRightComponent.getInputByName('legEndPos')
-        footRightArmEndPosInput.setSource(legRightEndPosOutput.getTarget())
+        footRightEndPosInput = footRightComponent.getInputByName('legEndPos')
+        footRightEndPosInput.setSource(legRightEndPosOutput.getTarget())
 
         # Arm Attributes to Clavicle
         # clavicleLeftFollowBodyOutput = clavicleLeftComponent.getOutputByName('followBody')
