@@ -19,7 +19,10 @@ from kraken.core.profiler import Profiler
 class NeckComponent(BaseComponent):
     """Neck Component"""
 
-    def __init__(self, name, parent=None, location='M'):
+    def __init__(self, name, parent=None, data={}):
+
+        location = data.get('location', 'M')
+
         Profiler.getInstance().push("Construct Neck Component:" + name + " location:" + location)
         super(NeckComponent, self).__init__(name, parent, location)
 
@@ -132,5 +135,5 @@ class NeckComponent(BaseComponent):
 
 
 if __name__ == "__main__":
-    neck = NeckComponent("myNeck", location='M')
+    neck = NeckComponent("myNeck", { 'location':'M' })
     logHierarchy(neck)

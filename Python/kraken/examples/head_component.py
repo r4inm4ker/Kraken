@@ -19,7 +19,10 @@ from kraken.core.profiler import Profiler
 class HeadComponent(BaseComponent):
     """Head Component"""
 
-    def __init__(self, name, parent=None, location='M'):
+    def __init__(self, name, parent=None, data={}):
+
+        location = data.get('location', 'M')
+        
         Profiler.getInstance().push("Construct Head Component:" + name + " location:" + location)
         super(HeadComponent, self).__init__(name, parent, location)
         

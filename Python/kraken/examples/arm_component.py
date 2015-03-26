@@ -24,7 +24,10 @@ from kraken.core.profiler import Profiler
 class ArmComponent(BaseComponent):
     """Arm Component"""
 
-    def __init__(self, name, parent=None, location='M'):
+    def __init__(self, name, parent=None, data={}):
+
+        location = data.get('location', 'M')
+
         Profiler.getInstance().push("Construct Arm Component:" + name + " location:" + location)
         super(ArmComponent, self).__init__(name, parent, location)
         # =========

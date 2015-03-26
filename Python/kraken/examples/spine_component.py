@@ -19,7 +19,10 @@ from kraken.core.profiler import Profiler
 class SpineComponent(BaseComponent):
     """Spine Component"""
 
-    def __init__(self, name, parent=None, location='M'):
+    def __init__(self, name, parent=None, data={}):
+
+        location = data.get('location', 'M')
+        
         Profiler.getInstance().push("Construct Spine Component:" + name + " location:" + location)
         super(SpineComponent, self).__init__(name, parent, location)
 

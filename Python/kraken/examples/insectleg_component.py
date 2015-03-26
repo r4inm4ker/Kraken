@@ -27,7 +27,10 @@ from kraken.core.profiler import Profiler
 class InsectLegComponent(BaseComponent):
     """Leg Component"""
 
-    def __init__(self, name, parent=None, location='M'):
+    def __init__(self, name, parent=None, data={}):
+
+        location = data.get('location', 'M')
+        
         Profiler.getInstance().push("Construct InsectLeg Component:" + name + " location:" + location)
         super(InsectLegComponent, self).__init__(name, parent, location)
 
