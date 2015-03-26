@@ -224,3 +224,7 @@ pip-log.txt
 ## Custom
 ###########
 bundles/
+
+
+#Test Result files
+*.result

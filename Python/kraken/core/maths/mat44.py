@@ -7,6 +7,7 @@ Mat44 -- Matrix 3 transform object.
 from math_object import MathObject
 from kraken.core.kraken_system import ks
 from vec import Vec3, Vec4
+from mat33 import Mat33
 
 
 class Mat44(MathObject):
