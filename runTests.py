@@ -88,7 +88,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--file', required=False, help = "The python or kl File to use in the test (optional)")
 parser.add_argument('--update', required=False, action='store_const', const=True, default=False, help = "Force the update of the reference file(s). (optional)")
 args = parser.parse_args()
-update = args.update is not None
+update = args.update
 
 if args.file is not None:
     if os.path.exists(args.file):
