@@ -193,6 +193,9 @@ class FootComponent(BaseComponent):
     def buildRig(self, parent):
         pass
 
+from kraken.core.kraken_system import KrakenSystem
+KrakenSystem.getInstance().registerComponent(FootComponent)
+
 
 if __name__ == "__main__":
     handLeft = FootComponent("myFoot", location='L')

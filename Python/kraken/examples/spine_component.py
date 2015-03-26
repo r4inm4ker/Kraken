@@ -218,6 +218,8 @@ class SpineComponent(BaseComponent):
     def buildRig(self, parent):
         pass
 
+from kraken.core.kraken_system import KrakenSystem
+KrakenSystem.getInstance().registerComponent(SpineComponent)
 
 if __name__ == "__main__":
     spine = SpineComponent("mySpine")

@@ -288,6 +288,8 @@ class ArmComponent(BaseComponent):
     def buildRig(self, parent):
         pass
 
+from kraken.core.kraken_system import KrakenSystem
+KrakenSystem.getInstance().registerComponent(ArmComponent)
 
 if __name__ == "__main__":
     armLeft = ArmComponent("myArm", location='L')

@@ -153,6 +153,9 @@ class ClavicleComponent(BaseComponent):
         pass
 
 
+from kraken.core.kraken_system import KrakenSystem
+KrakenSystem.getInstance().registerComponent(ClavicleComponent)
+
 if __name__ == "__main__":
     clavicleLeft = ClavicleComponent("myClavicle", location='L')
     logHierarchy(clavicleLeft)

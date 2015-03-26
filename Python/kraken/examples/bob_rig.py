@@ -13,12 +13,12 @@ from head_component import HeadComponent
 
 from kraken.core.profiler import Profiler
 
-class Rig(Container):
+class BobRig(Container):
     """Test Arm Component"""
 
     def __init__(self, name):
         Profiler.getInstance().push("Construct BobRig:" + name)
-        super(Rig, self).__init__(name)
+        super(BobRig, self).__init__(name)
 
         # Add rig layers
         deformersLayer = Layer('deformers', parent=self)
@@ -29,16 +29,16 @@ class Rig(Container):
         spineComponent = SpineComponent("spine", controlsLayer)
         neckComponent = NeckComponent("neck", controlsLayer)
         headComponent = HeadComponent("head", controlsLayer)
-        clavicleLeftComponent = ClavicleComponent("clavicle", controlsLayer, location="L")
-        clavicleRightComponent = ClavicleComponent("clavicle", controlsLayer, location="R")
-        armLeftComponent = ArmComponent("arm", controlsLayer, location="L")
-        armRightComponent = ArmComponent("arm", controlsLayer, location="R")
-        handLeftComponent = HandComponent("hand", controlsLayer, location="L")
-        handRightComponent = HandComponent("hand", controlsLayer, location="R")
-        legLeftComponent = LegComponent("leg", controlsLayer, location="L")
-        legRightComponent = LegComponent("leg", controlsLayer, location="R")
-        footLeftComponent = FootComponent("foot", controlsLayer, location="L")
-        footRightComponent = FootComponent("foot", controlsLayer, location="R")
+        clavicleLeftComponent = ClavicleComponent("clavicle", controlsLayer, { "location":"L"} )
+        clavicleRightComponent = ClavicleComponent("clavicle", controlsLayer, { "location":"R"} )
+        armLeftComponent = ArmComponent("arm", controlsLayer, { "location":"L"} )
+        armRightComponent = ArmComponent("arm", controlsLayer, { "location":"R"} )
+        handLeftComponent = HandComponent("hand", controlsLayer, { "location":"L"} )
+        handRightComponent = HandComponent("hand", controlsLayer, { "location":"R"} )
+        legLeftComponent = LegComponent("leg", controlsLayer, { "location":"L"} )
+        legRightComponent = LegComponent("leg", controlsLayer, { "location":"R"} )
+        footLeftComponent = FootComponent("foot", controlsLayer, { "location":"L"} )
+        footRightComponent = FootComponent("foot", controlsLayer, { "location":"R"} )
 
         # Neck to Spine
         spineEndOutput = spineComponent.getOutputByName('spineEnd')
@@ -114,5 +114,5 @@ class Rig(Container):
 
 
 if __name__ == "__main__":
-    bobRig = Rig("char_bob")
+    bobRig = BobRig("char_bob")
     logHierarchy(bobRig)

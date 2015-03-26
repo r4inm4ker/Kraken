@@ -194,6 +194,9 @@ class HandComponent(BaseComponent):
         pass
 
 
+from kraken.core.kraken_system import KrakenSystem
+KrakenSystem.getInstance().registerComponent(HandComponent)
+
 if __name__ == "__main__":
     handLeft = HandComponent("myHand", location='L')
     logHierarchy(handLeft)

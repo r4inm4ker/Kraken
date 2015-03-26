@@ -200,6 +200,8 @@ class HeadComponent(BaseComponent):
     def buildRig(self, parent):
         pass
 
+from kraken.core.kraken_system import KrakenSystem
+KrakenSystem.getInstance().registerComponent(HeadComponent)
 
 if __name__ == "__main__":
     head = HeadComponent("myClavicle")

@@ -273,6 +273,8 @@ class InsectLegComponent(BaseComponent):
     def buildRig(self, parent):
         pass
 
+from kraken.core.kraken_system import KrakenSystem
+KrakenSystem.getInstance().registerComponent(InsectLegComponent)
 
 if __name__ == "__main__":
     legLeft = InsectLegComponent("myLeg", location='L')
