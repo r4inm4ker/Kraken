@@ -571,7 +571,7 @@ class Builder(BaseBuilder):
 
             # Generate the operator source code.
             opSourceCode = kOperator.generateSourceCode()
-            
+
             cmds.fabricSplice('addKLOperator', spliceNode, '{"opName": "' + kOperator.getName() + '"}', opSourceCode)
 
         finally:
@@ -624,8 +624,9 @@ class Builder(BaseBuilder):
         dccSceneItem = self._getDCCSceneItem(kSceneItem)
         buildColor = self.getBuildColor(kSceneItem)
 
-        dccSceneItem.overrideEnabled.set(True)
-        dccSceneItem.overrideColor.set(colors[buildColor][0])
+        if buildColor is not None:
+            dccSceneItem.overrideEnabled.set(True)
+            dccSceneItem.overrideColor.set(colors[buildColor][0])
 
         return True
 
