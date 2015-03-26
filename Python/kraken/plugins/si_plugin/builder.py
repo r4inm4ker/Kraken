@@ -578,14 +578,31 @@ class Builder(BaseBuilder):
 
                 if arg.connectionType == 'io' or arg.connectionType == 'out':
                     if arg.dataType == 'Mat44':
-                        operatorOwner = self._getDCCSceneItem(kOperator.getOutput(arg.name))
+
+                        target = kOperator.getOutput(arg.name)
+                        if target is None:
+                            raise Exception("Solver '" + kOperator.getFullName() + "' output :'" + arg.name + "' not connected.")
+
+                        operatorOwner = self._getDCCSceneItem(target)
+
+                        if operatorOwner is None:
+                            raise Exception("Solver '" + kOperator.getFullName() + "' output :'" + arg.name + "' dcc item not found for item:" + target.getFullName())
+
                         targets = operatorOwner.FullName + ".kine.global"
                         operatorOwnerArg = arg.name
                         break
                     elif arg.dataType == 'Mat44[]':
                         targets = ""
                         for target in kOperator.getOutput(arg.name):
+
+                            if target is None:
+                                raise Exception("Solver '" + kOperator.getFullName() + "' output :'" + arg.name + "' not connected.")
+
                             dccSceneItem = self._getDCCSceneItem(target)
+
+                            if dccSceneItem is None:
+                                raise Exception("Solver '" + kOperator.getFullName() + "' output :'" + arg.name + "' dcc item not found for item:" + target.getFullName())
+
                             if targets == "":
                                 operatorOwner = dccSceneItem
                                 targets = dccSceneItem.FullName + ".kine.global"
@@ -595,7 +612,7 @@ class Builder(BaseBuilder):
                         break
 
             if operatorOwner is None:
-                raise Exception("Solver '" + kOperator.getName() + "' has no outputs!")
+                raise Exception("Solver '" + kOperator.getName() + "' has no Mat44 outputs!")
 
             spliceOpPath = operatorOwner.FullName + ".kine.global.SpliceOp"
 
