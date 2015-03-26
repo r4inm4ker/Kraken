@@ -13,4 +13,8 @@ builder = plugins.getBuilder()
 builder.build(arm)
 
 Profiler.getInstance().pop()
-print json.dumps(Profiler.getInstance().generateReport(), sort_keys=False, indent=4, separators=(',', ': '))
+
+if __name__ == "__main__":
+    print json.dumps(Profiler.getInstance().generateReport(), sort_keys=False, indent=4, separators=(',', ': '))
+else:
+    logHierarchy(bobRig)
