@@ -77,6 +77,7 @@ class BaseConfig(object):
                                        "ComponentOutput": "cmpOut",
                                        "Container": "",
                                        "Rig": "",
+                                       "BobRig": "",
                                        "Control": "ctrl",
                                        "Curve": "crv",
                                        "HierarchyGroup": "hrc",

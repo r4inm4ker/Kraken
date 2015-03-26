@@ -11,6 +11,8 @@ from spine_component import SpineComponent
 from neck_component import NeckComponent
 from head_component import HeadComponent
 
+from kraken.core.maths import Vec3
+
 from kraken.core.profiler import Profiler
 
 class BobRig(Container):
@@ -31,8 +33,22 @@ class BobRig(Container):
         headComponent = HeadComponent("head", controlsLayer)
         clavicleLeftComponent = ClavicleComponent("clavicle", controlsLayer, { "location":"L"} )
         clavicleRightComponent = ClavicleComponent("clavicle", controlsLayer, { "location":"R"} )
-        armLeftComponent = ArmComponent("arm", controlsLayer, { "location":"L"} )
-        armRightComponent = ArmComponent("arm", controlsLayer, { "location":"R"} )
+        armLeftComponent = ArmComponent("arm", controlsLayer, { 
+            "location":"L",
+            "bicepPosition": Vec3(2.27, 15.295, -0.753),
+            "forearmPosition": Vec3(5.039, 13.56, -0.859),
+            "wristPosition": Vec3(7.1886, 12.2819, 0.4906),
+            "bicepFKCtrlSize": 1.75,
+            "forearmFKCtrlSize": 1.5
+            } )
+        armRightComponent = ArmComponent("arm", controlsLayer, { 
+            "location":"R",
+            "bicepPosition": Vec3(-2.27, 15.295, -0.753),
+            "forearmPosition": Vec3(-5.039, 13.56, -0.859),
+            "wristPosition": Vec3(-7.1886, 12.2819, 0.4906),
+            "bicepFKCtrlSize": 1.75,
+            "forearmFKCtrlSize": 1.5
+            } )
         handLeftComponent = HandComponent("hand", controlsLayer, { "location":"L"} )
         handRightComponent = HandComponent("hand", controlsLayer, { "location":"R"} )
         legLeftComponent = LegComponent("leg", controlsLayer, { "location":"L"} )

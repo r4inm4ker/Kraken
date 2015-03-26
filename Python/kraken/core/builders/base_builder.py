@@ -526,7 +526,10 @@ class BaseBuilder(object):
         if kType == "Container":
             dccSceneItem = self.buildContainer(kObject, buildName)
 
-        if kType == "Rig":
+        elif kType == "Rig":
+            dccSceneItem = self.buildContainer(kObject, buildName)
+
+        elif kType == "BobRig":
             dccSceneItem = self.buildContainer(kObject, buildName)
 
         elif kType == "Layer":

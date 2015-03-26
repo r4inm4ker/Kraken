@@ -37,16 +37,12 @@ class ArmComponent(BaseComponent):
         defaultAttrGroup = self.getAttributeGroupByIndex(0)
         defaultAttrGroup.addAttribute(BoolAttribute("toggleDebugging", True))
 
-
-        # Default values
-        if self.getLocation() == "R":
-            bicepPosition = Vec3(-2.27, 15.295, -0.753)
-            forearmPosition = Vec3(-5.039, 13.56, -0.859)
-            wristPosition = Vec3(-7.1886, 12.2819, 0.4906)
-        else:
-            bicepPosition = Vec3(2.27, 15.295, -0.753)
-            forearmPosition = Vec3(5.039, 13.56, -0.859)
-            wristPosition = Vec3(7.1886, 12.2819, 0.4906)
+        # values
+        bicepPosition = data['bicepPosition']
+        forearmPosition = data['forearmPosition']
+        wristPosition = data['wristPosition']
+        bicepFKCtrlSize = data['bicepFKCtrlSize']
+        forearmFKCtrlSize = data['forearmFKCtrlSize']
 
         # Calculate Bicep Xfo
         rootToWrist = wristPosition.subtract(bicepPosition).unit()
@@ -72,7 +68,7 @@ class ArmComponent(BaseComponent):
         bicepFKCtrl = CubeControl('bicepFK', parent=bicepFKCtrlSrtBuffer)
         bicepFKCtrl.alignOnXAxis()
         bicepLen = bicepPosition.subtract(forearmPosition).length()
-        bicepFKCtrl.scalePoints(Vec3(bicepLen, 1.75, 1.75))
+        bicepFKCtrl.scalePoints(Vec3(bicepLen, bicepFKCtrlSize, bicepFKCtrlSize))
         bicepFKCtrl.xfo = bicepXfo
 
         # Forearm
@@ -82,7 +78,7 @@ class ArmComponent(BaseComponent):
         forearmFKCtrl = CubeControl('forearmFK', parent=forearmFKCtrlSrtBuffer)
         forearmFKCtrl.alignOnXAxis()
         forearmLen = forearmPosition.subtract(wristPosition).length()
-        forearmFKCtrl.scalePoints(Vec3(forearmLen, 1.5, 1.5))
+        forearmFKCtrl.scalePoints(Vec3(forearmLen, forearmFKCtrlSize, forearmFKCtrlSize))
         forearmFKCtrl.xfo = forearmXfo
 
         # Arm IK
@@ -292,5 +288,12 @@ from kraken.core.kraken_system import KrakenSystem
 KrakenSystem.getInstance().registerComponent(ArmComponent)
 
 if __name__ == "__main__":
-    armLeft = ArmComponent("myArm", location='L')
+    armLeft = ArmComponent("arm", controlsLayer, { 
+            "location":"L",
+            "bicepPosition": Vec3(2.27, 15.295, -0.753),
+            "forearmPosition": Vec3(5.039, 13.56, -0.859),
+            "wristPosition": Vec3(7.1886, 12.2819, 0.4906),
+            "bicepFKCtrlSize": 1.75,
+            "forearmFKCtrlSize": 1.5
+            } )
     logHierarchy(armLeft)
