@@ -185,7 +185,7 @@ class Builder(BaseBuilder):
         # Scale, rotate, translation shape
         curvePoints = []
         for eachSubCurve in points:
-            formattedPoints = [x.toArray() for x in eachSubCurve]
+            formattedPoints = [[x.x, x.y, x.z] for x in eachSubCurve]
             curvePoints.append(formattedPoints)
 
         mainCurve = None
@@ -231,7 +231,7 @@ class Builder(BaseBuilder):
         # Scale, rotate, translation shape
         curvePoints = []
         for eachSubCurve in points:
-            formattedPoints = [x.toArray() for x in eachSubCurve]
+            formattedPoints = [[x.x, x.y, x.z] for x in eachSubCurve]
             curvePoints.append(formattedPoints)
 
         mainCurve = None
