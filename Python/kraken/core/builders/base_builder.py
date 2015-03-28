@@ -911,6 +911,9 @@ class BaseBuilder(object):
         finally:
             self._postBuild()
 
+            # Clear config instance when finished.
+            self.config.clearInstance()
+
         Profiler.getInstance().pop()
 
         return True

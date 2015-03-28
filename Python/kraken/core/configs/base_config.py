@@ -240,3 +240,16 @@ class BaseConfig(object):
             raise Exception("Multiple different BaseConfig types have been constructed.");
 
         return BaseConfig._instance
+
+
+    def clearInstance(cls):
+        """Clears the instance variable of the config.
+
+        Return:
+        True if successful.
+
+        """
+
+        BaseConfig._instance = None
+
+        return True
