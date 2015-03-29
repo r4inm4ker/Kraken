@@ -1,22 +1,23 @@
-"""Kraken - objects.Controls.BaseControl module.
+"""Kraken - objects.Controls.Control module.
 
 Classes:
-BaseControl - Base Control.
+Control - Base Control.
 
 """
 
+from kraken.core.configs.base_config import BaseConfig
 from kraken.core.maths import Euler, Quat, Xfo
 from kraken.core.maths import Math_degToRad
 from kraken.core.objects.curve import Curve
 
 
-class BaseControl(Curve):
+class Control(Curve):
     """Base Control object."""
 
     __kType__ = "Control"
 
-    def __init__(self, name, parent=None):
-        """Initializes base control object.
+    def __init__(self, name, parent=None, shape="null"):
+        """Initializes control object.
 
         Arguments:
         name -- String, Name of the constraint.
@@ -24,7 +25,14 @@ class BaseControl(Curve):
 
         """
 
-        super(BaseControl, self).__init__(name, parent=parent)
+        super(Control, self).__init__(name, parent=parent)
+
+        config = BaseConfig.getInstance()
+        configShapes = config.getControlShapes()
+        if shape not in configShapes.keys():
+            raise KeyError("'" + shape + "' is not a valid shape in the loaded config.")
+
+        self.setCurveData(configShapes[shape])
 
 
     # ==============

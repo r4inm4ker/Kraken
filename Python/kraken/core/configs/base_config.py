@@ -186,7 +186,7 @@ class BaseConfig(object):
     # Control Shape Methods
     # ======================
     def initControlShapes(self):
-        """Doc String.
+        """Initializes the control shapes.
 
         Arguments:
         Arguments -- Type, information.
