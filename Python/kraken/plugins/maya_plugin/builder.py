@@ -180,19 +180,22 @@ class Builder(BaseBuilder):
         parentNode = self._getDCCSceneItem(kSceneItem.getParent())
 
         # Format points for Maya
-        points = kSceneItem.getControlPoints()
+        curveData = kSceneItem.getCurveData()
 
         # Scale, rotate, translation shape
         curvePoints = []
-        for eachSubCurve in points:
-            formattedPoints = [[x.x, x.y, x.z] for x in eachSubCurve]
+        for eachSubCurve in curveData:
+            formattedPoints = eachSubCurve["points"]
             curvePoints.append(formattedPoints)
 
         mainCurve = None
         for i, eachSubCurve in enumerate(curvePoints):
-            currentSubCurve = pm.curve(per=False, point=curvePoints[i], degree=1) #, knot=[x for x in xrange(len(curvePoints[i]))])
+            closedSubCurve = curveData[i]["closed"]
+            degreeSubCurve = curveData[i]["degree"]
 
-            if kSceneItem.getCurveSectionClosed(i):
+            currentSubCurve = pm.curve(per=False, point=curvePoints[i], degree=degreeSubCurve)
+
+            if closedSubCurve:
                 pm.closeCurve(currentSubCurve, preserveShape=True, replaceOriginal=True)
 
             if mainCurve is None:
@@ -226,19 +229,22 @@ class Builder(BaseBuilder):
         parentNode = self._getDCCSceneItem(kSceneItem.getParent())
 
         # Format points for Maya
-        points = kSceneItem.getControlPoints()
+        curveData = kSceneItem.getCurveData()
 
         # Scale, rotate, translation shape
         curvePoints = []
-        for eachSubCurve in points:
-            formattedPoints = [[x.x, x.y, x.z] for x in eachSubCurve]
+        for eachSubCurve in curveData:
+            formattedPoints = eachSubCurve["points"]
             curvePoints.append(formattedPoints)
 
         mainCurve = None
         for i, eachSubCurve in enumerate(curvePoints):
-            currentSubCurve = pm.curve(per=False, point=curvePoints[i], degree=1) #, knot=[x for x in xrange(len(curvePoints[i]))])
+            closedSubCurve = curveData[i]["closed"]
+            degreeSubCurve = curveData[i]["degree"]
 
-            if kSceneItem.getCurveSectionClosed(i):
+            currentSubCurve = pm.curve(per=False, point=curvePoints[i], degree=degreeSubCurve)
+
+            if closedSubCurve:
                 pm.closeCurve(currentSubCurve, preserveShape=True, replaceOriginal=True)
 
             if mainCurve is None:

@@ -212,8 +212,8 @@ class Builder(BaseBuilder):
 
         # Build the curve
         for i, eachSubCurve in enumerate(curvePoints):
-
             closedSubCurve = curveData[i]["closed"]
+
             # Create knots
             if closedSubCurve is True:
                 knots = list(xrange(len(eachSubCurve[0]) + 1))
@@ -271,8 +271,8 @@ class Builder(BaseBuilder):
 
         # Build the curve
         for i, eachSubCurve in enumerate(curvePoints):
-
             closedSubCurve = curveData[i]["closed"]
+
             # Create knots
             if closedSubCurve is True:
                 knots = list(xrange(len(eachSubCurve[0]) + 1))
