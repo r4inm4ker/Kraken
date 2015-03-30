@@ -33,11 +33,12 @@ class SpineComponent(BaseComponent):
         defaultAttrGroup.addAttribute(BoolAttribute("toggleDebugging", True))
 
         # Default values
-        cogPosition = Vec3(0.0, 11.1351, -0.1382)
-        spine01Position = Vec3(0.0, 11.1351, -0.1382)
-        spine02Position = Vec3(0.0, 11.8013, -0.1995)
-        spine03Position = Vec3(0.0, 12.4496, -0.3649)
-        spine04Position = Vec3(0.0, 13.1051, -0.4821)
+        cogPosition = data['cogPosition']
+        spine01Position = data['spine01Position']
+        spine02Position = data['spine02Position']
+        spine03Position = data['spine03Position']
+        spine04Position = data['spine04Position']
+        numDeformers = data['numDeformers']
 
         # COG
         cogCtrlSrtBuffer = SrtBuffer('cog', parent=self)
@@ -63,7 +64,7 @@ class SpineComponent(BaseComponent):
         spine02Ctrl = CircleControl('spine02', parent=spine02CtrlSrtBuffer)
         spine02Ctrl.scalePoints(Vec3(4.5, 4.5, 4.5))
         spine02Ctrl.xfo.tr = spine02Position
-        spine02Ctrl.setColor("blue")
+
 
         # Spine03
         spine03CtrlSrtBuffer = SrtBuffer('spine03', parent=spine02Ctrl)
@@ -81,29 +82,6 @@ class SpineComponent(BaseComponent):
         spine04Ctrl = CircleControl('spine04', parent=spine04CtrlSrtBuffer)
         spine04Ctrl.scalePoints(Vec3(6.0, 6.0, 6.0))
         spine04Ctrl.xfo.tr = spine04Position
-
-        # ==========
-        # Deformers
-        # ==========
-
-        spine01Def = Joint('spine01')
-        spine01Def.setComponent(self)
-
-        spine02Def = Joint('spine02')
-        spine02Def.setComponent(self)
-
-        spine03Def = Joint('spine03')
-        spine03Def.setComponent(self)
-
-        spine04Def = Joint('spine04')
-        spine04Def.setComponent(self)
-
-        deformersLayer = self.getLayer('deformers')
-        deformersLayer.addChild(spine01Def)
-        deformersLayer.addChild(spine02Def)
-        deformersLayer.addChild(spine03Def)
-        deformersLayer.addChild(spine04Def)
-
 
         # =====================
         # Create Component I/O
@@ -129,6 +107,22 @@ class SpineComponent(BaseComponent):
 
         length = spine01Position.distanceTo(spine02Position) + spine02Position.distanceTo(spine03Position) + spine03Position.distanceTo(spine04Position)
         lengthInputAttr = FloatAttribute('length', value=length, maxValue=length * 3.0)
+
+        # ==========
+        # Deformers
+        # ==========
+
+        deformersLayer = self.getLayer('deformers')
+        deformerJoints = []
+        for i in range(numDeformers):
+            if i < 10:
+                name = 'spine0'+str(i)
+            else:
+                name = 'spine'+str(i)
+            spineDef = Joint(name)
+            spineDef.setComponent(self)
+            deformersLayer.addChild(spineDef)
+            deformerJoints.append(spineDef)
 
 
         # ==============
@@ -200,10 +194,8 @@ class SpineComponent(BaseComponent):
         outputsToDeformersSpliceOp.setInput("constrainers", spine04Output)
 
         # Add Xfo Outputs
-        outputsToDeformersSpliceOp.setOutput("constraineess", spine01Def)
-        outputsToDeformersSpliceOp.setOutput("constraineess", spine02Def)
-        outputsToDeformersSpliceOp.setOutput("constraineess", spine03Def)
-        outputsToDeformersSpliceOp.setOutput("constraineess", spine04Def)
+        for joint in deformerJoints:
+            outputsToDeformersSpliceOp.setOutput("constraineess", joint)
 
         Profiler.getInstance().pop()
 
@@ -215,5 +207,12 @@ from kraken.core.kraken_system import KrakenSystem
 KrakenSystem.getInstance().registerComponent(SpineComponent)
 
 if __name__ == "__main__":
-    spine = SpineComponent("mySpine")
+    spine = SpineComponent("mySpine", data={
+        'cogPosition': Vec3(0.0, 11.1351, -0.1382),
+        'spine01Position': Vec3(0.0, 11.1351, -0.1382),
+        'spine02Position': Vec3(0.0, 11.8013, -0.1995),
+        'spine03Position': Vec3(0.0, 12.4496, -0.3649),
+        'spine04Position': Vec3(0.0, 13.1051, -0.4821),
+        'numDeformers': 4
+        })
     logHierarchy(spine)

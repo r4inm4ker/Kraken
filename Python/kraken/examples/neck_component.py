@@ -30,10 +30,10 @@ class NeckComponent(BaseComponent):
         defaultAttrGroup = self.getAttributeGroupByIndex(0)
         defaultAttrGroup.addAttribute(BoolAttribute("toggleDebugging", True))
 
-        # Default values
-        neckPosition = Vec3(0.0, 16.5572, -0.6915)
-        neckUpV = neckPosition.add(Vec3(0.0, 0.0, -1.0)).unit()
-        neckEndPosition = Vec3(0.0, 17.4756, -0.421)
+        # Input data values
+        neckPosition = data['neckPosition']
+        neckUpV = neckPosition.add(data['neckUpVOffset']).unit()
+        neckEndPosition = data['neckEndPosition']
 
         # Calculate Clavicle Xfo
         rootToEnd = neckEndPosition.subtract(neckPosition).unit()
@@ -134,6 +134,12 @@ class NeckComponent(BaseComponent):
 from kraken.core.kraken_system import KrakenSystem
 KrakenSystem.getInstance().registerComponent(NeckComponent)
 
+
 if __name__ == "__main__":
-    neck = NeckComponent("myNeck", data={ 'location':'M' })
+    neck = NeckComponent("myNeck", data={ 
+        'location':'M',
+        'neckPosition': Vec3(0.0, 16.5572, -0.6915),
+        'neckUpVOffset': Vec3(0.0, 0.0, -1.0),
+        'neckEndPosition': Vec3(0.0, 17.4756, -0.421)
+     })
     logHierarchy(neck)

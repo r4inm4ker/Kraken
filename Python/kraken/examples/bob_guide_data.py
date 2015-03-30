@@ -9,10 +9,19 @@ bob_guide_data = {
     ],
     "components":[
         {
-            "class":"kraken.examples.spine_component.SpineComponent"
+            "class":"kraken.examples.spine_component.SpineComponent",
+            'cogPosition': Vec3(0.0, 11.1351, -0.1382),
+            'spine01Position': Vec3(0.0, 11.1351, -0.1382),
+            'spine02Position': Vec3(0.0, 11.8013, -0.1995),
+            'spine03Position': Vec3(0.0, 12.4496, -0.3649),
+            'spine04Position': Vec3(0.0, 13.1051, -0.4821),
+            'numDeformers': 4
         },
         {
-            "class":"kraken.examples.neck_component.NeckComponent"
+            "class":"kraken.examples.neck_component.NeckComponent",
+            'neckPosition': Vec3(0.0, 16.5572, -0.6915),
+            'neckUpVOffset': Vec3(0.0, 0.0, -1.0),
+            'neckEndPosition': Vec3(0.0, 17.4756, -0.421)
         },
         {
             "class":"kraken.examples.head_component.HeadComponent"
