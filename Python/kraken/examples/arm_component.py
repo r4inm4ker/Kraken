@@ -134,22 +134,20 @@ class ArmComponent(BaseComponent):
         # ==========
         # Deformers
         # ==========
-        container = self.getContainer()
-        if container is not None:
-            deformersLayer = container.getChildByName('deformers')
+        deformersLayer = self.getLayer('deformers')
 
-            bicepDef = Joint('bicep')
-            bicepDef.setComponent(self)
+        bicepDef = Joint('bicep')
+        bicepDef.setComponent(self)
 
-            forearmDef = Joint('forearm')
-            forearmDef.setComponent(self)
+        forearmDef = Joint('forearm')
+        forearmDef.setComponent(self)
 
-            wristDef = Joint('wrist')
-            wristDef.setComponent(self)
+        wristDef = Joint('wrist')
+        wristDef.setComponent(self)
 
-            deformersLayer.addChild(bicepDef)
-            deformersLayer.addChild(forearmDef)
-            deformersLayer.addChild(wristDef)
+        deformersLayer.addChild(bicepDef)
+        deformersLayer.addChild(forearmDef)
+        deformersLayer.addChild(wristDef)
 
 
         # =====================

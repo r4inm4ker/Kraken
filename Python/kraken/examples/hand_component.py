@@ -93,10 +93,8 @@ class HandComponent(BaseComponent):
         handDef = Joint('hand')
         handDef.setComponent(self)
 
-        container = self.getContainer()
-        if container is not None:
-            deformersLayer = container.getChildByName('deformers')
-            deformersLayer.addChild(handDef)
+        deformersLayer = self.getLayer('deformers')
+        deformersLayer.addChild(handDef)
 
 
         # =====================

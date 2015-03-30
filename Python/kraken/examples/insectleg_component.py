@@ -13,7 +13,6 @@ from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 from kraken.core.objects.locator import Locator
 from kraken.core.objects.joint import Joint
 from kraken.core.objects.srtBuffer import SrtBuffer
-from kraken.core.objects.layer import Layer
 from kraken.core.objects.controls.cube_control import CubeControl
 from kraken.core.objects.controls.pin_control import PinControl
 from kraken.core.objects.controls.triangle_control import TriangleControl
@@ -138,13 +137,7 @@ class InsectLegComponent(BaseComponent):
         # Deformers
         # ==========
 
-        container = self.getContainer()
-        if container is not None:
-            deformersLayer = container.getChildByName('deformers')
-        else:
-            # When building the component in a testing scene, generate a 'deformers' layer.
-            deformersLayer = Layer('deformers', parent=self)
-
+        deformersLayer = self.getLayer('deformers')
         boneDefs = []
         for i in range(len(boneXfos)):
             boneDef = Joint('bone'+str(i))

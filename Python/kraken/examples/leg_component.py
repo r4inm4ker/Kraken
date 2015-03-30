@@ -151,12 +151,10 @@ class LegComponent(BaseComponent):
         ankleDef = Joint('ankle')
         ankleDef.setComponent(self)
 
-        container = self.getContainer()
-        if container is not None:
-            deformersLayer = container.getChildByName('deformers')
-            deformersLayer.addChild(femurDef)
-            deformersLayer.addChild(shinDef)
-            deformersLayer.addChild(ankleDef)
+        deformersLayer = self.getLayer('deformers')
+        deformersLayer.addChild(femurDef)
+        deformersLayer.addChild(shinDef)
+        deformersLayer.addChild(ankleDef)
 
 
         # =====================

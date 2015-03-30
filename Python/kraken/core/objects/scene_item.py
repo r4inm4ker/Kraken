@@ -149,7 +149,7 @@ class SceneItem(object):
         """
 
         parent = self.getParent()
-        while (parent is not None and parent.getKType() != 'Container'):
+        while (parent is not None and 'Container' not in parent.getKTypeHierarchy()):
             parent = parent.getParent()
 
         return parent
@@ -778,6 +778,21 @@ class SceneItem(object):
 
         return self.__kType__
 
+    def getKTypeHierarchy(self):
+        """Returns the kType of this object.
+
+        Return:
+        True if successful.
+
+        """
+        khierarchy = []
+        for cls in type.mro(type(self)):
+            if cls == object:
+                break;
+            khierarchy.append(cls.__name__)
+        print khierarchy
+        return khierarchy
+
 
     # ===================
     # Visibility Methods
@@ -898,11 +913,7 @@ class SceneItem(object):
 
         """
 
-        classHierarchy = []
-        for cls in type.mro(type(self)):
-            if cls == object:
-                break;
-            classHierarchy.append(cls.__name__)
+        classHierarchy = self.getKTypeHierarchy()
 
         jsonData = {
             '__typeHierarchy__': classHierarchy,

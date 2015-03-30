@@ -62,10 +62,8 @@ class NeckComponent(BaseComponent):
         neckDef = Joint('neck')
         neckDef.setComponent(self)
 
-        container = self.getContainer()
-        if container is not None:
-            deformersLayer = container.getChildByName('deformers')
-            deformersLayer.addChild(neckDef)
+        deformersLayer = self.getLayer('deformers')
+        deformersLayer.addChild(neckDef)
 
         # =====================
         # Create Component I/O
@@ -137,5 +135,5 @@ from kraken.core.kraken_system import KrakenSystem
 KrakenSystem.getInstance().registerComponent(NeckComponent)
 
 if __name__ == "__main__":
-    neck = NeckComponent("myNeck", { 'location':'M' })
+    neck = NeckComponent("myNeck", data={ 'location':'M' })
     logHierarchy(neck)

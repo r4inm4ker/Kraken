@@ -74,10 +74,8 @@ class ClavicleComponent(BaseComponent):
         clavicleDef = Joint('clavicle')
         clavicleDef.setComponent(self)
 
-        container = self.getContainer()
-        if container is not None:
-            deformersLayer = container.getChildByName('deformers')
-            deformersLayer.addChild(clavicleDef)
+        deformersLayer = self.getLayer('deformers')
+        deformersLayer.addChild(clavicleDef)
 
         # =====================
         # Create Component I/O

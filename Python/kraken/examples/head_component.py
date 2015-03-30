@@ -95,13 +95,11 @@ class HeadComponent(BaseComponent):
         eyeRightDef = Joint('eyeRight')
         eyeRightDef.setComponent(self)
 
-        container = self.getContainer()
-        if container is not None:
-            deformersLayer = container.getChildByName('deformers')
-            deformersLayer.addChild(headDef)
-            deformersLayer.addChild(jawDef)
-            deformersLayer.addChild(eyeLeftDef)
-            deformersLayer.addChild(eyeRightDef)
+        deformersLayer = self.getLayer('deformers')
+        deformersLayer.addChild(headDef)
+        deformersLayer.addChild(jawDef)
+        deformersLayer.addChild(eyeLeftDef)
+        deformersLayer.addChild(eyeRightDef)
 
 
         # =====================

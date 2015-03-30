@@ -93,10 +93,8 @@ class FootComponent(BaseComponent):
         footDef = Joint('foot')
         footDef.setComponent(self)
 
-        container = self.getContainer()
-        if container is not None:
-            deformersLayer = container.getChildByName('deformers')
-            deformersLayer.addChild(footDef)
+        deformersLayer = self.getLayer('deformers')
+        deformersLayer.addChild(footDef)
 
 
         # =====================
