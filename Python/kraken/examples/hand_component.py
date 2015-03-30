@@ -37,14 +37,11 @@ class HandComponent(BaseComponent):
         defaultAttrGroup.addAttribute(BoolAttribute("toggleDebugging", True))
 
         # Default values
-        if location == 'R':
-            handPosition = Vec3(-7.1886, 12.2819, 0.4906)
-            handUpV = Vec3(-7.7463, 13.1746, 0.4477)
-            handEndPosition = Vec3(-7.945, 11.8321, 0.9655)
-        else:
-            handPosition = Vec3(7.1886, 12.2819, 0.4906)
-            handUpV = Vec3(7.7463, 13.1746, 0.4477)
-            handEndPosition = Vec3(7.945, 11.8321, 0.9655)
+        handPosition = data['handPosition']
+        handUpV = data['handUpV']
+        handEndPosition = data['handEndPosition']
+        handQuat = data['handQuat']
+        handPos = data['handPos']
 
         # Calculate Clavicle Xfo
         rootToEnd = handEndPosition.subtract(handPosition).unit()
@@ -52,13 +49,6 @@ class HandComponent(BaseComponent):
         bone1ZAxis = rootToEnd.cross(rootToUpV).unit()
         bone1Normal = rootToEnd.cross(bone1ZAxis).unit()
         handXfo = Xfo()
-
-        if location == "R":
-            handQuat = Quat(Vec3(-0.2301, -0.0865, -0.9331), 0.2623)
-            handPos = Vec3(-7.1886, 12.2819, 0.4906)
-        else:
-            handQuat = Quat(Vec3(-0.0865, -0.2301, -0.2623), 0.9331)
-            handPos = Vec3(7.1886, 12.2819, 0.4906)
 
         handXfo.ori = handQuat
         handXfo.tr = handPos
@@ -196,5 +186,13 @@ from kraken.core.kraken_system import KrakenSystem
 KrakenSystem.getInstance().registerComponent(HandComponent)
 
 if __name__ == "__main__":
-    handLeft = HandComponent("myHand", location='L')
+    handLeft = HandComponent("myHand", data={
+            "name":"R_HandComponent",
+            "location": "R",
+            "handPosition": Vec3(-7.1886, 12.2819, 0.4906),
+            "handUpV": Vec3(-7.7463, 13.1746, 0.4477),
+            "handEndPosition": Vec3(-7.945, 11.8321, 0.9655),
+            "handQuat": Quat(Vec3(-0.2301, -0.0865, -0.9331), 0.2623),
+            "handPos": Vec3(-7.1886, 12.2819, 0.4906)
+        })
     logHierarchy(handLeft)

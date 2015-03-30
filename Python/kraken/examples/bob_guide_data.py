@@ -1,5 +1,5 @@
 
-from kraken.core.maths import Vec3
+from kraken.core.maths import Vec3, Vec3, Euler, Quat, Xfo
 
 bob_guide_data = {
     "layers":[
@@ -24,12 +24,20 @@ bob_guide_data = {
             'neckEndPosition': Vec3(0.0, 17.4756, -0.421)
         },
         {
-            "class":"kraken.examples.head_component.HeadComponent"
+            "class":"kraken.examples.head_component.HeadComponent",
+            "headPosition": Vec3(0.0, 17.4756, -0.421),
+            "headEndPosition": Vec3(0.0, 19.5, -0.421),
+            "eyeLeftPosition": Vec3(0.3497, 18.0878, 0.6088),
+            "eyeRightPosition": Vec3(-0.3497, 18.0878, 0.6088),
+            "jawPosition": Vec3(0.0, 17.613, -0.2731)
         },
         {
             "class":"kraken.examples.clavicle_component.ClavicleComponent",
             "name": "L_ClavicleComponent",
-            "location": "L"
+            "location": "L",
+            "claviclePosition": Vec3(0.1322, 15.403, -0.5723),
+            "clavicleUpVOffset": Vec3(0.0, 1.0, 0.0),
+            "clavicleEndPosition": Vec3(2.27, 15.295, -0.753)
         },
         {
             "class":"kraken.examples.arm_component.ArmComponent",
@@ -44,12 +52,20 @@ bob_guide_data = {
         {
             "class":"kraken.examples.hand_component.HandComponent",
             "name":"L_HandComponent",
-            "location": "L"
+            "location": "L",
+            "handPosition": Vec3(7.1886, 12.2819, 0.4906),
+            "handUpV": Vec3(7.7463, 13.1746, 0.4477),
+            "handEndPosition": Vec3(7.945, 11.8321, 0.9655),
+            "handQuat": Quat(Vec3(-0.0865, -0.2301, -0.2623), 0.9331),
+            "handPos": Vec3(7.1886, 12.2819, 0.4906)
         },
         {
             "class":"kraken.examples.clavicle_component.ClavicleComponent",
             "name":"R_ClavicleComponent",
-            "location": "R"
+            "location": "R",
+            "claviclePosition": Vec3(-0.1322, 15.403, -0.5723),
+            "clavicleUpVOffset": Vec3(0.0, 1.0, 0.0),
+            "clavicleEndPosition": Vec3(-2.27, 15.295, -0.753)
         },
         {
             "class":"kraken.examples.arm_component.ArmComponent",
@@ -64,7 +80,12 @@ bob_guide_data = {
         {
             "class":"kraken.examples.hand_component.HandComponent",
             "name":"R_HandComponent",
-            "location": "R"
+            "location": "R",
+            "handPosition": Vec3(-7.1886, 12.2819, 0.4906),
+            "handUpV": Vec3(-7.7463, 13.1746, 0.4477),
+            "handEndPosition": Vec3(-7.945, 11.8321, 0.9655),
+            "handQuat": Quat(Vec3(-0.2301, -0.0865, -0.9331), 0.2623),
+            "handPos": Vec3(-7.1886, 12.2819, 0.4906)
         },
         {
             "class":"kraken.examples.leg_component.LegComponent",

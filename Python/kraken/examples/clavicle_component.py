@@ -32,15 +32,10 @@ class ClavicleComponent(BaseComponent):
         defaultAttrGroup = self.getAttributeGroupByIndex(0)
         defaultAttrGroup.addAttribute(BoolAttribute("toggleDebugging", True))
 
-        # Default values
-        if location == 'R':
-            claviclePosition = Vec3(-0.1322, 15.403, -0.5723)
-            clavicleUpV = claviclePosition.add(Vec3(0.0, 1.0, 0.0)).unit()
-            clavicleEndPosition = Vec3(-2.27, 15.295, -0.753)
-        else:
-            claviclePosition = Vec3(0.1322, 15.403, -0.5723)
-            clavicleUpV = claviclePosition.add(Vec3(0.0, 1.0, 0.0)).unit()
-            clavicleEndPosition = Vec3(2.27, 15.295, -0.753)
+        # Input values
+        claviclePosition = data['claviclePosition']
+        clavicleUpV = claviclePosition.add(data['clavicleUpVOffset']).unit()
+        clavicleEndPosition = data['clavicleEndPosition']
 
         # Calculate Clavicle Xfo
         rootToEnd = clavicleEndPosition.subtract(claviclePosition).unit()
@@ -155,5 +150,12 @@ from kraken.core.kraken_system import KrakenSystem
 KrakenSystem.getInstance().registerComponent(ClavicleComponent)
 
 if __name__ == "__main__":
-    clavicleLeft = ClavicleComponent("myClavicle", location='L')
+    clavicleLeft = ClavicleComponent("myClavicle", data={
+            "class":"kraken.examples.clavicle_component.ClavicleComponent",
+            "name":"R_ClavicleComponent",
+            "location": "R",
+            "claviclePosition": Vec3(-0.1322, 15.403, -0.5723),
+            "clavicleUpVOffset": Vec3(0.0, 1.0, 0.0),
+            "clavicleEndPosition": Vec3(-2.27, 15.295, -0.753)
+        })
     logHierarchy(clavicleLeft)

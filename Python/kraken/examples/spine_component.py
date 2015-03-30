@@ -195,7 +195,7 @@ class SpineComponent(BaseComponent):
 
         # Add Xfo Outputs
         for joint in deformerJoints:
-            outputsToDeformersSpliceOp.setOutput("constraineess", joint)
+            outputsToDeformersSpliceOp.setOutput("constrainees", joint)
 
         Profiler.getInstance().pop()
 

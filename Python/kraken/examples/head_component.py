@@ -32,11 +32,11 @@ class HeadComponent(BaseComponent):
         defaultAttrGroup.addAttribute(BoolAttribute("toggleDebugging", True))
 
         # Default values
-        headPosition = Vec3(0.0, 17.4756, -0.421)
-        headEndPosition = Vec3(0.0, 19.5, -0.421)
-        eyeLeftPosition = Vec3(0.3497, 18.0878, 0.6088)
-        eyeRightPosition = Vec3(-0.3497, 18.0878, 0.6088)
-        jawPosition = Vec3(0.0, 17.613, -0.2731)
+        headPosition = data['headPosition']
+        headEndPosition = data['headEndPosition']
+        eyeLeftPosition = data['eyeLeftPosition']
+        eyeRightPosition = data['eyeRightPosition']
+        jawPosition = data['jawPosition']
 
         # Head
         headCtrlSrtBuffer = SrtBuffer('head', parent=self)

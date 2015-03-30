@@ -28,11 +28,42 @@ class BobRig(Container):
         geometryLayer = Layer('geometry', parent=self)
 
         # Add Components to Layers
-        spineComponent = SpineComponent("spine", controlsLayer)
-        neckComponent = NeckComponent("neck", controlsLayer)
-        headComponent = HeadComponent("head", controlsLayer)
-        clavicleLeftComponent = ClavicleComponent("clavicle", controlsLayer, { "location":"L"} )
-        clavicleRightComponent = ClavicleComponent("clavicle", controlsLayer, { "location":"R"} )
+        spineComponent = SpineComponent("spine", controlsLayer, data={
+            'cogPosition': Vec3(0.0, 11.1351, -0.1382),
+            'spine01Position': Vec3(0.0, 11.1351, -0.1382),
+            'spine02Position': Vec3(0.0, 11.8013, -0.1995),
+            'spine03Position': Vec3(0.0, 12.4496, -0.3649),
+            'spine04Position': Vec3(0.0, 13.1051, -0.4821),
+            'numDeformers': 4
+        })
+        neckComponent = NeckComponent("neck", controlsLayer, data={
+            'neckPosition': Vec3(0.0, 16.5572, -0.6915),
+            'neckUpVOffset': Vec3(0.0, 0.0, -1.0),
+            'neckEndPosition': Vec3(0.0, 17.4756, -0.421)
+        })
+        headComponent = HeadComponent("head", controlsLayer, data={
+            "headPosition": Vec3(0.0, 17.4756, -0.421),
+            "headEndPosition": Vec3(0.0, 19.5, -0.421),
+            "eyeLeftPosition": Vec3(0.3497, 18.0878, 0.6088),
+            "eyeRightPosition": Vec3(-0.3497, 18.0878, 0.6088),
+            "jawPosition": Vec3(0.0, 17.613, -0.2731)
+        })
+        clavicleLeftComponent = ClavicleComponent("clavicle", controlsLayer, data={ 
+            "class":"kraken.examples.clavicle_component.ClavicleComponent",
+            "name": "L_ClavicleComponent",
+            "location": "L",
+            "claviclePosition": Vec3(0.1322, 15.403, -0.5723),
+            "clavicleUpVOffset": Vec3(0.0, 1.0, 0.0),
+            "clavicleEndPosition": Vec3(2.27, 15.295, -0.753)
+        })
+        clavicleRightComponent = ClavicleComponent("clavicle", controlsLayer, data={
+            "class":"kraken.examples.clavicle_component.ClavicleComponent",
+            "name":"R_ClavicleComponent",
+            "location": "R",
+            "claviclePosition": Vec3(-0.1322, 15.403, -0.5723),
+            "clavicleUpVOffset": Vec3(0.0, 1.0, 0.0),
+            "clavicleEndPosition": Vec3(-2.27, 15.295, -0.753)
+        })
         armLeftComponent = ArmComponent("arm", controlsLayer, { 
             "location":"L",
             "bicepPosition": Vec3(2.27, 15.295, -0.753),
