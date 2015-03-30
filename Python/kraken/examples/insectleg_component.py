@@ -259,7 +259,7 @@ class InsectLegComponent(BaseComponent):
 
         # Add Xfo Outputs
         for i in range(len(boneOutputs)):
-            outputsToDeformersSpliceOp.setOutput("constraineess", boneDefs[i])
+            outputsToDeformersSpliceOp.setOutput("constrainees", boneDefs[i])
 
         Profiler.getInstance().pop()
 

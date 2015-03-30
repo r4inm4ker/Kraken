@@ -9,7 +9,7 @@ object MultiPoseConstraintSolver : KrakenSolver {
 function KrakenSolverArg[] MultiPoseConstraintSolver.getArguments(){
   KrakenSolverArg args[] = this.parent.getArguments();
   args.push(KrakenSolverArg('constrainers', 'in', 'Mat44[]'));
-  args.push(KrakenSolverArg('constraineess', 'out', 'Mat44[]'));
+  args.push(KrakenSolverArg('constrainees', 'out', 'Mat44[]'));
   return args;
 }
 

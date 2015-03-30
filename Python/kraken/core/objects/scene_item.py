@@ -790,7 +790,6 @@ class SceneItem(object):
             if cls == object:
                 break;
             khierarchy.append(cls.__name__)
-        print khierarchy
         return khierarchy
 
 
