@@ -22,10 +22,26 @@ function MultiPoseConstraintSolver.solve!
   io Mat44 constrainees[]
   )
 {
-  if(constrainers.size != constrainees.size)
-    throw("Error in MultiPoseConstraintSolver. The number of constrainees does not match the number of constrainers");
-  for(UInt32 i=0; i<constrainers.size; i++)
-    constrainees[i] = constrainers[i];
+  if(constrainers.size != 1 && constrainers.size != constrainees.size)
+    throw("Error in MultiPoseConstraintSolver. The number of constrainees must be 1 or match the number of constrainers");
+
+  if(constrainees.size() == 1){
+    Xfo xfo();
+    for(UInt32 i=0; i<constrainers.size; i++){
+      Xfo constrainersXfo(constrainers[i]);
+      xfo.tr += constrainersXfo.tr;
+      xfo.ori += constrainersXfo.ori;
+      xfo.sc += constrainersXfo.sc;
+    }
+    xfo.tr /= Scalar(constrainers.size);
+    xfo.ori.setUnit();
+    xfo.sc /= Scalar(constrainers.size);
+    constrainees[0] = xfo.toMat44();
+  }
+  else{
+    for(UInt32 i=0; i<constrainers.size; i++)
+      constrainees[i] = constrainers[i];
+  }
 
   // Set debugging visibility.
   this.setDebug(debug);
