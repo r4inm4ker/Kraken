@@ -4,6 +4,7 @@ Classes:
 Builder -- Component representation.
 
 """
+from win32com.client.dynamic import Dispatch
 
 from kraken.core.kraken_system import ks
 from kraken.core.builders.base_builder import BaseBuilder
@@ -13,6 +14,7 @@ from kraken.plugins.si_plugin.utils import *
 
 import FabricEngine.Core as core
 
+si = Dispatch("XSI.Application").Application
 
 class Builder(BaseBuilder):
     """Builder object for building Kraken objects in Softimage."""
@@ -470,11 +472,18 @@ class Builder(BaseBuilder):
         """
 
         constraineeDCCSceneItem = self._getDCCSceneItem(kConstraint.getConstrainee())
-        useXSIConstraint = False
+        useXSIConstraint = True
         if useXSIConstraint:
             constrainingObjs = getCollection()
             for eachConstrainer in kConstraint.getConstrainers():
-                constrainingObjs.AddItems(self._getDCCSceneItem(eachConstrainer))
+                constrainer = self._getDCCSceneItem(eachConstrainer)
+
+                if kConstraint.getMaintainOffset():
+                    constrainerTransform = constrainer.Kinematics.Global.Transform
+
+                # si.LogMessage( "%s,%s,%s" % (constrainer.posx.Value, constrainer.posy.Value, constrainer.posz.Value) )
+
+                constrainingObjs.AddItems(constrainer)
 
             dccSceneItem = constraineeDCCSceneItem.Kinematics.AddConstraint("Pose", constrainingObjs, kConstraint.getMaintainOffset())
             self._registerSceneItemPair(kConstraint, dccSceneItem)
@@ -484,17 +493,16 @@ class Builder(BaseBuilder):
             # Load the Fabric Engine client and construct the RTVal for the Solver
             ks.loadCoreClient()
             ks.loadExtension('Kraken')
-            dccSceneItem = ks.constructRTVal('PoseConstraintSolver')
-
-            solverTypeName = 'MultiPoseConstraintSolver'
+            solverTypeName = 'PoseConstraintSolver'
             target = constraineeDCCSceneItem.FullName + ".kine.global"
             spliceOpPath = target + ".SpliceOp"
 
-            si.fabricSplice('newSplice', "{\"targets\":\"" + target + "\", \"portName\":\"constrainees\", \"portMode\":\"out\"}", "", "")
+            si.fabricSplice('newSplice', "{\"targets\":\"" + target + "\", \"portName\":\"constrainee\", \"portMode\":\"out\"}", "", "")
 
             # Add the private/non-mayaAttr port that stores the Solver object
             si.fabricSplice("addInternalPort", spliceOpPath, "{\"portName\":\"solver\", \"dataType\":\"" + solverTypeName + "\", \"extension\":\"Kraken\", \"portMode\":\"io\"}", "")
             si.fabricSplice("addInternalPort", spliceOpPath, "{\"portName\":\"debug\", \"dataType\":\"Boolean\", \"extension\":\"Kraken\", \"portMode\":\"io\"}", "")
+            si.fabricSplice("addInternalPort", spliceOpPath, "{\"portName\":\"rightSide\", \"dataType\":\"Boolean\", \"extension\":\"Kraken\", \"portMode\":\"io\"}", "")
 
             connectionTargets = ""
             connectionSuffix = ".kine.global"
@@ -508,13 +516,26 @@ class Builder(BaseBuilder):
                 if dccSceneItem is None:
                     raise Exception("Constraint '"+kConstraint.getFullName()+"' of type '"+solverTypeName+"' is connected to object without corresponding SceneItem:" + eachConstrainer.getFullName());
                     
-                if connectionTargets == "":
-                    connectionTargets = dccSceneItem.FullName + connectionSuffix
-                else:
-                    connectionTargets = connectionTargets + "," + dccSceneItem.FullName + connectionSuffix
+                connectionTargets = dccSceneItem.FullName + connectionSuffix
+                break
 
-            si.fabricSplice("addInputPort", spliceOpPath, "{\"portName\":\"constrainers\", \"dataType\":\"Mat44[]\", \"extension\":\"\", \"targets\":\"" + connectionTargets + "\"}", "")
+            si.fabricSplice("addInputPort", spliceOpPath, "{\"portName\":\"constrainer\", \"dataType\":\"Mat44\", \"extension\":\"\", \"targets\":\"" + connectionTargets + "\"}", "")
 
+            # Generate the operator source code.
+            opSourceCode = ""
+            opSourceCode += "require Kraken;\n"
+            opSourceCode += "operator poseConstraint(\n"
+            opSourceCode += "    io " + solverTypeName + " solver,\n"
+            opSourceCode += "    in Boolean debug,\n"
+            opSourceCode += "    in Boolean rightSide,\n"
+            opSourceCode += "    io Mat44 constrainee,\n"
+            opSourceCode += "    in Mat44 constrainer\n"
+            opSourceCode += "    )\n"
+            opSourceCode += "{\n"
+            opSourceCode += "    solver.solve(debug, rightSide, constrainer, constrainee);"
+            opSourceCode += "}\n"
+
+            si.fabricSplice('addKLOperator', spliceOpPath, '{"opName": "poseConstraint"}', opSourceCode)
 
         return dccSceneItem
 
