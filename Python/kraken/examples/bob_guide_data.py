@@ -144,6 +144,11 @@ bob_guide_data = {
             "target": "L_LegComponent.pelvisInput"
         },
         {
+            "_comment": "RLeg To Pelvis Connections",
+            "source": "SpineComponent.spineBase",
+            "target": "R_LegComponent.pelvisInput"
+        },
+        {
             "_comment": "LFoot To LLeg Connections: legEndXfo",
             "source": "L_LegComponent.legEndXfo",
             "target": "L_FootComponent.legEndXfo"
