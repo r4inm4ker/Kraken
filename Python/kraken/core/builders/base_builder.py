@@ -890,10 +890,10 @@ class BaseBuilder(object):
         """
 
         self.buildHierarchy(kSceneItem, component=None)
-        self.buildConstraints(kSceneItem)
         self.buildAttrConnections(kSceneItem)
         self.buildIOConnections(kSceneItem)
         self.buildOperators(kSceneItem)
+        self.buildConstraints(kSceneItem)
 
         return True
 

@@ -471,9 +471,14 @@ class Builder(BaseBuilder):
 
         """
 
-        constraineeDCCSceneItem = self._getDCCSceneItem(kConstraint.getConstrainee())
+
         useXSIConstraint = True
         if useXSIConstraint:
+
+            constraineeDCCSceneItem = self._getDCCSceneItem(kConstraint.getConstrainee())
+            if kConstraint.getMaintainOffset():
+                constraineeTransform = constraineeDCCSceneItem.Kinematics.Global.Transform
+            
             constrainingObjs = getCollection()
             for eachConstrainer in kConstraint.getConstrainers():
                 constrainer = self._getDCCSceneItem(eachConstrainer)

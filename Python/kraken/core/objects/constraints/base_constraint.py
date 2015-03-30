@@ -19,7 +19,7 @@ class BaseConstraint(object):
         self.name = name
         self.constrainee = None
         self.constrainers = []
-        self.maintainOffset = True
+        self.maintainOffset = False
 
 
     # =============
