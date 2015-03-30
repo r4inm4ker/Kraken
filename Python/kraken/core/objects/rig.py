@@ -54,7 +54,7 @@ class Rig(Container):
                     componentName = componentData['name']
                 else:
                     componentName = str(componentClass.__name__)                    
-                component = componentClass(componentName, self, componentData)
+                component = componentClass(componentName, parent=self, data=componentData)
 
             Profiler.getInstance().pop()
 
@@ -83,6 +83,8 @@ class Rig(Container):
 
         if 'layers' in jsonData:
             loadLayers(jsonData['layers'])
+        else:
+            raise Exception("A rig must define layers.")
 
         if 'components' in jsonData:
             loadComponents(jsonData['components'])

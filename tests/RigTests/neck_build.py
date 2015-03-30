@@ -1,21 +1,22 @@
 
 from kraken import plugins
-from kraken.examples.arm_component import ArmComponent
+from kraken.examples.neck_component import NeckComponent
 from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
 import json
 
 
-Profiler.getInstance().push("arm_build")
+Profiler.getInstance().push("neck_build")
 
-arm = ArmComponent("arm")
+neck = NeckComponent("neck")
+logHierarchy(neck)
 
 builder = plugins.getBuilder()
-builder.build(arm)
+builder.build(neck)
 
 Profiler.getInstance().pop()
 
 if __name__ == "__main__":
     print json.dumps(Profiler.getInstance().generateReport(), sort_keys=False, indent=4, separators=(',', ': '))
 else:
-    logHierarchy(arm)
+    logHierarchy(neck)
