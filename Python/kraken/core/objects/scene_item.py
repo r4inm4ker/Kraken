@@ -789,7 +789,7 @@ class SceneItem(object):
         for cls in type.mro(type(self)):
             if cls == object:
                 break;
-            khierarchy.append(cls.__name__)
+            khierarchy.append(cls.__kType__)
         return khierarchy
 
 

@@ -161,10 +161,10 @@ class BaseConfig(object):
                                  },
                         "formats":
                                   {
-                                   "default": ["component", "sep", "location", "sep", "name", "sep", "type"],
                                    "Container": ["name"],
                                    "Layer": ["name"],
-                                   "Component": ["name", "sep", "location", "sep", "type"]
+                                   "Component": ["name", "sep", "location", "sep", "type"],
+                                   "default": ["component", "sep", "location", "sep", "name", "sep", "type"],
                                   }
                        }
 
