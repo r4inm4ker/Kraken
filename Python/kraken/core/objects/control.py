@@ -6,7 +6,7 @@ Control - Base Control.
 """
 
 from kraken.core.configs.base_config import BaseConfig
-from kraken.core.maths import Euler, Quat, Xfo
+from kraken.core.maths import Euler, Quat, Vec3, Xfo
 from kraken.core.maths import Math_degToRad
 from kraken.core.objects.curve import Curve
 
@@ -51,29 +51,29 @@ class Control(Curve):
 
         furthest = 0.0
 
-        controlPoints = self.copyControlPoints()
+        curveData = list(self.getCurveData())
 
-        for eachSection in controlPoints:
-            for eachPoint in eachSection:
+        for eachSubCurve in curveData:
+            for eachPoint in eachSubCurve["points"]:
 
                 if negative is False:
 
-                    if eachPoint.x < furthest:
-                        furthest = eachPoint.x
+                    if eachPoint[0] < furthest:
+                        furthest = eachPoint[0]
 
                 else:
 
-                    if eachPoint.x > furthest:
-                        furthest = eachPoint.x
+                    if eachPoint[0] > furthest:
+                        furthest = eachPoint[0]
 
 
         offset = 0.0 - furthest
 
-        for eachSection in controlPoints:
-            for eachPoint in eachSection:
-                eachPoint.x += offset
+        for eachSubCurve in curveData:
+            for eachPoint in eachSubCurve["points"]:
+                eachPoint[0] += offset
 
-        self.setControlPoints(controlPoints)
+        self.setCurveData(curveData)
 
         return True
 
@@ -91,29 +91,29 @@ class Control(Curve):
 
         furthest = 0.0
 
-        controlPoints = self.copyControlPoints()
+        curveData = list(self.getCurveData())
 
-        for eachSection in controlPoints:
-            for eachPoint in eachSection:
+        for eachSubCurve in curveData:
+            for eachPoint in eachSubCurve["points"]:
 
                 if negative is False:
 
-                    if eachPoint.y < furthest:
-                        furthest = eachPoint.y
+                    if eachPoint[1] < furthest:
+                        furthest = eachPoint[1]
 
                 else:
 
-                    if eachPoint.y > furthest:
-                        furthest = eachPoint.y
+                    if eachPoint[1] > furthest:
+                        furthest = eachPoint[1]
 
 
         offset = 0.0 - furthest
 
-        for eachSection in controlPoints:
-            for eachPoint in eachSection:
-                eachPoint.y += offset
+        for eachSubCurve in curveData:
+            for eachPoint in eachSubCurve["points"]:
+                eachPoint[1] += offset
 
-        self.setControlPoints(controlPoints)
+        self.setCurveData(curveData)
 
         return True
 
@@ -131,29 +131,29 @@ class Control(Curve):
 
         furthest = 0.0
 
-        controlPoints = self.copyControlPoints()
+        curveData = list(self.getCurveData())
 
-        for eachSection in controlPoints:
-            for eachPoint in eachSection:
+        for eachSubCurve in curveData:
+            for eachPoint in eachSubCurve["points"]:
 
                 if negative is False:
 
-                    if eachPoint.z < furthest:
-                        furthest = eachPoint.z
+                    if eachPoint[2] < furthest:
+                        furthest = eachPoint[2]
 
                 else:
 
-                    if eachPoint.z > furthest:
-                        furthest = eachPoint.z
+                    if eachPoint[2] > furthest:
+                        furthest = eachPoint[2]
 
 
         offset = 0.0 - furthest
 
-        for eachSection in controlPoints:
-            for eachPoint in eachSection:
-                eachPoint.z += offset
+        for eachSubCurve in curveData:
+            for eachPoint in eachSubCurve["points"]:
+                eachPoint[2] += offset
 
-        self.setControlPoints(controlPoints)
+        self.setCurveData(curveData)
 
         return True
 
@@ -172,15 +172,15 @@ class Control(Curve):
 
         """
 
-        controlPoints = self.copyControlPoints()
+        curveData = list(self.getCurveData())
 
-        for eachSection in controlPoints:
-            for eachPoint in eachSection:
-                eachPoint.x *= scaleVec.x
-                eachPoint.y *= scaleVec.y
-                eachPoint.z *= scaleVec.z
+        for eachSubCurve in curveData:
+            for eachPoint in eachSubCurve["points"]:
+                eachPoint[0] *= scaleVec.x
+                eachPoint[1] *= scaleVec.y
+                eachPoint[2] *= scaleVec.z
 
-        self.setControlPoints(controlPoints)
+        self.setCurveData(curveData)
 
         return True
 
@@ -201,22 +201,26 @@ class Control(Curve):
 
         """
 
-        controlPoints = self.copyControlPoints()
+        curveData = list(self.getCurveData())
 
         quatRot = Quat()
         quatRot.setFromEuler(Euler(Math_degToRad(xRot), Math_degToRad(yRot), Math_degToRad(zRot)))
 
         newPoints = []
-        for eachSection in controlPoints:
+        for eachSubCurve in curveData:
 
-            newSectionPoints = []
-            for i, eachPoint in enumerate(eachSection):
-                eachPoint = quatRot.rotateVector(eachPoint)
-                newSectionPoints.append(eachPoint)
+            for eachPoint in eachSubCurve["points"]:
+                from kraken.plugins.si_plugin.utils import *
+                log(eachPoint)
+                pointVec = Vec3(eachPoint[0], eachPoint[1], eachPoint[2])
+                rotVec = quatRot.rotateVector(pointVec)
+                eachPoint[0] = rotVec.x
+                eachPoint[1] = rotVec.y
+                eachPoint[2] = rotVec.z
+                log("after")
+                log(eachPoint)
 
-            newPoints.append(newSectionPoints)
-
-        self.setControlPoints(newPoints)
+        self.setCurveData(curveData)
 
         return True
 
@@ -235,14 +239,14 @@ class Control(Curve):
 
         """
 
-        controlPoints = self.copyControlPoints()
+        curveData = list(self.getCurveData())
 
-        for eachSection in controlPoints:
-            for eachPoint in eachSection:
-                eachPoint.x += translateVec.x
-                eachPoint.y += translateVec.y
-                eachPoint.z += translateVec.z
+        for eachSubCurve in curveData:
+            for eachPoint in eachSubCurve["points"]:
+                eachPoint[0] += translateVec.x
+                eachPoint[1] += translateVec.y
+                eachPoint[2] += translateVec.z
 
-        self.setControlPoints(controlPoints)
+        self.setCurveData(curveData)
 
         return True

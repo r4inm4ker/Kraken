@@ -46,7 +46,7 @@ class Curve(SceneItem):
 
         """
 
-        self._data = data
+        self._data = list(data)
 
         return True
 
