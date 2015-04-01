@@ -242,9 +242,6 @@ class KrakenLoader(object):
         elif "Null" in jsonData['__typeHierarchy__']:
             item = Null(jsonData['name'])
 
-        elif "Control" in jsonData['__typeHierarchy__']:
-            item = Control(jsonData['name'])
-
         elif "Chain" in jsonData['__typeHierarchy__']:
             item = Chain(jsonData['name'])
 
