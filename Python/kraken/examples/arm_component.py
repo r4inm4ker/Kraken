@@ -284,14 +284,3 @@ class ArmComponent(BaseComponent):
 
 from kraken.core.kraken_system import KrakenSystem
 KrakenSystem.getInstance().registerComponent(ArmComponent)
-
-if __name__ == "__main__":
-    armLeft = ArmComponent("arm", controlsLayer, { 
-            "location":"L",
-            "bicepPosition": Vec3(2.27, 15.295, -0.753),
-            "forearmPosition": Vec3(5.039, 13.56, -0.859),
-            "wristPosition": Vec3(7.1886, 12.2819, 0.4906),
-            "bicepFKCtrlSize": 1.75,
-            "forearmFKCtrlSize": 1.5
-            } )
-    logHierarchy(armLeft)

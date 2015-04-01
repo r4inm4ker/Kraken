@@ -135,11 +135,3 @@ from kraken.core.kraken_system import KrakenSystem
 KrakenSystem.getInstance().registerComponent(NeckComponent)
 
 
-if __name__ == "__main__":
-    neck = NeckComponent("myNeck", data={ 
-        'location':'M',
-        'neckPosition': Vec3(0.0, 16.5572, -0.6915),
-        'neckUpVOffset': Vec3(0.0, 0.0, -1.0),
-        'neckEndPosition': Vec3(0.0, 17.4756, -0.421)
-     })
-    logHierarchy(neck)

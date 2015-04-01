@@ -287,12 +287,3 @@ class LegComponent(BaseComponent):
 from kraken.core.kraken_system import KrakenSystem
 KrakenSystem.getInstance().registerComponent(LegComponent)
 
-if __name__ == "__main__":
-    legLeft = LegComponent("myLeg", data={
-            "name":"R_LegComponent",
-            "location": "R",
-            "femurPosition": Vec3(-0.9811, 9.769, -0.4572),
-            "kneePosition": Vec3(-1.4488, 5.4418, -0.5348),
-            "anklePosition": Vec3(-1.841, 1.1516, -1.237)
-        })
-    logHierarchy(legLeft)

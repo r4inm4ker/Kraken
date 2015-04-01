@@ -116,9 +116,9 @@ class SpineComponent(BaseComponent):
         deformerJoints = []
         for i in range(numDeformers):
             if i < 10:
-                name = 'spine0'+str(i)
+                name = 'spine0'+str(i+1)
             else:
-                name = 'spine'+str(i)
+                name = 'spine'+str(i+1)
             spineDef = Joint(name)
             spineDef.setComponent(self)
             deformersLayer.addChild(spineDef)
@@ -205,14 +205,3 @@ class SpineComponent(BaseComponent):
 
 from kraken.core.kraken_system import KrakenSystem
 KrakenSystem.getInstance().registerComponent(SpineComponent)
-
-if __name__ == "__main__":
-    spine = SpineComponent("mySpine", data={
-        'cogPosition': Vec3(0.0, 11.1351, -0.1382),
-        'spine01Position': Vec3(0.0, 11.1351, -0.1382),
-        'spine02Position': Vec3(0.0, 11.8013, -0.1995),
-        'spine03Position': Vec3(0.0, 12.4496, -0.3649),
-        'spine04Position': Vec3(0.0, 13.1051, -0.4821),
-        'numDeformers': 4
-        })
-    logHierarchy(spine)

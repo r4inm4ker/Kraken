@@ -1,5 +1,5 @@
 
-from kraken.core.maths import Vec3, Vec3, Euler, Quat, Xfo
+from kraken.core.maths import Vec2, Vec3, Euler, Quat, Xfo
 
 bob_guide_data = {
     "layers":[
