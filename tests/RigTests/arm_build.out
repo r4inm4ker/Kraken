@@ -1,2 +1,22 @@
+Warning: Generating 'deformers' layer for component:arm
 Failed to find DCC builder. Falling back to Python builder.
-name 'logHierarchy' is not defined
+arm
+arm.inputs
+arm.inputs.clavicleEnd
+arm.outputs
+arm.outputs.bicep
+arm.outputs.forearm
+arm.outputs.armEndXfo
+arm.outputs.armEndPos
+arm.bicepFK
+arm.bicepFK.bicepFK
+arm.bicepFK.bicepFK.forearmFK
+arm.bicepFK.bicepFK.forearmFK.forearmFK
+arm.IK
+arm.IK.IK
+arm.UpV
+arm.UpV.UpV
+arm.deformers
+arm.deformers.bicep
+arm.deformers.forearm
+arm.deformers.wrist
