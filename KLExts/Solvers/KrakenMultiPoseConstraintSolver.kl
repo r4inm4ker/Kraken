@@ -23,7 +23,7 @@ function MultiPoseConstraintSolver.solve!
   )
 {
   if(constrainers.size != 1 && constrainers.size != constrainees.size)
-    throw("Error in MultiPoseConstraintSolver. The number of constrainees must be 1 or match the number of constrainers");
+    throw("Error in MultiPoseConstraintSolver. The number of constrainees must be 1 or match the number of constrainers. constrainers.size:" + constrainers.size + "; constrainees.size:" + constrainees.size);
 
   if(constrainees.size() == 1){
     Xfo xfo();
