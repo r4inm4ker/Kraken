@@ -532,19 +532,11 @@ class Builder(BaseBuilder):
             # Add the private/non-mayaAttr port that stores the Solver object
             cmds.fabricSplice("addIOPort", spliceNode, "{\"portName\":\"solver\", \"dataType\":\"" + solverTypeName + "\", \"extension\":\"" + kOperator.getExtension() + "\", \"addMayaAttr\": false}")
 
+            arraySizes = {}
             # connect the operator to the objects in the DCC
             args = kOperator.getSolverArgs()
             for i in xrange(len(args)):
                 arg = args[i]
-
-
-                # Get the argument's input from the DCC
-                # try:
-                #     opObject = kOperator.getInput(arg.name)
-                #     targetObject = self._getDCCSceneItem(kOperator.getInput(arg.name))
-                # except:
-                #     opObject = kOperator.getOutput(arg.name)
-                #     targetObject = self._getDCCSceneItem(kOperator.getOutput(arg.name))
 
                 portArgs = {"portName": arg.name, "dataType": arg.dataType, "extension":"", "addMayaAttr": True }
 
@@ -558,6 +550,11 @@ class Builder(BaseBuilder):
 
                 if arg.dataType.endswith('[]'):
                     portArgs['arrayType'] = "Array (Multi)"
+
+                    # In SpliceMaya, output arrays are not resized by the system prior to calling into Splice, so we
+                    # explicily resize the arrays in the generated operator stub code. 
+                    if arg.connectionType in ['io', 'out']:
+                        arraySizes[arg.name] = len(connectedObjects)
 
                     if len(connectedObjects) == 0:
                         raise Exception("Operator '"+kOperator.getName()+"' of type '"+solverTypeName+"' arg '"+arg.name+"' not connected.");
@@ -586,74 +583,47 @@ class Builder(BaseBuilder):
                 if arg.connectionType == 'in':
                     cmds.fabricSplice("addInputPort", spliceNode, json.dumps(portArgs), "")
 
-                    def connectInput(connectionTarget, index):
-                        print "==== Connecting Input:" + str(connectionTarget['dccSceneItem']) + " -> '" + str(spliceNode.attr(arg.name))
-                        print "Connections:" + str(spliceNode.attr(arg.name).inputs())
-                        if isinstance(connectionTarget['opObject'], BaseAttribute):
-                            # connectionTarget['dccSceneItem'].connect(spliceNode.attr(arg.name))
-                            cmds.connectAttr(str(connectionTarget['dccSceneItem']), str(spliceNode.attr(arg.name))+'['+str(index)+']')
-                        elif isinstance(connectionTarget['opObject'], SceneItem):
-                            # connectionTarget['dccSceneItem'].attr('worldMatrix').connect(spliceNode.attr(arg.name))
-                            cmds.connectAttr(str(connectionTarget['dccSceneItem'].attr('worldMatrix')), str(spliceNode.attr(arg.name))+'['+str(index)+']')
+                    def connectInput(tgt, opObject, dccSceneItem):
+                        if isinstance(opObject, BaseAttribute):
+                            cmds.connectAttr(str(dccSceneItem), tgt)
+                        elif isinstance(opObject, SceneItem):
+                            cmds.connectAttr(str(dccSceneItem.attr('worldMatrix')), tgt)
                         else:
-                            raise Exception(connectionTarget['opObject'].getFullName() + " with type '" + connectionTarget['opObject'].getKType() + " is not implemented!")
+                            raise Exception(opObject.getFullName() + " with type '" + opObject.getKType() + " is not implemented!")
+
                     if arg.dataType.endswith('[]'):
                         for i in range(len(connectionTargets)):
-                            connectInput(connectionTargets[i], i)
+                            connectInput(str(spliceNode.attr(arg.name))+'['+str(i)+']', connectionTargets[i]['opObject'], connectionTargets[i]['dccSceneItem'])
                     else:
-                        # connectInput(connectionTargets)
-
-                        connectionTarget = connectionTargets
-                        print "==== Connecting Input:" + str(connectionTarget['dccSceneItem']) + " -> '" + str(spliceNode.attr(arg.name))
-                        if isinstance(connectionTarget['opObject'], BaseAttribute):
-                            connectionTarget['dccSceneItem'].connect(spliceNode.attr(arg.name))
-                            # cmds.connectAttr(str(connectionTarget['dccSceneItem']), str(spliceNode.attr(arg.name)))
-                        elif isinstance(connectionTarget['opObject'], SceneItem):
-                            connectionTarget['dccSceneItem'].attr('worldMatrix').connect(spliceNode.attr(arg.name))
-                            # cmds.connectAttr(str(connectionTarget['dccSceneItem'].attr('worldMatrix')), str(spliceNode.attr(arg.name)))
-                        else:
-                            raise Exception(connectionTarget['opObject'].getFullName() + " with type '" + connectionTarget['opObject'].getKType() + " is not implemented!")
+                        connectInput(str(spliceNode.attr(arg.name)), connectionTargets['opObject'], connectionTargets['dccSceneItem'])
 
                 elif arg.connectionType in ['io', 'out']:
                     cmds.fabricSplice("addOutputPort", spliceNode, json.dumps(portArgs), "")
 
-                    def connectOutput(connectionTarget, index):
-                        print "==== Connecting Output:" + str(spliceNode.attr(arg.name)) + " -> '" + str(connectionTarget['dccSceneItem'])
-                        print "Connections:" + str(spliceNode.attr(arg.name).outputs())
-                        if isinstance(connectionTarget['opObject'], BaseAttribute):
-                            # spliceNode.attr(arg.name).connect(connectionTarget['dccSceneItem'])
-                            cmds.connectAttr(str(spliceNode.attr(arg.name))+'['+str(index)+']', str(connectionTarget['dccSceneItem']))
+                    def connectOutput(src, opObject, dccSceneItem):
+                        if isinstance(opObject, BaseAttribute):
+                            cmds.connectAttr(src, str(dccSceneItem))
 
-                        elif isinstance(connectionTarget['opObject'], SceneItem):
+                        elif isinstance(opObject, SceneItem):
                             decomposeNode = pm.createNode('decomposeMatrix')
-                            print "==== Connecting decomposeNode:" + str(spliceNode.attr(arg.name)) + " -> '" + str(decomposeNode.attr("inputMatrix"))
-                            # spliceNode.attr(arg.name).connect(decomposeNode.attr("inputMatrix"))
-                            cmds.connectAttr(str(spliceNode.attr(arg.name))+'['+str(index)+']', str(decomposeNode.attr("inputMatrix")))
+                            cmds.connectAttr(src, str(decomposeNode.attr("inputMatrix")))
 
-                            decomposeNode.attr("outputRotate").connect(connectionTarget['dccSceneItem'].attr("rotate"))
-                            decomposeNode.attr("outputScale").connect(connectionTarget['dccSceneItem'].attr("scale"))
-                            decomposeNode.attr("outputTranslate").connect(connectionTarget['dccSceneItem'].attr("translate"))
+                            decomposeNode.attr("outputRotate").connect(dccSceneItem.attr("rotate"))
+                            decomposeNode.attr("outputScale").connect(dccSceneItem.attr("scale"))
+                            decomposeNode.attr("outputTranslate").connect(dccSceneItem.attr("translate"))
+
 
                     if arg.dataType.endswith('[]'):
                         for i in range(len(connectionTargets)):
-                            connectOutput(connectionTargets[i], i)
+                            connectOutput(str(spliceNode.attr(arg.name))+'['+str(i)+']', connectionTargets[i]['opObject'], connectionTargets[i]['dccSceneItem'])
                     else:
-                        connectionTarget = connectionTargets
-                        if isinstance(connectionTarget['opObject'], BaseAttribute):
-                            spliceNode.attr(arg.name).connect(connectionTarget['dccSceneItem'])
-
-                        elif isinstance(connectionTarget['opObject'], SceneItem):
-                            decomposeNode = pm.createNode('decomposeMatrix')
-                            spliceNode.attr(arg.name).connect(decomposeNode.attr("inputMatrix"))
-
-                            decomposeNode.attr("outputRotate").connect(connectionTarget['dccSceneItem'].attr("rotate"))
-                            decomposeNode.attr("outputScale").connect(connectionTarget['dccSceneItem'].attr("scale"))
-                            decomposeNode.attr("outputTranslate").connect(connectionTarget['dccSceneItem'].attr("translate"))
+                        connectOutput(str(spliceNode.attr(arg.name)), connectionTargets['opObject'], connectionTargets['dccSceneItem'])
 
             # Generate the operator source code.
-            opSourceCode = kOperator.generateSourceCode()
+            opSourceCode = kOperator.generateSourceCode(arraySizes=arraySizes)
 
             print "addKLOperator:" + str(spliceNode)
+            print "opSourceCode:" + str(opSourceCode)
 
             cmds.fabricSplice('addKLOperator', spliceNode, '{"opName": "' + kOperator.getName() + '"}', opSourceCode)
 
