@@ -679,6 +679,64 @@ class Builder(BaseBuilder):
         return True
 
 
+    # ==================
+    # Parameter Methods
+    # ==================
+    def lockParameters(self, kSceneItem):
+        """Locks flagged SRT parameters.
+
+        Arguments:
+        kSceneItem -- Object, kraken object to lock the SRT parameters on.
+
+        Return:
+        True if successful.
+
+        """
+
+        dccSceneItem = self._getDCCSceneItem(kSceneItem)
+
+        # Lock Rotation
+        if kSceneItem.testFlag("lockXRotation") is True:
+            dccSceneItem.rotx.SetLock(constants.siLockLevelManipulation)
+            dccSceneItem.rotx.SetCapabilityFlag(constants.siKeyable, False)
+
+        if kSceneItem.testFlag("lockYRotation") is True:
+            dccSceneItem.roty.SetLock(constants.siLockLevelManipulation)
+            dccSceneItem.roty.SetCapabilityFlag(constants.siKeyable, False)
+
+        if kSceneItem.testFlag("lockZRotation") is True:
+            dccSceneItem.rotz.SetLock(constants.siLockLevelManipulation)
+            dccSceneItem.rotz.SetCapabilityFlag(constants.siKeyable, False)
+
+        # Lock Scale
+        if kSceneItem.testFlag("lockXScale") is True:
+            dccSceneItem.sclx.SetLock(constants.siLockLevelManipulation)
+            dccSceneItem.sclx.SetCapabilityFlag(constants.siKeyable, False)
+
+        if kSceneItem.testFlag("lockYScale") is True:
+            dccSceneItem.scly.SetLock(constants.siLockLevelManipulation)
+            dccSceneItem.scly.SetCapabilityFlag(constants.siKeyable, False)
+
+        if kSceneItem.testFlag("lockZScale") is True:
+            dccSceneItem.sclz.SetLock(constants.siLockLevelManipulation)
+            dccSceneItem.sclz.SetCapabilityFlag(constants.siKeyable, False)
+
+        # Lock Translation
+        if kSceneItem.testFlag("lockXTranslation") is True:
+            dccSceneItem.posx.SetLock(constants.siLockLevelManipulation)
+            dccSceneItem.posx.SetCapabilityFlag(constants.siKeyable, False)
+
+        if kSceneItem.testFlag("lockYTranslation") is True:
+            dccSceneItem.posy.SetLock(constants.siLockLevelManipulation)
+            dccSceneItem.posy.SetCapabilityFlag(constants.siKeyable, False)
+
+        if kSceneItem.testFlag("lockZTranslation") is True:
+            dccSceneItem.posz.SetLock(constants.siLockLevelManipulation)
+            dccSceneItem.posz.SetCapabilityFlag(constants.siKeyable, False)
+
+        return True
+
+
     # ===================
     # Visibility Methods
     # ===================

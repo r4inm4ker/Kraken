@@ -885,6 +885,78 @@ class SceneItem(object):
         pass
 
 
+    # ==========================
+    # Parameter Locking Methods
+    # ==========================
+    def lockRotation(self, x=False, y=False, z=False):
+        """Sets flags for locking rotation parameters.
+
+        Arguments:
+        x -- Boolean, lock x axis.
+        y -- Boolean, lock y axis.
+        z -- Boolean, lock z axis.
+
+        Return:
+        True if successful.
+
+        """
+
+        if x is True:
+            self.setFlag("lockXRotation")
+
+        if y is True:
+            self.setFlag("lockYRotation")
+
+        if z is True:
+            self.setFlag("lockZRotation")
+
+
+    def lockScale(self, x=False, y=False, z=False):
+        """Sets flags for locking scale parameters.
+
+        Arguments:
+        x -- Boolean, lock x axis.
+        y -- Boolean, lock y axis.
+        z -- Boolean, lock z axis.
+
+        Return:
+        True if successful.
+
+        """
+
+        if x is True:
+            self.setFlag("lockXScale")
+
+        if y is True:
+            self.setFlag("lockYScale")
+
+        if z is True:
+            self.setFlag("lockZScale")
+
+
+    def lockTranslation(self, x=False, y=False, z=False):
+        """Sets flags for locking translation parameters.
+
+        Arguments:
+        x -- Boolean, lock x axis.
+        y -- Boolean, lock x axis.
+        z -- Boolean, lock x axis.
+
+        Return:
+        True if successful.
+
+        """
+
+        if x is True:
+            self.setFlag("lockXTranslation")
+
+        if y is True:
+            self.setFlag("lockYTranslation")
+
+        if z is True:
+            self.setFlag("lockZTranslation")
+
+
     # ====================
     # Persistence Methods
     # ====================
