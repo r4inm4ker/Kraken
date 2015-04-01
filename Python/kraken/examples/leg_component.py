@@ -37,15 +37,10 @@ class LegComponent(BaseComponent):
         defaultAttrGroup = self.getAttributeGroupByIndex(0)
         defaultAttrGroup.addAttribute(BoolAttribute("toggleDebugging", True))
 
-        # Default values
-        if self.getLocation() == "R":
-            femurPosition = Vec3(-0.9811, 9.769, -0.4572)
-            kneePosition = Vec3(-1.4488, 5.4418, -0.5348)
-            anklePosition = Vec3(-1.841, 1.1516, -1.237)
-        else:
-            femurPosition = Vec3(0.9811, 9.769, -0.4572)
-            kneePosition = Vec3(1.4488, 5.4418, -0.5348)
-            anklePosition = Vec3(1.841, 1.1516, -1.237)
+        # Input values
+        femurPosition = data['femurPosition']
+        kneePosition = data['kneePosition']
+        anklePosition = data['anklePosition']
 
         # Calculate Femur Xfo
         rootToAnkle = anklePosition.subtract(femurPosition).unit()
@@ -293,5 +288,11 @@ from kraken.core.kraken_system import KrakenSystem
 KrakenSystem.getInstance().registerComponent(LegComponent)
 
 if __name__ == "__main__":
-    legLeft = LegComponent("myLeg", location='L')
+    legLeft = LegComponent("myLeg", data={
+            "name":"R_LegComponent",
+            "location": "R",
+            "femurPosition": Vec3(-0.9811, 9.769, -0.4572),
+            "kneePosition": Vec3(-1.4488, 5.4418, -0.5348),
+            "anklePosition": Vec3(-1.841, 1.1516, -1.237)
+        })
     logHierarchy(legLeft)

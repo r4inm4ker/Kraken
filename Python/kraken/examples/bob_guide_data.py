@@ -90,22 +90,32 @@ bob_guide_data = {
         {
             "class":"kraken.examples.leg_component.LegComponent",
             "name":"L_LegComponent",
-            "location": "L"
+            "location": "L",
+            "femurPosition": Vec3(0.9811, 9.769, -0.4572),
+            "kneePosition": Vec3(1.4488, 5.4418, -0.5348),
+            "anklePosition": Vec3(1.841, 1.1516, -1.237)
         },
         {
             "class":"kraken.examples.foot_component.FootComponent",
             "name":"L_FootComponent",
-            "location": "L"
+            "location": "L",
+            "footQuat": Quat(Vec3(0.6377, -0.5695, 0.3053), 0.4190),
+            "footPos": Vec3(1.841, 1.1516, -1.237)
         },
         {
             "class":"kraken.examples.leg_component.LegComponent",
             "name":"R_LegComponent",
-            "location": "R"
+            "location": "R",
+            "femurPosition": Vec3(-0.9811, 9.769, -0.4572),
+            "kneePosition": Vec3(-1.4488, 5.4418, -0.5348),
+            "anklePosition": Vec3(-1.841, 1.1516, -1.237)
         },
         {
             "class":"kraken.examples.foot_component.FootComponent",
             "name":"R_FootComponent",
-            "location": "R"
+            "location": "R",
+            "footQuat": Quat(Vec3(0.5695, -0.6377, 0.4190), 0.3053),
+            "footPos": Vec3(-1.841, 1.1516, -1.237)
         }
     ],
     "connections": [
