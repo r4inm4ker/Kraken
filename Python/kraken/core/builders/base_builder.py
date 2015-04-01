@@ -7,6 +7,7 @@ BaseBuilder -- Base builder object to build objects in DCC.
 
 from kraken.core import logger as pyLogger
 logger = pyLogger.getLogger("pyLogger")
+
 from kraken.core.configs.base_config import BaseConfig
 
 from kraken.core.objects.components.base_component import BaseComponent
@@ -21,14 +22,11 @@ class BaseBuilder(object):
     """
 
 
-    def __init__(self, config=None):
+    def __init__(self):
         super(BaseBuilder, self).__init__()
         self._buildElements = []
 
-        if config is None:
-            config = BaseConfig()
-
-        self.config = config
+        self.config = BaseConfig.getInstance()
 
 
     # ====================
@@ -766,6 +764,7 @@ class BaseBuilder(object):
 
         config = self.getConfig()
         colors = config.getColors()
+        colorMap = config.getColorMap()
         kType = kSceneItem.getKType()
         component = kSceneItem.getComponent()
         objectColor = kSceneItem.getColor()
@@ -780,12 +779,12 @@ class BaseBuilder(object):
 
         else:
 
-            if kType in self.config.colorMap.keys():
+            if kType in colorMap.keys():
                 if component is None:
-                    buildColor = self.config.colorMap[kType]['default']
+                    buildColor = colorMap[kType]['default']
                 else:
                     componentLocation = component.getLocation()
-                    buildColor = self.config.colorMap[kType][componentLocation]
+                    buildColor = colorMap[kType][componentLocation]
 
         return buildColor
 
@@ -911,6 +910,9 @@ class BaseBuilder(object):
 
         finally:
             self._postBuild()
+
+            # Clear config instance when finished.
+            self.config.clearInstance()
 
         Profiler.getInstance().pop()
 
