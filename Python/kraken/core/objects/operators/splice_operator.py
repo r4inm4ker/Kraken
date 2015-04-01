@@ -73,7 +73,7 @@ class SpliceOperator(BaseOperator):
         # Get the args from the solver KL object.
         return self.args
 
-    def generateSourceCode(self):
+    def generateSourceCode(self, arraySizes={}):
 
         # Start constructing the source code.
         opSourceCode = ""
@@ -82,6 +82,12 @@ class SpliceOperator(BaseOperator):
         opSourceCode += "operator " + self.getName() + "(\n"
 
         opSourceCode += "    io " + self.solverTypeName + " solver,\n"
+
+        # In SpliceMaya, output arrays are not resized by the system prior to calling into Splice, so we
+        # explicily resize the arrays in the generated operator stub code. 
+        arrayResizing = "";
+        for argName, arraySize in arraySizes.iteritems():
+            arrayResizing += "    "+argName+".resize("+str(arraySize)+");\n"
 
         functionCall = "    solver.solve("
         for i in xrange(len(self.args)):
@@ -106,10 +112,12 @@ class SpliceOperator(BaseOperator):
                 functionCall += arg.name
             else:
                 functionCall += arg.name + ", "
+        functionCall += ");\n"
 
         opSourceCode += "    )\n"
         opSourceCode += "{\n"
-        opSourceCode += functionCall + ");\n"
+        opSourceCode += arrayResizing
+        opSourceCode += functionCall
         opSourceCode += "}\n"
 
         return opSourceCode
