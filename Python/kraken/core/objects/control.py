@@ -210,15 +210,11 @@ class Control(Curve):
         for eachSubCurve in curveData:
 
             for eachPoint in eachSubCurve["points"]:
-                from kraken.plugins.si_plugin.utils import *
-                log(eachPoint)
                 pointVec = Vec3(eachPoint[0], eachPoint[1], eachPoint[2])
                 rotVec = quatRot.rotateVector(pointVec)
                 eachPoint[0] = rotVec.x
                 eachPoint[1] = rotVec.y
                 eachPoint[2] = rotVec.z
-                log("after")
-                log(eachPoint)
 
         self.setCurveData(curveData)
 
