@@ -91,7 +91,7 @@ class ClavicleComponent(BaseComponent):
         # Setup componnent Attribute I/O's
         debugInputAttr = BoolAttribute('debug', True)
         rightSideInputAttr = BoolAttribute('rightSide', location is 'R')
-        armFollowBodyOutputAttr = FloatAttribute('followBody', 0.0, 0.0, 1.0)
+        armFollowBodyOutputAttr = FloatAttribute('followBody', 0.0)
 
 
         # ==============

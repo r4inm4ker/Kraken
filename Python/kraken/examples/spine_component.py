@@ -132,7 +132,7 @@ class SpineComponent(BaseComponent):
         debugInputAttr = BoolAttribute('debug', True)
 
         length = spine01Position.distanceTo(spine02Position) + spine02Position.distanceTo(spine03Position) + spine03Position.distanceTo(spine04Position)
-        lengthInputAttr = FloatAttribute('length', value=length, maxValue=length * 3.0)
+        lengthInputAttr = FloatAttribute('length', length)
 
 
         # ==============

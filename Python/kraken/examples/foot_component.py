@@ -75,7 +75,8 @@ class FootComponent(BaseComponent):
 
         # Add Component Params to IK control
         footDebugInputAttr = BoolAttribute('debug', True)
-        footLinkToWorldInputAttr = FloatAttribute('linkToWorld', 1.0, 0.0, 1.0)
+        footLinkToWorldInputAttr = FloatAttribute('linkToWorld', 1.0)
+        footLinkToWorldInputAttr.setMax(1.0)
 
         footSettingsAttrGrp = AttributeGroup("DisplayInfo_HandSettings")
         footCtrl.addAttributeGroup(footSettingsAttrGrp)
@@ -113,7 +114,8 @@ class FootComponent(BaseComponent):
         # Setup componnent Attribute I/O's
         debugInputAttr = BoolAttribute('debug', True)
         rightSideInputAttr = BoolAttribute('rightSide', location is 'R')
-        linkToWorldInputAttr = FloatAttribute('linkToWorld', 0.0, 0.0, 1.0)
+        linkToWorldInputAttr = FloatAttribute('linkToWorld', 0.0)
+        linkToWorldInputAttr.setMax(1.0)
 
         # Connect attrs to control attrs
         debugInputAttr.connect(footDebugInputAttr)

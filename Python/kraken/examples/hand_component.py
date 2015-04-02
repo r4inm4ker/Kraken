@@ -76,7 +76,7 @@ class HandComponent(BaseComponent):
 
         # Add Component Params to IK control
         handDebugInputAttr = BoolAttribute('debug', True)
-        handLinkToWorldInputAttr = FloatAttribute('linkToWorld', 0.0, 0.0, 1.0)
+        handLinkToWorldInputAttr = FloatAttribute('linkToWorld', 0.0)
 
         handSettingsAttrGrp = AttributeGroup("DisplayInfo_HandSettings")
         handCtrl.addAttributeGroup(handSettingsAttrGrp)
@@ -113,7 +113,7 @@ class HandComponent(BaseComponent):
         # Setup componnent Attribute I/O's
         debugInputAttr = BoolAttribute('debug', True)
         rightSideInputAttr = BoolAttribute('rightSide', location is 'R')
-        linkToWorldInputAttr = FloatAttribute('linkToWorld', 0.0, 0.0, 1.0)
+        linkToWorldInputAttr = FloatAttribute('linkToWorld', 0.0)
 
         # Connect attrs to control attrs
         debugInputAttr.connect(handDebugInputAttr)
