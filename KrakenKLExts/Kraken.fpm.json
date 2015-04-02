@@ -1,8 +1,0 @@
-{
-  "code": [
-    "Solvers/KrakenSolverArg.kl",
-    "Solvers/KrakenSolver.kl",
-    "Solvers/KrakenPoseConstraintSolver.kl",
-    "Drawing/DrawingUtils.kl"
-  ]
-}
