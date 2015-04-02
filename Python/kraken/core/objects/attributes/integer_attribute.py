@@ -13,14 +13,14 @@ class IntegerAttribute(BaseAttribute):
 
     __kType__ = "IntegerAttribute"
 
-    def __init__(self, name, value=0, minValue=0, maxValue=100):
+    def __init__(self, name, value=0):
         super(IntegerAttribute, self).__init__(name, value)
-        self.min = minValue
-        self.max = maxValue
+        if value == 0.0:
+            self.setMax(10)
+        else:
+            self.setMax(value * 3)
 
         assert type(self.value) is int, "Value is not of type 'int'."
-        assert self.value >= self.min, "Value is less than attribute minimum."
-        assert self.value <= self.max, "Value is greater than attribute maximum."
 
 
     def setValue(self, value):
