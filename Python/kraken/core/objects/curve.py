@@ -46,7 +46,7 @@ class Curve(SceneItem):
 
         """
 
-        self._data = list(data)
+        self._data = copy.deepcopy(data)
 
         return True
 
