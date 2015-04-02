@@ -13,9 +13,7 @@ from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 from kraken.core.objects.locator import Locator
 from kraken.core.objects.joint import Joint
 from kraken.core.objects.srtBuffer import SrtBuffer
-from kraken.core.objects.controls.cube_control import CubeControl
-from kraken.core.objects.controls.pin_control import PinControl
-from kraken.core.objects.controls.triangle_control import TriangleControl
+from kraken.core.objects.control import Control
 
 from kraken.core.objects.operators.splice_operator import SpliceOperator
 
@@ -65,7 +63,7 @@ class LegComponent(BaseComponent):
         femurFKCtrlSrtBuffer = SrtBuffer('femurFK', parent=self)
         femurFKCtrlSrtBuffer.xfo = femurXfo
 
-        femurFKCtrl = CubeControl('femurFK', parent=femurFKCtrlSrtBuffer)
+        femurFKCtrl = Control('femurFK', parent=femurFKCtrlSrtBuffer, shape="cube")
         femurFKCtrl.alignOnXAxis()
         femurLen = femurPosition.subtract(kneePosition).length()
         femurFKCtrl.scalePoints(Vec3(femurLen, 1.75, 1.75))
@@ -76,7 +74,7 @@ class LegComponent(BaseComponent):
         shinFKCtrlSrtBuffer = SrtBuffer('shinFK', parent=femurFKCtrl)
         shinFKCtrlSrtBuffer.xfo = shinXfo
 
-        shinFKCtrl = CubeControl('shinFK', parent=shinFKCtrlSrtBuffer)
+        shinFKCtrl = Control('shinFK', parent=shinFKCtrlSrtBuffer, shape="cube")
         shinFKCtrl.alignOnXAxis()
         shinLen = kneePosition.subtract(anklePosition).length()
         shinFKCtrl.scalePoints(Vec3(shinLen, 1.5, 1.5))
@@ -87,7 +85,7 @@ class LegComponent(BaseComponent):
         legIKCtrlSrtBuffer = SrtBuffer('IK', parent=self)
         legIKCtrlSrtBuffer.xfo.tr = anklePosition
 
-        legIKCtrl = PinControl('IK', parent=legIKCtrlSrtBuffer)
+        legIKCtrl = Control('IK', parent=legIKCtrlSrtBuffer, shape="pin")
         legIKCtrl.xfo.tr = anklePosition
 
         if self.getLocation() == "R":
@@ -129,7 +127,7 @@ class LegComponent(BaseComponent):
         legUpVCtrlSrtBuffer = SrtBuffer('UpV', parent=self)
         legUpVCtrlSrtBuffer.xfo.tr = upVOffset
 
-        legUpVCtrl = TriangleControl('UpV', parent=legUpVCtrlSrtBuffer)
+        legUpVCtrl = Control('UpV', parent=legUpVCtrlSrtBuffer, shape="triangle")
         legUpVCtrl.xfo.tr = upVOffset
         legUpVCtrl.alignOnZAxis()
         legUpVCtrl.rotatePoints(0, 0, 0)
