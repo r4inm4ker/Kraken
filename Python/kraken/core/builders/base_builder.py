@@ -557,6 +557,7 @@ class BaseBuilder(object):
 
         self.buildAttributes(kObject)
         self.setTransform(kObject)
+        self.lockParameters(kObject)
         self.setVisibility(kObject)
         self.setObjectColor(kObject)
 
@@ -723,6 +724,23 @@ class BaseBuilder(object):
         return True
 
 
+    # ==================
+    # Parameter Methods
+    # ==================
+    def lockParameters(self, kSceneItem):
+        """Locks flagged SRT parameters.
+
+        Arguments:
+        kSceneItem -- Object, kraken object to lock the SRT parameters on.
+
+        Return:
+        True if successful.
+
+        """
+
+        return True
+
+
     # ===================
     # Visibility Methods
     # ===================
@@ -730,7 +748,7 @@ class BaseBuilder(object):
         """Sets the visibility of the object after its been created.
 
         Arguments:
-        Arguments -- Type, information.
+        kSceneItem -- Object, kraken object to set the visibility on.
 
         Return:
         True if successful.

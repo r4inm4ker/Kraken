@@ -8,7 +8,7 @@ from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 from kraken.core.objects.locator import Locator
 from kraken.core.objects.joint import Joint
 from kraken.core.objects.srtBuffer import SrtBuffer
-from kraken.core.objects.controls.cube_control  import CubeControl
+from kraken.core.objects.control import Control
 
 from kraken.core.objects.operators.splice_operator import SpliceOperator
 
@@ -52,7 +52,7 @@ class ClavicleComponent(BaseComponent):
         clavicleCtrlSrtBuffer = SrtBuffer('clavicle', parent=self)
         clavicleCtrlSrtBuffer.xfo = clavicleXfo
 
-        clavicleCtrl = CubeControl('clavicle', parent=clavicleCtrlSrtBuffer)
+        clavicleCtrl = Control('clavicle', parent=clavicleCtrlSrtBuffer, shape="cube")
         clavicleCtrl.alignOnXAxis()
         clavicleLen = claviclePosition.subtract(clavicleEndPosition).length()
         clavicleCtrl.scalePoints(Vec3(clavicleLen, 0.75, 0.75))

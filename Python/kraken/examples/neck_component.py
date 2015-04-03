@@ -8,7 +8,7 @@ from kraken.core.objects.components.base_component import BaseComponent
 from kraken.core.objects.locator import Locator
 from kraken.core.objects.joint import Joint
 from kraken.core.objects.srtBuffer import SrtBuffer
-from kraken.core.objects.controls.pin_control  import PinControl
+from kraken.core.objects.control  import Control
 
 from kraken.core.objects.operators.splice_operator import SpliceOperator
 
@@ -44,7 +44,7 @@ class NeckComponent(BaseComponent):
         neckCtrlSrtBuffer = SrtBuffer('neck', parent=self)
         neckCtrlSrtBuffer.xfo = neckXfo
 
-        neckCtrl = PinControl('neck', parent=neckCtrlSrtBuffer)
+        neckCtrl = Control('neck', parent=neckCtrlSrtBuffer, shape="pin")
         neckCtrl.scalePoints(Vec3(1.25, 1.25, 1.25))
         neckCtrl.translatePoints(Vec3(0, 0, -0.5))
         neckCtrl.rotatePoints(90, 0, 90)

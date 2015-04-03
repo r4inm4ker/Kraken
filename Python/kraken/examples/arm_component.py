@@ -12,9 +12,7 @@ from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 from kraken.core.objects.locator import Locator
 from kraken.core.objects.joint import Joint
 from kraken.core.objects.srtBuffer import SrtBuffer
-from kraken.core.objects.controls.cube_control import CubeControl
-from kraken.core.objects.controls.pin_control import PinControl
-from kraken.core.objects.controls.triangle_control import TriangleControl
+from kraken.core.objects.control import Control
 
 from kraken.core.objects.operators.splice_operator import SpliceOperator
 
@@ -48,7 +46,7 @@ class ArmComponent(BaseComponent):
         # Calculate Bicep Xfo
         rootToWrist = wristPosition.subtract(bicepPosition).unit()
         rootToElbow = forearmPosition.subtract(bicepPosition).unit()
-        
+
         bone1Normal = rootToWrist.cross(rootToElbow).unit()
         bone1ZAxis = rootToElbow.cross(bone1Normal).unit()
         bicepXfo = Xfo()
@@ -66,7 +64,7 @@ class ArmComponent(BaseComponent):
         bicepFKCtrlSrtBuffer = SrtBuffer('bicepFK', parent=self)
         bicepFKCtrlSrtBuffer.xfo = bicepXfo
 
-        bicepFKCtrl = CubeControl('bicepFK', parent=bicepFKCtrlSrtBuffer)
+        bicepFKCtrl = Control('bicepFK', parent=bicepFKCtrlSrtBuffer, shape="cube")
         bicepFKCtrl.alignOnXAxis()
         bicepLen = bicepPosition.subtract(forearmPosition).length()
         bicepFKCtrl.scalePoints(Vec3(bicepLen, 1.75, 1.75))
@@ -76,7 +74,7 @@ class ArmComponent(BaseComponent):
         forearmFKCtrlSrtBuffer = SrtBuffer('forearmFK', parent=bicepFKCtrl)
         forearmFKCtrlSrtBuffer.xfo = forearmXfo
 
-        forearmFKCtrl = CubeControl('forearmFK', parent=forearmFKCtrlSrtBuffer)
+        forearmFKCtrl = Control('forearmFK', parent=forearmFKCtrlSrtBuffer, shape="cube")
         forearmFKCtrl.alignOnXAxis()
         forearmLen = forearmPosition.subtract(wristPosition).length()
         forearmFKCtrl.scalePoints(Vec3(forearmLen, 1.5, 1.5))
@@ -86,7 +84,7 @@ class ArmComponent(BaseComponent):
         armIKCtrlSrtBuffer = SrtBuffer('IK', parent=self)
         armIKCtrlSrtBuffer.xfo.tr = wristPosition
 
-        armIKCtrl = PinControl('IK', parent=armIKCtrlSrtBuffer)
+        armIKCtrl = Control('IK', parent=armIKCtrlSrtBuffer, shape="pin")
         armIKCtrl.xfo = armIKCtrlSrtBuffer.xfo
 
         if self.getLocation() == "R":
@@ -122,14 +120,13 @@ class ArmComponent(BaseComponent):
         upVOffset = Vec3(0, 0, 5)
         upVOffset = upVXfo.transformVector(upVOffset)
 
-        armUpVCtrl = TriangleControl('UpV')
+        armUpVCtrlSrtBuffer = SrtBuffer('UpV', parent=self)
+        armUpVCtrlSrtBuffer.xfo.tr = upVOffset
+
+        armUpVCtrl = Control('UpV', parent=armUpVCtrlSrtBuffer, shape="triangle")
         armUpVCtrl.xfo.tr = upVOffset
         armUpVCtrl.alignOnZAxis()
         armUpVCtrl.rotatePoints(180, 0, 0)
-
-        armUpVCtrlSrtBuffer = SrtBuffer('UpV', parent=self)
-        armUpVCtrlSrtBuffer.xfo.tr = upVOffset
-        armUpVCtrlSrtBuffer.addChild(armUpVCtrl)
 
 
         # ==========

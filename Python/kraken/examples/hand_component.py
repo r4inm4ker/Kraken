@@ -12,7 +12,7 @@ from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 from kraken.core.objects.locator import Locator
 from kraken.core.objects.joint import Joint
 from kraken.core.objects.srtBuffer import SrtBuffer
-from kraken.core.objects.controls.cube_control  import CubeControl
+from kraken.core.objects.control import Control
 
 from kraken.core.objects.operators.splice_operator import SpliceOperator
 
@@ -64,7 +64,7 @@ class HandComponent(BaseComponent):
         handCtrlSrtBuffer = SrtBuffer('hand', parent=self)
         handCtrlSrtBuffer.xfo = handXfo
 
-        handCtrl = CubeControl('hand', parent=handCtrlSrtBuffer)
+        handCtrl = Control('hand', parent=handCtrlSrtBuffer, shape="cube")
         handCtrl.alignOnXAxis()
         handCtrl.scalePoints(Vec3(2.0, 0.75, 1.25))
         handCtrl.xfo = handCtrlSrtBuffer.xfo

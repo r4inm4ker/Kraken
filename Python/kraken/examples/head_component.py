@@ -7,9 +7,7 @@ from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 from kraken.core.objects.locator import Locator
 from kraken.core.objects.joint import Joint
 from kraken.core.objects.srtBuffer import SrtBuffer
-from kraken.core.objects.controls.cube_control import CubeControl
-from kraken.core.objects.controls.circle_control import CircleControl
-from kraken.core.objects.controls.sphere_control import SphereControl
+from kraken.core.objects.control import Control
 
 from kraken.core.objects.operators.splice_operator import SpliceOperator
 
@@ -22,7 +20,7 @@ class HeadComponent(BaseComponent):
     def __init__(self, name, parent=None, location='M'):
         Profiler.getInstance().push("Construct Head Component:" + name + " location:" + location)
         super(HeadComponent, self).__init__(name, parent, location)
-        
+
 
         # Setup component attributes
         defaultAttrGroup = self.getAttributeGroupByIndex(0)
@@ -39,7 +37,7 @@ class HeadComponent(BaseComponent):
         headCtrlSrtBuffer = SrtBuffer('head', parent=self)
         headCtrlSrtBuffer.xfo.tr = headPosition
 
-        headCtrl = CircleControl('head', parent=headCtrlSrtBuffer)
+        headCtrl = Control('head', parent=headCtrlSrtBuffer, shape="circle")
         headCtrl.rotatePoints(0, 0, 90)
         headCtrl.scalePoints(Vec3(3, 3, 3))
         headCtrl.translatePoints(Vec3(0, 1, 0.25))
@@ -49,7 +47,7 @@ class HeadComponent(BaseComponent):
         eyeLeftCtrlSrtBuffer = SrtBuffer('eyeLeft', parent=headCtrl)
         eyeLeftCtrlSrtBuffer.xfo.tr = eyeLeftPosition
 
-        eyeLeftCtrl = SphereControl('eyeLeft', parent=eyeLeftCtrlSrtBuffer)
+        eyeLeftCtrl = Control('eyeLeft', parent=eyeLeftCtrlSrtBuffer, shape="sphere")
         eyeLeftCtrl.scalePoints(Vec3(0.5, 0.5, 0.5))
         eyeLeftCtrl.xfo.tr = eyeLeftPosition
         eyeLeftCtrl.setColor("blueMedium")
@@ -58,7 +56,7 @@ class HeadComponent(BaseComponent):
         eyeRightCtrlSrtBuffer = SrtBuffer('eyeRight', parent=headCtrl)
         eyeRightCtrlSrtBuffer.xfo.tr = eyeRightPosition
 
-        eyeRightCtrl = SphereControl('eyeRight', parent=eyeRightCtrlSrtBuffer)
+        eyeRightCtrl = Control('eyeRight', parent=eyeRightCtrlSrtBuffer, shape="sphere")
         eyeRightCtrl.scalePoints(Vec3(0.5, 0.5, 0.5))
         eyeRightCtrl.xfo.tr = eyeRightPosition
         eyeRightCtrl.setColor("blueMedium")
@@ -67,7 +65,7 @@ class HeadComponent(BaseComponent):
         jawCtrlSrtBuffer = SrtBuffer('jawSrtBuffer', parent=headCtrl)
         jawCtrlSrtBuffer.xfo.tr = jawPosition
 
-        jawCtrl = CubeControl('jaw', parent=jawCtrlSrtBuffer)
+        jawCtrl = Control('jaw', parent=jawCtrlSrtBuffer, shape="cube")
         jawCtrl.alignOnYAxis(negative=True)
         jawCtrl.alignOnZAxis()
         jawCtrl.scalePoints(Vec3(1.45, 0.65, 1.25))
