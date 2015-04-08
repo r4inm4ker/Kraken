@@ -15,6 +15,28 @@ class MathObject(object):
     def __init__(self):
         """Initialize the base math object."""
         super(MathObject, self).__init__()
+        self._rtval = None
+
+
+    def getRTVal(self):
+        """Returns the internal RTVal object owned by the math object.
+
+        Return:
+        RTVal
+
+        """
+        return self._rtval
+
+
+    def setRTVal(self, rtval):
+        """Sets the internal RTVal object owned by the math object.
+
+        Return:
+        RTVal
+
+        """
+        self._rtval = rtval
+
 
 
     def jsonEncode(self):
