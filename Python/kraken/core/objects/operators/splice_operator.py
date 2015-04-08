@@ -5,7 +5,10 @@ SpliceOperator - Splice operator object.
 
 """
 
+from kraken.core.maths import Mat44
+from kraken.core.objects.scene_item import SceneItem
 from kraken.core.objects.operators.base_operator import BaseOperator
+from kraken.core.objects.attributes.base_attribute import BaseAttribute
 from kraken.core.kraken_system import ks
 
 class SpliceOperator(BaseOperator):
@@ -69,11 +72,23 @@ class SpliceOperator(BaseOperator):
         return self.extension
 
     def getSolverArgs(self):
+        """Returns the args array defined by the KL Operator.
+
+        Return:
+        RTValArray, args array defined by the KL Operator.
+
+        """
 
         # Get the args from the solver KL object.
         return self.args
 
     def generateSourceCode(self, arraySizes={}):
+        """Returns the source code for a stub operator that will invoke the KL operator
+
+        Return:
+        String, The source code for the stub operator.
+
+        """
 
         # Start constructing the source code.
         opSourceCode = ""
@@ -121,3 +136,56 @@ class SpliceOperator(BaseOperator):
         opSourceCode += "}\n"
 
         return opSourceCode
+
+    def evaluate(self):
+        """Returns the source code for a stub operator that will invoke the KL operator
+
+        Return:
+        String, The source code for the stub operator.
+
+        """
+        def getRTVal(obj):
+            if isinstance(obj, SceneItem):
+                return obj.xfo.getRTVal().toMat44('Mat44')
+            elif isinstance(obj, BaseAttribute):
+                return obj.getRTVal()
+
+        argVals = []
+        for i in xrange(len(self.args)):
+            arg = self.args[i]
+            if arg.connectionType == 'in':
+                if str(arg.dataType).endswith('[]'):
+                    rtValArray = ks.rtVal(arg.dataType[:-2]+'Array')
+                    rtValArray.resize(len(self.inputs[arg.name]))
+                    for j in xrange(len(self.inputs[arg.name])):
+                        rtValArray[j] = getRTVal(self.inputs[arg.name][j])
+                    argVals.append(rtValArray)
+                else:
+                    argVals.append(getRTVal(self.inputs[arg.name]))
+            else:
+                if str(arg.dataType).endswith('[]'):
+                    rtValArray = ks.rtVal(arg.dataType[:-2]+'Array')
+                    rtValArray.resize(len(self.outputs[arg.name]))
+                    for j in xrange(len(self.outputs[arg.name])):
+                        rtValArray[j] = getRTVal(self.outputs[arg.name][j])
+                    argVals.append(rtValArray)
+                else:
+                    argVals.append(getRTVal(self.outputs[arg.name]))
+
+        self.solverRTVal.solve('', *argVals)
+
+        # Now put the computed values out to the connected output objects.
+        def setRTVal(obj, rtval):
+            if isinstance(obj, SceneItem):
+                obj.xfo.setFromMat44(Mat44(rtval))
+            elif isinstance(obj, BaseAttribute):
+                obj.setValue(rtval)
+
+        for i in xrange(len(argVals)):
+            arg = self.args[i]
+            if arg.connectionType != 'in':
+                if str(arg.dataType).endswith('[]'):
+                    for j in xrange(len(argVals[i])):
+                        setRTVal(self.outputs[arg.name][j], argVals[i][j])
+                else:
+                    setRTVal(self.outputs[arg.name], argVals[i])

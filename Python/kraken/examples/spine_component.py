@@ -178,6 +178,9 @@ class SpineComponent(BaseComponent):
         for spineOutput in spineOutputs:
             bezierSpineSpliceOp.setOutput("outputs", spineOutput)
 
+        # evaluate the spine op so that all the output transforms are updated.
+        bezierSpineSpliceOp.evaluate()
+
         # Add Deformer Splice Op
         outputsToDeformersSpliceOp = SpliceOperator("spineDeformerSpliceOp", "MultiPoseConstraintSolver", "Kraken")
         self.addOperator(outputsToDeformersSpliceOp)
@@ -192,6 +195,9 @@ class SpineComponent(BaseComponent):
         # Add Xfo Outputs
         for joint in deformerJoints:
             outputsToDeformersSpliceOp.setOutput("constrainees", joint)
+
+        # evaluate the constraint op so that all the joint transforms are updated.
+        outputsToDeformersSpliceOp.evaluate()
 
         Profiler.getInstance().pop()
 

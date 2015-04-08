@@ -6,6 +6,7 @@ IntegerAttribute - Base Attribute.
 """
 
 from base_attribute import BaseAttribute
+from kraken.core.kraken_system import ks
 
 
 class IntegerAttribute(BaseAttribute):
@@ -45,3 +46,12 @@ class IntegerAttribute(BaseAttribute):
         super(IntegerAttribute, self).setValue(value)
 
         return True
+
+    def getRTVal(self):
+        """Returns and RTVal object for this attribute.
+
+        Return:
+        RTVal
+
+        """
+        return ks.rtVal('Integer', self.value)

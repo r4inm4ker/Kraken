@@ -6,6 +6,7 @@ FloatAttribute - Base Attribute.
 """
 
 from base_attribute import BaseAttribute
+from kraken.core.kraken_system import ks
 
 
 class FloatAttribute(BaseAttribute):
@@ -45,3 +46,15 @@ class FloatAttribute(BaseAttribute):
         super(FloatAttribute, self).setValue(value)
 
         return True
+
+    def getRTVal(self):
+        """Returns and RTVal object for this attribute.
+
+        Return:
+        RTVal
+
+        """
+        return ks.rtVal('Scalar', self.value)
+
+
+        

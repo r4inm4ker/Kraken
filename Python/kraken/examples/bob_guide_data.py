@@ -15,7 +15,7 @@ bob_guide_data = {
             'spine02Position': Vec3(0.0, 11.8013, -0.1995),
             'spine03Position': Vec3(0.0, 12.4496, -0.3649),
             'spine04Position': Vec3(0.0, 13.1051, -0.4821),
-            'numDeformers': 4
+            'numDeformers': 6
         },
         {
             "class":"kraken.examples.neck_component.NeckComponent",
