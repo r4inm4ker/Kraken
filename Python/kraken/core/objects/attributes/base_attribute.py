@@ -14,8 +14,6 @@ class BaseAttribute(object):
         super(BaseAttribute, self).__init__()
         self.name = name
         self.value = value
-        self.min = None
-        self.max = None
         self.parent = None
         self.connection = None
 
