@@ -24,4 +24,4 @@ profiler.pop()
 profiler.pop()
 profiler.pop()
 
-print json.dumps(profiler.generateReport(), sort_keys=False, indent=4, separators=(',', ': '))
+print profiler.generateReport()

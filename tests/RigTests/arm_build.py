@@ -15,6 +15,6 @@ builder.build(arm)
 Profiler.getInstance().pop()
 
 if __name__ == "__main__":
-    print json.dumps(Profiler.getInstance().generateReport(), sort_keys=False, indent=4, separators=(',', ': '))
+    print Profiler.getInstance().generateReport()
 else:
     logHierarchy(bobRig)
