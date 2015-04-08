@@ -525,7 +525,6 @@ class BaseBuilder(object):
         """
 
         dccSceneItem = None
-        typeNames = kObject.getTypeHierarchyNames()
 
         buildName = self.getBuildName(kObject)
 
