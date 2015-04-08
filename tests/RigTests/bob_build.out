@@ -32,10 +32,10 @@ char_bob.controls
 char_bob.controls.spine
 char_bob.controls.spine.inputs
 char_bob.controls.spine.outputs
+char_bob.controls.spine.outputs.spine00
 char_bob.controls.spine.outputs.spine01
 char_bob.controls.spine.outputs.spine02
 char_bob.controls.spine.outputs.spine03
-char_bob.controls.spine.outputs.spine04
 char_bob.controls.spine.outputs.spineBase
 char_bob.controls.spine.outputs.spineEnd
 char_bob.controls.spine.cog

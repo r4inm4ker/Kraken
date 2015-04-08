@@ -84,30 +84,6 @@ class SpineComponent(BaseComponent):
         spine04Ctrl.scalePoints(Vec3(6.0, 6.0, 6.0))
         spine04Ctrl.xfo.tr = spine04Position
 
-        # =====================
-        # Create Component I/O
-        # =====================
-        # Setup component Xfo I/O's
-        spine01Output = Locator('spine01')
-        spine01Output.xfo.tr = spine01Ctrl.xfo.tr
-        spine02Output = Locator('spine02')
-        spine02Output.xfo.tr = spine01Ctrl.xfo.tr
-        spine03Output = Locator('spine03')
-        spine03Output.xfo.tr = spine01Ctrl.xfo.tr
-        spine04Output = Locator('spine04')
-        spine04Output.xfo.tr = spine01Ctrl.xfo.tr
-
-        spineBaseOutput = Locator('spineBase')
-        spineBaseOutput.xfo.tr = spine01Ctrl.xfo.tr
-
-        spineEndOutput = Locator('spineEnd')
-        spineEndOutput.xfo.tr = spine03Ctrl.xfo.tr
-
-        # Setup componnent Attribute I/O's
-        debugInputAttr = BoolAttribute('debug', True)
-
-        length = spine01Position.distanceTo(spine02Position) + spine02Position.distanceTo(spine03Position) + spine03Position.distanceTo(spine04Position)
-        lengthInputAttr = FloatAttribute('length', length)
 
         # ==========
         # Deformers
@@ -125,6 +101,32 @@ class SpineComponent(BaseComponent):
             deformersLayer.addChild(spineDef)
             deformerJoints.append(spineDef)
 
+        # =====================
+        # Create Component I/O
+        # =====================
+        # Setup component Xfo I/O's
+
+
+        spineOutputs = []
+        for i in range(numDeformers):
+            if i < 10:
+                name = 'spine0'+str(i)
+            else:
+                name = 'spine'+str(i)
+
+            spineOutput = Locator(name)
+            spineOutputs.append(spineOutput)
+
+        spineBaseOutput = Locator('spineBase')
+        spineEndOutput = Locator('spineEnd')
+
+        # Setup componnent Attribute I/O's
+        debugInputAttr = BoolAttribute('debug', True)
+
+        length = spine01Position.distanceTo(spine02Position) + spine02Position.distanceTo(spine03Position) + spine03Position.distanceTo(spine04Position)
+        lengthInputAttr = FloatAttribute('length', value=length, maxValue=length * 3.0)
+
+
 
         # ==============
         # Constrain I/O
@@ -133,22 +135,21 @@ class SpineComponent(BaseComponent):
 
         # Constraint outputs
         spineBaseOutputConstraint = PoseConstraint('_'.join([spineBaseOutput.getName(), 'To', 'spineBase']))
-        spineBaseOutputConstraint.addConstrainer(spine01Ctrl)
+        spineBaseOutputConstraint.addConstrainer(spineOutputs[0])
         spineBaseOutput.addConstraint(spineBaseOutputConstraint)
 
         spineEndOutputConstraint = PoseConstraint('_'.join([spineEndOutput.getName(), 'To', 'spineEnd']))
-        spineEndOutputConstraint.addConstrainer(spine04Ctrl)
+        spineEndOutputConstraint.addConstrainer(spineOutputs[len(spineOutputs)-1])
         spineEndOutput.addConstraint(spineEndOutputConstraint)
-
+        
 
         # ==================
         # Add Component I/O
         # ==================
         # Add Xfo I/O's
-        self.addOutput(spine01Output)
-        self.addOutput(spine02Output)
-        self.addOutput(spine03Output)
-        self.addOutput(spine04Output)
+
+        for spineOutput in spineOutputs:
+            self.addOutput(spineOutput)
         self.addOutput(spineBaseOutput)
         self.addOutput(spineEndOutput)
 
@@ -175,11 +176,11 @@ class SpineComponent(BaseComponent):
         bezierSpineSpliceOp.setInput("tip", spine04Ctrl)
 
         # Add Xfo Outputs
-        bezierSpineSpliceOp.setOutput("outputs", spine01Output)
-        bezierSpineSpliceOp.setOutput("outputs", spine02Output)
-        bezierSpineSpliceOp.setOutput("outputs", spine03Output)
-        bezierSpineSpliceOp.setOutput("outputs", spine04Output)
+        for spineOutput in spineOutputs:
+            bezierSpineSpliceOp.setOutput("outputs", spineOutput)
 
+        # evaluate the spine op so that all the output transforms are updated.
+        bezierSpineSpliceOp.evaluate()
 
         # Add Deformer Splice Op
         outputsToDeformersSpliceOp = SpliceOperator("spineDeformerSpliceOp", "MultiPoseConstraintSolver", "Kraken")
@@ -189,14 +190,15 @@ class SpineComponent(BaseComponent):
         outputsToDeformersSpliceOp.setInput("debug", debugInputAttr)
 
         # Add Xfo Inputstrl)
-        outputsToDeformersSpliceOp.setInput("constrainers", spine01Output)
-        outputsToDeformersSpliceOp.setInput("constrainers", spine02Output)
-        outputsToDeformersSpliceOp.setInput("constrainers", spine03Output)
-        outputsToDeformersSpliceOp.setInput("constrainers", spine04Output)
+        for spineOutput in spineOutputs:
+            outputsToDeformersSpliceOp.setInput("constrainers", spineOutput)
 
         # Add Xfo Outputs
         for joint in deformerJoints:
             outputsToDeformersSpliceOp.setOutput("constrainees", joint)
+
+        # evaluate the constraint op so that all the joint transforms are updated.
+        outputsToDeformersSpliceOp.evaluate()
 
         Profiler.getInstance().pop()
 

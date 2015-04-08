@@ -113,7 +113,6 @@ class KrakenSystem(object):
 
         """
         self.loadCoreClient()
-
         klType = getattr(self.registeredTypes, dataType)
         if defaultValue is not None:
             if hasattr(defaultValue, '_rtval'):
@@ -138,7 +137,10 @@ class KrakenSystem(object):
             try:
                 return klType.create()
             except:
-                return klType()
+                try:
+                    return klType()
+                except Exception as e:
+                    raise Exception("Error constructing RTVal:" + dataType)
 
 
     def rtVal(self, dataType, defaultValue=None):

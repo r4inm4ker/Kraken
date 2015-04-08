@@ -6,7 +6,7 @@ IntegerAttribute - Base Attribute.
 """
 
 from number_attribute import NumberAttribute
-
+from kraken.core.kraken_system import ks
 
 class IntegerAttribute(NumberAttribute):
     """Float Attribute. Implemented value type checking and limiting."""
@@ -47,3 +47,12 @@ class IntegerAttribute(NumberAttribute):
         super(IntegerAttribute, self).setValue(value)
 
         return True
+
+    def getRTVal(self):
+        """Returns and RTVal object for this attribute.
+
+        Return:
+        RTVal
+
+        """
+        return ks.rtVal('Integer', self.value)
