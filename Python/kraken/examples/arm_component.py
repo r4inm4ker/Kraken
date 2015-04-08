@@ -94,13 +94,13 @@ class ArmComponent(BaseComponent):
 
         # Add Component Params to IK control
         armDebugInputAttr = BoolAttribute('debug', True)
-        armBone1LenInputAttr = FloatAttribute('bone1Len', bicepLen, 0.0, 100.0)
-        armBone2LenInputAttr = FloatAttribute('bone2Len', forearmLen, 0.0, 100.0)
-        armFkikInputAttr = FloatAttribute('fkik', 0.0, 0.0, 1.0)
+        armBone1LenInputAttr = FloatAttribute('bone1Len', bicepLen)
+        armBone2LenInputAttr = FloatAttribute('bone2Len', forearmLen)
+        armFkikInputAttr = FloatAttribute('fkik', 0.0)
         armSoftIKInputAttr = BoolAttribute('softIK', True)
-        armSoftDistInputAttr = FloatAttribute('softDist', 0.0, 0.0, 1.0)
+        armSoftDistInputAttr = FloatAttribute('softDist', 0.0)
         armStretchInputAttr = BoolAttribute('stretch', True)
-        armStretchBlendInputAttr = FloatAttribute('stretchBlend', 0.0, 0.0, 1.0)
+        armStretchBlendInputAttr = FloatAttribute('stretchBlend', 0.0)
 
         armSettingsAttrGrp = AttributeGroup("DisplayInfo_ArmSettings")
         armIKCtrl.addAttributeGroup(armSettingsAttrGrp)
@@ -170,13 +170,13 @@ class ArmComponent(BaseComponent):
 
         # Setup componnent Attribute I/O's
         debugInputAttr = BoolAttribute('debug', True)
-        bone1LenInputAttr = FloatAttribute('bone1Len', bicepLen, 0.0, 100.0)
-        bone2LenInputAttr = FloatAttribute('bone2Len', forearmLen, 0.0, 100.0)
-        fkikInputAttr = FloatAttribute('fkik', 0.0, 0.0, 1.0)
+        bone1LenInputAttr = FloatAttribute('bone1Len', bicepLen)
+        bone2LenInputAttr = FloatAttribute('bone2Len', forearmLen)
+        fkikInputAttr = FloatAttribute('fkik', 0.0)
         softIKInputAttr = BoolAttribute('softIK', True)
-        softDistInputAttr = FloatAttribute('softDist', 0.5, 0.0, 1.0)
+        softDistInputAttr = FloatAttribute('softDist', 0.5)
         stretchInputAttr = BoolAttribute('stretch', True)
-        stretchBlendInputAttr = FloatAttribute('stretchBlend', 0.0, 0.0, 1.0)
+        stretchBlendInputAttr = FloatAttribute('stretchBlend', 0.0)
         rightSideInputAttr = BoolAttribute('rightSide', location is 'R')
 
         # Connect attrs to control attrs

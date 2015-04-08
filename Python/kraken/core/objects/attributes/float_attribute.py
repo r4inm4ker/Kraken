@@ -5,22 +5,24 @@ FloatAttribute - Base Attribute.
 
 """
 
-from base_attribute import BaseAttribute
+from number_attribute import NumberAttribute
 
 
-class FloatAttribute(BaseAttribute):
+class FloatAttribute(NumberAttribute):
     """Float Attribute. Implemented value type checking and limiting."""
 
     __kType__ = "FloatAttribute"
 
-    def __init__(self, name, value=0.0, minValue=0.0, maxValue=1.0):
+    def __init__(self, name, value=0.0, minValue=None, maxValue=None):
         super(FloatAttribute, self).__init__(name, value)
-        self.min = minValue
-        self.max = maxValue
+
+        if maxValue is None:
+            if value == 0.0:
+                self.setMax(1.0)
+            else:
+                self.setMax(value * 3.0)
 
         assert type(self.value) in (int, float), "Value is not of type 'int' or 'float'."
-        assert self.value >= self.min, "Value is less than attribute minimum."
-        assert self.value <= self.max, "Value is greater than attribute maximum."
 
 
     def setValue(self, value):

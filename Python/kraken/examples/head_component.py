@@ -1,7 +1,6 @@
 from kraken.core.maths import Vec3
 
 from kraken.core.objects.components.base_component import BaseComponent
-from kraken.core.objects.attributes.float_attribute import FloatAttribute
 from kraken.core.objects.attributes.bool_attribute import BoolAttribute
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 from kraken.core.objects.locator import Locator

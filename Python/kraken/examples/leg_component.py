@@ -96,13 +96,16 @@ class LegComponent(BaseComponent):
 
         # Add Component Params to IK control
         legDebugInputAttr = BoolAttribute('debug', True)
-        legBone1LenInputAttr = FloatAttribute('bone1Len', femurLen, 0.0, 100.0)
-        legBone2LenInputAttr = FloatAttribute('bone2Len', shinLen, 0.0, 100.0)
-        legFkikInputAttr = FloatAttribute('fkik', 1.0, 0.0, 1.0)
+        legBone1LenInputAttr = FloatAttribute('bone1Len', femurLen)
+        legBone1LenInputAttr.setMax(100.0)
+        legBone2LenInputAttr = FloatAttribute('bone2Len', shinLen)
+        legBone2LenInputAttr.setMax(100.0)
+        legFkikInputAttr = FloatAttribute('fkik', 1.0)
+        legFkikInputAttr.setMax(1.0)
         legSoftIKInputAttr = BoolAttribute('softIK', True)
-        legSoftDistInputAttr = FloatAttribute('softDist', 0.0, 0.0, 1.0)
+        legSoftDistInputAttr = FloatAttribute('softDist', 0.0)
         legStretchInputAttr = BoolAttribute('stretch', True)
-        legStretchBlendInputAttr = FloatAttribute('stretchBlend', 0.0, 0.0, 1.0)
+        legStretchBlendInputAttr = FloatAttribute('stretchBlend', 0.0)
 
         legSettingsAttrGrp = AttributeGroup("DisplayInfo_LegSettings")
         legIKCtrl.addAttributeGroup(legSettingsAttrGrp)
@@ -174,14 +177,18 @@ class LegComponent(BaseComponent):
 
         # Setup componnent Attribute I/O's
         debugInputAttr = BoolAttribute('debug', True)
-        bone1LenInputAttr = FloatAttribute('bone1Len', femurLen, 0.0, 100.0)
-        bone2LenInputAttr = FloatAttribute('bone2Len', shinLen, 0.0, 100.0)
-        fkikInputAttr = FloatAttribute('fkik', 1.0, 0.0, 1.0)
+        bone1LenInputAttr = FloatAttribute('bone1Len', femurLen)
+        bone1LenInputAttr.setMax(100.0)
+        bone2LenInputAttr = FloatAttribute('bone2Len', shinLen)
+        bone2LenInputAttr.setMax(100.0)
+        fkikInputAttr = FloatAttribute('fkik', 1.0)
+        fkikInputAttr.setMax(1.0)
         softIKInputAttr = BoolAttribute('softIK', True)
-        softDistInputAttr = FloatAttribute('softDist', 0.5, 0.0, 1.0)
+        softDistInputAttr = FloatAttribute('softDist', 0.0)
         stretchInputAttr = BoolAttribute('stretch', True)
-        stretchBlendInputAttr = FloatAttribute('stretchBlend', 0.0, 0.0, 1.0)
+        stretchBlendInputAttr = FloatAttribute('stretchBlend', 0.0)
         rightSideInputAttr = BoolAttribute('rightSide', location is 'R')
+
 
         # Connect attrs to control attrs
         debugInputAttr.connect(legDebugInputAttr)

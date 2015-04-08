@@ -102,14 +102,15 @@ class InsectLegComponent(BaseComponent):
 
         # Add Component Params to IK control
         legDebugInputAttr = BoolAttribute('debug', True)
-        legFkikInputAttr = FloatAttribute('fkik', 1.0, 0.0, 1.0)
+        legFkikInputAttr = FloatAttribute('fkik', 1.0)
+        legFkikInputAttr.setMax(1.0)
         legSoftIKInputAttr = BoolAttribute('softIK', True)
-        legSoftDistInputAttr = FloatAttribute('softDist', 0.0, 0.0, 1.0)
+        legSoftDistInputAttr = FloatAttribute('softDist', 0.0)
         legStretchInputAttr = BoolAttribute('stretch', True)
-        legStretchBlendInputAttr = FloatAttribute('stretchBlend', 0.0, 0.0, 1.0)
+        legStretchBlendInputAttr = FloatAttribute('stretchBlend', 0.0)
 
         tipBoneLen = boneLengths[len(boneLengths)-1]
-        legTipBoneLenInputAttr = FloatAttribute('tipBoneLen', tipBoneLen, 0.0, tipBoneLen * 3.0)
+        legTipBoneLenInputAttr = FloatAttribute('tipBoneLen', tipBoneLen)
 
         legSettingsAttrGrp = AttributeGroup("DisplayInfo_LegSettings")
         legIKCtrl.addAttributeGroup(legSettingsAttrGrp)
@@ -168,13 +169,15 @@ class InsectLegComponent(BaseComponent):
 
         # Setup componnent Attribute I/O's
         debugInputAttr = BoolAttribute('debug', True)
-        fkikInputAttr = FloatAttribute('fkik', 1.0, 0.0, 1.0)
+        fkikInputAttr = FloatAttribute('fkik', 1.0)
+        fkikInputAttr.setMax(1.0)
         softIKInputAttr = BoolAttribute('softIK', True)
-        softDistInputAttr = FloatAttribute('softDist', 0.5, 0.0, 1.0)
+        softDistInputAttr = FloatAttribute('softDist', 0.5)
+        softDistInputAttr.setMax(1.0)
         stretchInputAttr = BoolAttribute('stretch', True)
-        stretchBlendInputAttr = FloatAttribute('stretchBlend', 0.0, 0.0, 1.0)
+        stretchBlendInputAttr = FloatAttribute('stretchBlend', 0.0)
         rightSideInputAttr = BoolAttribute('rightSide', location is 'R')
-        tipBoneLenInputAttr = FloatAttribute('tipBoneLen', tipBoneLen, 0.0, tipBoneLen * 2.0)
+        tipBoneLenInputAttr = FloatAttribute('tipBoneLen', tipBoneLen)
 
         # Connect attrs to control attrs
         debugInputAttr.connect(legDebugInputAttr)

@@ -138,6 +138,7 @@ class BaseAttribute(object):
 
         return True
 
+
     def getConnection(self):
         """Returns the connected attribute.
 
