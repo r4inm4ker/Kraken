@@ -185,9 +185,6 @@ class KrakenLoader(object):
         elif "StringAttribute" in jsonData['__typeHierarchy__']:
             item = StringAttribute(jsonData['name'])
 
-        elif "Attribute" in jsonData['__typeHierarchy__']:
-            item = Attribute(jsonData['name'])
-
         elif "ComponentInput" in jsonData['__typeHierarchy__']:
             item = ComponentInput(jsonData['name'])
 

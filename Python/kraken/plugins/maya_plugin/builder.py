@@ -295,6 +295,7 @@ class Builder(BaseBuilder):
         True if successful.
 
         """
+        print "buildFloatAttribute:" + kAttribute.getFullName()
 
         parentDCCSceneItem = self._getDCCSceneItem(kAttribute.getParent().getParent())
         parentDCCSceneItem.addAttr(kAttribute.getName(), niceName=kAttribute.getName(), attributeType="float", defaultValue=kAttribute.getValue(), minValue=kAttribute.min, maxValue=kAttribute.max, keyable=True)
@@ -315,6 +316,7 @@ class Builder(BaseBuilder):
         True if successful.
 
         """
+        print "buildIntegerAttribute:" + kAttribute.getFullName()
 
         parentDCCSceneItem = self._getDCCSceneItem(kAttribute.getParent().getParent())
         parentDCCSceneItem.addAttr(kAttribute.getName(), niceName=kAttribute.getName(), attributeType="long", defaultValue=kAttribute.getValue(), minValue=kAttribute.min, maxValue=kAttribute.max, keyable=True)
@@ -373,18 +375,17 @@ class Builder(BaseBuilder):
          # Create Attributes on this Attribute Group
         for i in xrange(kAttributeGroup.getNumAttributes()):
             kAttribute = kAttributeGroup.getAttributeByIndex(i)
-            typeName = kAttribute.getTypeName()
 
-            if typeName == "BoolAttribute":
+            if kAttribute.isTypeOf("BoolAttribute"):
                 self.buildBoolAttribute(kAttribute)
 
-            elif typeName == "FloatAttribute":
+            elif kAttribute.isTypeOf("FloatAttribute"):
                 self.buildFloatAttribute(kAttribute)
 
-            elif typeName == "IntegerAttribute":
+            elif kAttribute.isTypeOf("IntegerAttribute"):
                 self.buildIntegerAttribute(kAttribute)
 
-            elif typeName == "StringAttribute":
+            elif kAttribute.isTypeOf("StringAttribute"):
                 self.buildStringAttribute(kAttribute)
 
             else:

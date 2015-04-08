@@ -397,18 +397,17 @@ class Builder(BaseBuilder):
         # Create Attributes on this Attribute Group
         for i in xrange(kAttributeGroup.getNumAttributes()):
             kAttribute = kAttributeGroup.getAttributeByIndex(i)
-            typeName = kAttribute.getTypeName()
 
-            if typeName == "BoolAttribute":
+            if kAttribute.isTypeOf("BoolAttribute"):
                 self.buildBoolAttribute(kAttribute)
 
-            elif typeName == "FloatAttribute":
+            elif kAttribute.isTypeOf("FloatAttribute"):
                 self.buildFloatAttribute(kAttribute)
 
-            elif typeName == "IntegerAttribute":
+            elif kAttribute.isTypeOf("IntegerAttribute"):
                 self.buildIntegerAttribute(kAttribute)
 
-            elif typeName == "StringAttribute":
+            elif kAttribute.isTypeOf("StringAttribute"):
                 self.buildStringAttribute(kAttribute)
 
             else:

@@ -4,116 +4,14 @@ Classes:
 AttributeGroup - Attribute Group.
 
 """
+from kraken.core.objects.base_item import BaseItem
 
-class AttributeGroup(object):
+class AttributeGroup(BaseItem):
     """Attribute Group that attributes belong to."""
 
     def __init__(self, name, parent=None):
-        super(AttributeGroup, self).__init__()
-        self.name = name
+        super(AttributeGroup, self).__init__(name, parent)
         self.attributes = []
-        self.parent = parent
-
-    # ==============
-    # Type Methods
-    # ==============
-    def getTypeName(self):
-        """Returns the class name of this object.
-
-        Return:
-        True if successful.
-
-        """
-
-        return self.__class__.__name___
-
-    def getTypeHierarchyNames(self):
-        """Returns the class name of this object.
-
-        Return:
-        True if successful.
-
-        """
-        khierarchy = []
-        for cls in type.mro(type(self)):
-            if cls == object:
-                break;
-            khierarchy.append(cls.__class__.__name___)
-        return khierarchy
-
-    # =============
-    # Name Methods
-    # =============
-    def setName(self, name):
-        """Sets the name of the attribute group.
-
-        Arguments:
-        name -- Sting, name of the attribute group.
-
-        Return:
-        True if successful.
-
-        """
-
-        self.name = name
-
-        return True
-
-
-    def getName(self):
-        """Returns the name of the attribute.
-
-        Return:
-        String of the name of the attribute.
-
-        """
-
-        return self.name
-
-
-    def getFullName(self):
-        """Returns the full hierarchical path to this object.
-
-        Return:
-        String, full name of the object.
-
-        """
-
-        if self.parent is not None:
-            return self.parent.getFullName() + '.' + self.getName()
-
-        return self.getName()
-
-
-    # ===============
-    # Parent Methods
-    # ===============
-    def setParent(self, parent):
-        """Sets the paret of this attribute.
-
-        Arguments:
-        parent -- Object, parent object of this attribute.
-
-        Return:
-        True if successful.
-
-        """
-
-        self.parent = parent
-
-        return True
-
-
-    def getParent(self):
-        """Returns the paret of this attribute.
-
-        Return:
-        Parent object of this attribute.
-
-        """
-
-        return self.parent
-
 
     # ==================
     # Attribute Methods

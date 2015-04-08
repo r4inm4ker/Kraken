@@ -5,101 +5,16 @@ BaseOperator - Base operator object.
 
 """
 
+from kraken.core.objects.base_item import BaseItem
 
-class BaseOperator(object):
+class BaseOperator(BaseItem):
     """Base Operator representation."""
 
-    def __init__(self, name):
-        super(BaseOperator, self).__init__()
-        self.name = name
-        self.parent = None
+    def __init__(self, name, parent=None):
+        super(BaseOperator, self).__init__(name, parent)
+
         self.inputs = {}
         self.outputs = {}
-
-
-    # ==============
-    # Type Methods
-    # ==============
-    def getTypeName(self):
-        """Returns the class name of this object.
-
-        Return:
-        True if successful.
-
-        """
-
-        return self.__class__.__name___
-
-    def getTypeHierarchyNames(self):
-        """Returns the class name of this object.
-
-        Return:
-        True if successful.
-
-        """
-        khierarchy = []
-        for cls in type.mro(type(self)):
-            if cls == object:
-                break;
-            khierarchy.append(cls.__class__.__name___)
-        return khierarchy
-
-    # =============
-    # Name methods
-    # =============
-    def getName(self):
-        """Returns the name of the object as a string.
-
-        Return:
-        String of the object's name.
-
-        """
-
-        return self.name
-
-
-    def getFullName(self):
-        """Returns the full hierarchical path to this object.
-
-        Return:
-        String, full name of the object.
-
-        """
-
-        if self.parent is not None:
-            return self.parent.getFullName() + '.' + self.getName() 
-            
-        return self.getName()
-
-
-    # ===============
-    # Parent Methods
-    # ===============
-    def setParent(self, parent):
-        """Sets the parent attribute of this object.
-
-        Arguments:
-        parent -- Object, object that is the parent of this one.
-
-        Return:
-        True if successful.
-
-        """
-
-        self.parent = parent
-
-        return True
-
-
-    def getParent(self):
-        """Returns the parent of the object as an object.
-
-        Return:
-        Parent of this object.
-
-        """
-
-        return self.parent
 
 
     # ==============
