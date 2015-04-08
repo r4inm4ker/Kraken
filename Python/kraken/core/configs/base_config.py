@@ -20,7 +20,7 @@ class BaseConfig(object):
 
         BaseConfig._instance = self
 
-        self._explicitNaming = self.initExplicitNaming()
+        self._explicitNaming = False
         self._colors = self.initColors()
         self._colorMap = self.initColorMap()
         self._nameTemplate = self.initNameTemplate()
@@ -186,7 +186,7 @@ class BaseConfig(object):
     # Control Shape Methods
     # ======================
     def initControlShapes(self):
-        """Doc String.
+        """Initializes the control shapes.
 
         Arguments:
         Arguments -- Type, information.
@@ -444,17 +444,6 @@ class BaseConfig(object):
     # =========================
     # Explicity Naming Methods
     # =========================
-    def initExplicitNaming(self):
-        """Returns the value of the explicit naming attribute.
-
-        Return:
-        Boolean, initial value for explicit naming.
-
-        """
-
-        return False
-
-
     def getExplicitNaming(self):
         """Returns the value of the explicit naming attribute.
 

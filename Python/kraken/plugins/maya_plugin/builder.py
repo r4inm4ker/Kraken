@@ -90,8 +90,6 @@ class Builder(BaseBuilder):
         pm.parent(dccSceneItem, parentNode)
         pm.rename(dccSceneItem, buildName)
 
-        lockObjXfo(dccSceneItem)
-
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
         return dccSceneItem
@@ -181,19 +179,22 @@ class Builder(BaseBuilder):
         parentNode = self._getDCCSceneItem(kSceneItem.getParent())
 
         # Format points for Maya
-        points = kSceneItem.getControlPoints()
+        curveData = kSceneItem.getCurveData()
 
         # Scale, rotate, translation shape
         curvePoints = []
-        for eachSubCurve in points:
-            formattedPoints = [[x.x, x.y, x.z] for x in eachSubCurve]
+        for eachSubCurve in curveData:
+            formattedPoints = eachSubCurve["points"]
             curvePoints.append(formattedPoints)
 
         mainCurve = None
         for i, eachSubCurve in enumerate(curvePoints):
-            currentSubCurve = pm.curve(per=False, point=curvePoints[i], degree=1) #, knot=[x for x in xrange(len(curvePoints[i]))])
+            closedSubCurve = curveData[i]["closed"]
+            degreeSubCurve = curveData[i]["degree"]
 
-            if kSceneItem.getCurveSectionClosed(i):
+            currentSubCurve = pm.curve(per=False, point=curvePoints[i], degree=degreeSubCurve)
+
+            if closedSubCurve:
                 pm.closeCurve(currentSubCurve, preserveShape=True, replaceOriginal=True)
 
             if mainCurve is None:
@@ -227,19 +228,22 @@ class Builder(BaseBuilder):
         parentNode = self._getDCCSceneItem(kSceneItem.getParent())
 
         # Format points for Maya
-        points = kSceneItem.getControlPoints()
+        curveData = kSceneItem.getCurveData()
 
         # Scale, rotate, translation shape
         curvePoints = []
-        for eachSubCurve in points:
-            formattedPoints = [[x.x, x.y, x.z] for x in eachSubCurve]
+        for eachSubCurve in curveData:
+            formattedPoints = eachSubCurve["points"]
             curvePoints.append(formattedPoints)
 
         mainCurve = None
         for i, eachSubCurve in enumerate(curvePoints):
-            currentSubCurve = pm.curve(per=False, point=curvePoints[i], degree=1) #, knot=[x for x in xrange(len(curvePoints[i]))])
+            closedSubCurve = curveData[i]["closed"]
+            degreeSubCurve = curveData[i]["degree"]
 
-            if kSceneItem.getCurveSectionClosed(i):
+            currentSubCurve = pm.curve(per=False, point=curvePoints[i], degree=degreeSubCurve)
+
+            if closedSubCurve:
                 pm.closeCurve(currentSubCurve, preserveShape=True, replaceOriginal=True)
 
             if mainCurve is None:
@@ -629,6 +633,57 @@ class Builder(BaseBuilder):
 
         finally:
             pass
+
+        return True
+
+
+    # ==================
+    # Parameter Methods
+    # ==================
+    def lockParameters(self, kSceneItem):
+        """Locks flagged SRT parameters.
+
+        Arguments:
+        kSceneItem -- Object, kraken object to lock the SRT parameters on.
+
+        Return:
+        True if successful.
+
+        """
+
+        dccSceneItem = self._getDCCSceneItem(kSceneItem)
+
+        # Lock Rotation
+        if kSceneItem.testFlag("lockXRotation") is True:
+            pm.setAttr(dccSceneItem.longName() + "." + 'rx', lock=True, keyable=False, channelBox=False)
+
+        if kSceneItem.testFlag("lockYRotation") is True:
+            pm.setAttr(dccSceneItem.longName() + "." + 'ry', lock=True, keyable=False, channelBox=False)
+
+        if kSceneItem.testFlag("lockZRotation") is True:
+            pm.setAttr(dccSceneItem.longName() + "." + 'rz', lock=True, keyable=False, channelBox=False)
+
+
+        # Lock Scale
+        if kSceneItem.testFlag("lockXScale") is True:
+            pm.setAttr(dccSceneItem.longName() + "." + 'sx', lock=True, keyable=False, channelBox=False)
+
+        if kSceneItem.testFlag("lockYScale") is True:
+            pm.setAttr(dccSceneItem.longName() + "." + 'sy', lock=True, keyable=False, channelBox=False)
+
+        if kSceneItem.testFlag("lockZScale") is True:
+            pm.setAttr(dccSceneItem.longName() + "." + 'sz', lock=True, keyable=False, channelBox=False)
+
+
+        # Lock Translation
+        if kSceneItem.testFlag("lockXTranslation") is True:
+            pm.setAttr(dccSceneItem.longName() + "." + 'tx', lock=True, keyable=False, channelBox=False)
+
+        if kSceneItem.testFlag("lockYTranslation") is True:
+            pm.setAttr(dccSceneItem.longName() + "." + 'tx', lock=True, keyable=False, channelBox=False)
+
+        if kSceneItem.testFlag("lockZTranslation") is True:
+            pm.setAttr(dccSceneItem.longName() + "." + 'tx', lock=True, keyable=False, channelBox=False)
 
         return True
 

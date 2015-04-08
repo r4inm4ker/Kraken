@@ -18,183 +18,152 @@ class Curve(SceneItem):
     def __init__(self, name, parent=None):
         super(Curve, self).__init__(name, parent=parent)
 
-        self.controlPoints = []
-        self.closed = []
+        self._data = None
 
 
     # ======================
     # Control Point Methods
     # ======================
-    def setControlPoints(self, points):
-        """Sets the control points array.
+    def getCurveData(self):
+        """Returns the data of the curve.
+
+        Return:
+        List, dictionaries defining each sub-curve of this curve.
+
+        """
+
+        return self._data
+
+
+    def setCurveData(self, data):
+        """Sets the curve data.
 
         Arguments:
-        points -- List, 2D array of Vec3 points to describe the curve's shape.
+        data -- List, dictionaries defining each sub-curve of this curve.
 
         Return:
         True if successful.
 
         """
 
-        self.controlPoints = points
+        self._data = copy.deepcopy(data)
 
         return True
 
 
-    def getControlPoints(self):
-        """Returns the control points of the curve.
-
-        Return:
-        Array of Vec3 positions.
-
-        """
-
-        return self.controlPoints
-
-
-    def copyControlPoints(self):
-        """Returns the control points of the curve.
-
-        Return:
-        Array of Vec3 positions.
-
-        """
-
-        # return copy.deepcopy(self.controlPoints)
-        return self.controlPoints
-
-
-    def appendControlPoints(self, points):
-        """Appends control points to the current curve.
+    def appendCurveData(self, data):
+        """Appends sub-curve data to this curve.
 
         Arguments:
-        points -- List, 1D array of Vec3 points to add to the curve description.
+        data -- List, dictionaries defining each sub-curve being added to this
+        curve.
 
         Return:
         True if successful.
 
         """
 
-        self.controlPoints.append(points)
+        self._data += data
 
         return True
 
 
-    # ======================
-    # Curve Section Methods
-    # ======================
-    def checkSectionIndex(self, index):
+    # ==================
+    # Sub-Curve Methods
+    # ==================
+    def checkSubCurveIndex(self, index):
         """Checks the supplied index is valid.
 
         Arguments:
-        index -- Integer, section index to check.
+        index -- Integer, sub-curve index to check.
 
         """
 
-        if index > len(self.controlPoints):
-            raise IndexError("'" + str(index) + "' is out of the range of the 'controlPoints' array.")
+        if index > len(self._data):
+            raise IndexError("'" + str(index) + "' is out of the range of the 'data' array.")
 
         return True
 
 
-    def addCurveSection(self, controlPoints, closed=False):
-        """Sets the control points of the control.
+    def getNumSubCurves(self):
+        """Returns the number of sub-curves on this object.
+
+        Return:
+        Integer, number of sub-curves in this object.
+
+        """
+
+        return len(self._data)
+
+
+    def getSubCurveClosed(self, index):
+        """Returns whether the sub-curve is closed or not.
 
         Arguments:
-        controlPoints -- Array, array of Vec3 objects of point positions.
-        closed -- Boolean, whether the sub-curve is closed or not.
+        index -- Integer, index of the sub-curve to query.
+
+        Return:
+        True or False if the sub-curve is closed.
+
+        """
+
+        if self.checkSubCurveIndex(index) is not True:
+            return False
+
+        return self._data[index]["closed"]
+
+
+    def getSubCurveData(self, index):
+        """Get the sub-curve data by it's index.
+
+        Arguments:
+        index -- Integer, index of the sub-curve to get the data for.
+
+        Return:
+        Dict, data defining the sub-curve.
+
+        """
+
+        if self.checkSubCurveIndex(index) is not True:
+            return False
+
+        return self._data[index]
+
+
+    def setSubCurveData(self, index, data):
+        """Sets the sub-curve data.
+
+        Arguments:
+        index -- Integer, index of the sub-curve to get the data for.
+        data -- Dict, defining the sub-curve data.
 
         Return:
         True if successful.
 
         """
 
-        self.controlPoints.append(controlPoints)
-        self.closed.append(closed)
+        if self.checkSubCurveIndex(index) is not True:
+            return False
+
+        self._data[index] = data
 
         return True
 
 
-    def getNumCurveSections(self):
-        """Returns the number of curve sections on this object.
-
-        Return:
-        Integner, number of curve sections in this object.
-
-        """
-
-        return len(self.controlPoints)
-
-
-    def getCurveSectionClosed(self, index):
-        """Returns whether the curve section is closed or not.
+    def removeSubCurveByIndex(self, index):
+        """Removes a sub-curve by its index.
 
         Arguments:
-        index -- Integer, index of the curve section to query.
-
-        Return:
-        True or False if the section is closed.
-
-        """
-
-        if self.checkSectionIndex(index) is not True:
-            return False
-
-        return self.closed[index]
-
-
-    def setCurveSectionArray(self, index, array):
-        """Get the curve section array by it's index.
-
-        Arguments:
-        index -- Integer, index of the section to get the array for.
+        index -- Integer, Index of the sub-curve to remove.
 
         Return:
         True if successful.
 
         """
 
-        if self.checkSectionIndex(index) is not True:
+        if self.checkSubCurveIndex(index) is not True:
             return False
 
-        self.controlPoints[index] = array
-
-        return True
-
-
-    def getCurveSectionArray(self, index):
-        """Get the curve section array by it's index.
-
-        Arguments:
-        index -- Integer, index of the section to get the array for.
-
-        Return:
-        Array, Vec3 values for that section of the curve.
-
-        """
-
-        if self.checkSectionIndex(index) is not True:
-            return False
-
-        return self.controlPoints[index]
-
-        return
-
-
-    def removeCurveSectionByIndex(self, index):
-        """Removes a curve section by its index.
-
-        Arguments:
-        index -- Integer, Index of the section to remove.
-
-        Return:
-        True if successful.
-
-        """
-
-        if self.checkSectionIndex(index) is not True:
-            return False
-
-        del self.controlPoints[index]
+        del self._data[index]
 
         return True

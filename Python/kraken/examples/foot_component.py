@@ -11,7 +11,7 @@ from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 from kraken.core.objects.locator import Locator
 from kraken.core.objects.joint import Joint
 from kraken.core.objects.srtBuffer import SrtBuffer
-from kraken.core.objects.controls.cube_control  import CubeControl
+from kraken.core.objects.control  import Control
 
 from kraken.core.objects.operators.splice_operator import SpliceOperator
 
@@ -47,7 +47,7 @@ class FootComponent(BaseComponent):
         footCtrlSrtBuffer = SrtBuffer('foot', parent=self)
         footCtrlSrtBuffer.xfo = footXfo
 
-        footCtrl = CubeControl('foot', parent=footCtrlSrtBuffer)
+        footCtrl = Control('foot', parent=footCtrlSrtBuffer, shape="cube")
         footCtrl.alignOnXAxis()
         footCtrl.scalePoints(Vec3(2.5, 1.5, 0.75))
         footCtrl.xfo = footCtrlSrtBuffer.xfo

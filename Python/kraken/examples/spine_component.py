@@ -7,7 +7,8 @@ from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 from kraken.core.objects.locator import Locator
 from kraken.core.objects.joint import Joint
 from kraken.core.objects.srtBuffer import SrtBuffer
-from kraken.core.objects.controls.circle_control  import  CircleControl
+from kraken.core.objects.layer import Layer
+from kraken.core.objects.control import Control
 
 from kraken.core.objects.operators.splice_operator import SpliceOperator
 
@@ -44,7 +45,7 @@ class SpineComponent(BaseComponent):
         cogCtrlSrtBuffer = SrtBuffer('cog', parent=self)
         cogCtrlSrtBuffer.xfo.tr = cogPosition
 
-        cogCtrl = CircleControl('cog', parent=cogCtrlSrtBuffer)
+        cogCtrl = Control('cog', parent=cogCtrlSrtBuffer, shape="circle")
         cogCtrl.scalePoints(Vec3(6.0, 6.0, 6.0))
         cogCtrl.xfo.tr = cogPosition
         cogCtrl.setColor("orange")
@@ -53,7 +54,7 @@ class SpineComponent(BaseComponent):
         spine01CtrlSrtBuffer = SrtBuffer('spine01', parent=cogCtrl)
         spine01CtrlSrtBuffer.xfo.tr = spine01Position
 
-        spine01Ctrl = CircleControl('spine01', parent=spine01CtrlSrtBuffer)
+        spine01Ctrl = Control('spine01', parent=spine01CtrlSrtBuffer, shape="circle")
         spine01Ctrl.scalePoints(Vec3(4.0, 4.0, 4.0))
         spine01Ctrl.xfo.tr = spine01Position
 
@@ -61,7 +62,7 @@ class SpineComponent(BaseComponent):
         spine02CtrlSrtBuffer = SrtBuffer('spine02', parent=spine01Ctrl)
         spine02CtrlSrtBuffer.xfo.tr = spine02Position
 
-        spine02Ctrl = CircleControl('spine02', parent=spine02CtrlSrtBuffer)
+        spine02Ctrl = Control('spine02', parent=spine02CtrlSrtBuffer, shape="circle")
         spine02Ctrl.scalePoints(Vec3(4.5, 4.5, 4.5))
         spine02Ctrl.xfo.tr = spine02Position
 
@@ -70,7 +71,7 @@ class SpineComponent(BaseComponent):
         spine03CtrlSrtBuffer = SrtBuffer('spine03', parent=spine02Ctrl)
         spine03CtrlSrtBuffer.xfo.tr = spine03Position
 
-        spine03Ctrl = CircleControl('spine03', parent=spine03CtrlSrtBuffer)
+        spine03Ctrl = Control('spine03', parent=spine03CtrlSrtBuffer, shape="circle")
         spine03Ctrl.scalePoints(Vec3(4.5, 4.5, 4.5))
         spine03Ctrl.xfo.tr = spine03Position
         spine03Ctrl.setColor("blue")
@@ -79,7 +80,7 @@ class SpineComponent(BaseComponent):
         spine04CtrlSrtBuffer = SrtBuffer('spine04', parent=cogCtrl)
         spine04CtrlSrtBuffer.xfo.tr = spine04Position
 
-        spine04Ctrl = CircleControl('spine04', parent=spine04CtrlSrtBuffer)
+        spine04Ctrl = Control('spine04', parent=spine04CtrlSrtBuffer, shape="circle")
         spine04Ctrl.scalePoints(Vec3(6.0, 6.0, 6.0))
         spine04Ctrl.xfo.tr = spine04Position
 

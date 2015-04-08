@@ -13,9 +13,8 @@ from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 from kraken.core.objects.locator import Locator
 from kraken.core.objects.joint import Joint
 from kraken.core.objects.srtBuffer import SrtBuffer
-from kraken.core.objects.controls.cube_control import CubeControl
-from kraken.core.objects.controls.pin_control import PinControl
-from kraken.core.objects.controls.triangle_control import TriangleControl
+from kraken.core.objects.layer import Layer
+from kraken.core.objects.control import Control
 
 from kraken.core.objects.operators.splice_operator import SpliceOperator
 
@@ -74,11 +73,11 @@ class InsectLegComponent(BaseComponent):
                 parent = self
             else:
                 parent = boneFKCtrls[i-1]
-            
+
             boneFKCtrlSrtBuffer = SrtBuffer('bone'+str(i)+'FK', parent=parent)
             boneFKCtrlSrtBuffer.xfo = boneXfos[i]
 
-            boneFKCtrl = CubeControl('bone'+str(i)+'FK', parent=boneFKCtrlSrtBuffer)
+            boneFKCtrl = Control('bone'+str(i)+'FK', parent=boneFKCtrlSrtBuffer, shape="cube")
             boneFKCtrl.alignOnXAxis()
             boneFKCtrl.scalePoints(Vec3(boneLengths[i], 1.75, 1.75))
             boneFKCtrl.xfo = boneXfos[i]
@@ -91,7 +90,7 @@ class InsectLegComponent(BaseComponent):
         legIKCtrlSrtBuffer = SrtBuffer('IK', parent=self)
         legIKCtrlSrtBuffer.xfo.tr = jointPositions[-1]
 
-        legIKCtrl = PinControl('IK', parent=legIKCtrlSrtBuffer)
+        legIKCtrl = Control('IK', parent=legIKCtrlSrtBuffer, shape="pin")
         legIKCtrl.xfo.tr = jointPositions[-1]
 
         if self.getLocation() == "R":
@@ -128,7 +127,7 @@ class InsectLegComponent(BaseComponent):
         legUpVCtrlSrtBuffer = SrtBuffer('UpV', parent=self)
         legUpVCtrlSrtBuffer.xfo.tr = upVOffset
 
-        legUpVCtrl = TriangleControl('UpV', parent=legUpVCtrlSrtBuffer)
+        legUpVCtrl = Control('UpV', parent=legUpVCtrlSrtBuffer, shape="triangle")
         legUpVCtrl.xfo.tr = upVOffset
         legUpVCtrl.alignOnZAxis()
         legUpVCtrl.rotatePoints(0, 0, 0)
