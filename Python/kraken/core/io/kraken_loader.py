@@ -8,13 +8,14 @@ KrakenLoader - Factory for building SceneItems.
 from kraken.core.maths import Vec2, Vec3, Vec4, Quat, Xfo
 # from kraken.core.maths.matrix import Matrix33, Matrix44
 
+from kraken.core.objects.scene_item import SceneItem
 from kraken.core.objects.container import Container
 from kraken.core.objects.curve import Curve
 from kraken.core.objects.hierarchy_group import HierarchyGroup
 from kraken.core.objects.joint import Joint
 from kraken.core.objects.layer import Layer
 from kraken.core.objects.locator import Locator
-from kraken.core.objects.scene_item import SceneItem
+from kraken.core.objects.control import Control
 
 from kraken.core.objects.attributes.attribute_group import AttributeGroup
 # from kraken.core.objects.attributes.base_attribute import BaseAttribute
@@ -24,17 +25,6 @@ from kraken.core.objects.attributes.integer_attribute import IntegerAttribute
 from kraken.core.objects.attributes.string_attribute import StringAttribute
 
 from kraken.core.objects.components import *
-
-from kraken.core.objects.controls.arrow_control import ArrowControl
-from kraken.core.objects.controls.arrows_control import ArrowsControl
-from kraken.core.objects.controls.circle_control import CircleControl
-from kraken.core.objects.controls.cube_control import CubeControl
-from kraken.core.objects.controls.null_control import NullControl
-from kraken.core.objects.controls.pin_control import PinControl
-from kraken.core.objects.controls.sphere_control import SphereControl
-from kraken.core.objects.controls.square_control import SquareControl
-from kraken.core.objects.controls.triangle_control import TriangleControl
-from kraken.core.objects.controls.base_control import BaseControl
 
 from kraken.core.objects.constraints.orientation_constraint import OrientationConstraint
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
