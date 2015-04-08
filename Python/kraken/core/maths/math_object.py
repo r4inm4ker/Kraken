@@ -31,9 +31,6 @@ class MathObject(object):
     def setRTVal(self, rtval):
         """Sets the internal RTVal object owned by the math object.
 
-        Return:
-        RTVal
-
         """
         self._rtval = rtval
 
@@ -49,7 +46,7 @@ class MathObject(object):
         d = {
                 "__class__":self.__class__.__name__,
             }
-            
+
         public_attrs = (name for name in dir(self) if not name.startswith('_') and not callable(getattr(self,name)) and name)
         for name in public_attrs:
             item = getattr(self, name)
