@@ -5,7 +5,7 @@ Profiler - Profiler Object.
 
 """
 import time
-
+import operator
 
 
 
@@ -75,8 +75,8 @@ class Profiler(object):
         self.__stack[-1].endProfiling()
         self.__stack.pop()
         
-    def generateReport(self):
-        """Returns a json object that encodes the data gathered during profiling.
+    def generateReport(self, listFunctionTotals=False):
+        """Returns a report string containing all the data gathered turing profiling.
 
         Return:
         the json object
@@ -84,30 +84,31 @@ class Profiler(object):
         """
         if len(self.__stack) != 0:
             raise Exception("Profiler brackets not closed properly. pop must be called for every call to push. Pop needs to be called another " + str(len(self.__stack)) + " times") 
-        report = {
-            'tree': None
-        }
+        report = []
+        report.append("--callstack--")
         functions = {}
-        def reportItem(item):
-            itemReport  = {
-                'label': item.label,
-                'duration' : item.end - item.start
-            }
+        def reportItem(item, indent):
+            duration = item.end - item.start
+            report.append(indent + item.label + ' duration: ' + str(duration))
             if item.label not in functions:
-                functions[item.label] = itemReport['duration']
+                functions[item.label] = duration
             else:
-                functions[item.label] += itemReport['duration']
+                functions[item.label] += duration
 
             for childItem in item.children:
-                if 'children' not in itemReport:
-                    itemReport['children'] = []
-                itemReport['children'].append(reportItem(childItem))
-            return itemReport
+                reportItem(childItem, indent+'  ')
 
-        report['tree'] = []
         for rootItem in self.__roots:
-            report['tree'].append(reportItem(rootItem))
-        return report
+            reportItem(rootItem, '  ')
+
+        if listFunctionTotals:
+            report.append("--functions--")
+            def reverse_numeric(x, y):
+                return y < x
+            sorted_fns = sorted(functions.items(), key=operator.itemgetter(1), cmp=reverse_numeric)
+            for fn_tuple in sorted_fns:
+                report.append(str(fn_tuple[1]) +': ' + fn_tuple[0])
+        return '\n'.join(report)
 
     @classmethod
     def getInstance(cls):
