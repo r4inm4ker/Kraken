@@ -9,8 +9,6 @@ BaseOperator - Base operator object.
 class BaseOperator(object):
     """Base Operator representation."""
 
-    __kType__ = "Operator"
-
     def __init__(self, name):
         super(BaseOperator, self).__init__()
         self.name = name
@@ -18,6 +16,33 @@ class BaseOperator(object):
         self.inputs = {}
         self.outputs = {}
 
+
+    # ==============
+    # Type Methods
+    # ==============
+    def getTypeName(self):
+        """Returns the class name of this object.
+
+        Return:
+        True if successful.
+
+        """
+
+        return self.__class__.__name___
+
+    def getTypeHierarchyNames(self):
+        """Returns the class name of this object.
+
+        Return:
+        True if successful.
+
+        """
+        khierarchy = []
+        for cls in type.mro(type(self)):
+            if cls == object:
+                break;
+            khierarchy.append(cls.__class__.__name___)
+        return khierarchy
 
     # =============
     # Name methods
@@ -75,20 +100,6 @@ class BaseOperator(object):
         """
 
         return self.parent
-
-
-    # ==============
-    # kType Methods
-    # ==============
-    def getKType(self):
-        """Returns the kType of this object.
-
-        Return:
-        True if successful.
-
-        """
-
-        return self.__kType__
 
 
     # ==============

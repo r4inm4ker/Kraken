@@ -12,8 +12,6 @@ from kraken.core.objects.attributes.attribute_group import AttributeGroup
 class SceneItem(object):
     """Kraken base object type for any 3D object."""
 
-    __kType__ = "SceneItem"
-
     def __init__(self, name, parent=None):
         super(SceneItem, self).__init__()
         self.name = name
@@ -149,7 +147,7 @@ class SceneItem(object):
         """
 
         parent = self.getParent()
-        while (parent is not None and 'Container' not in parent.getKTypeHierarchy()):
+        while (parent is not None and 'Container' not in parent.getTypeHierarchyNames()):
             parent = parent.getParent()
 
         return parent
@@ -164,7 +162,7 @@ class SceneItem(object):
         """
 
         parent = self.getParent()
-        while (parent is not None and parent.getKType() != 'Layer'):
+        while (parent is not None and parent.getTypeName() != 'Layer'):
             parent = parent.getParent()
 
         return parent
@@ -236,14 +234,14 @@ class SceneItem(object):
 
         # if child.getName() in [x.getName() for x in self.children]:
 
-        #     if child.getKType() == "Component":
+        #     if child.getTypeName() == "Component":
         #         existingChild = self.getChildByName(child.getName())
-        #         if child.getKType() == existingChild.getKType() and child.getLocation() == existingChild.getLocation():
-        #             raise NameError("Child with name '" + child.getFullName() + "', type: '" + child.getKType() + "', and location: '" + child.getLocation() + "' already exists.")
+        #         if child.getTypeName() == existingChild.getTypeName() and child.getLocation() == existingChild.getLocation():
+        #             raise NameError("Child with name '" + child.getFullName() + "', type: '" + child.getTypeName() + "', and location: '" + child.getLocation() + "' already exists.")
         #     else:
         #         existingChild = self.getChildByName(child.getName())
-        #         if child.getKType() == existingChild.getKType():
-        #             raise NameError("Child with name '" + child.getFullName() + "' and type: '" + child.getKType() + "' already exists.")
+        #         if child.getTypeName() == existingChild.getTypeName():
+        #             raise NameError("Child with name '" + child.getFullName() + "' and type: '" + child.getTypeName() + "' already exists.")
 
         if child.getParent() is not None:
             parent = child.getParent()
@@ -766,20 +764,20 @@ class SceneItem(object):
 
 
     # ==============
-    # kType Methods
+    # Type Methods
     # ==============
-    def getKType(self):
-        """Returns the kType of this object.
+    def getTypeName(self):
+        """Returns the class name of this object.
 
         Return:
         True if successful.
 
         """
 
-        return self.__kType__
+        return self.__class__.__name___
 
-    def getKTypeHierarchy(self):
-        """Returns the kType of this object.
+    def getTypeHierarchyNames(self):
+        """Returns the class name of this object.
 
         Return:
         True if successful.
@@ -789,7 +787,7 @@ class SceneItem(object):
         for cls in type.mro(type(self)):
             if cls == object:
                 break;
-            khierarchy.append(cls.__kType__)
+            khierarchy.append(cls.__class__.__name___)
         return khierarchy
 
 
@@ -984,7 +982,7 @@ class SceneItem(object):
 
         """
 
-        classHierarchy = self.getKTypeHierarchy()
+        classHierarchy = self.getTypeHierarchyNames()
 
         jsonData = {
             '__typeHierarchy__': classHierarchy,

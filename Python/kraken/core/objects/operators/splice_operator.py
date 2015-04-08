@@ -11,8 +11,6 @@ from kraken.core.kraken_system import ks
 class SpliceOperator(BaseOperator):
     """Base Operator representation."""
 
-    __kType__ = "SpliceOperator"
-
     # TODO: Look in to expanding the Splice operator to be able to handle more
     # than one extension / operator. Need to change extension to extensions and
     # figure out how to differentiate the solver types per operator. Maybe have

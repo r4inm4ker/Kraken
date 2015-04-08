@@ -216,12 +216,8 @@ class KrakenLoader(object):
         # ==========
         # Operators
         # ==========
-        elif "Operator" in jsonData['__typeHierarchy__']:
-            item = Operator(jsonData['name'])
-
-        elif "OperatorBinding" in jsonData['__typeHierarchy__']:
-            item = OperatorBinding(jsonData['name'])
-
+        elif "SpliceOperator" in jsonData['__typeHierarchy__']:
+            item = SpliceOperator(jsonData['name'])
 
         # ============
         # Scene Items
