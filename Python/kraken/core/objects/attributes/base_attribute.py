@@ -8,8 +8,6 @@ BaseAttribute - Base Attribute.
 class BaseAttribute(object):
     """Base Attribute object."""
 
-    __kType__ = "Attribute"
-
     def __init__(self, name, value):
         super(BaseAttribute, self).__init__()
         self.name = name
@@ -17,6 +15,32 @@ class BaseAttribute(object):
         self.parent = None
         self.connection = None
 
+    # ==============
+    # Type Methods
+    # ==============
+    def getTypeName(self):
+        """Returns the class name of this object.
+
+        Return:
+        True if successful.
+
+        """
+
+        return self.__class__.__name___
+
+    def getTypeHierarchyNames(self):
+        """Returns the class name of this object.
+
+        Return:
+        True if successful.
+
+        """
+        khierarchy = []
+        for cls in type.mro(type(self)):
+            if cls == object:
+                break;
+            khierarchy.append(cls.__class__.__name___)
+        return khierarchy
 
     # =============
     # Name Methods
@@ -177,21 +201,6 @@ class BaseAttribute(object):
         self.connection = None
 
         return True
-
-
-    # ==============
-    # kType Methods
-    # ==============
-    def getKType(self):
-        """Returns the kType of this object.
-
-        Return:
-        True if successful.
-
-        """
-
-        return self.__kType__
-
 
     # ====================
     # Persistence Methods

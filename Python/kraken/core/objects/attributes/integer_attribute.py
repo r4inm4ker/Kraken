@@ -11,8 +11,6 @@ from number_attribute import NumberAttribute
 class IntegerAttribute(NumberAttribute):
     """Float Attribute. Implemented value type checking and limiting."""
 
-    __kType__ = "IntegerAttribute"
-
     def __init__(self, name, value=0, minValue=None, maxValue=None):
         super(IntegerAttribute, self).__init__(name, value, minValue=minValue, maxValue=maxValue)
 

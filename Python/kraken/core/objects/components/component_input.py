@@ -13,8 +13,6 @@ from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 class ComponentInput(object):
     """Component Input Object."""
 
-    __kType__ = "ComponentInput"
-
     def __init__(self, name, connectionObj):
         super(ComponentInput, self).__init__()
         self.name = name
@@ -162,11 +160,11 @@ class ComponentInput(object):
 
         if self.getDataType() == 'Xfo' and not isinstance(sourceObj, Locator):
             raise Exception("'Xfo' inputs can only be connected to 'Locator' objects. Object '"
-                + sourceObj.getName() + "' has type:'" + sourceObj.getKType() + "'")
+                + sourceObj.getName() + "' has type:'" + sourceObj.getTypeName() + "'")
 
         if self.getDataType() == 'Attribute' and not isinstance(sourceObj, BaseAttribute):
             raise Exception("'Attribute' inputs can only be connected to 'Attribute' objects. Object '"
-                + sourceObj.getName() + "' has type:'" + sourceObj.getKType() + "'")
+                + sourceObj.getName() + "' has type:'" + sourceObj.getTypeName() + "'")
 
         self.source = sourceObj
 

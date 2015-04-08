@@ -11,8 +11,6 @@ from base_attribute import BaseAttribute
 class BoolAttribute(BaseAttribute):
     """Boolean Attribute. Implemented value type checking and limiting."""
 
-    __kType__ = "BoolAttribute"
-
     def __init__(self, name, value=False):
         super(BoolAttribute, self).__init__(name, value)
         assert type(value) is bool, "Value is not of type 'bool'."

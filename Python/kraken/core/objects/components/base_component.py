@@ -19,8 +19,6 @@ from kraken.core.objects.attributes.base_attribute import BaseAttribute
 class BaseComponent(SceneItem):
     """Kraken Base Component object."""
 
-    __kType__ = "Component"
-
     def __init__(self, name, parent=None, location='M'):
         super(BaseComponent, self).__init__(name, parent)
         self.location = location

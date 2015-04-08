@@ -8,14 +8,38 @@ AttributeGroup - Attribute Group.
 class AttributeGroup(object):
     """Attribute Group that attributes belong to."""
 
-    __kType__ = "AttributeGroup"
-
     def __init__(self, name, parent=None):
         super(AttributeGroup, self).__init__()
         self.name = name
         self.attributes = []
         self.parent = parent
 
+    # ==============
+    # Type Methods
+    # ==============
+    def getTypeName(self):
+        """Returns the class name of this object.
+
+        Return:
+        True if successful.
+
+        """
+
+        return self.__class__.__name___
+
+    def getTypeHierarchyNames(self):
+        """Returns the class name of this object.
+
+        Return:
+        True if successful.
+
+        """
+        khierarchy = []
+        for cls in type.mro(type(self)):
+            if cls == object:
+                break;
+            khierarchy.append(cls.__class__.__name___)
+        return khierarchy
 
     # =============
     # Name Methods
@@ -89,20 +113,6 @@ class AttributeGroup(object):
         """
 
         return self.parent
-
-
-    # ==============
-    # kType Methods
-    # ==============
-    def getKType(self):
-        """Returns the kType of this object.
-
-        Return:
-        True if successful.
-
-        """
-
-        return self.__kType__
 
 
     # ==================

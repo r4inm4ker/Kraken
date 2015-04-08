@@ -11,8 +11,6 @@ from kraken.core.objects.scene_item import SceneItem
 class BaseConstraint(object):
     """Base Constraint object."""
 
-    __kType__ = "BaseConstraint"
-
     def __init__(self, name):
         super(BaseConstraint, self).__init__()
 
@@ -21,6 +19,32 @@ class BaseConstraint(object):
         self.constrainers = []
         self.maintainOffset = False
 
+    # ==============
+    # Type Methods
+    # ==============
+    def getTypeName(self):
+        """Returns the class name of this object.
+
+        Return:
+        True if successful.
+
+        """
+
+        return self.__class__.__name___
+
+    def getTypeHierarchyNames(self):
+        """Returns the class name of this object.
+
+        Return:
+        True if successful.
+
+        """
+        khierarchy = []
+        for cls in type.mro(type(self)):
+            if cls == object:
+                break;
+            khierarchy.append(cls.__class__.__name___)
+        return khierarchy
 
     # =============
     # Name Methods
@@ -179,21 +203,6 @@ class BaseConstraint(object):
         """
 
         return self.constrainers
-
-
-    # ==============
-    # kType Methods
-    # ==============
-    def getKType(self):
-        """Returns the kType of this object.
-
-        Return:
-        True if successful.
-
-        """
-
-        return self.__kType__
-
 
 
     # ================

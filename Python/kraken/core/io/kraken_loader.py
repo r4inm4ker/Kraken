@@ -260,7 +260,7 @@ class KrakenLoader(object):
             item = SceneItem(jsonData['name'])
 
         else:
-            raise Exception("KrakenLoader does not support the given type:" + __kType__)
+            raise Exception("KrakenLoader does not support the given type:" + jsonData['__typeHierarchy__'])
 
         # Before registering or decoding, set the parent so that the full name contains the entire path. 
         if len(self.parentItems) > 0:
