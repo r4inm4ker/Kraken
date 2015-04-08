@@ -3,10 +3,12 @@ Failed to find DCC builder. Falling back to Python builder.
 spine
 spine.inputs
 spine.outputs
+spine.outputs.spine00
 spine.outputs.spine01
 spine.outputs.spine02
 spine.outputs.spine03
 spine.outputs.spine04
+spine.outputs.spine05
 spine.outputs.spineBase
 spine.outputs.spineEnd
 spine.cog
@@ -24,3 +26,5 @@ spine.deformers.spine01
 spine.deformers.spine02
 spine.deformers.spine03
 spine.deformers.spine04
+spine.deformers.spine05
+spine.deformers.spine06
