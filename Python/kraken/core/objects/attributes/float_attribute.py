@@ -14,6 +14,12 @@ class FloatAttribute(NumberAttribute):
     def __init__(self, name, value=0.0, minValue=None, maxValue=None):
         super(FloatAttribute, self).__init__(name, value)
 
+        if minValue is None:
+            if value < 0.0:
+                self.setMin(value)
+            else:
+                self.setMin(0.0)
+
         if maxValue is None:
             if value == 0.0:
                 self.setMax(1.0)
