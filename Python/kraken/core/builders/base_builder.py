@@ -629,7 +629,7 @@ class BaseBuilder(object):
 
         """
 
-        if kObject.isTypeOf('Component'):
+        if kObject.isTypeOf('BaseComponent'):
 
             # Build input connections
             for i in xrange(kObject.getNumInputs()):
@@ -709,8 +709,7 @@ class BaseBuilder(object):
         True if successful.
 
         """
-
-        if kObject.isTypeOf('Component'):
+        if kObject.isTypeOf('BaseComponent'):
 
             # Build operators
             for i in xrange(kObject.getNumOperators()):
@@ -1065,13 +1064,10 @@ class BaseBuilder(object):
             if kSceneItem.isTypeOf("Container"):
                 self.synchronizeContainerNode(kSceneItem, dccSceneItem)
 
-            if kSceneItem.isTypeOf("Rig"):
-                self.synchronizeContainerNode(kSceneItem, dccSceneItem)
-
             elif kSceneItem.isTypeOf("Layer"):
                 self.synchronizeLayerNode(kSceneItem, dccSceneItem)
 
-            elif kSceneItem.isTypeOf("Component"):
+            elif kSceneItem.isTypeOf("BaseComponent"):
                 self.synchronizeGroupNode(kSceneItem, dccSceneItem)
 
             elif kSceneItem.isTypeOf("Control"):

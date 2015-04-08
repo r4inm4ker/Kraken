@@ -295,7 +295,6 @@ class Builder(BaseBuilder):
         True if successful.
 
         """
-        print "buildFloatAttribute:" + kAttribute.getFullName()
 
         parentDCCSceneItem = self._getDCCSceneItem(kAttribute.getParent().getParent())
         parentDCCSceneItem.addAttr(kAttribute.getName(), niceName=kAttribute.getName(), attributeType="float", defaultValue=kAttribute.getValue(), minValue=kAttribute.min, maxValue=kAttribute.max, keyable=True)
@@ -316,7 +315,6 @@ class Builder(BaseBuilder):
         True if successful.
 
         """
-        print "buildIntegerAttribute:" + kAttribute.getFullName()
 
         parentDCCSceneItem = self._getDCCSceneItem(kAttribute.getParent().getParent())
         parentDCCSceneItem.addAttr(kAttribute.getName(), niceName=kAttribute.getName(), attributeType="long", defaultValue=kAttribute.getValue(), minValue=kAttribute.min, maxValue=kAttribute.max, keyable=True)

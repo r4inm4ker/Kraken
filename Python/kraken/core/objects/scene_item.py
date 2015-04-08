@@ -174,7 +174,7 @@ class SceneItem(BaseItem):
 
         # if child.getName() in [x.getName() for x in self.children]:
 
-        #     if child.isTypeOf("Component"):
+        #     if child.isTypeOf("BaseComponent"):
         #         existingChild = self.getChildByName(child.getName())
         #         if child.getTypeName() == existingChild.getTypeName() and child.getLocation() == existingChild.getLocation():
         #             raise NameError("Child with name '" + child.getFullName() + "', type: '" + child.getTypeName() + "', and location: '" + child.getLocation() + "' already exists.")
