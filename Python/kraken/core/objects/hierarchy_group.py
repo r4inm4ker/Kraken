@@ -17,3 +17,6 @@ class HierarchyGroup(SceneItem):
         super(HierarchyGroup, self).__init__(name, parent=parent)
 
         self.setShapeVisibility(False)
+        self.lockRotation(True, True, True)
+        self.lockScale(True, True, True)
+        self.lockTranslation(True, True, True)

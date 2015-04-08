@@ -194,11 +194,11 @@ class Builder(BaseBuilder):
         dccSceneItem = None
 
         # Format points for Softimage
-        points = kSceneItem.getControlPoints()
+        curveData = kSceneItem.getCurveData()
 
         curvePoints = []
-        for eachSubCurve in points:
-            subCurvePoints = [[x.x, x.y, x.z] for x in eachSubCurve]
+        for eachSubCurve in curveData:
+            subCurvePoints = eachSubCurve["points"]
 
             formattedPoints = []
             for i in xrange(3):
@@ -213,19 +213,20 @@ class Builder(BaseBuilder):
             curvePoints.append(formattedPoints)
 
         # Build the curve
-        for i, eachCurveSection in enumerate(curvePoints):
+        for i, eachSubCurve in enumerate(curvePoints):
+            closedSubCurve = curveData[i]["closed"]
 
             # Create knots
-            if kSceneItem.getCurveSectionClosed(i) is True:
-                knots = list(xrange(len(eachCurveSection[0]) + 1))
+            if closedSubCurve is True:
+                knots = list(xrange(len(eachSubCurve[0]) + 1))
             else:
-                knots = list(xrange(len(eachCurveSection[0])))
+                knots = list(xrange(len(eachSubCurve[0])))
 
             if i == 0:
-                dccSceneItem = parentDCCSceneItem.AddNurbsCurve(list(eachCurveSection), knots, kSceneItem.getCurveSectionClosed(i), 1, constants.siNonUniformParameterization, constants.siSINurbs)
+                dccSceneItem = parentDCCSceneItem.AddNurbsCurve(list(eachSubCurve), knots, closedSubCurve, 1, constants.siNonUniformParameterization, constants.siSINurbs)
                 self._registerSceneItemPair(kSceneItem, dccSceneItem)
             else:
-                dccSceneItem.ActivePrimitive.Geometry.AddCurve(eachCurveSection, knots, kSceneItem.getCurveSectionClosed(i), 1, constants.siNonUniformParameterization)
+                dccSceneItem.ActivePrimitive.Geometry.AddCurve(eachSubCurve, knots, closedSubCurve, 1, constants.siNonUniformParameterization)
 
         dccSceneItem.Name = buildName
 
@@ -252,11 +253,11 @@ class Builder(BaseBuilder):
         dccSceneItem = None
 
         # Format points for Softimage
-        points = kSceneItem.getControlPoints()
+        curveData = kSceneItem.getCurveData()
 
         curvePoints = []
-        for eachSubCurve in points:
-            subCurvePoints = [[x.x, x.y, x.z] for x in eachSubCurve]
+        for eachSubCurve in curveData:
+            subCurvePoints = eachSubCurve["points"]
 
             formattedPoints = []
             for i in xrange(3):
@@ -271,19 +272,20 @@ class Builder(BaseBuilder):
             curvePoints.append(formattedPoints)
 
         # Build the curve
-        for i, eachCurveSection in enumerate(curvePoints):
+        for i, eachSubCurve in enumerate(curvePoints):
+            closedSubCurve = curveData[i]["closed"]
 
             # Create knots
-            if kSceneItem.getCurveSectionClosed(i) is True:
-                knots = list(xrange(len(eachCurveSection[0]) + 1))
+            if closedSubCurve is True:
+                knots = list(xrange(len(eachSubCurve[0]) + 1))
             else:
-                knots = list(xrange(len(eachCurveSection[0])))
+                knots = list(xrange(len(eachSubCurve[0])))
 
             if i == 0:
-                dccSceneItem = parentDCCSceneItem.AddNurbsCurve(list(eachCurveSection), knots, kSceneItem.getCurveSectionClosed(i), 1, constants.siNonUniformParameterization, constants.siSINurbs)
+                dccSceneItem = parentDCCSceneItem.AddNurbsCurve(list(eachSubCurve), knots, closedSubCurve, 1, constants.siNonUniformParameterization, constants.siSINurbs)
                 self._registerSceneItemPair(kSceneItem, dccSceneItem)
             else:
-                dccSceneItem.ActivePrimitive.Geometry.AddCurve(eachCurveSection, knots, kSceneItem.getCurveSectionClosed(i), 1, constants.siNonUniformParameterization)
+                dccSceneItem.ActivePrimitive.Geometry.AddCurve(eachSubCurve, knots, closedSubCurve, 1, constants.siNonUniformParameterization)
 
         dccSceneItem.Name = buildName
 
@@ -704,8 +706,8 @@ class Builder(BaseBuilder):
 
 
                 # Get the argument's input from the DCC
-                # Note: this used to be a try/catch statement, which seemed quite strange to me. 
-                # I've replaced with a proper test with an exception if the item is not found. 
+                # Note: this used to be a try/catch statement, which seemed quite strange to me.
+                # I've replaced with a proper test with an exception if the item is not found.
                 if arg.connectionType == 'in':
                     connectedObjects = kOperator.getInput(arg.name)
                 elif arg.connectionType in ['io', 'out']:
@@ -722,7 +724,7 @@ class Builder(BaseBuilder):
 
                         if dccSceneItem is None:
                             raise Exception("Operator '"+kOperator.getName()+"' of type '"+solverTypeName+"' arg '"+arg.name+"' dcc item not found for item:" + connectedObjects[i].getFullName());
-                            
+
                         if i==0:
                             connectionTargets = dccSceneItem.FullName + connectionSuffix
                         else:
@@ -754,6 +756,64 @@ class Builder(BaseBuilder):
 
         finally:
             pass
+
+        return True
+
+
+    # ==================
+    # Parameter Methods
+    # ==================
+    def lockParameters(self, kSceneItem):
+        """Locks flagged SRT parameters.
+
+        Arguments:
+        kSceneItem -- Object, kraken object to lock the SRT parameters on.
+
+        Return:
+        True if successful.
+
+        """
+
+        dccSceneItem = self._getDCCSceneItem(kSceneItem)
+
+        # Lock Rotation
+        if kSceneItem.testFlag("lockXRotation") is True:
+            dccSceneItem.rotx.SetLock(constants.siLockLevelManipulation)
+            dccSceneItem.rotx.SetCapabilityFlag(constants.siKeyable, False)
+
+        if kSceneItem.testFlag("lockYRotation") is True:
+            dccSceneItem.roty.SetLock(constants.siLockLevelManipulation)
+            dccSceneItem.roty.SetCapabilityFlag(constants.siKeyable, False)
+
+        if kSceneItem.testFlag("lockZRotation") is True:
+            dccSceneItem.rotz.SetLock(constants.siLockLevelManipulation)
+            dccSceneItem.rotz.SetCapabilityFlag(constants.siKeyable, False)
+
+        # Lock Scale
+        if kSceneItem.testFlag("lockXScale") is True:
+            dccSceneItem.sclx.SetLock(constants.siLockLevelManipulation)
+            dccSceneItem.sclx.SetCapabilityFlag(constants.siKeyable, False)
+
+        if kSceneItem.testFlag("lockYScale") is True:
+            dccSceneItem.scly.SetLock(constants.siLockLevelManipulation)
+            dccSceneItem.scly.SetCapabilityFlag(constants.siKeyable, False)
+
+        if kSceneItem.testFlag("lockZScale") is True:
+            dccSceneItem.sclz.SetLock(constants.siLockLevelManipulation)
+            dccSceneItem.sclz.SetCapabilityFlag(constants.siKeyable, False)
+
+        # Lock Translation
+        if kSceneItem.testFlag("lockXTranslation") is True:
+            dccSceneItem.posx.SetLock(constants.siLockLevelManipulation)
+            dccSceneItem.posx.SetCapabilityFlag(constants.siKeyable, False)
+
+        if kSceneItem.testFlag("lockYTranslation") is True:
+            dccSceneItem.posy.SetLock(constants.siLockLevelManipulation)
+            dccSceneItem.posy.SetCapabilityFlag(constants.siKeyable, False)
+
+        if kSceneItem.testFlag("lockZTranslation") is True:
+            dccSceneItem.posz.SetLock(constants.siLockLevelManipulation)
+            dccSceneItem.posz.SetCapabilityFlag(constants.siKeyable, False)
 
         return True
 
