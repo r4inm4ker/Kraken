@@ -526,7 +526,6 @@ class Builder(BaseBuilder):
         True if successful.
 
         """
-
         try:
             solverTypeName = kOperator.getSolverTypeName()
 
@@ -625,9 +624,6 @@ class Builder(BaseBuilder):
 
             # Generate the operator source code.
             opSourceCode = kOperator.generateSourceCode(arraySizes=arraySizes)
-
-            print "addKLOperator:" + str(spliceNode)
-            print "opSourceCode:" + str(opSourceCode)
 
             cmds.fabricSplice('addKLOperator', spliceNode, '{"opName": "' + kOperator.getName() + '"}', opSourceCode)
 
