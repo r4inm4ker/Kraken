@@ -4,6 +4,7 @@ Classes:
 Builder -- Component representation.
 
 """
+import json
 from kraken.core.kraken_system import ks
 from kraken.core.builders.base_builder import BaseBuilder
 from kraken.core.objects.scene_item import SceneItem
