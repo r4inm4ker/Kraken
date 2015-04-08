@@ -5,23 +5,24 @@ IntegerAttribute - Base Attribute.
 
 """
 
-from base_attribute import BaseAttribute
+from number_attribute import NumberAttribute
 from kraken.core.kraken_system import ks
 
-
-class IntegerAttribute(BaseAttribute):
+class IntegerAttribute(NumberAttribute):
     """Float Attribute. Implemented value type checking and limiting."""
 
     __kType__ = "IntegerAttribute"
 
-    def __init__(self, name, value=0, minValue=0, maxValue=100):
-        super(IntegerAttribute, self).__init__(name, value)
-        self.min = minValue
-        self.max = maxValue
+    def __init__(self, name, value=0, minValue=None, maxValue=None):
+        super(IntegerAttribute, self).__init__(name, value, minValue=minValue, maxValue=maxValue)
+
+        if maxValue is None:
+            if value == 0:
+                self.setMax(10)
+            else:
+                self.setMax(value * 3)
 
         assert type(self.value) is int, "Value is not of type 'int'."
-        assert self.value >= self.min, "Value is less than attribute minimum."
-        assert self.value <= self.max, "Value is greater than attribute maximum."
 
 
     def setValue(self, value):

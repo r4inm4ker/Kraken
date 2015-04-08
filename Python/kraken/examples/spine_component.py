@@ -84,6 +84,7 @@ class SpineComponent(BaseComponent):
         spine04Ctrl.scalePoints(Vec3(6.0, 6.0, 6.0))
         spine04Ctrl.xfo.tr = spine04Position
 
+
         # ==========
         # Deformers
         # ==========
