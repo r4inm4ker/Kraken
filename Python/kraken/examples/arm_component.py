@@ -22,7 +22,10 @@ from kraken.core.profiler import Profiler
 class ArmComponent(BaseComponent):
     """Arm Component"""
 
-    def __init__(self, name, parent=None, location='M'):
+    def __init__(self, name, parent=None, data={}):
+
+        location = data.get('location', 'M')
+
         Profiler.getInstance().push("Construct Arm Component:" + name + " location:" + location)
         super(ArmComponent, self).__init__(name, parent, location)
         # =========
@@ -32,16 +35,12 @@ class ArmComponent(BaseComponent):
         defaultAttrGroup = self.getAttributeGroupByIndex(0)
         defaultAttrGroup.addAttribute(BoolAttribute("toggleDebugging", True))
 
-
-        # Default values
-        if self.getLocation() == "R":
-            bicepPosition = Vec3(-2.27, 15.295, -0.753)
-            forearmPosition = Vec3(-5.039, 13.56, -0.859)
-            wristPosition = Vec3(-7.1886, 12.2819, 0.4906)
-        else:
-            bicepPosition = Vec3(2.27, 15.295, -0.753)
-            forearmPosition = Vec3(5.039, 13.56, -0.859)
-            wristPosition = Vec3(7.1886, 12.2819, 0.4906)
+        # values
+        bicepPosition = data['bicepPosition']
+        forearmPosition = data['forearmPosition']
+        wristPosition = data['wristPosition']
+        bicepFKCtrlSize = data['bicepFKCtrlSize']
+        forearmFKCtrlSize = data['forearmFKCtrlSize']
 
         # Calculate Bicep Xfo
         rootToWrist = wristPosition.subtract(bicepPosition).unit()
@@ -67,7 +66,7 @@ class ArmComponent(BaseComponent):
         bicepFKCtrl = Control('bicepFK', parent=bicepFKCtrlSrtBuffer, shape="cube")
         bicepFKCtrl.alignOnXAxis()
         bicepLen = bicepPosition.subtract(forearmPosition).length()
-        bicepFKCtrl.scalePoints(Vec3(bicepLen, 1.75, 1.75))
+        bicepFKCtrl.scalePoints(Vec3(bicepLen, bicepFKCtrlSize, bicepFKCtrlSize))
         bicepFKCtrl.xfo = bicepXfo
 
         # Forearm
@@ -77,7 +76,7 @@ class ArmComponent(BaseComponent):
         forearmFKCtrl = Control('forearmFK', parent=forearmFKCtrlSrtBuffer, shape="cube")
         forearmFKCtrl.alignOnXAxis()
         forearmLen = forearmPosition.subtract(wristPosition).length()
-        forearmFKCtrl.scalePoints(Vec3(forearmLen, 1.5, 1.5))
+        forearmFKCtrl.scalePoints(Vec3(forearmLen, forearmFKCtrlSize, forearmFKCtrlSize))
         forearmFKCtrl.xfo = forearmXfo
 
         # Arm IK
@@ -132,22 +131,20 @@ class ArmComponent(BaseComponent):
         # ==========
         # Deformers
         # ==========
-        container = self.getContainer()
-        if container is not None:
-            deformersLayer = container.getChildByName('deformers')
+        deformersLayer = self.getLayer('deformers')
 
-            bicepDef = Joint('bicep')
-            bicepDef.setComponent(self)
+        bicepDef = Joint('bicep')
+        bicepDef.setComponent(self)
 
-            forearmDef = Joint('forearm')
-            forearmDef.setComponent(self)
+        forearmDef = Joint('forearm')
+        forearmDef.setComponent(self)
 
-            wristDef = Joint('wrist')
-            wristDef.setComponent(self)
+        wristDef = Joint('wrist')
+        wristDef.setComponent(self)
 
-            deformersLayer.addChild(bicepDef)
-            deformersLayer.addChild(forearmDef)
-            deformersLayer.addChild(wristDef)
+        deformersLayer.addChild(bicepDef)
+        deformersLayer.addChild(forearmDef)
+        deformersLayer.addChild(wristDef)
 
 
         # =====================
@@ -282,7 +279,5 @@ class ArmComponent(BaseComponent):
     def buildRig(self, parent):
         pass
 
-
-if __name__ == "__main__":
-    armLeft = ArmComponent("myArm", location='L')
-    logHierarchy(armLeft)
+from kraken.core.kraken_system import KrakenSystem
+KrakenSystem.getInstance().registerComponent(ArmComponent)

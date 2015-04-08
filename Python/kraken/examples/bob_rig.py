@@ -11,14 +11,16 @@ from spine_component import SpineComponent
 from neck_component import NeckComponent
 from head_component import HeadComponent
 
+from kraken.core.maths import Vec3, Quat
+
 from kraken.core.profiler import Profiler
 
-class Rig(Container):
+class BobRig(Container):
     """Test Arm Component"""
 
     def __init__(self, name):
         Profiler.getInstance().push("Construct BobRig:" + name)
-        super(Rig, self).__init__(name)
+        super(BobRig, self).__init__(name)
 
         # Add rig layers
         deformersLayer = Layer('deformers', parent=self)
@@ -26,19 +28,94 @@ class Rig(Container):
         geometryLayer = Layer('geometry', parent=self)
 
         # Add Components to Layers
-        spineComponent = SpineComponent("spine", controlsLayer)
-        neckComponent = NeckComponent("neck", controlsLayer)
-        headComponent = HeadComponent("head", controlsLayer)
-        clavicleLeftComponent = ClavicleComponent("clavicle", controlsLayer, location="L")
-        clavicleRightComponent = ClavicleComponent("clavicle", controlsLayer, location="R")
-        armLeftComponent = ArmComponent("arm", controlsLayer, location="L")
-        armRightComponent = ArmComponent("arm", controlsLayer, location="R")
-        handLeftComponent = HandComponent("hand", controlsLayer, location="L")
-        handRightComponent = HandComponent("hand", controlsLayer, location="R")
-        legLeftComponent = LegComponent("leg", controlsLayer, location="L")
-        legRightComponent = LegComponent("leg", controlsLayer, location="R")
-        footLeftComponent = FootComponent("foot", controlsLayer, location="L")
-        footRightComponent = FootComponent("foot", controlsLayer, location="R")
+        spineComponent = SpineComponent("spine", controlsLayer, data={
+            'cogPosition': Vec3(0.0, 11.1351, -0.1382),
+            'spine01Position': Vec3(0.0, 11.1351, -0.1382),
+            'spine02Position': Vec3(0.0, 11.8013, -0.1995),
+            'spine03Position': Vec3(0.0, 12.4496, -0.3649),
+            'spine04Position': Vec3(0.0, 13.1051, -0.4821),
+            'numDeformers': 4
+        })
+        neckComponent = NeckComponent("neck", controlsLayer, data={
+            'neckPosition': Vec3(0.0, 16.5572, -0.6915),
+            'neckUpVOffset': Vec3(0.0, 0.0, -1.0),
+            'neckEndPosition': Vec3(0.0, 17.4756, -0.421)
+        })
+        headComponent = HeadComponent("head", controlsLayer, data={
+            "headPosition": Vec3(0.0, 17.4756, -0.421),
+            "headEndPosition": Vec3(0.0, 19.5, -0.421),
+            "eyeLeftPosition": Vec3(0.3497, 18.0878, 0.6088),
+            "eyeRightPosition": Vec3(-0.3497, 18.0878, 0.6088),
+            "jawPosition": Vec3(0.0, 17.613, -0.2731)
+        })
+        clavicleLeftComponent = ClavicleComponent("clavicle", controlsLayer, data={
+            "name": "L_ClavicleComponent",
+            "location": "L",
+            "claviclePosition": Vec3(0.1322, 15.403, -0.5723),
+            "clavicleUpVOffset": Vec3(0.0, 1.0, 0.0),
+            "clavicleEndPosition": Vec3(2.27, 15.295, -0.753)
+        })
+        clavicleRightComponent = ClavicleComponent("clavicle", controlsLayer, data={
+            "name":"R_ClavicleComponent",
+            "location": "R",
+            "claviclePosition": Vec3(-0.1322, 15.403, -0.5723),
+            "clavicleUpVOffset": Vec3(0.0, 1.0, 0.0),
+            "clavicleEndPosition": Vec3(-2.27, 15.295, -0.753)
+        })
+        armLeftComponent = ArmComponent("arm", controlsLayer, data={ 
+            "location":"L",
+            "bicepPosition": Vec3(2.27, 15.295, -0.753),
+            "forearmPosition": Vec3(5.039, 13.56, -0.859),
+            "wristPosition": Vec3(7.1886, 12.2819, 0.4906),
+            "bicepFKCtrlSize": 1.75,
+            "forearmFKCtrlSize": 1.5
+            } )
+        armRightComponent = ArmComponent("arm", controlsLayer, data={ 
+            "location":"R",
+            "bicepPosition": Vec3(-2.27, 15.295, -0.753),
+            "forearmPosition": Vec3(-5.039, 13.56, -0.859),
+            "wristPosition": Vec3(-7.1886, 12.2819, 0.4906),
+            "bicepFKCtrlSize": 1.75,
+            "forearmFKCtrlSize": 1.5
+            } )
+        handLeftComponent = HandComponent("hand", controlsLayer, data={
+            "name":"L_HandComponent",
+            "location": "L",
+            "handQuat": Quat(Vec3(-0.0865, -0.2301, -0.2623), 0.9331),
+            "handPos": Vec3(7.1886, 12.2819, 0.4906)
+        } )
+        handRightComponent = HandComponent("hand", controlsLayer, data={
+            "name":"R_HandComponent",
+            "location": "R",
+            "handQuat": Quat(Vec3(-0.2301, -0.0865, -0.9331), 0.2623),
+            "handPos": Vec3(-7.1886, 12.2819, 0.4906)
+        } )
+        legLeftComponent = LegComponent("leg", controlsLayer, data={
+            "name":"L_LegComponent",
+            "location": "L",
+            "femurPosition": Vec3(0.9811, 9.769, -0.4572),
+            "kneePosition": Vec3(1.4488, 5.4418, -0.5348),
+            "anklePosition": Vec3(1.841, 1.1516, -1.237)
+        } )
+        legRightComponent = LegComponent("leg", controlsLayer, data={
+            "name":"R_LegComponent",
+            "location": "R",
+            "femurPosition": Vec3(-0.9811, 9.769, -0.4572),
+            "kneePosition": Vec3(-1.4488, 5.4418, -0.5348),
+            "anklePosition": Vec3(-1.841, 1.1516, -1.237)
+        } )
+        footLeftComponent = FootComponent("foot", controlsLayer, data={
+            "name":"L_FootComponent",
+            "location": "L",
+            "footQuat": Quat(Vec3(0.6377, -0.5695, 0.3053), 0.4190),
+            "footPos": Vec3(1.841, 1.1516, -1.237)
+        } )
+        footRightComponent = FootComponent("foot", controlsLayer, data={
+            "name":"R_FootComponent",
+            "location": "R",
+            "footQuat": Quat(Vec3(0.5695, -0.6377, 0.4190), 0.3053),
+            "footPos": Vec3(-1.841, 1.1516, -1.237)
+        } )
 
         # Neck to Spine
         spineEndOutput = spineComponent.getOutputByName('spineEnd')
@@ -84,24 +161,23 @@ class Rig(Container):
         spineBaseOutput = spineComponent.getOutputByName('spineBase')
         legLeftPelvisInput = legLeftComponent.getInputByName('pelvisInput')
         legLeftPelvisInput.setSource(spineBaseOutput.getTarget())
-        clavicleRightEndOutput = spineComponent.getOutputByName('spineBase')
         legRightPelvisInput = legRightComponent.getInputByName('pelvisInput')
-        legRightPelvisInput.setSource(clavicleRightEndOutput.getTarget())
+        legRightPelvisInput.setSource(spineBaseOutput.getTarget())
 
         # Foot To Arm Connections
         legLeftEndOutput = legLeftComponent.getOutputByName('legEndXfo')
-        footLeftArmEndInput = footLeftComponent.getInputByName('legEndXfo')
-        footLeftArmEndInput.setSource(legLeftEndOutput.getTarget())
+        footLeftEndInput = footLeftComponent.getInputByName('legEndXfo')
+        footLeftEndInput.setSource(legLeftEndOutput.getTarget())
         legLeftEndPosOutput = legLeftComponent.getOutputByName('legEndPos')
-        footLeftArmEndPosInput = footLeftComponent.getInputByName('legEndPos')
-        footLeftArmEndPosInput.setSource(legLeftEndPosOutput.getTarget())
+        footLeftEndPosInput = footLeftComponent.getInputByName('legEndPos')
+        footLeftEndPosInput.setSource(legLeftEndPosOutput.getTarget())
 
         legRightEndOutput = legRightComponent.getOutputByName('legEndXfo')
-        footRightArmEndInput = footRightComponent.getInputByName('legEndXfo')
-        footRightArmEndInput.setSource(legRightEndOutput.getTarget())
+        footRightEndInput = footRightComponent.getInputByName('legEndXfo')
+        footRightEndInput.setSource(legRightEndOutput.getTarget())
         legRightEndPosOutput = legRightComponent.getOutputByName('legEndPos')
-        footRightArmEndPosInput = footRightComponent.getInputByName('legEndPos')
-        footRightArmEndPosInput.setSource(legRightEndPosOutput.getTarget())
+        footRightEndPosInput = footRightComponent.getInputByName('legEndPos')
+        footRightEndPosInput.setSource(legRightEndPosOutput.getTarget())
 
         # Arm Attributes to Clavicle
         # clavicleLeftFollowBodyOutput = clavicleLeftComponent.getOutputByName('followBody')
@@ -112,8 +188,3 @@ class Rig(Container):
         # armRightFollowBodyInput.setSource(clavicleRightFollowBodyOutput.getTarget())
 
         Profiler.getInstance().pop()
-
-
-if __name__ == "__main__":
-    bobRig = Rig("char_bob")
-    logHierarchy(bobRig)

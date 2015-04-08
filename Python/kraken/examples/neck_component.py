@@ -19,7 +19,10 @@ from kraken.core.profiler import Profiler
 class NeckComponent(BaseComponent):
     """Neck Component"""
 
-    def __init__(self, name, parent=None, location='M'):
+    def __init__(self, name, parent=None, data={}):
+
+        location = data.get('location', 'M')
+
         Profiler.getInstance().push("Construct Neck Component:" + name + " location:" + location)
         super(NeckComponent, self).__init__(name, parent, location)
 
@@ -27,10 +30,10 @@ class NeckComponent(BaseComponent):
         defaultAttrGroup = self.getAttributeGroupByIndex(0)
         defaultAttrGroup.addAttribute(BoolAttribute("toggleDebugging", True))
 
-        # Default values
-        neckPosition = Vec3(0.0, 16.5572, -0.6915)
-        neckUpV = neckPosition.add(Vec3(0.0, 0.0, -1.0)).unit()
-        neckEndPosition = Vec3(0.0, 17.4756, -0.421)
+        # Input data values
+        neckPosition = data['neckPosition']
+        neckUpV = neckPosition.add(data['neckUpVOffset']).unit()
+        neckEndPosition = data['neckEndPosition']
 
         # Calculate Clavicle Xfo
         rootToEnd = neckEndPosition.subtract(neckPosition).unit()
@@ -59,10 +62,8 @@ class NeckComponent(BaseComponent):
         neckDef = Joint('neck')
         neckDef.setComponent(self)
 
-        container = self.getContainer()
-        if container is not None:
-            deformersLayer = container.getChildByName('deformers')
-            deformersLayer.addChild(neckDef)
+        deformersLayer = self.getLayer('deformers')
+        deformersLayer.addChild(neckDef)
 
         # =====================
         # Create Component I/O
@@ -130,7 +131,7 @@ class NeckComponent(BaseComponent):
     def buildRig(self, parent):
         pass
 
+from kraken.core.kraken_system import KrakenSystem
+KrakenSystem.getInstance().registerComponent(NeckComponent)
 
-if __name__ == "__main__":
-    neck = NeckComponent("myNeck", location='M')
-    logHierarchy(neck)
+

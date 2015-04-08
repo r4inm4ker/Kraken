@@ -24,7 +24,10 @@ from kraken.core.profiler import Profiler
 class LegComponent(BaseComponent):
     """Leg Component"""
 
-    def __init__(self, name, parent=None, location='M'):
+    def __init__(self, name, parent=None, data={}):
+
+        location = data.get('location', 'M')
+        
         Profiler.getInstance().push("Construct Leg Component:" + name + " location:" + location)
         super(LegComponent, self).__init__(name, parent, location)
 
@@ -32,15 +35,10 @@ class LegComponent(BaseComponent):
         defaultAttrGroup = self.getAttributeGroupByIndex(0)
         defaultAttrGroup.addAttribute(BoolAttribute("toggleDebugging", True))
 
-        # Default values
-        if self.getLocation() == "R":
-            femurPosition = Vec3(-0.9811, 9.769, -0.4572)
-            kneePosition = Vec3(-1.4488, 5.4418, -0.5348)
-            anklePosition = Vec3(-1.841, 1.1516, -1.237)
-        else:
-            femurPosition = Vec3(0.9811, 9.769, -0.4572)
-            kneePosition = Vec3(1.4488, 5.4418, -0.5348)
-            anklePosition = Vec3(1.841, 1.1516, -1.237)
+        # Input values
+        femurPosition = data['femurPosition']
+        kneePosition = data['kneePosition']
+        anklePosition = data['anklePosition']
 
         # Calculate Femur Xfo
         rootToAnkle = anklePosition.subtract(femurPosition).unit()
@@ -146,12 +144,10 @@ class LegComponent(BaseComponent):
         ankleDef = Joint('ankle')
         ankleDef.setComponent(self)
 
-        container = self.getContainer()
-        if container is not None:
-            deformersLayer = container.getChildByName('deformers')
-            deformersLayer.addChild(femurDef)
-            deformersLayer.addChild(shinDef)
-            deformersLayer.addChild(ankleDef)
+        deformersLayer = self.getLayer('deformers')
+        deformersLayer.addChild(femurDef)
+        deformersLayer.addChild(shinDef)
+        deformersLayer.addChild(ankleDef)
 
 
         # =====================
@@ -286,7 +282,6 @@ class LegComponent(BaseComponent):
     def buildRig(self, parent):
         pass
 
+from kraken.core.kraken_system import KrakenSystem
+KrakenSystem.getInstance().registerComponent(LegComponent)
 
-if __name__ == "__main__":
-    legLeft = LegComponent("myLeg", location='L')
-    logHierarchy(legLeft)

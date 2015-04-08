@@ -21,7 +21,10 @@ from kraken.core.profiler import Profiler
 class FootComponent(BaseComponent):
     """Foot Component"""
 
-    def __init__(self, name, parent=None, location='M'):
+    def __init__(self, name, parent=None, data={}):
+
+        location = data.get('location', 'M')
+
         Profiler.getInstance().push("Construct Foot Component:" + name + " location:" + location)
         super(FootComponent, self).__init__(name, parent, location)
 
@@ -32,30 +35,11 @@ class FootComponent(BaseComponent):
         defaultAttrGroup = self.getAttributeGroupByIndex(0)
         defaultAttrGroup.addAttribute(BoolAttribute("toggleDebugging", True))
 
-        # Default values
-        if location == 'R':
-            footPosition = Vec3(-7.1886, 12.2819, 0.4906)
-            footUpV = Vec3(-1.7454, 0.1922, -1.7397)
-            footEndPosition = Vec3(-2.0939, 0.4288, 0.0944)
-        else:
-            footPosition = Vec3(7.1886, 12.2819, 0.4906)
-            footUpV = Vec3(1.7454, 0.1922, -1.7397)
-            footEndPosition = Vec3(2.0939, 0.4288, 0.0944)
+        # Input values
+        footQuat = data['footQuat']
+        footPos = data['footPos']
 
-        # Calculate Clavicle Xfo
-        rootToEnd = footEndPosition.subtract(footPosition).unit()
-        rootToUpV = footUpV.subtract(footPosition).unit()
-        bone1ZAxis = rootToEnd.cross(rootToUpV).unit()
-        bone1Normal = rootToEnd.cross(bone1ZAxis).unit()
         footXfo = Xfo()
-
-        if location == "R":
-            footQuat = Quat(Vec3(0.5695, -0.6377, 0.4190), 0.3053)
-            footPos = Vec3(-1.841, 1.1516, -1.237)
-        else:
-            footQuat = Quat(Vec3(0.6377, -0.5695, 0.3053), 0.4190)
-            footPos = Vec3(1.841, 1.1516, -1.237)
-
         footXfo.ori = footQuat
         footXfo.tr = footPos
 
@@ -71,7 +55,6 @@ class FootComponent(BaseComponent):
         # Rig Ref objects
         footRefSrt = Locator('footRef', parent=self)
         footRefSrt.xfo = footCtrlSrtBuffer.xfo
-
 
         # Add Component Params to IK control
         footDebugInputAttr = BoolAttribute('debug', True)
@@ -90,10 +73,8 @@ class FootComponent(BaseComponent):
         footDef = Joint('foot')
         footDef.setComponent(self)
 
-        container = self.getContainer()
-        if container is not None:
-            deformersLayer = container.getChildByName('deformers')
-            deformersLayer.addChild(footDef)
+        deformersLayer = self.getLayer('deformers')
+        deformersLayer.addChild(footDef)
 
 
         # =====================
@@ -190,7 +171,5 @@ class FootComponent(BaseComponent):
     def buildRig(self, parent):
         pass
 
-
-if __name__ == "__main__":
-    handLeft = FootComponent("myFoot", location='L')
-    logHierarchy(handLeft)
+from kraken.core.kraken_system import KrakenSystem
+KrakenSystem.getInstance().registerComponent(FootComponent)

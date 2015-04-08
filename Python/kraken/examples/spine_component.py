@@ -19,7 +19,10 @@ from kraken.core.profiler import Profiler
 class SpineComponent(BaseComponent):
     """Spine Component"""
 
-    def __init__(self, name, parent=None, location='M'):
+    def __init__(self, name, parent=None, data={}):
+
+        location = data.get('location', 'M')
+        
         Profiler.getInstance().push("Construct Spine Component:" + name + " location:" + location)
         super(SpineComponent, self).__init__(name, parent, location)
 
@@ -31,11 +34,12 @@ class SpineComponent(BaseComponent):
         defaultAttrGroup.addAttribute(BoolAttribute("toggleDebugging", True))
 
         # Default values
-        cogPosition = Vec3(0.0, 11.1351, -0.1382)
-        spine01Position = Vec3(0.0, 11.1351, -0.1382)
-        spine02Position = Vec3(0.0, 11.8013, -0.1995)
-        spine03Position = Vec3(0.0, 12.4496, -0.3649)
-        spine04Position = Vec3(0.0, 13.1051, -0.4821)
+        cogPosition = data['cogPosition']
+        spine01Position = data['spine01Position']
+        spine02Position = data['spine02Position']
+        spine03Position = data['spine03Position']
+        spine04Position = data['spine04Position']
+        numDeformers = data['numDeformers']
 
         # COG
         cogCtrlSrtBuffer = SrtBuffer('cog', parent=self)
@@ -61,7 +65,7 @@ class SpineComponent(BaseComponent):
         spine02Ctrl = Control('spine02', parent=spine02CtrlSrtBuffer, shape="circle")
         spine02Ctrl.scalePoints(Vec3(4.5, 4.5, 4.5))
         spine02Ctrl.xfo.tr = spine02Position
-        spine02Ctrl.setColor("blue")
+
 
         # Spine03
         spine03CtrlSrtBuffer = SrtBuffer('spine03', parent=spine02Ctrl)
@@ -79,35 +83,6 @@ class SpineComponent(BaseComponent):
         spine04Ctrl = Control('spine04', parent=spine04CtrlSrtBuffer, shape="circle")
         spine04Ctrl.scalePoints(Vec3(6.0, 6.0, 6.0))
         spine04Ctrl.xfo.tr = spine04Position
-
-        # ==========
-        # Deformers
-        # ==========
-
-        spine01Def = Joint('spine01')
-        spine01Def.setComponent(self)
-
-        spine02Def = Joint('spine02')
-        spine02Def.setComponent(self)
-
-        spine03Def = Joint('spine03')
-        spine03Def.setComponent(self)
-
-        spine04Def = Joint('spine04')
-        spine04Def.setComponent(self)
-
-        container = self.getContainer()
-        if container is not None:
-            deformersLayer = container.getChildByName('deformers')
-        else:
-            # When building the spine in a testing scene, generate a 'deformers' layer.
-            deformersLayer = Layer('deformers', parent=self)
-
-        deformersLayer.addChild(spine01Def)
-        deformersLayer.addChild(spine02Def)
-        deformersLayer.addChild(spine03Def)
-        deformersLayer.addChild(spine04Def)
-
 
         # =====================
         # Create Component I/O
@@ -133,6 +108,22 @@ class SpineComponent(BaseComponent):
 
         length = spine01Position.distanceTo(spine02Position) + spine02Position.distanceTo(spine03Position) + spine03Position.distanceTo(spine04Position)
         lengthInputAttr = FloatAttribute('length', value=length, maxValue=length * 3.0)
+
+        # ==========
+        # Deformers
+        # ==========
+
+        deformersLayer = self.getLayer('deformers')
+        deformerJoints = []
+        for i in range(numDeformers):
+            if i < 10:
+                name = 'spine0'+str(i+1)
+            else:
+                name = 'spine'+str(i+1)
+            spineDef = Joint(name)
+            spineDef.setComponent(self)
+            deformersLayer.addChild(spineDef)
+            deformerJoints.append(spineDef)
 
 
         # ==============
@@ -204,10 +195,8 @@ class SpineComponent(BaseComponent):
         outputsToDeformersSpliceOp.setInput("constrainers", spine04Output)
 
         # Add Xfo Outputs
-        outputsToDeformersSpliceOp.setOutput("constraineess", spine01Def)
-        outputsToDeformersSpliceOp.setOutput("constraineess", spine02Def)
-        outputsToDeformersSpliceOp.setOutput("constraineess", spine03Def)
-        outputsToDeformersSpliceOp.setOutput("constraineess", spine04Def)
+        for joint in deformerJoints:
+            outputsToDeformersSpliceOp.setOutput("constrainees", joint)
 
         Profiler.getInstance().pop()
 
@@ -215,7 +204,5 @@ class SpineComponent(BaseComponent):
     def buildRig(self, parent):
         pass
 
-
-if __name__ == "__main__":
-    spine = SpineComponent("mySpine")
-    logHierarchy(spine)
+from kraken.core.kraken_system import KrakenSystem
+KrakenSystem.getInstance().registerComponent(SpineComponent)

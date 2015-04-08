@@ -25,6 +25,8 @@ class KrakenSystem(object):
         self.registeredTypes = None
         self.loadedExtensions = []
 
+        self.registeredComponents = {}
+
     def loadCoreClient(self):
         """Loads the Fabric Engine Core Client
 
@@ -182,6 +184,38 @@ class KrakenSystem(object):
             return json.loads(rtval.type("Type").jsonDesc("String"))['name']
         else:
             return "None"
+
+    def registerComponent(self, componentClass):
+        """Registers a component Python class with the KrakenSystem so ti can be built by the rig builder.
+
+        Arguments:
+        componentClass -- the Python class of the component
+
+        Return:
+        None
+
+        """
+        if componentClass.__name__ in self.registeredComponents:
+            raise Exception("Component with that class name already registered:" + componentClass.__name__ )
+
+        self.registeredComponents[componentClass.__name__] = componentClass
+
+    def getComponentClass(self, className):
+        """Returns the registered Python component class with the given name
+
+        Arguments:
+        className -- The name of the Python component class
+
+        Return:
+        The Python component class
+
+        """
+        if className not in self.registeredComponents:
+            raise Exception("Component with that class not registered:" + className )
+
+        return self.registeredComponents[className]
+
+
 
     @classmethod
     def getInstance(cls):

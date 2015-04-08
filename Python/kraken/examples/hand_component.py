@@ -22,7 +22,10 @@ from kraken.core.profiler import Profiler
 class HandComponent(BaseComponent):
     """Hand Component"""
 
-    def __init__(self, name, parent=None, location='M'):
+    def __init__(self, name, parent=None, data={}):
+
+        location = data.get('location', 'M')
+        
         Profiler.getInstance().push("Construct Hand Component:" + name + " location:" + location)
         super(HandComponent, self).__init__(name, parent, location)
 
@@ -34,29 +37,11 @@ class HandComponent(BaseComponent):
         defaultAttrGroup.addAttribute(BoolAttribute("toggleDebugging", True))
 
         # Default values
-        if location == 'R':
-            handPosition = Vec3(-7.1886, 12.2819, 0.4906)
-            handUpV = Vec3(-7.7463, 13.1746, 0.4477)
-            handEndPosition = Vec3(-7.945, 11.8321, 0.9655)
-        else:
-            handPosition = Vec3(7.1886, 12.2819, 0.4906)
-            handUpV = Vec3(7.7463, 13.1746, 0.4477)
-            handEndPosition = Vec3(7.945, 11.8321, 0.9655)
+        handQuat = data['handQuat']
+        handPos = data['handPos']
 
         # Calculate Clavicle Xfo
-        rootToEnd = handEndPosition.subtract(handPosition).unit()
-        rootToUpV = handUpV.subtract(handPosition).unit()
-        bone1ZAxis = rootToEnd.cross(rootToUpV).unit()
-        bone1Normal = rootToEnd.cross(bone1ZAxis).unit()
         handXfo = Xfo()
-
-        if location == "R":
-            handQuat = Quat(Vec3(-0.2301, -0.0865, -0.9331), 0.2623)
-            handPos = Vec3(-7.1886, 12.2819, 0.4906)
-        else:
-            handQuat = Quat(Vec3(-0.0865, -0.2301, -0.2623), 0.9331)
-            handPos = Vec3(7.1886, 12.2819, 0.4906)
-
         handXfo.ori = handQuat
         handXfo.tr = handPos
 
@@ -90,10 +75,8 @@ class HandComponent(BaseComponent):
         handDef = Joint('hand')
         handDef.setComponent(self)
 
-        container = self.getContainer()
-        if container is not None:
-            deformersLayer = container.getChildByName('deformers')
-            deformersLayer.addChild(handDef)
+        deformersLayer = self.getLayer('deformers')
+        deformersLayer.addChild(handDef)
 
 
         # =====================
@@ -191,6 +174,6 @@ class HandComponent(BaseComponent):
         pass
 
 
-if __name__ == "__main__":
-    handLeft = HandComponent("myHand", location='L')
-    logHierarchy(handLeft)
+from kraken.core.kraken_system import KrakenSystem
+KrakenSystem.getInstance().registerComponent(HandComponent)
+

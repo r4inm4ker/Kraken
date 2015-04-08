@@ -1,0 +1,12 @@
+Warning: Generating 'deformers' layer for component:neck
+Failed to find DCC builder. Falling back to Python builder.
+neck
+neck.inputs
+neck.inputs.neckBase
+neck.outputs
+neck.outputs.neckEnd
+neck.outputs.neck
+neck.neck
+neck.neck.neck
+neck.deformers
+neck.deformers.neck

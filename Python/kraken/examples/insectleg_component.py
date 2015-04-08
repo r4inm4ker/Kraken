@@ -25,7 +25,10 @@ from kraken.core.profiler import Profiler
 class InsectLegComponent(BaseComponent):
     """Leg Component"""
 
-    def __init__(self, name, parent=None, location='M'):
+    def __init__(self, name, parent=None, data={}):
+
+        location = data.get('location', 'M')
+        
         Profiler.getInstance().push("Construct InsectLeg Component:" + name + " location:" + location)
         super(InsectLegComponent, self).__init__(name, parent, location)
 
@@ -133,13 +136,7 @@ class InsectLegComponent(BaseComponent):
         # Deformers
         # ==========
 
-        container = self.getContainer()
-        if container is not None:
-            deformersLayer = container.getChildByName('deformers')
-        else:
-            # When building the component in a testing scene, generate a 'deformers' layer.
-            deformersLayer = Layer('deformers', parent=self)
-
+        deformersLayer = self.getLayer('deformers')
         boneDefs = []
         for i in range(len(boneXfos)):
             boneDef = Joint('bone'+str(i))
@@ -261,15 +258,13 @@ class InsectLegComponent(BaseComponent):
 
         # Add Xfo Outputs
         for i in range(len(boneOutputs)):
-            outputsToDeformersSpliceOp.setOutput("constraineess", boneDefs[i])
+            outputsToDeformersSpliceOp.setOutput("constrainees", boneDefs[i])
 
         Profiler.getInstance().pop()
 
     def buildRig(self, parent):
         pass
 
-
-if __name__ == "__main__":
-    legLeft = InsectLegComponent("myLeg", location='L')
-    logHierarchy(legLeft)
+from kraken.core.kraken_system import KrakenSystem
+KrakenSystem.getInstance().registerComponent(InsectLegComponent)
 

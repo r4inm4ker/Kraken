@@ -18,7 +18,10 @@ from kraken.core.profiler import Profiler
 class ClavicleComponent(BaseComponent):
     """Clavicle Component"""
 
-    def __init__(self, name, parent=None, location='M'):
+    def __init__(self, name, parent=None, data={}):
+        
+        location = data.get('location', 'M')
+
         Profiler.getInstance().push("Construct Clavicle Component:" + name + " location:" + location)
         super(ClavicleComponent, self).__init__(name, parent, location)
 
@@ -29,15 +32,10 @@ class ClavicleComponent(BaseComponent):
         defaultAttrGroup = self.getAttributeGroupByIndex(0)
         defaultAttrGroup.addAttribute(BoolAttribute("toggleDebugging", True))
 
-        # Default values
-        if location == 'R':
-            claviclePosition = Vec3(-0.1322, 15.403, -0.5723)
-            clavicleUpV = claviclePosition.add(Vec3(0.0, 1.0, 0.0)).unit()
-            clavicleEndPosition = Vec3(-2.27, 15.295, -0.753)
-        else:
-            claviclePosition = Vec3(0.1322, 15.403, -0.5723)
-            clavicleUpV = claviclePosition.add(Vec3(0.0, 1.0, 0.0)).unit()
-            clavicleEndPosition = Vec3(2.27, 15.295, -0.753)
+        # Input values
+        claviclePosition = data['claviclePosition']
+        clavicleUpV = claviclePosition.add(data['clavicleUpVOffset']).unit()
+        clavicleEndPosition = data['clavicleEndPosition']
 
         # Calculate Clavicle Xfo
         rootToEnd = clavicleEndPosition.subtract(claviclePosition).unit()
@@ -71,10 +69,8 @@ class ClavicleComponent(BaseComponent):
         clavicleDef = Joint('clavicle')
         clavicleDef.setComponent(self)
 
-        container = self.getContainer()
-        if container is not None:
-            deformersLayer = container.getChildByName('deformers')
-            deformersLayer.addChild(clavicleDef)
+        deformersLayer = self.getLayer('deformers')
+        deformersLayer.addChild(clavicleDef)
 
         # =====================
         # Create Component I/O
@@ -150,6 +146,6 @@ class ClavicleComponent(BaseComponent):
         pass
 
 
-if __name__ == "__main__":
-    clavicleLeft = ClavicleComponent("myClavicle", location='L')
-    logHierarchy(clavicleLeft)
+from kraken.core.kraken_system import KrakenSystem
+KrakenSystem.getInstance().registerComponent(ClavicleComponent)
+

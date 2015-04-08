@@ -4,6 +4,7 @@ Classes:
 Builder -- Component representation.
 
 """
+from win32com.client.dynamic import Dispatch
 
 from kraken.core.kraken_system import ks
 from kraken.core.builders.base_builder import BaseBuilder
@@ -13,6 +14,7 @@ from kraken.plugins.si_plugin.utils import *
 
 import FabricEngine.Core as core
 
+si = Dispatch("XSI.Application").Application
 
 class Builder(BaseBuilder):
     """Builder object for building Kraken objects in Softimage."""
@@ -471,14 +473,76 @@ class Builder(BaseBuilder):
 
         """
 
-        constraineeDCCSceneItem = self._getDCCSceneItem(kConstraint.getConstrainee())
 
-        constrainingObjs = getCollection()
-        for eachConstrainer in kConstraint.getConstrainers():
-            constrainingObjs.AddItems(self._getDCCSceneItem(eachConstrainer))
+        useXSIConstraint = True
+        if useXSIConstraint:
 
-        dccSceneItem = constraineeDCCSceneItem.Kinematics.AddConstraint("Pose", constrainingObjs, kConstraint.getMaintainOffset())
-        self._registerSceneItemPair(kConstraint, dccSceneItem)
+            constraineeDCCSceneItem = self._getDCCSceneItem(kConstraint.getConstrainee())
+            if kConstraint.getMaintainOffset():
+                constraineeTransform = constraineeDCCSceneItem.Kinematics.Global.Transform
+            
+            constrainingObjs = getCollection()
+            for eachConstrainer in kConstraint.getConstrainers():
+                constrainer = self._getDCCSceneItem(eachConstrainer)
+
+                if kConstraint.getMaintainOffset():
+                    constrainerTransform = constrainer.Kinematics.Global.Transform
+
+                # si.LogMessage( "%s,%s,%s" % (constrainer.posx.Value, constrainer.posy.Value, constrainer.posz.Value) )
+
+                constrainingObjs.AddItems(constrainer)
+
+            dccSceneItem = constraineeDCCSceneItem.Kinematics.AddConstraint("Pose", constrainingObjs, kConstraint.getMaintainOffset())
+            self._registerSceneItemPair(kConstraint, dccSceneItem)
+
+        else:
+
+            # Load the Fabric Engine client and construct the RTVal for the Solver
+            ks.loadCoreClient()
+            ks.loadExtension('Kraken')
+            solverTypeName = 'PoseConstraintSolver'
+            target = constraineeDCCSceneItem.FullName + ".kine.global"
+            spliceOpPath = target + ".SpliceOp"
+
+            si.fabricSplice('newSplice', "{\"targets\":\"" + target + "\", \"portName\":\"constrainee\", \"portMode\":\"out\"}", "", "")
+
+            # Add the private/non-mayaAttr port that stores the Solver object
+            si.fabricSplice("addInternalPort", spliceOpPath, "{\"portName\":\"solver\", \"dataType\":\"" + solverTypeName + "\", \"extension\":\"Kraken\", \"portMode\":\"io\"}", "")
+            si.fabricSplice("addInternalPort", spliceOpPath, "{\"portName\":\"debug\", \"dataType\":\"Boolean\", \"extension\":\"Kraken\", \"portMode\":\"io\"}", "")
+            si.fabricSplice("addInternalPort", spliceOpPath, "{\"portName\":\"rightSide\", \"dataType\":\"Boolean\", \"extension\":\"Kraken\", \"portMode\":\"io\"}", "")
+
+            connectionTargets = ""
+            connectionSuffix = ".kine.global"
+            for eachConstrainer in kConstraint.getConstrainers():
+
+                if eachConstrainer is None:
+                    raise Exception("Constraint '"+kConstraint.getFullName()+"' has invalid connection.");
+
+                dccSceneItem = self._getDCCSceneItem(eachConstrainer)
+
+                if dccSceneItem is None:
+                    raise Exception("Constraint '"+kConstraint.getFullName()+"' of type '"+solverTypeName+"' is connected to object without corresponding SceneItem:" + eachConstrainer.getFullName());
+                    
+                connectionTargets = dccSceneItem.FullName + connectionSuffix
+                break
+
+            si.fabricSplice("addInputPort", spliceOpPath, "{\"portName\":\"constrainer\", \"dataType\":\"Mat44\", \"extension\":\"\", \"targets\":\"" + connectionTargets + "\"}", "")
+
+            # Generate the operator source code.
+            opSourceCode = ""
+            opSourceCode += "require Kraken;\n"
+            opSourceCode += "operator poseConstraint(\n"
+            opSourceCode += "    io " + solverTypeName + " solver,\n"
+            opSourceCode += "    in Boolean debug,\n"
+            opSourceCode += "    in Boolean rightSide,\n"
+            opSourceCode += "    io Mat44 constrainee,\n"
+            opSourceCode += "    in Mat44 constrainer\n"
+            opSourceCode += "    )\n"
+            opSourceCode += "{\n"
+            opSourceCode += "    solver.solve(debug, rightSide, constrainer, constrainee);"
+            opSourceCode += "}\n"
+
+            si.fabricSplice('addKLOperator', spliceOpPath, '{"opName": "poseConstraint"}', opSourceCode)
 
         return dccSceneItem
 
@@ -580,14 +644,31 @@ class Builder(BaseBuilder):
 
                 if arg.connectionType == 'io' or arg.connectionType == 'out':
                     if arg.dataType == 'Mat44':
-                        operatorOwner = self._getDCCSceneItem(kOperator.getOutput(arg.name))
+
+                        target = kOperator.getOutput(arg.name)
+                        if target is None:
+                            raise Exception("Solver '" + kOperator.getFullName() + "' output :'" + arg.name + "' not connected.")
+
+                        operatorOwner = self._getDCCSceneItem(target)
+
+                        if operatorOwner is None:
+                            raise Exception("Solver '" + kOperator.getFullName() + "' output :'" + arg.name + "' dcc item not found for item:" + target.getFullName())
+
                         targets = operatorOwner.FullName + ".kine.global"
                         operatorOwnerArg = arg.name
                         break
                     elif arg.dataType == 'Mat44[]':
                         targets = ""
                         for target in kOperator.getOutput(arg.name):
+
+                            if target is None:
+                                raise Exception("Solver '" + kOperator.getFullName() + "' output :'" + arg.name + "' not connected.")
+
                             dccSceneItem = self._getDCCSceneItem(target)
+
+                            if dccSceneItem is None:
+                                raise Exception("Solver '" + kOperator.getFullName() + "' output :'" + arg.name + "' dcc item not found for item:" + target.getFullName())
+
                             if targets == "":
                                 operatorOwner = dccSceneItem
                                 targets = dccSceneItem.FullName + ".kine.global"
@@ -597,7 +678,7 @@ class Builder(BaseBuilder):
                         break
 
             if operatorOwner is None:
-                raise Exception("Solver '" + kOperator.getName() + "' has no outputs!")
+                raise Exception("Solver '" + kOperator.getName() + "' has no Mat44 outputs!")
 
             spliceOpPath = operatorOwner.FullName + ".kine.global.SpliceOp"
 
@@ -635,14 +716,14 @@ class Builder(BaseBuilder):
                 if arg.dataType.endswith('[]'):
 
                     if len(connectedObjects) == 0:
-                        raise Exception("Operator '"+kOperator.getName()+"' or type '"+solverTypeName+"' arg '"+arg.name+"' not connected.");
+                        raise Exception("Operator '"+kOperator.getName()+"' of type '"+solverTypeName+"' arg '"+arg.name+"' not connected.");
 
                     connectionTargets = ""
                     for i in range(len(connectedObjects)):
                         dccSceneItem = self._getDCCSceneItem(connectedObjects[i])
 
                         if dccSceneItem is None:
-                            raise Exception("Operator '"+kOperator.getName()+"' or type '"+solverTypeName+"' arg '"+arg.name+"' connection is invalid");
+                            raise Exception("Operator '"+kOperator.getName()+"' of type '"+solverTypeName+"' arg '"+arg.name+"' dcc item not found for item:" + connectedObjects[i].getFullName());
 
                         if i==0:
                             connectionTargets = dccSceneItem.FullName + connectionSuffix
@@ -650,12 +731,12 @@ class Builder(BaseBuilder):
                             connectionTargets = connectionTargets + "," + dccSceneItem.FullName + connectionSuffix
                 else:
                     if connectedObjects is None:
-                        raise Exception("Operator '"+kOperator.getName()+"' or type '"+solverTypeName+"' arg '"+arg.name+"' not connected.");
+                        raise Exception("Operator '"+kOperator.getName()+"' of type '"+solverTypeName+"' arg '"+arg.name+"' not connected.");
 
                     dccSceneItem = self._getDCCSceneItem(connectedObjects)
 
                     if dccSceneItem is None:
-                        raise Exception("Operator '"+kOperator.getName()+"' or type '"+solverTypeName+"' arg '"+arg.name+"' connection is invalid.");
+                        raise Exception("Operator '"+kOperator.getName()+"' of type '"+solverTypeName+"' arg '"+arg.name+"' dcc item not found for item:" + connectedObjects.getFullName());
 
                     connectionTargets = dccSceneItem.FullName + connectionSuffix
 

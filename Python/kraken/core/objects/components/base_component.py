@@ -7,11 +7,12 @@ Component -- Component representation.
 
 from kraken.core.maths import *
 from kraken.core.objects.scene_item import SceneItem
+from kraken.core.objects.layer import Layer
+from kraken.core.objects.hierarchy_group import HierarchyGroup
+from kraken.core.objects.locator import Locator
 from kraken.core.objects.components.component_input import ComponentInput
 from kraken.core.objects.components.component_output import ComponentOutput
 from kraken.core.objects.attributes.attribute_group import AttributeGroup
-from kraken.core.objects.hierarchy_group import HierarchyGroup
-from kraken.core.objects.locator import Locator
 from kraken.core.objects.attributes.base_attribute import BaseAttribute
 
 
@@ -81,6 +82,29 @@ class BaseComponent(SceneItem):
 
         return self.getName() + '_' + self.getLocation()
 
+
+    # =============
+    # Layer methods
+    # =============
+    def getLayer(self, name):
+        """Retrieves a layer from the owning container, or generates a layer (and warning message)
+
+        Return:
+        Layer, the layer from the container, or generated layer.
+
+        """
+
+        container = self.getContainer()
+        if container is not None:
+            layer = container.getChildByName(name)
+            if layer is None:
+                raise Exception("Container is missing a '"+name+"' layer:" + container.getFullName())
+        else:
+            # When building the component in a testing scene, generate a 'deformers' layer.
+            print("Warning: Generating '"+name+"' layer for component:" + self.getFullName());
+            layer = Layer(name, parent=self)
+
+        return layer
 
     # ==============
     # Child Methods

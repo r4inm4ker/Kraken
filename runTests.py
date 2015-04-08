@@ -7,23 +7,38 @@ import subprocess
 import StringIO
 import contextlib
 
+failedTests = []
+updatedReferences = []
 
 def checkTestOutput(filepath, output, update):
     referencefile = os.path.splitext(filepath)[0]+'.out'
-    if not os.path.exists(referencefile) or update:
-        with open(referencefile, 'w') as f:
-            f.write(output)
-            print "Reference Created:" + referencefile
-    else:
+    referencefileExists = os.path.exists(referencefile)
+    match = False
+    if referencefileExists:
         referenceTxt = str(open( referencefile ).read())
-        if referenceTxt == output:
+        match = (referenceTxt == output)
+
+    if not referencefileExists or update:
+        if not match:
+            with open(referencefile, 'w') as f:
+                f.write(output)
+                if referencefileExists:
+                    print "Reference Updated:" + referencefile
+                else:
+                    print "Reference Created:" + referencefile
+            updatedReferences.append(referencefile)
+        else:
+            print "Reference is Valid:" + referencefile
+    else:
+        if match:
             print "Test Passed:" + filepath
-            return True
         else:
             print "Test Failed:" + filepath
             resultfile = os.path.splitext(filepath)[0]+'.result'
             with open(resultfile, 'w') as f:
                 f.write(output)
+
+            failedTests.append(filepath)
 
 
 def runPytonTest(filepath, update):
@@ -102,3 +117,21 @@ else:
         for filename in files:
             filepath = os.path.join(root, filename)
             runTest(filepath, update)
+
+    if not update:
+        if len(failedTests) > 0:
+            print "======================================"
+            print "FAILED TESTS"
+
+            for filepath in failedTests:
+                print filepath
+        else:
+            print "======================================"
+            print "ALL TESTS PASSED"
+    else:
+        if len(updatedReferences) > 0:
+            print "======================================"
+            print "UPDATED TESTS"
+
+            for filepath in updatedReferences:
+                print filepath

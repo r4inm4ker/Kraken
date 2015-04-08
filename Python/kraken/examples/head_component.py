@@ -17,7 +17,10 @@ from kraken.core.profiler import Profiler
 class HeadComponent(BaseComponent):
     """Head Component"""
 
-    def __init__(self, name, parent=None, location='M'):
+    def __init__(self, name, parent=None, data={}):
+
+        location = data.get('location', 'M')
+        
         Profiler.getInstance().push("Construct Head Component:" + name + " location:" + location)
         super(HeadComponent, self).__init__(name, parent, location)
 
@@ -27,11 +30,11 @@ class HeadComponent(BaseComponent):
         defaultAttrGroup.addAttribute(BoolAttribute("toggleDebugging", True))
 
         # Default values
-        headPosition = Vec3(0.0, 17.4756, -0.421)
-        headEndPosition = Vec3(0.0, 19.5, -0.421)
-        eyeLeftPosition = Vec3(0.3497, 18.0878, 0.6088)
-        eyeRightPosition = Vec3(-0.3497, 18.0878, 0.6088)
-        jawPosition = Vec3(0.0, 17.613, -0.2731)
+        headPosition = data['headPosition']
+        headEndPosition = data['headEndPosition']
+        eyeLeftPosition = data['eyeLeftPosition']
+        eyeRightPosition = data['eyeRightPosition']
+        jawPosition = data['jawPosition']
 
         # Head
         headCtrlSrtBuffer = SrtBuffer('head', parent=self)
@@ -90,13 +93,11 @@ class HeadComponent(BaseComponent):
         eyeRightDef = Joint('eyeRight')
         eyeRightDef.setComponent(self)
 
-        container = self.getContainer()
-        if container is not None:
-            deformersLayer = container.getChildByName('deformers')
-            deformersLayer.addChild(headDef)
-            deformersLayer.addChild(jawDef)
-            deformersLayer.addChild(eyeLeftDef)
-            deformersLayer.addChild(eyeRightDef)
+        deformersLayer = self.getLayer('deformers')
+        deformersLayer.addChild(headDef)
+        deformersLayer.addChild(jawDef)
+        deformersLayer.addChild(eyeLeftDef)
+        deformersLayer.addChild(eyeRightDef)
 
 
         # =====================
@@ -195,7 +196,6 @@ class HeadComponent(BaseComponent):
     def buildRig(self, parent):
         pass
 
+from kraken.core.kraken_system import KrakenSystem
+KrakenSystem.getInstance().registerComponent(HeadComponent)
 
-if __name__ == "__main__":
-    head = HeadComponent("myClavicle")
-    logHierarchy(head)

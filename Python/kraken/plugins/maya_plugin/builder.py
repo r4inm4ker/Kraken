@@ -4,7 +4,6 @@ Classes:
 Builder -- Component representation.
 
 """
-import json
 from kraken.core.kraken_system import ks
 from kraken.core.builders.base_builder import BaseBuilder
 from kraken.core.objects.scene_item import SceneItem
@@ -14,7 +13,8 @@ from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 from kraken.plugins.maya_plugin.utils import *
 
 import FabricEngine.Core as core
-
+import json
+from maya import cmds
 
 class Builder(BaseBuilder):
     """Builder object for building Kraken objects in Maya."""

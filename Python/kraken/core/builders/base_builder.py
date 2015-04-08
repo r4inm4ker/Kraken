@@ -456,26 +456,32 @@ class BaseBuilder(object):
 
         """
 
-        kType = kObject.getKType()
+        kTypeHierarchy = kObject.getKTypeHierarchy()
         config = self.getConfig()
-        nameTemplate = config.getNameTemplate()
-
-        # Get the token list for this type of object
-        if kType in nameTemplate['formats'].keys():
-            format = nameTemplate['formats'][kType]
-        else:
-            format = nameTemplate['formats']['default']
 
         # If flag is set on object to use explicit name, return it.
         if config.getExplicitNaming() is True or kObject.testFlag('EXPLICIT_NAME'):
             return kObject.getName()
 
+        nameTemplate = config.getNameTemplate()
+
+        # Get the token list for this type of object
+        format = None
+        for kType in nameTemplate['formats'].keys():
+            if kType in kTypeHierarchy:
+                format = nameTemplate['formats'][kType]
+                break
+        if format is None:
+            format = nameTemplate['formats']['default']
+
         # Generate a name by concatenating the resolved tokens together.
         builtName = ""
+        skipSep = False
         for token in format:
 
             if token is 'sep':
-                builtName += nameTemplate['separator']
+                if not skipSep:
+                    builtName += nameTemplate['separator']
 
             elif token is 'location':
                 if isinstance(kObject, BaseComponent):
@@ -495,6 +501,9 @@ class BaseBuilder(object):
                 builtName += kObject.getName()
 
             elif token is 'component':
+                if kObject.getComponent() is None:
+                    skipSep = True
+                    continue
                 builtName += kObject.getComponent().getName()
 
             else:
@@ -522,6 +531,12 @@ class BaseBuilder(object):
 
         # Build Object
         if kType == "Container":
+            dccSceneItem = self.buildContainer(kObject, buildName)
+
+        elif kType == "Rig":
+            dccSceneItem = self.buildContainer(kObject, buildName)
+
+        elif kType == "BobRig":
             dccSceneItem = self.buildContainer(kObject, buildName)
 
         elif kType == "Layer":
@@ -901,10 +916,10 @@ class BaseBuilder(object):
         """
 
         self.buildHierarchy(kSceneItem, component=None)
-        self.buildConstraints(kSceneItem)
         self.buildAttrConnections(kSceneItem)
         self.buildIOConnections(kSceneItem)
         self.buildOperators(kSceneItem)
+        self.buildConstraints(kSceneItem)
 
         return True
 
@@ -1057,6 +1072,9 @@ class BaseBuilder(object):
 
             # Build Object
             if kType == "Container":
+                self.synchronizeContainerNode(kSceneItem, dccSceneItem)
+
+            if kType == "Rig":
                 self.synchronizeContainerNode(kSceneItem, dccSceneItem)
 
             elif kType == "Layer":

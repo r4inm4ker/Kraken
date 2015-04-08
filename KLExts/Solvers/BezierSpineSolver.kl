@@ -118,7 +118,7 @@ function BezierSpineSolver.solve!
     
     outputs[i] = outXfo.toMat44();
   }
-
+/*
 
   // Set debugging visibility.
   this.setDebug(debug);
@@ -134,4 +134,5 @@ function BezierSpineSolver.solve!
     for(UInt32 i=0; i<outputs.size; i++)
       etDrawBone(this.handle.rootTransform, 'constraint'+i, outputs[i], segLength, segLength * 0.25, boneColor);
   }
+  */
 }
