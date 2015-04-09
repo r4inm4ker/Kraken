@@ -5,6 +5,8 @@ char_bob.deformers.spine01
 char_bob.deformers.spine02
 char_bob.deformers.spine03
 char_bob.deformers.spine04
+char_bob.deformers.spine05
+char_bob.deformers.spine06
 char_bob.deformers.neck
 char_bob.deformers.head
 char_bob.deformers.jaw
@@ -33,10 +35,12 @@ char_bob.geometry
 char_bob.SpineComponent
 char_bob.SpineComponent.inputs
 char_bob.SpineComponent.outputs
+char_bob.SpineComponent.outputs.spine00
 char_bob.SpineComponent.outputs.spine01
 char_bob.SpineComponent.outputs.spine02
 char_bob.SpineComponent.outputs.spine03
 char_bob.SpineComponent.outputs.spine04
+char_bob.SpineComponent.outputs.spine05
 char_bob.SpineComponent.outputs.spineBase
 char_bob.SpineComponent.outputs.spineEnd
 char_bob.SpineComponent.cog

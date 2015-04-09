@@ -44,6 +44,16 @@ class BaseAttribute(BaseItem):
 
         return True
 
+
+    def getRTVal(self):
+        """Returns and RTVal object for this attribute.
+
+        Return:
+        RTVal
+
+        """
+        raise Exception("getRTVal must be implemented by concrete attribute classes")
+
     # ===================
     # Connection Methods
     # ===================

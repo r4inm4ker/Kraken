@@ -7,6 +7,8 @@ from vec4 import Vec4
 from quat import Quat
 from euler import Euler
 from xfo import Xfo
+from mat33 import Mat33
+from mat44 import Mat44
 
 
 PI = 3.141592653589793

@@ -6,6 +6,7 @@ BoolAttribute - Base Attribute.
 """
 
 from base_attribute import BaseAttribute
+from kraken.core.kraken_system import ks
 
 
 class BoolAttribute(BaseAttribute):
@@ -33,3 +34,13 @@ class BoolAttribute(BaseAttribute):
         super(BoolAttribute, self).setValue(value)
 
         return True
+
+
+    def getRTVal(self):
+        """Returns and RTVal object for this attribute.
+
+        Return:
+        RTVal
+
+        """
+        return ks.rtVal('Boolean', self.value)

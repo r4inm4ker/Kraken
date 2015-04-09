@@ -6,6 +6,7 @@ StringAttribute - Base Attribute.
 """
 
 from base_attribute import BaseAttribute
+from kraken.core.kraken_system import ks
 
 
 class StringAttribute(BaseAttribute):
@@ -32,3 +33,12 @@ class StringAttribute(BaseAttribute):
         super(StringAttribute, self).setValue(value)
 
         return True
+
+    def getRTVal(self):
+        """Returns and RTVal object for this attribute.
+
+        Return:
+        RTVal
+
+        """
+        return ks.rtVal('String', self.value)
