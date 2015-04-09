@@ -147,7 +147,7 @@ class BaseConfig(object):
                         "separator": "_",
                         "types": {
                                   "default": "null",
-                                  "Component": "cmp",
+                                  "BaseComponent": "cmp",
                                   "ComponentInput": "cmpIn",
                                   "ComponentOutput": "cmpOut",
                                   "Container": "",
@@ -163,7 +163,7 @@ class BaseConfig(object):
                                   {
                                    "Container": ["name"],
                                    "Layer": ["name"],
-                                   "Component": ["name", "sep", "location", "sep", "type"],
+                                   "BaseComponent": ["name", "sep", "location", "sep", "type"],
                                    "default": ["component", "sep", "location", "sep", "name", "sep", "type"],
                                   }
                        }

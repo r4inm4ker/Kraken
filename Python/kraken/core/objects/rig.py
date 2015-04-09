@@ -15,8 +15,6 @@ import json
 class Rig(Container):
     """Rig object."""
 
-    __kType__ = "Rig"
-
     def __init__(self, name):
         super(Rig, self).__init__(name)
 

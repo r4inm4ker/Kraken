@@ -90,7 +90,7 @@ class TestConfig(BaseConfig):
                         "separator": "_",
                         "types": {
                                   "default": "nl",
-                                  "Component": "cp",
+                                  "BaseComponent": "cp",
                                   "ComponentInput": "cpIn",
                                   "ComponentOutput": "cpOut",
                                   "Container": "con",
@@ -107,7 +107,7 @@ class TestConfig(BaseConfig):
                                    "default": ["location", "sep", "component", "sep", "name", "sep", "type"],
                                    "Container": ["name"],
                                    "Layer": ["name"],
-                                   "Component": ["location", "sep", "name", "sep", "type"]
+                                   "BaseComponent": ["location", "sep", "name", "sep", "type"]
                                   }
                        }
 

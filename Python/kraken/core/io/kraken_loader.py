@@ -185,9 +185,6 @@ class KrakenLoader(object):
         elif "StringAttribute" in jsonData['__typeHierarchy__']:
             item = StringAttribute(jsonData['name'])
 
-        elif "Attribute" in jsonData['__typeHierarchy__']:
-            item = Attribute(jsonData['name'])
-
         elif "ComponentInput" in jsonData['__typeHierarchy__']:
             item = ComponentInput(jsonData['name'])
 
@@ -216,12 +213,8 @@ class KrakenLoader(object):
         # ==========
         # Operators
         # ==========
-        elif "Operator" in jsonData['__typeHierarchy__']:
-            item = Operator(jsonData['name'])
-
-        elif "OperatorBinding" in jsonData['__typeHierarchy__']:
-            item = OperatorBinding(jsonData['name'])
-
+        elif "SpliceOperator" in jsonData['__typeHierarchy__']:
+            item = SpliceOperator(jsonData['name'])
 
         # ============
         # Scene Items
@@ -260,7 +253,7 @@ class KrakenLoader(object):
             item = SceneItem(jsonData['name'])
 
         else:
-            raise Exception("KrakenLoader does not support the given type:" + __kType__)
+            raise Exception("KrakenLoader does not support the given type:" + jsonData['__typeHierarchy__'])
 
         # Before registering or decoding, set the parent so that the full name contains the entire path. 
         if len(self.parentItems) > 0:

@@ -5,76 +5,19 @@ BaseConstraint - Base Constraint.
 
 """
 
+from kraken.core.objects.base_item import BaseItem
 from kraken.core.objects.scene_item import SceneItem
 
 
-class BaseConstraint(object):
+class BaseConstraint(BaseItem):
     """Base Constraint object."""
 
-    __kType__ = "BaseConstraint"
+    def __init__(self, name, parent=None):
+        super(BaseConstraint, self).__init__(name, parent)
 
-    def __init__(self, name):
-        super(BaseConstraint, self).__init__()
-
-        self.name = name
         self.constrainee = None
         self.constrainers = []
         self.maintainOffset = False
-
-
-    # =============
-    # Name Methods
-    # =============
-    def getName(self):
-        """Returns the name of the attribute.
-
-        Return:
-        String of the name of the attribute.
-
-        """
-
-        return self.name
-
-
-    def getFullName(self):
-        """Returns the full hierarchical path to this object.
-
-        Return:
-        String, full name of the object.
-
-        """
-
-        return self.getName()
-
-    # ===============
-    # Parent Methods
-    # ===============
-    def getParent(self):
-        """Returns the paret of this attribute.
-
-        Return:
-        Parent object of this attribute.
-
-        """
-
-        return self.parent
-
-
-    def setParent(self, parent):
-        """Sets the paret of this attribute.
-
-        Arguments:
-        parent -- Object, parent object of this attribute.
-
-        Return:
-        True if successful.
-
-        """
-
-        self.parent = parent
-
-        return True
-
 
     # ===================
     # Constraint Methods
@@ -179,21 +122,6 @@ class BaseConstraint(object):
         """
 
         return self.constrainers
-
-
-    # ==============
-    # kType Methods
-    # ==============
-    def getKType(self):
-        """Returns the kType of this object.
-
-        Return:
-        True if successful.
-
-        """
-
-        return self.__kType__
-
 
 
     # ================
