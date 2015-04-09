@@ -13,8 +13,6 @@ import copy
 class Curve(SceneItem):
     """Curve object."""
 
-    __kType__ = "Curve"
-
     def __init__(self, name, parent=None):
         super(Curve, self).__init__(name, parent=parent)
 

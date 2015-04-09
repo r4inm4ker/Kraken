@@ -11,8 +11,6 @@ from base_attribute import BaseAttribute
 class NumberAttribute(BaseAttribute):
     """Number Attributee. Base class for number attribute types"""
 
-    __kType__ = "NumberAttribute"
-
     def __init__(self, name, value=0, minValue=None, maxValue=None):
         super(NumberAttribute, self).__init__(name, value)
         

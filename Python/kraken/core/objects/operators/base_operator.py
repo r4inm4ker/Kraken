@@ -5,90 +5,16 @@ BaseOperator - Base operator object.
 
 """
 
+from kraken.core.objects.base_item import BaseItem
 
-class BaseOperator(object):
+class BaseOperator(BaseItem):
     """Base Operator representation."""
 
-    __kType__ = "Operator"
+    def __init__(self, name, parent=None):
+        super(BaseOperator, self).__init__(name, parent)
 
-    def __init__(self, name):
-        super(BaseOperator, self).__init__()
-        self.name = name
-        self.parent = None
         self.inputs = {}
         self.outputs = {}
-
-
-    # =============
-    # Name methods
-    # =============
-    def getName(self):
-        """Returns the name of the object as a string.
-
-        Return:
-        String of the object's name.
-
-        """
-
-        return self.name
-
-
-    def getFullName(self):
-        """Returns the full hierarchical path to this object.
-
-        Return:
-        String, full name of the object.
-
-        """
-
-        if self.parent is not None:
-            return self.parent.getFullName() + '.' + self.getName() 
-            
-        return self.getName()
-
-
-    # ===============
-    # Parent Methods
-    # ===============
-    def setParent(self, parent):
-        """Sets the parent attribute of this object.
-
-        Arguments:
-        parent -- Object, object that is the parent of this one.
-
-        Return:
-        True if successful.
-
-        """
-
-        self.parent = parent
-
-        return True
-
-
-    def getParent(self):
-        """Returns the parent of the object as an object.
-
-        Return:
-        Parent of this object.
-
-        """
-
-        return self.parent
-
-
-    # ==============
-    # kType Methods
-    # ==============
-    def getKType(self):
-        """Returns the kType of this object.
-
-        Return:
-        True if successful.
-
-        """
-
-        return self.__kType__
 
 
     # ==============

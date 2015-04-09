@@ -456,7 +456,7 @@ class BaseBuilder(object):
 
         """
 
-        kTypeHierarchy = kObject.getKTypeHierarchy()
+        typeNameHierarchy = kObject.getTypeHierarchyNames()
         config = self.getConfig()
 
         # If flag is set on object to use explicit name, return it.
@@ -467,9 +467,9 @@ class BaseBuilder(object):
 
         # Get the token list for this type of object
         format = None
-        for kType in nameTemplate['formats'].keys():
-            if kType in kTypeHierarchy:
-                format = nameTemplate['formats'][kType]
+        for typeName in nameTemplate['formats'].keys():
+            if typeName in typeNameHierarchy:
+                format = nameTemplate['formats'][typeName]
                 break
         if format is None:
             format = nameTemplate['formats']['default']
@@ -495,7 +495,7 @@ class BaseBuilder(object):
                 builtName += location
 
             elif token is 'type':
-                builtName += nameTemplate['types'][kType]
+                builtName += nameTemplate['types'][typeName]
 
             elif token is 'name':
                 builtName += kObject.getName()
@@ -525,47 +525,43 @@ class BaseBuilder(object):
         """
 
         dccSceneItem = None
-        kType = kObject.getKType()
 
         buildName = self.getBuildName(kObject)
 
         # Build Object
-        if kType == "Container":
+        if kObject.isTypeOf("Container"):
             dccSceneItem = self.buildContainer(kObject, buildName)
 
-        elif kType == "Rig":
-            dccSceneItem = self.buildContainer(kObject, buildName)
-
-        elif kType == "BobRig":
-            dccSceneItem = self.buildContainer(kObject, buildName)
-
-        elif kType == "Layer":
+        elif kObject.isTypeOf("Layer"):
             dccSceneItem = self.buildLayer(kObject, buildName)
 
-        elif kType == "Component":
+        elif kObject.isTypeOf("BaseComponent"):
             dccSceneItem = self.buildGroup(kObject, buildName)
             component = kObject
 
-        elif kType == "HierarchyGroup":
+        elif kObject.isTypeOf("HierarchyGroup"):
             dccSceneItem = self.buildHierarchyGroup(kObject, buildName)
 
-        elif kType == "SrtBuffer":
+        elif kObject.isTypeOf("SrtBuffer"):
             dccSceneItem = self.buildGroup(kObject, buildName)
 
-        elif kType == "Locator":
+        elif kObject.isTypeOf("Locator"):
             dccSceneItem = self.buildLocator(kObject, buildName)
 
-        elif kType == "Joint":
+        elif kObject.isTypeOf("Joint"):
             dccSceneItem = self.buildJoint(kObject, buildName)
 
-        elif kType == "SceneItem":
-            dccSceneItem = self.buildLocator(kObject, buildName)
+        elif kObject.isTypeOf("Control"):
+            dccSceneItem = self.buildControl(kObject, buildName)
 
-        elif kType == "Curve":
+        elif kObject.isTypeOf("Curve"):
             dccSceneItem = self.buildCurve(kObject, buildName)
 
-        elif kType == "Control":
-            dccSceneItem = self.buildControl(kObject, buildName)
+        ## Important Note: The order of these tests is important. 
+        ## New classes should be added above the classes they are derrived from. 
+        ## No new types should be added below SceneItem here.
+        elif kObject.isTypeOf("SceneItem"):
+            dccSceneItem = self.buildLocator(kObject, buildName)
 
         else:
             raise NotImplementedError(kObject.getName() + ' has an unsupported type: ' + str(type(kObject)))
@@ -599,19 +595,18 @@ class BaseBuilder(object):
         for i in xrange(kObject.getNumConstraints()):
 
             constraint = kObject.getConstraintByIndex(i)
-            kType = constraint.getKType()
 
             # Build Object
-            if kType == "OrientationConstraint":
+            if constraint.isTypeOf("OrientationConstraint"):
                 dccSceneItem = self.buildOrientationConstraint(constraint)
 
-            elif kType == "PoseConstraint":
+            elif constraint.isTypeOf("PoseConstraint"):
                 dccSceneItem = self.buildPoseConstraint(constraint)
 
-            elif kType == "PositionConstraint":
+            elif constraint.isTypeOf("PositionConstraint"):
                 dccSceneItem = self.buildPositionConstraint(constraint)
 
-            elif kType == "ScaleConstraint":
+            elif constraint.isTypeOf("ScaleConstraint"):
                 dccSceneItem = self.buildScaleConstraint(constraint)
 
             else:
@@ -637,7 +632,7 @@ class BaseBuilder(object):
 
         """
 
-        if kObject.getKType() == 'Component':
+        if kObject.isTypeOf('BaseComponent'):
 
             # Build input connections
             for i in xrange(kObject.getNumInputs()):
@@ -717,15 +712,13 @@ class BaseBuilder(object):
         True if successful.
 
         """
-
-        if kObject.getKType() == 'Component':
+        if kObject.isTypeOf('BaseComponent'):
 
             # Build operators
             for i in xrange(kObject.getNumOperators()):
                 operator = kObject.getOperatorByIndex(i)
-                kType = operator.getKType()
 
-                if kType == 'SpliceOperator':
+                if operator.isTypeOf('SpliceOperator'):
                     self.buildSpliceOperators(operator)
 
                 else:
@@ -798,7 +791,7 @@ class BaseBuilder(object):
         config = self.getConfig()
         colors = config.getColors()
         colorMap = config.getColorMap()
-        kType = kSceneItem.getKType()
+        typeNames = kSceneItem.getTypeHierarchyNames()
         component = kSceneItem.getComponent()
         objectColor = kSceneItem.getColor()
 
@@ -811,13 +804,15 @@ class BaseBuilder(object):
             buildColor = objectColor
 
         else:
-
-            if kType in colorMap.keys():
-                if component is None:
-                    buildColor = colorMap[kType]['default']
-                else:
-                    componentLocation = component.getLocation()
-                    buildColor = colorMap[kType][componentLocation]
+            # Find the first color mapping that matches a type in the object hierarchy.
+            for typeName in typeNames:
+                if typeName in colorMap.keys():
+                    if component is None:
+                        buildColor = colorMap[typeName]['default']
+                    else:
+                        componentLocation = component.getLocation()
+                        buildColor = colorMap[typeName][componentLocation]
+                    break;
 
         return buildColor
 
@@ -1068,29 +1063,24 @@ class BaseBuilder(object):
             dccSceneItem = builtElement['tgt']
             kSceneItem = builtElement['src']
 
-            kType = kSceneItem.getKType()
-
             # Build Object
-            if kType == "Container":
+            if kSceneItem.isTypeOf("Container"):
                 self.synchronizeContainerNode(kSceneItem, dccSceneItem)
 
-            if kType == "Rig":
-                self.synchronizeContainerNode(kSceneItem, dccSceneItem)
-
-            elif kType == "Layer":
+            elif kSceneItem.isTypeOf("Layer"):
                 self.synchronizeLayerNode(kSceneItem, dccSceneItem)
 
-            elif kType == "Component":
+            elif kSceneItem.isTypeOf("BaseComponent"):
                 self.synchronizeGroupNode(kSceneItem, dccSceneItem)
 
-            elif kType == "SceneItem":
+            elif kSceneItem.isTypeOf("Control"):
+                self.synchronizeCurveNode(kSceneItem, dccSceneItem)
+
+            elif kSceneItem.isTypeOf("Curve"):
+                self.synchronizeCurveNode(kSceneItem, dccSceneItem)
+
+            elif kSceneItem.isTypeOf("SceneItem"):
                 self.synchronizeLocatorNode(kSceneItem, dccSceneItem)
-
-            elif kType == "Curve":
-                self.synchronizeCurveNode(kSceneItem, dccSceneItem)
-
-            elif kType == "Control":
-                self.synchronizeCurveNode(kSceneItem, dccSceneItem)
 
             else:
                 raise NotImplementedError(kSceneItem.getName() + ' has an unsupported type: ' + str(type(kSceneItem)))
@@ -1167,18 +1157,17 @@ class BaseBuilder(object):
 
         for i in xrange(kSceneItem.getNumAttributeGroups()):
             attribute = kSceneItem.getAttributeByIndex(i)
-            kType = attribute.getKType()
 
-            if kType == "FloatAttribute":
+            if attribute.isTypeOf("FloatAttribute"):
                 print kSceneItem.attributes[i].name
 
-            elif kType == "BoolAttribute":
+            elif attribute.isTypeOf("BoolAttribute"):
                 print kSceneItem.attributes[i].name
 
-            elif kType == "IntegerAttribute":
+            elif attribute.isTypeOf("IntegerAttribute"):
                 print kSceneItem.attributes[i].name
 
-            elif kType == "StringAttribute":
+            elif attribute.isTypeOf("StringAttribute"):
                 print kSceneItem.attributes[i].name
 
         return True

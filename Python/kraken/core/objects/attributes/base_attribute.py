@@ -4,62 +4,15 @@ Classes:
 BaseAttribute - Base Attribute.
 
 """
+from kraken.core.objects.base_item import BaseItem
 
-class BaseAttribute(object):
+class BaseAttribute(BaseItem):
     """Base Attribute object."""
 
-    __kType__ = "Attribute"
-
-    def __init__(self, name, value):
-        super(BaseAttribute, self).__init__()
-        self.name = name
+    def __init__(self, name, value, parent=None):
+        super(BaseAttribute, self).__init__(name, parent)
         self.value = value
-        self.parent = None
         self.connection = None
-
-
-    # =============
-    # Name Methods
-    # =============
-    def setName(self, name):
-        """Sets the name of the attribute group.
-
-        Arguments:
-        name -- Sting, name of the attribute group.
-
-        Return:
-        True if successful.
-
-        """
-
-        self.name = name
-
-        return True
-
-
-    def getName(self):
-        """Returns the name of the attribute.
-
-        Return:
-        String of the name of the attribute.
-
-        """
-
-        return self.name
-
-
-    def getFullName(self):
-        """Returns the full hierarchical path to this object.
-
-        Return:
-        String, full name of the object.
-
-        """
-
-        if self.parent is not None:
-            return self.parent.getFullName() + '.' + self.getName()
-
-        return self.getName()
 
 
     # ==============
@@ -100,36 +53,6 @@ class BaseAttribute(object):
 
         """
         raise Exception("getRTVal must be implemented by concrete attribute classes")
-
-    # ===============
-    # Parent Methods
-    # ===============
-    def getParent(self):
-        """Returns the paret of this attribute.
-
-        Return:
-        Parent object of this attribute.
-
-        """
-
-        return self.parent
-
-
-    def setParent(self, parent):
-        """Sets the paret of this attribute.
-
-        Arguments:
-        parent -- Object, parent object of this attribute.
-
-        Return:
-        True if successful.
-
-        """
-
-        self.parent = parent
-
-        return True
-
 
     # ===================
     # Connection Methods
@@ -186,21 +109,6 @@ class BaseAttribute(object):
         self.connection = None
 
         return True
-
-
-    # ==============
-    # kType Methods
-    # ==============
-    def getKType(self):
-        """Returns the kType of this object.
-
-        Return:
-        True if successful.
-
-        """
-
-        return self.__kType__
-
 
     # ====================
     # Persistence Methods
