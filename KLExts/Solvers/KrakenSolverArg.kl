@@ -1,0 +1,23 @@
+
+struct KrakenSolverArg {
+    String name;
+    String connectionType;
+    String dataType;
+};
+
+
+// Default Constructor
+inline KrakenSolverArg()
+{
+
+}
+
+inline KrakenSolverArg(
+  String name,
+  String connectionType,
+  String dataType)
+{
+  this.name = name;
+  this.connectionType = connectionType;
+  this.dataType = dataType;
+}
