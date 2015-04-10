@@ -5,10 +5,10 @@ PositionConstraint - Position Constraint.
 
 """
 
-from base_constraint import BaseConstraint
+from constraint import Constraint
 
 
-class PositionConstraint(BaseConstraint):
+class PositionConstraint(Constraint):
     """Position Constraint."""
 
     def __init__(self, name):

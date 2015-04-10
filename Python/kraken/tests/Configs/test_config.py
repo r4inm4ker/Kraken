@@ -1,6 +1,7 @@
-from kraken.core.configs.base_config import BaseConfig
+from kraken.core.configs.config import Config
 
-class TestConfig(BaseConfig):
+
+class TestConfig(Config):
     """Test configuration."""
 
     def __init__(self):

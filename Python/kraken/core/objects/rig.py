@@ -12,6 +12,7 @@ from kraken.core.objects.layer import Layer
 import importlib
 import json
 
+
 class Rig(Container):
     """Rig object."""
 
@@ -27,6 +28,7 @@ class Rig(Container):
         jsonData = json.load(str(open( referencefile ).read()))
         this.loadRigDefinition(jsonData)
         Profiler.getInstance().pop()
+
 
     def loadRigDefinition(self, jsonData):
 
@@ -51,10 +53,11 @@ class Rig(Container):
                 if 'name' in componentData:
                     componentName = componentData['name']
                 else:
-                    componentName = str(componentClass.__name__)                    
+                    componentName = str(componentClass.__name__)
                 component = componentClass(componentName, parent=self, data=componentData)
 
             Profiler.getInstance().pop()
+
 
         def makeConnections(connectionsData):
             Profiler.getInstance().push("makeConnections")

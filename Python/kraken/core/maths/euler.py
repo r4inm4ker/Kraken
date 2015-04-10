@@ -9,6 +9,7 @@ from kraken.core.kraken_system import ks
 from math_object import MathObject
 from mat33 import Mat33
 
+
 rotationOrderStrToIntMapping = {
     'xyz': 0,
     'XYZ': 0,
@@ -32,6 +33,7 @@ rotationOrderIntToStrMapping = [
     'ZYX',
     'YXZ'
 ]
+
 
 class Euler(MathObject):
     """Euler rotation object."""

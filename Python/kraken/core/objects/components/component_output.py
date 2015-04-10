@@ -6,7 +6,7 @@ ComponentOutput -- Component output representation.
 """
 
 from kraken.core.objects.locator import Locator
-from kraken.core.objects.attributes.base_attribute import BaseAttribute
+from kraken.core.objects.attributes.attribute import Attribute
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
 
@@ -23,7 +23,7 @@ class ComponentOutput(object):
 
         if isinstance(connectionObj, Locator):
             self.setDataType('Xfo')
-        elif isinstance(connectionObj, BaseAttribute):
+        elif isinstance(connectionObj, Attribute):
             self.setDataType('Attribute')
 
 
@@ -161,7 +161,7 @@ class ComponentOutput(object):
             raise Exception("'Xfo' inputs can only be connected to 'Locator' objects. Object '"
                 + sourceObj.getName() + "' has type:'" + sourceObj.getTypeName() + "'")
 
-        if self.getDataType() == 'Attribute' and not isinstance(sourceObj, BaseAttribute):
+        if self.getDataType() == 'Attribute' and not isinstance(sourceObj, Attribute):
             raise Exception("'Attribute' inputs can only be connected to 'Attribute' objects. Object '"
                 + sourceObj.getName() + "' has type:'" + sourceObj.getTypeName() + "'")
 

@@ -1,6 +1,6 @@
 from kraken.core.maths import Vec3, Vec3, Euler, Quat, Xfo
 
-from kraken.core.objects.components.base_component import BaseComponent
+from kraken.core.objects.components.component import Component
 
 from kraken.core.objects.attributes.attribute_group import AttributeGroup
 from kraken.core.objects.attributes.float_attribute import FloatAttribute
@@ -18,7 +18,8 @@ from kraken.core.objects.operators.splice_operator import SpliceOperator
 from kraken.helpers.utility_methods import logHierarchy
 from kraken.core.profiler import Profiler
 
-class FootComponent(BaseComponent):
+
+class FootComponent(Component):
     """Foot Component"""
 
     def __init__(self, name, parent=None, data={}):

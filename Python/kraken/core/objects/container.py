@@ -6,7 +6,7 @@ Container -- Component container representation.
 """
 
 from kraken.core.objects.scene_item import SceneItem
-from kraken.core.objects.components.base_component import BaseComponent
+from kraken.core.objects.components.component import Component
 
 
 class Container(SceneItem):

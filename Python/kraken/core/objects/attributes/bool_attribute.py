@@ -5,11 +5,11 @@ BoolAttribute - Base Attribute.
 
 """
 
-from base_attribute import BaseAttribute
+from attribute import Attribute
 from kraken.core.kraken_system import ks
 
 
-class BoolAttribute(BaseAttribute):
+class BoolAttribute(Attribute):
     """Boolean Attribute. Implemented value type checking and limiting."""
 
     def __init__(self, name, value=False):
