@@ -108,6 +108,16 @@ class BaseComponent(SceneItem):
     # Child Methods
     # ==============
     def addChild(self, child):
+        """Adds a child to the component and sets the object's component attribute.
+
+        Arguments:
+        child -- Object, object to add as a child.
+
+        Return:
+        True if successful.
+
+        """
+
         super(BaseComponent, self).addChild(child)
 
         # Assign the child self as the component.
@@ -158,6 +168,7 @@ class BaseComponent(SceneItem):
 
         if isinstance(inputObject, Locator):
             inputHrc.addChild(inputObject)
+            inputObject.setFlag("inputObject")
             inputObject.setShapeVisibility(False)
 
         elif isinstance(inputObject, BaseAttribute):
@@ -300,6 +311,7 @@ class BaseComponent(SceneItem):
 
         if isinstance(outputObject, SceneItem):
             outputHrc.addChild(outputObject)
+            outputObject.setFlag("outputObject")
             outputObject.setShapeVisibility(False)
 
         elif isinstance(outputObject, BaseAttribute):
