@@ -476,14 +476,14 @@ class BaseBuilder(object):
         if format is None:
             format = nameTemplate['formats']['default']
 
-        firstValidType = None
+        objectType = None
         for eachType in typeNameHierarchy:
             if eachType in nameTemplate['types'].keys():
-                firstValidType = eachType
+                objectType = eachType
                 break
 
-        if firstValidType is None:
-            firstValidType = "default"
+        if objectType is None:
+            objectType = "default"
 
         # Generate a name by concatenating the resolved tokens together.
         builtName = ""
@@ -506,7 +506,13 @@ class BaseBuilder(object):
                 builtName += location
 
             elif token is 'type':
-                builtName += nameTemplate['types'][firstValidType]
+
+                if objectType == "Locator" and kObject.testFlag("inputObject"):
+                    objectType = "ComponentInput"
+                elif objectType == "Locator" and kObject.testFlag("outputObject"):
+                    objectType = "ComponentOutput"
+
+                builtName += nameTemplate['types'][objectType]
 
             elif token is 'name':
                 builtName += kObject.getName()
