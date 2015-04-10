@@ -457,6 +457,7 @@ class BaseBuilder(object):
         """
 
         typeNameHierarchy = kObject.getTypeHierarchyNames()
+
         config = self.getConfig()
 
         # If flag is set on object to use explicit name, return it.
@@ -471,8 +472,18 @@ class BaseBuilder(object):
             if typeName in typeNameHierarchy:
                 format = nameTemplate['formats'][typeName]
                 break
+
         if format is None:
             format = nameTemplate['formats']['default']
+
+        firstValidType = None
+        for eachType in typeNameHierarchy:
+            if eachType in nameTemplate['types'].keys():
+                firstValidType = eachType
+                break
+
+        if firstValidType is None:
+            firstValidType = "default"
 
         # Generate a name by concatenating the resolved tokens together.
         builtName = ""
@@ -495,7 +506,7 @@ class BaseBuilder(object):
                 builtName += location
 
             elif token is 'type':
-                builtName += nameTemplate['types'][typeName]
+                builtName += nameTemplate['types'][firstValidType]
 
             elif token is 'name':
                 builtName += kObject.getName()
@@ -557,8 +568,8 @@ class BaseBuilder(object):
         elif kObject.isTypeOf("Curve"):
             dccSceneItem = self.buildCurve(kObject, buildName)
 
-        ## Important Note: The order of these tests is important. 
-        ## New classes should be added above the classes they are derrived from. 
+        ## Important Note: The order of these tests is important.
+        ## New classes should be added above the classes they are derrived from.
         ## No new types should be added below SceneItem here.
         elif kObject.isTypeOf("SceneItem"):
             dccSceneItem = self.buildLocator(kObject, buildName)

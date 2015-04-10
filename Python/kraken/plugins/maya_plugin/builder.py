@@ -297,8 +297,15 @@ class Builder(BaseBuilder):
         """
 
         parentDCCSceneItem = self._getDCCSceneItem(kAttribute.getParent().getParent())
-        parentDCCSceneItem.addAttr(kAttribute.getName(), niceName=kAttribute.getName(), attributeType="float", defaultValue=kAttribute.getValue(), minValue=kAttribute.min, maxValue=kAttribute.max, keyable=True)
+        parentDCCSceneItem.addAttr(kAttribute.getName(), niceName=kAttribute.getName(), attributeType="float", defaultValue=kAttribute.getValue(), keyable=True)
+
         dccSceneItem = parentDCCSceneItem.attr(kAttribute.getName())
+
+        if kAttribute.min is not None:
+            dccSceneItem.setMin(kAttribute.min)
+
+        if kAttribute.max is not None:
+            dccSceneItem.setMax(kAttribute.max)
 
         self._registerSceneItemPair(kAttribute, dccSceneItem)
 
@@ -543,8 +550,8 @@ class Builder(BaseBuilder):
                 portArgs = {"portName": arg.name, "dataType": arg.dataType, "extension":"", "addMayaAttr": True }
 
                 # Get the argument's input from the DCC
-                # Note: this used to be a try/catch statement, which seemed quite strange to me. 
-                # I've replaced with a proper test with an exception if the item is not found. 
+                # Note: this used to be a try/catch statement, which seemed quite strange to me.
+                # I've replaced with a proper test with an exception if the item is not found.
                 if arg.connectionType == 'in':
                     connectedObjects = kOperator.getInput(arg.name)
                 elif arg.connectionType in ['io', 'out']:
@@ -554,7 +561,7 @@ class Builder(BaseBuilder):
                     portArgs['arrayType'] = "Array (Multi)"
 
                     # In SpliceMaya, output arrays are not resized by the system prior to calling into Splice, so we
-                    # explicily resize the arrays in the generated operator stub code. 
+                    # explicily resize the arrays in the generated operator stub code.
                     if arg.connectionType in ['io', 'out']:
                         arraySizes[arg.name] = len(connectedObjects)
 
