@@ -1,32 +1,33 @@
 """Kraken - builders module.
 
 Classes:
-BaseBuilder -- Base builder object to build objects in DCC.
+Builder -- Base builder object to build objects in DCC.
 
 """
 
 from kraken.core import logger as pyLogger
 logger = pyLogger.getLogger("pyLogger")
 
-from kraken.core.configs.base_config import BaseConfig
+from kraken.core.configs.config import Config
 
-from kraken.core.objects.components.base_component import BaseComponent
+from kraken.core.objects.components.component import Component
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
 from kraken.core.profiler import Profiler
 
-class BaseBuilder(object):
-    """BaseBuilder object for building objects in DCC's. Sub-class per DCC in a
+
+class Builder(object):
+    """Builder object for building objects in DCC's. Sub-class per DCC in a
     plugin.
 
     """
 
 
     def __init__(self):
-        super(BaseBuilder, self).__init__()
+        super(Builder, self).__init__()
         self._buildElements = []
 
-        self.config = BaseConfig.getInstance()
+        self.config = Config.getInstance()
 
 
     # ====================
@@ -495,7 +496,7 @@ class BaseBuilder(object):
                     builtName += nameTemplate['separator']
 
             elif token is 'location':
-                if isinstance(kObject, BaseComponent):
+                if isinstance(kObject, Component):
                     location = kObject.getLocation()
                 else:
                     location = kObject.getComponent().getLocation()
@@ -552,7 +553,7 @@ class BaseBuilder(object):
         elif kObject.isTypeOf("Layer"):
             dccSceneItem = self.buildLayer(kObject, buildName)
 
-        elif kObject.isTypeOf("BaseComponent"):
+        elif kObject.isTypeOf("Component"):
             dccSceneItem = self.buildGroup(kObject, buildName)
             component = kObject
 
@@ -649,7 +650,7 @@ class BaseBuilder(object):
 
         """
 
-        if kObject.isTypeOf('BaseComponent'):
+        if kObject.isTypeOf('Component'):
 
             # Build input connections
             for i in xrange(kObject.getNumInputs()):
@@ -729,7 +730,7 @@ class BaseBuilder(object):
         True if successful.
 
         """
-        if kObject.isTypeOf('BaseComponent'):
+        if kObject.isTypeOf('Component'):
 
             # Build operators
             for i in xrange(kObject.getNumOperators()):
@@ -1087,7 +1088,7 @@ class BaseBuilder(object):
             elif kSceneItem.isTypeOf("Layer"):
                 self.synchronizeLayerNode(kSceneItem, dccSceneItem)
 
-            elif kSceneItem.isTypeOf("BaseComponent"):
+            elif kSceneItem.isTypeOf("Component"):
                 self.synchronizeGroupNode(kSceneItem, dccSceneItem)
 
             elif kSceneItem.isTypeOf("Control"):

@@ -1,17 +1,17 @@
-"""Kraken - objects.operators.base_operator module.
+"""Kraken - objects.operators.operator module.
 
 Classes:
-BaseOperator - Base operator object.
+Operator - Base operator object.
 
 """
 
 from kraken.core.objects.base_item import BaseItem
 
-class BaseOperator(BaseItem):
-    """Base Operator representation."""
+class Operator(BaseItem):
+    """Operator representation."""
 
     def __init__(self, name, parent=None):
-        super(BaseOperator, self).__init__(name, parent)
+        super(Operator, self).__init__(name, parent)
 
         self.inputs = {}
         self.outputs = {}

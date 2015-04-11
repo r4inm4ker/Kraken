@@ -1,4 +1,4 @@
-__all__ = ['BaseConstraint',
+__all__ = ['Constraint',
            'ScaleConstraint',
            'OrientationConstraint',
            'PositionConstraint',

@@ -5,11 +5,11 @@ StringAttribute - Base Attribute.
 
 """
 
-from base_attribute import BaseAttribute
+from attribute import Attribute
 from kraken.core.kraken_system import ks
 
 
-class StringAttribute(BaseAttribute):
+class StringAttribute(Attribute):
     """String Attribute. Implemented value type checking."""
 
     def __init__(self, name, value=""):

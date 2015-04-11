@@ -5,10 +5,10 @@ PoseConstraint - Pose Constraint.
 
 """
 
-from base_constraint import BaseConstraint
+from constraint import Constraint
 
 
-class PoseConstraint(BaseConstraint):
+class PoseConstraint(Constraint):
     """Pose Constraint."""
 
     def __init__(self, name):

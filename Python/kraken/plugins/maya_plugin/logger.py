@@ -8,6 +8,7 @@ LOGGER_PREFIX = 'kraken.mayaLogger'
 
 thing = "blah"
 
+
 class MayaLogger(logging.Logger):
 
     def fatal(self, msg, *args, **kwargs):

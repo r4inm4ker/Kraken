@@ -5,10 +5,10 @@ ScaleConstraint - Scale Constraint.
 
 """
 
-from base_constraint import BaseConstraint
+from constraint import Constraint
 
 
-class ScaleConstraint(BaseConstraint):
+class ScaleConstraint(Constraint):
     """Scale Constraint."""
 
     def __init__(self, name):

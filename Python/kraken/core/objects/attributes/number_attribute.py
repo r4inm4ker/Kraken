@@ -5,15 +5,15 @@ NumberAttribute - Base Attribute.
 
 """
 
-from base_attribute import BaseAttribute
+from attribute import Attribute
 
 
-class NumberAttribute(BaseAttribute):
+class NumberAttribute(Attribute):
     """Number Attributee. Base class for number attribute types"""
 
     def __init__(self, name, value=0, minValue=None, maxValue=None):
         super(NumberAttribute, self).__init__(name, value)
-        
+
         self.min = None
         self.max = None
         if minValue is not None:

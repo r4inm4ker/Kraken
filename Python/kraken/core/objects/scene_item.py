@@ -9,6 +9,7 @@ from kraken.core.maths.xfo import Xfo
 from kraken.core.objects.attributes.attribute_group import AttributeGroup
 from base_item import BaseItem
 
+
 class SceneItem(BaseItem):
     """Kraken base object type for any 3D object."""
 
