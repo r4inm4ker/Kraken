@@ -1,7 +1,7 @@
-"""Kraken - objects.Constraints.BaseConstraint module.
+"""Kraken - objects.Constraints.Constraint module.
 
 Classes:
-BaseConstraint - Base Constraint.
+Constraint - Base Constraint.
 
 """
 
@@ -9,11 +9,11 @@ from kraken.core.objects.base_item import BaseItem
 from kraken.core.objects.scene_item import SceneItem
 
 
-class BaseConstraint(BaseItem):
-    """Base Constraint object."""
+class Constraint(BaseItem):
+    """Constraint object."""
 
     def __init__(self, name, parent=None):
-        super(BaseConstraint, self).__init__(name, parent)
+        super(Constraint, self).__init__(name, parent)
 
         self.constrainee = None
         self.constrainers = []

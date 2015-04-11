@@ -10,6 +10,7 @@ import imp
 from profiler import Profiler
 import FabricEngine.Core
 
+
 class KrakenSystem(object):
     """The KrakenSystem is a singleton object used to provide an interface with the FabricEngine Core and RTVal system."""
 
@@ -46,7 +47,7 @@ class KrakenSystem(object):
                     host = 'Softimage'
                 except ImportError:
                     host = 'Python'
-                    
+
             if host == "Python":
                 self.client = FabricEngine.Core.createClient()
 
@@ -73,7 +74,7 @@ class KrakenSystem(object):
             self.loadExtension('Math')
 
             Profiler.getInstance().pop()
-            
+
     def getCoreClient(self):
         """Returns the Fabric Engine Core Client owned by the KrakenSystem
 
@@ -86,7 +87,7 @@ class KrakenSystem(object):
         return self.client
 
     def loadExtension(self, extension):
-        """Loads the given extension and updates the registeredTypes cache. 
+        """Loads the given extension and updates the registeredTypes cache.
 
         Return:
         None
@@ -94,7 +95,7 @@ class KrakenSystem(object):
         """
         if extension not in self.loadedExtensions:
             Profiler.getInstance().push("loadExtension:" + extension)
-            self.client.loadExtension(extension) 
+            self.client.loadExtension(extension)
             self.registeredTypes = self.client.RT.types
             self.typeDescs = self.client.RT.getRegisteredTypes()
             # Cache the loaded extension so that we aviod refreshing the typeDescs cache(costly)
@@ -182,7 +183,7 @@ class KrakenSystem(object):
         True if successful.
 
         """
-        if ks.isRTVal(rtval): 
+        if ks.isRTVal(rtval):
             return json.loads(rtval.type("Type").jsonDesc("String"))['name']
         else:
             return "None"

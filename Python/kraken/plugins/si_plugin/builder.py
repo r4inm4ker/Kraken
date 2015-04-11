@@ -4,19 +4,17 @@ Classes:
 Builder -- Component representation.
 
 """
-from win32com.client.dynamic import Dispatch
 
 from kraken.core.kraken_system import ks
-from kraken.core.builders.base_builder import BaseBuilder
+from kraken.core.builders.builder import Builder
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
 from kraken.plugins.si_plugin.utils import *
 
 import FabricEngine.Core as core
 
-si = Dispatch("XSI.Application").Application
 
-class Builder(BaseBuilder):
+class Builder(Builder):
     """Builder object for building Kraken objects in Softimage."""
 
     def __init__(self):
@@ -479,7 +477,7 @@ class Builder(BaseBuilder):
             constraineeDCCSceneItem = self._getDCCSceneItem(kConstraint.getConstrainee())
             if kConstraint.getMaintainOffset():
                 constraineeTransform = constraineeDCCSceneItem.Kinematics.Global.Transform
-            
+
             constrainingObjs = getCollection()
             for eachConstrainer in kConstraint.getConstrainers():
                 constrainer = self._getDCCSceneItem(eachConstrainer)
@@ -521,7 +519,7 @@ class Builder(BaseBuilder):
 
                 if dccSceneItem is None:
                     raise Exception("Constraint '"+kConstraint.getFullName()+"' of type '"+solverTypeName+"' is connected to object without corresponding SceneItem:" + eachConstrainer.getFullName());
-                    
+
                 connectionTargets = dccSceneItem.FullName + connectionSuffix
                 break
 

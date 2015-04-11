@@ -5,9 +5,9 @@ Builder -- Component representation.
 
 """
 from kraken.core.kraken_system import ks
-from kraken.core.builders.base_builder import BaseBuilder
+from kraken.core.builders.builder import Builder
 from kraken.core.objects.scene_item import SceneItem
-from kraken.core.objects.attributes.base_attribute import BaseAttribute
+from kraken.core.objects.attributes.attribute import Attribute
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
 from kraken.plugins.maya_plugin.utils import *
@@ -16,7 +16,7 @@ import FabricEngine.Core as core
 import json
 from maya import cmds
 
-class Builder(BaseBuilder):
+class Builder(Builder):
     """Builder object for building Kraken objects in Maya."""
 
     def __init__(self):
@@ -593,7 +593,7 @@ class Builder(BaseBuilder):
                     cmds.fabricSplice("addInputPort", spliceNode, json.dumps(portArgs), "")
 
                     def connectInput(tgt, opObject, dccSceneItem):
-                        if isinstance(opObject, BaseAttribute):
+                        if isinstance(opObject, Attribute):
                             cmds.connectAttr(str(dccSceneItem), tgt)
                         elif isinstance(opObject, SceneItem):
                             cmds.connectAttr(str(dccSceneItem.attr('worldMatrix')), tgt)
@@ -610,7 +610,7 @@ class Builder(BaseBuilder):
                     cmds.fabricSplice("addOutputPort", spliceNode, json.dumps(portArgs), "")
 
                     def connectOutput(src, opObject, dccSceneItem):
-                        if isinstance(opObject, BaseAttribute):
+                        if isinstance(opObject, Attribute):
                             cmds.connectAttr(src, str(dccSceneItem))
 
                         elif isinstance(opObject, SceneItem):

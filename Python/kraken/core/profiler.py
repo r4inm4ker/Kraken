@@ -4,9 +4,9 @@ Classes:
 Profiler - Profiler Object.
 
 """
+
 import time
 import operator
-
 
 
 class Profiler(object):
@@ -70,11 +70,11 @@ class Profiler(object):
         """
         end = time.time()
         if len(self.__stack) == 0:
-            raise Exception("Unable to close bracket. Pop has been called more times than push.") 
-             
+            raise Exception("Unable to close bracket. Pop has been called more times than push.")
+
         self.__stack[-1].endProfiling()
         self.__stack.pop()
-        
+
     def generateReport(self, listFunctionTotals=False):
         """Returns a report string containing all the data gathered turing profiling.
 
@@ -83,7 +83,7 @@ class Profiler(object):
 
         """
         if len(self.__stack) != 0:
-            raise Exception("Profiler brackets not closed properly. pop must be called for every call to push. Pop needs to be called another " + str(len(self.__stack)) + " times") 
+            raise Exception("Profiler brackets not closed properly. pop must be called for every call to push. Pop needs to be called another " + str(len(self.__stack)) + " times")
         report = []
         report.append("--callstack--")
         functions = {}

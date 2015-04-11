@@ -1,16 +1,16 @@
-"""Kraken - objects.Attributes.BaseAttribute module.
+"""Kraken - objects.Attributes.Attribute module.
 
 Classes:
-BaseAttribute - Base Attribute.
+Attribute - Base Attribute.
 
 """
 from kraken.core.objects.base_item import BaseItem
 
-class BaseAttribute(BaseItem):
-    """Base Attribute object."""
+class Attribute(BaseItem):
+    """Attribute object."""
 
     def __init__(self, name, value, parent=None):
-        super(BaseAttribute, self).__init__(name, parent)
+        super(Attribute, self).__init__(name, parent)
         self.value = value
         self.connection = None
 

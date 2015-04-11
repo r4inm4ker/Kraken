@@ -13,14 +13,14 @@ from kraken.core.objects.locator import Locator
 from kraken.core.objects.components.component_input import ComponentInput
 from kraken.core.objects.components.component_output import ComponentOutput
 from kraken.core.objects.attributes.attribute_group import AttributeGroup
-from kraken.core.objects.attributes.base_attribute import BaseAttribute
+from kraken.core.objects.attributes.attribute import Attribute
 
 
-class BaseComponent(SceneItem):
-    """Kraken Base Component object."""
+class Component(SceneItem):
+    """Kraken Component object."""
 
     def __init__(self, name, parent=None, location='M'):
-        super(BaseComponent, self).__init__(name, parent)
+        super(Component, self).__init__(name, parent)
         self.location = location
         self.inputs = []
         self.outputs = []
@@ -118,7 +118,7 @@ class BaseComponent(SceneItem):
 
         """
 
-        super(BaseComponent, self).addChild(child)
+        super(Component, self).addChild(child)
 
         # Assign the child self as the component.
         child.setComponent(self)
@@ -157,10 +157,10 @@ class BaseComponent(SceneItem):
         inputHrc = self.getChildByName('inputs')
         inputAttrsGrp = inputHrc.getAttributeGroupByName('inputAttrs')
 
-        if not isinstance(inputObject, (Locator, BaseAttribute)):
+        if not isinstance(inputObject, (Locator, Attribute)):
             raise Exception("'inputObject' argument is not a valid object. "
                 + inputObject.getName() + " is of type:" + str(inputObject)
-                + ". Must be an instance of 'Locator' or 'BaseAttribute'.")
+                + ". Must be an instance of 'Locator' or 'Attribute'.")
 
         if inputObject in self.inputs:
             raise Exception("'inputObject' argument is already an input! Invalid object: '"
@@ -171,7 +171,7 @@ class BaseComponent(SceneItem):
             inputObject.setFlag("inputObject")
             inputObject.setShapeVisibility(False)
 
-        elif isinstance(inputObject, BaseAttribute):
+        elif isinstance(inputObject, Attribute):
             inputAttrsGrp.attributes.append(inputObject)
             inputObject.setParent(inputAttrsGrp)
 
@@ -300,10 +300,10 @@ class BaseComponent(SceneItem):
         outputHrc = self.getChildByName('outputs')
         outputAttrsGrp = outputHrc.getAttributeGroupByName('outputAttrs')
 
-        if not isinstance(outputObject, (SceneItem, BaseAttribute)):
+        if not isinstance(outputObject, (SceneItem, Attribute)):
             raise Exception("'outputObject' argument is not a valid object. "
                 + outputObject.getName() + " is of type:" + str(outputObject)
-                + ". Must be an instance of 'SceneItem' or 'BaseAttribute'.")
+                + ". Must be an instance of 'SceneItem' or 'Attribute'.")
 
         if outputObject in self.outputs:
             raise Exception("'outputObject' argument is already an output! Invalid object: '"
@@ -314,7 +314,7 @@ class BaseComponent(SceneItem):
             outputObject.setFlag("outputObject")
             outputObject.setShapeVisibility(False)
 
-        elif isinstance(outputObject, BaseAttribute):
+        elif isinstance(outputObject, Attribute):
             outputAttrsGrp.attributes.append(outputObject)
             outputObject.setParent(outputAttrsGrp)
 

@@ -5,7 +5,7 @@ Control - Base Control.
 
 """
 
-from kraken.core.configs.base_config import BaseConfig
+from kraken.core.configs.config import Config
 from kraken.core.maths import Euler, Quat, Vec3, Xfo
 from kraken.core.maths import Math_degToRad
 from kraken.core.objects.curve import Curve
@@ -25,7 +25,7 @@ class Control(Curve):
 
         super(Control, self).__init__(name, parent=parent)
 
-        config = BaseConfig.getInstance()
+        config = Config.getInstance()
         configShapes = config.getControlShapes()
         if shape not in configShapes.keys():
             raise KeyError("'" + shape + "' is not a valid shape in the loaded config.")

@@ -1,6 +1,5 @@
 from kraken.core.objects.container import Container
 from kraken.core.objects.layer import Layer
-from kraken.helpers.utility_methods import logHierarchy
 
 from arm_component import ArmComponent
 from hand_component import HandComponent
@@ -11,9 +10,12 @@ from spine_component import SpineComponent
 from neck_component import NeckComponent
 from head_component import HeadComponent
 
+from kraken.helpers.utility_methods import logHierarchy
+
 from kraken.core.maths import Vec3, Quat
 
 from kraken.core.profiler import Profiler
+
 
 class BobRig(Container):
     """Test Arm Component"""
@@ -62,7 +64,7 @@ class BobRig(Container):
             "clavicleUpVOffset": Vec3(0.0, 1.0, 0.0),
             "clavicleEndPosition": Vec3(-2.27, 15.295, -0.753)
         })
-        armLeftComponent = ArmComponent("arm", controlsLayer, data={ 
+        armLeftComponent = ArmComponent("arm", controlsLayer, data={
             "location":"L",
             "bicepPosition": Vec3(2.27, 15.295, -0.753),
             "forearmPosition": Vec3(5.039, 13.56, -0.859),
@@ -70,7 +72,7 @@ class BobRig(Container):
             "bicepFKCtrlSize": 1.75,
             "forearmFKCtrlSize": 1.5
             } )
-        armRightComponent = ArmComponent("arm", controlsLayer, data={ 
+        armRightComponent = ArmComponent("arm", controlsLayer, data={
             "location":"R",
             "bicepPosition": Vec3(-2.27, 15.295, -0.753),
             "forearmPosition": Vec3(-5.039, 13.56, -0.859),

@@ -1,5 +1,5 @@
 __all__ = ['attribute_group',
-           'base_attribute',
+           'attribute',
            'bool_attribute',
            'float_attribute',
            'integer_attribute',

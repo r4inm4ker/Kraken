@@ -5,10 +5,10 @@ OrientationConstraint - Orientation Constraint.
 
 """
 
-from base_constraint import BaseConstraint
+from constraint import Constraint
 
 
-class OrientationConstraint(BaseConstraint):
+class OrientationConstraint(Constraint):
     """Orientation Constraint."""
 
     def __init__(self, name):

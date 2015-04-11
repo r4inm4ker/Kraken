@@ -18,7 +18,6 @@ from kraken.core.objects.locator import Locator
 from kraken.core.objects.control import Control
 
 from kraken.core.objects.attributes.attribute_group import AttributeGroup
-# from kraken.core.objects.attributes.base_attribute import BaseAttribute
 from kraken.core.objects.attributes.bool_attribute import BoolAttribute
 from kraken.core.objects.attributes.float_attribute import FloatAttribute
 from kraken.core.objects.attributes.integer_attribute import IntegerAttribute
@@ -255,7 +254,7 @@ class KrakenLoader(object):
         else:
             raise Exception("KrakenLoader does not support the given type:" + jsonData['__typeHierarchy__'])
 
-        # Before registering or decoding, set the parent so that the full name contains the entire path. 
+        # Before registering or decoding, set the parent so that the full name contains the entire path.
         if len(self.parentItems) > 0:
             item.setParent(self.parentItems[-1])
 
@@ -263,7 +262,7 @@ class KrakenLoader(object):
         # Store the item as the parent item before decoding the object
         # which in turn decodes the children items.
         self.parentItems.append(item)
-        
+
         item.jsonDecode(self, jsonData)
 
         # Pop the parent item stack, which reverts the current parent item

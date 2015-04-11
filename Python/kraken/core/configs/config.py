@@ -1,24 +1,24 @@
 """Kraken - base config module.
 
 Classes:
-BaseConfig -- Base config object used to configure builders.
+Config -- Base config object used to configure builders.
 
 """
 
 
-class BaseConfig(object):
+class Config(object):
     """Base Configuration for Kraken builders."""
 
     _instance = None
 
     def __init__(self):
-        super(BaseConfig, self).__init__()
+        super(Config, self).__init__()
 
         # the config is a singleton, so after the first is constructed, throw an error.
-        if BaseConfig._instance is not None:
-            raise Exception("BaseConfig object constructed twice. Please always call 'BaseConfig.getInstance'")
+        if Config._instance is not None:
+            raise Exception("Config object constructed twice. Please always call 'Config.getInstance'")
 
-        BaseConfig._instance = self
+        Config._instance = self
 
         self._explicitNaming = False
         self._colors = self.initColors()
@@ -147,7 +147,7 @@ class BaseConfig(object):
                         "separator": "_",
                         "types": {
                                   "default": "null",
-                                  "BaseComponent": "cmp",
+                                  "Component": "cmp",
                                   "ComponentInput": "cmpIn",
                                   "ComponentOutput": "cmpOut",
                                   "Container": "",
@@ -163,7 +163,7 @@ class BaseConfig(object):
                                   {
                                    "Container": ["name"],
                                    "Layer": ["name"],
-                                   "BaseComponent": ["name", "sep", "location", "sep", "type"],
+                                   "Component": ["name", "sep", "location", "sep", "type"],
                                    "default": ["component", "sep", "location", "sep", "name", "sep", "type"],
                                   }
                        }
@@ -476,19 +476,19 @@ class BaseConfig(object):
     # ==============
     @classmethod
     def getInstance(cls):
-        """This class method returns the singleton instance for the BaseConfig.
+        """This class method returns the singleton instance for the Config.
 
         Return:
         The singleton instance.
 
         """
 
-        if BaseConfig._instance is None:
+        if Config._instance is None:
             cls()
-        elif not isinstance(BaseConfig._instance, BaseConfig):
-            raise Exception("Multiple different BaseConfig types have been constructed.");
+        elif not isinstance(Config._instance, Config):
+            raise Exception("Multiple different Config types have been constructed.");
 
-        return BaseConfig._instance
+        return Config._instance
 
 
     def clearInstance(cls):
@@ -499,6 +499,6 @@ class BaseConfig(object):
 
         """
 
-        BaseConfig._instance = None
+        Config._instance = None
 
         return True
