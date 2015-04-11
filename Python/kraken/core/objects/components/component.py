@@ -36,6 +36,8 @@ class Component(SceneItem):
         outputAttrGrp = AttributeGroup('outputAttrs')
         outputHrc.addAttributeGroup(outputAttrGrp)
 
+        self.setupComponent()
+
 
     # =============
     # Side Methods
@@ -103,6 +105,7 @@ class Component(SceneItem):
             layer = Layer(name, parent=self)
 
         return layer
+
 
     # ==============
     # Child Methods
@@ -587,5 +590,68 @@ class Component(SceneItem):
 
         oldIndex = self.getOperatorIndex(operator)
         self.operators.insert(index, self.operators.pop(oldindex))
+
+        return True
+
+
+    # ==============
+    # Setup Methods
+    # ==============
+    def setupComponent(self):
+        """Method called on initialization to setup the component.
+
+        Return:
+        True if successful.
+
+        """
+
+        self._setupControls()
+        self._setupDeformers()
+        self._setupOperators()
+        self._setupIO()
+
+        return True
+
+
+    def _setupControls(self):
+        """Method where control hierarchy should be created.
+
+        Return:
+        True if successful.
+
+        """
+
+        return True
+
+
+    def _setupDeformers(self):
+        """Method where deformers should be created and connected.
+
+        Return:
+        True if successful.
+
+        """
+
+        return True
+
+
+    def _setupOperators(self):
+        """Method where component operators should be created.
+
+        Return:
+        True if successful.
+
+        """
+
+        return True
+
+
+    def _setupIO(self):
+        """Method where component I/O objects should be created.
+
+        Return:
+        True if successful.
+
+        """
 
         return True

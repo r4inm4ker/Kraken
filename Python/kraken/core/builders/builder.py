@@ -575,9 +575,9 @@ class Builder(object):
         elif kObject.isTypeOf("Curve"):
             dccSceneItem = self.buildCurve(kObject, buildName)
 
-        ## Important Note: The order of these tests is important.
-        ## New classes should be added above the classes they are derrived from.
-        ## No new types should be added below SceneItem here.
+        # Important Note: The order of these tests is important.
+        # New classes should be added above the classes they are derrived from.
+        # No new types should be added below SceneItem here.
         elif kObject.isTypeOf("SceneItem"):
             dccSceneItem = self.buildLocator(kObject, buildName)
 
