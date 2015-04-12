@@ -36,7 +36,7 @@ class Component(SceneItem):
         outputAttrGrp = AttributeGroup('outputAttrs')
         outputHrc.addAttributeGroup(outputAttrGrp)
 
-        self.setupComponent()
+        self._setupComponent()
 
 
     # =============
@@ -597,7 +597,7 @@ class Component(SceneItem):
     # ==============
     # Setup Methods
     # ==============
-    def setupComponent(self):
+    def _setupComponent(self):
         """Method called on initialization to setup the component.
 
         Return:
