@@ -28,9 +28,9 @@ class Component(SceneItem):
 
         self.setShapeVisibility(False)
 
-        self.lockRotation(True, True, True)
-        self.lockScale(True, True, True)
-        self.lockTranslation(True, True, True)
+        self.lockRotation(x=True, y=True, z=True)
+        self.lockScale(x=True, y=True, z=True)
+        self.lockTranslation(x=True, y=True, z=True)
 
         inputHrc = HierarchyGroup('inputs', parent=self)
         inputAttrGrp = AttributeGroup('inputAttrs')
