@@ -5,9 +5,7 @@ Builder -- Base builder object to build objects in DCC.
 
 """
 
-from kraken.core import logger as pyLogger
-logger = pyLogger.getLogger("pyLogger")
-
+from kraken.core.kraken_system import KrakenSystem
 from kraken.core.configs.config import Config
 
 from kraken.core.objects.components.component import Component
@@ -959,6 +957,8 @@ class Builder(object):
 
             # Clear config instance when finished.
             self.config.clearInstance()
+            ks = KrakenSystem.getInstance()
+            ks.clearInstance()
 
         Profiler.getInstance().pop()
 
