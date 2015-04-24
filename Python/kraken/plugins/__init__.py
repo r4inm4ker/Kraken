@@ -31,6 +31,6 @@ def getBuilder():
         print "Failed to find DCC builder. Falling back to Python builder."
 
         from kraken.core.builders import builder
-        builder = base_builder.Builder()
+        builder = builder.Builder()
 
     return builder
