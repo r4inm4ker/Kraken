@@ -19,7 +19,7 @@ class NumberAttribute(Attribute):
         if minValue is not None:
             self.setMin(minValue)
         if maxValue is not None:
-            self.setMax(minValue)
+            self.setMax(maxValue)
 
     # ==================
     # Min / Max Methods
@@ -33,7 +33,6 @@ class NumberAttribute(Attribute):
         """
 
         return self.min
-
 
     def setMin(self, minimum):
         """Sets the minimum value for the attributeself.
@@ -54,7 +53,6 @@ class NumberAttribute(Attribute):
 
         return True
 
-
     def getMax(self):
         """Gets the maximum value for this attribute.
 
@@ -64,7 +62,6 @@ class NumberAttribute(Attribute):
         """
 
         return self.max
-
 
     def setMax(self, maximum):
         """Sets the maximum value for the attributeself.
@@ -84,4 +81,3 @@ class NumberAttribute(Attribute):
         self.max = maximum
 
         return True
-
