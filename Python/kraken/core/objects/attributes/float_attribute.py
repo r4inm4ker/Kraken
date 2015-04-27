@@ -52,6 +52,7 @@ class FloatAttribute(NumberAttribute):
 
         return True
 
+
     def getRTVal(self):
         """Returns and RTVal object for this attribute.
 
