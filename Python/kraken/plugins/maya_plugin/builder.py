@@ -301,11 +301,11 @@ class Builder(Builder):
 
         dccSceneItem = parentDCCSceneItem.attr(kAttribute.getName())
 
-        if kAttribute.min is not None:
-            dccSceneItem.setMin(kAttribute.min)
+        if kAttribute.getMin() is not None:
+            dccSceneItem.setMin(kAttribute.getMin())
 
-        if kAttribute.max is not None:
-            dccSceneItem.setMax(kAttribute.max)
+        if kAttribute.getMax() is not None:
+            dccSceneItem.setMax(kAttribute.getMax())
 
         self._registerSceneItemPair(kAttribute, dccSceneItem)
 
