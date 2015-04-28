@@ -13,8 +13,8 @@ class Attribute(BaseItem):
         super(Attribute, self).__init__(name, parent)
         self._value = value
         self._connection = None
-        self._keyable = None
-        self._lock = None
+        self._keyable = True
+        self._lock = False
 
         if keyable is not None:
             self.setKeyable(keyable)
