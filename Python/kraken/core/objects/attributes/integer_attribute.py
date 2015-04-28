@@ -11,8 +11,8 @@ from kraken.core.kraken_system import ks
 class IntegerAttribute(NumberAttribute):
     """Float Attribute. Implemented value type checking and limiting."""
 
-    def __init__(self, name, value=0, minValue=None, maxValue=None, keyable=None, lock=None):
-        super(IntegerAttribute, self).__init__(name, value, minValue=minValue, maxValue=maxValue, keyable=keyable, lock=lock)
+    def __init__(self, name, value=0, minValue=None, maxValue=None, keyable=None, lock=None, uiMin=None, uiMax=None):
+        super(IntegerAttribute, self).__init__(name, value, minValue=minValue, maxValue=maxValue, keyable=keyable, lock=lock, uiMin=uiMin, uiMax=uiMax)
 
         if minValue is None:
             if value < 0:
@@ -51,6 +51,45 @@ class IntegerAttribute(NumberAttribute):
         super(IntegerAttribute, self).setValue(value)
 
         return True
+
+
+    def setUiMin(self, minimum):
+        """Sets the default minimum ui slider value for the attribute.
+
+        Note: Only works on float or integer attributes.
+
+        Arguments:
+        minimum -- float / integer, default minimum ui slider value.
+
+        Return:
+        True if successful.
+
+        """
+
+        assert type(self._value) in (int), "Value is not of type 'int'."
+        super(IntegerAttribute, self).setUiMin(minimum)
+
+        return True
+
+
+    def setUiMax(self, maximum):
+        """Sets the default maximum ui slider value for the attribute.
+
+        Note: Only works on float or integer attributes.
+
+        Arguments:
+        maximum -- float / integer, default maximum ui slider value.
+
+        Return:
+        True if successful.
+
+        """
+
+        assert type(self._value) in (int), "Value is not of type 'int'."
+        super(IntegerAttribute, self).setUiMax(maximum)
+
+        return True
+
 
     def getRTVal(self):
         """Returns and RTVal object for this attribute.
