@@ -11,8 +11,8 @@ class Attribute(BaseItem):
 
     def __init__(self, name, value, parent=None):
         super(Attribute, self).__init__(name, parent)
-        self.value = value
-        self.connection = None
+        self._value = value
+        self._connection = None
 
 
     # ==============
@@ -26,7 +26,7 @@ class Attribute(BaseItem):
 
         """
 
-        return self.value
+        return self._value
 
 
     def setValue(self, value):
@@ -40,7 +40,7 @@ class Attribute(BaseItem):
 
         """
 
-        self.value = value
+        self._value = value
 
         return True
 
@@ -65,7 +65,7 @@ class Attribute(BaseItem):
 
         """
 
-        if self.connection is None:
+        if self._connection is None:
             return False
 
         return True
@@ -79,7 +79,7 @@ class Attribute(BaseItem):
 
         """
 
-        return self.connection
+        return self._connection
 
 
     def connect(self, attribute):
@@ -93,7 +93,7 @@ class Attribute(BaseItem):
 
         """
 
-        self.connection = attribute
+        self._connection = attribute
 
         return True
 
@@ -106,7 +106,7 @@ class Attribute(BaseItem):
 
         """
 
-        self.connection = None
+        self._connection = None
 
         return True
 
@@ -132,7 +132,7 @@ class Attribute(BaseItem):
         jsonData = {
             '__typeHierarchy__': classHierarchy,
             'name': self.name,
-            'value': saver.encodeValue(self.value),
+            'value': saver.encodeValue(self._value),
             'parent': None
         }
 
@@ -150,6 +150,6 @@ class Attribute(BaseItem):
 
         """
         self.name =  jsonData['name']
-        self.value =  loader.decodeValue(jsonData['value'])
+        self._value =  loader.decodeValue(jsonData['value'])
 
         return True
