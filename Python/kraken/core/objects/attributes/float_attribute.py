@@ -66,7 +66,9 @@ class FloatAttribute(NumberAttribute):
 
         """
 
-        assert type(self._value) in (int, float), "Value is not of type 'int' or 'float'."
+        if type(minimum) not in (int, float):
+            raise TypeError("Value is not of type 'int' or 'float'.")
+
         super(FloatAttribute, self).setUiMin(minimum)
 
         return True
@@ -85,7 +87,9 @@ class FloatAttribute(NumberAttribute):
 
         """
 
-        assert type(self._value) in (int, float), "Value is not of type 'int' or 'float'."
+        if type(maximum) not in (int, float):
+            raise TypeError("Value is not of type 'int' or 'float'.")
+
         super(FloatAttribute, self).setUiMax(maximum)
 
         return True
