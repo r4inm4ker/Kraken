@@ -14,8 +14,8 @@ class NumberAttribute(Attribute):
     def __init__(self, name, value=0, minValue=None, maxValue=None):
         super(NumberAttribute, self).__init__(name, value)
 
-        self.min = None
-        self.max = None
+        self._min = None
+        self._max = None
         if minValue is not None:
             self.setMin(minValue)
         if maxValue is not None:
@@ -33,7 +33,7 @@ class NumberAttribute(Attribute):
 
         """
 
-        return self.min
+        return self._min
 
 
     def setMin(self, minimum):
@@ -51,7 +51,7 @@ class NumberAttribute(Attribute):
 
         assert type(minimum) in (int, float), "'minimum' is not of type 'int' or 'float'."
 
-        self.min = minimum
+        self._min = minimum
 
         return True
 
@@ -64,7 +64,7 @@ class NumberAttribute(Attribute):
 
         """
 
-        return self.max
+        return self._max
 
 
     def setMax(self, maximum):
@@ -82,6 +82,6 @@ class NumberAttribute(Attribute):
 
         assert type(maximum) in (int, float), "'maximum' is not of type 'int' or 'float'."
 
-        self.max = maximum
+        self._max = maximum
 
         return True
