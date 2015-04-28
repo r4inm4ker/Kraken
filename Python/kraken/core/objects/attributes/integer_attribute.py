@@ -26,7 +26,7 @@ class IntegerAttribute(NumberAttribute):
             else:
                 self.setMax(value * 3)
 
-        assert type(self.value) is int, "Value is not of type 'int'."
+        assert type(self._value) is int, "Value is not of type 'int'."
 
 
     def setValue(self, value):
