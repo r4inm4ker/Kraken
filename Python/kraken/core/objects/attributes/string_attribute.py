@@ -41,4 +41,4 @@ class StringAttribute(Attribute):
         RTVal
 
         """
-        return ks.rtVal('String', self.value)
+        return ks.rtVal('String', self._value)
