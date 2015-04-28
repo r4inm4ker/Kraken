@@ -11,8 +11,8 @@ from attribute import Attribute
 class NumberAttribute(Attribute):
     """Number Attributee. Base class for number attribute types"""
 
-    def __init__(self, name, value=0, minValue=None, maxValue=None):
-        super(NumberAttribute, self).__init__(name, value)
+    def __init__(self, name, value=0, minValue=None, maxValue=None, keyable=None, lock=None):
+        super(NumberAttribute, self).__init__(name, value, keyable=keyable, lock=lock)
 
         self._min = None
         self._max = None
