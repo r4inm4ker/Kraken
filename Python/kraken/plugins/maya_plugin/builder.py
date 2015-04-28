@@ -277,7 +277,7 @@ class Builder(Builder):
         """
 
         parentDCCSceneItem = self._getDCCSceneItem(kAttribute.getParent().getParent())
-        parentDCCSceneItem.addAttr(kAttribute.getName(), niceName=kAttribute.getName(), attributeType="bool", defaultValue=kAttribute.getValue(), keyable=True)
+        parentDCCSceneItem.addAttr(kAttribute.getName(), niceName=kAttribute.getName(), attributeType="bool", defaultValue=kAttribute.getValue(), keyable=kAttribute.getKeyable())
         dccSceneItem = parentDCCSceneItem.attr(kAttribute.getName())
 
         self._registerSceneItemPair(kAttribute, dccSceneItem)
@@ -297,7 +297,7 @@ class Builder(Builder):
         """
 
         parentDCCSceneItem = self._getDCCSceneItem(kAttribute.getParent().getParent())
-        parentDCCSceneItem.addAttr(kAttribute.getName(), niceName=kAttribute.getName(), attributeType="float", defaultValue=kAttribute.getValue(), keyable=True)
+        parentDCCSceneItem.addAttr(kAttribute.getName(), niceName=kAttribute.getName(), attributeType="float", defaultValue=kAttribute.getValue(), keyable=kAttribute.getKeyable())
 
         dccSceneItem = parentDCCSceneItem.attr(kAttribute.getName())
 
@@ -324,7 +324,7 @@ class Builder(Builder):
         """
 
         parentDCCSceneItem = self._getDCCSceneItem(kAttribute.getParent().getParent())
-        parentDCCSceneItem.addAttr(kAttribute.getName(), niceName=kAttribute.getName(), attributeType="long", defaultValue=kAttribute.getValue(), minValue=kAttribute.getMin(), maxValue=kAttribute.getMax(), keyable=True)
+        parentDCCSceneItem.addAttr(kAttribute.getName(), niceName=kAttribute.getName(), attributeType="long", defaultValue=kAttribute.getValue(), minValue=kAttribute.getMin(), maxValue=kAttribute.getMax(), keyable=kAttribute.getKeyable())
         parentDCCSceneItem.attr(kAttribute.getName())
         dccSceneItem = parentDCCSceneItem.attr(kAttribute.getName())
 
