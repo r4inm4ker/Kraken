@@ -9,10 +9,18 @@ from kraken.core.objects.base_item import BaseItem
 class Attribute(BaseItem):
     """Attribute object."""
 
-    def __init__(self, name, value, parent=None):
+    def __init__(self, name, value, parent=None, keyable=None, lock=None):
         super(Attribute, self).__init__(name, parent)
         self._value = value
         self._connection = None
+        self._keyable = None
+        self._lock = None
+
+        if keyable is not None:
+            self.setKeyable(keyable)
+
+        if lock is not None:
+            self.setLock(lock)
 
 
     # ==============
@@ -41,6 +49,66 @@ class Attribute(BaseItem):
         """
 
         self._value = value
+
+        return True
+
+
+    def getKeyable(self):
+        """Returns the keyable state of the attribute.
+
+        Return:
+        Keyable state of the attribute.
+
+        """
+
+        return self._keyable
+
+
+    def setKeyable(self, value):
+        """Sets the keyable state of the attribute.
+
+        Arguments:
+        value -- Bool, keyable state.
+
+        Return:
+        True if successful.
+
+        """
+
+        if type(value) is bool:
+            self._keyable = value
+        else:
+            raise TypeError("Value is not of type 'bool'.")
+
+        return True
+
+
+    def getLock(self):
+            """Returns the Lock state of the attribute.
+
+            Return:
+            Lock state of the attribute.
+
+            """
+
+            return self._lock
+
+
+    def setLock(self, value):
+        """Sets the lock state of the attribute.
+
+        Arguments:
+        value -- Bool, lock state.
+
+        Return:
+        True if successful.
+
+        """
+
+        if type(value) is bool:
+            self._lock = value
+        else:
+            raise TypeError("Value is not of type 'bool'.")
 
         return True
 
