@@ -43,9 +43,9 @@ class IntegerAttribute(NumberAttribute):
         if type(value) not in (int):
             raise TypeError("Value is not of type 'int'.")
 
-        if value < self.min:
+        if value < self._min:
             raise ValueError("Value is less than attribute minimum.")
-        elif value > self.max:
+        elif value > self._max:
             raise ValueError("Value is greater than attribute maximum.")
 
         super(IntegerAttribute, self).setValue(value)
@@ -59,4 +59,4 @@ class IntegerAttribute(NumberAttribute):
         RTVal
 
         """
-        return ks.rtVal('Integer', self.value)
+        return ks.rtVal('Integer', self._value)

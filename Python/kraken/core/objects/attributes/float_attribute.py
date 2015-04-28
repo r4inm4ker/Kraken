@@ -26,7 +26,7 @@ class FloatAttribute(NumberAttribute):
             else:
                 self.setMax(value * 3.0)
 
-        assert type(self.value) in (int, float), "Value is not of type 'int' or 'float'."
+        assert type(self._value) in (int, float), "Value is not of type 'int' or 'float'."
 
 
     def setValue(self, value):
@@ -43,9 +43,9 @@ class FloatAttribute(NumberAttribute):
         if type(value) not in (int, float):
             raise TypeError("Value is not of type 'int' or 'float'.")
 
-        if value < self.min:
+        if value < self._min:
             raise ValueError("Value is less than attribute minimum.")
-        elif value > self.max:
+        elif value > self._max:
             raise ValueError("Value is greater than attribute maximum.")
 
         super(FloatAttribute, self).setValue(value)
@@ -60,7 +60,7 @@ class FloatAttribute(NumberAttribute):
         RTVal
 
         """
-        return ks.rtVal('Scalar', self.value)
+        return ks.rtVal('Scalar', self._value)
 
 
 
