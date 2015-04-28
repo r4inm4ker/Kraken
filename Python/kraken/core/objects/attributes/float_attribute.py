@@ -12,7 +12,7 @@ class FloatAttribute(NumberAttribute):
     """Float Attribute. Implemented value type checking and limiting."""
 
     def __init__(self, name, value=0.0, minValue=None, maxValue=None):
-        super(FloatAttribute, self).__init__(name, value)
+        super(FloatAttribute, self).__init__(name, value, minValue=minValue, maxValue=maxValue)
 
         if minValue is None:
             if value < 0.0:
@@ -52,6 +52,7 @@ class FloatAttribute(NumberAttribute):
 
         return True
 
+
     def getRTVal(self):
         """Returns and RTVal object for this attribute.
 
@@ -62,4 +63,4 @@ class FloatAttribute(NumberAttribute):
         return ks.rtVal('Scalar', self.value)
 
 
-        
+
