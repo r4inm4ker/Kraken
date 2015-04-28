@@ -67,7 +67,7 @@ class FloatAttribute(NumberAttribute):
         """
 
         if type(minimum) not in (int, float):
-            raise TypeError("Value is not of type 'int' or 'float'.")
+            raise TypeError("UiMin value is not of type 'int' or 'float'.")
 
         super(FloatAttribute, self).setUiMin(minimum)
 
@@ -88,7 +88,7 @@ class FloatAttribute(NumberAttribute):
         """
 
         if type(maximum) not in (int, float):
-            raise TypeError("Value is not of type 'int' or 'float'.")
+            raise TypeError("UiMax value is not of type 'int' or 'float'.")
 
         super(FloatAttribute, self).setUiMax(maximum)
 

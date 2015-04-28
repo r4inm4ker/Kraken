@@ -306,7 +306,7 @@ class Builder(Builder):
 
         parentDCCSceneItem = self._getDCCSceneItem(kAttribute.getParent())
         dccSceneItem = parentDCCSceneItem.AddParameter2(kAttribute.getName(), constants.siBool, kAttribute.getValue(), "", "", "", "", constants.siClassifUnknown, 2053, kAttribute.getName())
-
+        dccSceneItem.Keyable = kAttribute.getKeyable()
         self._registerSceneItemPair(kAttribute, dccSceneItem)
 
         return True
@@ -324,8 +324,8 @@ class Builder(Builder):
         """
 
         parentDCCSceneItem = self._getDCCSceneItem(kAttribute.getParent())
-        dccSceneItem = parentDCCSceneItem.AddParameter2(kAttribute.getName(), constants.siDouble, kAttribute.getValue(), kAttribute.getMin(), kAttribute.getMax(), kAttribute.getMin(), kAttribute.getMax(), constants.siClassifUnknown, 2053, kAttribute.getName())
-
+        dccSceneItem = parentDCCSceneItem.AddParameter2(kAttribute.getName(), constants.siDouble, kAttribute.getValue(), kAttribute.getMin(), kAttribute.getMax(), kAttribute.getUiMin(), kAttribute.getUiMax(), constants.siClassifUnknown, 2053, kAttribute.getName())
+        dccSceneItem.Keyable = kAttribute.getKeyable()
         self._registerSceneItemPair(kAttribute, dccSceneItem)
 
         return True
@@ -343,8 +343,8 @@ class Builder(Builder):
         """
 
         parentDCCSceneItem = self._getDCCSceneItem(kAttribute.getParent())
-        dccSceneItem = parentDCCSceneItem.AddParameter2(kAttribute.getName(), constants.siInt4, kAttribute.getValue(), kAttribute.getMin(), kAttribute.getMax(), kAttribute.getMin(), kAttribute.getMax(), constants.siClassifUnknown, 2053, kAttribute.getName())
-
+        dccSceneItem = parentDCCSceneItem.AddParameter2(kAttribute.getName(), constants.siInt4, kAttribute.getValue(), kAttribute.getMin(), kAttribute.getMax(), kAttribute.getUiMin(), kAttribute.getUiMax(), constants.siClassifUnknown, 2053, kAttribute.getName())
+        dccSceneItem.Keyable = kAttribute.getKeyable()
         self._registerSceneItemPair(kAttribute, dccSceneItem)
 
         return True
@@ -362,8 +362,8 @@ class Builder(Builder):
         """
 
         parentDCCSceneItem = self._getDCCSceneItem(kAttribute.getParent())
-        dccSceneItem = parentDCCSceneItem.AddParameter2(kAttribute.getName(), constants.siString, kAttribute.getValue(), "", "", "", "", constants.siClassifUnknown, 2053, kAttribute.getName())
-
+        dccSceneItem = parentDCCSceneItem.AddParameter2(kAttribute.getName(), constants.siString, kAttribute.getValue(), "", "", "", "", constants.siClassifUnknown, 2048, kAttribute.getName())
+        dccSceneItem.Keyable = False
         self._registerSceneItemPair(kAttribute, dccSceneItem)
 
         return True

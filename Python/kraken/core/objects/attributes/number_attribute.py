@@ -26,13 +26,9 @@ class NumberAttribute(Attribute):
 
         if uiMin is not None:
             self.setUiMin(uiMin)
-        else:
-            self.setUiMin(self._min)
 
         if uiMax is not None:
             self.setUiMax(uiMax)
-        else:
-            self.setUiMax(self._max)
 
 
     # ==================
@@ -125,13 +121,13 @@ class NumberAttribute(Attribute):
         """
         if self._uiMax is not None:
             if minimum > self._uiMax:
-                raise ValueError('Value is greater than attribute uiMax')
+                raise ValueError('UiMin value is greater than attribute uiMax')
+
+        if minimum > self._max:
+            raise ValueError('UiMin value is greater than attribute maximum')
 
         if minimum < self._min:
-            raise ValueError('Value is less than attribute minimum')
-
-        if minimum > self._min:
-            raise ValueError('Value is greater than attribute maximum')
+            raise ValueError('UiMin value is less than attribute minimum')
 
         self._uiMin = minimum
 
@@ -163,13 +159,13 @@ class NumberAttribute(Attribute):
         """
         if self._uiMin is not None:
             if maximum < self._uiMin:
-                raise ValueError('Value is less than attribute uiMin')
+                raise ValueError('UiMax value is less than attribute uiMin')
 
         if maximum < self._min:
-            raise ValueError('Value is less than attribute minimum')
+            raise ValueError('UiMax value is less than attribute minimum')
 
-        if maximum < self._max:
-            raise ValueError('Value is less than attribute maximum')
+        if maximum > self._max:
+            raise ValueError('UiMax value is greater than attribute maximum')
 
         self._uiMax = maximum
 
