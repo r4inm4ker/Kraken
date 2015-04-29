@@ -53,7 +53,7 @@ class FloatAttribute(NumberAttribute):
         return True
 
 
-    def setUiMin(self, minimum):
+    def setUIMin(self, minimum):
         """Sets the default minimum ui slider value for the attribute.
 
         Note: Only works on float or integer attributes.
@@ -69,12 +69,12 @@ class FloatAttribute(NumberAttribute):
         if type(minimum) not in (int, float):
             raise TypeError("UiMin value is not of type 'int' or 'float'.")
 
-        super(FloatAttribute, self).setUiMin(minimum)
+        super(FloatAttribute, self).setUIMin(minimum)
 
         return True
 
 
-    def setUiMax(self, maximum):
+    def setUIMax(self, maximum):
         """Sets the default maximum ui slider value for the attribute.
 
         Note: Only works on float or integer attributes.
@@ -90,7 +90,7 @@ class FloatAttribute(NumberAttribute):
         if type(maximum) not in (int, float):
             raise TypeError("UiMax value is not of type 'int' or 'float'.")
 
-        super(FloatAttribute, self).setUiMax(maximum)
+        super(FloatAttribute, self).setUIMax(maximum)
 
         return True
 

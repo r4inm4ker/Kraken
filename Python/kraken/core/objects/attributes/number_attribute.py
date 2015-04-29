@@ -24,8 +24,8 @@ class NumberAttribute(Attribute):
         if maxValue is not None:
             self.setMax(maxValue)
 
-        self.setUiMin(minValue)
-        self.setUiMax(maxValue)
+        self.setUIMin(minValue)
+        self.setUIMax(maxValue)
 
 
     # ==================
@@ -93,7 +93,7 @@ class NumberAttribute(Attribute):
         return True
 
 
-    def getUiMin(self):
+    def getUIMin(self):
         """Gets the default minimum ui slider value for this attribute.
 
         Return:
@@ -104,7 +104,7 @@ class NumberAttribute(Attribute):
         return self._uiMin
 
 
-    def setUiMin(self, minimum):
+    def setUIMin(self, minimum):
         """Sets the default minimum ui slider value for the attribute.
 
         Note: Only works on float or integer attributes.
@@ -131,7 +131,7 @@ class NumberAttribute(Attribute):
         return True
 
 
-    def getUiMax(self):
+    def getUIMax(self):
         """Gets the default maximum ui slider value for this attribute.
 
         Return:
@@ -142,7 +142,7 @@ class NumberAttribute(Attribute):
         return self._uiMax
 
 
-    def setUiMax(self, maximum):
+    def setUIMax(self, maximum):
         """Sets the default maximum ui slider value for the attribute.
 
         Note: Only works on float or integer attributes.
