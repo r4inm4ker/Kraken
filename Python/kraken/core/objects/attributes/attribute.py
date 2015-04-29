@@ -9,18 +9,12 @@ from kraken.core.objects.base_item import BaseItem
 class Attribute(BaseItem):
     """Attribute object."""
 
-    def __init__(self, name, value, parent=None, keyable=None, lock=None):
+    def __init__(self, name, value, parent=None):
         super(Attribute, self).__init__(name, parent)
         self._value = value
         self._connection = None
         self._keyable = True
         self._lock = False
-
-        if keyable is not None:
-            self.setKeyable(keyable)
-
-        if lock is not None:
-            self.setLock(lock)
 
 
     # ==============

@@ -12,8 +12,8 @@ from kraken.core.kraken_system import ks
 class BoolAttribute(Attribute):
     """Boolean Attribute. Implemented value type checking and limiting."""
 
-    def __init__(self, name, value=False, keyable=None, lock=None):
-        super(BoolAttribute, self).__init__(name, value, keyable=keyable, lock=lock)
+    def __init__(self, name, value=False):
+        super(BoolAttribute, self).__init__(name, value)
         assert type(value) is bool, "Value is not of type 'bool'."
 
 
