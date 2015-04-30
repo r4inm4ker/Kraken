@@ -116,6 +116,16 @@ class NumberAttribute(Attribute):
         True if successful.
 
         """
+
+        attrType = self.__class__.__name__
+        if attrType is 'IntegerAttribute':
+            if type(minimum) is not int:
+                raise TypeError("UiMin value is not of type 'int'.")
+
+        if attrType is 'FloatAttribute':
+            if type(minimum) not in (int, float):
+                raise TypeError("UiMin value is not of type 'int' or 'float'.")
+
         if self._uiMax is not None:
             if minimum > self._uiMax:
                 raise ValueError('UiMin value is greater than attribute uiMax')
@@ -154,6 +164,16 @@ class NumberAttribute(Attribute):
         True if successful.
 
         """
+
+        attrType = self.__class__.__name__
+        if attrType is 'IntegerAttribute':
+            if type(maximum) is not int:
+                raise TypeError("UiMax value is not of type 'int'.")
+
+        if attrType is 'FloatAttribute':
+            if type(maximum) not in (int, float):
+                raise TypeError("UiMax value is not of type 'int' or 'float'.")
+
         if self._uiMin is not None:
             if maximum < self._uiMin:
                 raise ValueError('UiMax value is less than attribute uiMin')

@@ -53,48 +53,6 @@ class IntegerAttribute(NumberAttribute):
         return True
 
 
-    def setUIMin(self, minimum):
-        """Sets the default minimum ui slider value for the attribute.
-
-        Note: Only works on float or integer attributes.
-
-        Arguments:
-        minimum -- float / integer, default minimum ui slider value.
-
-        Return:
-        True if successful.
-
-        """
-
-        if type(minimum) is not int:
-            raise TypeError("UiMin value is not of type 'int'.")
-
-        super(IntegerAttribute, self).setUIMin(minimum)
-
-        return True
-
-
-    def setUIMax(self, maximum):
-        """Sets the default maximum ui slider value for the attribute.
-
-        Note: Only works on float or integer attributes.
-
-        Arguments:
-        maximum -- float / integer, default maximum ui slider value.
-
-        Return:
-        True if successful.
-
-        """
-
-        if type(maximum) is not int:
-            raise TypeError("UiMax value is not of type 'int'.")
-
-        super(IntegerAttribute, self).setUIMax(maximum)
-
-        return True
-
-
     def getRTVal(self):
         """Returns and RTVal object for this attribute.
 
