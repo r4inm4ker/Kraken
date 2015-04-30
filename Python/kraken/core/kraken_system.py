@@ -28,6 +28,7 @@ class KrakenSystem(object):
 
         self.registeredComponents = {}
 
+
     def loadCoreClient(self):
         """Loads the Fabric Engine Core Client
 
@@ -75,6 +76,7 @@ class KrakenSystem(object):
 
             Profiler.getInstance().pop()
 
+
     def getCoreClient(self):
         """Returns the Fabric Engine Core Client owned by the KrakenSystem
 
@@ -85,6 +87,7 @@ class KrakenSystem(object):
         if self.client is None:
             self.loadCoreClient()
         return self.client
+
 
     def loadExtension(self, extension):
         """Loads the given extension and updates the registeredTypes cache.
@@ -101,6 +104,7 @@ class KrakenSystem(object):
             # Cache the loaded extension so that we aviod refreshing the typeDescs cache(costly)
             self.loadedExtensions.append(extension)
             Profiler.getInstance().pop()
+
 
     def constructRTVal(self, dataType, defaultValue=None):
         """Constructs a new RTVal using the given name and optional devault value.
@@ -188,6 +192,7 @@ class KrakenSystem(object):
         else:
             return "None"
 
+
     def registerComponent(self, componentClass):
         """Registers a component Python class with the KrakenSystem so ti can be built by the rig builder.
 
@@ -203,6 +208,7 @@ class KrakenSystem(object):
 
         self.registeredComponents[componentClass.__name__] = componentClass
 
+
     def getComponentClass(self, className):
         """Returns the registered Python component class with the given name
 
@@ -217,7 +223,6 @@ class KrakenSystem(object):
             raise Exception("Component with that class not registered:" + className )
 
         return self.registeredComponents[className]
-
 
 
     @classmethod
