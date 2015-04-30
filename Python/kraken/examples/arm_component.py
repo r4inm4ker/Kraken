@@ -25,12 +25,12 @@ class ArmComponentGuide(Component):
     """Arm Component Guide"""
 
 
-    def __init__(self, name='ArmGuide', parent=None):
+    def __init__(self, name='Arm', parent=None):
         super(ArmComponentGuide, self).__init__(name, parent)
 
-        self.bicep = Control('bicepFK', parent=self, shape="cube")
-        self.forearm = Control('bicepFK', parent=self, shape="cube")
-        self.wrist = Control('bicepFK', parent=self, shape="cube")
+        self.bicep = Control('bicepFK', parent=self, shape="sphere")
+        self.forearm = Control('bicepFK', parent=self, shape="sphere")
+        self.wrist = Control('bicepFK', parent=self, shape="sphere")
 
         self.bicepFKCtrlSizeInputAttr = FloatAttribute('bicepFKCtrlSize', 2.0)
         self.addInput(self.bicepFKCtrlSizeInputAttr)
@@ -38,10 +38,14 @@ class ArmComponentGuide(Component):
         self.addInput(self.forearmFKCtrlSizeInputAttr)
 
         self.loadData({
-            'bicep': Xfo(Vec3(3,4,5)),
-            'forearm': Xfo(Vec3(2,4,5)),
-            'wrist': Xfo(Vec3(1,4,5))
-            })
+            "name": name,
+            "location": "L",
+            "bicepXfo": Xfo(Vec3(2.27, 15.295, -0.753)),
+            "forearmXfo": Xfo(Vec3(5.039, 13.56, -0.859)),
+            "wristXfo": Xfo(Vec3(7.1886, 12.2819, 0.4906)),
+            "bicepFKCtrlSize": 1.75,
+            "forearmFKCtrlSize": 1.5
+        })
 
 
     # =============
@@ -59,9 +63,13 @@ class ArmComponentGuide(Component):
         
         
         data = {
-            'bicep': self.bicep.xfo,
-            'forearm': self.forearm.xfo,
-            'wrist': self.wrist.xfo
+            'name': self.getName(),
+            'location': self.getLocation(),
+            'bicepXfo': self.bicep.xfo,
+            'forearmXfo': self.forearm.xfo,
+            'wristXfo': self.wrist.xfo,
+            "bicepFKCtrlSize": self.bicepFKCtrlSizeInputAttr.getValue(),
+            "forearmFKCtrlSize": self.forearmFKCtrlSizeInputAttr.getValue()
             }
         return data
 
@@ -75,12 +83,15 @@ class ArmComponentGuide(Component):
         True if successful.
         
         """
-        
-        
-        self.bicep.xfo = data['bicep']
-        self.forearm.xfo = data['forearm']
-        self.wrist.xfo = data['wrist']
 
+        self.setName(data['name'])
+        self.setLocation(data['location'])
+        self.bicep.xfo = data['bicepXfo']
+        self.forearm.xfo = data['forearmXfo']
+        self.wrist.xfo = data['wristXfo']
+
+        self.bicepFKCtrlSizeInputAttr.setValue(data['bicepFKCtrlSize'])
+        self.forearmFKCtrlSizeInputAttr.setValue(data['forearmFKCtrlSize'])
         return True
 
 
@@ -129,8 +140,9 @@ class ArmComponentGuide(Component):
         upVXfo.tr = upVXfo.transformVector(Vec3(0, 0, 5))
 
         return {
-            "name": "BobArm", 
-            "location":"R",
+            "class":"kraken.examples.arm_component.ArmComponent",
+            "name": self.getName(),
+            "location":self.getLocation(),
             "bicepXfo": bicepXfo,
             "forearmXfo": forearmXfo,
             "armEndXfo": armEndXfo,
