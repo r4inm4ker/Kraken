@@ -69,10 +69,10 @@ class Attribute(BaseItem):
 
         """
 
-        if type(value) is bool:
-            self._keyable = value
-        else:
+        if type(value) is not bool:
             raise TypeError("Value is not of type 'bool'.")
+
+        self._keyable = value
 
         return True
 
@@ -99,10 +99,10 @@ class Attribute(BaseItem):
 
         """
 
-        if type(value) is bool:
-            self._lock = value
-        else:
+        if type(value) is not bool:
             raise TypeError("Value is not of type 'bool'.")
+
+        self._lock = value
 
         return True
 
@@ -118,10 +118,10 @@ class Attribute(BaseItem):
 
         """
 
-        if type(value) is bool:
-            self._animatable = value
-        else:
+        if type(value) is not bool:
             raise TypeError("Value is not of type 'bool'.")
+
+        self._animatable = value
 
         return True
 
