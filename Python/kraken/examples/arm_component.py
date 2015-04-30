@@ -21,12 +21,99 @@ from kraken.helpers.utility_methods import logHierarchy
 from kraken.core.profiler import Profiler
 
 
+class ArmComponentGuide(Component):
+    """Arm Component Guide"""
+
+
+    def __init__(self, name='ArmGuide', parent=None):
+        super(ArmComponentGuide, self).__init__(name, parent)
+
+        self.bicep = Control('bicepFK', parent=self, shape="cube")
+        self.forearm = Control('bicepFK', parent=self, shape="cube")
+        self.wrist = Control('bicepFK', parent=self, shape="cube")
+
+        self.bicepFKCtrlSizeInputAttr = FloatAttribute('bicepFKCtrlSize', 2.0)
+        self.addInput(self.bicepFKCtrlSizeInputAttr)
+        self.forearmFKCtrlSizeInputAttr = FloatAttribute('forearmFKCtrlSize', 2.0)
+        self.addInput(self.forearmFKCtrlSizeInputAttr)
+
+        self.loadData({
+            'bicep': Xfo(Vec3(3,4,5)),
+            'forearm': Xfo(Vec3(2,4,5)),
+            'wrist': Xfo(Vec3(1,4,5))
+            })
+
+    def saveData(self, data):
+        
+        data = {
+            'bicep': self.bicep.xfo,
+            'forearm': self.forearm.xfo,
+            'wrist': self.wrist.xfo
+            }
+        return data
+
+    def loadData(self, data):
+        
+        self.bicep.xfo = data['bicep']
+        self.forearm.xfo = data['forearm']
+        self.wrist.xfo = data['wrist']
+
+
+    def getGuideData(self):
+
+        # values
+        bicepPosition = self.bicep.xfo.tr
+        forearmPosition = self.forearm.xfo.tr
+        wristPosition = self.wrist.xfo.tr
+
+        # Calculate Bicep Xfo
+        rootToWrist = wristPosition.subtract(bicepPosition).unit()
+        rootToElbow = forearmPosition.subtract(bicepPosition).unit()
+
+        bone1Normal = rootToWrist.cross(rootToElbow).unit()
+        bone1ZAxis = rootToElbow.cross(bone1Normal).unit()
+
+
+        bicepXfo = Xfo()
+        bicepXfo.setFromVectors(rootToElbow, bone1Normal, bone1ZAxis, bicepPosition)
+
+        # Calculate Forearm Xfo
+        elbowToWrist = wristPosition.subtract(forearmPosition).unit()
+        elbowToRoot = bicepPosition.subtract(forearmPosition).unit()
+        bone2Normal = elbowToRoot.cross(elbowToWrist).unit()
+        bone2ZAxis = elbowToWrist.cross(bone2Normal).unit()
+        forearmXfo = Xfo()
+        forearmXfo.setFromVectors(elbowToWrist, bone2Normal, bone2ZAxis, forearmPosition)
+
+        bicepLen = bicepPosition.subtract(forearmPosition).length()
+        forearmLen = forearmPosition.subtract(wristPosition).length()
+
+        armEndXfo = Xfo()
+        armEndXfo.tr = wristPosition
+        armEndXfo.ori = forearmXfo.ori
+
+        upVXfo = xfoFromDirAndUpV(bicepPosition, wristPosition, forearmPosition)
+        upVXfo.tr = forearmPosition
+        upVXfo.tr = upVXfo.transformVector(Vec3(0, 0, 5))
+
+        return {
+            "name": "BobArm", 
+            "location":"R",
+            "bicepXfo": bicepXfo,
+            "forearmXfo": forearmXfo,
+            "armEndXfo": armEndXfo,
+            "upVXfo": upVXfo,
+            "forearmLen": forearmLen,
+            "bicepLen": bicepLen,
+            "bicepFKCtrlSize": self.bicepFKCtrlSizeInputAttr.getValue(),
+            "forearmFKCtrlSize": self.forearmFKCtrlSizeInputAttr.getValue()
+            }
 
 
 class ArmComponent(Component):
     """Arm Component"""
 
-    def __init__(self, name, parent=None):
+    def __init__(self, name='Arm', parent=None):
 
         # location = data.get('location', 'M')
 
@@ -227,76 +314,43 @@ class ArmComponent(Component):
 
     def loadData(self, data=None):
 
+        self.setName(data.get('name', 'Arm'))
         location = data.get('location', 'M')
         self.setLocation(location)
 
-        # values
-        bicepPosition = data['bicepPosition']
-        forearmPosition = data['forearmPosition']
-        wristPosition = data['wristPosition']
-        bicepFKCtrlSize = data['bicepFKCtrlSize']
-        forearmFKCtrlSize = data['forearmFKCtrlSize']
+        self.bicepFKCtrl.scalePoints(Vec3(data['bicepLen'], data['bicepFKCtrlSize'], data['bicepFKCtrlSize']))
+        self.bicepFKCtrlSrtBuffer.xfo = data['bicepXfo']
+        self.bicepFKCtrl.xfo = data['bicepXfo']
 
-        # Calculate Bicep Xfo
-        rootToWrist = wristPosition.subtract(bicepPosition).unit()
-        rootToElbow = forearmPosition.subtract(bicepPosition).unit()
+        self.bicepOutput.xfo = data['bicepXfo']
+        self.forearmOutput.xfo = data['forearmXfo']
 
-        bone1Normal = rootToWrist.cross(rootToElbow).unit()
-        bone1ZAxis = rootToElbow.cross(bone1Normal).unit()
+        self.forearmFKCtrlSrtBuffer.xfo = data['forearmXfo']
+        self.forearmFKCtrl.xfo = data['forearmXfo']
+        self.armIKCtrlSrtBuffer.xfo.tr = data['armEndXfo'].tr
+        self.armIKCtrl.xfo = data['armEndXfo']
 
-        bicepLen = bicepPosition.subtract(forearmPosition).length()
-        self.bicepFKCtrl.scalePoints(Vec3(bicepLen, bicepFKCtrlSize, bicepFKCtrlSize))
-
-        bicepXfo = Xfo()
-        bicepXfo.setFromVectors(rootToElbow, bone1Normal, bone1ZAxis, bicepPosition)
-
-        # Calculate Forearm Xfo
-        elbowToWrist = wristPosition.subtract(forearmPosition).unit()
-        elbowToRoot = bicepPosition.subtract(forearmPosition).unit()
-        bone2Normal = elbowToRoot.cross(elbowToWrist).unit()
-        bone2ZAxis = elbowToWrist.cross(bone2Normal).unit()
-        forearmXfo = Xfo()
-        forearmXfo.setFromVectors(elbowToWrist, bone2Normal, bone2ZAxis, forearmPosition)
-
-        self.bicepFKCtrlSrtBuffer.xfo = bicepXfo
-        self.bicepFKCtrl.xfo = bicepXfo
-
-        self.bicepOutput.xfo = bicepXfo
-        self.forearmOutput.xfo = forearmXfo
-
-        self.forearmFKCtrlSrtBuffer.xfo = forearmXfo
-        self.forearmFKCtrl.xfo = forearmXfo
-        self.armIKCtrlSrtBuffer.xfo.tr = wristPosition
-        self.armIKCtrl.xfo = self.armIKCtrlSrtBuffer.xfo
-        if self.getLocation() == "R":
+        if location == "R":
             self.armIKCtrl.rotatePoints(0, 90, 0)
         else:
             self.armIKCtrl.rotatePoints(0, -90, 0)
 
-        forearmLen = forearmPosition.subtract(wristPosition).length()
-        self.forearmFKCtrl.scalePoints(Vec3(forearmLen, forearmFKCtrlSize, forearmFKCtrlSize))
+        self.forearmFKCtrl.scalePoints(Vec3(data['forearmLen'], data['forearmFKCtrlSize'], data['forearmFKCtrlSize']))
 
-        armEndXfo = Xfo()
-        armEndXfo.tr = wristPosition
-        armEndXfo.ori = forearmXfo.ori
-        self.armEndXfoOutput.xfo = armEndXfo
-        self.armEndPosOutput.xfo = armEndXfo
+        self.armEndXfoOutput.xfo = data['armEndXfo']
+        self.armEndPosOutput.xfo = data['armEndXfo']
 
-        upVXfo = xfoFromDirAndUpV(bicepPosition, wristPosition, forearmPosition)
-        upVXfo.tr = forearmPosition
-        upVOffset = Vec3(0, 0, 5)
-        upVOffset = upVXfo.transformVector(upVOffset)
-        self.armUpVCtrlSrtBuffer.xfo.tr = upVOffset
-        self.armUpVCtrl.xfo.tr = upVOffset
-        
+
+        self.armUpVCtrlSrtBuffer.xfo = data['upVXfo']
+        self.armUpVCtrl.xfo = data['upVXfo']
+
         self.rightSideInputAttr.setValue(location is 'R')
-        self.armBone1LenInputAttr.setMin(bicepLen)
-        self.armBone1LenInputAttr.setMax(bicepLen)
-        self.armBone1LenInputAttr.setValue(bicepLen)
-        self.armBone2LenInputAttr.setMin(forearmLen)
-        self.armBone2LenInputAttr.setMax(forearmLen)
-        self.armBone2LenInputAttr.setValue(forearmLen)
-
+        self.armBone1LenInputAttr.setMin(data['bicepLen'])
+        self.armBone1LenInputAttr.setMax(data['bicepLen'])
+        self.armBone1LenInputAttr.setValue(data['bicepLen'])
+        self.armBone2LenInputAttr.setMin(data['forearmLen'])
+        self.armBone2LenInputAttr.setMax(data['forearmLen'])
+        self.armBone2LenInputAttr.setValue(data['forearmLen'])
 
 
     def buildRig(self, parent):

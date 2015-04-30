@@ -67,6 +67,22 @@ class BaseItem(object):
         return self.name
 
 
+    def setName(self, name):
+        """Sets the name of the object with a string.
+
+        Arguments:
+        name -- String, the new name for the item.
+
+        Return:
+        True if successful.
+
+        """
+
+        self.name = name
+
+        return True
+
+
     def getFullName(self):
         """Returns the full hierarchical path to this object.
 
