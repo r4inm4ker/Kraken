@@ -43,7 +43,20 @@ class ArmComponentGuide(Component):
             'wrist': Xfo(Vec3(1,4,5))
             })
 
-    def saveData(self, data):
+
+    # =============
+    # Data Methods
+    # =============
+
+    def saveData(self):
+        """Save the data for the component to be persisted.
+        
+        
+        Return:
+        The JSON data object
+        
+        """
+        
         
         data = {
             'bicep': self.bicep.xfo,
@@ -53,13 +66,32 @@ class ArmComponentGuide(Component):
         return data
 
     def loadData(self, data):
+        """Load a saved guide represetnatoin from persisted data.
+        
+        Arguments:
+        data -- object, The JSON data object.
+        
+        Return:
+        True if successful.
+        
+        """
+        
         
         self.bicep.xfo = data['bicep']
         self.forearm.xfo = data['forearm']
         self.wrist.xfo = data['wrist']
 
+        return True
+
 
     def getGuideData(self):
+        """Returns the Guide data used by the Rig Component to define the layout of the final rig..
+        
+        Return:
+        The JSON rig data object.
+        
+        """
+        
 
         # values
         bicepPosition = self.bicep.xfo.tr
