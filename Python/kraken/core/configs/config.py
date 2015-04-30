@@ -157,7 +157,7 @@ class Config(object):
                                   "Joint": "def",
                                   "Layer": "",
                                   "Locator": "loc",
-                                  "SrtBuffer": "srtBuffer"
+                                  "CtrlSpace": "ctrlSpace"
                                  },
                         "formats":
                                   {
