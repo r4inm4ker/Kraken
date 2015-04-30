@@ -7,12 +7,13 @@ KrakenSystem - Class for constructing the Fabric Engine Core client.
 
 import json
 import imp
-from profiler import Profiler
+from kraken.core.profiler import Profiler
 import FabricEngine.Core
 
 
 class KrakenSystem(object):
-    """The KrakenSystem is a singleton object used to provide an interface with the FabricEngine Core and RTVal system."""
+    """The KrakenSystem is a singleton object used to provide an interface with
+    the FabricEngine Core and RTVal system."""
 
     __instance = None
 
@@ -27,6 +28,7 @@ class KrakenSystem(object):
         self.loadedExtensions = []
 
         self.registeredComponents = {}
+
 
     def loadCoreClient(self):
         """Loads the Fabric Engine Core Client
@@ -75,6 +77,7 @@ class KrakenSystem(object):
 
             Profiler.getInstance().pop()
 
+
     def getCoreClient(self):
         """Returns the Fabric Engine Core Client owned by the KrakenSystem
 
@@ -85,6 +88,7 @@ class KrakenSystem(object):
         if self.client is None:
             self.loadCoreClient()
         return self.client
+
 
     def loadExtension(self, extension):
         """Loads the given extension and updates the registeredTypes cache.
@@ -101,6 +105,7 @@ class KrakenSystem(object):
             # Cache the loaded extension so that we aviod refreshing the typeDescs cache(costly)
             self.loadedExtensions.append(extension)
             Profiler.getInstance().pop()
+
 
     def constructRTVal(self, dataType, defaultValue=None):
         """Constructs a new RTVal using the given name and optional devault value.
@@ -183,6 +188,7 @@ class KrakenSystem(object):
         True if successful.
 
         """
+
         if ks.isRTVal(rtval):
             return json.loads(rtval.type("Type").jsonDesc("String"))['name']
         else:
@@ -199,7 +205,7 @@ class KrakenSystem(object):
 
         """
         if componentClass.__name__ in self.registeredComponents:
-            raise Exception("Component with that class name already registered:" + componentClass.__name__ )
+            raise Exception("Component with that class name already registered:" + componentClass.__name__)
 
         self.registeredComponents[componentClass.__name__] = componentClass
 
@@ -213,11 +219,11 @@ class KrakenSystem(object):
         The Python component class
 
         """
+
         if className not in self.registeredComponents:
-            raise Exception("Component with that class not registered:" + className )
+            raise Exception("Component with that class not registered:" + className)
 
         return self.registeredComponents[className]
-
 
 
     @classmethod
@@ -233,5 +239,20 @@ class KrakenSystem(object):
             cls.__instance = KrakenSystem()
 
         return cls.__instance
+
+
+    @classmethod
+    def clearInstance(cls):
+        """Clears the instance variable of the Kraken System.
+
+        Return:
+        True if successful.
+
+        """
+
+        KrakenSystem.__instance = None
+
+        return True
+
 
 ks = KrakenSystem.getInstance()
