@@ -21,83 +21,43 @@ from kraken.helpers.utility_methods import logHierarchy
 from kraken.core.profiler import Profiler
 
 
+
+
 class ArmComponent(Component):
     """Arm Component"""
 
-    def __init__(self, name, parent=None, data={}):
+    def __init__(self, name, parent=None):
 
-        location = data.get('location', 'M')
+        # location = data.get('location', 'M')
 
-        Profiler.getInstance().push("Construct Arm Component:" + name + " location:" + location)
-        super(ArmComponent, self).__init__(name, parent, location)
+        Profiler.getInstance().push("Construct Arm Component:" + name)
+        super(ArmComponent, self).__init__(name, parent)
+
         # =========
         # Controls
         # =========
-        # Setup component attributes
-        defaultAttrGroup = self.getAttributeGroupByIndex(0)
-        defaultAttrGroup.addAttribute(BoolAttribute("toggleDebugging", True))
-
-        # values
-        bicepPosition = data['bicepPosition']
-        forearmPosition = data['forearmPosition']
-        wristPosition = data['wristPosition']
-        bicepFKCtrlSize = data['bicepFKCtrlSize']
-        forearmFKCtrlSize = data['forearmFKCtrlSize']
-
-        # Calculate Bicep Xfo
-        rootToWrist = wristPosition.subtract(bicepPosition).unit()
-        rootToElbow = forearmPosition.subtract(bicepPosition).unit()
-
-        bone1Normal = rootToWrist.cross(rootToElbow).unit()
-        bone1ZAxis = rootToElbow.cross(bone1Normal).unit()
-        bicepXfo = Xfo()
-        bicepXfo.setFromVectors(rootToElbow, bone1Normal, bone1ZAxis, bicepPosition)
-
-        # Calculate Forearm Xfo
-        elbowToWrist = wristPosition.subtract(forearmPosition).unit()
-        elbowToRoot = bicepPosition.subtract(forearmPosition).unit()
-        bone2Normal = elbowToRoot.cross(elbowToWrist).unit()
-        bone2ZAxis = elbowToWrist.cross(bone2Normal).unit()
-        forearmXfo = Xfo()
-        forearmXfo.setFromVectors(elbowToWrist, bone2Normal, bone2ZAxis, forearmPosition)
 
         # Bicep
-        bicepFKCtrlSrtBuffer = SrtBuffer('bicepFK', parent=self)
-        bicepFKCtrlSrtBuffer.xfo = bicepXfo
+        self.bicepFKCtrlSrtBuffer = SrtBuffer('bicepFK', parent=self)
 
-        bicepFKCtrl = Control('bicepFK', parent=bicepFKCtrlSrtBuffer, shape="cube")
-        bicepFKCtrl.alignOnXAxis()
-        bicepLen = bicepPosition.subtract(forearmPosition).length()
-        bicepFKCtrl.scalePoints(Vec3(bicepLen, bicepFKCtrlSize, bicepFKCtrlSize))
-        bicepFKCtrl.xfo = bicepXfo
+        self.bicepFKCtrl = Control('bicepFK', parent=self.bicepFKCtrlSrtBuffer, shape="cube")
+        self.bicepFKCtrl.alignOnXAxis()
 
         # Forearm
-        forearmFKCtrlSrtBuffer = SrtBuffer('forearmFK', parent=bicepFKCtrl)
-        forearmFKCtrlSrtBuffer.xfo = forearmXfo
+        self.forearmFKCtrlSrtBuffer = SrtBuffer('forearmFK', parent=self.bicepFKCtrl)
 
-        forearmFKCtrl = Control('forearmFK', parent=forearmFKCtrlSrtBuffer, shape="cube")
-        forearmFKCtrl.alignOnXAxis()
-        forearmLen = forearmPosition.subtract(wristPosition).length()
-        forearmFKCtrl.scalePoints(Vec3(forearmLen, forearmFKCtrlSize, forearmFKCtrlSize))
-        forearmFKCtrl.xfo = forearmXfo
+        self.forearmFKCtrl = Control('forearmFK', parent=self.forearmFKCtrlSrtBuffer, shape="cube")
+        self.forearmFKCtrl.alignOnXAxis()
 
         # Arm IK
-        armIKCtrlSrtBuffer = SrtBuffer('IK', parent=self)
-        armIKCtrlSrtBuffer.xfo.tr = wristPosition
-
-        armIKCtrl = Control('IK', parent=armIKCtrlSrtBuffer, shape="pin")
-        armIKCtrl.xfo = armIKCtrlSrtBuffer.xfo
-
-        if self.getLocation() == "R":
-            armIKCtrl.rotatePoints(0, 90, 0)
-        else:
-            armIKCtrl.rotatePoints(0, -90, 0)
+        self.armIKCtrlSrtBuffer = SrtBuffer('IK', parent=self)
+        self.armIKCtrl = Control('IK', parent=self.armIKCtrlSrtBuffer, shape="pin")
 
 
         # Add Component Params to IK control
         armDebugInputAttr = BoolAttribute('debug', True)
-        armBone1LenInputAttr = FloatAttribute('bone1Len', bicepLen)
-        armBone2LenInputAttr = FloatAttribute('bone2Len', forearmLen)
+        self.armBone1LenInputAttr = FloatAttribute('bone1Len', 0.0)
+        self.armBone2LenInputAttr = FloatAttribute('bone2Len', 0.0)
         armFkikInputAttr = FloatAttribute('fkik', 0.0)
         armSoftIKInputAttr = BoolAttribute('softIK', True)
         armSoftDistInputAttr = FloatAttribute('softDist', 0.0)
@@ -105,10 +65,10 @@ class ArmComponent(Component):
         armStretchBlendInputAttr = FloatAttribute('stretchBlend', 0.0)
 
         armSettingsAttrGrp = AttributeGroup("DisplayInfo_ArmSettings")
-        armIKCtrl.addAttributeGroup(armSettingsAttrGrp)
+        self.armIKCtrl.addAttributeGroup(armSettingsAttrGrp)
         armSettingsAttrGrp.addAttribute(armDebugInputAttr)
-        armSettingsAttrGrp.addAttribute(armBone1LenInputAttr)
-        armSettingsAttrGrp.addAttribute(armBone2LenInputAttr)
+        armSettingsAttrGrp.addAttribute(self.armBone1LenInputAttr)
+        armSettingsAttrGrp.addAttribute(self.armBone2LenInputAttr)
         armSettingsAttrGrp.addAttribute(armFkikInputAttr)
         armSettingsAttrGrp.addAttribute(armSoftIKInputAttr)
         armSettingsAttrGrp.addAttribute(armSoftDistInputAttr)
@@ -116,18 +76,12 @@ class ArmComponent(Component):
         armSettingsAttrGrp.addAttribute(armStretchBlendInputAttr)
 
         # UpV
-        upVXfo = xfoFromDirAndUpV(bicepPosition, wristPosition, forearmPosition)
-        upVXfo.tr = forearmPosition
-        upVOffset = Vec3(0, 0, 5)
-        upVOffset = upVXfo.transformVector(upVOffset)
 
-        armUpVCtrlSrtBuffer = SrtBuffer('UpV', parent=self)
-        armUpVCtrlSrtBuffer.xfo.tr = upVOffset
+        self.armUpVCtrlSrtBuffer = SrtBuffer('UpV', parent=self)
 
-        armUpVCtrl = Control('UpV', parent=armUpVCtrlSrtBuffer, shape="triangle")
-        armUpVCtrl.xfo.tr = upVOffset
-        armUpVCtrl.alignOnZAxis()
-        armUpVCtrl.rotatePoints(180, 0, 0)
+        self.armUpVCtrl = Control('UpV', parent=self.armUpVCtrlSrtBuffer, shape="triangle")
+        self.armUpVCtrl.alignOnZAxis()
+        self.armUpVCtrl.rotatePoints(180, 0, 0)
 
 
         # ==========
@@ -154,37 +108,30 @@ class ArmComponent(Component):
         # =====================
         # Setup component Xfo I/O's
         clavicleEndInput = Locator('clavicleEnd')
-        clavicleEndInput.xfo = bicepXfo
 
-        bicepOutput = Locator('bicep')
-        bicepOutput.xfo = bicepXfo
-        forearmOutput = Locator('forearm')
-        forearmOutput.xfo = forearmXfo
+        self.bicepOutput = Locator('bicep')
+        self.forearmOutput = Locator('forearm')
 
-        armEndXfo = Xfo()
-        armEndXfo.ori = forearmXfo.ori
-        armEndXfo.tr = wristPosition
-        armEndXfoOutput = Locator('armEndXfo')
-        armEndXfoOutput.xfo = armEndXfo
+        self.armEndXfoOutput = Locator('armEndXfo')
+        self.armEndPosOutput = Locator('armEndPos')
 
-        armEndPosOutput = Locator('armEndPos')
-        armEndPosOutput.xfo = armEndXfo
 
         # Setup componnent Attribute I/O's
         debugInputAttr = BoolAttribute('debug', True)
-        bone1LenInputAttr = FloatAttribute('bone1Len', bicepLen)
-        bone2LenInputAttr = FloatAttribute('bone2Len', forearmLen)
+        bone1LenInputAttr = FloatAttribute('bone1Len', 0.0)
+        bone2LenInputAttr = FloatAttribute('bone2Len', 0.0)
         fkikInputAttr = FloatAttribute('fkik', 0.0)
         softIKInputAttr = BoolAttribute('softIK', True)
         softDistInputAttr = FloatAttribute('softDist', 0.5)
         stretchInputAttr = BoolAttribute('stretch', True)
         stretchBlendInputAttr = FloatAttribute('stretchBlend', 0.0)
-        rightSideInputAttr = BoolAttribute('rightSide', location is 'R')
+        self.rightSideInputAttr = BoolAttribute('rightSide')
+
 
         # Connect attrs to control attrs
         debugInputAttr.connect(armDebugInputAttr)
-        bone1LenInputAttr.connect(armBone1LenInputAttr)
-        bone2LenInputAttr.connect(armBone2LenInputAttr)
+        bone1LenInputAttr.connect(self.armBone1LenInputAttr)
+        bone2LenInputAttr.connect(self.armBone2LenInputAttr)
         fkikInputAttr.connect(armFkikInputAttr)
         softIKInputAttr.connect(armSoftIKInputAttr)
         softDistInputAttr.connect(armSoftDistInputAttr)
@@ -196,10 +143,10 @@ class ArmComponent(Component):
         # Constrain I/O
         # ==============
         # Constraint inputs
-        armRootInputConstraint = PoseConstraint('_'.join([armIKCtrl.getName(), 'To', clavicleEndInput.getName()]))
+        armRootInputConstraint = PoseConstraint('_'.join([self.armIKCtrl.getName(), 'To', clavicleEndInput.getName()]))
         armRootInputConstraint.setMaintainOffset(True)
         armRootInputConstraint.addConstrainer(clavicleEndInput)
-        bicepFKCtrlSrtBuffer.addConstraint(armRootInputConstraint)
+        self.bicepFKCtrlSrtBuffer.addConstraint(armRootInputConstraint)
 
         # Constraint outputs
 
@@ -209,10 +156,10 @@ class ArmComponent(Component):
         # ==================
         # Add Xfo I/O's
         self.addInput(clavicleEndInput)
-        self.addOutput(bicepOutput)
-        self.addOutput(forearmOutput)
-        self.addOutput(armEndXfoOutput)
-        self.addOutput(armEndPosOutput)
+        self.addOutput(self.bicepOutput)
+        self.addOutput(self.forearmOutput)
+        self.addOutput(self.armEndXfoOutput)
+        self.addOutput(self.armEndPosOutput)
 
         # Add Attribute I/O's
         self.addInput(debugInputAttr)
@@ -223,7 +170,7 @@ class ArmComponent(Component):
         self.addInput(softDistInputAttr)
         self.addInput(stretchInputAttr)
         self.addInput(stretchBlendInputAttr)
-        self.addInput(rightSideInputAttr)
+        self.addInput(self.rightSideInputAttr)
 
 
         # ===============
@@ -242,20 +189,20 @@ class ArmComponent(Component):
         # spliceOp.setInput("softDist", softDistInputAttr)
         # spliceOp.setInput("stretch", stretchInputAttr)
         # spliceOp.setInput("stretchBlend", stretchBlendInputAttr)
-        # spliceOp.setInput("rightSide", rightSideInputAttr)
+        # spliceOp.setInput("rightSide", self.rightSideInputAttr)
 
         # # Add Xfo Inputs
         # spliceOp.setInput("root", clavicleEndInput)
-        # spliceOp.setInput("bone1FK", bicepFKCtrl)
+        # spliceOp.setInput("bone1FK", self.bicepFKCtrl)
         # spliceOp.setInput("bone2FK", forearmFKCtrl)
         # spliceOp.setInput("ikHandle", armIKCtrl)
-        # spliceOp.setInput("upV", armUpVCtrl)
+        # spliceOp.setInput("upV", self.armUpVCtrl)
 
         # # Add Xfo Outputs
-        # spliceOp.setOutput("bone01Out", bicepOutput)
-        # spliceOp.setOutput("bone02Out", forearmOutput)
-        # spliceOp.setOutput("bone03Out", armEndXfoOutput)
-        # spliceOp.setOutput("bone03PosOut", armEndPosOutput)
+        # spliceOp.setOutput("bone01Out", self.bicepOutput)
+        # spliceOp.setOutput("bone02Out", self.forearmOutput)
+        # spliceOp.setOutput("bone03Out", self.armEndXfoOutput)
+        # spliceOp.setOutput("bone03PosOut", self.armEndPosOutput)
 
 
         # # Add Deformer Splice Op
@@ -266,9 +213,9 @@ class ArmComponent(Component):
         # spliceOp.setInput("debug", debugInputAttr)
 
         # # Add Xfo Inputs
-        # spliceOp.setInput("bone01Constrainer", bicepOutput)
-        # spliceOp.setInput("bone02Constrainer", forearmOutput)
-        # spliceOp.setInput("bone03Constrainer", armEndXfoOutput)
+        # spliceOp.setInput("bone01Constrainer", self.bicepOutput)
+        # spliceOp.setInput("bone02Constrainer", self.forearmOutput)
+        # spliceOp.setInput("bone03Constrainer", self.armEndXfoOutput)
 
         # # Add Xfo Outputs
         # spliceOp.setOutput("bone01Deformer", bicepDef)
@@ -277,6 +224,80 @@ class ArmComponent(Component):
 
 
         Profiler.getInstance().pop()
+
+    def loadData(self, data=None):
+
+        location = data.get('location', 'M')
+        self.setLocation(location)
+
+        # values
+        bicepPosition = data['bicepPosition']
+        forearmPosition = data['forearmPosition']
+        wristPosition = data['wristPosition']
+        bicepFKCtrlSize = data['bicepFKCtrlSize']
+        forearmFKCtrlSize = data['forearmFKCtrlSize']
+
+        # Calculate Bicep Xfo
+        rootToWrist = wristPosition.subtract(bicepPosition).unit()
+        rootToElbow = forearmPosition.subtract(bicepPosition).unit()
+
+        bone1Normal = rootToWrist.cross(rootToElbow).unit()
+        bone1ZAxis = rootToElbow.cross(bone1Normal).unit()
+
+        bicepLen = bicepPosition.subtract(forearmPosition).length()
+        self.bicepFKCtrl.scalePoints(Vec3(bicepLen, bicepFKCtrlSize, bicepFKCtrlSize))
+
+        bicepXfo = Xfo()
+        bicepXfo.setFromVectors(rootToElbow, bone1Normal, bone1ZAxis, bicepPosition)
+
+        # Calculate Forearm Xfo
+        elbowToWrist = wristPosition.subtract(forearmPosition).unit()
+        elbowToRoot = bicepPosition.subtract(forearmPosition).unit()
+        bone2Normal = elbowToRoot.cross(elbowToWrist).unit()
+        bone2ZAxis = elbowToWrist.cross(bone2Normal).unit()
+        forearmXfo = Xfo()
+        forearmXfo.setFromVectors(elbowToWrist, bone2Normal, bone2ZAxis, forearmPosition)
+
+        self.bicepFKCtrlSrtBuffer.xfo = bicepXfo
+        self.bicepFKCtrl.xfo = bicepXfo
+
+        self.bicepOutput.xfo = bicepXfo
+        self.forearmOutput.xfo = forearmXfo
+
+        self.forearmFKCtrlSrtBuffer.xfo = forearmXfo
+        self.forearmFKCtrl.xfo = forearmXfo
+        self.armIKCtrlSrtBuffer.xfo.tr = wristPosition
+        self.armIKCtrl.xfo = self.armIKCtrlSrtBuffer.xfo
+        if self.getLocation() == "R":
+            self.armIKCtrl.rotatePoints(0, 90, 0)
+        else:
+            self.armIKCtrl.rotatePoints(0, -90, 0)
+
+        forearmLen = forearmPosition.subtract(wristPosition).length()
+        self.forearmFKCtrl.scalePoints(Vec3(forearmLen, forearmFKCtrlSize, forearmFKCtrlSize))
+
+        armEndXfo = Xfo()
+        armEndXfo.tr = wristPosition
+        armEndXfo.ori = forearmXfo.ori
+        self.armEndXfoOutput.xfo = armEndXfo
+        self.armEndPosOutput.xfo = armEndXfo
+
+        upVXfo = xfoFromDirAndUpV(bicepPosition, wristPosition, forearmPosition)
+        upVXfo.tr = forearmPosition
+        upVOffset = Vec3(0, 0, 5)
+        upVOffset = upVXfo.transformVector(upVOffset)
+        self.armUpVCtrlSrtBuffer.xfo.tr = upVOffset
+        self.armUpVCtrl.xfo.tr = upVOffset
+        
+        self.rightSideInputAttr.setValue(location is 'R')
+        self.armBone1LenInputAttr.setMin(bicepLen)
+        self.armBone1LenInputAttr.setMax(bicepLen)
+        self.armBone1LenInputAttr.setValue(bicepLen)
+        self.armBone2LenInputAttr.setMin(forearmLen)
+        self.armBone2LenInputAttr.setMax(forearmLen)
+        self.armBone2LenInputAttr.setValue(forearmLen)
+
+
 
     def buildRig(self, parent):
         pass

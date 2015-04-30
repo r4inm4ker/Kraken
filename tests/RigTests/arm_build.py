@@ -9,7 +9,8 @@ import json
 
 Profiler.getInstance().push("arm_build")
 
-arm = ArmComponent("arm", data={ 
+arm = ArmComponent("arm")
+arm.loadData({ 
             "location":"R",
             "bicepPosition": Vec3(-2.27, 15.295, -0.753),
             "forearmPosition": Vec3(-5.039, 13.56, -0.859),
