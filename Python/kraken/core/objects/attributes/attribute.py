@@ -15,7 +15,7 @@ class Attribute(BaseItem):
         self._connection = None
         self._keyable = True
         self._lock = False
-
+        self._animatable = True
 
     # ==============
     # Value Methods
@@ -105,6 +105,36 @@ class Attribute(BaseItem):
             raise TypeError("Value is not of type 'bool'.")
 
         return True
+
+
+    def setAnimatable(self, value):
+        """Sets the animatable state of the attribute.
+
+        Arguments:
+        value -- Bool, animatable state.
+
+        Return:
+        True if successful.
+
+        """
+
+        if type(value) is bool:
+            self._animatable = value
+        else:
+            raise TypeError("Value is not of type 'bool'.")
+
+        return True
+
+
+    def getAnimatable(self):
+            """Returns the animatable state of the attribute.
+
+            Return:
+            Animatable state of the attribute.
+
+            """
+
+            return self._animatable
 
 
     def getRTVal(self):
