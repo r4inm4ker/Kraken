@@ -24,8 +24,11 @@ class NumberAttribute(Attribute):
         if maxValue is not None:
             self.setMax(maxValue)
 
-        self.setUIMin(minValue)
-        self.setUIMax(maxValue)
+        if minValue is not None:
+            self.setUIMin(minValue)
+
+        if maxValue is not None:
+            self.setUIMax(maxValue)
 
 
     # ==================
