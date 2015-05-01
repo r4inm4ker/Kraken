@@ -174,16 +174,16 @@ class ArmComponent(Component):
         ctrlCmpGrp = ComponentGroup(self.getName(), parent=controlsLayer)
 
         # IO Hierarchies
-        inputHrcGrp = HierarchyGroup('inputs', parent=controlsLayer)
+        inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
         cmpInputAttrGrp = AttributeGroup('inputs')
         inputHrcGrp.addAttributeGroup(cmpInputAttrGrp)
 
-        outputHrcGrp = HierarchyGroup('outputs', parent=controlsLayer)
+        outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
         cmpOutputAttrGrp = AttributeGroup('outputs')
         inputHrcGrp.addAttributeGroup(cmpOutputAttrGrp)
 
         # Bicep
-        self.bicepFKCtrlSrtBuffer = SrtBuffer('bicepFK', parent=self)
+        self.bicepFKCtrlSrtBuffer = SrtBuffer('bicepFK', parent=ctrlCmpGrp)
 
         self.bicepFKCtrl = Control('bicepFK', parent=self.bicepFKCtrlSrtBuffer, shape="cube")
         self.bicepFKCtrl.alignOnXAxis()
@@ -195,7 +195,7 @@ class ArmComponent(Component):
         self.forearmFKCtrl.alignOnXAxis()
 
         # Arm IK
-        self.armIKCtrlSrtBuffer = SrtBuffer('IK', parent=self)
+        self.armIKCtrlSrtBuffer = SrtBuffer('IK', parent=ctrlCmpGrp)
         self.armIKCtrl = Control('IK', parent=self.armIKCtrlSrtBuffer, shape="pin")
 
 
@@ -221,7 +221,7 @@ class ArmComponent(Component):
         armSettingsAttrGrp.addAttribute(armStretchBlendInputAttr)
 
         # UpV
-        self.armUpVCtrlSrtBuffer = SrtBuffer('UpV', parent=self)
+        self.armUpVCtrlSrtBuffer = SrtBuffer('UpV', parent=ctrlCmpGrp)
         self.armUpVCtrl = Control('UpV', parent=self.armUpVCtrlSrtBuffer, shape="triangle")
         self.armUpVCtrl.alignOnZAxis()
         self.armUpVCtrl.rotatePoints(180, 0, 0)
@@ -409,10 +409,10 @@ class ArmComponent(Component):
 
         self.rightSideInputAttr.setValue(location is 'R')
         self.armBone1LenInputAttr.setMin(data['bicepLen'])
-        self.armBone1LenInputAttr.setMax(data['bicepLen'])
+        self.armBone1LenInputAttr.setMax(data['bicepLen'] * 3.0)
         self.armBone1LenInputAttr.setValue(data['bicepLen'])
         self.armBone2LenInputAttr.setMin(data['forearmLen'])
-        self.armBone2LenInputAttr.setMax(data['forearmLen'])
+        self.armBone2LenInputAttr.setMax(data['forearmLen'] * 3.0)
         self.armBone2LenInputAttr.setValue(data['forearmLen'])
 
 
