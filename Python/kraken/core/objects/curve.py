@@ -5,9 +5,9 @@ Curve - Curve.
 
 """
 
-from kraken.core.objects.scene_item import SceneItem
-
 import copy
+
+from kraken.core.objects.scene_item import SceneItem
 
 
 class Curve(SceneItem):

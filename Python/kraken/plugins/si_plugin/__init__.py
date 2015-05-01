@@ -1,3 +1,4 @@
+"""Kraken Softimage Plug-in."""
 
 
 def dccTest():

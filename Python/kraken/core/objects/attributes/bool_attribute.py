@@ -5,7 +5,7 @@ BoolAttribute - Base Attribute.
 
 """
 
-from attribute import Attribute
+from kraken.objects.attributes.attribute import Attribute
 from kraken.core.kraken_system import ks
 
 
@@ -43,4 +43,5 @@ class BoolAttribute(Attribute):
         RTVal
 
         """
+
         return ks.rtVal('Boolean', self.value)

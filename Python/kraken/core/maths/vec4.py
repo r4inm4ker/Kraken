@@ -29,7 +29,13 @@ class Vec4(MathObject):
     def __str__(self):
         """String representation of the Vec4 object."""
 
-        return "Vec4(" + str(self.x) + "," + str(self.y) + "," + str(self.z) + "," + str(self.t) + ")"
+        stringRep = "Vec4("
+        stringRep += str(self.x) + ","
+        stringRep += str(self.y) + ","
+        stringRep += str(self.z) + ","
+        stringRep += str(self.t) + ")"
+
+        return stringRep
 
 
     @property
@@ -175,7 +181,8 @@ class Vec4(MathObject):
 
         """
 
-        self._rtval.set('', ks.rtVal('Scalar', x), ks.rtVal('Scalar', y), ks.rtVal('Scalar', z), ks.rtVal('Scalar', t))
+        self._rtval.set('', ks.rtVal('Scalar', x), ks.rtVal('Scalar', y),
+                        ks.rtVal('Scalar', z), ks.rtVal('Scalar', t))
 
         return True
 
@@ -219,7 +226,8 @@ class Vec4(MathObject):
 
         """
 
-        return self._rtval.almostEqual('Boolean', other._rtval, ks.rtVal('Scalar', precision))
+        return self._rtval.almostEqual('Boolean', other._rtval,
+                                       ks.rtVal('Scalar', precision))
 
 
     def almostEqual(self, other):
@@ -263,7 +271,8 @@ class Vec4(MathObject):
 
         """
 
-        return self._rtval.setComponent('', ks.rtVal('Size', i), ks.rtVal('Scalar', v))
+        return self._rtval.setComponent('', ks.rtVal('Size', i),
+                                        ks.rtVal('Scalar', v))
 
 
     # # Equals operator

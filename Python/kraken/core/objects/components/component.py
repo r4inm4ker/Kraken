@@ -55,7 +55,8 @@ class Component(SceneItem):
         """Sets the location of the component.
 
         Arguments:
-        location -- String, location that the component is on. Valid values: L, M, R.
+        location -- String, location that the component is on. Valid values: L,
+                            M, R.
 
         Return:
         True if successful.
@@ -71,7 +72,8 @@ class Component(SceneItem):
     # Name methods
     # =============
     def getComponentName(self):
-        """Returns the name of the component used on self and all objects owned by the component
+        """Returns the name of the component used on self and all objects owned
+        by the component
 
         Return:
         String, build name of the object.
@@ -85,7 +87,8 @@ class Component(SceneItem):
     # Layer methods
     # =============
     def getLayer(self, name):
-        """Retrieves a layer from the owning container, or generates a layer (and warning message)
+        """Retrieves a layer from the owning container, or generates a layer
+        (and warning message)
 
         Return:
         Layer, the layer from the container, or generated layer.
@@ -108,7 +111,8 @@ class Component(SceneItem):
     # Child Methods
     # ==============
     def addChild(self, child):
-        """Adds a child to the component and sets the object's component attribute.
+        """Adds a child to the component and sets the object's component
+        attribute.
 
         Arguments:
         child -- Object, object to add as a child.

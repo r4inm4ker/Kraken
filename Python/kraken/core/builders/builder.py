@@ -5,22 +5,16 @@ Builder -- Base builder object to build objects in DCC.
 
 """
 
-from kraken.core import logger as pyLogger
-logger = pyLogger.getLogger("pyLogger")
-
 from kraken.core.configs.config import Config
+from kraken.core.profiler import Profiler
 
 from kraken.core.objects.components.component import Component
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
-from kraken.core.profiler import Profiler
-
 
 class Builder(object):
     """Builder object for building objects in DCC's. Sub-class per DCC in a
-    plugin.
-
-    """
+    plugin."""
 
 
     def __init__(self):

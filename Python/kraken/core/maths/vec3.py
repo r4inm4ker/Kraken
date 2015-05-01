@@ -235,7 +235,8 @@ class Vec3(MathObject):
 
         """
 
-        return self._rtval.setComponent('', ks.rtVal('Size', i), ks.rtVal('Scalar', v))
+        return self._rtval.setComponent('', ks.rtVal('Size', i),
+                                        ks.rtVal('Scalar', v))
 
 
     # # Equals operator

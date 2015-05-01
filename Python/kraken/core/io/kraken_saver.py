@@ -16,6 +16,16 @@ class KrakenSaver(object):
 
 
     def encodeValue(self, value):
+        """Doc String.
+
+        Arguments:
+        Arguments -- Type, information.
+
+        Return:
+        True if successful.
+
+        """
+
         if isinstance(value, MathObject):
             return value.encodeValue()
         else:

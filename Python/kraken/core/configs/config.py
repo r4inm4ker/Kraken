@@ -486,7 +486,8 @@ class Config(object):
         if Config._instance is None:
             cls()
         elif not isinstance(Config._instance, Config):
-            raise Exception("Multiple different Config types have been constructed.");
+            raise Exception("Multiple different Config types have been \
+                            constructed.");
 
         return Config._instance
 

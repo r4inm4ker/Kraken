@@ -21,6 +21,16 @@ class Rig(Container):
 
 
     def loadRigDefinitionFile(self, filepath):
+        """Doc String.
+
+        Arguments:
+        Arguments -- Type, information.
+
+        Return:
+        True if successful.
+
+        """
+
         Profiler.getInstance().push("LoadRigDefinitionFile:" + filepath)
 
         if not os.path.exists(filepath):
@@ -31,16 +41,46 @@ class Rig(Container):
 
 
     def loadRigDefinition(self, jsonData):
+        """Doc String.
+
+        Arguments:
+        Arguments -- Type, information.
+
+        Return:
+        True if successful.
+
+        """
 
         Profiler.getInstance().push("loadRigDefinition:" + self.getName())
 
         krakenSystem = KrakenSystem.getInstance()
 
         def loadLayers(layersData):
+            """Doc String.
+
+            Arguments:
+            Arguments -- Type, information.
+
+            Return:
+            True if successful.
+
+            """
+
             for layerName in layersData:
                 layer = Layer(layerName, parent=self)
 
+
         def loadComponents(componentsData):
+            """Doc String.
+
+            Arguments:
+            Arguments -- Type, information.
+
+            Return:
+            True if successful.
+
+            """
+
             Profiler.getInstance().push("loadComponents")
 
             for componentData in componentsData:
@@ -60,6 +100,16 @@ class Rig(Container):
 
 
         def makeConnections(connectionsData):
+            """Doc String.
+
+            Arguments:
+            Arguments -- Type, information.
+
+            Return:
+            True if successful.
+
+            """
+
             Profiler.getInstance().push("makeConnections")
 
             for connectionData in connectionsData:
@@ -82,6 +132,7 @@ class Rig(Container):
 
             Profiler.getInstance().pop()
 
+
         if 'layers' in jsonData:
             loadLayers(jsonData['layers'])
         else:
@@ -92,6 +143,5 @@ class Rig(Container):
 
             if 'connections' in jsonData:
                 makeConnections(jsonData['connections'])
-
 
         Profiler.getInstance().pop()

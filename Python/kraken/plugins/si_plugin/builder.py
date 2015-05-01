@@ -8,7 +8,6 @@ Builder -- Component representation.
 from kraken.core.kraken_system import ks
 from kraken.core.builders.builder import Builder
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
-
 from kraken.plugins.si_plugin.utils import *
 
 import FabricEngine.Core as core

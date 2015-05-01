@@ -16,6 +16,7 @@ class StringAttribute(Attribute):
         super(StringAttribute, self).__init__(name, value)
         assert type(value) is str, "Value is not of type 'string'."
 
+
     def setValue(self, value):
         """Sets the value of the attribute.
 
@@ -33,6 +34,7 @@ class StringAttribute(Attribute):
         super(StringAttribute, self).setValue(value)
 
         return True
+
 
     def getRTVal(self):
         """Returns and RTVal object for this attribute.
