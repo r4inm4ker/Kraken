@@ -775,42 +775,42 @@ class Builder(Builder):
 
         # Lock Rotation
         if kSceneItem.testFlag("lockXRotation") is True:
-            dccSceneItem.rotx.SetLock(constants.siLockLevelManipulation)
-            dccSceneItem.rotx.SetCapabilityFlag(constants.siKeyable, False)
+            dccSceneItem.Kinematics.Local.Parameters('rotx').SetLock(constants.siLockLevelManipulation)
+            dccSceneItem.Kinematics.Local.Parameters('rotx').SetCapabilityFlag(constants.siKeyable, False)
 
         if kSceneItem.testFlag("lockYRotation") is True:
-            dccSceneItem.roty.SetLock(constants.siLockLevelManipulation)
-            dccSceneItem.roty.SetCapabilityFlag(constants.siKeyable, False)
+            dccSceneItem.Kinematics.Local.Parameters('roty').SetLock(constants.siLockLevelManipulation)
+            dccSceneItem.Kinematics.Local.Parameters('roty').SetCapabilityFlag(constants.siKeyable, False)
 
         if kSceneItem.testFlag("lockZRotation") is True:
-            dccSceneItem.rotz.SetLock(constants.siLockLevelManipulation)
-            dccSceneItem.rotz.SetCapabilityFlag(constants.siKeyable, False)
+            dccSceneItem.Kinematics.Local.Parameters('rotz').SetLock(constants.siLockLevelManipulation)
+            dccSceneItem.Kinematics.Local.Parameters('rotz').SetCapabilityFlag(constants.siKeyable, False)
 
         # Lock Scale
         if kSceneItem.testFlag("lockXScale") is True:
-            dccSceneItem.sclx.SetLock(constants.siLockLevelManipulation)
-            dccSceneItem.sclx.SetCapabilityFlag(constants.siKeyable, False)
+            dccSceneItem.Kinematics.Local.Parameters('sclx').SetLock(constants.siLockLevelManipulation)
+            dccSceneItem.Kinematics.Local.Parameters('sclx').SetCapabilityFlag(constants.siKeyable, False)
 
         if kSceneItem.testFlag("lockYScale") is True:
-            dccSceneItem.scly.SetLock(constants.siLockLevelManipulation)
-            dccSceneItem.scly.SetCapabilityFlag(constants.siKeyable, False)
+            dccSceneItem.Kinematics.Local.Parameters('scly').SetLock(constants.siLockLevelManipulation)
+            dccSceneItem.Kinematics.Local.Parameters('scly').SetCapabilityFlag(constants.siKeyable, False)
 
         if kSceneItem.testFlag("lockZScale") is True:
-            dccSceneItem.sclz.SetLock(constants.siLockLevelManipulation)
-            dccSceneItem.sclz.SetCapabilityFlag(constants.siKeyable, False)
+            dccSceneItem.Kinematics.Local.Parameters('sclz').SetLock(constants.siLockLevelManipulation)
+            dccSceneItem.Kinematics.Local.Parameters('sclz').SetCapabilityFlag(constants.siKeyable, False)
 
         # Lock Translation
         if kSceneItem.testFlag("lockXTranslation") is True:
-            dccSceneItem.posx.SetLock(constants.siLockLevelManipulation)
-            dccSceneItem.posx.SetCapabilityFlag(constants.siKeyable, False)
+            dccSceneItem.Kinematics.Local.Parameters('posx').SetLock(constants.siLockLevelManipulation)
+            dccSceneItem.Kinematics.Local.Parameters('posx').SetCapabilityFlag(constants.siKeyable, False)
 
         if kSceneItem.testFlag("lockYTranslation") is True:
-            dccSceneItem.posy.SetLock(constants.siLockLevelManipulation)
-            dccSceneItem.posy.SetCapabilityFlag(constants.siKeyable, False)
+            dccSceneItem.Kinematics.Local.Parameters('posy').SetLock(constants.siLockLevelManipulation)
+            dccSceneItem.Kinematics.Local.Parameters('posy').SetCapabilityFlag(constants.siKeyable, False)
 
         if kSceneItem.testFlag("lockZTranslation") is True:
-            dccSceneItem.posz.SetLock(constants.siLockLevelManipulation)
-            dccSceneItem.posz.SetCapabilityFlag(constants.siKeyable, False)
+            dccSceneItem.Kinematics.Local.Parameters('posz').SetLock(constants.siLockLevelManipulation)
+            dccSceneItem.Kinematics.Local.Parameters('posz').SetCapabilityFlag(constants.siKeyable, False)
 
         return True
 

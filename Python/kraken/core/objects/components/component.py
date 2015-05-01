@@ -28,6 +28,10 @@ class Component(SceneItem):
 
         self.setShapeVisibility(False)
 
+        self.lockRotation(x=True, y=True, z=True)
+        self.lockScale(x=True, y=True, z=True)
+        self.lockTranslation(x=True, y=True, z=True)
+
 
     # =============
     # Side Methods
@@ -163,9 +167,6 @@ class Component(SceneItem):
         True if successful.
 
         """
-
-        # inputHrc = self.getChildByName('inputs')
-        # inputAttrsGrp = inputHrc.getAttributeGroupByName('inputAttrs')
 
         if not isinstance(inputObject, (Locator, Attribute)):
             raise Exception("'inputObject' argument is not a valid object. "
@@ -304,9 +305,6 @@ class Component(SceneItem):
         True if successful.
 
         """
-
-        # outputHrc = self.getChildByName('outputs')
-        # outputAttrsGrp = outputHrc.getAttributeGroupByName('outputAttrs')
 
         if not isinstance(outputObject, (SceneItem, Attribute)):
             raise Exception("'outputObject' argument is not a valid object. "
