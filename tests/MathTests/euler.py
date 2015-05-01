@@ -1,5 +1,7 @@
-from kraken.core.maths import *
 import json
+
+from kraken.core.maths import *
+
 
 euler = Euler()
 print "euler:" + str(euler)

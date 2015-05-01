@@ -1,5 +1,7 @@
-from kraken.core.maths import *
 import json
+
+from kraken.core.maths import *
+
 
 xfo1 = Xfo()
 print "xfo:" + str(xfo1)

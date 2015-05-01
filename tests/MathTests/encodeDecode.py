@@ -1,5 +1,6 @@
 from kraken.core.maths import *
-from kraken.core.io.kraken_loader import KrakenLoader 
+from kraken.core.io.kraken_loader import KrakenLoader
+
 
 tr = Vec3(32,35,234)
 sc = Vec3(2.3,2.3,2.3)

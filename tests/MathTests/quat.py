@@ -1,5 +1,7 @@
-from kraken.core.maths import *
 import json
+
+from kraken.core.maths import *
+
 
 quat = Quat()
 print "quat:" + str(quat)
