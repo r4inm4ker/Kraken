@@ -552,6 +552,9 @@ class Builder(object):
             dccSceneItem = self.buildLayer(kObject, buildName)
 
         elif kObject.isTypeOf("Component"):
+            pass
+
+        elif kObject.isTypeOf("ComponentGroup"):
             dccSceneItem = self.buildGroup(kObject, buildName)
             component = kObject
 
@@ -582,11 +585,12 @@ class Builder(object):
         else:
             raise NotImplementedError(kObject.getName() + ' has an unsupported type: ' + str(type(kObject)))
 
-        self.buildAttributes(kObject)
-        self.setTransform(kObject)
-        self.lockParameters(kObject)
-        self.setVisibility(kObject)
-        self.setObjectColor(kObject)
+        if dccSceneItem is not None:
+            self.buildAttributes(kObject)
+            self.setTransform(kObject)
+            self.lockParameters(kObject)
+            self.setVisibility(kObject)
+            self.setObjectColor(kObject)
 
         # Build children
         for i in xrange(kObject.getNumChildren()):
