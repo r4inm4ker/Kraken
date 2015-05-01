@@ -33,8 +33,9 @@ class ArmComponentGuide(Component):
         self.wrist = Control('bicepFK', parent=self, shape="sphere")
 
         self.bicepFKCtrlSizeInputAttr = FloatAttribute('bicepFKCtrlSize', 2.0)
-        self.addInput(self.bicepFKCtrlSizeInputAttr)
         self.forearmFKCtrlSizeInputAttr = FloatAttribute('forearmFKCtrlSize', 2.0)
+        
+        self.addInput(self.bicepFKCtrlSizeInputAttr)
         self.addInput(self.forearmFKCtrlSizeInputAttr)
 
         self.loadData({

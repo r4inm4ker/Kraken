@@ -33,7 +33,7 @@ bob_guide_data = {
         },
         {
             "class":"kraken.examples.clavicle_component.ClavicleComponent",
-            "name": "L_ClavicleComponent",
+            "name": "L_Clavicle",
             "location": "L",
             "claviclePosition": Vec3(0.1322, 15.403, -0.5723),
             "clavicleUpVOffset": Vec3(0.0, 1.0, 0.0),
@@ -41,7 +41,7 @@ bob_guide_data = {
         },
         {
             "class":"kraken.examples.arm_component.ArmComponent",
-            "name": "L_ArmComponent",
+            "name": "L_Arm",
             "location": "L",
             "bicepPosition": Vec3(2.27, 15.295, -0.753),
             "forearmPosition": Vec3(5.039, 13.56, -0.859),
@@ -51,7 +51,7 @@ bob_guide_data = {
         },
         {
             "class":"kraken.examples.hand_component.HandComponent",
-            "name":"L_HandComponent",
+            "name":"L_Hand",
             "location": "L",
             "handPosition": Vec3(7.1886, 12.2819, 0.4906),
             "handUpV": Vec3(7.7463, 13.1746, 0.4477),
@@ -61,7 +61,7 @@ bob_guide_data = {
         },
         {
             "class":"kraken.examples.clavicle_component.ClavicleComponent",
-            "name":"R_ClavicleComponent",
+            "name":"R_Clavicle",
             "location": "R",
             "claviclePosition": Vec3(-0.1322, 15.403, -0.5723),
             "clavicleUpVOffset": Vec3(0.0, 1.0, 0.0),
@@ -69,7 +69,7 @@ bob_guide_data = {
         },
         {
             "class":"kraken.examples.arm_component.ArmComponent",
-            "name":"R_ArmComponent",
+            "name":"R_Arm",
             "location": "R",
             "bicepPosition": Vec3(-2.27, 15.295, -0.753),
             "forearmPosition": Vec3(-5.039, 13.56, -0.859),
@@ -79,7 +79,7 @@ bob_guide_data = {
         },
         {
             "class":"kraken.examples.hand_component.HandComponent",
-            "name":"R_HandComponent",
+            "name":"R_Hand",
             "location": "R",
             "handPosition": Vec3(-7.1886, 12.2819, 0.4906),
             "handUpV": Vec3(-7.7463, 13.1746, 0.4477),
@@ -89,7 +89,7 @@ bob_guide_data = {
         },
         {
             "class":"kraken.examples.leg_component.LegComponent",
-            "name":"L_LegComponent",
+            "name":"L_Leg",
             "location": "L",
             "femurPosition": Vec3(0.9811, 9.769, -0.4572),
             "kneePosition": Vec3(1.4488, 5.4418, -0.5348),
@@ -97,14 +97,14 @@ bob_guide_data = {
         },
         {
             "class":"kraken.examples.foot_component.FootComponent",
-            "name":"L_FootComponent",
+            "name":"L_Foot",
             "location": "L",
             "footQuat": Quat(Vec3(0.6377, -0.5695, 0.3053), 0.4190),
             "footPos": Vec3(1.841, 1.1516, -1.237)
         },
         {
             "class":"kraken.examples.leg_component.LegComponent",
-            "name":"R_LegComponent",
+            "name":"R_Leg",
             "location": "R",
             "femurPosition": Vec3(-0.9811, 9.769, -0.4572),
             "kneePosition": Vec3(-1.4488, 5.4418, -0.5348),
@@ -112,7 +112,7 @@ bob_guide_data = {
         },
         {
             "class":"kraken.examples.foot_component.FootComponent",
-            "name":"R_FootComponent",
+            "name":"R_Foot",
             "location": "R",
             "footQuat": Quat(Vec3(0.5695, -0.6377, 0.4190), 0.3053),
             "footPos": Vec3(-1.841, 1.1516, -1.237)
