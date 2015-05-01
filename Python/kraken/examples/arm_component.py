@@ -10,6 +10,8 @@ from kraken.core.objects.attributes.float_attribute import FloatAttribute
 
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
+from kraken.core.objects.component_group import ComponentGroup
+from kraken.core.objects.hierarchy_group import HierarchyGroup
 from kraken.core.objects.locator import Locator
 from kraken.core.objects.joint import Joint
 from kraken.core.objects.srtBuffer import SrtBuffer
@@ -34,7 +36,7 @@ class ArmComponentGuide(Component):
 
         self.bicepFKCtrlSizeInputAttr = FloatAttribute('bicepFKCtrlSize', 2.0)
         self.forearmFKCtrlSizeInputAttr = FloatAttribute('forearmFKCtrlSize', 2.0)
-        
+
         self.addInput(self.bicepFKCtrlSizeInputAttr)
         self.addInput(self.forearmFKCtrlSizeInputAttr)
 
@@ -55,14 +57,14 @@ class ArmComponentGuide(Component):
 
     def saveData(self):
         """Save the data for the component to be persisted.
-        
-        
+
+
         Return:
         The JSON data object
-        
+
         """
-        
-        
+
+
         data = {
             'name': self.getName(),
             'location': self.getLocation(),
@@ -76,13 +78,13 @@ class ArmComponentGuide(Component):
 
     def loadData(self, data):
         """Load a saved guide represetnatoin from persisted data.
-        
+
         Arguments:
         data -- object, The JSON data object.
-        
+
         Return:
         True if successful.
-        
+
         """
 
         self.setName(data['name'])
@@ -98,12 +100,12 @@ class ArmComponentGuide(Component):
 
     def getGuideData(self):
         """Returns the Guide data used by the Rig Component to define the layout of the final rig..
-        
+
         Return:
         The JSON rig data object.
-        
+
         """
-        
+
 
         # values
         bicepPosition = self.bicep.xfo.tr
@@ -168,6 +170,17 @@ class ArmComponent(Component):
         # =========
         # Controls
         # =========
+        controlsLayer = self.getOrCreateLayer('controls')
+        ctrlCmpGrp = ComponentGroup(self.getName(), parent=controlsLayer)
+
+        # IO Hierarchies
+        inputHrcGrp = HierarchyGroup('inputs', parent=controlsLayer)
+        cmpInputAttrGrp = AttributeGroup('inputs')
+        inputHrcGrp.addAttributeGroup(cmpInputAttrGrp)
+
+        outputHrcGrp = HierarchyGroup('outputs', parent=controlsLayer)
+        cmpOutputAttrGrp = AttributeGroup('outputs')
+        inputHrcGrp.addAttributeGroup(cmpOutputAttrGrp)
 
         # Bicep
         self.bicepFKCtrlSrtBuffer = SrtBuffer('bicepFK', parent=self)
@@ -208,9 +221,7 @@ class ArmComponent(Component):
         armSettingsAttrGrp.addAttribute(armStretchBlendInputAttr)
 
         # UpV
-
         self.armUpVCtrlSrtBuffer = SrtBuffer('UpV', parent=self)
-
         self.armUpVCtrl = Control('UpV', parent=self.armUpVCtrlSrtBuffer, shape="triangle")
         self.armUpVCtrl.alignOnZAxis()
         self.armUpVCtrl.rotatePoints(180, 0, 0)
@@ -219,33 +230,30 @@ class ArmComponent(Component):
         # ==========
         # Deformers
         # ==========
-        deformersLayer = self.getLayer('deformers')
+        deformersLayer = self.getOrCreateLayer('deformers')
+        defCmpGrp = ComponentGroup(self.getName(), parent=deformersLayer)
 
-        bicepDef = Joint('bicep')
+        bicepDef = Joint('bicep', parent=defCmpGrp)
         bicepDef.setComponent(self)
 
-        forearmDef = Joint('forearm')
+        forearmDef = Joint('forearm', parent=defCmpGrp)
         forearmDef.setComponent(self)
 
-        wristDef = Joint('wrist')
+        wristDef = Joint('wrist', parent=defCmpGrp)
         wristDef.setComponent(self)
-
-        deformersLayer.addChild(bicepDef)
-        deformersLayer.addChild(forearmDef)
-        deformersLayer.addChild(wristDef)
 
 
         # =====================
         # Create Component I/O
         # =====================
         # Setup component Xfo I/O's
-        clavicleEndInput = Locator('clavicleEnd')
+        clavicleEndInput = Locator('clavicleEnd', parent=inputHrcGrp)
 
-        self.bicepOutput = Locator('bicep')
-        self.forearmOutput = Locator('forearm')
+        self.bicepOutput = Locator('bicep', parent=outputHrcGrp)
+        self.forearmOutput = Locator('forearm', parent=outputHrcGrp)
 
-        self.armEndXfoOutput = Locator('armEndXfo')
-        self.armEndPosOutput = Locator('armEndPos')
+        self.armEndXfoOutput = Locator('armEndXfo', parent=outputHrcGrp)
+        self.armEndPosOutput = Locator('armEndPos', parent=outputHrcGrp)
 
 
         # Setup componnent Attribute I/O's
@@ -258,6 +266,16 @@ class ArmComponent(Component):
         stretchInputAttr = BoolAttribute('stretch', True)
         stretchBlendInputAttr = FloatAttribute('stretchBlend', 0.0)
         self.rightSideInputAttr = BoolAttribute('rightSide')
+
+        cmpInputAttrGrp.addAttribute(debugInputAttr)
+        cmpInputAttrGrp.addAttribute(bone1LenInputAttr)
+        cmpInputAttrGrp.addAttribute(bone2LenInputAttr)
+        cmpInputAttrGrp.addAttribute(fkikInputAttr)
+        cmpInputAttrGrp.addAttribute(softIKInputAttr)
+        cmpInputAttrGrp.addAttribute(softDistInputAttr)
+        cmpInputAttrGrp.addAttribute(stretchInputAttr)
+        cmpInputAttrGrp.addAttribute(stretchBlendInputAttr)
+        cmpInputAttrGrp.addAttribute(self.rightSideInputAttr)
 
 
         # Connect attrs to control attrs

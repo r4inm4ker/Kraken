@@ -28,14 +28,6 @@ class Component(SceneItem):
 
         self.setShapeVisibility(False)
 
-        inputHrc = HierarchyGroup('inputs', parent=self)
-        inputAttrGrp = AttributeGroup('inputAttrs')
-        inputHrc.addAttributeGroup(inputAttrGrp)
-
-        outputHrc = HierarchyGroup('outputs', parent=self)
-        outputAttrGrp = AttributeGroup('outputAttrs')
-        outputHrc.addAttributeGroup(outputAttrGrp)
-
 
     # =============
     # Side Methods
@@ -93,16 +85,34 @@ class Component(SceneItem):
         """
 
         container = self.getContainer()
-        if container is not None:
-            layer = container.getChildByName(name)
-            if layer is None:
-                raise Exception("Container is missing a '"+name+"' layer:" + container.getFullName())
-        else:
-            # When building the component in a testing scene, generate a 'deformers' layer.
-            print("Warning: Generating '"+name+"' layer for component:" + self.getFullName());
-            layer = Layer(name, parent=self)
+        if container is None:
+            container = self
+
+        layer = container.getChildByName(name)
+        if layer is None or not layer.isTypeOf('Layer'):
+            raise KeyError("Layer '" + + "' was not found!")
 
         return layer
+
+
+    def getOrCreateLayer(self, name):
+        """Retrieves a layer from the owning container, or generates a layer (and warning message)
+
+        Return:
+        Layer, the layer from the container, or generated layer.
+
+        """
+
+        container = self.getContainer()
+        if container is None:
+            container = self
+
+        layer = container.getChildByName(name)
+        if layer is None or not layer.isTypeOf('Layer'):
+            layer = Layer(name, parent=container)
+
+        return layer
+
 
     # ==============
     # Child Methods
@@ -154,8 +164,8 @@ class Component(SceneItem):
 
         """
 
-        inputHrc = self.getChildByName('inputs')
-        inputAttrsGrp = inputHrc.getAttributeGroupByName('inputAttrs')
+        # inputHrc = self.getChildByName('inputs')
+        # inputAttrsGrp = inputHrc.getAttributeGroupByName('inputAttrs')
 
         if not isinstance(inputObject, (Locator, Attribute)):
             raise Exception("'inputObject' argument is not a valid object. "
@@ -167,13 +177,11 @@ class Component(SceneItem):
                 + inputObject.getName() + "'")
 
         if isinstance(inputObject, Locator):
-            inputHrc.addChild(inputObject)
             inputObject.setFlag("inputObject")
             inputObject.setShapeVisibility(False)
 
         elif isinstance(inputObject, Attribute):
-            inputAttrsGrp.attributes.append(inputObject)
-            inputObject.setParent(inputAttrsGrp)
+            pass
 
         componentInput = ComponentInput(inputObject.getName(), inputObject)
         self.inputs.append(componentInput)
@@ -297,8 +305,8 @@ class Component(SceneItem):
 
         """
 
-        outputHrc = self.getChildByName('outputs')
-        outputAttrsGrp = outputHrc.getAttributeGroupByName('outputAttrs')
+        # outputHrc = self.getChildByName('outputs')
+        # outputAttrsGrp = outputHrc.getAttributeGroupByName('outputAttrs')
 
         if not isinstance(outputObject, (SceneItem, Attribute)):
             raise Exception("'outputObject' argument is not a valid object. "
@@ -310,13 +318,11 @@ class Component(SceneItem):
                 + outputObject.getName() + "'")
 
         if isinstance(outputObject, SceneItem):
-            outputHrc.addChild(outputObject)
             outputObject.setFlag("outputObject")
             outputObject.setShapeVisibility(False)
 
         elif isinstance(outputObject, Attribute):
-            outputAttrsGrp.attributes.append(outputObject)
-            outputObject.setParent(outputAttrsGrp)
+            pass
 
         componentOutput = ComponentOutput(outputObject.getName(), outputObject)
         self.outputs.append(componentOutput)
