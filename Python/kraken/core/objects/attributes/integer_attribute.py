@@ -5,7 +5,7 @@ IntegerAttribute - Base Attribute.
 
 """
 
-from number_attribute import NumberAttribute
+from kraken.core.objects.attributes.number_attribute import NumberAttribute
 from kraken.core.kraken_system import ks
 
 

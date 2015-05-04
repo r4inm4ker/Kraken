@@ -9,10 +9,10 @@ import time
 import operator
 
 
-class __ProfilerItem(object):
+class _ProfilerItem(object):
 
     def __init__(self, label):
-        super(__ProfilerItem, self).__init__()
+        super(_ProfilerItem, self).__init__()
 
         t = time.time()
         self.label = label
@@ -64,7 +64,7 @@ class Profiler(object):
 
         """
 
-        item = __ProfilerItem(label)
+        item = _ProfilerItem(label)
         if len(self.__stack) == 0:
             self.__roots.append(item)
         else:
@@ -84,8 +84,8 @@ class Profiler(object):
 
         end = time.time()
         if len(self.__stack) == 0:
-            raise Exception("Unable to close bracket. Pop has been called more \
-                            times than push.")
+            raise Exception("""Unable to close bracket. Pop has been called more """+
+                            """times than push.""")
 
         self.__stack[-1].endProfiling()
         self.__stack.pop()
@@ -104,10 +104,10 @@ class Profiler(object):
         """
 
         if len(self.__stack) != 0:
-            raise Exception("Profiler brackets not closed properly. \
-                             Pop must be called for every call to push. Pop \
-                             needs to be called another " +
-                             str(len(self.__stack)) + " times")
+            raise Exception("""Profiler brackets not closed properly. """+
+                            """Pop must be called for every call to push. Pop """+
+                            """needs to be called another """ +
+                             str(len(self.__stack)) + """ times""")
 
         report = []
         report.append("--callstack--")

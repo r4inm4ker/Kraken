@@ -5,7 +5,7 @@ BoolAttribute - Base Attribute.
 
 """
 
-from kraken.objects.attributes.attribute import Attribute
+from kraken.core.objects.attributes.attribute import Attribute
 from kraken.core.kraken_system import ks
 
 
