@@ -182,38 +182,20 @@ class ArmComponent(Component):
         inputHrcGrp.addAttributeGroup(cmpOutputAttrGrp)
 
         # Bicep
-        bicepFKCtrlSpace = CtrlSpace('bicepFK', parent=self)
-        bicepFKCtrlSpace.xfo = bicepXfo
+        self.bicepFKCtrlSpace = CtrlSpace('bicepFK', parent=self)
 
-        bicepFKCtrl = Control('bicepFK', parent=bicepFKCtrlSpace, shape="cube")
+        self.bicepFKCtrl = Control('bicepFK', parent=self.bicepFKCtrlSpace, shape="cube")
         self.bicepFKCtrl.alignOnXAxis()
-        bicepFKCtrl.alignOnXAxis()
-        bicepLen = bicepPosition.subtract(forearmPosition).length()
-        bicepFKCtrl.scalePoints(Vec3(bicepLen, bicepFKCtrlSize, bicepFKCtrlSize))
-        bicepFKCtrl.xfo = bicepXfo
 
         # Forearm
-        forearmFKCtrlSpace = CtrlSpace('forearmFK', parent=bicepFKCtrl)
-        forearmFKCtrlSpace.xfo = forearmXfo
+        self.forearmFKCtrlSpace = CtrlSpace('forearmFK', parent=self.bicepFKCtrl)
 
-        forearmFKCtrl = Control('forearmFK', parent=forearmFKCtrlSpace, shape="cube")
+        self.forearmFKCtrl = Control('forearmFK', parent=self.forearmFKCtrlSpace, shape="cube")
         self.forearmFKCtrl.alignOnXAxis()
-        forearmFKCtrl.alignOnXAxis()
-        forearmLen = forearmPosition.subtract(wristPosition).length()
-        forearmFKCtrl.scalePoints(Vec3(forearmLen, forearmFKCtrlSize, forearmFKCtrlSize))
-        forearmFKCtrl.xfo = forearmXfo
 
         # Arm IK
-        armIKCtrlSpace = CtrlSpace('IK', parent=self)
-        armIKCtrlSpace.xfo.tr = wristPosition
-
-        armIKCtrl = Control('IK', parent=armIKCtrlSpace, shape="pin")
-        armIKCtrl.xfo = armIKCtrlSpace.xfo
-
-        if self.getLocation() == "R":
-            armIKCtrl.rotatePoints(0, 90, 0)
-        else:
-            armIKCtrl.rotatePoints(0, -90, 0)
+        self.armIKCtrlSpace = CtrlSpace('IK', parent=self)
+        self.armIKCtrl = Control('IK', parent=self.armIKCtrlSpace, shape="pin")
 
 
         # Add Component Params to IK control
@@ -238,18 +220,16 @@ class ArmComponent(Component):
         armSettingsAttrGrp.addAttribute(armStretchBlendInputAttr)
 
         # UpV
-        self.armUpVCtrlSrtBuffer = SrtBuffer('UpV', parent=ctrlCmpGrp)
+        self.armUpVCtrlSrtBuffer = CtrlSpace('UpV', parent=ctrlCmpGrp)
         self.armUpVCtrl = Control('UpV', parent=self.armUpVCtrlSrtBuffer, shape="triangle")
         self.armUpVCtrl.alignOnZAxis()
         self.armUpVCtrl.rotatePoints(180, 0, 0)
 
-        armUpVCtrlSpace = CtrlSpace('UpV', parent=self)
-        armUpVCtrlSpace.xfo.tr = upVOffset
+        self.armUpVCtrlSpace = CtrlSpace('UpV', parent=self)
 
-        armUpVCtrl = Control('UpV', parent=armUpVCtrlSpace, shape="triangle")
-        armUpVCtrl.xfo.tr = upVOffset
-        armUpVCtrl.alignOnZAxis()
-        armUpVCtrl.rotatePoints(180, 0, 0)
+        self.armUpVCtrl = Control('UpV', parent=self.armUpVCtrlSpace, shape="triangle")
+        self.armUpVCtrl.alignOnZAxis()
+        self.armUpVCtrl.rotatePoints(180, 0, 0)
 
 
         # ==========
@@ -319,7 +299,7 @@ class ArmComponent(Component):
         armRootInputConstraint = PoseConstraint('_'.join([self.armIKCtrl.getName(), 'To', clavicleEndInput.getName()]))
         armRootInputConstraint.setMaintainOffset(True)
         armRootInputConstraint.addConstrainer(clavicleEndInput)
-        bicepFKCtrlSpace.addConstraint(armRootInputConstraint)
+        self.bicepFKCtrlSpace.addConstraint(armRootInputConstraint)
 
         # Constraint outputs
 
@@ -405,15 +385,15 @@ class ArmComponent(Component):
         self.setLocation(location)
 
         self.bicepFKCtrl.scalePoints(Vec3(data['bicepLen'], data['bicepFKCtrlSize'], data['bicepFKCtrlSize']))
-        self.bicepFKCtrlSrtBuffer.xfo = data['bicepXfo']
+        self.bicepFKCtrlSpace.xfo = data['bicepXfo']
         self.bicepFKCtrl.xfo = data['bicepXfo']
 
         self.bicepOutput.xfo = data['bicepXfo']
         self.forearmOutput.xfo = data['forearmXfo']
 
-        self.forearmFKCtrlSrtBuffer.xfo = data['forearmXfo']
+        self.forearmFKCtrlSpace.xfo = data['forearmXfo']
         self.forearmFKCtrl.xfo = data['forearmXfo']
-        self.armIKCtrlSrtBuffer.xfo.tr = data['armEndXfo'].tr
+        self.armIKCtrlSpace.xfo.tr = data['armEndXfo'].tr
         self.armIKCtrl.xfo = data['armEndXfo']
 
         if location == "R":
@@ -427,7 +407,7 @@ class ArmComponent(Component):
         self.armEndPosOutput.xfo = data['armEndXfo']
 
 
-        self.armUpVCtrlSrtBuffer.xfo = data['upVXfo']
+        self.armUpVCtrlSpace.xfo = data['upVXfo']
         self.armUpVCtrl.xfo = data['upVXfo']
 
         self.rightSideInputAttr.setValue(location is 'R')
