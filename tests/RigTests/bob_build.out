@@ -70,8 +70,8 @@ char_bob.controls.head.head.head.eyeLeft
 char_bob.controls.head.head.head.eyeLeft.eyeLeft
 char_bob.controls.head.head.head.eyeRight
 char_bob.controls.head.head.head.eyeRight.eyeRight
-char_bob.controls.head.head.head.jawSrtBuffer
-char_bob.controls.head.head.head.jawSrtBuffer.jaw
+char_bob.controls.head.head.head.jawCtrlSpace
+char_bob.controls.head.head.head.jawCtrlSpace.jaw
 char_bob.controls.clavicle
 char_bob.controls.clavicle.inputs
 char_bob.controls.clavicle.inputs.spineEnd

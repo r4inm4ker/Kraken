@@ -1,1 +1,1 @@
-Profiler brackets not closed properly. pop must be called for every call to push. Pop needs to be called another 1 times
+Profiler brackets not closed properly. Pop must be called for every call to push. Pop needs to be called another 1 times

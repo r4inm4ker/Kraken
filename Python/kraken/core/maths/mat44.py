@@ -36,7 +36,13 @@ class Mat44(MathObject):
 
         """
 
-        return "Mat44(" + str(self.row0) + "," + str(self.row1) + "," + str(self.row2) + "," + str(self.row3) + ")"
+        stringRep = "Mat44("
+        stringRep += str(self.row0) + ","
+        stringRep += str(self.row1) + ","
+        stringRep += str(self.row2) + ","
+        stringRep += str(self.row3) + ")"
+
+        return stringRep
 
 
     @property
@@ -186,7 +192,8 @@ class Mat44(MathObject):
 
         """
 
-        self._rtval.setRows('', ks.rtVal('Vec4', row0), ks.rtVal('Vec4', row0), ks.rtVal('Vec4', row2), ks.rtVal('Vec4', row3))
+        self._rtval.setRows('', ks.rtVal('Vec4', row0), ks.rtVal('Vec4', row0),
+                            ks.rtVal('Vec4', row2), ks.rtVal('Vec4', row3))
 
         return True
 
@@ -205,7 +212,8 @@ class Mat44(MathObject):
 
         """
 
-        self._rtval.setColumns('', ks.rtVal('Vec4', col0), ks.rtVal('Vec4', col0), ks.rtVal('Vec4', col2), ks.rtVal('Vec4', col3))
+        self._rtval.setColumns('', ks.rtVal('Vec4', col0), ks.rtVal('Vec4', col0),
+                               ks.rtVal('Vec4', col2), ks.rtVal('Vec4', col3))
 
         return True
 
@@ -295,7 +303,8 @@ class Mat44(MathObject):
 
         """
 
-        return self._rtval.almostEqual('Boolean', ks.rtVal('Mat44', other), ks.rtVal('Scalar', precision))
+        return self._rtval.almostEqual('Boolean', ks.rtVal('Mat44', other),
+                                       ks.rtVal('Scalar', precision))
 
 
     def almostEqual(self, other):

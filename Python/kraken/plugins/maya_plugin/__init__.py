@@ -1,3 +1,4 @@
+"""Kraken Maya Plug-in."""
 
 
 def dccTest():

@@ -4,17 +4,18 @@ Classes:
 Builder -- Component representation.
 
 """
+
+import json
+
 from kraken.core.kraken_system import ks
 from kraken.core.builders.builder import Builder
 from kraken.core.objects.scene_item import SceneItem
 from kraken.core.objects.attributes.attribute import Attribute
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
-
 from kraken.plugins.maya_plugin.utils import *
 
 import FabricEngine.Core as core
-import json
-from maya import cmds
+
 
 class Builder(Builder):
     """Builder object for building Kraken objects in Maya."""
@@ -697,7 +698,7 @@ class Builder(Builder):
         """Sets the visibility of the object after its been created.
 
         Arguments:
-        Arguments -- Type, information.
+        kSceneItem -- Object, the scene item to set the visibility on.
 
         Return:
         True if successful.

@@ -4,6 +4,7 @@ Classes:
 AttributeGroup - Attribute Group.
 
 """
+
 from kraken.core.objects.base_item import BaseItem
 
 class AttributeGroup(BaseItem):

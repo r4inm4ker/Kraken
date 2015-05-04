@@ -5,8 +5,9 @@ FloatAttribute - Base Attribute.
 
 """
 
-from number_attribute import NumberAttribute
+from kraken.core.objects.attributes.number_attribute import NumberAttribute
 from kraken.core.kraken_system import ks
+
 
 class FloatAttribute(NumberAttribute):
     """Float Attribute. Implemented value type checking and limiting."""

@@ -14,3 +14,4 @@ class CtrlSpace(SceneItem):
     def __init__(self, name, parent=None):
         super(CtrlSpace, self).__init__(name, parent=parent)
         self.setShapeVisibility(False)
+

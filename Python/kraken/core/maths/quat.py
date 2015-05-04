@@ -5,12 +5,13 @@ Quat -- Quaternion rotation.
 """
 
 import math
-from kraken.core.kraken_system import ks
-from math_object import MathObject
 
-from vec3 import Vec3
-from euler import Euler
-from mat33 import Mat33
+from kraken.core.kraken_system import ks
+from kraken.core.maths.math_object import MathObject
+
+from kraken.core.maths.vec3 import Vec3
+from kraken.core.maths.euler import Euler
+from kraken.core.maths.mat33 import Mat33
 
 
 class Quat(MathObject):
@@ -163,7 +164,8 @@ class Quat(MathObject):
 
 
     def setFromEulerAngles(self, angles, ro):
-        """Sets this quat to a given angles vector (in radians) and a rotation order.
+        """Sets this quat to a given angles vector (in radians) and a rotation
+        order.
 
         Arguments:
         angles -- Vec3, angle vector.
@@ -174,7 +176,8 @@ class Quat(MathObject):
 
         """
 
-        return Quat(self._rtval.setFromEuler('Quat', ks.rtVal('Vec3', angles), ks.rtVal('RotationOrder', ro)))
+        return Quat(self._rtval.setFromEuler('Quat', ks.rtVal('Vec3', angles),
+                    ks.rtVal('RotationOrder', ro)))
 
 
     def setFromEulerAngles(self, angles):
@@ -205,7 +208,8 @@ class Quat(MathObject):
 
         """
 
-        return Quat(self._rtval.setFromAxisAndAngle('Quat', ks.rtVal('Vec3', axis), ks.rtVal('Scalar', angle)))
+        return Quat(self._rtval.setFromAxisAndAngle('Quat', ks.rtVal('Vec3', axis),
+                    ks.rtVal('Scalar', angle)))
 
 
     def setFromMat33(self, mat):
@@ -239,7 +243,8 @@ class Quat(MathObject):
 
         """
 
-        return Quat(self._rtval.setFrom2Vectors('Quat', ks.rtVal('Vec3', sourceDirVec), ks.rtVal('Vec3', destDirVec), ks.rtVal('Boolean', arbitraryIfAmbiguous)))
+        return Quat(self._rtval.setFrom2Vectors('Quat', ks.rtVal('Vec3', sourceDirVec),
+                    ks.rtVal('Vec3', destDirVec), ks.rtVal('Boolean', arbitraryIfAmbiguous)))
 
 
     def setFromDirectionAndUpvector(self, direction, upvector):
@@ -255,7 +260,8 @@ class Quat(MathObject):
 
         """
 
-        return Quat(self._rtval.setFromDirectionAndUpvector('Quat', ks.rtVal('Vec3', direction), ks.rtVal('Vec3', upvector)))
+        return Quat(self._rtval.setFromDirectionAndUpvector('Quat',
+                    ks.rtVal('Vec3', direction), ks.rtVal('Vec3', upvector)))
 
 
     def equal(self, other):
@@ -284,7 +290,8 @@ class Quat(MathObject):
 
         """
 
-        return self._rtval.almostEqual('Boolean', ks.rtVal('Quat', other), ks.rtVal('Scalar', precision))
+        return self._rtval.almostEqual('Boolean', ks.rtVal('Quat', other),
+                                       ks.rtVal('Scalar', precision))
 
 
     def almostEqual(self, other):
@@ -712,14 +719,17 @@ class Quat(MathObject):
 
         """
 
-        return Quat(self._rtval.sphericalLinearInterpolate('Quat', ks.rtVal('Quat', q2), ks.rtVal('Scalar', t)))
+        return Quat(self._rtval.sphericalLinearInterpolate('Quat',
+                    ks.rtVal('Quat', q2), ks.rtVal('Scalar', t)))
 
 
     def linearInterpolate(self, other, t):
         """Interpolates two quaternions lineally (lerp) with a given blend value
         (0.0 to 1.0).
 
-        Note: The interpolation of the 2 quaternions will result acceleration and deceleration. Use :kl-ref:`sphericalLinearInterpolate` for an interpolation that does not introduce acceleration..
+        Note: The interpolation of the 2 quaternions will result acceleration
+        and deceleration. Use :kl-ref:`sphericalLinearInterpolate` for an
+        interpolation that does not introduce acceleration..
 
         Arguments:
         other -- Quat, quaternion to blend to.

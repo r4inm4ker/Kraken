@@ -14,8 +14,8 @@ from kraken.core.objects.control  import Control
 
 from kraken.core.objects.operators.splice_operator import SpliceOperator
 
-from kraken.helpers.utility_methods import logHierarchy
 from kraken.core.profiler import Profiler
+from kraken.helpers.utility_methods import logHierarchy
 
 
 class NeckComponent(Component):
@@ -130,10 +130,6 @@ class NeckComponent(Component):
 
         Profiler.getInstance().pop()
 
-    def buildRig(self, parent):
-        pass
 
 from kraken.core.kraken_system import KrakenSystem
 KrakenSystem.getInstance().registerComponent(NeckComponent)
-
-

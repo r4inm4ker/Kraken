@@ -11,6 +11,7 @@ from kraken.core.objects.operators.operator import Operator
 from kraken.core.objects.attributes.attribute import Attribute
 from kraken.core.kraken_system import ks
 
+
 class SpliceOperator(Operator):
     """Splice Operator representation."""
 
@@ -48,6 +49,7 @@ class SpliceOperator(Operator):
                 else:
                     self.outputs[arg.name] = None
 
+
     def getSolverTypeName(self):
         """Returns the solver type name for this operator.
 
@@ -69,6 +71,7 @@ class SpliceOperator(Operator):
 
         return self.extension
 
+
     def getSolverArgs(self):
         """Returns the args array defined by the KL Operator.
 
@@ -77,8 +80,8 @@ class SpliceOperator(Operator):
 
         """
 
-        # Get the args from the solver KL object.
         return self.args
+
 
     def generateSourceCode(self, arraySizes={}):
         """Returns the source code for a stub operator that will invoke the KL operator
@@ -135,6 +138,7 @@ class SpliceOperator(Operator):
 
         return opSourceCode
 
+
     def evaluate(self):
         """Returns the source code for a stub operator that will invoke the KL operator
 
@@ -142,6 +146,7 @@ class SpliceOperator(Operator):
         String, The source code for the stub operator.
 
         """
+
         def getRTVal(obj):
             if isinstance(obj, SceneItem):
                 return obj.xfo.getRTVal().toMat44('Mat44')

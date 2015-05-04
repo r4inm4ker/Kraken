@@ -104,7 +104,6 @@ class Control(Curve):
                     if eachPoint[1] > furthest:
                         furthest = eachPoint[1]
 
-
         offset = 0.0 - furthest
 
         for eachSubCurve in curveData:
@@ -143,7 +142,6 @@ class Control(Curve):
 
                     if eachPoint[2] > furthest:
                         furthest = eachPoint[2]
-
 
         offset = 0.0 - furthest
 
@@ -202,7 +200,8 @@ class Control(Curve):
         curveData = list(self.getCurveData())
 
         quatRot = Quat()
-        quatRot.setFromEuler(Euler(Math_degToRad(xRot), Math_degToRad(yRot), Math_degToRad(zRot)))
+        quatRot.setFromEuler(Euler(Math_degToRad(xRot), Math_degToRad(yRot),
+                                   Math_degToRad(zRot)))
 
         newPoints = []
         for eachSubCurve in curveData:
