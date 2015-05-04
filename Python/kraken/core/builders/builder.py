@@ -955,10 +955,9 @@ class Builder(object):
         finally:
             self._postBuild()
 
-            # Clear config instance when finished.
+            # Clear Config & Kraken System when finished.
             self.config.clearInstance()
-            ks = KrakenSystem.getInstance()
-            ks.clearInstance()
+            KrakenSystem.getInstance().clearInstance()
 
         Profiler.getInstance().pop()
 
