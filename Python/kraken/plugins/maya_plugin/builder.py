@@ -698,7 +698,7 @@ class Builder(Builder):
         """Sets the visibility of the object after its been created.
 
         Arguments:
-        Arguments -- Type, information.
+        kSceneItem -- Object, the scene item to set the visibility on.
 
         Return:
         True if successful.

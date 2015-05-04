@@ -19,7 +19,7 @@ class KrakenSaver(object):
         """Doc String.
 
         Arguments:
-        Arguments -- Type, information.
+        value -- MathObject, the math object to be saved.
 
         Return:
         True if successful.

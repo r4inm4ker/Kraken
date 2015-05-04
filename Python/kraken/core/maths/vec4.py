@@ -575,7 +575,7 @@ class Vec4(MathObject):
         """Doc String.
 
         Arguments:
-        Arguments -- Type, information.
+        other -- Vec4, the other vector to measure the distance to.
 
         Return:
         True if successful.

@@ -188,9 +188,6 @@ class Config(object):
     def initControlShapes(self):
         """Initializes the control shapes.
 
-        Arguments:
-        Arguments -- Type, information.
-
         Return:
         True if successful.
 

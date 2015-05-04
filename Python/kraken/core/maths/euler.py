@@ -100,7 +100,7 @@ class Euler(MathObject):
         """Doc String.
 
         Arguments:
-        value -- Type, information.
+        value -- number, x value of the Euler Angles.
 
         Return:
         True if successful.
@@ -127,7 +127,7 @@ class Euler(MathObject):
         """Doc String.
 
         Arguments:
-        value -- Type, information.
+        value -- number, y value of the Euler Angles.
 
         Return:
         True if successful.
@@ -154,7 +154,7 @@ class Euler(MathObject):
         """Doc String.
 
         Arguments:
-        value -- Type, information.
+        value -- number, z value of the Euler Angles.
 
         Return:
         True if successful.
@@ -181,7 +181,7 @@ class Euler(MathObject):
         """Doc String.
 
         Arguments:
-        value -- Type, information.
+        value -- number, rotation order(ro) value of the Euler Angles.
 
         Return:
         True if successful.

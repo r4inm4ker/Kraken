@@ -21,10 +21,10 @@ class Rig(Container):
 
 
     def loadRigDefinitionFile(self, filepath):
-        """Doc String.
+        """Load a rig definition from a file on disk.
 
         Arguments:
-        Arguments -- Type, information.
+        filepath -- string, the file path of the rig definition file.
 
         Return:
         True if successful.
@@ -41,10 +41,10 @@ class Rig(Container):
 
 
     def loadRigDefinition(self, jsonData):
-        """Doc String.
+        """Load a rig definition from a JSON structure.
 
         Arguments:
-        Arguments -- Type, information.
+        jsonData -- dict, the JSON data containing the rig definition.
 
         Return:
         True if successful.
@@ -55,33 +55,13 @@ class Rig(Container):
 
         krakenSystem = KrakenSystem.getInstance()
 
-        def loadLayers(layersData):
-            """Doc String.
-
-            Arguments:
-            Arguments -- Type, information.
-
-            Return:
-            True if successful.
-
-            """
-
+        def __loadLayers(layersData):
             for layerName in layersData:
                 layer = Layer(layerName, parent=self)
 
 
-        def loadComponents(componentsData):
-            """Doc String.
-
-            Arguments:
-            Arguments -- Type, information.
-
-            Return:
-            True if successful.
-
-            """
-
-            Profiler.getInstance().push("loadComponents")
+        def __loadComponents(componentsData):
+            Profiler.getInstance().push("__loadComponents")
 
             for componentData in componentsData:
                 moduleName = '.'.join(componentData['class'].split('.')[:-1])
@@ -99,18 +79,9 @@ class Rig(Container):
             Profiler.getInstance().pop()
 
 
-        def makeConnections(connectionsData):
-            """Doc String.
+        def __makeConnections(connectionsData):
 
-            Arguments:
-            Arguments -- Type, information.
-
-            Return:
-            True if successful.
-
-            """
-
-            Profiler.getInstance().push("makeConnections")
+            Profiler.getInstance().push("__makeConnections")
 
             for connectionData in connectionsData:
                 sourceComponentName, outputName = connectionData['source'].split('.')
@@ -134,14 +105,14 @@ class Rig(Container):
 
 
         if 'layers' in jsonData:
-            loadLayers(jsonData['layers'])
+            __loadLayers(jsonData['layers'])
         else:
             raise Exception("A rig must define layers.")
 
         if 'components' in jsonData:
-            loadComponents(jsonData['components'])
+            __loadComponents(jsonData['components'])
 
             if 'connections' in jsonData:
-                makeConnections(jsonData['connections'])
+                __makeConnections(jsonData['connections'])
 
         Profiler.getInstance().pop()

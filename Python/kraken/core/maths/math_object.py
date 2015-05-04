@@ -33,7 +33,7 @@ class MathObject(object):
         """Sets the internal RTVal object owned by the math object.
 
         Arguments:
-        rtval -- type, description.
+        rtval -- rtval, the internal RTVal object owned by the math object.
 
         """
 
@@ -63,12 +63,12 @@ class MathObject(object):
         return d
 
 
-    def jsonDecode(self, jsonData, ):
+    def jsonDecode(self, jsonData, loader):
         """Encodes object to JSON.
 
         Arguments:
-        jsonData -- type, description.
-        loader -- type, description.
+        jsonData -- dict, the JSON data used to populate the math object.
+        loader -- Loader, the Loader object used wen loading a Krkaen rig.
 
         Return:
         True of the decode was successful

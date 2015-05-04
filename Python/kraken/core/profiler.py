@@ -9,41 +9,42 @@ import time
 import operator
 
 
+class __ProfilerItem(object):
+
+    def __init__(self, label):
+        super(__ProfilerItem, self).__init__()
+
+        t = time.time()
+        self.label = label
+        self.start = t
+        self.end = t
+        self.children = []
+
+
+    def addChild(self, item):
+        self.children.append(item)
+
+
+    def endProfiling(self):
+        self.end = time.time()
+
 class Profiler(object):
     """Kraken profiler object for debugging performance issues."""
 
     __instance = None
 
-    class ProfilerItem(object):
 
-        def __init__(self, label):
-            super(Profiler.ProfilerItem, self).__init__()
-
-            t = time.time()
-            self.label = label
-            self.start = t
-            self.end = t
-            self.children = []
-
-
-        def addChild(self, item):
-            self.children.append(item)
-
-
-        def endProfiling(self):
-            self.end = time.time()
-
-
-    def __init__(self, label='Root'):
+    def __init__(self):
         super(Profiler, self).__init__()
-        self.reset(label=label)
+        self.reset()
 
 
-    def reset(self, label='Root'):
+    def reset(self):
         """Resets the profiler for generating a new report
 
         Return:
         None
+
 
         """
 
@@ -56,14 +57,14 @@ class Profiler(object):
         """Adds a new child to the profiling tree and activates it.
 
         Arguments:
-        label -- Type, information.
+        label -- string, The label of the next level of the stack.
 
         Return:
         None
 
         """
 
-        item = Profiler.ProfilerItem(label)
+        item = __ProfilerItem(label)
         if len(self.__stack) == 0:
             self.__roots.append(item)
         else:
@@ -95,7 +96,7 @@ class Profiler(object):
         profiling.
 
         Arguments:
-        listFunctionTotals -- Boolean, information.
+        listFunctionTotals -- Boolean, list information relating to the total time spent in each function.
 
         Return:
         the json object

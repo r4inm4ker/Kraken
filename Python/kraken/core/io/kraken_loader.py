@@ -48,7 +48,7 @@ class KrakenLoader(object):
         """Returns a constructed math value based on the provided json data.
 
         Arguments:
-        jsondata -- type, description.
+        jsondata -- dict, the JSON data to use to decode into a Math value.
 
         Return:
         The constructed math value
@@ -128,7 +128,7 @@ class KrakenLoader(object):
         """Returns a constructed scene item based on the provided json data.
 
         Arguments:
-        jsondata -- type, description.
+        jsondata -- dict, the JSON data to use to decode into a Math value.
 
         Return:
         The constructed scene item.
@@ -256,7 +256,7 @@ class KrakenLoader(object):
         during resolveSceneItem.
 
         Arguments:
-        item -- type, description.
+        item -- object, an object constructed during the loading process.
 
         Return:
         None

@@ -7,13 +7,8 @@ KrakenSystem - Class for constructing the Fabric Engine Core client.
 
 import json
 import imp
-<<<<<<< HEAD
 
 from kraken.core.profiler import Profiler
-
-=======
-from kraken.core.profiler import Profiler
->>>>>>> develop
 import FabricEngine.Core
 
 
@@ -103,7 +98,7 @@ class KrakenSystem(object):
         """Loads the given extension and updates the registeredTypes cache.
 
         Arguments:
-        extension -- type, description.
+        extension -- string, The name of the extension to load.
 
         Return:
         None
@@ -124,8 +119,8 @@ class KrakenSystem(object):
         """Constructs a new RTVal using the given name and optional devault value.
 
         Arguments:
-        dataType -- type, The name of the data type to construct.
-        defaultValue -- type, The default value to use to initialize the RTVal
+        dataType -- string, The name of the data type to construct.
+        defaultValue -- value, The default value to use to initialize the RTVal
 
         Return:
         The constructed RTval.
@@ -168,8 +163,8 @@ class KrakenSystem(object):
         """Constructs a new RTVal using the given name and optional devault value.
 
         Arguments:
-        dataType -- type, The name of the data type to construct.
-        defaultValue -- type, The default value to use to initialize the RTVal
+        dataType -- string, The name of the data type to construct.
+        defaultValue -- value, The default value to use to initialize the RTVal
 
         Return:
         The constructed RTval.
@@ -183,7 +178,7 @@ class KrakenSystem(object):
         """Returns true if the given value is an RTVal.
 
         Arguments:
-        value -- type, value to test.
+        value -- value, value to test.
 
         Return:
         True if successful.
@@ -197,7 +192,7 @@ class KrakenSystem(object):
         """Returns the name of the type, handling extracting the name from KL RTVals.
 
         Arguments:
-        rtval -- the rtval to extract the name from.
+        rtval -- rtval, the rtval to extract the name from.
 
         Return:
         True if successful.
@@ -213,7 +208,7 @@ class KrakenSystem(object):
         """Registers a component Python class with the KrakenSystem so ti can be built by the rig builder.
 
         Arguments:
-        componentClass -- the Python class of the component
+        componentClass -- string, the Python class of the component
 
         Return:
         None
@@ -230,7 +225,7 @@ class KrakenSystem(object):
         """Returns the registered Python component class with the given name
 
         Arguments:
-        className -- The name of the Python component class
+        className -- string, The name of the Python component class
 
         Return:
         The Python component class
@@ -256,7 +251,6 @@ class KrakenSystem(object):
             cls.__instance = KrakenSystem()
 
         return cls.__instance
-
 
 
     @classmethod
