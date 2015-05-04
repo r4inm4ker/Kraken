@@ -25,15 +25,19 @@ class MathObject(object):
         RTVal
 
         """
+
         return self._rtval
 
 
     def setRTVal(self, rtval):
         """Sets the internal RTVal object owned by the math object.
 
-        """
-        self._rtval = rtval
+        Arguments:
+        rtval -- rtval, the internal RTVal object owned by the math object.
 
+        """
+
+        self._rtval = rtval
 
 
     def jsonEncode(self):
@@ -43,8 +47,9 @@ class MathObject(object):
         JSON string.
 
         """
+
         d = {
-                "__class__":self.__class__.__name__,
+             "__class__": self.__class__.__name__,
             }
 
         public_attrs = (name for name in dir(self) if not name.startswith('_') and not callable(getattr(self,name)) and name)
@@ -61,12 +66,19 @@ class MathObject(object):
     def jsonDecode(self, jsonData, loader):
         """Encodes object to JSON.
 
+        Arguments:
+        jsonData -- dict, the JSON data used to populate the math object.
+        loader -- Loader, the Loader object used wen loading a Krkaen rig.
+
         Return:
         True of the decode was successful
 
         """
+
         if jsonData["__class__"] != self.__class__.__name__:
-            raise Exception("Error in jsonDecode. Json data specifies a different class:" + jsonData["__class__"] + "!==" + self.__class__.__name__)
+            raise Exception("Error in jsonDecode. Json data specifies a \
+                            different class:" + jsonData["__class__"] + "!==" +
+                            self.__class__.__name__)
 
         for key, value in jsonData.iteritems():
             if key == '__class__': continue

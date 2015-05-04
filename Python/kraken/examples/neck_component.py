@@ -9,13 +9,13 @@ from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
 from kraken.core.objects.locator import Locator
 from kraken.core.objects.joint import Joint
-from kraken.core.objects.srtBuffer import SrtBuffer
+from kraken.core.objects.ctrlSpace import CtrlSpace
 from kraken.core.objects.control  import Control
 
 from kraken.core.objects.operators.splice_operator import SpliceOperator
 
-from kraken.helpers.utility_methods import logHierarchy
 from kraken.core.profiler import Profiler
+from kraken.helpers.utility_methods import logHierarchy
 
 
 class NeckComponent(Component):
@@ -46,10 +46,10 @@ class NeckComponent(Component):
         neckXfo.setFromVectors(rootToEnd, bone1Normal, bone1ZAxis, neckPosition)
 
         # Add Guide Controls
-        neckCtrlSrtBuffer = SrtBuffer('neck', parent=self)
-        neckCtrlSrtBuffer.xfo = neckXfo
+        neckCtrlSpace = CtrlSpace('neck', parent=self)
+        neckCtrlSpace.xfo = neckXfo
 
-        neckCtrl = Control('neck', parent=neckCtrlSrtBuffer, shape="pin")
+        neckCtrl = Control('neck', parent=neckCtrlSpace, shape="pin")
         neckCtrl.scalePoints(Vec3(1.25, 1.25, 1.25))
         neckCtrl.translatePoints(Vec3(0, 0, -0.5))
         neckCtrl.rotatePoints(90, 0, 90)
@@ -90,7 +90,7 @@ class NeckComponent(Component):
         clavicleInputConstraint = PoseConstraint('_'.join([neckCtrl.getName(), 'To', neckEndInput.getName()]))
         clavicleInputConstraint.setMaintainOffset(True)
         clavicleInputConstraint.addConstrainer(neckEndInput)
-        neckCtrlSrtBuffer.addConstraint(clavicleInputConstraint)
+        neckCtrlSpace.addConstraint(clavicleInputConstraint)
 
         # Constraint outputs
         neckEndConstraint = PoseConstraint('_'.join([neckEndOutput.getName(), 'To', neckCtrl.getName()]))
@@ -130,10 +130,6 @@ class NeckComponent(Component):
 
         Profiler.getInstance().pop()
 
-    def buildRig(self, parent):
-        pass
 
 from kraken.core.kraken_system import KrakenSystem
 KrakenSystem.getInstance().registerComponent(NeckComponent)
-
-

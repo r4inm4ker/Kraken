@@ -1,5 +1,7 @@
-from kraken.core.maths import *
 import json
+
+from kraken.core.maths import *
+
 
 vec3 = Vec3()
 vec3.x = 3.0;

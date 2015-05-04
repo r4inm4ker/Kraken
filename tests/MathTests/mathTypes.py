@@ -1,5 +1,7 @@
-from kraken.core.maths import *
 import json
+
+from kraken.core.maths import *
+
 
 tr = Vec3(32,35,234)
 print "tr:" + str(tr)

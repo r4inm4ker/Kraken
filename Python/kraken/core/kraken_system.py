@@ -7,12 +7,14 @@ KrakenSystem - Class for constructing the Fabric Engine Core client.
 
 import json
 import imp
-from profiler import Profiler
+
+from kraken.core.profiler import Profiler
 import FabricEngine.Core
 
 
 class KrakenSystem(object):
-    """The KrakenSystem is a singleton object used to provide an interface with the FabricEngine Core and RTVal system."""
+    """The KrakenSystem is a singleton object used to provide an interface with
+    the FabricEngine Core and RTVal system."""
 
     __instance = None
 
@@ -36,6 +38,7 @@ class KrakenSystem(object):
         None
 
         """
+
         if self.client == None:
             Profiler.getInstance().push("loadCoreClient")
 
@@ -84,18 +87,24 @@ class KrakenSystem(object):
         The Fabric Engine Core Client
 
         """
+
         if self.client is None:
             self.loadCoreClient()
+
         return self.client
 
 
     def loadExtension(self, extension):
         """Loads the given extension and updates the registeredTypes cache.
 
+        Arguments:
+        extension -- string, The name of the extension to load.
+
         Return:
         None
 
         """
+
         if extension not in self.loadedExtensions:
             Profiler.getInstance().push("loadExtension:" + extension)
             self.client.loadExtension(extension)
@@ -110,15 +119,17 @@ class KrakenSystem(object):
         """Constructs a new RTVal using the given name and optional devault value.
 
         Arguments:
-        dataType -- The name of the data type to construct.
-        defaultValue -- The default value to use to initialize the RTVal
+        dataType -- string, The name of the data type to construct.
+        defaultValue -- value, The default value to use to initialize the RTVal
 
         Return:
         The constructed RTval.
 
         """
+
         self.loadCoreClient()
         klType = getattr(self.registeredTypes, dataType)
+
         if defaultValue is not None:
             if hasattr(defaultValue, '_rtval'):
                 return defaultValue._rtval
@@ -152,8 +163,8 @@ class KrakenSystem(object):
         """Constructs a new RTVal using the given name and optional devault value.
 
         Arguments:
-        dataType -- The name of the data type to construct.
-        defaultValue -- The default value to use to initialize the RTVal
+        dataType -- string, The name of the data type to construct.
+        defaultValue -- value, The default value to use to initialize the RTVal
 
         Return:
         The constructed RTval.
@@ -167,7 +178,7 @@ class KrakenSystem(object):
         """Returns true if the given value is an RTVal.
 
         Arguments:
-        value -- value to test.
+        value -- value, value to test.
 
         Return:
         True if successful.
@@ -181,12 +192,13 @@ class KrakenSystem(object):
         """Returns the name of the type, handling extracting the name from KL RTVals.
 
         Arguments:
-        rtval -- the rtval to extract the name from.
+        rtval -- rtval, the rtval to extract the name from.
 
         Return:
         True if successful.
 
         """
+
         if ks.isRTVal(rtval):
             return json.loads(rtval.type("Type").jsonDesc("String"))['name']
         else:
@@ -197,14 +209,15 @@ class KrakenSystem(object):
         """Registers a component Python class with the KrakenSystem so ti can be built by the rig builder.
 
         Arguments:
-        componentClass -- the Python class of the component
+        componentClass -- string, the Python class of the component
 
         Return:
         None
 
         """
+
         if componentClass.__name__ in self.registeredComponents:
-            raise Exception("Component with that class name already registered:" + componentClass.__name__ )
+            raise Exception("Component with that class name already registered:" + componentClass.__name__)
 
         self.registeredComponents[componentClass.__name__] = componentClass
 
@@ -213,14 +226,15 @@ class KrakenSystem(object):
         """Returns the registered Python component class with the given name
 
         Arguments:
-        className -- The name of the Python component class
+        className -- string, The name of the Python component class
 
         Return:
         The Python component class
 
         """
+
         if className not in self.registeredComponents:
-            raise Exception("Component with that class not registered:" + className )
+            raise Exception("Component with that class not registered:" + className)
 
         return self.registeredComponents[className]
 
@@ -240,6 +254,7 @@ class KrakenSystem(object):
         return cls.__instance
 
 
+    @classmethod
     def clearInstance(cls):
         """Clears the instance variable of the Kraken System.
 

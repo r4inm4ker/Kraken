@@ -7,6 +7,7 @@ Operator - Base operator object.
 
 from kraken.core.objects.base_item import BaseItem
 
+
 class Operator(BaseItem):
     """Operator representation."""
 

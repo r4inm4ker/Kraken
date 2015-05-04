@@ -12,14 +12,14 @@ from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
 from kraken.core.objects.locator import Locator
 from kraken.core.objects.joint import Joint
-from kraken.core.objects.srtBuffer import SrtBuffer
+from kraken.core.objects.ctrlSpace import CtrlSpace
 from kraken.core.objects.layer import Layer
 from kraken.core.objects.control import Control
 
 from kraken.core.objects.operators.splice_operator import SpliceOperator
 
-from kraken.helpers.utility_methods import logHierarchy
 from kraken.core.profiler import Profiler
+from kraken.helpers.utility_methods import logHierarchy
 
 
 class InsectLegComponent(Component):
@@ -56,7 +56,7 @@ class InsectLegComponent(Component):
         fw = Vec3(0, 0, 1)
         boneXfos = []
         boneLengths = []
-        for i in range(len(jointPositions)-1):
+        for i in xrange(len(jointPositions)-1):
             boneVec = jointPositions[i+1].subtract(jointPositions[i])
             boneLengths.append(boneVec.length())
             bone1Normal = fw.cross(boneVec).unit()
@@ -66,7 +66,7 @@ class InsectLegComponent(Component):
             boneXfos.append(xfo)
 
 
-        fkCtrlSrtBuffers = []
+        fkCtrlSpaces = []
         boneFKCtrls = []
         for i in range(len(boneXfos)):
             if i==0:
@@ -74,23 +74,23 @@ class InsectLegComponent(Component):
             else:
                 parent = boneFKCtrls[i-1]
 
-            boneFKCtrlSrtBuffer = SrtBuffer('bone'+str(i)+'FK', parent=parent)
-            boneFKCtrlSrtBuffer.xfo = boneXfos[i]
+            boneFKCtrlSpace = CtrlSpace('bone'+str(i)+'FK', parent=parent)
+            boneFKCtrlSpace.xfo = boneXfos[i]
 
-            boneFKCtrl = Control('bone'+str(i)+'FK', parent=boneFKCtrlSrtBuffer, shape="cube")
+            boneFKCtrl = Control('bone'+str(i)+'FK', parent=boneFKCtrlSpace, shape="cube")
             boneFKCtrl.alignOnXAxis()
             boneFKCtrl.scalePoints(Vec3(boneLengths[i], 1.75, 1.75))
             boneFKCtrl.xfo = boneXfos[i]
 
-            fkCtrlSrtBuffers.append(boneFKCtrlSrtBuffer)
+            fkCtrlSpaces.append(boneFKCtrlSpace)
             boneFKCtrls.append(boneFKCtrl)
 
 
         # IKControl
-        legIKCtrlSrtBuffer = SrtBuffer('IK', parent=self)
-        legIKCtrlSrtBuffer.xfo.tr = jointPositions[-1]
+        legIKCtrlSpace = CtrlSpace('IK', parent=self)
+        legIKCtrlSpace.xfo.tr = jointPositions[-1]
 
-        legIKCtrl = Control('IK', parent=legIKCtrlSrtBuffer, shape="pin")
+        legIKCtrl = Control('IK', parent=legIKCtrlSpace, shape="pin")
         legIKCtrl.xfo.tr = jointPositions[-1]
 
         if self.getLocation() == "R":
@@ -125,10 +125,10 @@ class InsectLegComponent(Component):
         # UpV
         upVOffset = boneXfos[1].transformVector(Vec3(0, 0, 5))
 
-        legUpVCtrlSrtBuffer = SrtBuffer('UpV', parent=self)
-        legUpVCtrlSrtBuffer.xfo.tr = upVOffset
+        legUpVCtrlSpace = CtrlSpace('UpV', parent=self)
+        legUpVCtrlSpace.xfo.tr = upVOffset
 
-        legUpVCtrl = Control('UpV', parent=legUpVCtrlSrtBuffer, shape="triangle")
+        legUpVCtrl = Control('UpV', parent=legUpVCtrlSpace, shape="triangle")
         legUpVCtrl.xfo.tr = upVOffset
         legUpVCtrl.alignOnZAxis()
         legUpVCtrl.rotatePoints(0, 0, 0)
@@ -139,7 +139,7 @@ class InsectLegComponent(Component):
 
         deformersLayer = self.getLayer('deformers')
         boneDefs = []
-        for i in range(len(boneXfos)):
+        for i in xrange(len(boneXfos)):
             boneDef = Joint('bone'+str(i))
             boneDef.setComponent(self)
             boneDefs.append(boneDef)
@@ -153,7 +153,7 @@ class InsectLegComponent(Component):
         rootInput.xfo = boneXfos[0]
 
         boneOutputs = []
-        for i in range(len(boneXfos)):
+        for i in xrange(len(boneXfos)):
             boneOutput = Locator('bone'+str(i))
             boneOutput.xfo = boneXfos[i]
             boneOutputs.append(boneOutput)
@@ -196,14 +196,14 @@ class InsectLegComponent(Component):
         legRootInputConstraint = PoseConstraint('_'.join([legIKCtrl.getName(), 'To', rootInput.getName()]))
         legRootInputConstraint.setMaintainOffset(True)
         legRootInputConstraint.addConstrainer(rootInput)
-        fkCtrlSrtBuffers[0].addConstraint(legRootInputConstraint)
+        fkCtrlSpaces[0].addConstraint(legRootInputConstraint)
 
         # ==================
         # Add Component I/O
         # ==================
         # Add Xfo I/O's
         self.addInput(rootInput)
-        for i in range(len(boneOutputs)):
+        for i in xrange(len(boneOutputs)):
             self.addOutput(boneOutputs[i])
         self.addOutput(legEndXfoOutput)
         self.addOutput(legEndPosOutput)
@@ -240,11 +240,11 @@ class InsectLegComponent(Component):
         spliceOp.setInput("ikgoal", legIKCtrl)
         # spliceOp.setInput("upV", legUpVCtrl)
 
-        for i in range(len(boneFKCtrls)):
+        for i in xrange(len(boneFKCtrls)):
             spliceOp.setInput("fkcontrols", boneFKCtrls[i])
 
         # Add Xfo Outputs
-        for i in range(len(boneOutputs)):
+        for i in xrange(len(boneOutputs)):
             spliceOp.setOutput("pose", boneOutputs[i])
         spliceOp.setOutput("legEnd", legEndPosOutput)
 
@@ -256,18 +256,15 @@ class InsectLegComponent(Component):
         outputsToDeformersSpliceOp.setInput("debug", debugInputAttr)
 
         # Add Xfo Inputs
-        for i in range(len(boneOutputs)):
+        for i in xrange(len(boneOutputs)):
             outputsToDeformersSpliceOp.setInput("constrainers", boneOutputs[i])
 
         # Add Xfo Outputs
-        for i in range(len(boneOutputs)):
+        for i in xrange(len(boneOutputs)):
             outputsToDeformersSpliceOp.setOutput("constrainees", boneDefs[i])
 
         Profiler.getInstance().pop()
 
-    def buildRig(self, parent):
-        pass
 
 from kraken.core.kraken_system import KrakenSystem
 KrakenSystem.getInstance().registerComponent(InsectLegComponent)
-

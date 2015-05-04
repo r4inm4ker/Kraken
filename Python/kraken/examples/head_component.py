@@ -8,13 +8,13 @@ from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
 from kraken.core.objects.locator import Locator
 from kraken.core.objects.joint import Joint
-from kraken.core.objects.srtBuffer import SrtBuffer
+from kraken.core.objects.ctrlSpace import CtrlSpace
 from kraken.core.objects.control import Control
 
 from kraken.core.objects.operators.splice_operator import SpliceOperator
 
-from kraken.helpers.utility_methods import logHierarchy
 from kraken.core.profiler import Profiler
+from kraken.helpers.utility_methods import logHierarchy
 
 
 class HeadComponent(Component):
@@ -26,7 +26,6 @@ class HeadComponent(Component):
 
         Profiler.getInstance().push("Construct Head Component:" + name + " location:" + location)
         super(HeadComponent, self).__init__(name, parent, location)
-
 
         # Setup component attributes
         defaultAttrGroup = self.getAttributeGroupByIndex(0)
@@ -40,38 +39,38 @@ class HeadComponent(Component):
         jawPosition = data['jawPosition']
 
         # Head
-        headCtrlSrtBuffer = SrtBuffer('head', parent=self)
-        headCtrlSrtBuffer.xfo.tr = headPosition
+        headCtrlSpace = CtrlSpace('head', parent=self)
+        headCtrlSpace.xfo.tr = headPosition
 
-        headCtrl = Control('head', parent=headCtrlSrtBuffer, shape="circle")
+        headCtrl = Control('head', parent=headCtrlSpace, shape="circle")
         headCtrl.rotatePoints(0, 0, 90)
         headCtrl.scalePoints(Vec3(3, 3, 3))
         headCtrl.translatePoints(Vec3(0, 1, 0.25))
         headCtrl.xfo.tr = headPosition
 
         # Eye Left
-        eyeLeftCtrlSrtBuffer = SrtBuffer('eyeLeft', parent=headCtrl)
-        eyeLeftCtrlSrtBuffer.xfo.tr = eyeLeftPosition
+        eyeLeftCtrlSpace = CtrlSpace('eyeLeft', parent=headCtrl)
+        eyeLeftCtrlSpace.xfo.tr = eyeLeftPosition
 
-        eyeLeftCtrl = Control('eyeLeft', parent=eyeLeftCtrlSrtBuffer, shape="sphere")
+        eyeLeftCtrl = Control('eyeLeft', parent=eyeLeftCtrlSpace, shape="sphere")
         eyeLeftCtrl.scalePoints(Vec3(0.5, 0.5, 0.5))
         eyeLeftCtrl.xfo.tr = eyeLeftPosition
         eyeLeftCtrl.setColor("blueMedium")
 
         # Eye Right
-        eyeRightCtrlSrtBuffer = SrtBuffer('eyeRight', parent=headCtrl)
-        eyeRightCtrlSrtBuffer.xfo.tr = eyeRightPosition
+        eyeRightCtrlSpace = CtrlSpace('eyeRight', parent=headCtrl)
+        eyeRightCtrlSpace.xfo.tr = eyeRightPosition
 
-        eyeRightCtrl = Control('eyeRight', parent=eyeRightCtrlSrtBuffer, shape="sphere")
+        eyeRightCtrl = Control('eyeRight', parent=eyeRightCtrlSpace, shape="sphere")
         eyeRightCtrl.scalePoints(Vec3(0.5, 0.5, 0.5))
         eyeRightCtrl.xfo.tr = eyeRightPosition
         eyeRightCtrl.setColor("blueMedium")
 
         # Jaw
-        jawCtrlSrtBuffer = SrtBuffer('jawSrtBuffer', parent=headCtrl)
-        jawCtrlSrtBuffer.xfo.tr = jawPosition
+        jawCtrlSpace = CtrlSpace('jawCtrlSpace', parent=headCtrl)
+        jawCtrlSpace.xfo.tr = jawPosition
 
-        jawCtrl = Control('jaw', parent=jawCtrlSrtBuffer, shape="cube")
+        jawCtrl = Control('jaw', parent=jawCtrlSpace, shape="cube")
         jawCtrl.alignOnYAxis(negative=True)
         jawCtrl.alignOnZAxis()
         jawCtrl.scalePoints(Vec3(1.45, 0.65, 1.25))
@@ -128,10 +127,10 @@ class HeadComponent(Component):
         # Constrain I/O
         # ==============
         # Constraint inputs
-        headInputConstraint = PoseConstraint('_'.join([headCtrlSrtBuffer.getName(), 'To', headBaseInput.getName()]))
+        headInputConstraint = PoseConstraint('_'.join([headCtrlSpace.getName(), 'To', headBaseInput.getName()]))
         headInputConstraint.setMaintainOffset(True)
         headInputConstraint.addConstrainer(headBaseInput)
-        headCtrlSrtBuffer.addConstraint(headInputConstraint)
+        headCtrlSpace.addConstraint(headInputConstraint)
 
         # Constraint outputs
         headOutputConstraint = PoseConstraint('_'.join([headOutput.getName(), 'To', headCtrl.getName()]))
@@ -196,9 +195,6 @@ class HeadComponent(Component):
 
         Profiler.getInstance().pop()
 
-    def buildRig(self, parent):
-        pass
 
 from kraken.core.kraken_system import KrakenSystem
 KrakenSystem.getInstance().registerComponent(HeadComponent)
-

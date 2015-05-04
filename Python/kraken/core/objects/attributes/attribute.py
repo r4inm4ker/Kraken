@@ -4,7 +4,9 @@ Classes:
 Attribute - Base Attribute.
 
 """
+
 from kraken.core.objects.base_item import BaseItem
+
 
 class Attribute(BaseItem):
     """Attribute object."""
@@ -52,7 +54,9 @@ class Attribute(BaseItem):
         RTVal
 
         """
+
         raise Exception("getRTVal must be implemented by concrete attribute classes")
+
 
     # ===================
     # Connection Methods

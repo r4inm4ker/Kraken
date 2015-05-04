@@ -11,13 +11,13 @@ from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
 from kraken.core.objects.locator import Locator
 from kraken.core.objects.joint import Joint
-from kraken.core.objects.srtBuffer import SrtBuffer
+from kraken.core.objects.ctrlSpace import CtrlSpace
 from kraken.core.objects.control import Control
 
 from kraken.core.objects.operators.splice_operator import SpliceOperator
 
-from kraken.helpers.utility_methods import logHierarchy
 from kraken.core.profiler import Profiler
+from kraken.helpers.utility_methods import logHierarchy
 
 
 class ClavicleComponentGuide(Component):
@@ -164,7 +164,7 @@ class ClavicleComponent(Component):
         clavicleInputConstraint = PoseConstraint('_'.join([self.clavicleCtrl.getName(), 'To', self.spineEndInput.getName()]))
         clavicleInputConstraint.setMaintainOffset(True)
         clavicleInputConstraint.addConstrainer(self.spineEndInput)
-        self.clavicleCtrlSrtBuffer.addConstraint(clavicleInputConstraint)
+        clavicleCtrlSpace.addConstraint(clavicleInputConstraint)
 
         # Constraint outputs
         clavicleConstraint = PoseConstraint('_'.join([self.clavicleOutput.getName(), 'To', self.clavicleCtrl.getName()]))
@@ -231,7 +231,6 @@ class ClavicleComponent(Component):
         self.spineEndInput.xfo = data['clavicleXfo']
         self.clavicleEndOutput.xfo = data['clavicleXfo']
         self.clavicleOutput.xfo = data['clavicleXfo']
-
 
 from kraken.core.kraken_system import KrakenSystem
 KrakenSystem.getInstance().registerComponent(ClavicleComponent)

@@ -10,13 +10,14 @@ from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
 from kraken.core.objects.locator import Locator
 from kraken.core.objects.joint import Joint
-from kraken.core.objects.srtBuffer import SrtBuffer
+from kraken.core.objects.ctrlSpace import CtrlSpace
 from kraken.core.objects.control import Control
 
 from kraken.core.objects.operators.splice_operator import SpliceOperator
 
-from kraken.helpers.utility_methods import logHierarchy
 from kraken.core.profiler import Profiler
+from kraken.helpers.utility_methods import logHierarchy
+
 
 class HandComponent(Component):
     """Hand Component"""
@@ -45,17 +46,17 @@ class HandComponent(Component):
         handXfo.tr = handPos
 
         # Add Controls
-        handCtrlSrtBuffer = SrtBuffer('hand', parent=self)
-        handCtrlSrtBuffer.xfo = handXfo
+        handCtrlSpace = CtrlSpace('hand', parent=self)
+        handCtrlSpace.xfo = handXfo
 
-        handCtrl = Control('hand', parent=handCtrlSrtBuffer, shape="cube")
+        handCtrl = Control('hand', parent=handCtrlSpace, shape="cube")
         handCtrl.alignOnXAxis()
         handCtrl.scalePoints(Vec3(2.0, 0.75, 1.25))
-        handCtrl.xfo = handCtrlSrtBuffer.xfo
+        handCtrl.xfo = handCtrlSpace.xfo
 
         # Rig Ref objects
         handRefSrt = Locator('handRef', parent=self)
-        handRefSrt.xfo = handCtrlSrtBuffer.xfo
+        handRefSrt.xfo = handCtrlSpace.xfo
 
 
         # Add Component Params to IK control
@@ -83,14 +84,14 @@ class HandComponent(Component):
         # =====================
         # Setup Component Xfo I/O's
         armEndXfoInput = Locator('armEndXfo')
-        armEndXfoInput.xfo = handCtrlSrtBuffer.xfo
+        armEndXfoInput.xfo = handCtrlSpace.xfo
         armEndPosInput = Locator('armEndPos')
-        armEndPosInput.xfo = handCtrlSrtBuffer.xfo
+        armEndPosInput.xfo = handCtrlSpace.xfo
 
         handEndOutput = Locator('handEnd')
-        handEndOutput.xfo = handCtrlSrtBuffer.xfo
+        handEndOutput.xfo = handCtrlSpace.xfo
         handOutput = Locator('hand')
-        handOutput.xfo = handCtrlSrtBuffer.xfo
+        handOutput.xfo = handCtrlSpace.xfo
 
         # Setup componnent Attribute I/O's
         debugInputAttr = BoolAttribute('debug', True)
@@ -150,7 +151,7 @@ class HandComponent(Component):
         # spliceOp.setInput("handRef", handRefSrt)
 
         # # Add Xfo Outputs
-        # spliceOp.setOutput("handCtrlSrtBuffer", handCtrlSrtBuffer)
+        # spliceOp.setOutput("handCtrlSpace", handCtrlSpace)
 
 
         # Add Deformer Splice Op
@@ -169,10 +170,6 @@ class HandComponent(Component):
 
         Profiler.getInstance().pop()
 
-    def buildRig(self, parent):
-        pass
-
 
 from kraken.core.kraken_system import KrakenSystem
 KrakenSystem.getInstance().registerComponent(HandComponent)
-

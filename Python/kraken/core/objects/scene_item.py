@@ -5,9 +5,9 @@ SceneItem - Base SceneItem Object.
 
 """
 
+from kraken.core.objects.base_item import BaseItem
 from kraken.core.maths.xfo import Xfo
 from kraken.core.objects.attributes.attribute_group import AttributeGroup
-from base_item import BaseItem
 
 
 class SceneItem(BaseItem):
@@ -35,7 +35,6 @@ class SceneItem(BaseItem):
     # ==================
     # Property Methods
     # ==================
-
     @property
     def xfo(self):
         """Gets xfo property of this SceneItem.
@@ -704,7 +703,6 @@ class SceneItem(BaseItem):
         return None
 
 
-
     # ===================
     # Visibility Methods
     # ===================
@@ -792,25 +790,6 @@ class SceneItem(BaseItem):
         return self.color
 
 
-    # ==================
-    # Transform Methods
-    # ==================
-    def lockAttribute(self, attributeName):
-        pass
-
-
-    def unlockAttribute(self, attributeName):
-        pass
-
-
-    def hideAttribute(self, attributeName):
-        pass
-
-
-    def unhideAttribute(self, attributeName):
-        pass
-
-
     # ==========================
     # Parameter Locking Methods
     # ==========================
@@ -836,6 +815,8 @@ class SceneItem(BaseItem):
         if z is True:
             self.setFlag("lockZRotation")
 
+        return True
+
 
     def lockScale(self, x=False, y=False, z=False):
         """Sets flags for locking scale parameters.
@@ -859,6 +840,8 @@ class SceneItem(BaseItem):
         if z is True:
             self.setFlag("lockZScale")
 
+        return True
+
 
     def lockTranslation(self, x=False, y=False, z=False):
         """Sets flags for locking translation parameters.
@@ -881,6 +864,8 @@ class SceneItem(BaseItem):
 
         if z is True:
             self.setFlag("lockZTranslation")
+
+        return True
 
 
     # ====================

@@ -5,7 +5,7 @@ NumberAttribute - Base Attribute.
 
 """
 
-from attribute import Attribute
+from kraken.core.objects.attributes.attribute import Attribute
 
 
 class NumberAttribute(Attribute):
@@ -20,6 +20,7 @@ class NumberAttribute(Attribute):
             self.setMin(minValue)
         if maxValue is not None:
             self.setMax(maxValue)
+
 
 
     # ==================
@@ -49,7 +50,8 @@ class NumberAttribute(Attribute):
 
         """
 
-        assert type(minimum) in (int, float), "'minimum' is not of type 'int' or 'float'."
+        assert type(minimum) in (int, float), "'minimum' is not of type 'int' \
+                                              or 'float'."
 
         self.min = minimum
 
@@ -80,7 +82,8 @@ class NumberAttribute(Attribute):
 
         """
 
-        assert type(maximum) in (int, float), "'maximum' is not of type 'int' or 'float'."
+        assert type(maximum) in (int, float), "'maximum' is not of type 'int' \
+                                              or 'float'."
 
         self.max = maximum
 

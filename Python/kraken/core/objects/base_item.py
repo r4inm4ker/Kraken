@@ -27,6 +27,7 @@ class BaseItem(object):
 
         return self.__class__.__name__
 
+
     def getTypeHierarchyNames(self):
         """Returns the class name of this object.
 
@@ -34,12 +35,15 @@ class BaseItem(object):
         True if successful.
 
         """
+
         khierarchy = []
         for cls in type.mro(type(self)):
             if cls == object:
                 break;
             khierarchy.append(cls.__name__)
+
         return khierarchy
+
 
     def isTypeOf(self, typeName):
         """Returns the class name of this object.
@@ -48,9 +52,11 @@ class BaseItem(object):
         True if the scene item is of the given type.
 
         """
+
         for cls in type.mro(type(self)):
             if cls.__name__ == typeName:
                 return True
+
         return False
 
     # =============
@@ -125,4 +131,3 @@ class BaseItem(object):
         self.parent = parent
 
         return True
-

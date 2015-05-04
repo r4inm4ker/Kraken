@@ -1,11 +1,12 @@
+import json
+
 from kraken.core.maths import *
 from kraken.core.io.kraken_saver import KrakenSaver
 from kraken.core.io.kraken_loader import KrakenLoader
-from kraken.helpers.utility_methods import logHierarchy 
+from kraken.helpers.utility_methods import logHierarchy
 
-from bob_rig import BobRig
+from kraken.examples.bob_rig import BobRig
 
-import json
 
 bob = BobRig("Bob")
 print "==bob=="

@@ -14,13 +14,13 @@ from kraken.core.objects.component_group import ComponentGroup
 from kraken.core.objects.hierarchy_group import HierarchyGroup
 from kraken.core.objects.locator import Locator
 from kraken.core.objects.joint import Joint
-from kraken.core.objects.srtBuffer import SrtBuffer
+from kraken.core.objects.ctrlSpace import CtrlSpace
 from kraken.core.objects.control import Control
 
 from kraken.core.objects.operators.splice_operator import SpliceOperator
 
-from kraken.helpers.utility_methods import logHierarchy
 from kraken.core.profiler import Profiler
+from kraken.helpers.utility_methods import logHierarchy
 
 
 class ArmComponentGuide(Component):
@@ -182,20 +182,38 @@ class ArmComponent(Component):
         inputHrcGrp.addAttributeGroup(cmpOutputAttrGrp)
 
         # Bicep
-        self.bicepFKCtrlSrtBuffer = SrtBuffer('bicepFK', parent=ctrlCmpGrp)
+        bicepFKCtrlSpace = CtrlSpace('bicepFK', parent=self)
+        bicepFKCtrlSpace.xfo = bicepXfo
 
-        self.bicepFKCtrl = Control('bicepFK', parent=self.bicepFKCtrlSrtBuffer, shape="cube")
+        bicepFKCtrl = Control('bicepFK', parent=bicepFKCtrlSpace, shape="cube")
         self.bicepFKCtrl.alignOnXAxis()
+        bicepFKCtrl.alignOnXAxis()
+        bicepLen = bicepPosition.subtract(forearmPosition).length()
+        bicepFKCtrl.scalePoints(Vec3(bicepLen, bicepFKCtrlSize, bicepFKCtrlSize))
+        bicepFKCtrl.xfo = bicepXfo
 
         # Forearm
-        self.forearmFKCtrlSrtBuffer = SrtBuffer('forearmFK', parent=self.bicepFKCtrl)
+        forearmFKCtrlSpace = CtrlSpace('forearmFK', parent=bicepFKCtrl)
+        forearmFKCtrlSpace.xfo = forearmXfo
 
-        self.forearmFKCtrl = Control('forearmFK', parent=self.forearmFKCtrlSrtBuffer, shape="cube")
+        forearmFKCtrl = Control('forearmFK', parent=forearmFKCtrlSpace, shape="cube")
         self.forearmFKCtrl.alignOnXAxis()
+        forearmFKCtrl.alignOnXAxis()
+        forearmLen = forearmPosition.subtract(wristPosition).length()
+        forearmFKCtrl.scalePoints(Vec3(forearmLen, forearmFKCtrlSize, forearmFKCtrlSize))
+        forearmFKCtrl.xfo = forearmXfo
 
         # Arm IK
-        self.armIKCtrlSrtBuffer = SrtBuffer('IK', parent=ctrlCmpGrp)
-        self.armIKCtrl = Control('IK', parent=self.armIKCtrlSrtBuffer, shape="pin")
+        armIKCtrlSpace = CtrlSpace('IK', parent=self)
+        armIKCtrlSpace.xfo.tr = wristPosition
+
+        armIKCtrl = Control('IK', parent=armIKCtrlSpace, shape="pin")
+        armIKCtrl.xfo = armIKCtrlSpace.xfo
+
+        if self.getLocation() == "R":
+            armIKCtrl.rotatePoints(0, 90, 0)
+        else:
+            armIKCtrl.rotatePoints(0, -90, 0)
 
 
         # Add Component Params to IK control
@@ -224,6 +242,14 @@ class ArmComponent(Component):
         self.armUpVCtrl = Control('UpV', parent=self.armUpVCtrlSrtBuffer, shape="triangle")
         self.armUpVCtrl.alignOnZAxis()
         self.armUpVCtrl.rotatePoints(180, 0, 0)
+
+        armUpVCtrlSpace = CtrlSpace('UpV', parent=self)
+        armUpVCtrlSpace.xfo.tr = upVOffset
+
+        armUpVCtrl = Control('UpV', parent=armUpVCtrlSpace, shape="triangle")
+        armUpVCtrl.xfo.tr = upVOffset
+        armUpVCtrl.alignOnZAxis()
+        armUpVCtrl.rotatePoints(180, 0, 0)
 
 
         # ==========
@@ -293,7 +319,7 @@ class ArmComponent(Component):
         armRootInputConstraint = PoseConstraint('_'.join([self.armIKCtrl.getName(), 'To', clavicleEndInput.getName()]))
         armRootInputConstraint.setMaintainOffset(True)
         armRootInputConstraint.addConstrainer(clavicleEndInput)
-        self.bicepFKCtrlSrtBuffer.addConstraint(armRootInputConstraint)
+        bicepFKCtrlSpace.addConstraint(armRootInputConstraint)
 
         # Constraint outputs
 
