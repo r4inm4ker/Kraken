@@ -7,9 +7,13 @@ KrakenSystem - Class for constructing the Fabric Engine Core client.
 
 import json
 import imp
+<<<<<<< HEAD
 
 from kraken.core.profiler import Profiler
 
+=======
+from kraken.core.profiler import Profiler
+>>>>>>> develop
 import FabricEngine.Core
 
 
@@ -217,7 +221,7 @@ class KrakenSystem(object):
         """
 
         if componentClass.__name__ in self.registeredComponents:
-            raise Exception("Component with that class name already registered:" + componentClass.__name__ )
+            raise Exception("Component with that class name already registered:" + componentClass.__name__)
 
         self.registeredComponents[componentClass.__name__] = componentClass
 
@@ -234,7 +238,7 @@ class KrakenSystem(object):
         """
 
         if className not in self.registeredComponents:
-            raise Exception("Component with that class not registered:" + className )
+            raise Exception("Component with that class not registered:" + className)
 
         return self.registeredComponents[className]
 
@@ -254,8 +258,8 @@ class KrakenSystem(object):
         return cls.__instance
 
 
-<<<<<<< HEAD
-=======
+
+    @classmethod
     def clearInstance(cls):
         """Clears the instance variable of the Kraken System.
 
@@ -269,5 +273,4 @@ class KrakenSystem(object):
         return True
 
 
->>>>>>> origin/develop
 ks = KrakenSystem.getInstance()
