@@ -101,7 +101,7 @@ class TestConfig(Config):
                                   "Joint": "env",
                                   "Layer": "",
                                   "Locator": "nl",
-                                  "SrtBuffer": "zero"
+                                  "CtrlSpace": "cSpace"
                                  },
                         "formats":
                                   {

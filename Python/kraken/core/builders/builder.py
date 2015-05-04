@@ -558,7 +558,7 @@ class Builder(object):
         elif kObject.isTypeOf("HierarchyGroup"):
             dccSceneItem = self.buildHierarchyGroup(kObject, buildName)
 
-        elif kObject.isTypeOf("SrtBuffer"):
+        elif kObject.isTypeOf("CtrlSpace"):
             dccSceneItem = self.buildGroup(kObject, buildName)
 
         elif kObject.isTypeOf("Locator"):
