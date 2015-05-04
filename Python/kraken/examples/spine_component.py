@@ -9,7 +9,7 @@ from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
 from kraken.core.objects.locator import Locator
 from kraken.core.objects.joint import Joint
-from kraken.core.objects.srtBuffer import SrtBuffer
+from kraken.core.objects.ctrlSpace import CtrlSpace
 from kraken.core.objects.layer import Layer
 from kraken.core.objects.control import Control
 
@@ -45,45 +45,45 @@ class SpineComponent(Component):
         numDeformers = data['numDeformers']
 
         # COG
-        cogCtrlSrtBuffer = SrtBuffer('cog', parent=self)
-        cogCtrlSrtBuffer.xfo.tr = cogPosition
+        cogCtrlSpace = CtrlSpace('cog', parent=self)
+        cogCtrlSpace.xfo.tr = cogPosition
 
-        cogCtrl = Control('cog', parent=cogCtrlSrtBuffer, shape="circle")
+        cogCtrl = Control('cog', parent=cogCtrlSpace, shape="circle")
         cogCtrl.scalePoints(Vec3(6.0, 6.0, 6.0))
         cogCtrl.xfo.tr = cogPosition
         cogCtrl.setColor("orange")
 
         # Spine01
-        spine01CtrlSrtBuffer = SrtBuffer('spine01', parent=cogCtrl)
-        spine01CtrlSrtBuffer.xfo.tr = spine01Position
+        spine01CtrlSpace = CtrlSpace('spine01', parent=cogCtrl)
+        spine01CtrlSpace.xfo.tr = spine01Position
 
-        spine01Ctrl = Control('spine01', parent=spine01CtrlSrtBuffer, shape="circle")
+        spine01Ctrl = Control('spine01', parent=spine01CtrlSpace, shape="circle")
         spine01Ctrl.scalePoints(Vec3(4.0, 4.0, 4.0))
         spine01Ctrl.xfo.tr = spine01Position
 
         # Spine02
-        spine02CtrlSrtBuffer = SrtBuffer('spine02', parent=spine01Ctrl)
-        spine02CtrlSrtBuffer.xfo.tr = spine02Position
+        spine02CtrlSpace = CtrlSpace('spine02', parent=spine01Ctrl)
+        spine02CtrlSpace.xfo.tr = spine02Position
 
-        spine02Ctrl = Control('spine02', parent=spine02CtrlSrtBuffer, shape="circle")
+        spine02Ctrl = Control('spine02', parent=spine02CtrlSpace, shape="circle")
         spine02Ctrl.scalePoints(Vec3(4.5, 4.5, 4.5))
         spine02Ctrl.xfo.tr = spine02Position
 
 
         # Spine03
-        spine03CtrlSrtBuffer = SrtBuffer('spine03', parent=spine02Ctrl)
-        spine03CtrlSrtBuffer.xfo.tr = spine03Position
+        spine03CtrlSpace = CtrlSpace('spine03', parent=spine02Ctrl)
+        spine03CtrlSpace.xfo.tr = spine03Position
 
-        spine03Ctrl = Control('spine03', parent=spine03CtrlSrtBuffer, shape="circle")
+        spine03Ctrl = Control('spine03', parent=spine03CtrlSpace, shape="circle")
         spine03Ctrl.scalePoints(Vec3(4.5, 4.5, 4.5))
         spine03Ctrl.xfo.tr = spine03Position
         spine03Ctrl.setColor("blue")
 
         # Spine04
-        spine04CtrlSrtBuffer = SrtBuffer('spine04', parent=cogCtrl)
-        spine04CtrlSrtBuffer.xfo.tr = spine04Position
+        spine04CtrlSpace = CtrlSpace('spine04', parent=cogCtrl)
+        spine04CtrlSpace.xfo.tr = spine04Position
 
-        spine04Ctrl = Control('spine04', parent=spine04CtrlSrtBuffer, shape="circle")
+        spine04Ctrl = Control('spine04', parent=spine04CtrlSpace, shape="circle")
         spine04Ctrl.scalePoints(Vec3(6.0, 6.0, 6.0))
         spine04Ctrl.xfo.tr = spine04Position
 

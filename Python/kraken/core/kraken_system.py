@@ -254,4 +254,20 @@ class KrakenSystem(object):
         return cls.__instance
 
 
+<<<<<<< HEAD
+=======
+    def clearInstance(cls):
+        """Clears the instance variable of the Kraken System.
+
+        Return:
+        True if successful.
+
+        """
+
+        KrakenSystem.__instance = None
+
+        return True
+
+
+>>>>>>> origin/develop
 ks = KrakenSystem.getInstance()

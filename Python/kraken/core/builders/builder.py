@@ -5,6 +5,8 @@ Builder -- Base builder object to build objects in DCC.
 
 """
 
+
+from kraken.core.kraken_system import KrakenSystem
 from kraken.core.configs.config import Config
 from kraken.core.profiler import Profiler
 
@@ -554,7 +556,7 @@ class Builder(object):
         elif kObject.isTypeOf("HierarchyGroup"):
             dccSceneItem = self.buildHierarchyGroup(kObject, buildName)
 
-        elif kObject.isTypeOf("SrtBuffer"):
+        elif kObject.isTypeOf("CtrlSpace"):
             dccSceneItem = self.buildGroup(kObject, buildName)
 
         elif kObject.isTypeOf("Locator"):
@@ -953,6 +955,8 @@ class Builder(object):
 
             # Clear config instance when finished.
             self.config.clearInstance()
+            ks = KrakenSystem.getInstance()
+            ks.clearInstance()
 
         Profiler.getInstance().pop()
 

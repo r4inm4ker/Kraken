@@ -19,7 +19,8 @@ class NumberAttribute(Attribute):
         if minValue is not None:
             self.setMin(minValue)
         if maxValue is not None:
-            self.setMax(minValue)
+            self.setMax(maxValue)
+
 
 
     # ==================
@@ -87,4 +88,3 @@ class NumberAttribute(Attribute):
         self.max = maximum
 
         return True
-

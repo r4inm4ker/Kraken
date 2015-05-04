@@ -683,10 +683,10 @@ class Builder(Builder):
             pm.setAttr(dccSceneItem.longName() + "." + 'tx', lock=True, keyable=False, channelBox=False)
 
         if kSceneItem.testFlag("lockYTranslation") is True:
-            pm.setAttr(dccSceneItem.longName() + "." + 'tx', lock=True, keyable=False, channelBox=False)
+            pm.setAttr(dccSceneItem.longName() + "." + 'ty', lock=True, keyable=False, channelBox=False)
 
         if kSceneItem.testFlag("lockZTranslation") is True:
-            pm.setAttr(dccSceneItem.longName() + "." + 'tx', lock=True, keyable=False, channelBox=False)
+            pm.setAttr(dccSceneItem.longName() + "." + 'tz', lock=True, keyable=False, channelBox=False)
 
         return True
 

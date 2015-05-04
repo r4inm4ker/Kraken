@@ -18,3 +18,4 @@ class HierarchyGroup(SceneItem):
         self.lockRotation(True, True, True)
         self.lockScale(True, True, True)
         self.lockTranslation(True, True, True)
+
