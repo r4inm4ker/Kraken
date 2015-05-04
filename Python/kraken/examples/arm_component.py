@@ -26,7 +26,6 @@ from kraken.core.profiler import Profiler
 class ArmComponentGuide(Component):
     """Arm Component Guide"""
 
-
     def __init__(self, name='Arm', parent=None):
         super(ArmComponentGuide, self).__init__(name, parent)
 
@@ -54,7 +53,6 @@ class ArmComponentGuide(Component):
     # =============
     # Data Methods
     # =============
-
     def saveData(self):
         """Save the data for the component to be persisted.
 
@@ -66,18 +64,20 @@ class ArmComponentGuide(Component):
 
 
         data = {
-            'name': self.getName(),
-            'location': self.getLocation(),
-            'bicepXfo': self.bicep.xfo,
-            'forearmXfo': self.forearm.xfo,
-            'wristXfo': self.wrist.xfo,
-            "bicepFKCtrlSize": self.bicepFKCtrlSizeInputAttr.getValue(),
-            "forearmFKCtrlSize": self.forearmFKCtrlSizeInputAttr.getValue()
-            }
+                'name': self.getName(),
+                'location': self.getLocation(),
+                'bicepXfo': self.bicep.xfo,
+                'forearmXfo': self.forearm.xfo,
+                'wristXfo': self.wrist.xfo,
+                "bicepFKCtrlSize": self.bicepFKCtrlSizeInputAttr.getValue(),
+                "forearmFKCtrlSize": self.forearmFKCtrlSizeInputAttr.getValue()
+                }
+
         return data
 
+
     def loadData(self, data):
-        """Load a saved guide represetnatoin from persisted data.
+        """Load a saved guide representation from persisted data.
 
         Arguments:
         data -- object, The JSON data object.
@@ -95,6 +95,7 @@ class ArmComponentGuide(Component):
 
         self.bicepFKCtrlSizeInputAttr.setValue(data['bicepFKCtrlSize'])
         self.forearmFKCtrlSizeInputAttr.setValue(data['forearmFKCtrlSize'])
+
         return True
 
 
@@ -105,7 +106,6 @@ class ArmComponentGuide(Component):
         The JSON rig data object.
 
         """
-
 
         # values
         bicepPosition = self.bicep.xfo.tr
@@ -118,7 +118,6 @@ class ArmComponentGuide(Component):
 
         bone1Normal = rootToWrist.cross(rootToElbow).unit()
         bone1ZAxis = rootToElbow.cross(bone1Normal).unit()
-
 
         bicepXfo = Xfo()
         bicepXfo.setFromVectors(rootToElbow, bone1Normal, bone1ZAxis, bicepPosition)
@@ -248,10 +247,8 @@ class ArmComponent(Component):
         # =====================
         # Setup component Xfo I/O's
         clavicleEndInput = Locator('clavicleEnd', parent=inputHrcGrp)
-
         self.bicepOutput = Locator('bicep', parent=outputHrcGrp)
         self.forearmOutput = Locator('forearm', parent=outputHrcGrp)
-
         self.armEndXfoOutput = Locator('armEndXfo', parent=outputHrcGrp)
         self.armEndPosOutput = Locator('armEndPos', parent=outputHrcGrp)
 
@@ -415,9 +412,6 @@ class ArmComponent(Component):
         self.armBone2LenInputAttr.setMax(data['forearmLen'] * 3.0)
         self.armBone2LenInputAttr.setValue(data['forearmLen'])
 
-
-    def buildRig(self, parent):
-        pass
 
 from kraken.core.kraken_system import KrakenSystem
 KrakenSystem.getInstance().registerComponent(ArmComponent)
