@@ -9,6 +9,8 @@ from kraken.core.objects.attributes.bool_attribute import BoolAttribute
 
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
+from kraken.core.objects.component_group import ComponentGroup
+from kraken.core.objects.hierarchy_group import HierarchyGroup
 from kraken.core.objects.locator import Locator
 from kraken.core.objects.joint import Joint
 from kraken.core.objects.ctrlSpace import CtrlSpace
@@ -119,42 +121,58 @@ class ClavicleComponent(Component):
 
     def __init__(self, name='Clavicle', parent=None):
 
-        # location = data.get('location', 'M')
-
         Profiler.getInstance().push("Construct Clavicle Component:" + name)
         super(ClavicleComponent, self).__init__(name, parent)
 
         # =========
         # Controls
         # =========
-        # Add Controls
-        self.clavicleCtrlSrtBuffer = SrtBuffer('clavicle', parent=self)
-        self.clavicleCtrl = Control('clavicle', parent=self.clavicleCtrlSrtBuffer, shape="cube")
+        controlsLayer = self.getOrCreateLayer('controls')
+        ctrlCmpGrp = ComponentGroup(self.getName(), parent=controlsLayer)
+
+        # IO Hierarchies
+        inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
+        cmpInputAttrGrp = AttributeGroup('inputs')
+        inputHrcGrp.addAttributeGroup(cmpInputAttrGrp)
+
+        outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
+        cmpOutputAttrGrp = AttributeGroup('outputs')
+        outputHrcGrp.addAttributeGroup(cmpOutputAttrGrp)
+
+        # Clavicle
+        self.clavicleCtrlSpace = CtrlSpace('clavicle', parent=ctrlCmpGrp)
+        self.clavicleCtrl = Control('clavicle', parent=self.clavicleCtrlSpace, shape="cube")
         self.clavicleCtrl.alignOnXAxis()
 
 
         # ==========
         # Deformers
         # ==========
-        self.clavicleDef = Joint('clavicle')
-        self.clavicleDef.setComponent(self)
+        deformersLayer = self.getOrCreateLayer('deformers')
+        defCmpGrp = ComponentGroup(self.getName(), parent=deformersLayer)
 
-        deformersLayer = self.getLayer('deformers')
-        deformersLayer.addChild(self.clavicleDef)
+        self.clavicleDef = Joint('clavicle', parent=defCmpGrp)
+        self.clavicleDef.setComponent(self)
 
 
         # =====================
         # Create Component I/O
         # =====================
         # Setup Component Xfo I/O's
-        self.spineEndInput = Locator('spineEnd')
-        self.clavicleEndOutput = Locator('clavicleEnd')
-        self.clavicleOutput = Locator('clavicle')
+        self.spineEndInput = Locator('spineEnd', parent=inputHrcGrp)
+        self.clavicleEndOutput = Locator('clavicleEnd', parent=outputHrcGrp)
+        self.clavicleOutput = Locator('clavicle', parent=outputHrcGrp)
 
         # Setup componnent Attribute I/O's
         debugInputAttr = BoolAttribute('debug', True)
         rightSideInputAttr = BoolAttribute('rightSide', self.getLocation() is 'R')
+
         armFollowBodyOutputAttr = FloatAttribute('followBody', 0.0)
+
+        cmpInputAttrGrp.addAttribute(debugInputAttr)
+        cmpInputAttrGrp.addAttribute(rightSideInputAttr)
+
+        cmpOutputAttrGrp.addAttribute(armFollowBodyOutputAttr)
 
 
         # ==============
@@ -164,7 +182,7 @@ class ClavicleComponent(Component):
         clavicleInputConstraint = PoseConstraint('_'.join([self.clavicleCtrl.getName(), 'To', self.spineEndInput.getName()]))
         clavicleInputConstraint.setMaintainOffset(True)
         clavicleInputConstraint.addConstrainer(self.spineEndInput)
-        clavicleCtrlSpace.addConstraint(clavicleInputConstraint)
+        self.clavicleCtrlSpace.addConstraint(clavicleInputConstraint)
 
         # Constraint outputs
         clavicleConstraint = PoseConstraint('_'.join([self.clavicleOutput.getName(), 'To', self.clavicleCtrl.getName()]))
@@ -212,11 +230,11 @@ class ClavicleComponent(Component):
 
     def loadData(self, data=None):
 
-        self.setName(data.get('name', 'Arm'))
+        self.setName(data.get('name', 'Clavicle'))
         location = data.get('location', 'M')
         self.setLocation(location)
 
-        self.clavicleCtrlSrtBuffer.xfo = data['clavicleXfo']
+        self.clavicleCtrlSpace.xfo = data['clavicleXfo']
         self.clavicleCtrl.xfo = data['clavicleXfo']
         self.clavicleCtrl.scalePoints(Vec3(data['clavicleLen'], 0.75, 0.75))
 
