@@ -165,6 +165,10 @@ class HandComponent(Component):
         rightSideInputAttr = BoolAttribute('rightSide', self.getLocation() is 'R')
         linkToWorldInputAttr = FloatAttribute('linkToWorld', 0.0)
 
+        cmpInputAttrGrp.addAttribute(debugInputAttr)
+        cmpInputAttrGrp.addAttribute(rightSideInputAttr)
+        cmpInputAttrGrp.addAttribute(linkToWorldInputAttr)
+
         # Connect attrs to control attrs
         debugInputAttr.connect(handDebugInputAttr)
         linkToWorldInputAttr.connect(handLinkToWorldInputAttr)
@@ -240,7 +244,7 @@ class HandComponent(Component):
 
     def loadData(self, data=None):
 
-        self.setName(data.get('name', 'Clavicle'))
+        self.setName(data.get('name', 'Hand'))
         location = data.get('location', 'M')
         self.setLocation(location)
 
