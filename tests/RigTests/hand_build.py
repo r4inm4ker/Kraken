@@ -11,11 +11,11 @@ Profiler.getInstance().push("hand_build")
 
 handGuide = HandComponentGuide("hand")
 handGuide.loadData({
-        "name": "L_Hand",
-        "location": "L",
-        "handXfo": Xfo(tr=Vec3(-7.1886, 12.2819, 0.4906),
-                       ori=Quat(Vec3(-0.2301, -0.0865, -0.9331), 0.2623))
-    })
+                    "name": "L_Hand",
+                    "location": "L",
+                    "handXfo": Xfo(tr=Vec3(-7.1886, 12.2819, 0.4906),
+                                   ori=Quat(Vec3(-0.2301, -0.0865, -0.9331), 0.2623))
+                   })
 
 # Save the hand guide data for persistence.
 saveData = handGuide.saveData()
