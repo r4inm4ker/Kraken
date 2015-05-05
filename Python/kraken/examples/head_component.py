@@ -2,6 +2,7 @@ from kraken.core.maths import Vec3
 
 from kraken.core.objects.components.component import Component
 
+from kraken.core.objects.attributes.attribute_group import AttributeGroup
 from kraken.core.objects.attributes.bool_attribute import BoolAttribute
 
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
@@ -139,37 +140,37 @@ class HeadComponent(Component):
         outputHrcGrp.addAttributeGroup(cmpOutputAttrGrp)
 
         # Head
-        headCtrlSpace = CtrlSpace('head', parent=ctrlCmpGrp)
+        self.headCtrlSpace = CtrlSpace('head', parent=ctrlCmpGrp)
 
-        headCtrl = Control('head', parent=headCtrlSpace, shape="circle")
-        headCtrl.rotatePoints(0, 0, 90)
-        headCtrl.scalePoints(Vec3(3, 3, 3))
-        headCtrl.translatePoints(Vec3(0, 1, 0.25))
+        self.headCtrl = Control('head', parent=self.headCtrlSpace, shape="circle")
+        self.headCtrl.rotatePoints(0, 0, 90)
+        self.headCtrl.scalePoints(Vec3(3, 3, 3))
+        self.headCtrl.translatePoints(Vec3(0, 1, 0.25))
 
         # Eye Left
-        eyeLeftCtrlSpace = CtrlSpace('eyeLeft', parent=headCtrl)
+        self.eyeLeftCtrlSpace = CtrlSpace('eyeLeft', parent=self.headCtrl)
 
-        eyeLeftCtrl = Control('eyeLeft', parent=eyeLeftCtrlSpace, shape="sphere")
-        eyeLeftCtrl.scalePoints(Vec3(0.5, 0.5, 0.5))
-        eyeLeftCtrl.setColor("blueMedium")
+        self.eyeLeftCtrl = Control('eyeLeft', parent=self.eyeLeftCtrlSpace, shape="sphere")
+        self.eyeLeftCtrl.scalePoints(Vec3(0.5, 0.5, 0.5))
+        self.eyeLeftCtrl.setColor("blueMedium")
 
         # Eye Right
-        eyeRightCtrlSpace = CtrlSpace('eyeRight', parent=headCtrl)
-        eyeRightCtrlSpace.xfo.tr = eyeRightPosition
+        self.eyeRightCtrlSpace = CtrlSpace('eyeRight', parent=self.headCtrl)
 
-        eyeRightCtrl = Control('eyeRight', parent=eyeRightCtrlSpace, shape="sphere")
-        eyeRightCtrl.scalePoints(Vec3(0.5, 0.5, 0.5))
-        eyeRightCtrl.setColor("blueMedium")
+
+        self.eyeRightCtrl = Control('eyeRight', parent=self.eyeRightCtrlSpace, shape="sphere")
+        self.eyeRightCtrl.scalePoints(Vec3(0.5, 0.5, 0.5))
+        self.eyeRightCtrl.setColor("blueMedium")
 
         # Jaw
-        jawCtrlSpace = CtrlSpace('jawCtrlSpace', parent=headCtrl)
+        self.jawCtrlSpace = CtrlSpace('jawCtrlSpace', parent=self.headCtrl)
 
-        jawCtrl = Control('jaw', parent=jawCtrlSpace, shape="cube")
-        jawCtrl.alignOnYAxis(negative=True)
-        jawCtrl.alignOnZAxis()
-        jawCtrl.scalePoints(Vec3(1.45, 0.65, 1.25))
-        jawCtrl.translatePoints(Vec3(0, -0.25, 0))
-        jawCtrl.setColor("orange")
+        self.jawCtrl = Control('jaw', parent=self.jawCtrlSpace, shape="cube")
+        self.jawCtrl.alignOnYAxis(negative=True)
+        self.jawCtrl.alignOnZAxis()
+        self.jawCtrl.scalePoints(Vec3(1.45, 0.65, 1.25))
+        self.jawCtrl.translatePoints(Vec3(0, -0.25, 0))
+        self.jawCtrl.setColor("orange")
 
 
         # ==========
@@ -195,64 +196,59 @@ class HeadComponent(Component):
         # Create Component I/O
         # =====================
         # Setup component Xfo I/O's
-        headBaseInput = Locator('headBase', parent=inputHrcGrp)
-        headBaseInput.xfo = headCtrl.xfo
+        self.headBaseInput = Locator('headBase', parent=inputHrcGrp)
 
-        headOutput = Locator('head', parent=outputHrcGrp)
-        headOutput.xfo = headCtrl.xfo
-        jawOutput = Locator('jaw', parent=outputHrcGrp)
-        jawOutput.xfo = jawCtrl.xfo
-        eyeLOutput = Locator('eyeL', parent=outputHrcGrp)
-        eyeLOutput.xfo = eyeLeftCtrl.xfo
-        eyeROutput = Locator('eyeR', parent=outputHrcGrp)
-        eyeROutput.xfo = eyeRightCtrl.xfo
+        self.headOutput = Locator('head', parent=outputHrcGrp)
+        self.jawOutput = Locator('jaw', parent=outputHrcGrp)
+        self.eyeLOutput = Locator('eyeL', parent=outputHrcGrp)
+        self.eyeROutput = Locator('eyeR', parent=outputHrcGrp)
 
         # Setup componnent Attribute I/O's
         debugInputAttr = BoolAttribute('debug', True)
-        rightSideInputAttr = BoolAttribute('rightSide', location is 'R')
+        rightSideInputAttr = BoolAttribute('rightSide', self.getLocation() is 'R')
 
 
         # ==============
         # Constrain I/O
         # ==============
         # Constraint inputs
-        headInputConstraint = PoseConstraint('_'.join([headCtrlSpace.getName(), 'To', headBaseInput.getName()]))
+        headInputConstraint = PoseConstraint('_'.join([self.headCtrlSpace.getName(), 'To', self.headBaseInput.getName()]))
         headInputConstraint.setMaintainOffset(True)
-        headInputConstraint.addConstrainer(headBaseInput)
-        headCtrlSpace.addConstraint(headInputConstraint)
+        headInputConstraint.addConstrainer(self.headBaseInput)
+        self.headCtrlSpace.addConstraint(headInputConstraint)
 
         # Constraint outputs
-        headOutputConstraint = PoseConstraint('_'.join([headOutput.getName(), 'To', headCtrl.getName()]))
+        headOutputConstraint = PoseConstraint('_'.join([self.headOutput.getName(), 'To', self.headCtrl.getName()]))
         headOutputConstraint.setMaintainOffset(True)
-        headOutputConstraint.addConstrainer(headCtrl)
-        headOutput.addConstraint(headOutputConstraint)
+        headOutputConstraint.addConstrainer(self.headCtrl)
+        self.headOutput.addConstraint(headOutputConstraint)
 
-        jawOutputConstraint = PoseConstraint('_'.join([jawOutput.getName(), 'To', jawCtrl.getName()]))
+        jawOutputConstraint = PoseConstraint('_'.join([self.jawOutput.getName(), 'To', self.jawCtrl.getName()]))
         jawOutputConstraint.setMaintainOffset(True)
-        jawOutputConstraint.addConstrainer(jawCtrl)
-        jawOutput.addConstraint(jawOutputConstraint)
+        jawOutputConstraint.addConstrainer(self.jawCtrl)
+        self.jawOutput.addConstraint(jawOutputConstraint)
 
-        eyeLOutputConstraint = PoseConstraint('_'.join([eyeLOutput.getName(), 'To', eyeLeftCtrl.getName()]))
+        eyeLOutputConstraint = PoseConstraint('_'.join([self.eyeLOutput.getName(), 'To', self.eyeLeftCtrl.getName()]))
         eyeLOutputConstraint.setMaintainOffset(True)
-        eyeLOutputConstraint.addConstrainer(eyeLeftCtrl)
-        eyeLOutput.addConstraint(eyeLOutputConstraint)
+        eyeLOutputConstraint.addConstrainer(self.eyeLeftCtrl)
+        self.eyeLOutput.addConstraint(eyeLOutputConstraint)
 
-        eyeROutputConstraint = PoseConstraint('_'.join([eyeROutput.getName(), 'To', eyeRightCtrl.getName()]))
+        eyeROutputConstraint = PoseConstraint('_'.join([self.eyeROutput.getName(), 'To', self.eyeRightCtrl.getName()]))
         eyeROutputConstraint.setMaintainOffset(True)
-        eyeROutputConstraint.addConstrainer(eyeRightCtrl)
-        eyeROutput.addConstraint(eyeROutputConstraint)
+        eyeROutputConstraint.addConstrainer(self.eyeRightCtrl)
+        self.eyeROutput.addConstraint(eyeROutputConstraint)
 
 
         # ==================
         # Add Component I/O
         # ==================
         # Add Xfo I/O's
-        self.addInput(headBaseInput)
+        self.addInput(self.headBaseInput)
 
-        self.addOutput(headOutput)
-        self.addOutput(jawOutput)
-        self.addOutput(eyeLOutput)
-        self.addOutput(eyeROutput)
+        self.addOutput(self.headOutput)
+        self.addOutput(self.jawOutput)
+        self.addOutput(self.eyeLOutput)
+        self.addOutput(self.eyeROutput)
 
         # Add Attribute I/O's
         self.addInput(debugInputAttr)
@@ -291,17 +287,22 @@ class HeadComponent(Component):
         location = data.get('location', 'M')
         self.setLocation(location)
 
-        headCtrlSpace.xfo.tr = data['headPosition']
-        headCtrl.xfo.tr = data['headPosition']
-        eyeLeftCtrlSpace.xfo.tr = data['eyeLeftPosition']
-        eyeLeftCtrl.xfo.tr = data['eyeLeftPosition']
-        eyeRightCtrl.xfo.tr = data['eyeRightPosition']
-        jawCtrlSpace.xfo.tr = data['jawPosition']
-        jawCtrl.xfo.tr = data['jawPosition']
-
+        self.headCtrlSpace.xfo.tr = data['headPosition']
+        self.headCtrl.xfo.tr = data['headPosition']
+        self.eyeLeftCtrlSpace.xfo.tr = data['eyeLeftPosition']
+        self.eyeLeftCtrl.xfo.tr = data['eyeLeftPosition']
+        self.eyeRightCtrlSpace.xfo.tr = data['eyeRightPosition']
+        self.eyeRightCtrl.xfo.tr = data['eyeRightPosition']
+        self.jawCtrlSpace.xfo.tr = data['jawPosition']
+        self.jawCtrl.xfo.tr = data['jawPosition']
         # ============
         # Set IO Xfos
         # ============
+        self.headBaseInput.xfo.tr = data['headPosition']
+        self.headOutput.xfo.tr = data['headPosition']
+        self.jawOutput.xfo.tr = data['jawPosition']
+        self.eyeLOutput.xfo.tr = data['eyeLeftPosition']
+        self.eyeROutput.xfo.tr = data['eyeRightPosition']
 
 
 from kraken.core.kraken_system import KrakenSystem
