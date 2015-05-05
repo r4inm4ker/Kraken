@@ -30,8 +30,8 @@ class ArmComponentGuide(Component):
         super(ArmComponentGuide, self).__init__(name, parent)
 
         self.bicep = Control('bicepFK', parent=self, shape="sphere")
-        self.forearm = Control('bicepFK', parent=self, shape="sphere")
-        self.wrist = Control('bicepFK', parent=self, shape="sphere")
+        self.forearm = Control('forearmFK', parent=self, shape="sphere")
+        self.wrist = Control('wristFK', parent=self, shape="sphere")
 
         self.bicepFKCtrlSizeInputAttr = FloatAttribute('bicepFKCtrlSize', 2.0)
         self.forearmFKCtrlSizeInputAttr = FloatAttribute('forearmFKCtrlSize', 2.0)
@@ -179,10 +179,10 @@ class ArmComponent(Component):
 
         outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
         cmpOutputAttrGrp = AttributeGroup('outputs')
-        inputHrcGrp.addAttributeGroup(cmpOutputAttrGrp)
+        outputHrcGrp.addAttributeGroup(cmpOutputAttrGrp)
 
         # Bicep
-        self.bicepFKCtrlSpace = CtrlSpace('bicepFK', parent=self)
+        self.bicepFKCtrlSpace = CtrlSpace('bicepFK', parent=ctrlCmpGrp)
 
         self.bicepFKCtrl = Control('bicepFK', parent=self.bicepFKCtrlSpace, shape="cube")
         self.bicepFKCtrl.alignOnXAxis()
@@ -194,7 +194,7 @@ class ArmComponent(Component):
         self.forearmFKCtrl.alignOnXAxis()
 
         # Arm IK
-        self.armIKCtrlSpace = CtrlSpace('IK', parent=self)
+        self.armIKCtrlSpace = CtrlSpace('IK', parent=ctrlCmpGrp)
         self.armIKCtrl = Control('IK', parent=self.armIKCtrlSpace, shape="pin")
 
 
@@ -225,7 +225,7 @@ class ArmComponent(Component):
         self.armUpVCtrl.alignOnZAxis()
         self.armUpVCtrl.rotatePoints(180, 0, 0)
 
-        self.armUpVCtrlSpace = CtrlSpace('UpV', parent=self)
+        self.armUpVCtrlSpace = CtrlSpace('UpV', parent=ctrlCmpGrp)
 
         self.armUpVCtrl = Control('UpV', parent=self.armUpVCtrlSpace, shape="triangle")
         self.armUpVCtrl.alignOnZAxis()
