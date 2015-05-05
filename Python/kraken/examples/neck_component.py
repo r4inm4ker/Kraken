@@ -101,7 +101,7 @@ class NeckComponentGuide(Component):
         neckXfo.setFromVectors(rootToEnd, bone1Normal, bone1ZAxis, neckPosition)
 
         return {
-                "class":"kraken.examples.hand_component.HandComponent",
+                "class":"kraken.examples.neck_component.NeckComponent",
                 "name": self.getName(),
                 "location":self.getLocation(),
                 "neckXfo": neckXfo

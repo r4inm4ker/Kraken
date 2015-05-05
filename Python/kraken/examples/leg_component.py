@@ -130,7 +130,7 @@ class LegComponentGuide(Component):
         upVXfo.tr = upVXfo.transformVector(Vec3(0, 0, 5))
 
         return {
-                "class":"kraken.examples.arm_component.ArmComponent",
+                "class":"kraken.examples.leg_component.LegComponent",
                 "name": self.getName(),
                 "location":self.getLocation(),
                 "femurXfo": femurXfo,

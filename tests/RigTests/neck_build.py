@@ -9,7 +9,7 @@ from kraken.helpers.utility_methods import logHierarchy
 
 Profiler.getInstance().push("neck_build")
 
-neckGuide = NeckComponentGuide("hand")
+neckGuide = NeckComponentGuide("neck")
 neckGuide.loadData({
                     "name": "Neck",
                     "location": "L",
