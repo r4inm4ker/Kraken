@@ -1,0 +1,25 @@
+Failed to find DCC builder. Falling back to Python builder.
+Head
+Head.controls
+Head.controls.Head
+Head.controls.Head.inputs
+Head.controls.Head.inputs.headBase
+Head.controls.Head.outputs
+Head.controls.Head.outputs.head
+Head.controls.Head.outputs.jaw
+Head.controls.Head.outputs.eyeL
+Head.controls.Head.outputs.eyeR
+Head.controls.Head.head
+Head.controls.Head.head.head
+Head.controls.Head.head.head.eyeLeft
+Head.controls.Head.head.head.eyeLeft.eyeLeft
+Head.controls.Head.head.head.eyeRight
+Head.controls.Head.head.head.eyeRight.eyeRight
+Head.controls.Head.head.head.jawCtrlSpace
+Head.controls.Head.head.head.jawCtrlSpace.jaw
+Head.deformers
+Head.deformers.Head
+Head.deformers.Head.head
+Head.deformers.Head.jaw
+Head.deformers.Head.eyeLeft
+Head.deformers.Head.eyeRight

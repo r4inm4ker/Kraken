@@ -1,0 +1,16 @@
+Failed to find DCC builder. Falling back to Python builder.
+L_Foot
+L_Foot.controls
+L_Foot.controls.Foot
+L_Foot.controls.Foot.inputs
+L_Foot.controls.Foot.inputs.legEndXfo
+L_Foot.controls.Foot.inputs.legEndPos
+L_Foot.controls.Foot.outputs
+L_Foot.controls.Foot.outputs.handEnd
+L_Foot.controls.Foot.outputs.hand
+L_Foot.controls.Foot.foot
+L_Foot.controls.Foot.foot.foot
+L_Foot.controls.Foot.footRef
+L_Foot.deformers
+L_Foot.deformers.Foot
+L_Foot.deformers.Foot.foot

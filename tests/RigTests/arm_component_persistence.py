@@ -1,22 +1,33 @@
 import json
 
-from kraken.core.maths import Vec3
-from kraken.examples.arm_component import ArmComponent
+from kraken.core.maths import Xfo, Vec3
+
+from kraken.examples.arm_component import ArmComponentGuide, ArmComponent
+
 from kraken.core.io.kraken_saver import KrakenSaver
 from kraken.core.io.kraken_loader import KrakenLoader
 from kraken.helpers.utility_methods import logHierarchy
 
 
-data = {
-        "location":"R",
-        "bicepPosition": Vec3(-2.27, 15.295, -0.753),
-        "forearmPosition": Vec3(-5.039, 13.56, -0.859),
-        "wristPosition": Vec3(-7.1886, 12.2819, 0.4906),
+armGuide = ArmComponentGuide("arm")
+armGuide.loadData({
+        "name": "L_Arm",
+        "location": "L",
+        "bicepXfo": Xfo(Vec3(2.27, 15.295, -0.753)),
+        "forearmXfo": Xfo(Vec3(5.039, 13.56, -0.859)),
+        "wristXfo": Xfo(Vec3(7.1886, 12.2819, 0.4906)),
         "bicepFKCtrlSize": 1.75,
         "forearmFKCtrlSize": 1.5
-       }
+    })
 
-armLeft = ArmComponent("myArm", data=data)
+# Save the arm guid data for persistence.
+saveData = armGuide.saveData()
+
+armGuideData = armGuide.getGuideData()
+
+armLeft = ArmComponent()
+armLeft.loadData(armGuideData)
+
 print "==armLeft=="
 logHierarchy(armLeft)
 
