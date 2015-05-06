@@ -24,11 +24,6 @@ class BobRig(Container):
         Profiler.getInstance().push("Construct BobRig:" + name)
         super(BobRig, self).__init__(name)
 
-        # Add rig layers
-        deformersLayer = Layer('deformers', parent=self)
-        controlsLayer = Layer('controls', parent=self)
-        geometryLayer = Layer('geometry', parent=self)
-
         # Add Components to Layers
         spineComponent = SpineComponent("spine", controlsLayer, data={
             'cogPosition': Vec3(0.0, 11.1351, -0.1382),
