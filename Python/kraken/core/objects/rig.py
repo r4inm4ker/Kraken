@@ -35,8 +35,12 @@ class Rig(Container):
 
         if not os.path.exists(filepath):
             raise Exception("File not found:" + filepath)
-        jsonData = json.load(str(open( referencefile ).read()))
-        this.loadRigDefinition(jsonData)
+
+        with open(referencefile) as rigDef:
+            jsonData = json.load(rigDef)
+
+        # jsonData = json.load(str(open(referencefile).read()))
+        self.loadRigDefinition(jsonData)
         Profiler.getInstance().pop()
 
 
@@ -55,10 +59,6 @@ class Rig(Container):
 
         krakenSystem = KrakenSystem.getInstance()
 
-        def __loadLayers(layersData):
-            for layerName in layersData:
-                layer = Layer(layerName, parent=self)
-
 
         def __loadComponents(componentsData):
             Profiler.getInstance().push("__loadComponents")
@@ -74,7 +74,10 @@ class Rig(Container):
                     componentName = componentData['name']
                 else:
                     componentName = str(componentClass.__name__)
-                component = componentClass(componentName, parent=self, data=componentData)
+
+                component = componentClass(componentName, parent=self) #, data=componentData)
+
+                component.loadData(componentData)
 
             Profiler.getInstance().pop()
 
@@ -103,11 +106,6 @@ class Rig(Container):
 
             Profiler.getInstance().pop()
 
-
-        if 'layers' in jsonData:
-            __loadLayers(jsonData['layers'])
-        else:
-            raise Exception("A rig must define layers.")
 
         if 'components' in jsonData:
             __loadComponents(jsonData['components'])
