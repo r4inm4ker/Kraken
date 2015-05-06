@@ -3,8 +3,8 @@ import json
 from kraken import plugins
 from kraken.core.maths import Xfo, Vec3, Quat
 from kraken.examples.arm_component import ArmComponentGuide, ArmComponent
-from kraken.helpers.utility_methods import logHierarchy
 from kraken.core.profiler import Profiler
+from kraken.helpers.utility_methods import logHierarchy
 
 
 Profiler.getInstance().push("arm_build")
@@ -20,7 +20,7 @@ armGuide.loadData({
         "forearmFKCtrlSize": 1.5
     })
 
-# Save the arm guid data for persistence. 
+# Save the arm guid data for persistence.
 saveData = armGuide.saveData()
 
 armGuideData = armGuide.getGuideData()
