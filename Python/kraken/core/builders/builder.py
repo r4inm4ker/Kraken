@@ -944,7 +944,7 @@ class Builder(object):
         kSceneItem -- Object, kraken kSceneItem object to build.
 
         Return:
-        True if successful.
+        The DCC scene item of the kSceneItem that was passed to the builder.
 
         """
 
@@ -963,7 +963,7 @@ class Builder(object):
 
         Profiler.getInstance().pop()
 
-        return True
+        return self._getDCCSceneItem(kSceneItem)
 
 
     def _postBuild(self):
