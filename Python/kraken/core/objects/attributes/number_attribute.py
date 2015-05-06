@@ -6,7 +6,8 @@ NumberAttribute - Base Attribute.
 """
 
 from attribute import Attribute
-
+import integer_attribute
+import float_attribute
 
 class NumberAttribute(Attribute):
     """Number Attributee. Base class for number attribute types"""
@@ -120,12 +121,11 @@ class NumberAttribute(Attribute):
 
         """
 
-        attrType = self.__class__.__name__
-        if attrType is 'IntegerAttribute':
+        if isinstance(self, integer_attribute.IntegerAttribute):
             if type(minimum) is not int:
                 raise TypeError("UiMin value is not of type 'int'.")
 
-        if attrType is 'FloatAttribute':
+        if isinstance(self, float_attribute.FloatAttribute):
             if type(minimum) not in (int, float):
                 raise TypeError("UiMin value is not of type 'int' or 'float'.")
 
@@ -168,12 +168,11 @@ class NumberAttribute(Attribute):
 
         """
 
-        attrType = self.__class__.__name__
-        if attrType is 'IntegerAttribute':
+        if isinstance(self, integer_attribute.IntegerAttribute):
             if type(maximum) is not int:
                 raise TypeError("UiMax value is not of type 'int'.")
 
-        if attrType is 'FloatAttribute':
+        if isinstance(self, float_attribute.FloatAttribute):
             if type(maximum) not in (int, float):
                 raise TypeError("UiMax value is not of type 'int' or 'float'.")
 
