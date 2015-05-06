@@ -220,11 +220,6 @@ class ArmComponent(Component):
         armSettingsAttrGrp.addAttribute(armStretchBlendInputAttr)
 
         # UpV
-        self.armUpVCtrlSrtBuffer = CtrlSpace('UpV', parent=ctrlCmpGrp)
-        self.armUpVCtrl = Control('UpV', parent=self.armUpVCtrlSrtBuffer, shape="triangle")
-        self.armUpVCtrl.alignOnZAxis()
-        self.armUpVCtrl.rotatePoints(180, 0, 0)
-
         self.armUpVCtrlSpace = CtrlSpace('UpV', parent=ctrlCmpGrp)
 
         self.armUpVCtrl = Control('UpV', parent=self.armUpVCtrlSpace, shape="triangle")
