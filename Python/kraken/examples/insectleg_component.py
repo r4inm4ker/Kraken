@@ -316,7 +316,6 @@ class InsectLegComponent(Component):
         boneLengths = data['boneLengths']
 
         for i, each in enumerate(self.fkCtrlSpaces):
-            print boneXfos[i]
             self.fkCtrlSpaces[i].xfo = boneXfos[i]
             self.boneFKCtrls[i].xfo = boneXfos[i]
 
