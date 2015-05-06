@@ -52,7 +52,7 @@ class Builder(object):
         return True
 
 
-    def _getDCCSceneItem(self, kSceneItem):
+    def getDCCSceneItem(self, kSceneItem):
         """Given a kSceneItem, returns the built dcc scene item.
 
         Arguments:
@@ -294,7 +294,7 @@ class Builder(object):
 
         """
 
-        constraineeDCCSceneItem = self._getDCCSceneItem(kConstraint.getConstrainee())
+        constraineeDCCSceneItem = self.getDCCSceneItem(kConstraint.getConstrainee())
         dccSceneItem = None # Add constraint object here.
         self._registerSceneItemPair(kConstraint, dccSceneItem)
 
@@ -312,7 +312,7 @@ class Builder(object):
 
         """
 
-        constraineeDCCSceneItem = self._getDCCSceneItem(kConstraint.getConstrainee())
+        constraineeDCCSceneItem = self.getDCCSceneItem(kConstraint.getConstrainee())
         dccSceneItem = None # Add constraint object here.
         self._registerSceneItemPair(kConstraint, dccSceneItem)
 
@@ -330,7 +330,7 @@ class Builder(object):
 
         """
 
-        constraineeDCCSceneItem = self._getDCCSceneItem(kConstraint.getConstrainee())
+        constraineeDCCSceneItem = self.getDCCSceneItem(kConstraint.getConstrainee())
         dccSceneItem = None # Add constraint object here.
         self._registerSceneItemPair(kConstraint, dccSceneItem)
 
@@ -348,7 +348,7 @@ class Builder(object):
 
         """
 
-        constraineeDCCSceneItem = self._getDCCSceneItem(kConstraint.getConstrainee())
+        constraineeDCCSceneItem = self.getDCCSceneItem(kConstraint.getConstrainee())
         dccSceneItem = None # Add constraint object here.
         self._registerSceneItemPair(kConstraint, dccSceneItem)
 
@@ -863,7 +863,7 @@ class Builder(object):
 
         """
 
-        dccSceneItem = self._getDCCSceneItem(kSceneItem)
+        dccSceneItem = self.getDCCSceneItem(kSceneItem)
 
         # Re-implement in DCC builders.
 
@@ -963,7 +963,7 @@ class Builder(object):
 
         Profiler.getInstance().pop()
 
-        return self._getDCCSceneItem(kSceneItem)
+        return self.getDCCSceneItem(kSceneItem)
 
 
     def _postBuild(self):
