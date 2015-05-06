@@ -6,8 +6,8 @@ NumberAttribute - Base Attribute.
 """
 
 from kraken.core.objects.attributes.attribute import Attribute
-import integer_attribute
-import float_attribute
+# import integer_attribute
+# import float_attribute
 
 class NumberAttribute(Attribute):
     """Number Attributee. Base class for number attribute types"""
@@ -125,11 +125,11 @@ class NumberAttribute(Attribute):
 
         """
 
-        if isinstance(self, integer_attribute.IntegerAttribute):
+        if self.isTypeOf('IntergerAttribute'):
             if type(minimum) is not int:
                 raise TypeError("UiMin value is not of type 'int'.")
 
-        if isinstance(self, float_attribute.FloatAttribute):
+        if self.isTypeOf('FloatAttribute'):
             if type(minimum) not in (int, float):
                 raise TypeError("UiMin value is not of type 'int' or 'float'.")
 
@@ -172,11 +172,11 @@ class NumberAttribute(Attribute):
 
         """
 
-        if isinstance(self, integer_attribute.IntegerAttribute):
+        if self.isTypeOf('IntergerAttribute'):
             if type(maximum) is not int:
                 raise TypeError("UiMax value is not of type 'int'.")
 
-        if isinstance(self, float_attribute.FloatAttribute):
+        if self.isTypeOf('FloatAttribute'):
             if type(maximum) not in (int, float):
                 raise TypeError("UiMax value is not of type 'int' or 'float'.")
 
