@@ -10,13 +10,13 @@ from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
 from kraken.core.objects.locator import Locator
 from kraken.core.objects.joint import Joint
-from kraken.core.objects.srtBuffer import SrtBuffer
+from kraken.core.objects.ctrlSpace import CtrlSpace
 from kraken.core.objects.control import Control
 
 from kraken.core.objects.operators.splice_operator import SpliceOperator
 
-from kraken.helpers.utility_methods import logHierarchy
 from kraken.core.profiler import Profiler
+from kraken.helpers.utility_methods import logHierarchy
 
 
 class ClavicleComponent(Component):
@@ -51,10 +51,10 @@ class ClavicleComponent(Component):
         clavicleXfo.setFromVectors(rootToEnd, bone1Normal, bone1ZAxis, claviclePosition)
 
         # Add Controls
-        clavicleCtrlSrtBuffer = SrtBuffer('clavicle', parent=self)
-        clavicleCtrlSrtBuffer.xfo = clavicleXfo
+        clavicleCtrlSpace = CtrlSpace('clavicle', parent=self)
+        clavicleCtrlSpace.xfo = clavicleXfo
 
-        clavicleCtrl = Control('clavicle', parent=clavicleCtrlSrtBuffer, shape="cube")
+        clavicleCtrl = Control('clavicle', parent=clavicleCtrlSpace, shape="cube")
         clavicleCtrl.alignOnXAxis()
         clavicleLen = claviclePosition.subtract(clavicleEndPosition).length()
         clavicleCtrl.scalePoints(Vec3(clavicleLen, 0.75, 0.75))
@@ -101,7 +101,7 @@ class ClavicleComponent(Component):
         clavicleInputConstraint = PoseConstraint('_'.join([clavicleCtrl.getName(), 'To', spineEndInput.getName()]))
         clavicleInputConstraint.setMaintainOffset(True)
         clavicleInputConstraint.addConstrainer(spineEndInput)
-        clavicleCtrlSrtBuffer.addConstraint(clavicleInputConstraint)
+        clavicleCtrlSpace.addConstraint(clavicleInputConstraint)
 
         # Constraint outputs
         clavicleConstraint = PoseConstraint('_'.join([clavicleOutput.getName(), 'To', clavicleCtrl.getName()]))
@@ -146,10 +146,6 @@ class ClavicleComponent(Component):
 
         Profiler.getInstance().pop()
 
-    def buildRig(self, parent):
-        pass
-
 
 from kraken.core.kraken_system import KrakenSystem
 KrakenSystem.getInstance().registerComponent(ClavicleComponent)
-

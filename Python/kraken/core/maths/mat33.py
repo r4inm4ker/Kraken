@@ -4,9 +4,9 @@ Classes:
 Mat33 -- Matrix 3 transform object.
 """
 
-from math_object import MathObject
 from kraken.core.kraken_system import ks
-from vec3 import Vec3
+from kraken.core.maths.math_object import MathObject
+from kraken.core.maths.vec3 import Vec3
 
 
 class Mat33(MathObject):
@@ -31,6 +31,7 @@ class Mat33(MathObject):
         """Return a string representation of the 3x3 matrix."""
 
         return "Mat33(" + str(self.row0) + "," + str(self.row1) + "," + str(self.row2) + ")"
+
 
     @property
     def row0(self):

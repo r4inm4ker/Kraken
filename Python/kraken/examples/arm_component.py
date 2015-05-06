@@ -12,13 +12,13 @@ from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
 from kraken.core.objects.locator import Locator
 from kraken.core.objects.joint import Joint
-from kraken.core.objects.srtBuffer import SrtBuffer
+from kraken.core.objects.ctrlSpace import CtrlSpace
 from kraken.core.objects.control import Control
 
 from kraken.core.objects.operators.splice_operator import SpliceOperator
 
-from kraken.helpers.utility_methods import logHierarchy
 from kraken.core.profiler import Profiler
+from kraken.helpers.utility_methods import logHierarchy
 
 
 class ArmComponent(Component):
@@ -30,6 +30,7 @@ class ArmComponent(Component):
 
         Profiler.getInstance().push("Construct Arm Component:" + name + " location:" + location)
         super(ArmComponent, self).__init__(name, parent, location)
+
         # =========
         # Controls
         # =========
@@ -62,31 +63,31 @@ class ArmComponent(Component):
         forearmXfo.setFromVectors(elbowToWrist, bone2Normal, bone2ZAxis, forearmPosition)
 
         # Bicep
-        bicepFKCtrlSrtBuffer = SrtBuffer('bicepFK', parent=self)
-        bicepFKCtrlSrtBuffer.xfo = bicepXfo
+        bicepFKCtrlSpace = CtrlSpace('bicepFK', parent=self)
+        bicepFKCtrlSpace.xfo = bicepXfo
 
-        bicepFKCtrl = Control('bicepFK', parent=bicepFKCtrlSrtBuffer, shape="cube")
+        bicepFKCtrl = Control('bicepFK', parent=bicepFKCtrlSpace, shape="cube")
         bicepFKCtrl.alignOnXAxis()
         bicepLen = bicepPosition.subtract(forearmPosition).length()
         bicepFKCtrl.scalePoints(Vec3(bicepLen, bicepFKCtrlSize, bicepFKCtrlSize))
         bicepFKCtrl.xfo = bicepXfo
 
         # Forearm
-        forearmFKCtrlSrtBuffer = SrtBuffer('forearmFK', parent=bicepFKCtrl)
-        forearmFKCtrlSrtBuffer.xfo = forearmXfo
+        forearmFKCtrlSpace = CtrlSpace('forearmFK', parent=bicepFKCtrl)
+        forearmFKCtrlSpace.xfo = forearmXfo
 
-        forearmFKCtrl = Control('forearmFK', parent=forearmFKCtrlSrtBuffer, shape="cube")
+        forearmFKCtrl = Control('forearmFK', parent=forearmFKCtrlSpace, shape="cube")
         forearmFKCtrl.alignOnXAxis()
         forearmLen = forearmPosition.subtract(wristPosition).length()
         forearmFKCtrl.scalePoints(Vec3(forearmLen, forearmFKCtrlSize, forearmFKCtrlSize))
         forearmFKCtrl.xfo = forearmXfo
 
         # Arm IK
-        armIKCtrlSrtBuffer = SrtBuffer('IK', parent=self)
-        armIKCtrlSrtBuffer.xfo.tr = wristPosition
+        armIKCtrlSpace = CtrlSpace('IK', parent=self)
+        armIKCtrlSpace.xfo.tr = wristPosition
 
-        armIKCtrl = Control('IK', parent=armIKCtrlSrtBuffer, shape="pin")
-        armIKCtrl.xfo = armIKCtrlSrtBuffer.xfo
+        armIKCtrl = Control('IK', parent=armIKCtrlSpace, shape="pin")
+        armIKCtrl.xfo = armIKCtrlSpace.xfo
 
         if self.getLocation() == "R":
             armIKCtrl.rotatePoints(0, 90, 0)
@@ -121,10 +122,10 @@ class ArmComponent(Component):
         upVOffset = Vec3(0, 0, 5)
         upVOffset = upVXfo.transformVector(upVOffset)
 
-        armUpVCtrlSrtBuffer = SrtBuffer('UpV', parent=self)
-        armUpVCtrlSrtBuffer.xfo.tr = upVOffset
+        armUpVCtrlSpace = CtrlSpace('UpV', parent=self)
+        armUpVCtrlSpace.xfo.tr = upVOffset
 
-        armUpVCtrl = Control('UpV', parent=armUpVCtrlSrtBuffer, shape="triangle")
+        armUpVCtrl = Control('UpV', parent=armUpVCtrlSpace, shape="triangle")
         armUpVCtrl.xfo.tr = upVOffset
         armUpVCtrl.alignOnZAxis()
         armUpVCtrl.rotatePoints(180, 0, 0)
@@ -199,7 +200,7 @@ class ArmComponent(Component):
         armRootInputConstraint = PoseConstraint('_'.join([armIKCtrl.getName(), 'To', clavicleEndInput.getName()]))
         armRootInputConstraint.setMaintainOffset(True)
         armRootInputConstraint.addConstrainer(clavicleEndInput)
-        bicepFKCtrlSrtBuffer.addConstraint(armRootInputConstraint)
+        bicepFKCtrlSpace.addConstraint(armRootInputConstraint)
 
         # Constraint outputs
 
@@ -278,8 +279,6 @@ class ArmComponent(Component):
 
         Profiler.getInstance().pop()
 
-    def buildRig(self, parent):
-        pass
 
 from kraken.core.kraken_system import KrakenSystem
 KrakenSystem.getInstance().registerComponent(ArmComponent)

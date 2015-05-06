@@ -5,20 +5,18 @@ Builder -- Base builder object to build objects in DCC.
 
 """
 
+
 from kraken.core.kraken_system import KrakenSystem
 from kraken.core.configs.config import Config
+from kraken.core.profiler import Profiler
 
 from kraken.core.objects.components.component import Component
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
-from kraken.core.profiler import Profiler
-
 
 class Builder(object):
     """Builder object for building objects in DCC's. Sub-class per DCC in a
-    plugin.
-
-    """
+    plugin."""
 
 
     def __init__(self):
@@ -558,7 +556,7 @@ class Builder(object):
         elif kObject.isTypeOf("HierarchyGroup"):
             dccSceneItem = self.buildHierarchyGroup(kObject, buildName)
 
-        elif kObject.isTypeOf("SrtBuffer"):
+        elif kObject.isTypeOf("CtrlSpace"):
             dccSceneItem = self.buildGroup(kObject, buildName)
 
         elif kObject.isTypeOf("Locator"):
@@ -573,9 +571,9 @@ class Builder(object):
         elif kObject.isTypeOf("Curve"):
             dccSceneItem = self.buildCurve(kObject, buildName)
 
-        ## Important Note: The order of these tests is important.
-        ## New classes should be added above the classes they are derrived from.
-        ## No new types should be added below SceneItem here.
+        # Important Note: The order of these tests is important.
+        # New classes should be added above the classes they are derrived from.
+        # No new types should be added below SceneItem here.
         elif kObject.isTypeOf("SceneItem"):
             dccSceneItem = self.buildLocator(kObject, buildName)
 
@@ -955,10 +953,9 @@ class Builder(object):
         finally:
             self._postBuild()
 
-            # Clear config instance when finished.
+            # Clear Config & Kraken System when finished.
             self.config.clearInstance()
-            ks = KrakenSystem.getInstance()
-            ks.clearInstance()
+            KrakenSystem.getInstance().clearInstance()
 
         Profiler.getInstance().pop()
 

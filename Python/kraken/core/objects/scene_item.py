@@ -5,9 +5,9 @@ SceneItem - Base SceneItem Object.
 
 """
 
+from kraken.core.objects.base_item import BaseItem
 from kraken.core.maths.xfo import Xfo
 from kraken.core.objects.attributes.attribute_group import AttributeGroup
-from base_item import BaseItem
 
 
 class SceneItem(BaseItem):
@@ -35,7 +35,6 @@ class SceneItem(BaseItem):
     # ==================
     # Property Methods
     # ==================
-
     @property
     def xfo(self):
         """Gets xfo property of this SceneItem.
@@ -291,7 +290,7 @@ class SceneItem(BaseItem):
         """Returns all children that are of the specified type.
 
         Arguments:
-        childType -- Class, type of children to find.
+        childType -- String, type of children to find.
 
         Return:
         Array of child objects of the specified type.
@@ -301,7 +300,7 @@ class SceneItem(BaseItem):
 
         childrenOfType = []
         for eachChild in self.children:
-            if type(eachChild) is childType:
+            if type(eachChild).__name__ is childType:
                 childrenOfType.append(eachChild)
 
         return childrenOfType
@@ -340,12 +339,12 @@ class SceneItem(BaseItem):
         return foundChild
 
 
-    def findChildrenByType(self, objectType, targetObj=None):
+    def findChildrenByType(self, childType, targetObj=None):
         """Finds a child by recursively searching the hierarhcy for a child with
         the given name.
 
         Arguments:
-        objectType -- Class, type of children to find.
+        childType -- String, type of children to find.
         targetObj -- Object, object to search under. Used for recursive searching.
 
         Return:
@@ -355,16 +354,16 @@ class SceneItem(BaseItem):
 
         childrenOfType = []
 
-        self._findChildByType(objectType, childrenOfType)
+        self._findChildByType(childType, childrenOfType)
 
         return childrenOfType
 
 
-    def _findChildByType(self, objectType, foundArray, targetObj=None):
+    def _findChildByType(self, childType, foundArray, targetObj=None):
         """Protected find child by type method.
 
         Arguments:
-        objectType -- Class, type of children to find.
+        childType -- Class, type of children to find.
         foundArray -- List, list of found children to append to.
         targetObj -- Object, object to search under. Used for recursive searching.
 
@@ -380,10 +379,10 @@ class SceneItem(BaseItem):
         for i in xrange(targetObj.getNumChildren()):
             child = targetObj.getChildByIndex(i)
 
-            if type(child) is objectType:
+            if type(child).__name__ is childType:
                 foundArray.append(child)
 
-            newFoundChildren = self._findChildByType(objectType, foundArray, child)
+            newFoundChildren = self._findChildByType(childType, foundArray, child)
 
         return
 
@@ -704,7 +703,6 @@ class SceneItem(BaseItem):
         return None
 
 
-
     # ===================
     # Visibility Methods
     # ===================
@@ -792,25 +790,6 @@ class SceneItem(BaseItem):
         return self.color
 
 
-    # ==================
-    # Transform Methods
-    # ==================
-    def lockAttribute(self, attributeName):
-        pass
-
-
-    def unlockAttribute(self, attributeName):
-        pass
-
-
-    def hideAttribute(self, attributeName):
-        pass
-
-
-    def unhideAttribute(self, attributeName):
-        pass
-
-
     # ==========================
     # Parameter Locking Methods
     # ==========================
@@ -836,6 +815,8 @@ class SceneItem(BaseItem):
         if z is True:
             self.setFlag("lockZRotation")
 
+        return True
+
 
     def lockScale(self, x=False, y=False, z=False):
         """Sets flags for locking scale parameters.
@@ -859,6 +840,8 @@ class SceneItem(BaseItem):
         if z is True:
             self.setFlag("lockZScale")
 
+        return True
+
 
     def lockTranslation(self, x=False, y=False, z=False):
         """Sets flags for locking translation parameters.
@@ -881,6 +864,8 @@ class SceneItem(BaseItem):
 
         if z is True:
             self.setFlag("lockZTranslation")
+
+        return True
 
 
     # ====================

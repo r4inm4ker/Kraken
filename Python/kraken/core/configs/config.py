@@ -9,16 +9,16 @@ Config -- Base config object used to configure builders.
 class Config(object):
     """Base Configuration for Kraken builders."""
 
-    _instance = None
+    __instance = None
 
     def __init__(self):
         super(Config, self).__init__()
 
         # the config is a singleton, so after the first is constructed, throw an error.
-        if Config._instance is not None:
+        if Config.__instance is not None:
             raise Exception("Config object constructed twice. Please always call 'Config.getInstance'")
 
-        Config._instance = self
+        Config.__instance = self
 
         self._explicitNaming = False
         self._colors = self.initColors()
@@ -157,7 +157,7 @@ class Config(object):
                                   "Joint": "def",
                                   "Layer": "",
                                   "Locator": "loc",
-                                  "SrtBuffer": "srtBuffer"
+                                  "CtrlSpace": "ctrlSpace"
                                  },
                         "formats":
                                   {
@@ -187,9 +187,6 @@ class Config(object):
     # ======================
     def initControlShapes(self):
         """Initializes the control shapes.
-
-        Arguments:
-        Arguments -- Type, information.
 
         Return:
         True if successful.
@@ -483,14 +480,16 @@ class Config(object):
 
         """
 
-        if Config._instance is None:
+        if Config.__instance is None:
             cls()
-        elif not isinstance(Config._instance, Config):
-            raise Exception("Multiple different Config types have been constructed.");
+        elif not isinstance(Config.__instance, Config):
+            raise Exception("Multiple different Config types have been \
+                            constructed.");
 
-        return Config._instance
+        return Config.__instance
 
 
+    @classmethod
     def clearInstance(cls):
         """Clears the instance variable of the config.
 
@@ -499,6 +498,6 @@ class Config(object):
 
         """
 
-        Config._instance = None
+        Config.__instance = None
 
         return True

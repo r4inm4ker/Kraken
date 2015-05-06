@@ -235,7 +235,8 @@ class Vec3(MathObject):
 
         """
 
-        return self._rtval.setComponent('', ks.rtVal('Size', i), ks.rtVal('Scalar', v))
+        return self._rtval.setComponent('', ks.rtVal('Size', i),
+                                        ks.rtVal('Scalar', v))
 
 
     # # Equals operator
@@ -539,7 +540,7 @@ class Vec3(MathObject):
         """Doc String.
 
         Arguments:
-        Arguments -- Type, information.
+        other -- Vec3, the other vector to measure the distance to.
 
         Return:
         True if successful.

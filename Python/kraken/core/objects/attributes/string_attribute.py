@@ -5,7 +5,7 @@ StringAttribute - Base Attribute.
 
 """
 
-from attribute import Attribute
+from kraken.core.objects.attributes.attribute import Attribute
 from kraken.core.kraken_system import ks
 
 
@@ -15,6 +15,7 @@ class StringAttribute(Attribute):
     def __init__(self, name, value=""):
         super(StringAttribute, self).__init__(name, value)
         assert type(value) is str, "Value is not of type 'string'."
+
 
     def setValue(self, value):
         """Sets the value of the attribute.
@@ -33,6 +34,7 @@ class StringAttribute(Attribute):
         super(StringAttribute, self).setValue(value)
 
         return True
+
 
     def getRTVal(self):
         """Returns and RTVal object for this attribute.

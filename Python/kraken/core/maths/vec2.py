@@ -25,6 +25,7 @@ class Vec2(MathObject):
             else:
                 self.set(x=x, y=y)
 
+
     def __str__(self):
         """String representation of the Vec2 object."""
 

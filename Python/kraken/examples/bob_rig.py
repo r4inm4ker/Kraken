@@ -1,26 +1,26 @@
+from kraken.core.maths import Vec3, Quat
+
 from kraken.core.objects.container import Container
 from kraken.core.objects.layer import Layer
 
-from arm_component import ArmComponent
-from hand_component import HandComponent
-from clavicle_component import ClavicleComponent
-from leg_component import LegComponent
-from foot_component import FootComponent
-from spine_component import SpineComponent
-from neck_component import NeckComponent
-from head_component import HeadComponent
-
-from kraken.helpers.utility_methods import logHierarchy
-
-from kraken.core.maths import Vec3, Quat
+from kraken.examples.arm_component import ArmComponent
+from kraken.examples.hand_component import HandComponent
+from kraken.examples.clavicle_component import ClavicleComponent
+from kraken.examples.leg_component import LegComponent
+from kraken.examples.foot_component import FootComponent
+from kraken.examples.spine_component import SpineComponent
+from kraken.examples.neck_component import NeckComponent
+from kraken.examples.head_component import HeadComponent
 
 from kraken.core.profiler import Profiler
+from kraken.helpers.utility_methods import logHierarchy
 
 
 class BobRig(Container):
     """Test Arm Component"""
 
     def __init__(self, name):
+
         Profiler.getInstance().push("Construct BobRig:" + name)
         super(BobRig, self).__init__(name)
 

@@ -37,7 +37,11 @@ class Xfo(MathObject):
     def __str__(self):
         """String representation of Transform."""
 
-        return "Xfo(ori=" + str(self.ori) + ", tr=" + str(self.tr) + ", sc=" + str(self.sc) + ")"
+        stringRep = "Xfo(ori=" + str(self.ori)
+        stringRep += ", tr=" + str(self.tr)
+        stringRep += ", sc=" + str(self.sc) + ")"
+
+        return stringRep
 
 
     @property
@@ -156,7 +160,8 @@ class Xfo(MathObject):
 
         """
 
-        self._rtval.set('', ks.rtVal('Vec3', tr), ks.rtVal('Quat', ori), ks.rtVal('Vec3', sc))
+        self._rtval.set('', ks.rtVal('Vec3', tr), ks.rtVal('Quat', ori),
+                        ks.rtVal('Vec3', sc))
 
         return True
 
@@ -286,8 +291,8 @@ class Xfo(MathObject):
 
 
     def linearInterpolate(self, other, t):
-        """Linearly interpolates this transform with another one based on a scalar
-        blend value (0.0 to 1.0).
+        """Linearly interpolates this transform with another one based on a
+        scalar blend value (0.0 to 1.0).
 
         Arguments:
         other -- Xfo, transform to blend to.
@@ -298,7 +303,8 @@ class Xfo(MathObject):
 
         """
 
-        return Xfo(self._rtval.linearInterpolate('Xfo', ks.rtVal('Xfo', other), ks.rtVal('Scalar', t)))
+        return Xfo(self._rtval.linearInterpolate('Xfo', ks.rtVal('Xfo', other),
+                                                 ks.rtVal('Scalar', t)))
 
 
     def setFromVectors(self, inVec1, inVec2, inVec3, translation):
@@ -327,7 +333,8 @@ class Xfo(MathObject):
 # Helper Methods
 # ===============
 def xfoFromDirAndUpV(base, target, upV):
-    """Creates a transform for base object pointing to target with an upvector upV..
+    """Creates a transform for base object pointing to target with an upvector
+    upV.
 
     Arguments:
     base -- Vec3, base vec3 to use in calculation.
@@ -347,4 +354,3 @@ def xfoFromDirAndUpV(base, target, upV):
     outXfo.setFromVectors(rootToTarget, normal, zAxis, base)
 
     return outXfo
-

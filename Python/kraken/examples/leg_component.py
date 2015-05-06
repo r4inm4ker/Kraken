@@ -12,14 +12,14 @@ from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
 from kraken.core.objects.locator import Locator
 from kraken.core.objects.joint import Joint
-from kraken.core.objects.srtBuffer import SrtBuffer
+from kraken.core.objects.ctrlSpace import CtrlSpace
 from kraken.core.objects.control import Control
 
 from kraken.core.objects.operators.splice_operator import SpliceOperator
 
-
-from kraken.helpers.utility_methods import logHierarchy
 from kraken.core.profiler import Profiler
+from kraken.helpers.utility_methods import logHierarchy
+
 
 class LegComponent(Component):
     """Leg Component"""
@@ -58,10 +58,10 @@ class LegComponent(Component):
 
 
         # Femur
-        femurFKCtrlSrtBuffer = SrtBuffer('femurFK', parent=self)
-        femurFKCtrlSrtBuffer.xfo = femurXfo
+        femurFKCtrlSpace = CtrlSpace('femurFK', parent=self)
+        femurFKCtrlSpace.xfo = femurXfo
 
-        femurFKCtrl = Control('femurFK', parent=femurFKCtrlSrtBuffer, shape="cube")
+        femurFKCtrl = Control('femurFK', parent=femurFKCtrlSpace, shape="cube")
         femurFKCtrl.alignOnXAxis()
         femurLen = femurPosition.subtract(kneePosition).length()
         femurFKCtrl.scalePoints(Vec3(femurLen, 1.75, 1.75))
@@ -69,10 +69,10 @@ class LegComponent(Component):
 
 
         # Shin
-        shinFKCtrlSrtBuffer = SrtBuffer('shinFK', parent=femurFKCtrl)
-        shinFKCtrlSrtBuffer.xfo = shinXfo
+        shinFKCtrlSpace = CtrlSpace('shinFK', parent=femurFKCtrl)
+        shinFKCtrlSpace.xfo = shinXfo
 
-        shinFKCtrl = Control('shinFK', parent=shinFKCtrlSrtBuffer, shape="cube")
+        shinFKCtrl = Control('shinFK', parent=shinFKCtrlSpace, shape="cube")
         shinFKCtrl.alignOnXAxis()
         shinLen = kneePosition.subtract(anklePosition).length()
         shinFKCtrl.scalePoints(Vec3(shinLen, 1.5, 1.5))
@@ -80,10 +80,10 @@ class LegComponent(Component):
 
 
         # Ankle
-        legIKCtrlSrtBuffer = SrtBuffer('IK', parent=self)
-        legIKCtrlSrtBuffer.xfo.tr = anklePosition
+        legIKCtrlSpace = CtrlSpace('IK', parent=self)
+        legIKCtrlSpace.xfo.tr = anklePosition
 
-        legIKCtrl = Control('IK', parent=legIKCtrlSrtBuffer, shape="pin")
+        legIKCtrl = Control('IK', parent=legIKCtrlSpace, shape="pin")
         legIKCtrl.xfo.tr = anklePosition
 
         if self.getLocation() == "R":
@@ -125,10 +125,10 @@ class LegComponent(Component):
         upVOffset = Vec3(0, 0, 5)
         upVOffset = upVXfo.transformVector(upVOffset)
 
-        legUpVCtrlSrtBuffer = SrtBuffer('UpV', parent=self)
-        legUpVCtrlSrtBuffer.xfo.tr = upVOffset
+        legUpVCtrlSpace = CtrlSpace('UpV', parent=self)
+        legUpVCtrlSpace.xfo.tr = upVOffset
 
-        legUpVCtrl = Control('UpV', parent=legUpVCtrlSrtBuffer, shape="triangle")
+        legUpVCtrl = Control('UpV', parent=legUpVCtrlSpace, shape="triangle")
         legUpVCtrl.xfo.tr = upVOffset
         legUpVCtrl.alignOnZAxis()
         legUpVCtrl.rotatePoints(0, 0, 0)
@@ -208,7 +208,7 @@ class LegComponent(Component):
         legRootInputConstraint = PoseConstraint('_'.join([legIKCtrl.getName(), 'To', legPelvisInput.getName()]))
         legRootInputConstraint.setMaintainOffset(True)
         legRootInputConstraint.addConstrainer(legPelvisInput)
-        femurFKCtrlSrtBuffer.addConstraint(legRootInputConstraint)
+        femurFKCtrlSpace.addConstraint(legRootInputConstraint)
 
         # Constraint outputs
 
@@ -286,9 +286,6 @@ class LegComponent(Component):
 
         Profiler.getInstance().pop()
 
-    def buildRig(self, parent):
-        pass
 
 from kraken.core.kraken_system import KrakenSystem
 KrakenSystem.getInstance().registerComponent(LegComponent)
-

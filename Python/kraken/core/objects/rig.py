@@ -21,6 +21,16 @@ class Rig(Container):
 
 
     def loadRigDefinitionFile(self, filepath):
+        """Load a rig definition from a file on disk.
+
+        Arguments:
+        filepath -- string, the file path of the rig definition file.
+
+        Return:
+        True if successful.
+
+        """
+
         Profiler.getInstance().push("LoadRigDefinitionFile:" + filepath)
 
         if not os.path.exists(filepath):
@@ -31,17 +41,27 @@ class Rig(Container):
 
 
     def loadRigDefinition(self, jsonData):
+        """Load a rig definition from a JSON structure.
+
+        Arguments:
+        jsonData -- dict, the JSON data containing the rig definition.
+
+        Return:
+        True if successful.
+
+        """
 
         Profiler.getInstance().push("loadRigDefinition:" + self.getName())
 
         krakenSystem = KrakenSystem.getInstance()
 
-        def loadLayers(layersData):
+        def __loadLayers(layersData):
             for layerName in layersData:
                 layer = Layer(layerName, parent=self)
 
-        def loadComponents(componentsData):
-            Profiler.getInstance().push("loadComponents")
+
+        def __loadComponents(componentsData):
+            Profiler.getInstance().push("__loadComponents")
 
             for componentData in componentsData:
                 moduleName = '.'.join(componentData['class'].split('.')[:-1])
@@ -59,8 +79,9 @@ class Rig(Container):
             Profiler.getInstance().pop()
 
 
-        def makeConnections(connectionsData):
-            Profiler.getInstance().push("makeConnections")
+        def __makeConnections(connectionsData):
+
+            Profiler.getInstance().push("__makeConnections")
 
             for connectionData in connectionsData:
                 sourceComponentName, outputName = connectionData['source'].split('.')
@@ -82,16 +103,16 @@ class Rig(Container):
 
             Profiler.getInstance().pop()
 
+
         if 'layers' in jsonData:
-            loadLayers(jsonData['layers'])
+            __loadLayers(jsonData['layers'])
         else:
             raise Exception("A rig must define layers.")
 
         if 'components' in jsonData:
-            loadComponents(jsonData['components'])
+            __loadComponents(jsonData['components'])
 
             if 'connections' in jsonData:
-                makeConnections(jsonData['connections'])
-
+                __makeConnections(jsonData['connections'])
 
         Profiler.getInstance().pop()
