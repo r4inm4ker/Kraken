@@ -311,7 +311,8 @@ class SpineComponent(Component):
         self.spine04Ctrl.xfo.tr = spine04Position
 
         length = spine01Position.distanceTo(spine02Position) + spine02Position.distanceTo(spine03Position) + spine03Position.distanceTo(spine04Position)
-        self.lengthInputAttr
+        self.lengthInputAttr.setMax(length * 3.0)
+        self.lengthInputAttr.setValue(length)
 
         # ============
         # Set IO Xfos

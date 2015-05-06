@@ -11,7 +11,7 @@ Profiler.getInstance().push("spine_build")
 
 spineGuide = SpineComponentGuide("spine")
 spineGuide.loadData({
-                     "name": "Spine",
+                     "name": "spine",
                      "location": "M",
                      "cogPosition": Vec3(0.0, 11.1351, -0.1382),
                      "spine01Position": Vec3(0.0, 11.1351, -0.1382),
