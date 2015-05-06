@@ -5,10 +5,10 @@ ComponentGroup -- Hiearchy group representation.
 
 """
 
-from kraken.core.objects.scene_item import SceneItem
+from kraken.core.objects.object_3d import Object3D
 
 
-class ComponentGroup(SceneItem):
+class ComponentGroup(Object3D):
     """ComponentGroup object."""
 
     def __init__(self, name, parent=None):

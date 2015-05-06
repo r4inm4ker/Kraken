@@ -6,7 +6,7 @@ SpliceOperator - Splice operator object.
 """
 
 from kraken.core.maths import Mat44
-from kraken.core.objects.scene_item import SceneItem
+from kraken.core.objects.object_3d import Object3D
 from kraken.core.objects.operators.operator import Operator
 from kraken.core.objects.attributes.attribute import Attribute
 from kraken.core.kraken_system import ks

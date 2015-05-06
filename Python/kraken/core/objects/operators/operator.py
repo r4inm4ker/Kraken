@@ -5,10 +5,10 @@ Operator - Base operator object.
 
 """
 
-from kraken.core.objects.base_item import BaseItem
+from kraken.core.objects.scene_item import SceneItem
 
 
-class Operator(BaseItem):
+class Operator(SceneItem):
     """Operator representation."""
 
     def __init__(self, name, parent=None):

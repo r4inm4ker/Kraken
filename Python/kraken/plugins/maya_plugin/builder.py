@@ -9,7 +9,7 @@ import json
 
 from kraken.core.kraken_system import ks
 from kraken.core.builders.builder import Builder
-from kraken.core.objects.scene_item import SceneItem
+from kraken.core.objects.object_3d import Object3D
 from kraken.core.objects.attributes.attribute import Attribute
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 from kraken.plugins.maya_plugin.utils import *
