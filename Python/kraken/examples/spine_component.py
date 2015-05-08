@@ -4,6 +4,7 @@ from kraken.core.objects.components.component import Component
 
 from kraken.core.objects.attributes.attribute_group import AttributeGroup
 from kraken.core.objects.attributes.bool_attribute import BoolAttribute
+from kraken.core.objects.attributes.integer_attribute import IntegerAttribute
 from kraken.core.objects.attributes.float_attribute import FloatAttribute
 
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
@@ -36,6 +37,10 @@ class SpineComponentGuide(Component):
         self.spine03 = Control('spine03Position', parent=self, shape="sphere")
         self.spine04 = Control('spine04Position', parent=self, shape="sphere")
 
+        self.numDeformers = IntegerAttribute('numDeformers', 1)
+
+        self.addInput(self.numDeformers)
+
         self.loadData({
             "name": name,
             "location": "M",
@@ -66,7 +71,8 @@ class SpineComponentGuide(Component):
             "spine01Position": self.spine01.xfo.tr,
             "spine02Position": self.spine02.xfo.tr,
             "spine03Position": self.spine03.xfo.tr,
-            "spine04Position": self.spine04.xfo.tr
+            "spine04Position": self.spine04.xfo.tr,
+            "numDeformers": self.numDeformers.getValue()
             }
 
         return data
@@ -90,6 +96,7 @@ class SpineComponentGuide(Component):
         self.spine02.xfo.tr = data["spine02Position"]
         self.spine03.xfo.tr = data["spine03Position"]
         self.spine04.xfo.tr = data["spine04Position"]
+        self.numDeformers.setValue(data["numDeformers"])
 
         return True
 
@@ -112,7 +119,8 @@ class SpineComponentGuide(Component):
                 "spine01Position": self.spine01.xfo.tr,
                 "spine02Position": self.spine02.xfo.tr,
                 "spine03Position": self.spine03.xfo.tr,
-                "spine04Position": self.spine04.xfo.tr
+                "spine04Position": self.spine04.xfo.tr,
+                "numDeformers": self.numDeformers.getValue()
                }
 
 
@@ -135,9 +143,9 @@ class SpineComponent(Component):
         cmpInputAttrGrp = AttributeGroup('inputs')
         inputHrcGrp.addAttributeGroup(cmpInputAttrGrp)
 
-        outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
+        self.outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
         cmpOutputAttrGrp = AttributeGroup('outputs')
-        outputHrcGrp.addAttributeGroup(cmpOutputAttrGrp)
+        self.outputHrcGrp.addAttributeGroup(cmpOutputAttrGrp)
 
         # COG
         self.cogCtrlSpace = CtrlSpace('cog', parent=ctrlCmpGrp)
@@ -177,29 +185,19 @@ class SpineComponent(Component):
         # Deformers
         # ==========
         deformersLayer = self.getOrCreateLayer('deformers')
-        defCmpGrp = ComponentGroup(self.getName(), parent=deformersLayer)
+        self.defCmpGrp = ComponentGroup(self.getName(), parent=deformersLayer)
 
         self.deformerJoints = []
-        for i in xrange(6):
-            name = 'spine' + str(i + 1).zfill(2)
-            spineDef = Joint(name, parent=defCmpGrp)
-            spineDef.setComponent(self)
-            self.deformerJoints.append(spineDef)
+        self.spineOutputs = []
+        self.setNumDeformers(1)
 
         # =====================
         # Create Component I/O
         # =====================
         # Setup component Xfo I/O's
 
-
-        self.spineOutputs = []
-        for i in xrange(6):
-            name = 'spine' + str(i + 1).zfill(2)
-            spineOutput = Locator(name, parent=outputHrcGrp)
-            self.spineOutputs.append(spineOutput)
-
-        spineBaseOutput = Locator('spineBase', parent=outputHrcGrp)
-        spineEndOutput = Locator('spineEnd', parent=outputHrcGrp)
+        spineBaseOutput = Locator('spineBase', parent=self.outputHrcGrp)
+        spineEndOutput = Locator('spineEnd', parent=self.outputHrcGrp)
 
         # Setup componnent Attribute I/O's
         debugInputAttr = BoolAttribute('debug', True)
@@ -216,13 +214,13 @@ class SpineComponent(Component):
         # Constraint inputs
 
         # Constraint outputs
-        spineBaseOutputConstraint = PoseConstraint('_'.join([spineBaseOutput.getName(), 'To', 'spineBase']))
-        spineBaseOutputConstraint.addConstrainer(self.spineOutputs[0])
-        spineBaseOutput.addConstraint(spineBaseOutputConstraint)
+        self.spineBaseOutputConstraint = PoseConstraint('_'.join([spineBaseOutput.getName(), 'To', 'spineBase']))
+        self.spineBaseOutputConstraint.addConstrainer(self.spineOutputs[0])
+        spineBaseOutput.addConstraint(self.spineBaseOutputConstraint)
 
-        spineEndOutputConstraint = PoseConstraint('_'.join([spineEndOutput.getName(), 'To', 'spineEnd']))
-        spineEndOutputConstraint.addConstrainer(self.spineOutputs[len(self.spineOutputs)-1])
-        spineEndOutput.addConstraint(spineEndOutputConstraint)
+        self.spineEndOutputConstraint = PoseConstraint('_'.join([spineEndOutput.getName(), 'To', 'spineEnd']))
+        self.spineEndOutputConstraint.addConstrainer(self.spineOutputs[0])
+        spineEndOutput.addConstraint(self.spineEndOutputConstraint)
 
 
         # ==================
@@ -283,6 +281,21 @@ class SpineComponent(Component):
         Profiler.getInstance().pop()
 
 
+    def setNumDeformers(self, numDeformers):
+
+        # Add new deformers and outputs
+        for i in xrange(len(self.deformerJoints), numDeformers):
+            name = 'spine' + str(i + 1).zfill(2)
+            spineDef = Joint(name, parent=self.defCmpGrp)
+            spineDef.setComponent(self)
+            self.deformerJoints.append(spineDef)
+
+        for i in xrange(len(self.outputs), numDeformers):
+            name = 'spine' + str(i + 1).zfill(2)
+            spineOutput = Locator(name, parent=self.outputHrcGrp)
+            self.spineOutputs.append(spineOutput)
+
+
     def loadData(self, data=None):
 
         self.setName(data.get('name', 'Spine'))
@@ -294,6 +307,7 @@ class SpineComponent(Component):
         spine02Position = data['spine02Position']
         spine03Position = data['spine03Position']
         spine04Position = data['spine04Position']
+        numDeformers = data['numDeformers']
 
         self.cogCtrlSpace.xfo.tr = cogPosition
         self.cogCtrl.xfo.tr = cogPosition
@@ -313,6 +327,12 @@ class SpineComponent(Component):
         length = spine01Position.distanceTo(spine02Position) + spine02Position.distanceTo(spine03Position) + spine03Position.distanceTo(spine04Position)
         self.lengthInputAttr.setMax(length * 3.0)
         self.lengthInputAttr.setValue(length)
+
+        # Update number of deformers and outputs
+        self.setNumDeformers(numDeformers)
+
+        # Updating constraint to use the updated last output.
+        self.spineEndOutputConstraint.setConstrainer(self.spineOutputs[-1], index=0)
 
         # ============
         # Set IO Xfos
