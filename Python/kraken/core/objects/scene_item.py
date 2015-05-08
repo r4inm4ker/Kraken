@@ -84,6 +84,14 @@ class SceneItem(object):
 
         """
 
+        # Check for existing objects with that name and type.
+        parent = self.getParent()
+        if parent is not None:
+            foundChild = parent.findChild(name, childType=self.getTypeName())
+            if foundChild is not None:
+                raise Exception("Child with the same name already exists: '" +
+                                name + "'")
+
         self.name = name
 
         return True

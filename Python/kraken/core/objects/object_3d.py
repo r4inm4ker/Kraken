@@ -158,6 +158,8 @@ class Object3D(SceneItem):
     def addChild(self, child):
         """Adds a child to this object.
 
+        We allow for duplicate child names as long as the types differ.
+
         Arguments:
         child -- Object, object that will be a child of this object.
 
@@ -166,22 +168,10 @@ class Object3D(SceneItem):
 
         """
 
-        # TODO: Attempted to check for types, but still running into issues
-        # throughout the hierarchy. Need to find a better solution. Possibly have
-        # the children attribute a dictionary sorted by types and check there. But
-        # will still run into clashes. Need another differentiating attribute on
-        # all objects.
-
-        # if child.getName() in [x.getName() for x in self.children]:
-
-        #     if child.isTypeOf("BaseComponent"):
-        #         existingChild = self.getChildByName(child.getName())
-        #         if child.getTypeName() == existingChild.getTypeName() and child.getLocation() == existingChild.getLocation():
-        #             raise NameError("Child with name '" + child.getFullName() + "', type: '" + child.getTypeName() + "', and location: '" + child.getLocation() + "' already exists.")
-        #     else:
-        #         existingChild = self.getChildByName(child.getName())
-        #         if child.getTypeName() == existingChild.getTypeName():
-        #             raise NameError("Child with name '" + child.getFullName() + "' and type: '" + child.getTypeName() + "' already exists.")
+        foundChild = self.findChild(child.getName(), childType=child.getTypeName())
+        if foundChild is not None:
+            raise Exception("Child with the same name already exists: '" +
+                            child.getName() + "'")
 
         if child.getParent() is not None:
             parent = child.getParent()
@@ -306,12 +296,13 @@ class Object3D(SceneItem):
         return childrenOfType
 
 
-    def findChild(self, name, targetObj=None):
+    def findChild(self, name, childType=None, targetObj=None):
         """Finds a child by recursively searching the hierarhcy for a child with
         the given name.
 
         Arguments:
         name -- String, name of the child to find.
+        childType -- String, type of object to find.
         targetObj -- Object, object to search under. Used for recursive searching.
 
         Return:
@@ -328,10 +319,10 @@ class Object3D(SceneItem):
         for i in xrange(targetObj.getNumChildren()):
             child = targetObj.getChildByIndex(i)
 
-            if child.getName() == name:
+            if child.getName() == name and child.getTypeName() == childType:
                 foundChild = child
             else:
-                foundChild = self.findChild(name, child)
+                foundChild = self.findChild(name, childType=childType, targetObj=child)
 
             if foundChild is not None:
                 break
