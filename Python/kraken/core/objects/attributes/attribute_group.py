@@ -14,6 +14,7 @@ class AttributeGroup(SceneItem):
         super(AttributeGroup, self).__init__(name, parent)
         self.attributes = []
 
+
     # ==================
     # Attribute Methods
     # ==================
