@@ -6,7 +6,7 @@ Component -- Component representation.
 """
 
 from kraken.core.maths import *
-from kraken.core.objects.scene_item import SceneItem
+from kraken.core.objects.object_3d import Object3D
 from kraken.core.objects.layer import Layer
 from kraken.core.objects.hierarchy_group import HierarchyGroup
 from kraken.core.objects.locator import Locator
@@ -16,7 +16,7 @@ from kraken.core.objects.attributes.attribute_group import AttributeGroup
 from kraken.core.objects.attributes.attribute import Attribute
 
 
-class Component(SceneItem):
+class Component(Object3D):
     """Kraken Component object."""
 
     def __init__(self, name, parent=None, location='M'):
@@ -310,16 +310,16 @@ class Component(SceneItem):
 
         """
 
-        if not isinstance(outputObject, (SceneItem, Attribute)):
+        if not isinstance(outputObject, (Object3D, Attribute)):
             raise Exception("'outputObject' argument is not a valid object. "
                 + outputObject.getName() + " is of type:" + str(outputObject)
-                + ". Must be an instance of 'SceneItem' or 'Attribute'.")
+                + ". Must be an instance of 'Object3D' or 'Attribute'.")
 
         if outputObject in self.outputs:
             raise Exception("'outputObject' argument is already an output! Invalid object: '"
                 + outputObject.getName() + "'")
 
-        if isinstance(outputObject, SceneItem):
+        if isinstance(outputObject, Object3D):
             outputObject.setFlag("outputObject")
             outputObject.setShapeVisibility(False)
 

@@ -5,10 +5,10 @@ Layer - Layer object that gets added to containers for organizing the rig.
 
 """
 
-from kraken.core.objects.scene_item import SceneItem
+from kraken.core.objects.object_3d import Object3D
 
 
-class Layer(SceneItem):
+class Layer(Object3D):
     """Layer object."""
 
     def __init__(self, name, parent=None):

@@ -7,7 +7,7 @@ KrakenLoader - Factory for building SceneItems.
 
 from kraken.core.maths import Vec2, Vec3, Vec4, Euler, Quat, Xfo, Mat33, Mat44
 
-from kraken.core.objects.scene_item import SceneItem
+from kraken.core.objects.object_3d import Object3D
 from kraken.core.objects.container import Container
 from kraken.core.objects.curve import Curve
 from kraken.core.objects.hierarchy_group import HierarchyGroup

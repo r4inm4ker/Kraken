@@ -5,10 +5,10 @@ Attribute - Base Attribute.
 
 """
 
-from kraken.core.objects.base_item import BaseItem
+from kraken.core.objects.scene_item import SceneItem
 
 
-class Attribute(BaseItem):
+class Attribute(SceneItem):
     """Attribute object."""
 
     def __init__(self, name, value, parent=None):

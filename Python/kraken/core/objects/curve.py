@@ -7,10 +7,10 @@ Curve - Curve.
 
 import copy
 
-from kraken.core.objects.scene_item import SceneItem
+from kraken.core.objects.object_3d import Object3D
 
 
-class Curve(SceneItem):
+class Curve(Object3D):
     """Curve object."""
 
     def __init__(self, name, parent=None):

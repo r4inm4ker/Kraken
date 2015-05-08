@@ -5,9 +5,9 @@ AttributeGroup - Attribute Group.
 
 """
 
-from kraken.core.objects.base_item import BaseItem
+from kraken.core.objects.scene_item import SceneItem
 
-class AttributeGroup(BaseItem):
+class AttributeGroup(SceneItem):
     """Attribute Group that attributes belong to."""
 
     def __init__(self, name, parent=None):
