@@ -12,7 +12,7 @@ from kraken.core.kraken_system import ks
 class IntegerAttribute(NumberAttribute):
     """Float Attribute. Implemented value type checking and limiting."""
 
-    def __init__(self, name, value=0, minValue=None, maxValue=None):
+    def __init__(self, name, value=0, minValue=None, maxValue=None, keyable=None):
         super(IntegerAttribute, self).__init__(name, value, minValue=minValue,
               maxValue=maxValue)
 
@@ -28,7 +28,7 @@ class IntegerAttribute(NumberAttribute):
             else:
                 self.setMax(value * 3)
 
-        assert type(self.value) is int, "Value is not of type 'int'."
+        assert type(self._value) is int, "Value is not of type 'int'."
 
 
     def setValue(self, value):
@@ -45,9 +45,9 @@ class IntegerAttribute(NumberAttribute):
         if type(value) not in (int):
             raise TypeError("Value is not of type 'int'.")
 
-        if value < self.min:
+        if value < self._min:
             raise ValueError("Value is less than attribute minimum.")
-        elif value > self.max:
+        elif value > self._max:
             raise ValueError("Value is greater than attribute maximum.")
 
         super(IntegerAttribute, self).setValue(value)
@@ -62,4 +62,4 @@ class IntegerAttribute(NumberAttribute):
         RTVal
 
         """
-        return ks.rtVal('Integer', self.value)
+        return ks.rtVal('Integer', self._value)
