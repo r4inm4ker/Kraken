@@ -116,6 +116,13 @@ class Rig(Container):
         Profiler.getInstance().pop()
 
     def getGuideData(self):
+        """Get the graph definition of the guide for biulding the final rig.
+        
+        Return:
+        The JSON data struture of the guide rig data
+        
+        """
+        
 
         jsonData = {
             'name': self.getName()
