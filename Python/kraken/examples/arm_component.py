@@ -26,7 +26,7 @@ from kraken.helpers.utility_methods import logHierarchy
 class ArmComponentGuide(Component):
     """Arm Component Guide"""
 
-    def __init__(self, name='Arm', parent=None):
+    def __init__(self, name='Arm', parent=None, data=None):
         super(ArmComponentGuide, self).__init__(name, parent)
 
         self.bicep = Control('bicepFK', parent=self, shape="sphere")
@@ -39,7 +39,8 @@ class ArmComponentGuide(Component):
         self.addInput(self.bicepFKCtrlSizeInputAttr)
         self.addInput(self.forearmFKCtrlSizeInputAttr)
 
-        self.loadData({
+        if data is None:
+            data = {
             "name": name,
             "location": "L",
             "bicepXfo": Xfo(Vec3(2.27, 15.295, -0.753)),
@@ -47,7 +48,8 @@ class ArmComponentGuide(Component):
             "wristXfo": Xfo(Vec3(7.1886, 12.2819, 0.4906)),
             "bicepFKCtrlSize": 1.75,
             "forearmFKCtrlSize": 1.5
-        })
+        }
+        self.loadData(data)
 
 
     # =============
@@ -86,8 +88,8 @@ class ArmComponentGuide(Component):
         True if successful.
 
         """
-
-        self.setName(data['name'])
+        if 'name' in data:
+            self.setName(data['name'])
         self.setLocation(data['location'])
         self.bicep.xfo = data['bicepXfo']
         self.forearm.xfo = data['forearmXfo']
@@ -170,7 +172,7 @@ class ArmComponent(Component):
         # Controls
         # =========
         controlsLayer = self.getOrCreateLayer('controls')
-        ctrlCmpGrp = ComponentGroup(self.getName(), parent=controlsLayer)
+        ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
 
         # IO Hierarchies
         inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
@@ -231,7 +233,7 @@ class ArmComponent(Component):
         # Deformers
         # ==========
         deformersLayer = self.getOrCreateLayer('deformers')
-        defCmpGrp = ComponentGroup(self.getName(), parent=deformersLayer)
+        defCmpGrp = ComponentGroup(self.getName(), self, parent=deformersLayer)
 
         bicepDef = Joint('bicep', parent=defCmpGrp)
         bicepDef.setComponent(self)

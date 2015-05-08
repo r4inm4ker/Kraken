@@ -139,7 +139,7 @@ class InsectLegComponent(Component):
         # Controls
         # =========
         controlsLayer = self.getOrCreateLayer('controls')
-        ctrlCmpGrp = ComponentGroup(self.getName(), parent=controlsLayer)
+        ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
 
         # IO Hierarchies
         inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
@@ -199,7 +199,7 @@ class InsectLegComponent(Component):
         # Deformers
         # ==========
         deformersLayer = self.getOrCreateLayer('deformers')
-        defCmpGrp = ComponentGroup(self.getName(), parent=deformersLayer)
+        defCmpGrp = ComponentGroup(self.getName(), self, parent=deformersLayer)
 
         self.boneDefs = []
         for i in xrange(4):

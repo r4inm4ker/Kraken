@@ -24,16 +24,18 @@ from kraken.helpers.utility_methods import logHierarchy
 class FootComponentGuide(Component):
     """Foot Component Guide"""
 
-    def __init__(self, name='Foot', parent=None):
+    def __init__(self, name='Foot', parent=None, data=None):
         super(FootComponentGuide, self).__init__(name, parent)
 
         self.foot = Control('foot', parent=self, shape="sphere")
 
-        self.loadData({
+        if data is None:
+            data = {
             "name": name,
             "location": "L",
             "footXfo": Xfo(tr=Vec3(1.841, 1.1516, -1.237), ori=Quat(Vec3(0.6377, -0.5695, 0.3053), 0.4190))
-        })
+        }
+        self.loadData(data)
 
 
     # =============
@@ -67,7 +69,8 @@ class FootComponentGuide(Component):
 
         """
 
-        self.setName(data['name'])
+        if 'name' in data:
+            self.setName(data['name'])
         self.setLocation(data['location'])
         self.foot.xfo = data['footXfo']
 
@@ -105,7 +108,7 @@ class FootComponent(Component):
         # Controls
         # =========
         controlsLayer = self.getOrCreateLayer('controls')
-        ctrlCmpGrp = ComponentGroup(self.getName(), parent=controlsLayer)
+        ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
 
         # IO Hierarchies
         inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
@@ -141,7 +144,7 @@ class FootComponent(Component):
         # Deformers
         # ==========
         deformersLayer = self.getOrCreateLayer('deformers')
-        defCmpGrp = ComponentGroup(self.getName(), parent=deformersLayer)
+        defCmpGrp = ComponentGroup(self.getName(), self, parent=deformersLayer)
 
         footDef = Joint('foot', parent=defCmpGrp)
         footDef.setComponent(self)

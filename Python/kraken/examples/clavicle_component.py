@@ -25,20 +25,22 @@ from kraken.helpers.utility_methods import logHierarchy
 class ClavicleComponentGuide(Component):
     """Clavicle Component Guide"""
 
-    def __init__(self, name='Clavicle', parent=None):
+    def __init__(self, name='Clavicle', parent=None, data=None):
         super(ClavicleComponentGuide, self).__init__(name, parent)
 
         self.clavicle = Control('clavicle', parent=self, shape="sphere")
         self.clavicleUpV = Control('clavicleUpV', parent=self, shape="sphere")
         self.clavicleEnd = Control('clavicleEnd', parent=self, shape="sphere")
 
-        self.loadData({
+        if data is None:
+            data = {
             "name": name,
             "location": "L",
             "clavicleXfo": Xfo(Vec3(0.1322, 15.403, -0.5723)),
             "clavicleUpVXfo": Xfo(Vec3(0.0, 1.0, 0.0)),
             "clavicleEndXfo": Xfo(Vec3(2.27, 15.295, -0.753))
-        })
+        }
+        self.loadData(data)
 
 
     # =============
@@ -74,7 +76,8 @@ class ClavicleComponentGuide(Component):
 
         """
 
-        self.setName(data['name'])
+        if 'name' in data:
+            self.setName(data['name'])
         self.setLocation(data['location'])
         self.clavicle.xfo = data['clavicleXfo']
         self.clavicleUpV.xfo = data['clavicleUpVXfo']
@@ -128,8 +131,8 @@ class ClavicleComponent(Component):
         # Controls
         # =========
         controlsLayer = self.getOrCreateLayer('controls')
-        ctrlCmpGrp = ComponentGroup(self.getName(), parent=controlsLayer)
-
+        ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
+        
         # IO Hierarchies
         inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
         cmpInputAttrGrp = AttributeGroup('inputs')
@@ -149,7 +152,8 @@ class ClavicleComponent(Component):
         # Deformers
         # ==========
         deformersLayer = self.getOrCreateLayer('deformers')
-        defCmpGrp = ComponentGroup(self.getName(), parent=deformersLayer)
+        defCmpGrp = ComponentGroup(self.getName(), self, parent=deformersLayer)
+        ctrlCmpGrp.setComponent(self)
 
         self.clavicleDef = Joint('clavicle', parent=defCmpGrp)
         self.clavicleDef.setComponent(self)

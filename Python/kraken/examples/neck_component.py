@@ -24,18 +24,20 @@ from kraken.helpers.utility_methods import logHierarchy
 class NeckComponentGuide(Component):
     """Neck Component Guide"""
 
-    def __init__(self, name='Neck', parent=None):
+    def __init__(self, name='Neck', parent=None, data=None):
         super(NeckComponentGuide, self).__init__(name, parent)
 
         self.neck = Control('neck', parent=self, shape="sphere")
         self.neckEnd = Control('neckEnd', parent=self, shape="sphere")
 
-        self.loadData({
+        if data is None:
+            data = {
             "name": name,
             "location": "M",
             "neckPosition": Vec3(0.0, 16.5572, -0.6915),
             "neckEndPosition": Vec3(0.0, 17.4756, -0.421)
-        })
+        }
+        self.loadData(data)
 
 
     # =============
@@ -70,7 +72,8 @@ class NeckComponentGuide(Component):
 
         """
 
-        self.setName(data['name'])
+        if 'name' in data:
+            self.setName(data['name'])
         self.setLocation(data['location'])
         self.neck.xfo.tr = data['neckPosition']
         self.neckEnd.xfo.tr = data['neckEndPosition']
@@ -120,7 +123,8 @@ class NeckComponent(Component):
         # Controls
         # =========
         controlsLayer = self.getOrCreateLayer('controls')
-        ctrlCmpGrp = ComponentGroup(self.getName(), parent=controlsLayer)
+        ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
+        ctrlCmpGrp.setComponent(self)
 
         # IO Hierarchies
         inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
@@ -145,7 +149,7 @@ class NeckComponent(Component):
         # Deformers
         # ==========
         deformersLayer = self.getOrCreateLayer('deformers')
-        defCmpGrp = ComponentGroup(self.getName(), parent=deformersLayer)
+        defCmpGrp = ComponentGroup(self.getName(), self, parent=deformersLayer)
 
         neckDef = Joint('neck', parent=defCmpGrp)
         neckDef.setComponent(self)

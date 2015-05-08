@@ -106,7 +106,7 @@ class HandComponent(Component):
         # Controls
         # =========
         controlsLayer = self.getOrCreateLayer('controls')
-        ctrlCmpGrp = ComponentGroup(self.getName(), parent=controlsLayer)
+        ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
 
         # IO Hierarchies
         inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
@@ -143,7 +143,7 @@ class HandComponent(Component):
         # Deformers
         # ==========
         deformersLayer = self.getOrCreateLayer('deformers')
-        defCmpGrp = ComponentGroup(self.getName(), parent=deformersLayer)
+        defCmpGrp = ComponentGroup(self.getName(), self, parent=deformersLayer)
 
         handDef = Joint('hand', parent=defCmpGrp)
         handDef.setComponent(self)

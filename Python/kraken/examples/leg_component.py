@@ -26,20 +26,22 @@ from kraken.helpers.utility_methods import logHierarchy
 class LegComponentGuide(Component):
     """Leg Component Guide"""
 
-    def __init__(self, name='Leg', parent=None):
+    def __init__(self, name='Leg', parent=None, data=None):
         super(LegComponentGuide, self).__init__(name, parent)
 
         self.femur = Control('femur', parent=self, shape="sphere")
         self.knee = Control('knee', parent=self, shape="sphere")
         self.ankle = Control('ankle', parent=self, shape="sphere")
 
-        self.loadData({
+        if data is None:
+            data = {
                        "name": name,
                        "location": "L",
                        "femurXfo": Xfo(Vec3(0.9811, 9.769, -0.4572)),
                        "kneeXfo": Xfo(Vec3(1.4488, 5.4418, -0.5348)),
                        "ankleXfo": Xfo(Vec3(1.841, 1.1516, -1.237))
-                      })
+                      }
+        self.loadData(data)
 
 
     # =============
@@ -77,7 +79,8 @@ class LegComponentGuide(Component):
 
         """
 
-        self.setName(data['name'])
+        if 'name' in data:
+            self.setName(data['name'])
         self.setLocation(data['location'])
         self.femur.xfo = data['femurXfo']
         self.knee.xfo = data['kneeXfo']
@@ -154,7 +157,7 @@ class LegComponent(Component):
         # Controls
         # =========
         controlsLayer = self.getOrCreateLayer('controls')
-        ctrlCmpGrp = ComponentGroup(self.getName(), parent=controlsLayer)
+        ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
 
         # IO Hierarchies
         inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
@@ -224,7 +227,7 @@ class LegComponent(Component):
         # Deformers
         # ==========
         deformersLayer = self.getOrCreateLayer('deformers')
-        defCmpGrp = ComponentGroup(self.getName(), parent=deformersLayer)
+        defCmpGrp = ComponentGroup(self.getName(), self, parent=deformersLayer)
 
         femurDef = Joint('femur', parent=defCmpGrp)
         femurDef.setComponent(self)
