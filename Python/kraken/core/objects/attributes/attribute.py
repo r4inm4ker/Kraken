@@ -58,6 +58,20 @@ class Attribute(SceneItem):
         raise Exception("getRTVal must be implemented by concrete attribute classes")
 
 
+    def validateValue(self, value):
+        """Validates the incoming value is the correct type.
+
+        Arguments:
+        value -- Type, value to check the type of.
+
+        Return:
+        True if successful.
+
+        """
+
+        return True
+
+
     # ===================
     # Connection Methods
     # ===================
