@@ -26,7 +26,7 @@ from kraken.helpers.utility_methods import logHierarchy
 class SpineComponentGuide(Component):
     """Spine Component Guide"""
 
-    def __init__(self, name='Spine', parent=None):
+    def __init__(self, name='spine', parent=None):
         super(SpineComponentGuide, self).__init__(name, parent)
 
         self.cog = Control('cogPosition', parent=self, shape="sphere")
@@ -91,7 +91,7 @@ class SpineComponentGuide(Component):
 
         if 'name' in data:
             self.setName(data['name'])
-        self.setLocation(data['location'])
+        self.setLocation(data.get('location', 'M'))
         self.cog.xfo.tr = data["cogPosition"]
         self.spine01.xfo.tr = data["spine01Position"]
         self.spine02.xfo.tr = data["spine02Position"]
@@ -123,6 +123,10 @@ class SpineComponentGuide(Component):
                 "spine04Position": self.spine04.xfo.tr,
                 "numDeformers": self.numDeformers.getValue()
                }
+
+
+from kraken.core.kraken_system import KrakenSystem
+KrakenSystem.getInstance().registerComponent(SpineComponentGuide)
 
 
 class SpineComponent(Component):

@@ -145,6 +145,12 @@ class LegComponentGuide(Component):
                }
 
 
+
+from kraken.core.kraken_system import KrakenSystem
+KrakenSystem.getInstance().registerComponent(LegComponentGuide)
+
+
+
 class LegComponent(Component):
     """Leg Component"""
 

@@ -119,6 +119,11 @@ class ClavicleComponentGuide(Component):
                 }
 
 
+from kraken.core.kraken_system import KrakenSystem
+KrakenSystem.getInstance().registerComponent(ClavicleComponentGuide)
+
+
+
 class ClavicleComponent(Component):
     """Clavicle Component"""
 

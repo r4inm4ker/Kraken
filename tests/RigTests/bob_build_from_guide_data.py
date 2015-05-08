@@ -9,8 +9,12 @@ from kraken.helpers.utility_methods import logHierarchy
 
 Profiler.getInstance().push("bob_build")
 
-bobRig = Rig("char_bob")
-bobRig.loadRigDefinition(bob_guide_data)
+bobGuideRig = Rig("char_bob")
+bobGuideRig.loadRigDefinition(bob_guide_data)
+
+bobRigData = bobGuideRig.getGuideData()
+bobRig = Rig()
+bobRig.loadRigDefinition(bobRigData)
 
 builder = plugins.getBuilder()
 builder.build(bobRig)
