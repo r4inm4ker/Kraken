@@ -27,6 +27,35 @@ class NeckComponentGuide(Component):
     def __init__(self, name='neck', parent=None, data=None):
         super(NeckComponentGuide, self).__init__(name, parent)
 
+
+        # ==================
+        # Add Component I/O
+        # ==================
+        
+        controlsLayer = self.getOrCreateLayer('controls')
+        ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
+        ctrlCmpGrp.setComponent(self)
+
+        # IO Hierarchies
+        inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
+        cmpInputAttrGrp = AttributeGroup('inputs')
+        inputHrcGrp.addAttributeGroup(cmpInputAttrGrp)
+
+        outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
+        cmpOutputAttrGrp = AttributeGroup('outputs')
+        outputHrcGrp.addAttributeGroup(cmpOutputAttrGrp)
+
+
+        # Add Xfo I/O's
+        self.neckEndInput = Locator('neckBase', parent=inputHrcGrp)
+        self.neckEndOutput = Locator('neckEnd', parent=outputHrcGrp)
+        self.neckOutput = Locator('neck', parent=outputHrcGrp)
+
+        self.addInput(self.neckEndInput)
+        self.addOutput(self.neckEndOutput)
+        self.addOutput(self.neckOutput)
+
+
         self.neck = Control('neck', parent=self, shape="sphere")
         self.neckEnd = Control('neckEnd', parent=self, shape="sphere")
 

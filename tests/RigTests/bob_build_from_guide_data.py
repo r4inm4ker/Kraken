@@ -13,16 +13,17 @@ bobGuideRig = Rig("char_bob")
 bobGuideRig.loadRigDefinition(bob_guide_data)
 
 bobRigData = bobGuideRig.getGuideData()
+print bobRigData
 bobRig = Rig()
 bobRig.loadRigDefinition(bobRigData)
 
-builder = plugins.getBuilder()
-builder.build(bobRig)
+# builder = plugins.getBuilder()
+# builder.build(bobRig)
 
-Profiler.getInstance().pop()
+# Profiler.getInstance().pop()
 
-if __name__ == "__main__":
-    print json.dumps(Profiler.getInstance().generateReport(),
-                     sort_keys=False, indent=4, separators=(',', ': '))
-else:
-    logHierarchy(bobRig)
+# if __name__ == "__main__":
+#     print json.dumps(Profiler.getInstance().generateReport(),
+#                      sort_keys=False, indent=4, separators=(',', ': '))
+# else:
+#     logHierarchy(bobRig)

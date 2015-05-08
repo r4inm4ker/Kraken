@@ -31,6 +31,18 @@ class SpineComponentGuide(Component):
 
         self.cog = Control('cogPosition', parent=self, shape="sphere")
         self.cog.setColor("red")
+        
+        controlsLayer = self.getOrCreateLayer('controls')
+        ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
+
+        # Input and Outputs
+        self.outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
+        spineBaseOutput = Locator('spineBase', parent=self.outputHrcGrp)
+        spineEndOutput = Locator('spineEnd', parent=self.outputHrcGrp)
+
+        self.addOutput(spineBaseOutput)
+        self.addOutput(spineEndOutput)
+
 
         self.spine01 = Control('spine01Position', parent=self, shape="sphere")
         self.spine02 = Control('spine02Position', parent=self, shape="sphere")
