@@ -148,7 +148,7 @@ class SpliceOperator(Operator):
         """
 
         def getRTVal(obj):
-            if isinstance(obj, SceneItem):
+            if isinstance(obj, Object3D):
                 return obj.xfo.getRTVal().toMat44('Mat44')
             elif isinstance(obj, Attribute):
                 return obj.getRTVal()
@@ -179,7 +179,7 @@ class SpliceOperator(Operator):
 
         # Now put the computed values out to the connected output objects.
         def setRTVal(obj, rtval):
-            if isinstance(obj, SceneItem):
+            if isinstance(obj, Object3D):
                 obj.xfo.setFromMat44(Mat44(rtval))
             elif isinstance(obj, Attribute):
                 obj.setValue(rtval)

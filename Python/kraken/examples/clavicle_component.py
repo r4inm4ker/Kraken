@@ -28,9 +28,9 @@ class ClavicleComponentGuide(Component):
     def __init__(self, name='Clavicle', parent=None):
         super(ClavicleComponentGuide, self).__init__(name, parent)
 
-        self.clavicle = Control('bicepFK', parent=self, shape="sphere")
-        self.clavicleUpV = Control('bicepFK', parent=self, shape="sphere")
-        self.clavicleEnd = Control('bicepFK', parent=self, shape="sphere")
+        self.clavicle = Control('clavicle', parent=self, shape="sphere")
+        self.clavicleUpV = Control('clavicleUpV', parent=self, shape="sphere")
+        self.clavicleEnd = Control('clavicleEnd', parent=self, shape="sphere")
 
         self.loadData({
             "name": name,
