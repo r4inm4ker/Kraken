@@ -14,6 +14,7 @@ class SceneItem(object):
         self.name = name
         self.parent = parent
 
+
     # ==============
     # Type Methods
     # ==============
@@ -58,6 +59,7 @@ class SceneItem(object):
                 return True
 
         return False
+
 
     # =============
     # Name methods

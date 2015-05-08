@@ -161,40 +161,30 @@ class Component(Object3D):
         return True
 
 
-    def addInput(self, inputObject):
+    def addInput(self, name, dataType):
         """Add inputObject to this object.
 
         Arguments:
-        inputObject -- Object, input object to add.
+        name -- String, name of the input to create.
+        dataType -- String, data type of the input.
 
         Return:
-        True if successful.
+        New input object.
 
         """
 
-        if not isinstance(inputObject, (Locator, Attribute)):
-            raise Exception("'inputObject' argument is not a valid object. "
-                + inputObject.getName() + " is of type:" + str(inputObject)
-                + ". Must be an instance of 'Locator' or 'Attribute'.")
+        if inputObject.getTypeName() == "ComponentInput":
+            raise Exception("'inputObject' argument is not a ComponentInput.")
 
         if inputObject in self.inputs:
             raise Exception("'inputObject' argument is already an input! Invalid object: '"
                 + inputObject.getName() + "'")
 
-        if isinstance(inputObject, Locator):
-            inputObject.setFlag("inputObject")
-            inputObject.setShapeVisibility(False)
+        componentInput = ComponentInput(name, parent=self, dataType=dataType)
 
-        elif isinstance(inputObject, Attribute):
-            pass
-
-        componentInput = ComponentInput(inputObject.getName(), inputObject)
         self.inputs.append(componentInput)
 
-        # Assign the componentInput self as the component.
-        componentInput.setComponent(self)
-
-        return True
+        return componentInput
 
 
     def removeInputByIndex(self, index):
@@ -299,84 +289,26 @@ class Component(Object3D):
         return True
 
 
-    def addOutput(self, outputObject):
+    def addOutput(self, name, dataType):
         """Add outputObject to this object.
 
         Arguments:
-        outputObject -- Object, input object to add.
+        name -- String, name of the output to create.
+        dataType -- String, data type of the output.
 
         Return:
-        True if successful.
+        New output object.
 
         """
 
-        if not isinstance(outputObject, (Object3D, Attribute)):
-            raise Exception("'outputObject' argument is not a valid object. "
-                + outputObject.getName() + " is of type:" + str(outputObject)
-                + ". Must be an instance of 'Object3D' or 'Attribute'.")
+        if self.getOutputByName(name) is not None:
+            raise Exception("'outputObject' argument is already an output!")
 
-        if outputObject in self.outputs:
-            raise Exception("'outputObject' argument is already an output! Invalid object: '"
-                + outputObject.getName() + "'")
+        componentOutput = ComponentOutput(name, parent=self, dataType=dataType)
 
-        if isinstance(outputObject, Object3D):
-            outputObject.setFlag("outputObject")
-            outputObject.setShapeVisibility(False)
+        self.outputs.append(outputObject)
 
-        elif isinstance(outputObject, Attribute):
-            pass
-
-        componentOutput = ComponentOutput(outputObject.getName(), outputObject)
-        self.outputs.append(componentOutput)
-
-        # Assign the componentOutput self as the component.
-        componentOutput.setComponent(self)
-
-        return True
-
-
-    def removeOutputByIndex(self, index):
-        """Remove ComponentInput at specified index.
-
-        Arguments:
-        index -- Integer, index of the ComponentInput to remove.
-
-        Return:
-        True if successful.
-
-        """
-
-        if self.checkInputIndex(index) is not True:
-            return False
-
-        del self.outputs[index]
-
-        return True
-
-
-    def removeOutputByName(self, name):
-        """Removes a output from this object by name.
-
-        Arguments:
-        name -- String, name of output to remove.
-
-        Return:
-        True if successful.
-
-        """
-
-        removeIndex = None
-
-        for i, eachOutput in enumerate(self.outputs):
-            if eachOutput.getName() == name:
-                removeIndex = i
-
-        if removeIndex is None:
-            raise ValueError("'" + name + "' is not a valid output of this object.")
-
-        self.removeInputByIndex(removeIndex)
-
-        return True
+        return componentOutput
 
 
     def getNumOutputs(self):
