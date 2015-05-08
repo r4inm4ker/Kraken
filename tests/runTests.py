@@ -4,6 +4,7 @@ import argparse
 import subprocess
 import StringIO
 import contextlib
+import traceback
 
 failedTests = []
 updatedReferences = []
@@ -45,6 +46,20 @@ def checkTestOutput(filepath, output, update):
 
 def runPytonTest(filepath, update):
 
+
+    def format_exception(e):
+        exception_list = traceback.format_stack()
+        exception_list = exception_list[:-2]
+        exception_list.extend(traceback.format_tb(sys.exc_info()[2]))
+        exception_list.extend(traceback.format_exception_only(sys.exc_info()[0], sys.exc_info()[1]))
+
+        exception_str = "Traceback (most recent call last):\n"
+        exception_str += "".join(exception_list)
+        # Removing the last \n
+        exception_str = exception_str[:-1]
+
+        return exception_str
+
     @contextlib.contextmanager
     def stdoutIO(stdout=None):
         old = sys.stdout
@@ -59,9 +74,8 @@ def runPytonTest(filepath, update):
             execfile( filepath, {} )
             output = s.getvalue()
         except Exception as e:
-            # Some tests raise exceptions
-            output = s.getvalue()
-            output += str(e)
+            print(format_exception(e))
+            output = s.getvalue() + '\n'
 
     # Now remove all the output that comes from Fabric Engine loading...
     lines = output.split('\n')
