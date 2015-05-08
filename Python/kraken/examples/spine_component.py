@@ -229,8 +229,8 @@ class SpineComponent(Component):
         # ==================
         # Add Xfo I/O's
 
-        for spineOutput in self.spineOutputs:
-            self.addOutput(spineOutput)
+        # for spineOutput in self.spineOutputs:
+        #     self.addOutput(spineOutput)
 
         self.addOutput(spineBaseOutput)
         self.addOutput(spineEndOutput)
@@ -261,7 +261,6 @@ class SpineComponent(Component):
         for spineOutput in self.spineOutputs:
             self.bezierSpineSpliceOp.setOutput("outputs", spineOutput)
 
-
         # Add Deformer Splice Op
         self.outputsToDeformersSpliceOp = SpliceOperator("spineDeformerSpliceOp", "MultiPoseConstraintSolver", "Kraken")
         self.addOperator(self.outputsToDeformersSpliceOp)
@@ -269,7 +268,7 @@ class SpineComponent(Component):
         # Add Att Inputs
         self.outputsToDeformersSpliceOp.setInput("debug", debugInputAttr)
 
-        # Add Xfo Inputstrl)
+        # Add Xfo Outputs
         for spineOutput in self.spineOutputs:
             self.outputsToDeformersSpliceOp.setInput("constrainers", spineOutput)
 
@@ -277,7 +276,7 @@ class SpineComponent(Component):
         for joint in self.deformerJoints:
             self.outputsToDeformersSpliceOp.setOutput("constrainees", joint)
 
-
+        # print self.outputsToDeformersSpliceOp.getOutput("constrainees")
 
         Profiler.getInstance().pop()
 
@@ -285,16 +284,18 @@ class SpineComponent(Component):
     def setNumDeformers(self, numDeformers):
 
         # Add new deformers and outputs
+        for i in xrange(len(self.spineOutputs), numDeformers):
+            name = 'spine' + str(i + 1).zfill(2)
+            spineOutput = Locator(name, parent=self.outputHrcGrp)
+            self.spineOutputs.append(spineOutput)
+
         for i in xrange(len(self.deformerJoints), numDeformers):
             name = 'spine' + str(i + 1).zfill(2)
             spineDef = Joint(name, parent=self.defCmpGrp)
             spineDef.setComponent(self)
             self.deformerJoints.append(spineDef)
 
-        for i in xrange(len(self.outputs), numDeformers):
-            name = 'spine' + str(i + 1).zfill(2)
-            spineOutput = Locator(name, parent=self.outputHrcGrp)
-            self.spineOutputs.append(spineOutput)
+        return True
 
 
     def loadData(self, data=None):
@@ -331,6 +332,19 @@ class SpineComponent(Component):
 
         # Update number of deformers and outputs
         self.setNumDeformers(numDeformers)
+
+        for spineOutput in self.spineOutputs:
+            if spineOutput not in self.bezierSpineSpliceOp.getOutput("outputs"):
+                self.bezierSpineSpliceOp.setOutput("outputs", spineOutput)
+
+        # Update Deformers Splice Op
+        for spineOutput in self.spineOutputs:
+            if spineOutput not in self.outputsToDeformersSpliceOp.getInput("constrainers"):
+                self.outputsToDeformersSpliceOp.setInput("constrainers", spineOutput)
+
+        for joint in self.deformerJoints:
+            if joint not in self.outputsToDeformersSpliceOp.getOutput("constrainees"):
+                self.outputsToDeformersSpliceOp.setOutput("constrainees", joint)
 
         # Updating constraint to use the updated last output.
         self.spineEndOutputConstraint.setConstrainer(self.spineOutputs[-1], index=0)
