@@ -187,13 +187,6 @@ class LegComponent(Component):
 
         self.legIKCtrl = Control('IK', parent=self.legIKCtrlSpace, shape="pin")
 
-        if self.getLocation() == "R":
-            self.legIKCtrl.rotatePoints(0, 90, 0)
-            self.legIKCtrl.translatePoints(Vec3(-1.0, 0.0, 0.0))
-        else:
-            self.legIKCtrl.rotatePoints(0, -90, 0)
-            self.legIKCtrl.translatePoints(Vec3(1.0, 0.0, 0.0))
-
 
         # Add Component Params to IK control
         legDebugInputAttr = BoolAttribute('debug', True)
@@ -359,6 +352,7 @@ class LegComponent(Component):
 
         Profiler.getInstance().pop()
 
+
     def loadData(self, data=None):
 
         self.setName(data.get('name', 'Arm'))
@@ -377,6 +371,13 @@ class LegComponent(Component):
 
         self.legIKCtrlSpace.xfo.tr = data['ankleXfo'].tr
         self.legIKCtrl.xfo.tr = data['ankleXfo'].tr
+
+        if self.getLocation() == "R":
+            self.legIKCtrl.rotatePoints(0, 90, 0)
+            self.legIKCtrl.translatePoints(Vec3(-1.0, 0.0, 0.0))
+        else:
+            self.legIKCtrl.rotatePoints(0, -90, 0)
+            self.legIKCtrl.translatePoints(Vec3(1.0, 0.0, 0.0))
 
         # ============
         # Set IO Xfos
