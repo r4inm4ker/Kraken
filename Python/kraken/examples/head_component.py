@@ -78,8 +78,9 @@ class HeadComponentGuide(Component):
 
         """
 
-        self.setName(data['name'])
-        self.setLocation(data['location'])
+        if 'name' in data:
+            self.setName(data['name'])
+        self.setLocation(data.get('location', 'M'))
         self.head.xfo.tr = data['headPosition']
         self.headEnd.xfo.tr = data['headEndPosition']
         self.eyeLeft.xfo.tr = data['eyeLeftPosition']
@@ -114,6 +115,11 @@ class HeadComponentGuide(Component):
                 "eyeRightPosition": self.eyeRight.xfo.tr,
                 "jawPosition": self.jaw.xfo.tr
                 }
+
+
+from kraken.core.kraken_system import KrakenSystem
+KrakenSystem.getInstance().registerComponent(HeadComponentGuide)
+
 
 
 class HeadComponent(Component):

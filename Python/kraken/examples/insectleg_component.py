@@ -27,24 +27,25 @@ from kraken.helpers.utility_methods import logHierarchy
 class InsectLegComponentGuide(Component):
     """InsectLeg Component Guide"""
 
-    def __init__(self, name='InsectLeg', parent=None):
+    def __init__(self, name='InsectLeg', parent=None, data=None):
         super(InsectLegComponentGuide, self).__init__(name, parent)
 
         self.legCtrls = []
         for i in xrange(5):
             self.legCtrls.append(Control('leg' + str(i).zfill(2), parent=self, shape="sphere"))
 
-        self.loadData({
-                       "name": name,
-                       "location": "L",
-                       "jointPositions": [
-                                          Vec3(0.9811, 9.769, -1.237),
-                                          Vec3(5.4488, 8.4418, -1.237),
-                                          Vec3(4.0, 3.1516, -1.237),
-                                          Vec3(6.841, 1.0, -1.237),
-                                          Vec3(9.841, 0.0, -1.237)
-                                         ]
-                      })
+        if data is None:
+            data = {
+               "location": "L",
+               "jointPositions": [
+                  Vec3(0.9811, 9.769, -1.237),
+                  Vec3(5.4488, 8.4418, -1.237),
+                  Vec3(4.0, 3.1516, -1.237),
+                  Vec3(6.841, 1.0, -1.237),
+                  Vec3(9.841, 0.0, -1.237)
+                 ]
+              }
+        self.loadData(data)
 
 
     # =============
@@ -82,7 +83,8 @@ class InsectLegComponentGuide(Component):
 
         """
 
-        self.setName(data['name'])
+        if 'name' in data:
+            self.setName(data['name'])
         self.setLocation(data['location'])
 
         for i in xrange(5):
@@ -125,6 +127,11 @@ class InsectLegComponentGuide(Component):
                 "endXfo": self.legCtrls[-1].xfo,
                 "boneLengths": boneLengths
                 }
+
+
+
+from kraken.core.kraken_system import KrakenSystem
+KrakenSystem.getInstance().registerComponent(InsectLegComponentGuide)
 
 
 class InsectLegComponent(Component):

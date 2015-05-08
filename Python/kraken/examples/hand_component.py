@@ -30,7 +30,6 @@ class HandComponentGuide(Component):
         self.hand = Control('hand', parent=self, shape="cube")
 
         self.loadData({
-            "name": name,
             "location": "L",
             "handXfo": Xfo(tr=Vec3(-7.1886, 12.2819, 0.4906),
                            ori=Quat(Vec3(-0.2301, -0.0865, -0.9331), 0.2623))
@@ -68,7 +67,8 @@ class HandComponentGuide(Component):
 
         """
 
-        self.setName(data['name'])
+        if 'name' in data:
+            self.setName(data['name'])
         self.setLocation(data['location'])
         self.hand.xfo = data['handXfo']
 
@@ -92,6 +92,10 @@ class HandComponentGuide(Component):
                 "location":self.getLocation(),
                 "handXfo": handXfo
                 }
+
+
+from kraken.core.kraken_system import KrakenSystem
+KrakenSystem.getInstance().registerComponent(HandComponentGuide)
 
 
 class HandComponent(Component):

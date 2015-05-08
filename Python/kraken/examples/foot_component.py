@@ -96,6 +96,10 @@ class FootComponentGuide(Component):
                 }
 
 
+from kraken.core.kraken_system import KrakenSystem
+KrakenSystem.getInstance().registerComponent(FootComponentGuide)
+
+
 class FootComponent(Component):
     """Foot Component"""
 

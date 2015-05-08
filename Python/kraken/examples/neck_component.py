@@ -24,7 +24,7 @@ from kraken.helpers.utility_methods import logHierarchy
 class NeckComponentGuide(Component):
     """Neck Component Guide"""
 
-    def __init__(self, name='Neck', parent=None, data=None):
+    def __init__(self, name='neck', parent=None, data=None):
         super(NeckComponentGuide, self).__init__(name, parent)
 
         self.neck = Control('neck', parent=self, shape="sphere")
@@ -74,7 +74,7 @@ class NeckComponentGuide(Component):
 
         if 'name' in data:
             self.setName(data['name'])
-        self.setLocation(data['location'])
+        self.setLocation(data.get('location', 'M'))
         self.neck.xfo.tr = data['neckPosition']
         self.neckEnd.xfo.tr = data['neckEndPosition']
 
@@ -109,6 +109,10 @@ class NeckComponentGuide(Component):
                 "location":self.getLocation(),
                 "neckXfo": neckXfo
                 }
+
+from kraken.core.kraken_system import KrakenSystem
+KrakenSystem.getInstance().registerComponent(NeckComponentGuide)
+
 
 
 class NeckComponent(Component):

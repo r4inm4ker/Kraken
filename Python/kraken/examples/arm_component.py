@@ -158,6 +158,11 @@ class ArmComponentGuide(Component):
             }
 
 
+from kraken.core.kraken_system import KrakenSystem
+KrakenSystem.getInstance().registerComponent(ArmComponentGuide)
+
+
+
 class ArmComponent(Component):
     """Arm Component"""
 

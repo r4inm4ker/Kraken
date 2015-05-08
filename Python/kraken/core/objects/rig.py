@@ -71,12 +71,9 @@ class Rig(Container):
 
                 componentClass = krakenSystem.getComponentClass(className)
                 if 'name' in componentData:
-                    componentName = componentData['name']
+                    component = componentClass(name=componentData['name'], parent=self)
                 else:
-                    componentName = str(componentClass.__name__)
-
-                component = componentClass(componentName, parent=self) #, data=componentData)
-
+                    component = componentClass(parent=self)
                 component.loadData(componentData)
 
             Profiler.getInstance().pop()
@@ -92,10 +89,10 @@ class Rig(Container):
 
                 sourceComponent = self.getChildByName(sourceComponentName)
                 if sourceComponent is None:
-                    raise Exception("Error making connection:" + connectionData['source'] + " -> " + connectionData['target']+". Source component not found:" + sourceComponent)
+                    raise Exception("Error making connection:" + connectionData['source'] + " -> " + connectionData['target']+". Source component not found:" + sourceComponentName)
                 targetComponent = self.getChildByName(targetComponentName)
                 if targetComponent is None:
-                    raise Exception("Error making connection:" + connectionData['source'] + " -> " + connectionData['target']+". Source component not found:" + targetComponent)
+                    raise Exception("Error making connection:" + connectionData['source'] + " -> " + connectionData['target']+". Target component not found:" + targetComponentName)
                 outputPort = sourceComponent.getOutputByName(outputName)
                 if outputPort is None:
                     raise Exception("Error making connection:" + connectionData['source'] + " -> " + connectionData['target']+". Output '" + outputName + "' not found on Component:" + sourceComponent.getName())
