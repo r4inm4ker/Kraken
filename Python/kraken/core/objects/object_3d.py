@@ -168,10 +168,10 @@ class Object3D(SceneItem):
 
         """
 
-        foundChild = self.findChild(child.getName(), childType=child.getTypeName())
-        if foundChild is not None:
-            raise Exception("Child with the same name already exists: '" +
-                            child.getName() + "'")
+        # foundChild = self.findChild(child.getName(), childType=child.getTypeName())
+        # if foundChild is not None:
+        #     raise Exception("Child with the same name already exists: '" +
+        #                     child.getName() + "'")
 
         if child.getParent() is not None:
             parent = child.getParent()
