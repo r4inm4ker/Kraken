@@ -53,6 +53,9 @@ class NeckComponentGuide(Component):
         # Guide Controls
         self.neckCtrl = Control('neck', parent=ctrlCmpGrp, shape="sphere")
         self.neckEndCtrl = Control('neckEnd', parent=ctrlCmpGrp, shape="sphere")
+        self.addOutput(self.neckOutput)
+
+
 
         if data is None:
             data = {

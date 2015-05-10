@@ -16,7 +16,7 @@ import json
 class Rig(Container):
     """Rig object."""
 
-    def __init__(self, name):
+    def __init__(self, name='rig'):
         super(Rig, self).__init__(name)
 
 
@@ -59,11 +59,14 @@ class Rig(Container):
 
         krakenSystem = KrakenSystem.getInstance()
 
+        if 'name' in jsonData:
+            self.setName(jsonData['name'])
 
-        def __loadComponents(componentsData):
+
+        def __loadComponents(componentsJson):
             Profiler.getInstance().push("__loadComponents")
 
-            for componentData in componentsData:
+            for componentData in componentsJson:
                 moduleName = '.'.join(componentData['class'].split('.')[:-1])
                 className = componentData['class'].split('.').pop()
                 if moduleName is not "":
@@ -79,11 +82,11 @@ class Rig(Container):
             Profiler.getInstance().pop()
 
 
-        def __makeConnections(connectionsData):
+        def __makeConnections(connectionJson):
 
             Profiler.getInstance().push("__makeConnections")
 
-            for connectionData in connectionsData:
+            for connectionData in connectionJson:
                 sourceComponentName, outputName = connectionData['source'].split('.')
                 targetComponentName, inputName = connectionData['target'].split('.')
 
@@ -111,3 +114,38 @@ class Rig(Container):
                 __makeConnections(jsonData['connections'])
 
         Profiler.getInstance().pop()
+
+    def getGuideData(self):
+        """Get the graph definition of the guide for biulding the final rig.
+        
+        Return:
+        The JSON data struture of the guide rig data
+        
+        """
+        
+
+        jsonData = {
+            'name': self.getName()
+        }
+        
+        componentsJson = []
+        guideComponents = self.getChildrenByType('Component')
+        for component in guideComponents:
+            componentsJson.append(component.getGuideData())
+        jsonData['components'] = componentsJson
+
+        connectionsJson = []
+        for component in guideComponents:
+            for i in range(component.getNumOutputs()):
+                componentOutput = component.getOutputByIndex(i)
+                if componentOutput.isConnected():
+                    componentInput = componentOutput.getConnection()
+                    connectionJson = {
+                        'source': componentOutput.getFullName(),
+                        'target': componentInput.getFullName()
+                    }
+                    connectionsJson.append(connectionJson)
+
+        jsonData['connections'] = connectionsJson
+        
+        return jsonData

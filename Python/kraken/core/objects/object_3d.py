@@ -290,7 +290,7 @@ class Object3D(SceneItem):
 
         childrenOfType = []
         for eachChild in self.children:
-            if type(eachChild).__name__ is childType:
+            if eachChild.isTypeOf(childType):
                 childrenOfType.append(eachChild)
 
         return childrenOfType
