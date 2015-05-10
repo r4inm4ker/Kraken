@@ -143,6 +143,8 @@ class HandComponent(Component):
         self.handEndOutput = self.addOutput('handEnd', dataType='Xfo')
 
         # Declare Input Attrs
+        self.debugInput = self.addInput('debug', dataType='Boolean')
+        self.rightSideInput = self.addInput('rightSide', dataType='Boolean')
 
         # Declare Output Attrs
 
@@ -174,12 +176,10 @@ class HandComponent(Component):
 
 
         # Add Component Params to IK control
-        handDebugInputAttr = BoolAttribute('debug', True)
-        handLinkToWorldInputAttr = FloatAttribute('linkToWorld', 0.0)
+        handLinkToWorldInputAttr = FloatAttribute('linkToWorld', 0.0, maxValue=1.0)
 
         handSettingsAttrGrp = AttributeGroup("DisplayInfo_HandSettings")
         self.handCtrl.addAttributeGroup(handSettingsAttrGrp)
-        handSettingsAttrGrp.addAttribute(handDebugInputAttr)
         handSettingsAttrGrp.addAttribute(handLinkToWorldInputAttr)
 
 
@@ -214,15 +214,13 @@ class HandComponent(Component):
         # Setup componnent Attribute I/O's
         debugInputAttr = BoolAttribute('debug', True)
         rightSideInputAttr = BoolAttribute('rightSide', self.getLocation() is 'R')
-        linkToWorldInputAttr = FloatAttribute('linkToWorld', 0.0)
 
         cmpInputAttrGrp.addAttribute(debugInputAttr)
         cmpInputAttrGrp.addAttribute(rightSideInputAttr)
-        cmpInputAttrGrp.addAttribute(linkToWorldInputAttr)
 
-        # Connect attrs to control attrs
-        debugInputAttr.connect(handDebugInputAttr)
-        linkToWorldInputAttr.connect(handLinkToWorldInputAttr)
+        # Set IO Targets
+        self.debugInput.setTarget(debugInputAttr)
+        self.rightSideInput.setTarget(rightSideInputAttr)
 
 
         # ==============
@@ -252,7 +250,7 @@ class HandComponent(Component):
         # Add Attribute I/O's
         # self.addInput(debugInputAttr)
         # self.addInput(rightSideInputAttr)
-        # self.addInput(linkToWorldInputAttr)
+        # self.addInput(handLinkToWorldInputAttr)
 
 
         # ===============
@@ -265,7 +263,7 @@ class HandComponent(Component):
         # # Add Att Inputs
         # spliceOp.setInput("debug", debugInputAttr)
         # spliceOp.setInput("rightSide", rightSideInputAttr)
-        # spliceOp.setInput("linkToWorld", linkToWorldInputAttr)
+        # spliceOp.setInput("linkToWorld", handLinkToWorldInputAttr)
 
         # # Add Xfo Inputs)
         # spliceOp.setInput("armEndXfo", armEndXfoInput)

@@ -176,12 +176,20 @@ class BobRig(Container):
         handLeftArmEndPosInput = handLeftComponent.getInputByName('armEndPos')
         handLeftArmEndPosInput.setConnection(armLeftEndPosOutput)
 
+        armLeftDebugOutput = armLeftComponent.getOutputByName('debug')
+        handLeftDebugInput = handLeftComponent.getInputByName('debug')
+        handLeftDebugInput.setConnection(armLeftDebugOutput)
+
         armRightEndOutput = armRightComponent.getOutputByName('armEndXfo')
         handRightArmEndInput = handRightComponent.getInputByName('armEndXfo')
         handRightArmEndInput.setConnection(armRightEndOutput)
         armRightEndPosOutput = armRightComponent.getOutputByName('armEndPos')
         handRightArmEndPosInput = handRightComponent.getInputByName('armEndPos')
         handRightArmEndPosInput.setConnection(armRightEndPosOutput)
+
+        armRightDebugOutput = armRightComponent.getOutputByName('debug')
+        handRightDebugInput = handRightComponent.getInputByName('debug')
+        handRightDebugInput.setConnection(armRightDebugOutput)
 
         # Arm To Clavicle Connections
         clavicleLeftEndOutput = clavicleLeftComponent.getOutputByName('clavicleEnd')
