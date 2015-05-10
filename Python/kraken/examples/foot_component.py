@@ -143,6 +143,8 @@ class FootComponent(Component):
         self.footOutput = self.addOutput('foot', dataType='Xfo')
 
         # Declare Input Attrs
+        self.debugInput = self.addInput('debug', dataType='Boolean')
+        self.rightSideInput = self.addInput('rightSide', dataType='Boolean')
 
         # Declare Output Attrs
 
@@ -173,12 +175,10 @@ class FootComponent(Component):
 
 
         # Add Component Params to IK control
-        footDebugInputAttr = BoolAttribute('debug', True)
         footLinkToWorldInputAttr = FloatAttribute('linkToWorld', 1.0, maxValue=1.0)
 
-        footSettingsAttrGrp = AttributeGroup("DisplayInfo_HandSettings")
+        footSettingsAttrGrp = AttributeGroup("DisplayInfo_FootSettings")
         self.footCtrl.addAttributeGroup(footSettingsAttrGrp)
-        footSettingsAttrGrp.addAttribute(footDebugInputAttr)
         footSettingsAttrGrp.addAttribute(footLinkToWorldInputAttr)
 
 
@@ -211,15 +211,13 @@ class FootComponent(Component):
         # Setup componnent Attribute I/O's
         debugInputAttr = BoolAttribute('debug', True)
         rightSideInputAttr = BoolAttribute('rightSide', self.getLocation() is 'R')
-        linkToWorldInputAttr = FloatAttribute('linkToWorld', 0.0, maxValue=1.0)
 
         cmpInputAttrGrp.addAttribute(debugInputAttr)
         cmpInputAttrGrp.addAttribute(rightSideInputAttr)
-        cmpInputAttrGrp.addAttribute(linkToWorldInputAttr)
 
-        # Connect attrs to control attrs
-        debugInputAttr.connect(footDebugInputAttr)
-        linkToWorldInputAttr.connect(footLinkToWorldInputAttr)
+        # Set IO Targets
+        self.debugInput.setTarget(debugInputAttr)
+        self.rightSideInput.setTarget(rightSideInputAttr)
 
 
         # ==============
@@ -249,7 +247,7 @@ class FootComponent(Component):
         # Add Attribute I/O's
         # self.addInput(debugInputAttr)
         # self.addInput(rightSideInputAttr)
-        # self.addInput(linkToWorldInputAttr)
+        # self.addInput(footLinkToWorldInputAttr)
 
 
         # ===============
@@ -262,7 +260,7 @@ class FootComponent(Component):
         # # Add Att Inputs
         # spliceOp.setInput("debug", debugInputAttr)
         # spliceOp.setInput("rightSide", rightSideInputAttr)
-        # spliceOp.setInput("linkToWorld", linkToWorldInputAttr)
+        # spliceOp.setInput("linkToWorld", footLinkToWorldInputAttr)
 
         # # Add Xfo Inputs)
         # spliceOp.setInput("armEndXfo", legEndXfoInput)

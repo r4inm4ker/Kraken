@@ -195,6 +195,7 @@ class LegComponent(Component):
         # Declare Input Attrs
 
         # Declare Output Attrs
+        self.debugOutput = self.addOutput('debug', dataType='Boolean')
 
         # =========
         # Controls
@@ -305,6 +306,11 @@ class LegComponent(Component):
         stretchInputAttr = BoolAttribute('stretch', True)
         stretchBlendInputAttr = FloatAttribute('stretchBlend', 0.0)
         rightSideInputAttr = BoolAttribute('rightSide', self.getLocation() is 'R')
+
+        cmpInputAttrGrp.addAttribute(debugInputAttr)
+
+        # Set IO Targets
+        self.debugOutput.setTarget(debugInputAttr)
 
 
         # Connect attrs to control attrs
