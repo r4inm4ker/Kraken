@@ -27,18 +27,47 @@ from kraken.helpers.utility_methods import logHierarchy
 class ArmComponentGuide(Component):
     """Arm Component Guide"""
 
-    def __init__(self, name='Arm', parent=None, data=None):
+    def __init__(self, name='armGuide', parent=None, data=None):
         super(ArmComponentGuide, self).__init__(name, parent)
 
-        self.bicep = Control('bicepFK', parent=self, shape="sphere")
-        self.forearm = Control('forearmFK', parent=self, shape="sphere")
-        self.wrist = Control('wristFK', parent=self, shape="sphere")
+        # Declare Inputs Xfos
 
+        # Declare Output Xfos
+
+        # Declare Input Attrs
+        self.bicepFKCtrlSizeInput = self.addInput('bicepFKCtrlSize', dataType='Float')
+        self.forearmFKCtrlSizeInput = self.addInput('forearmFKCtrlSize', dataType='Float')
+
+        # =========
+        # Controls
+        # =========
+        controlsLayer = self.getOrCreateLayer('controls')
+        ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
+
+        # IO Hierarchies
+        inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
+        cmpInputAttrGrp = AttributeGroup('inputs')
+        inputHrcGrp.addAttributeGroup(cmpInputAttrGrp)
+
+        outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
+        cmpOutputAttrGrp = AttributeGroup('outputs')
+        outputHrcGrp.addAttributeGroup(cmpOutputAttrGrp)
+
+        # Guide Controls
+        self.bicepCtrl = Control('bicepFK', parent=ctrlCmpGrp, shape="sphere")
+        self.forearmCtrl = Control('forearmFK', parent=ctrlCmpGrp, shape="sphere")
+        self.wristCtrl = Control('wristFK', parent=ctrlCmpGrp, shape="sphere")
+
+        # Guide Attributes
         self.bicepFKCtrlSizeInputAttr = FloatAttribute('bicepFKCtrlSize', 2.0)
         self.forearmFKCtrlSizeInputAttr = FloatAttribute('forearmFKCtrlSize', 2.0)
 
-        self.addInput(self.bicepFKCtrlSizeInputAttr)
-        self.addInput(self.forearmFKCtrlSizeInputAttr)
+        cmpInputAttrGrp.addAttribute(self.bicepFKCtrlSizeInputAttr)
+        cmpInputAttrGrp.addAttribute(self.forearmFKCtrlSizeInputAttr)
+
+        # Set input attribute targets
+        self.bicepFKCtrlSizeInput.setTarget(self.bicepFKCtrlSizeInputAttr)
+        self.bicepFKCtrlSizeInput.setTarget(self.forearmFKCtrlSizeInputAttr)
 
         if data is None:
             data = {
@@ -50,6 +79,7 @@ class ArmComponentGuide(Component):
             "bicepFKCtrlSize": 1.75,
             "forearmFKCtrlSize": 1.5
         }
+
         self.loadData(data)
 
 
@@ -69,12 +99,12 @@ class ArmComponentGuide(Component):
         data = {
                 'name': self.getName(),
                 'location': self.getLocation(),
-                'bicepXfo': self.bicep.xfo,
-                'forearmXfo': self.forearm.xfo,
-                'wristXfo': self.wrist.xfo,
+                'bicepXfo': self.bicepCtrl.xfo,
+                'forearmXfo': self.forearmCtrl.xfo,
+                'wristXfo': self.wristCtrl.xfo,
                 "bicepFKCtrlSize": self.bicepFKCtrlSizeInputAttr.getValue(),
                 "forearmFKCtrlSize": self.forearmFKCtrlSizeInputAttr.getValue()
-                }
+               }
 
         return data
 
@@ -89,12 +119,14 @@ class ArmComponentGuide(Component):
         True if successful.
 
         """
+
         if 'name' in data:
             self.setName(data['name'])
+
         self.setLocation(data['location'])
-        self.bicep.xfo = data['bicepXfo']
-        self.forearm.xfo = data['forearmXfo']
-        self.wrist.xfo = data['wristXfo']
+        self.bicepCtrl.xfo = data['bicepXfo']
+        self.forearmCtrl.xfo = data['forearmXfo']
+        self.wristCtrl.xfo = data['wristXfo']
 
         self.bicepFKCtrlSizeInputAttr.setValue(data['bicepFKCtrlSize'])
         self.forearmFKCtrlSizeInputAttr.setValue(data['forearmFKCtrlSize'])
@@ -111,9 +143,9 @@ class ArmComponentGuide(Component):
         """
 
         # values
-        bicepPosition = self.bicep.xfo.tr
-        forearmPosition = self.forearm.xfo.tr
-        wristPosition = self.wrist.xfo.tr
+        bicepPosition = self.bicepCtrl.xfo.tr
+        forearmPosition = self.forearmCtrl.xfo.tr
+        wristPosition = self.wristCtrl.xfo.tr
 
         # Calculate Bicep Xfo
         rootToWrist = wristPosition.subtract(bicepPosition).unit()
@@ -167,9 +199,7 @@ KrakenSystem.getInstance().registerComponent(ArmComponentGuide)
 class ArmComponent(Component):
     """Arm Component"""
 
-    def __init__(self, name='Arm', parent=None):
-
-        # location = data.get('location', 'M')
+    def __init__(self, name='arm', parent=None):
 
         Profiler.getInstance().push("Construct Arm Component:" + name)
         super(ArmComponent, self).__init__(name, parent)
@@ -178,10 +208,10 @@ class ArmComponent(Component):
         self.clavicleEndInput = self.addInput('clavicleEnd', dataType='Xfo')
 
         # Declare Output Xfos
-        self.bicepOutput = self.addOutput('bicep', 'Xfo')
-        self.forearmOutput = self.addOutput('forearm', 'Xfo')
-        self.armEndXfoOutput = self.addOutput('armEndXfo', 'Xfo')
-        self.armEndPosOutput = self.addOutput('armEndPos', 'Xfo')
+        self.bicepOutput = self.addOutput('bicep', dataType='Xfo')
+        self.forearmOutput = self.addOutput('forearm', dataType='Xfo')
+        self.armEndXfoOutput = self.addOutput('armEndXfo', dataType='Xfo')
+        self.armEndPosOutput = self.addOutput('armEndPos', dataType='Xfo')
 
         # Declare Input Attrs
         # TODO: Support attrinbut inputs.
@@ -411,7 +441,7 @@ class ArmComponent(Component):
 
     def loadData(self, data=None):
 
-        self.setName(data.get('name', 'Arm'))
+        self.setName(data.get('name', 'arm'))
         location = data.get('location', 'M')
         self.setLocation(location)
 

@@ -27,14 +27,39 @@ class FootComponentGuide(Component):
     def __init__(self, name='Foot', parent=None, data=None):
         super(FootComponentGuide, self).__init__(name, parent)
 
-        self.foot = Control('foot', parent=self, shape="sphere")
+        # Declare Inputs Xfos
+
+        # Declare Output Xfos
+
+        # Declare Input Attrs
+
+        # Declare Output Attrs
+
+        # =========
+        # Controls
+        # =========
+        controlsLayer = self.getOrCreateLayer('controls')
+        ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
+
+        # IO Hierarchies
+        inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
+        cmpInputAttrGrp = AttributeGroup('inputs')
+        inputHrcGrp.addAttributeGroup(cmpInputAttrGrp)
+
+        outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
+        cmpOutputAttrGrp = AttributeGroup('outputs')
+        outputHrcGrp.addAttributeGroup(cmpOutputAttrGrp)
+
+        # Guide Controls
+        self.footCtrl = Control('foot', parent=ctrlCmpGrp, shape="sphere")
 
         if data is None:
             data = {
-            "name": name,
-            "location": "L",
-            "footXfo": Xfo(tr=Vec3(1.841, 1.1516, -1.237), ori=Quat(Vec3(0.6377, -0.5695, 0.3053), 0.4190))
-        }
+                    "name": name,
+                    "location": "L",
+                    "footXfo": Xfo(tr=Vec3(1.841, 1.1516, -1.237), ori=Quat(Vec3(0.6377, -0.5695, 0.3053), 0.4190))
+                   }
+
         self.loadData(data)
 
 
@@ -52,7 +77,7 @@ class FootComponentGuide(Component):
         data = {
             'name': self.getName(),
             'location': self.getLocation(),
-            'footXfo': self.foot.xfo
+            'footXfo': self.footCtrl.xfo
             }
 
         return data
@@ -71,8 +96,9 @@ class FootComponentGuide(Component):
 
         if 'name' in data:
             self.setName(data['name'])
+
         self.setLocation(data['location'])
-        self.foot.xfo = data['footXfo']
+        self.footCtrl.xfo = data['footXfo']
 
         return True
 
@@ -86,14 +112,14 @@ class FootComponentGuide(Component):
         """
 
         # values
-        footXfo = self.foot.xfo
+        footXfo = self.footCtrl.xfo
 
         return {
                 "class":"kraken.examples.foot_component.FootComponent",
                 "name": self.getName(),
-                "location":self.getLocation(),
+                "location": self.getLocation(),
                 "footXfo": footXfo
-                }
+               }
 
 
 from kraken.core.kraken_system import KrakenSystem
@@ -103,10 +129,22 @@ KrakenSystem.getInstance().registerComponent(FootComponentGuide)
 class FootComponent(Component):
     """Foot Component"""
 
-    def __init__(self, name='Foot', parent=None):
+    def __init__(self, name='foot', parent=None):
 
         Profiler.getInstance().push("Construct Foot Component:" + name)
         super(FootComponent, self).__init__(name, parent)
+
+        # Declare Inputs Xfos
+        self.legEndXfoInput = self.addInput('legEndXfo', dataType='Xfo')
+        self.legEndPosInput = self.addInput('legEndPos', dataType='Xfo')
+
+        # Declare Output Xfos
+        self.footEndOutput = self.addOutput('footEnd', dataType='Xfo')
+        self.footOutput = self.addOutput('foot', dataType='Xfo')
+
+        # Declare Input Attrs
+
+        # Declare Output Attrs
 
         # =========
         # Controls
@@ -158,17 +196,26 @@ class FootComponent(Component):
         # Create Component I/O
         # =====================
         # Setup Component Xfo I/O's
-        self.legEndXfoInput = Locator('legEndXfo', parent=inputHrcGrp)
-        self.legEndPosInput = Locator('legEndPos', parent=inputHrcGrp)
+        self.legEndXfoInputTgt = Locator('legEndXfo', parent=inputHrcGrp)
+        self.legEndPosInputTgt = Locator('legEndPos', parent=inputHrcGrp)
 
-        self.footEndOutput = Locator('handEnd', parent=outputHrcGrp)
-        self.footOutput = Locator('hand', parent=outputHrcGrp)
+        self.footEndOutputTgt = Locator('handEnd', parent=outputHrcGrp)
+        self.footOutputTgt = Locator('hand', parent=outputHrcGrp)
 
+        # Set IO Targets
+        self.legEndXfoInput.setTarget(self.legEndXfoInputTgt)
+        self.legEndPosInput.setTarget(self.legEndPosInputTgt)
+        self.footEndOutput.setTarget(self.footEndOutputTgt)
+        self.footOutput.setTarget(self.footOutputTgt)
 
         # Setup componnent Attribute I/O's
         debugInputAttr = BoolAttribute('debug', True)
         rightSideInputAttr = BoolAttribute('rightSide', self.getLocation() is 'R')
         linkToWorldInputAttr = FloatAttribute('linkToWorld', 0.0, maxValue=1.0)
+
+        cmpInputAttrGrp.addAttribute(debugInputAttr)
+        cmpInputAttrGrp.addAttribute(rightSideInputAttr)
+        cmpInputAttrGrp.addAttribute(linkToWorldInputAttr)
 
         # Connect attrs to control attrs
         debugInputAttr.connect(footDebugInputAttr)
@@ -181,28 +228,28 @@ class FootComponent(Component):
         # Constraint inputs
 
         # Constraint outputs
-        handConstraint = PoseConstraint('_'.join([self.footOutput.getName(), 'To', self.footCtrl.getName()]))
+        handConstraint = PoseConstraint('_'.join([self.footOutputTgt.getName(), 'To', self.footCtrl.getName()]))
         handConstraint.addConstrainer(self.footCtrl)
-        self.footOutput.addConstraint(handConstraint)
+        self.footOutputTgt.addConstraint(handConstraint)
 
-        handEndConstraint = PoseConstraint('_'.join([self.footEndOutput.getName(), 'To', self.footCtrl.getName()]))
+        handEndConstraint = PoseConstraint('_'.join([self.footEndOutputTgt.getName(), 'To', self.footCtrl.getName()]))
         handEndConstraint.addConstrainer(self.footCtrl)
-        self.footEndOutput.addConstraint(handEndConstraint)
+        self.footEndOutputTgt.addConstraint(handEndConstraint)
 
 
         # ==================
         # Add Component I/O
         # ==================
         # Add Xfo I/O's
-        self.addInput(self.legEndXfoInput)
-        self.addInput(self.legEndPosInput)
-        self.addOutput(self.footOutput)
-        self.addOutput(self.footEndOutput)
+        # self.addInput(self.legEndXfoInputTgt)
+        # self.addInput(self.legEndPosInputTgt)
+        # self.addOutput(self.footOutputTgt)
+        # self.addOutput(self.footEndOutputTgt)
 
         # Add Attribute I/O's
-        self.addInput(debugInputAttr)
-        self.addInput(rightSideInputAttr)
-        self.addInput(linkToWorldInputAttr)
+        # self.addInput(debugInputAttr)
+        # self.addInput(rightSideInputAttr)
+        # self.addInput(linkToWorldInputAttr)
 
 
         # ===============
@@ -235,7 +282,7 @@ class FootComponent(Component):
         spliceOp.setInput("rightSide", rightSideInputAttr)
 
         # Add Xfo Inputs)
-        spliceOp.setInput("constrainer", self.footOutput)
+        spliceOp.setInput("constrainer", self.footOutputTgt)
 
         # Add Xfo Outputs
         spliceOp.setOutput("constrainee", footDef)
@@ -245,8 +292,9 @@ class FootComponent(Component):
 
     def loadData(self, data=None):
 
-        self.setName(data.get('name', 'Arm'))
+        self.setName(data.get('name', 'foot'))
         location = data.get('location', 'M')
+        self.setLocation(location)
 
         self.footCtrlSpace.xfo = data['footXfo']
         self.footCtrl.xfo = data['footXfo']
@@ -255,10 +303,10 @@ class FootComponent(Component):
         # ============
         # Set IO Xfos
         # ============
-        self.legEndXfoInput.xfo = data['footXfo']
-        self.legEndPosInput.xfo = data['footXfo']
-        self.footEndOutput.xfo = data['footXfo']
-        self.footOutput.xfo = data['footXfo']
+        self.legEndXfoInputTgt.xfo = data['footXfo']
+        self.legEndPosInputTgt.xfo = data['footXfo']
+        self.footEndOutputTgt.xfo = data['footXfo']
+        self.footOutputTgt.xfo = data['footXfo']
 
 
 from kraken.core.kraken_system import KrakenSystem
