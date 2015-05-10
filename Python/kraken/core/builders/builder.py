@@ -679,7 +679,7 @@ class Builder(object):
                 if componentInput.getDataType().startswith('Xfo'):
                     self.buildXfoConnection(componentInput)
 
-                elif componentInput.getDataType() == 'Attribute':
+                elif componentInput.getDataType().startswith(('Boolean', 'Float', 'Integer', 'String')):
                     self.buildAttributeConnection(componentInput)
 
             # Build output connections
