@@ -173,12 +173,8 @@ class Component(Object3D):
 
         """
 
-        if inputObject.getTypeName() == "ComponentInput":
-            raise Exception("'inputObject' argument is not a ComponentInput.")
-
-        if inputObject in self.inputs:
-            raise Exception("'inputObject' argument is already an input! Invalid object: '"
-                + inputObject.getName() + "'")
+        if self.getInputByName(name) is not None:
+            raise Exception("'" + name + "' argument is already an output!")
 
         componentInput = ComponentInput(name, parent=self, dataType=dataType)
 
@@ -306,7 +302,7 @@ class Component(Object3D):
 
         componentOutput = ComponentOutput(name, parent=self, dataType=dataType)
 
-        self.outputs.append(outputObject)
+        self.outputs.append(componentOutput)
 
         return componentOutput
 

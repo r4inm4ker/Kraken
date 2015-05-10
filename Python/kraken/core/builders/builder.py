@@ -358,45 +358,60 @@ class Builder(object):
     # ========================
     # Component Build Methods
     # ========================
-    def buildXfoConnection(self, kConnection):
-        """Builds the connection between the xfo and the connection.
+    def buildXfoConnection(self, componentIO):
+        """Builds the constraint between the target and connection target.
 
         Arguments:
-        kConnection -- Object, kraken connection to build.
+        componentIO -- Object, kraken component input or output to build connections
+                               for.
 
         Return:
         True if successful.
 
         """
 
-        source = kConnection.getSource()
-        target = kConnection.getTarget()
+        connection = componentIO.getConnection()
+        connectionTarget = connection.getTarget()
+        target = componentIO.getTarget()
 
-        if source is None or target is None:
-            raise Exception("Component connection '" + kConnection.getName() + "'is invalid! Missing Source or Target!")
+        if componentIO.getDataType().endswith('[]'):
+            # TODO: Implement array handling.
+            pass
+        else:
+            constraint = PoseConstraint('_'.join([target.getName(), 'To', connectionTarget.getName()]))
+            constraint.setMaintainOffset(True)
+            constraint.setConstrainee(target)
+            constraint.addConstrainer(connectionTarget)
 
-        constraint = PoseConstraint('_'.join([target.getName(), 'To', source.getName()]))
-        constraint.setMaintainOffset(True)
-        constraint.setConstrainee(target)
-        constraint.addConstrainer(source)
-        dccSceneItem = self.buildPoseConstraint(constraint)
-        self._registerSceneItemPair(kConnection, dccSceneItem)
+            dccSceneItem = self.buildPoseConstraint(constraint)
+            self._registerSceneItemPair(componentIO, dccSceneItem)
 
-        return None
+        return True
 
 
-    def buildAttributeConnection(self, kConnection):
-        """Builds the connection between the attribute and the connection.
+    def buildAttributeConnection(self, componentIO):
+        """Builds the link between the target and connection target.
 
         Arguments:
-        kConnection -- Object, kraken connection to build.
+        componentIO -- Object, kraken connection to build.
 
         Return:
         True if successful.
 
         """
 
-        return None
+        connection = componentIO.getConnection()
+        connectionTarget = connection.getTarget()
+        target = componentIO.getTarget()
+
+        if componentIO.getDataType().endswith('[]'):
+            # TODO: Implement array handling.
+            pass
+        else:
+            # Implemented in DCC Plugins.
+            pass
+
+        return True
 
 
     # =========================
@@ -642,6 +657,9 @@ class Builder(object):
         """Builds the connections between the component inputs and outputs of each
         component.
 
+        Only input connections are built otherwise duplicate constraints / expressions
+        would be created.
+
         Arguments:
         kObject -- Object, kraken object to create connections for.
 
@@ -655,34 +673,26 @@ class Builder(object):
             # Build input connections
             for i in xrange(kObject.getNumInputs()):
                 componentInput = kObject.getInputByIndex(i)
+                if componentInput.getTarget() is None or componentInput.getConnection() is None:
+                    continue
 
-                if componentInput.getDataType() == 'Xfo':
-                    if componentInput.getSource() is None:
-                        continue
-
+                if componentInput.getDataType().startswith('Xfo'):
                     self.buildXfoConnection(componentInput)
 
                 elif componentInput.getDataType() == 'Attribute':
-                    if componentInput.getSource() is None:
-                        continue
-
                     self.buildAttributeConnection(componentInput)
 
             # Build output connections
-            for i in xrange(kObject.getNumOutputs()):
-                componentOutput = kObject.getOutputByIndex(i)
+            # for i in xrange(kObject.getNumOutputs()):
+            #     componentOutput = kObject.getOutputByIndex(i)
+            #     if componentOutput.getTarget() is None or componentOutput.getConnection() is None:
+            #         continue
 
-                if componentOutput.getDataType() == 'Xfo':
-                    if componentOutput.getSource() is None:
-                        continue
+            #     if componentOutput.getDataType().startswith('Xfo'):
+            #         self.buildXfoConnection(componentOutput)
 
-                    self.buildXfoConnection(componentOutput)
-
-                elif componentOutput.getDataType() == 'Attribute':
-                    if componentOutput.getSource() is None:
-                        continue
-
-                    self.buildAttributeConnection(componentOutput)
+            #     elif componentOutput.getDataType() == 'Attribute':
+            #         self.buildAttributeConnection(componentOutput)
 
         # Build connections for children.
         for i in xrange(kObject.getNumChildren()):

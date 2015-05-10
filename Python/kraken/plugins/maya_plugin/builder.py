@@ -501,6 +501,7 @@ class Builder(Builder):
     # ========================
     # Component Build Methods
     # ========================
+
     def buildAttributeConnection(self, kConnection):
         """Builds the connection between the attribute and the connection.
 
@@ -512,12 +513,22 @@ class Builder(Builder):
 
         """
 
-        sourceDCCSceneItem = self.getDCCSceneItem(kConnection.getSource())
-        targetDCCSceneItem = self.getDCCSceneItem(kConnection.getTarget())
+        connection = componentIO.getConnection()
+        connectionTarget = connection.getTarget()
+        target = componentIO.getTarget()
 
-        pm.connectAttr(sourceDCCSceneItem, targetDCCSceneItem, force=True)
+        if componentIO.getDataType().endswith('[]'):
+            # TODO: Implement array handling.
+            pass
+        else:
 
-        return None
+            connectionTargetDCCSceneItem = self.getDCCSceneItem(connectionTarget)
+            targetDCCSceneItem = self.getDCCSceneItem(target)
+
+            pm.connectAttr(connectionTargetDCCSceneItem, targetDCCSceneItem, force=True)
+            targetDCCSceneItem.AddExpression(connectionTargetDCCSceneItem.FullName)
+
+        return True
 
 
     # =========================

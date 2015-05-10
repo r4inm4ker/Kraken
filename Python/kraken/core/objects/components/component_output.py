@@ -17,6 +17,8 @@ class ComponentOutput(SceneItem):
         self.connections = []
         self.target = None
 
+        self.setDataType(dataType)
+
 
     # =================
     # DataType Methods
@@ -84,12 +86,11 @@ class ComponentOutput(SceneItem):
 
         """
 
-        if connectionObj.getDataType() != self.getDataType() and
-            connectionObj.getDataType() != self.getDataType()[:-2]:
+        if connectionObj.getDataType() != self.getDataType() and connectionObj.getDataType() != self.getDataType()[:-2]:
             raise Exception("Data Type mismatch! Cannot connect '" +
                 connectionObj.getDataType() + "' to '" + self.getDataType())
 
-        if connectionObj is in self.connections:
+        if connectionObj in self.connections:
             raise Exception("'connectionObj' is already in the connections.")
 
         self.connections.append(connectionObj)

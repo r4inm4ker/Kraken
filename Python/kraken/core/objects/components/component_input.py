@@ -18,6 +18,8 @@ class ComponentInput(SceneItem):
         self.target = None
         self.index = 0
 
+        self.setDataType(dataType)
+
 
     # =================
     # DataType Methods
@@ -85,8 +87,7 @@ class ComponentInput(SceneItem):
 
         """
 
-        if connectionObj.getDataType() != self.getDataType() and
-            connectionObj.getDataType()[:-2] != self.getDataType():
+        if connectionObj.getDataType() != self.getDataType() and connectionObj.getDataType()[:-2] != self.getDataType():
             raise Exception("Data Type mismatch! Cannot connect '" +
                 connectionObj.getDataType() + "' to '" + self.getDataType())
 
