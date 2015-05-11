@@ -30,8 +30,13 @@ class LegComponentGuide(Component):
         super(LegComponentGuide, self).__init__(name, parent)
 
         # Declare Inputs Xfos
+        self.legPelvisInput = self.addInput('pelvisInput', dataType='Xfo')
 
         # Declare Output Xfos
+        self.femurOutput = self.addOutput('femur', dataType='Xfo')
+        self.shinOutput = self.addOutput('shin', dataType='Xfo')
+        self.legEndXfoOutput = self.addOutput('legEndXfo', dataType='Xfo')
+        self.legEndPosOutput = self.addOutput('legEndPos', dataType='Xfo')
 
         # Declare Input Attrs
 

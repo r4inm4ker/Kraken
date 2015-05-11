@@ -82,11 +82,11 @@ class Rig(Container):
             Profiler.getInstance().pop()
 
 
-        def __makeConnections(connectionJson):
+        def __makeConnections(connectionsJson):
 
             Profiler.getInstance().push("__makeConnections")
 
-            for connectionData in connectionJson:
+            for connectionData in connectionsJson:
                 sourceComponentName, outputName = connectionData['source'].split('.')
                 targetComponentName, inputName = connectionData['target'].split('.')
 
@@ -102,7 +102,7 @@ class Rig(Container):
                 inputPort = targetComponent.getInputByName(inputName)
                 if inputPort is None:
                     raise Exception("Error making connection:" + connectionData['source'] + " -> " + connectionData['target']+". Input '" + inputName + "' not found on Component:" + targetComponent.getName())
-                inputPort.setSource(outputPort.getTarget())
+                inputPort.setConnection(outputPort)
 
             Profiler.getInstance().pop()
 
@@ -122,7 +122,6 @@ class Rig(Container):
         The JSON data struture of the guide rig data
         
         """
-        
 
         jsonData = {
             'name': self.getName()
@@ -136,13 +135,13 @@ class Rig(Container):
 
         connectionsJson = []
         for component in guideComponents:
-            for i in range(component.getNumOutputs()):
-                componentOutput = component.getOutputByIndex(i)
-                if componentOutput.isConnected():
-                    componentInput = componentOutput.getConnection()
+            for i in range(component.getNumInputs()):
+                componentInput = component.getInputByIndex(i)
+                if componentInput.isConnected():
+                    componentOutput = componentInput.getConnection()
                     connectionJson = {
-                        'source': componentOutput.getFullName(),
-                        'target': componentInput.getFullName()
+                        'source': componentOutput.getParent().getName() + '.' + componentOutput.getName(),
+                        'target': component.getName() + '.' + componentInput.getName()
                     }
                     connectionsJson.append(connectionJson)
 

@@ -24,12 +24,15 @@ from kraken.helpers.utility_methods import logHierarchy
 class NeckComponentGuide(Component):
     """Neck Component Guide"""
 
-    def __init__(self, name='neckGuide', parent=None, data=None):
+    def __init__(self, name='neck', parent=None, data=None):
         super(NeckComponentGuide, self).__init__(name, parent)
 
         # Declare Inputs Xfos
+        self.neckBaseInput = self.addInput('neckBase', dataType='Xfo')
 
         # Declare Output Xfos
+        self.neckEndOutput = self.addOutput('neckEnd', dataType='Xfo')
+        self.neckOutput = self.addOutput('neck', dataType='Xfo')
 
         # Declare Input Attrs
 
@@ -53,7 +56,6 @@ class NeckComponentGuide(Component):
         # Guide Controls
         self.neckCtrl = Control('neck', parent=ctrlCmpGrp, shape="sphere")
         self.neckEndCtrl = Control('neckEnd', parent=ctrlCmpGrp, shape="sphere")
-        self.addOutput(self.neckOutput)
 
 
 

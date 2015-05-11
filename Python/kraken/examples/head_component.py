@@ -23,12 +23,17 @@ from kraken.helpers.utility_methods import logHierarchy
 class HeadComponentGuide(Component):
     """Head Component Guide"""
 
-    def __init__(self, name='headGuide', parent=None, data=None):
+    def __init__(self, name='head', parent=None, data=None):
         super(HeadComponentGuide, self).__init__(name, parent)
 
         # Declare Inputs Xfos
+        self.headBaseInput = self.addInput('headBase', dataType='Xfo')
 
         # Declare Output Xfos
+        self.headOutput = self.addOutput('head', dataType='Xfo')
+        self.jawOutput = self.addOutput('jaw', dataType='Xfo')
+        self.eyeLOutput = self.addOutput('eyeL', dataType='Xfo')
+        self.eyeROutput = self.addOutput('eyeR', dataType='Xfo')
 
         # Declare Input Attrs
 

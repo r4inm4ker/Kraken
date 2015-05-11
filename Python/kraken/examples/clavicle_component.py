@@ -25,12 +25,15 @@ from kraken.helpers.utility_methods import logHierarchy
 class ClavicleComponentGuide(Component):
     """Clavicle Component Guide"""
 
-    def __init__(self, name='clavicleGuide', parent=None, data=None):
+    def __init__(self, name='clavicle', parent=None, data=None):
         super(ClavicleComponentGuide, self).__init__(name, parent)
 
         # Declare Inputs Xfos
+        self.spineEndInput = self.addInput('spineEnd', dataType='Xfo')
 
         # Declare Output Xfos
+        self.clavicleOutput = self.addOutput('clavicle', dataType='Xfo')
+        self.clavicleEndOutput = self.addOutput('clavicleEnd', dataType='Xfo')
 
         # Declare Input Attrs
 
