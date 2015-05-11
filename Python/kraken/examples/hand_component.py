@@ -28,8 +28,12 @@ class HandComponentGuide(Component):
         super(HandComponentGuide, self).__init__(name, parent)
 
         # Declare Inputs Xfos
+        self.armEndXfoInput = self.addInput('armEndXfo', dataType='Xfo')
+        self.armEndPosInput = self.addInput('armEndPos', dataType='Xfo')
 
         # Declare Output Xfos
+        self.handOutput = self.addOutput('hand', dataType='Xfo')
+        self.handEndOutput = self.addOutput('handEnd', dataType='Xfo')
 
         # Declare Input Attrs
 
@@ -41,14 +45,6 @@ class HandComponentGuide(Component):
         controlsLayer = self.getOrCreateLayer('controls')
         ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
 
-        # IO Hierarchies
-        inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
-        cmpInputAttrGrp = AttributeGroup('inputs')
-        inputHrcGrp.addAttributeGroup(cmpInputAttrGrp)
-
-        outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
-        cmpOutputAttrGrp = AttributeGroup('outputs')
-        outputHrcGrp.addAttributeGroup(cmpOutputAttrGrp)
 
         # Guide Controls
         self.handCtrl = Control('hand', parent=ctrlCmpGrp, shape="cube")

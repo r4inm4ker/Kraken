@@ -28,8 +28,12 @@ class FootComponentGuide(Component):
         super(FootComponentGuide, self).__init__(name, parent)
 
         # Declare Inputs Xfos
+        self.legEndXfoInput = self.addInput('legEndXfo', dataType='Xfo')
+        self.legEndPosInput = self.addInput('legEndPos', dataType='Xfo')
 
         # Declare Output Xfos
+        self.footEndOutput = self.addOutput('footEnd', dataType='Xfo')
+        self.footOutput = self.addOutput('foot', dataType='Xfo')
 
         # Declare Input Attrs
 

@@ -30,9 +30,15 @@ class ArmComponentGuide(Component):
     def __init__(self, name='armGuide', parent=None, data=None):
         super(ArmComponentGuide, self).__init__(name, parent)
 
+
         # Declare Inputs Xfos
+        self.clavicleEndInput = self.addInput('clavicleEnd', dataType='Xfo')
 
         # Declare Output Xfos
+        self.bicepOutput = self.addOutput('bicep', dataType='Xfo')
+        self.forearmOutput = self.addOutput('forearm', dataType='Xfo')
+        self.armEndXfoOutput = self.addOutput('armEndXfo', dataType='Xfo')
+        self.armEndPosOutput = self.addOutput('armEndPos', dataType='Xfo')
 
         # Declare Input Attrs
         self.bicepFKCtrlSizeInput = self.addInput('bicepFKCtrlSize', dataType='Float')

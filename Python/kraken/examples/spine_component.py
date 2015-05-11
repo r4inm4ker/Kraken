@@ -26,12 +26,15 @@ from kraken.helpers.utility_methods import logHierarchy
 class SpineComponentGuide(Component):
     """Spine Component Guide"""
 
-    def __init__(self, name='spineGuide', parent=None):
+    def __init__(self, name='spine', parent=None):
         super(SpineComponentGuide, self).__init__(name, parent)
 
         # Declare Inputs Xfos
 
         # Declare Output Xfos
+        self.spineBaseOutput = self.addOutput('spineBase', dataType='Xfo')
+        self.spineEndOutput = self.addOutput('spineEnd', dataType='Xfo')
+        self.spineVertebraeOutput = self.addOutput('spineVertebrae', dataType='Xfo[]')
 
         # Declare Input Attrs
 
@@ -53,17 +56,6 @@ class SpineComponentGuide(Component):
         # Guide Controls
         self.cog = Control('cogPosition', parent=ctrlCmpGrp, shape="sphere")
         self.cog.setColor("red")
-        
-        controlsLayer = self.getOrCreateLayer('controls')
-        ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
-
-        # Input and Outputs
-        self.outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
-        spineBaseOutput = Locator('spineBase', parent=self.outputHrcGrp)
-        spineEndOutput = Locator('spineEnd', parent=self.outputHrcGrp)
-
-        self.addOutput(spineBaseOutput)
-        self.addOutput(spineEndOutput)
 
 
         self.spine01Ctrl = Control('spine01Position', parent=ctrlCmpGrp, shape="sphere")
@@ -173,11 +165,11 @@ class SpineComponent(Component):
         super(SpineComponent, self).__init__(name, parent)
 
         # Declare Inputs Xfos
+
+        # Declare Output Xfos
         self.spineBaseOutput = self.addOutput('spineBase', dataType='Xfo')
         self.spineEndOutput = self.addOutput('spineEnd', dataType='Xfo')
         self.spineVertebraeOutput = self.addOutput('spineVertebrae', dataType='Xfo[]')
-
-        # Declare Output Xfos
 
         # Declare Input Attrs
 
