@@ -24,17 +24,22 @@ from kraken.helpers.utility_methods import logHierarchy
 class NeckComponentGuide(Component):
     """Neck Component Guide"""
 
-    def __init__(self, name='neck', parent=None, data=None):
+    def __init__(self, name='neckGuide', parent=None, data=None):
         super(NeckComponentGuide, self).__init__(name, parent)
 
+        # Declare Inputs Xfos
 
-        # ==================
-        # Add Component I/O
-        # ==================
-        
+        # Declare Output Xfos
+
+        # Declare Input Attrs
+
+        # Declare Output Attrs
+
+        # =========
+        # Controls
+        # =========
         controlsLayer = self.getOrCreateLayer('controls')
         ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
-        ctrlCmpGrp.setComponent(self)
 
         # IO Hierarchies
         inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
@@ -45,27 +50,21 @@ class NeckComponentGuide(Component):
         cmpOutputAttrGrp = AttributeGroup('outputs')
         outputHrcGrp.addAttributeGroup(cmpOutputAttrGrp)
 
-
-        # Add Xfo I/O's
-        self.neckEndInput = Locator('neckBase', parent=inputHrcGrp)
-        self.neckEndOutput = Locator('neckEnd', parent=outputHrcGrp)
-        self.neckOutput = Locator('neck', parent=outputHrcGrp)
-
-        self.addInput(self.neckEndInput)
-        self.addOutput(self.neckEndOutput)
+        # Guide Controls
+        self.neckCtrl = Control('neck', parent=ctrlCmpGrp, shape="sphere")
+        self.neckEndCtrl = Control('neckEnd', parent=ctrlCmpGrp, shape="sphere")
         self.addOutput(self.neckOutput)
 
 
-        self.neck = Control('neck', parent=self, shape="sphere")
-        self.neckEnd = Control('neckEnd', parent=self, shape="sphere")
 
         if data is None:
             data = {
-            "name": name,
-            "location": "M",
-            "neckPosition": Vec3(0.0, 16.5572, -0.6915),
-            "neckEndPosition": Vec3(0.0, 17.4756, -0.421)
-        }
+                    "name": name,
+                    "location": "M",
+                    "neckPosition": Vec3(0.0, 16.5572, -0.6915),
+                    "neckEndPosition": Vec3(0.0, 17.4756, -0.421)
+                   }
+
         self.loadData(data)
 
 
@@ -81,11 +80,11 @@ class NeckComponentGuide(Component):
         """
 
         data = {
-            "name": self.getName(),
-            "location": self.getLocation(),
-            "neckPosition": self.neck.xfo.tr,
-            "neckEndPosition": self.neckEnd.xfo.tr
-            }
+                "name": self.getName(),
+                "location": self.getLocation(),
+                "neckPosition": self.neckCtrl.xfo.tr,
+                "neckEndPosition": self.neckEndCtrl.xfo.tr
+               }
 
         return data
 
@@ -103,9 +102,10 @@ class NeckComponentGuide(Component):
 
         if 'name' in data:
             self.setName(data['name'])
+
         self.setLocation(data.get('location', 'M'))
-        self.neck.xfo.tr = data['neckPosition']
-        self.neckEnd.xfo.tr = data['neckEndPosition']
+        self.neckCtrl.xfo.tr = data['neckPosition']
+        self.neckEndCtrl.xfo.tr = data['neckEndPosition']
 
         return True
 
@@ -119,8 +119,8 @@ class NeckComponentGuide(Component):
         """
 
         # values
-        neckEndPosition = self.neck.xfo.tr
-        neckPosition = self.neckEnd.xfo.tr
+        neckEndPosition = self.neckCtrl.xfo.tr
+        neckPosition = self.neckEndCtrl.xfo.tr
         neckUpV = Vec3(0.0, 0.0, -1.0)
 
         # Calculate Neck Xfo
@@ -137,7 +137,8 @@ class NeckComponentGuide(Component):
                 "name": self.getName(),
                 "location":self.getLocation(),
                 "neckXfo": neckXfo
-                }
+               }
+
 
 from kraken.core.kraken_system import KrakenSystem
 KrakenSystem.getInstance().registerComponent(NeckComponentGuide)
@@ -147,10 +148,19 @@ KrakenSystem.getInstance().registerComponent(NeckComponentGuide)
 class NeckComponent(Component):
     """Neck Component"""
 
-    def __init__(self, name="Neck", parent=None):
+    def __init__(self, name="neck", parent=None):
 
         Profiler.getInstance().push("Construct Neck Component:" + name)
         super(NeckComponent, self).__init__(name, parent)
+
+        # Declare Inputs Xfos
+        self.neckBaseInput = self.addInput('neckBase', dataType='Xfo')
+
+        # Declare Output Xfos
+        self.neckEndOutput = self.addOutput('neckEnd', dataType='Xfo')
+        self.neckOutput = self.addOutput('neck', dataType='Xfo')
+
+        # Declare Input Attrs
 
         # =========
         # Controls
@@ -192,9 +202,14 @@ class NeckComponent(Component):
         # Create Component I/O
         # =====================
         # Setup Component Xfo I/O's
-        self.neckEndInput = Locator('neckBase', parent=inputHrcGrp)
-        self.neckEndOutput = Locator('neckEnd', parent=outputHrcGrp)
-        self.neckOutput = Locator('neck', parent=outputHrcGrp)
+        self.neckEndInputTgt = Locator('neckBase', parent=inputHrcGrp)
+        self.neckEndOutputTgt = Locator('neckEnd', parent=outputHrcGrp)
+        self.neckOutputTgt = Locator('neck', parent=outputHrcGrp)
+
+        # Set IO Targets
+        self.neckBaseInput.setTarget(self.neckEndInputTgt)
+        self.neckEndOutput.setTarget(self.neckEndOutputTgt)
+        self.neckOutput.setTarget(self.neckOutputTgt)
 
         # Setup componnent Attribute I/O's
         debugInputAttr = BoolAttribute('debug', True)
@@ -207,28 +222,28 @@ class NeckComponent(Component):
         # Constrain I/O
         # ==============
         # Constraint inputs
-        clavicleInputConstraint = PoseConstraint('_'.join([self.neckCtrlSpace.getName(), 'To', self.neckEndInput.getName()]))
+        clavicleInputConstraint = PoseConstraint('_'.join([self.neckCtrlSpace.getName(), 'To', self.neckEndInputTgt.getName()]))
         clavicleInputConstraint.setMaintainOffset(True)
-        clavicleInputConstraint.addConstrainer(self.neckEndInput)
+        clavicleInputConstraint.addConstrainer(self.neckEndInputTgt)
         self.neckCtrlSpace.addConstraint(clavicleInputConstraint)
 
         # Constraint outputs
-        neckEndConstraint = PoseConstraint('_'.join([self.neckEndOutput.getName(), 'To', self.neckCtrl.getName()]))
+        neckEndConstraint = PoseConstraint('_'.join([self.neckEndOutputTgt.getName(), 'To', self.neckCtrl.getName()]))
         neckEndConstraint.addConstrainer(self.neckCtrl)
-        self.neckEndOutput.addConstraint(neckEndConstraint)
+        self.neckEndOutputTgt.addConstraint(neckEndConstraint)
 
 
         # ==================
         # Add Component I/O
         # ==================
         # Add Xfo I/O's
-        self.addInput(self.neckEndInput)
-        self.addOutput(self.neckEndOutput)
-        self.addOutput(self.neckOutput)
+        # self.addInput(self.neckEndInputTgt)
+        # self.addOutput(self.neckEndOutputTgt)
+        # self.addOutput(self.neckOutputTgt)
 
         # Add Attribute I/O's
-        self.addInput(debugInputAttr)
-        self.addInput(rightSideInputAttr)
+        # self.addInput(debugInputAttr)
+        # self.addInput(rightSideInputAttr)
 
 
         # ===============
@@ -243,7 +258,7 @@ class NeckComponent(Component):
         spliceOp.setInput("rightSide", rightSideInputAttr)
 
         # Add Xfo Inputstrl)
-        spliceOp.setInput("constrainer", self.neckEndOutput)
+        spliceOp.setInput("constrainer", self.neckEndOutputTgt)
 
         # Add Xfo Outputs
         spliceOp.setOutput("constrainee", neckDef)
@@ -253,7 +268,7 @@ class NeckComponent(Component):
 
     def loadData(self, data=None):
 
-        self.setName(data.get('name', 'Neck'))
+        self.setName(data.get('name', 'neck'))
         location = data.get('location', 'M')
         self.setLocation(location)
 
@@ -263,9 +278,9 @@ class NeckComponent(Component):
         # ============
         # Set IO Xfos
         # ============
-        self.neckEndInput.xfo = data['neckXfo']
-        self.neckEndOutput.xfo = data['neckXfo']
-        self.neckOutput.xfo = data['neckXfo']
+        self.neckEndInputTgt.xfo = data['neckXfo']
+        self.neckEndOutputTgt.xfo = data['neckXfo']
+        self.neckOutputTgt.xfo = data['neckXfo']
 
 
 from kraken.core.kraken_system import KrakenSystem

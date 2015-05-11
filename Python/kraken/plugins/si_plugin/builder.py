@@ -323,7 +323,7 @@ class Builder(Builder):
         """
 
         parentDCCSceneItem = Dispatch(self.getDCCSceneItem(kAttribute.getParent()))
-        dccSceneItem = parentDCCSceneItem.AddParameter2(kAttribute.getName(), constants.siDouble, kAttribute.getValue(), kAttribute.min, kAttribute.max, kAttribute.min, kAttribute.max, constants.siClassifUnknown, 2053, kAttribute.getName())
+        dccSceneItem = parentDCCSceneItem.AddParameter2(kAttribute.getName(), constants.siDouble, kAttribute.getValue(), kAttribute.getMin(), kAttribute.getMax(), kAttribute.getMin(), kAttribute.getMax(), constants.siClassifUnknown, 2053, kAttribute.getName())
 
         self._registerSceneItemPair(kAttribute, dccSceneItem)
 
@@ -592,24 +592,30 @@ class Builder(Builder):
     # ========================
     # Component Build Methods
     # ========================
-    def buildAttributeConnection(self, kConnection):
-        """Builds the connection between the attribute and the connection.
+    def buildAttributeConnection(self, componentIO):
+        """Builds the link between the target and connection target.
 
         Arguments:
-        kConnection -- Object, kraken connection to build.
+        componentIO -- Object, kraken connection to build.
 
         Return:
         True if successful.
 
         """
 
-        source = kConnection.getSource()
-        target = kConnection.getTarget()
+        connection = componentIO.getConnection()
+        connectionTarget = connection.getTarget()
+        target = componentIO.getTarget()
 
-        sourceDCCSceneItem = self.getDCCSceneItem(kConnection.getSource())
-        targetDCCSceneItem = self.getDCCSceneItem(kConnection.getTarget())
+        if componentIO.getDataType().endswith('[]'):
+            # TODO: Implement array handling.
+            pass
+        else:
 
-        targetDCCSceneItem.AddExpression(sourceDCCSceneItem.FullName)
+            connectionTargetDCCSceneItem = self.getDCCSceneItem(connectionTarget)
+            targetDCCSceneItem = self.getDCCSceneItem(target)
+
+            targetDCCSceneItem.AddExpression(connectionTargetDCCSceneItem.FullName)
 
         return True
 

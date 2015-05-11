@@ -26,10 +26,32 @@ from kraken.helpers.utility_methods import logHierarchy
 class SpineComponentGuide(Component):
     """Spine Component Guide"""
 
-    def __init__(self, name='spine', parent=None):
+    def __init__(self, name='spineGuide', parent=None):
         super(SpineComponentGuide, self).__init__(name, parent)
 
-        self.cog = Control('cogPosition', parent=self, shape="sphere")
+        # Declare Inputs Xfos
+
+        # Declare Output Xfos
+
+        # Declare Input Attrs
+
+        # =========
+        # Controls
+        # =========
+        controlsLayer = self.getOrCreateLayer('controls')
+        ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
+
+        # IO Hierarchies
+        inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
+        cmpInputAttrGrp = AttributeGroup('inputs')
+        inputHrcGrp.addAttributeGroup(cmpInputAttrGrp)
+
+        outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
+        cmpOutputAttrGrp = AttributeGroup('outputs')
+        outputHrcGrp.addAttributeGroup(cmpOutputAttrGrp)
+
+        # Guide Controls
+        self.cog = Control('cogPosition', parent=ctrlCmpGrp, shape="sphere")
         self.cog.setColor("red")
         
         controlsLayer = self.getOrCreateLayer('controls')
@@ -44,14 +66,14 @@ class SpineComponentGuide(Component):
         self.addOutput(spineEndOutput)
 
 
-        self.spine01 = Control('spine01Position', parent=self, shape="sphere")
-        self.spine02 = Control('spine02Position', parent=self, shape="sphere")
-        self.spine03 = Control('spine03Position', parent=self, shape="sphere")
-        self.spine04 = Control('spine04Position', parent=self, shape="sphere")
+        self.spine01Ctrl = Control('spine01Position', parent=ctrlCmpGrp, shape="sphere")
+        self.spine02Ctrl = Control('spine02Position', parent=ctrlCmpGrp, shape="sphere")
+        self.spine03Ctrl = Control('spine03Position', parent=ctrlCmpGrp, shape="sphere")
+        self.spine04Ctrl = Control('spine04Position', parent=ctrlCmpGrp, shape="sphere")
 
-        self.numDeformers = IntegerAttribute('numDeformers', 1)
+        self.numDeformersAttr = IntegerAttribute('numDeformers', 1)
 
-        self.addInput(self.numDeformers)
+        # self.addInput(self.numDeformersAttr)
 
         self.loadData({
             "name": name,
@@ -77,15 +99,15 @@ class SpineComponentGuide(Component):
         """
 
         data = {
-            "name": self.getName(),
-            "location": self.getLocation(),
-            "cogPosition": self.cog.xfo.tr,
-            "spine01Position": self.spine01.xfo.tr,
-            "spine02Position": self.spine02.xfo.tr,
-            "spine03Position": self.spine03.xfo.tr,
-            "spine04Position": self.spine04.xfo.tr,
-            "numDeformers": self.numDeformers.getValue()
-            }
+                "name": self.getName(),
+                "location": self.getLocation(),
+                "cogPosition": self.cog.xfo.tr,
+                "spine01Position": self.spine01Ctrl.xfo.tr,
+                "spine02Position": self.spine02Ctrl.xfo.tr,
+                "spine03Position": self.spine03Ctrl.xfo.tr,
+                "spine04Position": self.spine04Ctrl.xfo.tr,
+                "numDeformers": self.numDeformersAttr.getValue()
+               }
 
         return data
 
@@ -103,13 +125,14 @@ class SpineComponentGuide(Component):
 
         if 'name' in data:
             self.setName(data['name'])
+
         self.setLocation(data.get('location', 'M'))
         self.cog.xfo.tr = data["cogPosition"]
-        self.spine01.xfo.tr = data["spine01Position"]
-        self.spine02.xfo.tr = data["spine02Position"]
-        self.spine03.xfo.tr = data["spine03Position"]
-        self.spine04.xfo.tr = data["spine04Position"]
-        self.numDeformers.setValue(data["numDeformers"])
+        self.spine01Ctrl.xfo.tr = data["spine01Position"]
+        self.spine02Ctrl.xfo.tr = data["spine02Position"]
+        self.spine03Ctrl.xfo.tr = data["spine03Position"]
+        self.spine04Ctrl.xfo.tr = data["spine04Position"]
+        self.numDeformersAttr.setValue(data["numDeformers"])
 
         return True
 
@@ -129,11 +152,11 @@ class SpineComponentGuide(Component):
                 "name": self.getName(),
                 "location":self.getLocation(),
                 "cogPosition": self.cog.xfo.tr,
-                "spine01Position": self.spine01.xfo.tr,
-                "spine02Position": self.spine02.xfo.tr,
-                "spine03Position": self.spine03.xfo.tr,
-                "spine04Position": self.spine04.xfo.tr,
-                "numDeformers": self.numDeformers.getValue()
+                "spine01Position": self.spine01Ctrl.xfo.tr,
+                "spine02Position": self.spine02Ctrl.xfo.tr,
+                "spine03Position": self.spine03Ctrl.xfo.tr,
+                "spine04Position": self.spine04Ctrl.xfo.tr,
+                "numDeformers": self.numDeformersAttr.getValue()
                }
 
 
@@ -144,10 +167,19 @@ KrakenSystem.getInstance().registerComponent(SpineComponentGuide)
 class SpineComponent(Component):
     """Spine Component"""
 
-    def __init__(self, name="Spine", parent=None):
+    def __init__(self, name="spine", parent=None):
 
         Profiler.getInstance().push("Construct Spine Component:" + name)
         super(SpineComponent, self).__init__(name, parent)
+
+        # Declare Inputs Xfos
+        self.spineBaseOutput = self.addOutput('spineBase', dataType='Xfo')
+        self.spineEndOutput = self.addOutput('spineEnd', dataType='Xfo')
+        self.spineVertebraeOutput = self.addOutput('spineVertebrae', dataType='Xfo[]')
+
+        # Declare Output Xfos
+
+        # Declare Input Attrs
 
         # =========
         # Controls
@@ -213,8 +245,11 @@ class SpineComponent(Component):
         # =====================
         # Setup component Xfo I/O's
 
-        spineBaseOutput = Locator('spineBase', parent=self.outputHrcGrp)
-        spineEndOutput = Locator('spineEnd', parent=self.outputHrcGrp)
+        spineBaseOutputTgt = Locator('spineBase', parent=self.outputHrcGrp)
+        spineEndOutputTgt = Locator('spineEnd', parent=self.outputHrcGrp)
+
+        self.spineBaseOutput.setTarget(spineBaseOutputTgt)
+        self.spineEndOutput.setTarget(spineEndOutputTgt)
 
         # Setup componnent Attribute I/O's
         debugInputAttr = BoolAttribute('debug', True)
@@ -231,13 +266,13 @@ class SpineComponent(Component):
         # Constraint inputs
 
         # Constraint outputs
-        self.spineBaseOutputConstraint = PoseConstraint('_'.join([spineBaseOutput.getName(), 'To', 'spineBase']))
+        self.spineBaseOutputConstraint = PoseConstraint('_'.join([spineBaseOutputTgt.getName(), 'To', 'spineBase']))
         self.spineBaseOutputConstraint.addConstrainer(self.spineOutputs[0])
-        spineBaseOutput.addConstraint(self.spineBaseOutputConstraint)
+        spineBaseOutputTgt.addConstraint(self.spineBaseOutputConstraint)
 
-        self.spineEndOutputConstraint = PoseConstraint('_'.join([spineEndOutput.getName(), 'To', 'spineEnd']))
+        self.spineEndOutputConstraint = PoseConstraint('_'.join([spineEndOutputTgt.getName(), 'To', 'spineEnd']))
         self.spineEndOutputConstraint.addConstrainer(self.spineOutputs[0])
-        spineEndOutput.addConstraint(self.spineEndOutputConstraint)
+        spineEndOutputTgt.addConstraint(self.spineEndOutputConstraint)
 
 
         # ==================
@@ -248,12 +283,12 @@ class SpineComponent(Component):
         # for spineOutput in self.spineOutputs:
         #     self.addOutput(spineOutput)
 
-        self.addOutput(spineBaseOutput)
-        self.addOutput(spineEndOutput)
+        # self.addOutput(spineBaseOutputTgt)
+        # self.addOutput(spineEndOutputTgt)
 
-        # Add Attribute I/O's
-        self.addInput(debugInputAttr)
-        self.addInput(self.lengthInputAttr)
+        # # Add Attribute I/O's
+        # self.addInput(debugInputAttr)
+        # self.addInput(self.lengthInputAttr)
 
 
         # ===============
@@ -316,7 +351,7 @@ class SpineComponent(Component):
 
     def loadData(self, data=None):
 
-        self.setName(data.get('name', 'Spine'))
+        self.setName(data.get('name', 'spine'))
         location = data.get('location', 'M')
         self.setLocation(location)
 
