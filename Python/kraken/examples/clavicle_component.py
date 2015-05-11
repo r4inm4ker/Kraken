@@ -107,7 +107,7 @@ class ClavicleComponentGuide(Component):
 
         self.setLocation(data['location'])
         self.clavicleCtrl.xfo = data['clavicleXfo']
-        self.clavicleUpVCtrl.xfo = data['clavicleUpVXfo']
+        self.clavicleUpVCtrl.xfo = self.clavicleCtrl.xfo.multiply(data['clavicleUpVXfo'])
         self.clavicleEndCtrl.xfo = data['clavicleEndXfo']
 
         return True
