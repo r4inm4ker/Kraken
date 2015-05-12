@@ -26,6 +26,8 @@ class Inspector(Inspector):
 
         """
 
-        dccItem = None
+        findItem = pm.PyNode("|" + "|".join(name.split('.')))
+        if findItem is None:
+            return None
 
-        return dccItem
+        return findItem
