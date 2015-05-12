@@ -18,4 +18,4 @@ Profiler.getInstance().pop()
 if __name__ == "__main__":
     print Profiler.getInstance().generateReport()
 else:
-   logHierarchy(bobGuide)
+    logHierarchy(bobGuide)
