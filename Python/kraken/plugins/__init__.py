@@ -14,7 +14,7 @@ def getBuilder():
 
     """
 
-    builder = None
+    dccBuilder = None
 
     for eachPlugin in __all__:
         mod = __import__("kraken.plugins." + eachPlugin, fromlist=['dccTest'])
@@ -25,12 +25,42 @@ def getBuilder():
             reload(loaded_mod)
             loaded_class = getattr(loaded_mod, 'Builder')
 
-            builder = loaded_class()
+            dccBuilder = loaded_class()
 
-    if builder is None:
+    if dccBuilder is None:
         print "Failed to find DCC builder. Falling back to Python builder."
 
-        from kraken.core.builders import builder
-        builder = builder.Builder()
+        from kraken.core import builder
+        dccBuilder = builder.Builder()
 
-    return builder
+    return dccBuilder
+
+
+def getInspector():
+    """Gets the inspector that belongs to the DCC calling this method.
+
+    Return:
+    Inspect, instance of the inspector for the DCC.
+
+    """
+
+    dccInspector = None
+
+    for eachPlugin in __all__:
+        mod = __import__("kraken.plugins." + eachPlugin, fromlist=['dccTest'])
+        reload(mod)
+
+        if mod.dccTest() is True:
+            loaded_mod = __import__("kraken.plugins." + eachPlugin + ".inspector", fromlist=['inspector'])
+            reload(loaded_mod)
+            loaded_class = getattr(loaded_mod, 'Inspector')
+
+            dccInspector = loaded_class()
+
+    if dccInspector is None:
+        print "Failed to find DCC inspector. Falling back to Python inspector."
+
+        from kraken.core import inspector
+        dccInspector = inspector.Inspector()
+
+    return dccInspector
