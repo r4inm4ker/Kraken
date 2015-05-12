@@ -7,12 +7,33 @@ AttributeGroup - Attribute Group.
 
 from kraken.core.objects.scene_item import SceneItem
 
+
 class AttributeGroup(SceneItem):
     """Attribute Group that attributes belong to."""
 
     def __init__(self, name, parent=None):
         super(AttributeGroup, self).__init__(name, parent)
         self.attributes = []
+
+
+    # =============
+    # Name Methods
+    # =============
+    def getFullBuildName(self):
+        """Gets the full build name of the object.
+
+        Return:
+        String, full build name of the object.
+
+        """
+
+        print "got an attribute group!!!"
+        print self.getName()
+
+        if self.parent is not None and not self.parent.isTypeOf('Component'):
+            return self.parent.getFullBuildName() + '_' + self.getName()
+
+        return self.getName()
 
 
     # ==================

@@ -87,7 +87,7 @@ class Object3D(SceneItem):
 
         """
 
-        if self.parent is not None:
+        if self.parent is not None and not self.parent.isTypeOf('Component'):
             return self.parent.getFullBuildName() + '.' + self.getBuildName()
 
         return self.getBuildName()

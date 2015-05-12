@@ -4,8 +4,6 @@ class Inspector(object):
     """The Inspector is a singleton object used to create mapping between Kraken
     objects and the DCC objects."""
 
-    __instance = None
-
     def __init__(self):
         super(Inspector, self).__init__()
         self._hrcMap = {}
@@ -27,20 +25,33 @@ class Inspector(object):
 
     def createHierarchyMap(self, obj):
 
-        if obj.isTypeOf('Component'):
-            return
+        if obj.isTypeOf('Component') is False:
 
-        fullBuildName = obj.getFullBuildName()
-        dccItem = self.getDCCItem(fullBuildName)
+            fullBuildName = obj.getFullBuildName()
+            dccItem = self.getDCCItem(fullBuildName)
 
-        self._hrcMap[obj] = {
-                       "buildName": fullBuildName,
-                       "dccItem": dccItem
-                      }
+            self._hrcMap[obj] = {
+                           "buildName": fullBuildName,
+                           "dccItem": dccItem
+                          }
 
-        for i in xrange(obj.getNumChildren()):
-            child = obj.getChildByIndex(i)
-            self.createHierarchyMap(child)
+        if obj.isTypeOf('Object3D'):
+            for i in xrange(obj.getNumAttributeGroups()):
+                attrGrp = obj.getAttributeGroupByIndex(i)
+                self.createHierarchyMap(attrGrp)
+
+        if obj.isTypeOf('AttributeGroup'):
+            print "getting attributes!"
+            print obj.name
+
+            for i in xrange(obj.getNumAttributes()):
+                attr = obj.getAttributeByIndex(i)
+                self.createHierarchyMap(attr)
+
+        if obj.isTypeOf('Object3D'):
+            for i in xrange(obj.getNumChildren()):
+                child = obj.getChildByIndex(i)
+                self.createHierarchyMap(child)
 
         return
 
@@ -74,35 +85,3 @@ class Inspector(object):
         dccItem = None
 
         return dccItem
-
-
-    # ==============
-    # Class Methods
-    # ==============
-    @classmethod
-    def getInstance(cls):
-        """This class method returns the singleton instance for the Inspector.
-
-        Return:
-        The singleton instance.
-
-        """
-
-        if cls.__instance is None:
-            cls.__instance = Inspector()
-
-        return cls.__instance
-
-
-    @classmethod
-    def clearInstance(cls):
-        """Clears the instance variable of the Inspector.
-
-        Return:
-        True if successful.
-
-        """
-
-        Inspector.__instance = None
-
-        return True
