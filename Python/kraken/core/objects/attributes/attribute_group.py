@@ -27,11 +27,8 @@ class AttributeGroup(SceneItem):
 
         """
 
-        print "got an attribute group!!!"
-        print self.getName()
-
         if self.parent is not None and not self.parent.isTypeOf('Component'):
-            return self.parent.getFullBuildName() + '_' + self.getName()
+            return self.parent.getFullBuildName() + ':' + self.getName()
 
         return self.getName()
 
