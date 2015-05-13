@@ -449,9 +449,6 @@ class Builder(object):
             attributeGroup = kObject.getAttributeGroupByIndex(i)
 
             attributeCount = attributeGroup.getNumAttributes()
-            if attributeCount < 1:
-                continue
-
             self.buildAttributeGroup(attributeGroup)
 
         return True

@@ -369,9 +369,6 @@ class Builder(Builder):
         parentDCCSceneItem = self.getDCCSceneItem(kAttributeGroup.getParent())
 
         groupName = kAttributeGroup.getName()
-        if groupName == "":
-            groupName = "Settings"
-
         parentDCCSceneItem.addAttr(groupName, niceName=groupName, attributeType="enum", enumName="-----", keyable=True)
         dccSceneItem = parentDCCSceneItem.attr(groupName)
         pm.setAttr(parentDCCSceneItem + "." + groupName, lock=True)

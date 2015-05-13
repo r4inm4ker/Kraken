@@ -29,9 +29,6 @@ class Object3D(SceneItem):
         if parent is not None:
             parent.addChild(self)
 
-        defaultAttrGroup = AttributeGroup("")
-        self.addAttributeGroup(defaultAttrGroup)
-
 
     # ==================
     # Property Methods

@@ -382,12 +382,6 @@ class Builder(Builder):
         parentDCCSceneItem = self.getDCCSceneItem(kAttributeGroup.getParent())
 
         groupName = kAttributeGroup.getName()
-        if groupName == "" and kAttributeGroup.getNumAttributes() < 1:
-            return False
-
-        if groupName == "":
-            groupName = "Settings"
-
         dccSceneItem = parentDCCSceneItem.AddProperty("CustomParameterSet", False, groupName)
         self._registerSceneItemPair(kAttributeGroup, dccSceneItem)
 
