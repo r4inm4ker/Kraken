@@ -36,31 +36,31 @@ def getBuilder():
     return dccBuilder
 
 
-def getInspector():
-    """Gets the inspector that belongs to the DCC calling this method.
+def getSynchronizer():
+    """Gets the Synchronizer that belongs to the DCC calling this method.
 
     Return:
-    Inspect, instance of the inspector for the DCC.
+    Inspect, instance of the Synchronizer for the DCC.
 
     """
 
-    dccInspector = None
+    dccSynchronizer = None
 
     for eachPlugin in __all__:
         mod = __import__("kraken.plugins." + eachPlugin, fromlist=['dccTest'])
         reload(mod)
 
         if mod.dccTest() is True:
-            loaded_mod = __import__("kraken.plugins." + eachPlugin + ".inspector", fromlist=['inspector'])
+            loaded_mod = __import__("kraken.plugins." + eachPlugin + ".synchronizer", fromlist=['synchronizer'])
             reload(loaded_mod)
-            loaded_class = getattr(loaded_mod, 'Inspector')
+            loaded_class = getattr(loaded_mod, 'Synchronizer')
 
-            dccInspector = loaded_class()
+            dccSynchronizer = loaded_class()
 
-    if dccInspector is None:
+    if dccSynchronizer is None:
         print "Failed to find DCC inspector. Falling back to Python inspector."
 
-        from kraken.core import inspector
-        dccInspector = inspector.Inspector()
+        from kraken.core import synchronizer
+        dccSynchronizer = synchronizer.Synchronizer()
 
-    return dccInspector
+    return dccSynchronizer

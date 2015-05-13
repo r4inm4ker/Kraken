@@ -162,7 +162,6 @@ class ClavicleComponentGuide(Component):
         for k, v, in hrcMap.iteritems():
             print k
             print v
-            print "\n"
 
         return
 
@@ -323,6 +322,7 @@ class ClavicleComponent(Component):
         self.spineEndInputTgt.xfo = data['clavicleXfo']
         self.clavicleEndOutputTgt.xfo = data['clavicleXfo']
         self.clavicleOutputTgt.xfo = data['clavicleXfo']
+
 
 from kraken.core.kraken_system import KrakenSystem
 KrakenSystem.getInstance().registerComponent(ClavicleComponent)

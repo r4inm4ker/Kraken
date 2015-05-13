@@ -20,6 +20,8 @@ from kraken.core.objects.control import Control
 
 from kraken.core.objects.operators.splice_operator import SpliceOperator
 
+from kraken.plugins import getInspector
+
 from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
 
@@ -73,7 +75,7 @@ class ArmComponentGuide(Component):
 
         # Set input attribute targets
         self.bicepFKCtrlSizeInput.setTarget(self.bicepFKCtrlSizeInputAttr)
-        self.bicepFKCtrlSizeInput.setTarget(self.forearmFKCtrlSizeInputAttr)
+        self.forearmFKCtrlSizeInput.setTarget(self.forearmFKCtrlSizeInputAttr)
 
         if data is None:
             data = {
@@ -195,6 +197,24 @@ class ArmComponentGuide(Component):
             "bicepFKCtrlSize": self.bicepFKCtrlSizeInputAttr.getValue(),
             "forearmFKCtrlSize": self.forearmFKCtrlSizeInputAttr.getValue()
             }
+
+
+    # ==========
+    # Sync Data
+    # ==========
+    def syncData(self):
+
+        guideInspector = getInspector()
+        guideInspector.createHierarchyMap(self)
+
+        hrcMap = guideInspector.getHierarchyMap()
+
+        print "Mapping: "
+        for k, v, in hrcMap.iteritems():
+            print k
+            print v
+
+        return
 
 
 from kraken.core.kraken_system import KrakenSystem
