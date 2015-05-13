@@ -26,8 +26,22 @@ class Inspector(Inspector):
 
         """
 
-        findItem = pm.PyNode("|" + "|".join(name.split('.')))
-        if findItem is None:
+        try:
+            if ':' in name:
+                nameSplit = name.split(':')
+                objName = nameSplit[0].replace('.', '|')
+
+                if len(nameSplit[1].split('.')) > 0:
+                    objName += '.' + nameSplit[1].split('.')[-1]
+                else:
+                    objName += '.' + nameSplit[1]
+            else:
+                objName = "|" + name.replace('.', '|')
+
+            print "finding: " + objName
+
+            findItem = pm.PyNode(objName)
+        except:
             return None
 
         return findItem

@@ -36,14 +36,15 @@ class Inspector(object):
                           }
 
         if obj.isTypeOf('Object3D'):
+
             for i in xrange(obj.getNumAttributeGroups()):
                 attrGrp = obj.getAttributeGroupByIndex(i)
                 self.createHierarchyMap(attrGrp)
 
-        if obj.isTypeOf('AttributeGroup'):
-            print "getting attributes!"
-            print obj.name
+                print "Found Attr Group"
+                print attrGrp.getNumAttributes()
 
+        if obj.isTypeOf('AttributeGroup'):
             for i in xrange(obj.getNumAttributes()):
                 attr = obj.getAttributeByIndex(i)
                 self.createHierarchyMap(attr)

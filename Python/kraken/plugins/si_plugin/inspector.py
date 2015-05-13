@@ -26,6 +26,8 @@ class Inspector(Inspector):
 
         """
 
+        name = name.replace(':', '.')
+
         findItem = si.Dictionary.GetObject(name, False)
         if findItem is None:
             return None
