@@ -18,8 +18,6 @@ from kraken.core.objects.control import Control
 
 from kraken.core.objects.operators.splice_operator import SpliceOperator
 
-from kraken.plugins import getInspector
-
 from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
 
@@ -146,24 +144,6 @@ class ClavicleComponentGuide(Component):
                 "clavicleXfo": clavicleXfo,
                 "clavicleLen": clavicleLen
                 }
-
-
-    # ==========
-    # Sync Data
-    # ==========
-    def syncData(self):
-
-        guideInspector = getInspector()
-        guideInspector.createHierarchyMap(self)
-
-        hrcMap = guideInspector.getHierarchyMap()
-
-        print "Mapping: "
-        for k, v, in hrcMap.iteritems():
-            print k
-            print v
-
-        return
 
 
 from kraken.core.kraken_system import KrakenSystem
