@@ -18,10 +18,6 @@ clavicleGuide.loadData({
         "clavicleEndXfo": Xfo(Vec3(2.27, 15.295, -0.753))
     })
 
-
-clavicleGuide.syncData()
-
-
 # Save the clavicle guid data for persistence.
 saveData = clavicleGuide.saveData()
 
