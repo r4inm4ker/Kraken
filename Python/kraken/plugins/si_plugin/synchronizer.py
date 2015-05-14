@@ -54,19 +54,23 @@ class Synchronizer(Synchronizer):
         hrcMap = self.getHierarchyMap()
 
         if obj not in hrcMap.keys():
-            print "Warning! " + obj.getName() + " was not found in the mapping!"
+            print "Warning! 3D Object '" + obj.getName() + "' was not found in the mapping!"
             return False
 
         dccItem = hrcMap[obj]['dccItem']
 
-        dccXfo = dccItem.Kinematics.Global.GetTransform2()
+        dccXfo = dccItem.Kinematics.Global.GetTransform2(None)
         dccPos = dccXfo.Translation.Get2()
         dccQuat = dccXfo.Rotation.Quaternion.Get2()
+        dccScl = dccXfo.Scaling.Get2()
 
         pos = Vec3(x=dccPos[0], y=dccPos[1], z=dccPos[2])
         quat = Quat(v=Vec3(dccQuat[1], dccQuat[2], dccQuat[3]), w=dccQuat[0])
+        scl = Vec3(x=dccScl[0], y=dccScl[1], z=dccScl[2])
 
-        obj.xfo = dccItem
+        newXfo = Xfo(tr=pos, ori=quat, sc=scl)
+
+        obj.xfo = newXfo
 
         return True
 
@@ -84,5 +88,15 @@ class Synchronizer(Synchronizer):
         True if successful.
 
         """
+
+        hrcMap = self.getHierarchyMap()
+
+        if obj not in hrcMap.keys():
+            print "Warning! Attribute '" + obj.getName() + "' was not found in the mapping!"
+            return False
+
+        dccItem = hrcMap[obj]['dccItem']
+
+        obj.setValue(dccItem.Value)
 
         return True

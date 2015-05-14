@@ -18,7 +18,8 @@ class Synchronizer(object):
         self._hrcMap = {}
         self._target = None
 
-        self.setTarget(target)
+        if target is not None:
+            self.setTarget(target)
 
 
     # ===============
@@ -46,7 +47,11 @@ class Synchronizer(object):
 
         """
 
+        self.clearHierarchyMap()
+
         self._target = target
+
+        self.createHierarchyMap(self.getTarget())
 
         return True
 
@@ -67,11 +72,13 @@ class Synchronizer(object):
 
     def createHierarchyMap(self, obj):
 
+        # ==============
+        # Map Hierarchy
+        # ==============
         if obj.isTypeOf('Object3D'):
 
             # Sync Xfo if it's not a Component
             if obj.isTypeOf('Component') is False:
-
                 fullBuildName = obj.getFullBuildName()
                 dccItem = self.getDCCItem(fullBuildName)
 
@@ -80,6 +87,22 @@ class Synchronizer(object):
                                "dccItem": dccItem
                               }
 
+        elif obj.isTypeOf('Attribute'):
+            fullBuildName = obj.getFullBuildName()
+            dccItem = self.getDCCItem(fullBuildName)
+
+            self._hrcMap[obj] = {
+                           "buildName": fullBuildName,
+                           "dccItem": dccItem
+                          }
+
+        else:
+            pass
+
+        # =======================
+        # Iterate over hierarchy
+        # =======================
+        if obj.isTypeOf('Object3D'):
             # Iterate over attribute groups
             for i in xrange(obj.getNumAttributeGroups()):
                 attrGrp = obj.getAttributeGroupByIndex(i)
@@ -125,6 +148,8 @@ class Synchronizer(object):
 
         """
 
+        self.synchronize(self.getTarget())
+
         return True
 
 
@@ -140,12 +165,25 @@ class Synchronizer(object):
 
         """
 
+        # =================
+        # Synchronize Data
+        # =================
         if obj.isTypeOf('Object3D'):
 
             # Sync Xfo if it's not a Component
             if obj.isTypeOf('Component') is False:
                 self.syncXfo(obj)
 
+        elif obj.isTypeOf('Attribute'):
+            self.syncAttribute(obj)
+
+        else:
+            pass
+
+        # =======================
+        # Iterate over hierarchy
+        # =======================
+        if obj.isTypeOf('Object3D'):
             # Iterate over attribute groups
             for i in xrange(obj.getNumAttributeGroups()):
                 attrGrp = obj.getAttributeGroupByIndex(i)
@@ -155,7 +193,7 @@ class Synchronizer(object):
         if obj.isTypeOf('AttributeGroup'):
             for i in xrange(obj.getNumAttributes()):
                 attr = obj.getAttributeByIndex(i)
-                self.syncAttribute(attr)
+                self.synchronize(attr)
 
         if obj.isTypeOf('Object3D'):
 
