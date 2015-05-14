@@ -8,6 +8,7 @@ from euler import Euler
 from xfo import Xfo
 from mat33 import Mat33
 from mat44 import Mat44
+from rotation_order import RotationOrder
 
 
 PI = 3.141592653589793
