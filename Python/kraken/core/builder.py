@@ -532,6 +532,12 @@ class Builder(object):
                     continue
                 builtName += kObject.getComponent().getName()
 
+            elif token is 'container':
+                if kObject.getContainer() is None:
+                    skipSep = True
+                    continue
+                builtName += kObject.getContainer().getName()
+
             else:
                 raise ValueError("Unresolvabled token '" + token + "' used on: " + kObject.getFullName())
 

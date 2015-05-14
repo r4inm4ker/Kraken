@@ -164,7 +164,7 @@ class Config(object):
                                   {
                                    "Container": ["name"],
                                    "Layer": ["name"],
-                                   "ComponentGroup": ["name", "sep", "location", "sep", "type"],
+                                   "ComponentGroup": ["container", "name", "sep", "location", "sep", "type"],
                                    "default": ["component", "sep", "location", "sep", "name", "sep", "type"],
                                   }
                        }

@@ -165,6 +165,12 @@ class Object3D(SceneItem):
                     continue
                 builtName += self.getComponent().getName()
 
+            elif token is 'container':
+                if self.getContainer() is None:
+                    skipSep = True
+                    continue
+                builtName += self.getContainer().getName()
+
             else:
                 raise ValueError("Unresolvabled token '" + token + "' used on: " + self.getFullName())
 
