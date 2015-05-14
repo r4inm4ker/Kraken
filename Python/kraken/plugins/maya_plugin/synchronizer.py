@@ -1,4 +1,6 @@
-from kraken.core.Synchronizer import Synchronizer
+from kraken.core.maths import Xfo, Vec3, Quat
+
+from kraken.core.synchronizer import Synchronizer
 from kraken.plugins.maya_plugin.utils import *
 
 
@@ -61,6 +63,28 @@ class Synchronizer(Synchronizer):
 
         """
 
+        hrcMap = self.getHierarchyMap()
+
+        if obj not in hrcMap.keys():
+            print "Warning! 3D Object '" + obj.getName() + "' was not found in the mapping!"
+            return False
+
+        dccItem = hrcMap[obj]['dccItem']
+
+
+        # dccXfo = dccItem.Kinematics.Global.GetTransform2(None)
+        dccPos = dccItem.getTranslation()
+        dccQuat = dccItem.getRotation(quaternion=True).get()
+        dccScl = dccItem.getScale()
+
+        pos = Vec3(x=dccPos[0], y=dccPos[1], z=dccPos[2])
+        quat = Quat(v=Vec3(dccQuat[0], dccQuat[1], dccQuat[2]), w=dccQuat[3])
+        scl = Vec3(x=dccScl[0], y=dccScl[1], z=dccScl[2])
+
+        newXfo = Xfo(tr=pos, ori=quat, sc=scl)
+
+        obj.xfo = newXfo
+
         return True
 
 
@@ -77,5 +101,15 @@ class Synchronizer(Synchronizer):
         True if successful.
 
         """
+
+        hrcMap = self.getHierarchyMap()
+
+        if obj not in hrcMap.keys():
+            print "Warning! Attribute '" + obj.getName() + "' was not found in the mapping!"
+            return False
+
+        dccItem = hrcMap[obj]['dccItem']
+
+        obj.setValue(dccItem.get())
 
         return True
