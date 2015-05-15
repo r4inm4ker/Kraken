@@ -14,7 +14,7 @@ class NumberAttribute(Attribute):
 
     def __init__(self, name, value=0, minValue=None, maxValue=None):
         super(NumberAttribute, self).__init__(name, value)
-        
+
         self.min = None
         self.max = None
 
@@ -146,7 +146,7 @@ class NumberAttribute(Attribute):
 
         """
 
-        if self.isTypeOf('IntergerAttribute'):
+        if self.isTypeOf('IntegerAttribute'):
             if type(minimum) is not int:
                 raise TypeError("UiMin value is not of type 'int'.")
 
@@ -193,7 +193,7 @@ class NumberAttribute(Attribute):
 
         """
 
-        if self.isTypeOf('IntergerAttribute'):
+        if self.isTypeOf('IntegerAttribute'):
             if type(maximum) is not int:
                 raise TypeError("UiMax value is not of type 'int'.")
 
