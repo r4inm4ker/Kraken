@@ -358,58 +358,48 @@ class Builder(object):
     # ========================
     # Component Build Methods
     # ========================
-    def buildXfoConnection(self, componentIO):
+    def buildXfoConnection(self, componentInput):
         """Builds the constraint between the target and connection target.
 
         Arguments:
-        componentIO -- Object, kraken component input or output to build connections
-                               for.
+        componentInput -- Object, kraken component input to build connections for.
 
         Return:
         True if successful.
 
         """
 
-        connection = componentIO.getConnection()
-        connectionTarget = connection.getTarget()
-        target = componentIO.getTarget()
+        connection = componentInput.getConnection()
+        target = componentInput.getTarget()
 
-        if componentIO.getDataType().endswith('[]'):
-            # TODO: Implement array handling.
-            pass
+        if componentInput.getDataType().endswith('[]'):
+            connectionTarget = connection.getTarget()[componentInput.getIndex()]
         else:
-            constraint = PoseConstraint('_'.join([target.getName(), 'To', connectionTarget.getName()]))
-            constraint.setMaintainOffset(True)
-            constraint.setConstrainee(target)
-            constraint.addConstrainer(connectionTarget)
+            connectionTarget = connection.getTarget()
 
-            dccSceneItem = self.buildPoseConstraint(constraint)
-            self._registerSceneItemPair(componentIO, dccSceneItem)
+        constraint = PoseConstraint('_'.join([target.getName(), 'To', connectionTarget.getName()]))
+        constraint.setMaintainOffset(True)
+        constraint.setConstrainee(target)
+        constraint.addConstrainer(connectionTarget)
+
+        dccSceneItem = self.buildPoseConstraint(constraint)
+        self._registerSceneItemPair(componentInput, dccSceneItem)
 
         return True
 
 
-    def buildAttributeConnection(self, componentIO):
+    def buildAttributeConnection(self, componentInput):
         """Builds the link between the target and connection target.
 
         Arguments:
-        componentIO -- Object, kraken connection to build.
+        componentInput -- Object, kraken connection to build.
 
         Return:
         True if successful.
 
         """
 
-        connection = componentIO.getConnection()
-        connectionTarget = connection.getTarget()
-        target = componentIO.getTarget()
-
-        if componentIO.getDataType().endswith('[]'):
-            # TODO: Implement array handling.
-            pass
-        else:
-            # Implemented in DCC Plugins.
-            pass
+        # Implemented in DCC Plugins.
 
         return True
 

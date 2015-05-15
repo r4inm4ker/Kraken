@@ -230,6 +230,7 @@ class SpineComponent(Component):
 
         self.deformerJoints = []
         self.spineOutputs = []
+        self.spineVertebraeOutput.setTarget(self.spineOutputs)
         self.setNumDeformers(1)
 
         # =====================

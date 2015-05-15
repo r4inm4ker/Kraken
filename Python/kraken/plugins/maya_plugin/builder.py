@@ -518,31 +518,30 @@ class Builder(Builder):
     # Component Build Methods
     # ========================
 
-    def buildAttributeConnection(self, kConnection):
+    def buildAttributeConnection(self, componentInput):
         """Builds the connection between the attribute and the connection.
 
         Arguments:
-        kConnection -- Object, kraken connection to build.
+        componentInput -- Object, kraken connection to build.
 
         Return:
         True if successful.
 
         """
 
-        connection = componentIO.getConnection()
-        connectionTarget = connection.getTarget()
-        target = componentIO.getTarget()
+        connection = componentInput.getConnection()
+        target = componentInput.getTarget()
 
-        if componentIO.getDataType().endswith('[]'):
-            # TODO: Implement array handling.
-            pass
+        if componentInput.getDataType().endswith('[]'):
+            connectionTarget = connection.getTarget()[componentInput.getIndex()]
         else:
+            connectionTarget = connection.getTarget()
 
-            connectionTargetDCCSceneItem = self.getDCCSceneItem(connectionTarget)
-            targetDCCSceneItem = self.getDCCSceneItem(target)
+        connectionTargetDCCSceneItem = self.getDCCSceneItem(connectionTarget)
+        targetDCCSceneItem = self.getDCCSceneItem(target)
 
-            pm.connectAttr(connectionTargetDCCSceneItem, targetDCCSceneItem, force=True)
-            targetDCCSceneItem.AddExpression(connectionTargetDCCSceneItem.FullName)
+        pm.connectAttr(connectionTargetDCCSceneItem, targetDCCSceneItem, force=True)
+        targetDCCSceneItem.AddExpression(connectionTargetDCCSceneItem.FullName)
 
         return True
 
