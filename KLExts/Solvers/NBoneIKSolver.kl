@@ -1,7 +1,20 @@
 require InlineDrawing;
 
 object NBoneIKSolver : KrakenSolver {
+  Xfo initPose[];
 };
+
+// Default Constructor
+function NBoneIKSolver()
+{
+
+}
+
+function NBoneIKSolver(
+  Xfo initPose[])
+{
+  this.initPose = initPose;
+}
 
 
 // Return Arguments for Kraken
@@ -38,7 +51,7 @@ function Xfo[] solveNCFIK(
   ikpose.resize(basePose.size());
   for (Integer i = 0; i < basePose.size()-1; i++) {
     ikpose[i] = basePose[i];
-    // Note: Scaling of bones is currently not supported. 
+    // Note: Scaling of bones is currently not supported.
     boneVectors[i] = basePose[i].inverse().transformVector(basePose[i+1].tr);
     boneLengths[i] = boneVectors[i].length();
     remainingChainLength += abs(boneLengths[i] /* basePose[i].sc.x*/);
@@ -78,7 +91,7 @@ function Xfo[] solveNCFIK(
     if (i == 0) {
       // For the first bone calculate and store the overall chain offset towards the ik target
       chainOffsetRotation.setFrom2Vectors(vecToFkChainTip, vecToIkGoal);
-    
+
       fkChainTip = boneXfo.tr + (vecToIkGoal * distToFkChainTip);
       boneXfo.ori = chainOffsetRotation * boneXfo.ori;
     }
@@ -99,7 +112,7 @@ function Xfo[] solveNCFIK(
       //  boneLengthVector = boneXfo.ori.rotateVector(Vec3(-1.0, 0.0, 0.0));
       //else
         boneLengthVector = boneXfo.ori.rotateVector(boneVectors[i].unit());
-      
+
       // this is the current angle of the bone.
       Scalar fkBoneAngle = acos(Math_clamp(boneLengthVector.dot(vecToIkGoal), -1.0, 1.0));
 
@@ -108,11 +121,11 @@ function Xfo[] solveNCFIK(
         // in debug mode, report and error...
         continue;
       }
-      
+
       Vec3 bendAxis = vecToIkGoal.cross(boneLengthVector);
       bendAxis.setUnit();
       Scalar ikBoneAngle;
-      
+
       if (i == (basePose.size() - 3)) {
         // Use trigonometry to determine the ikBoneAngle
         // Law of cosines. a = BoneLength; b = Child BoneLength; c = Distance to the Ik Goal;
@@ -153,7 +166,7 @@ function Xfo[] solveNCFIK(
       Quat offset;
       offset.setFromAxisAndAngle(bendAxis, deltaBoneAngle);
       boneXfo.ori = offset * boneXfo.ori;
-      
+
     }
 
     ikpose[boneIndex] = boneXfo;
@@ -178,6 +191,19 @@ function NBoneIKSolver.solve!
   if(fkcontrols.size != pose.size)
     throw("Error in NBoneIKSolver. The number of FKControls does not match the number of joints");
 
+  if(this.initPose.size == 0) {
+    this.initPose.resize(pose.size);
+
+    Xfo fkPose[];
+    fkPose.resize(fkcontrols.size+1);
+    for(UInt32 i=0; i< fkcontrols.size; i++) {
+      fkPose[i] = Xfo(fkcontrols[i]);
+    }
+    this.initPose = fkPose;
+    fkPose[fkcontrols.size] = fkPose[fkcontrols.size-1];
+    fkPose[fkcontrols.size].tr = fkPose[fkcontrols.size-1].transformVector(fkPose[fkcontrols.size-2].inverse().transformVector(fkPose[fkcontrols.size-1].tr));
+  }
+
   Xfo xfoPose[];
   Vec3 boneVectors[];
   xfoPose.resize(fkcontrols.size+1);
@@ -190,9 +216,9 @@ function NBoneIKSolver.solve!
   boneVectors[boneVectors.size-1] = Vec3(tipBoneLen, 0.0, 0.0);
   xfoPose[fkcontrols.size] = xfoPose[fkcontrols.size-1];
   xfoPose[fkcontrols.size].tr = xfoPose[fkcontrols.size-1].transformVector(boneVectors[boneVectors.size-1]);
-  
+
   if(ikblend > 0.0){
-    Xfo ikPose[] = solveNCFIK(xfoPose, ikgoal.translation());
+    Xfo ikPose[] = solveNCFIK(this.initPose, ikgoal.translation());
 
     // Now blend the IK result with the FK result
     for(UInt32 i=0; i < xfoPose.size; i++){
