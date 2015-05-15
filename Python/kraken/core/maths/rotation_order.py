@@ -88,8 +88,6 @@ class RotationOrder(MathObject):
 
         """
 
-        import pdb; pdb.set_trace()
-
         if type(order) == str:
             lowerOrder = order.lower()
             if lowerOrder == 'xyz':

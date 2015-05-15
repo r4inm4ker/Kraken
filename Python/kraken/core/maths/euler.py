@@ -221,10 +221,10 @@ class Euler(MathObject):
 
         """
 
-        if ro is not None:
+        if ro is None:
             self._rtval.set('', ks.rtVal('Scalar', x), ks.rtVal('Scalar', y), ks.rtVal('Scalar', z))
         else:
-            self._rtval.set('', ks.rtVal('Scalar', x), ks.rtVal('Scalar', y), ks.rtVal('Scalar', z), ks.rtval('RotationOrder', ro))
+            self._rtval.set('', ks.rtVal('Scalar', x), ks.rtVal('Scalar', y), ks.rtVal('Scalar', z), ks.rtVal('RotationOrder', ro))
 
         return True
 
