@@ -50,6 +50,15 @@ print "Is in (XZY, ZYX or YXZ): " + str(yxzRotationOrder.isReversed())
 print ""
 
 print "\n=========="
+print "String Tests"
+print "==========="
+xyzRotationOrder = RotationOrder('YXZ')
+print "RotationOrder: " + str(xyzRotationOrder)
+print "Order is YXZ: " + str(xyzRotationOrder.isYXZ())
+print ""
+
+
+print "\n=========="
 print "Set Tests"
 print "=========="
 

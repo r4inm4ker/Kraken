@@ -88,18 +88,21 @@ class RotationOrder(MathObject):
 
         """
 
+        import pdb; pdb.set_trace()
+
         if type(order) == str:
-            if order.lower() == 'xyz':
+            lowerOrder = order.lower()
+            if lowerOrder == 'xyz':
                 newOrder = 0
-            elif order.lower() == 'yzx':
+            elif lowerOrder == 'yzx':
                 newOrder = 1
-            elif order.lower() == 'zxy':
+            elif lowerOrder == 'zxy':
                 newOrder = 2
-            elif order.lower() == 'xzy':
+            elif lowerOrder == 'xzy':
                 newOrder = 3
-            elif order.lower() == 'zyx':
+            elif lowerOrder == 'zyx':
                 newOrder = 4
-            elif order.lower() == 'yxz':
+            elif lowerOrder == 'yxz':
                 newOrder = 5
             else:
                 print "Invalid rotation order '" + order + "', using default 0 (XYZ)."
