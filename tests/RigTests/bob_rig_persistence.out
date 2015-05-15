@@ -1,43 +1,16 @@
 ==bob==
 Bob
-Bob.deformers
-Bob.deformers.spine01
-Bob.deformers.spine02
-Bob.deformers.spine03
-Bob.deformers.spine04
-Bob.deformers.neck
-Bob.deformers.head
-Bob.deformers.jaw
-Bob.deformers.eyeLeft
-Bob.deformers.eyeRight
-Bob.deformers.clavicle
-Bob.deformers.clavicle
-Bob.deformers.bicep
-Bob.deformers.forearm
-Bob.deformers.wrist
-Bob.deformers.bicep
-Bob.deformers.forearm
-Bob.deformers.wrist
-Bob.deformers.hand
-Bob.deformers.hand
-Bob.deformers.femur
-Bob.deformers.shin
-Bob.deformers.ankle
-Bob.deformers.femur
-Bob.deformers.shin
-Bob.deformers.ankle
-Bob.deformers.foot
-Bob.deformers.foot
+Bob.spine
 Bob.controls
 Bob.controls.spine
 Bob.controls.spine.inputs
 Bob.controls.spine.outputs
-Bob.controls.spine.outputs.spine00
 Bob.controls.spine.outputs.spine01
-Bob.controls.spine.outputs.spine02
-Bob.controls.spine.outputs.spine03
 Bob.controls.spine.outputs.spineBase
 Bob.controls.spine.outputs.spineEnd
+Bob.controls.spine.outputs.spine02
+Bob.controls.spine.outputs.spine03
+Bob.controls.spine.outputs.spine04
 Bob.controls.spine.cog
 Bob.controls.spine.cog.cog
 Bob.controls.spine.cog.cog.spine01
@@ -76,16 +49,16 @@ Bob.controls.clavicle
 Bob.controls.clavicle.inputs
 Bob.controls.clavicle.inputs.spineEnd
 Bob.controls.clavicle.outputs
-Bob.controls.clavicle.outputs.clavicleEnd
 Bob.controls.clavicle.outputs.clavicle
+Bob.controls.clavicle.outputs.clavicleEnd
 Bob.controls.clavicle.clavicle
 Bob.controls.clavicle.clavicle.clavicle
 Bob.controls.clavicle
 Bob.controls.clavicle.inputs
 Bob.controls.clavicle.inputs.spineEnd
 Bob.controls.clavicle.outputs
-Bob.controls.clavicle.outputs.clavicleEnd
 Bob.controls.clavicle.outputs.clavicle
+Bob.controls.clavicle.outputs.clavicleEnd
 Bob.controls.clavicle.clavicle
 Bob.controls.clavicle.clavicle.clavicle
 Bob.controls.arm
@@ -125,8 +98,8 @@ Bob.controls.hand.inputs
 Bob.controls.hand.inputs.armEndXfo
 Bob.controls.hand.inputs.armEndPos
 Bob.controls.hand.outputs
-Bob.controls.hand.outputs.hand
 Bob.controls.hand.outputs.handEnd
+Bob.controls.hand.outputs.hand
 Bob.controls.hand.hand
 Bob.controls.hand.hand.hand
 Bob.controls.hand.handRef
@@ -135,8 +108,8 @@ Bob.controls.hand.inputs
 Bob.controls.hand.inputs.armEndXfo
 Bob.controls.hand.inputs.armEndPos
 Bob.controls.hand.outputs
-Bob.controls.hand.outputs.hand
 Bob.controls.hand.outputs.handEnd
+Bob.controls.hand.outputs.hand
 Bob.controls.hand.hand
 Bob.controls.hand.hand.hand
 Bob.controls.hand.handRef
@@ -177,8 +150,8 @@ Bob.controls.foot.inputs
 Bob.controls.foot.inputs.legEndXfo
 Bob.controls.foot.inputs.legEndPos
 Bob.controls.foot.outputs
-Bob.controls.foot.outputs.hand
 Bob.controls.foot.outputs.handEnd
+Bob.controls.foot.outputs.hand
 Bob.controls.foot.foot
 Bob.controls.foot.foot.foot
 Bob.controls.foot.footRef
@@ -187,417 +160,76 @@ Bob.controls.foot.inputs
 Bob.controls.foot.inputs.legEndXfo
 Bob.controls.foot.inputs.legEndPos
 Bob.controls.foot.outputs
-Bob.controls.foot.outputs.hand
 Bob.controls.foot.outputs.handEnd
+Bob.controls.foot.outputs.hand
 Bob.controls.foot.foot
 Bob.controls.foot.foot.foot
 Bob.controls.foot.footRef
-Bob.geometry
-Warning. Non unique names used in Kraken:Bob.deformers.clavicle
-Warning. Non unique names used in Kraken:Bob.deformers.clavicle.
-Warning. Non unique names used in Kraken:Bob.deformers.bicep
-Warning. Non unique names used in Kraken:Bob.deformers.bicep.
-Warning. Non unique names used in Kraken:Bob.deformers.forearm
-Warning. Non unique names used in Kraken:Bob.deformers.forearm.
-Warning. Non unique names used in Kraken:Bob.deformers.wrist
-Warning. Non unique names used in Kraken:Bob.deformers.wrist.
-Warning. Non unique names used in Kraken:Bob.deformers.hand
-Warning. Non unique names used in Kraken:Bob.deformers.hand.
-Warning. Non unique names used in Kraken:Bob.deformers.femur
-Warning. Non unique names used in Kraken:Bob.deformers.femur.
-Warning. Non unique names used in Kraken:Bob.deformers.shin
-Warning. Non unique names used in Kraken:Bob.deformers.shin.
-Warning. Non unique names used in Kraken:Bob.deformers.ankle
-Warning. Non unique names used in Kraken:Bob.deformers.ankle.
-Warning. Non unique names used in Kraken:Bob.deformers.foot
-Warning. Non unique names used in Kraken:Bob.deformers.foot.
-Warning. Non unique names used in Kraken:Bob.controls.clavicle
-Warning. Non unique names used in Kraken:Bob.controls.clavicle.inputs
-Warning. Non unique names used in Kraken:Bob.controls.clavicle.inputs.spineEnd
-Warning. Non unique names used in Kraken:Bob.controls.clavicle.inputs.spineEnd.
-Warning. Non unique names used in Kraken:Bob.controls.clavicle.inputs.
-Warning. Non unique names used in Kraken:Bob.controls.clavicle.inputs.inputAttrs
-Warning. Non unique names used in Kraken:Bob.controls.clavicle.inputs.inputAttrs.debug
-Warning. Non unique names used in Kraken:Bob.controls.clavicle.inputs.inputAttrs.rightSide
-Warning. Non unique names used in Kraken:Bob.controls.clavicle.outputs
-Warning. Non unique names used in Kraken:Bob.controls.clavicle.outputs.clavicleEnd
-Warning. Non unique names used in Kraken:Bob.controls.clavicle.outputs.clavicleEnd.
-Warning. Non unique names used in Kraken:Bob.controls.clavicle.outputs.clavicleEnd.clavicleEnd_To_clavicle
-Warning. Non unique names used in Kraken:Bob.controls.clavicle.outputs.clavicle
-Warning. Non unique names used in Kraken:Bob.controls.clavicle.outputs.clavicle.
-Warning. Non unique names used in Kraken:Bob.controls.clavicle.outputs.clavicle.clavicle_To_clavicle
-Warning. Non unique names used in Kraken:Bob.controls.clavicle.outputs.
-Warning. Non unique names used in Kraken:Bob.controls.clavicle.outputs.outputAttrs
-Warning. Non unique names used in Kraken:Bob.controls.clavicle.outputs.outputAttrs.followBody
-Warning. Non unique names used in Kraken:Bob.controls.clavicle.clavicle
-Warning. Non unique names used in Kraken:Bob.controls.clavicle.clavicle.clavicle
-Warning. Non unique names used in Kraken:Bob.controls.clavicle.clavicle.clavicle.
-Warning. Non unique names used in Kraken:Bob.controls.clavicle.clavicle.
-Warning. Non unique names used in Kraken:Bob.controls.clavicle.clavicle.clavicle_To_spineEnd
-Warning. Non unique names used in Kraken:Bob.controls.clavicle.
-Warning. Non unique names used in Kraken:Bob.controls.clavicle.toggleDebugging
-Warning. Non unique names used in Kraken:Bob.controls.arm
-Warning. Non unique names used in Kraken:Bob.controls.arm.inputs
-Warning. Non unique names used in Kraken:Bob.controls.arm.inputs.clavicleEnd
-Warning. Non unique names used in Kraken:Bob.controls.arm.inputs.clavicleEnd.
-Warning. Non unique names used in Kraken:Bob.controls.arm.inputs.
-Warning. Non unique names used in Kraken:Bob.controls.arm.inputs.inputAttrs
-Warning. Non unique names used in Kraken:Bob.controls.arm.inputs.inputAttrs.debug
-Warning. Non unique names used in Kraken:Bob.controls.arm.inputs.inputAttrs.bone1Len
-Warning. Non unique names used in Kraken:Bob.controls.arm.inputs.inputAttrs.bone2Len
-Warning. Non unique names used in Kraken:Bob.controls.arm.inputs.inputAttrs.fkik
-Warning. Non unique names used in Kraken:Bob.controls.arm.inputs.inputAttrs.softIK
-Warning. Non unique names used in Kraken:Bob.controls.arm.inputs.inputAttrs.softDist
-Warning. Non unique names used in Kraken:Bob.controls.arm.inputs.inputAttrs.stretch
-Warning. Non unique names used in Kraken:Bob.controls.arm.inputs.inputAttrs.stretchBlend
-Warning. Non unique names used in Kraken:Bob.controls.arm.inputs.inputAttrs.rightSide
-Warning. Non unique names used in Kraken:Bob.controls.arm.outputs
-Warning. Non unique names used in Kraken:Bob.controls.arm.outputs.bicep
-Warning. Non unique names used in Kraken:Bob.controls.arm.outputs.bicep.
-Warning. Non unique names used in Kraken:Bob.controls.arm.outputs.forearm
-Warning. Non unique names used in Kraken:Bob.controls.arm.outputs.forearm.
-Warning. Non unique names used in Kraken:Bob.controls.arm.outputs.armEndXfo
-Warning. Non unique names used in Kraken:Bob.controls.arm.outputs.armEndXfo.
-Warning. Non unique names used in Kraken:Bob.controls.arm.outputs.armEndPos
-Warning. Non unique names used in Kraken:Bob.controls.arm.outputs.armEndPos.
-Warning. Non unique names used in Kraken:Bob.controls.arm.outputs.
-Warning. Non unique names used in Kraken:Bob.controls.arm.outputs.outputAttrs
-Warning. Non unique names used in Kraken:Bob.controls.arm.bicepFK
-Warning. Non unique names used in Kraken:Bob.controls.arm.bicepFK.bicepFK
-Warning. Non unique names used in Kraken:Bob.controls.arm.bicepFK.bicepFK.forearmFK
-Warning. Non unique names used in Kraken:Bob.controls.arm.bicepFK.bicepFK.forearmFK.forearmFK
-Warning. Non unique names used in Kraken:Bob.controls.arm.bicepFK.bicepFK.forearmFK.forearmFK.
-Warning. Non unique names used in Kraken:Bob.controls.arm.bicepFK.bicepFK.forearmFK.
-Warning. Non unique names used in Kraken:Bob.controls.arm.bicepFK.bicepFK.
-Warning. Non unique names used in Kraken:Bob.controls.arm.bicepFK.
-Warning. Non unique names used in Kraken:Bob.controls.arm.bicepFK.IK_To_clavicleEnd
-Warning. Non unique names used in Kraken:Bob.controls.arm.IK
-Warning. Non unique names used in Kraken:Bob.controls.arm.IK.IK
-Warning. Non unique names used in Kraken:Bob.controls.arm.IK.IK.
-Warning. Non unique names used in Kraken:Bob.controls.arm.IK.IK.DisplayInfo_ArmSettings
-Warning. Non unique names used in Kraken:Bob.controls.arm.IK.IK.DisplayInfo_ArmSettings.debug
-Warning. Non unique names used in Kraken:Bob.controls.arm.IK.IK.DisplayInfo_ArmSettings.bone1Len
-Warning. Non unique names used in Kraken:Bob.controls.arm.IK.IK.DisplayInfo_ArmSettings.bone2Len
-Warning. Non unique names used in Kraken:Bob.controls.arm.IK.IK.DisplayInfo_ArmSettings.fkik
-Warning. Non unique names used in Kraken:Bob.controls.arm.IK.IK.DisplayInfo_ArmSettings.softIK
-Warning. Non unique names used in Kraken:Bob.controls.arm.IK.IK.DisplayInfo_ArmSettings.softDist
-Warning. Non unique names used in Kraken:Bob.controls.arm.IK.IK.DisplayInfo_ArmSettings.stretch
-Warning. Non unique names used in Kraken:Bob.controls.arm.IK.IK.DisplayInfo_ArmSettings.stretchBlend
-Warning. Non unique names used in Kraken:Bob.controls.arm.IK.
-Warning. Non unique names used in Kraken:Bob.controls.arm.UpV
-Warning. Non unique names used in Kraken:Bob.controls.arm.UpV.UpV
-Warning. Non unique names used in Kraken:Bob.controls.arm.UpV.UpV.
-Warning. Non unique names used in Kraken:Bob.controls.arm.UpV.
-Warning. Non unique names used in Kraken:Bob.controls.arm.
-Warning. Non unique names used in Kraken:Bob.controls.arm.toggleDebugging
-Warning. Non unique names used in Kraken:Bob.controls.hand
-Warning. Non unique names used in Kraken:Bob.controls.hand.inputs
-Warning. Non unique names used in Kraken:Bob.controls.hand.inputs.armEndXfo
-Warning. Non unique names used in Kraken:Bob.controls.hand.inputs.armEndXfo.
-Warning. Non unique names used in Kraken:Bob.controls.hand.inputs.armEndPos
-Warning. Non unique names used in Kraken:Bob.controls.hand.inputs.armEndPos.
-Warning. Non unique names used in Kraken:Bob.controls.hand.inputs.
-Warning. Non unique names used in Kraken:Bob.controls.hand.inputs.inputAttrs
-Warning. Non unique names used in Kraken:Bob.controls.hand.inputs.inputAttrs.debug
-Warning. Non unique names used in Kraken:Bob.controls.hand.inputs.inputAttrs.rightSide
-Warning. Non unique names used in Kraken:Bob.controls.hand.inputs.inputAttrs.linkToWorld
-Warning. Non unique names used in Kraken:Bob.controls.hand.outputs
-Warning. Non unique names used in Kraken:Bob.controls.hand.outputs.hand
-Warning. Non unique names used in Kraken:Bob.controls.hand.outputs.hand.
-Warning. Non unique names used in Kraken:Bob.controls.hand.outputs.hand.hand_To_hand
-Warning. Non unique names used in Kraken:Bob.controls.hand.outputs.handEnd
-Warning. Non unique names used in Kraken:Bob.controls.hand.outputs.handEnd.
-Warning. Non unique names used in Kraken:Bob.controls.hand.outputs.handEnd.handEnd_To_hand
-Warning. Non unique names used in Kraken:Bob.controls.hand.outputs.
-Warning. Non unique names used in Kraken:Bob.controls.hand.outputs.outputAttrs
-Warning. Non unique names used in Kraken:Bob.controls.hand.hand
-Warning. Non unique names used in Kraken:Bob.controls.hand.hand.hand
-Warning. Non unique names used in Kraken:Bob.controls.hand.hand.hand.
-Warning. Non unique names used in Kraken:Bob.controls.hand.hand.hand.DisplayInfo_HandSettings
-Warning. Non unique names used in Kraken:Bob.controls.hand.hand.hand.DisplayInfo_HandSettings.debug
-Warning. Non unique names used in Kraken:Bob.controls.hand.hand.hand.DisplayInfo_HandSettings.linkToWorld
-Warning. Non unique names used in Kraken:Bob.controls.hand.hand.
-Warning. Non unique names used in Kraken:Bob.controls.hand.handRef
-Warning. Non unique names used in Kraken:Bob.controls.hand.handRef.
-Warning. Non unique names used in Kraken:Bob.controls.hand.
-Warning. Non unique names used in Kraken:Bob.controls.hand.toggleDebugging
-Warning. Non unique names used in Kraken:Bob.controls.leg
-Warning. Non unique names used in Kraken:Bob.controls.leg.inputs
-Warning. Non unique names used in Kraken:Bob.controls.leg.inputs.pelvisInput
-Warning. Non unique names used in Kraken:Bob.controls.leg.inputs.pelvisInput.
-Warning. Non unique names used in Kraken:Bob.controls.leg.inputs.
-Warning. Non unique names used in Kraken:Bob.controls.leg.inputs.inputAttrs
-Warning. Non unique names used in Kraken:Bob.controls.leg.inputs.inputAttrs.debug
-Warning. Non unique names used in Kraken:Bob.controls.leg.inputs.inputAttrs.bone1Len
-Warning. Non unique names used in Kraken:Bob.controls.leg.inputs.inputAttrs.bone2Len
-Warning. Non unique names used in Kraken:Bob.controls.leg.inputs.inputAttrs.fkik
-Warning. Non unique names used in Kraken:Bob.controls.leg.inputs.inputAttrs.softIK
-Warning. Non unique names used in Kraken:Bob.controls.leg.inputs.inputAttrs.softDist
-Warning. Non unique names used in Kraken:Bob.controls.leg.inputs.inputAttrs.stretch
-Warning. Non unique names used in Kraken:Bob.controls.leg.inputs.inputAttrs.stretchBlend
-Warning. Non unique names used in Kraken:Bob.controls.leg.inputs.inputAttrs.rightSide
-Warning. Non unique names used in Kraken:Bob.controls.leg.outputs
-Warning. Non unique names used in Kraken:Bob.controls.leg.outputs.femur
-Warning. Non unique names used in Kraken:Bob.controls.leg.outputs.femur.
-Warning. Non unique names used in Kraken:Bob.controls.leg.outputs.shin
-Warning. Non unique names used in Kraken:Bob.controls.leg.outputs.shin.
-Warning. Non unique names used in Kraken:Bob.controls.leg.outputs.legEndXfo
-Warning. Non unique names used in Kraken:Bob.controls.leg.outputs.legEndXfo.
-Warning. Non unique names used in Kraken:Bob.controls.leg.outputs.legEndPos
-Warning. Non unique names used in Kraken:Bob.controls.leg.outputs.legEndPos.
-Warning. Non unique names used in Kraken:Bob.controls.leg.outputs.
-Warning. Non unique names used in Kraken:Bob.controls.leg.outputs.outputAttrs
-Warning. Non unique names used in Kraken:Bob.controls.leg.femurFK
-Warning. Non unique names used in Kraken:Bob.controls.leg.femurFK.femurFK
-Warning. Non unique names used in Kraken:Bob.controls.leg.femurFK.femurFK.shinFK
-Warning. Non unique names used in Kraken:Bob.controls.leg.femurFK.femurFK.shinFK.shinFK
-Warning. Non unique names used in Kraken:Bob.controls.leg.femurFK.femurFK.shinFK.shinFK.
-Warning. Non unique names used in Kraken:Bob.controls.leg.femurFK.femurFK.shinFK.
-Warning. Non unique names used in Kraken:Bob.controls.leg.femurFK.femurFK.
-Warning. Non unique names used in Kraken:Bob.controls.leg.femurFK.
-Warning. Non unique names used in Kraken:Bob.controls.leg.femurFK.IK_To_pelvisInput
-Warning. Non unique names used in Kraken:Bob.controls.leg.IK
-Warning. Non unique names used in Kraken:Bob.controls.leg.IK.IK
-Warning. Non unique names used in Kraken:Bob.controls.leg.IK.IK.
-Warning. Non unique names used in Kraken:Bob.controls.leg.IK.IK.DisplayInfo_LegSettings
-Warning. Non unique names used in Kraken:Bob.controls.leg.IK.IK.DisplayInfo_LegSettings.debug
-Warning. Non unique names used in Kraken:Bob.controls.leg.IK.IK.DisplayInfo_LegSettings.bone1Len
-Warning. Non unique names used in Kraken:Bob.controls.leg.IK.IK.DisplayInfo_LegSettings.bone2Len
-Warning. Non unique names used in Kraken:Bob.controls.leg.IK.IK.DisplayInfo_LegSettings.fkik
-Warning. Non unique names used in Kraken:Bob.controls.leg.IK.IK.DisplayInfo_LegSettings.softIK
-Warning. Non unique names used in Kraken:Bob.controls.leg.IK.IK.DisplayInfo_LegSettings.softDist
-Warning. Non unique names used in Kraken:Bob.controls.leg.IK.IK.DisplayInfo_LegSettings.stretch
-Warning. Non unique names used in Kraken:Bob.controls.leg.IK.IK.DisplayInfo_LegSettings.stretchBlend
-Warning. Non unique names used in Kraken:Bob.controls.leg.IK.
-Warning. Non unique names used in Kraken:Bob.controls.leg.UpV
-Warning. Non unique names used in Kraken:Bob.controls.leg.UpV.UpV
-Warning. Non unique names used in Kraken:Bob.controls.leg.UpV.UpV.
-Warning. Non unique names used in Kraken:Bob.controls.leg.UpV.
-Warning. Non unique names used in Kraken:Bob.controls.leg.
-Warning. Non unique names used in Kraken:Bob.controls.leg.toggleDebugging
-Warning. Non unique names used in Kraken:Bob.controls.foot
-Warning. Non unique names used in Kraken:Bob.controls.foot.inputs
-Warning. Non unique names used in Kraken:Bob.controls.foot.inputs.legEndXfo
-Warning. Non unique names used in Kraken:Bob.controls.foot.inputs.legEndXfo.
-Warning. Non unique names used in Kraken:Bob.controls.foot.inputs.legEndPos
-Warning. Non unique names used in Kraken:Bob.controls.foot.inputs.legEndPos.
-Warning. Non unique names used in Kraken:Bob.controls.foot.inputs.
-Warning. Non unique names used in Kraken:Bob.controls.foot.inputs.inputAttrs
-Warning. Non unique names used in Kraken:Bob.controls.foot.inputs.inputAttrs.debug
-Warning. Non unique names used in Kraken:Bob.controls.foot.inputs.inputAttrs.rightSide
-Warning. Non unique names used in Kraken:Bob.controls.foot.inputs.inputAttrs.linkToWorld
-Warning. Non unique names used in Kraken:Bob.controls.foot.outputs
-Warning. Non unique names used in Kraken:Bob.controls.foot.outputs.hand
-Warning. Non unique names used in Kraken:Bob.controls.foot.outputs.hand.
-Warning. Non unique names used in Kraken:Bob.controls.foot.outputs.hand.hand_To_foot
-Warning. Non unique names used in Kraken:Bob.controls.foot.outputs.handEnd
-Warning. Non unique names used in Kraken:Bob.controls.foot.outputs.handEnd.
-Warning. Non unique names used in Kraken:Bob.controls.foot.outputs.handEnd.handEnd_To_foot
-Warning. Non unique names used in Kraken:Bob.controls.foot.outputs.
-Warning. Non unique names used in Kraken:Bob.controls.foot.outputs.outputAttrs
-Warning. Non unique names used in Kraken:Bob.controls.foot.foot
-Warning. Non unique names used in Kraken:Bob.controls.foot.foot.foot
-Warning. Non unique names used in Kraken:Bob.controls.foot.foot.foot.
-Warning. Non unique names used in Kraken:Bob.controls.foot.foot.foot.DisplayInfo_HandSettings
-Warning. Non unique names used in Kraken:Bob.controls.foot.foot.foot.DisplayInfo_HandSettings.debug
-Warning. Non unique names used in Kraken:Bob.controls.foot.foot.foot.DisplayInfo_HandSettings.linkToWorld
-Warning. Non unique names used in Kraken:Bob.controls.foot.foot.
-Warning. Non unique names used in Kraken:Bob.controls.foot.footRef
-Warning. Non unique names used in Kraken:Bob.controls.foot.footRef.
-Warning. Non unique names used in Kraken:Bob.controls.foot.
-Warning. Non unique names used in Kraken:Bob.controls.foot.toggleDebugging
-==bob2==
-Bob
 Bob.deformers
-Bob.deformers.spine01
-Bob.deformers.spine02
-Bob.deformers.spine03
-Bob.deformers.spine04
+Bob.deformers.spine
+Bob.deformers.spine.spine01
+Bob.deformers.spine.spine02
+Bob.deformers.spine.spine03
+Bob.deformers.spine.spine04
 Bob.deformers.neck
+Bob.deformers.neck.neck
 Bob.deformers.head
-Bob.deformers.jaw
-Bob.deformers.eyeLeft
-Bob.deformers.eyeRight
+Bob.deformers.head.head
+Bob.deformers.head.jaw
+Bob.deformers.head.eyeLeft
+Bob.deformers.head.eyeRight
 Bob.deformers.clavicle
+Bob.deformers.clavicle.clavicle
 Bob.deformers.clavicle
-Bob.deformers.bicep
-Bob.deformers.forearm
-Bob.deformers.wrist
-Bob.deformers.bicep
-Bob.deformers.forearm
-Bob.deformers.wrist
+Bob.deformers.clavicle.clavicle
+Bob.deformers.arm
+Bob.deformers.arm.bicep
+Bob.deformers.arm.forearm
+Bob.deformers.arm.wrist
+Bob.deformers.arm
+Bob.deformers.arm.bicep
+Bob.deformers.arm.forearm
+Bob.deformers.arm.wrist
 Bob.deformers.hand
+Bob.deformers.hand.hand
 Bob.deformers.hand
-Bob.deformers.femur
-Bob.deformers.shin
-Bob.deformers.ankle
-Bob.deformers.femur
-Bob.deformers.shin
-Bob.deformers.ankle
+Bob.deformers.hand.hand
+Bob.deformers.leg
+Bob.deformers.leg.femur
+Bob.deformers.leg.shin
+Bob.deformers.leg.ankle
+Bob.deformers.leg
+Bob.deformers.leg.femur
+Bob.deformers.leg.shin
+Bob.deformers.leg.ankle
 Bob.deformers.foot
+Bob.deformers.foot.foot
 Bob.deformers.foot
-Bob.controls
-Bob.controls.spine
-Bob.controls.spine.inputs
-Bob.controls.spine.outputs
-Bob.controls.spine.outputs.spine00
-Bob.controls.spine.outputs.spine01
-Bob.controls.spine.outputs.spine02
-Bob.controls.spine.outputs.spine03
-Bob.controls.spine.outputs.spineBase
-Bob.controls.spine.outputs.spineEnd
-Bob.controls.spine.cog
-Bob.controls.spine.cog.cog
-Bob.controls.spine.cog.cog.spine01
-Bob.controls.spine.cog.cog.spine01.spine01
-Bob.controls.spine.cog.cog.spine01.spine01.spine02
-Bob.controls.spine.cog.cog.spine01.spine01.spine02.spine02
-Bob.controls.spine.cog.cog.spine01.spine01.spine02.spine02.spine03
-Bob.controls.spine.cog.cog.spine01.spine01.spine02.spine02.spine03.spine03
-Bob.controls.spine.cog.cog.spine04
-Bob.controls.spine.cog.cog.spine04.spine04
-Bob.controls.neck
-Bob.controls.neck.inputs
-Bob.controls.neck.inputs.neckBase
-Bob.controls.neck.outputs
-Bob.controls.neck.outputs.neckEnd
-Bob.controls.neck.outputs.neck
-Bob.controls.neck.neck
-Bob.controls.neck.neck.neck
-Bob.controls.head
-Bob.controls.head.inputs
-Bob.controls.head.inputs.headBase
-Bob.controls.head.outputs
-Bob.controls.head.outputs.head
-Bob.controls.head.outputs.jaw
-Bob.controls.head.outputs.eyeL
-Bob.controls.head.outputs.eyeR
-Bob.controls.head.head
-Bob.controls.head.head.head
-Bob.controls.head.head.head.eyeLeft
-Bob.controls.head.head.head.eyeLeft.eyeLeft
-Bob.controls.head.head.head.eyeRight
-Bob.controls.head.head.head.eyeRight.eyeRight
-Bob.controls.head.head.head.jawCtrlSpace
-Bob.controls.head.head.head.jawCtrlSpace.jaw
-Bob.controls.clavicle
-Bob.controls.clavicle.inputs
-Bob.controls.clavicle.inputs.spineEnd
-Bob.controls.clavicle.outputs
-Bob.controls.clavicle.outputs.clavicleEnd
-Bob.controls.clavicle.outputs.clavicle
-Bob.controls.clavicle.clavicle
-Bob.controls.clavicle.clavicle.clavicle
-Bob.controls.clavicle
-Bob.controls.clavicle.inputs
-Bob.controls.clavicle.inputs.spineEnd
-Bob.controls.clavicle.outputs
-Bob.controls.clavicle.outputs.clavicleEnd
-Bob.controls.clavicle.outputs.clavicle
-Bob.controls.clavicle.clavicle
-Bob.controls.clavicle.clavicle.clavicle
-Bob.controls.arm
-Bob.controls.arm.inputs
-Bob.controls.arm.inputs.clavicleEnd
-Bob.controls.arm.outputs
-Bob.controls.arm.outputs.bicep
-Bob.controls.arm.outputs.forearm
-Bob.controls.arm.outputs.armEndXfo
-Bob.controls.arm.outputs.armEndPos
-Bob.controls.arm.bicepFK
-Bob.controls.arm.bicepFK.bicepFK
-Bob.controls.arm.bicepFK.bicepFK.forearmFK
-Bob.controls.arm.bicepFK.bicepFK.forearmFK.forearmFK
-Bob.controls.arm.IK
-Bob.controls.arm.IK.IK
-Bob.controls.arm.UpV
-Bob.controls.arm.UpV.UpV
-Bob.controls.arm
-Bob.controls.arm.inputs
-Bob.controls.arm.inputs.clavicleEnd
-Bob.controls.arm.outputs
-Bob.controls.arm.outputs.bicep
-Bob.controls.arm.outputs.forearm
-Bob.controls.arm.outputs.armEndXfo
-Bob.controls.arm.outputs.armEndPos
-Bob.controls.arm.bicepFK
-Bob.controls.arm.bicepFK.bicepFK
-Bob.controls.arm.bicepFK.bicepFK.forearmFK
-Bob.controls.arm.bicepFK.bicepFK.forearmFK.forearmFK
-Bob.controls.arm.IK
-Bob.controls.arm.IK.IK
-Bob.controls.arm.UpV
-Bob.controls.arm.UpV.UpV
-Bob.controls.hand
-Bob.controls.hand.inputs
-Bob.controls.hand.inputs.armEndXfo
-Bob.controls.hand.inputs.armEndPos
-Bob.controls.hand.outputs
-Bob.controls.hand.outputs.hand
-Bob.controls.hand.outputs.handEnd
-Bob.controls.hand.hand
-Bob.controls.hand.hand.hand
-Bob.controls.hand.handRef
-Bob.controls.hand
-Bob.controls.hand.inputs
-Bob.controls.hand.inputs.armEndXfo
-Bob.controls.hand.inputs.armEndPos
-Bob.controls.hand.outputs
-Bob.controls.hand.outputs.hand
-Bob.controls.hand.outputs.handEnd
-Bob.controls.hand.hand
-Bob.controls.hand.hand.hand
-Bob.controls.hand.handRef
-Bob.controls.leg
-Bob.controls.leg.inputs
-Bob.controls.leg.inputs.pelvisInput
-Bob.controls.leg.outputs
-Bob.controls.leg.outputs.femur
-Bob.controls.leg.outputs.shin
-Bob.controls.leg.outputs.legEndXfo
-Bob.controls.leg.outputs.legEndPos
-Bob.controls.leg.femurFK
-Bob.controls.leg.femurFK.femurFK
-Bob.controls.leg.femurFK.femurFK.shinFK
-Bob.controls.leg.femurFK.femurFK.shinFK.shinFK
-Bob.controls.leg.IK
-Bob.controls.leg.IK.IK
-Bob.controls.leg.UpV
-Bob.controls.leg.UpV.UpV
-Bob.controls.leg
-Bob.controls.leg.inputs
-Bob.controls.leg.inputs.pelvisInput
-Bob.controls.leg.outputs
-Bob.controls.leg.outputs.femur
-Bob.controls.leg.outputs.shin
-Bob.controls.leg.outputs.legEndXfo
-Bob.controls.leg.outputs.legEndPos
-Bob.controls.leg.femurFK
-Bob.controls.leg.femurFK.femurFK
-Bob.controls.leg.femurFK.femurFK.shinFK
-Bob.controls.leg.femurFK.femurFK.shinFK.shinFK
-Bob.controls.leg.IK
-Bob.controls.leg.IK.IK
-Bob.controls.leg.UpV
-Bob.controls.leg.UpV.UpV
-Bob.controls.foot
-Bob.controls.foot.inputs
-Bob.controls.foot.inputs.legEndXfo
-Bob.controls.foot.inputs.legEndPos
-Bob.controls.foot.outputs
-Bob.controls.foot.outputs.hand
-Bob.controls.foot.outputs.handEnd
-Bob.controls.foot.foot
-Bob.controls.foot.foot.foot
-Bob.controls.foot.footRef
-Bob.controls.foot
-Bob.controls.foot.inputs
-Bob.controls.foot.inputs.legEndXfo
-Bob.controls.foot.inputs.legEndPos
-Bob.controls.foot.outputs
-Bob.controls.foot.outputs.hand
-Bob.controls.foot.outputs.handEnd
-Bob.controls.foot.foot
-Bob.controls.foot.foot.foot
-Bob.controls.foot.footRef
-Bob.geometry
+Bob.deformers.foot.foot
+Bob.neck
+Bob.head
+Bob.clavicle
+Bob.clavicle
+Bob.arm
+Bob.arm
+Bob.L_HandComponent
+Bob.R_HandComponent
+Bob.L_LegComponent
+Bob.R_LegComponent
+Bob.L_FootComponent
+Bob.R_FootComponent
+Traceback (most recent call last):
+  File "tests/runTests.py", line 140, in <module>
+    runTest(filepath, update)
+  File "tests/runTests.py", line 116, in runTest
+    runPytonTest( filepath, update )
+  File "tests/runTests.py", line 74, in runPytonTest
+    execfile( filepath, {} )
+  File "d:\Projects\Kraken\tests\RigTests\bob_rig_persistence.py", line 19, in <module>
+    bob2 = loader.construct(jsonData1)
+  File "D:\Projects\Kraken\Python\kraken\core\io\kraken_loader.py", line 199, in construct
+    item.jsonDecode(self, jsonData)
+  File "D:\Projects\Kraken\Python\kraken\core\objects\object_3d.py", line 1019, in jsonDecode
+    self.xfo =  loader.decodeValue(jsonData['xfo'])
+AttributeError: 'KrakenLoader' object has no attribute 'decodeValue'
+
