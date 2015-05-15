@@ -5,13 +5,15 @@ Rig -- Rig representation.
 
 """
 
+import importlib
+import json
+import os
+
 from container import Container
 from kraken.core.kraken_system import KrakenSystem
 from kraken.core.profiler import Profiler
 from kraken.core.objects.layer import Layer
-import importlib
-import json
-
+from kraken.helpers.utility_methods import prepareToSave, prepareToLoad
 
 class Rig(Container):
     """Rig object."""
@@ -36,10 +38,12 @@ class Rig(Container):
         if not os.path.exists(filepath):
             raise Exception("File not found:" + filepath)
 
-        with open(referencefile) as rigDef:
+        with open(filepath) as rigDef:
             jsonData = json.load(rigDef)
 
-        # jsonData = json.load(str(open(referencefile).read()))
+        # now preprocess the data ready for loading.
+        jsonData = prepareToLoad(jsonData)
+
         self.loadRigDefinition(jsonData)
         Profiler.getInstance().pop()
 
@@ -116,6 +120,32 @@ class Rig(Container):
 
         Profiler.getInstance().pop()
 
+
+
+    def writeGuideDefinitionFile(self, filepath):
+        """Writes a rig definition to a file on disk.
+
+        Arguments:
+        filepath -- string, the file path of the rig definition file.
+
+        Return:
+        True if successful.
+
+        """
+
+        Profiler.getInstance().push("WriteGuideDefinitionFile:" + filepath)
+
+        guideData = self.getGuideData()
+
+        # now preprocess the data ready for saving to disk.
+        pureJSON = prepareToSave(guideData)
+
+        with open(filepath,'w') as rigDef:
+            rigDef.write(json.dumps(pureJSON, indent=2))
+
+        Profiler.getInstance().pop()
+
+
     def getGuideData(self):
         """Get the graph definition of the guide for biulding the final rig.
 
@@ -124,7 +154,7 @@ class Rig(Container):
 
         """
 
-        jsonData = {
+        guideData = {
             'name': self.getName()
         }
 
@@ -132,7 +162,7 @@ class Rig(Container):
         guideComponents = self.getChildrenByType('Component')
         for component in guideComponents:
             componentsJson.append(component.getGuideData())
-        jsonData['components'] = componentsJson
+        guideData['components'] = componentsJson
 
         connectionsJson = []
         for component in guideComponents:
@@ -146,6 +176,6 @@ class Rig(Container):
                     }
                     connectionsJson.append(connectionJson)
 
-        jsonData['connections'] = connectionsJson
+        guideData['connections'] = connectionsJson
 
-        return jsonData
+        return guideData

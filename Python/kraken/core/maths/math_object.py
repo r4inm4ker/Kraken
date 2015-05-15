@@ -44,7 +44,7 @@ class MathObject(object):
         """Encodes object to JSON.
 
         Return:
-        JSON string.
+        JSON object.
 
         """
 
@@ -68,7 +68,7 @@ class MathObject(object):
 
         Arguments:
         jsonData -- dict, the JSON data used to populate the math object.
-        decodeFn -- decodeFn, the decodeFn that can construct the math objects.
+        decodeFn -- decodeFn, the decodeFn that can construct the math members.
 
         Return:
         True of the decode was successful

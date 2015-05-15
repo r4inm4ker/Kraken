@@ -33,6 +33,15 @@ def __convertFromJSON(jsonData):
     return jsonData
 
 def prepareToLoad(jsonData):
+    """Prepares the json data for loading into kraken.
+
+    Arguments:
+    jsonData -- dict, the JSON data to be prepared.
+
+    Return:
+    dict, the prepared JSON hierarchy.
+
+    """
 
     return __convertFromJSON(jsonData)
 
@@ -51,4 +60,14 @@ def __convertToJSON(jsonData):
     return jsonData
 
 def prepareToSave(jsonData):
+    """Prepares the json data for serialization.
+
+    Arguments:
+    jsonData -- dict, the JSON data to be prepared.
+
+    Return:
+    dict, the prepared JSON hierarchy.
+
+    """
+
     return __convertToJSON(jsonData)
