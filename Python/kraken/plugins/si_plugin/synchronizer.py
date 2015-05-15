@@ -15,22 +15,21 @@ class Synchronizer(Synchronizer):
     # ============
     # DCC Methods
     # ============
-    def getDCCItem(self, name):
-        """Gets the DCC Item from the full build name.
-
-        This should be re-implemented in each DCC plugin.
+    def getDCCItem(self, decoratedPath):
+        """Gets the DCC Item from the full decorated path.
 
         Arguments:
-        name -- String, full build name for the object.
+        decoratedPath -- String, full decorated path for the object.
 
         Return:
         DCC Object, None if it isn't found.
 
         """
 
-        name = name.replace(':', '.')
+        # Softimage matches the Kraken path so we remove decorators.
+        path = decoratedPath.translate(None, ':#')
 
-        findItem = si.Dictionary.GetObject(name, False)
+        findItem = si.Dictionary.GetObject(path, False)
         if findItem is None:
             return None
 
@@ -39,9 +38,6 @@ class Synchronizer(Synchronizer):
 
     def syncXfo(self, obj):
         """Syncs the xfo from the DCC objec to the Kraken object.
-
-        * This should be re-implemented in the sub-classed synchronizer for each
-        plugin.
 
         Arguments:
         obj -- Object, object to sync the xfo for.
@@ -77,9 +73,6 @@ class Synchronizer(Synchronizer):
 
     def syncAttribute(self, obj):
         """Syncs the attribute value from the DCC objec to the Kraken object.
-
-        * This should be re-implemented in the sub-classed synchronizer for each
-        plugin.
 
         Arguments:
         obj -- Object, object to sync the attribute value for.

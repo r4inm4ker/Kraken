@@ -67,12 +67,13 @@ class Rig(Container):
             Profiler.getInstance().push("__loadComponents")
 
             for componentData in componentsJson:
-                moduleName = '.'.join(componentData['class'].split('.')[:-1])
-                className = componentData['class'].split('.').pop()
-                if moduleName is not "":
-                    importlib.import_module(moduleName)
 
-                componentClass = krakenSystem.getComponentClass(className)
+                # trim off the class name to get the module path.
+                modulePath = '.'.join(componentData['class'].split('.')[:-1])
+                if modulePath is not "":
+                    importlib.import_module(modulePath)
+
+                componentClass = krakenSystem.getComponentClass(componentData['class'])
                 if 'name' in componentData:
                     component = componentClass(name=componentData['name'], parent=self)
                 else:
@@ -117,16 +118,16 @@ class Rig(Container):
 
     def getGuideData(self):
         """Get the graph definition of the guide for biulding the final rig.
-        
+
         Return:
         The JSON data struture of the guide rig data
-        
+
         """
 
         jsonData = {
             'name': self.getName()
         }
-        
+
         componentsJson = []
         guideComponents = self.getChildrenByType('Component')
         for component in guideComponents:
@@ -146,5 +147,5 @@ class Rig(Container):
                     connectionsJson.append(connectionJson)
 
         jsonData['connections'] = connectionsJson
-        
+
         return jsonData
