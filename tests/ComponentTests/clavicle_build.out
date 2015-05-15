@@ -5,8 +5,8 @@ L_Clavicle.controls.Clavicle
 L_Clavicle.controls.Clavicle.inputs
 L_Clavicle.controls.Clavicle.inputs.spineEnd
 L_Clavicle.controls.Clavicle.outputs
-L_Clavicle.controls.Clavicle.outputs.clavicleEnd
 L_Clavicle.controls.Clavicle.outputs.clavicle
+L_Clavicle.controls.Clavicle.outputs.clavicleEnd
 L_Clavicle.controls.Clavicle.clavicle
 L_Clavicle.controls.Clavicle.clavicle.clavicle
 L_Clavicle.deformers

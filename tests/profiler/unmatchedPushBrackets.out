@@ -1,1 +1,13 @@
-Unable to close bracket. Pop has been called more times than push.
+Traceback (most recent call last):
+  File "tests/runTests.py", line 140, in <module>
+    runTest(filepath, update)
+  File "tests/runTests.py", line 116, in runTest
+    runPytonTest( filepath, update )
+  File "tests/runTests.py", line 74, in runPytonTest
+    execfile( filepath, {} )
+  File "d:\Projects\Kraken\tests\profiler\unmatchedPushBrackets.py", line 15, in <module>
+    profiler.pop()
+  File "D:\Projects\Kraken\Python\kraken\core\profiler.py", line 88, in pop
+    """times than push.""")
+Exception: Unable to close bracket. Pop has been called more times than push.
+
