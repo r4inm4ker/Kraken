@@ -8,6 +8,7 @@ Object3D - Base Object3D Object.
 from kraken.core.configs.config import Config
 from kraken.core.objects.scene_item import SceneItem
 from kraken.core.maths.xfo import Xfo
+from kraken.core.maths.rotation_order import RotationOrder
 from kraken.core.objects.attributes.attribute_group import AttributeGroup
 
 
@@ -21,7 +22,8 @@ class Object3D(SceneItem):
         self.flags = {}
         self.attributeGroups = []
         self.constraints = []
-        self.__xfo = Xfo()
+        self._xfo = Xfo()
+        self._ro = RotationOrder()
         self.color = None
         self.visibility = True
         self.shapeVisibility = True
@@ -42,7 +44,7 @@ class Object3D(SceneItem):
 
         """
 
-        return self.__xfo
+        return self._xfo
 
 
     @xfo.setter
@@ -68,9 +70,50 @@ class Object3D(SceneItem):
 
         """
 
-        self.__xfo = value.clone()
+        self._xfo = value.clone()
 
         return True
+
+
+    @property
+    def ro(self):
+        """Gets Rotation Order property of this Object3D.
+
+        Return:
+        Scalar, Rotation Order property of this Object3D.
+
+        """
+
+        return self._ro
+
+
+    @ro.setter
+    def ro(self, value):
+        """Sets Rotation Order of this Object3D.
+
+        Note: In Python, objects are always referenced, meaning to get a unique
+        instance, an explicit clone is required. In KL, structs are passed by
+        value, meaning that every assignment of a struct causes a clone.
+
+        This means that in KL it is impossible for 2 objects to reference the
+        same KL math object. This is an important performance feature of KL.
+
+        The members of the KL Math objects have this property. 2 Xfos cannot
+        share the same tr value. Here we implcitly clone the math object to
+        ensure the same behavior as in KL.
+
+        Arguments:
+        value -- RotationOrder, new rotation order.
+
+        Return:
+        True if successful.
+
+        """
+
+        self._ro = value.clone()
+
+        return True
+
 
 
     # =============

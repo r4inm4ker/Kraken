@@ -771,6 +771,8 @@ class Builder(Builder):
         dccSceneItem.setTranslation(dt.Vector(kSceneItem.xfo.tr.x, kSceneItem.xfo.tr.y, kSceneItem.xfo.tr.z), "world")
         dccSceneItem.setRotation(quat, "world")
 
+        dccSceneItem.setRotationOrder(kSceneItem.ro.order + 1, False)
+
         pm.select(clear=True)
 
         return True
