@@ -15,6 +15,7 @@ from kraken.core.profiler import Profiler
 from kraken.core.objects.layer import Layer
 from kraken.helpers.utility_methods import prepareToSave, prepareToLoad
 
+
 class Rig(Container):
     """Rig object."""
 

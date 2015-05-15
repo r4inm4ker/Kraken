@@ -1,4 +1,7 @@
 
+from kraken.core.maths.math_object import MathObject
+from kraken.core.maths import decodeValue
+
 
 def logHierarchy(kObject):
     """Traverses the given Kraken hierarchy and logs the names of all the objects.
@@ -14,10 +17,6 @@ def logHierarchy(kObject):
         logHierarchy(child)
 
 
-
-from kraken.core.maths.math_object import MathObject
-from kraken.core.maths import decodeValue
-
 def __convertFromJSON(jsonData):
 
     if type(jsonData) is list:
@@ -32,6 +31,7 @@ def __convertFromJSON(jsonData):
             jsonData[key] = __convertFromJSON(value)
     return jsonData
 
+
 def prepareToLoad(jsonData):
     """Prepares the json data for loading into kraken.
 
@@ -44,6 +44,7 @@ def prepareToLoad(jsonData):
     """
 
     return __convertFromJSON(jsonData)
+
 
 def __convertToJSON(jsonData):
 
@@ -58,6 +59,7 @@ def __convertToJSON(jsonData):
         for key, value in jsonData.iteritems():
             jsonData[key] = __convertToJSON(value)
     return jsonData
+
 
 def prepareToSave(jsonData):
     """Prepares the json data for serialization.
