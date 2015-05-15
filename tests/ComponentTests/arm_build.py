@@ -6,9 +6,9 @@ from kraken.examples.arm_component import ArmComponentGuide, ArmComponent
 from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy, reloadModule
 
-reloadModule()
-# from kraken.core.kraken_system import KrakenSystem
-# KrakenSystem.getInstance().reloadAllComponents()
+# reloadModule()
+from kraken.core.kraken_system import KrakenSystem
+KrakenSystem.getInstance().reloadAllComponents()
 
 Profiler.getInstance().push("arm_build")
 

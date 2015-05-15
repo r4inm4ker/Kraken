@@ -273,7 +273,7 @@ class KrakenSystem(object):
                     # print name
                     if inspect.isclass(cls):
                         baseClasses = inspect.getmro(cls)
-                        # print baseClasses
+                        print baseClasses
                         # for i in xrange(0, len(list(baseClasses))):
                         for baseClass in list(baseClasses):
                             # print i
@@ -285,7 +285,7 @@ class KrakenSystem(object):
                                 break
 
                             baseModule = sys.modules[baseModulePath]
-                            # print str(baseModule)
+                            print str(baseModule)
                             # importModule(baseModule)
                             if baseModule not in orderedModules:
                                 orderedModules.append(baseModule)
@@ -297,7 +297,7 @@ class KrakenSystem(object):
             collectModuleHierarchy(module)
 
         for module in reversed(orderedModules):
-            print "relaod:" + str(module)
+            print "reload:" + str(module)
             reload(module)
 
         return True
