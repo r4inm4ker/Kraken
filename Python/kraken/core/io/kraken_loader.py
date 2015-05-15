@@ -7,7 +7,7 @@ KrakenLoader - Factory for building SceneItems.
 
 from kraken.core.maths import Vec2, Vec3, Vec4, Euler, Quat, Xfo, Mat33, Mat44
 
-from kraken.core.objects.scene_item import SceneItem
+from kraken.core.objects.object_3d import Object3D
 from kraken.core.objects.container import Container
 from kraken.core.objects.curve import Curve
 from kraken.core.objects.hierarchy_group import HierarchyGroup
@@ -44,51 +44,6 @@ class KrakenLoader(object):
         self.callbacks = {}
 
 
-    def decodeValue(self, jsonData):
-        """Returns a constructed math value based on the provided json data.
-
-        Arguments:
-        jsondata -- dict, the JSON data to use to decode into a Math value.
-
-        Return:
-        The constructed math value
-
-        """
-
-        if type(jsonData) is not dict:
-            return jsonData
-
-        if '__class__' not in jsonData:
-            raise Exception("Invalid JSON data for constructing value:" + str(jsonData));
-
-        if jsonData['__class__'] == 'Vec2':
-            val = Vec2()
-            val.jsonDecode(jsonData, self)
-        elif jsonData['__class__'] == 'Vec3':
-            val = Vec3()
-            val.jsonDecode(jsonData, self)
-        elif jsonData['__class__'] == 'Vec4':
-            val = Vec4()
-            val.jsonDecode(jsonData, self)
-        elif jsonData['__class__'] == 'Euler':
-            val = Euler()
-            val.jsonDecode(jsonData, self)
-        elif jsonData['__class__'] == 'Quat':
-            val = Quat()
-            val.jsonDecode(jsonData, self)
-        elif jsonData['__class__'] == 'Xfo':
-            val = Xfo()
-            val.jsonDecode(jsonData, self)
-        elif jsonData['__class__'] == 'Mat33':
-            val = Mat33()
-            val.jsonDecode(jsonData, self)
-        elif jsonData['__class__'] == 'Mat44':
-            val = Mat44()
-            val.jsonDecode(jsonData, self)
-        else:
-            raise Exception("Unsupported Math type:" + jsonData['__class__'])
-
-        return val
 
 
     def getParentItem(self):

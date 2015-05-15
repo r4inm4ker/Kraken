@@ -5,10 +5,10 @@ Attribute - Base Attribute.
 
 """
 
-from kraken.core.objects.base_item import BaseItem
+from kraken.core.objects.scene_item import SceneItem
 
 
-class Attribute(BaseItem):
+class Attribute(SceneItem):
     """Attribute object."""
 
     def __init__(self, name, value, parent=None):
@@ -18,6 +18,20 @@ class Attribute(BaseItem):
         self._keyable = True
         self._lock = False
         self._animatable = True
+
+    # =============
+    # Name Methods
+    # =============
+    def getDecoratedPath(self):
+        """Gets the decorated path of the object.
+
+        Return:
+        String, decorated path  of the object.
+
+        """
+
+        return self.parent.getDecoratedPath() + '.' + '#' + self.getName()
+
 
     # ==============
     # Value Methods
@@ -148,6 +162,20 @@ class Attribute(BaseItem):
         """
 
         raise Exception("getRTVal must be implemented by concrete attribute classes")
+
+
+    def validateValue(self, value):
+        """Validates the incoming value is the correct type.
+
+        Arguments:
+        value -- Type, value to check the type of.
+
+        Return:
+        True if successful.
+
+        """
+
+        return True
 
 
     # ===================

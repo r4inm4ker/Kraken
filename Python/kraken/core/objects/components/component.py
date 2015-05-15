@@ -6,7 +6,7 @@ Component -- Component representation.
 """
 
 from kraken.core.maths import *
-from kraken.core.objects.scene_item import SceneItem
+from kraken.core.objects.object_3d import Object3D
 from kraken.core.objects.layer import Layer
 from kraken.core.objects.hierarchy_group import HierarchyGroup
 from kraken.core.objects.locator import Locator
@@ -16,7 +16,7 @@ from kraken.core.objects.attributes.attribute_group import AttributeGroup
 from kraken.core.objects.attributes.attribute import Attribute
 
 
-class Component(SceneItem):
+class Component(Object3D):
     """Kraken Component object."""
 
     def __init__(self, name, parent=None, location='M'):
@@ -31,14 +31,6 @@ class Component(SceneItem):
         self.lockRotation(x=True, y=True, z=True)
         self.lockScale(x=True, y=True, z=True)
         self.lockTranslation(x=True, y=True, z=True)
-
-        inputHrc = HierarchyGroup('inputs', parent=self)
-        inputAttrGrp = AttributeGroup('inputAttrs')
-        inputHrc.addAttributeGroup(inputAttrGrp)
-
-        outputHrc = HierarchyGroup('outputs', parent=self)
-        outputAttrGrp = AttributeGroup('outputAttrs')
-        outputHrc.addAttributeGroup(outputAttrGrp)
 
 
     # =============
@@ -100,16 +92,34 @@ class Component(SceneItem):
         """
 
         container = self.getContainer()
-        if container is not None:
-            layer = container.getChildByName(name)
-            if layer is None:
-                raise Exception("Container is missing a '"+name+"' layer:" + container.getFullName())
-        else:
-            # When building the component in a testing scene, generate a 'deformers' layer.
-            print("Warning: Generating '"+name+"' layer for component:" + self.getFullName());
-            layer = Layer(name, parent=self)
+        if container is None:
+            container = self
+
+        layer = container.getChildByName(name)
+        if layer is None or not layer.isTypeOf('Layer'):
+            raise KeyError("Layer '" + + "' was not found!")
 
         return layer
+
+
+    def getOrCreateLayer(self, name):
+        """Retrieves a layer from the owning container, or generates a layer (and warning message)
+
+        Return:
+        Layer, the layer from the container, or generated layer.
+
+        """
+
+        container = self.getContainer()
+        if container is None:
+            container = self
+
+        layer = container.getChildByName(name)
+        if layer is None or not layer.isTypeOf('Layer'):
+            layer = Layer(name, parent=container)
+
+        return layer
+
 
     # ==============
     # Child Methods
@@ -151,45 +161,26 @@ class Component(SceneItem):
         return True
 
 
-    def addInput(self, inputObject):
+    def addInput(self, name, dataType):
         """Add inputObject to this object.
 
         Arguments:
-        inputObject -- Object, input object to add.
+        name -- String, name of the input to create.
+        dataType -- String, data type of the input.
 
         Return:
-        True if successful.
+        New input object.
 
         """
 
-        inputHrc = self.getChildByName('inputs')
-        inputAttrsGrp = inputHrc.getAttributeGroupByName('inputAttrs')
+        if self.getInputByName(name) is not None:
+            raise Exception("'" + name + "' argument is already an output!")
 
-        if not isinstance(inputObject, (Locator, Attribute)):
-            raise Exception("'inputObject' argument is not a valid object. "
-                + inputObject.getName() + " is of type:" + str(inputObject)
-                + ". Must be an instance of 'Locator' or 'Attribute'.")
+        componentInput = ComponentInput(name, parent=self, dataType=dataType)
 
-        if inputObject in self.inputs:
-            raise Exception("'inputObject' argument is already an input! Invalid object: '"
-                + inputObject.getName() + "'")
-
-        if isinstance(inputObject, Locator):
-            inputHrc.addChild(inputObject)
-            inputObject.setFlag("inputObject")
-            inputObject.setShapeVisibility(False)
-
-        elif isinstance(inputObject, Attribute):
-            inputAttrsGrp.attributes.append(inputObject)
-            inputObject.setParent(inputAttrsGrp)
-
-        componentInput = ComponentInput(inputObject.getName(), inputObject)
         self.inputs.append(componentInput)
 
-        # Assign the componentInput self as the component.
-        componentInput.setComponent(self)
-
-        return True
+        return componentInput
 
 
     def removeInputByIndex(self, index):
@@ -294,89 +285,26 @@ class Component(SceneItem):
         return True
 
 
-    def addOutput(self, outputObject):
+    def addOutput(self, name, dataType):
         """Add outputObject to this object.
 
         Arguments:
-        outputObject -- Object, input object to add.
+        name -- String, name of the output to create.
+        dataType -- String, data type of the output.
 
         Return:
-        True if successful.
+        New output object.
 
         """
 
-        outputHrc = self.getChildByName('outputs')
-        outputAttrsGrp = outputHrc.getAttributeGroupByName('outputAttrs')
+        if self.getOutputByName(name) is not None:
+            raise Exception("'outputObject' argument is already an output!")
 
-        if not isinstance(outputObject, (SceneItem, Attribute)):
-            raise Exception("'outputObject' argument is not a valid object. "
-                + outputObject.getName() + " is of type:" + str(outputObject)
-                + ". Must be an instance of 'SceneItem' or 'Attribute'.")
+        componentOutput = ComponentOutput(name, parent=self, dataType=dataType)
 
-        if outputObject in self.outputs:
-            raise Exception("'outputObject' argument is already an output! Invalid object: '"
-                + outputObject.getName() + "'")
-
-        if isinstance(outputObject, SceneItem):
-            outputHrc.addChild(outputObject)
-            outputObject.setFlag("outputObject")
-            outputObject.setShapeVisibility(False)
-
-        elif isinstance(outputObject, Attribute):
-            outputAttrsGrp.attributes.append(outputObject)
-            outputObject.setParent(outputAttrsGrp)
-
-        componentOutput = ComponentOutput(outputObject.getName(), outputObject)
         self.outputs.append(componentOutput)
 
-        # Assign the componentOutput self as the component.
-        componentOutput.setComponent(self)
-
-        return True
-
-
-    def removeOutputByIndex(self, index):
-        """Remove ComponentInput at specified index.
-
-        Arguments:
-        index -- Integer, index of the ComponentInput to remove.
-
-        Return:
-        True if successful.
-
-        """
-
-        if self.checkInputIndex(index) is not True:
-            return False
-
-        del self.outputs[index]
-
-        return True
-
-
-    def removeOutputByName(self, name):
-        """Removes a output from this object by name.
-
-        Arguments:
-        name -- String, name of output to remove.
-
-        Return:
-        True if successful.
-
-        """
-
-        removeIndex = None
-
-        for i, eachOutput in enumerate(self.outputs):
-            if eachOutput.getName() == name:
-                removeIndex = i
-
-        if removeIndex is None:
-            raise ValueError("'" + name + "' is not a valid output of this object.")
-
-        self.removeInputByIndex(removeIndex)
-
-        return True
+        return componentOutput
 
 
     def getNumOutputs(self):

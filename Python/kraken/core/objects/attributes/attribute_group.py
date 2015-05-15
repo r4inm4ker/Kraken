@@ -5,14 +5,33 @@ AttributeGroup - Attribute Group.
 
 """
 
-from kraken.core.objects.base_item import BaseItem
+from kraken.core.objects.scene_item import SceneItem
 
-class AttributeGroup(BaseItem):
+
+class AttributeGroup(SceneItem):
     """Attribute Group that attributes belong to."""
 
     def __init__(self, name, parent=None):
         super(AttributeGroup, self).__init__(name, parent)
         self.attributes = []
+
+
+    # =============
+    # Name Methods
+    # =============
+    def getDecoratedPath(self):
+        """Gets the decorated path of the object.
+
+        Return:
+        String, decorated path  of the object.
+
+        """
+
+        if self.parent is not None and not self.parent.isTypeOf('Component'):
+            return self.parent.getDecoratedPath() + '.' + ':' + self.getName()
+
+        return self.getName()
+
 
     # ==================
     # Attribute Methods

@@ -5,11 +5,11 @@ Constraint - Base Constraint.
 
 """
 
-from kraken.core.objects.base_item import BaseItem
 from kraken.core.objects.scene_item import SceneItem
+from kraken.core.objects.object_3d import Object3D
 
 
-class Constraint(BaseItem):
+class Constraint(SceneItem):
     """Constraint object."""
 
     def __init__(self, name, parent=None):
@@ -75,26 +75,44 @@ class Constraint(BaseItem):
         return self.constrainee
 
 
-    def addConstrainer(self, kSceneItem):
+    def addConstrainer(self, kObject3D):
         """Adds a constrainer object to this constraint.
 
         Arguments:
-        kSceneItem -- Object, kSceneItem that will constrain the constrainee.
+        kObject3D -- Object, kObject3D that will constrain the constrainee.
 
         Return:
         True if successful.
 
         """
 
-        if not isinstance(kSceneItem, SceneItem):
-            raise Exception("'kSceneItem' argument is not a valid instance type. '"
-                             + kSceneItem.getName() + "': " + type(kSceneItem) +
-                             ". Must be an instance of 'SceneItem'.")
+        self.constrainers.append(None)
+        self.setConstrainer(kObject3D, len(self.constrainers) - 1)
 
-        if kSceneItem in self.constrainers:
-            raise Exception("'kSceneItem' argument is already a constrainer: '" + kSceneItem.getName() + "'.")
+        return True
 
-        self.constrainers.append(kSceneItem)
+
+    def setConstrainer(self, kObject3D, index=0):
+        """Sets the constrainer at the specified index.
+
+        Arguments:
+        kObject3D -- kObject3D, Kraken 3D object.
+        index -- Integer, index of the constraint to set.
+
+        Return:
+        True if successful.
+
+        """
+
+        if not isinstance(kObject3D, Object3D):
+            raise Exception("'kObject3D' argument is not a valid instance type. '"
+                             + kObject3D.getName() + "': " + type(kObject3D) +
+                             ". Must be an instance of 'Object3D'.")
+
+        if kObject3D in self.constrainers:
+            raise Exception("'kObject3D' argument is already a constrainer: '" + kObject3D.getName() + "'.")
+
+        self.constrainers[index] = kObject3D
 
         return True
 

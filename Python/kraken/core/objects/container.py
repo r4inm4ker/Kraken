@@ -5,11 +5,11 @@ Container -- Component container representation.
 
 """
 
-from kraken.core.objects.scene_item import SceneItem
+from kraken.core.objects.object_3d import Object3D
 from kraken.core.objects.components.component import Component
 
 
-class Container(SceneItem):
+class Container(Object3D):
     """Container object."""
 
     def __init__(self, name):

@@ -8,6 +8,8 @@ from kraken.core.objects.attributes.bool_attribute import BoolAttribute
 
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
+from kraken.core.objects.component_group import ComponentGroup
+from kraken.core.objects.hierarchy_group import HierarchyGroup
 from kraken.core.objects.locator import Locator
 from kraken.core.objects.joint import Joint
 from kraken.core.objects.ctrlSpace import CtrlSpace
@@ -19,88 +21,202 @@ from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
 
 
-class HandComponent(Component):
-    """Hand Component"""
+class HandComponentGuide(Component):
+    """Hand Component Guide"""
 
-    def __init__(self, name, parent=None, data={}):
+    def __init__(self, name='handGuide', parent=None, data=None):
+        super(HandComponentGuide, self).__init__(name, parent)
 
-        location = data.get('location', 'M')
+        # Declare Inputs Xfos
+        self.armEndXfoInput = self.addInput('armEndXfo', dataType='Xfo')
+        self.armEndPosInput = self.addInput('armEndPos', dataType='Xfo')
 
-        Profiler.getInstance().push("Construct Hand Component:" + name + " location:" + location)
-        super(HandComponent, self).__init__(name, parent, location)
+        # Declare Output Xfos
+        self.handOutput = self.addOutput('hand', dataType='Xfo')
+        self.handEndOutput = self.addOutput('handEnd', dataType='Xfo')
+
+        # Declare Input Attrs
+
+        # Declare Output Attrs
 
         # =========
         # Controls
         # =========
-        # Setup component attributes
-        defaultAttrGroup = self.getAttributeGroupByIndex(0)
-        defaultAttrGroup.addAttribute(BoolAttribute("toggleDebugging", True))
+        controlsLayer = self.getOrCreateLayer('controls')
+        ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
 
-        # Default values
-        handQuat = data['handQuat']
-        handPos = data['handPos']
 
-        # Calculate Clavicle Xfo
-        handXfo = Xfo()
-        handXfo.ori = handQuat
-        handXfo.tr = handPos
+        # Guide Controls
+        self.handCtrl = Control('hand', parent=ctrlCmpGrp, shape="cube")
+
+        if data is None:
+            data = {
+                    "location": "L",
+                    "handXfo": Xfo(tr=Vec3(-7.1886, 12.2819, 0.4906),
+                                   ori=Quat(Vec3(-0.2301, -0.0865, -0.9331), 0.2623))
+                   }
+
+        self.loadData(data)
+
+
+    # =============
+    # Data Methods
+    # =============
+    def saveData(self):
+        """Save the data for the component to be persisted.
+
+        Return:
+        The JSON data object
+
+        """
+
+        data = {
+            "name": self.getName(),
+            "location": self.getLocation(),
+            "handXfo": self.handCtrl.xfo
+            }
+
+        return data
+
+
+    def loadData(self, data):
+        """Load a saved guide representation from persisted data.
+
+        Arguments:
+        data -- object, The JSON data object.
+
+        Return:
+        True if successful.
+
+        """
+
+        if 'name' in data:
+            self.setName(data['name'])
+
+        self.setLocation(data['location'])
+        self.handCtrl.xfo = data['handXfo']
+
+        return True
+
+
+    def getGuideData(self):
+        """Returns the Guide data used by the Rig Component to define the layout of the final rig.
+
+        Return:
+        The JSON rig data object.
+
+        """
+
+        # values
+        handXfo = self.handCtrl.xfo
+
+        return {
+                "class":"kraken.examples.hand_component.HandComponent",
+                "name": self.getName(),
+                "location": self.getLocation(),
+                "handXfo": handXfo
+               }
+
+
+from kraken.core.kraken_system import KrakenSystem
+KrakenSystem.getInstance().registerComponent(HandComponentGuide)
+
+
+class HandComponent(Component):
+    """Hand Component"""
+
+    def __init__(self, name='hand', parent=None):
+
+        Profiler.getInstance().push("Construct Hand Component:" + name)
+        super(HandComponent, self).__init__(name, parent)
+
+        # Declare Inputs Xfos
+        self.armEndXfoInput = self.addInput('armEndXfo', dataType='Xfo')
+        self.armEndPosInput = self.addInput('armEndPos', dataType='Xfo')
+
+        # Declare Output Xfos
+        self.handOutput = self.addOutput('hand', dataType='Xfo')
+        self.handEndOutput = self.addOutput('handEnd', dataType='Xfo')
+
+        # Declare Input Attrs
+        self.debugInput = self.addInput('debug', dataType='Boolean')
+        self.rightSideInput = self.addInput('rightSide', dataType='Boolean')
+
+        # Declare Output Attrs
+
+        # =========
+        # Controls
+        # =========
+        controlsLayer = self.getOrCreateLayer('controls')
+        ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
+
+        # IO Hierarchies
+        inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
+        cmpInputAttrGrp = AttributeGroup('inputs')
+        inputHrcGrp.addAttributeGroup(cmpInputAttrGrp)
+
+        outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
+        cmpOutputAttrGrp = AttributeGroup('outputs')
+        outputHrcGrp.addAttributeGroup(cmpOutputAttrGrp)
 
         # Add Controls
-        handCtrlSpace = CtrlSpace('hand', parent=self)
-        handCtrlSpace.xfo = handXfo
+        self.handCtrlSpace = CtrlSpace('hand', parent=ctrlCmpGrp)
 
-        handCtrl = Control('hand', parent=handCtrlSpace, shape="cube")
-        handCtrl.alignOnXAxis()
-        handCtrl.scalePoints(Vec3(2.0, 0.75, 1.25))
-        handCtrl.xfo = handCtrlSpace.xfo
+        self.handCtrl = Control('hand', parent=self.handCtrlSpace, shape="cube")
+        self.handCtrl.alignOnXAxis()
+        self.handCtrl.scalePoints(Vec3(2.0, 0.75, 1.25))
+
 
         # Rig Ref objects
-        handRefSrt = Locator('handRef', parent=self)
-        handRefSrt.xfo = handCtrlSpace.xfo
+        self.handRefSrt = Locator('handRef', parent=ctrlCmpGrp)
 
 
         # Add Component Params to IK control
-        handDebugInputAttr = BoolAttribute('debug', True)
-        handLinkToWorldInputAttr = FloatAttribute('linkToWorld', 0.0)
+        handLinkToWorldInputAttr = FloatAttribute('linkToWorld', 0.0, maxValue=1.0)
 
         handSettingsAttrGrp = AttributeGroup("DisplayInfo_HandSettings")
-        handCtrl.addAttributeGroup(handSettingsAttrGrp)
-        handSettingsAttrGrp.addAttribute(handDebugInputAttr)
+        self.handCtrl.addAttributeGroup(handSettingsAttrGrp)
         handSettingsAttrGrp.addAttribute(handLinkToWorldInputAttr)
 
 
         # ==========
         # Deformers
         # ==========
-        handDef = Joint('hand')
-        handDef.setComponent(self)
+        deformersLayer = self.getOrCreateLayer('deformers')
+        defCmpGrp = ComponentGroup(self.getName(), self, parent=deformersLayer)
 
-        deformersLayer = self.getLayer('deformers')
-        deformersLayer.addChild(handDef)
+        handDef = Joint('hand', parent=defCmpGrp)
+        handDef.setComponent(self)
 
 
         # =====================
         # Create Component I/O
         # =====================
         # Setup Component Xfo I/O's
-        armEndXfoInput = Locator('armEndXfo')
-        armEndXfoInput.xfo = handCtrlSpace.xfo
-        armEndPosInput = Locator('armEndPos')
-        armEndPosInput.xfo = handCtrlSpace.xfo
+        self.armEndXfoInputTgt = Locator('armEndXfo', parent=inputHrcGrp)
+        self.armEndPosInputTgt = Locator('armEndPos', parent=inputHrcGrp)
 
-        handEndOutput = Locator('handEnd')
-        handEndOutput.xfo = handCtrlSpace.xfo
-        handOutput = Locator('hand')
-        handOutput.xfo = handCtrlSpace.xfo
+        self.handEndOutputTgt = Locator('handEnd', parent=outputHrcGrp)
+        self.handOutputTgt = Locator('hand', parent=outputHrcGrp)
+
+        # Set IO Targets
+        self.armEndXfoInput.setTarget(self.armEndXfoInputTgt)
+        self.armEndPosInput.setTarget(self.armEndPosInputTgt)
+
+        self.handOutput.setTarget(self.handEndOutputTgt)
+        self.handEndOutput.setTarget(self.handOutputTgt)
+
 
         # Setup componnent Attribute I/O's
         debugInputAttr = BoolAttribute('debug', True)
-        rightSideInputAttr = BoolAttribute('rightSide', location is 'R')
-        linkToWorldInputAttr = FloatAttribute('linkToWorld', 0.0)
+        rightSideInputAttr = BoolAttribute('rightSide', self.getLocation() is 'R')
 
-        # Connect attrs to control attrs
-        debugInputAttr.connect(handDebugInputAttr)
-        linkToWorldInputAttr.connect(handLinkToWorldInputAttr)
+        cmpInputAttrGrp.addAttribute(debugInputAttr)
+        cmpInputAttrGrp.addAttribute(rightSideInputAttr)
+
+        # Set IO Targets
+        self.debugInput.setTarget(debugInputAttr)
+        self.rightSideInput.setTarget(rightSideInputAttr)
 
 
         # ==============
@@ -109,28 +225,28 @@ class HandComponent(Component):
         # Constraint inputs
 
         # Constraint outputs
-        handConstraint = PoseConstraint('_'.join([handOutput.getName(), 'To', handCtrl.getName()]))
-        handConstraint.addConstrainer(handCtrl)
-        handOutput.addConstraint(handConstraint)
+        handConstraint = PoseConstraint('_'.join([self.handOutputTgt.getName(), 'To', self.handCtrl.getName()]))
+        handConstraint.addConstrainer(self.handCtrl)
+        self.handOutputTgt.addConstraint(handConstraint)
 
-        handEndConstraint = PoseConstraint('_'.join([handEndOutput.getName(), 'To', handCtrl.getName()]))
-        handEndConstraint.addConstrainer(handCtrl)
-        handEndOutput.addConstraint(handEndConstraint)
+        handEndConstraint = PoseConstraint('_'.join([self.handEndOutputTgt.getName(), 'To', self.handCtrl.getName()]))
+        handEndConstraint.addConstrainer(self.handCtrl)
+        self.handEndOutputTgt.addConstraint(handEndConstraint)
 
 
         # ==================
         # Add Component I/O
         # ==================
         # Add Xfo I/O's
-        self.addInput(armEndXfoInput)
-        self.addInput(armEndPosInput)
-        self.addOutput(handOutput)
-        self.addOutput(handEndOutput)
+        # self.addInput(self.armEndXfoInputTgt)
+        # self.addInput(self.armEndPosInputTgt)
+        # self.addOutput(self.handOutputTgt)
+        # self.addOutput(self.handEndOutputTgt)
 
         # Add Attribute I/O's
-        self.addInput(debugInputAttr)
-        self.addInput(rightSideInputAttr)
-        self.addInput(linkToWorldInputAttr)
+        # self.addInput(debugInputAttr)
+        # self.addInput(rightSideInputAttr)
+        # self.addInput(handLinkToWorldInputAttr)
 
 
         # ===============
@@ -143,7 +259,7 @@ class HandComponent(Component):
         # # Add Att Inputs
         # spliceOp.setInput("debug", debugInputAttr)
         # spliceOp.setInput("rightSide", rightSideInputAttr)
-        # spliceOp.setInput("linkToWorld", linkToWorldInputAttr)
+        # spliceOp.setInput("linkToWorld", handLinkToWorldInputAttr)
 
         # # Add Xfo Inputs)
         # spliceOp.setInput("armEndXfo", armEndXfoInput)
@@ -163,12 +279,31 @@ class HandComponent(Component):
         spliceOp.setInput("rightSide", rightSideInputAttr)
 
         # Add Xfo Inputs)
-        spliceOp.setInput("constrainer", handOutput)
+        spliceOp.setInput("constrainer", self.handOutputTgt)
 
         # Add Xfo Outputs
         spliceOp.setOutput("constrainee", handDef)
 
         Profiler.getInstance().pop()
+
+
+    def loadData(self, data=None):
+
+        self.setName(data.get('name', 'hand'))
+        location = data.get('location', 'M')
+        self.setLocation(location)
+
+        self.handCtrlSpace.xfo = data['handXfo']
+        self.handCtrl.xfo = data['handXfo']
+        self.handRefSrt.xfo = data['handXfo']
+
+        # ============
+        # Set IO Xfos
+        # ============
+        self.armEndXfoInputTgt.xfo = data['handXfo']
+        self.armEndPosInputTgt.xfo = data['handXfo']
+        self.handEndOutputTgt.xfo = data['handXfo']
+        self.handOutputTgt.xfo = data['handXfo']
 
 
 from kraken.core.kraken_system import KrakenSystem

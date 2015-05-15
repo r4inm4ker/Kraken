@@ -52,7 +52,7 @@ class Builder(object):
         return True
 
 
-    def _getDCCSceneItem(self, kSceneItem):
+    def getDCCSceneItem(self, kSceneItem):
         """Given a kSceneItem, returns the built dcc scene item.
 
         Arguments:
@@ -294,7 +294,7 @@ class Builder(object):
 
         """
 
-        constraineeDCCSceneItem = self._getDCCSceneItem(kConstraint.getConstrainee())
+        constraineeDCCSceneItem = self.getDCCSceneItem(kConstraint.getConstrainee())
         dccSceneItem = None # Add constraint object here.
         self._registerSceneItemPair(kConstraint, dccSceneItem)
 
@@ -312,7 +312,7 @@ class Builder(object):
 
         """
 
-        constraineeDCCSceneItem = self._getDCCSceneItem(kConstraint.getConstrainee())
+        constraineeDCCSceneItem = self.getDCCSceneItem(kConstraint.getConstrainee())
         dccSceneItem = None # Add constraint object here.
         self._registerSceneItemPair(kConstraint, dccSceneItem)
 
@@ -330,7 +330,7 @@ class Builder(object):
 
         """
 
-        constraineeDCCSceneItem = self._getDCCSceneItem(kConstraint.getConstrainee())
+        constraineeDCCSceneItem = self.getDCCSceneItem(kConstraint.getConstrainee())
         dccSceneItem = None # Add constraint object here.
         self._registerSceneItemPair(kConstraint, dccSceneItem)
 
@@ -348,7 +348,7 @@ class Builder(object):
 
         """
 
-        constraineeDCCSceneItem = self._getDCCSceneItem(kConstraint.getConstrainee())
+        constraineeDCCSceneItem = self.getDCCSceneItem(kConstraint.getConstrainee())
         dccSceneItem = None # Add constraint object here.
         self._registerSceneItemPair(kConstraint, dccSceneItem)
 
@@ -358,45 +358,60 @@ class Builder(object):
     # ========================
     # Component Build Methods
     # ========================
-    def buildXfoConnection(self, kConnection):
-        """Builds the connection between the xfo and the connection.
+    def buildXfoConnection(self, componentIO):
+        """Builds the constraint between the target and connection target.
 
         Arguments:
-        kConnection -- Object, kraken connection to build.
+        componentIO -- Object, kraken component input or output to build connections
+                               for.
 
         Return:
         True if successful.
 
         """
 
-        source = kConnection.getSource()
-        target = kConnection.getTarget()
+        connection = componentIO.getConnection()
+        connectionTarget = connection.getTarget()
+        target = componentIO.getTarget()
 
-        if source is None or target is None:
-            raise Exception("Component connection '" + kConnection.getName() + "'is invalid! Missing Source or Target!")
+        if componentIO.getDataType().endswith('[]'):
+            # TODO: Implement array handling.
+            pass
+        else:
+            constraint = PoseConstraint('_'.join([target.getName(), 'To', connectionTarget.getName()]))
+            constraint.setMaintainOffset(True)
+            constraint.setConstrainee(target)
+            constraint.addConstrainer(connectionTarget)
 
-        constraint = PoseConstraint('_'.join([target.getName(), 'To', source.getName()]))
-        constraint.setMaintainOffset(True)
-        constraint.setConstrainee(target)
-        constraint.addConstrainer(source)
-        dccSceneItem = self.buildPoseConstraint(constraint)
-        self._registerSceneItemPair(kConnection, dccSceneItem)
+            dccSceneItem = self.buildPoseConstraint(constraint)
+            self._registerSceneItemPair(componentIO, dccSceneItem)
 
-        return None
+        return True
 
 
-    def buildAttributeConnection(self, kConnection):
-        """Builds the connection between the attribute and the connection.
+    def buildAttributeConnection(self, componentIO):
+        """Builds the link between the target and connection target.
 
         Arguments:
-        kConnection -- Object, kraken connection to build.
+        componentIO -- Object, kraken connection to build.
 
         Return:
         True if successful.
 
         """
 
-        return None
+        connection = componentIO.getConnection()
+        connectionTarget = connection.getTarget()
+        target = componentIO.getTarget()
+
+        if componentIO.getDataType().endswith('[]'):
+            # TODO: Implement array handling.
+            pass
+        else:
+            # Implemented in DCC Plugins.
+            pass
+
+        return True
 
 
     # =========================
@@ -434,9 +449,6 @@ class Builder(object):
             attributeGroup = kObject.getAttributeGroupByIndex(i)
 
             attributeCount = attributeGroup.getNumAttributes()
-            if attributeCount < 1:
-                continue
-
             self.buildAttributeGroup(attributeGroup)
 
         return True
@@ -520,6 +532,12 @@ class Builder(object):
                     continue
                 builtName += kObject.getComponent().getName()
 
+            elif token is 'container':
+                if kObject.getContainer() is None:
+                    skipSep = True
+                    continue
+                builtName += kObject.getContainer().getName()
+
             else:
                 raise ValueError("Unresolvabled token '" + token + "' used on: " + kObject.getFullName())
 
@@ -550,6 +568,9 @@ class Builder(object):
             dccSceneItem = self.buildLayer(kObject, buildName)
 
         elif kObject.isTypeOf("Component"):
+            pass
+
+        elif kObject.isTypeOf("ComponentGroup"):
             dccSceneItem = self.buildGroup(kObject, buildName)
             component = kObject
 
@@ -580,11 +601,12 @@ class Builder(object):
         else:
             raise NotImplementedError(kObject.getName() + ' has an unsupported type: ' + str(type(kObject)))
 
-        self.buildAttributes(kObject)
-        self.setTransform(kObject)
-        self.lockParameters(kObject)
-        self.setVisibility(kObject)
-        self.setObjectColor(kObject)
+        if dccSceneItem is not None:
+            self.buildAttributes(kObject)
+            self.setTransform(kObject)
+            self.lockParameters(kObject)
+            self.setVisibility(kObject)
+            self.setObjectColor(kObject)
 
         # Build children
         for i in xrange(kObject.getNumChildren()):
@@ -638,6 +660,9 @@ class Builder(object):
         """Builds the connections between the component inputs and outputs of each
         component.
 
+        Only input connections are built otherwise duplicate constraints / expressions
+        would be created.
+
         Arguments:
         kObject -- Object, kraken object to create connections for.
 
@@ -651,34 +676,26 @@ class Builder(object):
             # Build input connections
             for i in xrange(kObject.getNumInputs()):
                 componentInput = kObject.getInputByIndex(i)
+                if componentInput.getTarget() is None or componentInput.getConnection() is None:
+                    continue
 
-                if componentInput.getDataType() == 'Xfo':
-                    if componentInput.getSource() is None:
-                        continue
-
+                if componentInput.getDataType().startswith('Xfo'):
                     self.buildXfoConnection(componentInput)
 
-                elif componentInput.getDataType() == 'Attribute':
-                    if componentInput.getSource() is None:
-                        continue
-
+                elif componentInput.getDataType().startswith(('Boolean', 'Float', 'Integer', 'String')):
                     self.buildAttributeConnection(componentInput)
 
             # Build output connections
-            for i in xrange(kObject.getNumOutputs()):
-                componentOutput = kObject.getOutputByIndex(i)
+            # for i in xrange(kObject.getNumOutputs()):
+            #     componentOutput = kObject.getOutputByIndex(i)
+            #     if componentOutput.getTarget() is None or componentOutput.getConnection() is None:
+            #         continue
 
-                if componentOutput.getDataType() == 'Xfo':
-                    if componentOutput.getSource() is None:
-                        continue
+            #     if componentOutput.getDataType().startswith('Xfo'):
+            #         self.buildXfoConnection(componentOutput)
 
-                    self.buildXfoConnection(componentOutput)
-
-                elif componentOutput.getDataType() == 'Attribute':
-                    if componentOutput.getSource() is None:
-                        continue
-
-                    self.buildAttributeConnection(componentOutput)
+            #     elif componentOutput.getDataType() == 'Attribute':
+            #         self.buildAttributeConnection(componentOutput)
 
         # Build connections for children.
         for i in xrange(kObject.getNumChildren()):
@@ -859,7 +876,7 @@ class Builder(object):
 
         """
 
-        dccSceneItem = self._getDCCSceneItem(kSceneItem)
+        dccSceneItem = self.getDCCSceneItem(kSceneItem)
 
         # Re-implement in DCC builders.
 
@@ -940,7 +957,7 @@ class Builder(object):
         kSceneItem -- Object, kraken kSceneItem object to build.
 
         Return:
-        True if successful.
+        The DCC scene item of the kSceneItem that was passed to the builder.
 
         """
 
@@ -953,13 +970,12 @@ class Builder(object):
         finally:
             self._postBuild()
 
-            # Clear Config & Kraken System when finished.
+            # Clear Config when finished.
             self.config.clearInstance()
-            KrakenSystem.getInstance().clearInstance()
 
         Profiler.getInstance().pop()
 
-        return True
+        return self.getDCCSceneItem(kSceneItem)
 
 
     def _postBuild(self):
@@ -972,217 +988,3 @@ class Builder(object):
 
         return True
 
-
-    # ==============================
-    # Synchrnization Object Methods
-    # ==============================
-    def synchronizeName(self, kSceneItem, dccSceneItem):
-        """Synchronizes the name between the dcc scene item and the corresponding kraken scene item.
-
-        Arguments:
-        kSceneItem -- Object, kSceneItem that represents a container to be built.
-        dccSceneItem -- Object, the element in the host DCC application
-
-        Return:
-        True if the synchronization was successful.
-
-        """
-
-        return False
-
-
-    def synchronizeContainerNode(self, kSceneItem, dccSceneItem):
-        """Synchronizes a container / namespace with the corresponding kraken scene item.
-
-        Arguments:
-        kSceneItem -- Object, kSceneItem that represents a container to be built.
-        dccSceneItem -- Object, the element in the host DCC application
-
-        Return:
-        True if the synchronization was successful.
-
-        """
-
-        return False
-
-
-    def synchronizeLayerNode(self, kSceneItem, dccSceneItem):
-        """Synchronizes a layer object with the corresponding kraken scene item.
-
-        Arguments:
-        kSceneItem -- Object, kSceneItem that represents a layer to be built.
-        dccSceneItem -- Object, the element in the host DCC application
-
-        Return:
-        True if the synchronization was successful.
-
-        """
-
-        return False
-
-
-    def synchronizeGroupNode(self, kSceneItem, dccSceneItem):
-        """Synchronizes a group object with the corresponding kraken scene item.
-
-        Arguments:
-        kSceneItem -- Object, kSceneItem that represents a group to be built.
-        dccSceneItem -- Object, the element in the host DCC application
-
-        Return:
-        True if the synchronization was successful.
-
-        """
-
-        return False
-
-
-    def synchronizeLocatorNode(self, kSceneItem, dccSceneItem):
-        """Synchronizes a locator / null object with the corresponding kraken scene item.
-
-        Arguments:
-        kSceneItem -- Object, kSceneItem that represents a locator / null to be built.
-        dccSceneItem -- Object, the element in the host DCC application
-
-        Return:
-        True if the synchronization was successful.
-
-        """
-
-        return False
-
-
-    def synchronizeCurveNode(self, kSceneItem, dccSceneItem):
-        """Synchronizes a Curve object with the corresponding kraken scene item.
-
-        Arguments:
-        kSceneItem -- Object, kSceneItem that represents a curve to be built.
-        dccSceneItem -- Object, the element in the host DCC application
-
-        Return:
-        True if the synchronization was successful.
-
-        """
-
-        return False
-
-
-    def synchronize(self):
-        """Synchronizes the Kraken hierarchy with the DCC data
-
-        Return:
-        True if the synchronization was successful.
-
-        """
-
-        for builtElement in self._buildElements:
-            dccSceneItem = builtElement['tgt']
-            kSceneItem = builtElement['src']
-
-            # Build Object
-            if kSceneItem.isTypeOf("Container"):
-                self.synchronizeContainerNode(kSceneItem, dccSceneItem)
-
-            elif kSceneItem.isTypeOf("Layer"):
-                self.synchronizeLayerNode(kSceneItem, dccSceneItem)
-
-            elif kSceneItem.isTypeOf("Component"):
-                self.synchronizeGroupNode(kSceneItem, dccSceneItem)
-
-            elif kSceneItem.isTypeOf("Control"):
-                self.synchronizeCurveNode(kSceneItem, dccSceneItem)
-
-            elif kSceneItem.isTypeOf("Curve"):
-                self.synchronizeCurveNode(kSceneItem, dccSceneItem)
-
-            elif kSceneItem.isTypeOf("SceneItem"):
-                self.synchronizeLocatorNode(kSceneItem, dccSceneItem)
-
-            else:
-                raise NotImplementedError(kSceneItem.getName() + ' has an unsupported type: ' + str(type(kSceneItem)))
-
-
-    # ==============================
-    # Synchronize Attribute Methods
-    # ==============================
-    def synchronizeBoolAttributeNode(self):
-        """Synchronizes a Bool attribute with the corresponding kraken scene item.
-
-        Return:
-        True if the synchronization was successful.
-
-        """
-
-        return True
-
-
-    def synchronizeColorAttributeNode(self):
-        """Synchronizes a Color attribute with the corresponding kraken scene item.
-
-        Return:
-        True if the synchronization was successful.
-
-        """
-
-        return True
-
-
-    def synchronizeFloatAttributeNode(self):
-        """Synchronizes a Float attribute with the corresponding kraken scene item.
-
-        Return:
-        True if the synchronization was successful.
-
-        """
-
-        return True
-
-
-    def synchronizeIntegerAttributeNode(self):
-        """Synchronizes a Integer attribute with the corresponding kraken scene item.
-
-        Return:
-        True if the synchronization was successful.
-
-        """
-
-        return True
-
-
-    def synchronizeStringAttributeNode(self):
-        """Synchronizes a String attribute with the corresponding kraken scene item.
-
-        Return:
-        True if the synchronization was successful.
-
-        """
-
-        return True
-
-
-    def synchronizeAttributes(self, kSceneItem, dccSceneItem):
-        """Synchronizes attributes on the DCC object.
-
-        Arguments:
-        kSceneItem -- SceneItem, kraken object to build attributes for.
-
-        Return:
-        True if the synchronization was successful.
-
-        """
-
-        for i in xrange(kSceneItem.getNumAttributeGroups()):
-            attribute = kSceneItem.getAttributeByIndex(i)
-
-            if attribute.isTypeOf("FloatAttribute"):
-                print kSceneItem.attributes[i].name
-
-            elif attribute.isTypeOf("BoolAttribute"):
-                print kSceneItem.attributes[i].name
-
-            elif attribute.isTypeOf("IntegerAttribute"):
-                print kSceneItem.attributes[i].name
-
-            elif attribute.isTypeOf("StringAttribute"):
-                print kSceneItem.attributes[i].name
-
-        return True

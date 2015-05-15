@@ -8,8 +8,8 @@ Builder -- Component representation.
 import json
 
 from kraken.core.kraken_system import ks
-from kraken.core.builders.builder import Builder
-from kraken.core.objects.scene_item import SceneItem
+from kraken.core.builder import Builder
+from kraken.core.objects.object_3d import Object3D
 from kraken.core.objects.attributes.attribute import Attribute
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 from kraken.plugins.maya_plugin.utils import *
@@ -39,7 +39,7 @@ class Builder(Builder):
 
         """
 
-        parentNode = self._getDCCSceneItem(kSceneItem.getParent())
+        parentNode = self.getDCCSceneItem(kSceneItem.getParent())
 
         dccSceneItem = pm.group(name="group", em=True)
         pm.parent(dccSceneItem, parentNode)
@@ -62,7 +62,7 @@ class Builder(Builder):
 
         """
 
-        parentNode = self._getDCCSceneItem(kSceneItem.getParent())
+        parentNode = self.getDCCSceneItem(kSceneItem.getParent())
 
         dccSceneItem = pm.group(name="group", em=True)
         pm.parent(dccSceneItem, parentNode)
@@ -85,7 +85,7 @@ class Builder(Builder):
 
         """
 
-        parentNode = self._getDCCSceneItem(kSceneItem.getParent())
+        parentNode = self.getDCCSceneItem(kSceneItem.getParent())
 
         dccSceneItem = pm.group(name="group", em=True)
         pm.parent(dccSceneItem, parentNode)
@@ -108,7 +108,7 @@ class Builder(Builder):
 
         """
 
-        parentNode = self._getDCCSceneItem(kSceneItem.getParent())
+        parentNode = self.getDCCSceneItem(kSceneItem.getParent())
 
         dccSceneItem = pm.group(name="group", em=True)
         pm.parent(dccSceneItem, parentNode)
@@ -131,7 +131,7 @@ class Builder(Builder):
 
         """
 
-        parentNode = self._getDCCSceneItem(kSceneItem.getParent())
+        parentNode = self.getDCCSceneItem(kSceneItem.getParent())
 
         dccSceneItem = pm.joint(name="joint")
         pm.parent(dccSceneItem, parentNode)
@@ -154,7 +154,7 @@ class Builder(Builder):
 
         """
 
-        parentNode = self._getDCCSceneItem(kSceneItem.getParent())
+        parentNode = self.getDCCSceneItem(kSceneItem.getParent())
 
         dccSceneItem = pm.spaceLocator(name="locator")
         pm.parent(dccSceneItem, parentNode)
@@ -177,7 +177,7 @@ class Builder(Builder):
 
         """
 
-        parentNode = self._getDCCSceneItem(kSceneItem.getParent())
+        parentNode = self.getDCCSceneItem(kSceneItem.getParent())
 
         # Format points for Maya
         curveData = kSceneItem.getCurveData()
@@ -226,7 +226,7 @@ class Builder(Builder):
 
         """
 
-        parentNode = self._getDCCSceneItem(kSceneItem.getParent())
+        parentNode = self.getDCCSceneItem(kSceneItem.getParent())
 
         # Format points for Maya
         curveData = kSceneItem.getCurveData()
@@ -277,8 +277,8 @@ class Builder(Builder):
 
         """
 
-        parentDCCSceneItem = self._getDCCSceneItem(kAttribute.getParent().getParent())
-        parentDCCSceneItem.addAttr(kAttribute.getName(), niceName=kAttribute.getName(), attributeType="bool", defaultValue=kAttribute.getValue(), keyable=kAttribute.getKeyable())
+        parentDCCSceneItem = self.getDCCSceneItem(kAttribute.getParent().getParent())
+        parentDCCSceneItem.addAttr(kAttribute.getName(), niceName=kAttribute.getName(), attributeType="bool", defaultValue=kAttribute.getValue(), keyable=True)
         dccSceneItem = parentDCCSceneItem.attr(kAttribute.getName())
         dccSceneItem.setLocked(kAttribute.getLock())
         self._registerSceneItemPair(kAttribute, dccSceneItem)
@@ -297,9 +297,8 @@ class Builder(Builder):
 
         """
 
-        parentDCCSceneItem = self._getDCCSceneItem(kAttribute.getParent().getParent())
-        parentDCCSceneItem.addAttr(kAttribute.getName(), niceName=kAttribute.getName(), attributeType="float", defaultValue=kAttribute.getValue(), keyable=kAttribute.getKeyable())
-
+        parentDCCSceneItem = self.getDCCSceneItem(kAttribute.getParent().getParent())
+        parentDCCSceneItem.addAttr(kAttribute.getName(), niceName=kAttribute.getName(), attributeType="float", defaultValue=kAttribute.getValue(), keyable=True)
         dccSceneItem = parentDCCSceneItem.attr(kAttribute.getName())
 
         if kAttribute.getMin() is not None:
@@ -331,8 +330,8 @@ class Builder(Builder):
 
         """
 
-        parentDCCSceneItem = self._getDCCSceneItem(kAttribute.getParent().getParent())
-        parentDCCSceneItem.addAttr(kAttribute.getName(), niceName=kAttribute.getName(), attributeType="long", defaultValue=kAttribute.getValue(), keyable=kAttribute.getKeyable())
+        parentDCCSceneItem = self.getDCCSceneItem(kAttribute.getParent().getParent())
+        parentDCCSceneItem.addAttr(kAttribute.getName(), niceName=kAttribute.getName(), attributeType="long", defaultValue=kAttribute.getValue(), minValue=kAttribute.min, maxValue=kAttribute.max, keyable=True)
         parentDCCSceneItem.attr(kAttribute.getName())
         dccSceneItem = parentDCCSceneItem.attr(kAttribute.getName())
 
@@ -365,7 +364,7 @@ class Builder(Builder):
 
         """
 
-        parentDCCSceneItem = self._getDCCSceneItem(kAttribute.getParent().getParent())
+        parentDCCSceneItem = self.getDCCSceneItem(kAttribute.getParent().getParent())
         parentDCCSceneItem.addAttr(kAttribute.getName(), niceName=kAttribute.getName(), dataType="string")
         dccSceneItem = parentDCCSceneItem.attr(kAttribute.getName())
         dccSceneItem.set(kAttribute.getValue())
@@ -386,12 +385,9 @@ class Builder(Builder):
 
         """
 
-        parentDCCSceneItem = self._getDCCSceneItem(kAttributeGroup.getParent())
+        parentDCCSceneItem = self.getDCCSceneItem(kAttributeGroup.getParent())
 
         groupName = kAttributeGroup.getName()
-        if groupName == "":
-            groupName = "Settings"
-
         parentDCCSceneItem.addAttr(groupName, niceName=groupName, attributeType="enum", enumName="-----", keyable=True)
         dccSceneItem = parentDCCSceneItem.attr(groupName)
         pm.setAttr(parentDCCSceneItem + "." + groupName, lock=True)
@@ -433,8 +429,8 @@ class Builder(Builder):
 
         if kAttribute.isConnected() is True:
 
-            driver = self._getDCCSceneItem(kAttribute.getConnection())
-            driven = self._getDCCSceneItem(kAttribute)
+            driver = self.getDCCSceneItem(kAttribute.getConnection())
+            driven = self.getDCCSceneItem(kAttribute)
 
             pm.connectAttr(driver, driven, force=True)
 
@@ -455,8 +451,8 @@ class Builder(Builder):
 
         """
 
-        constraineeDCCSceneItem = self._getDCCSceneItem(kConstraint.getConstrainee())
-        dccSceneItem = pm.orientConstraint([self._getDCCSceneItem(x) for x in kConstraint.getConstrainers()], constraineeDCCSceneItem, name=kConstraint.getName() + "_ori_cns", maintainOffset=kConstraint.getMaintainOffset())
+        constraineeDCCSceneItem = self.getDCCSceneItem(kConstraint.getConstrainee())
+        dccSceneItem = pm.orientConstraint([self.getDCCSceneItem(x) for x in kConstraint.getConstrainers()], constraineeDCCSceneItem, name=kConstraint.getName() + "_ori_cns", maintainOffset=kConstraint.getMaintainOffset())
         self._registerSceneItemPair(kConstraint, dccSceneItem)
 
         return dccSceneItem
@@ -473,9 +469,9 @@ class Builder(Builder):
 
         """
 
-        constraineeDCCSceneItem = self._getDCCSceneItem(kConstraint.getConstrainee())
-        dccSceneItem = pm.parentConstraint([self._getDCCSceneItem(x) for x in kConstraint.getConstrainers()], constraineeDCCSceneItem, name=kConstraint.getName() + "_par_cns", maintainOffset=kConstraint.getMaintainOffset())
-        pm.scaleConstraint([self._getDCCSceneItem(x) for x in kConstraint.getConstrainers()], constraineeDCCSceneItem, name=kConstraint.getName() + "_scl_cns", maintainOffset=kConstraint.getMaintainOffset())
+        constraineeDCCSceneItem = self.getDCCSceneItem(kConstraint.getConstrainee())
+        dccSceneItem = pm.parentConstraint([self.getDCCSceneItem(x) for x in kConstraint.getConstrainers()], constraineeDCCSceneItem, name=kConstraint.getName() + "_par_cns", maintainOffset=kConstraint.getMaintainOffset())
+        pm.scaleConstraint([self.getDCCSceneItem(x) for x in kConstraint.getConstrainers()], constraineeDCCSceneItem, name=kConstraint.getName() + "_scl_cns", maintainOffset=kConstraint.getMaintainOffset())
 
         self._registerSceneItemPair(kConstraint, dccSceneItem)
 
@@ -493,8 +489,8 @@ class Builder(Builder):
 
         """
 
-        constraineeDCCSceneItem = self._getDCCSceneItem(kConstraint.getConstrainee())
-        dccSceneItem = pm.pointConstraint([self._getDCCSceneItem(x) for x in kConstraint.getConstrainers()], constraineeDCCSceneItem, name=kConstraint.getName() + "_pos_cns", maintainOffset=kConstraint.getMaintainOffset())
+        constraineeDCCSceneItem = self.getDCCSceneItem(kConstraint.getConstrainee())
+        dccSceneItem = pm.pointConstraint([self.getDCCSceneItem(x) for x in kConstraint.getConstrainers()], constraineeDCCSceneItem, name=kConstraint.getName() + "_pos_cns", maintainOffset=kConstraint.getMaintainOffset())
         self._registerSceneItemPair(kConstraint, dccSceneItem)
 
         return dccSceneItem
@@ -511,8 +507,8 @@ class Builder(Builder):
 
         """
 
-        constraineeDCCSceneItem = self._getDCCSceneItem(kConstraint.getConstrainee())
-        dccSceneItem = pm.scaleConstraint([self._getDCCSceneItem(x) for x in kConstraint.getConstrainers()], constraineeDCCSceneItem, name=kConstraint.getName() + "_scl_cns", maintainOffset=kConstraint.getMaintainOffset())
+        constraineeDCCSceneItem = self.getDCCSceneItem(kConstraint.getConstrainee())
+        dccSceneItem = pm.scaleConstraint([self.getDCCSceneItem(x) for x in kConstraint.getConstrainers()], constraineeDCCSceneItem, name=kConstraint.getName() + "_scl_cns", maintainOffset=kConstraint.getMaintainOffset())
         self._registerSceneItemPair(kConstraint, dccSceneItem)
 
         return dccSceneItem
@@ -521,6 +517,7 @@ class Builder(Builder):
     # ========================
     # Component Build Methods
     # ========================
+
     def buildAttributeConnection(self, kConnection):
         """Builds the connection between the attribute and the connection.
 
@@ -532,12 +529,22 @@ class Builder(Builder):
 
         """
 
-        sourceDCCSceneItem = self._getDCCSceneItem(kConnection.getSource())
-        targetDCCSceneItem = self._getDCCSceneItem(kConnection.getTarget())
+        connection = componentIO.getConnection()
+        connectionTarget = connection.getTarget()
+        target = componentIO.getTarget()
 
-        pm.connectAttr(sourceDCCSceneItem, targetDCCSceneItem, force=True)
+        if componentIO.getDataType().endswith('[]'):
+            # TODO: Implement array handling.
+            pass
+        else:
 
-        return None
+            connectionTargetDCCSceneItem = self.getDCCSceneItem(connectionTarget)
+            targetDCCSceneItem = self.getDCCSceneItem(target)
+
+            pm.connectAttr(connectionTargetDCCSceneItem, targetDCCSceneItem, force=True)
+            targetDCCSceneItem.AddExpression(connectionTargetDCCSceneItem.FullName)
+
+        return True
 
 
     # =========================
@@ -592,7 +599,7 @@ class Builder(Builder):
                     connectionTargets = []
                     for i in range(len(connectedObjects)):
                         opObject = connectedObjects[i]
-                        dccSceneItem = self._getDCCSceneItem(opObject)
+                        dccSceneItem = self.getDCCSceneItem(opObject)
 
                         if dccSceneItem is None:
                             raise Exception("Operator '"+kOperator.getName()+"' of type '"+solverTypeName+"' arg '"+arg.name+"' dcc item not found for item:" + opObject.getFullName());
@@ -602,7 +609,7 @@ class Builder(Builder):
                         raise Exception("Operator '"+kOperator.getName()+"' of type '"+solverTypeName+"' arg '"+arg.name+"' not connected.");
 
                     opObject = connectedObjects
-                    dccSceneItem = self._getDCCSceneItem(opObject)
+                    dccSceneItem = self.getDCCSceneItem(opObject)
 
                     if dccSceneItem is None:
                         raise Exception("Operator '"+kOperator.getName()+"' of type '"+solverTypeName+"' arg '"+arg.name+"' dcc item not found for item:" + connectedObjects.getFullName());
@@ -674,7 +681,7 @@ class Builder(Builder):
 
         """
 
-        dccSceneItem = self._getDCCSceneItem(kSceneItem)
+        dccSceneItem = self.getDCCSceneItem(kSceneItem)
 
         # Lock Rotation
         if kSceneItem.testFlag("lockXRotation") is True:
@@ -725,7 +732,7 @@ class Builder(Builder):
 
         """
 
-        dccSceneItem = self._getDCCSceneItem(kSceneItem)
+        dccSceneItem = self.getDCCSceneItem(kSceneItem)
 
         if kSceneItem.getShapeVisibility() is False:
 
@@ -752,7 +759,7 @@ class Builder(Builder):
         """
 
         colors = self.config.getColors()
-        dccSceneItem = self._getDCCSceneItem(kSceneItem)
+        dccSceneItem = self.getDCCSceneItem(kSceneItem)
         buildColor = self.getBuildColor(kSceneItem)
 
         if buildColor is not None:
@@ -776,12 +783,14 @@ class Builder(Builder):
 
         """
 
-        dccSceneItem = self._getDCCSceneItem(kSceneItem)
+        dccSceneItem = self.getDCCSceneItem(kSceneItem)
 
         quat = dt.Quaternion(kSceneItem.xfo.ori.v.x, kSceneItem.xfo.ori.v.y, kSceneItem.xfo.ori.v.z, kSceneItem.xfo.ori.w)
         dccSceneItem.setScale(dt.Vector(kSceneItem.xfo.sc.x, kSceneItem.xfo.sc.y, kSceneItem.xfo.sc.z))
         dccSceneItem.setTranslation(dt.Vector(kSceneItem.xfo.tr.x, kSceneItem.xfo.tr.y, kSceneItem.xfo.tr.z), "world")
         dccSceneItem.setRotation(quat, "world")
+
+        dccSceneItem.setRotationOrder(kSceneItem.ro.order + 1, False)
 
         pm.select(clear=True)
 

@@ -14,22 +14,43 @@ class NumberAttribute(Attribute):
 
     def __init__(self, name, value=0, minValue=None, maxValue=None):
         super(NumberAttribute, self).__init__(name, value)
-        self._min = None
-        self._max = None
-        self._uiMin = None
-        self._uiMax = None
 
-        if minValue is not None:
-            self.setMin(minValue)
+        self.min = None
+        self.max = None
 
-        if maxValue is not None:
-            self.setMax(maxValue)
+        if minValue is None:
+            if value < 0:
+                self.setMin(value)
+            else:
+                self.setMin(0)
 
-        if minValue is not None:
-            self.setUIMin(minValue)
+        if maxValue is None:
+            if value == 0:
+                self.setMax(10)
+            else:
+                self.setMax(value * 3)
 
-        if maxValue is not None:
-            self.setUIMax(maxValue)
+
+    # ==============
+    # Value Methods
+    # ==============
+    def setValue(self, value):
+        """Sets the value of the attribute.
+
+        Arguments:
+        value -- Value to set the attribute to.
+
+        Return:
+        True if successful.
+
+        """
+
+        if self.validateValue(value) is False:
+            raise TypeError("Value: '" + str(value) + "' has an invalid type!")
+
+        super(NumberAttribute, self).setValue(value)
+
+        return True
 
 
     # ==================
@@ -125,7 +146,7 @@ class NumberAttribute(Attribute):
 
         """
 
-        if self.isTypeOf('IntergerAttribute'):
+        if self.isTypeOf('IntegerAttribute'):
             if type(minimum) is not int:
                 raise TypeError("UiMin value is not of type 'int'.")
 
@@ -172,7 +193,7 @@ class NumberAttribute(Attribute):
 
         """
 
-        if self.isTypeOf('IntergerAttribute'):
+        if self.isTypeOf('IntegerAttribute'):
             if type(maximum) is not int:
                 raise TypeError("UiMax value is not of type 'int'.")
 

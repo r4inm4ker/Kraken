@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "tests/runTests.py", line 140, in <module>
+    runTest(filepath, update)
+  File "tests/runTests.py", line 116, in runTest
+    runPytonTest( filepath, update )
+  File "tests/runTests.py", line 74, in runPytonTest
+    execfile( filepath, {} )
+  File "d:\Projects\Kraken\tests\ComponentTests\insectleg_build.py", line 30, in <module>
+    leg = InsectLegComponent()
+  File "D:\Projects\Kraken\Python\kraken\examples\insectleg_component.py", line 260, in __init__
+    self.addInput(self.rootInput)
+TypeError: addInput() takes exactly 3 arguments (2 given)
+

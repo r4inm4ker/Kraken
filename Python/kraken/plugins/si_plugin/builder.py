@@ -6,7 +6,7 @@ Builder -- Component representation.
 """
 
 from kraken.core.kraken_system import ks
-from kraken.core.builders.builder import Builder
+from kraken.core.builder import Builder
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 from kraken.plugins.si_plugin.utils import *
 
@@ -35,7 +35,7 @@ class Builder(Builder):
 
         """
 
-        parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
+        parentDCCSceneItem = self.getDCCSceneItem(kSceneItem.getParent())
 
         if parentDCCSceneItem is None:
             parentDCCSceneItem = si.ActiveProject3.ActiveScene.Root
@@ -60,7 +60,7 @@ class Builder(Builder):
 
         """
 
-        parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
+        parentDCCSceneItem = self.getDCCSceneItem(kSceneItem.getParent())
 
         if parentDCCSceneItem is None:
             parentDCCSceneItem = si.ActiveProject3.ActiveScene.Root
@@ -84,7 +84,7 @@ class Builder(Builder):
 
         """
 
-        parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
+        parentDCCSceneItem = self.getDCCSceneItem(kSceneItem.getParent())
 
         if parentDCCSceneItem is None:
             parentDCCSceneItem = si.ActiveProject3.ActiveScene.Root
@@ -111,7 +111,7 @@ class Builder(Builder):
 
         """
 
-        parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
+        parentDCCSceneItem = self.getDCCSceneItem(kSceneItem.getParent())
 
         if parentDCCSceneItem is None:
             parentDCCSceneItem = si.ActiveProject3.ActiveScene.Root
@@ -135,7 +135,7 @@ class Builder(Builder):
 
         """
 
-        parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
+        parentDCCSceneItem = self.getDCCSceneItem(kSceneItem.getParent())
 
         if parentDCCSceneItem is None:
             parentDCCSceneItem = si.ActiveProject3.ActiveScene.Root
@@ -159,7 +159,7 @@ class Builder(Builder):
 
         """
 
-        parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
+        parentDCCSceneItem = self.getDCCSceneItem(kSceneItem.getParent())
 
         if parentDCCSceneItem is None:
             parentDCCSceneItem = si.ActiveProject3.ActiveScene.Root
@@ -183,7 +183,7 @@ class Builder(Builder):
 
         """
 
-        parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
+        parentDCCSceneItem = self.getDCCSceneItem(kSceneItem.getParent())
 
         if parentDCCSceneItem is None:
             parentDCCSceneItem = si.ActiveProject3.ActiveScene.Root
@@ -242,7 +242,7 @@ class Builder(Builder):
 
         """
 
-        parentDCCSceneItem = self._getDCCSceneItem(kSceneItem.getParent())
+        parentDCCSceneItem = self.getDCCSceneItem(kSceneItem.getParent())
 
         if parentDCCSceneItem is None:
             parentDCCSceneItem = si.ActiveProject3.ActiveScene.Root
@@ -303,7 +303,7 @@ class Builder(Builder):
 
         """
 
-        parentDCCSceneItem = self._getDCCSceneItem(kAttribute.getParent())
+        parentDCCSceneItem = Dispatch(self.getDCCSceneItem(kAttribute.getParent()))
         dccSceneItem = parentDCCSceneItem.AddParameter2(kAttribute.getName(), constants.siBool, kAttribute.getValue(), "", "", "", "", constants.siClassifUnknown, 2053, kAttribute.getName())
         dccSceneItem.Animatable = kAttribute.getAnimatable()
         dccSceneItem.Keyable = kAttribute.getKeyable()
@@ -323,10 +323,9 @@ class Builder(Builder):
 
         """
 
-        parentDCCSceneItem = self._getDCCSceneItem(kAttribute.getParent())
-        dccSceneItem = parentDCCSceneItem.AddParameter2(kAttribute.getName(), constants.siDouble, kAttribute.getValue(), kAttribute.getMin(), kAttribute.getMax(), kAttribute.getUIMin(), kAttribute.getUIMax(), constants.siClassifUnknown, 2053, kAttribute.getName())
-        dccSceneItem.Animatable = kAttribute.getAnimatable()
-        dccSceneItem.Keyable = kAttribute.getKeyable()
+        parentDCCSceneItem = Dispatch(self.getDCCSceneItem(kAttribute.getParent()))
+        dccSceneItem = parentDCCSceneItem.AddParameter2(kAttribute.getName(), constants.siDouble, kAttribute.getValue(), kAttribute.getMin(), kAttribute.getMax(), kAttribute.getMin(), kAttribute.getMax(), constants.siClassifUnknown, 2053, kAttribute.getName())
+
         self._registerSceneItemPair(kAttribute, dccSceneItem)
 
         return True
@@ -343,10 +342,9 @@ class Builder(Builder):
 
         """
 
-        parentDCCSceneItem = self._getDCCSceneItem(kAttribute.getParent())
-        dccSceneItem = parentDCCSceneItem.AddParameter2(kAttribute.getName(), constants.siInt4, kAttribute.getValue(), kAttribute.getMin(), kAttribute.getMax(), kAttribute.getUIMin(), kAttribute.getUIMax(), constants.siClassifUnknown, 2053, kAttribute.getName())
-        dccSceneItem.Animatable = kAttribute.getAnimatable()
-        dccSceneItem.Keyable = kAttribute.getKeyable()
+        parentDCCSceneItem = Dispatch(self.getDCCSceneItem(kAttribute.getParent()))
+        dccSceneItem = parentDCCSceneItem.AddParameter2(kAttribute.getName(), constants.siInt4, kAttribute.getValue(), kAttribute.min, kAttribute.max, kAttribute.min, kAttribute.max, constants.siClassifUnknown, 2053, kAttribute.getName())
+
         self._registerSceneItemPair(kAttribute, dccSceneItem)
 
         return True
@@ -363,9 +361,9 @@ class Builder(Builder):
 
         """
 
-        parentDCCSceneItem = self._getDCCSceneItem(kAttribute.getParent())
-        dccSceneItem = parentDCCSceneItem.AddParameter2(kAttribute.getName(), constants.siString, kAttribute.getValue(), "", "", "", "", constants.siClassifUnknown, 2048, kAttribute.getName())
-        dccSceneItem.Keyable = False
+        parentDCCSceneItem = Dispatch(self.getDCCSceneItem(kAttribute.getParent()))
+        dccSceneItem = parentDCCSceneItem.AddParameter2(kAttribute.getName(), constants.siString, kAttribute.getValue(), "", "", "", "", constants.siClassifUnknown, 2053, kAttribute.getName())
+
         self._registerSceneItemPair(kAttribute, dccSceneItem)
 
         return True
@@ -382,15 +380,9 @@ class Builder(Builder):
 
         """
 
-        parentDCCSceneItem = self._getDCCSceneItem(kAttributeGroup.getParent())
+        parentDCCSceneItem = self.getDCCSceneItem(kAttributeGroup.getParent())
 
         groupName = kAttributeGroup.getName()
-        if groupName == "" and kAttributeGroup.getNumAttributes() < 1:
-            return False
-
-        if groupName == "":
-            groupName = "Settings"
-
         dccSceneItem = parentDCCSceneItem.AddProperty("CustomParameterSet", False, groupName)
         self._registerSceneItemPair(kAttributeGroup, dccSceneItem)
 
@@ -428,8 +420,8 @@ class Builder(Builder):
         """
 
         if kAttribute.isConnected() is True:
-            driver = self._getDCCSceneItem(kAttribute.getConnection())
-            driven = self._getDCCSceneItem(kAttribute)
+            driver = self.getDCCSceneItem(kAttribute.getConnection())
+            driven = self.getDCCSceneItem(kAttribute)
             driven.AddExpression(driver.FullName)
 
         return True
@@ -449,11 +441,11 @@ class Builder(Builder):
 
         """
 
-        constraineeDCCSceneItem = self._getDCCSceneItem(kConstraint.getConstrainee())
+        constraineeDCCSceneItem = self.getDCCSceneItem(kConstraint.getConstrainee())
 
         constrainers = getCollection()
         for eachConstrainer in kConstraint.getConstrainers():
-            constrainers.AddItems(self._getDCCSceneItem(eachConstrainer))
+            constrainers.AddItems(self.getDCCSceneItem(eachConstrainer))
 
         dccSceneItem = constraineeDCCSceneItem.Kinematics.AddConstraint("Orientation", constrainers, kConstraint.getMaintainOffset())
         self._registerSceneItemPair(kConstraint, dccSceneItem)
@@ -476,13 +468,13 @@ class Builder(Builder):
         useXSIConstraint = True
         if useXSIConstraint:
 
-            constraineeDCCSceneItem = self._getDCCSceneItem(kConstraint.getConstrainee())
+            constraineeDCCSceneItem = self.getDCCSceneItem(kConstraint.getConstrainee())
             if kConstraint.getMaintainOffset():
                 constraineeTransform = constraineeDCCSceneItem.Kinematics.Global.Transform
 
             constrainingObjs = getCollection()
             for eachConstrainer in kConstraint.getConstrainers():
-                constrainer = self._getDCCSceneItem(eachConstrainer)
+                constrainer = self.getDCCSceneItem(eachConstrainer)
 
                 if kConstraint.getMaintainOffset():
                     constrainerTransform = constrainer.Kinematics.Global.Transform
@@ -517,7 +509,7 @@ class Builder(Builder):
                 if eachConstrainer is None:
                     raise Exception("Constraint '"+kConstraint.getFullName()+"' has invalid connection.");
 
-                dccSceneItem = self._getDCCSceneItem(eachConstrainer)
+                dccSceneItem = self.getDCCSceneItem(eachConstrainer)
 
                 if dccSceneItem is None:
                     raise Exception("Constraint '"+kConstraint.getFullName()+"' of type '"+solverTypeName+"' is connected to object without corresponding SceneItem:" + eachConstrainer.getFullName());
@@ -557,11 +549,11 @@ class Builder(Builder):
 
         """
 
-        constraineeDCCSceneItem = self._getDCCSceneItem(kConstraint.getConstrainee())
+        constraineeDCCSceneItem = self.getDCCSceneItem(kConstraint.getConstrainee())
 
         constrainers = getCollection()
         for eachConstrainer in kConstraint.getConstrainers():
-            constrainers.AddItems(self._getDCCSceneItem(eachConstrainer))
+            constrainers.AddItems(self.getDCCSceneItem(eachConstrainer))
 
         dccSceneItem = constraineeDCCSceneItem.Kinematics.AddConstraint("Position", constrainers, kConstraint.getMaintainOffset())
         self._registerSceneItemPair(kConstraint, dccSceneItem)
@@ -580,11 +572,11 @@ class Builder(Builder):
 
         """
 
-        constraineeDCCSceneItem = self._getDCCSceneItem(kConstraint.getConstrainee())
+        constraineeDCCSceneItem = self.getDCCSceneItem(kConstraint.getConstrainee())
 
         constrainers = getCollection()
         for eachConstrainer in kConstraint.getConstrainers():
-            constrainers.AddItems(self._getDCCSceneItem(eachConstrainer))
+            constrainers.AddItems(self.getDCCSceneItem(eachConstrainer))
 
         dccSceneItem = constraineeDCCSceneItem.Kinematics.AddConstraint("Scaling", constrainers, kConstraint.getMaintainOffset())
         self._registerSceneItemPair(kConstraint, dccSceneItem)
@@ -595,24 +587,30 @@ class Builder(Builder):
     # ========================
     # Component Build Methods
     # ========================
-    def buildAttributeConnection(self, kConnection):
-        """Builds the connection between the attribute and the connection.
+    def buildAttributeConnection(self, componentIO):
+        """Builds the link between the target and connection target.
 
         Arguments:
-        kConnection -- Object, kraken connection to build.
+        componentIO -- Object, kraken connection to build.
 
         Return:
         True if successful.
 
         """
 
-        source = kConnection.getSource()
-        target = kConnection.getTarget()
+        connection = componentIO.getConnection()
+        connectionTarget = connection.getTarget()
+        target = componentIO.getTarget()
 
-        sourceDCCSceneItem = self._getDCCSceneItem(kConnection.getSource())
-        targetDCCSceneItem = self._getDCCSceneItem(kConnection.getTarget())
+        if componentIO.getDataType().endswith('[]'):
+            # TODO: Implement array handling.
+            pass
+        else:
 
-        targetDCCSceneItem.AddExpression(sourceDCCSceneItem.FullName)
+            connectionTargetDCCSceneItem = self.getDCCSceneItem(connectionTarget)
+            targetDCCSceneItem = self.getDCCSceneItem(target)
+
+            targetDCCSceneItem.AddExpression(connectionTargetDCCSceneItem.FullName)
 
         return True
 
@@ -648,7 +646,7 @@ class Builder(Builder):
                         if target is None:
                             raise Exception("Solver '" + kOperator.getFullName() + "' output :'" + arg.name + "' not connected.")
 
-                        operatorOwner = self._getDCCSceneItem(target)
+                        operatorOwner = self.getDCCSceneItem(target)
 
                         if operatorOwner is None:
                             raise Exception("Solver '" + kOperator.getFullName() + "' output :'" + arg.name + "' dcc item not found for item:" + target.getFullName())
@@ -663,7 +661,7 @@ class Builder(Builder):
                             if target is None:
                                 raise Exception("Solver '" + kOperator.getFullName() + "' output :'" + arg.name + "' not connected.")
 
-                            dccSceneItem = self._getDCCSceneItem(target)
+                            dccSceneItem = self.getDCCSceneItem(target)
 
                             if dccSceneItem is None:
                                 raise Exception("Solver '" + kOperator.getFullName() + "' output :'" + arg.name + "' dcc item not found for item:" + target.getFullName())
@@ -719,7 +717,7 @@ class Builder(Builder):
 
                     connectionTargets = ""
                     for i in range(len(connectedObjects)):
-                        dccSceneItem = self._getDCCSceneItem(connectedObjects[i])
+                        dccSceneItem = self.getDCCSceneItem(connectedObjects[i])
 
                         if dccSceneItem is None:
                             raise Exception("Operator '"+kOperator.getName()+"' of type '"+solverTypeName+"' arg '"+arg.name+"' dcc item not found for item:" + connectedObjects[i].getFullName());
@@ -732,7 +730,7 @@ class Builder(Builder):
                     if connectedObjects is None:
                         raise Exception("Operator '"+kOperator.getName()+"' of type '"+solverTypeName+"' arg '"+arg.name+"' not connected.");
 
-                    dccSceneItem = self._getDCCSceneItem(connectedObjects)
+                    dccSceneItem = self.getDCCSceneItem(connectedObjects)
 
                     if dccSceneItem is None:
                         raise Exception("Operator '"+kOperator.getName()+"' of type '"+solverTypeName+"' arg '"+arg.name+"' dcc item not found for item:" + connectedObjects.getFullName());
@@ -773,7 +771,7 @@ class Builder(Builder):
 
         """
 
-        dccSceneItem = self._getDCCSceneItem(kSceneItem)
+        dccSceneItem = self.getDCCSceneItem(kSceneItem)
 
         # Lock Rotation
         if kSceneItem.testFlag("lockXRotation") is True:
@@ -831,7 +829,7 @@ class Builder(Builder):
 
         """
 
-        dccSceneItem = self._getDCCSceneItem(kSceneItem)
+        dccSceneItem = self.getDCCSceneItem(kSceneItem)
 
         if kSceneItem.getShapeVisibility() is False:
             dccSceneItem.Properties("Visibility").Parameters("viewvis").Value = False
@@ -854,7 +852,7 @@ class Builder(Builder):
         """
 
         colors = self.config.getColors()
-        dccSceneItem = self._getDCCSceneItem(kSceneItem)
+        dccSceneItem = self.getDCCSceneItem(kSceneItem)
         buildColor = self.getBuildColor(kSceneItem)
 
         if buildColor is not None:
@@ -880,7 +878,7 @@ class Builder(Builder):
 
         """
 
-        dccSceneItem = self._getDCCSceneItem(kSceneItem)
+        dccSceneItem = self.getDCCSceneItem(kSceneItem)
 
         xfo = XSIMath.CreateTransform()
         sc = XSIMath.CreateVector3(kSceneItem.xfo.sc.x, kSceneItem.xfo.sc.y, kSceneItem.xfo.sc.z)
@@ -893,6 +891,8 @@ class Builder(Builder):
         xfo.SetTranslation(tr)
 
         dccSceneItem.Kinematics.Global.PutTransform2(None, xfo)
+
+        dccSceneItem.Kinematics.Local.Parameters('rotorder').Value = kSceneItem.ro.order
 
         return True
 

@@ -147,7 +147,8 @@ class Config(object):
                         "separator": "_",
                         "types": {
                                   "default": "null",
-                                  "Component": "cmp",
+                                  "Component": "",
+                                  "ComponentGroup": "cmp",
                                   "ComponentInput": "cmpIn",
                                   "ComponentOutput": "cmpOut",
                                   "Container": "",
@@ -163,7 +164,7 @@ class Config(object):
                                   {
                                    "Container": ["name"],
                                    "Layer": ["name"],
-                                   "Component": ["name", "sep", "location", "sep", "type"],
+                                   "ComponentGroup": ["container", "name", "sep", "location", "sep", "type"],
                                    "default": ["component", "sep", "location", "sep", "name", "sep", "type"],
                                   }
                        }

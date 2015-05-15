@@ -1,4 +1,4 @@
-"""Kraken - objects.profiler module.
+"""Kraken - core.profiler module.
 
 Classes:
 Profiler - Profiler Object.

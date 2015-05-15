@@ -9,8 +9,12 @@ from kraken.helpers.utility_methods import logHierarchy
 
 Profiler.getInstance().push("bob_build")
 
-bobRig = Rig("char_bob")
-bobRig.loadRigDefinition(bob_guide_data)
+bobGuideRig = Rig("char_bob")
+bobGuideRig.loadRigDefinition(bob_guide_data)
+
+bobRigData = bobGuideRig.getGuideData()
+bobRig = Rig()
+bobRig.loadRigDefinition(bobRigData)
 
 builder = plugins.getBuilder()
 builder.build(bobRig)
@@ -18,7 +22,6 @@ builder.build(bobRig)
 Profiler.getInstance().pop()
 
 if __name__ == "__main__":
-    print json.dumps(Profiler.getInstance().generateReport(),
-                     sort_keys=False, indent=4, separators=(',', ': '))
+    print Profiler.getInstance().generateReport()
 else:
     logHierarchy(bobRig)
