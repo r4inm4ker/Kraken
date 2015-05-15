@@ -217,12 +217,14 @@ class KrakenSystem(object):
         None
 
         """
-        print "registerComponent:" + componentClass.__name__
 
-        if componentClass.__name__ in self.registeredComponents:
-            raise Exception("Component with that class name already registered:" + componentClass.__name__)
+        componentModulePath = componentClass.__module__ + "." + componentClass.__name__
+        if componentModulePath in self.registeredComponents:
+            # we allow reregistring of components because as a componet's class is edited
+            # it will be re-imported by python(in Maya), and the classes reregistered.
+            pass
 
-        self.registeredComponents[componentClass.__name__] = componentClass
+        self.registeredComponents[componentModulePath] = componentClass
 
 
     def getComponentClass(self, className):
@@ -314,21 +316,6 @@ class KrakenSystem(object):
             cls.__instance = KrakenSystem()
 
         return cls.__instance
-
-
-    @classmethod
-    def clearInstance(cls):
-        """Clears the instance variable of the Kraken System.
-
-        Return:
-        True if successful.
-
-        """
-
-        KrakenSystem.__instance = None
-
-        return True
-
 
 
 
