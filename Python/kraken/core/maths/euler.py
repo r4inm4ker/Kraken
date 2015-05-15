@@ -9,6 +9,7 @@ import math
 from kraken.core.kraken_system import ks
 from kraken.core.maths.math_object import MathObject
 from kraken.core.maths.mat33 import Mat33
+from kraken.core.maths.rotation_order import RotationOrder
 
 
 rotationOrderStrToIntMapping = {
@@ -60,12 +61,9 @@ class Euler(MathObject):
                 raise TypeError("Euler: Invalid type for 'z' argument. Must be \
                                 an int or float.")
 
-            if ro is not None and not isinstance(ro, (int)):
-                if isinstance(ro, basestring):
-                    ro = rotationOrderStrToIntMapping[ro]
-                else:
-                    raise TypeError("Euler: Invalid type for 'ro' argument. \
-                                    Must be an int or a string.")
+            if ro is not None:
+                if isinstance(ro, basestring) or isinstance(ro, (int)):
+                    ro = RotationOrder(order=ro)
 
             self._rtval = ks.rtVal('Euler')
             if isinstance(x, Euler):
@@ -173,7 +171,7 @@ class Euler(MathObject):
 
         """
 
-        return rotationOrderIntToStrMapping[self._rtval.ro.order]
+        return RotationOrder(self._rtval.ro)
 
 
     @ro.setter
@@ -188,7 +186,7 @@ class Euler(MathObject):
 
         """
 
-        self._rtval.ro.order = ks.rtVal('Integer', value)
+        self._rtval.ro = ks.rtVal('RotationOrder', value)
 
 
     def clone(self):
@@ -223,12 +221,12 @@ class Euler(MathObject):
 
         """
 
-        self._rtval.set('', ks.rtVal('Scalar', x), ks.rtVal('Scalar', y), ks.rtVal('Scalar', z))
+        if ro is None:
+            self._rtval.set('', ks.rtVal('Scalar', x), ks.rtVal('Scalar', y), ks.rtVal('Scalar', z))
+        else:
+            self._rtval.set('', ks.rtVal('Scalar', x), ks.rtVal('Scalar', y), ks.rtVal('Scalar', z), ks.rtVal('RotationOrder', ro))
 
-        if ro is not None:
-            if isinstance(ro, basestring):
-                ro = rotationOrderStrToIntMapping[ro]
-            self._rtval.ro.order = ks.rtVal('Integer', ro)
+        return True
 
 
     def equal(self, other):

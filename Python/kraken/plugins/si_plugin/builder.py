@@ -891,6 +891,8 @@ class Builder(Builder):
 
         dccSceneItem.Kinematics.Global.PutTransform2(None, xfo)
 
+        dccSceneItem.Kinematics.Local.Parameters('rotorder').Value = kSceneItem.ro.order
+
         return True
 
 

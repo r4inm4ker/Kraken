@@ -98,9 +98,9 @@ class Vec2(MathObject):
 
         """
 
-        vec2 = Vec2();
-        vec2.x = self.x;
-        vec2.y = self.y;
+        vec2 = Vec2()
+        vec2.x = self.x
+        vec2.y = self.y
 
         return vec2
 
