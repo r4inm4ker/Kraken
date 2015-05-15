@@ -118,8 +118,6 @@ class HandComponentGuide(Component):
                }
 
 
-from kraken.core.kraken_system import KrakenSystem
-KrakenSystem.getInstance().registerComponent(HandComponentGuide)
 
 
 class HandComponent(Component):
@@ -307,4 +305,6 @@ class HandComponent(Component):
 
 
 from kraken.core.kraken_system import KrakenSystem
-KrakenSystem.getInstance().registerComponent(HandComponent)
+ks = KrakenSystem.getInstance()
+ks.registerComponent(HandComponentGuide)
+ks.registerComponent(HandComponent)

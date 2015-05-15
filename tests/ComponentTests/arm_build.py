@@ -7,6 +7,9 @@ from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
 
 
+from kraken.core.kraken_system import KrakenSystem
+KrakenSystem.getInstance().reloadAllComponents()
+
 Profiler.getInstance().push("arm_build")
 
 armGuide = ArmComponentGuide("arm")
