@@ -302,6 +302,21 @@ class KrakenSystem(object):
 
         return True
 
+    @classmethod
+    def getInstance(cls):
+        """This class method returns the singleton instance for the KrakenSystem
+
+        Return:
+        The singleton instance.
+
+        """
+
+        if cls.__instance is None:
+            cls.__instance = KrakenSystem()
+
+        return cls.__instance
+
+
 
 
 ks = KrakenSystem.getInstance()
