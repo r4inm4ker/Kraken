@@ -19,16 +19,16 @@ class AttributeGroup(SceneItem):
     # =============
     # Name Methods
     # =============
-    def getFullBuildName(self):
-        """Gets the full build name of the object.
+    def getDecoratedPath(self):
+        """Gets the decorated path of the object.
 
         Return:
-        String, full build name of the object.
+        String, decorated path  of the object.
 
         """
 
         if self.parent is not None and not self.parent.isTypeOf('Component'):
-            return self.parent.getFullBuildName() + ':' + self.getName()
+            return self.parent.getDecoratedPath() + '.' + ':' + self.getName()
 
         return self.getName()
 

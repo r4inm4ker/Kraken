@@ -79,7 +79,7 @@ class Synchronizer(object):
 
             # Sync Xfo if it's not a Component
             if obj.isTypeOf('Component') is False:
-                fullBuildName = obj.getFullBuildName()
+                fullBuildName = obj.getDecoratedPath()
                 dccItem = self.getDCCItem(fullBuildName)
 
                 self._hrcMap[obj] = {
@@ -88,7 +88,7 @@ class Synchronizer(object):
                               }
 
         elif obj.isTypeOf('Attribute'):
-            fullBuildName = obj.getFullBuildName()
+            fullBuildName = obj.getDecoratedPath()
             dccItem = self.getDCCItem(fullBuildName)
 
             self._hrcMap[obj] = {
@@ -208,14 +208,14 @@ class Synchronizer(object):
     # ============
     # DCC Methods
     # ============
-    def getDCCItem(self, name):
-        """Gets the DCC Item from the full build name.
+    def getDCCItem(self, decoratedPath):
+        """Gets the DCC Item from the full decorated path.
 
         * This should be re-implemented in the sub-classed synchronizer for each
         plugin.
 
         Arguments:
-        name -- String, full build name for the object.
+        decoratedPath -- String, full decorated path for the object.
 
         Return:
         DCC Object, None if it isn't found.

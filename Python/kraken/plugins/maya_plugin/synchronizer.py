@@ -15,13 +15,11 @@ class Synchronizer(Synchronizer):
     # ============
     # DCC Methods
     # ============
-    def getDCCItem(self, name):
-        """Gets the DCC Item from the full build name.
-
-        This should be re-implemented in each DCC plugin.
+    def getDCCItem(self, decoratedPath):
+        """Gets the DCC Item from the full decorated path.
 
         Arguments:
-        name -- String, full build name for the object.
+        decoratedPath -- String, full decorated path for the object.
 
         Return:
         DCC Object, None if it isn't found.
@@ -29,31 +27,31 @@ class Synchronizer(Synchronizer):
         """
 
         try:
-            if ':' in name:
-                nameSplit = name.split(':')
-                objName = nameSplit[0].replace('.', '|')
+            path = ''
+            pathSections = decoratedPath.split('.')
+            for pathSection in pathSections:
+                if pathSection.startswith(':'):
+                    # The ':' symbol represents an attribute group that we never
+                    # build in Maya.
+                    continue
 
-                if len(nameSplit[1].split('.')) > 0:
-                    objName += '.' + nameSplit[1].split('.')[-1]
+                elif pathSection.startswith('#'):
+                    # The '#' symbol represents an attribute object which
+                    # requires a '.' seperator in the Maya path.
+                    path += '.' + pathSection
+
                 else:
-                    objName += '.' + nameSplit[1]
-            else:
-                objName = "|" + name.replace('.', '|')
+                    path += '|' + pathSection
 
-            print "finding: " + objName
-
-            findItem = pm.PyNode(objName)
+            foundItem = pm.PyNode(path)
         except:
             return None
 
-        return findItem
+        return foundItem
 
 
     def syncXfo(self, obj):
         """Syncs the xfo from the DCC objec to the Kraken object.
-
-        * This should be re-implemented in the sub-classed synchronizer for each
-        plugin.
 
         Arguments:
         obj -- Object, object to sync the xfo for.
@@ -71,8 +69,6 @@ class Synchronizer(Synchronizer):
 
         dccItem = hrcMap[obj]['dccItem']
 
-
-        # dccXfo = dccItem.Kinematics.Global.GetTransform2(None)
         dccPos = dccItem.getTranslation()
         dccQuat = dccItem.getRotation(quaternion=True).get()
         dccScl = dccItem.getScale()
@@ -90,9 +86,6 @@ class Synchronizer(Synchronizer):
 
     def syncAttribute(self, obj):
         """Syncs the attribute value from the DCC objec to the Kraken object.
-
-        * This should be re-implemented in the sub-classed synchronizer for each
-        plugin.
 
         Arguments:
         obj -- Object, object to sync the attribute value for.
