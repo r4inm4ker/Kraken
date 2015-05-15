@@ -29,7 +29,7 @@ class FloatAttribute(NumberAttribute):
         RTVal
 
         """
-        return ks.rtVal('Scalar', self.value)
+        return ks.rtVal('Scalar', self._value)
 
 
     def validateValue(self, value):

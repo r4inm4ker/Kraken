@@ -16,7 +16,7 @@ class IntegerAttribute(NumberAttribute):
         super(IntegerAttribute, self).__init__(name, value, minValue=minValue,
               maxValue=maxValue)
 
-        assert type(self.value) is int, "Value is not of type 'int'."
+        assert type(self._value) is int, "Value is not of type 'int'."
 
 
     # ==============
@@ -29,7 +29,7 @@ class IntegerAttribute(NumberAttribute):
         RTVal
 
         """
-        return ks.rtVal('Integer', self.value)
+        return ks.rtVal('Integer', self._value)
 
 
     def validateValue(self, value):

@@ -15,8 +15,8 @@ class NumberAttribute(Attribute):
     def __init__(self, name, value=0, minValue=None, maxValue=None):
         super(NumberAttribute, self).__init__(name, value)
 
-        self.min = None
-        self.max = None
+        self._min = None
+        self._max = None
 
         if minValue is None:
             if value < 0:
