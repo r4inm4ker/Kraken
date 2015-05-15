@@ -13,9 +13,11 @@ class Attribute(SceneItem):
 
     def __init__(self, name, value, parent=None):
         super(Attribute, self).__init__(name, parent)
-        self.value = value
-        self.connection = None
-
+        self._value = value
+        self._connection = None
+        self._keyable = True
+        self._lock = False
+        self._animatable = True
 
     # =============
     # Name Methods
@@ -42,7 +44,7 @@ class Attribute(SceneItem):
 
         """
 
-        return self.value
+        return self._value
 
 
     def setValue(self, value):
@@ -56,9 +58,99 @@ class Attribute(SceneItem):
 
         """
 
-        self.value = value
+        self._value = value
 
         return True
+
+
+    def getKeyable(self):
+        """Returns the keyable state of the attribute.
+
+        Return:
+        Keyable state of the attribute.
+
+        """
+
+        return self._keyable
+
+
+    def setKeyable(self, value):
+        """Sets the keyable state of the attribute.
+
+        Arguments:
+        value -- Bool, keyable state.
+
+        Return:
+        True if successful.
+
+        """
+
+        if type(value) is not bool:
+            raise TypeError("Value is not of type 'bool'.")
+
+        self._keyable = value
+
+        return True
+
+
+    def getLock(self):
+            """Returns the Lock state of the attribute.
+
+            Return:
+            Lock state of the attribute.
+
+            """
+
+            return self._lock
+
+
+    def setLock(self, value):
+        """Sets the lock state of the attribute.
+
+        Arguments:
+        value -- Bool, lock state.
+
+        Return:
+        True if successful.
+
+        """
+
+        if type(value) is not bool:
+            raise TypeError("Value is not of type 'bool'.")
+
+        self._lock = value
+
+        return True
+
+
+    def setAnimatable(self, value):
+        """Sets the animatable state of the attribute.
+
+        Arguments:
+        value -- Bool, animatable state.
+
+        Return:
+        True if successful.
+
+        """
+
+        if type(value) is not bool:
+            raise TypeError("Value is not of type 'bool'.")
+
+        self._animatable = value
+
+        return True
+
+
+    def getAnimatable(self):
+            """Returns the animatable state of the attribute.
+
+            Return:
+            Animatable state of the attribute.
+
+            """
+
+            return self._animatable
 
 
     def getRTVal(self):
@@ -97,7 +189,7 @@ class Attribute(SceneItem):
 
         """
 
-        if self.connection is None:
+        if self._connection is None:
             return False
 
         return True
@@ -111,7 +203,7 @@ class Attribute(SceneItem):
 
         """
 
-        return self.connection
+        return self._connection
 
 
     def connect(self, attribute):
@@ -125,7 +217,7 @@ class Attribute(SceneItem):
 
         """
 
-        self.connection = attribute
+        self._connection = attribute
 
         return True
 
@@ -138,7 +230,7 @@ class Attribute(SceneItem):
 
         """
 
-        self.connection = None
+        self._connection = None
 
         return True
 
@@ -164,7 +256,7 @@ class Attribute(SceneItem):
         jsonData = {
             '__typeHierarchy__': classHierarchy,
             'name': self.name,
-            'value': saver.encodeValue(self.value),
+            'value': saver.encodeValue(self._value),
             'parent': None
         }
 
@@ -182,6 +274,6 @@ class Attribute(SceneItem):
 
         """
         self.name =  jsonData['name']
-        self.value =  loader.decodeValue(jsonData['value'])
+        self._value =  loader.decodeValue(jsonData['value'])
 
         return True

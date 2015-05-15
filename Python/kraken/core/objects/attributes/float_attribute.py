@@ -16,7 +16,7 @@ class FloatAttribute(NumberAttribute):
         super(FloatAttribute, self).__init__(name, value, minValue=minValue,
               maxValue=maxValue)
 
-        assert type(self.value) in (int, float), "Value is not of type 'int' or 'float'."
+        assert type(self._value) in (int, float), "Value is not of type 'int' or 'float'."
 
 
     # ==============
@@ -47,3 +47,4 @@ class FloatAttribute(NumberAttribute):
             return False
 
         return True
+

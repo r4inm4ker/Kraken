@@ -44,4 +44,4 @@ class BoolAttribute(Attribute):
 
         """
 
-        return ks.rtVal('Boolean', self.value)
+        return ks.rtVal('Boolean', self._value)

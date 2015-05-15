@@ -280,7 +280,7 @@ class Builder(Builder):
         parentDCCSceneItem = self.getDCCSceneItem(kAttribute.getParent().getParent())
         parentDCCSceneItem.addAttr(kAttribute.getName(), niceName=kAttribute.getName(), attributeType="bool", defaultValue=kAttribute.getValue(), keyable=True)
         dccSceneItem = parentDCCSceneItem.attr(kAttribute.getName())
-
+        dccSceneItem.setLocked(kAttribute.getLock())
         self._registerSceneItemPair(kAttribute, dccSceneItem)
 
         return True
@@ -299,15 +299,21 @@ class Builder(Builder):
 
         parentDCCSceneItem = self.getDCCSceneItem(kAttribute.getParent().getParent())
         parentDCCSceneItem.addAttr(kAttribute.getName(), niceName=kAttribute.getName(), attributeType="float", defaultValue=kAttribute.getValue(), keyable=True)
-
         dccSceneItem = parentDCCSceneItem.attr(kAttribute.getName())
 
-        if kAttribute.min is not None:
-            dccSceneItem.setMin(kAttribute.min)
+        if kAttribute.getMin() is not None:
+            dccSceneItem.setMin(kAttribute.getMin())
 
-        if kAttribute.max is not None:
-            dccSceneItem.setMax(kAttribute.max)
+        if kAttribute.getMax() is not None:
+            dccSceneItem.setMax(kAttribute.getMax())
 
+        if kAttribute.getUIMin() is not None:
+            dccSceneItem.setSoftMin(kAttribute.getUIMin())
+
+        if kAttribute.getUIMax() is not None:
+            dccSceneItem.setSoftMax(kAttribute.getUIMax())
+
+        dccSceneItem.setLocked(kAttribute.getLock())
         self._registerSceneItemPair(kAttribute, dccSceneItem)
 
         return True
@@ -329,6 +335,19 @@ class Builder(Builder):
         parentDCCSceneItem.attr(kAttribute.getName())
         dccSceneItem = parentDCCSceneItem.attr(kAttribute.getName())
 
+        if kAttribute.getMin() is not None:
+            dccSceneItem.setMin(kAttribute.getMin())
+
+        if kAttribute.getMax() is not None:
+            dccSceneItem.setMax(kAttribute.getMax())
+
+        if kAttribute.getUIMin() is not None:
+            dccSceneItem.setSoftMin(kAttribute.getUIMin())
+
+        if kAttribute.getUIMax() is not None:
+            dccSceneItem.setSoftMax(kAttribute.getUIMax())
+
+        dccSceneItem.setLocked(kAttribute.getLock())
         self._registerSceneItemPair(kAttribute, dccSceneItem)
 
         return True
@@ -349,7 +368,7 @@ class Builder(Builder):
         parentDCCSceneItem.addAttr(kAttribute.getName(), niceName=kAttribute.getName(), dataType="string")
         dccSceneItem = parentDCCSceneItem.attr(kAttribute.getName())
         dccSceneItem.set(kAttribute.getValue())
-
+        dccSceneItem.setLocked(kAttribute.getLock())
         self._registerSceneItemPair(kAttribute, dccSceneItem)
 
         return True

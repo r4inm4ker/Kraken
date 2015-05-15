@@ -305,7 +305,8 @@ class Builder(Builder):
 
         parentDCCSceneItem = Dispatch(self.getDCCSceneItem(kAttribute.getParent()))
         dccSceneItem = parentDCCSceneItem.AddParameter2(kAttribute.getName(), constants.siBool, kAttribute.getValue(), "", "", "", "", constants.siClassifUnknown, 2053, kAttribute.getName())
-
+        dccSceneItem.Animatable = kAttribute.getAnimatable()
+        dccSceneItem.Keyable = kAttribute.getKeyable()
         self._registerSceneItemPair(kAttribute, dccSceneItem)
 
         return True
