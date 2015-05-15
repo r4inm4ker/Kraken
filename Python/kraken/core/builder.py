@@ -646,8 +646,8 @@ class Builder(object):
         return True
 
 
-    def buildIOConnections(self, kObject):
-        """Builds the connections between the component inputs and outputs of each
+    def buildInputConnections(self, kObject):
+        """Builds the connections between the component inputs of each
         component.
 
         Only input connections are built otherwise duplicate constraints / expressions
@@ -675,22 +675,10 @@ class Builder(object):
                 elif componentInput.getDataType().startswith(('Boolean', 'Float', 'Integer', 'String')):
                     self.buildAttributeConnection(componentInput)
 
-            # Build output connections
-            # for i in xrange(kObject.getNumOutputs()):
-            #     componentOutput = kObject.getOutputByIndex(i)
-            #     if componentOutput.getTarget() is None or componentOutput.getConnection() is None:
-            #         continue
-
-            #     if componentOutput.getDataType().startswith('Xfo'):
-            #         self.buildXfoConnection(componentOutput)
-
-            #     elif componentOutput.getDataType() == 'Attribute':
-            #         self.buildAttributeConnection(componentOutput)
-
         # Build connections for children.
         for i in xrange(kObject.getNumChildren()):
             child = kObject.getChildByIndex(i)
-            self.buildIOConnections(child)
+            self.buildInputConnections(child)
 
         return True
 
@@ -933,7 +921,7 @@ class Builder(object):
 
         self.buildHierarchy(kSceneItem, component=None)
         self.buildAttrConnections(kSceneItem)
-        self.buildIOConnections(kSceneItem)
+        self.buildInputConnections(kSceneItem)
         self.buildOperators(kSceneItem)
         self.buildConstraints(kSceneItem)
 
