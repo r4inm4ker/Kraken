@@ -12,12 +12,20 @@ class Attribute(SceneItem):
     """Attribute object."""
 
     def __init__(self, name, value, parent=None):
-        super(Attribute, self).__init__(name, parent)
+        super(Attribute, self).__init__(name)
         self._value = value
         self._connection = None
         self._keyable = True
         self._lock = False
         self._animatable = True
+
+        if parent is not None:
+            if parent.getTypeName() != 'AttributeGroup':
+                raise ValueError("Parent: " + parent.getName() +
+                    " is not an Attribute Group!")
+
+            parent.addAttribute(self)
+
 
     # =============
     # Name Methods
@@ -233,6 +241,7 @@ class Attribute(SceneItem):
         self._connection = None
 
         return True
+
 
     # ====================
     # Persistence Methods

@@ -30,7 +30,6 @@ class ArmComponentGuide(Component):
     def __init__(self, name='armGuide', parent=None, data=None):
         super(ArmComponentGuide, self).__init__(name, parent)
 
-
         # Declare Inputs Xfos
         self.clavicleEndInput = self.addInput('clavicleEnd', dataType='Xfo')
 
@@ -326,15 +325,10 @@ class ArmComponent(Component):
         self.armEndPosOutput.setTarget(self.armEndPosOutputTgt)
 
         # Setup component Attribute I/O's
-        debugInputAttr = BoolAttribute('debug', True)
-        self.rightSideInputAttr = BoolAttribute('rightSide', True)
+        debugInputAttr = BoolAttribute('debug', value=True, parent=cmpInputAttrGrp)
+        self.rightSideInputAttr = BoolAttribute('rightSide', value=True, parent=cmpInputAttrGrp)
 
-        cmpInputAttrGrp.addAttribute(debugInputAttr)
-        cmpInputAttrGrp.addAttribute(self.rightSideInputAttr)
-
-        debugOutputAttr = BoolAttribute('debug', True)
-
-        cmpOutputAttrGrp.addAttribute(debugOutputAttr)
+        debugOutputAttr = BoolAttribute('debug', value=True, parent=cmpOutputAttrGrp)
 
         # Set IO Targets
         self.debugInput.setTarget(debugInputAttr)
@@ -428,6 +422,7 @@ class ArmComponent(Component):
 
 
         Profiler.getInstance().pop()
+
 
     def loadData(self, data=None):
 

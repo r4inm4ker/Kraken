@@ -12,8 +12,15 @@ class AttributeGroup(SceneItem):
     """Attribute Group that attributes belong to."""
 
     def __init__(self, name, parent=None):
-        super(AttributeGroup, self).__init__(name, parent)
+        super(AttributeGroup, self).__init__(name)
         self.attributes = []
+
+        if parent is not None:
+            if 'Object3D' not in parent.getTypeHierarchyNames():
+                raise ValueError("Parent: " + parent.getName() +
+                    " is not of type 'Object3D'!")
+
+            parent.addAttributeGroup(self)
 
 
     # =============
