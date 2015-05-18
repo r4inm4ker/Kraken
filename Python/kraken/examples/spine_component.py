@@ -320,8 +320,6 @@ class SpineComponent(Component):
         for joint in self.deformerJoints:
             self.outputsToDeformersSpliceOp.setOutput("constrainees", joint)
 
-        # print self.outputsToDeformersSpliceOp.getOutput("constrainees")
-
         Profiler.getInstance().pop()
 
 
