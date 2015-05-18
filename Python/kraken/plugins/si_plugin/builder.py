@@ -587,27 +587,28 @@ class Builder(Builder):
     # ========================
     # Component Build Methods
     # ========================
-    def buildAttributeConnection(self, connectionTarget):
+    def buildAttributeConnection(self, connectionInput):
         """Builds the link between the target and connection target.
 
         Arguments:
-        connectionTarget -- Object, kraken connection to build.
+        connectionInput -- Object, kraken component input to build connections for.
 
         Return:
         True if successful.
 
         """
 
-        connection = connectionTarget.getConnection()
-        target = connectionTarget.getTarget()
+        connection = connectionInput.getConnection()
+        connectionTarget = connection.getTarget()
+        inputTarget = componentInput.getTarget()
 
-        if connectionTarget.getDataType().endswith('[]'):
+        if connection.getDataType().endswith('[]'):
             connectionTarget = connection.getTarget()[componentInput.getIndex()]
         else:
             connectionTarget = connection.getTarget()
 
         connectionTargetDCCSceneItem = self.getDCCSceneItem(connectionTarget)
-        targetDCCSceneItem = self.getDCCSceneItem(target)
+        targetDCCSceneItem = self.getDCCSceneItem(inputTarget)
         targetDCCSceneItem.AddExpression(connectionTargetDCCSceneItem.FullName)
 
         return True

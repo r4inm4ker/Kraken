@@ -370,16 +370,17 @@ class Builder(object):
         """
 
         connection = componentInput.getConnection()
-        target = componentInput.getTarget()
+        connectionTarget = connection.getTarget()
+        inputTarget = componentInput.getTarget()
 
-        if componentInput.getDataType().endswith('[]'):
+        if connection.getDataType().endswith('[]'):
             connectionTarget = connection.getTarget()[componentInput.getIndex()]
         else:
             connectionTarget = connection.getTarget()
 
-        constraint = PoseConstraint('_'.join([target.getName(), 'To', connectionTarget.getName()]))
+        constraint = PoseConstraint('_'.join([inputTarget.getName(), 'To', connectionTarget.getName()]))
         constraint.setMaintainOffset(True)
-        constraint.setConstrainee(target)
+        constraint.setConstrainee(inputTarget)
         constraint.addConstrainer(connectionTarget)
 
         dccSceneItem = self.buildPoseConstraint(constraint)
