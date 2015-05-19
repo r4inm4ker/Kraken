@@ -12,7 +12,7 @@ Profiler.getInstance().push("head_build")
 headGuide = HeadComponentGuide("head")
 headGuide.loadData({
                     "name": "Head",
-                    "location": "L",
+                    "location": "M",
                     "headPosition": Vec3(0.0, 17.4756, -0.421),
                     "headEndPosition": Vec3(0.0, 19.5, -0.421),
                     "eyeLeftPosition": Vec3(0.3497, 18.0878, 0.6088),

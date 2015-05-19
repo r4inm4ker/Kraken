@@ -45,12 +45,10 @@ class ClavicleComponentGuide(Component):
 
         # IO Hierarchies
         inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
-        cmpInputAttrGrp = AttributeGroup('inputs')
-        inputHrcGrp.addAttributeGroup(cmpInputAttrGrp)
+        cmpInputAttrGrp = AttributeGroup('inputs', parent=inputHrcGrp)
 
         outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
-        cmpOutputAttrGrp = AttributeGroup('outputs')
-        outputHrcGrp.addAttributeGroup(cmpOutputAttrGrp)
+        cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
 
         # Guide Controls
         self.clavicleCtrl = Control('clavicle', parent=ctrlCmpGrp, shape="sphere")
@@ -121,7 +119,7 @@ class ClavicleComponentGuide(Component):
 
         """
 
-        # values
+        # Values
         claviclePosition = self.clavicleCtrl.xfo.tr
         clavicleUpV = self.clavicleUpVCtrl.xfo.tr
         clavicleEndPosition = self.clavicleEndCtrl.xfo.tr
@@ -137,17 +135,15 @@ class ClavicleComponentGuide(Component):
 
         clavicleLen = claviclePosition.subtract(clavicleEndPosition).length()
 
-        return {
+        data = {
                 "class":"kraken.examples.clavicle_component.ClavicleComponent",
                 "name": self.getName(),
                 "location":self.getLocation(),
                 "clavicleXfo": clavicleXfo,
                 "clavicleLen": clavicleLen
-                }
+               }
 
-
-from kraken.core.kraken_system import KrakenSystem
-KrakenSystem.getInstance().registerComponent(ClavicleComponentGuide)
+        return data
 
 
 class ClavicleComponent(Component):
@@ -177,12 +173,10 @@ class ClavicleComponent(Component):
 
         # IO Hierarchies
         inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
-        cmpInputAttrGrp = AttributeGroup('inputs')
-        inputHrcGrp.addAttributeGroup(cmpInputAttrGrp)
+        cmpInputAttrGrp = AttributeGroup('inputs', parent=inputHrcGrp)
 
         outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
-        cmpOutputAttrGrp = AttributeGroup('outputs')
-        outputHrcGrp.addAttributeGroup(cmpOutputAttrGrp)
+        cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
 
         # Clavicle
         self.clavicleCtrlSpace = CtrlSpace('clavicle', parent=ctrlCmpGrp)
@@ -217,15 +211,10 @@ class ClavicleComponent(Component):
         self.clavicleEndOutput.setTarget(self.clavicleEndOutputTgt)
 
         # Setup componnent Attribute I/O's
-        debugInputAttr = BoolAttribute('debug', True)
-        rightSideInputAttr = BoolAttribute('rightSide', self.getLocation() is 'R')
+        debugInputAttr = BoolAttribute('debug', value=True, parent=cmpInputAttrGrp)
+        rightSideInputAttr = BoolAttribute('rightSide', value=self.getLocation() is 'R', parent=cmpInputAttrGrp)
 
-        armFollowBodyOutputAttr = FloatAttribute('followBody', 0.0)
-
-        cmpInputAttrGrp.addAttribute(debugInputAttr)
-        cmpInputAttrGrp.addAttribute(rightSideInputAttr)
-
-        cmpOutputAttrGrp.addAttribute(armFollowBodyOutputAttr)
+        armFollowBodyOutputAttr = FloatAttribute('followBody', value=0.0, parent=cmpOutputAttrGrp)
 
 
         # ==============
@@ -245,20 +234,6 @@ class ClavicleComponent(Component):
         clavicleEndConstraint = PoseConstraint('_'.join([self.clavicleEndOutputTgt.getName(), 'To', self.clavicleCtrl.getName()]))
         clavicleEndConstraint.addConstrainer(self.clavicleCtrl)
         self.clavicleEndOutputTgt.addConstraint(clavicleEndConstraint)
-
-
-        # ==================
-        # Add Component I/O
-        # ==================
-        # Add Xfo I/O's
-        # self.addInput(self.spineEndInputTgt)
-        # self.addOutput(self.clavicleEndOutputTgt)
-        # self.addOutput(self.clavicleOutputTgt)
-
-        # Add Attribute I/O's
-        # self.addInput(debugInputAttr)
-        # self.addInput(rightSideInputAttr)
-        # self.addOutput(armFollowBodyOutputAttr)
 
 
         # ===============
@@ -305,4 +280,6 @@ class ClavicleComponent(Component):
 
 
 from kraken.core.kraken_system import KrakenSystem
-KrakenSystem.getInstance().registerComponent(ClavicleComponent)
+ks = KrakenSystem.getInstance()
+ks.registerComponent(ClavicleComponent)
+ks.registerComponent(ClavicleComponentGuide)

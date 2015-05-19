@@ -45,7 +45,6 @@ class HandComponentGuide(Component):
         controlsLayer = self.getOrCreateLayer('controls')
         ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
 
-
         # Guide Controls
         self.handCtrl = Control('hand', parent=ctrlCmpGrp, shape="cube")
 
@@ -110,16 +109,14 @@ class HandComponentGuide(Component):
         # values
         handXfo = self.handCtrl.xfo
 
-        return {
+        data = {
                 "class":"kraken.examples.hand_component.HandComponent",
                 "name": self.getName(),
                 "location": self.getLocation(),
                 "handXfo": handXfo
                }
 
-
-from kraken.core.kraken_system import KrakenSystem
-KrakenSystem.getInstance().registerComponent(HandComponentGuide)
+        return data
 
 
 class HandComponent(Component):
@@ -152,12 +149,10 @@ class HandComponent(Component):
 
         # IO Hierarchies
         inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
-        cmpInputAttrGrp = AttributeGroup('inputs')
-        inputHrcGrp.addAttributeGroup(cmpInputAttrGrp)
+        cmpInputAttrGrp = AttributeGroup('inputs', parent=inputHrcGrp)
 
         outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
-        cmpOutputAttrGrp = AttributeGroup('outputs')
-        outputHrcGrp.addAttributeGroup(cmpOutputAttrGrp)
+        cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
 
         # Add Controls
         self.handCtrlSpace = CtrlSpace('hand', parent=ctrlCmpGrp)
@@ -166,17 +161,14 @@ class HandComponent(Component):
         self.handCtrl.alignOnXAxis()
         self.handCtrl.scalePoints(Vec3(2.0, 0.75, 1.25))
 
-
         # Rig Ref objects
         self.handRefSrt = Locator('handRef', parent=ctrlCmpGrp)
 
-
         # Add Component Params to IK control
-        handLinkToWorldInputAttr = FloatAttribute('linkToWorld', 0.0, maxValue=1.0)
-
-        handSettingsAttrGrp = AttributeGroup("DisplayInfo_HandSettings")
-        self.handCtrl.addAttributeGroup(handSettingsAttrGrp)
-        handSettingsAttrGrp.addAttribute(handLinkToWorldInputAttr)
+        handSettingsAttrGrp = AttributeGroup("DisplayInfo_HandSettings",
+            parent=self.handCtrl)
+        handLinkToWorldInputAttr = FloatAttribute('linkToWorld', 0.0,
+            maxValue=1.0, parent=handSettingsAttrGrp)
 
 
         # ==========
@@ -208,11 +200,8 @@ class HandComponent(Component):
 
 
         # Setup componnent Attribute I/O's
-        debugInputAttr = BoolAttribute('debug', True)
-        rightSideInputAttr = BoolAttribute('rightSide', self.getLocation() is 'R')
-
-        cmpInputAttrGrp.addAttribute(debugInputAttr)
-        cmpInputAttrGrp.addAttribute(rightSideInputAttr)
+        debugInputAttr = BoolAttribute('debug', value=True, parent=cmpInputAttrGrp)
+        rightSideInputAttr = BoolAttribute('rightSide', value=self.getLocation() is 'R', parent=cmpInputAttrGrp)
 
         # Set IO Targets
         self.debugInput.setTarget(debugInputAttr)
@@ -307,4 +296,6 @@ class HandComponent(Component):
 
 
 from kraken.core.kraken_system import KrakenSystem
-KrakenSystem.getInstance().registerComponent(HandComponent)
+ks = KrakenSystem.getInstance()
+ks.registerComponent(HandComponent)
+ks.registerComponent(HandComponentGuide)

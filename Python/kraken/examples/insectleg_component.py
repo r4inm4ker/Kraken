@@ -86,6 +86,7 @@ class InsectLegComponentGuide(Component):
 
         if 'name' in data:
             self.setName(data['name'])
+
         self.setLocation(data['location'])
 
         for i in xrange(5):
@@ -120,18 +121,16 @@ class InsectLegComponentGuide(Component):
 
             boneXfos.append(xfo)
 
-        return {
+        data = {
                 "class":"kraken.examples.insectleg_component.InsectLegComponent",
                 "name": self.getName(),
                 "location": self.getLocation(),
                 "boneXfos": boneXfos,
                 "endXfo": self.legCtrls[-1].xfo,
                 "boneLengths": boneLengths
-                }
+               }
 
-
-from kraken.core.kraken_system import KrakenSystem
-KrakenSystem.getInstance().registerComponent(InsectLegComponentGuide)
+        return data
 
 
 class InsectLegComponent(Component):
@@ -198,13 +197,17 @@ class InsectLegComponent(Component):
             self.legIKCtrl.translatePoints(Vec3(1.0, 0.0, 0.0))
 
         # Add Component Params to IK control
-        legSettingsAttrGrp = AttributeGroup("DisplayInfo_LegSettings", parent=self.legIKCtrl)
-        legDebugInputAttr = BoolAttribute('debug', value=True, parent=legSettingsAttrGrp)
-        legFkikInputAttr = FloatAttribute('fkik', value=1.0, maxValue=1.0, parent=legSettingsAttrGrp)
+        legSettingsAttrGrp = AttributeGroup("DisplayInfo_LegSettings",
+            parent=self.legIKCtrl)
+        legDebugInputAttr = BoolAttribute('debug', value=True,
+            parent=legSettingsAttrGrp)
+        legFkikInputAttr = FloatAttribute('fkik', value=1.0, minValue=0.0,
+            maxValue=1.0, parent=legSettingsAttrGrp)
 
         # UpV
         self.legUpVCtrlSpace = CtrlSpace('UpV', parent=ctrlCmpGrp)
-        self.legUpVCtrl = Control('UpV', parent=self.legUpVCtrlSpace, shape="triangle")
+        self.legUpVCtrl = Control('UpV', parent=self.legUpVCtrlSpace,
+            shape="triangle")
         self.legUpVCtrl.alignOnZAxis()
 
         # ==========
@@ -359,4 +362,6 @@ class InsectLegComponent(Component):
 
 
 from kraken.core.kraken_system import KrakenSystem
-KrakenSystem.getInstance().registerComponent(InsectLegComponent)
+ks = KrakenSystem.getInstance()
+ks.registerComponent(InsectLegComponent)
+ks.registerComponent(InsectLegComponentGuide)
