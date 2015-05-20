@@ -8,12 +8,14 @@ Component -- Component representation.
 from kraken.core.maths import *
 from kraken.core.objects.object_3d import Object3D
 from kraken.core.objects.layer import Layer
-from kraken.core.objects.hierarchy_group import HierarchyGroup
 from kraken.core.objects.locator import Locator
+from kraken.core.objects.attributes.bool_attribute import BoolAttribute
+from kraken.core.objects.attributes.float_attribute import FloatAttribute
+from kraken.core.objects.attributes.integer_attribute import IntegerAttribute
+from kraken.core.objects.attributes.string_attribute import StringAttribute
+
 from kraken.core.objects.components.component_input import ComponentInput
 from kraken.core.objects.components.component_output import ComponentOutput
-from kraken.core.objects.attributes.attribute_group import AttributeGroup
-from kraken.core.objects.attributes.attribute import Attribute
 
 
 class Component(Object3D):
@@ -161,6 +163,58 @@ class Component(Object3D):
         return True
 
 
+    def createInput(self, name, dataType, **kwargs):
+        """Creates an input object and also a connected target object that matches
+        the data type that is passed.
+
+        Arguments:
+        name -- String, name of the input to create.
+        dataType -- String, data type of the input.
+
+        Return:
+        Object, the connected target object for the input.
+
+        """
+
+        componentInput = self.addInput(name, dataType)
+
+        # Create object
+        if dataType.startswith('Xfo'):
+            newInputTgt = Locator(name)
+
+        elif dataType.startswith('Boolean'):
+            newInputTgt = BoolAttribute(name)
+
+        elif dataType.startswith('Float'):
+            newInputTgt = FloatAttribute(name)
+
+        elif dataType.startswith('Integer'):
+            newInputTgt = IntegerAttribute(name)
+
+        elif dataType.startswith('String'):
+            newInputTgt = StringAttribute(name)
+
+        # Handle keyword arguments
+        for k, v in kwargs.iteritems():
+            if k == 'value':
+                newInputTgt.setValue(v)
+            elif k == 'minValue':
+                newInputTgt.setMin(v)
+            elif k == 'maxValue':
+                newInputTgt.setMax(v)
+            elif k == 'parent':
+                if dataType.startswith('Xfo'):
+                    v.addChild(newInputTgt)
+                else:
+                    v.addAttribute(newInputTgt)
+            else:
+                print "Keyword '" + k + "' is not supported with createInput method!"
+
+        componentInput.setTarget(newInputTgt)
+
+        return newInputTgt
+
+
     def addInput(self, name, dataType):
         """Add inputObject to this object.
 
@@ -283,6 +337,55 @@ class Component(Object3D):
             raise IndexError("'" + str(index) + "' is out of the range of 'outputs' array.")
 
         return True
+
+
+    def createOutput(self, name, dataType, **kwargs):
+        """Creates an output object and also a connected target object that matches
+        the data type that is passed.
+
+        Arguments:
+        name -- String, name of the output to create.
+        dataType -- String, data type of the output.
+
+        Return:
+        Object, the connected target object for the output.
+
+        """
+
+        componentOutput = self.addOutput(name, dataType)
+
+        # Create object
+        if dataType.startswith('Xfo'):
+            newOutputTgt = Locator(name)
+
+        elif dataType.startswith('Boolean'):
+            newOutputTgt = BoolAttribute(name)
+
+        elif dataType.startswith('Float'):
+            newOutputTgt = FloatAttribute(name)
+
+        elif dataType.startswith('Integer'):
+            newOutputTgt = IntegerAttribute(name)
+
+        elif dataType.startswith('String'):
+            newOutputTgt = StringAttribute(name)
+
+        # Handle keyword arguments
+        for k, v in kwargs.iteritems():
+            if k == 'value':
+                newOutputTgt.setValue(v)
+            elif k == 'minValue':
+                newOutputTgt.setMin(v)
+            elif k == 'maxValue':
+                newOutputTgt.setMax(v)
+            elif k == 'parent':
+                newOutputTgt.setParent(v)
+            else:
+                print "Keyword '" + k + "' is not supported with createOutput method!"
+
+        componentOutput.setTarget(newOutputTgt)
+
+        return newOutputTgt
 
 
     def addOutput(self, name, dataType):
