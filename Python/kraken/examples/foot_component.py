@@ -47,12 +47,10 @@ class FootComponentGuide(Component):
 
         # IO Hierarchies
         inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
-        cmpInputAttrGrp = AttributeGroup('inputs')
-        inputHrcGrp.addAttributeGroup(cmpInputAttrGrp)
+        cmpInputAttrGrp = AttributeGroup('inputs', parent=inputHrcGrp)
 
         outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
-        cmpOutputAttrGrp = AttributeGroup('outputs')
-        outputHrcGrp.addAttributeGroup(cmpOutputAttrGrp)
+        cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
 
         # Guide Controls
         self.footCtrl = Control('foot', parent=ctrlCmpGrp, shape="sphere")
@@ -118,16 +116,14 @@ class FootComponentGuide(Component):
         # values
         footXfo = self.footCtrl.xfo
 
-        return {
+        data = {
                 "class":"kraken.examples.foot_component.FootComponent",
                 "name": self.getName(),
                 "location": self.getLocation(),
                 "footXfo": footXfo
                }
 
-
-from kraken.core.kraken_system import KrakenSystem
-KrakenSystem.getInstance().registerComponent(FootComponentGuide)
+        return data
 
 
 class FootComponent(Component):
@@ -160,12 +156,10 @@ class FootComponent(Component):
 
         # IO Hierarchies
         inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
-        cmpInputAttrGrp = AttributeGroup('inputs')
-        inputHrcGrp.addAttributeGroup(cmpInputAttrGrp)
+        cmpInputAttrGrp = AttributeGroup('inputs', parent=inputHrcGrp)
 
         outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
-        cmpOutputAttrGrp = AttributeGroup('outputs')
-        outputHrcGrp.addAttributeGroup(cmpOutputAttrGrp)
+        cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
 
         # Foot
         self.footCtrlSpace = CtrlSpace('foot', parent=ctrlCmpGrp)
@@ -177,13 +171,11 @@ class FootComponent(Component):
         # Rig Ref objects
         self.footRefSrt = Locator('footRef', parent=ctrlCmpGrp)
 
-
         # Add Component Params to IK control
-        footLinkToWorldInputAttr = FloatAttribute('linkToWorld', 1.0, maxValue=1.0)
-
-        footSettingsAttrGrp = AttributeGroup("DisplayInfo_FootSettings")
-        self.footCtrl.addAttributeGroup(footSettingsAttrGrp)
-        footSettingsAttrGrp.addAttribute(footLinkToWorldInputAttr)
+        footSettingsAttrGrp = AttributeGroup("DisplayInfo_FootSettings",
+            parent=self.footCtrl)
+        footLinkToWorldInputAttr = FloatAttribute('linkToWorld', 1.0,
+            maxValue=1.0, parent=footSettingsAttrGrp)
 
 
         # ==========
@@ -213,11 +205,8 @@ class FootComponent(Component):
         self.footOutput.setTarget(self.footOutputTgt)
 
         # Setup componnent Attribute I/O's
-        debugInputAttr = BoolAttribute('debug', True)
-        rightSideInputAttr = BoolAttribute('rightSide', self.getLocation() is 'R')
-
-        cmpInputAttrGrp.addAttribute(debugInputAttr)
-        cmpInputAttrGrp.addAttribute(rightSideInputAttr)
+        debugInputAttr = BoolAttribute('debug', value=True, parent=cmpInputAttrGrp)
+        rightSideInputAttr = BoolAttribute('rightSide', value=self.getLocation() is 'R', parent=cmpInputAttrGrp)
 
         # Set IO Targets
         self.debugInput.setTarget(debugInputAttr)
@@ -312,4 +301,6 @@ class FootComponent(Component):
 
 
 from kraken.core.kraken_system import KrakenSystem
-KrakenSystem.getInstance().registerComponent(FootComponent)
+ks = KrakenSystem.getInstance()
+ks.registerComponent(FootComponent)
+ks.registerComponent(FootComponentGuide)

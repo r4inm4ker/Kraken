@@ -46,18 +46,14 @@ class NeckComponentGuide(Component):
 
         # IO Hierarchies
         inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
-        cmpInputAttrGrp = AttributeGroup('inputs')
-        inputHrcGrp.addAttributeGroup(cmpInputAttrGrp)
+        cmpInputAttrGrp = AttributeGroup('inputs', parent=inputHrcGrp)
 
         outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
-        cmpOutputAttrGrp = AttributeGroup('outputs')
-        outputHrcGrp.addAttributeGroup(cmpOutputAttrGrp)
+        cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
 
         # Guide Controls
         self.neckCtrl = Control('neck', parent=ctrlCmpGrp, shape="sphere")
         self.neckEndCtrl = Control('neckEnd', parent=ctrlCmpGrp, shape="sphere")
-
-
 
         if data is None:
             data = {
@@ -134,17 +130,14 @@ class NeckComponentGuide(Component):
         neckXfo = Xfo()
         neckXfo.setFromVectors(rootToEnd, bone1Normal, bone1ZAxis, neckPosition)
 
-        return {
+        data = {
                 "class":"kraken.examples.neck_component.NeckComponent",
                 "name": self.getName(),
                 "location":self.getLocation(),
                 "neckXfo": neckXfo
                }
 
-
-from kraken.core.kraken_system import KrakenSystem
-KrakenSystem.getInstance().registerComponent(NeckComponentGuide)
-
+        return data
 
 
 class NeckComponent(Component):
@@ -173,16 +166,13 @@ class NeckComponent(Component):
 
         # IO Hierarchies
         inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
-        cmpInputAttrGrp = AttributeGroup('inputs')
-        inputHrcGrp.addAttributeGroup(cmpInputAttrGrp)
+        cmpInputAttrGrp = AttributeGroup('inputs', parent=inputHrcGrp)
 
         outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
-        cmpOutputAttrGrp = AttributeGroup('outputs')
-        outputHrcGrp.addAttributeGroup(cmpOutputAttrGrp)
+        cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
 
         # Neck
         self.neckCtrlSpace = CtrlSpace('neck', parent=ctrlCmpGrp)
-
         self.neckCtrl = Control('neck', parent=self.neckCtrlSpace, shape="pin")
         self.neckCtrl.scalePoints(Vec3(1.25, 1.25, 1.25))
         self.neckCtrl.translatePoints(Vec3(0, 0, -0.5))
@@ -214,11 +204,8 @@ class NeckComponent(Component):
         self.neckOutput.setTarget(self.neckOutputTgt)
 
         # Setup componnent Attribute I/O's
-        debugInputAttr = BoolAttribute('debug', True)
-        rightSideInputAttr = BoolAttribute('rightSide', self.getLocation() is 'R')
-
-        cmpInputAttrGrp.addAttribute(debugInputAttr)
-        cmpInputAttrGrp.addAttribute(rightSideInputAttr)
+        debugInputAttr = BoolAttribute('debug', value=True, parent=cmpInputAttrGrp)
+        rightSideInputAttr = BoolAttribute('rightSide', value=self.getLocation() is 'R', parent=cmpInputAttrGrp)
 
         # ==============
         # Constrain I/O
@@ -233,19 +220,6 @@ class NeckComponent(Component):
         neckEndConstraint = PoseConstraint('_'.join([self.neckEndOutputTgt.getName(), 'To', self.neckCtrl.getName()]))
         neckEndConstraint.addConstrainer(self.neckCtrl)
         self.neckEndOutputTgt.addConstraint(neckEndConstraint)
-
-
-        # ==================
-        # Add Component I/O
-        # ==================
-        # Add Xfo I/O's
-        # self.addInput(self.neckEndInputTgt)
-        # self.addOutput(self.neckEndOutputTgt)
-        # self.addOutput(self.neckOutputTgt)
-
-        # Add Attribute I/O's
-        # self.addInput(debugInputAttr)
-        # self.addInput(rightSideInputAttr)
 
 
         # ===============
@@ -286,4 +260,6 @@ class NeckComponent(Component):
 
 
 from kraken.core.kraken_system import KrakenSystem
-KrakenSystem.getInstance().registerComponent(NeckComponent)
+ks = KrakenSystem.getInstance()
+ks.registerComponent(NeckComponent)
+ks.registerComponent(NeckComponentGuide)

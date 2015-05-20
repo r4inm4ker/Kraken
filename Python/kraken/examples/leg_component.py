@@ -50,12 +50,10 @@ class LegComponentGuide(Component):
 
         # IO Hierarchies
         inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
-        cmpInputAttrGrp = AttributeGroup('inputs')
-        inputHrcGrp.addAttributeGroup(cmpInputAttrGrp)
+        cmpInputAttrGrp = AttributeGroup('inputs', parent=inputHrcGrp)
 
         outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
-        cmpOutputAttrGrp = AttributeGroup('outputs')
-        outputHrcGrp.addAttributeGroup(cmpOutputAttrGrp)
+        cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
 
         # Guide Controls
         self.femurCtrl = Control('femur', parent=ctrlCmpGrp, shape="sphere")
@@ -85,7 +83,6 @@ class LegComponentGuide(Component):
         The JSON data object
 
         """
-
 
         data = {
                 'name': self.getName(),
@@ -128,7 +125,7 @@ class LegComponentGuide(Component):
 
         """
 
-        # values
+        # Values
         femurPosition = self.femurCtrl.xfo.tr
         kneePosition = self.kneeCtrl.xfo.tr
         anklePosition = self.ankleCtrl.xfo.tr
@@ -163,7 +160,7 @@ class LegComponentGuide(Component):
         upVXfo.tr = kneePosition
         upVXfo.tr = upVXfo.transformVector(Vec3(0, 0, 5))
 
-        return {
+        data = {
                 "class":"kraken.examples.leg_component.LegComponent",
                 "name": self.getName(),
                 "location":self.getLocation(),
@@ -175,9 +172,7 @@ class LegComponentGuide(Component):
                 "shinLen": shinLen
                }
 
-
-from kraken.core.kraken_system import KrakenSystem
-KrakenSystem.getInstance().registerComponent(LegComponentGuide)
+        return data
 
 
 class LegComponent(Component):
@@ -212,57 +207,46 @@ class LegComponent(Component):
 
         # IO Hierarchies
         inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
-        cmpInputAttrGrp = AttributeGroup('inputs')
-        inputHrcGrp.addAttributeGroup(cmpInputAttrGrp)
+        cmpInputAttrGrp = AttributeGroup('inputs', parent=inputHrcGrp)
 
         outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
-        cmpOutputAttrGrp = AttributeGroup('outputs')
-        outputHrcGrp.addAttributeGroup(cmpOutputAttrGrp)
+        cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
 
         # Femur
         self.femurFKCtrlSpace = CtrlSpace('femurFK', parent=ctrlCmpGrp)
-
         self.femurFKCtrl = Control('femurFK', parent=self.femurFKCtrlSpace, shape="cube")
         self.femurFKCtrl.alignOnXAxis()
 
-
         # Shin
         self.shinFKCtrlSpace = CtrlSpace('shinFK', parent=self.femurFKCtrl)
-
         self.shinFKCtrl = Control('shinFK', parent=self.shinFKCtrlSpace, shape="cube")
         self.shinFKCtrl.alignOnXAxis()
 
-
         # Ankle
         self.legIKCtrlSpace = CtrlSpace('IK', parent=ctrlCmpGrp)
-
         self.legIKCtrl = Control('IK', parent=self.legIKCtrlSpace, shape="pin")
 
 
         # Add Component Params to IK control
-        legDebugInputAttr = BoolAttribute('debug', True)
-        self.legBone1LenInputAttr = FloatAttribute('bone1Len', 1.0)
-        self.legBone2LenInputAttr = FloatAttribute('bone2Len', 1.0)
-        legFkikInputAttr = FloatAttribute('fkik', 1.0, maxValue=1.0)
-        legSoftIKInputAttr = BoolAttribute('softIK', True)
-        legSoftDistInputAttr = FloatAttribute('softDist', 0.0)
-        legStretchInputAttr = BoolAttribute('stretch', True)
-        legStretchBlendInputAttr = FloatAttribute('stretchBlend', 0.0)
-
-        legSettingsAttrGrp = AttributeGroup("DisplayInfo_LegSettings")
-        self.legIKCtrl.addAttributeGroup(legSettingsAttrGrp)
-        legSettingsAttrGrp.addAttribute(legDebugInputAttr)
-        legSettingsAttrGrp.addAttribute(self.legBone1LenInputAttr)
-        legSettingsAttrGrp.addAttribute(self.legBone2LenInputAttr)
-        legSettingsAttrGrp.addAttribute(legFkikInputAttr)
-        legSettingsAttrGrp.addAttribute(legSoftIKInputAttr)
-        legSettingsAttrGrp.addAttribute(legSoftDistInputAttr)
-        legSettingsAttrGrp.addAttribute(legStretchInputAttr)
-        legSettingsAttrGrp.addAttribute(legStretchBlendInputAttr)
+        legSettingsAttrGrp = AttributeGroup("DisplayInfo_LegSettings",
+            parent=self.legIKCtrl)
+        legDebugInputAttr = BoolAttribute('debug', value=True,
+            parent=legSettingsAttrGrp)
+        self.legBone1LenInputAttr = FloatAttribute('bone1Len', value=1.0,
+            parent=legSettingsAttrGrp)
+        self.legBone2LenInputAttr = FloatAttribute('bone2Len', value=1.0,
+            parent=legSettingsAttrGrp)
+        legFkikInputAttr = FloatAttribute('fkik', value=1.0, minValue=0.0,
+            maxValue=1.0, parent=legSettingsAttrGrp)
+        legSoftIKInputAttr = BoolAttribute('softIK', value=True)
+        legSoftDistInputAttr = FloatAttribute('softDist', value=0.0,
+            minValue=0.0, parent=legSettingsAttrGrp)
+        legStretchInputAttr = BoolAttribute('stretch', value=True)
+        legStretchBlendInputAttr = FloatAttribute('stretchBlend', value=0.0,
+            minValue=0.0, maxValue=1.0, parent=legSettingsAttrGrp)
 
         # UpV
         self.legUpVCtrlSpace = CtrlSpace('UpV', parent=ctrlCmpGrp)
-
         self.legUpVCtrl = Control('UpV', parent=self.legUpVCtrlSpace, shape="triangle")
         self.legUpVCtrl.alignOnZAxis()
 
@@ -304,15 +288,12 @@ class LegComponent(Component):
 
 
         # Setup component Attribute I/O's
-        debugInputAttr = BoolAttribute('debug', True)
-        self.rightSideInputAttr = BoolAttribute('rightSide', True)
+        debugInputAttr = BoolAttribute('debug', value=True,
+            parent=cmpInputAttrGrp)
+        self.rightSideInputAttr = BoolAttribute('rightSide', value=True,
+            parent=cmpInputAttrGrp)
 
-        cmpInputAttrGrp.addAttribute(debugInputAttr)
-        cmpInputAttrGrp.addAttribute(self.rightSideInputAttr)
-
-        debugOutputAttr = BoolAttribute('debug', True)
-
-        cmpOutputAttrGrp.addAttribute(debugOutputAttr)
+        debugOutputAttr = BoolAttribute('debug', value=True, parent=cmpOutputAttrGrp)
 
         # Set IO Targets
         self.debugInput.setTarget(debugInputAttr)
@@ -452,4 +433,6 @@ class LegComponent(Component):
 
 
 from kraken.core.kraken_system import KrakenSystem
-KrakenSystem.getInstance().registerComponent(LegComponent)
+ks = KrakenSystem.getInstance()
+ks.registerComponent(LegComponent)
+ks.registerComponent(LegComponentGuide)

@@ -47,12 +47,10 @@ class HeadComponentGuide(Component):
 
         # IO Hierarchies
         inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
-        cmpInputAttrGrp = AttributeGroup('inputs')
-        inputHrcGrp.addAttributeGroup(cmpInputAttrGrp)
+        cmpInputAttrGrp = AttributeGroup('inputs', parent=inputHrcGrp)
 
         outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
-        cmpOutputAttrGrp = AttributeGroup('outputs')
-        outputHrcGrp.addAttributeGroup(cmpOutputAttrGrp)
+        cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
 
         # Guide Controls
         self.headCtrl = Control('head', parent=ctrlCmpGrp, shape="cube")
@@ -131,9 +129,7 @@ class HeadComponentGuide(Component):
 
         """
 
-        # values
-
-        return {
+        data = {
                 "class":"kraken.examples.head_component.HeadComponent",
                 "name": self.getName(),
                 "location":self.getLocation(),
@@ -144,9 +140,7 @@ class HeadComponentGuide(Component):
                 "jawPosition": self.jawCtrl.xfo.tr
                }
 
-
-from kraken.core.kraken_system import KrakenSystem
-KrakenSystem.getInstance().registerComponent(HeadComponentGuide)
+        return data
 
 
 
@@ -168,6 +162,7 @@ class HeadComponent(Component):
         self.eyeROutput = self.addOutput('eyeR', dataType='Xfo')
 
         # Declare Input Attrs
+        self.debugInput = self.addInput('debug', dataType='Boolean')
 
         # Declare Output Attrs
 
@@ -179,12 +174,10 @@ class HeadComponent(Component):
 
         # IO Hierarchies
         inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
-        cmpInputAttrGrp = AttributeGroup('inputs')
-        inputHrcGrp.addAttributeGroup(cmpInputAttrGrp)
+        cmpInputAttrGrp = AttributeGroup('inputs', parent=inputHrcGrp)
 
         outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
-        cmpOutputAttrGrp = AttributeGroup('outputs')
-        outputHrcGrp.addAttributeGroup(cmpOutputAttrGrp)
+        cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
 
         # Head
         self.headCtrlSpace = CtrlSpace('head', parent=ctrlCmpGrp)
@@ -259,8 +252,10 @@ class HeadComponent(Component):
         self.eyeROutput.setTarget(self.eyeROutputTgt)
 
         # Setup componnent Attribute I/O's
-        debugInputAttr = BoolAttribute('debug', True)
-        rightSideInputAttr = BoolAttribute('rightSide', self.getLocation() is 'R')
+        debugInputAttr = BoolAttribute('debug', value=True, parent=cmpInputAttrGrp)
+
+        # Set IO Targets
+        self.debugInput.setTarget(debugInputAttr)
 
 
         # ==============
@@ -307,7 +302,6 @@ class HeadComponent(Component):
 
         # Add Attribute I/O's
         # self.addInput(debugInputAttr)
-        # self.addInput(rightSideInputAttr)
 
 
         # ===============
@@ -319,7 +313,6 @@ class HeadComponent(Component):
 
         # # Add Att Inputs
         # spliceOp.setInput("debug", debugInputAttr)
-        # spliceOp.setInput("rightSide", rightSideInputAttr)
 
         # # Add Xfo Inputstrl)
         # spliceOp.setInput("headConstrainer", headOutput)
@@ -350,6 +343,7 @@ class HeadComponent(Component):
         self.eyeRightCtrl.xfo.tr = data['eyeRightPosition']
         self.jawCtrlSpace.xfo.tr = data['jawPosition']
         self.jawCtrl.xfo.tr = data['jawPosition']
+
         # ============
         # Set IO Xfos
         # ============
@@ -361,4 +355,6 @@ class HeadComponent(Component):
 
 
 from kraken.core.kraken_system import KrakenSystem
-KrakenSystem.getInstance().registerComponent(HeadComponent)
+ks = KrakenSystem.getInstance()
+ks.registerComponent(HeadComponent)
+ks.registerComponent(HeadComponentGuide)
