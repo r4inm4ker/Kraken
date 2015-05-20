@@ -379,7 +379,10 @@ class Component(Object3D):
             elif k == 'maxValue':
                 newOutputTgt.setMax(v)
             elif k == 'parent':
-                newOutputTgt.setParent(v)
+                if dataType.startswith('Xfo'):
+                    v.addChild(newOutputTgt)
+                else:
+                    v.addAttribute(newOutputTgt)
             else:
                 print "Keyword '" + k + "' is not supported with createOutput method!"
 
