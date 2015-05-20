@@ -45,6 +45,7 @@ class InsectLegComponentGuide(Component):
                   Vec3(9.841, 0.0, -1.237)
                  ]
               }
+
         self.loadData(data)
 
 
@@ -85,6 +86,7 @@ class InsectLegComponentGuide(Component):
 
         if 'name' in data:
             self.setName(data['name'])
+
         self.setLocation(data['location'])
 
         for i in xrange(5):
@@ -119,19 +121,16 @@ class InsectLegComponentGuide(Component):
 
             boneXfos.append(xfo)
 
-        return {
+        data = {
                 "class":"kraken.examples.insectleg_component.InsectLegComponent",
                 "name": self.getName(),
                 "location": self.getLocation(),
                 "boneXfos": boneXfos,
                 "endXfo": self.legCtrls[-1].xfo,
                 "boneLengths": boneLengths
-                }
+               }
 
-
-
-from kraken.core.kraken_system import KrakenSystem
-KrakenSystem.getInstance().registerComponent(InsectLegComponentGuide)
+        return data
 
 
 class InsectLegComponent(Component):
@@ -142,6 +141,19 @@ class InsectLegComponent(Component):
         Profiler.getInstance().push("Construct InsectLeg Component:" + name)
         super(InsectLegComponent, self).__init__(name, parent)
 
+        # Declare Inputs Xfos
+        self.rootInput = self.addInput('rootInput', dataType='Xfo')
+
+        # Declare Output Xfos
+        self.boneOutputs = self.addOutput('boneOutputs', dataType='Xfo[]')
+        self.legEndXfoOutput = self.addOutput('legEndXfoOutput', dataType='Xfo')
+        self.legEndPosOutput = self.addOutput('legEndPosOutput', dataType='Xfo')
+
+        # Declare Input Attrs
+        self.debugInput = self.addInput('debug', dataType='Boolean')
+
+        # Declare Output Attrs
+
         # =========
         # Controls
         # =========
@@ -150,12 +162,10 @@ class InsectLegComponent(Component):
 
         # IO Hierarchies
         inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
-        cmpInputAttrGrp = AttributeGroup('inputs')
-        inputHrcGrp.addAttributeGroup(cmpInputAttrGrp)
+        cmpInputAttrGrp = AttributeGroup('inputs', parent=inputHrcGrp)
 
         outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
-        cmpOutputAttrGrp = AttributeGroup('outputs')
-        outputHrcGrp.addAttributeGroup(cmpOutputAttrGrp)
+        cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
 
         # FK
         self.fkCtrlSpaces = []
@@ -187,19 +197,17 @@ class InsectLegComponent(Component):
             self.legIKCtrl.translatePoints(Vec3(1.0, 0.0, 0.0))
 
         # Add Component Params to IK control
-        legDebugInputAttr = BoolAttribute('debug', True)
-        legFkikInputAttr = FloatAttribute('fkik', 1.0, maxValue=1.0)
-        self.legTipBoneLenInputAttr = FloatAttribute('tipBoneLen', 1.0)
-
-        legSettingsAttrGrp = AttributeGroup("DisplayInfo_LegSettings")
-        self.legIKCtrl.addAttributeGroup(legSettingsAttrGrp)
-        legSettingsAttrGrp.addAttribute(legDebugInputAttr)
-        legSettingsAttrGrp.addAttribute(legFkikInputAttr)
-        legSettingsAttrGrp.addAttribute(self.legTipBoneLenInputAttr)
+        legSettingsAttrGrp = AttributeGroup("DisplayInfo_LegSettings",
+            parent=self.legIKCtrl)
+        legDebugInputAttr = BoolAttribute('debug', value=True,
+            parent=legSettingsAttrGrp)
+        legFkikInputAttr = FloatAttribute('fkik', value=1.0, minValue=0.0,
+            maxValue=1.0, parent=legSettingsAttrGrp)
 
         # UpV
         self.legUpVCtrlSpace = CtrlSpace('UpV', parent=ctrlCmpGrp)
-        self.legUpVCtrl = Control('UpV', parent=self.legUpVCtrlSpace, shape="triangle")
+        self.legUpVCtrl = Control('UpV', parent=self.legUpVCtrlSpace,
+            shape="triangle")
         self.legUpVCtrl.alignOnZAxis()
 
         # ==========
@@ -218,97 +226,95 @@ class InsectLegComponent(Component):
         # Create Component I/O
         # =====================
         # Setup component Xfo I/O's
-        self.rootInput = Locator('rootInput', parent=inputHrcGrp)
+        self.rootInputTgt = Locator('rootInput', parent=inputHrcGrp)
 
-        self.boneOutputs = []
+        self.boneOutputsTgt = []
         for i in xrange(4):
             boneOutput = Locator('bone' + str(i).zfill(2), parent=outputHrcGrp)
-            self.boneOutputs.append(boneOutput)
+            self.boneOutputsTgt.append(boneOutput)
 
-        self.legEndXfoOutput = Locator('legEndXfo', parent=outputHrcGrp)
+        self.legEndXfoOutputTgt = Locator('legEndXfo', parent=outputHrcGrp)
+        self.legEndPosOutputTgt = Locator('legEndPos', parent=outputHrcGrp)
 
-        self.legEndPosOutput = Locator('legEndPos', parent=outputHrcGrp)
+        # Set IO Targets
+        self.rootInput.setTarget(self.rootInputTgt)
 
+        self.boneOutputs.setTarget(self.boneOutputsTgt)
+        self.legEndXfoOutput.setTarget(self.legEndXfoOutputTgt)
+        self.legEndPosOutput.setTarget(self.legEndPosOutputTgt)
 
         # Setup componnent Attribute I/O's
-        debugInputAttr = BoolAttribute('debug', True)
-        fkikInputAttr = FloatAttribute('fkik', 1.0, maxValue=1.0)
-        self.tipBoneLenInputAttr = FloatAttribute('tipBoneLen', 1.0)
+        debugInputAttr = BoolAttribute('debug', value=True, parent=cmpInputAttrGrp)
+        self.tipBoneLenInputAttr = FloatAttribute('tipBoneLen', value=1.0, parent=cmpInputAttrGrp)
 
-        cmpInputAttrGrp.addAttribute(debugInputAttr)
-        cmpInputAttrGrp.addAttribute(fkikInputAttr)
-        cmpInputAttrGrp.addAttribute(self.tipBoneLenInputAttr)
-
-        # Connect attrs to control attrs
-        debugInputAttr.connect(legDebugInputAttr)
-        fkikInputAttr.connect(legFkikInputAttr)
-        self.tipBoneLenInputAttr.connect(self.legTipBoneLenInputAttr)
+        # Set IO Targets
+        self.debugInput.setTarget(debugInputAttr)
 
         # ==============
         # Constrain I/O
         # ==============
         # Constraint inputs
-        legRootInputConstraint = PoseConstraint('_'.join([self.legIKCtrl.getName(), 'To', self.rootInput.getName()]))
+        legRootInputConstraint = PoseConstraint('_'.join([self.legIKCtrl.getName(), 'To', self.rootInputTgt.getName()]))
         legRootInputConstraint.setMaintainOffset(True)
-        legRootInputConstraint.addConstrainer(self.rootInput)
+        legRootInputConstraint.addConstrainer(self.rootInputTgt)
         self.fkCtrlSpaces[0].addConstraint(legRootInputConstraint)
 
         # ==================
         # Add Component I/O
         # ==================
         # Add Xfo I/O's
-        self.addInput(self.rootInput)
+        # self.addInput(self.rootInputTgt)
 
-        for i in xrange(4):
-            self.addOutput(self.boneOutputs[i])
+        # for i in xrange(4):
+        #     self.addOutput(self.boneOutputsTgt[i])
 
-        self.addOutput(self.legEndXfoOutput)
-        self.addOutput(self.legEndPosOutput)
+        # self.addOutput(self.legEndXfoOutputTgt)
+        # self.addOutput(self.legEndPosOutputTgt)
 
-        # Add Attribute I/O's
-        self.addInput(debugInputAttr)
-        self.addInput(fkikInputAttr)
-        self.addInput(self.tipBoneLenInputAttr)
+        # # Add Attribute I/O's
+        # self.addInput(debugInputAttr)
+        # self.addInput(fkikInputAttr)
+        # self.addInput(self.tipBoneLenInputAttr)
 
         # ===============
         # Add Splice Ops
         # ===============
         # Add Splice Op
-        spliceOp = SpliceOperator("legSpliceOp", "NBoneIKSolver", "Kraken")
-        self.addOperator(spliceOp)
+        self.NBoneSolverSpliceOp = SpliceOperator("legSpliceOp", "NBoneIKSolver", "Kraken")
+        self.addOperator(self.NBoneSolverSpliceOp)
 
         # # Add Att Inputs
-        spliceOp.setInput("debug", debugInputAttr)
-        spliceOp.setInput("ikblend", fkikInputAttr)
-        spliceOp.setInput("tipBoneLen", self.tipBoneLenInputAttr)
+        self.NBoneSolverSpliceOp.setInput("debug", debugInputAttr)
+        self.NBoneSolverSpliceOp.setInput("ikblend", legFkikInputAttr)
+        self.NBoneSolverSpliceOp.setInput("tipBoneLen", self.tipBoneLenInputAttr)
 
         # Add Xfo Inputs
-        spliceOp.setInput("ikgoal", self.legIKCtrl)
-        # spliceOp.setInput("upV", legUpVCtrl)
+        self.NBoneSolverSpliceOp.setInput("ikgoal", self.legIKCtrl)
+        # self.NBoneSolverSpliceOp.setInput("upV", legUpVCtrl)
 
         for i in xrange(len(self.boneFKCtrls)):
-            spliceOp.setInput("fkcontrols", self.boneFKCtrls[i])
+            self.NBoneSolverSpliceOp.setInput("fkcontrols", self.boneFKCtrls[i])
 
         # Add Xfo Outputs
-        for i in xrange(len(self.boneOutputs)):
-            spliceOp.setOutput("pose", self.boneOutputs[i])
+        for i in xrange(len(self.boneOutputsTgt)):
+            self.NBoneSolverSpliceOp.setOutput("pose", self.boneOutputsTgt[i])
 
-        spliceOp.setOutput("legEnd", self.legEndPosOutput)
+        self.NBoneSolverSpliceOp.setOutput("legEnd", self.legEndPosOutputTgt)
 
         # Add Deformer Splice Op
-        outputsToDeformersSpliceOp = SpliceOperator("insectLegDeformerSpliceOp", "MultiPoseConstraintSolver", "Kraken")
-        self.addOperator(outputsToDeformersSpliceOp)
+        self.outputsToDeformersSpliceOp = SpliceOperator("insectLegDeformerSpliceOp", "MultiPoseConstraintSolver", "Kraken")
+        self.addOperator(self.outputsToDeformersSpliceOp)
 
         # Add Att Inputs
-        outputsToDeformersSpliceOp.setInput("debug", debugInputAttr)
+        self.outputsToDeformersSpliceOp.setInput("debug", debugInputAttr)
 
         # Add Xfo Inputs
-        for i in xrange(len(self.boneOutputs)):
-            outputsToDeformersSpliceOp.setInput("constrainers", self.boneOutputs[i])
+        for i in xrange(len(self.boneOutputsTgt)):
+            self.outputsToDeformersSpliceOp.setInput("constrainers", self.boneOutputsTgt[i])
 
         # Add Xfo Outputs
-        for i in xrange(len(self.boneOutputs)):
-            outputsToDeformersSpliceOp.setOutput("constrainees", self.boneDefs[i])
+        for i in xrange(len(self.boneDefs)):
+            self.outputsToDeformersSpliceOp.setOutput("constrainees", self.boneDefs[i])
 
         Profiler.getInstance().pop()
 
@@ -331,10 +337,6 @@ class InsectLegComponent(Component):
         self.legIKCtrlSpace.xfo = data['endXfo']
         self.legIKCtrl.xfo = data['endXfo']
 
-        tipBoneLen = boneLengths[len(boneLengths) - 1]
-        self.legTipBoneLenInputAttr.setMax(tipBoneLen * 2.0)
-        self.legTipBoneLenInputAttr.setValue(tipBoneLen)
-
         upVOffset = boneXfos[1].transformVector(Vec3(0, 0, 5))
         self.legUpVCtrlSpace.xfo.tr = upVOffset
         self.legUpVCtrl.xfo.tr = upVOffset
@@ -343,20 +345,23 @@ class InsectLegComponent(Component):
         # ============
         # Set IO Xfos
         # ============
-        self.rootInput.xfo = boneXfos[0]
+        self.rootInputTgt.xfo = boneXfos[0]
 
         for i in xrange(4):
-            self.boneOutputs[i].xfo = boneXfos[i]
+            self.boneOutputsTgt[i].xfo = boneXfos[i]
 
-        self.legEndXfoOutput.xfo = data['endXfo']
-        self.legEndPosOutput.xfo = data['endXfo']
+        self.legEndXfoOutputTgt.xfo = data['endXfo']
+        self.legEndPosOutputTgt.xfo = data['endXfo']
 
         # =============
         # Set IO Attrs
         # =============
+        tipBoneLen = boneLengths[len(boneLengths) - 1]
         self.tipBoneLenInputAttr.setMax(tipBoneLen * 2.0)
         self.tipBoneLenInputAttr.setValue(tipBoneLen)
 
 
 from kraken.core.kraken_system import KrakenSystem
-KrakenSystem.getInstance().registerComponent(InsectLegComponent)
+ks = KrakenSystem.getInstance()
+ks.registerComponent(InsectLegComponent)
+ks.registerComponent(InsectLegComponentGuide)

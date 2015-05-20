@@ -12,11 +12,13 @@ from kraken.core.objects.attributes.attribute import Attribute
 class NumberAttribute(Attribute):
     """Number Attributee. Base class for number attribute types"""
 
-    def __init__(self, name, value=0, minValue=None, maxValue=None):
-        super(NumberAttribute, self).__init__(name, value)
+    def __init__(self, name, value=0, minValue=None, maxValue=None, parent=None):
+        super(NumberAttribute, self).__init__(name, value=value, parent=parent)
 
         self._min = None
         self._max = None
+        self._uiMin = None
+        self._uiMax = None
 
         if minValue is None:
             if value < 0:

@@ -30,7 +30,6 @@ class ArmComponentGuide(Component):
     def __init__(self, name='armGuide', parent=None, data=None):
         super(ArmComponentGuide, self).__init__(name, parent)
 
-
         # Declare Inputs Xfos
         self.clavicleEndInput = self.addInput('clavicleEnd', dataType='Xfo')
 
@@ -52,12 +51,10 @@ class ArmComponentGuide(Component):
 
         # IO Hierarchies
         inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
-        cmpInputAttrGrp = AttributeGroup('inputs')
-        inputHrcGrp.addAttributeGroup(cmpInputAttrGrp)
+        cmpInputAttrGrp = AttributeGroup('inputs', parent=inputHrcGrp)
 
         outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
-        cmpOutputAttrGrp = AttributeGroup('outputs')
-        outputHrcGrp.addAttributeGroup(cmpOutputAttrGrp)
+        cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
 
         # Guide Controls
         self.bicepCtrl = Control('bicepFK', parent=ctrlCmpGrp, shape="sphere")
@@ -68,11 +65,8 @@ class ArmComponentGuide(Component):
         self.wristCtrl.setColor('blue')
 
         # Guide Attributes
-        self.bicepFKCtrlSizeInputAttr = FloatAttribute('bicepFKCtrlSize', 2.0)
-        self.forearmFKCtrlSizeInputAttr = FloatAttribute('forearmFKCtrlSize', 2.0)
-
-        cmpInputAttrGrp.addAttribute(self.bicepFKCtrlSizeInputAttr)
-        cmpInputAttrGrp.addAttribute(self.forearmFKCtrlSizeInputAttr)
+        self.bicepFKCtrlSizeInputAttr = FloatAttribute('bicepFKCtrlSize', value=2.0, parent=cmpInputAttrGrp)
+        self.forearmFKCtrlSizeInputAttr = FloatAttribute('forearmFKCtrlSize', value=2.0, parent=cmpInputAttrGrp)
 
         # Set input attribute targets
         self.bicepFKCtrlSizeInput.setTarget(self.bicepFKCtrlSizeInputAttr)
@@ -103,7 +97,6 @@ class ArmComponentGuide(Component):
         The JSON data object
 
         """
-
 
         data = {
                 'name': self.getName(),
@@ -185,7 +178,7 @@ class ArmComponentGuide(Component):
         upVXfo.tr = forearmPosition
         upVXfo.tr = upVXfo.transformVector(Vec3(0, 0, 5))
 
-        return {
+        data = {
             "class":"kraken.examples.arm_component.ArmComponent",
             "name": self.getName(),
             "location":self.getLocation(),
@@ -197,12 +190,9 @@ class ArmComponentGuide(Component):
             "bicepLen": bicepLen,
             "bicepFKCtrlSize": self.bicepFKCtrlSizeInputAttr.getValue(),
             "forearmFKCtrlSize": self.forearmFKCtrlSizeInputAttr.getValue()
-            }
+        }
 
-
-from kraken.core.kraken_system import KrakenSystem
-KrakenSystem.getInstance().registerComponent(ArmComponentGuide)
-
+        return data
 
 
 class ArmComponent(Component):
@@ -238,12 +228,10 @@ class ArmComponent(Component):
 
         # IO Hierarchies
         inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
-        cmpInputAttrGrp = AttributeGroup('inputs')
-        inputHrcGrp.addAttributeGroup(cmpInputAttrGrp)
+        cmpInputAttrGrp = AttributeGroup('inputs', parent=inputHrcGrp)
 
         outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
-        cmpOutputAttrGrp = AttributeGroup('outputs')
-        outputHrcGrp.addAttributeGroup(cmpOutputAttrGrp)
+        cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
 
         # Bicep
         self.bicepFKCtrlSpace = CtrlSpace('bicepFK', parent=ctrlCmpGrp)
@@ -261,27 +249,16 @@ class ArmComponent(Component):
         self.armIKCtrlSpace = CtrlSpace('IK', parent=ctrlCmpGrp)
         self.armIKCtrl = Control('IK', parent=self.armIKCtrlSpace, shape="pin")
 
-
         # Add Component Params to IK control
-        armDebugInputAttr = BoolAttribute('debug', True)
-        self.armBone1LenInputAttr = FloatAttribute('bone1Len', 0.0)
-        self.armBone2LenInputAttr = FloatAttribute('bone2Len', 0.0)
-        armFkikInputAttr = FloatAttribute('fkik', 0.0)
-        armSoftIKInputAttr = BoolAttribute('softIK', True)
-        armSoftDistInputAttr = FloatAttribute('softDist', 0.0)
-        armStretchInputAttr = BoolAttribute('stretch', True)
-        armStretchBlendInputAttr = FloatAttribute('stretchBlend', 0.0)
-
-        armSettingsAttrGrp = AttributeGroup("DisplayInfo_ArmSettings")
-        self.armIKCtrl.addAttributeGroup(armSettingsAttrGrp)
-        armSettingsAttrGrp.addAttribute(armDebugInputAttr)
-        armSettingsAttrGrp.addAttribute(self.armBone1LenInputAttr)
-        armSettingsAttrGrp.addAttribute(self.armBone2LenInputAttr)
-        armSettingsAttrGrp.addAttribute(armFkikInputAttr)
-        armSettingsAttrGrp.addAttribute(armSoftIKInputAttr)
-        armSettingsAttrGrp.addAttribute(armSoftDistInputAttr)
-        armSettingsAttrGrp.addAttribute(armStretchInputAttr)
-        armSettingsAttrGrp.addAttribute(armStretchBlendInputAttr)
+        armSettingsAttrGrp = AttributeGroup("DisplayInfo_ArmSettings", parent=self.armIKCtrl)
+        armDebugInputAttr = BoolAttribute('debug', value=True, parent=armSettingsAttrGrp)
+        self.armBone1LenInputAttr = FloatAttribute('bone1Len', value=0.0, parent=armSettingsAttrGrp)
+        self.armBone2LenInputAttr = FloatAttribute('bone2Len', value=0.0, parent=armSettingsAttrGrp)
+        armFkikInputAttr = FloatAttribute('fkik', value=0.0, minValue=0.0, maxValue=1.0, parent=armSettingsAttrGrp)
+        armSoftIKInputAttr = BoolAttribute('softIK', value=True, parent=armSettingsAttrGrp)
+        armSoftDistInputAttr = FloatAttribute('softDist', value=0.0, minValue=0.0, parent=armSettingsAttrGrp)
+        armStretchInputAttr = BoolAttribute('stretch', value=True, parent=armSettingsAttrGrp)
+        armStretchBlendInputAttr = FloatAttribute('stretchBlend', value=0.0, minValue=0.0, maxValue=1.0, parent=armSettingsAttrGrp)
 
         # UpV
         self.armUpVCtrlSpace = CtrlSpace('UpV', parent=ctrlCmpGrp)
@@ -326,15 +303,10 @@ class ArmComponent(Component):
         self.armEndPosOutput.setTarget(self.armEndPosOutputTgt)
 
         # Setup component Attribute I/O's
-        debugInputAttr = BoolAttribute('debug', True)
-        self.rightSideInputAttr = BoolAttribute('rightSide', True)
+        debugInputAttr = BoolAttribute('debug', value=True, parent=cmpInputAttrGrp)
+        self.rightSideInputAttr = BoolAttribute('rightSide', value=True, parent=cmpInputAttrGrp)
 
-        cmpInputAttrGrp.addAttribute(debugInputAttr)
-        cmpInputAttrGrp.addAttribute(self.rightSideInputAttr)
-
-        debugOutputAttr = BoolAttribute('debug', True)
-
-        cmpOutputAttrGrp.addAttribute(debugOutputAttr)
+        debugOutputAttr = BoolAttribute('debug', value=True, parent=cmpOutputAttrGrp)
 
         # Set IO Targets
         self.debugInput.setTarget(debugInputAttr)
@@ -353,28 +325,6 @@ class ArmComponent(Component):
         self.bicepFKCtrlSpace.addConstraint(armRootInputConstraint)
 
         # Constraint outputs
-
-
-        # ==================
-        # Add Component I/O
-        # ==================
-        # Add Xfo I/O's
-        # self.addInput(clavicleEndInputTgt)
-        # self.addOutput(self.bicepOutputTgt)
-        # self.addOutput(self.forearmOutputTgt)
-        # self.addOutput(self.armEndXfoOutputTgt)
-        # self.addOutput(self.armEndPosOutputTgt)
-
-        # Add Attribute I/O's
-        # self.addInput(debugInputAttr)
-        # self.addInput(self.armBone1LenInputAttr)
-        # self.addInput(self.armBone2LenInputAttr)
-        # self.addInput(armFkikInputAttr)
-        # self.addInput(softIKInputAttr)
-        # self.addInput(armSoftDistInputAttr)
-        # self.addInput(armStretchInputAttr)
-        # self.addInput(armStretchBlendInputAttr)
-        # self.addInput(self.rightSideInputAttr)
 
 
         # ===============
@@ -429,6 +379,7 @@ class ArmComponent(Component):
 
         Profiler.getInstance().pop()
 
+
     def loadData(self, data=None):
 
         self.setName(data.get('name', 'arm'))
@@ -470,4 +421,6 @@ class ArmComponent(Component):
 
 
 from kraken.core.kraken_system import KrakenSystem
-KrakenSystem.getInstance().registerComponent(ArmComponent)
+ks = KrakenSystem.getInstance()
+ks.registerComponent(ArmComponentGuide)
+ks.registerComponent(ArmComponent)

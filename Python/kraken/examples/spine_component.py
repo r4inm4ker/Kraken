@@ -46,17 +46,14 @@ class SpineComponentGuide(Component):
 
         # IO Hierarchies
         inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
-        cmpInputAttrGrp = AttributeGroup('inputs')
-        inputHrcGrp.addAttributeGroup(cmpInputAttrGrp)
+        cmpInputAttrGrp = AttributeGroup('inputs', parent=inputHrcGrp)
 
         outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
-        cmpOutputAttrGrp = AttributeGroup('outputs')
-        outputHrcGrp.addAttributeGroup(cmpOutputAttrGrp)
+        cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
 
         # Guide Controls
         self.cog = Control('cogPosition', parent=ctrlCmpGrp, shape="sphere")
         self.cog.setColor("red")
-
 
         self.spine01Ctrl = Control('spine01Position', parent=ctrlCmpGrp, shape="sphere")
         self.spine02Ctrl = Control('spine02Position', parent=ctrlCmpGrp, shape="sphere")
@@ -64,8 +61,6 @@ class SpineComponentGuide(Component):
         self.spine04Ctrl = Control('spine04Position', parent=ctrlCmpGrp, shape="sphere")
 
         self.numDeformersAttr = IntegerAttribute('numDeformers', 1)
-
-        # self.addInput(self.numDeformersAttr)
 
         self.loadData({
             "name": name,
@@ -137,9 +132,7 @@ class SpineComponentGuide(Component):
 
         """
 
-        # values
-
-        return {
+        data = {
                 "class":"kraken.examples.spine_component.SpineComponent",
                 "name": self.getName(),
                 "location":self.getLocation(),
@@ -151,9 +144,7 @@ class SpineComponentGuide(Component):
                 "numDeformers": self.numDeformersAttr.getValue()
                }
 
-
-from kraken.core.kraken_system import KrakenSystem
-KrakenSystem.getInstance().registerComponent(SpineComponentGuide)
+        return data
 
 
 class SpineComponent(Component):
@@ -181,43 +172,36 @@ class SpineComponent(Component):
 
         # IO Hierarchies
         inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
-        cmpInputAttrGrp = AttributeGroup('inputs')
-        inputHrcGrp.addAttributeGroup(cmpInputAttrGrp)
+        cmpInputAttrGrp = AttributeGroup('inputs', parent=inputHrcGrp)
 
         self.outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
-        cmpOutputAttrGrp = AttributeGroup('outputs')
-        self.outputHrcGrp.addAttributeGroup(cmpOutputAttrGrp)
+        cmpOutputAttrGrp = AttributeGroup('outputs', parent=self.outputHrcGrp)
 
         # COG
         self.cogCtrlSpace = CtrlSpace('cog', parent=ctrlCmpGrp)
-
         self.cogCtrl = Control('cog', parent=self.cogCtrlSpace, shape="circle")
         self.cogCtrl.scalePoints(Vec3(6.0, 6.0, 6.0))
         self.cogCtrl.setColor("orange")
 
         # Spine01
         self.spine01CtrlSpace = CtrlSpace('spine01', parent=self.cogCtrl)
-
         self.spine01Ctrl = Control('spine01', parent=self.spine01CtrlSpace, shape="circle")
         self.spine01Ctrl.scalePoints(Vec3(4.0, 4.0, 4.0))
 
         # Spine02
         self.spine02CtrlSpace = CtrlSpace('spine02', parent=self.spine01Ctrl)
-
         self.spine02Ctrl = Control('spine02', parent=self.spine02CtrlSpace, shape="circle")
         self.spine02Ctrl.scalePoints(Vec3(4.5, 4.5, 4.5))
 
 
         # Spine03
         self.spine03CtrlSpace = CtrlSpace('spine03', parent=self.spine02Ctrl)
-
         self.spine03Ctrl = Control('spine03', parent=self.spine03CtrlSpace, shape="circle")
         self.spine03Ctrl.scalePoints(Vec3(4.5, 4.5, 4.5))
         self.spine03Ctrl.setColor("blue")
 
         # Spine04
         self.spine04CtrlSpace = CtrlSpace('spine04', parent=self.cogCtrl)
-
         self.spine04Ctrl = Control('spine04', parent=self.spine04CtrlSpace, shape="circle")
         self.spine04Ctrl.scalePoints(Vec3(6.0, 6.0, 6.0))
 
@@ -245,12 +229,8 @@ class SpineComponent(Component):
         self.spineEndOutput.setTarget(spineEndOutputTgt)
 
         # Setup componnent Attribute I/O's
-        debugInputAttr = BoolAttribute('debug', True)
-
-        self.lengthInputAttr = FloatAttribute('length', 1.0)
-
-        cmpInputAttrGrp.addAttribute(debugInputAttr)
-        cmpInputAttrGrp.addAttribute(self.lengthInputAttr)
+        debugInputAttr = BoolAttribute('debug', value=True, parent=cmpInputAttrGrp)
+        self.lengthInputAttr = FloatAttribute('length', value=1.0, parent=cmpInputAttrGrp)
 
 
         # ==============
@@ -268,59 +248,41 @@ class SpineComponent(Component):
         spineEndOutputTgt.addConstraint(self.spineEndOutputConstraint)
 
 
-        # ==================
-        # Add Component I/O
-        # ==================
-        # Add Xfo I/O's
-
-        # for spineOutput in self.spineOutputs:
-        #     self.addOutput(spineOutput)
-
-        # self.addOutput(spineBaseOutputTgt)
-        # self.addOutput(spineEndOutputTgt)
-
-        # # Add Attribute I/O's
-        # self.addInput(debugInputAttr)
-        # self.addInput(self.lengthInputAttr)
-
-
         # ===============
         # Add Splice Ops
         # ===============
         # Add Splice Op
-        self.bezierSpineSpliceOp = SpliceOperator("spineSpliceOp", "BezierSpineSolver", "Kraken")
+        self.bezierSpineSpliceOp = SpliceOperator('spineSpliceOp', 'BezierSpineSolver', 'Kraken')
         self.addOperator(self.bezierSpineSpliceOp)
 
         # Add Att Inputs
-        self.bezierSpineSpliceOp.setInput("debug", debugInputAttr)
-        self.bezierSpineSpliceOp.setInput("length", self.lengthInputAttr)
+        self.bezierSpineSpliceOp.setInput('debug', debugInputAttr)
+        self.bezierSpineSpliceOp.setInput('length', self.lengthInputAttr)
 
         # Add Xfo Inputs
-        self.bezierSpineSpliceOp.setInput("base", self.spine01Ctrl)
-        self.bezierSpineSpliceOp.setInput("baseHandle", self.spine02Ctrl)
-        self.bezierSpineSpliceOp.setInput("tipHandle", self.spine03Ctrl)
-        self.bezierSpineSpliceOp.setInput("tip", self.spine04Ctrl)
+        self.bezierSpineSpliceOp.setInput('base', self.spine01Ctrl)
+        self.bezierSpineSpliceOp.setInput('baseHandle', self.spine02Ctrl)
+        self.bezierSpineSpliceOp.setInput('tipHandle', self.spine03Ctrl)
+        self.bezierSpineSpliceOp.setInput('tip', self.spine04Ctrl)
 
         # Add Xfo Outputs
         for spineOutput in self.spineOutputs:
-            self.bezierSpineSpliceOp.setOutput("outputs", spineOutput)
+            self.bezierSpineSpliceOp.setOutput('outputs', spineOutput)
 
         # Add Deformer Splice Op
-        self.outputsToDeformersSpliceOp = SpliceOperator("spineDeformerSpliceOp", "MultiPoseConstraintSolver", "Kraken")
+        self.outputsToDeformersSpliceOp = SpliceOperator('spineDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken')
         self.addOperator(self.outputsToDeformersSpliceOp)
 
         # Add Att Inputs
-        self.outputsToDeformersSpliceOp.setInput("debug", debugInputAttr)
+        self.outputsToDeformersSpliceOp.setInput('debug', debugInputAttr)
 
         # Add Xfo Outputs
         for spineOutput in self.spineOutputs:
-            self.outputsToDeformersSpliceOp.setInput("constrainers", spineOutput)
+            self.outputsToDeformersSpliceOp.setInput('constrainers', spineOutput)
 
         # Add Xfo Outputs
         for joint in self.deformerJoints:
-            self.outputsToDeformersSpliceOp.setOutput("constrainees", joint)
-
-        # print self.outputsToDeformersSpliceOp.getOutput("constrainees")
+            self.outputsToDeformersSpliceOp.setOutput('constrainees', joint)
 
         Profiler.getInstance().pop()
 
@@ -408,4 +370,6 @@ class SpineComponent(Component):
 
 
 from kraken.core.kraken_system import KrakenSystem
-KrakenSystem.getInstance().registerComponent(SpineComponent)
+ks = KrakenSystem.getInstance()
+ks.registerComponent(SpineComponent)
+ks.registerComponent(SpineComponentGuide)

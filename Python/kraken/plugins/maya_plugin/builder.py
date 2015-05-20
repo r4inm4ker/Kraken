@@ -25,7 +25,7 @@ class Builder(Builder):
 
 
     # ========================
-    # SceneItem Build Methods
+    # Object3D Build Methods
     # ========================
     def buildContainer(self, kSceneItem, buildName):
         """Builds a container / namespace object.
@@ -529,19 +529,19 @@ class Builder(Builder):
 
         """
 
-        connection = componentInput.getConnection()
-        target = componentInput.getTarget()
+        connection = connectionInput.getConnection()
+        connectionTarget = connection.getTarget()
+        inputTarget = componentInput.getTarget()
 
-        if componentInput.getDataType().endswith('[]'):
+        if connection.getDataType().endswith('[]'):
             connectionTarget = connection.getTarget()[componentInput.getIndex()]
         else:
             connectionTarget = connection.getTarget()
 
         connectionTargetDCCSceneItem = self.getDCCSceneItem(connectionTarget)
-        targetDCCSceneItem = self.getDCCSceneItem(target)
+        targetDCCSceneItem = self.getDCCSceneItem(inputTarget)
 
         pm.connectAttr(connectionTargetDCCSceneItem, targetDCCSceneItem, force=True)
-        targetDCCSceneItem.AddExpression(connectionTargetDCCSceneItem.FullName)
 
         return True
 
@@ -559,6 +559,7 @@ class Builder(Builder):
         True if successful.
 
         """
+
         try:
             solverTypeName = kOperator.getSolverTypeName()
 
@@ -622,7 +623,7 @@ class Builder(Builder):
                     def connectInput(tgt, opObject, dccSceneItem):
                         if isinstance(opObject, Attribute):
                             cmds.connectAttr(str(dccSceneItem), tgt)
-                        elif isinstance(opObject, SceneItem):
+                        elif isinstance(opObject, Object3D):
                             cmds.connectAttr(str(dccSceneItem.attr('worldMatrix')), tgt)
                         else:
                             raise Exception(opObject.getFullName() + " with type '" + opObject.getTypeName() + " is not implemented!")
@@ -640,7 +641,7 @@ class Builder(Builder):
                         if isinstance(opObject, Attribute):
                             cmds.connectAttr(src, str(dccSceneItem))
 
-                        elif isinstance(opObject, SceneItem):
+                        elif isinstance(opObject, Object3D):
                             decomposeNode = pm.createNode('decomposeMatrix')
                             cmds.connectAttr(src, str(decomposeNode.attr("inputMatrix")))
 

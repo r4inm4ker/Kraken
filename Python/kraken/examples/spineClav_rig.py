@@ -47,8 +47,9 @@ class SpineClavRig(Container):
         clavicleLeftComponent.loadData(data=clavicleLeftComponentGuide.getGuideData())
 
         # Clavicle to Spine
-        spineEndOutput = spineComponent.getOutputByName('spineEnd')
+        vertebraeOutputs = spineComponent.getOutputByName('spineVertebrae')
         clavicleLeftSpineEndInput = clavicleLeftComponent.getInputByName('spineEnd')
-        clavicleLeftSpineEndInput.setConnection(spineEndOutput)
+        clavicleLeftSpineEndInput.setConnection(vertebraeOutputs)
+        clavicleLeftSpineEndInput.setIndex(2)
 
         Profiler.getInstance().pop()
