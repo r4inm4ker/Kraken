@@ -27,15 +27,34 @@ class FootComponentGuide(Component):
     def __init__(self, name='Foot', parent=None, data=None):
         super(FootComponentGuide, self).__init__(name, parent)
 
+        # ================
+        # Setup Hierarchy
+        # ================
+        controlsLayer = self.getOrCreateLayer('controls')
+        ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
+
+        # IO Hierarchies
+        inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
+        cmpInputAttrGrp = AttributeGroup('inputs', parent=inputHrcGrp)
+
+        outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
+        cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
+
+
+        # ===========
+        # Declare IO
+        # ===========
         # Declare Inputs Xfos
-        self.legEndXfoInput = self.addInput('legEndXfo', dataType='Xfo')
-        self.legEndPosInput = self.addInput('legEndPos', dataType='Xfo')
+        self.legEndXfoInputTgt = self.createInput('legEndXfo', dataType='Xfo', parent=inputHrcGrp)
+        self.legEndPosInputTgt = self.createInput('legEndPos', dataType='Xfo', parent=inputHrcGrp)
 
         # Declare Output Xfos
-        self.footEndOutput = self.addOutput('footEnd', dataType='Xfo')
-        self.footOutput = self.addOutput('foot', dataType='Xfo')
+        self.footEndOutputTgt = self.createOutput('footEnd', dataType='Xfo', parent=outputHrcGrp)
+        self.footOutputTgt = self.createOutput('foot', dataType='Xfo', parent=outputHrcGrp)
 
         # Declare Input Attrs
+        self.debugInputAttr = self.createInput('debug', dataType='Boolean', parent=cmpInputAttrGrp)
+        self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', parent=cmpInputAttrGrp)
 
         # Declare Output Attrs
 
@@ -134,23 +153,9 @@ class FootComponent(Component):
         Profiler.getInstance().push("Construct Foot Component:" + name)
         super(FootComponent, self).__init__(name, parent)
 
-        # Declare Inputs Xfos
-        self.legEndXfoInput = self.addInput('legEndXfo', dataType='Xfo')
-        self.legEndPosInput = self.addInput('legEndPos', dataType='Xfo')
-
-        # Declare Output Xfos
-        self.footEndOutput = self.addOutput('footEnd', dataType='Xfo')
-        self.footOutput = self.addOutput('foot', dataType='Xfo')
-
-        # Declare Input Attrs
-        self.debugInput = self.addInput('debug', dataType='Boolean')
-        self.rightSideInput = self.addInput('rightSide', dataType='Boolean')
-
-        # Declare Output Attrs
-
-        # =========
-        # Controls
-        # =========
+        # ================
+        # Setup Hierarchy
+        # ================
         controlsLayer = self.getOrCreateLayer('controls')
         ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
 
@@ -161,6 +166,28 @@ class FootComponent(Component):
         outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
         cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
 
+
+        # ===========
+        # Declare IO
+        # ===========
+        # Declare Inputs Xfos
+        self.legEndXfoInputTgt = self.createInput('legEndXfo', dataType='Xfo', parent=inputHrcGrp)
+        self.legEndPosInputTgt = self.createInput('legEndPos', dataType='Xfo', parent=inputHrcGrp)
+
+        # Declare Output Xfos
+        self.footEndOutputTgt = self.createOutput('footEnd', dataType='Xfo', parent=outputHrcGrp)
+        self.footOutputTgt = self.createOutput('foot', dataType='Xfo', parent=outputHrcGrp)
+
+        # Declare Input Attrs
+        self.debugInputAttr = self.createInput('debug', dataType='Boolean', parent=cmpInputAttrGrp)
+        self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', parent=cmpInputAttrGrp)
+
+        # Declare Output Attrs
+
+
+        # =========
+        # Controls
+        # =========
         # Foot
         self.footCtrlSpace = CtrlSpace('foot', parent=ctrlCmpGrp)
 
@@ -188,31 +215,6 @@ class FootComponent(Component):
         footDef.setComponent(self)
 
 
-        # =====================
-        # Create Component I/O
-        # =====================
-        # Setup Component Xfo I/O's
-        self.legEndXfoInputTgt = Locator('legEndXfo', parent=inputHrcGrp)
-        self.legEndPosInputTgt = Locator('legEndPos', parent=inputHrcGrp)
-
-        self.footEndOutputTgt = Locator('handEnd', parent=outputHrcGrp)
-        self.footOutputTgt = Locator('hand', parent=outputHrcGrp)
-
-        # Set IO Targets
-        self.legEndXfoInput.setTarget(self.legEndXfoInputTgt)
-        self.legEndPosInput.setTarget(self.legEndPosInputTgt)
-        self.footEndOutput.setTarget(self.footEndOutputTgt)
-        self.footOutput.setTarget(self.footOutputTgt)
-
-        # Setup componnent Attribute I/O's
-        debugInputAttr = BoolAttribute('debug', value=True, parent=cmpInputAttrGrp)
-        rightSideInputAttr = BoolAttribute('rightSide', value=self.getLocation() is 'R', parent=cmpInputAttrGrp)
-
-        # Set IO Targets
-        self.debugInput.setTarget(debugInputAttr)
-        self.rightSideInput.setTarget(rightSideInputAttr)
-
-
         # ==============
         # Constrain I/O
         # ==============
@@ -238,8 +240,8 @@ class FootComponent(Component):
         # self.addOutput(self.footEndOutputTgt)
 
         # Add Attribute I/O's
-        # self.addInput(debugInputAttr)
-        # self.addInput(rightSideInputAttr)
+        # self.addInput(self.debugInputAttr)
+        # self.addInput(self.rightSideInputAttr)
         # self.addInput(footLinkToWorldInputAttr)
 
 
@@ -251,8 +253,8 @@ class FootComponent(Component):
         # self.addOperator(spliceOp)
 
         # # Add Att Inputs
-        # spliceOp.setInput("debug", debugInputAttr)
-        # spliceOp.setInput("rightSide", rightSideInputAttr)
+        # spliceOp.setInput("debug", self.debugInputAttr)
+        # spliceOp.setInput("rightSide", self.rightSideInputAttr)
         # spliceOp.setInput("linkToWorld", footLinkToWorldInputAttr)
 
         # # Add Xfo Inputs)
@@ -269,8 +271,8 @@ class FootComponent(Component):
         self.addOperator(spliceOp)
 
         # Add Att Inputs
-        spliceOp.setInput("debug", debugInputAttr)
-        spliceOp.setInput("rightSide", rightSideInputAttr)
+        spliceOp.setInput("debug", self.debugInputAttr)
+        spliceOp.setInput("rightSide", self.rightSideInputAttr)
 
         # Add Xfo Inputs)
         spliceOp.setInput("constrainer", self.footOutputTgt)

@@ -30,22 +30,9 @@ class ArmComponentGuide(Component):
     def __init__(self, name='armGuide', parent=None, data=None):
         super(ArmComponentGuide, self).__init__(name, parent)
 
-        # Declare Inputs Xfos
-        self.clavicleEndInput = self.addInput('clavicleEnd', dataType='Xfo')
-
-        # Declare Output Xfos
-        self.bicepOutput = self.addOutput('bicep', dataType='Xfo')
-        self.forearmOutput = self.addOutput('forearm', dataType='Xfo')
-        self.armEndXfoOutput = self.addOutput('armEndXfo', dataType='Xfo')
-        self.armEndPosOutput = self.addOutput('armEndPos', dataType='Xfo')
-
-        # Declare Input Attrs
-        self.bicepFKCtrlSizeInput = self.addInput('bicepFKCtrlSize', dataType='Float')
-        self.forearmFKCtrlSizeInput = self.addInput('forearmFKCtrlSize', dataType='Float')
-
-        # =========
-        # Controls
-        # =========
+        # ================
+        # Setup Hierarchy
+        # ================
         controlsLayer = self.getOrCreateLayer('controls')
         ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
 
@@ -56,6 +43,30 @@ class ArmComponentGuide(Component):
         outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
         cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
 
+        # ===========
+        # Declare IO
+        # ===========
+        # Declare Inputs Xfos
+        self.clavicleEndInputTgt = self.createInput('clavicleEnd', dataType='Xfo', parent=inputHrcGrp)
+
+        # Declare Output Xfos
+        self.bicepOutputTgt = self.createOutput('bicep', dataType='Xfo', parent=outputHrcGrp)
+        self.forearmOutputTgt = self.createOutput('forearm', dataType='Xfo', parent=outputHrcGrp)
+        self.armEndXfoOutputTgt = self.createOutput('armEndXfo', dataType='Xfo', parent=outputHrcGrp)
+        self.armEndPosOutputTgt = self.createOutput('armEndPos', dataType='Xfo', parent=outputHrcGrp)
+
+        # Declare Input Attrs
+        self.debugInputAttr = self.createInput('debug', dataType='Boolean', parent=cmpInputAttrGrp)
+        self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', parent=cmpInputAttrGrp)
+        self.bicepFKCtrlSizeInputAttr = self.createInput('bicepFKCtrlSize', dataType='Float', parent=cmpInputAttrGrp)
+        self.forearmFKCtrlSizeInputAttr = self.createInput('forearmFKCtrlSize', dataType='Float', parent=cmpInputAttrGrp)
+
+        # Declare Output Attrs
+        self.debugOutputAttr = self.createOutput('debug', dataType='Boolean', parent=cmpOutputAttrGrp)
+
+        # =========
+        # Controls
+        # =========
         # Guide Controls
         self.bicepCtrl = Control('bicepFK', parent=ctrlCmpGrp, shape="sphere")
         self.bicepCtrl.setColor('blue')
@@ -63,14 +74,6 @@ class ArmComponentGuide(Component):
         self.forearmCtrl.setColor('blue')
         self.wristCtrl = Control('wristFK', parent=ctrlCmpGrp, shape="sphere")
         self.wristCtrl.setColor('blue')
-
-        # Guide Attributes
-        self.bicepFKCtrlSizeInputAttr = FloatAttribute('bicepFKCtrlSize', value=2.0, parent=cmpInputAttrGrp)
-        self.forearmFKCtrlSizeInputAttr = FloatAttribute('forearmFKCtrlSize', value=2.0, parent=cmpInputAttrGrp)
-
-        # Set input attribute targets
-        self.bicepFKCtrlSizeInput.setTarget(self.bicepFKCtrlSizeInputAttr)
-        self.forearmFKCtrlSizeInput.setTarget(self.forearmFKCtrlSizeInputAttr)
 
         if data is None:
             data = {
@@ -220,7 +223,6 @@ class ArmComponent(Component):
         # Declare IO
         # ===========
         # Declare Inputs Xfos
-        # self.clavicleEndInput = self.addInput('clavicleEnd', dataType='Xfo')
         self.clavicleEndInputTgt = self.createInput('clavicleEnd', dataType='Xfo', parent=inputHrcGrp)
 
         # Declare Output Xfos

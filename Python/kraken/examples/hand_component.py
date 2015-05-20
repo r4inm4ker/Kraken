@@ -27,15 +27,34 @@ class HandComponentGuide(Component):
     def __init__(self, name='handGuide', parent=None, data=None):
         super(HandComponentGuide, self).__init__(name, parent)
 
+        # ================
+        # Setup Hierarchy
+        # ================
+        controlsLayer = self.getOrCreateLayer('controls')
+        ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
+
+        # IO Hierarchies
+        inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
+        cmpInputAttrGrp = AttributeGroup('inputs', parent=inputHrcGrp)
+
+        outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
+        cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
+
+
+        # ===========
+        # Declare IO
+        # ===========
         # Declare Inputs Xfos
-        self.armEndXfoInput = self.addInput('armEndXfo', dataType='Xfo')
-        self.armEndPosInput = self.addInput('armEndPos', dataType='Xfo')
+        self.armEndXfoInputTgt = self.createInput('armEndXfo', dataType='Xfo', parent=inputHrcGrp)
+        self.armEndPosInputTgt = self.createInput('armEndPos', dataType='Xfo', parent=inputHrcGrp)
 
         # Declare Output Xfos
-        self.handOutput = self.addOutput('hand', dataType='Xfo')
-        self.handEndOutput = self.addOutput('handEnd', dataType='Xfo')
+        self.handOutputTgt = self.createOutput('hand', dataType='Xfo', parent=outputHrcGrp)
+        self.handEndOutputTgt = self.createOutput('handEnd', dataType='Xfo', parent=outputHrcGrp)
 
         # Declare Input Attrs
+        self.debugInputAttr = self.createInput('debug', dataType='Boolean', parent=cmpInputAttrGrp)
+        self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', parent=cmpInputAttrGrp)
 
         # Declare Output Attrs
 
@@ -127,23 +146,9 @@ class HandComponent(Component):
         Profiler.getInstance().push("Construct Hand Component:" + name)
         super(HandComponent, self).__init__(name, parent)
 
-        # Declare Inputs Xfos
-        self.armEndXfoInput = self.addInput('armEndXfo', dataType='Xfo')
-        self.armEndPosInput = self.addInput('armEndPos', dataType='Xfo')
-
-        # Declare Output Xfos
-        self.handOutput = self.addOutput('hand', dataType='Xfo')
-        self.handEndOutput = self.addOutput('handEnd', dataType='Xfo')
-
-        # Declare Input Attrs
-        self.debugInput = self.addInput('debug', dataType='Boolean')
-        self.rightSideInput = self.addInput('rightSide', dataType='Boolean')
-
-        # Declare Output Attrs
-
-        # =========
-        # Controls
-        # =========
+        # ================
+        # Setup Hierarchy
+        # ================
         controlsLayer = self.getOrCreateLayer('controls')
         ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
 
@@ -154,6 +159,28 @@ class HandComponent(Component):
         outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
         cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
 
+
+        # ===========
+        # Declare IO
+        # ===========
+        # Declare Inputs Xfos
+        self.armEndXfoInputTgt = self.createInput('armEndXfo', dataType='Xfo', parent=inputHrcGrp)
+        self.armEndPosInputTgt = self.createInput('armEndPos', dataType='Xfo', parent=inputHrcGrp)
+
+        # Declare Output Xfos
+        self.handOutputTgt = self.createOutput('hand', dataType='Xfo', parent=outputHrcGrp)
+        self.handEndOutputTgt = self.createOutput('handEnd', dataType='Xfo', parent=outputHrcGrp)
+
+        # Declare Input Attrs
+        self.debugInputAttr = self.createInput('debug', dataType='Boolean', parent=cmpInputAttrGrp)
+        self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', parent=cmpInputAttrGrp)
+
+        # Declare Output Attrs
+
+
+        # =========
+        # Controls
+        # =========
         # Add Controls
         self.handCtrlSpace = CtrlSpace('hand', parent=ctrlCmpGrp)
 
@@ -181,33 +208,6 @@ class HandComponent(Component):
         handDef.setComponent(self)
 
 
-        # =====================
-        # Create Component I/O
-        # =====================
-        # Setup Component Xfo I/O's
-        self.armEndXfoInputTgt = Locator('armEndXfo', parent=inputHrcGrp)
-        self.armEndPosInputTgt = Locator('armEndPos', parent=inputHrcGrp)
-
-        self.handEndOutputTgt = Locator('handEnd', parent=outputHrcGrp)
-        self.handOutputTgt = Locator('hand', parent=outputHrcGrp)
-
-        # Set IO Targets
-        self.armEndXfoInput.setTarget(self.armEndXfoInputTgt)
-        self.armEndPosInput.setTarget(self.armEndPosInputTgt)
-
-        self.handOutput.setTarget(self.handEndOutputTgt)
-        self.handEndOutput.setTarget(self.handOutputTgt)
-
-
-        # Setup componnent Attribute I/O's
-        debugInputAttr = BoolAttribute('debug', value=True, parent=cmpInputAttrGrp)
-        rightSideInputAttr = BoolAttribute('rightSide', value=self.getLocation() is 'R', parent=cmpInputAttrGrp)
-
-        # Set IO Targets
-        self.debugInput.setTarget(debugInputAttr)
-        self.rightSideInput.setTarget(rightSideInputAttr)
-
-
         # ==============
         # Constrain I/O
         # ==============
@@ -223,21 +223,6 @@ class HandComponent(Component):
         self.handEndOutputTgt.addConstraint(handEndConstraint)
 
 
-        # ==================
-        # Add Component I/O
-        # ==================
-        # Add Xfo I/O's
-        # self.addInput(self.armEndXfoInputTgt)
-        # self.addInput(self.armEndPosInputTgt)
-        # self.addOutput(self.handOutputTgt)
-        # self.addOutput(self.handEndOutputTgt)
-
-        # Add Attribute I/O's
-        # self.addInput(debugInputAttr)
-        # self.addInput(rightSideInputAttr)
-        # self.addInput(handLinkToWorldInputAttr)
-
-
         # ===============
         # Add Splice Ops
         # ===============
@@ -246,17 +231,17 @@ class HandComponent(Component):
         # self.addOperator(spliceOp)
 
         # # Add Att Inputs
-        # spliceOp.setInput("debug", debugInputAttr)
-        # spliceOp.setInput("rightSide", rightSideInputAttr)
+        # spliceOp.setInput("debug", self.debugInputAttr)
+        # spliceOp.setInput("rightSide", self.rightSideInputAttr)
         # spliceOp.setInput("linkToWorld", handLinkToWorldInputAttr)
 
         # # Add Xfo Inputs)
-        # spliceOp.setInput("armEndXfo", armEndXfoInput)
-        # spliceOp.setInput("armEndPos", armEndPosInput)
-        # spliceOp.setInput("handRef", handRefSrt)
+        # spliceOp.setInput("armEndXfo", self.armEndXfoInputTgt)
+        # spliceOp.setInput("armEndPos", self.armEndPosInputTgt)
+        # spliceOp.setInput("handRef", self.handRefSrt)
 
         # # Add Xfo Outputs
-        # spliceOp.setOutput("handCtrlSpace", handCtrlSpace)
+        # spliceOp.setOutput("handCtrlSpace", self.handCtrlSpace)
 
 
         # Add Deformer Splice Op
@@ -264,8 +249,8 @@ class HandComponent(Component):
         self.addOperator(spliceOp)
 
         # Add Att Inputs
-        spliceOp.setInput("debug", debugInputAttr)
-        spliceOp.setInput("rightSide", rightSideInputAttr)
+        spliceOp.setInput("debug", self.debugInputAttr)
+        spliceOp.setInput("rightSide", self.rightSideInputAttr)
 
         # Add Xfo Inputs)
         spliceOp.setInput("constrainer", self.handOutputTgt)
