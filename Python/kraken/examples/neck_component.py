@@ -148,18 +148,9 @@ class NeckComponent(Component):
         Profiler.getInstance().push("Construct Neck Component:" + name)
         super(NeckComponent, self).__init__(name, parent)
 
-        # Declare Inputs Xfos
-        self.neckBaseInput = self.addInput('neckBase', dataType='Xfo')
-
-        # Declare Output Xfos
-        self.neckEndOutput = self.addOutput('neckEnd', dataType='Xfo')
-        self.neckOutput = self.addOutput('neck', dataType='Xfo')
-
-        # Declare Input Attrs
-
-        # =========
-        # Controls
-        # =========
+        # ================
+        # Setup Hierarchy
+        # ================
         controlsLayer = self.getOrCreateLayer('controls')
         ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
         ctrlCmpGrp.setComponent(self)
@@ -171,6 +162,29 @@ class NeckComponent(Component):
         outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
         cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
 
+
+        # ===========
+        # Declare IO
+        # ===========
+        # Declare Inputs Xfos
+        self.neckBaseInputTgt = self.createInput('neckBase', dataType='Xfo', parent=inputHrcGrp)
+
+        # Declare Output Xfos
+        self.neckOutputTgt = self.createOutput('neck', dataType='Xfo', parent=outputHrcGrp)
+        self.neckEndOutputTgt = self.createOutput('neckEnd', dataType='Xfo', parent=outputHrcGrp)
+
+        # Declare Input Attrs
+        self.debugInputAttr = self.createInput('debug', dataType='Boolean', value=True,
+            parent=cmpInputAttrGrp)
+        self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean',
+            value=self.getLocation() is 'R', parent=cmpInputAttrGrp)
+
+        # Declare Output Attrs
+
+
+        # =========
+        # Controls
+        # =========
         # Neck
         self.neckCtrlSpace = CtrlSpace('neck', parent=ctrlCmpGrp)
         self.neckCtrl = Control('neck', parent=self.neckCtrlSpace, shape="pin")
@@ -190,33 +204,20 @@ class NeckComponent(Component):
         neckDef.setComponent(self)
 
 
-        # =====================
-        # Create Component I/O
-        # =====================
-        # Setup Component Xfo I/O's
-        self.neckEndInputTgt = Locator('neckBase', parent=inputHrcGrp)
-        self.neckEndOutputTgt = Locator('neckEnd', parent=outputHrcGrp)
-        self.neckOutputTgt = Locator('neck', parent=outputHrcGrp)
-
-        # Set IO Targets
-        self.neckBaseInput.setTarget(self.neckEndInputTgt)
-        self.neckEndOutput.setTarget(self.neckEndOutputTgt)
-        self.neckOutput.setTarget(self.neckOutputTgt)
-
-        # Setup componnent Attribute I/O's
-        debugInputAttr = BoolAttribute('debug', value=True, parent=cmpInputAttrGrp)
-        rightSideInputAttr = BoolAttribute('rightSide', value=self.getLocation() is 'R', parent=cmpInputAttrGrp)
-
         # ==============
         # Constrain I/O
         # ==============
         # Constraint inputs
-        clavicleInputConstraint = PoseConstraint('_'.join([self.neckCtrlSpace.getName(), 'To', self.neckEndInputTgt.getName()]))
+        clavicleInputConstraint = PoseConstraint('_'.join([self.neckCtrlSpace.getName(), 'To', self.neckBaseInputTgt.getName()]))
         clavicleInputConstraint.setMaintainOffset(True)
-        clavicleInputConstraint.addConstrainer(self.neckEndInputTgt)
+        clavicleInputConstraint.addConstrainer(self.neckBaseInputTgt)
         self.neckCtrlSpace.addConstraint(clavicleInputConstraint)
 
         # Constraint outputs
+        neckOutputConstraint = PoseConstraint('_'.join([self.neckOutputTgt.getName(), 'To', self.neckCtrl.getName()]))
+        neckOutputConstraint.addConstrainer(self.neckCtrl)
+        self.neckOutputTgt.addConstraint(neckOutputConstraint)
+
         neckEndConstraint = PoseConstraint('_'.join([self.neckEndOutputTgt.getName(), 'To', self.neckCtrl.getName()]))
         neckEndConstraint.addConstrainer(self.neckCtrl)
         self.neckEndOutputTgt.addConstraint(neckEndConstraint)
@@ -230,8 +231,8 @@ class NeckComponent(Component):
         self.addOperator(spliceOp)
 
         # Add Att Inputs
-        spliceOp.setInput("debug", debugInputAttr)
-        spliceOp.setInput("rightSide", rightSideInputAttr)
+        spliceOp.setInput("debug", self.debugInputAttr)
+        spliceOp.setInput("rightSide", self.rightSideInputAttr)
 
         # Add Xfo Inputstrl)
         spliceOp.setInput("constrainer", self.neckEndOutputTgt)
@@ -254,7 +255,7 @@ class NeckComponent(Component):
         # ============
         # Set IO Xfos
         # ============
-        self.neckEndInputTgt.xfo = data['neckXfo']
+        self.neckBaseInputTgt.xfo = data['neckXfo']
         self.neckEndOutputTgt.xfo = data['neckXfo']
         self.neckOutputTgt.xfo = data['neckXfo']
 
