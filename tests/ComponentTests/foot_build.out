@@ -6,8 +6,8 @@ L_Foot.controls.foot.inputs
 L_Foot.controls.foot.inputs.legEndXfo
 L_Foot.controls.foot.inputs.legEndPos
 L_Foot.controls.foot.outputs
-L_Foot.controls.foot.outputs.handEnd
-L_Foot.controls.foot.outputs.hand
+L_Foot.controls.foot.outputs.footEnd
+L_Foot.controls.foot.outputs.foot
 L_Foot.controls.foot.foot
 L_Foot.controls.foot.foot.foot
 L_Foot.controls.foot.footRef
