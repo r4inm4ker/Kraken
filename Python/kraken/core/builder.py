@@ -722,6 +722,7 @@ class Builder(object):
         True if successful.
 
         """
+
         if kObject.isTypeOf('Component'):
 
             # Build operators
