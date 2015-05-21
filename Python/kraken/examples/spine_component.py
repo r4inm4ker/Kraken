@@ -368,6 +368,10 @@ class SpineComponent(Component):
         # evaluate the constraint op so that all the joint transforms are updated.
         self.outputsToDeformersSpliceOp.evaluate()
 
+        # evaluate the constraints to ensure the outputs are now in the correct location.
+        self.spineBaseOutputConstraint.evaluate()
+        self.spineEndOutputConstraint.evaluate()
+
 
 from kraken.core.kraken_system import KrakenSystem
 ks = KrakenSystem.getInstance()

@@ -140,10 +140,10 @@ class SpliceOperator(Operator):
 
 
     def evaluate(self):
-        """Returns the source code for a stub operator that will invoke the KL operator
+        """invokes the Splice operator causing the output values to be computed.
 
         Return:
-        String, The source code for the stub operator.
+        Boolean, True if successful.
 
         """
 
@@ -192,3 +192,5 @@ class SpliceOperator(Operator):
                         setRTVal(self.outputs[arg.name][j], argVals[i][j])
                 else:
                     setRTVal(self.outputs[arg.name], argVals[i])
+
+        return True
