@@ -398,7 +398,7 @@ class Quat(MathObject):
 
         """
 
-        return self._rtval.add('Quat', ks.rtVal('Quat', other))
+        return Quat(self._rtval.add('Quat', ks.rtVal('Quat', other)))
 
 
     def subtract(self, other):
@@ -509,7 +509,7 @@ class Quat(MathObject):
 
         """
 
-        return self._rtval.conjugate('Quat')
+        return Quat(self._rtval.conjugate('Quat'))
 
 
     def lengthSquared(self):

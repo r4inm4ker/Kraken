@@ -24,7 +24,7 @@ class Xfo(MathObject):
         else:
             self._rtval = ks.rtVal('Xfo')
             if isinstance(tr, Xfo):
-                self.set(tr=tr.tr, y=tr.ori, z=tr.sc)
+                self.set(tr=tr.tr, ori=tr.ori, sc=tr.sc)
             else:
                 if tr is not None:
                     self.tr = tr
