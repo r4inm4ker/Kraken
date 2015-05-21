@@ -61,16 +61,6 @@ class FootComponentGuide(Component):
         # =========
         # Controls
         # =========
-        controlsLayer = self.getOrCreateLayer('controls')
-        ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
-
-        # IO Hierarchies
-        inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
-        cmpInputAttrGrp = AttributeGroup('inputs', parent=inputHrcGrp)
-
-        outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
-        cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
-
         # Guide Controls
         self.footCtrl = Control('foot', parent=ctrlCmpGrp, shape="sphere")
 

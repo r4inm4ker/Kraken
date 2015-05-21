@@ -61,9 +61,6 @@ class HandComponentGuide(Component):
         # =========
         # Controls
         # =========
-        controlsLayer = self.getOrCreateLayer('controls')
-        ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
-
         # Guide Controls
         self.handCtrl = Control('hand', parent=ctrlCmpGrp, shape="cube")
 
