@@ -11,8 +11,8 @@ class SceneItem(object):
 
     def __init__(self, name, parent=None):
         super(SceneItem, self).__init__()
-        self.name = name
-        self.parent = parent
+        self._name = name
+        self._parent = parent
 
 
     # ==============
@@ -72,7 +72,7 @@ class SceneItem(object):
 
         """
 
-        return self.name
+        return self._name
 
 
     def setName(self, name):
@@ -94,7 +94,7 @@ class SceneItem(object):
         #         raise Exception("Child with the same name already exists: '" +
         #                         name + "'")
 
-        self.name = name
+        self._name = name
 
         return True
 
@@ -107,8 +107,8 @@ class SceneItem(object):
 
         """
 
-        if self.parent is not None:
-            return self.parent.getFullName() + '.' + self.getName()
+        if self._parent is not None:
+            return self._parent.getFullName() + '.' + self.getName()
 
         return self.getName()
 
@@ -124,7 +124,7 @@ class SceneItem(object):
 
         """
 
-        return self.parent
+        return self._parent
 
 
     def setParent(self, parent):
@@ -138,6 +138,6 @@ class SceneItem(object):
 
         """
 
-        self.parent = parent
+        self._parent = parent
 
         return True

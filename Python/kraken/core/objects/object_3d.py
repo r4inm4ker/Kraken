@@ -127,8 +127,8 @@ class Object3D(SceneItem):
 
         """
 
-        if self.parent is not None and not self.parent.isTypeOf('Component'):
-            return self.parent.getDecoratedPath() + '.' + self.getBuildName()
+        if self.getParent() is not None and not self.getParent().isTypeOf('Component'):
+            return self.getParent().getDecoratedPath() + '.' + self.getBuildName()
 
         return self.getBuildName()
 
@@ -1021,7 +1021,7 @@ class Object3D(SceneItem):
 
         jsonData = {
             '__typeHierarchy__': classHierarchy,
-            'name': self.name,
+            'name': self.getName(),
             'parent': None,
             'children': [],
             'flags': self.flags,
@@ -1033,8 +1033,8 @@ class Object3D(SceneItem):
             'shapeVisibility': self.shapeVisibility,
         }
 
-        if self.parent is not None:
-            jsonData['parent'] = self.parent.getName()
+        if self.getParent() is not None:
+            jsonData['parent'] = self.getParent().getName()
 
         if self.color is not None:
             jsonData['color'] = saver.encodeValue(self.color)
