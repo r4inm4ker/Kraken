@@ -180,7 +180,7 @@ function Xfo[] solveNCFIK(
 // Solve
 function NBoneIKSolver.solve!
 (
-  Boolean debug,
+  Boolean drawDebug,
   Scalar ikblend,
   Mat44 ikgoal,
   Mat44 fkcontrols[],
@@ -234,8 +234,8 @@ function NBoneIKSolver.solve!
   legEnd = xfoPose[xfoPose.size-1].toMat44();
 
   // Set debugging visibility.
-  this.setDebug(debug);
-  if(this.debug){
+  this.setDebug(drawDebug);
+  if(this.drawDebug){
 
     Color boneColor(1.0, 1.0, 0);
     for(UInt32 i=0; i<pose.size; i++){

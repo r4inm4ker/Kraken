@@ -51,7 +51,7 @@ function Scalar[] measureBezierLength(Vec3 coeffs[4], UInt32 numSamples){
 // Solve
 function BezierSpineSolver.solve!
 (
-  Boolean debug,
+  Boolean drawDebug,
   Scalar length,
   Mat44 base,
   Mat44 baseHandle,
@@ -69,7 +69,7 @@ function BezierSpineSolver.solve!
   Xfo baseXfo(base);
   Xfo tipXfo(tip);
   for(UInt32 i=0; i<outputs.size; i++){
-    
+
     Xfo outXfo;
     {
       // Compute the translation by projecting the local vector by the parent matrix.
@@ -115,14 +115,14 @@ function BezierSpineSolver.solve!
       alignment.setFrom2Vectors(outXfo.ori.getYaxis(), (targ - outXfo.tr).unit());
       outXfo.ori = alignment * outXfo.ori;
     }
-    
+
     outputs[i] = outXfo.toMat44();
   }
 /*
 
   // Set debugging visibility.
-  this.setDebug(debug);
-  if(this.debug){
+  this.setDebug(drawDebug);
+  if(this.drawDebug){
 
     Vec3 positions[];
     for(UInt32 i=0; i<20; i++){
