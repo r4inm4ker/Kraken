@@ -10,7 +10,7 @@ failedTests = []
 updatedReferences = []
 
 
-def checkTestOutput(filepath, output, update):
+def checkTestOutput(filepath, output, update, printoutput=False):
     referencefile = os.path.splitext(filepath)[0] + '.out'
     referencefileExists = os.path.exists(referencefile)
     match = False
@@ -43,14 +43,26 @@ def checkTestOutput(filepath, output, update):
 
             failedTests.append(filepath)
 
+    # TODO: Print out a diff between the output and the previous result.
+    if printoutput:
+        print output
 
-def runPytonTest(filepath, update):
 
+def runPytonTest(filepath, update, printoutput):
 
     def format_exception(e):
-        exception_list = traceback.format_stack()
-        exception_list = exception_list[:-2]
-        exception_list.extend(traceback.format_tb(sys.exc_info()[2]))
+        stack = traceback.format_tb(sys.exc_info()[2])
+        newStack = []
+        for line in stack:
+            if 'runTests.py' in line:
+                continue;
+            lineParts = line.split('"')
+            if len(lineParts) >= 3:
+                lineParts[1] = os.path.relpath(os.path.normpath(lineParts[1]), os.path.join(__file__, '..'))
+                line = '"'.join(lineParts)
+            newStack.append(line)
+        exception_list = []
+        exception_list.extend(newStack)
         exception_list.extend(traceback.format_exception_only(sys.exc_info()[0], sys.exc_info()[1]))
 
         exception_str = "Traceback (most recent call last):\n"
@@ -86,10 +98,10 @@ def runPytonTest(filepath, update):
 
     output = '\n'.join(strippedlines)
 
-    checkTestOutput(filepath, output, update)
+    checkTestOutput(filepath, output, update, printoutput=printoutput)
 
 
-def runKLTest(filepath, update):
+def runKLTest(filepath, update, printoutput=False):
     cmdstring = "kl.exe " + filepath
 
     # Call the kl tool piping output to the output buffer.
@@ -102,20 +114,19 @@ def runKLTest(filepath, update):
             output += line.rstrip()
         else:
             break
+    checkTestOutput(filepath, output, update, printoutput=printoutput)
 
-    checkTestOutput(filepath, output, update)
 
-
-def runTest(filepath, update):
+def runTest(filepath, update, printoutput=False):
     skipile = os.path.splitext(filepath)[0]+'.skip'
     if os.path.exists(skipile):
         print "Test Skipped:" + filepath
         return
 
     if filepath.endswith(".py"):
-        runPytonTest( filepath, update )
+        runPytonTest( filepath, update, printoutput )
     elif filepath.endswith(".kl"):
-        runKLTest( filepath, update )
+        runKLTest( filepath, update, printoutput )
 
 
 if __name__ == '__main__':
@@ -127,11 +138,12 @@ if __name__ == '__main__':
     update = args.update
 
     if args.file is not None:
-        if os.path.exists(args.file):
-            runTest(args.file, update)
-        else:
+        filepath = args.file
+        if not os.path.exists(filepath):
             filepath = os.path.join(os.path.dirname(os.path.realpath(__file__)), args.file)
-            runTest(filepath, update)
+
+        # wehn running a single test at a time, print the output to help with debugging.
+        runTest(filepath, update, printoutput=True)
     else:
         testsDir = os.path.join(os.path.dirname(os.path.realpath(__file__)))
         for root, dirs, files in os.walk(testsDir):

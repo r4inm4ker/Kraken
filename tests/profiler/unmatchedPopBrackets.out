@@ -1,13 +1,7 @@
 Traceback (most recent call last):
-  File "tests/runTests.py", line 140, in <module>
-    runTest(filepath, update)
-  File "tests/runTests.py", line 116, in runTest
-    runPytonTest( filepath, update )
-  File "tests/runTests.py", line 74, in runPytonTest
-    execfile( filepath, {} )
-  File "d:\Projects\Kraken\tests\profiler\unmatchedPopBrackets.py", line 14, in <module>
+  File "profiler\unmatchedPopBrackets.py", line 14, in <module>
     profiler.generateReport()
-  File "D:\Projects\Kraken\Python\kraken\core\profiler.py", line 110, in generateReport
+  File "..\Python\kraken\core\profiler.py", line 110, in generateReport
     str(len(self.__stack)) + """ times""")
 Exception: Profiler brackets not closed properly. Pop must be called for every call to push. Pop needs to be called another 1 times
 
