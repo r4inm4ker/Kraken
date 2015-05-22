@@ -28,18 +28,9 @@ class ClavicleComponentGuide(Component):
     def __init__(self, name='clavicle', parent=None, data=None):
         super(ClavicleComponentGuide, self).__init__(name, parent)
 
-        # Declare Inputs Xfos
-        self.spineEndInput = self.addInput('spineEnd', dataType='Xfo')
-
-        # Declare Output Xfos
-        self.clavicleOutput = self.addOutput('clavicle', dataType='Xfo')
-        self.clavicleEndOutput = self.addOutput('clavicleEnd', dataType='Xfo')
-
-        # Declare Input Attrs
-
-        # =========
-        # Controls
-        # =========
+        # ================
+        # Setup Hierarchy
+        # ================
         controlsLayer = self.getOrCreateLayer('controls')
         ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
 
@@ -50,6 +41,24 @@ class ClavicleComponentGuide(Component):
         outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
         cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
 
+        # ===========
+        # Declare IO
+        # ===========
+        # Declare Inputs Xfos
+        self.spineEndInputTgt = self.createInput('spineEnd', dataType='Xfo')
+
+        # Declare Output Xfos
+        self.clavicleOutputTgt = self.createOutput('clavicle', dataType='Xfo')
+        self.clavicleEndOutputTgt = self.createOutput('clavicleEnd', dataType='Xfo')
+
+        # Declare Input Attrs
+
+        # Declare Output Attrs
+
+
+        # =========
+        # Controls
+        # =========
         # Guide Controls
         self.clavicleCtrl = Control('clavicle', parent=ctrlCmpGrp, shape="sphere")
         self.clavicleUpVCtrl = Control('clavicleUpV', parent=ctrlCmpGrp, shape="sphere")
@@ -154,20 +163,9 @@ class ClavicleComponent(Component):
         Profiler.getInstance().push("Construct Clavicle Component:" + name)
         super(ClavicleComponent, self).__init__(name, parent)
 
-        # Declare Inputs Xfos
-        self.spineEndInput = self.addInput('spineEnd', dataType='Xfo')
-
-        # Declare Output Xfos
-        self.clavicleOutput = self.addOutput('clavicle', dataType='Xfo')
-        self.clavicleEndOutput = self.addOutput('clavicleEnd', dataType='Xfo')
-
-        # Declare Input Attrs
-
-        # Declare Output Attrs
-
-        # =========
-        # Controls
-        # =========
+        # ================
+        # Setup Hierarchy
+        # ================
         controlsLayer = self.getOrCreateLayer('controls')
         ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
 
@@ -178,6 +176,31 @@ class ClavicleComponent(Component):
         outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
         cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
 
+
+        # ===========
+        # Declare IO
+        # ===========
+        # Declare Inputs Xfos
+        self.spineEndInputTgt = self.createInput('spineEnd', dataType='Xfo', parent=inputHrcGrp)
+
+        # Declare Output Xfos
+        self.clavicleOutputTgt = self.createOutput('clavicle', dataType='Xfo', parent=outputHrcGrp)
+        self.clavicleEndOutputTgt = self.createOutput('clavicleEnd', dataType='Xfo', parent=outputHrcGrp)
+
+        # Declare Input Attrs
+        debugInputAttr = self.createInput('debug', dataType='Boolean', value=True,
+            parent=cmpInputAttrGrp)
+        rightSideInputAttr = self.createInput('rightSide', dataType='Boolean',
+            value=self.getLocation() is 'R', parent=cmpInputAttrGrp)
+
+        # Declare Output Attrs
+        armFollowBodyOutputAttr = self.createOutput('followBody', dataType='Float',
+            value=0.0, parent=cmpOutputAttrGrp)
+
+
+        # =========
+        # Controls
+        # =========
         # Clavicle
         self.clavicleCtrlSpace = CtrlSpace('clavicle', parent=ctrlCmpGrp)
         self.clavicleCtrl = Control('clavicle', parent=self.clavicleCtrlSpace, shape="cube")
@@ -195,33 +218,11 @@ class ClavicleComponent(Component):
         self.clavicleDef.setComponent(self)
 
 
-        # =====================
-        # Create Component I/O
-        # =====================
-        # Setup Component Xfo I/O's
-        self.spineEndInputTgt = Locator('spineEnd', parent=inputHrcGrp)
-
-        self.clavicleOutputTgt = Locator('clavicle', parent=outputHrcGrp)
-        self.clavicleEndOutputTgt = Locator('clavicleEnd', parent=outputHrcGrp)
-
-        # Set IO Targets
-        self.spineEndInput.setTarget(self.spineEndInputTgt)
-
-        self.clavicleOutput.setTarget(self.clavicleOutputTgt)
-        self.clavicleEndOutput.setTarget(self.clavicleEndOutputTgt)
-
-        # Setup componnent Attribute I/O's
-        debugInputAttr = BoolAttribute('debug', value=True, parent=cmpInputAttrGrp)
-        rightSideInputAttr = BoolAttribute('rightSide', value=self.getLocation() is 'R', parent=cmpInputAttrGrp)
-
-        armFollowBodyOutputAttr = FloatAttribute('followBody', value=0.0, parent=cmpOutputAttrGrp)
-
-
         # ==============
         # Constrain I/O
         # ==============
         # Constraint inputs
-        clavicleInputConstraint = PoseConstraint('_'.join([self.clavicleCtrl.getName(), 'To', self.spineEndInput.getName()]))
+        clavicleInputConstraint = PoseConstraint('_'.join([self.clavicleCtrl.getName(), 'To', self.spineEndInputTgt.getName()]))
         clavicleInputConstraint.setMaintainOffset(True)
         clavicleInputConstraint.addConstrainer(self.spineEndInputTgt)
         self.clavicleCtrlSpace.addConstraint(clavicleInputConstraint)

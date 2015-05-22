@@ -5,9 +5,9 @@ char_bob.controls
 char_bob.controls.spine
 char_bob.controls.spine.inputs
 char_bob.controls.spine.outputs
-char_bob.controls.spine.outputs.spine01
 char_bob.controls.spine.outputs.spineBase
 char_bob.controls.spine.outputs.spineEnd
+char_bob.controls.spine.outputs.spine01
 char_bob.controls.spine.outputs.spine02
 char_bob.controls.spine.outputs.spine03
 char_bob.controls.spine.outputs.spine04
@@ -25,8 +25,8 @@ char_bob.controls.neck
 char_bob.controls.neck.inputs
 char_bob.controls.neck.inputs.neckBase
 char_bob.controls.neck.outputs
-char_bob.controls.neck.outputs.neckEnd
 char_bob.controls.neck.outputs.neck
+char_bob.controls.neck.outputs.neckEnd
 char_bob.controls.neck.neck
 char_bob.controls.neck.neck.neck
 char_bob.controls.head
@@ -98,8 +98,8 @@ char_bob.controls.hand.inputs
 char_bob.controls.hand.inputs.armEndXfo
 char_bob.controls.hand.inputs.armEndPos
 char_bob.controls.hand.outputs
-char_bob.controls.hand.outputs.handEnd
 char_bob.controls.hand.outputs.hand
+char_bob.controls.hand.outputs.handEnd
 char_bob.controls.hand.hand
 char_bob.controls.hand.hand.hand
 char_bob.controls.hand.handRef
@@ -108,8 +108,8 @@ char_bob.controls.hand.inputs
 char_bob.controls.hand.inputs.armEndXfo
 char_bob.controls.hand.inputs.armEndPos
 char_bob.controls.hand.outputs
-char_bob.controls.hand.outputs.handEnd
 char_bob.controls.hand.outputs.hand
+char_bob.controls.hand.outputs.handEnd
 char_bob.controls.hand.hand
 char_bob.controls.hand.hand.hand
 char_bob.controls.hand.handRef
@@ -150,8 +150,8 @@ char_bob.controls.foot.inputs
 char_bob.controls.foot.inputs.legEndXfo
 char_bob.controls.foot.inputs.legEndPos
 char_bob.controls.foot.outputs
-char_bob.controls.foot.outputs.handEnd
-char_bob.controls.foot.outputs.hand
+char_bob.controls.foot.outputs.footEnd
+char_bob.controls.foot.outputs.foot
 char_bob.controls.foot.foot
 char_bob.controls.foot.foot.foot
 char_bob.controls.foot.footRef
@@ -160,8 +160,8 @@ char_bob.controls.foot.inputs
 char_bob.controls.foot.inputs.legEndXfo
 char_bob.controls.foot.inputs.legEndPos
 char_bob.controls.foot.outputs
-char_bob.controls.foot.outputs.handEnd
-char_bob.controls.foot.outputs.hand
+char_bob.controls.foot.outputs.footEnd
+char_bob.controls.foot.outputs.foot
 char_bob.controls.foot.foot
 char_bob.controls.foot.foot.foot
 char_bob.controls.foot.footRef

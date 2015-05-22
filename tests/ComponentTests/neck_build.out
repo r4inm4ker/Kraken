@@ -5,8 +5,8 @@ Neck.controls.neck
 Neck.controls.neck.inputs
 Neck.controls.neck.inputs.neckBase
 Neck.controls.neck.outputs
-Neck.controls.neck.outputs.neckEnd
 Neck.controls.neck.outputs.neck
+Neck.controls.neck.outputs.neckEnd
 Neck.controls.neck.neck
 Neck.controls.neck.neck.neck
 Neck.deformers

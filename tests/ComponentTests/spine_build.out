@@ -4,9 +4,9 @@ spine.controls
 spine.controls.spine
 spine.controls.spine.inputs
 spine.controls.spine.outputs
-spine.controls.spine.outputs.spine01
 spine.controls.spine.outputs.spineBase
 spine.controls.spine.outputs.spineEnd
+spine.controls.spine.outputs.spine01
 spine.controls.spine.outputs.spine02
 spine.controls.spine.outputs.spine03
 spine.controls.spine.outputs.spine04
