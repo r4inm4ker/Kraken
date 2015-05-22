@@ -18,7 +18,7 @@ function KrakenSolverArg[] PoseConstraintSolver.getArguments(){
 // Solve
 function PoseConstraintSolver.solve!
 (
-  in Boolean debug,
+  in Boolean drawDebug,
   in Boolean rightSide,
   in Mat44 constrainer,
   io Mat44 constrainee
@@ -27,8 +27,8 @@ function PoseConstraintSolver.solve!
   constrainee = constrainer;
 
   // Set debugging visibility.
-  this.setDebug(this.debug);
-  if(this.debug){
+  this.setDebug(this.drawDebug);
+  if(this.drawDebug){
     Color boneColor = Color(1.0, 1.0, 0);
     if(rightSide) {
       boneColor.set(0.5, 0, 0, 1.0);

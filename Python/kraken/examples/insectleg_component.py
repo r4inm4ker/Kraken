@@ -168,7 +168,7 @@ class InsectLegComponent(Component):
         self.legEndPosOutputTgt = self.createOutput('legEndPosOutput', dataType='Xfo', parent=outputHrcGrp)
 
         # Declare Input Attrs
-        self.debugInputAttr = self.createInput('debug', dataType='Boolean', value=True, parent=cmpInputAttrGrp)
+        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=True, parent=cmpInputAttrGrp)
         self.tipBoneLenInputAttr = self.createInput('tipBoneLen', dataType='Float', value=1.0, parent=cmpInputAttrGrp)
 
         # Declare Output Attrs
@@ -208,9 +208,12 @@ class InsectLegComponent(Component):
 
         # Add Component Params to IK control
         legSettingsAttrGrp = AttributeGroup("DisplayInfo_LegSettings", parent=self.legIKCtrl)
-        legDebugInputAttr = BoolAttribute('debug', value=True, parent=legSettingsAttrGrp)
+        legdrawDebugInputAttr = BoolAttribute('drawDebug', value=True, parent=legSettingsAttrGrp)
         legFkikInputAttr = FloatAttribute('fkik', value=1.0, minValue=0.0,
             maxValue=1.0, parent=legSettingsAttrGrp)
+
+        # Connect IO to controls
+        self.drawDebugInputAttr.connect(legdrawDebugInputAttr)
 
         # UpV
         self.legUpVCtrlSpace = CtrlSpace('UpV', parent=ctrlCmpGrp)
@@ -262,7 +265,7 @@ class InsectLegComponent(Component):
         self.addOperator(self.NBoneSolverSpliceOp)
 
         # # Add Att Inputs
-        self.NBoneSolverSpliceOp.setInput("debug", self.debugInputAttr)
+        self.NBoneSolverSpliceOp.setInput("drawDebug", self.drawDebugInputAttr)
         self.NBoneSolverSpliceOp.setInput("ikblend", legFkikInputAttr)
         self.NBoneSolverSpliceOp.setInput("tipBoneLen", self.tipBoneLenInputAttr)
 
@@ -284,7 +287,7 @@ class InsectLegComponent(Component):
         self.addOperator(self.outputsToDeformersSpliceOp)
 
         # Add Att Inputs
-        self.outputsToDeformersSpliceOp.setInput("debug", self.debugInputAttr)
+        self.outputsToDeformersSpliceOp.setInput("drawDebug", self.drawDebugInputAttr)
 
         # Add Xfo Inputs
         for i in xrange(len(self.boneOutputsTgt)):

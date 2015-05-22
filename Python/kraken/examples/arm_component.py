@@ -55,13 +55,13 @@ class ArmComponentGuide(Component):
         self.armEndXfoOutputTgt = self.createOutput('armEndXfo', dataType='Xfo', parent=outputHrcGrp)
 
         # Declare Input Attrs
-        self.debugInputAttr = self.createInput('debug', dataType='Boolean', parent=cmpInputAttrGrp)
+        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', parent=cmpInputAttrGrp)
         self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', parent=cmpInputAttrGrp)
         self.bicepFKCtrlSizeInputAttr = self.createInput('bicepFKCtrlSize', dataType='Float', parent=cmpInputAttrGrp)
         self.forearmFKCtrlSizeInputAttr = self.createInput('forearmFKCtrlSize', dataType='Float', parent=cmpInputAttrGrp)
 
         # Declare Output Attrs
-        self.debugOutputAttr = self.createOutput('debug', dataType='Boolean', parent=cmpOutputAttrGrp)
+        self.debugOutputAttr = self.createOutput('drawDebug', dataType='Boolean', parent=cmpOutputAttrGrp)
 
         # =========
         # Controls
@@ -230,11 +230,11 @@ class ArmComponent(Component):
         self.armEndXfoOutputTgt = self.createOutput('armEndXfo', dataType='Xfo', parent=outputHrcGrp)
 
         # Declare Input Attrs
-        self.debugInputAttr = self.createInput('debug', dataType='Boolean', value=True, parent=cmpInputAttrGrp)
+        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=True, parent=cmpInputAttrGrp)
         self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', parent=cmpInputAttrGrp)
 
         # Declare Output Attrs
-        self.debugOutputAttr = self.createOutput('debug', dataType='Boolean', parent=cmpOutputAttrGrp)
+        self.debugOutputAttr = self.createOutput('drawDebug', dataType='Boolean', parent=cmpOutputAttrGrp)
 
 
         # =========
@@ -258,7 +258,7 @@ class ArmComponent(Component):
 
         # Add Component Params to IK control
         armSettingsAttrGrp = AttributeGroup("DisplayInfo_ArmSettings", parent=self.armIKCtrl)
-        armDebugInputAttr = BoolAttribute('debug', value=True, parent=armSettingsAttrGrp)
+        armDebugInputAttr = BoolAttribute('drawDebug', value=True, parent=armSettingsAttrGrp)
         self.armBone0LenInputAttr = FloatAttribute('bone1Len', value=0.0, parent=armSettingsAttrGrp)
         self.armBone1LenInputAttr = FloatAttribute('bone2Len', value=0.0, parent=armSettingsAttrGrp)
         armIKBlendInputAttr = FloatAttribute('fkik', value=0.0, minValue=0.0, maxValue=1.0, parent=armSettingsAttrGrp)
@@ -268,7 +268,7 @@ class ArmComponent(Component):
         armStretchBlendInputAttr = FloatAttribute('stretchBlend', value=0.0, minValue=0.0, maxValue=1.0, parent=armSettingsAttrGrp)
 
 
-        self.debugInputAttr.connect(armDebugInputAttr)
+        self.drawDebugInputAttr.connect(armDebugInputAttr)
 
         # UpV
         self.armUpVCtrlSpace = CtrlSpace('UpV', parent=ctrlCmpGrp)
@@ -309,49 +309,49 @@ class ArmComponent(Component):
         # Add Splice Ops
         # ===============
         # Add Splice Op
-        self.spliceOp = SpliceOperator("armSpliceOp", "TwoBoneIKSolver", "Kraken")
+        self.spliceOp = SpliceOperator('armSpliceOp', 'TwoBoneIKSolver', 'Kraken')
         self.addOperator(self.spliceOp)
 
         # Add Att Inputs
-        self.spliceOp.setInput("debug", self.debugInputAttr)
-        self.spliceOp.setInput("bone0Len", self.armBone0LenInputAttr)
-        self.spliceOp.setInput("bone1Len", self.armBone1LenInputAttr)
-        self.spliceOp.setInput("ikblend", armIKBlendInputAttr)
-        self.spliceOp.setInput("softIK", armSoftIKInputAttr)
-        self.spliceOp.setInput("softDist", armSoftDistInputAttr)
-        self.spliceOp.setInput("stretch", armStretchInputAttr)
-        self.spliceOp.setInput("stretchBlend", armStretchBlendInputAttr)
-        self.spliceOp.setInput("rightSide", self.rightSideInputAttr)
+        self.spliceOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.spliceOp.setInput('bone0Len', self.armBone0LenInputAttr)
+        self.spliceOp.setInput('bone1Len', self.armBone1LenInputAttr)
+        self.spliceOp.setInput('ikblend', armIKBlendInputAttr)
+        self.spliceOp.setInput('softIK', armSoftIKInputAttr)
+        self.spliceOp.setInput('softDist', armSoftDistInputAttr)
+        self.spliceOp.setInput('stretch', armStretchInputAttr)
+        self.spliceOp.setInput('stretchBlend', armStretchBlendInputAttr)
+        self.spliceOp.setInput('rightSide', self.rightSideInputAttr)
 
         # Add Xfo Inputs
-        self.spliceOp.setInput("root", self.clavicleEndInputTgt)
-        self.spliceOp.setInput("bone0FK", self.bicepFKCtrl)
-        self.spliceOp.setInput("bone1FK", self.forearmFKCtrl)
-        self.spliceOp.setInput("ikHandle", self.armIKCtrl)
-        self.spliceOp.setInput("upV", self.armUpVCtrl)
+        self.spliceOp.setInput('root', self.clavicleEndInputTgt)
+        self.spliceOp.setInput('bone0FK', self.bicepFKCtrl)
+        self.spliceOp.setInput('bone1FK', self.forearmFKCtrl)
+        self.spliceOp.setInput('ikHandle', self.armIKCtrl)
+        self.spliceOp.setInput('upV', self.armUpVCtrl)
 
         # Add Xfo Outputs
-        self.spliceOp.setOutput("bone0Out", self.bicepOutputTgt)
-        self.spliceOp.setOutput("bone1Out", self.forearmOutputTgt)
-        self.spliceOp.setOutput("bone2Out", self.armEndXfoOutputTgt)
+        self.spliceOp.setOutput('bone0Out', self.bicepOutputTgt)
+        self.spliceOp.setOutput('bone1Out', self.forearmOutputTgt)
+        self.spliceOp.setOutput('bone2Out', self.armEndXfoOutputTgt)
 
 
         # Add Deformer Splice Op
-        self.outputsToDeformersSpliceOp = SpliceOperator("armDeformerSpliceOp", "MultiPoseConstraintSolver", "Kraken")
+        self.outputsToDeformersSpliceOp = SpliceOperator('armDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken')
         self.addOperator(self.outputsToDeformersSpliceOp)
 
         # Add Att Inputs
-        self.outputsToDeformersSpliceOp.setInput("debug", self.debugInputAttr)
+        self.outputsToDeformersSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
 
         # Add Xfo Inputs
-        self.outputsToDeformersSpliceOp.setInput("constrainers", self.bicepOutputTgt)
-        self.outputsToDeformersSpliceOp.setInput("constrainers", self.forearmOutputTgt)
-        self.outputsToDeformersSpliceOp.setInput("constrainers", self.armEndXfoOutputTgt)
+        self.outputsToDeformersSpliceOp.setInput('constrainers', self.bicepOutputTgt)
+        self.outputsToDeformersSpliceOp.setInput('constrainers', self.forearmOutputTgt)
+        self.outputsToDeformersSpliceOp.setInput('constrainers', self.armEndXfoOutputTgt)
 
         # Add Xfo Outputs
-        self.outputsToDeformersSpliceOp.setOutput("constrainees", bicepDef)
-        self.outputsToDeformersSpliceOp.setOutput("constrainees", forearmDef)
-        self.outputsToDeformersSpliceOp.setOutput("constrainees", wristDef)
+        self.outputsToDeformersSpliceOp.setOutput('constrainees', bicepDef)
+        self.outputsToDeformersSpliceOp.setOutput('constrainees', forearmDef)
+        self.outputsToDeformersSpliceOp.setOutput('constrainees', wristDef)
 
 
 

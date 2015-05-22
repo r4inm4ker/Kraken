@@ -529,6 +529,9 @@ class Builder(Builder):
 
         """
 
+        if connectionInput.isConnected() is False:
+            return False
+
         connection = connectionInput.getConnection()
         connectionTarget = connection.getTarget()
         inputTarget = componentInput.getTarget()

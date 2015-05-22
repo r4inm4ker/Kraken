@@ -20,7 +20,6 @@ function TwoBoneIKSolver(
 // Return Arguments for Kraken
 function KrakenSolverArg[] TwoBoneIKSolver.getArguments(){
   KrakenSolverArg args[] = this.parent.getArguments();
-  // args.push(KrakenSolverArg('debug', 'in', 'Boolean'));
   args.push(KrakenSolverArg('rightSide', 'in', 'Boolean'));
 
   args.push(KrakenSolverArg('ikblend', 'in', 'Scalar'));
@@ -91,7 +90,7 @@ function solve2BoneIK(
 // Solve
 function TwoBoneIKSolver.solve!
 (
-  Boolean debug,
+  Boolean drawDebug,
   Boolean rightSide,
 
   Scalar ikblend,
@@ -142,8 +141,8 @@ function TwoBoneIKSolver.solve!
   bone2Out = bone2Xfo.toMat44();
 
   // Set debugging visibility.
-  this.setDebug(debug);
-  if(this.debug){
+  this.setDebug(drawDebug);
+  if(this.drawDebug){
 
     Color boneColor(1.0, 1.0, 0);
     etDrawBone(this.handle.rootTransform, 'bone0', bone0Xfo, bone0Len, bone0Len * 0.15, boneColor);

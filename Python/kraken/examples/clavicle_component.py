@@ -188,7 +188,7 @@ class ClavicleComponent(Component):
         self.clavicleEndOutputTgt = self.createOutput('clavicleEnd', dataType='Xfo', parent=outputHrcGrp)
 
         # Declare Input Attrs
-        debugInputAttr = self.createInput('debug', dataType='Boolean', value=True,
+        drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=True,
             parent=cmpInputAttrGrp)
         rightSideInputAttr = self.createInput('rightSide', dataType='Boolean',
             value=self.getLocation() is 'R', parent=cmpInputAttrGrp)
@@ -241,18 +241,18 @@ class ClavicleComponent(Component):
         # Add Splice Ops
         # ===============
         # Add Deformer Splice Op
-        spliceOp = SpliceOperator("clavicleDeformerSpliceOp", "PoseConstraintSolver", "Kraken")
+        spliceOp = SpliceOperator('clavicleDeformerSpliceOp', 'PoseConstraintSolver', 'Kraken')
         self.addOperator(spliceOp)
 
         # Add Att Inputs
-        spliceOp.setInput("debug", debugInputAttr)
-        spliceOp.setInput("rightSide", rightSideInputAttr)
+        spliceOp.setInput('drawDebug', drawDebugInputAttr)
+        spliceOp.setInput('rightSide', rightSideInputAttr)
 
         # Add Xfo Inputs
-        spliceOp.setInput("constrainer", self.clavicleOutputTgt)
+        spliceOp.setInput('constrainer', self.clavicleOutputTgt)
 
         # Add Xfo Outputs
-        spliceOp.setOutput("constrainee", self.clavicleDef)
+        spliceOp.setOutput('constrainee', self.clavicleDef)
 
         Profiler.getInstance().pop()
 
