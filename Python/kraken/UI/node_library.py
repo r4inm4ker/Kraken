@@ -50,6 +50,7 @@ class NodeLibrary(QtGui.QWidget):
         super(NodeLibrary, self).__init__(parent)
 
         self.ks = KrakenSystem.getInstance()
+        self.ks.loadIniFile()
         # self.controller = controller
         self.searchLineEdit = QtGui.QLineEdit(self)
         self.searchLineEdit.setFocusPolicy(QtCore.Qt.StrongFocus)

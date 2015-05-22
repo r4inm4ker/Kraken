@@ -5,9 +5,11 @@ KrakenSystem - Class for constructing the Fabric Engine Core client.
 
 """
 
+import os
 import json
 import imp
-
+import importlib
+import kraken
 from kraken.core.profiler import Profiler
 import FabricEngine.Core
 
@@ -252,6 +254,43 @@ class KrakenSystem(object):
 
         return self.registeredComponents.keys()
 
+    def loadIniFile(self, iniFilePath=None):
+        def __importDirRecursive(path, parentModulePath=''):
+            for root, dirs, files in os.walk(path, True, None):
+
+                # parse all the files of given path and import python modules
+                for sfile in files:
+                    if sfile.endswith(".py"):
+                        if sfile == "__init__.py":
+                            module = parentModulePath
+                        else:
+                            module = parentModulePath+"."+sfile[:-3]
+
+                        try:
+                            importlib.import_module(module)
+                        except ImportError, e:
+                            for arg in e.args:
+                                print arg
+                        except Exception, e:
+                            for arg in e.args:
+                                print arg
+
+                # Now reload sub modules
+                for dirName in dirs:
+                    __importDirRecursive(os.path.join(path,dirName), parentModulePath+"."+dirName)
+
+        if iniFilePath is None:
+            iniJson = {
+                'componentModulePaths':{
+                    'kraken.examples': os.path.join(os.path.dirname(kraken.__file__), 'examples')
+                }
+            }
+        else:
+            with open(iniFilePath, 'r') as f:
+                iniJson = json.loads(f.read())
+
+        for key, path in iniJson['componentModulePaths'].iteritems():
+            __importDirRecursive(path, key)
 
     @classmethod
     def getInstance(cls):
