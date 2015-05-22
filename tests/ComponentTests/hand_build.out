@@ -4,7 +4,6 @@ L_Hand.controls
 L_Hand.controls.hand
 L_Hand.controls.hand.inputs
 L_Hand.controls.hand.inputs.armEndXfo
-L_Hand.controls.hand.inputs.armEndPos
 L_Hand.controls.hand.outputs
 L_Hand.controls.hand.outputs.hand
 L_Hand.controls.hand.outputs.handEnd

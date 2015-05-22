@@ -36,19 +36,9 @@
       "target": "L_Hand.armEndXfo"
     }, 
     {
-      "source": "L_Arm.armEndPos", 
-      "_comment": "LHand To LArm Connections. armEndPos", 
-      "target": "L_Hand.armEndPos"
-    }, 
-    {
       "source": "R_Arm.armEndXfo", 
       "_comment": "RHand To RArm Connections. armEndXfo", 
       "target": "R_Hand.armEndXfo"
-    }, 
-    {
-      "source": "R_Arm.armEndPos", 
-      "_comment": "RHand To RArm Connections. armEndPos", 
-      "target": "R_Hand.armEndPos"
     }, 
     {
       "source": "spine.spineBase", 
@@ -66,19 +56,9 @@
       "target": "L_Foot.legEndXfo"
     }, 
     {
-      "source": "L_Leg.legEndPos", 
-      "_comment": "LFoot To LLeg Connections: legEndPos", 
-      "target": "L_Foot.legEndPos"
-    }, 
-    {
       "source": "R_Leg.legEndXfo", 
       "_comment": "RFoot To RLeg Connections: legEndXfo", 
       "target": "R_Foot.legEndXfo"
-    }, 
-    {
-      "source": "R_Leg.legEndPos", 
-      "_comment": "RFoot To RLeg Connections: legEndPos", 
-      "target": "R_Foot.legEndPos"
     }
   ], 
   "components": [
