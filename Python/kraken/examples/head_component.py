@@ -53,7 +53,7 @@ class HeadComponentGuide(Component):
         self.eyeROutputTgt = self.createOutput('eyeR', dataType='Xfo', parent=outputHrcGrp)
 
         # Declare Input Attrs
-        self.debugInputAttr = self.createInput('debug', dataType='Boolean', parent=cmpInputAttrGrp)
+        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', parent=cmpInputAttrGrp)
 
         # Declare Output Attrs
 
@@ -187,7 +187,7 @@ class HeadComponent(Component):
         self.eyeROutputTgt = self.createOutput('eyeR', dataType='Xfo', parent=outputHrcGrp)
 
         # Declare Input Attrs
-        self.debugInputAttr = self.createInput('debug', dataType='Boolean', parent=cmpInputAttrGrp)
+        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', parent=cmpInputAttrGrp)
 
         # Declare Output Attrs
 
@@ -286,30 +286,30 @@ class HeadComponent(Component):
         # self.addOutput(self.eyeROutputTgt)
 
         # Add Attribute I/O's
-        # self.addInput(self.debugInputAttr)
+        # self.addInput(self.drawDebugInputAttr)
 
 
         # ===============
         # Add Splice Ops
         # ===============
         # Add Deformer Splice Op
-        # spliceOp = SpliceOperator("headDeformerSpliceOp", "HeadConstraintSolver", "KrakenHeadConstraintSolver")
+        # spliceOp = SpliceOperator('headDeformerSpliceOp', 'HeadConstraintSolver', 'KrakenHeadConstraintSolver')
         # self.addOperator(spliceOp)
 
         # # Add Att Inputs
-        # spliceOp.setInput("debug", self.debugInputAttr)
+        # spliceOp.setInput('drawDebug', self.drawDebugInputAttr)
 
         # # Add Xfo Inputstrl)
-        # spliceOp.setInput("headConstrainer", self.headOutputTgt)
-        # spliceOp.setInput("jawConstrainer", self.jawOutputTgt)
-        # spliceOp.setInput("eyeLeftConstrainer", self.eyeLOutputTgt)
-        # spliceOp.setInput("eyeRightConstrainer", self.eyeROutputTgt)
+        # spliceOp.setInput('headConstrainer', self.headOutputTgt)
+        # spliceOp.setInput('jawConstrainer', self.jawOutputTgt)
+        # spliceOp.setInput('eyeLeftConstrainer', self.eyeLOutputTgt)
+        # spliceOp.setInput('eyeRightConstrainer', self.eyeROutputTgt)
 
         # # Add Xfo Outputs
-        # spliceOp.setOutput("headDeformer", headDef)
-        # spliceOp.setOutput("jawDeformer", jawDef)
-        # spliceOp.setOutput("eyeLeftDeformer", eyeLeftDef)
-        # spliceOp.setOutput("eyeRightDeformer", eyeRightDef)
+        # spliceOp.setOutput('headDeformer', headDef)
+        # spliceOp.setOutput('jawDeformer', jawDef)
+        # spliceOp.setOutput('eyeLeftDeformer', eyeLeftDef)
+        # spliceOp.setOutput('eyeRightDeformer', eyeRightDef)
 
         Profiler.getInstance().pop()
 

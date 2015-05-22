@@ -56,13 +56,13 @@ class ArmComponentGuide(Component):
         self.armEndPosOutputTgt = self.createOutput('armEndPos', dataType='Xfo', parent=outputHrcGrp)
 
         # Declare Input Attrs
-        self.debugInputAttr = self.createInput('debug', dataType='Boolean', parent=cmpInputAttrGrp)
+        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', parent=cmpInputAttrGrp)
         self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', parent=cmpInputAttrGrp)
         self.bicepFKCtrlSizeInputAttr = self.createInput('bicepFKCtrlSize', dataType='Float', parent=cmpInputAttrGrp)
         self.forearmFKCtrlSizeInputAttr = self.createInput('forearmFKCtrlSize', dataType='Float', parent=cmpInputAttrGrp)
 
         # Declare Output Attrs
-        self.debugOutputAttr = self.createOutput('debug', dataType='Boolean', parent=cmpOutputAttrGrp)
+        self.drawDebugOutputAttr = self.createOutput('drawDebug', dataType='Boolean', parent=cmpOutputAttrGrp)
 
         # =========
         # Controls
@@ -232,11 +232,11 @@ class ArmComponent(Component):
         self.armEndPosOutputTgt = self.createOutput('armEndPos', dataType='Xfo', parent=outputHrcGrp)
 
         # Declare Input Attrs
-        self.debugInputAttr = self.createInput('debug', dataType='Boolean', parent=cmpInputAttrGrp)
+        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', parent=cmpInputAttrGrp)
         self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', parent=cmpInputAttrGrp)
 
         # Declare Output Attrs
-        self.debugOutputAttr = self.createOutput('debug', dataType='Boolean', parent=cmpOutputAttrGrp)
+        self.drawDebugOutputAttr = self.createOutput('drawDebug', dataType='Boolean', parent=cmpOutputAttrGrp)
 
 
         # =========
@@ -313,7 +313,7 @@ class ArmComponent(Component):
         # self.addOperator(spliceOp)
 
         # # Add Att Inputs
-        # spliceOp.setInput("debug", self.debugInputAttr)
+        # spliceOp.setInput("drawDebug", self.drawDebugInputAttr)
         # spliceOp.setInput("bone1Len", self.armBone1LenInputAttr)
         # spliceOp.setInput("bone2Len", self.armBone2LenInputAttr)
         # spliceOp.setInput("fkik", armFkikInputAttr)
@@ -342,7 +342,7 @@ class ArmComponent(Component):
         # self.addOperator(spliceOp)
 
         # # Add Att Inputs
-        # spliceOp.setInput("debug", self.debugInputAttr)
+        # spliceOp.setInput("drawDebug", self.drawDebugInputAttr)
 
         # # Add Xfo Inputs
         # spliceOp.setInput("bone01Constrainer", self.bicepOutputTgt)

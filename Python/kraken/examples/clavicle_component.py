@@ -188,7 +188,7 @@ class ClavicleComponent(Component):
         self.clavicleEndOutputTgt = self.createOutput('clavicleEnd', dataType='Xfo', parent=outputHrcGrp)
 
         # Declare Input Attrs
-        debugInputAttr = self.createInput('debug', dataType='Boolean', value=True,
+        drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=True,
             parent=cmpInputAttrGrp)
         rightSideInputAttr = self.createInput('rightSide', dataType='Boolean',
             value=self.getLocation() is 'R', parent=cmpInputAttrGrp)
@@ -245,7 +245,7 @@ class ClavicleComponent(Component):
         self.addOperator(spliceOp)
 
         # Add Att Inputs
-        spliceOp.setInput("debug", debugInputAttr)
+        spliceOp.setInput("drawDebug", drawDebugInputAttr)
         spliceOp.setInput("rightSide", rightSideInputAttr)
 
         # Add Xfo Inputs

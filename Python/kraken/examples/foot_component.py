@@ -53,7 +53,7 @@ class FootComponentGuide(Component):
         self.footOutputTgt = self.createOutput('foot', dataType='Xfo', parent=outputHrcGrp)
 
         # Declare Input Attrs
-        self.debugInputAttr = self.createInput('debug', dataType='Boolean', parent=cmpInputAttrGrp)
+        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', parent=cmpInputAttrGrp)
         self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', parent=cmpInputAttrGrp)
 
         # Declare Output Attrs
@@ -169,7 +169,7 @@ class FootComponent(Component):
         self.footOutputTgt = self.createOutput('foot', dataType='Xfo', parent=outputHrcGrp)
 
         # Declare Input Attrs
-        self.debugInputAttr = self.createInput('debug', dataType='Boolean', parent=cmpInputAttrGrp)
+        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', parent=cmpInputAttrGrp)
         self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', parent=cmpInputAttrGrp)
 
         # Declare Output Attrs
@@ -230,7 +230,7 @@ class FootComponent(Component):
         # self.addOutput(self.footEndOutputTgt)
 
         # Add Attribute I/O's
-        # self.addInput(self.debugInputAttr)
+        # self.addInput(self.drawDebugInputAttr)
         # self.addInput(self.rightSideInputAttr)
         # self.addInput(footLinkToWorldInputAttr)
 
@@ -243,7 +243,7 @@ class FootComponent(Component):
         # self.addOperator(spliceOp)
 
         # # Add Att Inputs
-        # spliceOp.setInput("debug", self.debugInputAttr)
+        # spliceOp.setInput("drawDebug", self.drawDebugInputAttr)
         # spliceOp.setInput("rightSide", self.rightSideInputAttr)
         # spliceOp.setInput("linkToWorld", footLinkToWorldInputAttr)
 
@@ -261,7 +261,7 @@ class FootComponent(Component):
         self.addOperator(spliceOp)
 
         # Add Att Inputs
-        spliceOp.setInput("debug", self.debugInputAttr)
+        spliceOp.setInput("drawDebug", self.drawDebugInputAttr)
         spliceOp.setInput("rightSide", self.rightSideInputAttr)
 
         # Add Xfo Inputs)
