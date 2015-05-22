@@ -1,0 +1,360 @@
+
+#
+# Copyright 2010-2015
+#
+
+#pylint: disable-msg=W0613
+import json
+from PySide import QtGui, QtCore
+from port import PortFromPath
+# from FabricEngine.DFG.Widgets.node_inspector import NodeInspectorDockWidget
+
+class NodeTitle(QtGui.QGraphicsWidget):
+    __color = QtGui.QColor(25, 25, 25)
+    __font = QtGui.QFont('Decorative', 16)
+
+    def __init__(self, text):
+        super(NodeTitle, self).__init__()
+
+        self.__textItem = QtGui.QGraphicsTextItem(text, self)
+        self.__textItem.setDefaultTextColor(self.__color)
+        self.__textItem.setFont(self.__font)
+        self.__textItem.setPos(0, -4)
+        option=self.__textItem.document().defaultTextOption()
+        option.setWrapMode(QtGui.QTextOption.NoWrap)
+        self.__textItem.document().setDefaultTextOption(option)
+        self.__textItem.adjustSize()
+
+        self.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed))
+        self.setPreferredSize(self.textSize())
+
+    def textSize(self):
+        return QtCore.QSizeF(
+            self.__textItem.textWidth(),
+            self.__font.pointSizeF()
+            )
+
+    def paint(self, painter, option, widget):
+        super(NodeTitle, self).paint(painter, option, widget)
+        # painter.setPen(QtGui.QPen(QtGui.QColor(0, 255, 0)))
+        # painter.drawRect(self.windowFrameRect())
+
+class DebugButton(QtGui.QPushButton):
+
+    def __init__(self, text):
+        super(DebugButton, self).__init__(text)
+    #     self.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed))
+    #     # self.setPreferredSize(QtCore.QSize(20, 20))
+
+    # def sizeHint(self):
+    #     return QtCore.QSize(20, 20)
+
+    # def paint(self, painter, option, widget):
+    #     super(DebugButton, self).paint(painter, option, widget)
+    #     painter.setPen(QtGui.QPen(QtGui.QColor(0, 255, 0)))
+    #     painter.drawRect(self.windowFrameRect())
+
+
+class NodeHeader(QtGui.QGraphicsWidget):
+
+    def __init__(self, graph, node, text, showEditSubGraphButton, showEditFunctionButton):
+        super(NodeHeader, self).__init__()
+
+        self.__graph = graph
+        self.__node = node
+
+        self.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding))
+
+        layout = QtGui.QGraphicsLinearLayout()
+        layout.setContentsMargins(4, 4, 4, 4)
+        layout.setSpacing(1)
+        layout.setOrientation(QtCore.Qt.Horizontal)
+        self.setLayout(layout)
+
+        self.__titleItem = NodeTitle(text)
+        layout.addStretch(1)
+        layout.addItem(self.__titleItem)
+        layout.setAlignment(self.__titleItem, QtCore.Qt.AlignCenter | QtCore.Qt.AlignTop)
+        layout.addStretch(1)
+
+        if showEditSubGraphButton:
+            editSubGraphButton = DebugButton('')
+            editSubGraphButton.setIconSize(QtCore.QSize(40, 40))
+            editSubGraphButton.setObjectName("editSubGraph")
+            editSubGraphButton.setContentsMargins(0, 0, 0, 0)
+            def editSubGraph():
+                self.__graph.pushSubGraph(node.getName())
+            editSubGraphButton.pressed.connect(editSubGraph)
+            editSubGraphButtonProxy = QtGui.QGraphicsProxyWidget()
+            editSubGraphButtonProxy.setWidget(editSubGraphButton)
+            editSubGraphButtonProxy.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed))
+            editSubGraphButtonProxy.setPreferredSize(22, 22)
+            editSubGraphButtonProxy.setContentsMargins(0, 0, 0, 0)
+            layout.addItem(editSubGraphButtonProxy)
+
+        if showEditFunctionButton:
+            editFunctionButton = DebugButton('')
+            editFunctionButton.setIconSize(QtCore.QSize(40, 40))
+            editFunctionButton.setObjectName("editFunction")
+            editFunctionButton.setContentsMargins(0, 0, 0, 0)
+            def editFunction():
+                self.__graph.openEditFunctionDialog(self.__node.getEvalPath(), self.__node.getExecutablePath())
+            editFunctionButton.pressed.connect(editFunction)
+            editFunctionButtonProxy = QtGui.QGraphicsProxyWidget()
+            editFunctionButtonProxy.setWidget(editFunctionButton)
+            editFunctionButtonProxy.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed))
+            editFunctionButtonProxy.setPreferredSize(22, 22)
+            editFunctionButtonProxy.setContentsMargins(0, 0, 0, 0)
+            layout.addItem(editFunctionButtonProxy)
+
+
+    def paint(self, painter, option, widget):
+        super(NodeHeader, self).paint(painter, option, widget)
+        # painter.setPen(QtGui.QPen(QtGui.QColor(0, 255, 0)))
+        # painter.drawRect(self.windowFrameRect())
+
+class Node(QtGui.QGraphicsWidget):
+    __defaultColor = QtGui.QColor(154, 205, 50, 255)
+    __unselectedPen =  QtGui.QPen(QtGui.QColor(25, 25, 25), 1.6)
+    __selectedPen =  QtGui.QPen(QtGui.QColor(255, 255, 255, 255), 1.6)
+
+    def __init__(self, graph, name):
+        super(Node, self).__init__(graph.itemGroup())
+
+        self.setMinimumWidth(60)
+        self.setMinimumHeight(20)
+        self.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding))
+
+        layout = QtGui.QGraphicsLinearLayout()
+        layout.setContentsMargins(4, 4, 4, 4)
+        layout.setSpacing(4)
+        layout.setOrientation(QtCore.Qt.Vertical)
+        self.setLayout(layout)
+
+        # We have the following sources of information to display a node.
+        # 1. The executable. This defines the ports of the node, and its metadata contains the color and other settings.
+        # 2. The 'Node' or instance of the executable. Its meta data contains the positioin of the node in the graph.
+        # 3. The 'evalDesc' (for lack of a better name). This contains the data types that have been propagated to the ports.
+        # Given the graph path, and the node name, I should be able to acess the node.
+
+        self.__graph = graph
+        self.__name = name
+
+        self.__nodePath = self.__graph.getGraphPath()+'.'+name
+
+        nodeDesc = self.__graph.controller().getDesc(path=self.__nodePath)
+        self.__executablePath = nodeDesc['executablePath']
+        self.executableDesc = self.__graph.controller().getDesc(path=self.__executablePath)
+        self.__retrieveBinding()
+        self.__graph.controller().addNotificationListener('scene.bindingChanged', self.__retrieveBinding)
+
+        executableMetadata = {}
+        if 'metadata' in self.executableDesc and len(self.executableDesc['metadata']) > 0:
+            executableMetadata = json.loads(self.executableDesc['metadata'])
+
+        if 'visibleTitle' not in executableMetadata or executableMetadata['visibleTitle'] == True:
+            showEditSubGraphButton = self.executableDesc['objectType'] == 'graph'
+            showEditFunctionButton = self.executableDesc['objectType'] == 'function'
+            self.__headerItem = NodeHeader(
+                graph,
+                self,
+                nodeDesc['title'],
+                showEditSubGraphButton=showEditSubGraphButton,
+                showEditFunctionButton=showEditFunctionButton
+            )
+            layout.addItem(self.__headerItem)
+            layout.setAlignment(self.__headerItem, QtCore.Qt.AlignCenter | QtCore.Qt.AlignTop)
+
+        self.displayPorts()
+
+        nodeMetadata = {}
+        if 'metadata' in nodeDesc and len(nodeDesc['metadata']) > 0:
+            nodeMetadata = json.loads(nodeDesc['metadata'])
+        if 'graphPos' in nodeMetadata:
+            jsonVec2 = nodeMetadata['graphPos']
+            graphPos = QtCore.QPointF(jsonVec2['x'], jsonVec2['y'])
+            self.setGraphPos(graphPos)
+
+        self.__color = self.__defaultColor
+        if 'color' in executableMetadata:
+            jsonColor = executableMetadata['color']
+            self.__color = QtGui.QColor(jsonColor['r'], jsonColor['g'], jsonColor['b'])
+
+        self.__selected = False
+        self.__dragging = False
+        self.__graph.controller().addNotificationListener('node.posChanged', self.__nodePosChanged)
+        self.__graph.controller().addNotificationListener('port.created', self.__portAdded)
+        self.__graph.controller().addNotificationListener('port.destroyed', self.__portRemoved)
+
+        # Update the node so that the size is computed.
+        self.adjustSize()
+
+    def getName(self):
+        return self.__name
+
+    def getNodePath(self):
+        return self.__nodePath
+
+    def getExecutablePath(self):
+        return self.__executablePath
+
+    def getEvalPath(self):
+        return self.__graph.getEvalPath()+[self.__name]
+
+    #########################
+    ##
+
+    def displayPorts(self):
+        self.__ports = []
+        for portDesc in self.executableDesc['ports']:
+            self.addPort(self.__nodePath+'.'+portDesc['name'])
+
+    def addPort(self, path):
+        port = PortFromPath(self, self.__graph, path)
+
+        layout = self.layout()
+        layout.addItem(port)
+        layout.setAlignment(port, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
+
+        self.__ports.append(port)
+        self.adjustSize()
+        return port
+
+    def removePort(self, name):
+        for i in range(len(self.__ports)):
+            port = self.__ports[i]
+            if port.getName() == name:
+                port.destroy()
+                port.deleteLater()
+                self.layout().removeItem(port)
+                del self.__ports[i]
+                self.adjustSize()
+        raise Exception("Node: " +  self.getName() + " does not have port:" + name)
+
+    def getPort(self, name):
+        for port in self.__ports:
+            if port.getName() == name:
+                return port
+        return None
+
+    def getPortEvalDesc(self, name):
+        if self.__evalDesc is not None:
+            for portEvalDesc in self.__evalDesc['ports']:
+                if portEvalDesc['name'] == name:
+                    return portEvalDesc
+        return None
+
+    def paint(self, painter, option, widget):
+        rect = self.windowFrameRect()
+        painter.setBrush(self.__color)
+        if self.__selected:
+            painter.setPen(self.__selectedPen)
+        else:
+            painter.setPen(self.__unselectedPen)
+        painter.drawRoundRect(rect, 20, 20)
+
+    def isSelected(self):
+        return self.__selected
+
+    def setSelected(self, selected):
+        self.__selected = selected
+        self.update()
+
+    def getGraphPos(self):
+        transform = self.transform()
+        size = self.size()
+        return QtCore.QPointF(transform.dx()+(size.width()*0.5), transform.dy()+(size.height()*0.5))
+
+    def setGraphPos(self, graphPos):
+        size = self.size()
+        self.setTransform(QtGui.QTransform.fromTranslate(graphPos.x()-(size.width()*0.5), graphPos.y()-(size.height()*0.5)), False)
+
+    def mousePressEvent(self, event):
+        if event.button() is QtCore.Qt.MouseButton.LeftButton:
+            self.__dragging = True
+            self._lastDragPoint = self.mapToItem(self.__graph.itemGroup(), event.pos())
+        else:
+            super(Node, self).mousePressEvent(event)
+
+    def mouseMoveEvent(self, event):
+        if self.__dragging:
+            newPos = self.mapToItem(self.__graph.itemGroup(), event.pos())
+            delta = newPos - self._lastDragPoint
+            self._lastDragPoint = newPos
+
+            if not self.isSelected():
+                self.translate(delta.x(), delta.y())
+            else:
+                selectedNodes = self.__graph.getSelectedNodes()
+                # Apply the delta to each selected key
+                for node in selectedNodes:
+                    node.translate(delta.x(), delta.y())
+        else:
+            super(Node, self).mouseMoveEvent(event)
+
+    def mouseReleaseEvent(self, event):
+        if self.__dragging:
+            if not self.isSelected():
+                self.__graph.controller().beginInteraction("Move:" + self.getName())
+                graphPos = self.getGraphPos()
+                self.__graph.controller().setNodeGraphPos(
+                    nodePath=self.getNodePath(),
+                    graphPos=graphPos
+                )
+                self.__graph.controller().endInteraction()
+            else:
+                selectedNodes = self.__graph.getSelectedNodes()
+                names = ""
+                for node in selectedNodes:
+                    names += (" " + node.getName())
+                self.__graph.controller().beginInteraction("Move:" + names)
+                for node in selectedNodes:
+                    graphPos = node.getGraphPos()
+                    self.__graph.controller().setNodeGraphPos(
+                        nodePath=node.getNodePath(),
+                        graphPos=graphPos
+                    )
+                self.__graph.controller().endInteraction()
+
+            self.setCursor(QtCore.Qt.ArrowCursor)
+            self._panning = False
+        else:
+            super(Node, self).mouseReleaseEvent(event)
+
+    def mouseDoubleClickEvent(self, event):
+        NodeInspectorDockWidget.showWidget(self.__graph.controller(), self.getEvalPath(), self.getNodePath(), floating=True)
+        super(Node, self).mouseDoubleClickEvent(event)
+
+    #########################
+    ## Events
+
+    def __retrieveBinding(self, data=None):
+        try:
+            self.__evalDesc = self.__graph.controller().getDescForEvalPath(evalPath=self.__graph.getEvalPath()+[self.getName()])
+        except:
+            # This node is not part of the EvalPath yet.
+            self.__evalDesc = None
+
+    def __nodePosChanged(self, data):
+        if data['node']['path'] == self.__nodePath:
+            self.setGraphPos(data['node']['graphPos'])
+
+    def __portAdded(self, data):
+        executablePath = '.'.join(data['port']['path'].split('.')[0:-1])
+        if executablePath == self.__executablePath:
+            self.addPort(data['port']['path'])
+
+    def __portRemoved(self, data):
+        executablePath = '.'.join(data['port']['path'].split('.')[0:-1])
+        if executablePath == self.__executablePath:
+            portName = data['port']['path'].split('.')[-1]
+            self.removePort(portName)
+
+    def destroy(self):
+        self.__graph.controller().removeNotificationListener('scene.bindingChanged', self.__retrieveBinding)
+        self.__graph.controller().removeNotificationListener('node.posChanged', self.__nodePosChanged)
+        self.__graph.controller().removeNotificationListener('port.created', self.__portAdded)
+        self.__graph.controller().removeNotificationListener('port.destroyed', self.__portRemoved)
+        for port in self.__ports:
+            port.destroy()
+        self.scene().removeItem(self)

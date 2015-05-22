@@ -242,6 +242,17 @@ class KrakenSystem(object):
         return self.registeredComponents[className]
 
 
+    def getComponentClassNames(self):
+        """Returns the names of the registered Python component classes
+
+        Return:
+        The array of component class names.
+
+        """
+
+        return self.registeredComponents.keys()
+
+
     @classmethod
     def getInstance(cls):
         """This class method returns the singleton instance for the KrakenSystem
