@@ -33,10 +33,6 @@ function KrakenSolverArg[] NBoneIKSolver.getArguments(){
 require Math;
 require Animation;
 
-function Scalar sq(Scalar v) {
-  return v * v;
-}
-
 function Xfo[] solveNCFIK(
   in Xfo basePose[],
   in Vec3 goalPosition

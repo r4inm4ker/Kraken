@@ -46,7 +46,6 @@ class FootComponentGuide(Component):
         # ===========
         # Declare Inputs Xfos
         self.legEndXfoInputTgt = self.createInput('legEndXfo', dataType='Xfo', parent=inputHrcGrp)
-        self.legEndPosInputTgt = self.createInput('legEndPos', dataType='Xfo', parent=inputHrcGrp)
 
         # Declare Output Xfos
         self.footEndOutputTgt = self.createOutput('footEnd', dataType='Xfo', parent=outputHrcGrp)
@@ -162,7 +161,6 @@ class FootComponent(Component):
         # ===========
         # Declare Inputs Xfos
         self.legEndXfoInputTgt = self.createInput('legEndXfo', dataType='Xfo', parent=inputHrcGrp)
-        self.legEndPosInputTgt = self.createInput('legEndPos', dataType='Xfo', parent=inputHrcGrp)
 
         # Declare Output Xfos
         self.footEndOutputTgt = self.createOutput('footEnd', dataType='Xfo', parent=outputHrcGrp)
@@ -220,55 +218,40 @@ class FootComponent(Component):
         self.footEndOutputTgt.addConstraint(handEndConstraint)
 
 
-        # ==================
-        # Add Component I/O
-        # ==================
-        # Add Xfo I/O's
-        # self.addInput(self.legEndXfoInputTgt)
-        # self.addInput(self.legEndPosInputTgt)
-        # self.addOutput(self.footOutputTgt)
-        # self.addOutput(self.footEndOutputTgt)
-
-        # Add Attribute I/O's
-        # self.addInput(self.drawDebugInputAttr)
-        # self.addInput(self.rightSideInputAttr)
-        # self.addInput(footLinkToWorldInputAttr)
-
 
         # ===============
         # Add Splice Ops
         # ===============
         # Add Hand Solver Splice Op
-        # spliceOp = SpliceOperator("footSolverSpliceOp", "HandSolver", "KrakenHandSolver")
+        # spliceOp = SpliceOperator('footSolverSpliceOp', 'HandSolver', 'KrakenHandSolver')
         # self.addOperator(spliceOp)
 
         # # Add Att Inputs
-        # spliceOp.setInput("drawDebug", self.drawDebugInputAttr)
-        # spliceOp.setInput("rightSide", self.rightSideInputAttr)
-        # spliceOp.setInput("linkToWorld", footLinkToWorldInputAttr)
+        # spliceOp.setInput('drawDebug', self.drawDebugInputAttr)
+        # spliceOp.setInput('rightSide', self.rightSideInputAttr)
+        # spliceOp.setInput('linkToWorld', footLinkToWorldInputAttr)
 
         # # Add Xfo Inputs)
-        # spliceOp.setInput("armEndXfo", legEndXfoInput)
-        # spliceOp.setInput("armEndPos", legEndPosInput)
-        # spliceOp.setInput("handRef", footRefSrt)
+        # spliceOp.setInput('armEndXfo', legEndXfoInput)
+        # spliceOp.setInput('handRef', footRefSrt)
 
         # # Add Xfo Outputs
-        # spliceOp.setOutput("handCtrlSpace", footCtrlSpace)
+        # spliceOp.setOutput('handCtrlSpace', footCtrlSpace)
 
 
         # Add Deformer Splice Op
-        spliceOp = SpliceOperator("footDeformerSpliceOp", "PoseConstraintSolver", "Kraken")
+        spliceOp = SpliceOperator('footDeformerSpliceOp', 'PoseConstraintSolver', 'Kraken')
         self.addOperator(spliceOp)
 
         # Add Att Inputs
-        spliceOp.setInput("drawDebug", self.drawDebugInputAttr)
-        spliceOp.setInput("rightSide", self.rightSideInputAttr)
+        spliceOp.setInput('drawDebug', self.drawDebugInputAttr)
+        spliceOp.setInput('rightSide', self.rightSideInputAttr)
 
         # Add Xfo Inputs)
-        spliceOp.setInput("constrainer", self.footOutputTgt)
+        spliceOp.setInput('constrainer', self.footOutputTgt)
 
         # Add Xfo Outputs
-        spliceOp.setOutput("constrainee", footDef)
+        spliceOp.setOutput('constrainee', footDef)
 
         Profiler.getInstance().pop()
 
@@ -287,7 +270,6 @@ class FootComponent(Component):
         # Set IO Xfos
         # ============
         self.legEndXfoInputTgt.xfo = data['footXfo']
-        self.legEndPosInputTgt.xfo = data['footXfo']
         self.footEndOutputTgt.xfo = data['footXfo']
         self.footOutputTgt.xfo = data['footXfo']
 
