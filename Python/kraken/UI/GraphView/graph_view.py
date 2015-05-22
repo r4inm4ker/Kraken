@@ -572,47 +572,35 @@ class Graph(QtGui.QGraphicsWidget):
     #######################
     ## Connections
 
-    def addConnection(self, source, target):
+    def addConnection(self, connectionDef):
 
         # remove the graph path from the start of the string to get the graph relative path.
-        source = source[len(self.graphPath)+1:]
-        target = target[len(self.graphPath)+1:]
+        source = connectionDef['source']
+        target = connectionDef['target']
 
         key = source +">" + target
         if key in self.__connections:
             raise Exception("Error adding connection:" + key+ ". Graph already has a connection between the specified ports.")
 
-        sourcePath = source.split('.')
-        targetPath = target.split('.')
-        if len(sourcePath) == 1:
-            sourcePortName = sourcePath[0]
-            sourcePort = self.__leftPanel.getPort(sourcePortName)
-            if not sourcePort:
-                raise Exception("Graph does not have in port:" + sourcePortName)
-        else:
-            sourceNodeName = sourcePath[0]
-            sourceNode = self.getNode(sourceNodeName)
-            if not sourceNode:
-                raise Exception("Node Instance not found:" + sourceNodeName)
-            sourcePortName = sourcePath[1]
-            sourcePort = sourceNode.getPort(sourcePortName)
-            if not sourcePort:
-                raise Exception("Node '"+sourceNodeName+"'' does not have out port:" + sourcePortName)
+        sourceComponent, outputName = tuple(source.split('.'))
+        targetComponent, inputName = tuple(target.split('.'))
 
-        if len(targetPath) == 1:
-            targetPortName = targetPath[0]
-            targetPort = self.__rightPanel.getPort(targetPortName)
-            if not targetPort:
-                raise Exception("Graph does not have out port:" + targetPortName)
-        else:
-            targetNodeName = target.split('.')[0]
-            targetNode = self.getNode(targetNodeName)
-            if not targetNode:
-                raise Exception("Node Instance not found:" + targetNodeName)
-            targetPortName = targetPath[1]
-            targetPort = targetNode.getPort(targetPortName)
-            if not targetPort:
-                raise Exception("Node '"+targetNodeName+"'' does not have in port:" + targetPortName)
+        #     sourceNodeName = sourcePath[0]
+        sourceNode = self.getNode(sourceComponent)
+        if not sourceNode:
+            raise Exception("Component not found:" + sourceNodeName)
+
+        sourcePort = sourceNode.getPort(outputName)
+        if not sourcePort:
+            raise Exception("Component '"+sourceNodeName+"'' does not have output:" + sourcePortName)
+
+        targetNode = self.getNode(targetComponent)
+        if not targetNode:
+            raise Exception("Component not found:" + targetNodeName)
+
+        targetPort = targetNode.getPort(inputName)
+        if not targetPort:
+            raise Exception("Component '"+targetNodeName+"'' does not have input:" + targetPortName)
 
         connection = Connection(self, sourcePort, targetPort)
         self.__connections[key] = connection
@@ -674,16 +662,16 @@ class Graph(QtGui.QGraphicsWidget):
             self.addNode(component)
 
 
-        # for component in guideComponents:
-        #     for i in range(component.getNumInputs()):
-        #         componentInput = component.getInputByIndex(i)
-        #         if componentInput.isConnected():
-        #             componentOutput = componentInput.getConnection()
-        #             connectionJson = {
-        #                 'source': componentOutput.getParent().getName() + '.' + componentOutput.getName(),
-        #                 'target': component.getName() + '.' + componentInput.getName()
-        #             }
-        #             self.addConnection(connectionJson)
+        for component in guideComponents:
+            for i in range(component.getNumInputs()):
+                componentInput = component.getInputByIndex(i)
+                if componentInput.isConnected():
+                    componentOutput = componentInput.getConnection()
+                    connectionJson = {
+                        'source': componentOutput.getParent().getName() + '.' + componentOutput.getName(),
+                        'target': component.getName() + '.' + componentInput.getName()
+                    }
+                    self.addConnection(connectionJson)
 
         self.frameAllNodes()
 

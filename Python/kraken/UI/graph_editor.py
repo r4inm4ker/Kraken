@@ -26,12 +26,12 @@ class GraphEditor(QtGui.QWidget):
         self.rig = Rig()
         self.rig.loadRigDefinition(bob_guide_data)
 
-        nodeLibrary = NodeLibrary(self)
-        graphViewWidget = GraphViewWidget(self.rig, self)
+        self.nodeLibrary = NodeLibrary(self)
+        self.graphViewWidget = GraphViewWidget(self.rig, self)
 
         horizontalSplitter = QtGui.QSplitter(QtCore.Qt.Horizontal,self)
-        horizontalSplitter.addWidget(nodeLibrary)
-        horizontalSplitter.addWidget(graphViewWidget)
+        horizontalSplitter.addWidget(self.nodeLibrary)
+        horizontalSplitter.addWidget(self.graphViewWidget)
 
         horizontalSplitter.setStretchFactor(0, 0)
         horizontalSplitter.setStretchFactor(1, 1)
@@ -44,8 +44,9 @@ class GraphEditor(QtGui.QWidget):
         # self.setWidget(horizontalSplitter)
 
     def closeEvent(self, event):
-        self.__graphViewWidget.closeEvent(event)
-        return super(GraphEditor, self).closeEvent(event)
+        pass
+        # self.__graphViewWidget.closeEvent(event)
+        # return super(GraphEditor, self).closeEvent(event)
 
 
 if __name__ == "__main__":

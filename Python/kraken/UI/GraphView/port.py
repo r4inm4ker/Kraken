@@ -146,7 +146,7 @@ class BasePort(QtGui.QGraphicsWidget):
         layout.setSpacing(1)
         self.setLayout(layout)
 
-        self.__color = QtGui.QColor(154, 205, 50, 255)
+        self.__color = QtGui.QColor(254, 105, 50, 255)
         self.__labelColor = QtGui.QColor(25, 25, 25)
         self.__label = self.__componentInput.getName()
         self.__inCircle = None
@@ -179,6 +179,9 @@ class BasePort(QtGui.QGraphicsWidget):
             self.__outCircle = PortCircle(self, self.__graph, 'Out', 10, self.__color)
             layout.addItem(self.__outCircle)
             layout.setAlignment(self.__outCircle, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
+
+    def getName(self):
+        return self.__componentInput.getName()
 
     def inCircle(self):
         if self.__inCircle is None:
