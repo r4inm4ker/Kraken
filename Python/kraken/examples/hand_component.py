@@ -226,14 +226,14 @@ class HandComponent(Component):
         self.addOperator(spliceOp)
 
         # Add Att Inputs
-        spliceOp.setInput("debug", self.debugInputAttr)
-        spliceOp.setInput("rightSide", self.rightSideInputAttr)
+        spliceOp.setInput('drawDebug', self.drawDebugInputAttr)
+        spliceOp.setInput('rightSide', self.rightSideInputAttr)
 
         # Add Xfo Inputs)
-        spliceOp.setInput("constrainer", self.armEndXfoInputTgt)
+        spliceOp.setInput('constrainer', self.armEndXfoInputTgt)
 
         # Add Xfo Outputs
-        spliceOp.setOutput("constrainee", self.handCtrlSpace)
+        spliceOp.setOutput('constrainee', self.handCtrlSpace)
 
 
         # Add Deformer Splice Op
