@@ -9,6 +9,7 @@ from node_library import NodeLibrary
 from GraphView.graph_view import GraphViewWidget
 
 from kraken.core.objects.rig import Rig
+from kraken.examples.bob_guide_data import bob_guide_data
 
 
 class GraphEditor(QtGui.QWidget):
@@ -23,6 +24,7 @@ class GraphEditor(QtGui.QWidget):
         self.setAcceptDrops(True)
 
         self.rig = Rig()
+        self.rig.loadRigDefinition(bob_guide_data)
 
         nodeLibrary = NodeLibrary(self)
         graphViewWidget = GraphViewWidget(self.rig, self)

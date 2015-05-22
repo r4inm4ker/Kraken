@@ -6,118 +6,13 @@
 from PySide import QtGui, QtCore
 import json, difflib
 from node import Node, NodeTitle, NodeHeader
-from port import BasePort, PortFromPath, PortLabel
+from port import BasePort
 from connection import Connection
 # from FabricEngine.DFG.Widgets.add_port_dialog import AddPortDialog
 # from FabricEngine.DFG.Widgets.dfg_function_editor import DFGFunctionEditorDockWidget
 # from FabricEngine.DFG.Widgets.node_inspector import NodeInspectorDockWidget
 
 
-class SidePanelPort(PortFromPath):
-    def __init__(self, parent, graph, desc, connectionPointType, labelColor):
-        super(SidePanelPort, self).__init__(parent, graph, desc, connectionPointType, labelColor)
-
-
-class ProxySidePanelPort(BasePort):
-    def __init__(self, parent, graph, connectionPointType):
-        # parent, graph, label, color, connectionPointType, labelColor
-        super(ProxySidePanelPort, self).__init__(parent, graph, "+", color = QtGui.QColor(80, 80, 80, 100), connectionPointType = connectionPointType, labelColor = QtGui.QColor(160, 160, 160, 100))
-
-        self.setMinimumWidth(60)
-        self.__parent = parent
-        self.graph = graph
-
-    def getSidePanel(self):
-        return self.__parent
-
-    def getPath(self):
-        return self.graph.getGraphPath() + ".ProxyPort"
-
-    def getName(self):
-        return ""
-
-    def getDataType(self):
-        return None
-
-
-class SidePanel(QtGui.QGraphicsWidget):
-    __portLabelColor = QtGui.QColor(160, 160, 160)
-
-    def __init__(self, parent, graph, connectionPointType):
-        super(SidePanel, self).__init__(parent)
-
-        self.graph = graph
-        self.__color = QtGui.QColor(40, 40, 60)
-        self.__connectionPointType = connectionPointType
-        self.__ports = []
-
-
-        self.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Expanding))
-
-        layout = QtGui.QGraphicsLinearLayout()
-        layout.setContentsMargins(2, 0, 2, 0)
-        layout.setSpacing(4)
-        layout.setOrientation(QtCore.Qt.Vertical)
-        layout.addStretch()
-
-        proxyPort = ProxySidePanelPort(self, graph, connectionPointType = self.__connectionPointType)
-        layout.addItem(proxyPort)
-
-        layout.addStretch()
-        self.setLayout(layout)
-        self.setZValue(1)
-        self.setPos(16, 8)
-
-    def getConnectionPortType(self):
-        return self.__connectionPointType
-
-
-    def addPort(self, path):
-        port = SidePanelPort(self, self.graph, path, connectionPointType = self.__connectionPointType, labelColor = QtGui.QColor(160, 160, 160))
-
-        layout = self.layout()
-        layout.insertItem(len(self.__ports)+1, port)
-        layout.setAlignment(port, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
-
-        self.__ports.append(port)
-        return port
-
-    def getPort(self, name):
-        for port in self.__ports:
-            if port.getName() == name:
-                return port
-        return None
-
-    def getPortEvalDesc(self, name):
-        return self.graph.getPortEvalDesc(name)
-
-    def getEvalPath(self):
-        return self.graph.getEvalPath()
-
-    def removePort(self, name):
-        for i in range(len(self.__ports)):
-            port = self.__ports[i]
-            if port.getName() == name:
-                port.destroy()
-                port.deleteLater()
-                self.layout().removeItem(port)
-                del self.__ports[i]
-        raise Exception(self.__connectionPointType + " Side panel does not have port:" + name)
-
-    def clear(self):
-        for port in self.__ports:
-            port.destroy()
-            self.layout().removeItem(port)
-        self.__ports = []
-
-    def setColor(self, color):
-        self.__color = color
-
-    def paint(self, painter, option, widget):
-        rect = self.windowFrameRect()
-        painter.fillRect(rect, self.__color)
-        painter.setPen(QtGui.QPen(QtGui.QColor(0, 0, 0)))
-        painter.drawRect(self.windowFrameRect())
 
 class SelectionRect(QtGui.QGraphicsWidget):
     __backgroundColor = QtGui.QColor(100, 100, 100, 50)
@@ -514,22 +409,17 @@ class Graph(QtGui.QGraphicsWidget):
         self.__scene = QtGui.QGraphicsScene()
         self.__scene.addItem(self)
 
-        self.__name = ""
-        self.__evalPath = []
-        self.graphPath = ""
-        self.__parentPath = None
-        self.__evalDesc = None
         self.__nodes = {}
         self.__connections = {}
         self.__selection = []
+
+        self.__mainPanel = MainPanel(self)
 
         self.setContentsMargins(2, 0, 2, 0)
         layout = QtGui.QGraphicsLinearLayout()
         layout.setSpacing(0)
         layout.setContentsMargins(0, 0, 0, 0)
-        layout.addItem(self.__leftPanel)
         layout.addItem(self.__mainPanel)
-        layout.addItem(self.__rightPanel)
         self.setLayout(layout)
 
         # self.__controller.addNotificationListener('port.created', self.__portCreated)
@@ -554,8 +444,8 @@ class Graph(QtGui.QGraphicsWidget):
     def itemGroup(self):
         return self.__mainPanel.itemGroup()
 
-    def controller(self):
-        return self.__controller
+    # def controller(self):
+    #     return self.__controller
 
     def getGraphPath(self):
         return self.graphPath
@@ -570,25 +460,12 @@ class Graph(QtGui.QGraphicsWidget):
         return evalPathStr
 
 
-    ####################
-    ## Ports
-
-    def addInPort(self, name):
-        return self.__leftPanel.addPort(name)
-
-    def removeInPort(self, name):
-        return self.__leftPanel.removePort(name)
-
-    def addOutPort(self, name):
-        return self.__rightPanel.addPort(name)
-
-
     #####################
     ## Nodes
 
-    def addNode(self, name):
-        node = Node(self, name)
-        self.__nodes[node.getName()] = node
+    def addNode(self, component):
+        node = Node(self, component)
+        self.__nodes[component.getName()] = node
         return node
 
     def getNode(self, name):
@@ -627,12 +504,12 @@ class Graph(QtGui.QGraphicsWidget):
 
         def computeWindowFrame():
             windowRect = self.mapRectToItem(self.itemGroup(), self.windowFrameGeometry())
-            leftSidePanelRect = self.mapRectToItem(self.itemGroup(), self.__leftPanel.windowFrameGeometry())
-            rightSidePanelRect = self.mapRectToItem(self.itemGroup(), self.__rightPanel.windowFrameGeometry())
-            windowRect.setLeft(leftSidePanelRect.right() + 8)
-            windowRect.setRight(rightSidePanelRect.left() - 8)
-            windowRect.setTop(windowRect.top() + 8)
-            windowRect.setBottom(windowRect.bottom() - 8)
+            # leftSidePanelRect = self.mapRectToItem(self.itemGroup(), self.__leftPanel.windowFrameGeometry())
+            # rightSidePanelRect = self.mapRectToItem(self.itemGroup(), self.__rightPanel.windowFrameGeometry())
+            # windowRect.setLeft(leftSidePanelRect.right() + 8)
+            # windowRect.setRight(rightSidePanelRect.left() - 8)
+            # windowRect.setTop(windowRect.top() + 8)
+            # windowRect.setBottom(windowRect.bottom() - 8)
             return windowRect
 
         nodesRect = None
@@ -790,45 +667,25 @@ class Graph(QtGui.QGraphicsWidget):
     def displayGraph(self):
         self.clear()
 
-        # self.graphPath = self.__controller.getRootEvalGraphPath() + '.'.join(self.__evalPath)
-        self.__bindingChanged(None)
-
-        self.graphPath = self.__evalDesc['path']
-        graphDesc = self.__controller.getDesc(path=self.graphPath)
-
-        if graphDesc['objectType'] != "graph":
-            self.__name = graphDesc['title']
-            return
-        # print "displayGraph:" + json.dumps(graphDesc, indent=1)
-        self.__name = graphDesc['name']
-
-        self.__leftPanel
-        if 'metadata' in graphDesc and len(graphDesc['metadata']) > 0:
-            metadata = json.loads(graphDesc['metadata'])
-            if 'color' in metadata:
-                jsonColor = metadata['color']
-                self.setColor(QtGui.QColor(jsonColor['r'], jsonColor['g'], jsonColor['b']).darker())
-
-        # graphDesc: {"name":"lhs","title":"lhs","portType":"In","type":"SInt32"}
-        # evalDesc: {u'portType': u'In', u'name': u'lhs', u'title': u'lhs'}
-        for portDesc in graphDesc['ports']:
-            portType = portDesc['portType']
-            if portType in ['In', 'IO']:
-                self.addInPort(self.graphPath+'.'+portDesc['name'])
-            if portType in ['Out', 'IO']:
-                self.addOutPort(self.graphPath+'.'+portDesc['name'])
+        guideComponents = self.__rig.getChildrenByType('Component')
 
         # {"name":"AddGraph","types":["SInt32","SInt32","SInt32"]}
-        for nodeDesc in graphDesc['nodes']:
-            self.addNode(nodeDesc['name'])
+        for component in guideComponents:
+            self.addNode(component)
 
-        # Once all the Nodes are constructed, we can start connecting them together.
-        for connection in graphDesc['connections']:
-            for dst in connection['dsts']:
-                self.addConnection(self.graphPath + '.' + connection['src'], self.graphPath + '.' + dst)
+
+        # for component in guideComponents:
+        #     for i in range(component.getNumInputs()):
+        #         componentInput = component.getInputByIndex(i)
+        #         if componentInput.isConnected():
+        #             componentOutput = componentInput.getConnection()
+        #             connectionJson = {
+        #                 'source': componentOutput.getParent().getName() + '.' + componentOutput.getName(),
+        #                 'target': component.getName() + '.' + componentInput.getName()
+        #             }
+        #             self.addConnection(connectionJson)
 
         self.frameAllNodes()
-        self.evalPathChanged.emit(self.getDisplayedEvalPath())
 
 
     def clear(self):
@@ -838,8 +695,6 @@ class Graph(QtGui.QGraphicsWidget):
         for nodeName, node in self.__nodes.iteritems():
             node.destroy()
 
-        self.__leftPanel.clear()
-        self.__rightPanel.clear()
         self.__connections = {}
         self.__nodes = {}
         self.__selection = []
@@ -889,6 +744,7 @@ class GraphView(QtGui.QGraphicsView):
         # self.setContentsMargins(0, 0, 0, 0)
 
         self.graph = Graph(self, rig)
+        self.setScene(self.graph.scene())
 
         self.setAcceptDrops(True)
 
@@ -1050,7 +906,7 @@ class GraphViewWidget(QtGui.QWidget):
 
         self.setAcceptDrops(True)
 
-        self.graphView = QtGui.QGraphicsView(self, rig)
+        self.graphView = GraphView(rig, self)
         self.__contextualNodeList = None
 
         # setup the toobar

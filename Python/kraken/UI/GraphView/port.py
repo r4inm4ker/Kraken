@@ -119,12 +119,12 @@ class PortCircle(QtGui.QGraphicsWidget):
         scenePos = self.mapToItem(self.__graph.itemGroup(), event.pos())
 
         self.unhighlight()
-        if self.__connectionPointType == 'In':
-            self.__graph.controller().beginInteraction("Edit connection to:" + self.__port.getPath())
-            MouseGrabber(self.__graph, scenePos, self.__port, 'Out')
-        elif self.__connectionPointType == 'Out':
-            self.__graph.controller().beginInteraction("Edit connections from:" + self.__port.getPath())
-            MouseGrabber(self.__graph, scenePos, self.__port, 'In')
+        # if self.__connectionPointType == 'In':
+        #     self.__graph.controller().beginInteraction("Edit connection to:" + self.__port.getPath())
+        #     MouseGrabber(self.__graph, scenePos, self.__port, 'Out')
+        # elif self.__connectionPointType == 'Out':
+        #     self.__graph.controller().beginInteraction("Edit connections from:" + self.__port.getPath())
+        #     MouseGrabber(self.__graph, scenePos, self.__port, 'In')
 
     # def paint(self, painter, option, widget):
     #     super(PortCircle, self).paint(painter, option, widget)
@@ -133,12 +133,11 @@ class PortCircle(QtGui.QGraphicsWidget):
 
 
 class BasePort(QtGui.QGraphicsWidget):
-    def __init__(self, parent, graph, label, color, connectionPointType, labelColor):
+    def __init__(self, parent, graph, componentInput, connectionPointType):
         super(BasePort, self).__init__(parent)
 
         self.__graph = graph
-        self.__label = label
-        self.__labelColor = labelColor
+        self.__componentInput = componentInput
 
         self.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Fixed))
 
@@ -147,7 +146,9 @@ class BasePort(QtGui.QGraphicsWidget):
         layout.setSpacing(1)
         self.setLayout(layout)
 
-        self.__color = color
+        self.__color = QtGui.QColor(154, 205, 50, 255)
+        self.__labelColor = QtGui.QColor(25, 25, 25)
+        self.__label = self.__componentInput.getName()
         self.__inCircle = None
         self.__outCircle = None
 
@@ -208,82 +209,16 @@ class BasePort(QtGui.QGraphicsWidget):
         self.scene().removeItem(self)
 
 
-
-# class PortFromDesc(BasePort):
-#     def __init__(self, parent, graph, desc, connectionPointType = None, labelColor = QtGui.QColor(25, 25, 25)):
-
-#         self.__graph = graph
-#         self.__portDesc = desc
-#         print
-
-#         label = self.__portDesc['title']
-#         print "parent:" + str(parent)
-#         print "PortFromDesc:" + str(desc)
-#         if 'type' in desc:
-#             color = self.__graph.controller().getDataTypeColor(self.__portDesc['type'])
-#         else:
-#             color = self.__graph.controller().getDataTypeColor(None)
-
-#         if connectionPointType is None:
-#             connectionPointType = self.__portDesc['portType']
-
-#         super(PortFromDesc, self).__init__(parent, graph, label, color, connectionPointType, labelColor)
-
-#     def getPath(self):
-#         raise Exception("getPath not yet supported")
-#         # return self.__path
-
-#     def getName(self):
-#         return self.__portDesc['name']
-
-#     def getDataType(self):
-#         return self.__portDesc['type']
+class InputPort(BasePort):
+    """docstring for InputPort"""
+    def __init__(self, parent, graph, componentInput):
+        super(InputPort, self).__init__(parent, graph, componentInput, 'In')
 
 
 
-class PortFromPath(BasePort):
-    def __init__(self, parent, graph, path, connectionPointType = None, labelColor = QtGui.QColor(25, 25, 25)):
+class OutputPort(BasePort):
+    """docstring for OutputPort"""
+    def __init__(self, parent, graph, componentOutput):
+        super(OutputPort, self).__init__(parent, graph, componentOutput, 'Out')
 
-        self.parent = parent
-        self.__graph = graph
-        self.__path = path
-        self.__portDesc = self.__graph.controller().getDesc(path=self.__path)
-        self.__evalDesc = parent.getPortEvalDesc(self.__portDesc['name'])
-        self.__dataType = None
-
-        if self.__evalDesc is not None and 'type' in self.__evalDesc:
-            self.__dataType = self.__evalDesc['type']
-        elif 'dataType' in self.__portDesc:
-            self.__dataType = self.__portDesc['dataType']
-
-        label = self.__portDesc['title']
-        color = self.__graph.controller().getDataTypeColor(self.__dataType)
-
-        if connectionPointType is None:
-            connectionPointType = self.__portDesc['connectionPointType']
-
-        super(PortFromPath, self).__init__(parent, graph, label, color, connectionPointType, labelColor)
-
-        self.__graph.controller().addNotificationListener('scene.bindingChanged', self.__bindingChanged)
-
-    def getPath(self):
-        return self.__path
-
-    def getName(self):
-        return self.__portDesc['name']
-
-    def getDataType(self):
-        return self.__dataType
-
-    def __bindingChanged(self, data):
-        self.__evalDesc = self.parent.getPortEvalDesc(self.__portDesc['name'])
-        self.__dataType = None
-        if self.__evalDesc is not None and 'type' in self.__evalDesc:
-            self.__dataType = self.__evalDesc['type']
-        self.setColor(self.__graph.controller().getDataTypeColor(self.__dataType))
-
-
-    def destroy(self):
-        self.__graph.controller().removeNotificationListener('scene.bindingChanged', self.__bindingChanged)
-        self.scene().removeItem(self)
 

@@ -6,15 +6,15 @@
 #pylint: disable-msg=W0613
 import json
 from PySide import QtGui, QtCore
-from port import PortFromPath
+from port import InputPort, OutputPort
 # from FabricEngine.DFG.Widgets.node_inspector import NodeInspectorDockWidget
 
 class NodeTitle(QtGui.QGraphicsWidget):
     __color = QtGui.QColor(25, 25, 25)
     __font = QtGui.QFont('Decorative', 16)
 
-    def __init__(self, text):
-        super(NodeTitle, self).__init__()
+    def __init__(self, text, parent=None):
+        super(NodeTitle, self).__init__(parent)
 
         self.__textItem = QtGui.QGraphicsTextItem(text, self)
         self.__textItem.setDefaultTextColor(self.__color)
@@ -57,11 +57,11 @@ class DebugButton(QtGui.QPushButton):
 
 class NodeHeader(QtGui.QGraphicsWidget):
 
-    def __init__(self, graph, node, text, showEditSubGraphButton, showEditFunctionButton):
+    def __init__(self, graph, component):
         super(NodeHeader, self).__init__()
 
         self.__graph = graph
-        self.__node = node
+        self.__component = component
 
         self.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding))
 
@@ -71,7 +71,7 @@ class NodeHeader(QtGui.QGraphicsWidget):
         layout.setOrientation(QtCore.Qt.Horizontal)
         self.setLayout(layout)
 
-        self.__titleItem = NodeTitle(text)
+        self.__titleItem = NodeTitle(text, self)
         layout.addStretch(1)
         layout.addItem(self.__titleItem)
         layout.setAlignment(self.__titleItem, QtCore.Qt.AlignCenter | QtCore.Qt.AlignTop)
@@ -118,7 +118,7 @@ class Node(QtGui.QGraphicsWidget):
     __unselectedPen =  QtGui.QPen(QtGui.QColor(25, 25, 25), 1.6)
     __selectedPen =  QtGui.QPen(QtGui.QColor(255, 255, 255, 255), 1.6)
 
-    def __init__(self, graph, name):
+    def __init__(self, graph, component):
         super(Node, self).__init__(graph.itemGroup())
 
         self.setMinimumWidth(60)
@@ -138,53 +138,29 @@ class Node(QtGui.QGraphicsWidget):
         # Given the graph path, and the node name, I should be able to acess the node.
 
         self.__graph = graph
-        self.__name = name
+        self.__component = component
 
-        self.__nodePath = self.__graph.getGraphPath()+'.'+name
+        self.__color = QtGui.QColor(154, 205, 50, 255)
 
-        nodeDesc = self.__graph.controller().getDesc(path=self.__nodePath)
-        self.__executablePath = nodeDesc['executablePath']
-        self.executableDesc = self.__graph.controller().getDesc(path=self.__executablePath)
-        self.__retrieveBinding()
-        self.__graph.controller().addNotificationListener('scene.bindingChanged', self.__retrieveBinding)
+        self.__titleItem = NodeTitle(self.__component.getName(), self)
+        layout.addItem(self.__titleItem)
+        layout.setAlignment(self.__titleItem, QtCore.Qt.AlignCenter | QtCore.Qt.AlignTop)
 
-        executableMetadata = {}
-        if 'metadata' in self.executableDesc and len(self.executableDesc['metadata']) > 0:
-            executableMetadata = json.loads(self.executableDesc['metadata'])
+        self.__ports = []
+        for i in range(self.__component.getNumInputs()):
+            componentInput = component.getInputByIndex(i)
+            self.addInputPort(componentInput)
 
-        if 'visibleTitle' not in executableMetadata or executableMetadata['visibleTitle'] == True:
-            showEditSubGraphButton = self.executableDesc['objectType'] == 'graph'
-            showEditFunctionButton = self.executableDesc['objectType'] == 'function'
-            self.__headerItem = NodeHeader(
-                graph,
-                self,
-                nodeDesc['title'],
-                showEditSubGraphButton=showEditSubGraphButton,
-                showEditFunctionButton=showEditFunctionButton
-            )
-            layout.addItem(self.__headerItem)
-            layout.setAlignment(self.__headerItem, QtCore.Qt.AlignCenter | QtCore.Qt.AlignTop)
+        for i in range(self.__component.getNumOutputs()):
+            componentOutput = component.getOutputByIndex(i)
+            self.addOutputPort(componentOutput)
 
-        self.displayPorts()
-
-        nodeMetadata = {}
-        if 'metadata' in nodeDesc and len(nodeDesc['metadata']) > 0:
-            nodeMetadata = json.loads(nodeDesc['metadata'])
-        if 'graphPos' in nodeMetadata:
-            jsonVec2 = nodeMetadata['graphPos']
-            graphPos = QtCore.QPointF(jsonVec2['x'], jsonVec2['y'])
-            self.setGraphPos(graphPos)
-
-        self.__color = self.__defaultColor
-        if 'color' in executableMetadata:
-            jsonColor = executableMetadata['color']
-            self.__color = QtGui.QColor(jsonColor['r'], jsonColor['g'], jsonColor['b'])
 
         self.__selected = False
         self.__dragging = False
-        self.__graph.controller().addNotificationListener('node.posChanged', self.__nodePosChanged)
-        self.__graph.controller().addNotificationListener('port.created', self.__portAdded)
-        self.__graph.controller().addNotificationListener('port.destroyed', self.__portRemoved)
+        # self.__graph.controller().addNotificationListener('node.posChanged', self.__nodePosChanged)
+        # self.__graph.controller().addNotificationListener('port.created', self.__portAdded)
+        # self.__graph.controller().addNotificationListener('port.destroyed', self.__portRemoved)
 
         # Update the node so that the size is computed.
         self.adjustSize()
@@ -204,13 +180,19 @@ class Node(QtGui.QGraphicsWidget):
     #########################
     ##
 
-    def displayPorts(self):
-        self.__ports = []
-        for portDesc in self.executableDesc['ports']:
-            self.addPort(self.__nodePath+'.'+portDesc['name'])
+    def addInputPort(self, componentInput):
+        port = InputPort(self, self.__graph, componentInput)
 
-    def addPort(self, path):
-        port = PortFromPath(self, self.__graph, path)
+        layout = self.layout()
+        layout.addItem(port)
+        layout.setAlignment(port, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
+
+        self.__ports.append(port)
+        self.adjustSize()
+        return port
+
+    def addOutputPort(self, componentOutput):
+        port = OutputPort(self, self.__graph, componentOutput)
 
         layout = self.layout()
         layout.addItem(port)
@@ -293,33 +275,34 @@ class Node(QtGui.QGraphicsWidget):
             super(Node, self).mouseMoveEvent(event)
 
     def mouseReleaseEvent(self, event):
-        if self.__dragging:
-            if not self.isSelected():
-                self.__graph.controller().beginInteraction("Move:" + self.getName())
-                graphPos = self.getGraphPos()
-                self.__graph.controller().setNodeGraphPos(
-                    nodePath=self.getNodePath(),
-                    graphPos=graphPos
-                )
-                self.__graph.controller().endInteraction()
-            else:
-                selectedNodes = self.__graph.getSelectedNodes()
-                names = ""
-                for node in selectedNodes:
-                    names += (" " + node.getName())
-                self.__graph.controller().beginInteraction("Move:" + names)
-                for node in selectedNodes:
-                    graphPos = node.getGraphPos()
-                    self.__graph.controller().setNodeGraphPos(
-                        nodePath=node.getNodePath(),
-                        graphPos=graphPos
-                    )
-                self.__graph.controller().endInteraction()
+        pass
+        # if self.__dragging:
+        #     if not self.isSelected():
+        #         self.__graph.controller().beginInteraction("Move:" + self.getName())
+        #         graphPos = self.getGraphPos()
+        #         self.__graph.controller().setNodeGraphPos(
+        #             nodePath=self.getNodePath(),
+        #             graphPos=graphPos
+        #         )
+        #         self.__graph.controller().endInteraction()
+        #     else:
+        #         selectedNodes = self.__graph.getSelectedNodes()
+        #         names = ""
+        #         for node in selectedNodes:
+        #             names += (" " + node.getName())
+        #         self.__graph.controller().beginInteraction("Move:" + names)
+        #         for node in selectedNodes:
+        #             graphPos = node.getGraphPos()
+        #             self.__graph.controller().setNodeGraphPos(
+        #                 nodePath=node.getNodePath(),
+        #                 graphPos=graphPos
+        #             )
+        #         self.__graph.controller().endInteraction()
 
-            self.setCursor(QtCore.Qt.ArrowCursor)
-            self._panning = False
-        else:
-            super(Node, self).mouseReleaseEvent(event)
+        #     self.setCursor(QtCore.Qt.ArrowCursor)
+        #     self._panning = False
+        # else:
+        #     super(Node, self).mouseReleaseEvent(event)
 
     def mouseDoubleClickEvent(self, event):
         NodeInspectorDockWidget.showWidget(self.__graph.controller(), self.getEvalPath(), self.getNodePath(), floating=True)

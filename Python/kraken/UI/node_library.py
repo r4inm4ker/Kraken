@@ -7,10 +7,6 @@ import json
 from PySide import QtGui, QtCore
 from kraken.core.kraken_system import KrakenSystem
 
-import kraken.examples.spine_component
-import kraken.examples.arm_component
-import kraken.examples.leg_component
-
 class NodeLibrary(QtGui.QWidget):
 
     class NodeTree(QtGui.QTreeWidget):
