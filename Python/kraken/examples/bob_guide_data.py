@@ -66,7 +66,7 @@ bob_guide_data = {
             "class": "kraken.examples.hand_component.HandComponentGuide",
             "name": "L_Hand",
             "location": "L",
-            "handXfo": Xfo(tr=Vec3(7.1886, 12.2819, 0.4906), 
+            "handXfo": Xfo(tr=Vec3(7.1886, 12.2819, 0.4906),
                             ori=Quat(Vec3(-0.0865, -0.2301, -0.2623), 0.9331)),
         },
         {
@@ -144,19 +144,9 @@ bob_guide_data = {
             "target": "L_Hand.armEndXfo"
         },
         {
-            "_comment": "LHand To LArm Connections. armEndPos",
-            "source": "L_Arm.armEndPos",
-            "target": "L_Hand.armEndPos"
-        },
-        {
             "_comment": "RHand To RArm Connections. armEndXfo",
             "source": "R_Arm.armEndXfo",
             "target": "R_Hand.armEndXfo"
-        },
-        {
-            "_comment": "RHand To RArm Connections. armEndPos",
-            "source": "R_Arm.armEndPos",
-            "target": "R_Hand.armEndPos"
         },
         {
             "_comment": "LLeg To Pelvis Connections",
@@ -174,19 +164,9 @@ bob_guide_data = {
             "target": "L_Foot.legEndXfo"
         },
         {
-            "_comment": "LFoot To LLeg Connections: legEndPos",
-            "source": "L_Leg.legEndPos",
-            "target": "L_Foot.legEndPos"
-        },
-        {
             "_comment": "RFoot To RLeg Connections: legEndXfo",
             "source": "R_Leg.legEndXfo",
             "target": "R_Foot.legEndXfo"
-        },
-        {
-            "_comment": "RFoot To RLeg Connections: legEndPos",
-            "source": "R_Leg.legEndPos",
-            "target": "R_Foot.legEndPos"
         }
     ]
 }

@@ -46,7 +46,6 @@ class FootComponentGuide(Component):
         # ===========
         # Declare Inputs Xfos
         self.legEndXfoInputTgt = self.createInput('legEndXfo', dataType='Xfo', parent=inputHrcGrp)
-        self.legEndPosInputTgt = self.createInput('legEndPos', dataType='Xfo', parent=inputHrcGrp)
 
         # Declare Output Xfos
         self.footEndOutputTgt = self.createOutput('footEnd', dataType='Xfo', parent=outputHrcGrp)
@@ -162,7 +161,6 @@ class FootComponent(Component):
         # ===========
         # Declare Inputs Xfos
         self.legEndXfoInputTgt = self.createInput('legEndXfo', dataType='Xfo', parent=inputHrcGrp)
-        self.legEndPosInputTgt = self.createInput('legEndPos', dataType='Xfo', parent=inputHrcGrp)
 
         # Declare Output Xfos
         self.footEndOutputTgt = self.createOutput('footEnd', dataType='Xfo', parent=outputHrcGrp)
@@ -220,20 +218,6 @@ class FootComponent(Component):
         self.footEndOutputTgt.addConstraint(handEndConstraint)
 
 
-        # ==================
-        # Add Component I/O
-        # ==================
-        # Add Xfo I/O's
-        # self.addInput(self.legEndXfoInputTgt)
-        # self.addInput(self.legEndPosInputTgt)
-        # self.addOutput(self.footOutputTgt)
-        # self.addOutput(self.footEndOutputTgt)
-
-        # Add Attribute I/O's
-        # self.addInput(self.debugInputAttr)
-        # self.addInput(self.rightSideInputAttr)
-        # self.addInput(footLinkToWorldInputAttr)
-
 
         # ===============
         # Add Splice Ops
@@ -249,7 +233,6 @@ class FootComponent(Component):
 
         # # Add Xfo Inputs)
         # spliceOp.setInput("armEndXfo", legEndXfoInput)
-        # spliceOp.setInput("armEndPos", legEndPosInput)
         # spliceOp.setInput("handRef", footRefSrt)
 
         # # Add Xfo Outputs
@@ -287,7 +270,6 @@ class FootComponent(Component):
         # Set IO Xfos
         # ============
         self.legEndXfoInputTgt.xfo = data['footXfo']
-        self.legEndPosInputTgt.xfo = data['footXfo']
         self.footEndOutputTgt.xfo = data['footXfo']
         self.footOutputTgt.xfo = data['footXfo']
 

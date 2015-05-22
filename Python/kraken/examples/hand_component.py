@@ -46,7 +46,6 @@ class HandComponentGuide(Component):
         # ===========
         # Declare Inputs Xfos
         self.armEndXfoInputTgt = self.createInput('armEndXfo', dataType='Xfo', parent=inputHrcGrp)
-        self.armEndPosInputTgt = self.createInput('armEndPos', dataType='Xfo', parent=inputHrcGrp)
 
         # Declare Output Xfos
         self.handOutputTgt = self.createOutput('hand', dataType='Xfo', parent=outputHrcGrp)
@@ -162,7 +161,6 @@ class HandComponent(Component):
         # ===========
         # Declare Inputs Xfos
         self.armEndXfoInputTgt = self.createInput('armEndXfo', dataType='Xfo', parent=inputHrcGrp)
-        self.armEndPosInputTgt = self.createInput('armEndPos', dataType='Xfo', parent=inputHrcGrp)
 
         # Declare Output Xfos
         self.handOutputTgt = self.createOutput('hand', dataType='Xfo', parent=outputHrcGrp)
@@ -224,21 +222,18 @@ class HandComponent(Component):
         # Add Splice Ops
         # ===============
         # Add Hand Solver Splice Op
-        # spliceOp = SpliceOperator("handSolverSpliceOp", "HandSolver", "KrakenHandSolver")
-        # self.addOperator(spliceOp)
+        spliceOp = SpliceOperator("handCtrlSpaceSpliceOp", "PoseConstraintSolver", "Kraken")
+        self.addOperator(spliceOp)
 
-        # # Add Att Inputs
-        # spliceOp.setInput("debug", self.debugInputAttr)
-        # spliceOp.setInput("rightSide", self.rightSideInputAttr)
-        # spliceOp.setInput("linkToWorld", handLinkToWorldInputAttr)
+        # Add Att Inputs
+        spliceOp.setInput("debug", self.debugInputAttr)
+        spliceOp.setInput("rightSide", self.rightSideInputAttr)
 
-        # # Add Xfo Inputs)
-        # spliceOp.setInput("armEndXfo", self.armEndXfoInputTgt)
-        # spliceOp.setInput("armEndPos", self.armEndPosInputTgt)
-        # spliceOp.setInput("handRef", self.handRefSrt)
+        # Add Xfo Inputs)
+        spliceOp.setInput("constrainer", self.armEndXfoInputTgt)
 
-        # # Add Xfo Outputs
-        # spliceOp.setOutput("handCtrlSpace", self.handCtrlSpace)
+        # Add Xfo Outputs
+        spliceOp.setOutput("constrainee", self.handCtrlSpace)
 
 
         # Add Deformer Splice Op
@@ -272,7 +267,6 @@ class HandComponent(Component):
         # Set IO Xfos
         # ============
         self.armEndXfoInputTgt.xfo = data['handXfo']
-        self.armEndPosInputTgt.xfo = data['handXfo']
         self.handEndOutputTgt.xfo = data['handXfo']
         self.handOutputTgt.xfo = data['handXfo']
 
