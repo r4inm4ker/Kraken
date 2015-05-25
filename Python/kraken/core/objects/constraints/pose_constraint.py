@@ -26,13 +26,15 @@ class PoseConstraint(Constraint):
 
         """
 
-        if not self.maintainOffset:
+        if self.getMaintainOffset() is False:
             newXfo = Xfo();
             newXfo.ori.set(Vec3(), 0.0)
-            for constrainer in self.constrainers:
+            for constrainer in self.getConstrainers():
                 newXfo.tr = newXfo.tr.add(constrainer.xfo.tr)
                 newXfo.ori = newXfo.ori.add(constrainer.xfo.ori)
+
             newXfo.ori.setUnit()
-            self.constrainee.xfo = newXfo
+            self.getConstrainee().xfo = newXfo
+
         return True
 

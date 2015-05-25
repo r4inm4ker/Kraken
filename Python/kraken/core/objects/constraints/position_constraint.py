@@ -23,9 +23,11 @@ class PositionConstraint(Constraint):
 
         """
 
-        if not self.maintainOffset:
+        if self.getMaintainOffset() is False:
             newTr = Vec3();
-            for constrainer in self.constrainers:
+            for constrainer in self.getConstrainers():
                 newTr = newTr.add(constrainer.xfo.tr)
-            self.constrainee.xfo.tr = newTr
+
+            self.getConstrainee().xfo.tr = newTr
+
         return True

@@ -13,7 +13,7 @@ class AttributeGroup(SceneItem):
 
     def __init__(self, name, parent=None):
         super(AttributeGroup, self).__init__(name)
-        self.attributes = []
+        self._attributes = []
 
         if parent is not None:
             if 'Object3D' not in parent.getTypeHierarchyNames():
@@ -54,7 +54,7 @@ class AttributeGroup(SceneItem):
 
         """
 
-        if index > len(self.attributes):
+        if index > len(self._attributes):
             raise IndexError("'" + str(index) + "' is out of the range of 'attributes' array.")
 
         return True
@@ -71,10 +71,10 @@ class AttributeGroup(SceneItem):
 
         """
 
-        if attribute.getName() in [x.getName() for x in self.attributes]:
+        if attribute.getName() in [x.getName() for x in self._attributes]:
             raise IndexError("Child with " + attribute.getName() + " already exists as a attribute.")
 
-        self.attributes.append(attribute)
+        self._attributes.append(attribute)
         attribute.setParent(self)
 
         return True
@@ -94,7 +94,7 @@ class AttributeGroup(SceneItem):
         if self.checkAttributeIndex(index) is not True:
             return False
 
-        del self.attributes[index]
+        del self._attributes[index]
 
         return True
 
@@ -112,7 +112,7 @@ class AttributeGroup(SceneItem):
 
         removeIndex = None
 
-        for i, eachAttribute in enumerate(self.attributes):
+        for i, eachAttribute in enumerate(self._attributes):
             if eachAttribute.getName() == name:
                 removeIndex = i
 
@@ -132,7 +132,7 @@ class AttributeGroup(SceneItem):
 
         """
 
-        return len(self.attributes)
+        return len(self._attributes)
 
 
     def getAttributeByIndex(self, index):
@@ -150,7 +150,7 @@ class AttributeGroup(SceneItem):
         if self.checkAttributeIndex(index) is not True:
             return False
 
-        return self.attributes[index]
+        return self._attributes[index]
 
 
     def getAttributeByName(self, name):
@@ -165,7 +165,7 @@ class AttributeGroup(SceneItem):
 
         """
 
-        for eachAttribute in self.attributes:
+        for eachAttribute in self._attributes:
             if eachAttribute.getName() == name:
                 return eachAttribute
 
@@ -197,7 +197,7 @@ class AttributeGroup(SceneItem):
             'parent': self.parent.getName(),
             'attributes': []
         }
-        for attr in self.attributes:
+        for attr in self._attributes:
             jsonData['attributes'].append(attr.jsonEncode(saver))
 
         return jsonData

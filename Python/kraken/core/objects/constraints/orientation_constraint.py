@@ -23,11 +23,13 @@ class OrientationConstraint(Constraint):
 
         """
 
-        if not self.maintainOffset:
+        if self.getMaintainOffset() is False:
             newOri = Quat();
             newOri.set(Vec3(), 0.0)
-            for constrainer in self.constrainers:
+            for constrainer in self.getConstrainers():
                 newOri = newOri.add(constrainer.xfo.ori)
+
             newOri.setUnit()
-            self.constrainee.xfo.ori = newOri
+            self.getConstrainee().xfo.ori = newOri
+
         return True

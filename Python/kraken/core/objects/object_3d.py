@@ -17,16 +17,16 @@ class Object3D(SceneItem):
 
     def __init__(self, name, parent=None):
         super(Object3D, self).__init__(name, parent)
-        self.component = None
-        self.children = []
-        self.flags = {}
-        self.attributeGroups = []
-        self.constraints = []
+        self._component = None
+        self._children = []
+        self._flags = {}
+        self._attributeGroups = []
+        self._constraints = []
         self._xfo = Xfo()
         self._ro = RotationOrder()
-        self.color = None
-        self.visibility = True
-        self.shapeVisibility = True
+        self._color = None
+        self._visibility = True
+        self._shapeVisibility = True
 
         if parent is not None:
             parent.addChild(self)
@@ -264,7 +264,7 @@ class Object3D(SceneItem):
 
         """
 
-        return self.component
+        return self._component
 
 
     def setComponent(self, component):
@@ -278,7 +278,7 @@ class Object3D(SceneItem):
 
         """
 
-        self.component = component
+        self._component = component
 
         return True
 
@@ -294,7 +294,7 @@ class Object3D(SceneItem):
 
         """
 
-        if index > len(self.children):
+        if index > len(self.getChildren()):
             raise IndexError("'" + str(index) + "' is out of the range of the 'children' array.")
 
         return True
@@ -320,15 +320,15 @@ class Object3D(SceneItem):
 
         if child.getParent() is not None:
             parent = child.getParent()
-            if child in parent.children:
-                parent.children.remove(child)
+            if child in parent.getChildren():
+                parent.getChildren().remove(child)
 
-        self.children.append(child)
+        self.getChildren().append(child)
         child.setParent(self)
 
         # Assign the child the same component.
-        if self.component is not None:
-            child.setComponent(self.component)
+        if self._component is not None:
+            child.setComponent(self._component)
 
         return True
 
@@ -347,7 +347,7 @@ class Object3D(SceneItem):
         if self.checkChildIndex(index) is not True:
             return False
 
-        del self.children[index]
+        del self.getChildren()[index]
 
         return True
 
@@ -365,7 +365,7 @@ class Object3D(SceneItem):
 
         removeIndex = None
 
-        for i, eachChild in enumerate(self.children):
+        for i, eachChild in enumerate(self.getChildren()):
             if eachChild.getName() == name:
                 removeIndex = i
 
@@ -377,6 +377,17 @@ class Object3D(SceneItem):
         return True
 
 
+    def getChildren(self):
+        """Gets the children of this object.
+
+        Return:
+        List, child objects.
+
+        """
+
+        return self._children
+
+
     def getNumChildren(self):
         """Returns the number of children this object has.
 
@@ -385,7 +396,7 @@ class Object3D(SceneItem):
 
         """
 
-        return len(self.children)
+        return len(self.getChildren())
 
 
     def getChildByIndex(self, index):
@@ -402,7 +413,7 @@ class Object3D(SceneItem):
         if self.checkChildIndex(index) is not True:
             return False
 
-        return self.children[index]
+        return self.getChildren()[index]
 
 
     def getChildByName(self, name):
@@ -414,7 +425,7 @@ class Object3D(SceneItem):
 
         """
 
-        for eachChild in self.children:
+        for eachChild in self.getChildren():
             if eachChild.getName() == name:
                 return eachChild
 
@@ -434,7 +445,7 @@ class Object3D(SceneItem):
         """
 
         childrenOfType = []
-        for eachChild in self.children:
+        for eachChild in self.getChildren():
             if eachChild.isTypeOf(childType):
                 childrenOfType.append(eachChild)
 
@@ -534,7 +545,7 @@ class Object3D(SceneItem):
 
         """
 
-        self.flags[name] = True
+        self._flags[name] = True
 
         return True
 
@@ -550,7 +561,7 @@ class Object3D(SceneItem):
 
         """
 
-        if name in self.flags:
+        if name in self._flags:
             return True
 
         return False
@@ -567,8 +578,8 @@ class Object3D(SceneItem):
 
         """
 
-        if name in self.flags:
-            del self.flags[name]
+        if name in self._flags:
+            del self._flags[name]
             return True
 
         return False
@@ -588,7 +599,7 @@ class Object3D(SceneItem):
 
         """
 
-        if index > len(self.attributeGroups):
+        if index > len(self._attributeGroups):
             raise IndexError("'" + str(index) + "' is out of the range of 'attributeGroups' array.")
 
         return True
@@ -605,10 +616,10 @@ class Object3D(SceneItem):
 
         """
 
-        if attributeGroup.getName() in [x.getName() for x in self.attributeGroups]:
+        if attributeGroup.getName() in [x.getName() for x in self._attributeGroups]:
             raise IndexError("Child with " + attributeGroup.getName() + " already exists as a attributeGroup.")
 
-        self.attributeGroups.append(attributeGroup)
+        self._attributeGroups.append(attributeGroup)
         attributeGroup.setParent(self)
 
         return True
@@ -628,7 +639,7 @@ class Object3D(SceneItem):
         if self.checkAttributeGroupIndex(index) is not True:
             return False
 
-        del self.attributeGroups[index]
+        del self._attributeGroups[index]
 
         return True
 
@@ -646,7 +657,7 @@ class Object3D(SceneItem):
 
         removeIndex = None
 
-        for i, eachAttributeGroup in enumerate(self.attributeGroups):
+        for i, eachAttributeGroup in enumerate(self._attributeGroups):
             if eachAttributeGroup.getName() == name:
                 removeIndex = i
 
@@ -666,7 +677,7 @@ class Object3D(SceneItem):
 
         """
 
-        return len(self.attributeGroups)
+        return len(self._attributeGroups)
 
 
     def getAttributeGroupByIndex(self, index):
@@ -684,7 +695,7 @@ class Object3D(SceneItem):
         if self.checkAttributeGroupIndex(index) is not True:
             return False
 
-        return self.attributeGroups[index]
+        return self._attributeGroups[index]
 
 
     def getAttributeGroupByName(self, name):
@@ -699,7 +710,7 @@ class Object3D(SceneItem):
 
         """
 
-        for eachAttributeGroup in self.attributeGroups:
+        for eachAttributeGroup in self._attributeGroups:
             if eachAttributeGroup.getName() == name:
                 return eachAttributeGroup
 
@@ -720,7 +731,7 @@ class Object3D(SceneItem):
 
         """
 
-        if index > len(self.constraints):
+        if index > len(self._constraints):
             raise IndexError("'" + str(index) + "' is out of the range of 'constraints' array.")
 
         return True
@@ -737,10 +748,10 @@ class Object3D(SceneItem):
 
         """
 
-        if constraint.getName() in [x.getName() for x in self.constraints]:
+        if constraint.getName() in [x.getName() for x in self._constraints]:
             raise IndexError("Constraint with name '" + constraint.getName() + "'' already exists as a constraint.")
 
-        self.constraints.append(constraint)
+        self._constraints.append(constraint)
         constraint.setParent(self)
         constraint.setConstrainee(self)
 
@@ -761,7 +772,7 @@ class Object3D(SceneItem):
         if self.checkConstraintIndex(index) is not True:
             return False
 
-        del self.constraints[index]
+        del self._constraints[index]
 
         return True
 
@@ -779,7 +790,7 @@ class Object3D(SceneItem):
 
         removeIndex = None
 
-        for i, eachConstraint in enumerate(self.constraints):
+        for i, eachConstraint in enumerate(self._constraints):
             if eachConstraint.getName() == name:
                 removeIndex = i
 
@@ -799,7 +810,7 @@ class Object3D(SceneItem):
 
         """
 
-        return len(self.constraints)
+        return len(self._constraints)
 
 
     def getConstraintByIndex(self, index):
@@ -817,7 +828,7 @@ class Object3D(SceneItem):
         if self.checkConstraintIndex(index) is not True:
             return False
 
-        return self.constraints[index]
+        return self._constraints[index]
 
 
     def getConstraintByName(self, name):
@@ -832,7 +843,7 @@ class Object3D(SceneItem):
 
         """
 
-        for eachConstraint in self.constraints:
+        for eachConstraint in self._constraints:
             if eachConstraint.getName() == name:
                 return eachConstraint
 
@@ -850,7 +861,7 @@ class Object3D(SceneItem):
 
         """
 
-        return self.visibility
+        return self._visibility
 
 
     def setVisibility(self, value):
@@ -864,7 +875,7 @@ class Object3D(SceneItem):
 
         """
 
-        self.visibility = value
+        self._visibility = value
 
         return True
 
@@ -877,7 +888,7 @@ class Object3D(SceneItem):
 
         """
 
-        return self.shapeVisibility
+        return self._shapeVisibility
 
 
     def setShapeVisibility(self, value):
@@ -891,7 +902,7 @@ class Object3D(SceneItem):
 
         """
 
-        self.shapeVisibility = value
+        self._shapeVisibility = value
 
         return True
 
@@ -910,7 +921,7 @@ class Object3D(SceneItem):
 
         """
 
-        self.color = color
+        self._color = color
 
         return True
 
@@ -923,7 +934,7 @@ class Object3D(SceneItem):
 
         """
 
-        return self.color
+        return self._color
 
 
     # ==========================
@@ -1024,28 +1035,28 @@ class Object3D(SceneItem):
             'name': self.getName(),
             'parent': None,
             'children': [],
-            'flags': self.flags,
+            'flags': self._flags,
             'attributeGroups': [],
             'constraints': [],
             'xfo': self.xfo.jsonEncode(),
-            'color': self.color,
-            'visibility': self.visibility,
-            'shapeVisibility': self.shapeVisibility,
+            'color': self.getColor(),
+            'visibility': self._visibility,
+            'shapeVisibility': self._shapeVisibility,
         }
 
         if self.getParent() is not None:
             jsonData['parent'] = self.getParent().getName()
 
-        if self.color is not None:
-            jsonData['color'] = saver.encodeValue(self.color)
+        if self.getColor() is not None:
+            jsonData['color'] = saver.encodeValue(self.getColor())
 
-        for child in self.children:
+        for child in self.getChildren():
             jsonData['children'].append(child.jsonEncode(saver))
 
-        for attrGroup in self.attributeGroups:
+        for attrGroup in self._attributeGroups:
             jsonData['attributeGroups'].append(attrGroup.jsonEncode(saver))
 
-        for constr in self.constraints:
+        for constr in self._constraints:
             jsonData['constraints'].append(constr.jsonEncode(saver))
 
         return jsonData
@@ -1058,12 +1069,12 @@ class Object3D(SceneItem):
         True if decoding was successful
 
         """
-        self.flags =  jsonData['flags']
+        self._flags =  jsonData['flags']
         self.xfo =  loader.decodeValue(jsonData['xfo'])
         if 'color' in jsonData and jsonData['color'] is not None:
-            self.color =  loader.decodeValue(jsonData['color'])
-        self.visibility =  jsonData['visibility']
-        self.shapeVisibility =  jsonData['shapeVisibility']
+            self.setColor(loader.decodeValue(jsonData['color']))
+        self._visibility =  jsonData['visibility']
+        self._shapeVisibility =  jsonData['shapeVisibility']
 
         for child in jsonData['children']:
             self.addChild(loader.construct(child))
@@ -1072,8 +1083,8 @@ class Object3D(SceneItem):
             # There is one default attribute group assigned to each scene item.
             # Load data into the existing item instead of constructing a new one.
             if attrGroup['name'] == '':
-                loader.registerItem(self.attributeGroups[0])
-                self.attributeGroups[0].jsonDecode(loader, attrGroup)
+                loader.registerItem(self._attributeGroups[0])
+                self._attributeGroups[0].jsonDecode(loader, attrGroup)
             else:
                 self.addAttributeGroup(loader.construct(attrGroup))
 
