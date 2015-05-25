@@ -13,9 +13,9 @@ class ComponentOutput(SceneItem):
 
     def __init__(self, name, parent, dataType):
         super(ComponentOutput, self).__init__(name, parent=parent)
-        self.dataType = None
-        self.connections = []
-        self.target = None
+        self._dataType = None
+        self._connections = []
+        self._target = None
 
         self.setDataType(dataType)
 
@@ -34,7 +34,7 @@ class ComponentOutput(SceneItem):
 
         """
 
-        self.dataType = dataType
+        self._dataType = dataType
 
         return True
 
@@ -47,7 +47,7 @@ class ComponentOutput(SceneItem):
 
         """
 
-        return self.dataType
+        return self._dataType
 
 
     # ====================
@@ -61,7 +61,7 @@ class ComponentOutput(SceneItem):
 
         """
 
-        return len(self.connections) > 0
+        return len(self._connections) > 0
 
 
     def getConnection(self, index):
@@ -72,7 +72,7 @@ class ComponentOutput(SceneItem):
 
         """
 
-        return self.connections[index]
+        return self._connections[index]
 
 
     def _addConnection(self, connectionObj):
@@ -90,10 +90,10 @@ class ComponentOutput(SceneItem):
             raise Exception("Data Type mismatch! Cannot connect '" +
                 connectionObj.getDataType() + "' to '" + self.getDataType())
 
-        if connectionObj in self.connections:
+        if connectionObj in self._connections:
             raise Exception("'connectionObj' is already in the connections.")
 
-        self.connections.append(connectionObj)
+        self._connections.append(connectionObj)
 
         return True
 
@@ -112,7 +112,7 @@ class ComponentOutput(SceneItem):
 
         """
 
-        self.target = target
+        self._target = target
 
 
     def getTarget(self):
@@ -123,4 +123,4 @@ class ComponentOutput(SceneItem):
 
         """
 
-        return self.target
+        return self._target

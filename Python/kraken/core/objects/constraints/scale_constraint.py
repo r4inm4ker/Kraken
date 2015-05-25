@@ -23,10 +23,12 @@ class ScaleConstraint(Constraint):
 
         """
 
-        if not self.maintainOffset:
+        if self.getMaintainOffset() is False:
             newSc = Vec3();
-            for constrainer in self.constrainers:
+            for constrainer in self.getConstrainers():
                 newSc = newSc.add(constrainer.xfo.tr)
-            newSc.multiplyScalar(1.0/len(self.constrainers))
-            self.constrainee.xfo.sc = newSc
+
+            newSc.multiplyScalar(1.0 / len(self.getConstrainers()))
+            self.getConstrainee().xfo.sc = newSc
+
         return True

@@ -15,9 +15,10 @@ class Constraint(SceneItem):
     def __init__(self, name, parent=None):
         super(Constraint, self).__init__(name, parent)
 
-        self.constrainee = None
-        self.constrainers = []
-        self.maintainOffset = False
+        self._constrainee = None
+        self._constrainers = []
+        self._maintainOffset = False
+
 
     # ===================
     # Constraint Methods
@@ -31,7 +32,7 @@ class Constraint(SceneItem):
 
         """
 
-        return self.maintainOffset
+        return self._maintainOffset
 
 
     def setMaintainOffset(self, value):
@@ -45,7 +46,7 @@ class Constraint(SceneItem):
 
         """
 
-        self.maintainOffset = value
+        self._maintainOffset = value
 
 
     def setConstrainee(self, constrainee):
@@ -59,7 +60,7 @@ class Constraint(SceneItem):
 
         """
 
-        self.constrainee = constrainee
+        self._constrainee = constrainee
 
         return True
 
@@ -72,7 +73,7 @@ class Constraint(SceneItem):
 
         """
 
-        return self.constrainee
+        return self._constrainee
 
 
     def addConstrainer(self, kObject3D):
@@ -86,8 +87,8 @@ class Constraint(SceneItem):
 
         """
 
-        self.constrainers.append(None)
-        self.setConstrainer(kObject3D, len(self.constrainers) - 1)
+        self._constrainers.append(None)
+        self.setConstrainer(kObject3D, len(self._constrainers) - 1)
 
         return True
 
@@ -109,10 +110,10 @@ class Constraint(SceneItem):
                              + kObject3D.getName() + "': " + type(kObject3D) +
                              ". Must be an instance of 'Object3D'.")
 
-        if kObject3D in self.constrainers:
+        if kObject3D in self._constrainers:
             raise Exception("'kObject3D' argument is already a constrainer: '" + kObject3D.getName() + "'.")
 
-        self.constrainers[index] = kObject3D
+        self._constrainers[index] = kObject3D
 
         return True
 
@@ -139,7 +140,7 @@ class Constraint(SceneItem):
 
         """
 
-        return self.constrainers
+        return self._constrainers
 
 
     # ================
@@ -164,10 +165,10 @@ class Constraint(SceneItem):
         jsonData = {
             '__typeHierarchy__': classHierarchy,
             'name': self.name,
-            'constrainee': self.constrainee.getName(),
+            'constrainee': self._constrainee.getName(),
             'constrainers': []
         }
-        for cnstrnr in self.constrainers:
+        for cnstrnr in self._constrainers:
             jsonData['constrainers'].append(cnstrnr.getName())
 
         return jsonData

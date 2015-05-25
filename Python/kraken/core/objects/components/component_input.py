@@ -13,10 +13,10 @@ class ComponentInput(SceneItem):
 
     def __init__(self, name, parent, dataType):
         super(ComponentInput, self).__init__(name, parent=parent)
-        self.dataType = None
-        self.connection = None
-        self.target = None
-        self.index = 0
+        self._dataType = None
+        self._connection = None
+        self._target = None
+        self._index = 0
 
         self.setDataType(dataType)
 
@@ -35,7 +35,7 @@ class ComponentInput(SceneItem):
 
         """
 
-        self.dataType = dataType
+        self._dataType = dataType
 
         return True
 
@@ -48,7 +48,7 @@ class ComponentInput(SceneItem):
 
         """
 
-        return self.dataType
+        return self._dataType
 
 
     # ====================
@@ -62,7 +62,7 @@ class ComponentInput(SceneItem):
 
         """
 
-        return self.connection is not None
+        return self._connection is not None
 
 
     def getConnection(self):
@@ -73,7 +73,7 @@ class ComponentInput(SceneItem):
 
         """
 
-        return self.connection
+        return self._connection
 
 
     def setConnection(self, connectionObj):
@@ -94,7 +94,7 @@ class ComponentInput(SceneItem):
         if connectionObj is self.getConnection():
             raise Exception("'connectionObj' is already set as the connection.")
 
-        self.connection = connectionObj
+        self._connection = connectionObj
 
         connectionObj._addConnection(self)
 
@@ -115,7 +115,7 @@ class ComponentInput(SceneItem):
 
         """
 
-        self.target = target
+        self._target = target
 
 
     def getTarget(self):
@@ -126,7 +126,7 @@ class ComponentInput(SceneItem):
 
         """
 
-        return self.target
+        return self._target
 
 
     # ==============
@@ -140,7 +140,7 @@ class ComponentInput(SceneItem):
 
         """
 
-        return self.index
+        return self._index
 
 
     def setIndex(self, index):
@@ -154,6 +154,6 @@ class ComponentInput(SceneItem):
 
         """
 
-        self.index = index
+        self._index = index
 
         return True
