@@ -13,7 +13,7 @@ footGuide = FootComponentGuide("foot")
 footGuide.loadData({
                     "name": "L_Foot",
                     "location": "L",
-                    "footXfo": Xfo(tr=Vec3(0.1322, 15.403, -0.5723),
+                    "footXfo": Xfo(tr=Vec3(1.841, 1.1516, -1.237),
                                    ori=Quat(Vec3(0.6377, -0.5695, 0.3053), 0.4190))
                    })
 

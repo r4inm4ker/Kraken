@@ -29,18 +29,9 @@ class SpineComponentGuide(Component):
     def __init__(self, name='spine', parent=None):
         super(SpineComponentGuide, self).__init__(name, parent)
 
-        # Declare Inputs Xfos
-
-        # Declare Output Xfos
-        self.spineBaseOutput = self.addOutput('spineBase', dataType='Xfo')
-        self.spineEndOutput = self.addOutput('spineEnd', dataType='Xfo')
-        self.spineVertebraeOutput = self.addOutput('spineVertebrae', dataType='Xfo[]')
-
-        # Declare Input Attrs
-
-        # =========
-        # Controls
-        # =========
+        # ================
+        # Setup Hierarchy
+        # ================
         controlsLayer = self.getOrCreateLayer('controls')
         ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
 
@@ -48,9 +39,31 @@ class SpineComponentGuide(Component):
         inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
         cmpInputAttrGrp = AttributeGroup('inputs', parent=inputHrcGrp)
 
-        outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
-        cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
+        self.outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
+        cmpOutputAttrGrp = AttributeGroup('outputs', parent=self.outputHrcGrp)
 
+
+        # ===========
+        # Declare IO
+        # ===========
+        # Declare Inputs Xfos
+
+        # Declare Output Xfos
+        self.spineBaseOutputTgt = self.createOutput('spineBase', dataType='Xfo', parent=self.outputHrcGrp)
+        self.spineEndOutputTgt = self.createOutput('spineEnd', dataType='Xfo', parent=self.outputHrcGrp)
+
+        self.spineVertebraeOutput = self.addOutput('spineVertebrae', dataType='Xfo[]')
+
+        # Declare Input Attrs
+        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=True, parent=cmpInputAttrGrp)
+        self.lengthInputAttr = self.createInput('length', dataType='Float', value=1.0, parent=cmpInputAttrGrp)
+
+        # Declare Output Attrs
+
+
+        # =========
+        # Controls
+        # =========
         # Guide Controls
         self.cog = Control('cogPosition', parent=ctrlCmpGrp, shape="sphere")
         self.cog.setColor("red")
@@ -155,18 +168,9 @@ class SpineComponent(Component):
         Profiler.getInstance().push("Construct Spine Component:" + name)
         super(SpineComponent, self).__init__(name, parent)
 
-        # Declare Inputs Xfos
-
-        # Declare Output Xfos
-        self.spineBaseOutput = self.addOutput('spineBase', dataType='Xfo')
-        self.spineEndOutput = self.addOutput('spineEnd', dataType='Xfo')
-        self.spineVertebraeOutput = self.addOutput('spineVertebrae', dataType='Xfo[]')
-
-        # Declare Input Attrs
-
-        # =========
-        # Controls
-        # =========
+        # ================
+        # Setup Hierarchy
+        # ================
         controlsLayer = self.getOrCreateLayer('controls')
         ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
 
@@ -177,6 +181,28 @@ class SpineComponent(Component):
         self.outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
         cmpOutputAttrGrp = AttributeGroup('outputs', parent=self.outputHrcGrp)
 
+
+        # ===========
+        # Declare IO
+        # ===========
+        # Declare Inputs Xfos
+
+        # Declare Output Xfos
+        self.spineBaseOutputTgt = self.createOutput('spineBase', dataType='Xfo', parent=self.outputHrcGrp)
+        self.spineEndOutputTgt = self.createOutput('spineEnd', dataType='Xfo', parent=self.outputHrcGrp)
+
+        self.spineVertebraeOutput = self.addOutput('spineVertebrae', dataType='Xfo[]')
+
+        # Declare Input Attrs
+        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=True, parent=cmpInputAttrGrp)
+        self.lengthInputAttr = self.createInput('length', dataType='Float', value=1.0, parent=cmpInputAttrGrp)
+
+        # Declare Output Attrs
+
+
+        # =========
+        # Controls
+        # =========
         # COG
         self.cogCtrlSpace = CtrlSpace('cog', parent=ctrlCmpGrp)
         self.cogCtrl = Control('cog', parent=self.cogCtrlSpace, shape="circle")
@@ -211,26 +237,15 @@ class SpineComponent(Component):
         # ==========
         deformersLayer = self.getOrCreateLayer('deformers')
         self.defCmpGrp = ComponentGroup(self.getName(), self, parent=deformersLayer)
-
         self.deformerJoints = []
         self.spineOutputs = []
-        self.spineVertebraeOutput.setTarget(self.spineOutputs)
         self.setNumDeformers(1)
 
         # =====================
         # Create Component I/O
         # =====================
         # Setup component Xfo I/O's
-
-        spineBaseOutputTgt = Locator('spineBase', parent=self.outputHrcGrp)
-        spineEndOutputTgt = Locator('spineEnd', parent=self.outputHrcGrp)
-
-        self.spineBaseOutput.setTarget(spineBaseOutputTgt)
-        self.spineEndOutput.setTarget(spineEndOutputTgt)
-
-        # Setup componnent Attribute I/O's
-        debugInputAttr = BoolAttribute('debug', value=True, parent=cmpInputAttrGrp)
-        self.lengthInputAttr = FloatAttribute('length', value=1.0, parent=cmpInputAttrGrp)
+        self.spineVertebraeOutput.setTarget(self.spineOutputs)
 
 
         # ==============
@@ -239,13 +254,13 @@ class SpineComponent(Component):
         # Constraint inputs
 
         # Constraint outputs
-        self.spineBaseOutputConstraint = PoseConstraint('_'.join([spineBaseOutputTgt.getName(), 'To', 'spineBase']))
+        self.spineBaseOutputConstraint = PoseConstraint('_'.join([self.spineBaseOutputTgt.getName(), 'To', 'spineBase']))
         self.spineBaseOutputConstraint.addConstrainer(self.spineOutputs[0])
-        spineBaseOutputTgt.addConstraint(self.spineBaseOutputConstraint)
+        self.spineBaseOutputTgt.addConstraint(self.spineBaseOutputConstraint)
 
-        self.spineEndOutputConstraint = PoseConstraint('_'.join([spineEndOutputTgt.getName(), 'To', 'spineEnd']))
+        self.spineEndOutputConstraint = PoseConstraint('_'.join([self.spineEndOutputTgt.getName(), 'To', 'spineEnd']))
         self.spineEndOutputConstraint.addConstrainer(self.spineOutputs[0])
-        spineEndOutputTgt.addConstraint(self.spineEndOutputConstraint)
+        self.spineEndOutputTgt.addConstraint(self.spineEndOutputConstraint)
 
 
         # ===============
@@ -256,7 +271,7 @@ class SpineComponent(Component):
         self.addOperator(self.bezierSpineSpliceOp)
 
         # Add Att Inputs
-        self.bezierSpineSpliceOp.setInput('debug', debugInputAttr)
+        self.bezierSpineSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
         self.bezierSpineSpliceOp.setInput('length', self.lengthInputAttr)
 
         # Add Xfo Inputs
@@ -274,7 +289,7 @@ class SpineComponent(Component):
         self.addOperator(self.outputsToDeformersSpliceOp)
 
         # Add Att Inputs
-        self.outputsToDeformersSpliceOp.setInput('debug', debugInputAttr)
+        self.outputsToDeformersSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
 
         # Add Xfo Outputs
         for spineOutput in self.spineOutputs:

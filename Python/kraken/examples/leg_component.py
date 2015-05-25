@@ -29,22 +29,9 @@ class LegComponentGuide(Component):
     def __init__(self, name='legGuide', parent=None, data=None):
         super(LegComponentGuide, self).__init__(name, parent)
 
-        # Declare Inputs Xfos
-        self.legPelvisInput = self.addInput('pelvisInput', dataType='Xfo')
-
-        # Declare Output Xfos
-        self.femurOutput = self.addOutput('femur', dataType='Xfo')
-        self.shinOutput = self.addOutput('shin', dataType='Xfo')
-        self.legEndXfoOutput = self.addOutput('legEndXfo', dataType='Xfo')
-        self.legEndPosOutput = self.addOutput('legEndPos', dataType='Xfo')
-
-        # Declare Input Attrs
-
-        # Declare Output Attrs
-
-        # =========
-        # Controls
-        # =========
+        # ================
+        # Setup Hierarchy
+        # ================
         controlsLayer = self.getOrCreateLayer('controls')
         ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
 
@@ -55,6 +42,29 @@ class LegComponentGuide(Component):
         outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
         cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
 
+
+        # ===========
+        # Declare IO
+        # ===========
+        # Declare Inputs Xfos
+        self.legPelvisInputTgt = self.createInput('pelvisInput', dataType='Xfo', parent=inputHrcGrp)
+
+        # Declare Output Xfos
+        self.femurOutputTgt = self.createOutput('femur', dataType='Xfo', parent=outputHrcGrp)
+        self.shinOutputTgt = self.createOutput('shin', dataType='Xfo', parent=outputHrcGrp)
+        self.legEndXfoOutputTgt = self.createOutput('legEndXfo', dataType='Xfo', parent=outputHrcGrp)
+
+        # Declare Input Attrs
+        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=True, parent=cmpInputAttrGrp)
+        self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', value=False, parent=cmpInputAttrGrp)
+
+        # Declare Output Attrs
+        self.drawDebugOutputAttr = self.createOutput('drawDebug', dataType='Boolean', value=True, parent=cmpOutputAttrGrp)
+
+
+        # =========
+        # Controls
+        # ========
         # Guide Controls
         self.femurCtrl = Control('femur', parent=ctrlCmpGrp, shape="sphere")
         self.kneeCtrl = Control('knee', parent=ctrlCmpGrp, shape="sphere")
@@ -70,7 +80,6 @@ class LegComponentGuide(Component):
                    }
 
         self.loadData(data)
-
 
     # =============
     # Data Methods
@@ -183,25 +192,9 @@ class LegComponent(Component):
         Profiler.getInstance().push("Construct Leg Component:" + name)
         super(LegComponent, self).__init__(name, parent)
 
-        # Declare Inputs Xfos
-        self.legPelvisInput = self.addInput('pelvisInput', dataType='Xfo')
-
-        # Declare Output Xfos
-        self.femurOutput = self.addOutput('femur', dataType='Xfo')
-        self.shinOutput = self.addOutput('shin', dataType='Xfo')
-        self.legEndXfoOutput = self.addOutput('legEndXfo', dataType='Xfo')
-        self.legEndPosOutput = self.addOutput('legEndPos', dataType='Xfo')
-
-        # Declare Input Attrs
-        self.debugInput = self.addInput('debug', dataType='Boolean')
-        self.rightSideInput = self.addInput('rightSide', dataType='Boolean')
-
-        # Declare Output Attrs
-        self.debugOutput = self.addOutput('debug', dataType='Boolean')
-
-        # =========
-        # Controls
-        # =========
+        # ================
+        # Setup Hierarchy
+        # ================
         controlsLayer = self.getOrCreateLayer('controls')
         ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
 
@@ -212,6 +205,29 @@ class LegComponent(Component):
         outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
         cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
 
+
+        # ===========
+        # Declare IO
+        # ===========
+        # Declare Inputs Xfos
+        self.legPelvisInputTgt = self.createInput('pelvisInput', dataType='Xfo', parent=inputHrcGrp)
+
+        # Declare Output Xfos
+        self.femurOutputTgt = self.createOutput('femur', dataType='Xfo', parent=outputHrcGrp)
+        self.shinOutputTgt = self.createOutput('shin', dataType='Xfo', parent=outputHrcGrp)
+        self.legEndXfoOutputTgt = self.createOutput('legEndXfo', dataType='Xfo', parent=outputHrcGrp)
+
+        # Declare Input Attrs
+        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=True, parent=cmpInputAttrGrp)
+        self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', value=False, parent=cmpInputAttrGrp)
+
+        # Declare Output Attrs
+        self.drawDebugOutputAttr = self.createOutput('drawDebug', dataType='Boolean', value=True, parent=cmpOutputAttrGrp)
+
+
+        # =========
+        # Controls
+        # =========
         # Femur
         self.femurFKCtrlSpace = CtrlSpace('femurFK', parent=ctrlCmpGrp)
         self.femurFKCtrl = Control('femurFK', parent=self.femurFKCtrlSpace, shape="cube")
@@ -228,22 +244,17 @@ class LegComponent(Component):
 
 
         # Add Component Params to IK control
-        legSettingsAttrGrp = AttributeGroup("DisplayInfo_LegSettings",
-            parent=self.legIKCtrl)
-        legDebugInputAttr = BoolAttribute('debug', value=True,
-            parent=legSettingsAttrGrp)
-        self.legBone1LenInputAttr = FloatAttribute('bone1Len', value=1.0,
-            parent=legSettingsAttrGrp)
-        self.legBone2LenInputAttr = FloatAttribute('bone2Len', value=1.0,
-            parent=legSettingsAttrGrp)
-        legFkikInputAttr = FloatAttribute('fkik', value=1.0, minValue=0.0,
-            maxValue=1.0, parent=legSettingsAttrGrp)
-        legSoftIKInputAttr = BoolAttribute('softIK', value=True)
-        legSoftDistInputAttr = FloatAttribute('softDist', value=0.0,
-            minValue=0.0, parent=legSettingsAttrGrp)
-        legStretchInputAttr = BoolAttribute('stretch', value=True)
-        legStretchBlendInputAttr = FloatAttribute('stretchBlend', value=0.0,
-            minValue=0.0, maxValue=1.0, parent=legSettingsAttrGrp)
+        legSettingsAttrGrp = AttributeGroup("DisplayInfo_LegSettings", parent=self.legIKCtrl)
+        legDrawDebugInputAttr = BoolAttribute('drawDebug', value=True, parent=legSettingsAttrGrp)
+        self.legBone0LenInputAttr = FloatAttribute('bone0Len', value=1.0, parent=legSettingsAttrGrp)
+        self.legBone1LenInputAttr = FloatAttribute('bone1Len', value=1.0, parent=legSettingsAttrGrp)
+        legIKBlendInputAttr = FloatAttribute('ikblend', value=1.0, minValue=0.0, maxValue=1.0, parent=legSettingsAttrGrp)
+        legSoftIKInputAttr = BoolAttribute('softIK', value=True, parent=legSettingsAttrGrp)
+        legSoftDistInputAttr = FloatAttribute('softDist', value=0.0, minValue=0.0, parent=legSettingsAttrGrp)
+        legStretchInputAttr = BoolAttribute('stretch', value=True, parent=legSettingsAttrGrp)
+        legStretchBlendInputAttr = FloatAttribute('stretchBlend', value=0.0, minValue=0.0, maxValue=1.0, parent=legSettingsAttrGrp)
+
+        self.drawDebugInputAttr.connect(legDrawDebugInputAttr)
 
         # UpV
         self.legUpVCtrlSpace = CtrlSpace('UpV', parent=ctrlCmpGrp)
@@ -267,41 +278,6 @@ class LegComponent(Component):
         ankleDef.setComponent(self)
 
 
-        # =====================
-        # Create Component I/O
-        # =====================
-        # Setup component Xfo I/O's
-        self.legPelvisInputTgt = Locator('pelvisInput', parent=inputHrcGrp)
-
-        self.femurOutputTgt = Locator('femur', parent=outputHrcGrp)
-        self.shinOutputTgt = Locator('shin', parent=outputHrcGrp)
-        self.legEndXfoOutputTgt = Locator('legEndXfo', parent=outputHrcGrp)
-        self.legEndPosOutputTgt = Locator('legEndPos', parent=outputHrcGrp)
-
-        # Set IO Targets
-        self.legPelvisInput.setTarget(self.legPelvisInputTgt)
-
-        self.femurOutput.setTarget(self.femurOutputTgt)
-        self.shinOutput.setTarget(self.shinOutputTgt)
-        self.legEndXfoOutput.setTarget(self.legEndXfoOutputTgt)
-        self.legEndPosOutput.setTarget(self.legEndPosOutputTgt)
-
-
-        # Setup component Attribute I/O's
-        debugInputAttr = BoolAttribute('debug', value=True,
-            parent=cmpInputAttrGrp)
-        self.rightSideInputAttr = BoolAttribute('rightSide', value=True,
-            parent=cmpInputAttrGrp)
-
-        debugOutputAttr = BoolAttribute('debug', value=True, parent=cmpOutputAttrGrp)
-
-        # Set IO Targets
-        self.debugInput.setTarget(debugInputAttr)
-        self.rightSideInput.setTarget(self.rightSideInputAttr)
-
-        self.debugOutput.setTarget(debugOutputAttr)
-
-
         # ==============
         # Constrain I/O
         # ==============
@@ -314,80 +290,59 @@ class LegComponent(Component):
         # Constraint outputs
 
 
-        # ==================
-        # Add Component I/O
-        # ==================
-        # Add Xfo I/O's
-        # self.addInput(self.legPelvisInputTgt)
-        # self.addOutput(self.femurOutputTgt)
-        # self.addOutput(self.shinOutputTgt)
-        # self.addOutput(self.legEndXfoOutputTgt)
-        # self.addOutput(self.legEndPosOutputTgt)
-
-        # Add Attribute I/O's
-        # self.addInput(debugInputAttr)
-        # self.addInput(self.legBone1LenInputAttr)
-        # self.addInput(self.legBone2LenInputAttr)
-        # self.addInput(legFkikInputAttr)
-        # self.addInput(legSoftIKInputAttr)
-        # self.addInput(legSoftDistInputAttr)
-        # self.addInput(legStretchInputAttr)
-        # self.addInput(legStretchBlendInputAttr)
-        # self.addInput(self.rightSideInputAttr)
-
-
         # ===============
         # Add Splice Ops
         # ===============
         # Add Splice Op
-        # spliceOp = SpliceOperator("legSpliceOp", "LimbSolver", "KrakenLimbSolver")
-        # self.addOperator(spliceOp)
+        self.spliceOp = SpliceOperator('legSpliceOp', 'TwoBoneIKSolver', 'Kraken')
+        self.addOperator(self.spliceOp)
 
-        # # Add Att Inputs
-        # spliceOp.setInput("debug", debugInputAttr)
-        # spliceOp.setInput("bone1Len", self.legBone1LenInputAttr)
-        # spliceOp.setInput("bone2Len", self.legBone2LenInputAttr)
-        # spliceOp.setInput("fkik", legFkikInputAttr)
-        # spliceOp.setInput("softIK", legSoftIKInputAttr)
-        # spliceOp.setInput("softDist", legSoftDistInputAttr)
-        # spliceOp.setInput("stretch", legStretchInputAttr)
-        # spliceOp.setInput("stretchBlend", legStretchBlendInputAttr)
-        # spliceOp.setInput("rightSide", self.rightSideInputAttr)
+        # Add Att Inputs
+        self.spliceOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.spliceOp.setInput('bone0Len', self.legBone0LenInputAttr)
+        self.spliceOp.setInput('bone1Len', self.legBone1LenInputAttr)
+        self.spliceOp.setInput('ikblend', legIKBlendInputAttr)
+        self.spliceOp.setInput('softIK', legSoftIKInputAttr)
+        self.spliceOp.setInput('softDist', legSoftDistInputAttr)
+        self.spliceOp.setInput('stretch', legStretchInputAttr)
+        self.spliceOp.setInput('stretchBlend', legStretchBlendInputAttr)
+        self.spliceOp.setInput('rightSide', self.rightSideInputAttr)
 
-        # # Add Xfo Inputs
-        # spliceOp.setInput("root", self.legPelvisInputTgt)
-        # spliceOp.setInput("bone1FK", femurFKCtrl)
-        # spliceOp.setInput("bone2FK", shinFKCtrl)
-        # spliceOp.setInput("ikHandle", self.legIKCtrl)
-        # spliceOp.setInput("upV", self.legUpVCtrl)
+        # Add Xfo Inputs
+        self.spliceOp.setInput('root', self.legPelvisInputTgt)
+        self.spliceOp.setInput('bone0FK', self.femurFKCtrl)
+        self.spliceOp.setInput('bone1FK', self.shinFKCtrl)
+        self.spliceOp.setInput('ikHandle', self.legIKCtrl)
+        self.spliceOp.setInput('upV', self.legUpVCtrl)
 
-        # # Add Xfo Outputs
-        # spliceOp.setOutput("bone01Out", self.femurOutputTgt)
-        # spliceOp.setOutput("bone02Out", self.shinOutputTgt)
-        # spliceOp.setOutput("bone03Out", self.legEndXfoOutputTgt)
-        # spliceOp.setOutput("bone03PosOut", self.legEndPosOutputTgt)
+        # Add Xfo Outputs
+        self.spliceOp.setOutput('bone0Out', self.femurOutputTgt)
+        self.spliceOp.setOutput('bone1Out', self.shinOutputTgt)
+        self.spliceOp.setOutput('bone2Out', self.legEndXfoOutputTgt)
 
 
-        # # Add Deformer Splice Op
-        # spliceOp = SpliceOperator("legDeformerSpliceOp", "LimbConstraintSolver", "KrakenLimbSolver")
-        # self.addOperator(spliceOp)
+        # Add Deformer Splice Op
+        self.outputsToDeformersSpliceOp = SpliceOperator('legDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken')
+        self.addOperator(self.outputsToDeformersSpliceOp)
 
-        # # Add Att Inputs
-        # spliceOp.setInput("debug", debugInputAttr)
+        # Add Att Inputs
+        self.outputsToDeformersSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
 
-        # # Add Xfo Inputstrl)
-        # spliceOp.setInput("bone01Constrainer", self.femurOutputTgt)
-        # spliceOp.setInput("bone02Constrainer", self.shinOutputTgt)
-        # spliceOp.setInput("bone03Constrainer", self.legEndXfoOutputTgt)
+        # Add Xfo Inputs
+        self.outputsToDeformersSpliceOp.setInput('constrainers', self.femurOutputTgt)
+        self.outputsToDeformersSpliceOp.setInput('constrainers', self.shinOutputTgt)
+        self.outputsToDeformersSpliceOp.setInput('constrainers', self.legEndXfoOutputTgt)
 
-        # # Add Xfo Outputs
-        # spliceOp.setOutput("bone01Deformer", femurDef)
-        # spliceOp.setOutput("bone02Deformer", shinDef)
-        # spliceOp.setOutput("bone03Deformer", ankleDef)
+        # Add Xfo Outputs
+        self.outputsToDeformersSpliceOp.setOutput('constrainees', femurDef)
+        self.outputsToDeformersSpliceOp.setOutput('constrainees', shinDef)
+        self.outputsToDeformersSpliceOp.setOutput('constrainees', ankleDef)
 
         Profiler.getInstance().pop()
 
-
+    # =============
+    # Data Methods
+    # =============
     def loadData(self, data=None):
 
         self.setName(data.get('name', 'leg'))
@@ -419,17 +374,18 @@ class LegComponent(Component):
         self.legUpVCtrl.xfo = data['upVXfo']
 
         self.rightSideInputAttr.setValue(self.getLocation() is 'R')
+        self.legBone0LenInputAttr.setMin(0.0)
+        self.legBone0LenInputAttr.setMax(data['femurLen'] * 3.0)
+        self.legBone0LenInputAttr.setValue(data['femurLen'])
         self.legBone1LenInputAttr.setMin(0.0)
-        self.legBone1LenInputAttr.setMax(data['femurLen'] * 3.0)
-        self.legBone1LenInputAttr.setValue(data['femurLen'])
-        self.legBone2LenInputAttr.setMin(0.0)
-        self.legBone2LenInputAttr.setMax(data['shinLen'] * 3.0)
-        self.legBone2LenInputAttr.setValue(data['shinLen'])
+        self.legBone1LenInputAttr.setMax(data['shinLen'] * 3.0)
+        self.legBone1LenInputAttr.setValue(data['shinLen'])
 
         self.legPelvisInputTgt.xfo = data['femurXfo']
 
-        self.legEndXfoOutputTgt.xfo = data['ankleXfo']
-        self.legEndPosOutputTgt.xfo.tr = data['ankleXfo'].tr
+        self.spliceOp.evaluate()
+        self.outputsToDeformersSpliceOp.evaluate()
+        # self.legEndXfoOutputTgt.xfo = data['ankleXfo']
 
 
 from kraken.core.kraken_system import KrakenSystem

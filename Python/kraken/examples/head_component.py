@@ -26,22 +26,9 @@ class HeadComponentGuide(Component):
     def __init__(self, name='head', parent=None, data=None):
         super(HeadComponentGuide, self).__init__(name, parent)
 
-        # Declare Inputs Xfos
-        self.headBaseInput = self.addInput('headBase', dataType='Xfo')
-
-        # Declare Output Xfos
-        self.headOutput = self.addOutput('head', dataType='Xfo')
-        self.jawOutput = self.addOutput('jaw', dataType='Xfo')
-        self.eyeLOutput = self.addOutput('eyeL', dataType='Xfo')
-        self.eyeROutput = self.addOutput('eyeR', dataType='Xfo')
-
-        # Declare Input Attrs
-
-        # Declare Output Attrs
-
-        # =========
-        # Controls
-        # =========
+        # ================
+        # Setup Hierarchy
+        # ================
         controlsLayer = self.getOrCreateLayer('controls')
         ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
 
@@ -52,6 +39,27 @@ class HeadComponentGuide(Component):
         outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
         cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
 
+
+        # ===========
+        # Declare IO
+        # ===========
+        # Declare Inputs Xfos
+        self.headBaseInputTgt = self.createInput('headBase', dataType='Xfo', parent=inputHrcGrp)
+
+        # Declare Output Xfos
+        self.headOutputTgt = self.createOutput('head', dataType='Xfo', parent=outputHrcGrp)
+        self.jawOutputTgt = self.createOutput('jaw', dataType='Xfo', parent=outputHrcGrp)
+        self.eyeLOutputTgt = self.createOutput('eyeL', dataType='Xfo', parent=outputHrcGrp)
+        self.eyeROutputTgt = self.createOutput('eyeR', dataType='Xfo', parent=outputHrcGrp)
+
+        # Declare Input Attrs
+        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', parent=cmpInputAttrGrp)
+
+        # Declare Output Attrs
+
+        # =========
+        # Controls
+        # =========
         # Guide Controls
         self.headCtrl = Control('head', parent=ctrlCmpGrp, shape="cube")
         self.headEndCtrl = Control('headEnd', parent=ctrlCmpGrp, shape="sphere")
@@ -152,23 +160,9 @@ class HeadComponent(Component):
         Profiler.getInstance().push("Construct Head Component:" + name)
         super(HeadComponent, self).__init__(name, parent)
 
-        # Declare Inputs Xfos
-        self.headBaseInput = self.addInput('headBase', dataType='Xfo')
-
-        # Declare Output Xfos
-        self.headOutput = self.addOutput('head', dataType='Xfo')
-        self.jawOutput = self.addOutput('jaw', dataType='Xfo')
-        self.eyeLOutput = self.addOutput('eyeL', dataType='Xfo')
-        self.eyeROutput = self.addOutput('eyeR', dataType='Xfo')
-
-        # Declare Input Attrs
-        self.debugInput = self.addInput('debug', dataType='Boolean')
-
-        # Declare Output Attrs
-
-        # =========
-        # Controls
-        # =========
+        # ================
+        # Setup Hierarchy
+        # ================
         controlsLayer = self.getOrCreateLayer('controls')
         ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
 
@@ -179,9 +173,30 @@ class HeadComponent(Component):
         outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
         cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
 
+
+        # ===========
+        # Declare IO
+        # ===========
+        # Declare Inputs Xfos
+        self.headBaseInputTgt = self.createInput('headBase', dataType='Xfo', parent=inputHrcGrp)
+
+        # Declare Output Xfos
+        self.headOutputTgt = self.createOutput('head', dataType='Xfo', parent=outputHrcGrp)
+        self.jawOutputTgt = self.createOutput('jaw', dataType='Xfo', parent=outputHrcGrp)
+        self.eyeLOutputTgt = self.createOutput('eyeL', dataType='Xfo', parent=outputHrcGrp)
+        self.eyeROutputTgt = self.createOutput('eyeR', dataType='Xfo', parent=outputHrcGrp)
+
+        # Declare Input Attrs
+        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', parent=cmpInputAttrGrp)
+
+        # Declare Output Attrs
+
+
+        # =========
+        # Controls
+        # =========
         # Head
         self.headCtrlSpace = CtrlSpace('head', parent=ctrlCmpGrp)
-
         self.headCtrl = Control('head', parent=self.headCtrlSpace, shape="circle")
         self.headCtrl.rotatePoints(0, 0, 90)
         self.headCtrl.scalePoints(Vec3(3, 3, 3))
@@ -189,22 +204,18 @@ class HeadComponent(Component):
 
         # Eye Left
         self.eyeLeftCtrlSpace = CtrlSpace('eyeLeft', parent=self.headCtrl)
-
         self.eyeLeftCtrl = Control('eyeLeft', parent=self.eyeLeftCtrlSpace, shape="sphere")
         self.eyeLeftCtrl.scalePoints(Vec3(0.5, 0.5, 0.5))
         self.eyeLeftCtrl.setColor("blueMedium")
 
         # Eye Right
         self.eyeRightCtrlSpace = CtrlSpace('eyeRight', parent=self.headCtrl)
-
-
         self.eyeRightCtrl = Control('eyeRight', parent=self.eyeRightCtrlSpace, shape="sphere")
         self.eyeRightCtrl.scalePoints(Vec3(0.5, 0.5, 0.5))
         self.eyeRightCtrl.setColor("blueMedium")
 
         # Jaw
         self.jawCtrlSpace = CtrlSpace('jawCtrlSpace', parent=self.headCtrl)
-
         self.jawCtrl = Control('jaw', parent=self.jawCtrlSpace, shape="cube")
         self.jawCtrl.alignOnYAxis(negative=True)
         self.jawCtrl.alignOnZAxis()
@@ -230,32 +241,6 @@ class HeadComponent(Component):
 
         eyeRightDef = Joint('eyeRight', parent=defCmpGrp)
         eyeRightDef.setComponent(self)
-
-
-        # =====================
-        # Create Component I/O
-        # =====================
-        # Setup component Xfo I/O's
-        self.headBaseInputTgt = Locator('headBase', parent=inputHrcGrp)
-
-        self.headOutputTgt = Locator('head', parent=outputHrcGrp)
-        self.jawOutputTgt = Locator('jaw', parent=outputHrcGrp)
-        self.eyeLOutputTgt = Locator('eyeL', parent=outputHrcGrp)
-        self.eyeROutputTgt = Locator('eyeR', parent=outputHrcGrp)
-
-        # Set IO Targets
-        self.headBaseInput.setTarget(self.headBaseInputTgt)
-
-        self.headOutput.setTarget(self.headOutputTgt)
-        self.jawOutput.setTarget(self.jawOutputTgt)
-        self.eyeLOutput.setTarget(self.eyeLOutputTgt)
-        self.eyeROutput.setTarget(self.eyeROutputTgt)
-
-        # Setup componnent Attribute I/O's
-        debugInputAttr = BoolAttribute('debug', value=True, parent=cmpInputAttrGrp)
-
-        # Set IO Targets
-        self.debugInput.setTarget(debugInputAttr)
 
 
         # ==============
@@ -301,30 +286,30 @@ class HeadComponent(Component):
         # self.addOutput(self.eyeROutputTgt)
 
         # Add Attribute I/O's
-        # self.addInput(debugInputAttr)
+        # self.addInput(self.drawDebugInputAttr)
 
 
         # ===============
         # Add Splice Ops
         # ===============
         # Add Deformer Splice Op
-        # spliceOp = SpliceOperator("headDeformerSpliceOp", "HeadConstraintSolver", "KrakenHeadConstraintSolver")
+        # spliceOp = SpliceOperator('headDeformerSpliceOp', 'HeadConstraintSolver', 'KrakenHeadConstraintSolver')
         # self.addOperator(spliceOp)
 
         # # Add Att Inputs
-        # spliceOp.setInput("debug", debugInputAttr)
+        # spliceOp.setInput('drawDebug', self.drawDebugInputAttr)
 
         # # Add Xfo Inputstrl)
-        # spliceOp.setInput("headConstrainer", headOutput)
-        # spliceOp.setInput("jawConstrainer", jawOutput)
-        # spliceOp.setInput("eyeLeftConstrainer", eyeLOutput)
-        # spliceOp.setInput("eyeRightConstrainer", eyeROutput)
+        # spliceOp.setInput('headConstrainer', self.headOutputTgt)
+        # spliceOp.setInput('jawConstrainer', self.jawOutputTgt)
+        # spliceOp.setInput('eyeLeftConstrainer', self.eyeLOutputTgt)
+        # spliceOp.setInput('eyeRightConstrainer', self.eyeROutputTgt)
 
         # # Add Xfo Outputs
-        # spliceOp.setOutput("headDeformer", headDef)
-        # spliceOp.setOutput("jawDeformer", jawDef)
-        # spliceOp.setOutput("eyeLeftDeformer", eyeLeftDef)
-        # spliceOp.setOutput("eyeRightDeformer", eyeRightDef)
+        # spliceOp.setOutput('headDeformer', headDef)
+        # spliceOp.setOutput('jawDeformer', jawDef)
+        # spliceOp.setOutput('eyeLeftDeformer', eyeLeftDef)
+        # spliceOp.setOutput('eyeRightDeformer', eyeRightDef)
 
         Profiler.getInstance().pop()
 

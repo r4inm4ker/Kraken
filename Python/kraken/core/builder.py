@@ -369,6 +369,9 @@ class Builder(object):
 
         """
 
+        if componentInput.isConnected() is False:
+            return False
+
         connection = componentInput.getConnection()
         connectionTarget = connection.getTarget()
         inputTarget = componentInput.getTarget()

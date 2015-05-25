@@ -30,22 +30,9 @@ class ArmComponentGuide(Component):
     def __init__(self, name='armGuide', parent=None, data=None):
         super(ArmComponentGuide, self).__init__(name, parent)
 
-        # Declare Inputs Xfos
-        self.clavicleEndInput = self.addInput('clavicleEnd', dataType='Xfo')
-
-        # Declare Output Xfos
-        self.bicepOutput = self.addOutput('bicep', dataType='Xfo')
-        self.forearmOutput = self.addOutput('forearm', dataType='Xfo')
-        self.armEndXfoOutput = self.addOutput('armEndXfo', dataType='Xfo')
-        self.armEndPosOutput = self.addOutput('armEndPos', dataType='Xfo')
-
-        # Declare Input Attrs
-        self.bicepFKCtrlSizeInput = self.addInput('bicepFKCtrlSize', dataType='Float')
-        self.forearmFKCtrlSizeInput = self.addInput('forearmFKCtrlSize', dataType='Float')
-
-        # =========
-        # Controls
-        # =========
+        # ================
+        # Setup Hierarchy
+        # ================
         controlsLayer = self.getOrCreateLayer('controls')
         ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
 
@@ -56,6 +43,29 @@ class ArmComponentGuide(Component):
         outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
         cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
 
+        # ===========
+        # Declare IO
+        # ===========
+        # Declare Inputs Xfos
+        self.clavicleEndInputTgt = self.createInput('clavicleEnd', dataType='Xfo', parent=inputHrcGrp)
+
+        # Declare Output Xfos
+        self.bicepOutputTgt = self.createOutput('bicep', dataType='Xfo', parent=outputHrcGrp)
+        self.forearmOutputTgt = self.createOutput('forearm', dataType='Xfo', parent=outputHrcGrp)
+        self.armEndXfoOutputTgt = self.createOutput('armEndXfo', dataType='Xfo', parent=outputHrcGrp)
+
+        # Declare Input Attrs
+        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', parent=cmpInputAttrGrp)
+        self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', parent=cmpInputAttrGrp)
+        self.bicepFKCtrlSizeInputAttr = self.createInput('bicepFKCtrlSize', dataType='Float', parent=cmpInputAttrGrp)
+        self.forearmFKCtrlSizeInputAttr = self.createInput('forearmFKCtrlSize', dataType='Float', parent=cmpInputAttrGrp)
+
+        # Declare Output Attrs
+        self.debugOutputAttr = self.createOutput('drawDebug', dataType='Boolean', parent=cmpOutputAttrGrp)
+
+        # =========
+        # Controls
+        # =========
         # Guide Controls
         self.bicepCtrl = Control('bicepFK', parent=ctrlCmpGrp, shape="sphere")
         self.bicepCtrl.setColor('blue')
@@ -63,14 +73,6 @@ class ArmComponentGuide(Component):
         self.forearmCtrl.setColor('blue')
         self.wristCtrl = Control('wristFK', parent=ctrlCmpGrp, shape="sphere")
         self.wristCtrl.setColor('blue')
-
-        # Guide Attributes
-        self.bicepFKCtrlSizeInputAttr = FloatAttribute('bicepFKCtrlSize', value=2.0, parent=cmpInputAttrGrp)
-        self.forearmFKCtrlSizeInputAttr = FloatAttribute('forearmFKCtrlSize', value=2.0, parent=cmpInputAttrGrp)
-
-        # Set input attribute targets
-        self.bicepFKCtrlSizeInput.setTarget(self.bicepFKCtrlSizeInputAttr)
-        self.forearmFKCtrlSizeInput.setTarget(self.forearmFKCtrlSizeInputAttr)
 
         if data is None:
             data = {
@@ -203,26 +205,9 @@ class ArmComponent(Component):
         Profiler.getInstance().push("Construct Arm Component:" + name)
         super(ArmComponent, self).__init__(name, parent)
 
-        # Declare Inputs Xfos
-        self.clavicleEndInput = self.addInput('clavicleEnd', dataType='Xfo')
-
-        # Declare Output Xfos
-        self.bicepOutput = self.addOutput('bicep', dataType='Xfo')
-        self.forearmOutput = self.addOutput('forearm', dataType='Xfo')
-        self.armEndXfoOutput = self.addOutput('armEndXfo', dataType='Xfo')
-        self.armEndPosOutput = self.addOutput('armEndPos', dataType='Xfo')
-
-        # Declare Input Attrs
-        self.debugInput = self.addInput('debug', dataType='Boolean')
-        self.rightSideInput = self.addInput('rightSide', dataType='Boolean')
-
-        # Declare Output Attrs
-        self.debugOutput = self.addOutput('debug', dataType='Boolean')
-
-
-        # =========
-        # Controls
-        # =========
+        # ================
+        # Setup Hierarchy
+        # ================
         controlsLayer = self.getOrCreateLayer('controls')
         ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
 
@@ -233,6 +218,28 @@ class ArmComponent(Component):
         outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
         cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
 
+        # ===========
+        # Declare IO
+        # ===========
+        # Declare Inputs Xfos
+        self.clavicleEndInputTgt = self.createInput('clavicleEnd', dataType='Xfo', parent=inputHrcGrp)
+
+        # Declare Output Xfos
+        self.bicepOutputTgt = self.createOutput('bicep', dataType='Xfo', parent=outputHrcGrp)
+        self.forearmOutputTgt = self.createOutput('forearm', dataType='Xfo', parent=outputHrcGrp)
+        self.armEndXfoOutputTgt = self.createOutput('armEndXfo', dataType='Xfo', parent=outputHrcGrp)
+
+        # Declare Input Attrs
+        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=True, parent=cmpInputAttrGrp)
+        self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', parent=cmpInputAttrGrp)
+
+        # Declare Output Attrs
+        self.debugOutputAttr = self.createOutput('drawDebug', dataType='Boolean', parent=cmpOutputAttrGrp)
+
+
+        # =========
+        # Controls
+        # =========
         # Bicep
         self.bicepFKCtrlSpace = CtrlSpace('bicepFK', parent=ctrlCmpGrp)
 
@@ -251,14 +258,17 @@ class ArmComponent(Component):
 
         # Add Component Params to IK control
         armSettingsAttrGrp = AttributeGroup("DisplayInfo_ArmSettings", parent=self.armIKCtrl)
-        armDebugInputAttr = BoolAttribute('debug', value=True, parent=armSettingsAttrGrp)
-        self.armBone1LenInputAttr = FloatAttribute('bone1Len', value=0.0, parent=armSettingsAttrGrp)
-        self.armBone2LenInputAttr = FloatAttribute('bone2Len', value=0.0, parent=armSettingsAttrGrp)
-        armFkikInputAttr = FloatAttribute('fkik', value=0.0, minValue=0.0, maxValue=1.0, parent=armSettingsAttrGrp)
+        armDebugInputAttr = BoolAttribute('drawDebug', value=True, parent=armSettingsAttrGrp)
+        self.armBone0LenInputAttr = FloatAttribute('bone1Len', value=0.0, parent=armSettingsAttrGrp)
+        self.armBone1LenInputAttr = FloatAttribute('bone2Len', value=0.0, parent=armSettingsAttrGrp)
+        armIKBlendInputAttr = FloatAttribute('fkik', value=0.0, minValue=0.0, maxValue=1.0, parent=armSettingsAttrGrp)
         armSoftIKInputAttr = BoolAttribute('softIK', value=True, parent=armSettingsAttrGrp)
         armSoftDistInputAttr = FloatAttribute('softDist', value=0.0, minValue=0.0, parent=armSettingsAttrGrp)
         armStretchInputAttr = BoolAttribute('stretch', value=True, parent=armSettingsAttrGrp)
         armStretchBlendInputAttr = FloatAttribute('stretchBlend', value=0.0, minValue=0.0, maxValue=1.0, parent=armSettingsAttrGrp)
+
+
+        self.drawDebugInputAttr.connect(armDebugInputAttr)
 
         # UpV
         self.armUpVCtrlSpace = CtrlSpace('UpV', parent=ctrlCmpGrp)
@@ -284,97 +294,66 @@ class ArmComponent(Component):
         wristDef.setComponent(self)
 
 
-        # =====================
-        # Create Component I/O
-        # =====================
-        # Setup component Xfo I/O's
-        clavicleEndInputTgt = Locator('clavicleEnd', parent=inputHrcGrp)
-
-        self.clavicleEndInput.setTarget(clavicleEndInputTgt)
-
-        self.bicepOutputTgt = Locator('bicep', parent=outputHrcGrp)
-        self.forearmOutputTgt = Locator('forearm', parent=outputHrcGrp)
-        self.armEndXfoOutputTgt = Locator('armEndXfo', parent=outputHrcGrp)
-        self.armEndPosOutputTgt = Locator('armEndPos', parent=outputHrcGrp)
-
-        self.bicepOutput.setTarget(self.bicepOutputTgt)
-        self.forearmOutput.setTarget(self.forearmOutputTgt)
-        self.armEndXfoOutput.setTarget(self.armEndXfoOutputTgt)
-        self.armEndPosOutput.setTarget(self.armEndPosOutputTgt)
-
-        # Setup component Attribute I/O's
-        debugInputAttr = BoolAttribute('debug', value=True, parent=cmpInputAttrGrp)
-        self.rightSideInputAttr = BoolAttribute('rightSide', value=True, parent=cmpInputAttrGrp)
-
-        debugOutputAttr = BoolAttribute('debug', value=True, parent=cmpOutputAttrGrp)
-
-        # Set IO Targets
-        self.debugInput.setTarget(debugInputAttr)
-        self.rightSideInput.setTarget(self.rightSideInputAttr)
-
-        self.debugOutput.setTarget(debugOutputAttr)
-
-
         # ==============
         # Constrain I/O
         # ==============
         # Constraint inputs
-        armRootInputConstraint = PoseConstraint('_'.join([self.armIKCtrl.getName(), 'To', clavicleEndInputTgt.getName()]))
+        armRootInputConstraint = PoseConstraint('_'.join([self.armIKCtrl.getName(), 'To', self.clavicleEndInputTgt.getName()]))
         armRootInputConstraint.setMaintainOffset(True)
-        armRootInputConstraint.addConstrainer(clavicleEndInputTgt)
+        armRootInputConstraint.addConstrainer(self.clavicleEndInputTgt)
         self.bicepFKCtrlSpace.addConstraint(armRootInputConstraint)
 
         # Constraint outputs
 
-
         # ===============
         # Add Splice Ops
         # ===============
-        # Add Solver Splice Op
-        # spliceOp = SpliceOperator("armSpliceOp", "LimbSolver", "KrakenLimbSolver")
-        # self.addOperator(spliceOp)
+        # Add Splice Op
+        self.spliceOp = SpliceOperator('armSpliceOp', 'TwoBoneIKSolver', 'Kraken')
+        self.addOperator(self.spliceOp)
 
-        # # Add Att Inputs
-        # spliceOp.setInput("debug", debugInputAttr)
-        # spliceOp.setInput("bone1Len", self.armBone1LenInputAttr)
-        # spliceOp.setInput("bone2Len", self.armBone2LenInputAttr)
-        # spliceOp.setInput("fkik", armFkikInputAttr)
-        # spliceOp.setInput("softIK", softIKInputAttr)
-        # spliceOp.setInput("softDist", armSoftDistInputAttr)
-        # spliceOp.setInput("stretch", armStretchInputAttr)
-        # spliceOp.setInput("stretchBlend", armStretchBlendInputAttr)
-        # spliceOp.setInput("rightSide", self.rightSideInputAttr)
+        # Add Att Inputs
+        self.spliceOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.spliceOp.setInput('bone0Len', self.armBone0LenInputAttr)
+        self.spliceOp.setInput('bone1Len', self.armBone1LenInputAttr)
+        self.spliceOp.setInput('ikblend', armIKBlendInputAttr)
+        self.spliceOp.setInput('softIK', armSoftIKInputAttr)
+        self.spliceOp.setInput('softDist', armSoftDistInputAttr)
+        self.spliceOp.setInput('stretch', armStretchInputAttr)
+        self.spliceOp.setInput('stretchBlend', armStretchBlendInputAttr)
+        self.spliceOp.setInput('rightSide', self.rightSideInputAttr)
 
-        # # Add Xfo Inputs
-        # spliceOp.setInput("root", clavicleEndInputTgt)
-        # spliceOp.setInput("bone1FK", self.bicepFKCtrl)
-        # spliceOp.setInput("bone2FK", forearmFKCtrl)
-        # spliceOp.setInput("ikHandle", armIKCtrl)
-        # spliceOp.setInput("upV", self.armUpVCtrl)
+        # Add Xfo Inputs
+        self.spliceOp.setInput('root', self.clavicleEndInputTgt)
+        self.spliceOp.setInput('bone0FK', self.bicepFKCtrl)
+        self.spliceOp.setInput('bone1FK', self.forearmFKCtrl)
+        self.spliceOp.setInput('ikHandle', self.armIKCtrl)
+        self.spliceOp.setInput('upV', self.armUpVCtrl)
 
-        # # Add Xfo Outputs
-        # spliceOp.setOutput("bone01Out", self.bicepOutputTgt)
-        # spliceOp.setOutput("bone02Out", self.forearmOutputTgt)
-        # spliceOp.setOutput("bone03Out", self.armEndXfoOutputTgt)
-        # spliceOp.setOutput("bone03PosOut", self.armEndPosOutputTgt)
+        # Add Xfo Outputs
+        self.spliceOp.setOutput('bone0Out', self.bicepOutputTgt)
+        self.spliceOp.setOutput('bone1Out', self.forearmOutputTgt)
+        self.spliceOp.setOutput('bone2Out', self.armEndXfoOutputTgt)
 
 
-        # # Add Deformer Splice Op
-        # spliceOp = SpliceOperator("armDeformerSpliceOp", "LimbConstraintSolver", "KrakenLimbSolver")
-        # self.addOperator(spliceOp)
+        # Add Deformer Splice Op
+        self.outputsToDeformersSpliceOp = SpliceOperator('armDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken')
+        self.addOperator(self.outputsToDeformersSpliceOp)
 
-        # # Add Att Inputs
-        # spliceOp.setInput("debug", debugInputAttr)
+        # Add Att Inputs
+        self.outputsToDeformersSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
 
-        # # Add Xfo Inputs
-        # spliceOp.setInput("bone01Constrainer", self.bicepOutputTgt)
-        # spliceOp.setInput("bone02Constrainer", self.forearmOutputTgt)
-        # spliceOp.setInput("bone03Constrainer", self.armEndXfoOutputTgt)
+        # Add Xfo Inputs
+        self.outputsToDeformersSpliceOp.setInput('constrainers', self.bicepOutputTgt)
+        self.outputsToDeformersSpliceOp.setInput('constrainers', self.forearmOutputTgt)
+        self.outputsToDeformersSpliceOp.setInput('constrainers', self.armEndXfoOutputTgt)
 
-        # # Add Xfo Outputs
-        # spliceOp.setOutput("bone01Deformer", bicepDef)
-        # spliceOp.setOutput("bone02Deformer", forearmDef)
-        # spliceOp.setOutput("bone03Deformer", wristDef)
+        # Add Xfo Outputs
+        self.outputsToDeformersSpliceOp.setOutput('constrainees', bicepDef)
+        self.outputsToDeformersSpliceOp.setOutput('constrainees', forearmDef)
+        self.outputsToDeformersSpliceOp.setOutput('constrainees', wristDef)
+
+
 
 
         Profiler.getInstance().pop()
@@ -385,6 +364,8 @@ class ArmComponent(Component):
         self.setName(data.get('name', 'arm'))
         location = data.get('location', 'M')
         self.setLocation(location)
+
+        self.clavicleEndInputTgt.xfo.tr = data['bicepXfo'].tr
 
         self.bicepFKCtrlSpace.xfo = data['bicepXfo']
         self.bicepFKCtrl.xfo = data['bicepXfo']
@@ -409,16 +390,15 @@ class ArmComponent(Component):
         self.armUpVCtrl.xfo = data['upVXfo']
 
         self.rightSideInputAttr.setValue(self.getLocation() is 'R')
+        self.armBone0LenInputAttr.setMin(0.0)
+        self.armBone0LenInputAttr.setMax(data['bicepLen'] * 3.0)
+        self.armBone0LenInputAttr.setValue(data['bicepLen'])
         self.armBone1LenInputAttr.setMin(0.0)
-        self.armBone1LenInputAttr.setMax(data['bicepLen'] * 3.0)
-        self.armBone1LenInputAttr.setValue(data['bicepLen'])
-        self.armBone2LenInputAttr.setMin(0.0)
-        self.armBone2LenInputAttr.setMax(data['forearmLen'] * 3.0)
-        self.armBone2LenInputAttr.setValue(data['forearmLen'])
+        self.armBone1LenInputAttr.setMax(data['forearmLen'] * 3.0)
+        self.armBone1LenInputAttr.setValue(data['forearmLen'])
 
-        self.armEndXfoOutputTgt.xfo = data['armEndXfo']
-        self.armEndPosOutputTgt.xfo = data['armEndXfo']
-
+        self.spliceOp.evaluate()
+        self.outputsToDeformersSpliceOp.evaluate()
 
 from kraken.core.kraken_system import KrakenSystem
 ks = KrakenSystem.getInstance()

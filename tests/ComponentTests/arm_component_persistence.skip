@@ -23,9 +23,15 @@ L_Arm.deformers.arm.bicep
 L_Arm.deformers.arm.forearm
 L_Arm.deformers.arm.wrist
 Traceback (most recent call last):
-  File "ComponentTests\arm_component_persistence.py", line 39, in <module>
+  File "tests/runTests.py", line 140, in <module>
+    runTest(filepath, update)
+  File "tests/runTests.py", line 116, in runTest
+    runPytonTest( filepath, update )
+  File "tests/runTests.py", line 74, in runPytonTest
+    execfile( filepath, {} )
+  File "d:\Projects\Kraken\tests\ComponentTests\arm_component_persistence.py", line 39, in <module>
     armLeft2 = loader.construct(jsonData1)
-  File "..\Python\kraken\core\io\kraken_loader.py", line 200, in construct
+  File "D:\Projects\Kraken\Python\kraken\core\io\kraken_loader.py", line 200, in construct
     item.jsonDecode(self, jsonData)
 AttributeError: 'SceneItem' object has no attribute 'jsonDecode'
 

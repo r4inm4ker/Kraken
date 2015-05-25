@@ -141,22 +141,9 @@ class InsectLegComponent(Component):
         Profiler.getInstance().push("Construct InsectLeg Component:" + name)
         super(InsectLegComponent, self).__init__(name, parent)
 
-        # Declare Inputs Xfos
-        self.rootInput = self.addInput('rootInput', dataType='Xfo')
-
-        # Declare Output Xfos
-        self.boneOutputs = self.addOutput('boneOutputs', dataType='Xfo[]')
-        self.legEndXfoOutput = self.addOutput('legEndXfoOutput', dataType='Xfo')
-        self.legEndPosOutput = self.addOutput('legEndPosOutput', dataType='Xfo')
-
-        # Declare Input Attrs
-        self.debugInput = self.addInput('debug', dataType='Boolean')
-
-        # Declare Output Attrs
-
-        # =========
-        # Controls
-        # =========
+        # ================
+        # Setup Hierarchy
+        # ================
         controlsLayer = self.getOrCreateLayer('controls')
         ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
 
@@ -167,6 +154,29 @@ class InsectLegComponent(Component):
         outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
         cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
 
+
+        # ===========
+        # Declare IO
+        # ===========
+        # Declare Inputs Xfos
+        self.rootInputTgt = self.createInput('rootInput', dataType='Xfo', parent=inputHrcGrp)
+
+        # Declare Output Xfos
+        self.boneOutputs = self.addOutput('boneOutputs', dataType='Xfo[]')
+
+        self.legEndXfoOutputTgt = self.createOutput('legEndXfoOutput', dataType='Xfo', parent=outputHrcGrp)
+        self.legEndPosOutputTgt = self.createOutput('legEndPosOutput', dataType='Xfo', parent=outputHrcGrp)
+
+        # Declare Input Attrs
+        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=True, parent=cmpInputAttrGrp)
+        self.tipBoneLenInputAttr = self.createInput('tipBoneLen', dataType='Float', value=1.0, parent=cmpInputAttrGrp)
+
+        # Declare Output Attrs
+
+
+        # =========
+        # Controls
+        # =========
         # FK
         self.fkCtrlSpaces = []
         self.boneFKCtrls = []
@@ -197,18 +207,19 @@ class InsectLegComponent(Component):
             self.legIKCtrl.translatePoints(Vec3(1.0, 0.0, 0.0))
 
         # Add Component Params to IK control
-        legSettingsAttrGrp = AttributeGroup("DisplayInfo_LegSettings",
-            parent=self.legIKCtrl)
-        legDebugInputAttr = BoolAttribute('debug', value=True,
-            parent=legSettingsAttrGrp)
+        legSettingsAttrGrp = AttributeGroup("DisplayInfo_LegSettings", parent=self.legIKCtrl)
+        legdrawDebugInputAttr = BoolAttribute('drawDebug', value=True, parent=legSettingsAttrGrp)
         legFkikInputAttr = FloatAttribute('fkik', value=1.0, minValue=0.0,
             maxValue=1.0, parent=legSettingsAttrGrp)
 
+        # Connect IO to controls
+        self.drawDebugInputAttr.connect(legdrawDebugInputAttr)
+
         # UpV
         self.legUpVCtrlSpace = CtrlSpace('UpV', parent=ctrlCmpGrp)
-        self.legUpVCtrl = Control('UpV', parent=self.legUpVCtrlSpace,
-            shape="triangle")
+        self.legUpVCtrl = Control('UpV', parent=self.legUpVCtrlSpace, shape="triangle")
         self.legUpVCtrl.alignOnZAxis()
+
 
         # ==========
         # Deformers
@@ -222,33 +233,19 @@ class InsectLegComponent(Component):
             boneDef.setComponent(self)
             self.boneDefs.append(boneDef)
 
+
         # =====================
         # Create Component I/O
         # =====================
         # Setup component Xfo I/O's
-        self.rootInputTgt = Locator('rootInput', parent=inputHrcGrp)
-
         self.boneOutputsTgt = []
         for i in xrange(4):
             boneOutput = Locator('bone' + str(i).zfill(2), parent=outputHrcGrp)
             self.boneOutputsTgt.append(boneOutput)
 
-        self.legEndXfoOutputTgt = Locator('legEndXfo', parent=outputHrcGrp)
-        self.legEndPosOutputTgt = Locator('legEndPos', parent=outputHrcGrp)
-
         # Set IO Targets
-        self.rootInput.setTarget(self.rootInputTgt)
-
         self.boneOutputs.setTarget(self.boneOutputsTgt)
-        self.legEndXfoOutput.setTarget(self.legEndXfoOutputTgt)
-        self.legEndPosOutput.setTarget(self.legEndPosOutputTgt)
 
-        # Setup componnent Attribute I/O's
-        debugInputAttr = BoolAttribute('debug', value=True, parent=cmpInputAttrGrp)
-        self.tipBoneLenInputAttr = FloatAttribute('tipBoneLen', value=1.0, parent=cmpInputAttrGrp)
-
-        # Set IO Targets
-        self.debugInput.setTarget(debugInputAttr)
 
         # ==============
         # Constrain I/O
@@ -259,22 +256,6 @@ class InsectLegComponent(Component):
         legRootInputConstraint.addConstrainer(self.rootInputTgt)
         self.fkCtrlSpaces[0].addConstraint(legRootInputConstraint)
 
-        # ==================
-        # Add Component I/O
-        # ==================
-        # Add Xfo I/O's
-        # self.addInput(self.rootInputTgt)
-
-        # for i in xrange(4):
-        #     self.addOutput(self.boneOutputsTgt[i])
-
-        # self.addOutput(self.legEndXfoOutputTgt)
-        # self.addOutput(self.legEndPosOutputTgt)
-
-        # # Add Attribute I/O's
-        # self.addInput(debugInputAttr)
-        # self.addInput(fkikInputAttr)
-        # self.addInput(self.tipBoneLenInputAttr)
 
         # ===============
         # Add Splice Ops
@@ -284,7 +265,7 @@ class InsectLegComponent(Component):
         self.addOperator(self.NBoneSolverSpliceOp)
 
         # # Add Att Inputs
-        self.NBoneSolverSpliceOp.setInput("debug", debugInputAttr)
+        self.NBoneSolverSpliceOp.setInput("drawDebug", self.drawDebugInputAttr)
         self.NBoneSolverSpliceOp.setInput("ikblend", legFkikInputAttr)
         self.NBoneSolverSpliceOp.setInput("tipBoneLen", self.tipBoneLenInputAttr)
 
@@ -306,7 +287,7 @@ class InsectLegComponent(Component):
         self.addOperator(self.outputsToDeformersSpliceOp)
 
         # Add Att Inputs
-        self.outputsToDeformersSpliceOp.setInput("debug", debugInputAttr)
+        self.outputsToDeformersSpliceOp.setInput("drawDebug", self.drawDebugInputAttr)
 
         # Add Xfo Inputs
         for i in xrange(len(self.boneOutputsTgt)):
