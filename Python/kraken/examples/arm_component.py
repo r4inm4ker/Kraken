@@ -24,54 +24,63 @@ from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
 
 
-class ArmComponentGuide(Component):
-    """Arm Component Guide"""
+class ArmComponent(Component):
+    """Arm Component Base"""
 
-    def __init__(self, name='armGuide', parent=None, data=None):
-        super(ArmComponentGuide, self).__init__(name, parent)
+    def __init__(self, name='arm', parent=None, data=None):
+        super(ArmComponent, self).__init__(name, parent)
 
         # ================
         # Setup Hierarchy
         # ================
-        controlsLayer = self.getOrCreateLayer('controls')
-        ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
+        self.controlsLayer = self.getOrCreateLayer('controls')
+        self.ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=self.controlsLayer)
 
         # IO Hierarchies
-        inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
-        cmpInputAttrGrp = AttributeGroup('inputs', parent=inputHrcGrp)
+        self.inputHrcGrp = HierarchyGroup('inputs', parent=self.ctrlCmpGrp)
+        self.cmpInputAttrGrp = AttributeGroup('inputs', parent=self.inputHrcGrp)
 
-        outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
-        cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
+        self.outputHrcGrp = HierarchyGroup('outputs', parent=self.ctrlCmpGrp)
+        self.cmpOutputAttrGrp = AttributeGroup('outputs', parent=self.outputHrcGrp)
 
         # ===========
         # Declare IO
         # ===========
         # Declare Inputs Xfos
-        self.clavicleEndInputTgt = self.createInput('clavicleEnd', dataType='Xfo', parent=inputHrcGrp)
+        self.clavicleEndInputTgt = self.createInput('clavicleEnd', dataType='Xfo', parent=self.inputHrcGrp)
 
         # Declare Output Xfos
-        self.bicepOutputTgt = self.createOutput('bicep', dataType='Xfo', parent=outputHrcGrp)
-        self.forearmOutputTgt = self.createOutput('forearm', dataType='Xfo', parent=outputHrcGrp)
-        self.armEndXfoOutputTgt = self.createOutput('armEndXfo', dataType='Xfo', parent=outputHrcGrp)
+        self.bicepOutputTgt = self.createOutput('bicep', dataType='Xfo', parent=self.outputHrcGrp)
+        self.forearmOutputTgt = self.createOutput('forearm', dataType='Xfo', parent=self.outputHrcGrp)
+        self.armEndXfoOutputTgt = self.createOutput('armEndXfo', dataType='Xfo', parent=self.outputHrcGrp)
 
         # Declare Input Attrs
-        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', parent=cmpInputAttrGrp)
-        self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', parent=cmpInputAttrGrp)
-        self.bicepFKCtrlSizeInputAttr = self.createInput('bicepFKCtrlSize', dataType='Float', parent=cmpInputAttrGrp)
-        self.forearmFKCtrlSizeInputAttr = self.createInput('forearmFKCtrlSize', dataType='Float', parent=cmpInputAttrGrp)
+        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', parent=self.cmpInputAttrGrp)
+        self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', parent=self.cmpInputAttrGrp)
+        self.bicepFKCtrlSizeInputAttr = self.createInput('bicepFKCtrlSize', dataType='Float', parent=self.cmpInputAttrGrp)
+        self.forearmFKCtrlSizeInputAttr = self.createInput('forearmFKCtrlSize', dataType='Float', parent=self.cmpInputAttrGrp)
 
         # Declare Output Attrs
-        self.debugOutputAttr = self.createOutput('drawDebug', dataType='Boolean', parent=cmpOutputAttrGrp)
+        self.debugOutputAttr = self.createOutput('drawDebug', dataType='Boolean', parent=self.cmpOutputAttrGrp)
+
+
+class ArmComponentGuide(ArmComponent):
+    """Arm Component Guide"""
+
+    def __init__(self, name='armGuide', parent=None, data=None):
+
+        Profiler.getInstance().push("Construct Arm Guide Component:" + name)
+        super(ArmComponentGuide, self).__init__(name, parent)
 
         # =========
         # Controls
         # =========
         # Guide Controls
-        self.bicepCtrl = Control('bicepFK', parent=ctrlCmpGrp, shape="sphere")
+        self.bicepCtrl = Control('bicepFK', parent=self.ctrlCmpGrp, shape="sphere")
         self.bicepCtrl.setColor('blue')
-        self.forearmCtrl = Control('forearmFK', parent=ctrlCmpGrp, shape="sphere")
+        self.forearmCtrl = Control('forearmFK', parent=self.ctrlCmpGrp, shape="sphere")
         self.forearmCtrl.setColor('blue')
-        self.wristCtrl = Control('wristFK', parent=ctrlCmpGrp, shape="sphere")
+        self.wristCtrl = Control('wristFK', parent=self.ctrlCmpGrp, shape="sphere")
         self.wristCtrl.setColor('blue')
 
         if data is None:
@@ -86,6 +95,8 @@ class ArmComponentGuide(Component):
         }
 
         self.loadData(data)
+
+        Profiler.getInstance().pop()
 
 
     # =============
@@ -181,7 +192,7 @@ class ArmComponentGuide(Component):
         upVXfo.tr = upVXfo.transformVector(Vec3(0, 0, 5))
 
         data = {
-            "class":"kraken.examples.arm_component.ArmComponent",
+            "class":"kraken.examples.arm_component.ArmComponentRig",
             "name": self.getName(),
             "location":self.getLocation(),
             "bicepXfo": bicepXfo,
@@ -197,51 +208,20 @@ class ArmComponentGuide(Component):
         return data
 
 
-class ArmComponent(Component):
-    """Arm Component"""
+class ArmComponentRig(ArmComponent):
+    """Arm Component Rig"""
 
     def __init__(self, name='arm', parent=None):
 
-        Profiler.getInstance().push("Construct Arm Component:" + name)
-        super(ArmComponent, self).__init__(name, parent)
-
-        # ================
-        # Setup Hierarchy
-        # ================
-        controlsLayer = self.getOrCreateLayer('controls')
-        ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
-
-        # IO Hierarchies
-        inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
-        cmpInputAttrGrp = AttributeGroup('inputs', parent=inputHrcGrp)
-
-        outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
-        cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
-
-        # ===========
-        # Declare IO
-        # ===========
-        # Declare Inputs Xfos
-        self.clavicleEndInputTgt = self.createInput('clavicleEnd', dataType='Xfo', parent=inputHrcGrp)
-
-        # Declare Output Xfos
-        self.bicepOutputTgt = self.createOutput('bicep', dataType='Xfo', parent=outputHrcGrp)
-        self.forearmOutputTgt = self.createOutput('forearm', dataType='Xfo', parent=outputHrcGrp)
-        self.armEndXfoOutputTgt = self.createOutput('armEndXfo', dataType='Xfo', parent=outputHrcGrp)
-
-        # Declare Input Attrs
-        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=True, parent=cmpInputAttrGrp)
-        self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', parent=cmpInputAttrGrp)
-
-        # Declare Output Attrs
-        self.debugOutputAttr = self.createOutput('drawDebug', dataType='Boolean', parent=cmpOutputAttrGrp)
+        Profiler.getInstance().push("Construct Arm Rig Component:" + name)
+        super(ArmComponentRig, self).__init__(name, parent)
 
 
         # =========
         # Controls
         # =========
         # Bicep
-        self.bicepFKCtrlSpace = CtrlSpace('bicepFK', parent=ctrlCmpGrp)
+        self.bicepFKCtrlSpace = CtrlSpace('bicepFK', parent=self.ctrlCmpGrp)
 
         self.bicepFKCtrl = Control('bicepFK', parent=self.bicepFKCtrlSpace, shape="cube")
         self.bicepFKCtrl.alignOnXAxis()
@@ -253,7 +233,7 @@ class ArmComponent(Component):
         self.forearmFKCtrl.alignOnXAxis()
 
         # Arm IK
-        self.armIKCtrlSpace = CtrlSpace('IK', parent=ctrlCmpGrp)
+        self.armIKCtrlSpace = CtrlSpace('IK', parent=self.ctrlCmpGrp)
         self.armIKCtrl = Control('IK', parent=self.armIKCtrlSpace, shape="pin")
 
         # Add Component Params to IK control
@@ -271,7 +251,7 @@ class ArmComponent(Component):
         self.drawDebugInputAttr.connect(armDebugInputAttr)
 
         # UpV
-        self.armUpVCtrlSpace = CtrlSpace('UpV', parent=ctrlCmpGrp)
+        self.armUpVCtrlSpace = CtrlSpace('UpV', parent=self.ctrlCmpGrp)
 
         self.armUpVCtrl = Control('UpV', parent=self.armUpVCtrlSpace, shape="triangle")
         self.armUpVCtrl.alignOnZAxis()
@@ -353,9 +333,6 @@ class ArmComponent(Component):
         self.outputsToDeformersSpliceOp.setOutput('constrainees', forearmDef)
         self.outputsToDeformersSpliceOp.setOutput('constrainees', wristDef)
 
-
-
-
         Profiler.getInstance().pop()
 
 
@@ -400,7 +377,8 @@ class ArmComponent(Component):
         self.spliceOp.evaluate()
         self.outputsToDeformersSpliceOp.evaluate()
 
+
 from kraken.core.kraken_system import KrakenSystem
 ks = KrakenSystem.getInstance()
 ks.registerComponent(ArmComponentGuide)
-ks.registerComponent(ArmComponent)
+ks.registerComponent(ArmComponentRig)

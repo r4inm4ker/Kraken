@@ -2,7 +2,7 @@
 from kraken import plugins
 from kraken.core.maths import Xfo, Vec3, Quat
 from kraken.core.profiler import Profiler
-from kraken.examples.foot_component import FootComponentGuide, FootComponent
+from kraken.examples.foot_component import FootComponentGuide, FootComponentRig
 from kraken.helpers.utility_methods import logHierarchy
 import json
 
@@ -22,7 +22,7 @@ saveData = footGuide.saveData()
 
 footGuideData = footGuide.getGuideData()
 
-foot = FootComponent()
+foot = FootComponentRig()
 foot.loadData(footGuideData)
 
 builder = plugins.getBuilder()
