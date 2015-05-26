@@ -59,6 +59,7 @@ class InsectLegComponent(Component):
 
         # Declare Input Attrs
         self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=True, parent=self.cmpInputAttrGrp)
+        self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', parent=cmpInputAttrGrp)
         self.tipBoneLenInputAttr = self.createInput('tipBoneLen', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp)
 
         # Declare Output Attrs
@@ -279,6 +280,7 @@ class InsectLegComponentRig(InsectLegComponent):
 
         # # Add Att Inputs
         self.NBoneSolverSpliceOp.setInput("drawDebug", self.drawDebugInputAttr)
+        self.NBoneSolverSpliceOp.setInput("rigScale", self.rigScaleInputAttr)
         self.NBoneSolverSpliceOp.setInput("ikblend", legFkikInputAttr)
         self.NBoneSolverSpliceOp.setInput("tipBoneLen", self.tipBoneLenInputAttr)
 
@@ -301,6 +303,7 @@ class InsectLegComponentRig(InsectLegComponent):
 
         # Add Att Inputs
         self.outputsToDeformersSpliceOp.setInput("drawDebug", self.drawDebugInputAttr)
+        self.outputsToDeformersSpliceOp.setInput("rigScale", self.rigScaleInputAttr)
 
         # Add Xfo Inputs
         for i in xrange(len(self.boneOutputsTgt)):

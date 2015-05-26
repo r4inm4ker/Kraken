@@ -54,6 +54,7 @@ class HeadComponent(Component):
 
         # Declare Input Attrs
         self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', parent=self.cmpInputAttrGrp)
+        self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', parent=cmpInputAttrGrp)
 
         # Declare Output Attrs
 
@@ -279,6 +280,7 @@ class HeadComponentRig(HeadComponent):
 
         # # Add Att Inputs
         # spliceOp.setInput('drawDebug', self.drawDebugInputAttr)
+        # spliceOp.setInput('rigScale', self.rigScaleInputAttr)
 
         # # Add Xfo Inputstrl)
         # spliceOp.setInput('headConstrainer', self.headOutputTgt)

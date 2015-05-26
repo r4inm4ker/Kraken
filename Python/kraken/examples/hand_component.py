@@ -53,6 +53,7 @@ class HandComponent(Component):
 
         # Declare Input Attrs
         self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', parent=self.cmpInputAttrGrp)
+        self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', parent=cmpInputAttrGrp)
         self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', parent=self.cmpInputAttrGrp)
 
         # Declare Output Attrs
@@ -204,33 +205,35 @@ class HandComponentRig(HandComponent):
         # Add Splice Ops
         # ===============
         # Add Hand Solver Splice Op
-        spliceOp = SpliceOperator('handCtrlSpaceSpliceOp', 'PoseConstraintSolver', 'Kraken')
-        self.addOperator(spliceOp)
+        handCtrlSpaceSpliceOp = SpliceOperator('handCtrlSpaceSpliceOp', 'PoseConstraintSolver', 'Kraken')
+        self.addOperator(handCtrlSpaceSpliceOp)
 
         # Add Att Inputs
-        spliceOp.setInput('drawDebug', self.drawDebugInputAttr)
-        spliceOp.setInput('rightSide', self.rightSideInputAttr)
+        handCtrlSpaceSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
+        handCtrlSpaceSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
+        handCtrlSpaceSpliceOp.setInput('rightSide', self.rightSideInputAttr)
 
         # Add Xfo Inputs)
-        spliceOp.setInput('constrainer', self.armEndXfoInputTgt)
+        handCtrlSpaceSpliceOp.setInput('constrainer', self.armEndXfoInputTgt)
 
         # Add Xfo Outputs
-        spliceOp.setOutput('constrainee', self.handCtrlSpace)
+        handCtrlSpaceSpliceOp.setOutput('constrainee', self.handCtrlSpace)
 
 
         # Add Deformer Splice Op
-        spliceOp = SpliceOperator('handDeformerSpliceOp', 'PoseConstraintSolver', 'Kraken')
-        self.addOperator(spliceOp)
+        handDefSpliceOp = SpliceOperator('handDeformerSpliceOp', 'PoseConstraintSolver', 'Kraken')
+        self.addOperator(handDefSpliceOp)
 
         # Add Att Inputs
-        spliceOp.setInput('drawDebug', self.drawDebugInputAttr)
-        spliceOp.setInput('rightSide', self.rightSideInputAttr)
+        handDefSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
+        handDefSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
+        handDefSpliceOp.setInput('rightSide', self.rightSideInputAttr)
 
         # Add Xfo Inputs)
-        spliceOp.setInput('constrainer', self.handOutputTgt)
+        handDefSpliceOp.setInput('constrainer', self.handOutputTgt)
 
         # Add Xfo Outputs
-        spliceOp.setOutput('constrainee', handDef)
+        handDefSpliceOp.setOutput('constrainee', handDef)
 
         Profiler.getInstance().pop()
 
