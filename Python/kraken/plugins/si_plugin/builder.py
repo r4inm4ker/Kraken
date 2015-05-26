@@ -914,7 +914,7 @@ class Builder(Builder):
         """
 
         si.SetValue("preferences.scripting.cmdlog", False, "")
-        si.BeginUndo("Kraken SI Build: " + kSceneItem.name)
+        si.BeginUndo("Kraken SI Build: " + kSceneItem.getName())
 
         return True
 
