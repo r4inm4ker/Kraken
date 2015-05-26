@@ -72,7 +72,6 @@ class Rig(Container):
             Profiler.getInstance().push("__loadComponents")
 
             for componentData in componentsJson:
-
                 # trim off the class name to get the module path.
                 modulePath = '.'.join(componentData['class'].split('.')[:-1])
                 if modulePath is not "":

@@ -35,7 +35,10 @@ char_bob_guide.controls.head.eyeRight
 char_bob_guide.controls.head.jaw
 char_bob_guide.controls.clavicle
 char_bob_guide.controls.clavicle.inputs
+char_bob_guide.controls.clavicle.inputs.spineEnd
 char_bob_guide.controls.clavicle.outputs
+char_bob_guide.controls.clavicle.outputs.clavicle
+char_bob_guide.controls.clavicle.outputs.clavicleEnd
 char_bob_guide.controls.clavicle.clavicle
 char_bob_guide.controls.clavicle.clavicleUpV
 char_bob_guide.controls.clavicle.clavicleEnd
@@ -58,7 +61,10 @@ char_bob_guide.controls.hand.outputs.handEnd
 char_bob_guide.controls.hand.hand
 char_bob_guide.controls.clavicle
 char_bob_guide.controls.clavicle.inputs
+char_bob_guide.controls.clavicle.inputs.spineEnd
 char_bob_guide.controls.clavicle.outputs
+char_bob_guide.controls.clavicle.outputs.clavicle
+char_bob_guide.controls.clavicle.outputs.clavicleEnd
 char_bob_guide.controls.clavicle.clavicle
 char_bob_guide.controls.clavicle.clavicleUpV
 char_bob_guide.controls.clavicle.clavicleEnd

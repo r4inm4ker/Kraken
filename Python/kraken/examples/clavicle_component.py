@@ -22,47 +22,60 @@ from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
 
 
-class ClavicleComponentGuide(Component):
-    """Clavicle Component Guide"""
+
+class ClavicleComponent(Component):
+    """Clavicle Component Base"""
 
     def __init__(self, name='clavicle', parent=None, data=None):
-        super(ClavicleComponentGuide, self).__init__(name, parent)
+        super(ClavicleComponent, self).__init__(name, parent)
 
         # ================
         # Setup Hierarchy
         # ================
-        controlsLayer = self.getOrCreateLayer('controls')
-        ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
+        self.controlsLayer = self.getOrCreateLayer('controls')
+        self.ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=self.controlsLayer)
 
         # IO Hierarchies
-        inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
-        cmpInputAttrGrp = AttributeGroup('inputs', parent=inputHrcGrp)
+        self.inputHrcGrp = HierarchyGroup('inputs', parent=self.ctrlCmpGrp)
+        self.cmpInputAttrGrp = AttributeGroup('inputs', parent=self.inputHrcGrp)
 
-        outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
-        cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
+        self.outputHrcGrp = HierarchyGroup('outputs', parent=self.ctrlCmpGrp)
+        self.cmpOutputAttrGrp = AttributeGroup('outputs', parent=self.outputHrcGrp)
 
         # ===========
         # Declare IO
         # ===========
         # Declare Inputs Xfos
-        self.spineEndInputTgt = self.createInput('spineEnd', dataType='Xfo')
+        self.spineEndInputTgt = self.createInput('spineEnd', dataType='Xfo', parent=self.inputHrcGrp)
 
         # Declare Output Xfos
-        self.clavicleOutputTgt = self.createOutput('clavicle', dataType='Xfo')
-        self.clavicleEndOutputTgt = self.createOutput('clavicleEnd', dataType='Xfo')
+        self.clavicleOutputTgt = self.createOutput('clavicle', dataType='Xfo', parent=self.outputHrcGrp)
+        self.clavicleEndOutputTgt = self.createOutput('clavicleEnd', dataType='Xfo', parent=self.outputHrcGrp)
 
         # Declare Input Attrs
+        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=True, parent=self.cmpInputAttrGrp)
+        self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', value=self.getLocation() is 'R', parent=self.cmpInputAttrGrp)
 
         # Declare Output Attrs
+
+
+
+class ClavicleComponentGuide(ClavicleComponent):
+    """Clavicle Component Guide"""
+
+    def __init__(self, name='clavicle', parent=None, data=None):
+
+        Profiler.getInstance().push("Construct Clavicle Guide Component:" + name)
+        super(ClavicleComponentGuide, self).__init__(name, parent)
 
 
         # =========
         # Controls
         # =========
         # Guide Controls
-        self.clavicleCtrl = Control('clavicle', parent=ctrlCmpGrp, shape="sphere")
-        self.clavicleUpVCtrl = Control('clavicleUpV', parent=ctrlCmpGrp, shape="sphere")
-        self.clavicleEndCtrl = Control('clavicleEnd', parent=ctrlCmpGrp, shape="sphere")
+        self.clavicleCtrl = Control('clavicle', parent=self.ctrlCmpGrp, shape="sphere")
+        self.clavicleUpVCtrl = Control('clavicleUpV', parent=self.ctrlCmpGrp, shape="sphere")
+        self.clavicleEndCtrl = Control('clavicleEnd', parent=self.ctrlCmpGrp, shape="sphere")
 
         if data is None:
             data = {
@@ -74,6 +87,8 @@ class ClavicleComponentGuide(Component):
                    }
 
         self.loadData(data)
+
+        Profiler.getInstance().pop()
 
 
     # =============
@@ -145,7 +160,7 @@ class ClavicleComponentGuide(Component):
         clavicleLen = claviclePosition.subtract(clavicleEndPosition).length()
 
         data = {
-                "class":"kraken.examples.clavicle_component.ClavicleComponent",
+                "class":"kraken.examples.clavicle_component.ClavicleComponentRig",
                 "name": self.getName(),
                 "location":self.getLocation(),
                 "clavicleXfo": clavicleXfo,
@@ -155,54 +170,20 @@ class ClavicleComponentGuide(Component):
         return data
 
 
-class ClavicleComponent(Component):
+class ClavicleComponentRig(ClavicleComponent):
     """Clavicle Component"""
 
     def __init__(self, name='Clavicle', parent=None):
 
-        Profiler.getInstance().push("Construct Clavicle Component:" + name)
-        super(ClavicleComponent, self).__init__(name, parent)
-
-        # ================
-        # Setup Hierarchy
-        # ================
-        controlsLayer = self.getOrCreateLayer('controls')
-        ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
-
-        # IO Hierarchies
-        inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
-        cmpInputAttrGrp = AttributeGroup('inputs', parent=inputHrcGrp)
-
-        outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
-        cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
-
-
-        # ===========
-        # Declare IO
-        # ===========
-        # Declare Inputs Xfos
-        self.spineEndInputTgt = self.createInput('spineEnd', dataType='Xfo', parent=inputHrcGrp)
-
-        # Declare Output Xfos
-        self.clavicleOutputTgt = self.createOutput('clavicle', dataType='Xfo', parent=outputHrcGrp)
-        self.clavicleEndOutputTgt = self.createOutput('clavicleEnd', dataType='Xfo', parent=outputHrcGrp)
-
-        # Declare Input Attrs
-        drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=True,
-            parent=cmpInputAttrGrp)
-        rightSideInputAttr = self.createInput('rightSide', dataType='Boolean',
-            value=self.getLocation() is 'R', parent=cmpInputAttrGrp)
-
-        # Declare Output Attrs
-        armFollowBodyOutputAttr = self.createOutput('followBody', dataType='Float',
-            value=0.0, parent=cmpOutputAttrGrp)
+        Profiler.getInstance().push("Construct Clavicle Rig Component:" + name)
+        super(ClavicleComponentRig, self).__init__(name, parent)
 
 
         # =========
         # Controls
         # =========
         # Clavicle
-        self.clavicleCtrlSpace = CtrlSpace('clavicle', parent=ctrlCmpGrp)
+        self.clavicleCtrlSpace = CtrlSpace('clavicle', parent=self.ctrlCmpGrp)
         self.clavicleCtrl = Control('clavicle', parent=self.clavicleCtrlSpace, shape="cube")
         self.clavicleCtrl.alignOnXAxis()
 
@@ -212,7 +193,7 @@ class ClavicleComponent(Component):
         # ==========
         deformersLayer = self.getOrCreateLayer('deformers')
         defCmpGrp = ComponentGroup(self.getName(), self, parent=deformersLayer)
-        ctrlCmpGrp.setComponent(self)
+        self.ctrlCmpGrp.setComponent(self)
 
         self.clavicleDef = Joint('clavicle', parent=defCmpGrp)
         self.clavicleDef.setComponent(self)
@@ -245,8 +226,8 @@ class ClavicleComponent(Component):
         self.addOperator(spliceOp)
 
         # Add Att Inputs
-        spliceOp.setInput('drawDebug', drawDebugInputAttr)
-        spliceOp.setInput('rightSide', rightSideInputAttr)
+        spliceOp.setInput('drawDebug', self.drawDebugInputAttr)
+        spliceOp.setInput('rightSide', self.rightSideInputAttr)
 
         # Add Xfo Inputs
         spliceOp.setInput('constrainer', self.clavicleOutputTgt)
@@ -282,5 +263,5 @@ class ClavicleComponent(Component):
 
 from kraken.core.kraken_system import KrakenSystem
 ks = KrakenSystem.getInstance()
-ks.registerComponent(ClavicleComponent)
 ks.registerComponent(ClavicleComponentGuide)
+ks.registerComponent(ClavicleComponentRig)

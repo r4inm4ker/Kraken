@@ -23,52 +23,62 @@ from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
 
 
-class LegComponentGuide(Component):
-    """Leg Component Guide"""
+class LegComponent(Component):
+    """Leg Component"""
 
-    def __init__(self, name='legGuide', parent=None, data=None):
-        super(LegComponentGuide, self).__init__(name, parent)
+    def __init__(self, name='legBase', parent=None):
+
+        super(LegComponent, self).__init__(name, parent)
 
         # ================
         # Setup Hierarchy
         # ================
-        controlsLayer = self.getOrCreateLayer('controls')
-        ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
+        self.controlsLayer = self.getOrCreateLayer('controls')
+        self.ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=self.controlsLayer)
 
         # IO Hierarchies
-        inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
-        cmpInputAttrGrp = AttributeGroup('inputs', parent=inputHrcGrp)
+        self.inputHrcGrp = HierarchyGroup('inputs', parent=self.ctrlCmpGrp)
+        self.cmpInputAttrGrp = AttributeGroup('inputs', parent=self.inputHrcGrp)
 
-        outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
-        cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
+        self.outputHrcGrp = HierarchyGroup('outputs', parent=self.ctrlCmpGrp)
+        self.cmpOutputAttrGrp = AttributeGroup('outputs', parent=self.outputHrcGrp)
 
 
         # ===========
         # Declare IO
         # ===========
         # Declare Inputs Xfos
-        self.legPelvisInputTgt = self.createInput('pelvisInput', dataType='Xfo', parent=inputHrcGrp)
+        self.legPelvisInputTgt = self.createInput('pelvisInput', dataType='Xfo', parent=self.inputHrcGrp)
 
         # Declare Output Xfos
-        self.femurOutputTgt = self.createOutput('femur', dataType='Xfo', parent=outputHrcGrp)
-        self.shinOutputTgt = self.createOutput('shin', dataType='Xfo', parent=outputHrcGrp)
-        self.legEndXfoOutputTgt = self.createOutput('legEndXfo', dataType='Xfo', parent=outputHrcGrp)
+        self.femurOutputTgt = self.createOutput('femur', dataType='Xfo', parent=self.outputHrcGrp)
+        self.shinOutputTgt = self.createOutput('shin', dataType='Xfo', parent=self.outputHrcGrp)
+        self.legEndXfoOutputTgt = self.createOutput('legEndXfo', dataType='Xfo', parent=self.outputHrcGrp)
 
         # Declare Input Attrs
-        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=True, parent=cmpInputAttrGrp)
-        self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', value=False, parent=cmpInputAttrGrp)
+        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=True, parent=self.cmpInputAttrGrp)
+        self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', value=False, parent=self.cmpInputAttrGrp)
 
         # Declare Output Attrs
-        self.drawDebugOutputAttr = self.createOutput('drawDebug', dataType='Boolean', value=True, parent=cmpOutputAttrGrp)
+        self.drawDebugOutputAttr = self.createOutput('drawDebug', dataType='Boolean', value=True, parent=self.cmpOutputAttrGrp)
+
+
+class LegComponentGuide(LegComponent):
+    """Leg Component Guide"""
+
+    def __init__(self, name='legGuide', parent=None, data=None):
+
+        Profiler.getInstance().push("Construct Leg Guide Component:" + name)
+        super(LegComponentGuide, self).__init__(name, parent)
 
 
         # =========
         # Controls
         # ========
         # Guide Controls
-        self.femurCtrl = Control('femur', parent=ctrlCmpGrp, shape="sphere")
-        self.kneeCtrl = Control('knee', parent=ctrlCmpGrp, shape="sphere")
-        self.ankleCtrl = Control('ankle', parent=ctrlCmpGrp, shape="sphere")
+        self.femurCtrl = Control('femur', parent=self.ctrlCmpGrp, shape="sphere")
+        self.kneeCtrl = Control('knee', parent=self.ctrlCmpGrp, shape="sphere")
+        self.ankleCtrl = Control('ankle', parent=self.ctrlCmpGrp, shape="sphere")
 
         if data is None:
             data = {
@@ -80,6 +90,9 @@ class LegComponentGuide(Component):
                    }
 
         self.loadData(data)
+
+        Profiler.getInstance().pop()
+
 
     # =============
     # Data Methods
@@ -170,7 +183,7 @@ class LegComponentGuide(Component):
         upVXfo.tr = upVXfo.transformVector(Vec3(0, 0, 5))
 
         data = {
-                "class":"kraken.examples.leg_component.LegComponent",
+                "class":"kraken.examples.leg_component.LegComponentRig",
                 "name": self.getName(),
                 "location":self.getLocation(),
                 "femurXfo": femurXfo,
@@ -184,52 +197,20 @@ class LegComponentGuide(Component):
         return data
 
 
-class LegComponent(Component):
+class LegComponentRig(LegComponent):
     """Leg Component"""
 
     def __init__(self, name='leg', parent=None):
 
-        Profiler.getInstance().push("Construct Leg Component:" + name)
-        super(LegComponent, self).__init__(name, parent)
-
-        # ================
-        # Setup Hierarchy
-        # ================
-        controlsLayer = self.getOrCreateLayer('controls')
-        ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
-
-        # IO Hierarchies
-        inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
-        cmpInputAttrGrp = AttributeGroup('inputs', parent=inputHrcGrp)
-
-        outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
-        cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
-
-
-        # ===========
-        # Declare IO
-        # ===========
-        # Declare Inputs Xfos
-        self.legPelvisInputTgt = self.createInput('pelvisInput', dataType='Xfo', parent=inputHrcGrp)
-
-        # Declare Output Xfos
-        self.femurOutputTgt = self.createOutput('femur', dataType='Xfo', parent=outputHrcGrp)
-        self.shinOutputTgt = self.createOutput('shin', dataType='Xfo', parent=outputHrcGrp)
-        self.legEndXfoOutputTgt = self.createOutput('legEndXfo', dataType='Xfo', parent=outputHrcGrp)
-
-        # Declare Input Attrs
-        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=True, parent=cmpInputAttrGrp)
-        self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', value=False, parent=cmpInputAttrGrp)
-
-        # Declare Output Attrs
-        self.drawDebugOutputAttr = self.createOutput('drawDebug', dataType='Boolean', value=True, parent=cmpOutputAttrGrp)
+        Profiler.getInstance().push("Construct Leg Rig Component:" + name)
+        super(LegComponentRig, self).__init__(name, parent)
 
 
         # =========
         # Controls
         # =========
         # Femur
-        self.femurFKCtrlSpace = CtrlSpace('femurFK', parent=ctrlCmpGrp)
+        self.femurFKCtrlSpace = CtrlSpace('femurFK', parent=self.ctrlCmpGrp)
         self.femurFKCtrl = Control('femurFK', parent=self.femurFKCtrlSpace, shape="cube")
         self.femurFKCtrl.alignOnXAxis()
 
@@ -239,7 +220,7 @@ class LegComponent(Component):
         self.shinFKCtrl.alignOnXAxis()
 
         # Ankle
-        self.legIKCtrlSpace = CtrlSpace('IK', parent=ctrlCmpGrp)
+        self.legIKCtrlSpace = CtrlSpace('IK', parent=self.ctrlCmpGrp)
         self.legIKCtrl = Control('IK', parent=self.legIKCtrlSpace, shape="pin")
 
 
@@ -257,7 +238,7 @@ class LegComponent(Component):
         self.drawDebugInputAttr.connect(legDrawDebugInputAttr)
 
         # UpV
-        self.legUpVCtrlSpace = CtrlSpace('UpV', parent=ctrlCmpGrp)
+        self.legUpVCtrlSpace = CtrlSpace('UpV', parent=self.ctrlCmpGrp)
         self.legUpVCtrl = Control('UpV', parent=self.legUpVCtrlSpace, shape="triangle")
         self.legUpVCtrl.alignOnZAxis()
 
@@ -390,5 +371,5 @@ class LegComponent(Component):
 
 from kraken.core.kraken_system import KrakenSystem
 ks = KrakenSystem.getInstance()
-ks.registerComponent(LegComponent)
 ks.registerComponent(LegComponentGuide)
+ks.registerComponent(LegComponentRig)

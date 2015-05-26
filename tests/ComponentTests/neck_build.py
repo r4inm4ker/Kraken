@@ -1,7 +1,7 @@
 from kraken import plugins
 from kraken.core.maths import Vec3
 
-from kraken.examples.neck_component import NeckComponentGuide, NeckComponent
+from kraken.examples.neck_component import NeckComponentGuide, NeckComponentRig
 
 from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
@@ -24,7 +24,7 @@ saveData = neckGuide.saveData()
 
 neckGuideData = neckGuide.getGuideData()
 
-neck = NeckComponent()
+neck = NeckComponentRig()
 neck.loadData(neckGuideData)
 
 builder = plugins.getBuilder()
