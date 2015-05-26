@@ -22,7 +22,6 @@ function KrakenSolverArg[] TwoBoneIKSolver.getArguments(){
   KrakenSolverArg args[] = this.parent.getArguments();
   args.push(KrakenSolverArg('rightSide', 'in', 'Boolean'));
 
-  args.push(KrakenSolverArg('useInitPose', 'in', 'Boolean'));
   args.push(KrakenSolverArg('ikblend', 'in', 'Scalar'));
   args.push(KrakenSolverArg('softIK', 'in', 'Boolean'));
   args.push(KrakenSolverArg('softDist', 'in', 'Scalar'));
@@ -94,7 +93,6 @@ function TwoBoneIKSolver.solve!
   Boolean drawDebug,
   Boolean rightSide,
 
-  Boolean useInitPose,
   Scalar ikblend,
   Boolean softIK,
   Scalar softDist,
