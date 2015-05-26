@@ -177,6 +177,7 @@ function Xfo[] solveNCFIK(
 function NBoneIKSolver.solve!
 (
   Boolean drawDebug,
+  Scalar rigScale,
   Scalar ikblend,
   Mat44 ikgoal,
   Mat44 fkcontrols[],

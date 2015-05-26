@@ -19,6 +19,7 @@ function KrakenSolverArg[] PoseConstraintSolver.getArguments(){
 function PoseConstraintSolver.solve!
 (
   in Boolean drawDebug,
+  in Scalar rigScale,
   in Boolean rightSide,
   in Mat44 constrainer,
   io Mat44 constrainee

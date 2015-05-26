@@ -18,6 +18,7 @@ function KrakenSolverArg[] MultiPoseConstraintSolver.getArguments(){
 function MultiPoseConstraintSolver.solve!
 (
   in Boolean drawDebug,
+  in Scalar rigScale,
   in Mat44 constrainers[],
   io Mat44 constrainees[]
   )
