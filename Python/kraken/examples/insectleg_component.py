@@ -222,6 +222,7 @@ class InsectLegComponentRig(InsectLegComponent):
         # Add Component Params to IK control
         legSettingsAttrGrp = AttributeGroup("DisplayInfo_LegSettings", parent=self.legIKCtrl)
         legdrawDebugInputAttr = BoolAttribute('drawDebug', value=True, parent=legSettingsAttrGrp)
+        legUseInitPoseInputAttr = BoolAttribute('useInitPose', value=False, parent=legSettingsAttrGrp)
         legFkikInputAttr = FloatAttribute('fkik', value=1.0, minValue=0.0,
             maxValue=1.0, parent=legSettingsAttrGrp)
 
@@ -274,41 +275,42 @@ class InsectLegComponentRig(InsectLegComponent):
         # Add Splice Ops
         # ===============
         # Add Splice Op
-        self.NBoneSolverSpliceOp = SpliceOperator("legSpliceOp", "NBoneIKSolver", "Kraken")
+        self.NBoneSolverSpliceOp = SpliceOperator('legSpliceOp', 'NBoneIKSolver', 'Kraken')
         self.addOperator(self.NBoneSolverSpliceOp)
 
         # # Add Att Inputs
-        self.NBoneSolverSpliceOp.setInput("drawDebug", self.drawDebugInputAttr)
-        self.NBoneSolverSpliceOp.setInput("ikblend", legFkikInputAttr)
-        self.NBoneSolverSpliceOp.setInput("tipBoneLen", self.tipBoneLenInputAttr)
+        self.NBoneSolverSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.NBoneSolverSpliceOp.setInput('useInitPose', legUseInitPoseInputAttr)
+        self.NBoneSolverSpliceOp.setInput('ikblend', legFkikInputAttr)
+        self.NBoneSolverSpliceOp.setInput('tipBoneLen', self.tipBoneLenInputAttr)
 
         # Add Xfo Inputs
-        self.NBoneSolverSpliceOp.setInput("ikgoal", self.legIKCtrl)
-        # self.NBoneSolverSpliceOp.setInput("upV", legUpVCtrl)
+        self.NBoneSolverSpliceOp.setInput('ikgoal', self.legIKCtrl)
+        # self.NBoneSolverSpliceOp.setInput('upV', legUpVCtrl)
 
         for i in xrange(len(self.boneFKCtrls)):
-            self.NBoneSolverSpliceOp.setInput("fkcontrols", self.boneFKCtrls[i])
+            self.NBoneSolverSpliceOp.setInput('fkcontrols', self.boneFKCtrls[i])
 
         # Add Xfo Outputs
         for i in xrange(len(self.boneOutputsTgt)):
-            self.NBoneSolverSpliceOp.setOutput("pose", self.boneOutputsTgt[i])
+            self.NBoneSolverSpliceOp.setOutput('pose', self.boneOutputsTgt[i])
 
-        self.NBoneSolverSpliceOp.setOutput("legEnd", self.legEndPosOutputTgt)
+        self.NBoneSolverSpliceOp.setOutput('legEnd', self.legEndPosOutputTgt)
 
         # Add Deformer Splice Op
-        self.outputsToDeformersSpliceOp = SpliceOperator("insectLegDeformerSpliceOp", "MultiPoseConstraintSolver", "Kraken")
+        self.outputsToDeformersSpliceOp = SpliceOperator('insectLegDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken')
         self.addOperator(self.outputsToDeformersSpliceOp)
 
         # Add Att Inputs
-        self.outputsToDeformersSpliceOp.setInput("drawDebug", self.drawDebugInputAttr)
+        self.outputsToDeformersSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
 
         # Add Xfo Inputs
         for i in xrange(len(self.boneOutputsTgt)):
-            self.outputsToDeformersSpliceOp.setInput("constrainers", self.boneOutputsTgt[i])
+            self.outputsToDeformersSpliceOp.setInput('constrainers', self.boneOutputsTgt[i])
 
         # Add Xfo Outputs
         for i in xrange(len(self.boneDefs)):
-            self.outputsToDeformersSpliceOp.setOutput("constrainees", self.boneDefs[i])
+            self.outputsToDeformersSpliceOp.setOutput('constrainees', self.boneDefs[i])
 
         Profiler.getInstance().pop()
 
