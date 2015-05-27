@@ -20,6 +20,7 @@ function NBoneIKSolver(
 // Return Arguments for Kraken
 function KrakenSolverArg[] NBoneIKSolver.getArguments(){
   KrakenSolverArg args[] = this.parent.getArguments();
+  args.push(KrakenSolverArg('useInitPose', 'in', 'Boolean'));
   args.push(KrakenSolverArg('ikblend', 'in', 'Scalar'));
   args.push(KrakenSolverArg('ikgoal', 'in', 'Mat44'));
   args.push(KrakenSolverArg('fkcontrols', 'in', 'Mat44[]'));
@@ -172,19 +173,19 @@ function Xfo[] solveNCFIK(
 }
 
 
-
 // Solve
 function NBoneIKSolver.solve!
 (
   Boolean drawDebug,
   Scalar rigScale,
+  Boolean useInitPose,
   Scalar ikblend,
   Mat44 ikgoal,
   Mat44 fkcontrols[],
   Scalar tipBoneLen,
   io Mat44 pose[],
   io Mat44 legEnd
-){
+) {
   if(fkcontrols.size != pose.size)
     throw("Error in NBoneIKSolver. The number of FKControls does not match the number of joints");
 
@@ -205,7 +206,7 @@ function NBoneIKSolver.solve!
   Vec3 boneVectors[];
   xfoPose.resize(fkcontrols.size+1);
   boneVectors.resize(fkcontrols.size);
-  for(UInt32 i=0; i < fkcontrols.size; i++){
+  for(UInt32 i=0; i < fkcontrols.size; i++) {
     xfoPose[i] = Xfo(fkcontrols[i]);
     if(i>0)
       boneVectors[i-1] = xfoPose[i-1].inverse().transformVector(xfoPose[i].tr);
@@ -214,11 +215,17 @@ function NBoneIKSolver.solve!
   xfoPose[fkcontrols.size] = xfoPose[fkcontrols.size-1];
   xfoPose[fkcontrols.size].tr = xfoPose[fkcontrols.size-1].transformVector(boneVectors[boneVectors.size-1]);
 
-  if(ikblend > 0.0){
-    Xfo ikPose[] = solveNCFIK(this.initPose, ikgoal.translation());
+  if(ikblend > 0.0) {
+    Xfo ikPose[];
+    if (useInitPose == 1) {
+      ikPose = solveNCFIK(this.initPose, ikgoal.translation());
+    }
+    else {
+      ikPose = solveNCFIK(xfoPose, ikgoal.translation());
+    }
 
     // Now blend the IK result with the FK result
-    for(UInt32 i=0; i < xfoPose.size; i++){
+    for(UInt32 i=0; i < xfoPose.size; i++) {
       xfoPose[i].ori = xfoPose[i].ori.sphericalLinearInterpolate(ikPose[i].ori, ikblend);
       if(i>0)
         xfoPose[i].tr = xfoPose[i-1].transformVector(boneVectors[i-1]);
@@ -232,7 +239,7 @@ function NBoneIKSolver.solve!
 
   // Set debugging visibility.
   this.setDebug(drawDebug);
-  if(this.drawDebug){
+  if(this.drawDebug) {
 
     Color boneColor(1.0, 1.0, 0);
     for(UInt32 i=0; i<pose.size; i++){
