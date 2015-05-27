@@ -227,7 +227,6 @@ class FootComponentRig(FootComponent):
         # Add Att Inputs
         spliceOp.setInput('drawDebug', self.drawDebugInputAttr)
         spliceOp.setInput('rigScale', self.rigScaleInputAttr)
-        spliceOp.setInput('rightSide', self.rightSideInputAttr)
 
         # Add Xfo Inputs)
         spliceOp.setInput('constrainer', self.footOutputTgt)

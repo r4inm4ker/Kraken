@@ -211,7 +211,6 @@ class HandComponentRig(HandComponent):
         # Add Att Inputs
         handCtrlSpaceSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
         handCtrlSpaceSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
-        handCtrlSpaceSpliceOp.setInput('rightSide', self.rightSideInputAttr)
 
         # Add Xfo Inputs)
         handCtrlSpaceSpliceOp.setInput('constrainer', self.armEndXfoInputTgt)
@@ -227,7 +226,6 @@ class HandComponentRig(HandComponent):
         # Add Att Inputs
         handDefSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
         handDefSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
-        handDefSpliceOp.setInput('rightSide', self.rightSideInputAttr)
 
         # Add Xfo Inputs)
         handDefSpliceOp.setInput('constrainer', self.handOutputTgt)
