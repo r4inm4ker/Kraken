@@ -1,7 +1,7 @@
 from kraken import plugins
 from kraken.core.maths import Xfo, Vec3, Quat
 
-from kraken.examples.hand_component import HandComponentGuide, HandComponent
+from kraken.examples.hand_component import HandComponentGuide, HandComponentRig
 
 from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
@@ -22,7 +22,7 @@ saveData = handGuide.saveData()
 
 handGuideData = handGuide.getGuideData()
 
-hand = HandComponent()
+hand = HandComponentRig()
 hand.loadData(handGuideData)
 
 builder = plugins.getBuilder()

@@ -21,47 +21,57 @@ from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
 
 
-class FootComponentGuide(Component):
-    """Foot Component Guide"""
+class FootComponent(Component):
+    """Foot Component Base"""
 
     def __init__(self, name='Foot', parent=None, data=None):
-        super(FootComponentGuide, self).__init__(name, parent)
+        super(FootComponent, self).__init__(name, parent)
 
         # ================
         # Setup Hierarchy
         # ================
-        controlsLayer = self.getOrCreateLayer('controls')
-        ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
+        self.controlsLayer = self.getOrCreateLayer('controls')
+        self.ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=self.controlsLayer)
 
         # IO Hierarchies
-        inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
-        cmpInputAttrGrp = AttributeGroup('inputs', parent=inputHrcGrp)
+        self.inputHrcGrp = HierarchyGroup('inputs', parent=self.ctrlCmpGrp)
+        self.cmpInputAttrGrp = AttributeGroup('inputs', parent=self.inputHrcGrp)
 
-        outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
-        cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
+        self.outputHrcGrp = HierarchyGroup('outputs', parent=self.ctrlCmpGrp)
+        self.cmpOutputAttrGrp = AttributeGroup('outputs', parent=self.outputHrcGrp)
 
 
         # ===========
         # Declare IO
         # ===========
         # Declare Inputs Xfos
-        self.legEndXfoInputTgt = self.createInput('legEndXfo', dataType='Xfo', parent=inputHrcGrp)
+        self.legEndXfoInputTgt = self.createInput('legEndXfo', dataType='Xfo', parent=self.inputHrcGrp)
 
         # Declare Output Xfos
-        self.footEndOutputTgt = self.createOutput('footEnd', dataType='Xfo', parent=outputHrcGrp)
-        self.footOutputTgt = self.createOutput('foot', dataType='Xfo', parent=outputHrcGrp)
+        self.footEndOutputTgt = self.createOutput('footEnd', dataType='Xfo', parent=self.outputHrcGrp)
+        self.footOutputTgt = self.createOutput('foot', dataType='Xfo', parent=self.outputHrcGrp)
 
         # Declare Input Attrs
-        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', parent=cmpInputAttrGrp)
-        self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', parent=cmpInputAttrGrp)
+        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', parent=self.cmpInputAttrGrp)
+        self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', parent=self.cmpInputAttrGrp)
 
         # Declare Output Attrs
+
+
+class FootComponentGuide(FootComponent):
+    """Foot Component Guide"""
+
+    def __init__(self, name='Foot', parent=None, data=None):
+
+        Profiler.getInstance().push("Construct Foot Rig Component:" + name)
+        super(FootComponentGuide, self).__init__(name, parent)
+
 
         # =========
         # Controls
         # =========
         # Guide Controls
-        self.footCtrl = Control('foot', parent=ctrlCmpGrp, shape="sphere")
+        self.footCtrl = Control('foot', parent=self.ctrlCmpGrp, shape="sphere")
 
         if data is None:
             data = {
@@ -71,6 +81,8 @@ class FootComponentGuide(Component):
                    }
 
         self.loadData(data)
+
+        Profiler.getInstance().pop()
 
 
     # =============
@@ -125,7 +137,7 @@ class FootComponentGuide(Component):
         footXfo = self.footCtrl.xfo
 
         data = {
-                "class":"kraken.examples.foot_component.FootComponent",
+                "class":"kraken.examples.foot_component.FootComponentRig",
                 "name": self.getName(),
                 "location": self.getLocation(),
                 "footXfo": footXfo
@@ -134,63 +146,31 @@ class FootComponentGuide(Component):
         return data
 
 
-class FootComponent(Component):
+class FootComponentRig(FootComponent):
     """Foot Component"""
 
     def __init__(self, name='foot', parent=None):
 
-        Profiler.getInstance().push("Construct Foot Component:" + name)
-        super(FootComponent, self).__init__(name, parent)
-
-        # ================
-        # Setup Hierarchy
-        # ================
-        controlsLayer = self.getOrCreateLayer('controls')
-        ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
-
-        # IO Hierarchies
-        inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
-        cmpInputAttrGrp = AttributeGroup('inputs', parent=inputHrcGrp)
-
-        outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
-        cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
-
-
-        # ===========
-        # Declare IO
-        # ===========
-        # Declare Inputs Xfos
-        self.legEndXfoInputTgt = self.createInput('legEndXfo', dataType='Xfo', parent=inputHrcGrp)
-
-        # Declare Output Xfos
-        self.footEndOutputTgt = self.createOutput('footEnd', dataType='Xfo', parent=outputHrcGrp)
-        self.footOutputTgt = self.createOutput('foot', dataType='Xfo', parent=outputHrcGrp)
-
-        # Declare Input Attrs
-        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', parent=cmpInputAttrGrp)
-        self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', parent=cmpInputAttrGrp)
-
-        # Declare Output Attrs
+        Profiler.getInstance().push("Construct Foot Rig Component:" + name)
+        super(FootComponentRig, self).__init__(name, parent)
 
 
         # =========
         # Controls
         # =========
         # Foot
-        self.footCtrlSpace = CtrlSpace('foot', parent=ctrlCmpGrp)
+        self.footCtrlSpace = CtrlSpace('foot', parent=self.ctrlCmpGrp)
 
         self.footCtrl = Control('foot', parent=self.footCtrlSpace, shape="cube")
         self.footCtrl.alignOnXAxis()
         self.footCtrl.scalePoints(Vec3(2.5, 1.5, 0.75))
 
         # Rig Ref objects
-        self.footRefSrt = Locator('footRef', parent=ctrlCmpGrp)
+        self.footRefSrt = Locator('footRef', parent=self.ctrlCmpGrp)
 
         # Add Component Params to IK control
-        footSettingsAttrGrp = AttributeGroup("DisplayInfo_FootSettings",
-            parent=self.footCtrl)
-        footLinkToWorldInputAttr = FloatAttribute('linkToWorld', 1.0,
-            maxValue=1.0, parent=footSettingsAttrGrp)
+        footSettingsAttrGrp = AttributeGroup("DisplayInfo_FootSettings", parent=self.footCtrl)
+        footLinkToWorldInputAttr = FloatAttribute('linkToWorld', 1.0, maxValue=1.0, parent=footSettingsAttrGrp)
 
 
         # ==========
@@ -276,5 +256,5 @@ class FootComponent(Component):
 
 from kraken.core.kraken_system import KrakenSystem
 ks = KrakenSystem.getInstance()
-ks.registerComponent(FootComponent)
 ks.registerComponent(FootComponentGuide)
+ks.registerComponent(FootComponentRig)

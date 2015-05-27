@@ -21,46 +21,55 @@ from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
 
 
-class NeckComponentGuide(Component):
-    """Neck Component Guide"""
+class NeckComponent(Component):
+    """Neck Component"""
 
-    def __init__(self, name='neck', parent=None, data=None):
-        super(NeckComponentGuide, self).__init__(name, parent)
+    def __init__(self, name="neckBase", parent=None):
+        super(NeckComponent, self).__init__(name, parent)
 
         # ================
         # Setup Hierarchy
         # ================
-        controlsLayer = self.getOrCreateLayer('controls')
-        ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
-        ctrlCmpGrp.setComponent(self)
+        self.controlsLayer = self.getOrCreateLayer('controls')
+        self.ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=self.controlsLayer)
 
         # IO Hierarchies
-        inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
-        cmpInputAttrGrp = AttributeGroup('inputs', parent=inputHrcGrp)
+        self.inputHrcGrp = HierarchyGroup('inputs', parent=self.ctrlCmpGrp)
+        self.cmpInputAttrGrp = AttributeGroup('inputs', parent=self.inputHrcGrp)
 
-        outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
-        cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
+        self.outputHrcGrp = HierarchyGroup('outputs', parent=self.ctrlCmpGrp)
+        self.cmpOutputAttrGrp = AttributeGroup('outputs', parent=self.outputHrcGrp)
 
 
         # ===========
         # Declare IO
         # ===========
         # Declare Inputs Xfos
-        self.neckBaseInputTgt = self.createInput('neckBase', dataType='Xfo', parent=inputHrcGrp)
+        self.neckBaseInputTgt = self.createInput('neckBase', dataType='Xfo', parent=self.inputHrcGrp)
 
         # Declare Output Xfos
-        self.neckOutputTgt = self.createOutput('neck', dataType='Xfo', parent=outputHrcGrp)
-        self.neckEndOutputTgt = self.createOutput('neckEnd', dataType='Xfo', parent=outputHrcGrp)
+        self.neckOutputTgt = self.createOutput('neck', dataType='Xfo', parent=self.outputHrcGrp)
+        self.neckEndOutputTgt = self.createOutput('neckEnd', dataType='Xfo', parent=self.outputHrcGrp)
 
         # Declare Input Attrs
-        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=True, parent=cmpInputAttrGrp)
-        self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', value=self.getLocation() is 'R', parent=cmpInputAttrGrp)
+        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=True, parent=self.cmpInputAttrGrp)
+        self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', value=self.getLocation() is 'R', parent=self.cmpInputAttrGrp)
 
         # Declare Output Attrs
 
+
+class NeckComponentGuide(NeckComponent):
+    """Neck Component Guide"""
+
+    def __init__(self, name='neck', parent=None, data=None):
+
+        Profiler.getInstance().push("Construct Neck Component:" + name)
+        super(NeckComponentGuide, self).__init__(name, parent)
+
+
         # Guide Controls
-        self.neckCtrl = Control('neck', parent=ctrlCmpGrp, shape="sphere")
-        self.neckEndCtrl = Control('neckEnd', parent=ctrlCmpGrp, shape="sphere")
+        self.neckCtrl = Control('neck', parent=self.ctrlCmpGrp, shape="sphere")
+        self.neckEndCtrl = Control('neckEnd', parent=self.ctrlCmpGrp, shape="sphere")
 
         if data is None:
             data = {
@@ -71,6 +80,8 @@ class NeckComponentGuide(Component):
                    }
 
         self.loadData(data)
+
+        Profiler.getInstance().pop()
 
 
     # =============
@@ -138,7 +149,7 @@ class NeckComponentGuide(Component):
         neckXfo.setFromVectors(rootToEnd, bone1Normal, bone1ZAxis, neckPosition)
 
         data = {
-                "class":"kraken.examples.neck_component.NeckComponent",
+                "class":"kraken.examples.neck_component.NeckComponentRig",
                 "name": self.getName(),
                 "location":self.getLocation(),
                 "neckXfo": neckXfo
@@ -147,51 +158,20 @@ class NeckComponentGuide(Component):
         return data
 
 
-class NeckComponent(Component):
+class NeckComponentRig(NeckComponent):
     """Neck Component"""
 
     def __init__(self, name="neck", parent=None):
 
-        Profiler.getInstance().push("Construct Neck Component:" + name)
-        super(NeckComponent, self).__init__(name, parent)
-
-        # ================
-        # Setup Hierarchy
-        # ================
-        controlsLayer = self.getOrCreateLayer('controls')
-        ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
-        ctrlCmpGrp.setComponent(self)
-
-        # IO Hierarchies
-        inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
-        cmpInputAttrGrp = AttributeGroup('inputs', parent=inputHrcGrp)
-
-        outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
-        cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
-
-
-        # ===========
-        # Declare IO
-        # ===========
-        # Declare Inputs Xfos
-        self.neckBaseInputTgt = self.createInput('neckBase', dataType='Xfo', parent=inputHrcGrp)
-
-        # Declare Output Xfos
-        self.neckOutputTgt = self.createOutput('neck', dataType='Xfo', parent=outputHrcGrp)
-        self.neckEndOutputTgt = self.createOutput('neckEnd', dataType='Xfo', parent=outputHrcGrp)
-
-        # Declare Input Attrs
-        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=True, parent=cmpInputAttrGrp)
-        self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', value=self.getLocation() is 'R', parent=cmpInputAttrGrp)
-
-        # Declare Output Attrs
+        Profiler.getInstance().push("Construct Neck Rig Component:" + name)
+        super(NeckComponentRig, self).__init__(name, parent)
 
 
         # =========
         # Controls
         # =========
         # Neck
-        self.neckCtrlSpace = CtrlSpace('neck', parent=ctrlCmpGrp)
+        self.neckCtrlSpace = CtrlSpace('neck', parent=self.ctrlCmpGrp)
         self.neckCtrl = Control('neck', parent=self.neckCtrlSpace, shape="pin")
         self.neckCtrl.scalePoints(Vec3(1.25, 1.25, 1.25))
         self.neckCtrl.translatePoints(Vec3(0, 0, -0.5))
@@ -267,5 +247,5 @@ class NeckComponent(Component):
 
 from kraken.core.kraken_system import KrakenSystem
 ks = KrakenSystem.getInstance()
-ks.registerComponent(NeckComponent)
 ks.registerComponent(NeckComponentGuide)
+ks.registerComponent(NeckComponentRig)

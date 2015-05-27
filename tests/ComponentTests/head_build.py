@@ -1,7 +1,7 @@
 
 from kraken import plugins
 from kraken.core.maths import Vec3
-from kraken.examples.head_component import HeadComponentGuide, HeadComponent
+from kraken.examples.head_component import HeadComponentGuide, HeadComponentRig
 
 from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
@@ -25,7 +25,7 @@ saveData = headGuide.saveData()
 
 headGuideData = headGuide.getGuideData()
 
-head = HeadComponent()
+head = HeadComponentRig()
 head.loadData(headGuideData)
 
 builder = plugins.getBuilder()

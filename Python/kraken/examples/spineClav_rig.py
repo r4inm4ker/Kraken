@@ -3,14 +3,8 @@ from kraken.core.maths import Vec3, Quat, Xfo
 from kraken.core.objects.container import Container
 from kraken.core.objects.layer import Layer
 
-from kraken.examples.hand_component import HandComponent
-from kraken.examples.head_component import HeadComponent
-from kraken.examples.clavicle_component import ClavicleComponentGuide, ClavicleComponent
-from kraken.examples.arm_component import ArmComponentGuide, ArmComponent
-from kraken.examples.leg_component import LegComponentGuide, LegComponent
-from kraken.examples.foot_component import FootComponentGuide, FootComponent
-from kraken.examples.spine_component import SpineComponent
-from kraken.examples.neck_component import NeckComponentGuide, NeckComponent
+from kraken.examples.clavicle_component import ClavicleComponentGuide, ClavicleComponentRig
+from kraken.examples.spine_component import SpineComponentRig
 
 from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
@@ -25,7 +19,7 @@ class SpineClavRig(Container):
         super(SpineClavRig, self).__init__(name)
 
         # Add Components to Layers
-        spineComponent = SpineComponent("spine", self)
+        spineComponent = SpineComponentRig("spine", self)
         spineComponent.loadData(data={
             'cogPosition': Vec3(0.0, 11.1351, -0.1382),
             'spine01Position': Vec3(0.0, 11.1351, -0.1382),
@@ -43,7 +37,7 @@ class SpineClavRig(Container):
                   "clavicleEndXfo": Xfo(Vec3(2.27, 15.295, -0.753))
                  })
 
-        clavicleLeftComponent = ClavicleComponent("clavicle", self)
+        clavicleLeftComponent = ClavicleComponentRig("clavicle", self)
         clavicleLeftComponent.loadData(data=clavicleLeftComponentGuide.getGuideData())
 
         # Clavicle to Spine

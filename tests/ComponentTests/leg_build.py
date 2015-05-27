@@ -2,7 +2,7 @@ import json
 
 from kraken import plugins
 from kraken.core.maths import Xfo, Vec3, Quat
-from kraken.examples.leg_component import LegComponentGuide, LegComponent
+from kraken.examples.leg_component import LegComponentGuide, LegComponentRig
 
 from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
@@ -24,7 +24,7 @@ saveData = legGuide.saveData()
 
 legGuideData = legGuide.getGuideData()
 
-leg = LegComponent()
+leg = LegComponentRig()
 leg.loadData(legGuideData)
 
 builder = plugins.getBuilder()
