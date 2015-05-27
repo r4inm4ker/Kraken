@@ -56,6 +56,7 @@ class ArmComponent(Component):
 
         # Declare Input Attrs
         self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', parent=self.cmpInputAttrGrp)
+        self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', parent=self.cmpInputAttrGrp)
         self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', parent=self.cmpInputAttrGrp)
         self.bicepFKCtrlSizeInputAttr = self.createInput('bicepFKCtrlSize', dataType='Float', parent=self.cmpInputAttrGrp)
         self.forearmFKCtrlSizeInputAttr = self.createInput('forearmFKCtrlSize', dataType='Float', parent=self.cmpInputAttrGrp)
@@ -294,6 +295,8 @@ class ArmComponentRig(ArmComponent):
 
         # Add Att Inputs
         self.spliceOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.spliceOp.setInput('rigScale', self.rigScaleInputAttr)
+
         self.spliceOp.setInput('bone0Len', self.armBone0LenInputAttr)
         self.spliceOp.setInput('bone1Len', self.armBone1LenInputAttr)
         self.spliceOp.setInput('ikblend', armIKBlendInputAttr)
@@ -322,6 +325,7 @@ class ArmComponentRig(ArmComponent):
 
         # Add Att Inputs
         self.outputsToDeformersSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.outputsToDeformersSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
 
         # Add Xfo Inputs
         self.outputsToDeformersSpliceOp.setInput('constrainers', self.bicepOutputTgt)

@@ -52,6 +52,7 @@ function Scalar[] measureBezierLength(Vec3 coeffs[4], UInt32 numSamples){
 function BezierSpineSolver.solve!
 (
   Boolean drawDebug,
+  Scalar rigScale,
   Scalar length,
   Mat44 base,
   Mat44 baseHandle,

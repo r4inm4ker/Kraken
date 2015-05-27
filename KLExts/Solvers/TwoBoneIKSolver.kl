@@ -91,6 +91,7 @@ function solve2BoneIK(
 function TwoBoneIKSolver.solve!
 (
   Boolean drawDebug,
+  Scalar rigScale,
   Boolean rightSide,
 
   Scalar ikblend,
