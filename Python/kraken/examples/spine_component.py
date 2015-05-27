@@ -49,6 +49,7 @@ class SpineComponent(Component):
         # Declare Inputs Xfos
 
         # Declare Output Xfos
+        self.spineCogOutputTgt = self.createOutput('cog', dataType='Xfo', parent=self.outputHrcGrp)
         self.spineBaseOutputTgt = self.createOutput('spineBase', dataType='Xfo', parent=self.outputHrcGrp)
         self.spineEndOutputTgt = self.createOutput('spineEnd', dataType='Xfo', parent=self.outputHrcGrp)
 
@@ -234,6 +235,10 @@ class SpineComponentRig(SpineComponent):
         # Constraint inputs
 
         # Constraint outputs
+        self.spineCogOutputConstraint = PoseConstraint('_'.join([self.spineCogOutputTgt.getName(), 'To', self.cogCtrl.getName()]))
+        self.spineCogOutputConstraint.addConstrainer(self.cogCtrl)
+        self.spineCogOutputTgt.addConstraint(self.spineCogOutputConstraint)
+
         self.spineBaseOutputConstraint = PoseConstraint('_'.join([self.spineBaseOutputTgt.getName(), 'To', 'spineBase']))
         self.spineBaseOutputConstraint.addConstrainer(self.spineOutputs[0])
         self.spineBaseOutputTgt.addConstraint(self.spineBaseOutputConstraint)
@@ -366,6 +371,7 @@ class SpineComponentRig(SpineComponent):
         self.outputsToDeformersSpliceOp.evaluate()
 
         # evaluate the constraints to ensure the outputs are now in the correct location.
+        self.spineCogOutputConstraint.evaluate()
         self.spineBaseOutputConstraint.evaluate()
         self.spineEndOutputConstraint.evaluate()
 

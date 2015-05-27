@@ -10,6 +10,7 @@ from kraken.examples.arm_component import ArmComponentGuide, ArmComponentRig
 from kraken.examples.leg_component import LegComponentGuide, LegComponentRig
 from kraken.examples.foot_component import FootComponentGuide, FootComponentRig
 from kraken.examples.spine_component import SpineComponentRig
+from kraken.examples.pelvis_component import PelvisComponentRig
 from kraken.examples.neck_component import NeckComponentGuide, NeckComponentRig
 
 from kraken.core.profiler import Profiler
@@ -33,6 +34,11 @@ class BobRig(Container):
             'spine03Position': Vec3(0.0, 12.4496, -0.3649),
             'spine04Position': Vec3(0.0, 13.1051, -0.4821),
             'numDeformers': 4
+        })
+
+        pelvisComponent = PelvisComponentRig('pelvis', self)
+        pelvisComponent.loadData(data={
+            "pelvisXfo": Xfo(tr=Vec3(0.0, 11.1351, -0.1382))
         })
 
         neckComponentGuide = NeckComponentGuide(data={
@@ -151,6 +157,13 @@ class BobRig(Container):
         footRightComponent = FootComponentRig("foot", self)
         footRightComponent.loadData(data=footRightComponentGuide.getGuideData() )
 
+        # ============
+        # Connections
+        # ============
+        spineCogOutput = spineComponent.getOutputByName('cog')
+        pelvisCogInput = pelvisComponent.getInputByName('cog')
+        pelvisCogInput.setConnection(spineCogOutput)
+
         # Neck to Spine
         spineEndOutput = spineComponent.getOutputByName('spineEnd')
         neckSpineEndInput = neckComponent.getInputByName('neckBase')
@@ -200,11 +213,11 @@ class BobRig(Container):
         armRightClavicleEndInput.setConnection(clavicleRightEndOutput)
 
         # Leg To Pelvis Connections
-        spineBaseOutput = spineComponent.getOutputByName('spineBase')
+        pelvisOutput = pelvisComponent.getOutputByName('pelvis')
         legLeftPelvisInput = legLeftComponent.getInputByName('pelvisInput')
-        legLeftPelvisInput.setConnection(spineBaseOutput)
+        legLeftPelvisInput.setConnection(pelvisOutput)
         legRightPelvisInput = legRightComponent.getInputByName('pelvisInput')
-        legRightPelvisInput.setConnection(spineBaseOutput)
+        legRightPelvisInput.setConnection(pelvisOutput)
 
         # Foot To Leg Connections
         legLeftEndOutput = legLeftComponent.getOutputByName('legEndXfo')
