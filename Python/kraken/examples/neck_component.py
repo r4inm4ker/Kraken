@@ -219,7 +219,6 @@ class NeckComponentRig(NeckComponent):
         # Add Att Inputs
         spliceOp.setInput('drawDebug', self.drawDebugInputAttr)
         spliceOp.setInput('rigScale', self.rigScaleInputAttr)
-        spliceOp.setInput('rightSide', self.rightSideInputAttr)
 
         # Add Xfo Inputstrl)
         spliceOp.setInput('constrainer', self.neckEndOutputTgt)
