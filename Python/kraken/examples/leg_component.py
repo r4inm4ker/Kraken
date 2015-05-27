@@ -57,6 +57,7 @@ class LegComponent(Component):
 
         # Declare Input Attrs
         self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=True, parent=self.cmpInputAttrGrp)
+        self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', parent=self.cmpInputAttrGrp)
         self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', value=False, parent=self.cmpInputAttrGrp)
 
         # Declare Output Attrs
@@ -275,31 +276,33 @@ class LegComponentRig(LegComponent):
         # Add Splice Ops
         # ===============
         # Add Splice Op
-        self.spliceOp = SpliceOperator('legSpliceOp', 'TwoBoneIKSolver', 'Kraken')
-        self.addOperator(self.spliceOp)
+        self.legIKSpliceOp = SpliceOperator('legSpliceOp', 'TwoBoneIKSolver', 'Kraken')
+        self.addOperator(self.legIKSpliceOp)
 
         # Add Att Inputs
-        self.spliceOp.setInput('drawDebug', self.drawDebugInputAttr)
-        self.spliceOp.setInput('bone0Len', self.legBone0LenInputAttr)
-        self.spliceOp.setInput('bone1Len', self.legBone1LenInputAttr)
-        self.spliceOp.setInput('ikblend', legIKBlendInputAttr)
-        self.spliceOp.setInput('softIK', legSoftIKInputAttr)
-        self.spliceOp.setInput('softDist', legSoftDistInputAttr)
-        self.spliceOp.setInput('stretch', legStretchInputAttr)
-        self.spliceOp.setInput('stretchBlend', legStretchBlendInputAttr)
-        self.spliceOp.setInput('rightSide', self.rightSideInputAttr)
+        self.legIKSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.legIKSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
+
+        self.legIKSpliceOp.setInput('bone0Len', self.legBone0LenInputAttr)
+        self.legIKSpliceOp.setInput('bone1Len', self.legBone1LenInputAttr)
+        self.legIKSpliceOp.setInput('ikblend', legIKBlendInputAttr)
+        self.legIKSpliceOp.setInput('softIK', legSoftIKInputAttr)
+        self.legIKSpliceOp.setInput('softDist', legSoftDistInputAttr)
+        self.legIKSpliceOp.setInput('stretch', legStretchInputAttr)
+        self.legIKSpliceOp.setInput('stretchBlend', legStretchBlendInputAttr)
+        self.legIKSpliceOp.setInput('rightSide', self.rightSideInputAttr)
 
         # Add Xfo Inputs
-        self.spliceOp.setInput('root', self.legPelvisInputTgt)
-        self.spliceOp.setInput('bone0FK', self.femurFKCtrl)
-        self.spliceOp.setInput('bone1FK', self.shinFKCtrl)
-        self.spliceOp.setInput('ikHandle', self.legIKCtrl)
-        self.spliceOp.setInput('upV', self.legUpVCtrl)
+        self.legIKSpliceOp.setInput('root', self.legPelvisInputTgt)
+        self.legIKSpliceOp.setInput('bone0FK', self.femurFKCtrl)
+        self.legIKSpliceOp.setInput('bone1FK', self.shinFKCtrl)
+        self.legIKSpliceOp.setInput('ikHandle', self.legIKCtrl)
+        self.legIKSpliceOp.setInput('upV', self.legUpVCtrl)
 
         # Add Xfo Outputs
-        self.spliceOp.setOutput('bone0Out', self.femurOutputTgt)
-        self.spliceOp.setOutput('bone1Out', self.shinOutputTgt)
-        self.spliceOp.setOutput('bone2Out', self.legEndXfoOutputTgt)
+        self.legIKSpliceOp.setOutput('bone0Out', self.femurOutputTgt)
+        self.legIKSpliceOp.setOutput('bone1Out', self.shinOutputTgt)
+        self.legIKSpliceOp.setOutput('bone2Out', self.legEndXfoOutputTgt)
 
 
         # Add Deformer Splice Op
@@ -308,6 +311,7 @@ class LegComponentRig(LegComponent):
 
         # Add Att Inputs
         self.outputsToDeformersSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.outputsToDeformersSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
 
         # Add Xfo Inputs
         self.outputsToDeformersSpliceOp.setInput('constrainers', self.femurOutputTgt)
@@ -364,7 +368,7 @@ class LegComponentRig(LegComponent):
 
         self.legPelvisInputTgt.xfo = data['femurXfo']
 
-        self.spliceOp.evaluate()
+        self.legIKSpliceOp.evaluate()
         self.outputsToDeformersSpliceOp.evaluate()
         # self.legEndXfoOutputTgt.xfo = data['ankleXfo']
 

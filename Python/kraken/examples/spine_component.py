@@ -56,6 +56,7 @@ class SpineComponent(Component):
 
         # Declare Input Attrs
         self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=True, parent=self.cmpInputAttrGrp)
+        self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', parent=self.cmpInputAttrGrp)
         self.lengthInputAttr = self.createInput('length', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp)
 
         # Declare Output Attrs
@@ -251,6 +252,7 @@ class SpineComponentRig(SpineComponent):
 
         # Add Att Inputs
         self.bezierSpineSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.bezierSpineSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
         self.bezierSpineSpliceOp.setInput('length', self.lengthInputAttr)
 
         # Add Xfo Inputs
@@ -269,6 +271,7 @@ class SpineComponentRig(SpineComponent):
 
         # Add Att Inputs
         self.outputsToDeformersSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.outputsToDeformersSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
 
         # Add Xfo Outputs
         for spineOutput in self.spineOutputs:

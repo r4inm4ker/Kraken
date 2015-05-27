@@ -53,6 +53,7 @@ class NeckComponent(Component):
 
         # Declare Input Attrs
         self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=True, parent=self.cmpInputAttrGrp)
+        self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', parent=self.cmpInputAttrGrp)
         self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', value=self.getLocation() is 'R', parent=self.cmpInputAttrGrp)
 
         # Declare Output Attrs
@@ -217,6 +218,7 @@ class NeckComponentRig(NeckComponent):
 
         # Add Att Inputs
         spliceOp.setInput('drawDebug', self.drawDebugInputAttr)
+        spliceOp.setInput('rigScale', self.rigScaleInputAttr)
         spliceOp.setInput('rightSide', self.rightSideInputAttr)
 
         # Add Xfo Inputstrl)
