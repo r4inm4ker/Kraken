@@ -47,6 +47,7 @@ class SpineComponent(Component):
         # Declare IO
         # ===========
         # Declare Inputs Xfos
+        self.spineMainSrtInputTgt = self.createInput('mainSrt', dataType='Xfo', parent=self.inputHrcGrp)
 
         # Declare Output Xfos
         self.spineCogOutputTgt = self.createOutput('cog', dataType='Xfo', parent=self.outputHrcGrp)
@@ -233,6 +234,9 @@ class SpineComponentRig(SpineComponent):
         # Constrain I/O
         # ==============
         # Constraint inputs
+        self.spineSrtInputConstraint = PoseConstraint('_'.join([self.cogCtrlSpace.getName(), 'To', self.spineMainSrtInputTgt.getName()]))
+        self.spineSrtInputConstraint.addConstrainer(self.spineMainSrtInputTgt)
+        self.cogCtrlSpace.addConstraint(self.spineSrtInputConstraint)
 
         # Constraint outputs
         self.spineCogOutputConstraint = PoseConstraint('_'.join([self.spineCogOutputTgt.getName(), 'To', self.cogCtrl.getName()]))

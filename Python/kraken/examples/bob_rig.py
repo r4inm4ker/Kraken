@@ -3,6 +3,7 @@ from kraken.core.maths import Vec3, Quat, Xfo
 from kraken.core.objects.container import Container
 from kraken.core.objects.layer import Layer
 
+from kraken.examples.mainSrt_component import MainSrtComponentRig
 from kraken.examples.hand_component import HandComponentRig
 from kraken.examples.head_component import HeadComponentRig
 from kraken.examples.clavicle_component import ClavicleComponentGuide, ClavicleComponentRig
@@ -25,7 +26,9 @@ class BobRig(Container):
         Profiler.getInstance().push("Construct BobRig:" + name)
         super(BobRig, self).__init__(name)
 
-        # Add Components to Layers
+        # Add Components
+        mainSrtComponent = MainSrtComponentRig("mainSrt", self)
+
         spineComponent = SpineComponentRig("spine", self)
         spineComponent.loadData(data={
             'cogPosition': Vec3(0.0, 11.1351, -0.1382),
@@ -160,6 +163,11 @@ class BobRig(Container):
         # ============
         # Connections
         # ============
+        mainSrtRigScaleOutput = mainSrtComponent.getOutputByName('rigScale')
+        mainSrtOffsetOutput = mainSrtComponent.getOutputByName('offset')
+        spineInput = spineComponent.getInputByName('mainSrt')
+        spineInput.setConnection(mainSrtOffsetOutput)
+
         spineCogOutput = spineComponent.getOutputByName('cog')
         pelvisCogInput = pelvisComponent.getInputByName('cog')
         pelvisCogInput.setConnection(spineCogOutput)
