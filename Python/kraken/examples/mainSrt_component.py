@@ -54,7 +54,7 @@ class MainSrtComponent(Component):
         self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', parent=self.cmpInputAttrGrp)
 
         # Declare Output Attrs
-        self.rigScaleOutputAttr = self.createOutput('rigScale', dataType='Float', parent=self.cmpInputAttrGrp)
+        self.rigScaleOutputAttr = self.createOutput('rigScale', dataType='Float', parent=self.cmpOutputAttrGrp)
 
 
 class MainSrtComponentGuide(MainSrtComponent):
@@ -75,7 +75,7 @@ class MainSrtComponentGuide(MainSrtComponent):
         if data is None:
             data = {
                     "location": "M",
-                    "mainSrtXfo": Xfo(tr=Vec3(0.0, 11.1351, -0.1382))
+                    "mainSrtXfo": Xfo(tr=Vec3(0.0, 0.0, 0.0))
                    }
 
         self.loadData(data)
@@ -168,7 +168,7 @@ class MainSrtComponentRig(MainSrtComponent):
 
         # Add Component Params to IK control
         mainSrtSettingsAttrGrp = AttributeGroup('DisplayInfo_MainSrtSettings', parent=self.mainSRTCtrl)
-        self.rigScaleAttr = FloatAttribute('rigScale', value=0.0, parent=mainSrtSettingsAttrGrp, minValue=0.1, maxValue=100.0)
+        self.rigScaleAttr = FloatAttribute('rigScale', value=1.0, parent=mainSrtSettingsAttrGrp, minValue=0.1, maxValue=100.0)
         # self.rigScaleAttr.setUIMin(0.1)
         # self.rigScaleAttr.setUIMax(100.0)
 
@@ -197,6 +197,9 @@ class MainSrtComponentRig(MainSrtComponent):
         # ===============
         # Add Splice Ops
         # ===============
+
+
+        Profiler.getInstance().pop()
 
 
     def loadData(self, data=None):

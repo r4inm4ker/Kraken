@@ -13,7 +13,7 @@ mainSrtGuide = MainSrtComponentGuide("mainSrt")
 mainSrtGuide.loadData({
                       "name": "mainSrt",
                       "location": "M",
-                      "mainSrtXfo": Xfo(tr=Vec3(0.0, 11.1351, -0.1382))
+                      "mainSrtXfo": Xfo(tr=Vec3(0.0, 0.0, 0.0))
                      })
 
 # Save the main srt guide data for persistence.
