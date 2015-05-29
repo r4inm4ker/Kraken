@@ -48,3 +48,13 @@ class FloatAttribute(NumberAttribute):
 
         return True
 
+
+    def getDataType(self):
+        """Returns the name of the data type for this attribute.
+
+        Return:
+        string
+
+        """
+
+        return 'Scalar'

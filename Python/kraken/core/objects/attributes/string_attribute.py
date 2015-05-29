@@ -28,7 +28,7 @@ class StringAttribute(Attribute):
 
         """
 
-        if type(value) not in (str):
+        if not isinstance(value, basestring):
             raise TypeError("Value is not of type 'str'.")
 
         super(StringAttribute, self).setValue(value)
@@ -44,3 +44,15 @@ class StringAttribute(Attribute):
 
         """
         return ks.rtVal('String', self._value)
+
+
+
+    def getDataType(self):
+        """Returns the name of the data type for this attribute.
+
+        Return:
+        string
+
+        """
+
+        return 'String'

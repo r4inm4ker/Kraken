@@ -47,3 +47,15 @@ class IntegerAttribute(NumberAttribute):
             return False
 
         return True
+
+
+
+    def getDataType(self):
+        """Returns the name of the data type for this attribute.
+
+        Return:
+        string
+
+        """
+
+        return 'Integer'
