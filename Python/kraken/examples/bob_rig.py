@@ -4,7 +4,6 @@ from kraken.core.objects.container import Container
 from kraken.core.objects.layer import Layer
 
 from kraken.examples.mainSrt_component import MainSrtComponentRig
-from kraken.examples.hand_component import HandComponentRig
 from kraken.examples.head_component import HeadComponentRig
 from kraken.examples.clavicle_component import ClavicleComponentGuide, ClavicleComponentRig
 from kraken.examples.arm_component import ArmComponentGuide, ArmComponentRig
@@ -80,6 +79,8 @@ class BobRig(Container):
             "bicepXfo": Xfo(Vec3(2.27, 15.295, -0.753)),
             "forearmXfo": Xfo(Vec3(5.039, 13.56, -0.859)),
             "wristXfo": Xfo(Vec3(7.1886, 12.2819, 0.4906)),
+            "handXfo": Xfo(tr=Vec3(7.1886, 12.2819, 0.4906),
+                           ori=Quat(Vec3(-0.0865, -0.2301, -0.2623), 0.9331)),
             "bicepFKCtrlSize": 1.75,
             "forearmFKCtrlSize": 1.5
         })
@@ -92,26 +93,14 @@ class BobRig(Container):
             "bicepXfo": Xfo(Vec3(-2.27, 15.295, -0.753)),
             "forearmXfo": Xfo(Vec3(-5.039, 13.56, -0.859)),
             "wristXfo": Xfo(Vec3(-7.1886, 12.2819, 0.4906)),
+            "handXfo": Xfo(tr=Vec3(-7.1886, 12.2819, 0.4906),
+                           ori=Quat(Vec3(-0.2301, -0.0865, -0.9331), 0.2623)),
             "bicepFKCtrlSize": 1.75,
             "forearmFKCtrlSize": 1.5
         })
 
         armRightComponent = ArmComponentRig("arm", self)
         armRightComponent.loadData(data=armRightComponentGuide.getGuideData() )
-
-        handLeftComponent = HandComponentRig("hand", self)
-        handLeftComponent.loadData(data={
-            "name":"L_HandComponent",
-            "location": "L",
-            "handXfo": Xfo(tr=Vec3(7.1886, 12.2819, 0.4906), ori=Quat(Vec3(-0.0865, -0.2301, -0.2623), 0.9331)),
-        })
-
-        handRightComponent = HandComponentRig("hand", self)
-        handRightComponent.loadData(data={
-            "name":"R_HandComponent",
-            "location": "R",
-            "handXfo": Xfo(tr=Vec3(-7.1886, 12.2819, 0.4906), ori=Quat(Vec3(-0.2301, -0.0865, -0.9331), 0.2623)),
-        })
 
         legLeftComponentGuide = LegComponentGuide("leg", data={
             "name":"L_LegComponent",
@@ -181,23 +170,6 @@ class BobRig(Container):
 
         armRightRigScaleInput = armRightComponent.getInputByName('rigScale')
         armRightRigScaleInput.setConnection(mainSrtRigScaleOutput)
-
-        # Hand To Arm Connections
-        armLeftEndOutput = armLeftComponent.getOutputByName('armEndXfo')
-        handLeftArmEndInput = handLeftComponent.getInputByName('armEndXfo')
-        handLeftArmEndInput.setConnection(armLeftEndOutput)
-
-        armLeftDrawDebugOutput = armLeftComponent.getOutputByName('drawDebug')
-        handLeftDrawDebugInput = handLeftComponent.getInputByName('drawDebug')
-        handLeftDrawDebugInput.setConnection(armLeftDrawDebugOutput)
-
-        armRightEndOutput = armRightComponent.getOutputByName('armEndXfo')
-        handRightArmEndInput = handRightComponent.getInputByName('armEndXfo')
-        handRightArmEndInput.setConnection(armRightEndOutput)
-
-        armRightDrawDebugOutput = armRightComponent.getOutputByName('drawDebug')
-        handRightDrawDebugInput = handRightComponent.getInputByName('drawDebug')
-        handRightDrawDebugInput.setConnection(armRightDrawDebugOutput)
 
         # Arm To Clavicle Connections
         clavicleLeftEndOutput = clavicleLeftComponent.getOutputByName('clavicleEnd')
