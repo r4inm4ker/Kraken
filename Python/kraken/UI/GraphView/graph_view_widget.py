@@ -8,6 +8,7 @@ from contextual_node_list import ContextualNodeList, ContextualNewNodeWidget
 from graph_view import GraphView
 
 from kraken.core.objects.rig import Rig
+from kraken import plugins
 
 
 def GetHomePath():
@@ -49,7 +50,7 @@ class GraphViewWidget(QtGui.QWidget):
         toolBar.addWidget(QtGui.QLabel('Name:'))
         self.nameWidget = QtGui.QLineEdit('', self)
         def setRigName( text ):
-            self.rig.setName( text )
+            self.guideRig.setName( text )
         self.nameWidget.textChanged.connect(setRigName)
         toolBar.addWidget( self.nameWidget )
 
@@ -57,6 +58,9 @@ class GraphViewWidget(QtGui.QWidget):
 
         buildGuideAction = toolBar.addAction('Build Guide')
         buildGuideAction.triggered.connect(self.buildGuideRig)
+
+        synchGuideAction = toolBar.addAction('Synch Guide')
+        synchGuideAction.triggered.connect(self.synchGuideRig)
 
         buildGuideAction = toolBar.addAction('Build Rig')
         buildGuideAction.triggered.connect(self.buildRig)
@@ -90,36 +94,48 @@ class GraphViewWidget(QtGui.QWidget):
 
     def newRigPreset(self):
         # TODO: clean the rig from the scene if it has been built.
-        self.rig = Rig()
-        self.graphView.init( self.rig )
+        self.guideRig = Rig()
+        self.graphView.init( self.guideRig )
         self.nameWidget.setText( 'MyRig' )
 
     def saveRigPreset(self):
-        lastSceneFilePath = os.path.join(GetHomePath(), self.rig.getName() )
+        lastSceneFilePath = os.path.join(GetHomePath(), self.guideRig.getName() )
         (filePath, filter) = QtGui.QFileDialog.getSaveFileName(self, 'Save Rig Preset', lastSceneFilePath, 'Kraken Rig (*.krg)')
         if len(filePath) > 0:
-            self.rig.writeGuideDefinitionFile(filePath)
+            self.synchGuideRig()
+            self.guideRig.writeGuideDefinitionFile(filePath)
 
     def loadRigPreset(self):
         lastSceneFilePath = GetHomePath()
         (filePath, filter) = QtGui.QFileDialog.getOpenFileName(self, 'Load Rig Preset', lastSceneFilePath, 'Kraken Rig (*.krg)')
         if len(filePath) > 0:
-            self.rig = Rig()
-            self.rig.loadRigDefinitionFile(filePath)
-            self.graphView.init( self.rig )
-            self.nameWidget.setText( self.rig.getName() )
+            self.guideRig = Rig()
+            self.guideRig.loadRigDefinitionFile(filePath)
+            self.graphView.init( self.guideRig )
+            self.nameWidget.setText( self.guideRig.getName() )
 
     def buildGuideRig(self):
-        print 'buildGuideRig'
+        builder = plugins.getBuilder()
+        builder.build(self.guideRig)
+
+    def synchGuideRig(self):
+        print "synchGuideRig"
 
     def buildRig(self):
-        print 'buildRig'
+        self.synchGuideRig()
+
+        guideData = self.guideRig.getGuideData()
+        rig = Rig()
+        rig.loadRigDefinition(guideData)
+
+        builder = plugins.getBuilder()
+        builder.build(rig)
 
     def keyPressEvent(self, event):
         if event.key() == 96: #'`'
             pos = self.mapFromGlobal(QtGui.QCursor.pos());
             if not self.__contextualNodeList:
-                self.__contextualNodeList = ContextualNodeList(self, self.__controller, self.graphView.getGraph())
+                self.__contextualNodeList = ContextualNodeList(self)
 
 
             scenepos = self.graphView.getGraph().mapToScene(pos)
