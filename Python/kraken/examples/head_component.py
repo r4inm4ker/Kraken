@@ -20,52 +20,63 @@ from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
 
 
-class HeadComponentGuide(Component):
-    """Head Component Guide"""
+class HeadComponent(Component):
+    """Head Component Base"""
 
-    def __init__(self, name='head', parent=None, data=None):
-        super(HeadComponentGuide, self).__init__(name, parent)
+    def __init__(self, name='headBase', parent=None, data=None):
+        super(HeadComponent, self).__init__(name, parent)
 
         # ================
         # Setup Hierarchy
         # ================
-        controlsLayer = self.getOrCreateLayer('controls')
-        ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
+        self.controlsLayer = self.getOrCreateLayer('controls')
+        self.ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=self.controlsLayer)
 
         # IO Hierarchies
-        inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
-        cmpInputAttrGrp = AttributeGroup('inputs', parent=inputHrcGrp)
+        self.inputHrcGrp = HierarchyGroup('inputs', parent=self.ctrlCmpGrp)
+        self.cmpInputAttrGrp = AttributeGroup('inputs', parent=self.inputHrcGrp)
 
-        outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
-        cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
+        self.outputHrcGrp = HierarchyGroup('outputs', parent=self.ctrlCmpGrp)
+        self.cmpOutputAttrGrp = AttributeGroup('outputs', parent=self.outputHrcGrp)
 
 
         # ===========
         # Declare IO
         # ===========
         # Declare Inputs Xfos
-        self.headBaseInputTgt = self.createInput('headBase', dataType='Xfo', parent=inputHrcGrp)
+        self.headBaseInputTgt = self.createInput('headBase', dataType='Xfo', parent=self.inputHrcGrp)
 
         # Declare Output Xfos
-        self.headOutputTgt = self.createOutput('head', dataType='Xfo', parent=outputHrcGrp)
-        self.jawOutputTgt = self.createOutput('jaw', dataType='Xfo', parent=outputHrcGrp)
-        self.eyeLOutputTgt = self.createOutput('eyeL', dataType='Xfo', parent=outputHrcGrp)
-        self.eyeROutputTgt = self.createOutput('eyeR', dataType='Xfo', parent=outputHrcGrp)
+        self.headOutputTgt = self.createOutput('head', dataType='Xfo', parent=self.outputHrcGrp)
+        self.jawOutputTgt = self.createOutput('jaw', dataType='Xfo', parent=self.outputHrcGrp)
+        self.eyeLOutputTgt = self.createOutput('eyeL', dataType='Xfo', parent=self.outputHrcGrp)
+        self.eyeROutputTgt = self.createOutput('eyeR', dataType='Xfo', parent=self.outputHrcGrp)
 
         # Declare Input Attrs
-        self.debugInputAttr = self.createInput('debug', dataType='Boolean', parent=cmpInputAttrGrp)
+        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', parent=self.cmpInputAttrGrp)
+        self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', parent=self.cmpInputAttrGrp)
 
         # Declare Output Attrs
+
+
+class HeadComponentGuide(HeadComponent):
+    """Head Component Guide"""
+
+    def __init__(self, name='head', parent=None, data=None):
+
+        Profiler.getInstance().push("Construct Head Guide Component:" + name)
+        super(HeadComponentGuide, self).__init__(name, parent)
+
 
         # =========
         # Controls
         # =========
         # Guide Controls
-        self.headCtrl = Control('head', parent=ctrlCmpGrp, shape="cube")
-        self.headEndCtrl = Control('headEnd', parent=ctrlCmpGrp, shape="sphere")
-        self.eyeLeftCtrl = Control('eyeLeft', parent=ctrlCmpGrp, shape="sphere")
-        self.eyeRightCtrl = Control('eyeRight', parent=ctrlCmpGrp, shape="sphere")
-        self.jawCtrl = Control('jaw', parent=ctrlCmpGrp, shape="cube")
+        self.headCtrl = Control('head', parent=self.ctrlCmpGrp, shape="cube")
+        self.headEndCtrl = Control('headEnd', parent=self.ctrlCmpGrp, shape="sphere")
+        self.eyeLeftCtrl = Control('eyeLeft', parent=self.ctrlCmpGrp, shape="sphere")
+        self.eyeRightCtrl = Control('eyeRight', parent=self.ctrlCmpGrp, shape="sphere")
+        self.jawCtrl = Control('jaw', parent=self.ctrlCmpGrp, shape="cube")
 
         if data is None:
             data = {
@@ -79,6 +90,8 @@ class HeadComponentGuide(Component):
                    }
 
         self.loadData(data)
+
+        Profiler.getInstance().pop()
 
 
     # =============
@@ -138,7 +151,7 @@ class HeadComponentGuide(Component):
         """
 
         data = {
-                "class":"kraken.examples.head_component.HeadComponent",
+                "class":"kraken.examples.head_component.HeadComponentRig",
                 "name": self.getName(),
                 "location":self.getLocation(),
                 "headPosition": self.headCtrl.xfo.tr,
@@ -152,51 +165,20 @@ class HeadComponentGuide(Component):
 
 
 
-class HeadComponent(Component):
-    """Head Component"""
+class HeadComponentRig(HeadComponent):
+    """Head Component Rig"""
 
     def __init__(self, name='head', parent=None):
 
-        Profiler.getInstance().push("Construct Head Component:" + name)
-        super(HeadComponent, self).__init__(name, parent)
-
-        # ================
-        # Setup Hierarchy
-        # ================
-        controlsLayer = self.getOrCreateLayer('controls')
-        ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
-
-        # IO Hierarchies
-        inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
-        cmpInputAttrGrp = AttributeGroup('inputs', parent=inputHrcGrp)
-
-        outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
-        cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
-
-
-        # ===========
-        # Declare IO
-        # ===========
-        # Declare Inputs Xfos
-        self.headBaseInputTgt = self.createInput('headBase', dataType='Xfo', parent=inputHrcGrp)
-
-        # Declare Output Xfos
-        self.headOutputTgt = self.createOutput('head', dataType='Xfo', parent=outputHrcGrp)
-        self.jawOutputTgt = self.createOutput('jaw', dataType='Xfo', parent=outputHrcGrp)
-        self.eyeLOutputTgt = self.createOutput('eyeL', dataType='Xfo', parent=outputHrcGrp)
-        self.eyeROutputTgt = self.createOutput('eyeR', dataType='Xfo', parent=outputHrcGrp)
-
-        # Declare Input Attrs
-        self.debugInputAttr = self.createInput('debug', dataType='Boolean', parent=cmpInputAttrGrp)
-
-        # Declare Output Attrs
+        Profiler.getInstance().push("Construct Head Rig Component:" + name)
+        super(HeadComponentRig, self).__init__(name, parent)
 
 
         # =========
         # Controls
         # =========
         # Head
-        self.headCtrlSpace = CtrlSpace('head', parent=ctrlCmpGrp)
+        self.headCtrlSpace = CtrlSpace('head', parent=self.ctrlCmpGrp)
         self.headCtrl = Control('head', parent=self.headCtrlSpace, shape="circle")
         self.headCtrl.rotatePoints(0, 0, 90)
         self.headCtrl.scalePoints(Vec3(3, 3, 3))
@@ -286,30 +268,31 @@ class HeadComponent(Component):
         # self.addOutput(self.eyeROutputTgt)
 
         # Add Attribute I/O's
-        # self.addInput(self.debugInputAttr)
+        # self.addInput(self.drawDebugInputAttr)
 
 
         # ===============
         # Add Splice Ops
         # ===============
         # Add Deformer Splice Op
-        # spliceOp = SpliceOperator("headDeformerSpliceOp", "HeadConstraintSolver", "KrakenHeadConstraintSolver")
+        # spliceOp = SpliceOperator('headDeformerSpliceOp', 'HeadConstraintSolver', 'KrakenHeadConstraintSolver')
         # self.addOperator(spliceOp)
 
         # # Add Att Inputs
-        # spliceOp.setInput("debug", self.debugInputAttr)
+        # spliceOp.setInput('drawDebug', self.drawDebugInputAttr)
+        # spliceOp.setInput('rigScale', self.rigScaleInputAttr)
 
         # # Add Xfo Inputstrl)
-        # spliceOp.setInput("headConstrainer", self.headOutputTgt)
-        # spliceOp.setInput("jawConstrainer", self.jawOutputTgt)
-        # spliceOp.setInput("eyeLeftConstrainer", self.eyeLOutputTgt)
-        # spliceOp.setInput("eyeRightConstrainer", self.eyeROutputTgt)
+        # spliceOp.setInput('headConstrainer', self.headOutputTgt)
+        # spliceOp.setInput('jawConstrainer', self.jawOutputTgt)
+        # spliceOp.setInput('eyeLeftConstrainer', self.eyeLOutputTgt)
+        # spliceOp.setInput('eyeRightConstrainer', self.eyeROutputTgt)
 
         # # Add Xfo Outputs
-        # spliceOp.setOutput("headDeformer", headDef)
-        # spliceOp.setOutput("jawDeformer", jawDef)
-        # spliceOp.setOutput("eyeLeftDeformer", eyeLeftDef)
-        # spliceOp.setOutput("eyeRightDeformer", eyeRightDef)
+        # spliceOp.setOutput('headDeformer', headDef)
+        # spliceOp.setOutput('jawDeformer', jawDef)
+        # spliceOp.setOutput('eyeLeftDeformer', eyeLeftDef)
+        # spliceOp.setOutput('eyeRightDeformer', eyeRightDef)
 
         Profiler.getInstance().pop()
 
@@ -341,5 +324,5 @@ class HeadComponent(Component):
 
 from kraken.core.kraken_system import KrakenSystem
 ks = KrakenSystem.getInstance()
-ks.registerComponent(HeadComponent)
 ks.registerComponent(HeadComponentGuide)
+ks.registerComponent(HeadComponentRig)

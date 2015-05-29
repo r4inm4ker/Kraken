@@ -23,42 +23,64 @@ from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
 
 
-class SpineComponentGuide(Component):
-    """Spine Component Guide"""
+class SpineComponent(Component):
+    """Spine Component"""
 
-    def __init__(self, name='spine', parent=None):
-        super(SpineComponentGuide, self).__init__(name, parent)
+    def __init__(self, name="spineBase", parent=None):
+        super(SpineComponent, self).__init__(name, parent)
 
+        # ================
+        # Setup Hierarchy
+        # ================
+        self.controlsLayer = self.getOrCreateLayer('controls')
+        self.ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=self.controlsLayer)
+
+        # IO Hierarchies
+        self.inputHrcGrp = HierarchyGroup('inputs', parent=self.ctrlCmpGrp)
+        self.cmpInputAttrGrp = AttributeGroup('inputs', parent=self.inputHrcGrp)
+
+        self.outputHrcGrp = HierarchyGroup('outputs', parent=self.ctrlCmpGrp)
+        self.cmpOutputAttrGrp = AttributeGroup('outputs', parent=self.outputHrcGrp)
+
+
+        # ===========
+        # Declare IO
+        # ===========
         # Declare Inputs Xfos
 
         # Declare Output Xfos
-        self.spineBaseOutput = self.addOutput('spineBase', dataType='Xfo')
-        self.spineEndOutput = self.addOutput('spineEnd', dataType='Xfo')
+        self.spineBaseOutputTgt = self.createOutput('spineBase', dataType='Xfo', parent=self.outputHrcGrp)
+        self.spineEndOutputTgt = self.createOutput('spineEnd', dataType='Xfo', parent=self.outputHrcGrp)
+
         self.spineVertebraeOutput = self.addOutput('spineVertebrae', dataType='Xfo[]')
 
         # Declare Input Attrs
+        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=True, parent=self.cmpInputAttrGrp)
+        self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', parent=self.cmpInputAttrGrp)
+        self.lengthInputAttr = self.createInput('length', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp)
+
+        # Declare Output Attrs
+
+
+class SpineComponentGuide(SpineComponent):
+    """Spine Component Guide"""
+
+    def __init__(self, name='spine', parent=None):
+
+        Profiler.getInstance().push("Construct Spine Guide Component:" + name)
+        super(SpineComponentGuide, self).__init__(name, parent)
 
         # =========
         # Controls
         # =========
-        controlsLayer = self.getOrCreateLayer('controls')
-        ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
-
-        # IO Hierarchies
-        inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
-        cmpInputAttrGrp = AttributeGroup('inputs', parent=inputHrcGrp)
-
-        outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
-        cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
-
         # Guide Controls
-        self.cog = Control('cogPosition', parent=ctrlCmpGrp, shape="sphere")
+        self.cog = Control('cogPosition', parent=self.ctrlCmpGrp, shape="sphere")
         self.cog.setColor("red")
 
-        self.spine01Ctrl = Control('spine01Position', parent=ctrlCmpGrp, shape="sphere")
-        self.spine02Ctrl = Control('spine02Position', parent=ctrlCmpGrp, shape="sphere")
-        self.spine03Ctrl = Control('spine03Position', parent=ctrlCmpGrp, shape="sphere")
-        self.spine04Ctrl = Control('spine04Position', parent=ctrlCmpGrp, shape="sphere")
+        self.spine01Ctrl = Control('spine01Position', parent=self.ctrlCmpGrp, shape="sphere")
+        self.spine02Ctrl = Control('spine02Position', parent=self.ctrlCmpGrp, shape="sphere")
+        self.spine03Ctrl = Control('spine03Position', parent=self.ctrlCmpGrp, shape="sphere")
+        self.spine04Ctrl = Control('spine04Position', parent=self.ctrlCmpGrp, shape="sphere")
 
         self.numDeformersAttr = IntegerAttribute('numDeformers', 1)
 
@@ -72,6 +94,8 @@ class SpineComponentGuide(Component):
             "spine04Position": Vec3(0.0, 13.1051, -0.4821),
             "numDeformers": 6
         })
+
+        Profiler.getInstance().pop()
 
 
     # =============
@@ -133,7 +157,7 @@ class SpineComponentGuide(Component):
         """
 
         data = {
-                "class":"kraken.examples.spine_component.SpineComponent",
+                "class":"kraken.examples.spine_component.SpineComponentRig",
                 "name": self.getName(),
                 "location":self.getLocation(),
                 "cogPosition": self.cog.xfo.tr,
@@ -147,51 +171,20 @@ class SpineComponentGuide(Component):
         return data
 
 
-class SpineComponent(Component):
+class SpineComponentRig(SpineComponent):
     """Spine Component"""
 
     def __init__(self, name="spine", parent=None):
 
-        Profiler.getInstance().push("Construct Spine Component:" + name)
-        super(SpineComponent, self).__init__(name, parent)
-
-        # ================
-        # Setup Hierarchy
-        # ================
-        controlsLayer = self.getOrCreateLayer('controls')
-        ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
-
-        # IO Hierarchies
-        inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
-        cmpInputAttrGrp = AttributeGroup('inputs', parent=inputHrcGrp)
-
-        self.outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
-        cmpOutputAttrGrp = AttributeGroup('outputs', parent=self.outputHrcGrp)
-
-
-        # ===========
-        # Declare IO
-        # ===========
-        # Declare Inputs Xfos
-
-        # Declare Output Xfos
-        self.spineBaseOutputTgt = self.createOutput('spineBase', dataType='Xfo', parent=self.outputHrcGrp)
-        self.spineEndOutputTgt = self.createOutput('spineEnd', dataType='Xfo', parent=self.outputHrcGrp)
-
-        self.spineVertebraeOutput = self.addOutput('spineVertebrae', dataType='Xfo[]')
-
-        # Declare Input Attrs
-        debugInputAttr = self.createInput('debug', dataType='Boolean', value=True, parent=cmpInputAttrGrp)
-        self.lengthInputAttr = self.createInput('length', dataType='Float', value=1.0, parent=cmpInputAttrGrp)
-
-        # Declare Output Attrs
+        Profiler.getInstance().push("Construct Spine Rig Component:" + name)
+        super(SpineComponentRig, self).__init__(name, parent)
 
 
         # =========
         # Controls
         # =========
         # COG
-        self.cogCtrlSpace = CtrlSpace('cog', parent=ctrlCmpGrp)
+        self.cogCtrlSpace = CtrlSpace('cog', parent=self.ctrlCmpGrp)
         self.cogCtrl = Control('cog', parent=self.cogCtrlSpace, shape="circle")
         self.cogCtrl.scalePoints(Vec3(6.0, 6.0, 6.0))
         self.cogCtrl.setColor("orange")
@@ -258,7 +251,8 @@ class SpineComponent(Component):
         self.addOperator(self.bezierSpineSpliceOp)
 
         # Add Att Inputs
-        self.bezierSpineSpliceOp.setInput('debug', debugInputAttr)
+        self.bezierSpineSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.bezierSpineSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
         self.bezierSpineSpliceOp.setInput('length', self.lengthInputAttr)
 
         # Add Xfo Inputs
@@ -276,7 +270,8 @@ class SpineComponent(Component):
         self.addOperator(self.outputsToDeformersSpliceOp)
 
         # Add Att Inputs
-        self.outputsToDeformersSpliceOp.setInput('debug', debugInputAttr)
+        self.outputsToDeformersSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.outputsToDeformersSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
 
         # Add Xfo Outputs
         for spineOutput in self.spineOutputs:
@@ -377,5 +372,5 @@ class SpineComponent(Component):
 
 from kraken.core.kraken_system import KrakenSystem
 ks = KrakenSystem.getInstance()
-ks.registerComponent(SpineComponent)
 ks.registerComponent(SpineComponentGuide)
+ks.registerComponent(SpineComponentRig)

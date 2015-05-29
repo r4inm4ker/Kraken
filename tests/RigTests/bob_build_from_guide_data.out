@@ -70,7 +70,6 @@ char_bob.controls.L_Arm.outputs
 char_bob.controls.L_Arm.outputs.bicep
 char_bob.controls.L_Arm.outputs.forearm
 char_bob.controls.L_Arm.outputs.armEndXfo
-char_bob.controls.L_Arm.outputs.armEndPos
 char_bob.controls.L_Arm.bicepFK
 char_bob.controls.L_Arm.bicepFK.bicepFK
 char_bob.controls.L_Arm.bicepFK.bicepFK.forearmFK
@@ -86,7 +85,6 @@ char_bob.controls.R_Arm.outputs
 char_bob.controls.R_Arm.outputs.bicep
 char_bob.controls.R_Arm.outputs.forearm
 char_bob.controls.R_Arm.outputs.armEndXfo
-char_bob.controls.R_Arm.outputs.armEndPos
 char_bob.controls.R_Arm.bicepFK
 char_bob.controls.R_Arm.bicepFK.bicepFK
 char_bob.controls.R_Arm.bicepFK.bicepFK.forearmFK
@@ -98,7 +96,6 @@ char_bob.controls.R_Arm.UpV.UpV
 char_bob.controls.L_Hand
 char_bob.controls.L_Hand.inputs
 char_bob.controls.L_Hand.inputs.armEndXfo
-char_bob.controls.L_Hand.inputs.armEndPos
 char_bob.controls.L_Hand.outputs
 char_bob.controls.L_Hand.outputs.hand
 char_bob.controls.L_Hand.outputs.handEnd
@@ -108,7 +105,6 @@ char_bob.controls.L_Hand.handRef
 char_bob.controls.R_Hand
 char_bob.controls.R_Hand.inputs
 char_bob.controls.R_Hand.inputs.armEndXfo
-char_bob.controls.R_Hand.inputs.armEndPos
 char_bob.controls.R_Hand.outputs
 char_bob.controls.R_Hand.outputs.hand
 char_bob.controls.R_Hand.outputs.handEnd
@@ -122,7 +118,6 @@ char_bob.controls.L_Leg.outputs
 char_bob.controls.L_Leg.outputs.femur
 char_bob.controls.L_Leg.outputs.shin
 char_bob.controls.L_Leg.outputs.legEndXfo
-char_bob.controls.L_Leg.outputs.legEndPos
 char_bob.controls.L_Leg.femurFK
 char_bob.controls.L_Leg.femurFK.femurFK
 char_bob.controls.L_Leg.femurFK.femurFK.shinFK
@@ -134,7 +129,6 @@ char_bob.controls.L_Leg.UpV.UpV
 char_bob.controls.L_Foot
 char_bob.controls.L_Foot.inputs
 char_bob.controls.L_Foot.inputs.legEndXfo
-char_bob.controls.L_Foot.inputs.legEndPos
 char_bob.controls.L_Foot.outputs
 char_bob.controls.L_Foot.outputs.footEnd
 char_bob.controls.L_Foot.outputs.foot
@@ -148,7 +142,6 @@ char_bob.controls.R_Leg.outputs
 char_bob.controls.R_Leg.outputs.femur
 char_bob.controls.R_Leg.outputs.shin
 char_bob.controls.R_Leg.outputs.legEndXfo
-char_bob.controls.R_Leg.outputs.legEndPos
 char_bob.controls.R_Leg.femurFK
 char_bob.controls.R_Leg.femurFK.femurFK
 char_bob.controls.R_Leg.femurFK.femurFK.shinFK
@@ -160,7 +153,6 @@ char_bob.controls.R_Leg.UpV.UpV
 char_bob.controls.R_Foot
 char_bob.controls.R_Foot.inputs
 char_bob.controls.R_Foot.inputs.legEndXfo
-char_bob.controls.R_Foot.inputs.legEndPos
 char_bob.controls.R_Foot.outputs
 char_bob.controls.R_Foot.outputs.footEnd
 char_bob.controls.R_Foot.outputs.foot

@@ -324,7 +324,7 @@ class Builder(Builder):
         """
 
         parentDCCSceneItem = Dispatch(self.getDCCSceneItem(kAttribute.getParent()))
-        dccSceneItem = parentDCCSceneItem.AddParameter2(kAttribute.getName(), constants.siDouble, kAttribute.getValue(), kAttribute.getMin(), kAttribute.getMax(), kAttribute.getMin(), kAttribute.getMax(), constants.siClassifUnknown, 2053, kAttribute.getName())
+        dccSceneItem = parentDCCSceneItem.AddParameter2(kAttribute.getName(), constants.siDouble, kAttribute.getValue(), kAttribute.getMin(), kAttribute.getMax(), kAttribute.getUIMin(), kAttribute.getUIMax(), constants.siClassifUnknown, 2053, kAttribute.getName())
 
         self._registerSceneItemPair(kAttribute, dccSceneItem)
 
@@ -343,7 +343,7 @@ class Builder(Builder):
         """
 
         parentDCCSceneItem = Dispatch(self.getDCCSceneItem(kAttribute.getParent()))
-        dccSceneItem = parentDCCSceneItem.AddParameter2(kAttribute.getName(), constants.siInt4, kAttribute.getValue(), kAttribute.min, kAttribute.max, kAttribute.min, kAttribute.max, constants.siClassifUnknown, 2053, kAttribute.getName())
+        dccSceneItem = parentDCCSceneItem.AddParameter2(kAttribute.getName(), constants.siInt4, kAttribute.getValue(), kAttribute.getMin(), kAttribute.getMax(), kAttribute.getUIMin(), kAttribute.getUIMax(), constants.siClassifUnknown, 2053, kAttribute.getName())
 
         self._registerSceneItemPair(kAttribute, dccSceneItem)
 
@@ -597,6 +597,9 @@ class Builder(Builder):
         True if successful.
 
         """
+
+        if connectionInput.isConnected() is False:
+            return False
 
         connection = connectionInput.getConnection()
         connectionTarget = connection.getTarget()
@@ -911,7 +914,7 @@ class Builder(Builder):
         """
 
         si.SetValue("preferences.scripting.cmdlog", False, "")
-        si.BeginUndo("Kraken SI Build: " + kSceneItem.name)
+        si.BeginUndo("Kraken SI Build: " + kSceneItem.getName())
 
         return True
 

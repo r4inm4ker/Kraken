@@ -8,7 +8,6 @@ L_Arm.controls.arm.outputs
 L_Arm.controls.arm.outputs.bicep
 L_Arm.controls.arm.outputs.forearm
 L_Arm.controls.arm.outputs.armEndXfo
-L_Arm.controls.arm.outputs.armEndPos
 L_Arm.controls.arm.bicepFK
 L_Arm.controls.arm.bicepFK.bicepFK
 L_Arm.controls.arm.bicepFK.bicepFK.forearmFK

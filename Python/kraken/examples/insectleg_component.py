@@ -24,10 +24,54 @@ from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
 
 
-class InsectLegComponentGuide(Component):
+class InsectLegComponent(Component):
+    """Insect Leg Base"""
+
+    def __init__(self, name='InsectLegBase', parent=None):
+
+        super(InsectLegComponent, self).__init__(name, parent)
+
+        # ================
+        # Setup Hierarchy
+        # ================
+        self.controlsLayer = self.getOrCreateLayer('controls')
+        self.ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=self.controlsLayer)
+
+        # IO Hierarchies
+        self.inputHrcGrp = HierarchyGroup('inputs', parent=self.ctrlCmpGrp)
+        self.cmpInputAttrGrp = AttributeGroup('inputs', parent=self.inputHrcGrp)
+
+        self.outputHrcGrp = HierarchyGroup('outputs', parent=self.ctrlCmpGrp)
+        self.cmpOutputAttrGrp = AttributeGroup('outputs', parent=self.outputHrcGrp)
+
+
+        # ===========
+        # Declare IO
+        # ===========
+        # Declare Inputs Xfos
+        self.rootInputTgt = self.createInput('rootInput', dataType='Xfo', parent=self.inputHrcGrp)
+
+        # Declare Output Xfos
+        self.boneOutputs = self.addOutput('boneOutputs', dataType='Xfo[]')
+
+        self.legEndXfoOutputTgt = self.createOutput('legEndXfoOutput', dataType='Xfo', parent=self.outputHrcGrp)
+        self.legEndPosOutputTgt = self.createOutput('legEndPosOutput', dataType='Xfo', parent=self.outputHrcGrp)
+
+        # Declare Input Attrs
+        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=True, parent=self.cmpInputAttrGrp)
+        self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', parent=self.cmpInputAttrGrp)
+        self.tipBoneLenInputAttr = self.createInput('tipBoneLen', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp)
+
+        # Declare Output Attrs
+
+
+
+class InsectLegComponentGuide(InsectLegComponent):
     """InsectLeg Component Guide"""
 
     def __init__(self, name='InsectLeg', parent=None, data=None):
+
+        Profiler.getInstance().push("Construct InsectLeg Guide Component:" + name)
         super(InsectLegComponentGuide, self).__init__(name, parent)
 
         self.legCtrls = []
@@ -47,6 +91,8 @@ class InsectLegComponentGuide(Component):
               }
 
         self.loadData(data)
+
+        Profiler.getInstance().pop()
 
 
     # =============
@@ -122,7 +168,7 @@ class InsectLegComponentGuide(Component):
             boneXfos.append(xfo)
 
         data = {
-                "class":"kraken.examples.insectleg_component.InsectLegComponent",
+                "class":"kraken.examples.insectleg_component.InsectLegComponentRig",
                 "name": self.getName(),
                 "location": self.getLocation(),
                 "boneXfos": boneXfos,
@@ -133,45 +179,13 @@ class InsectLegComponentGuide(Component):
         return data
 
 
-class InsectLegComponent(Component):
-    """Insect Leg Component"""
+class InsectLegComponentRig(InsectLegComponent):
+    """Insect Leg Rig"""
 
     def __init__(self, name='InsectLeg', parent=None):
 
-        Profiler.getInstance().push("Construct InsectLeg Component:" + name)
-        super(InsectLegComponent, self).__init__(name, parent)
-
-        # ================
-        # Setup Hierarchy
-        # ================
-        controlsLayer = self.getOrCreateLayer('controls')
-        ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
-
-        # IO Hierarchies
-        inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
-        cmpInputAttrGrp = AttributeGroup('inputs', parent=inputHrcGrp)
-
-        outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
-        cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
-
-
-        # ===========
-        # Declare IO
-        # ===========
-        # Declare Inputs Xfos
-        self.rootInputTgt = self.createInput('rootInput', dataType='Xfo', parent=inputHrcGrp)
-
-        # Declare Output Xfos
-        self.boneOutputs = self.addOutput('boneOutputs', dataType='Xfo[]')
-
-        self.legEndXfoOutputTgt = self.createOutput('legEndXfoOutput', dataType='Xfo', parent=outputHrcGrp)
-        self.legEndPosOutputTgt = self.createOutput('legEndPosOutput', dataType='Xfo', parent=outputHrcGrp)
-
-        # Declare Input Attrs
-        self.debugInputAttr = self.createInput('debug', dataType='Boolean', value=True, parent=cmpInputAttrGrp)
-        self.tipBoneLenInputAttr = self.createInput('tipBoneLen', dataType='Float', value=1.0, parent=cmpInputAttrGrp)
-
-        # Declare Output Attrs
+        Profiler.getInstance().push("Construct InsectLeg Rig Component:" + name)
+        super(InsectLegComponentRig, self).__init__(name, parent)
 
 
         # =========
@@ -182,7 +196,7 @@ class InsectLegComponent(Component):
         self.boneFKCtrls = []
         for i in xrange(4):
             if i==0:
-                parent = ctrlCmpGrp
+                parent = self.ctrlCmpGrp
             else:
                 parent = self.boneFKCtrls[i - 1]
 
@@ -196,7 +210,7 @@ class InsectLegComponent(Component):
             self.boneFKCtrls.append(boneFKCtrl)
 
         # IK Control
-        self.legIKCtrlSpace = CtrlSpace('IK', parent=ctrlCmpGrp)
+        self.legIKCtrlSpace = CtrlSpace('IK', parent=self.ctrlCmpGrp)
         self.legIKCtrl = Control('IK', parent=self.legIKCtrlSpace, shape="pin")
 
         if self.getLocation() == 'R':
@@ -208,12 +222,16 @@ class InsectLegComponent(Component):
 
         # Add Component Params to IK control
         legSettingsAttrGrp = AttributeGroup("DisplayInfo_LegSettings", parent=self.legIKCtrl)
-        legDebugInputAttr = BoolAttribute('debug', value=True, parent=legSettingsAttrGrp)
+        legdrawDebugInputAttr = BoolAttribute('drawDebug', value=True, parent=legSettingsAttrGrp)
+        legUseInitPoseInputAttr = BoolAttribute('useInitPose', value=False, parent=legSettingsAttrGrp)
         legFkikInputAttr = FloatAttribute('fkik', value=1.0, minValue=0.0,
             maxValue=1.0, parent=legSettingsAttrGrp)
 
+        # Connect IO to controls
+        self.drawDebugInputAttr.connect(legdrawDebugInputAttr)
+
         # UpV
-        self.legUpVCtrlSpace = CtrlSpace('UpV', parent=ctrlCmpGrp)
+        self.legUpVCtrlSpace = CtrlSpace('UpV', parent=self.ctrlCmpGrp)
         self.legUpVCtrl = Control('UpV', parent=self.legUpVCtrlSpace, shape="triangle")
         self.legUpVCtrl.alignOnZAxis()
 
@@ -237,7 +255,7 @@ class InsectLegComponent(Component):
         # Setup component Xfo I/O's
         self.boneOutputsTgt = []
         for i in xrange(4):
-            boneOutput = Locator('bone' + str(i).zfill(2), parent=outputHrcGrp)
+            boneOutput = Locator('bone' + str(i).zfill(2), parent=self.outputHrcGrp)
             self.boneOutputsTgt.append(boneOutput)
 
         # Set IO Targets
@@ -258,41 +276,43 @@ class InsectLegComponent(Component):
         # Add Splice Ops
         # ===============
         # Add Splice Op
-        self.NBoneSolverSpliceOp = SpliceOperator("legSpliceOp", "NBoneIKSolver", "Kraken")
+        self.NBoneSolverSpliceOp = SpliceOperator('legSpliceOp', 'NBoneIKSolver', 'Kraken')
         self.addOperator(self.NBoneSolverSpliceOp)
 
         # # Add Att Inputs
-        self.NBoneSolverSpliceOp.setInput("debug", self.debugInputAttr)
-        self.NBoneSolverSpliceOp.setInput("ikblend", legFkikInputAttr)
-        self.NBoneSolverSpliceOp.setInput("tipBoneLen", self.tipBoneLenInputAttr)
+        self.NBoneSolverSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.NBoneSolverSpliceOp.setInput('useInitPose', legUseInitPoseInputAttr)
+        self.NBoneSolverSpliceOp.setInput('ikblend', legFkikInputAttr)
+        self.NBoneSolverSpliceOp.setInput('tipBoneLen', self.tipBoneLenInputAttr)
 
         # Add Xfo Inputs
-        self.NBoneSolverSpliceOp.setInput("ikgoal", self.legIKCtrl)
-        # self.NBoneSolverSpliceOp.setInput("upV", legUpVCtrl)
+        self.NBoneSolverSpliceOp.setInput('ikgoal', self.legIKCtrl)
+        # self.NBoneSolverSpliceOp.setInput('upV', legUpVCtrl)
 
         for i in xrange(len(self.boneFKCtrls)):
-            self.NBoneSolverSpliceOp.setInput("fkcontrols", self.boneFKCtrls[i])
+            self.NBoneSolverSpliceOp.setInput('fkcontrols', self.boneFKCtrls[i])
 
         # Add Xfo Outputs
         for i in xrange(len(self.boneOutputsTgt)):
-            self.NBoneSolverSpliceOp.setOutput("pose", self.boneOutputsTgt[i])
+            self.NBoneSolverSpliceOp.setOutput('pose', self.boneOutputsTgt[i])
 
-        self.NBoneSolverSpliceOp.setOutput("legEnd", self.legEndPosOutputTgt)
+        self.NBoneSolverSpliceOp.setOutput('legEnd', self.legEndPosOutputTgt)
 
         # Add Deformer Splice Op
-        self.outputsToDeformersSpliceOp = SpliceOperator("insectLegDeformerSpliceOp", "MultiPoseConstraintSolver", "Kraken")
+        self.outputsToDeformersSpliceOp = SpliceOperator('insectLegDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken')
         self.addOperator(self.outputsToDeformersSpliceOp)
 
         # Add Att Inputs
-        self.outputsToDeformersSpliceOp.setInput("debug", self.debugInputAttr)
+        self.outputsToDeformersSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.outputsToDeformersSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
 
         # Add Xfo Inputs
         for i in xrange(len(self.boneOutputsTgt)):
-            self.outputsToDeformersSpliceOp.setInput("constrainers", self.boneOutputsTgt[i])
+            self.outputsToDeformersSpliceOp.setInput('constrainers', self.boneOutputsTgt[i])
 
         # Add Xfo Outputs
         for i in xrange(len(self.boneDefs)):
-            self.outputsToDeformersSpliceOp.setOutput("constrainees", self.boneDefs[i])
+            self.outputsToDeformersSpliceOp.setOutput('constrainees', self.boneDefs[i])
 
         Profiler.getInstance().pop()
 
@@ -341,5 +361,5 @@ class InsectLegComponent(Component):
 
 from kraken.core.kraken_system import KrakenSystem
 ks = KrakenSystem.getInstance()
-ks.registerComponent(InsectLegComponent)
 ks.registerComponent(InsectLegComponentGuide)
+ks.registerComponent(InsectLegComponentRig)

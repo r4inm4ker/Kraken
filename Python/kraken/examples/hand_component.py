@@ -21,48 +21,58 @@ from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
 
 
-class HandComponentGuide(Component):
-    """Hand Component Guide"""
+class HandComponent(Component):
+    """Hand Component Base"""
 
-    def __init__(self, name='handGuide', parent=None, data=None):
-        super(HandComponentGuide, self).__init__(name, parent)
+    def __init__(self, name='handBase', parent=None, data=None):
+        super(HandComponent, self).__init__(name, parent)
 
         # ================
         # Setup Hierarchy
         # ================
-        controlsLayer = self.getOrCreateLayer('controls')
-        ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
+        self.controlsLayer = self.getOrCreateLayer('controls')
+        self.ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=self.controlsLayer)
 
         # IO Hierarchies
-        inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
-        cmpInputAttrGrp = AttributeGroup('inputs', parent=inputHrcGrp)
+        self.inputHrcGrp = HierarchyGroup('inputs', parent=self.ctrlCmpGrp)
+        self.cmpInputAttrGrp = AttributeGroup('inputs', parent=self.inputHrcGrp)
 
-        outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
-        cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
+        self.outputHrcGrp = HierarchyGroup('outputs', parent=self.ctrlCmpGrp)
+        self.cmpOutputAttrGrp = AttributeGroup('outputs', parent=self.outputHrcGrp)
 
 
         # ===========
         # Declare IO
         # ===========
         # Declare Inputs Xfos
-        self.armEndXfoInputTgt = self.createInput('armEndXfo', dataType='Xfo', parent=inputHrcGrp)
-        self.armEndPosInputTgt = self.createInput('armEndPos', dataType='Xfo', parent=inputHrcGrp)
+        self.armEndXfoInputTgt = self.createInput('armEndXfo', dataType='Xfo', parent=self.inputHrcGrp)
 
         # Declare Output Xfos
-        self.handOutputTgt = self.createOutput('hand', dataType='Xfo', parent=outputHrcGrp)
-        self.handEndOutputTgt = self.createOutput('handEnd', dataType='Xfo', parent=outputHrcGrp)
+        self.handOutputTgt = self.createOutput('hand', dataType='Xfo', parent=self.outputHrcGrp)
+        self.handEndOutputTgt = self.createOutput('handEnd', dataType='Xfo', parent=self.outputHrcGrp)
 
         # Declare Input Attrs
-        self.debugInputAttr = self.createInput('debug', dataType='Boolean', parent=cmpInputAttrGrp)
-        self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', parent=cmpInputAttrGrp)
+        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', parent=self.cmpInputAttrGrp)
+        self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', parent=self.cmpInputAttrGrp)
+        self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', parent=self.cmpInputAttrGrp)
 
         # Declare Output Attrs
+
+
+class HandComponentGuide(HandComponent):
+    """Hand Component Guide"""
+
+    def __init__(self, name='handGuide', parent=None, data=None):
+
+        Profiler.getInstance().push("Construct Hand Guide Component:" + name)
+        super(HandComponentGuide, self).__init__(name, parent)
+
 
         # =========
         # Controls
         # =========
         # Guide Controls
-        self.handCtrl = Control('hand', parent=ctrlCmpGrp, shape="cube")
+        self.handCtrl = Control('hand', parent=self.ctrlCmpGrp, shape="cube")
 
         if data is None:
             data = {
@@ -72,6 +82,8 @@ class HandComponentGuide(Component):
                    }
 
         self.loadData(data)
+
+        Profiler.getInstance().pop()
 
 
     # =============
@@ -126,7 +138,7 @@ class HandComponentGuide(Component):
         handXfo = self.handCtrl.xfo
 
         data = {
-                "class":"kraken.examples.hand_component.HandComponent",
+                "class":"kraken.examples.hand_component.HandComponentRig",
                 "name": self.getName(),
                 "location": self.getLocation(),
                 "handXfo": handXfo
@@ -135,58 +147,27 @@ class HandComponentGuide(Component):
         return data
 
 
-class HandComponent(Component):
-    """Hand Component"""
+class HandComponentRig(HandComponent):
+    """Hand Component Rig"""
 
     def __init__(self, name='hand', parent=None):
 
-        Profiler.getInstance().push("Construct Hand Component:" + name)
-        super(HandComponent, self).__init__(name, parent)
-
-        # ================
-        # Setup Hierarchy
-        # ================
-        controlsLayer = self.getOrCreateLayer('controls')
-        ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
-
-        # IO Hierarchies
-        inputHrcGrp = HierarchyGroup('inputs', parent=ctrlCmpGrp)
-        cmpInputAttrGrp = AttributeGroup('inputs', parent=inputHrcGrp)
-
-        outputHrcGrp = HierarchyGroup('outputs', parent=ctrlCmpGrp)
-        cmpOutputAttrGrp = AttributeGroup('outputs', parent=outputHrcGrp)
-
-
-        # ===========
-        # Declare IO
-        # ===========
-        # Declare Inputs Xfos
-        self.armEndXfoInputTgt = self.createInput('armEndXfo', dataType='Xfo', parent=inputHrcGrp)
-        self.armEndPosInputTgt = self.createInput('armEndPos', dataType='Xfo', parent=inputHrcGrp)
-
-        # Declare Output Xfos
-        self.handOutputTgt = self.createOutput('hand', dataType='Xfo', parent=outputHrcGrp)
-        self.handEndOutputTgt = self.createOutput('handEnd', dataType='Xfo', parent=outputHrcGrp)
-
-        # Declare Input Attrs
-        self.debugInputAttr = self.createInput('debug', dataType='Boolean', parent=cmpInputAttrGrp)
-        self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', parent=cmpInputAttrGrp)
-
-        # Declare Output Attrs
+        Profiler.getInstance().push("Construct Hand Rig Component:" + name)
+        super(HandComponentRig, self).__init__(name, parent)
 
 
         # =========
         # Controls
         # =========
         # Add Controls
-        self.handCtrlSpace = CtrlSpace('hand', parent=ctrlCmpGrp)
+        self.handCtrlSpace = CtrlSpace('hand', parent=self.ctrlCmpGrp)
 
         self.handCtrl = Control('hand', parent=self.handCtrlSpace, shape="cube")
         self.handCtrl.alignOnXAxis()
         self.handCtrl.scalePoints(Vec3(2.0, 0.75, 1.25))
 
         # Rig Ref objects
-        self.handRefSrt = Locator('handRef', parent=ctrlCmpGrp)
+        self.handRefSrt = Locator('handRef', parent=self.ctrlCmpGrp)
 
         # Add Component Params to IK control
         handSettingsAttrGrp = AttributeGroup("DisplayInfo_HandSettings",
@@ -224,36 +205,33 @@ class HandComponent(Component):
         # Add Splice Ops
         # ===============
         # Add Hand Solver Splice Op
-        # spliceOp = SpliceOperator("handSolverSpliceOp", "HandSolver", "KrakenHandSolver")
-        # self.addOperator(spliceOp)
+        handCtrlSpaceSpliceOp = SpliceOperator('handCtrlSpaceSpliceOp', 'PoseConstraintSolver', 'Kraken')
+        self.addOperator(handCtrlSpaceSpliceOp)
 
-        # # Add Att Inputs
-        # spliceOp.setInput("debug", self.debugInputAttr)
-        # spliceOp.setInput("rightSide", self.rightSideInputAttr)
-        # spliceOp.setInput("linkToWorld", handLinkToWorldInputAttr)
+        # Add Att Inputs
+        handCtrlSpaceSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
+        handCtrlSpaceSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
 
-        # # Add Xfo Inputs)
-        # spliceOp.setInput("armEndXfo", self.armEndXfoInputTgt)
-        # spliceOp.setInput("armEndPos", self.armEndPosInputTgt)
-        # spliceOp.setInput("handRef", self.handRefSrt)
+        # Add Xfo Inputs)
+        handCtrlSpaceSpliceOp.setInput('constrainer', self.armEndXfoInputTgt)
 
-        # # Add Xfo Outputs
-        # spliceOp.setOutput("handCtrlSpace", self.handCtrlSpace)
+        # Add Xfo Outputs
+        handCtrlSpaceSpliceOp.setOutput('constrainee', self.handCtrlSpace)
 
 
         # Add Deformer Splice Op
-        spliceOp = SpliceOperator("handDeformerSpliceOp", "PoseConstraintSolver", "Kraken")
-        self.addOperator(spliceOp)
+        handDefSpliceOp = SpliceOperator('handDeformerSpliceOp', 'PoseConstraintSolver', 'Kraken')
+        self.addOperator(handDefSpliceOp)
 
         # Add Att Inputs
-        spliceOp.setInput("debug", self.debugInputAttr)
-        spliceOp.setInput("rightSide", self.rightSideInputAttr)
+        handDefSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
+        handDefSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
 
         # Add Xfo Inputs)
-        spliceOp.setInput("constrainer", self.handOutputTgt)
+        handDefSpliceOp.setInput('constrainer', self.handOutputTgt)
 
         # Add Xfo Outputs
-        spliceOp.setOutput("constrainee", handDef)
+        handDefSpliceOp.setOutput('constrainee', handDef)
 
         Profiler.getInstance().pop()
 
@@ -272,12 +250,11 @@ class HandComponent(Component):
         # Set IO Xfos
         # ============
         self.armEndXfoInputTgt.xfo = data['handXfo']
-        self.armEndPosInputTgt.xfo = data['handXfo']
         self.handEndOutputTgt.xfo = data['handXfo']
         self.handOutputTgt.xfo = data['handXfo']
 
 
 from kraken.core.kraken_system import KrakenSystem
 ks = KrakenSystem.getInstance()
-ks.registerComponent(HandComponent)
 ks.registerComponent(HandComponentGuide)
+ks.registerComponent(HandComponentRig)

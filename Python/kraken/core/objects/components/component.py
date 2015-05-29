@@ -23,10 +23,10 @@ class Component(Object3D):
 
     def __init__(self, name, parent=None, location='M'):
         super(Component, self).__init__(name, parent)
-        self.location = location
-        self.inputs = []
-        self.outputs = []
-        self.operators = []
+        self._location = location
+        self._inputs = []
+        self._outputs = []
+        self._operators = []
 
         self.setShapeVisibility(False)
 
@@ -46,7 +46,7 @@ class Component(Object3D):
 
         """
 
-        return self.location
+        return self._location
 
 
     def setLocation(self, location):
@@ -61,7 +61,7 @@ class Component(Object3D):
 
         """
 
-        self.location = location
+        self._location = location
 
         return True
 
@@ -157,7 +157,7 @@ class Component(Object3D):
 
         """
 
-        if index > len(self.inputs):
+        if index > len(self._inputs):
             raise IndexError("'" + str(index) + "' is out of the range of 'inputs' array.")
 
         return True
@@ -232,7 +232,7 @@ class Component(Object3D):
 
         componentInput = ComponentInput(name, parent=self, dataType=dataType)
 
-        self.inputs.append(componentInput)
+        self._inputs.append(componentInput)
 
         return componentInput
 
@@ -251,7 +251,7 @@ class Component(Object3D):
         if self.checkInputIndex(index) is not True:
             return False
 
-        del self.inputs[index]
+        del self._inputs[index]
 
         return True
 
@@ -269,7 +269,7 @@ class Component(Object3D):
 
         removeIndex = None
 
-        for i, eachInput in enumerate(self.inputs):
+        for i, eachInput in enumerate(self._inputs):
             if eachInput.getName() == name:
                 removeIndex = i
 
@@ -289,7 +289,7 @@ class Component(Object3D):
 
         """
 
-        return len(self.inputs)
+        return len(self._inputs)
 
 
     def getInputByIndex(self, index):
@@ -303,7 +303,7 @@ class Component(Object3D):
         if self.checkInputIndex(index) is not True:
             return False
 
-        return self.inputs[index]
+        return self._inputs[index]
 
 
     def getInputByName(self, name):
@@ -315,7 +315,7 @@ class Component(Object3D):
 
         """
 
-        for eachInput in self.inputs:
+        for eachInput in self._inputs:
             if eachInput.getName() == name:
                 return eachInput
 
@@ -333,7 +333,7 @@ class Component(Object3D):
 
         """
 
-        if index > len(self.outputs):
+        if index > len(self._outputs):
             raise IndexError("'" + str(index) + "' is out of the range of 'outputs' array.")
 
         return True
@@ -408,7 +408,7 @@ class Component(Object3D):
 
         componentOutput = ComponentOutput(name, parent=self, dataType=dataType)
 
-        self.outputs.append(componentOutput)
+        self._outputs.append(componentOutput)
 
         return componentOutput
 
@@ -421,7 +421,7 @@ class Component(Object3D):
 
         """
 
-        return len(self.outputs)
+        return len(self._outputs)
 
 
     def getOutputByIndex(self, index):
@@ -435,7 +435,7 @@ class Component(Object3D):
         if self.checkOutputIndex(index) is not True:
             return False
 
-        return self.outputs[index]
+        return self._outputs[index]
 
 
     def getOutputByName(self, name):
@@ -447,7 +447,7 @@ class Component(Object3D):
 
         """
 
-        for eachOutput in self.outputs:
+        for eachOutput in self._outputs:
             if eachOutput.getName() == name:
                 return eachOutput
 
@@ -465,7 +465,7 @@ class Component(Object3D):
 
         """
 
-        if index > len(self.operators):
+        if index > len(self._operators):
             raise IndexError("'" + str(index) + "' is out of the range of the 'children' array.")
 
         return True
@@ -482,10 +482,10 @@ class Component(Object3D):
 
         """
 
-        if operator.name in [x.name for x in self.operators]:
-            raise IndexError("Operator with " + operator.name + " already exists as a operator.")
+        if operator.getName() in [x.getName() for x in self._operators]:
+            raise IndexError("Operator with " + operator.getName() + " already exists as a operator.")
 
-        self.operators.append(operator)
+        self._operators.append(operator)
         operator.setParent(self)
 
         return True
@@ -505,7 +505,7 @@ class Component(Object3D):
         if self.checkOperatorIndex(index) is not True:
             return False
 
-        del self.operators[index]
+        del self._operators[index]
 
         return True
 
@@ -523,7 +523,7 @@ class Component(Object3D):
 
         removeIndex = None
 
-        for i, eachOperator in enumerate(self.operators):
+        for i, eachOperator in enumerate(self._operators):
             if eachOperator.getName() == name:
                 removeIndex = i
 
@@ -543,7 +543,7 @@ class Component(Object3D):
 
         """
 
-        return len(self.operators)
+        return len(self._operators)
 
 
     def getOperatorByIndex(self, index):
@@ -557,7 +557,7 @@ class Component(Object3D):
         if self.checkOperatorIndex(index) is not True:
             return False
 
-        return self.operators[index]
+        return self._operators[index]
 
 
     def getOperatorByName(self, name):
@@ -569,7 +569,7 @@ class Component(Object3D):
 
         """
 
-        for eachOperator in self.operators:
+        for eachOperator in self._operators:
             if eachOperator.getName() == name:
                 return eachOperator
 
@@ -589,7 +589,7 @@ class Component(Object3D):
         """
 
         childrenOfType = []
-        for eachOperator in self.operators:
+        for eachOperator in self._operators:
             if isinstance(eachOperator, childType):
                 childrenOfType.append(eachOperator)
 
@@ -628,6 +628,6 @@ class Component(Object3D):
         """
 
         oldIndex = self.getOperatorIndex(operator)
-        self.operators.insert(index, self.operators.pop(oldindex))
+        self._operators.insert(index, self._operators.pop(oldindex))
 
         return True

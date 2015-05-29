@@ -3,14 +3,14 @@ from kraken.core.maths import Vec3, Quat, Xfo
 from kraken.core.objects.container import Container
 from kraken.core.objects.layer import Layer
 
-from kraken.examples.hand_component import HandComponent
-from kraken.examples.head_component import HeadComponent
-from kraken.examples.clavicle_component import ClavicleComponentGuide, ClavicleComponent
-from kraken.examples.arm_component import ArmComponentGuide, ArmComponent
-from kraken.examples.leg_component import LegComponentGuide, LegComponent
-from kraken.examples.foot_component import FootComponentGuide, FootComponent
-from kraken.examples.spine_component import SpineComponent
-from kraken.examples.neck_component import NeckComponentGuide, NeckComponent
+from kraken.examples.hand_component import HandComponentRig
+from kraken.examples.head_component import HeadComponentRig
+from kraken.examples.clavicle_component import ClavicleComponentGuide, ClavicleComponentRig
+from kraken.examples.arm_component import ArmComponentGuide, ArmComponentRig
+from kraken.examples.leg_component import LegComponentGuide, LegComponentRig
+from kraken.examples.foot_component import FootComponentGuide, FootComponentRig
+from kraken.examples.spine_component import SpineComponentRig
+from kraken.examples.neck_component import NeckComponentGuide, NeckComponentRig
 
 from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
@@ -25,7 +25,7 @@ class BobRig(Container):
         super(BobRig, self).__init__(name)
 
         # Add Components to Layers
-        spineComponent = SpineComponent("spine", self)
+        spineComponent = SpineComponentRig("spine", self)
         spineComponent.loadData(data={
             'cogPosition': Vec3(0.0, 11.1351, -0.1382),
             'spine01Position': Vec3(0.0, 11.1351, -0.1382),
@@ -41,10 +41,10 @@ class BobRig(Container):
             "neckEndPosition": Vec3(0.0, 17.4756, -0.421)
         })
 
-        neckComponent = NeckComponent("neck", self)
+        neckComponent = NeckComponentRig("neck", self)
         neckComponent.loadData(data=neckComponentGuide.getGuideData())
 
-        headComponent = HeadComponent("head", self)
+        headComponent = HeadComponentRig("head", self)
         headComponent.loadData(data={
             "headPosition": Vec3(0.0, 17.4756, -0.421),
             "headEndPosition": Vec3(0.0, 19.5, -0.421),
@@ -60,7 +60,7 @@ class BobRig(Container):
             "clavicleEndXfo": Xfo(Vec3(2.27, 15.295, -0.753))
         })
 
-        clavicleLeftComponent = ClavicleComponent("clavicle", self)
+        clavicleLeftComponent = ClavicleComponentRig("clavicle", self)
         clavicleLeftComponent.loadData(data=clavicleLeftComponentGuide.getGuideData())
 
         clavicleRightComponentGuide = ClavicleComponentGuide("clavicle", data={
@@ -70,7 +70,7 @@ class BobRig(Container):
             "clavicleEndXfo": Xfo(Vec3(-2.27, 15.295, -0.753))
         })
 
-        clavicleRightComponent = ClavicleComponent("clavicle", self)
+        clavicleRightComponent = ClavicleComponentRig("clavicle", self)
         clavicleRightComponent.loadData(data=clavicleRightComponentGuide.getGuideData())
 
         armLeftComponentGuide = ArmComponentGuide("arm", data={
@@ -82,7 +82,7 @@ class BobRig(Container):
             "forearmFKCtrlSize": 1.5
         })
 
-        armLeftComponent = ArmComponent("arm", self)
+        armLeftComponent = ArmComponentRig("arm", self)
         armLeftComponent.loadData(data=armLeftComponentGuide.getGuideData())
 
         armRightComponentGuide = ArmComponentGuide("arm", data={
@@ -94,17 +94,17 @@ class BobRig(Container):
             "forearmFKCtrlSize": 1.5
         })
 
-        armRightComponent = ArmComponent("arm", self)
+        armRightComponent = ArmComponentRig("arm", self)
         armRightComponent.loadData(data=armRightComponentGuide.getGuideData() )
 
-        handLeftComponent = HandComponent("hand", self)
+        handLeftComponent = HandComponentRig("hand", self)
         handLeftComponent.loadData(data={
             "name":"L_HandComponent",
             "location": "L",
             "handXfo": Xfo(tr=Vec3(7.1886, 12.2819, 0.4906), ori=Quat(Vec3(-0.0865, -0.2301, -0.2623), 0.9331)),
         })
 
-        handRightComponent = HandComponent("hand", self)
+        handRightComponent = HandComponentRig("hand", self)
         handRightComponent.loadData(data={
             "name":"R_HandComponent",
             "location": "R",
@@ -119,7 +119,7 @@ class BobRig(Container):
             "ankleXfo": Xfo(Vec3(1.841, 1.1516, -1.237))
         })
 
-        legLeftComponent = LegComponent("leg", self)
+        legLeftComponent = LegComponentRig("leg", self)
         legLeftComponent.loadData(data= legLeftComponentGuide.getGuideData())
 
         legRightComponentGuide = LegComponentGuide("leg", data={
@@ -130,7 +130,7 @@ class BobRig(Container):
             "ankleXfo": Xfo(Vec3(-1.841, 1.1516, -1.237))
         })
 
-        legRightComponent = LegComponent("leg", self)
+        legRightComponent = LegComponentRig("leg", self)
         legRightComponent.loadData(data=legRightComponentGuide.getGuideData() )
 
         footLeftComponentGuide = FootComponentGuide("foot", data={
@@ -139,7 +139,7 @@ class BobRig(Container):
             "footXfo": Xfo(tr=Vec3(1.841, 1.1516, -1.237), ori=Quat(Vec3(0.6377, -0.5695, 0.3053), 0.4190))
         })
 
-        footLeftComponent = FootComponent("foot", self)
+        footLeftComponent = FootComponentRig("foot", self)
         footLeftComponent.loadData(data=footLeftComponentGuide.getGuideData() )
 
         footRightComponentGuide = FootComponentGuide("foot", data={
@@ -148,7 +148,7 @@ class BobRig(Container):
             "footXfo": Xfo(tr= Vec3(-1.841, 1.1516, -1.237), ori=Quat(Vec3(0.5695, -0.6377, 0.4190), 0.3053))
         })
 
-        footRightComponent = FootComponent("foot", self)
+        footRightComponent = FootComponentRig("foot", self)
         footRightComponent.loadData(data=footRightComponentGuide.getGuideData() )
 
         # Neck to Spine
@@ -172,24 +172,24 @@ class BobRig(Container):
         armLeftEndOutput = armLeftComponent.getOutputByName('armEndXfo')
         handLeftArmEndInput = handLeftComponent.getInputByName('armEndXfo')
         handLeftArmEndInput.setConnection(armLeftEndOutput)
-        armLeftEndPosOutput = armLeftComponent.getOutputByName('armEndPos')
-        handLeftArmEndPosInput = handLeftComponent.getInputByName('armEndPos')
-        handLeftArmEndPosInput.setConnection(armLeftEndPosOutput)
+        # armLeftEndPosOutput = armLeftComponent.getOutputByName('armEndPos')
+        # handLeftArmEndPosInput = handLeftComponent.getInputByName('armEndPos')
+        # handLeftArmEndPosInput.setConnection(armLeftEndPosOutput)
 
-        armLeftDebugOutput = armLeftComponent.getOutputByName('debug')
-        handLeftDebugInput = handLeftComponent.getInputByName('debug')
-        handLeftDebugInput.setConnection(armLeftDebugOutput)
+        armLeftDrawDebugOutput = armLeftComponent.getOutputByName('drawDebug')
+        handLeftDrawDebugInput = handLeftComponent.getInputByName('drawDebug')
+        handLeftDrawDebugInput.setConnection(armLeftDrawDebugOutput)
 
         armRightEndOutput = armRightComponent.getOutputByName('armEndXfo')
         handRightArmEndInput = handRightComponent.getInputByName('armEndXfo')
         handRightArmEndInput.setConnection(armRightEndOutput)
-        armRightEndPosOutput = armRightComponent.getOutputByName('armEndPos')
-        handRightArmEndPosInput = handRightComponent.getInputByName('armEndPos')
-        handRightArmEndPosInput.setConnection(armRightEndPosOutput)
+        # armRightEndPosOutput = armRightComponent.getOutputByName('armEndPos')
+        # handRightArmEndPosInput = handRightComponent.getInputByName('armEndPos')
+        # handRightArmEndPosInput.setConnection(armRightEndPosOutput)
 
-        armRightDebugOutput = armRightComponent.getOutputByName('debug')
-        handRightDebugInput = handRightComponent.getInputByName('debug')
-        handRightDebugInput.setConnection(armRightDebugOutput)
+        armRightDrawDebugOutput = armRightComponent.getOutputByName('drawDebug')
+        handRightDrawDebugInput = handRightComponent.getInputByName('drawDebug')
+        handRightDrawDebugInput.setConnection(armRightDrawDebugOutput)
 
         # Arm To Clavicle Connections
         clavicleLeftEndOutput = clavicleLeftComponent.getOutputByName('clavicleEnd')
@@ -210,24 +210,24 @@ class BobRig(Container):
         legLeftEndOutput = legLeftComponent.getOutputByName('legEndXfo')
         footLeftEndInput = footLeftComponent.getInputByName('legEndXfo')
         footLeftEndInput.setConnection(legLeftEndOutput)
-        legLeftEndPosOutput = legLeftComponent.getOutputByName('legEndPos')
-        footLeftEndPosInput = footLeftComponent.getInputByName('legEndPos')
-        footLeftEndPosInput.setConnection(legLeftEndPosOutput)
+        # legLeftEndPosOutput = legLeftComponent.getOutputByName('legEndPos')
+        # footLeftEndPosInput = footLeftComponent.getInputByName('legEndPos')
+        # footLeftEndPosInput.setConnection(legLeftEndPosOutput)
 
-        legLeftDebugOutput = legLeftComponent.getOutputByName('debug')
-        footLeftDebugInput = footLeftComponent.getInputByName('debug')
-        footLeftDebugInput.setConnection(legLeftDebugOutput)
+        legLeftDrawDebugOutput = legLeftComponent.getOutputByName('drawDebug')
+        footLeftDrawDebugInput = footLeftComponent.getInputByName('drawDebug')
+        footLeftDrawDebugInput.setConnection(legLeftDrawDebugOutput)
 
         legRightEndOutput = legRightComponent.getOutputByName('legEndXfo')
         footRightEndInput = footRightComponent.getInputByName('legEndXfo')
         footRightEndInput.setConnection(legRightEndOutput)
-        legRightEndPosOutput = legRightComponent.getOutputByName('legEndPos')
-        footRightEndPosInput = footRightComponent.getInputByName('legEndPos')
-        footRightEndPosInput.setConnection(legRightEndPosOutput)
+        # legRightEndPosOutput = legRightComponent.getOutputByName('legEndPos')
+        # footRightEndPosInput = footRightComponent.getInputByName('legEndPos')
+        # footRightEndPosInput.setConnection(legRightEndPosOutput)
 
-        legLeftDebugOutput = legRightComponent.getOutputByName('debug')
-        footLeftDebugInput = footRightComponent.getInputByName('debug')
-        footLeftDebugInput.setConnection(legLeftDebugOutput)
+        legLeftDrawDebugOutput = legRightComponent.getOutputByName('drawDebug')
+        footLeftDrawDebugInput = footRightComponent.getInputByName('drawDebug')
+        footLeftDrawDebugInput.setConnection(legLeftDrawDebugOutput)
 
         # Arm Attributes to Clavicle
         # clavicleLeftFollowBodyOutput = clavicleLeftComponent.getOutputByName('followBody')

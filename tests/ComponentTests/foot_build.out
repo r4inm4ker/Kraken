@@ -4,7 +4,6 @@ L_Foot.controls
 L_Foot.controls.foot
 L_Foot.controls.foot.inputs
 L_Foot.controls.foot.inputs.legEndXfo
-L_Foot.controls.foot.inputs.legEndPos
 L_Foot.controls.foot.outputs
 L_Foot.controls.foot.outputs.footEnd
 L_Foot.controls.foot.outputs.foot
