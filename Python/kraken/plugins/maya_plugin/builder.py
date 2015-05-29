@@ -518,11 +518,11 @@ class Builder(Builder):
     # Component Build Methods
     # ========================
 
-    def buildAttributeConnection(self, componentInput):
+    def buildAttributeConnection(self, connectionInput):
         """Builds the connection between the attribute and the connection.
 
         Arguments:
-        componentInput -- Object, kraken connection to build.
+        connectionInput -- Object, kraken connection to build.
 
         Return:
         True if successful.
@@ -534,10 +534,10 @@ class Builder(Builder):
 
         connection = connectionInput.getConnection()
         connectionTarget = connection.getTarget()
-        inputTarget = componentInput.getTarget()
+        inputTarget = connectionInput.getTarget()
 
         if connection.getDataType().endswith('[]'):
-            connectionTarget = connection.getTarget()[componentInput.getIndex()]
+            connectionTarget = connection.getTarget()[connectionInput.getIndex()]
         else:
             connectionTarget = connection.getTarget()
 

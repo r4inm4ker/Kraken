@@ -65,7 +65,7 @@ function BezierSpineSolver.solve!
   // sample the curve 2x for every output joint
   Scalar distances[] = measureBezierLength(coeffs, outputs.size*2);
   Scalar chainLength = distances[distances.size-1];
-  Scalar segLength = length / Scalar(outputs.size);
+  Scalar segLength = (length * rigScale) / Scalar(outputs.size);
   Scalar currIndex = 1;
   Xfo baseXfo(base);
   Xfo tipXfo(tip);
@@ -116,6 +116,10 @@ function BezierSpineSolver.solve!
       alignment.setFrom2Vectors(outXfo.ori.getYaxis(), (targ - outXfo.tr).unit());
       outXfo.ori = alignment * outXfo.ori;
     }
+
+    // Set scaling
+    Vec3 outScaling = Vec3(rigScale, rigScale, rigScale);
+    outXfo.sc = outScaling;
 
     outputs[i] = outXfo.toMat44();
   }

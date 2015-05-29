@@ -48,6 +48,7 @@ class LegComponent(Component):
         # Declare IO
         # ===========
         # Declare Inputs Xfos
+        self.globalSRTInputTgt = self.createInput('globalSRT', dataType='Xfo', parent=self.inputHrcGrp)
         self.legPelvisInputTgt = self.createInput('pelvisInput', dataType='Xfo', parent=self.inputHrcGrp)
 
         # Declare Output Xfos
@@ -57,7 +58,7 @@ class LegComponent(Component):
 
         # Declare Input Attrs
         self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=True, parent=self.cmpInputAttrGrp)
-        self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', parent=self.cmpInputAttrGrp)
+        self.rigScaleInputAttr = self.createInput('rigScale', value=1.0, dataType='Float', parent=self.cmpInputAttrGrp)
         self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', value=False, parent=self.cmpInputAttrGrp)
 
         # Declare Output Attrs
@@ -264,10 +265,20 @@ class LegComponentRig(LegComponent):
         # Constrain I/O
         # ==============
         # Constraint inputs
-        legRootInputConstraint = PoseConstraint('_'.join([self.legIKCtrl.getName(), 'To', self.legPelvisInputTgt.getName()]))
-        legRootInputConstraint.setMaintainOffset(True)
-        legRootInputConstraint.addConstrainer(self.legPelvisInputTgt)
-        self.femurFKCtrlSpace.addConstraint(legRootInputConstraint)
+        self.legIKCtrlSpaceInputConstraint = PoseConstraint('_'.join([self.legIKCtrlSpace.getName(), 'To', self.globalSRTInputTgt.getName()]))
+        self.legIKCtrlSpaceInputConstraint.setMaintainOffset(True)
+        self.legIKCtrlSpaceInputConstraint.addConstrainer(self.globalSRTInputTgt)
+        self.legIKCtrlSpace.addConstraint(self.legIKCtrlSpaceInputConstraint)
+
+        self.legUpVCtrlSpaceInputConstraint = PoseConstraint('_'.join([self.legUpVCtrlSpace.getName(), 'To', self.globalSRTInputTgt.getName()]))
+        self.legUpVCtrlSpaceInputConstraint.setMaintainOffset(True)
+        self.legUpVCtrlSpaceInputConstraint.addConstrainer(self.globalSRTInputTgt)
+        self.legUpVCtrlSpace.addConstraint(self.legUpVCtrlSpaceInputConstraint)
+
+        self.legRootInputConstraint = PoseConstraint('_'.join([self.legIKCtrl.getName(), 'To', self.legPelvisInputTgt.getName()]))
+        self.legRootInputConstraint.setMaintainOffset(True)
+        self.legRootInputConstraint.addConstrainer(self.legPelvisInputTgt)
+        self.femurFKCtrlSpace.addConstraint(self.legRootInputConstraint)
 
         # Constraint outputs
 
@@ -368,6 +379,12 @@ class LegComponentRig(LegComponent):
 
         self.legPelvisInputTgt.xfo = data['femurXfo']
 
+        # Eval Constraints
+        self.legIKCtrlSpaceInputConstraint.evaluate()
+        self.legUpVCtrlSpaceInputConstraint.evaluate()
+        self.legRootInputConstraint.evaluate()
+
+        # Eval Operators
         self.legIKSpliceOp.evaluate()
         self.outputsToDeformersSpliceOp.evaluate()
         # self.legEndXfoOutputTgt.xfo = data['ankleXfo']

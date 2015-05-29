@@ -117,14 +117,17 @@ function TwoBoneIKSolver.solve!
   Xfo bone0Xfo = bone0FkXfo;
   Xfo bone1Xfo = bone1FkXfo;
   Xfo bone2Xfo;
+
+  Scalar scaledBone0Len = bone0Len * rigScale;
+  Scalar scaledBone1Len = bone1Len * rigScale;
+
   if(ikblend > 0.0){
     solve2BoneIK(
-      bone0Len,
-      bone1Len,
+      scaledBone0Len,
+      scaledBone1Len,
       root.translation(),
       upV.translation(),
       ikHandle.translation(),
-
       bone0Xfo,
       bone1Xfo
     );
@@ -137,6 +140,12 @@ function TwoBoneIKSolver.solve!
   bone2Xfo = bone1Xfo;
   bone2Xfo.tr = bone1Xfo.transformVector(Vec3(bone1Len, 0.0, 0.0));
 
+  // Set scaling
+  Vec3 outScaling = Vec3(rigScale, rigScale, rigScale);
+  bone0Xfo.sc = outScaling;
+  bone1Xfo.sc = outScaling;
+  bone2Xfo.sc = outScaling;
+
   bone0Out = bone0Xfo.toMat44();
   bone1Out = bone1Xfo.toMat44();
   bone2Out = bone2Xfo.toMat44();
@@ -146,7 +155,7 @@ function TwoBoneIKSolver.solve!
   if(this.drawDebug){
 
     Color boneColor(1.0, 1.0, 0);
-    etDrawBone(this.handle.rootTransform, 'bone0', bone0Xfo, bone0Len, bone0Len * 0.15, boneColor);
-    etDrawBone(this.handle.rootTransform, 'bone1', bone1Xfo, bone1Len, bone1Len * 0.15, boneColor);
+    etDrawBone(this.handle.rootTransform, 'bone0', bone0Xfo, scaledBone0Len, scaledBone0Len * 0.15, boneColor);
+    etDrawBone(this.handle.rootTransform, 'bone1', bone1Xfo, scaledBone1Len, scaledBone1Len * 0.15, boneColor);
   }
 }

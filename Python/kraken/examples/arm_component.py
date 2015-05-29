@@ -47,6 +47,7 @@ class ArmComponent(Component):
         # Declare IO
         # ===========
         # Declare Inputs Xfos
+        self.globalSRTInputTgt = self.createInput('globalSRT', dataType='Xfo', parent=self.inputHrcGrp)
         self.clavicleEndInputTgt = self.createInput('clavicleEnd', dataType='Xfo', parent=self.inputHrcGrp)
 
         # Declare Output Xfos
@@ -56,7 +57,7 @@ class ArmComponent(Component):
 
         # Declare Input Attrs
         self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', parent=self.cmpInputAttrGrp)
-        self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', parent=self.cmpInputAttrGrp)
+        self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp)
         self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', parent=self.cmpInputAttrGrp)
         self.bicepFKCtrlSizeInputAttr = self.createInput('bicepFKCtrlSize', dataType='Float', parent=self.cmpInputAttrGrp)
         self.forearmFKCtrlSizeInputAttr = self.createInput('forearmFKCtrlSize', dataType='Float', parent=self.cmpInputAttrGrp)
@@ -248,12 +249,10 @@ class ArmComponentRig(ArmComponent):
         armStretchInputAttr = BoolAttribute('stretch', value=True, parent=armSettingsAttrGrp)
         armStretchBlendInputAttr = FloatAttribute('stretchBlend', value=0.0, minValue=0.0, maxValue=1.0, parent=armSettingsAttrGrp)
 
-
         self.drawDebugInputAttr.connect(armDebugInputAttr)
 
         # UpV
         self.armUpVCtrlSpace = CtrlSpace('UpV', parent=self.ctrlCmpGrp)
-
         self.armUpVCtrl = Control('UpV', parent=self.armUpVCtrlSpace, shape="triangle")
         self.armUpVCtrl.alignOnZAxis()
         self.armUpVCtrl.rotatePoints(180, 0, 0)
@@ -279,10 +278,20 @@ class ArmComponentRig(ArmComponent):
         # Constrain I/O
         # ==============
         # Constraint inputs
-        armRootInputConstraint = PoseConstraint('_'.join([self.armIKCtrl.getName(), 'To', self.clavicleEndInputTgt.getName()]))
-        armRootInputConstraint.setMaintainOffset(True)
-        armRootInputConstraint.addConstrainer(self.clavicleEndInputTgt)
-        self.bicepFKCtrlSpace.addConstraint(armRootInputConstraint)
+        self.armIKCtrlSpaceInputConstraint = PoseConstraint('_'.join([self.armIKCtrlSpace.getName(), 'To', self.globalSRTInputTgt.getName()]))
+        self.armIKCtrlSpaceInputConstraint.setMaintainOffset(True)
+        self.armIKCtrlSpaceInputConstraint.addConstrainer(self.globalSRTInputTgt)
+        self.armIKCtrlSpace.addConstraint(self.armIKCtrlSpaceInputConstraint)
+
+        self.armUpVCtrlSpaceInputConstraint = PoseConstraint('_'.join([self.armUpVCtrlSpace.getName(), 'To', self.globalSRTInputTgt.getName()]))
+        self.armUpVCtrlSpaceInputConstraint.setMaintainOffset(True)
+        self.armUpVCtrlSpaceInputConstraint.addConstrainer(self.globalSRTInputTgt)
+        self.armUpVCtrlSpace.addConstraint(self.armUpVCtrlSpaceInputConstraint)
+
+        self.armRootInputConstraint = PoseConstraint('_'.join([self.bicepFKCtrlSpace.getName(), 'To', self.clavicleEndInputTgt.getName()]))
+        self.armRootInputConstraint.setMaintainOffset(True)
+        self.armRootInputConstraint.addConstrainer(self.clavicleEndInputTgt)
+        self.bicepFKCtrlSpace.addConstraint(self.armRootInputConstraint)
 
         # Constraint outputs
 
@@ -378,6 +387,12 @@ class ArmComponentRig(ArmComponent):
         self.armBone1LenInputAttr.setMax(data['forearmLen'] * 3.0)
         self.armBone1LenInputAttr.setValue(data['forearmLen'])
 
+        # Eval Constraints
+        self.armIKCtrlSpaceInputConstraint.evaluate()
+        self.armUpVCtrlSpaceInputConstraint.evaluate()
+        self.armRootInputConstraint.evaluate()
+
+        # Eval Operators
         self.spliceOp.evaluate()
         self.outputsToDeformersSpliceOp.evaluate()
 

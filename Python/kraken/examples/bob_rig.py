@@ -169,6 +169,9 @@ class BobRig(Container):
         spineInput = spineComponent.getInputByName('mainSrt')
         spineInput.setConnection(mainSrtOffsetOutput)
 
+        spineRigScaleInput = spineComponent.getInputByName('rigScale')
+        spineRigScaleInput.setConnection(mainSrtRigScaleOutput)
+
         # Pelvis to Spine
         spineCogOutput = spineComponent.getOutputByName('cog')
         pelvisCogInput = pelvisComponent.getInputByName('cog')
@@ -191,13 +194,24 @@ class BobRig(Container):
         clavicleRightSpineEndInput = clavicleRightComponent.getInputByName('spineEnd')
         clavicleRightSpineEndInput.setConnection(spineEndOutput)
 
+        # Arm to Global SRT
+        mainSrtOffsetOutput = mainSrtComponent.getOutputByName('offset')
+        armLeftGlobalSRTInput = armLeftComponent.getInputByName('globalSRT')
+        armLeftGlobalSRTInput.setConnection(mainSrtOffsetOutput)
+
+        armLeftRigScaleInput = armLeftComponent.getInputByName('rigScale')
+        armLeftRigScaleInput.setConnection(mainSrtRigScaleOutput)
+
+        armRightGlobalSRTInput = armRightComponent.getInputByName('globalSRT')
+        armRightGlobalSRTInput.setConnection(mainSrtOffsetOutput)
+
+        armRightRigScaleInput = armRightComponent.getInputByName('rigScale')
+        armRightRigScaleInput.setConnection(mainSrtRigScaleOutput)
+
         # Hand To Arm Connections
         armLeftEndOutput = armLeftComponent.getOutputByName('armEndXfo')
         handLeftArmEndInput = handLeftComponent.getInputByName('armEndXfo')
         handLeftArmEndInput.setConnection(armLeftEndOutput)
-        # armLeftEndPosOutput = armLeftComponent.getOutputByName('armEndPos')
-        # handLeftArmEndPosInput = handLeftComponent.getInputByName('armEndPos')
-        # handLeftArmEndPosInput.setConnection(armLeftEndPosOutput)
 
         armLeftDrawDebugOutput = armLeftComponent.getOutputByName('drawDebug')
         handLeftDrawDebugInput = handLeftComponent.getInputByName('drawDebug')
@@ -206,9 +220,6 @@ class BobRig(Container):
         armRightEndOutput = armRightComponent.getOutputByName('armEndXfo')
         handRightArmEndInput = handRightComponent.getInputByName('armEndXfo')
         handRightArmEndInput.setConnection(armRightEndOutput)
-        # armRightEndPosOutput = armRightComponent.getOutputByName('armEndPos')
-        # handRightArmEndPosInput = handRightComponent.getInputByName('armEndPos')
-        # handRightArmEndPosInput.setConnection(armRightEndPosOutput)
 
         armRightDrawDebugOutput = armRightComponent.getOutputByName('drawDebug')
         handRightDrawDebugInput = handRightComponent.getInputByName('drawDebug')
@@ -222,6 +233,20 @@ class BobRig(Container):
         armRightClavicleEndInput = armRightComponent.getInputByName('clavicleEnd')
         armRightClavicleEndInput.setConnection(clavicleRightEndOutput)
 
+        # Leg to Global SRT
+        mainSrtOffsetOutput = mainSrtComponent.getOutputByName('offset')
+        legLeftGlobalSRTInput = legLeftComponent.getInputByName('globalSRT')
+        legLeftGlobalSRTInput.setConnection(mainSrtOffsetOutput)
+
+        legLeftRigScaleInput = legLeftComponent.getInputByName('rigScale')
+        legLeftRigScaleInput.setConnection(mainSrtRigScaleOutput)
+
+        legRightGlobalSRTInput = legRightComponent.getInputByName('globalSRT')
+        legRightGlobalSRTInput.setConnection(mainSrtOffsetOutput)
+
+        legRightRigScaleInput = legRightComponent.getInputByName('rigScale')
+        legRightRigScaleInput.setConnection(mainSrtRigScaleOutput)
+
         # Leg To Pelvis Connections
         pelvisOutput = pelvisComponent.getOutputByName('pelvis')
         legLeftPelvisInput = legLeftComponent.getInputByName('pelvisInput')
@@ -233,9 +258,6 @@ class BobRig(Container):
         legLeftEndOutput = legLeftComponent.getOutputByName('legEndXfo')
         footLeftEndInput = footLeftComponent.getInputByName('legEndXfo')
         footLeftEndInput.setConnection(legLeftEndOutput)
-        # legLeftEndPosOutput = legLeftComponent.getOutputByName('legEndPos')
-        # footLeftEndPosInput = footLeftComponent.getInputByName('legEndPos')
-        # footLeftEndPosInput.setConnection(legLeftEndPosOutput)
 
         legLeftDrawDebugOutput = legLeftComponent.getOutputByName('drawDebug')
         footLeftDrawDebugInput = footLeftComponent.getInputByName('drawDebug')
@@ -244,20 +266,9 @@ class BobRig(Container):
         legRightEndOutput = legRightComponent.getOutputByName('legEndXfo')
         footRightEndInput = footRightComponent.getInputByName('legEndXfo')
         footRightEndInput.setConnection(legRightEndOutput)
-        # legRightEndPosOutput = legRightComponent.getOutputByName('legEndPos')
-        # footRightEndPosInput = footRightComponent.getInputByName('legEndPos')
-        # footRightEndPosInput.setConnection(legRightEndPosOutput)
 
         legLeftDrawDebugOutput = legRightComponent.getOutputByName('drawDebug')
         footLeftDrawDebugInput = footRightComponent.getInputByName('drawDebug')
         footLeftDrawDebugInput.setConnection(legLeftDrawDebugOutput)
-
-        # Arm Attributes to Clavicle
-        # clavicleLeftFollowBodyOutput = clavicleLeftComponent.getOutputByName('followBody')
-        # armLeftFollowBodyInput = armLeftComponent.getInputByName('followBody')
-        # armLeftFollowBodyInput.setConnection(clavicleLeftFollowBodyOutput)
-        # clavicleRightFollowBodyOutput = clavicleRightComponent.getOutputByName('followBody')
-        # armRightFollowBodyInput = armRightComponent.getInputByName('followBody')
-        # armRightFollowBodyInput.setConnection(clavicleRightFollowBodyOutput)
 
         Profiler.getInstance().pop()
