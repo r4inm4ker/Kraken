@@ -63,20 +63,6 @@ bob_guide_data = {
             "forearmFKCtrlSize": 1.5
         },
         {
-            "class": "kraken.examples.hand_component.HandComponentGuide",
-            "name": "L_Hand",
-            "location": "L",
-            "handXfo": Xfo(tr=Vec3(7.1886, 12.2819, 0.4906),
-                            ori=Quat(Vec3(-0.0865, -0.2301, -0.2623), 0.9331)),
-        },
-        {
-            "class": "kraken.examples.hand_component.HandComponentGuide",
-            "name": "R_Hand",
-            "location": "R",
-            "handXfo": Xfo(tr=Vec3(-7.1886, 12.2819, 0.4906),
-                            ori=Quat(Vec3(-0.2301, -0.0865, -0.9331), 0.2623))
-        },
-        {
             "class": "kraken.examples.leg_component.LegComponentGuide",
             "name": "L_Leg",
             "location": "L",
@@ -85,26 +71,12 @@ bob_guide_data = {
             "ankleXfo": Xfo(Vec3(1.841, 1.1516, -1.237))
         },
         {
-            "class": "kraken.examples.foot_component.FootComponentGuide",
-            "name": "L_Foot",
-            "location": "L",
-            "footXfo": Xfo(tr=Vec3(1.841, 1.1516, -1.237),
-                           ori=Quat(Vec3(0.6377, -0.5695, 0.3053), 0.4190))
-        },
-        {
             "class": "kraken.examples.leg_component.LegComponentGuide",
             "name": "R_Leg",
             "location": "R",
             "femurXfo": Xfo(Vec3(-0.9811, 9.769, -0.4572)),
             "kneeXfo": Xfo(Vec3(-1.4488, 5.4418, -0.5348)),
             "ankleXfo": Xfo(Vec3(-1.841, 1.1516, -1.237))
-        },
-        {
-            "class": "kraken.examples.foot_component.FootComponentGuide",
-            "name": "R_Foot",
-            "location": "R",
-            "footXfo": Xfo(tr=Vec3(-1.841, 1.1516, -1.237),
-                           ori=Quat(Vec3(0.5695, -0.6377, 0.4190), 0.3053))
         }
     ],
     "connections": [
@@ -139,16 +111,6 @@ bob_guide_data = {
             "target": "R_Clavicle.spineEnd"
         },
         {
-            "_comment": "LHand To LArm Connections. armEndXfo",
-            "source": "L_Arm.armEndXfo",
-            "target": "L_Hand.armEndXfo"
-        },
-        {
-            "_comment": "RHand To RArm Connections. armEndXfo",
-            "source": "R_Arm.armEndXfo",
-            "target": "R_Hand.armEndXfo"
-        },
-        {
             "_comment": "LLeg To Pelvis Connections",
             "source": "spine.spineBase",
             "target": "L_Leg.pelvisInput"
@@ -157,16 +119,6 @@ bob_guide_data = {
             "_comment": "RLeg To Pelvis Connections",
             "source": "spine.spineBase",
             "target": "R_Leg.pelvisInput"
-        },
-        {
-            "_comment": "LFoot To LLeg Connections: legEndXfo",
-            "source": "L_Leg.legEndXfo",
-            "target": "L_Foot.legEndXfo"
-        },
-        {
-            "_comment": "RFoot To RLeg Connections: legEndXfo",
-            "source": "R_Leg.legEndXfo",
-            "target": "R_Foot.legEndXfo"
         }
     ]
 }
