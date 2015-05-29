@@ -39,79 +39,6 @@ class NodeTitle(QtGui.QGraphicsWidget):
         # painter.setPen(QtGui.QPen(QtGui.QColor(0, 255, 0)))
         # painter.drawRect(self.windowFrameRect())
 
-class DebugButton(QtGui.QPushButton):
-
-    def __init__(self, text):
-        super(DebugButton, self).__init__(text)
-    #     self.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed))
-    #     # self.setPreferredSize(QtCore.QSize(20, 20))
-
-    # def sizeHint(self):
-    #     return QtCore.QSize(20, 20)
-
-    # def paint(self, painter, option, widget):
-    #     super(DebugButton, self).paint(painter, option, widget)
-    #     painter.setPen(QtGui.QPen(QtGui.QColor(0, 255, 0)))
-    #     painter.drawRect(self.windowFrameRect())
-
-
-class NodeHeader(QtGui.QGraphicsWidget):
-
-    def __init__(self, graph, component):
-        super(NodeHeader, self).__init__()
-
-        self.__graph = graph
-        self.__component = component
-
-        self.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding))
-
-        layout = QtGui.QGraphicsLinearLayout()
-        layout.setContentsMargins(4, 4, 4, 4)
-        layout.setSpacing(1)
-        layout.setOrientation(QtCore.Qt.Horizontal)
-        self.setLayout(layout)
-
-        self.__titleItem = NodeTitle(text, self)
-        layout.addStretch(1)
-        layout.addItem(self.__titleItem)
-        layout.setAlignment(self.__titleItem, QtCore.Qt.AlignCenter | QtCore.Qt.AlignTop)
-        layout.addStretch(1)
-
-        if showEditSubGraphButton:
-            editSubGraphButton = DebugButton('')
-            editSubGraphButton.setIconSize(QtCore.QSize(40, 40))
-            editSubGraphButton.setObjectName("editSubGraph")
-            editSubGraphButton.setContentsMargins(0, 0, 0, 0)
-            def editSubGraph():
-                self.__graph.pushSubGraph(node.getName())
-            editSubGraphButton.pressed.connect(editSubGraph)
-            editSubGraphButtonProxy = QtGui.QGraphicsProxyWidget()
-            editSubGraphButtonProxy.setWidget(editSubGraphButton)
-            editSubGraphButtonProxy.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed))
-            editSubGraphButtonProxy.setPreferredSize(22, 22)
-            editSubGraphButtonProxy.setContentsMargins(0, 0, 0, 0)
-            layout.addItem(editSubGraphButtonProxy)
-
-        if showEditFunctionButton:
-            editFunctionButton = DebugButton('')
-            editFunctionButton.setIconSize(QtCore.QSize(40, 40))
-            editFunctionButton.setObjectName("editFunction")
-            editFunctionButton.setContentsMargins(0, 0, 0, 0)
-            def editFunction():
-                self.__graph.openEditFunctionDialog(self.__node.getEvalPath(), self.__node.getExecutablePath())
-            editFunctionButton.pressed.connect(editFunction)
-            editFunctionButtonProxy = QtGui.QGraphicsProxyWidget()
-            editFunctionButtonProxy.setWidget(editFunctionButton)
-            editFunctionButtonProxy.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed))
-            editFunctionButtonProxy.setPreferredSize(22, 22)
-            editFunctionButtonProxy.setContentsMargins(0, 0, 0, 0)
-            layout.addItem(editFunctionButtonProxy)
-
-
-    def paint(self, painter, option, widget):
-        super(NodeHeader, self).paint(painter, option, widget)
-        # painter.setPen(QtGui.QPen(QtGui.QColor(0, 255, 0)))
-        # painter.drawRect(self.windowFrameRect())
 
 class Node(QtGui.QGraphicsWidget):
     __defaultColor = QtGui.QColor(154, 205, 50, 255)
@@ -168,16 +95,10 @@ class Node(QtGui.QGraphicsWidget):
         self.setGraphPos( QtCore.QPointF( self.__component.getGraphPos().x, self.__component.getGraphPos().y ) )
 
     def getName(self):
-        return self.__name
+        return self.__component.getName()
 
-    def getNodePath(self):
-        return self.__nodePath
-
-    def getExecutablePath(self):
-        return self.__executablePath
-
-    def getEvalPath(self):
-        return self.__graph.getEvalPath()+[self.__name]
+    def getComponent(self):
+        return self.__component
 
     #########################
     ##
@@ -313,33 +234,11 @@ class Node(QtGui.QGraphicsWidget):
     #########################
     ## Events
 
-    def __retrieveBinding(self, data=None):
-        try:
-            self.__evalDesc = self.__graph.controller().getDescForEvalPath(evalPath=self.__graph.getEvalPath()+[self.getName()])
-        except:
-            # This node is not part of the EvalPath yet.
-            self.__evalDesc = None
-
-    def __nodePosChanged(self, data):
-        if data['node']['path'] == self.__nodePath:
-            self.setGraphPos(data['node']['graphPos'])
-
-    def __portAdded(self, data):
-        executablePath = '.'.join(data['port']['path'].split('.')[0:-1])
-        if executablePath == self.__executablePath:
-            self.addPort(data['port']['path'])
-
-    def __portRemoved(self, data):
-        executablePath = '.'.join(data['port']['path'].split('.')[0:-1])
-        if executablePath == self.__executablePath:
-            portName = data['port']['path'].split('.')[-1]
-            self.removePort(portName)
-
     def destroy(self):
-        self.__graph.controller().removeNotificationListener('scene.bindingChanged', self.__retrieveBinding)
-        self.__graph.controller().removeNotificationListener('node.posChanged', self.__nodePosChanged)
-        self.__graph.controller().removeNotificationListener('port.created', self.__portAdded)
-        self.__graph.controller().removeNotificationListener('port.destroyed', self.__portRemoved)
+        # self.__graph.controller().removeNotificationListener('scene.bindingChanged', self.__retrieveBinding)
+        # self.__graph.controller().removeNotificationListener('node.posChanged', self.__nodePosChanged)
+        # self.__graph.controller().removeNotificationListener('port.created', self.__portAdded)
+        # self.__graph.controller().removeNotificationListener('port.destroyed', self.__portRemoved)
         for port in self.__ports:
             port.destroy()
         self.scene().removeItem(self)

@@ -377,6 +377,19 @@ class Object3D(SceneItem):
         return True
 
 
+    def removeChild(self, child):
+        """Removed the child as an child item of this object.
+
+        Return:
+        True if successful.
+
+        """
+
+        self._children.remove(child)
+        return True
+
+
+
     def getChildren(self):
         """Gets the children of this object.
 

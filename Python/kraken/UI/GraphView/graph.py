@@ -73,11 +73,19 @@ class Graph(QtGui.QGraphicsWidget):
         selectedNodes = self.getSelectedNodes()
         names = ""
         for node in selectedNodes:
-            names += (" " + node.getName())
-        self.__controller.beginInteraction("Delete " + names)
-        for node in selectedNodes:
-            self.__controller.removeNode(nodePath=node.getNodePath())
-        self.__controller.endInteraction()
+            # names += (" " + node.getName())
+            component = node.getComponent()
+            self.__rig.removeChild( component )
+
+            node.destroy()
+            del self.__nodes[node.getName()]
+
+
+
+        # self.__controller.beginInteraction("Delete " + names)
+        # for node in selectedNodes:
+        #     self.__controller.removeNode(nodePath=node.getNodePath())
+        # self.__controller.endInteraction()
 
     def frameNodes(self, nodes):
         if len(nodes) == 0:
