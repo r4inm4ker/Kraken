@@ -6,7 +6,7 @@
 import sys
 from PySide import QtGui, QtCore
 from node_library import NodeLibrary
-from GraphView.graph_view import GraphViewWidget
+from GraphView.graph_view_widget import GraphViewWidget
 
 from kraken.core.kraken_system import KrakenSystem
 
