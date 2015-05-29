@@ -192,33 +192,33 @@ class PelvisComponentRig(PelvisComponent):
         # Add Splice Ops
         # ===============
         # Add Pelvis Solver Splice Op
-        pelvisCtrlSpaceSpliceOp = SpliceOperator('pelvisCtrlSpaceSpliceOp', 'PoseConstraintSolver', 'Kraken')
-        self.addOperator(pelvisCtrlSpaceSpliceOp)
+        self.pelvisCtrlSpaceSpliceOp = SpliceOperator('pelvisCtrlSpaceSpliceOp', 'PoseConstraintSolver', 'Kraken')
+        self.addOperator(self.pelvisCtrlSpaceSpliceOp)
 
         # Add Att Inputs
-        pelvisCtrlSpaceSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
-        pelvisCtrlSpaceSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
+        self.pelvisCtrlSpaceSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.pelvisCtrlSpaceSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
 
         # Add Xfo Inputs
-        pelvisCtrlSpaceSpliceOp.setInput('constrainer', self.cogInputTgt)
+        self.pelvisCtrlSpaceSpliceOp.setInput('constrainer', self.cogInputTgt)
 
         # Add Xfo Outputs
-        pelvisCtrlSpaceSpliceOp.setOutput('constrainee', self.pelvisCtrlSpace)
+        self.pelvisCtrlSpaceSpliceOp.setOutput('constrainee', self.pelvisCtrlSpace)
 
 
         # Add Deformer Splice Op
-        pelvisDefSpliceOp = SpliceOperator('pelvisDeformerSpliceOp', 'PoseConstraintSolver', 'Kraken')
-        self.addOperator(pelvisDefSpliceOp)
+        self.pelvisDefSpliceOp = SpliceOperator('pelvisDeformerSpliceOp', 'PoseConstraintSolver', 'Kraken')
+        self.addOperator(self.pelvisDefSpliceOp)
 
         # Add Att Inputs
-        pelvisDefSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
-        pelvisDefSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
+        self.pelvisDefSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.pelvisDefSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
 
         # Add Xfo Inputs)
-        pelvisDefSpliceOp.setInput('constrainer', self.pelvisOutputTgt)
+        self.pelvisDefSpliceOp.setInput('constrainer', self.pelvisOutputTgt)
 
         # Add Xfo Outputs
-        pelvisDefSpliceOp.setOutput('constrainee', pelvisDef)
+        self.pelvisDefSpliceOp.setOutput('constrainee', pelvisDef)
 
         Profiler.getInstance().pop()
 
@@ -237,6 +237,9 @@ class PelvisComponentRig(PelvisComponent):
         # ============
         self.cogInputTgt.xfo = data['pelvisXfo']
         self.pelvisOutputTgt.xfo = data['pelvisXfo']
+
+        self.pelvisCtrlSpaceSpliceOp.evaluate()
+        self.pelvisDefSpliceOp.evaluate()
 
 
 from kraken.core.kraken_system import KrakenSystem

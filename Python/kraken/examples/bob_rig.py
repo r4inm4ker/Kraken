@@ -163,11 +163,13 @@ class BobRig(Container):
         # ============
         # Connections
         # ============
+        # Spine to Main SRT
         mainSrtRigScaleOutput = mainSrtComponent.getOutputByName('rigScale')
         mainSrtOffsetOutput = mainSrtComponent.getOutputByName('offset')
         spineInput = spineComponent.getInputByName('mainSrt')
         spineInput.setConnection(mainSrtOffsetOutput)
 
+        # Pelvis to Spine
         spineCogOutput = spineComponent.getOutputByName('cog')
         pelvisCogInput = pelvisComponent.getInputByName('cog')
         pelvisCogInput.setConnection(spineCogOutput)

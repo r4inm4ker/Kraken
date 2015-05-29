@@ -236,6 +236,7 @@ class SpineComponentRig(SpineComponent):
         # Constraint inputs
         self.spineSrtInputConstraint = PoseConstraint('_'.join([self.cogCtrlSpace.getName(), 'To', self.spineMainSrtInputTgt.getName()]))
         self.spineSrtInputConstraint.addConstrainer(self.spineMainSrtInputTgt)
+        self.spineSrtInputConstraint.setMaintainOffset(True)
         self.cogCtrlSpace.addConstraint(self.spineSrtInputConstraint)
 
         # Constraint outputs
