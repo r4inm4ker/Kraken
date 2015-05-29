@@ -197,6 +197,20 @@ class LegComponentGuide(LegComponent):
 
         return data
 
+    # ==============
+    # Class Methods
+    # ==============
+    @classmethod
+    def getComponentType(cls):
+        """Enables introspection of the class prior to construction to determine if it is a guide component.
+
+        Return:
+        The true if this component is a guide component.
+
+        """
+
+        return 'Guide'
+
 
 class LegComponentRig(LegComponent):
     """Leg Component"""

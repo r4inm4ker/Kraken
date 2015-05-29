@@ -67,16 +67,19 @@ class NodeLibrary(QtGui.QWidget):
         self.nodesList.clear()
         fuzzyText = self.searchLineEdit.text()
 
-        for cmpName in self.componentClassNames:
-            add = True
+        for componentClassName in self.componentClassNames:
             if fuzzyText != '':
-                if fuzzyText.lower() not in cmpName.lower():
-                    add = False
-            if add:
-                treeItem = QtGui.QTreeWidgetItem()
-                treeItem.setText(0, cmpName)
-                # treeItem.setData(0, QtCore.Qt.UserRole, path)
-                self.nodesList.addTopLevelItem(treeItem)
+                if fuzzyText.lower() not in componentClassName.lower():
+                    continue
+
+            cmpCls = self.ks.getComponentClass( componentClassName )
+            if cmpCls.getComponentType() != 'Guide':
+                continue
+
+            treeItem = QtGui.QTreeWidgetItem()
+            treeItem.setText(0, componentClassName)
+            # treeItem.setData(0, QtCore.Qt.UserRole, path)
+            self.nodesList.addTopLevelItem(treeItem)
 
         self.nodesList.expandAll()
 
