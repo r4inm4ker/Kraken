@@ -18,12 +18,8 @@ class KrakenUI(QtGui.QWidget):
         # constructors of base classes
         super(KrakenUI, self).__init__(parent)
 
-        #self.setAllowedAreas(QtCore.Qt.LeftDockWidgetArea | QtCore.Qt.RightDockWidgetArea | QtCore.Qt.BottomDockWidgetArea | QtCore.Qt.TopDockWidgetArea)
+        self.setWindowTitle("Kraken Editor")
         self.setAcceptDrops(True)
-
-        krakenSystem = KrakenSystem.getInstance()
-        krakenSystem.loadCoreClient()
-        krakenSystem.loadExtension('Kraken')
 
         self.nodeLibrary = NodeLibrary(parent=self)
         self.graphViewWidget = GraphViewWidget(parent=self)
@@ -38,14 +34,14 @@ class KrakenUI(QtGui.QWidget):
         grid = QtGui.QVBoxLayout(self)
         grid.addWidget(horizontalSplitter)
 
-        # self.setWindowTitle("Kraken Node Editor")
-        # self.setWidget(horizontalSplitter)
-
     def closeEvent(self, event):
-        pass
-        # self.__graphViewWidget.closeEvent(event)
-        # return super(KrakenUI, self).closeEvent(event)
+        self.graphViewWidget.closeEvent(event)
 
+    def showEvent(self, event):
+        print "showEvent"
+        krakenSystem = KrakenSystem.getInstance()
+        krakenSystem.loadCoreClient()
+        krakenSystem.loadExtension('Kraken')
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
