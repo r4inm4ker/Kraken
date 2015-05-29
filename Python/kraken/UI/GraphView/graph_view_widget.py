@@ -68,13 +68,13 @@ class GraphViewWidget(QtGui.QWidget):
         #########################
         ## Setup hotkeys for the following actions.
 
-        deleteShortcut = QtGui.QShortcut(QtGui.QKeySequence(QtGui.QKeySequence(QtCore.Qt.Key_Delete)), self)
+        deleteShortcut = QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.Key_Delete), self)
         deleteShortcut.activated.connect(self.graphView.deleteSelectedNodes)
 
-        frameShortcut = QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.Key_F)), self)
+        frameShortcut = QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.Key_F), self)
         frameShortcut.activated.connect(self.graphView.frameSelectedNodes)
 
-        frameShortcut = QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.Key_A)), self)
+        frameShortcut = QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.Key_A), self)
         frameShortcut.activated.connect(self.graphView.frameAllNodes)
 
         layout = QtGui.QVBoxLayout(self)
