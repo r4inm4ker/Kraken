@@ -77,14 +77,10 @@ class Node(QtGui.QGraphicsWidget):
         self.__outports = []
         for i in range(self.__component.getNumInputs()):
             componentInput = component.getInputByIndex(i)
-            if componentInput.getDataType() != 'Xfo':
-                continue;
             self.addInputPort(componentInput)
 
         for i in range(self.__component.getNumOutputs()):
             componentOutput = component.getOutputByIndex(i)
-            if componentOutput.getDataType() != 'Xfo':
-                continue;
             self.addOutputPort(componentOutput)
 
 

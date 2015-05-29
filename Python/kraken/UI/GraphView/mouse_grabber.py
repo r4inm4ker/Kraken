@@ -62,6 +62,10 @@ class MouseGrabber(QtGui.QGraphicsWidget):
         def canConnect(mouseOverPortCircle):
             if self.__connectionPointType != mouseOverPortCircle.connectionPointType():
                 return False
+
+            if mouseOverPortCircle.getPort().getDataType() != self.__port.getDataType():
+                return False
+
             return True
 
         collidingPortCircles = filter(lambda port: canConnect(port), collidingPortCircles)

@@ -103,9 +103,22 @@ class PortCircle(QtGui.QGraphicsWidget):
 
     def highlight(self):
         self.__ellipseItem.setBrush(QtGui.QBrush(self.__color.lighter()))
+        # make the port bigger to highliht it can accept the connection.
+        self.__ellipseItem.setRect(
+            -self.__radius * 1.6,
+            -self.__radius * 1.6,
+            self.__diameter * 1.6,
+            self.__diameter * 1.6,
+            )
 
     def unhighlight(self):
         self.__ellipseItem.setBrush(QtGui.QBrush(self.__color))
+        self.__ellipseItem.setRect(
+            -self.__radius,
+            -self.__radius,
+            self.__diameter,
+            self.__diameter,
+            )
 
     def hoverEnterEvent(self, event):
         self.highlight()
@@ -183,6 +196,9 @@ class BasePort(QtGui.QGraphicsWidget):
 
     def getName(self):
         return self.__componentInput.getName()
+
+    def getDataType(self):
+        return self.__componentInput.getDataType()
 
     def getNode(self):
         return self.__node
