@@ -34,6 +34,8 @@ class Component(Object3D):
         self.lockScale(x=True, y=True, z=True)
         self.lockTranslation(x=True, y=True, z=True)
 
+        self._graphPos = Vec2()
+
 
     # =============
     # Side Methods
@@ -79,6 +81,36 @@ class Component(Object3D):
         """
 
         return self.getName() + '_' + self.getLocation()
+
+
+    # =============
+    # Graph UI
+    # =============
+    def getGraphPos(self):
+        """Returns the graphPos of the component as a string.
+
+        Return:
+        String, the graphPos of the component.
+
+        """
+
+        return self._graphPos
+
+
+    def setGraphPos(self, graphPos):
+        """Sets the graphPos of the component.
+
+        Arguments:
+        graphPos -- Vec2, The position in the graph where this node is placed.
+
+        Return:
+        True if successful.
+
+        """
+
+        self._graphPos = graphPos
+
+        return True
 
 
     # =============

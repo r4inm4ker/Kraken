@@ -165,6 +165,8 @@ class Node(QtGui.QGraphicsWidget):
         # Update the node so that the size is computed.
         self.adjustSize()
 
+        self.setGraphPos( QtCore.QPointF( self.__component.getGraphPos().x, self.__component.getGraphPos().y ) )
+
     def getName(self):
         return self.__name
 

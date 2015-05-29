@@ -8,10 +8,13 @@ import json, difflib
 from node import Node, NodeTitle, NodeHeader
 from port import BasePort
 from connection import Connection
+from kraken.core.maths import Vec2
+
 # from FabricEngine.DFG.Widgets.add_port_dialog import AddPortDialog
 # from FabricEngine.DFG.Widgets.dfg_function_editor import DFGFunctionEditorDockWidget
 # from FabricEngine.DFG.Widgets.node_inspector import NodeInspectorDockWidget
 
+from kraken.core.kraken_system import KrakenSystem
 
 
 class SelectionRect(QtGui.QGraphicsWidget):
@@ -661,7 +664,6 @@ class Graph(QtGui.QGraphicsWidget):
         for component in guideComponents:
             self.addNode(component)
 
-
         for component in guideComponents:
             for i in range(component.getNumInputs()):
                 componentInput = component.getInputByIndex(i)
@@ -834,14 +836,12 @@ class GraphView(QtGui.QGraphicsView):
             super(GraphView, self).mousePressEvent(event)
 
     def dragEnterEvent(self, event):
-        print "dragEnterEvent:" + event.mimeData().text()
         textParts = event.mimeData().text().split(':')
         if textParts[0] == 'KrakenComponent':
             event.accept()
         else:
             event.setDropAction(QtCore.Qt.IgnoreAction)
             super(GraphView, self).dragEnterEvent(event)
-            #event.setDropAction(QtCore.Qt.IgnoreAction)
 
     def dragMoveEvent(self, event):
         super(GraphView, self).dragMoveEvent(event)
@@ -849,16 +849,21 @@ class GraphView(QtGui.QGraphicsView):
 
     def dropEvent(self, event):
         textParts = event.mimeData().text().split(':')
-        if textParts[0] == 'DFGNode':
-            executablePath = textParts[1]
+        if textParts[0] == 'KrakenComponent':
+            componentClassName = textParts[1]
 
-            # Add a node to the graph at the given position.
+            # Add a component to the rig placed at the given position.
             dropPosition = self.graph.mapToItem(self.graph.itemGroup(), event.pos())
-            self.__controller.addNode(
-                graphPath=self.graph.getGraphPath(),
-                executablePath=executablePath,
-                graphPos=dropPosition
-            )
+
+            ##############################
+            ## construct
+
+            krakenSystem = KrakenSystem.getInstance()
+            componentClass = krakenSystem.getComponentClass( componentClassName )
+            component = componentClass(parent=self.rig)
+            component.setGraphPos( Vec2(dropPosition.x(), dropPosition.y()) )
+
+            self.graph.addNode(component)
 
             event.acceptProposedAction()
         else:
@@ -869,20 +874,17 @@ class GraphView(QtGui.QGraphicsView):
 
     def closeEvent(self, event):
 
-        self.__controller.removeNotificationListener('port.created', self.__portCreated)
-        self.__controller.removeNotificationListener('port.destroyed', self.__portDestroyed)
-        self.__controller.removeNotificationListener('node.created', self.__nodeCreated)
-        self.__controller.removeNotificationListener('node.destroyed', self.__nodeDestroyed)
-        self.__controller.removeNotificationListener('graph.connected', self.__connectionAdded)
-        self.__controller.removeNotificationListener('graph.disconnected', self.__connectionRemoved)
-        self.__controller.removeNotificationListener('graph.metadata.changed', self.graphMetadataChanged)
-        self.__controller.removeNotificationListener('scene.new', self.__onSceneChange)
-        self.__controller.removeNotificationListener('scene.load', self.__onSceneChange)
+        # self.__controller.removeNotificationListener('port.created', self.__portCreated)
+        # self.__controller.removeNotificationListener('port.destroyed', self.__portDestroyed)
+        # self.__controller.removeNotificationListener('node.created', self.__nodeCreated)
+        # self.__controller.removeNotificationListener('node.destroyed', self.__nodeDestroyed)
+        # self.__controller.removeNotificationListener('graph.connected', self.__connectionAdded)
+        # self.__controller.removeNotificationListener('graph.disconnected', self.__connectionRemoved)
+        # self.__controller.removeNotificationListener('graph.metadata.changed', self.graphMetadataChanged)
+        # self.__controller.removeNotificationListener('scene.new', self.__onSceneChange)
+        # self.__controller.removeNotificationListener('scene.load', self.__onSceneChange)
 
         return super(GraphView, self).closeEvent(event)
-
-    def saveExecutable(self):
-        self.__controller.saveExecutable(executablePath=self.graph.getGraphPath())
 
 
 class GraphViewWidget(QtGui.QWidget):
@@ -892,7 +894,7 @@ class GraphViewWidget(QtGui.QWidget):
         # constructors of base classes
         super(GraphViewWidget, self).__init__(parent)
 
-        self.setAcceptDrops(True)
+        # self.setAcceptDrops(True)
 
         self.graphView = GraphView(rig, self)
         self.__contextualNodeList = None
@@ -978,5 +980,5 @@ class GraphViewWidget(QtGui.QWidget):
             # print "scenepos:" + str(scenepos)
             self.__contextualNodeList.showAtPos(pos, scenepos)
 
-    def dragEnterEvent(self, event):
-        print "GraphViewWidget.dragEnterEvent:" + event.mimeData().text()
+    # def dragEnterEvent(self, event):
+    #     print "GraphViewWidget.dragEnterEvent:" + event.mimeData().text()

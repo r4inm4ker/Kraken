@@ -58,7 +58,7 @@ class NodeLibrary(QtGui.QWidget):
         grid.addWidget(self.searchLineEdit, 0, 0)
         grid.addWidget(self.nodesList, 1, 0)
 
-        self.componentNames = self.ks.getComponentClassNames()
+        self.componentClassNames = self.ks.getComponentClassNames()
 
         self.showClosestNames()
         self.searchLineEdit.textEdited.connect(self.showClosestNames)
@@ -67,7 +67,7 @@ class NodeLibrary(QtGui.QWidget):
         self.nodesList.clear()
         fuzzyText = self.searchLineEdit.text()
 
-        for cmpName in self.componentNames:
+        for cmpName in self.componentClassNames:
             add = True
             if fuzzyText != '':
                 if fuzzyText.lower() not in cmpName.lower():
