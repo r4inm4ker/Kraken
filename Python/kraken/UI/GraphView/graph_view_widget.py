@@ -66,23 +66,16 @@ class GraphViewWidget(QtGui.QWidget):
         buildGuideAction.triggered.connect(self.buildRig)
 
         #########################
-        ## TODO: Setup hotkeys for the following actions.
+        ## Setup hotkeys for the following actions.
 
         deleteShortcut = QtGui.QShortcut(QtGui.QKeySequence(QtGui.QKeySequence(QtCore.Qt.Key_Delete)), self)
         deleteShortcut.activated.connect(self.graphView.deleteSelectedNodes)
 
-        # deleteAction = toolBar.addAction('Delete')
-        # deleteAction.setShortcut(QtGui.QKeySequence.Delete)
-        # deleteAction.setShortcut(QtGui.QKeySequence(QtCore.Qt.Key_Delete))
-        # deleteAction.triggered.connect(self.graphView.deleteSelectedNodes)
+        frameShortcut = QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.Key_F)), self)
+        frameShortcut.activated.connect(self.graphView.frameSelectedNodes)
 
-        # frameAction = toolBar.addAction('Frame Selected Nodes')
-        # frameAction.setShortcut(QtGui.QKeySequence(QtCore.Qt.Key_F))
-        # # frameAction.triggered.connect(self.graphView.frameSelectedNodes)
-
-        # frameAction = toolBar.addAction('Frame All  Nodes')
-        # frameAction.setShortcut(QtGui.QKeySequence(QtCore.Qt.Key_A))
-        # # frameAction.triggered.connect(self.graphView.frameAllNodes)
+        frameShortcut = QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.Key_A)), self)
+        frameShortcut.activated.connect(self.graphView.frameAllNodes)
 
         layout = QtGui.QVBoxLayout(self)
         layout.addWidget(toolBar)

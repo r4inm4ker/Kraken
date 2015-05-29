@@ -38,7 +38,6 @@ class KrakenUI(QtGui.QWidget):
         self.graphViewWidget.closeEvent(event)
 
     def showEvent(self, event):
-        print "showEvent"
         krakenSystem = KrakenSystem.getInstance()
         krakenSystem.loadCoreClient()
         krakenSystem.loadExtension('Kraken')
