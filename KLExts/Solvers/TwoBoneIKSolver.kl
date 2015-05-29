@@ -77,8 +77,8 @@ function solve2BoneIK(
   offset.setFromAxisAndAngle(Vec3(0.0, 1.0, 0.0), ikBoneAngle);
   bone0Xfo.ori = bone0Xfo.ori * offset;
 
-
-  bone1Xfo.tr = bone0Xfo.transformVector(Vec3(bone0Length, 0.0, 0.0));
+  // transform the vector without applying scale.
+  bone1Xfo.tr = bone0Xfo.tr + bone0Xfo.ori.rotateVector(Vec3(bone0Length, 0.0, 0.0));
   bone1Xfo.ori = bone0Xfo.ori;
 
   offset.setFrom2Vectors(bone1Xfo.ori.getXaxis(), (goalPosition - bone1Xfo.tr).unit());
