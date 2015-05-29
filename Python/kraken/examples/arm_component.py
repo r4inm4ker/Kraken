@@ -8,6 +8,7 @@ from kraken.core.objects.components.component import Component
 from kraken.core.objects.attributes.attribute_group import AttributeGroup
 from kraken.core.objects.attributes.bool_attribute import BoolAttribute
 from kraken.core.objects.attributes.float_attribute import FloatAttribute
+from kraken.core.objects.attributes.string_attribute import StringAttribute
 
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
@@ -58,8 +59,6 @@ class ArmComponent(Component):
         self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', parent=self.cmpInputAttrGrp)
         self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', parent=self.cmpInputAttrGrp)
         self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', parent=self.cmpInputAttrGrp)
-        self.bicepFKCtrlSizeInputAttr = self.createInput('bicepFKCtrlSize', dataType='Float', parent=self.cmpInputAttrGrp)
-        self.forearmFKCtrlSizeInputAttr = self.createInput('forearmFKCtrlSize', dataType='Float', parent=self.cmpInputAttrGrp)
 
         # Declare Output Attrs
         self.debugOutputAttr = self.createOutput('drawDebug', dataType='Boolean', parent=self.cmpOutputAttrGrp)
@@ -73,6 +72,19 @@ class ArmComponentGuide(ArmComponent):
 
         Profiler.getInstance().push("Construct Arm Guide Component:" + name)
         super(ArmComponentGuide, self).__init__(name, parent)
+
+        # =========
+        # Attributes
+        # =========
+        # Add Component Params to IK control
+        guideSettingsAttrGrp = AttributeGroup("GuideSettings", parent=self)
+
+        self.nameAttr = StringAttribute('name', value='arm', parent=guideSettingsAttrGrp)
+        self.locationAttr = StringAttribute('location', value='L', parent=guideSettingsAttrGrp)
+        self.boolAttr = BoolAttribute('test', value=True, parent=guideSettingsAttrGrp)
+
+        self.bicepFKCtrlSizeInputAttr = FloatAttribute('bicepFKCtrlSize', value=1.75, minValue=0.0,   maxValue=10.0, parent=guideSettingsAttrGrp)
+        self.forearmFKCtrlSizeInputAttr = FloatAttribute('forearmFKCtrlSize', value=1.5, minValue=0.0,   maxValue=10.0, parent=guideSettingsAttrGrp)
 
         # =========
         # Controls

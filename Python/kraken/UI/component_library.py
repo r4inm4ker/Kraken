@@ -7,43 +7,43 @@ import json
 from PySide import QtGui, QtCore
 from kraken.core.kraken_system import KrakenSystem
 
-class NodeLibrary(QtGui.QWidget):
+class __ComponentTree(QtGui.QTreeWidget):
 
-    class NodeTree(QtGui.QTreeWidget):
+    def __init__(self, parent=None):
+        # constructors of base classes
+        QtGui.QTreeWidget.__init__(self, parent)
 
-        def __init__(self, parent=None):
-            # constructors of base classes
-            QtGui.QTreeWidget.__init__(self, parent)
+        self.setDragEnabled(True)
+        self.setDragDropMode(QtGui.QTreeWidget.DragOnly)
+        self.setColumnCount(1)
+        self.setHeaderLabels([''])
 
-            self.setDragEnabled(True)
-            self.setDragDropMode(QtGui.QTreeWidget.DragOnly)
-            self.setColumnCount(1)
-            self.setHeaderLabels([''])
+    def mouseMoveEvent(self, event):
+        self.dragObject()
 
-        def mouseMoveEvent(self, event):
-            self.dragObject()
+    def dragObject(self):
+        if not self.selectedIndexes():
+            return
+        drag = QtGui.QDrag(self)
+        text = 'KrakenComponent:' + self.selectedItems()[0].text(0)
 
-        def dragObject(self):
-            if not self.selectedIndexes():
-                return
-            drag = QtGui.QDrag(self)
-            text = 'KrakenComponent:' + self.selectedItems()[0].text(0)
+        mimeData = QtCore.QMimeData()
+        mimeData.setText(text)
 
-            mimeData = QtCore.QMimeData()
-            mimeData.setText(text)
+        drag.setMimeData(mimeData)
+        drag.setHotSpot(QtCore.QPoint(90, 23))
 
-            drag.setMimeData(mimeData)
-            drag.setHotSpot(QtCore.QPoint(90, 23))
+        ghostComponent = QtGui.QPixmap(180, 46)
+        ghostComponent.fill(QtGui.QColor(200, 200, 200, 80))
 
-            ghostNode = QtGui.QPixmap(180, 46)
-            ghostNode.fill(QtGui.QColor(200, 200, 200, 80))
+        drag.setPixmap(ghostComponent)
+        drag.start(QtCore.Qt.IgnoreAction)
 
-            drag.setPixmap(ghostNode)
-            drag.start(QtCore.Qt.IgnoreAction)
+class ComponentLibrary(QtGui.QWidget):
 
 
     def __init__(self, parent=None):
-        super(NodeLibrary, self).__init__(parent)
+        super(ComponentLibrary, self).__init__(parent)
 
         self.ks = KrakenSystem.getInstance()
         self.ks.loadIniFile()
@@ -52,7 +52,7 @@ class NodeLibrary(QtGui.QWidget):
         self.searchLineEdit.setFocusPolicy(QtCore.Qt.StrongFocus)
         self.searchLineEdit.setFocus()
 
-        self.nodesList = NodeLibrary.NodeTree(parent)
+        self.nodesList = __ComponentTree(parent)
 
         grid = QtGui.QGridLayout(self)
         grid.addWidget(self.searchLineEdit, 0, 0)
@@ -84,11 +84,9 @@ class NodeLibrary(QtGui.QWidget):
         self.nodesList.expandAll()
 
 
-
-
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
-    widget = NodeLibrary()
+    widget = ComponentLibrary()
     widget.show()
     sys.exit(app.exec_())
 
