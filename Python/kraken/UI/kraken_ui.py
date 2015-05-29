@@ -8,9 +8,6 @@ from PySide import QtGui, QtCore
 from node_library import NodeLibrary
 from GraphView.graph_view import GraphViewWidget
 
-from kraken.core.objects.rig import Rig
-from kraken.examples.bob_guide_data import bob_guide_data
-
 from kraken.core.kraken_system import KrakenSystem
 
 class KrakenUI(QtGui.QWidget):
@@ -28,13 +25,10 @@ class KrakenUI(QtGui.QWidget):
         krakenSystem.loadCoreClient()
         krakenSystem.loadExtension('Kraken')
 
-        self.rig = Rig()
-        # self.rig.loadRigDefinition(bob_guide_data)
+        self.nodeLibrary = NodeLibrary(parent=self)
+        self.graphViewWidget = GraphViewWidget(parent=self)
 
-        self.nodeLibrary = NodeLibrary(self)
-        self.graphViewWidget = GraphViewWidget(self.rig, self)
-
-        horizontalSplitter = QtGui.QSplitter(QtCore.Qt.Horizontal,self)
+        horizontalSplitter = QtGui.QSplitter(QtCore.Qt.Horizontal, parent=self)
         horizontalSplitter.addWidget(self.nodeLibrary)
         horizontalSplitter.addWidget(self.graphViewWidget)
 

@@ -10,6 +10,9 @@ from port import BasePort
 from connection import Connection
 from kraken.core.maths import Vec2
 
+from kraken.core.objects.rig import Rig
+from kraken.examples.bob_guide_data import bob_guide_data
+
 # from FabricEngine.DFG.Widgets.add_port_dialog import AddPortDialog
 # from FabricEngine.DFG.Widgets.dfg_function_editor import DFGFunctionEditorDockWidget
 # from FabricEngine.DFG.Widgets.node_inspector import NodeInspectorDockWidget
@@ -720,10 +723,9 @@ class Graph(QtGui.QGraphicsWidget):
 
 
 class GraphView(QtGui.QGraphicsView):
-    def __init__(self, rig, parent=None):
+    def __init__(self, parent=None):
         super(GraphView, self).__init__(parent)
 
-        self.rig = rig
         self.setRenderHint(QtGui.QPainter.Antialiasing)
         self.setRenderHint(QtGui.QPainter.TextAntialiasing)
 
@@ -733,22 +735,20 @@ class GraphView(QtGui.QGraphicsView):
         # self.setDragMode(QtGui.QGraphicsView.RubberBandDrag)
         # self.setContentsMargins(0, 0, 0, 0)
 
+        self.setAcceptDrops(True)
+
+    ################################################
+    ## Graph
+    def init(self, rig):
+        self.rig = rig
         self.graph = Graph(self, rig)
         self.setScene(self.graph.scene())
-
-        self.setAcceptDrops(True)
 
 
     ################################################
     ## Graph
     def getGraph(self):
         return self.graph
-
-    def popSubGraph(self):
-        self.graph.popSubGraph()
-
-    def getDisplayedEvalPath(self):
-        return self.graph.getDisplayedEvalPath()
 
     def frameSelectedNodes(self):
         self.graph.frameSelectedNodes()
@@ -758,20 +758,6 @@ class GraphView(QtGui.QGraphicsView):
 
     def deleteSelectedNodes(self):
         self.graph.deleteSelectedNodes()
-
-
-    ################################################
-    ## Function
-
-    def openEditFunctionDialog(self, evalPath, executablePath):
-        DFGFunctionEditorDockWidget.showWidget(self.__controller, evalPath, executablePath, floating=True)
-
-    ################################################
-    ## Ports
-
-    def openAddPortDialog(self, graphPath, evalPath, portType=None):
-        addPortDialog = AddPortDialog(self, self.__controller, evalPath=evalPath, executablePath=graphPath, portType=portType)
-        addPortDialog.show()
 
     ################################################
     ## Events
@@ -889,53 +875,57 @@ class GraphView(QtGui.QGraphicsView):
 
 class GraphViewWidget(QtGui.QWidget):
 
-    def __init__(self, rig, parent=None):
+    def __init__(self, parent=None):
 
         # constructors of base classes
         super(GraphViewWidget, self).__init__(parent)
 
-        # self.setAcceptDrops(True)
-
-        self.graphView = GraphView(rig, self)
+        self.graphView = GraphView(parent=self)
         self.__contextualNodeList = None
 
         # setup the toobar
         toolBar = QtGui.QToolBar()
 
         newAction = toolBar.addAction('New')
-        # newAction.setShortcut('Ctrl+S')
-        # newAction.triggered.connect(self.graphView.saveExecutable)
-        newAction.setObjectName("saveButton")
+        newAction.setShortcut('Ctrl+N')
+        newAction.triggered.connect(self.newRigPreset)
+        newAction.setObjectName("newButton")
 
         saveAction = toolBar.addAction('Save')
-        # saveAction.setShortcut('Ctrl+S')
-        # saveAction.triggered.connect(self.graphView.saveExecutable)
+        saveAction.setShortcut('Ctrl+S')
+        saveAction.triggered.connect(self.saveRigPreset)
         saveAction.setObjectName("saveButton")
 
         loadAction = toolBar.addAction('Load')
-        # loadAction.setShortcut('Ctrl+S')
-        # loadAction.triggered.connect(self.graphView.saveExecutable)
-        saveAction.setObjectName("saveButton")
+        loadAction.setShortcut('Ctrl+S')
+        loadAction.triggered.connect(self.loadRigPreset)
+        saveAction.setObjectName("loadButton")
 
         toolBar.addSeparator()
 
+        # Setup the name widget
         toolBar.addWidget(QtGui.QLabel('Name:'))
         nameWidget = QtGui.QLineEdit('', self)
+        def setRigName( text ):
+            rig.setName( text )
+        nameWidget.textChanged.connect(setRigName)
         toolBar.addWidget(nameWidget)
 
+        toolBar.addSeparator()
+
+        buildGuideAction = toolBar.addAction('Build Guide')
+        buildGuideAction.triggered.connect(self.buildGuideRig)
+
+        buildGuideAction = toolBar.addAction('Build Rig')
+        buildGuideAction.triggered.connect(self.buildRig)
+
+        #########################
+        ## TODO: Setup hotkeys for the following actions.
 
         # deleteAction = toolBar.addAction('Delete')
         # deleteAction.setShortcut(QtGui.QKeySequence.Delete)
         # deleteAction.setShortcut(QtGui.QKeySequence(QtCore.Qt.Key_Delete))
         # deleteAction.triggered.connect(self.graphView.deleteSelectedNodes)
-
-        toolBar.addSeparator()
-
-        buildGuideAction = toolBar.addAction('Build Guide')
-        # buildGuideAction.triggered.connect(self.graphView.popSubGraph)
-
-        buildGuideAction = toolBar.addAction('Build Rig')
-        # buildGuideAction.triggered.connect(self.graphView.popSubGraph)
 
         # frameAction = toolBar.addAction('Frame Selected Nodes')
         # frameAction.setShortcut(QtGui.QKeySequence(QtCore.Qt.Key_F))
@@ -945,25 +935,30 @@ class GraphViewWidget(QtGui.QWidget):
         # frameAction.setShortcut(QtGui.QKeySequence(QtCore.Qt.Key_A))
         # # frameAction.triggered.connect(self.graphView.frameAllNodes)
 
-        # def inspectGraph():
-        #     NodeInspectorDockWidget.showWidget(controller, self.graphView.getGraph().getEvalPath(), self.graphView.getGraph().getGraphPath(), floating=True)
-        # inspectAction = toolBar.addAction('Inspect')
-        # inspectAction.setShortcut(QtGui.QKeySequence(QtCore.Qt.Key_I))
-        # inspectAction.triggered.connect(inspectGraph)
-
-
-        # def updateWidgetsBasedOnEvalPath(evalPath):
-        #     executionPathWidget.setText(str(evalPath))
-        #     upAction.setEnabled(len(evalPath.split('.')) > 1)
-        # self.graphView.getGraph().evalPathChanged.connect(updateWidgetsBasedOnEvalPath)
-        # updateWidgetsBasedOnEvalPath(self.graphView.getDisplayedEvalPath())
-
         layout = QtGui.QVBoxLayout(self)
         layout.addWidget(toolBar)
         layout.addWidget(self.graphView)
 
         self.setLayout(layout)
 
+        self.newRigPreset()
+
+    def newRigPreset(self):
+        # TODO: clean the rig from the scene if it has been built.
+        self.rig = Rig()
+        self.graphView.init( self.rig )
+
+    def saveRigPreset(self):
+        print 'saveRigPreset'
+
+    def loadRigPreset(self):
+        print 'loadRigPreset'
+
+    def buildGuideRig(self):
+        print 'buildGuideRig'
+
+    def buildRig(self):
+        print 'buildRig'
 
     def keyPressEvent(self, event):
         if event.key() == 96: #'`'
