@@ -9,9 +9,7 @@ from kraken.examples.head_component import HeadComponentRig
 from kraken.examples.clavicle_component import ClavicleComponentGuide, ClavicleComponentRig
 from kraken.examples.arm_component import ArmComponentGuide, ArmComponentRig
 from kraken.examples.leg_component import LegComponentGuide, LegComponentRig
-from kraken.examples.foot_component import FootComponentGuide, FootComponentRig
 from kraken.examples.spine_component import SpineComponentRig
-from kraken.examples.pelvis_component import PelvisComponentRig
 from kraken.examples.neck_component import NeckComponentGuide, NeckComponentRig
 
 from kraken.core.profiler import Profiler
@@ -37,11 +35,6 @@ class BobRig(Container):
             'spine03Position': Vec3(0.0, 12.4496, -0.3649),
             'spine04Position': Vec3(0.0, 13.1051, -0.4821),
             'numDeformers': 4
-        })
-
-        pelvisComponent = PelvisComponentRig('pelvis', self)
-        pelvisComponent.loadData(data={
-            "pelvisXfo": Xfo(tr=Vec3(0.0, 11.1351, -0.1382))
         })
 
         neckComponentGuide = NeckComponentGuide(data={
@@ -125,40 +118,26 @@ class BobRig(Container):
             "location": "L",
             "femurXfo": Xfo(Vec3(0.9811, 9.769, -0.4572)),
             "kneeXfo": Xfo(Vec3(1.4488, 5.4418, -0.5348)),
-            "ankleXfo": Xfo(Vec3(1.841, 1.1516, -1.237))
+            "ankleXfo": Xfo(Vec3(1.841, 1.1516, -1.237)),
+            "toeXfo": Xfo(Vec3(1.85, 0.4, 0.25)),
+            "toeTipXfo": Xfo(Vec3(1.85, 0.4, 1.5))
         })
 
         legLeftComponent = LegComponentRig("leg", self)
-        legLeftComponent.loadData(data= legLeftComponentGuide.getGuideData())
+        legLeftComponent.loadData(data=legLeftComponentGuide.getGuideData())
 
         legRightComponentGuide = LegComponentGuide("leg", data={
             "name":"R_LegComponent",
             "location": "R",
             "femurXfo": Xfo(Vec3(-0.9811, 9.769, -0.4572)),
             "kneeXfo": Xfo(Vec3(-1.4488, 5.4418, -0.5348)),
-            "ankleXfo": Xfo(Vec3(-1.841, 1.1516, -1.237))
+            "ankleXfo": Xfo(Vec3(-1.85, 1.1516, -1.237)),
+            "toeXfo": Xfo(Vec3(-1.85, 0.4, 0.25)),
+            "toeTipXfo": Xfo(Vec3(-1.85, 0.4, 1.5))
         })
 
         legRightComponent = LegComponentRig("leg", self)
         legRightComponent.loadData(data=legRightComponentGuide.getGuideData() )
-
-        footLeftComponentGuide = FootComponentGuide("foot", data={
-            "name":"L_FootComponent",
-            "location": "L",
-            "footXfo": Xfo(tr=Vec3(1.841, 1.1516, -1.237), ori=Quat(Vec3(0.6377, -0.5695, 0.3053), 0.4190))
-        })
-
-        footLeftComponent = FootComponentRig("foot", self)
-        footLeftComponent.loadData(data=footLeftComponentGuide.getGuideData() )
-
-        footRightComponentGuide = FootComponentGuide("foot", data={
-            "name":"R_FootComponent",
-            "location": "R",
-            "footXfo": Xfo(tr= Vec3(-1.841, 1.1516, -1.237), ori=Quat(Vec3(0.5695, -0.6377, 0.4190), 0.3053))
-        })
-
-        footRightComponent = FootComponentRig("foot", self)
-        footRightComponent.loadData(data=footRightComponentGuide.getGuideData() )
 
         # ============
         # Connections
@@ -171,11 +150,6 @@ class BobRig(Container):
 
         spineRigScaleInput = spineComponent.getInputByName('rigScale')
         spineRigScaleInput.setConnection(mainSrtRigScaleOutput)
-
-        # Pelvis to Spine
-        spineCogOutput = spineComponent.getOutputByName('cog')
-        pelvisCogInput = pelvisComponent.getInputByName('cog')
-        pelvisCogInput.setConnection(spineCogOutput)
 
         # Neck to Spine
         spineEndOutput = spineComponent.getOutputByName('spineEnd')
@@ -248,27 +222,10 @@ class BobRig(Container):
         legRightRigScaleInput.setConnection(mainSrtRigScaleOutput)
 
         # Leg To Pelvis Connections
-        pelvisOutput = pelvisComponent.getOutputByName('pelvis')
+        spinePelvisOutput = spineComponent.getOutputByName('pelvis')
         legLeftPelvisInput = legLeftComponent.getInputByName('pelvisInput')
-        legLeftPelvisInput.setConnection(pelvisOutput)
+        legLeftPelvisInput.setConnection(spinePelvisOutput)
         legRightPelvisInput = legRightComponent.getInputByName('pelvisInput')
-        legRightPelvisInput.setConnection(pelvisOutput)
-
-        # Foot To Leg Connections
-        legLeftEndOutput = legLeftComponent.getOutputByName('legEndXfo')
-        footLeftEndInput = footLeftComponent.getInputByName('legEndXfo')
-        footLeftEndInput.setConnection(legLeftEndOutput)
-
-        legLeftDrawDebugOutput = legLeftComponent.getOutputByName('drawDebug')
-        footLeftDrawDebugInput = footLeftComponent.getInputByName('drawDebug')
-        footLeftDrawDebugInput.setConnection(legLeftDrawDebugOutput)
-
-        legRightEndOutput = legRightComponent.getOutputByName('legEndXfo')
-        footRightEndInput = footRightComponent.getInputByName('legEndXfo')
-        footRightEndInput.setConnection(legRightEndOutput)
-
-        legLeftDrawDebugOutput = legRightComponent.getOutputByName('drawDebug')
-        footLeftDrawDebugInput = footRightComponent.getInputByName('drawDebug')
-        footLeftDrawDebugInput.setConnection(legLeftDrawDebugOutput)
+        legRightPelvisInput.setConnection(spinePelvisOutput)
 
         Profiler.getInstance().pop()

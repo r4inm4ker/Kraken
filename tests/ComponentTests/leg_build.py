@@ -16,7 +16,9 @@ legGuide.loadData({
                    "location": "L",
                    "femurXfo": Xfo(Vec3(0.9811, 9.769, -0.4572)),
                    "kneeXfo": Xfo(Vec3(1.4488, 5.4418, -0.5348)),
-                   "ankleXfo": Xfo(Vec3(1.841, 1.1516, -1.237))
+                   "ankleXfo": Xfo(Vec3(1.85, 1.1516, -1.237)),
+                   "toeXfo": Xfo(Vec3(1.85, 0.4, 0.25)),
+                   "toeTipXfo": Xfo(Vec3(1.85, 0.4, 1.5))
                   })
 
 # Save the arm guid data for persistence.
