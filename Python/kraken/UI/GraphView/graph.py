@@ -41,6 +41,10 @@ class Graph(QtGui.QGraphicsWidget):
     def itemGroup(self):
         return self.__mainPanel.itemGroup()
 
+
+    def getRig(self):
+        return self.__rig
+
     #####################
     ## Nodes
 

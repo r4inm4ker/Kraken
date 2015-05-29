@@ -82,6 +82,7 @@ class MouseGrabber(QtGui.QGraphicsWidget):
         self.ungrabMouse()
         graph = self.__graph
         scene = self.scene()
+        # Destroy the temporary connection.
         scene.removeItem(self.__connection)
         # Destroy the grabber.
         scene.removeItem(self)
@@ -90,7 +91,6 @@ class MouseGrabber(QtGui.QGraphicsWidget):
         if self.__mouseOverPortCircle is not None:
             self.__mouseOverPortCircle.unhighlight()
             try:
-                from graph_view import ProxySidePanelPort
 
                 if self.__connectionPointType == 'In':
                     sourcePort = self.__port
@@ -99,32 +99,25 @@ class MouseGrabber(QtGui.QGraphicsWidget):
                     sourcePort = self.__mouseOverPortCircle.getPort()
                     targetPort = self.__port
 
-                if not (isinstance(sourcePort, ProxySidePanelPort) and isinstance(targetPort, ProxySidePanelPort)):
-                    if isinstance(sourcePort, ProxySidePanelPort):
-                        # Add a new port in place of the proxy port. Ensure to include the connected ports meta data.
-                        desc = graph.controller().getDesc(targetPort.getPath())
-                        metadata = graph.controller().getMetadata(desc['portPath'])
-                        dataType = targetPort.getDataType()
-                        source = graph.controller().addPort(evalPath=self.__graph.getEvalPath(), portName=targetPort.getName(), portType='In', dataType=dataType, **metadata)
-                    else:
-                        source = sourcePort.getPath()
+                sourceComponent = sourcePort.getNode().getComponent()
+                targetComponent = targetPort.getNode().getComponent()
 
-                    if isinstance(targetPort, ProxySidePanelPort):
-                        # Add a new port in place of the proxy port. Ensure to include the connected ports meta data.
-                        desc = graph.controller().getDesc(sourcePort.getPath())
-                        metadata = graph.controller().getMetadata(desc['portPath'])
-                        dataType = sourcePort.getDataType()
-                        target = graph.controller().addPort(evalPath=self.__graph.getEvalPath(), portName=sourcePort.getName(), portType='Out', dataType=dataType, **metadata)
-                    else:
-                        target=targetPort.getPath()
+                rig = self.__graph.getRig()
 
-                    graph.controller().addConnection(source=source, target=target)
+                sourceComponentOutputPort = sourceComponent.getOutputByName(sourcePort.getName())
+                targetComponentInputPort = targetComponent.getInputByName(targetPort.getName())
+                targetComponentInputPort.setConnection(sourceComponentOutputPort)
+
+                connectionJson = {
+                    'source': sourceComponent.getName() + '.' + sourceComponentOutputPort.getName(),
+                    'target': targetComponent.getName() + '.' + targetComponentInputPort.getName()
+                }
+                self.__graph.addConnection(connectionJson)
+
             except Exception as e:
                 print "Exception in MouseGrabber.mouseReleaseEvent: " + str(e)
 
 
-        graph.controller().endInteraction()
-        # Destroy the temporary connection.
 
 
     def paint(self, painter, option, widget):

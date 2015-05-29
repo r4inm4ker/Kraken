@@ -119,12 +119,12 @@ class PortCircle(QtGui.QGraphicsWidget):
         scenePos = self.mapToItem(self.__graph.itemGroup(), event.pos())
 
         self.unhighlight()
-        # if self.__connectionPointType == 'In':
+        if self.isInConnectionPoint():
         #     self.__graph.controller().beginInteraction("Edit connection to:" + self.__port.getPath())
-        #     MouseGrabber(self.__graph, scenePos, self.__port, 'Out')
-        # elif self.__connectionPointType == 'Out':
+            MouseGrabber(self.__graph, scenePos, self.__port, 'Out')
+        elif self.isOutConnectionPoint():
         #     self.__graph.controller().beginInteraction("Edit connections from:" + self.__port.getPath())
-        #     MouseGrabber(self.__graph, scenePos, self.__port, 'In')
+            MouseGrabber(self.__graph, scenePos, self.__port, 'In')
 
     # def paint(self, painter, option, widget):
     #     super(PortCircle, self).paint(painter, option, widget)
@@ -136,6 +136,7 @@ class BasePort(QtGui.QGraphicsWidget):
     def __init__(self, parent, graph, componentInput, connectionPointType):
         super(BasePort, self).__init__(parent)
 
+        self.__node = parent
         self.__graph = graph
         self.__componentInput = componentInput
 
@@ -183,14 +184,17 @@ class BasePort(QtGui.QGraphicsWidget):
     def getName(self):
         return self.__componentInput.getName()
 
+    def getNode(self):
+        return self.__node
+
     def inCircle(self):
         if self.__inCircle is None:
-            raise Exception("Port '" + self.__label + "' Does not have an 'In' connection point.");
+            raise Exception("Port '" + self.getNode().getName() + "." + self.__label + "' Does not have an 'In' connection point.");
         return self.__inCircle
 
     def outCircle(self):
         if self.__outCircle is None:
-            raise Exception("Port '" + self.__label + "' Does not have an 'Out' connection point.");
+            raise Exception("Port '" + self.getNode().getName() + "." + self.__label + "' Does not have an 'Out' connection point.");
         return self.__outCircle
 
     def getColor(self):
