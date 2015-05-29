@@ -183,7 +183,7 @@ class Graph(QtGui.QGraphicsWidget):
         if not sourceNode:
             raise Exception("Component not found:" + sourceNodeName)
 
-        sourcePort = sourceNode.getPort(outputName)
+        sourcePort = sourceNode.getOutPort(outputName)
         if not sourcePort:
             raise Exception("Component '"+sourceNodeName+"'' does not have output:" + sourcePortName)
 
@@ -191,7 +191,7 @@ class Graph(QtGui.QGraphicsWidget):
         if not targetNode:
             raise Exception("Component not found:" + targetNodeName)
 
-        targetPort = targetNode.getPort(inputName)
+        targetPort = targetNode.getInPort(inputName)
         if not targetPort:
             raise Exception("Component '"+targetNodeName+"'' does not have input:" + targetPortName)
 

@@ -73,7 +73,8 @@ class Node(QtGui.QGraphicsWidget):
         layout.addItem(self.__titleItem)
         layout.setAlignment(self.__titleItem, QtCore.Qt.AlignCenter | QtCore.Qt.AlignTop)
 
-        self.__ports = []
+        self.__inports = []
+        self.__outports = []
         for i in range(self.__component.getNumInputs()):
             componentInput = component.getInputByIndex(i)
             if componentInput.getDataType() != 'Xfo':
@@ -114,7 +115,7 @@ class Node(QtGui.QGraphicsWidget):
         layout.addItem(port)
         layout.setAlignment(port, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
 
-        self.__ports.append(port)
+        self.__inports.append(port)
         self.adjustSize()
         return port
 
@@ -125,32 +126,20 @@ class Node(QtGui.QGraphicsWidget):
         layout.addItem(port)
         layout.setAlignment(port, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
 
-        self.__ports.append(port)
+        self.__outports.append(port)
         self.adjustSize()
         return port
 
-    def removePort(self, name):
-        for i in range(len(self.__ports)):
-            port = self.__ports[i]
-            if port.getName() == name:
-                port.destroy()
-                port.deleteLater()
-                self.layout().removeItem(port)
-                del self.__ports[i]
-                self.adjustSize()
-        raise Exception("Node: " +  self.getName() + " does not have port:" + name)
-
-    def getPort(self, name):
-        for port in self.__ports:
+    def getInPort(self, name):
+        for port in self.__inports:
             if port.getName() == name:
                 return port
         return None
 
-    def getPortEvalDesc(self, name):
-        if self.__evalDesc is not None:
-            for portEvalDesc in self.__evalDesc['ports']:
-                if portEvalDesc['name'] == name:
-                    return portEvalDesc
+    def getOutPort(self, name):
+        for port in self.__outports:
+            if port.getName() == name:
+                return port
         return None
 
     def paint(self, painter, option, widget):
@@ -243,6 +232,8 @@ class Node(QtGui.QGraphicsWidget):
         # self.__graph.controller().removeNotificationListener('node.posChanged', self.__nodePosChanged)
         # self.__graph.controller().removeNotificationListener('port.created', self.__portAdded)
         # self.__graph.controller().removeNotificationListener('port.destroyed', self.__portRemoved)
-        for port in self.__ports:
+        for port in self.__inports:
+            port.destroy()
+        for port in self.__outports:
             port.destroy()
         self.scene().removeItem(self)
