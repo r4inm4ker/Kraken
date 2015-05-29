@@ -69,6 +69,10 @@ class Synchronizer(Synchronizer):
 
         dccItem = hrcMap[obj]['dccItem']
 
+        if dccItem is None:
+            print "Warning Syncing. No DCC Item for :" + obj.getFullName()
+            return;
+
         dccPos = dccItem.getTranslation()
         dccQuat = dccItem.getRotation(quaternion=True).get()
         dccScl = dccItem.getScale()
@@ -102,6 +106,10 @@ class Synchronizer(Synchronizer):
             return False
 
         dccItem = hrcMap[obj]['dccItem']
+
+        if dccItem is None:
+            print "Warning Syncing. No DCC Item for :" + obj.getFullName()
+            return;
 
         obj.setValue(dccItem.get())
 

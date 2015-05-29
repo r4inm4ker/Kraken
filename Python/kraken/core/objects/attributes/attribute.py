@@ -38,7 +38,7 @@ class Attribute(SceneItem):
 
         """
 
-        return self.parent.getDecoratedPath() + '.' + '#' + self.getName()
+        return self.getParent().getDecoratedPath() + '.' + '#' + self.getName()
 
 
     # ==============
@@ -269,8 +269,8 @@ class Attribute(SceneItem):
             'parent': None
         }
 
-        if self.parent is not None:
-            jsonData['parent'] = self.parent.getName()
+        if self.getParent() is not None:
+            jsonData['parent'] = self.getParent().getName()
 
         return jsonData
 

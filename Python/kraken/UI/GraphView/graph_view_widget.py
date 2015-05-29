@@ -119,7 +119,9 @@ class GraphViewWidget(QtGui.QWidget):
         builder.build(self.guideRig)
 
     def synchGuideRig(self):
-        print "synchGuideRig"
+        synchronizer = plugins.getSynchronizer()
+        synchronizer.setTarget(self.guideRig)
+        synchronizer.sync()
 
     def buildRig(self):
         self.synchGuideRig()

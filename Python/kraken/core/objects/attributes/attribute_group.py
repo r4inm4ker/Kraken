@@ -34,8 +34,8 @@ class AttributeGroup(SceneItem):
 
         """
 
-        if self.parent is not None and not self.parent.isTypeOf('Component'):
-            return self.parent.getDecoratedPath() + '.' + ':' + self.getName()
+        if self.getParent() is not None and not self.getParent().isTypeOf('Component'):
+            return self.getParent().getDecoratedPath() + '.' + ':' + self.getName()
 
         return self.getName()
 
@@ -194,7 +194,7 @@ class AttributeGroup(SceneItem):
         jsonData = {
             '__typeHierarchy__': classHierarchy,
             'name': self.name,
-            'parent': self.parent.getName(),
+            'parent': self.getParent().getName(),
             'attributes': []
         }
         for attr in self._attributes:
