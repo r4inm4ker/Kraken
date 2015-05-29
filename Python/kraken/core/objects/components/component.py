@@ -663,3 +663,4 @@ class Component(Object3D):
         self._operators.insert(index, self._operators.pop(oldindex))
 
         return True
+

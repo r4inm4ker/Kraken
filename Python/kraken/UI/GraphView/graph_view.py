@@ -3,21 +3,24 @@
 # Copyright 2010-2015
 #
 
-from PySide import QtGui, QtCore
 import json, difflib
+import os.path
+from PySide import QtGui, QtCore
+
 from node import Node, NodeTitle, NodeHeader
 from port import BasePort
 from connection import Connection
 from kraken.core.maths import Vec2
 
-from kraken.core.objects.rig import Rig
-from kraken.examples.bob_guide_data import bob_guide_data
-
 # from FabricEngine.DFG.Widgets.add_port_dialog import AddPortDialog
 # from FabricEngine.DFG.Widgets.dfg_function_editor import DFGFunctionEditorDockWidget
 # from FabricEngine.DFG.Widgets.node_inspector import NodeInspectorDockWidget
 
+from kraken.core.objects.rig import Rig
+from kraken.examples.bob_guide_data import bob_guide_data
 from kraken.core.kraken_system import KrakenSystem
+
+
 
 
 class SelectionRect(QtGui.QGraphicsWidget):
@@ -428,43 +431,13 @@ class Graph(QtGui.QGraphicsWidget):
         layout.addItem(self.__mainPanel)
         self.setLayout(layout)
 
-        # self.__controller.addNotificationListener('port.created', self.__portCreated)
-        # self.__controller.addNotificationListener('port.destroyed', self.__portDestroyed)
-        # self.__controller.addNotificationListener('node.created', self.__nodeCreated)
-        # self.__controller.addNotificationListener('node.destroyed', self.__nodeDestroyed)
-        # self.__controller.addNotificationListener('graph.connected', self.__connectionAdded)
-        # self.__controller.addNotificationListener('graph.disconnected', self.__connectionRemoved)
-        # self.__controller.addNotificationListener('graph.metadata.changed', self.graphMetadataChanged)
-        # self.__controller.addNotificationListener('scene.new', self.__onSceneChange)
-        # self.__controller.addNotificationListener('scene.load', self.__onSceneChange)
-        # self.__controller.addNotificationListener('scene.bindingChanged', self.__bindingChanged)
-
         self.displayGraph()
-
-    def getName(self):
-        return self.__name
 
     def scene(self):
         return self.__scene
 
     def itemGroup(self):
         return self.__mainPanel.itemGroup()
-
-    # def controller(self):
-    #     return self.__controller
-
-    def getGraphPath(self):
-        return self.graphPath
-
-    def getEvalPath(self):
-        return self.__evalPath
-
-    def getDisplayedEvalPath(self):
-        evalPathStr = self.__controller.getRootEvalPath()
-        for lvl in self.__evalPath:
-            evalPathStr += '.' + str(lvl)
-        return evalPathStr
-
 
     #####################
     ## Nodes
@@ -624,46 +597,13 @@ class Graph(QtGui.QGraphicsWidget):
         connection.destroy();
         del self.__connections[key]
 
-    def __connectionAdded(self, data):
-        # fired when a connection is connected
-        # {u'src.port': {u'path': u'Scene.Root.foo'}, u'dst.pin': {u'path': u'Scene.Root.Add.lhs'}, u'desc': u'graph.connected'}
-        if ('src.port' in data and data['src.port']['path'].startswith(self.graphPath)) and ('dst.port' in data and data['dst.port']['path'].startswith(self.graphPath)):
-            self.addConnection(data['src.port']['path'], data['dst.port']['path'])
-        elif ('src.pin' in data and data['src.pin']['path'].startswith(self.graphPath)) and ('dst.port' in data and data['dst.port']['path'].startswith(self.graphPath)):
-            self.addConnection(data['src.pin']['path'], data['dst.port']['path'])
-        elif ('src.port' in data and data['src.port']['path'].startswith(self.graphPath)) and ('dst.pin' in data and data['dst.pin']['path'].startswith(self.graphPath)):
-            self.addConnection(data['src.port']['path'], data['dst.pin']['path'])
-        elif ('src.pin' in data and data['src.pin']['path'].startswith(self.graphPath)) and ('dst.pin' in data and data['dst.pin']['path'].startswith(self.graphPath)):
-            self.addConnection(data['src.pin']['path'], data['dst.pin']['path'])
-
-    def __connectionRemoved(self, data):
-        # fired when a connection is disconnected
-        if ('src.port' in data and data['src.port']['path'].startswith(self.graphPath)) and ('dst.port' in data and data['dst.port']['path'].startswith(self.graphPath)):
-            self.removeConnection(data['src.port']['path'], data['dst.port']['path'])
-        elif ('src.pin' in data and data['src.pin']['path'].startswith(self.graphPath)) and ('dst.port' in data and data['dst.port']['path'].startswith(self.graphPath)):
-            self.removeConnection(data['src.pin']['path'], data['dst.port']['path'])
-        elif ('src.port' in data and data['src.port']['path'].startswith(self.graphPath)) and ('dst.pin' in data and data['dst.pin']['path'].startswith(self.graphPath)):
-            self.removeConnection(data['src.port']['path'], data['dst.pin']['path'])
-        elif ('src.pin' in data and data['src.pin']['path'].startswith(self.graphPath)) and ('dst.pin' in data and data['dst.pin']['path'].startswith(self.graphPath)):
-            self.removeConnection(data['src.pin']['path'], data['dst.pin']['path'])
-
     #######################
     ## Graph
-
-    def pushSubGraph(self, subGraphName):
-        self.__evalPath.append(subGraphName)
-        self.displayGraph()
-
-    def popSubGraph(self):
-        self.__evalPath = self.__evalPath[:-1]
-        self.displayGraph()
-
     def displayGraph(self):
         self.clear()
 
         guideComponents = self.__rig.getChildrenByType('Component')
 
-        # {"name":"AddGraph","types":["SInt32","SInt32","SInt32"]}
         for component in guideComponents:
             self.addNode(component)
 
@@ -693,32 +633,11 @@ class Graph(QtGui.QGraphicsWidget):
         self.__selection = []
 
 
-    #######################
-    ## Functions
-
-    def openEditFunctionDialog(self, evalPath, executablePath):
-        self.__parent.openEditFunctionDialog(evalPath, executablePath)
 
     #######################
     ## Events
 
-    def __bindingChanged(self, data):
-        self.__evalDesc = self.__controller.getDescForEvalPath(evalPath=self.__evalPath)
-
-    def graphMetadataChanged(self, data):
-        if 'graph' in data and data['graph']['path'] == self.graphPath:
-            if data['graph']['metadata'] != "":
-                pass
-                # metadata = json.loads(data['graph']['metadata'])
-
-    def __onSceneChange(self, data):
-        self.__evalPath = []
-        self.displayGraph()
-
-
     def closeEvent(self, event):
-        self.__controller.removeNotificationListener('scene.bindingChanged', self.__bindingChanged)
-
         return super(Graph, self).closeEvent(event)
 
 
@@ -872,6 +791,10 @@ class GraphView(QtGui.QGraphicsView):
 
         return super(GraphView, self).closeEvent(event)
 
+def GetHomePath():
+    from os.path import expanduser
+    homeDir = expanduser("~")
+    return homeDir
 
 class GraphViewWidget(QtGui.QWidget):
 
@@ -905,11 +828,11 @@ class GraphViewWidget(QtGui.QWidget):
 
         # Setup the name widget
         toolBar.addWidget(QtGui.QLabel('Name:'))
-        nameWidget = QtGui.QLineEdit('', self)
+        self.nameWidget = QtGui.QLineEdit('', self)
         def setRigName( text ):
-            rig.setName( text )
-        nameWidget.textChanged.connect(setRigName)
-        toolBar.addWidget(nameWidget)
+            self.rig.setName( text )
+        self.nameWidget.textChanged.connect(setRigName)
+        toolBar.addWidget( self.nameWidget )
 
         toolBar.addSeparator()
 
@@ -947,12 +870,22 @@ class GraphViewWidget(QtGui.QWidget):
         # TODO: clean the rig from the scene if it has been built.
         self.rig = Rig()
         self.graphView.init( self.rig )
+        self.nameWidget.setText( 'MyRig' )
 
     def saveRigPreset(self):
-        print 'saveRigPreset'
+        lastSceneFilePath = os.path.join(GetHomePath(), self.rig.getName() )
+        (filePath, filter) = QtGui.QFileDialog.getSaveFileName(self, 'Save Rig Preset', lastSceneFilePath, 'Kraken Rig (*.krg)')
+        if len(filePath) > 0:
+            self.rig.writeGuideDefinitionFile(filePath)
 
     def loadRigPreset(self):
-        print 'loadRigPreset'
+        lastSceneFilePath = GetHomePath()
+        (filePath, filter) = QtGui.QFileDialog.getOpenFileName(self, 'Load Rig Preset', lastSceneFilePath, 'Kraken Rig (*.krg)')
+        if len(filePath) > 0:
+            self.rig = Rig()
+            self.rig.loadRigDefinitionFile(filePath)
+            self.graphView.init( self.rig )
+            self.nameWidget.setText( self.rig.getName() )
 
     def buildGuideRig(self):
         print 'buildGuideRig'

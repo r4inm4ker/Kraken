@@ -111,12 +111,21 @@ class Rig(Container):
 
             Profiler.getInstance().pop()
 
+        def __loadGraphPositions(graphPositions):
+            for componentName, graphPos in graphPositions.iteritems():
+                component = self.getChildByName(componentName)
+                component.setGraphPos( graphPos )
 
         if 'components' in jsonData:
             __loadComponents(jsonData['components'])
 
             if 'connections' in jsonData:
                 __makeConnections(jsonData['connections'])
+
+
+        if 'graphPositions' in jsonData:
+            __loadGraphPositions(jsonData['graphPositions'])
+
 
         Profiler.getInstance().pop()
 
@@ -165,6 +174,7 @@ class Rig(Container):
         guideData['components'] = componentsJson
 
         connectionsJson = []
+        graphPositions = {}
         for component in guideComponents:
             for i in range(component.getNumInputs()):
                 componentInput = component.getInputByIndex(i)
@@ -176,6 +186,10 @@ class Rig(Container):
                     }
                     connectionsJson.append(connectionJson)
 
+            # Save the graph pos.
+            graphPositions[component.getName()] = component.getGraphPos()
+
         guideData['connections'] = connectionsJson
+        guideData['graphPositions'] = graphPositions
 
         return guideData
