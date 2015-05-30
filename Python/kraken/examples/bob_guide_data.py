@@ -49,6 +49,8 @@ bob_guide_data = {
             "bicepXfo": Xfo(Vec3(2.27, 15.295, -0.753)),
             "forearmXfo": Xfo(Vec3(5.039, 13.56, -0.859)),
             "wristXfo": Xfo(Vec3(7.1886, 12.2819, 0.4906)),
+            "handXfo": Xfo(tr=Vec3(7.1886, 12.2819, 0.4906),
+                           ori=Quat(Vec3(-0.0865, -0.2301, -0.2623), 0.9331)),
             "bicepFKCtrlSize": 1.75,
             "forearmFKCtrlSize": 1.5
         },
@@ -59,6 +61,8 @@ bob_guide_data = {
             "bicepXfo": Xfo(Vec3(-2.27, 15.295, -0.753)),
             "forearmXfo": Xfo(Vec3(-5.039, 13.56, -0.859)),
             "wristXfo": Xfo(Vec3(-7.1886, 12.2819, 0.4906)),
+            "handXfo": Xfo(tr=Vec3(-7.1886, 12.2819, 0.4906),
+                           ori=Quat(Vec3(-0.2301, -0.0865, -0.9331), 0.2623)),
             "bicepFKCtrlSize": 1.75,
             "forearmFKCtrlSize": 1.5
         },
@@ -68,7 +72,9 @@ bob_guide_data = {
             "location": "L",
             "femurXfo": Xfo(Vec3(0.9811, 9.769, -0.4572)),
             "kneeXfo": Xfo(Vec3(1.4488, 5.4418, -0.5348)),
-            "ankleXfo": Xfo(Vec3(1.841, 1.1516, -1.237))
+            "ankleXfo": Xfo(Vec3(1.841, 1.1516, -1.237)),
+            "toeXfo": Xfo(Vec3(1.85, 0.4, 0.25)),
+            "toeTipXfo": Xfo(Vec3(1.85, 0.4, 1.5))
         },
         {
             "class": "kraken.examples.leg_component.LegComponentGuide",
@@ -76,7 +82,9 @@ bob_guide_data = {
             "location": "R",
             "femurXfo": Xfo(Vec3(-0.9811, 9.769, -0.4572)),
             "kneeXfo": Xfo(Vec3(-1.4488, 5.4418, -0.5348)),
-            "ankleXfo": Xfo(Vec3(-1.841, 1.1516, -1.237))
+            "ankleXfo": Xfo(Vec3(-1.841, 1.1516, -1.237)),
+            "toeXfo": Xfo(Vec3(-1.85, 0.4, 0.25)),
+            "toeTipXfo": Xfo(Vec3(-1.85, 0.4, 1.5))
         }
     ],
     "connections": [

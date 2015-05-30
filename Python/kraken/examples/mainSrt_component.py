@@ -198,17 +198,17 @@ class MainSrtComponentRig(MainSrtComponent):
         # Add Splice Ops
         # ===============
         #Add Rig Scale Splice Op
-        rigScaleSpliceOp = SpliceOperator('rigScaleSpliceOp', 'RigScaleSolver', 'Kraken')
-        self.addOperator(rigScaleSpliceOp)
+        self.rigScaleSpliceOp = SpliceOperator('rigScaleSpliceOp', 'RigScaleSolver', 'Kraken')
+        self.addOperator(self.rigScaleSpliceOp)
 
         # Add Att Inputs
-        rigScaleSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
-        rigScaleSpliceOp.setInput('rigScale', self.rigScaleOutputAttr)
+        self.rigScaleSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.rigScaleSpliceOp.setInput('rigScale', self.rigScaleOutputAttr)
 
         # Add Xfo Inputs
 
         # Add Xfo Outputs
-        rigScaleSpliceOp.setOutput('target', self.mainSRTCtrlSpace)
+        self.rigScaleSpliceOp.setOutput('target', self.mainSRTCtrlSpace)
 
 
         Profiler.getInstance().pop()
