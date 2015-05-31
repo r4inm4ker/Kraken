@@ -51,7 +51,7 @@ class MainSrtComponent(Component):
         self.offsetOutputTgt = self.createOutput('offset', dataType='Xfo', parent=self.outputHrcGrp)
 
         # Declare Input Attrs
-        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', parent=self.cmpInputAttrGrp)
+        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=False, parent=self.cmpInputAttrGrp)
 
         # Declare Output Attrs
         self.rigScaleOutputAttr = self.createOutput('rigScale', dataType='Float', parent=self.cmpOutputAttrGrp)

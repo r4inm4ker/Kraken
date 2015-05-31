@@ -258,7 +258,7 @@ class ArmComponentRig(ArmComponent):
 
         # Add Params to IK control
         armSettingsAttrGrp = AttributeGroup("DisplayInfo_ArmSettings", parent=self.armIKCtrl)
-        armDebugInputAttr = BoolAttribute('drawDebug', value=True, parent=armSettingsAttrGrp)
+        armDebugInputAttr = BoolAttribute('drawDebug', value=False, parent=armSettingsAttrGrp)
         self.armBone0LenInputAttr = FloatAttribute('bone1Len', value=0.0, parent=armSettingsAttrGrp)
         self.armBone1LenInputAttr = FloatAttribute('bone2Len', value=0.0, parent=armSettingsAttrGrp)
         armIKBlendInputAttr = FloatAttribute('fkik', value=0.0, minValue=0.0, maxValue=1.0, parent=armSettingsAttrGrp)
