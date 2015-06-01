@@ -163,9 +163,16 @@ class BasePort(QtGui.QGraphicsWidget):
         layout.setSpacing(1)
         self.setLayout(layout)
 
-        self.__color = QtGui.QColor(254, 105, 50, 255)
         if self.getDataType() == 'Xfo':
-            self.__color = QtGui.QColor(50, 105, 254, 255)
+            self.__color = QtGui.QColor(205, 254, 50, 255)
+        elif self.getDataType() == 'Scalar':
+            self.__color = QtGui.QColor(205, 50, 254, 255)
+        elif self.getDataType() == 'Integer':
+            self.__color = QtGui.QColor(205, 254, 50, 255)
+        elif self.getDataType() == 'Boolean':
+            self.__color = QtGui.QColor(254, 105, 50, 255)
+        else:
+            self.__color = QtGui.QColor(50, 205, 254, 255)
 
         self.__labelColor = QtGui.QColor(25, 25, 25)
         self.__label = self.__componentInput.getName()
