@@ -90,7 +90,7 @@ class IntegerSliderWidget(BaseSliderWidget):
 
     @classmethod
     def canDisplay(cls, attribute):
-        return  (
+        return (
                     attribute.getDataType() == 'Integer' or
                     attribute.getDataType() == 'UInt8' or
                     attribute.getDataType() == 'SInt8' or

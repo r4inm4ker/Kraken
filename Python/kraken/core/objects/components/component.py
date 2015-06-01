@@ -69,21 +69,6 @@ class Component(Object3D):
 
 
     # =============
-    # Name methods
-    # =============
-    def getComponentName(self):
-        """Returns the name of the component used on self and all objects owned
-        by the component
-
-        Return:
-        String, build name of the object.
-
-        """
-
-        return self.getName() + '_' + self.getLocation()
-
-
-    # =============
     # Graph UI
     # =============
     def getGraphPos(self):

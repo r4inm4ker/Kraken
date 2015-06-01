@@ -9,9 +9,9 @@ class BaseSliderWidget(AttributeWidget):
         self._editWidget = QtGui.QLineEdit(self)
         self._sliderWidget = QtGui.QSlider(QtCore.Qt.Horizontal, self)
 
-        self._range = attribute.getOption('Range', { 'min': 0, 'max': 100 })
-        self._uiOutOfSliderRange = attribute.getOption('OutOfSliderRange', self._range)
-        self._dynamicRange = attribute.getOption('dynamicRange', True)
+        self._range = { 'min': attribute.getUIMin(), 'max': attribute.getUIMax() }
+        self._uiOutOfSliderRange = self._range
+        self._dynamicRange = True
         self._uiDynamicRange = self._range
 
         self._accurateRange = { 'min': 0, 'max': 0 }
@@ -21,16 +21,17 @@ class BaseSliderWidget(AttributeWidget):
             self._editWidget.setReadOnly(True)
 
     def updateSliderRange(self, value):
-        offset = None
-        if value < self._uiDynamicRange['min']:
-            offset = value - self._uiDynamicRange['min']
-        elif value > self._uiDynamicRange['max']:
-            offset = value - self._uiDynamicRange['max']
+        pass
+        # offset = None
+        # if value < self._uiDynamicRange['min']:
+        #     offset = value - self._uiDynamicRange['min']
+        # elif value > self._uiDynamicRange['max']:
+        #     offset = value - self._uiDynamicRange['max']
 
-        if offset:
-            self._uiDynamicRange['min'] += offset
-            self._uiDynamicRange['max'] += offset
-            self._attribute.setOption('Range', self._uiDynamicRange)
+        # if offset:
+        #     self._uiDynamicRange['min'] += offset
+        #     self._uiDynamicRange['max'] += offset
+        #     self._attribute.setOption('Range', self._uiDynamicRange)
 
     # def keyPressEvent(self, event):
     #   modifiers = QtGui.QApplication.keyboardModifiers()
