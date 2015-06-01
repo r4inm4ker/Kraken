@@ -12,9 +12,9 @@ from kraken.core.kraken_system import ks
 class IntegerAttribute(NumberAttribute):
     """Float Attribute. Implemented value type checking and limiting."""
 
-    def __init__(self, name, value=0, minValue=None, maxValue=None, keyable=None, parent=None):
+    def __init__(self, name, value=0, minValue=None, maxValue=None, keyable=None, parent=None, callback=None):
         super(IntegerAttribute, self).__init__(name, value=value, minValue=minValue,
-              maxValue=maxValue, parent=parent)
+              maxValue=maxValue, parent=parent, callback=callback)
 
         assert type(self._value) is int, "Value is not of type 'int'."
 
