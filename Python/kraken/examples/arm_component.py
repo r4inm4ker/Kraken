@@ -59,7 +59,7 @@ class ArmComponent(Component):
 
         # Declare Input Attrs
         self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', parent=self.cmpInputAttrGrp)
-        self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp)
+        self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', value=1.0, minValue=0.0, maxValue=1.0, parent=self.cmpInputAttrGrp)
         self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', parent=self.cmpInputAttrGrp)
         self.bicepFKCtrlSizeInputAttr = self.createInput('bicepFKCtrlSize', dataType='Float', parent=self.cmpInputAttrGrp)
         self.forearmFKCtrlSizeInputAttr = self.createInput('forearmFKCtrlSize', dataType='Float', parent=self.cmpInputAttrGrp)

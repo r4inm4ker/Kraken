@@ -198,6 +198,10 @@ class Component(Object3D):
         for k, v in kwargs.iteritems():
             if k == 'value':
                 newInputTgt.setValue(v)
+                newInputTgt.setMin(v)
+                newInputTgt.setMax(v)
+                newInputTgt.setUIMin(v)
+                newInputTgt.setUIMax(v)
             elif k == 'minValue':
                 newInputTgt.setMin(v)
             elif k == 'maxValue':

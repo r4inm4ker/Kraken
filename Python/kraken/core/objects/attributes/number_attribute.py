@@ -6,8 +6,7 @@ NumberAttribute - Base Attribute.
 """
 
 from kraken.core.objects.attributes.attribute import Attribute
-# import integer_attribute
-# import float_attribute
+
 
 class NumberAttribute(Attribute):
     """Number Attributee. Base class for number attribute types"""
@@ -21,16 +20,24 @@ class NumberAttribute(Attribute):
         self._uiMax = None
 
         if minValue is None:
-            if value < 0:
-                self.setMin(value)
-            else:
-                self.setMin(0)
+            self.setMin(value)
+        else:
+            self.setMin(minValue)
 
         if maxValue is None:
-            if value == 0:
-                self.setMax(10)
-            else:
-                self.setMax(value * 3)
+            self.setMax(value * 3)
+        else:
+            self.setMax(maxValue)
+
+        if minValue is None:
+            self.setUIMin(value)
+        else:
+            self.setUIMin(minValue)
+
+        if maxValue is None:
+            self.setUIMax(value * 3)
+        else:
+            self.setUIMax(maxValue)
 
 
     # ==============
@@ -82,10 +89,8 @@ class NumberAttribute(Attribute):
 
         """
 
-        assert type(minimum) in (int, float), "'minimum' is not of type 'int' \
-                                              or 'float'."
-        if self._max is not None and minimum > self._max:
-            raise ValueError("Minimum value is greater than attribute maximum value")
+        assert type(minimum) in (int, float), "'minimum' is not of type 'int' or 'float'."
+
         self._min = minimum
 
         return True
@@ -115,10 +120,8 @@ class NumberAttribute(Attribute):
 
         """
 
-        assert type(maximum) in (int, float), "'maximum' is not of type 'int' \
-                                              or 'float'."
-        if self._min is not None and maximum < self._min:
-            raise ValueError("Maximum value is less than attribute minimum value")
+        assert type(maximum) in (int, float), "'maximum' is not of type 'int' or 'float'."
+
         self._max = maximum
 
         return True
@@ -155,13 +158,6 @@ class NumberAttribute(Attribute):
         if self.isTypeOf('FloatAttribute'):
             if type(minimum) not in (int, float):
                 raise TypeError("UiMin value is not of type 'int' or 'float'.")
-
-        if self._uiMax is not None:
-            if minimum > self._uiMax:
-                raise ValueError('UiMin value is greater than attribute uiMax')
-
-        if minimum > self._max:
-            raise ValueError('UiMin value is greater than attribute maximum')
 
         if minimum < self._min:
             raise ValueError('UiMin value is less than attribute minimum')
@@ -202,13 +198,6 @@ class NumberAttribute(Attribute):
         if self.isTypeOf('FloatAttribute'):
             if type(maximum) not in (int, float):
                 raise TypeError("UiMax value is not of type 'int' or 'float'.")
-
-        if self._uiMin is not None:
-            if maximum < self._uiMin:
-                raise ValueError('UiMax value is less than attribute uiMin')
-
-        if maximum < self._min:
-            raise ValueError('UiMax value is less than attribute minimum')
 
         if maximum > self._max:
             raise ValueError('UiMax value is greater than attribute maximum')
