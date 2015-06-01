@@ -9,6 +9,8 @@ from PySide import QtGui, QtCore
 from port import InputPort, OutputPort
 from kraken.core.maths import Vec2
 
+from kraken.ui.component_inspector import ComponentInspector
+
 class NodeTitle(QtGui.QGraphicsWidget):
     __color = QtGui.QColor(25, 25, 25)
     __font = QtGui.QFont('Decorative', 16)
@@ -208,7 +210,9 @@ class Node(QtGui.QGraphicsWidget):
             super(Node, self).mouseReleaseEvent(event)
 
     def mouseDoubleClickEvent(self, event):
-        NodeInspectorDockWidget.showWidget(self.__graph.controller(), self.getEvalPath(), self.getNodePath(), floating=True)
+        widget = ComponentInspector(component=self.__component, parent=self.__graph.graphView().getGraphViewWidget())
+        widget.show()
+
         super(Node, self).mouseDoubleClickEvent(event)
 
     #########################

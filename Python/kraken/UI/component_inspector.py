@@ -23,6 +23,9 @@ class ComponentInspector(QtGui.QWidget):
         self.component = component
 
         self.setAttribute(QtCore.Qt.WA_WindowPropagation, True)
+        self.setWindowTitle( self.component.getName() + ":" + self.component.getTypeName() )
+        self.setWindowFlags( QtCore.Qt.Window )
+        self.resize( 300, 300 )
 
         # layout
         self._mainLayout = QtGui.QVBoxLayout()

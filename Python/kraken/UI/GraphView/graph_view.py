@@ -17,6 +17,10 @@ class GraphView(QtGui.QGraphicsView):
     def __init__(self, parent=None):
         super(GraphView, self).__init__(parent)
 
+        self.__graphViewWidget = parent
+        self.rig = None
+        self.graph = None
+
         self.setRenderHint(QtGui.QPainter.Antialiasing)
         self.setRenderHint(QtGui.QPainter.TextAntialiasing)
 
@@ -35,12 +39,14 @@ class GraphView(QtGui.QGraphicsView):
         self.graph = Graph(self, rig)
         self.setScene(self.graph.scene())
 
+    def getGraphViewWidget(self):
+        return self.__graphViewWidget
 
-    ################################################
-    ## Graph
     def getGraph(self):
         return self.graph
 
+    ################################################
+    ## Graph
     def frameSelectedNodes(self):
         self.graph.frameSelectedNodes()
 

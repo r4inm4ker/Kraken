@@ -35,6 +35,10 @@ class Graph(QtGui.QGraphicsWidget):
 
         self.displayGraph()
 
+    def graphView(self):
+        return self.__parent
+
+
     def scene(self):
         return self.__scene
 
