@@ -96,7 +96,7 @@ class GraphViewWidget(QtGui.QWidget):
         (filePath, filter) = QtGui.QFileDialog.getSaveFileName(self, 'Save Rig Preset', lastSceneFilePath, 'Kraken Rig (*.krg)')
         if len(filePath) > 0:
             self.synchGuideRig()
-            self.guideRig.writeGuideDefinitionFile(filePath)
+            self.guideRig.writeRigDefinitionFile(filePath)
 
     def loadRigPreset(self):
         lastSceneFilePath = GetHomePath()
@@ -119,9 +119,9 @@ class GraphViewWidget(QtGui.QWidget):
     def buildRig(self):
         self.synchGuideRig()
 
-        guideData = self.guideRig.getGuideData()
+        rigBuildData = self.guideRig.getRigBuildData()
         rig = Rig()
-        rig.loadRigDefinition(guideData)
+        rig.loadRigDefinition(rigBuildData)
 
         builder = plugins.getBuilder()
         builder.build(rig)

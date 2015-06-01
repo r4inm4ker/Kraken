@@ -23,7 +23,7 @@ armGuide.loadData({
 # Save the arm guid data for persistence.
 saveData = armGuide.saveData()
 
-armGuideData = armGuide.getGuideData()
+armGuideData = armGuide.getRigBuildData()
 
 arm = ArmComponentRig()
 arm.loadData(armGuideData)

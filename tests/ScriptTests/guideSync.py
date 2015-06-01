@@ -34,7 +34,7 @@ def buildArm(mode='guide'):
         synchronizer.setTarget(guideContainer)
         synchronizer.sync()
 
-        armGuideData = armGuide.getGuideData()
+        armGuideData = armGuide.getRigBuildData()
 
         rigContainer = Container('armRig')
         arm = ArmComponent(parent=rigContainer)

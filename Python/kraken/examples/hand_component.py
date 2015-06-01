@@ -98,9 +98,10 @@ class HandComponentGuide(HandComponent):
         """
 
         data = {
-            "name": self.getName(),
-            "location": self.getLocation(),
-            "handXfo": self.handCtrl.xfo
+            'class':"kraken.examples.hand_component.HandComponentGuide",
+            'name': self.getName(),
+            'location': self.getLocation(),
+            'handXfo': self.handCtrl.xfo
             }
 
         return data
@@ -126,7 +127,7 @@ class HandComponentGuide(HandComponent):
         return True
 
 
-    def getGuideData(self):
+    def getRigBuildData(self):
         """Returns the Guide data used by the Rig Component to define the layout of the final rig.
 
         Return:
@@ -138,11 +139,11 @@ class HandComponentGuide(HandComponent):
         handXfo = self.handCtrl.xfo
 
         data = {
-                "class":"kraken.examples.hand_component.HandComponentRig",
-                "name": self.getName(),
-                "location": self.getLocation(),
-                "handXfo": handXfo
-               }
+            "class":"kraken.examples.hand_component.HandComponentRig",
+            "name": self.getName(),
+            "location": self.getLocation(),
+            "handXfo": handXfo
+           }
 
         return data
 

@@ -20,7 +20,7 @@ handGuide.loadData({
 # Save the hand guide data for persistence.
 saveData = handGuide.saveData()
 
-handGuideData = handGuide.getGuideData()
+handGuideData = handGuide.getRigBuildData()
 
 hand = HandComponentRig()
 hand.loadData(handGuideData)

@@ -7,7 +7,7 @@
 import json
 from PySide import QtGui, QtCore
 from port import InputPort, OutputPort
-# from FabricEngine.DFG.Widgets.node_inspector import NodeInspectorDockWidget
+from kraken.core.maths import Vec2
 
 class NodeTitle(QtGui.QGraphicsWidget):
     __color = QtGui.QColor(25, 25, 25)
@@ -163,6 +163,11 @@ class Node(QtGui.QGraphicsWidget):
         size = self.size()
         self.setTransform(QtGui.QTransform.fromTranslate(graphPos.x()-(size.width()*0.5), graphPos.y()-(size.height()*0.5)), False)
 
+    def pushGraphPosToComponent(self):
+        graphPos = self.getGraphPos()
+        self.__component.setGraphPos( Vec2(graphPos.x(), graphPos.y()) )
+
+
     def mousePressEvent(self, event):
         if event.button() is QtCore.Qt.MouseButton.LeftButton:
             self.__dragging = True
@@ -187,34 +192,20 @@ class Node(QtGui.QGraphicsWidget):
             super(Node, self).mouseMoveEvent(event)
 
     def mouseReleaseEvent(self, event):
-        pass
-        # if self.__dragging:
-        #     if not self.isSelected():
-        #         self.__graph.controller().beginInteraction("Move:" + self.getName())
-        #         graphPos = self.getGraphPos()
-        #         self.__graph.controller().setNodeGraphPos(
-        #             nodePath=self.getNodePath(),
-        #             graphPos=graphPos
-        #         )
-        #         self.__graph.controller().endInteraction()
-        #     else:
-        #         selectedNodes = self.__graph.getSelectedNodes()
-        #         names = ""
-        #         for node in selectedNodes:
-        #             names += (" " + node.getName())
-        #         self.__graph.controller().beginInteraction("Move:" + names)
-        #         for node in selectedNodes:
-        #             graphPos = node.getGraphPos()
-        #             self.__graph.controller().setNodeGraphPos(
-        #                 nodePath=node.getNodePath(),
-        #                 graphPos=graphPos
-        #             )
-        #         self.__graph.controller().endInteraction()
+        if self.__dragging:
+                # TODO: Undo code goes here...
+            if not self.isSelected():
+                self.pushGraphPosToComponent( )
 
-        #     self.setCursor(QtCore.Qt.ArrowCursor)
-        #     self._panning = False
-        # else:
-        #     super(Node, self).mouseReleaseEvent(event)
+            else:
+                selectedNodes = self.__graph.getSelectedNodes()
+                for node in selectedNodes:
+                    node.pushGraphPosToComponent( )
+
+            self.setCursor(QtCore.Qt.ArrowCursor)
+            self._panning = False
+        else:
+            super(Node, self).mouseReleaseEvent(event)
 
     def mouseDoubleClickEvent(self, event):
         NodeInspectorDockWidget.showWidget(self.__graph.controller(), self.getEvalPath(), self.getNodePath(), floating=True)

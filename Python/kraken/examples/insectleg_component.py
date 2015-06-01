@@ -111,9 +111,10 @@ class InsectLegComponentGuide(InsectLegComponent):
             jointPositions.append(self.legCtrls[i].xfo.tr)
 
         data = {
-            "name": self.getName(),
-            "location": self.getLocation(),
-            "jointPositions": jointPositions
+            'class':"kraken.examples.insectleg_component.InsectLegComponentGuide",
+            'name': self.getName(),
+            'location': self.getLocation(),
+            'jointPositions': jointPositions
             }
 
         return data
@@ -141,7 +142,7 @@ class InsectLegComponentGuide(InsectLegComponent):
         return True
 
 
-    def getGuideData(self):
+    def getRigBuildData(self):
         """Returns the Guide data used by the Rig Component to define the layout of the final rig..
 
         Return:
@@ -168,13 +169,13 @@ class InsectLegComponentGuide(InsectLegComponent):
             boneXfos.append(xfo)
 
         data = {
-                "class":"kraken.examples.insectleg_component.InsectLegComponentRig",
-                "name": self.getName(),
-                "location": self.getLocation(),
-                "boneXfos": boneXfos,
-                "endXfo": self.legCtrls[-1].xfo,
-                "boneLengths": boneLengths
-               }
+            "class":"kraken.examples.insectleg_component.InsectLegComponentRig",
+            "name": self.getName(),
+            "location": self.getLocation(),
+            "boneXfos": boneXfos,
+            "endXfo": self.legCtrls[-1].xfo,
+            "boneLengths": boneLengths
+           }
 
         return data
 

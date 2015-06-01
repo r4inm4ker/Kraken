@@ -23,7 +23,7 @@ headGuide.loadData({
 # Save the hand guide data for persistence.
 saveData = headGuide.saveData()
 
-headGuideData = headGuide.getGuideData()
+headGuideData = headGuide.getRigBuildData()
 
 head = HeadComponentRig()
 head.loadData(headGuideData)

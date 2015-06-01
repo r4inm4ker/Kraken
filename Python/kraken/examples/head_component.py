@@ -106,14 +106,15 @@ class HeadComponentGuide(HeadComponent):
         """
 
         data = {
-                "name": self.getName(),
-                "location": self.getLocation(),
-                "headPosition": self.headCtrl.xfo.tr,
-                "headEndPosition": self.headEndCtrl.xfo.tr,
-                "eyeLeftPosition": self.eyeLeftCtrl.xfo.tr,
-                "eyeRightPosition": self.eyeRightCtrl.xfo.tr,
-                "jawPosition": self.jawCtrl.xfo.tr
-               }
+            'class':"kraken.examples.head_component.HeadComponentGuide",
+            'name': self.getName(),
+            'location': self.getLocation(),
+            'headPosition': self.headCtrl.xfo.tr,
+            'headEndPosition': self.headEndCtrl.xfo.tr,
+            'eyeLeftPosition': self.eyeLeftCtrl.xfo.tr,
+            'eyeRightPosition': self.eyeRightCtrl.xfo.tr,
+            'jawPosition': self.jawCtrl.xfo.tr
+           }
 
         return data
 
@@ -142,7 +143,7 @@ class HeadComponentGuide(HeadComponent):
         return True
 
 
-    def getGuideData(self):
+    def getRigBuildData(self):
         """Returns the Guide data used by the Rig Component to define the layout of the final rig..
 
         Return:
@@ -151,15 +152,15 @@ class HeadComponentGuide(HeadComponent):
         """
 
         data = {
-                "class":"kraken.examples.head_component.HeadComponentRig",
-                "name": self.getName(),
-                "location":self.getLocation(),
-                "headPosition": self.headCtrl.xfo.tr,
-                "headEndPosition": self.headEndCtrl.xfo.tr,
-                "eyeLeftPosition": self.eyeLeftCtrl.xfo.tr,
-                "eyeRightPosition": self.eyeRightCtrl.xfo.tr,
-                "jawPosition": self.jawCtrl.xfo.tr
-               }
+            'class':"kraken.examples.head_component.HeadComponentRig",
+            'name': self.getName(),
+            'location':self.getLocation(),
+            'headPosition': self.headCtrl.xfo.tr,
+            'headEndPosition': self.headEndCtrl.xfo.tr,
+            'eyeLeftPosition': self.eyeLeftCtrl.xfo.tr,
+            'eyeRightPosition': self.eyeRightCtrl.xfo.tr,
+            'jawPosition': self.jawCtrl.xfo.tr
+           }
 
         return data
 

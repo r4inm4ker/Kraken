@@ -97,11 +97,12 @@ class NeckComponentGuide(NeckComponent):
         """
 
         data = {
-                "name": self.getName(),
-                "location": self.getLocation(),
-                "neckPosition": self.neckCtrl.xfo.tr,
-                "neckEndPosition": self.neckEndCtrl.xfo.tr
-               }
+            'class':"kraken.examples.neck_component.NeckComponentGuide",
+            'name': self.getName(),
+            'location': self.getLocation(),
+            'neckPosition': self.neckCtrl.xfo.tr,
+            'neckEndPosition': self.neckEndCtrl.xfo.tr
+           }
 
         return data
 
@@ -127,7 +128,7 @@ class NeckComponentGuide(NeckComponent):
         return True
 
 
-    def getGuideData(self):
+    def getRigBuildData(self):
         """Returns the Guide data used by the Rig Component to define the layout of the final rig.
 
         Return:
@@ -150,11 +151,11 @@ class NeckComponentGuide(NeckComponent):
         neckXfo.setFromVectors(rootToEnd, bone1Normal, bone1ZAxis, neckPosition)
 
         data = {
-                "class":"kraken.examples.neck_component.NeckComponentRig",
-                "name": self.getName(),
-                "location":self.getLocation(),
-                "neckXfo": neckXfo
-               }
+            'class':"kraken.examples.neck_component.NeckComponentRig",
+            'name': self.getName(),
+            'location':self.getLocation(),
+            'neckXfo': neckXfo
+           }
 
         return data
 

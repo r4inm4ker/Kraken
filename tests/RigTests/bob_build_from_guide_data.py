@@ -12,7 +12,7 @@ Profiler.getInstance().push("bob_build")
 bobGuideRig = Rig("char_bob")
 bobGuideRig.loadRigDefinition(bob_guide_data)
 
-bobRigData = bobGuideRig.getGuideData()
+bobRigData = bobGuideRig.getRigBuildData()
 bobRig = Rig()
 bobRig.loadRigDefinition(bobRigData)
 

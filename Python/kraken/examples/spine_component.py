@@ -110,15 +110,16 @@ class SpineComponentGuide(SpineComponent):
         """
 
         data = {
-                "name": self.getName(),
-                "location": self.getLocation(),
-                "cogPosition": self.cog.xfo.tr,
-                "spine01Position": self.spine01Ctrl.xfo.tr,
-                "spine02Position": self.spine02Ctrl.xfo.tr,
-                "spine03Position": self.spine03Ctrl.xfo.tr,
-                "spine04Position": self.spine04Ctrl.xfo.tr,
-                "numDeformers": self.numDeformersAttr.getValue()
-               }
+            'class':"kraken.examples.spine_component.SpineComponentGuide",
+            'name': self.getName(),
+            'location': self.getLocation(),
+            'cogPosition': self.cog.xfo.tr,
+            'spine01Position': self.spine01Ctrl.xfo.tr,
+            'spine02Position': self.spine02Ctrl.xfo.tr,
+            'spine03Position': self.spine03Ctrl.xfo.tr,
+            'spine04Position': self.spine04Ctrl.xfo.tr,
+            'numDeformers': self.numDeformersAttr.getValue()
+           }
 
         return data
 
@@ -148,7 +149,7 @@ class SpineComponentGuide(SpineComponent):
         return True
 
 
-    def getGuideData(self):
+    def getRigBuildData(self):
         """Returns the Guide data used by the Rig Component to define the layout of the final rig.
 
         Return:
@@ -157,16 +158,16 @@ class SpineComponentGuide(SpineComponent):
         """
 
         data = {
-                "class":"kraken.examples.spine_component.SpineComponentRig",
-                "name": self.getName(),
-                "location":self.getLocation(),
-                "cogPosition": self.cog.xfo.tr,
-                "spine01Position": self.spine01Ctrl.xfo.tr,
-                "spine02Position": self.spine02Ctrl.xfo.tr,
-                "spine03Position": self.spine03Ctrl.xfo.tr,
-                "spine04Position": self.spine04Ctrl.xfo.tr,
-                "numDeformers": self.numDeformersAttr.getValue()
-               }
+            'class':"kraken.examples.spine_component.SpineComponentRig",
+            'name': self.getName(),
+            'location':self.getLocation(),
+            'cogPosition': self.cog.xfo.tr,
+            'spine01Position': self.spine01Ctrl.xfo.tr,
+            'spine02Position': self.spine02Ctrl.xfo.tr,
+            'spine03Position': self.spine03Ctrl.xfo.tr,
+            'spine04Position': self.spine04Ctrl.xfo.tr,
+            'numDeformers': self.numDeformersAttr.getValue()
+           }
 
         return data
 

@@ -126,14 +126,15 @@ class ArmComponentGuide(ArmComponent):
         """
 
         data = {
-                'name': self.getName(),
-                'location': self.getLocation(),
-                'bicepXfo': self.bicepCtrl.xfo,
-                'forearmXfo': self.forearmCtrl.xfo,
-                'wristXfo': self.wristCtrl.xfo,
-                "bicepFKCtrlSize": self.bicepFKCtrlSizeInputAttr.getValue(),
-                "forearmFKCtrlSize": self.forearmFKCtrlSizeInputAttr.getValue()
-               }
+            'class':"kraken.examples.arm_component.ArmComponentGuide",
+            'name': self.getName(),
+            'location': self.getLocation(),
+            'bicepXfo': self.bicepCtrl.xfo,
+            'forearmXfo': self.forearmCtrl.xfo,
+            'wristXfo': self.wristCtrl.xfo,
+            "bicepFKCtrlSize": self.bicepFKCtrlSizeInputAttr.getValue(),
+            "forearmFKCtrlSize": self.forearmFKCtrlSizeInputAttr.getValue()
+           }
 
         return data
 
@@ -163,7 +164,7 @@ class ArmComponentGuide(ArmComponent):
         return True
 
 
-    def getGuideData(self):
+    def getRigBuildData(self):
         """Returns the Guide data used by the Rig Component to define the layout of the final rig..
 
         Return:

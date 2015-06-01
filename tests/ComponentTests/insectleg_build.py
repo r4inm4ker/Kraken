@@ -25,7 +25,7 @@ insectLegGuide.loadData(
 # Save the hand guide data for persistence.
 saveData = insectLegGuide.saveData()
 
-insectLegGuideData = insectLegGuide.getGuideData()
+insectLegGuideData = insectLegGuide.getRigBuildData()
 
 leg = InsectLegComponentRig()
 leg.loadData(insectLegGuideData)

@@ -22,6 +22,29 @@ class Rig(Container):
     def __init__(self, name='rig'):
         super(Rig, self).__init__(name)
 
+    def writeRigDefinitionFile(self, filepath):
+        """Load a rig definition from a file on disk.
+
+        Arguments:
+        filepath -- string, the file path of the rig definition file.
+
+        Return:
+        True if successful.
+
+        """
+
+        Profiler.getInstance().push("writeRigDefinitionFile:" + filepath)
+
+        jsonData = self.getData()
+
+        # now preprocess the data ready for saving to disk.
+        pureJSON = prepareToSave(jsonData)
+
+        with open(filepath,'w') as rigFile:
+            rigFile.write(json.dumps(pureJSON, indent=2))
+
+        Profiler.getInstance().pop()
+
 
     def loadRigDefinitionFile(self, filepath):
         """Load a rig definition from a file on disk.
@@ -39,8 +62,8 @@ class Rig(Container):
         if not os.path.exists(filepath):
             raise Exception("File not found:" + filepath)
 
-        with open(filepath) as rigDef:
-            jsonData = json.load(rigDef)
+        with open(filepath) as rigFile:
+            jsonData = json.load(rigFile)
 
         # now preprocess the data ready for loading.
         jsonData = prepareToLoad(jsonData)
@@ -144,7 +167,7 @@ class Rig(Container):
 
         Profiler.getInstance().push("WriteGuideDefinitionFile:" + filepath)
 
-        guideData = self.getGuideData()
+        guideData = self.getRigBuildData()
 
         # now preprocess the data ready for saving to disk.
         pureJSON = prepareToSave(guideData)
@@ -155,8 +178,48 @@ class Rig(Container):
         Profiler.getInstance().pop()
 
 
-    def getGuideData(self):
-        """Get the graph definition of the guide for biulding the final rig.
+    def getData(self):
+        """Get the graph definition of the rig. This method is used to save the state of the guide itself.
+
+        Return:
+        The JSON data struture of the rig data
+
+        """
+
+        guideData = {
+            'name': self.getName()
+        }
+
+        componentsJson = []
+        guideComponents = self.getChildrenByType('Component')
+        for component in guideComponents:
+            componentsJson.append(component.saveData())
+        guideData['components'] = componentsJson
+
+        connectionsJson = []
+        graphPositions = {}
+        for component in guideComponents:
+            for i in range(component.getNumInputs()):
+                componentInput = component.getInputByIndex(i)
+                if componentInput.isConnected():
+                    componentOutput = componentInput.getConnection()
+                    connectionJson = {
+                        'source': componentOutput.getParent().getName() + '.' + componentOutput.getName(),
+                        'target': component.getName() + '.' + componentInput.getName()
+                    }
+                    connectionsJson.append(connectionJson)
+
+            # Save the graph pos.
+            graphPositions[component.getName()] = component.getGraphPos()
+
+        guideData['connections'] = connectionsJson
+        guideData['graphPositions'] = graphPositions
+
+        return guideData
+
+
+    def getRigBuildData(self):
+        """Get the graph definition of the guide for building the final rig.
 
         Return:
         The JSON data struture of the guide rig data
@@ -170,7 +233,7 @@ class Rig(Container):
         componentsJson = []
         guideComponents = self.getChildrenByType('Component')
         for component in guideComponents:
-            componentsJson.append(component.getGuideData())
+            componentsJson.append(component.getRigBuildData())
         guideData['components'] = componentsJson
 
         connectionsJson = []

@@ -38,7 +38,7 @@ class SpineClavRig(Container):
                  })
 
         clavicleLeftComponent = ClavicleComponentRig("clavicle", self)
-        clavicleLeftComponent.loadData(data=clavicleLeftComponentGuide.getGuideData())
+        clavicleLeftComponent.loadData(data=clavicleLeftComponentGuide.getRigBuildData())
 
         # Clavicle to Spine
         vertebraeOutputs = spineComponent.getOutputByName('spineVertebrae')

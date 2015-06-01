@@ -22,7 +22,7 @@ neckGuide.loadData({
 # Save the hand guide data for persistence.
 saveData = neckGuide.saveData()
 
-neckGuideData = neckGuide.getGuideData()
+neckGuideData = neckGuide.getRigBuildData()
 
 neck = NeckComponentRig()
 neck.loadData(neckGuideData)

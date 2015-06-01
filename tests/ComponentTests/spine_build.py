@@ -24,7 +24,7 @@ spineGuide.loadData({
 # Save the hand guide data for persistence.
 saveData = spineGuide.saveData()
 
-spineGuideData = spineGuide.getGuideData()
+spineGuideData = spineGuide.getRigBuildData()
 
 spine = SpineComponentRig()
 spine.loadData(spineGuideData)

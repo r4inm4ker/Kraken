@@ -20,7 +20,7 @@ footGuide.loadData({
 # Save the foot guid data for persistence.
 saveData = footGuide.saveData()
 
-footGuideData = footGuide.getGuideData()
+footGuideData = footGuide.getRigBuildData()
 
 foot = FootComponentRig()
 foot.loadData(footGuideData)

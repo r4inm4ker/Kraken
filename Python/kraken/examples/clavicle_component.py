@@ -104,6 +104,7 @@ class ClavicleComponentGuide(ClavicleComponent):
         """
 
         data = {
+            'class':"kraken.examples.clavicle_component.ClavicleComponentGuide",
             'name': self.getName(),
             'location': self.getLocation(),
             'clavicleXfo': self.clavicleCtrl.xfo,
@@ -136,7 +137,7 @@ class ClavicleComponentGuide(ClavicleComponent):
         return True
 
 
-    def getGuideData(self):
+    def getRigBuildData(self):
         """Returns the Guide data used by the Rig Component to define the layout of the final rig..
 
         Return:
@@ -161,12 +162,12 @@ class ClavicleComponentGuide(ClavicleComponent):
         clavicleLen = claviclePosition.subtract(clavicleEndPosition).length()
 
         data = {
-                "class":"kraken.examples.clavicle_component.ClavicleComponentRig",
-                "name": self.getName(),
-                "location":self.getLocation(),
-                "clavicleXfo": clavicleXfo,
-                "clavicleLen": clavicleLen
-               }
+            "class":"kraken.examples.clavicle_component.ClavicleComponentRig",
+            "name": self.getName(),
+            "location":self.getLocation(),
+            "clavicleXfo": clavicleXfo,
+            "clavicleLen": clavicleLen
+           }
 
         return data
 

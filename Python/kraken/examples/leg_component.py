@@ -108,12 +108,13 @@ class LegComponentGuide(LegComponent):
         """
 
         data = {
-                'name': self.getName(),
-                'location': self.getLocation(),
-                'femurXfo': self.femurCtrl.xfo,
-                'kneeXfo': self.kneeCtrl.xfo,
-                'ankleXfo': self.ankleCtrl.xfo
-               }
+            'class':"kraken.examples.leg_component.LegComponentGuide",
+            'name': self.getName(),
+            'location': self.getLocation(),
+            'femurXfo': self.femurCtrl.xfo,
+            'kneeXfo': self.kneeCtrl.xfo,
+            'ankleXfo': self.ankleCtrl.xfo
+           }
 
         return data
 
@@ -140,7 +141,7 @@ class LegComponentGuide(LegComponent):
         return True
 
 
-    def getGuideData(self):
+    def getRigBuildData(self):
         """Returns the Guide data used by the Rig Component to define the layout of the final rig..
 
         Return:
@@ -184,16 +185,16 @@ class LegComponentGuide(LegComponent):
         upVXfo.tr = upVXfo.transformVector(Vec3(0, 0, 5))
 
         data = {
-                "class":"kraken.examples.leg_component.LegComponentRig",
-                "name": self.getName(),
-                "location":self.getLocation(),
-                "femurXfo": femurXfo,
-                "kneeXfo": kneeXfo,
-                "ankleXfo": ankleXfo,
-                "upVXfo": upVXfo,
-                "femurLen": femurLen,
-                "shinLen": shinLen
-               }
+            'class':"kraken.examples.leg_component.LegComponentRig",
+            'name': self.getName(),
+            'location':self.getLocation(),
+            'femurXfo': femurXfo,
+            'kneeXfo': kneeXfo,
+            'ankleXfo': ankleXfo,
+            'upVXfo': upVXfo,
+            'femurLen': femurLen,
+            'shinLen': shinLen
+           }
 
         return data
 

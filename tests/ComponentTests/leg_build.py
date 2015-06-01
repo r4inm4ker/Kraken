@@ -22,7 +22,7 @@ legGuide.loadData({
 # Save the arm guid data for persistence.
 saveData = legGuide.saveData()
 
-legGuideData = legGuide.getGuideData()
+legGuideData = legGuide.getRigBuildData()
 
 leg = LegComponentRig()
 leg.loadData(legGuideData)

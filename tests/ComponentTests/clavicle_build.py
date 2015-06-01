@@ -21,7 +21,7 @@ clavicleGuide.loadData({
 # Save the clavicle guid data for persistence.
 saveData = clavicleGuide.saveData()
 
-clavicleGuideData = clavicleGuide.getGuideData()
+clavicleGuideData = clavicleGuide.getRigBuildData()
 
 clavicle = ClavicleComponentRig()
 clavicle.loadData(clavicleGuideData)

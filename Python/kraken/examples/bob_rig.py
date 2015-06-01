@@ -42,7 +42,7 @@ class BobRig(Container):
         })
 
         neckComponent = NeckComponentRig("neck", self)
-        neckComponent.loadData(data=neckComponentGuide.getGuideData())
+        neckComponent.loadData(data=neckComponentGuide.getRigBuildData())
 
         headComponent = HeadComponentRig("head", self)
         headComponent.loadData(data={
@@ -61,7 +61,7 @@ class BobRig(Container):
         })
 
         clavicleLeftComponent = ClavicleComponentRig("clavicle", self)
-        clavicleLeftComponent.loadData(data=clavicleLeftComponentGuide.getGuideData())
+        clavicleLeftComponent.loadData(data=clavicleLeftComponentGuide.getRigBuildData())
 
         clavicleRightComponentGuide = ClavicleComponentGuide("clavicle", data={
             "location": "R",
@@ -71,7 +71,7 @@ class BobRig(Container):
         })
 
         clavicleRightComponent = ClavicleComponentRig("clavicle", self)
-        clavicleRightComponent.loadData(data=clavicleRightComponentGuide.getGuideData())
+        clavicleRightComponent.loadData(data=clavicleRightComponentGuide.getRigBuildData())
 
         armLeftComponentGuide = ArmComponentGuide("arm", data={
             "location":"L",
@@ -83,7 +83,7 @@ class BobRig(Container):
         })
 
         armLeftComponent = ArmComponentRig("arm", self)
-        armLeftComponent.loadData(data=armLeftComponentGuide.getGuideData())
+        armLeftComponent.loadData(data=armLeftComponentGuide.getRigBuildData())
 
         armRightComponentGuide = ArmComponentGuide("arm", data={
             "location":"R",
@@ -95,7 +95,7 @@ class BobRig(Container):
         })
 
         armRightComponent = ArmComponentRig("arm", self)
-        armRightComponent.loadData(data=armRightComponentGuide.getGuideData() )
+        armRightComponent.loadData(data=armRightComponentGuide.getRigBuildData() )
 
         handLeftComponent = HandComponentRig("hand", self)
         handLeftComponent.loadData(data={
@@ -120,7 +120,7 @@ class BobRig(Container):
         })
 
         legLeftComponent = LegComponentRig("leg", self)
-        legLeftComponent.loadData(data= legLeftComponentGuide.getGuideData())
+        legLeftComponent.loadData(data= legLeftComponentGuide.getRigBuildData())
 
         legRightComponentGuide = LegComponentGuide("leg", data={
             "name":"R_LegComponent",
@@ -131,7 +131,7 @@ class BobRig(Container):
         })
 
         legRightComponent = LegComponentRig("leg", self)
-        legRightComponent.loadData(data=legRightComponentGuide.getGuideData() )
+        legRightComponent.loadData(data=legRightComponentGuide.getRigBuildData() )
 
         footLeftComponentGuide = FootComponentGuide("foot", data={
             "name":"L_FootComponent",
@@ -140,7 +140,7 @@ class BobRig(Container):
         })
 
         footLeftComponent = FootComponentRig("foot", self)
-        footLeftComponent.loadData(data=footLeftComponentGuide.getGuideData() )
+        footLeftComponent.loadData(data=footLeftComponentGuide.getRigBuildData() )
 
         footRightComponentGuide = FootComponentGuide("foot", data={
             "name":"R_FootComponent",
@@ -149,7 +149,7 @@ class BobRig(Container):
         })
 
         footRightComponent = FootComponentRig("foot", self)
-        footRightComponent.loadData(data=footRightComponentGuide.getGuideData() )
+        footRightComponent.loadData(data=footRightComponentGuide.getRigBuildData() )
 
         # Neck to Spine
         spineEndOutput = spineComponent.getOutputByName('spineEnd')
