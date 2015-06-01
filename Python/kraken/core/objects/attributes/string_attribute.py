@@ -14,7 +14,9 @@ class StringAttribute(Attribute):
 
     def __init__(self, name, value="", parent=None, callback=None):
         super(StringAttribute, self).__init__(name, value=value, parent=parent, callback=callback)
-        assert type(value) is str, "Value is not of type 'string'."
+
+        if not isinstance(value, basestring):
+            raise TypeError("Value is not of type 'str':" + str(value))
 
 
     def setValue(self, value):
@@ -29,9 +31,9 @@ class StringAttribute(Attribute):
         """
 
         if not isinstance(value, basestring):
-            raise TypeError("Value is not of type 'str'.")
+            raise TypeError("Value is not of type 'str':" + str(value))
 
-        super(StringAttribute, self).setValue(value)
+        super(StringAttribute, self).setValue(str(value))
 
         return True
 
