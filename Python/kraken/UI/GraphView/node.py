@@ -21,7 +21,7 @@ class NodeTitle(QtGui.QGraphicsWidget):
         self.__textItem = QtGui.QGraphicsTextItem(text, self)
         self.__textItem.setDefaultTextColor(self.__color)
         self.__textItem.setFont(self.__font)
-        self.__textItem.setPos(0, -4)
+        self.__textItem.setPos(0, -2)
         option=self.__textItem.document().defaultTextOption()
         option.setWrapMode(QtGui.QTextOption.NoWrap)
         self.__textItem.document().setDefaultTextOption(option)
@@ -33,7 +33,7 @@ class NodeTitle(QtGui.QGraphicsWidget):
     def textSize(self):
         return QtCore.QSizeF(
             self.__textItem.textWidth(),
-            self.__font.pointSizeF()
+            self.__font.pointSizeF() + 8
             )
 
     def paint(self, painter, option, widget):
@@ -55,8 +55,8 @@ class Node(QtGui.QGraphicsWidget):
         self.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding))
 
         layout = QtGui.QGraphicsLinearLayout()
-        layout.setContentsMargins(4, 4, 4, 4)
-        layout.setSpacing(4)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
         layout.setOrientation(QtCore.Qt.Vertical)
         self.setLayout(layout)
 
@@ -104,7 +104,7 @@ class Node(QtGui.QGraphicsWidget):
         return self.__component
 
     #########################
-    ##
+    ## Ports
 
     def addInputPort(self, componentInput):
         port = InputPort(self, self.__graph, componentInput)
@@ -147,7 +147,14 @@ class Node(QtGui.QGraphicsWidget):
             painter.setPen(self.__selectedPen)
         else:
             painter.setPen(self.__unselectedPen)
-        painter.drawRoundRect(rect, 20, 20)
+
+        roundingY = 10
+        roundingX = rect.height() / rect.width() * roundingY
+
+        painter.drawRoundRect(rect, roundingX, roundingY)
+
+    #########################
+    ## Selection
 
     def isSelected(self):
         return self.__selected
@@ -155,6 +162,9 @@ class Node(QtGui.QGraphicsWidget):
     def setSelected(self, selected):
         self.__selected = selected
         self.update()
+
+    #########################
+    ## Graph Pos
 
     def getGraphPos(self):
         transform = self.transform()
@@ -169,6 +179,9 @@ class Node(QtGui.QGraphicsWidget):
         graphPos = self.getGraphPos()
         self.__component.setGraphPos( Vec2(graphPos.x(), graphPos.y()) )
 
+
+    #########################
+    ## Events
 
     def mousePressEvent(self, event):
         if event.button() is QtCore.Qt.MouseButton.LeftButton:
@@ -216,13 +229,9 @@ class Node(QtGui.QGraphicsWidget):
         super(Node, self).mouseDoubleClickEvent(event)
 
     #########################
-    ## Events
+    ## shut down
 
     def destroy(self):
-        # self.__graph.controller().removeNotificationListener('scene.bindingChanged', self.__retrieveBinding)
-        # self.__graph.controller().removeNotificationListener('node.posChanged', self.__nodePosChanged)
-        # self.__graph.controller().removeNotificationListener('port.created', self.__portAdded)
-        # self.__graph.controller().removeNotificationListener('port.destroyed', self.__portRemoved)
         for port in self.__inports:
             port.destroy()
         for port in self.__outports:

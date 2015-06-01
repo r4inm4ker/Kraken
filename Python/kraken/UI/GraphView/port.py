@@ -9,7 +9,7 @@ from PySide import QtGui, QtCore
 from mouse_grabber import MouseGrabber
 
 class PortLabel(QtGui.QGraphicsWidget):
-    __font = QtGui.QFont('Decorative', 14)
+    __font = QtGui.QFont('Decorative', 12)
 
     def __init__(self, parent, text, hOffset, color):
         super(PortLabel, self).__init__(parent)
@@ -47,7 +47,7 @@ class PortLabel(QtGui.QGraphicsWidget):
 
 
 class PortCircle(QtGui.QGraphicsWidget):
-    __radius = 4
+    __radius = 6
     __diameter = 2 * __radius
 
     def __init__(self, port, graph, connectionPointType, hOffset, color):
@@ -79,6 +79,9 @@ class PortCircle(QtGui.QGraphicsWidget):
             self.__diameter,
             self.__diameter,
             )
+        if self.isInConnectionPoint():
+            self.__ellipseItem.setStartAngle(270 * 16)
+            self.__ellipseItem.setSpanAngle(180 * 16)
         self.__ellipseItem.setParentItem(self)
         self.setColor(color)
 
@@ -161,13 +164,16 @@ class BasePort(QtGui.QGraphicsWidget):
         self.setLayout(layout)
 
         self.__color = QtGui.QColor(254, 105, 50, 255)
+        if self.getDataType() == 'Xfo':
+            self.__color = QtGui.QColor(50, 105, 254, 255)
+
         self.__labelColor = QtGui.QColor(25, 25, 25)
         self.__label = self.__componentInput.getName()
         self.__inCircle = None
         self.__outCircle = None
 
         if connectionPointType in ["In", "IO"]:
-            self.__inCircle = PortCircle(self, self.__graph, 'In', -10, self.__color)
+            self.__inCircle = PortCircle(self, self.__graph, 'In', -11, self.__color)
             layout.addItem(self.__inCircle)
             layout.setAlignment(self.__inCircle, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
 
@@ -190,7 +196,7 @@ class BasePort(QtGui.QGraphicsWidget):
             layout.addStretch(2)
 
         if connectionPointType in ["Out", "IO"]:
-            self.__outCircle = PortCircle(self, self.__graph, 'Out', 10, self.__color)
+            self.__outCircle = PortCircle(self, self.__graph, 'Out', 11, self.__color)
             layout.addItem(self.__outCircle)
             layout.setAlignment(self.__outCircle, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
 
