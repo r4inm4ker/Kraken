@@ -58,8 +58,8 @@ class InsectLegComponent(Component):
         self.legEndPosOutputTgt = self.createOutput('legEndPosOutput', dataType='Xfo', parent=self.outputHrcGrp)
 
         # Declare Input Attrs
-        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=True, parent=self.cmpInputAttrGrp)
-        self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', parent=self.cmpInputAttrGrp)
+        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=False, parent=self.cmpInputAttrGrp)
+        self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp)
         self.tipBoneLenInputAttr = self.createInput('tipBoneLen', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp)
 
         # Declare Output Attrs
@@ -222,7 +222,7 @@ class InsectLegComponentRig(InsectLegComponent):
 
         # Add Component Params to IK control
         legSettingsAttrGrp = AttributeGroup("DisplayInfo_LegSettings", parent=self.legIKCtrl)
-        legdrawDebugInputAttr = BoolAttribute('drawDebug', value=True, parent=legSettingsAttrGrp)
+        legdrawDebugInputAttr = BoolAttribute('drawDebug', value=False, parent=legSettingsAttrGrp)
         legUseInitPoseInputAttr = BoolAttribute('useInitPose', value=False, parent=legSettingsAttrGrp)
         legFkikInputAttr = FloatAttribute('fkik', value=1.0, minValue=0.0,
             maxValue=1.0, parent=legSettingsAttrGrp)

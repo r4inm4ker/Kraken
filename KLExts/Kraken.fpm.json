@@ -4,6 +4,7 @@
     "Solvers/Math.kl",
     "Solvers/KrakenSolverArg.kl",
     "Solvers/KrakenSolver.kl",
+    "Solvers/KrakenRigScaleSolver.kl",
     "Solvers/KrakenPoseConstraintSolver.kl",
     "Solvers/KrakenMultiPoseConstraintSolver.kl"
     "Solvers/BezierSpineSolver.kl",

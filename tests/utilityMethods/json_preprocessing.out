@@ -31,16 +31,6 @@
       "target": "R_Clavicle.spineEnd"
     }, 
     {
-      "source": "L_Arm.armEndXfo", 
-      "_comment": "LHand To LArm Connections. armEndXfo", 
-      "target": "L_Hand.armEndXfo"
-    }, 
-    {
-      "source": "R_Arm.armEndXfo", 
-      "_comment": "RHand To RArm Connections. armEndXfo", 
-      "target": "R_Hand.armEndXfo"
-    }, 
-    {
       "source": "spine.spineBase", 
       "_comment": "LLeg To Pelvis Connections", 
       "target": "L_Leg.pelvisInput"
@@ -49,16 +39,6 @@
       "source": "spine.spineBase", 
       "_comment": "RLeg To Pelvis Connections", 
       "target": "R_Leg.pelvisInput"
-    }, 
-    {
-      "source": "L_Leg.legEndXfo", 
-      "_comment": "LFoot To LLeg Connections: legEndXfo", 
-      "target": "L_Foot.legEndXfo"
-    }, 
-    {
-      "source": "R_Leg.legEndXfo", 
-      "_comment": "RFoot To RLeg Connections: legEndXfo", 
-      "target": "R_Foot.legEndXfo"
     }
   ], 
   "components": [
@@ -384,6 +364,31 @@
         }
       }, 
       "class": "kraken.examples.arm_component.ArmComponentGuide", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
       "location": "L"
     }, 
     {
@@ -466,41 +471,6 @@
         }
       }, 
       "class": "kraken.examples.arm_component.ArmComponentGuide", 
-      "location": "R"
-    }, 
-    {
-      "location": "L", 
-      "class": "kraken.examples.hand_component.HandComponentGuide", 
-      "handXfo": {
-        "sc": {
-          "y": 1.0, 
-          "x": 1.0, 
-          "__mathObjectClass__": "Vec3", 
-          "z": 1.0
-        }, 
-        "__mathObjectClass__": "Xfo", 
-        "tr": {
-          "y": 12.281900405883789, 
-          "x": 7.188600063323975, 
-          "__mathObjectClass__": "Vec3", 
-          "z": 0.49059998989105225
-        }, 
-        "ori": {
-          "__mathObjectClass__": "Quat", 
-          "w": 0.9330999851226807, 
-          "v": {
-            "y": -0.23010000586509705, 
-            "x": -0.08649999648332596, 
-            "__mathObjectClass__": "Vec3", 
-            "z": -0.2623000144958496
-          }
-        }
-      }, 
-      "name": "L_Hand"
-    }, 
-    {
-      "location": "R", 
-      "class": "kraken.examples.hand_component.HandComponentGuide", 
       "handXfo": {
         "sc": {
           "y": 1.0, 
@@ -526,9 +496,34 @@
           }
         }
       }, 
-      "name": "R_Hand"
+      "location": "R"
     }, 
     {
+      "toeTipXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 0.4000000059604645, 
+          "x": 1.850000023841858, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.5
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
       "name": "L_Leg", 
       "ankleXfo": {
         "sc": {
@@ -580,7 +575,31 @@
           }
         }
       }, 
-      "location": "L", 
+      "toeXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 0.4000000059604645, 
+          "x": 1.850000023841858, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.25
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
       "class": "kraken.examples.leg_component.LegComponentGuide", 
       "femurXfo": {
         "sc": {
@@ -606,12 +625,11 @@
             "z": 0.0
           }
         }
-      }
+      }, 
+      "location": "L"
     }, 
     {
-      "location": "L", 
-      "class": "kraken.examples.foot_component.FootComponentGuide", 
-      "footXfo": {
+      "toeTipXfo": {
         "sc": {
           "y": 1.0, 
           "x": 1.0, 
@@ -620,25 +638,22 @@
         }, 
         "__mathObjectClass__": "Xfo", 
         "tr": {
-          "y": 1.1516000032424927, 
-          "x": 1.840999960899353, 
+          "y": 0.4000000059604645, 
+          "x": -1.850000023841858, 
           "__mathObjectClass__": "Vec3", 
-          "z": -1.2369999885559082
+          "z": 1.5
         }, 
         "ori": {
           "__mathObjectClass__": "Quat", 
-          "w": 0.4189999997615814, 
+          "w": 1.0, 
           "v": {
-            "y": -0.5695000290870667, 
-            "x": 0.6377000212669373, 
+            "y": 0.0, 
+            "x": 0.0, 
             "__mathObjectClass__": "Vec3", 
-            "z": 0.3052999973297119
+            "z": 0.0
           }
         }
       }, 
-      "name": "L_Foot"
-    }, 
-    {
       "name": "R_Leg", 
       "ankleXfo": {
         "sc": {
@@ -690,7 +705,31 @@
           }
         }
       }, 
-      "location": "R", 
+      "toeXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 0.4000000059604645, 
+          "x": -1.850000023841858, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.25
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
       "class": "kraken.examples.leg_component.LegComponentGuide", 
       "femurXfo": {
         "sc": {
@@ -716,37 +755,8 @@
             "z": 0.0
           }
         }
-      }
-    }, 
-    {
-      "location": "R", 
-      "class": "kraken.examples.foot_component.FootComponentGuide", 
-      "footXfo": {
-        "sc": {
-          "y": 1.0, 
-          "x": 1.0, 
-          "__mathObjectClass__": "Vec3", 
-          "z": 1.0
-        }, 
-        "__mathObjectClass__": "Xfo", 
-        "tr": {
-          "y": 1.1516000032424927, 
-          "x": -1.840999960899353, 
-          "__mathObjectClass__": "Vec3", 
-          "z": -1.2369999885559082
-        }, 
-        "ori": {
-          "__mathObjectClass__": "Quat", 
-          "w": 0.3052999973297119, 
-          "v": {
-            "y": -0.6377000212669373, 
-            "x": 0.5695000290870667, 
-            "__mathObjectClass__": "Vec3", 
-            "z": 0.4189999997615814
-          }
-        }
       }, 
-      "name": "R_Foot"
+      "location": "R"
     }
   ]
 }
