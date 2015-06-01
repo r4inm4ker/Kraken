@@ -19,26 +19,6 @@ class NumberAttribute(Attribute):
         self._uiMin = None
         self._uiMax = None
 
-        if minValue is None:
-            self.setMin(value)
-        else:
-            self.setMin(minValue)
-
-        if maxValue is None:
-            self.setMax(value * 3)
-        else:
-            self.setMax(maxValue)
-
-        if minValue is None:
-            self.setUIMin(value)
-        else:
-            self.setUIMin(minValue)
-
-        if maxValue is None:
-            self.setUIMax(value * 3)
-        else:
-            self.setUIMax(maxValue)
-
 
     # ==============
     # Value Methods
