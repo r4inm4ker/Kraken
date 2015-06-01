@@ -98,6 +98,7 @@ class FootComponentGuide(FootComponent):
         """
 
         data = {
+            'class':"kraken.examples.foot_component.FootComponentGuide",
             'name': self.getName(),
             'location': self.getLocation(),
             'footXfo': self.footCtrl.xfo
@@ -126,7 +127,7 @@ class FootComponentGuide(FootComponent):
         return True
 
 
-    def getGuideData(self):
+    def getRigBuildData(self):
         """Returns the Guide data used by the Rig Component to define the layout of the final rig..
 
         Return:
