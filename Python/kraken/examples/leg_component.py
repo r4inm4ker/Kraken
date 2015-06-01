@@ -7,6 +7,7 @@ from kraken.core.objects.components.component import Component
 from kraken.core.objects.attributes.attribute_group import AttributeGroup
 from kraken.core.objects.attributes.float_attribute import FloatAttribute
 from kraken.core.objects.attributes.bool_attribute import BoolAttribute
+from kraken.core.objects.attributes.string_attribute import StringAttribute
 
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
@@ -76,6 +77,11 @@ class LegComponentGuide(LegComponent):
         # =========
         # Controls
         # ========
+
+        guideSettingsAttrGrp = AttributeGroup("GuideSettings", parent=self)
+        self.nameAttr = StringAttribute('name', value=name, parent=guideSettingsAttrGrp, callback=self.setName)
+        self.locationAttr = StringAttribute('location', value='L', parent=guideSettingsAttrGrp, callback=self.setLocation)
+
         # Guide Controls
         self.femurCtrl = Control('femur', parent=self.ctrlCmpGrp, shape="sphere")
         self.kneeCtrl = Control('knee', parent=self.ctrlCmpGrp, shape="sphere")
