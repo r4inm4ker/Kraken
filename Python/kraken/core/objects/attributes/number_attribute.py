@@ -14,10 +14,10 @@ class NumberAttribute(Attribute):
     def __init__(self, name, value=0, minValue=None, maxValue=None, parent=None):
         super(NumberAttribute, self).__init__(name, value=value, parent=parent)
 
-        self._min = None
-        self._max = None
-        self._uiMin = None
-        self._uiMax = None
+        self._min = minValue
+        self._max = maxValue
+        self._uiMin = minValue
+        self._uiMax = maxValue
 
 
     # ==============
@@ -69,7 +69,7 @@ class NumberAttribute(Attribute):
 
         """
 
-        assert type(minimum) in (int, float), "'minimum' is not of type 'int' or 'float'."
+        assert type(minimum) in (int, float) or minimum is not None, "'minimum' is not of type 'int', 'float', or None."
 
         self._min = minimum
 
@@ -100,7 +100,7 @@ class NumberAttribute(Attribute):
 
         """
 
-        assert type(maximum) in (int, float), "'maximum' is not of type 'int' or 'float'."
+        assert type(maximum) in (int, float) or maximum is not None, "'maximum' is not of type 'int', 'float', or None."
 
         self._max = maximum
 
@@ -132,14 +132,14 @@ class NumberAttribute(Attribute):
         """
 
         if self.isTypeOf('IntegerAttribute'):
-            if type(minimum) is not int:
-                raise TypeError("UiMin value is not of type 'int'.")
+            if type(minimum) is not int or minimum is not None:
+                raise TypeError("UiMin value is not of type 'int' or None.")
 
         if self.isTypeOf('FloatAttribute'):
-            if type(minimum) not in (int, float):
-                raise TypeError("UiMin value is not of type 'int' or 'float'.")
+            if type(minimum) not in (int, float) or minimum is not None:
+                raise TypeError("UiMin value is not of type 'int', 'float' or None.")
 
-        if minimum < self._min:
+        if minimum is not None and minimum < self._min:
             raise ValueError('UiMin value is less than attribute minimum')
 
         self._uiMin = minimum
@@ -172,14 +172,14 @@ class NumberAttribute(Attribute):
         """
 
         if self.isTypeOf('IntegerAttribute'):
-            if type(maximum) is not int:
-                raise TypeError("UiMax value is not of type 'int'.")
+            if type(maximum) is not int or maximum is not None:
+                raise TypeError("UiMax value is not of type 'int' or None.")
 
         if self.isTypeOf('FloatAttribute'):
-            if type(maximum) not in (int, float):
-                raise TypeError("UiMax value is not of type 'int' or 'float'.")
+            if type(maximum) not in (int, float) or maximum is not None:
+                raise TypeError("UiMax value is not of type 'int','float', or None.")
 
-        if maximum > self._max:
+        if maximum is not None and maximum > self._max:
             raise ValueError('UiMax value is greater than attribute maximum')
 
         self._uiMax = maximum
