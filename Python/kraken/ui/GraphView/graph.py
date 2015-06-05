@@ -136,6 +136,10 @@ class Graph(QtGui.QGraphicsWidget):
         pan = windowRect.center() - nodesRect.center()
         self.itemGroup().translate(pan.x(), pan.y())
 
+        # Update the main panel when reframing.
+        self.__mainPanel.update()
+
+
     def frameSelectedNodes(self):
         self.frameNodes(self.getSelectedNodes())
 

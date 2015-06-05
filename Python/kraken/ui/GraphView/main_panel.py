@@ -59,6 +59,9 @@ class MainPanel(QtGui.QGraphicsWidget):
             delta = xfo.map(event.pos()) - xfo.map(self._lastPanPoint)
             self._lastPanPoint = event.pos()
             self.__itemGroup.translate(delta.x(), delta.y())
+
+            # Call udpate to redraw background
+            self.update()
         else:
             super(MainPanel, self).mouseMoveEvent(event)
 
@@ -83,7 +86,13 @@ class MainPanel(QtGui.QGraphicsWidget):
         center = ( topLeft + bottomRight ) * 0.5
 
         zoomFactor = 1.0 + event.delta() * self.__mouseWheelZoomRate
+
         transform = self.__itemGroup.transform()
+
+        # Limit zoom to 3x
+        if transform.m22() * zoomFactor >= 2.0 or transform.m22() * zoomFactor <= 0.25:
+            return
+
         transform.scale(zoomFactor, zoomFactor)
 
         if transform.m22() > 0.01: # To avoid negative scalling as it would flip the graph
@@ -98,6 +107,10 @@ class MainPanel(QtGui.QGraphicsWidget):
             self.__itemGroup.translate(newcenter.x() - center.x(), newcenter.y() - center.y())
 
         self.graph.resize(self.graph.size())
+
+        # Call udpate to redraw background
+        self.update()
+
 
     def paint(self, painter, option, widget):
         # return super(MainPanel, self).paint(painter, option, widget)
