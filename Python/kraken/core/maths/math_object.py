@@ -25,26 +25,31 @@ class MathObject(object):
         RTVal
 
         """
+
         return self._rtval
 
 
     def setRTVal(self, rtval):
         """Sets the internal RTVal object owned by the math object.
 
-        """
-        self._rtval = rtval
+        Arguments:
+        rtval -- rtval, the internal RTVal object owned by the math object.
 
+        """
+
+        self._rtval = rtval
 
 
     def jsonEncode(self):
         """Encodes object to JSON.
 
         Return:
-        JSON string.
+        JSON object.
 
         """
+
         d = {
-                "__class__":self.__class__.__name__,
+             "__mathObjectClass__": self.__class__.__name__,
             }
 
         public_attrs = (name for name in dir(self) if not name.startswith('_') and not callable(getattr(self,name)) and name)
@@ -58,21 +63,30 @@ class MathObject(object):
         return d
 
 
-    def jsonDecode(self, jsonData, loader):
+    def jsonDecode(self, jsonData, decodeFn):
         """Encodes object to JSON.
+
+        Arguments:
+        jsonData -- dict, the JSON data used to populate the math object.
+        decodeFn -- decodeFn, the decodeFn that can construct the math members.
 
         Return:
         True of the decode was successful
 
         """
-        if jsonData["__class__"] != self.__class__.__name__:
-            raise Exception("Error in jsonDecode. Json data specifies a different class:" + jsonData["__class__"] + "!==" + self.__class__.__name__)
+
+        if jsonData["__mathObjectClass__"] != self.__class__.__name__:
+            raise Exception("Error in jsonDecode. Json data specifies a \
+                            different class:" + jsonData["__class__"] + "!==" +
+                            self.__class__.__name__)
 
         for key, value in jsonData.iteritems():
-            if key == '__class__': continue
+            if key == '__mathObjectClass__': continue
             if type(value) is dict:
-                setattr(self, key, loader.decodeValue(value))
+                setattr(self, key, decodeFn(value))
             else:
                 setattr(self, key, value)
 
         return True
+
+

@@ -5,9 +5,12 @@ Euler -- Euler rotation.
 """
 
 import math
+
 from kraken.core.kraken_system import ks
-from math_object import MathObject
-from mat33 import Mat33
+from kraken.core.maths.math_object import MathObject
+from kraken.core.maths.mat33 import Mat33
+from kraken.core.maths.rotation_order import RotationOrder
+
 
 rotationOrderStrToIntMapping = {
     'xyz': 0,
@@ -33,6 +36,7 @@ rotationOrderIntToStrMapping = [
     'YXZ'
 ]
 
+
 class Euler(MathObject):
     """Euler rotation object."""
 
@@ -46,19 +50,20 @@ class Euler(MathObject):
         else:
 
             if x is not None and not isinstance(x, (int, float)) and not isinstance(x, Euler):
-                raise TypeError("Euler: Invalid type for 'x' argument. Must be an int or float.")
+                raise TypeError("Euler: Invalid type for 'x' argument. \
+                                Must be an int or float.")
 
             if y is not None and not isinstance(y, (int, float)):
-                raise TypeError("Euler: Invalid type for 'y' argument. Must be an int or float.")
+                raise TypeError("Euler: Invalid type for 'y' argument. Must be \
+                                an int or float.")
 
             if z is not None and not isinstance(z, (int, float)):
-                raise TypeError("Euler: Invalid type for 'z' argument. Must be an int or float.")
+                raise TypeError("Euler: Invalid type for 'z' argument. Must be \
+                                an int or float.")
 
-            if ro is not None and not isinstance(ro, (int)):
-                if isinstance(ro, basestring):
-                    ro = rotationOrderStrToIntMapping[ro]
-                else:
-                    raise TypeError("Euler: Invalid type for 'ro' argument. Must be an int or a string.")
+            if ro is not None:
+                if isinstance(ro, basestring) or isinstance(ro, (int)):
+                    ro = RotationOrder(order=ro)
 
             self._rtval = ks.rtVal('Euler')
             if isinstance(x, Euler):
@@ -70,7 +75,6 @@ class Euler(MathObject):
                     self.set(x=x, y=y, z=z)
 
 
-
     def __str__(self):
         """String representation of Euler object."""
 
@@ -80,9 +84,6 @@ class Euler(MathObject):
     @property
     def x(self):
         """Doc String.
-
-        Arguments:
-        Arguments -- Type, information.
 
         Return:
         True if successful.
@@ -97,7 +98,7 @@ class Euler(MathObject):
         """Doc String.
 
         Arguments:
-        Arguments -- Type, information.
+        value -- number, x value of the Euler Angles.
 
         Return:
         True if successful.
@@ -110,9 +111,6 @@ class Euler(MathObject):
     @property
     def y(self):
         """Doc String.
-
-        Arguments:
-        Arguments -- Type, information.
 
         Return:
         True if successful.
@@ -127,7 +125,7 @@ class Euler(MathObject):
         """Doc String.
 
         Arguments:
-        Arguments -- Type, information.
+        value -- number, y value of the Euler Angles.
 
         Return:
         True if successful.
@@ -140,9 +138,6 @@ class Euler(MathObject):
     @property
     def z(self):
         """Doc String.
-
-        Arguments:
-        Arguments -- Type, information.
 
         Return:
         True if successful.
@@ -157,7 +152,7 @@ class Euler(MathObject):
         """Doc String.
 
         Arguments:
-        Arguments -- Type, information.
+        value -- number, z value of the Euler Angles.
 
         Return:
         True if successful.
@@ -171,15 +166,12 @@ class Euler(MathObject):
     def ro(self):
         """Doc String.
 
-        Arguments:
-        Arguments -- Type, information.
-
         Return:
         True if successful.
 
         """
 
-        return rotationOrderIntToStrMapping[self._rtval.ro.order]
+        return RotationOrder(self._rtval.ro)
 
 
     @ro.setter
@@ -187,13 +179,14 @@ class Euler(MathObject):
         """Doc String.
 
         Arguments:
-        Arguments -- Type, information.
+        value -- number, rotation order(ro) value of the Euler Angles.
 
         Return:
         True if successful.
 
         """
-        self._rtval.ro.order = ks.rtVal('Integer', value)
+
+        self._rtval.ro = ks.rtVal('RotationOrder', value)
 
 
     def clone(self):
@@ -218,19 +211,22 @@ class Euler(MathObject):
         """Doc String.
 
         Arguments:
-            x, y, z -- Scalar, the angles in radians to set the eulaer angles to.
-            ro -- Integer, the rotation order to use in the euler angles.
+        x -- Scalar, x angle in radians.
+        y -- Scalar, y angle in radians.
+        z -- Scalar, z angle in radians.
+        ro -- Integer, the rotation order to use in the euler angles.
 
         Return:
         True if successful.
 
         """
-        self._rtval.set('', ks.rtVal('Scalar', x), ks.rtVal('Scalar', y), ks.rtVal('Scalar', z))
-        if ro is not None:
-            if isinstance(ro, basestring):
-                ro = rotationOrderStrToIntMapping[ro]
-            self._rtval.ro.order = ks.rtVal('Integer', ro)
 
+        if ro is None:
+            self._rtval.set('', ks.rtVal('Scalar', x), ks.rtVal('Scalar', y), ks.rtVal('Scalar', z))
+        else:
+            self._rtval.set('', ks.rtVal('Scalar', x), ks.rtVal('Scalar', y), ks.rtVal('Scalar', z), ks.rtVal('RotationOrder', ro))
+
+        return True
 
 
     def equal(self, other):
@@ -271,6 +267,3 @@ class Euler(MathObject):
         """
 
         return Mat33(self._rtval.toMat33('Mat33'))
-
-
-

@@ -5,53 +5,23 @@ FloatAttribute - Base Attribute.
 
 """
 
-from number_attribute import NumberAttribute
+from kraken.core.objects.attributes.number_attribute import NumberAttribute
 from kraken.core.kraken_system import ks
+
 
 class FloatAttribute(NumberAttribute):
     """Float Attribute. Implemented value type checking and limiting."""
 
-    def __init__(self, name, value=0.0, minValue=None, maxValue=None):
-        super(FloatAttribute, self).__init__(name, value)
+    def __init__(self, name, value=0.0, minValue=None, maxValue=None, parent=None, callback=None):
+        super(FloatAttribute, self).__init__(name, value=value, minValue=minValue,
+              maxValue=maxValue, parent=parent, callback=callback)
 
-        if minValue is None:
-            if value < 0.0:
-                self.setMin(value)
-            else:
-                self.setMin(0.0)
-
-        if maxValue is None:
-            if value == 0.0:
-                self.setMax(1.0)
-            else:
-                self.setMax(value * 3.0)
-
-        assert type(self.value) in (int, float), "Value is not of type 'int' or 'float'."
+        assert type(self._value) in (int, float), "Value is not of type 'int' or 'float'."
 
 
-    def setValue(self, value):
-        """Sets the value of the attribute.
-
-        Arguments:
-        value -- Value to set the attribute to.
-
-        Return:
-        True if successful.
-
-        """
-
-        if type(value) not in (int, float):
-            raise TypeError("Value is not of type 'int' or 'float'.")
-
-        if value < self.min:
-            raise ValueError("Value is less than attribute minimum.")
-        elif value > self.max:
-            raise ValueError("Value is greater than attribute maximum.")
-
-        super(FloatAttribute, self).setValue(value)
-
-        return True
-
+    # ==============
+    # Value Methods
+    # ==============
     def getRTVal(self):
         """Returns and RTVal object for this attribute.
 
@@ -59,7 +29,33 @@ class FloatAttribute(NumberAttribute):
         RTVal
 
         """
-        return ks.rtVal('Scalar', self.value)
+
+        return ks.rtVal('Scalar', self._value)
 
 
-        
+    def validateValue(self, value):
+        """Validates the incoming value is the correct type.
+
+        Arguments:
+        value -- Type, value to check the type of.
+
+        Return:
+        True if successful.
+
+        """
+
+        if type(value) not in (int, float):
+            return False
+
+        return True
+
+
+    def getDataType(self):
+        """Returns the name of the data type for this attribute.
+
+        Return:
+        string
+
+        """
+
+        return 'Scalar'

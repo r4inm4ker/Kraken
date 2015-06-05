@@ -1,0 +1,7 @@
+
+require Math;
+
+function Scalar sq(Scalar v) {
+  return v * v;
+}
+

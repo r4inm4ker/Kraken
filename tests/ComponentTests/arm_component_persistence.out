@@ -1,0 +1,31 @@
+==armLeft==
+L_Arm
+L_Arm.controls
+L_Arm.controls.arm
+L_Arm.controls.arm.inputs
+L_Arm.controls.arm.inputs.clavicleEnd
+L_Arm.controls.arm.outputs
+L_Arm.controls.arm.outputs.bicep
+L_Arm.controls.arm.outputs.forearm
+L_Arm.controls.arm.outputs.armEndXfo
+L_Arm.controls.arm.outputs.armEndPos
+L_Arm.controls.arm.bicepFK
+L_Arm.controls.arm.bicepFK.bicepFK
+L_Arm.controls.arm.bicepFK.bicepFK.forearmFK
+L_Arm.controls.arm.bicepFK.bicepFK.forearmFK.forearmFK
+L_Arm.controls.arm.IK
+L_Arm.controls.arm.IK.IK
+L_Arm.controls.arm.UpV
+L_Arm.controls.arm.UpV.UpV
+L_Arm.deformers
+L_Arm.deformers.arm
+L_Arm.deformers.arm.bicep
+L_Arm.deformers.arm.forearm
+L_Arm.deformers.arm.wrist
+Traceback (most recent call last):
+  File "ComponentTests\arm_component_persistence.py", line 39, in <module>
+    armLeft2 = loader.construct(jsonData1)
+  File "..\Python\kraken\core\io\kraken_loader.py", line 200, in construct
+    item.jsonDecode(self, jsonData)
+AttributeError: 'SceneItem' object has no attribute 'jsonDecode'
+

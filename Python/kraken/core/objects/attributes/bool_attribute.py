@@ -5,15 +5,15 @@ BoolAttribute - Base Attribute.
 
 """
 
-from base_attribute import BaseAttribute
+from kraken.core.objects.attributes.attribute import Attribute
 from kraken.core.kraken_system import ks
 
 
-class BoolAttribute(BaseAttribute):
+class BoolAttribute(Attribute):
     """Boolean Attribute. Implemented value type checking and limiting."""
 
-    def __init__(self, name, value=False):
-        super(BoolAttribute, self).__init__(name, value)
+    def __init__(self, name, value=False, parent=None, callback=None):
+        super(BoolAttribute, self).__init__(name, value=value, parent=parent, callback=callback)
         assert type(value) is bool, "Value is not of type 'bool'."
 
 
@@ -43,4 +43,16 @@ class BoolAttribute(BaseAttribute):
         RTVal
 
         """
-        return ks.rtVal('Boolean', self.value)
+
+        return ks.rtVal('Boolean', self._value)
+
+
+    def getDataType(self):
+        """Returns the name of the data type for this attribute.
+
+        Return:
+        string
+
+        """
+
+        return 'Boolean'

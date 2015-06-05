@@ -1,12 +1,26 @@
 require InlineDrawing;
 
 object NBoneIKSolver : KrakenSolver {
+  Xfo initPose[];
 };
+
+// Default Constructor
+function NBoneIKSolver()
+{
+
+}
+
+function NBoneIKSolver(
+  Xfo initPose[])
+{
+  this.initPose = initPose;
+}
 
 
 // Return Arguments for Kraken
 function KrakenSolverArg[] NBoneIKSolver.getArguments(){
   KrakenSolverArg args[] = this.parent.getArguments();
+  args.push(KrakenSolverArg('useInitPose', 'in', 'Boolean'));
   args.push(KrakenSolverArg('ikblend', 'in', 'Scalar'));
   args.push(KrakenSolverArg('ikgoal', 'in', 'Mat44'));
   args.push(KrakenSolverArg('fkcontrols', 'in', 'Mat44[]'));
@@ -19,10 +33,6 @@ function KrakenSolverArg[] NBoneIKSolver.getArguments(){
 
 require Math;
 require Animation;
-
-function Scalar sq(Scalar v) {
-  return v * v;
-}
 
 function Xfo[] solveNCFIK(
   in Xfo basePose[],
@@ -38,7 +48,7 @@ function Xfo[] solveNCFIK(
   ikpose.resize(basePose.size());
   for (Integer i = 0; i < basePose.size()-1; i++) {
     ikpose[i] = basePose[i];
-    // Note: Scaling of bones is currently not supported. 
+    // Note: Scaling of bones is currently not supported.
     boneVectors[i] = basePose[i].inverse().transformVector(basePose[i+1].tr);
     boneLengths[i] = boneVectors[i].length();
     remainingChainLength += abs(boneLengths[i] /* basePose[i].sc.x*/);
@@ -78,7 +88,7 @@ function Xfo[] solveNCFIK(
     if (i == 0) {
       // For the first bone calculate and store the overall chain offset towards the ik target
       chainOffsetRotation.setFrom2Vectors(vecToFkChainTip, vecToIkGoal);
-    
+
       fkChainTip = boneXfo.tr + (vecToIkGoal * distToFkChainTip);
       boneXfo.ori = chainOffsetRotation * boneXfo.ori;
     }
@@ -99,7 +109,7 @@ function Xfo[] solveNCFIK(
       //  boneLengthVector = boneXfo.ori.rotateVector(Vec3(-1.0, 0.0, 0.0));
       //else
         boneLengthVector = boneXfo.ori.rotateVector(boneVectors[i].unit());
-      
+
       // this is the current angle of the bone.
       Scalar fkBoneAngle = acos(Math_clamp(boneLengthVector.dot(vecToIkGoal), -1.0, 1.0));
 
@@ -108,11 +118,11 @@ function Xfo[] solveNCFIK(
         // in debug mode, report and error...
         continue;
       }
-      
+
       Vec3 bendAxis = vecToIkGoal.cross(boneLengthVector);
       bendAxis.setUnit();
       Scalar ikBoneAngle;
-      
+
       if (i == (basePose.size() - 3)) {
         // Use trigonometry to determine the ikBoneAngle
         // Law of cosines. a = BoneLength; b = Child BoneLength; c = Distance to the Ik Goal;
@@ -153,7 +163,7 @@ function Xfo[] solveNCFIK(
       Quat offset;
       offset.setFromAxisAndAngle(bendAxis, deltaBoneAngle);
       boneXfo.ori = offset * boneXfo.ori;
-      
+
     }
 
     ikpose[boneIndex] = boneXfo;
@@ -163,26 +173,40 @@ function Xfo[] solveNCFIK(
 }
 
 
-
 // Solve
 function NBoneIKSolver.solve!
 (
-  Boolean debug,
+  Boolean drawDebug,
+  Scalar rigScale,
+  Boolean useInitPose,
   Scalar ikblend,
   Mat44 ikgoal,
   Mat44 fkcontrols[],
   Scalar tipBoneLen,
   io Mat44 pose[],
   io Mat44 legEnd
-){
+) {
   if(fkcontrols.size != pose.size)
     throw("Error in NBoneIKSolver. The number of FKControls does not match the number of joints");
+
+  if(this.initPose.size == 0) {
+    this.initPose.resize(pose.size);
+
+    Xfo fkPose[];
+    fkPose.resize(fkcontrols.size+1);
+    for(UInt32 i=0; i< fkcontrols.size; i++) {
+      fkPose[i] = Xfo(fkcontrols[i]);
+    }
+    this.initPose = fkPose;
+    fkPose[fkcontrols.size] = fkPose[fkcontrols.size-1];
+    fkPose[fkcontrols.size].tr = fkPose[fkcontrols.size-1].transformVector(fkPose[fkcontrols.size-2].inverse().transformVector(fkPose[fkcontrols.size-1].tr));
+  }
 
   Xfo xfoPose[];
   Vec3 boneVectors[];
   xfoPose.resize(fkcontrols.size+1);
   boneVectors.resize(fkcontrols.size);
-  for(UInt32 i=0; i < fkcontrols.size; i++){
+  for(UInt32 i=0; i < fkcontrols.size; i++) {
     xfoPose[i] = Xfo(fkcontrols[i]);
     if(i>0)
       boneVectors[i-1] = xfoPose[i-1].inverse().transformVector(xfoPose[i].tr);
@@ -190,12 +214,18 @@ function NBoneIKSolver.solve!
   boneVectors[boneVectors.size-1] = Vec3(tipBoneLen, 0.0, 0.0);
   xfoPose[fkcontrols.size] = xfoPose[fkcontrols.size-1];
   xfoPose[fkcontrols.size].tr = xfoPose[fkcontrols.size-1].transformVector(boneVectors[boneVectors.size-1]);
-  
-  if(ikblend > 0.0){
-    Xfo ikPose[] = solveNCFIK(xfoPose, ikgoal.translation());
+
+  if(ikblend > 0.0) {
+    Xfo ikPose[];
+    if (useInitPose == 1) {
+      ikPose = solveNCFIK(this.initPose, ikgoal.translation());
+    }
+    else {
+      ikPose = solveNCFIK(xfoPose, ikgoal.translation());
+    }
 
     // Now blend the IK result with the FK result
-    for(UInt32 i=0; i < xfoPose.size; i++){
+    for(UInt32 i=0; i < xfoPose.size; i++) {
       xfoPose[i].ori = xfoPose[i].ori.sphericalLinearInterpolate(ikPose[i].ori, ikblend);
       if(i>0)
         xfoPose[i].tr = xfoPose[i-1].transformVector(boneVectors[i-1]);
@@ -208,8 +238,8 @@ function NBoneIKSolver.solve!
   legEnd = xfoPose[xfoPose.size-1].toMat44();
 
   // Set debugging visibility.
-  this.setDebug(debug);
-  if(this.debug){
+  this.setDebug(drawDebug);
+  if(this.drawDebug) {
 
     Color boneColor(1.0, 1.0, 0);
     for(UInt32 i=0; i<pose.size; i++){

@@ -1,15 +1,11 @@
 
 from kraken.core.maths import Vec2, Vec3, Euler, Quat, Xfo
 
+
 bob_guide_data = {
-    "layers":[
-        "deformers",
-        "controls",
-        "geometry"
-    ],
     "components":[
         {
-            "class":"kraken.examples.spine_component.SpineComponent",
+            "class": "kraken.examples.spine_component.SpineComponentGuide",
             'cogPosition': Vec3(0.0, 11.1351, -0.1382),
             'spine01Position': Vec3(0.0, 11.1351, -0.1382),
             'spine02Position': Vec3(0.0, 11.8013, -0.1995),
@@ -18,13 +14,12 @@ bob_guide_data = {
             'numDeformers': 6
         },
         {
-            "class":"kraken.examples.neck_component.NeckComponent",
-            'neckPosition': Vec3(0.0, 16.5572, -0.6915),
-            'neckUpVOffset': Vec3(0.0, 0.0, -1.0),
-            'neckEndPosition': Vec3(0.0, 17.4756, -0.421)
+            "class": "kraken.examples.neck_component.NeckComponentGuide",
+            "neckPosition": Vec3(0.0, 16.5572, -0.6915),
+            "neckEndPosition": Vec3(0.0, 17.4756, -0.421)
         },
         {
-            "class":"kraken.examples.head_component.HeadComponent",
+            "class": "kraken.examples.head_component.HeadComponentGuide",
             "headPosition": Vec3(0.0, 17.4756, -0.421),
             "headEndPosition": Vec3(0.0, 19.5, -0.421),
             "eyeLeftPosition": Vec3(0.3497, 18.0878, 0.6088),
@@ -32,172 +27,106 @@ bob_guide_data = {
             "jawPosition": Vec3(0.0, 17.613, -0.2731)
         },
         {
-            "class":"kraken.examples.clavicle_component.ClavicleComponent",
-            "name": "L_ClavicleComponent",
+            "class": "kraken.examples.clavicle_component.ClavicleComponentGuide",
+            "name": "L_Clavicle",
             "location": "L",
-            "claviclePosition": Vec3(0.1322, 15.403, -0.5723),
-            "clavicleUpVOffset": Vec3(0.0, 1.0, 0.0),
-            "clavicleEndPosition": Vec3(2.27, 15.295, -0.753)
+            "clavicleXfo": Xfo(Vec3(0.1322, 15.403, -0.5723)),
+            "clavicleUpVXfo": Xfo(Vec3(0.0, 1.0, 0.0)),
+            "clavicleEndXfo": Xfo(Vec3(2.27, 15.295, -0.753))
         },
         {
-            "class":"kraken.examples.arm_component.ArmComponent",
-            "name": "L_ArmComponent",
+            "class": "kraken.examples.clavicle_component.ClavicleComponentGuide",
+            "name": "R_Clavicle",
+            "location": "R",
+            "clavicleXfo": Xfo(Vec3(-0.1322, 15.403, -0.5723)),
+            "clavicleUpVXfo": Xfo(Vec3(0.0, 1.0, 0.0)),
+            "clavicleEndXfo": Xfo(Vec3(-2.27, 15.295, -0.753))
+        },
+        {
+            "class": "kraken.examples.arm_component.ArmComponentGuide",
+            "name": "L_Arm",
             "location": "L",
-            "bicepPosition": Vec3(2.27, 15.295, -0.753),
-            "forearmPosition": Vec3(5.039, 13.56, -0.859),
-            "wristPosition": Vec3(7.1886, 12.2819, 0.4906),
+            "bicepXfo": Xfo(Vec3(2.27, 15.295, -0.753)),
+            "forearmXfo": Xfo(Vec3(5.039, 13.56, -0.859)),
+            "wristXfo": Xfo(Vec3(7.1886, 12.2819, 0.4906)),
+            "handXfo": Xfo(tr=Vec3(7.1886, 12.2819, 0.4906),
+                           ori=Quat(Vec3(-0.0865, -0.2301, -0.2623), 0.9331)),
             "bicepFKCtrlSize": 1.75,
             "forearmFKCtrlSize": 1.5
         },
         {
-            "class":"kraken.examples.hand_component.HandComponent",
-            "name":"L_HandComponent",
-            "location": "L",
-            "handPosition": Vec3(7.1886, 12.2819, 0.4906),
-            "handUpV": Vec3(7.7463, 13.1746, 0.4477),
-            "handEndPosition": Vec3(7.945, 11.8321, 0.9655),
-            "handQuat": Quat(Vec3(-0.0865, -0.2301, -0.2623), 0.9331),
-            "handPos": Vec3(7.1886, 12.2819, 0.4906)
-        },
-        {
-            "class":"kraken.examples.clavicle_component.ClavicleComponent",
-            "name":"R_ClavicleComponent",
+            "class": "kraken.examples.arm_component.ArmComponentGuide",
+            "name": "R_Arm",
             "location": "R",
-            "claviclePosition": Vec3(-0.1322, 15.403, -0.5723),
-            "clavicleUpVOffset": Vec3(0.0, 1.0, 0.0),
-            "clavicleEndPosition": Vec3(-2.27, 15.295, -0.753)
-        },
-        {
-            "class":"kraken.examples.arm_component.ArmComponent",
-            "name":"R_ArmComponent",
-            "location": "R",
-            "bicepPosition": Vec3(-2.27, 15.295, -0.753),
-            "forearmPosition": Vec3(-5.039, 13.56, -0.859),
-            "wristPosition": Vec3(-7.1886, 12.2819, 0.4906),
+            "bicepXfo": Xfo(Vec3(-2.27, 15.295, -0.753)),
+            "forearmXfo": Xfo(Vec3(-5.039, 13.56, -0.859)),
+            "wristXfo": Xfo(Vec3(-7.1886, 12.2819, 0.4906)),
+            "handXfo": Xfo(tr=Vec3(-7.1886, 12.2819, 0.4906),
+                           ori=Quat(Vec3(-0.2301, -0.0865, -0.9331), 0.2623)),
             "bicepFKCtrlSize": 1.75,
             "forearmFKCtrlSize": 1.5
         },
         {
-            "class":"kraken.examples.hand_component.HandComponent",
-            "name":"R_HandComponent",
-            "location": "R",
-            "handPosition": Vec3(-7.1886, 12.2819, 0.4906),
-            "handUpV": Vec3(-7.7463, 13.1746, 0.4477),
-            "handEndPosition": Vec3(-7.945, 11.8321, 0.9655),
-            "handQuat": Quat(Vec3(-0.2301, -0.0865, -0.9331), 0.2623),
-            "handPos": Vec3(-7.1886, 12.2819, 0.4906)
-        },
-        {
-            "class":"kraken.examples.leg_component.LegComponent",
-            "name":"L_LegComponent",
+            "class": "kraken.examples.leg_component.LegComponentGuide",
+            "name": "L_Leg",
             "location": "L",
-            "femurPosition": Vec3(0.9811, 9.769, -0.4572),
-            "kneePosition": Vec3(1.4488, 5.4418, -0.5348),
-            "anklePosition": Vec3(1.841, 1.1516, -1.237)
+            "femurXfo": Xfo(Vec3(0.9811, 9.769, -0.4572)),
+            "kneeXfo": Xfo(Vec3(1.4488, 5.4418, -0.5348)),
+            "ankleXfo": Xfo(Vec3(1.841, 1.1516, -1.237)),
+            "toeXfo": Xfo(Vec3(1.85, 0.4, 0.25)),
+            "toeTipXfo": Xfo(Vec3(1.85, 0.4, 1.5))
         },
         {
-            "class":"kraken.examples.foot_component.FootComponent",
-            "name":"L_FootComponent",
-            "location": "L",
-            "footQuat": Quat(Vec3(0.6377, -0.5695, 0.3053), 0.4190),
-            "footPos": Vec3(1.841, 1.1516, -1.237)
-        },
-        {
-            "class":"kraken.examples.leg_component.LegComponent",
-            "name":"R_LegComponent",
+            "class": "kraken.examples.leg_component.LegComponentGuide",
+            "name": "R_Leg",
             "location": "R",
-            "femurPosition": Vec3(-0.9811, 9.769, -0.4572),
-            "kneePosition": Vec3(-1.4488, 5.4418, -0.5348),
-            "anklePosition": Vec3(-1.841, 1.1516, -1.237)
-        },
-        {
-            "class":"kraken.examples.foot_component.FootComponent",
-            "name":"R_FootComponent",
-            "location": "R",
-            "footQuat": Quat(Vec3(0.5695, -0.6377, 0.4190), 0.3053),
-            "footPos": Vec3(-1.841, 1.1516, -1.237)
+            "femurXfo": Xfo(Vec3(-0.9811, 9.769, -0.4572)),
+            "kneeXfo": Xfo(Vec3(-1.4488, 5.4418, -0.5348)),
+            "ankleXfo": Xfo(Vec3(-1.841, 1.1516, -1.237)),
+            "toeXfo": Xfo(Vec3(-1.85, 0.4, 0.25)),
+            "toeTipXfo": Xfo(Vec3(-1.85, 0.4, 1.5))
         }
     ],
     "connections": [
         {
             "_comment": "Neck to Spine",
-            "source": "SpineComponent.spineEnd",
-            "target": "NeckComponent.neckBase"
+            "source": "spine.spineEnd",
+            "target": "neck.neckBase"
         },
         {
             "_comment": "Head to Neck",
-            "source": "NeckComponent.neckEnd",
-            "target": "HeadComponent.headBase"
+            "source": "neck.neckEnd",
+            "target": "head.headBase"
         },
         {
             "_comment": "LClavicle to Spine",
-            "source": "SpineComponent.spineEnd",
-            "target": "L_ClavicleComponent.spineEnd"
+            "source": "spine.spineEnd",
+            "target": "L_Clavicle.spineEnd"
         },
         {
             "_comment": "LArm to LClavicle",
-            "source": "L_ClavicleComponent.clavicleEnd",
-            "target": "L_ArmComponent.clavicleEnd"
+            "source": "L_Clavicle.clavicleEnd",
+            "target": "L_Arm.clavicleEnd"
         },
         {
             "_comment": "RArm to RClavicle",
-            "source": "R_ClavicleComponent.clavicleEnd",
-            "target": "R_ArmComponent.clavicleEnd"
+            "source": "R_Clavicle.clavicleEnd",
+            "target": "R_Arm.clavicleEnd"
         },
         {
             "_comment": "RClavicle to Spine",
-            "source": "SpineComponent.spineEnd",
-            "target": "R_ClavicleComponent.spineEnd"
-        },
-        {
-            "_comment": "LHand To LArm Connections. armEndXfo",
-            "source": "L_ArmComponent.armEndXfo",
-            "target": "L_HandComponent.armEndXfo"
-        },
-        {
-            "_comment": "LHand To LArm Connections. armEndPos",
-            "source": "L_ArmComponent.armEndPos",
-            "target": "L_HandComponent.armEndPos"
-        },
-        {
-            "_comment": "RHand To RArm Connections. armEndXfo",
-            "source": "R_ArmComponent.armEndXfo",
-            "target": "R_HandComponent.armEndXfo"
-        },
-        {
-            "_comment": "RHand To RArm Connections. armEndPos",
-            "source": "R_ArmComponent.armEndPos",
-            "target": "R_HandComponent.armEndPos"
+            "source": "spine.spineEnd",
+            "target": "R_Clavicle.spineEnd"
         },
         {
             "_comment": "LLeg To Pelvis Connections",
-            "source": "SpineComponent.spineBase",
-            "target": "L_LegComponent.pelvisInput"
+            "source": "spine.pelvis",
+            "target": "L_Leg.pelvisInput"
         },
         {
             "_comment": "RLeg To Pelvis Connections",
-            "source": "SpineComponent.spineBase",
-            "target": "R_LegComponent.pelvisInput"
-        },
-        {
-            "_comment": "LFoot To LLeg Connections: legEndXfo",
-            "source": "L_LegComponent.legEndXfo",
-            "target": "L_FootComponent.legEndXfo"
-        },
-        {
-            "_comment": "LFoot To LLeg Connections: legEndPos",
-            "source": "L_LegComponent.legEndPos",
-            "target": "L_FootComponent.legEndPos"
-        },
-        {
-            "_comment": "RFoot To RLeg Connections: legEndXfo",
-            "source": "R_LegComponent.legEndXfo",
-            "target": "R_FootComponent.legEndXfo"
-        },
-        {
-            "_comment": "RFoot To RLeg Connections: legEndPos",
-            "source": "R_LegComponent.legEndPos",
-            "target": "R_FootComponent.legEndPos"
+            "source": "spine.pelvis",
+            "target": "R_Leg.pelvisInput"
         }
     ]
 }

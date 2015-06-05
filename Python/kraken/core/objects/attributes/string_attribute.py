@@ -5,16 +5,19 @@ StringAttribute - Base Attribute.
 
 """
 
-from base_attribute import BaseAttribute
+from kraken.core.objects.attributes.attribute import Attribute
 from kraken.core.kraken_system import ks
 
 
-class StringAttribute(BaseAttribute):
+class StringAttribute(Attribute):
     """String Attribute. Implemented value type checking."""
 
-    def __init__(self, name, value=""):
-        super(StringAttribute, self).__init__(name, value)
-        assert type(value) is str, "Value is not of type 'string'."
+    def __init__(self, name, value="", parent=None, callback=None):
+        super(StringAttribute, self).__init__(name, value=value, parent=parent, callback=callback)
+
+        if not isinstance(value, basestring):
+            raise TypeError("Value is not of type 'str':" + str(value))
+
 
     def setValue(self, value):
         """Sets the value of the attribute.
@@ -27,12 +30,13 @@ class StringAttribute(BaseAttribute):
 
         """
 
-        if type(value) not in (str):
-            raise TypeError("Value is not of type 'str'.")
+        if not isinstance(value, basestring):
+            raise TypeError("Value is not of type 'str':" + str(value))
 
-        super(StringAttribute, self).setValue(value)
+        super(StringAttribute, self).setValue(str(value))
 
         return True
+
 
     def getRTVal(self):
         """Returns and RTVal object for this attribute.
@@ -41,4 +45,16 @@ class StringAttribute(BaseAttribute):
         RTVal
 
         """
-        return ks.rtVal('String', self.value)
+        return ks.rtVal('String', self._value)
+
+
+
+    def getDataType(self):
+        """Returns the name of the data type for this attribute.
+
+        Return:
+        string
+
+        """
+
+        return 'String'

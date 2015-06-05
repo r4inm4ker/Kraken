@@ -1,6 +1,8 @@
-from kraken.core.profiler import Profiler
 import time
 import json
+
+from kraken.core.profiler import Profiler
+
 
 profiler = Profiler()
 time.sleep(0.15)

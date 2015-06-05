@@ -1,0 +1,62 @@
+==============
+Instance Test
+==============
+RotationOrder: RotationOrder(order='0')
+order: 0
+
+
+=========
+Is Tests
+=========
+RotationOrder: RotationOrder(order='0')
+Order is XYZ: True
+Is in (XZY, ZYX or YXZ): False
+
+RotationOrder: RotationOrder(order='1')
+Order is YZX: True
+Is in (XZY, ZYX or YXZ): False
+
+RotationOrder: RotationOrder(order='2')
+Order is ZXY: True
+Is in (XZY, ZYX or YXZ): False
+
+RotationOrder: RotationOrder(order='3')
+Order is XZY: True
+Is in (XZY, ZYX or YXZ): True
+
+RotationOrder: RotationOrder(order='4')
+Order is ZYX: True
+Is in (XZY, ZYX or YXZ): True
+
+RotationOrder: RotationOrder(order='5')
+Order is YXZ: True
+Is in (XZY, ZYX or YXZ): True
+
+
+==========
+String Tests
+===========
+RotationOrder: RotationOrder(order='5')
+Order is YXZ: True
+
+
+==========
+Set Tests
+==========
+RotationOrder: RotationOrder(order='0')
+Order is XYZ: True
+
+RotationOrder: RotationOrder(order='0')
+Order is YZX: True
+
+RotationOrder: RotationOrder(order='1')
+Order is ZXY: True
+
+RotationOrder: RotationOrder(order='2')
+Order is XZY: True
+
+RotationOrder: RotationOrder(order='3')
+Order is ZYX: True
+
+RotationOrder: RotationOrder(order='4')
+Order is YXZ: True

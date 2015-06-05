@@ -5,13 +5,18 @@ KrakenSystem - Class for constructing the Fabric Engine Core client.
 
 """
 
+import os
 import json
 import imp
-from profiler import Profiler
+import importlib
+import kraken
+from kraken.core.profiler import Profiler
 import FabricEngine.Core
 
+
 class KrakenSystem(object):
-    """The KrakenSystem is a singleton object used to provide an interface with the FabricEngine Core and RTVal system."""
+    """The KrakenSystem is a singleton object used to provide an interface with
+    the FabricEngine Core and RTVal system."""
 
     __instance = None
 
@@ -27,6 +32,7 @@ class KrakenSystem(object):
 
         self.registeredComponents = {}
 
+
     def loadCoreClient(self):
         """Loads the Fabric Engine Core Client
 
@@ -34,6 +40,7 @@ class KrakenSystem(object):
         None
 
         """
+
         if self.client == None:
             Profiler.getInstance().push("loadCoreClient")
 
@@ -46,7 +53,7 @@ class KrakenSystem(object):
                     host = 'Softimage'
                 except ImportError:
                     host = 'Python'
-                    
+
             if host == "Python":
                 self.client = FabricEngine.Core.createClient()
 
@@ -73,7 +80,8 @@ class KrakenSystem(object):
             self.loadExtension('Math')
 
             Profiler.getInstance().pop()
-            
+
+
     def getCoreClient(self):
         """Returns the Fabric Engine Core Client owned by the KrakenSystem
 
@@ -81,39 +89,49 @@ class KrakenSystem(object):
         The Fabric Engine Core Client
 
         """
+
         if self.client is None:
             self.loadCoreClient()
+
         return self.client
 
+
     def loadExtension(self, extension):
-        """Loads the given extension and updates the registeredTypes cache. 
+        """Loads the given extension and updates the registeredTypes cache.
+
+        Arguments:
+        extension -- string, The name of the extension to load.
 
         Return:
         None
 
         """
+
         if extension not in self.loadedExtensions:
             Profiler.getInstance().push("loadExtension:" + extension)
-            self.client.loadExtension(extension) 
+            self.client.loadExtension(extension)
             self.registeredTypes = self.client.RT.types
             self.typeDescs = self.client.RT.getRegisteredTypes()
             # Cache the loaded extension so that we aviod refreshing the typeDescs cache(costly)
             self.loadedExtensions.append(extension)
             Profiler.getInstance().pop()
 
+
     def constructRTVal(self, dataType, defaultValue=None):
         """Constructs a new RTVal using the given name and optional devault value.
 
         Arguments:
-        dataType -- The name of the data type to construct.
-        defaultValue -- The default value to use to initialize the RTVal
+        dataType -- string, The name of the data type to construct.
+        defaultValue -- value, The default value to use to initialize the RTVal
 
         Return:
         The constructed RTval.
 
         """
+
         self.loadCoreClient()
         klType = getattr(self.registeredTypes, dataType)
+
         if defaultValue is not None:
             if hasattr(defaultValue, '_rtval'):
                 return defaultValue._rtval
@@ -147,8 +165,8 @@ class KrakenSystem(object):
         """Constructs a new RTVal using the given name and optional devault value.
 
         Arguments:
-        dataType -- The name of the data type to construct.
-        defaultValue -- The default value to use to initialize the RTVal
+        dataType -- string, The name of the data type to construct.
+        defaultValue -- value, The default value to use to initialize the RTVal
 
         Return:
         The constructed RTval.
@@ -162,7 +180,7 @@ class KrakenSystem(object):
         """Returns true if the given value is an RTVal.
 
         Arguments:
-        value -- value to test.
+        value -- value, value to test.
 
         Return:
         True if successful.
@@ -176,48 +194,103 @@ class KrakenSystem(object):
         """Returns the name of the type, handling extracting the name from KL RTVals.
 
         Arguments:
-        rtval -- the rtval to extract the name from.
+        rtval -- rtval, the rtval to extract the name from.
 
         Return:
         True if successful.
 
         """
-        if ks.isRTVal(rtval): 
+
+        if ks.isRTVal(rtval):
             return json.loads(rtval.type("Type").jsonDesc("String"))['name']
         else:
             return "None"
+
 
     def registerComponent(self, componentClass):
         """Registers a component Python class with the KrakenSystem so ti can be built by the rig builder.
 
         Arguments:
-        componentClass -- the Python class of the component
+        componentClass -- string, the Python class of the component
 
         Return:
         None
 
         """
-        if componentClass.__name__ in self.registeredComponents:
-            raise Exception("Component with that class name already registered:" + componentClass.__name__ )
 
-        self.registeredComponents[componentClass.__name__] = componentClass
+        componentModulePath = componentClass.__module__ + "." + componentClass.__name__
+        if componentModulePath in self.registeredComponents:
+            # we allow reregistring of components because as a componet's class is edited
+            # it will be re-imported by python(in Maya), and the classes reregistered.
+            pass
+
+        self.registeredComponents[componentModulePath] = componentClass
+
 
     def getComponentClass(self, className):
         """Returns the registered Python component class with the given name
 
         Arguments:
-        className -- The name of the Python component class
+        className -- string, The name of the Python component class
 
         Return:
         The Python component class
 
         """
+
         if className not in self.registeredComponents:
-            raise Exception("Component with that class not registered:" + className )
+            raise Exception("Component with that class not registered:" + className)
 
         return self.registeredComponents[className]
 
 
+    def getComponentClassNames(self):
+        """Returns the names of the registered Python component classes
+
+        Return:
+        The array of component class names.
+
+        """
+
+        return self.registeredComponents.keys()
+
+    def loadIniFile(self, iniFilePath=None):
+        def __importDirRecursive(path, parentModulePath=''):
+            for root, dirs, files in os.walk(path, True, None):
+
+                # parse all the files of given path and import python modules
+                for sfile in files:
+                    if sfile.endswith(".py"):
+                        if sfile == "__init__.py":
+                            module = parentModulePath
+                        else:
+                            module = parentModulePath+"."+sfile[:-3]
+
+                        try:
+                            importlib.import_module(module)
+                        except ImportError, e:
+                            for arg in e.args:
+                                print arg
+                        except Exception, e:
+                            for arg in e.args:
+                                print arg
+
+                # Now reload sub modules
+                for dirName in dirs:
+                    __importDirRecursive(os.path.join(path,dirName), parentModulePath+"."+dirName)
+
+        if iniFilePath is None:
+            iniJson = {
+                'componentModulePaths':{
+                    'kraken.examples': os.path.join(os.path.dirname(kraken.__file__), 'examples')
+                }
+            }
+        else:
+            with open(iniFilePath, 'r') as f:
+                iniJson = json.loads(f.read())
+
+        for key, path in iniJson['componentModulePaths'].iteritems():
+            __importDirRecursive(path, key)
 
     @classmethod
     def getInstance(cls):
@@ -232,5 +305,7 @@ class KrakenSystem(object):
             cls.__instance = KrakenSystem()
 
         return cls.__instance
+
+
 
 ks = KrakenSystem.getInstance()

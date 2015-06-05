@@ -5,12 +5,12 @@ Curve - Curve.
 
 """
 
-from kraken.core.objects.scene_item import SceneItem
-
 import copy
 
+from kraken.core.objects.object_3d import Object3D
 
-class Curve(SceneItem):
+
+class Curve(Object3D):
     """Curve object."""
 
     def __init__(self, name, parent=None):
@@ -77,7 +77,7 @@ class Curve(SceneItem):
 
         """
 
-        if index > len(self._data):
+        if index > len(self.getCurveData()):
             raise IndexError("'" + str(index) + "' is out of the range of the 'data' array.")
 
         return True
@@ -91,7 +91,7 @@ class Curve(SceneItem):
 
         """
 
-        return len(self._data)
+        return len(self.getCurveData())
 
 
     def getSubCurveClosed(self, index):

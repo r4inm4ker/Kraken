@@ -1,200 +1,346 @@
 from kraken.core.maths import Vec3
 
-from kraken.core.objects.components.base_component import BaseComponent
+from kraken.core.objects.components.component import Component
+
+from kraken.core.objects.attributes.attribute_group import AttributeGroup
 from kraken.core.objects.attributes.bool_attribute import BoolAttribute
+from kraken.core.objects.attributes.string_attribute import StringAttribute
+
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
+
+from kraken.core.objects.component_group import ComponentGroup
+from kraken.core.objects.hierarchy_group import HierarchyGroup
 from kraken.core.objects.locator import Locator
 from kraken.core.objects.joint import Joint
-from kraken.core.objects.srtBuffer import SrtBuffer
+from kraken.core.objects.ctrlSpace import CtrlSpace
 from kraken.core.objects.control import Control
 
 from kraken.core.objects.operators.splice_operator import SpliceOperator
 
-from kraken.helpers.utility_methods import logHierarchy
 from kraken.core.profiler import Profiler
-
-class HeadComponent(BaseComponent):
-    """Head Component"""
-
-    def __init__(self, name, parent=None, data={}):
-
-        location = data.get('location', 'M')
-        
-        Profiler.getInstance().push("Construct Head Component:" + name + " location:" + location)
-        super(HeadComponent, self).__init__(name, parent, location)
+from kraken.helpers.utility_methods import logHierarchy
 
 
-        # Setup component attributes
-        defaultAttrGroup = self.getAttributeGroupByIndex(0)
-        defaultAttrGroup.addAttribute(BoolAttribute("toggleDebugging", True))
+class HeadComponent(Component):
+    """Head Component Base"""
 
-        # Default values
-        headPosition = data['headPosition']
-        headEndPosition = data['headEndPosition']
-        eyeLeftPosition = data['eyeLeftPosition']
-        eyeRightPosition = data['eyeRightPosition']
-        jawPosition = data['jawPosition']
+    def __init__(self, name='headBase', parent=None, data=None):
+        super(HeadComponent, self).__init__(name, parent)
 
+        # ================
+        # Setup Hierarchy
+        # ================
+        self.controlsLayer = self.getOrCreateLayer('controls')
+        self.ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=self.controlsLayer)
+
+        # IO Hierarchies
+        self.inputHrcGrp = HierarchyGroup('inputs', parent=self.ctrlCmpGrp)
+        self.cmpInputAttrGrp = AttributeGroup('inputs', parent=self.inputHrcGrp)
+
+        self.outputHrcGrp = HierarchyGroup('outputs', parent=self.ctrlCmpGrp)
+        self.cmpOutputAttrGrp = AttributeGroup('outputs', parent=self.outputHrcGrp)
+
+
+        # ===========
+        # Declare IO
+        # ===========
+        # Declare Inputs Xfos
+        self.headBaseInputTgt = self.createInput('headBase', dataType='Xfo', parent=self.inputHrcGrp)
+
+        # Declare Output Xfos
+        self.headOutputTgt = self.createOutput('head', dataType='Xfo', parent=self.outputHrcGrp)
+        self.jawOutputTgt = self.createOutput('jaw', dataType='Xfo', parent=self.outputHrcGrp)
+        self.eyeLOutputTgt = self.createOutput('eyeL', dataType='Xfo', parent=self.outputHrcGrp)
+        self.eyeROutputTgt = self.createOutput('eyeR', dataType='Xfo', parent=self.outputHrcGrp)
+
+        # Declare Input Attrs
+        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=False, parent=self.cmpInputAttrGrp)
+        self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp)
+
+        # Declare Output Attrs
+
+
+class HeadComponentGuide(HeadComponent):
+    """Head Component Guide"""
+
+    def __init__(self, name='head', parent=None, data=None):
+
+        Profiler.getInstance().push("Construct Head Guide Component:" + name)
+        super(HeadComponentGuide, self).__init__(name, parent)
+
+
+        # =========
+        # Controls
+        # =========
+        guideSettingsAttrGrp = AttributeGroup("GuideSettings", parent=self)
+        self.nameAttr = StringAttribute('name', value=name, parent=guideSettingsAttrGrp, callback=self.setName)
+        self.locationAttr = StringAttribute('location', value='L', parent=guideSettingsAttrGrp, callback=self.setLocation)
+
+        self.headCtrl = Control('head', parent=self.ctrlCmpGrp, shape="cube")
+        self.headEndCtrl = Control('headEnd', parent=self.ctrlCmpGrp, shape="sphere")
+        self.eyeLeftCtrl = Control('eyeLeft', parent=self.ctrlCmpGrp, shape="sphere")
+        self.eyeRightCtrl = Control('eyeRight', parent=self.ctrlCmpGrp, shape="sphere")
+        self.jawCtrl = Control('jaw', parent=self.ctrlCmpGrp, shape="cube")
+
+        if data is None:
+            data = {
+                    "name": name,
+                    "location": "M",
+                    "headPosition": Vec3(0.0, 17.4756, -0.421),
+                    "headEndPosition": Vec3(0.0, 19.5, -0.421),
+                    "eyeLeftPosition": Vec3(0.3497, 18.0878, 0.6088),
+                    "eyeRightPosition": Vec3(-0.3497, 18.0878, 0.6088),
+                    "jawPosition": Vec3(0.0, 17.613, -0.2731)
+                   }
+
+        self.loadData(data)
+
+        Profiler.getInstance().pop()
+
+
+    # =============
+    # Data Methods
+    # =============
+    def saveData(self):
+        """Save the data for the component to be persisted.
+
+        Return:
+        The JSON data object
+
+        """
+
+        data = {
+            'class':"kraken.examples.head_component.HeadComponentGuide",
+            'name': self.getName(),
+            'location': self.getLocation(),
+            'headPosition': self.headCtrl.xfo.tr,
+            'headEndPosition': self.headEndCtrl.xfo.tr,
+            'eyeLeftPosition': self.eyeLeftCtrl.xfo.tr,
+            'eyeRightPosition': self.eyeRightCtrl.xfo.tr,
+            'jawPosition': self.jawCtrl.xfo.tr
+           }
+
+        return data
+
+
+    def loadData(self, data):
+        """Load a saved guide representation from persisted data.
+
+        Arguments:
+        data -- object, The JSON data object.
+
+        Return:
+        True if successful.
+
+        """
+
+        if 'name' in data:
+            self.setName(data['name'])
+
+        self.setLocation(data.get('location', 'M'))
+        self.headCtrl.xfo.tr = data['headPosition']
+        self.headEndCtrl.xfo.tr = data['headEndPosition']
+        self.eyeLeftCtrl.xfo.tr = data['eyeLeftPosition']
+        self.eyeRightCtrl.xfo.tr = data['eyeRightPosition']
+        self.jawCtrl.xfo.tr = data['jawPosition']
+
+        return True
+
+
+    def getRigBuildData(self):
+        """Returns the Guide data used by the Rig Component to define the layout of the final rig..
+
+        Return:
+        The JSON rig data object.
+
+        """
+
+        data = {
+            'class':"kraken.examples.head_component.HeadComponentRig",
+            'name': self.getName(),
+            'location':self.getLocation(),
+            'headPosition': self.headCtrl.xfo.tr,
+            'headEndPosition': self.headEndCtrl.xfo.tr,
+            'eyeLeftPosition': self.eyeLeftCtrl.xfo.tr,
+            'eyeRightPosition': self.eyeRightCtrl.xfo.tr,
+            'jawPosition': self.jawCtrl.xfo.tr
+           }
+
+        return data
+
+    # ==============
+    # Class Methods
+    # ==============
+    @classmethod
+    def getComponentType(cls):
+        """Enables introspection of the class prior to construction to determine if it is a guide component.
+
+        Return:
+        The true if this component is a guide component.
+
+        """
+
+        return 'Guide'
+
+
+class HeadComponentRig(HeadComponent):
+    """Head Component Rig"""
+
+    def __init__(self, name='head', parent=None):
+
+        Profiler.getInstance().push("Construct Head Rig Component:" + name)
+        super(HeadComponentRig, self).__init__(name, parent)
+
+
+        # =========
+        # Controls
+        # =========
         # Head
-        headCtrlSrtBuffer = SrtBuffer('head', parent=self)
-        headCtrlSrtBuffer.xfo.tr = headPosition
-
-        headCtrl = Control('head', parent=headCtrlSrtBuffer, shape="circle")
-        headCtrl.rotatePoints(0, 0, 90)
-        headCtrl.scalePoints(Vec3(3, 3, 3))
-        headCtrl.translatePoints(Vec3(0, 1, 0.25))
-        headCtrl.xfo.tr = headPosition
+        self.headCtrlSpace = CtrlSpace('head', parent=self.ctrlCmpGrp)
+        self.headCtrl = Control('head', parent=self.headCtrlSpace, shape="circle")
+        self.headCtrl.rotatePoints(0, 0, 90)
+        self.headCtrl.scalePoints(Vec3(3, 3, 3))
+        self.headCtrl.translatePoints(Vec3(0, 1, 0.25))
 
         # Eye Left
-        eyeLeftCtrlSrtBuffer = SrtBuffer('eyeLeft', parent=headCtrl)
-        eyeLeftCtrlSrtBuffer.xfo.tr = eyeLeftPosition
-
-        eyeLeftCtrl = Control('eyeLeft', parent=eyeLeftCtrlSrtBuffer, shape="sphere")
-        eyeLeftCtrl.scalePoints(Vec3(0.5, 0.5, 0.5))
-        eyeLeftCtrl.xfo.tr = eyeLeftPosition
-        eyeLeftCtrl.setColor("blueMedium")
+        self.eyeLeftCtrlSpace = CtrlSpace('eyeLeft', parent=self.headCtrl)
+        self.eyeLeftCtrl = Control('eyeLeft', parent=self.eyeLeftCtrlSpace, shape="sphere")
+        self.eyeLeftCtrl.scalePoints(Vec3(0.5, 0.5, 0.5))
+        self.eyeLeftCtrl.setColor("blueMedium")
 
         # Eye Right
-        eyeRightCtrlSrtBuffer = SrtBuffer('eyeRight', parent=headCtrl)
-        eyeRightCtrlSrtBuffer.xfo.tr = eyeRightPosition
-
-        eyeRightCtrl = Control('eyeRight', parent=eyeRightCtrlSrtBuffer, shape="sphere")
-        eyeRightCtrl.scalePoints(Vec3(0.5, 0.5, 0.5))
-        eyeRightCtrl.xfo.tr = eyeRightPosition
-        eyeRightCtrl.setColor("blueMedium")
+        self.eyeRightCtrlSpace = CtrlSpace('eyeRight', parent=self.headCtrl)
+        self.eyeRightCtrl = Control('eyeRight', parent=self.eyeRightCtrlSpace, shape="sphere")
+        self.eyeRightCtrl.scalePoints(Vec3(0.5, 0.5, 0.5))
+        self.eyeRightCtrl.setColor("blueMedium")
 
         # Jaw
-        jawCtrlSrtBuffer = SrtBuffer('jawSrtBuffer', parent=headCtrl)
-        jawCtrlSrtBuffer.xfo.tr = jawPosition
-
-        jawCtrl = Control('jaw', parent=jawCtrlSrtBuffer, shape="cube")
-        jawCtrl.alignOnYAxis(negative=True)
-        jawCtrl.alignOnZAxis()
-        jawCtrl.scalePoints(Vec3(1.45, 0.65, 1.25))
-        jawCtrl.translatePoints(Vec3(0, -0.25, 0))
-        jawCtrl.xfo.tr = jawPosition
-        jawCtrl.setColor("orange")
+        self.jawCtrlSpace = CtrlSpace('jawCtrlSpace', parent=self.headCtrl)
+        self.jawCtrl = Control('jaw', parent=self.jawCtrlSpace, shape="cube")
+        self.jawCtrl.alignOnYAxis(negative=True)
+        self.jawCtrl.alignOnZAxis()
+        self.jawCtrl.scalePoints(Vec3(1.45, 0.65, 1.25))
+        self.jawCtrl.translatePoints(Vec3(0, -0.25, 0))
+        self.jawCtrl.setColor("orange")
 
 
         # ==========
         # Deformers
         # ==========
+        deformersLayer = self.getOrCreateLayer('deformers')
+        defCmpGrp = ComponentGroup(self.getName(), self, parent=deformersLayer)
 
-        headDef = Joint('head')
+        headDef = Joint('head', parent=defCmpGrp)
         headDef.setComponent(self)
 
-        jawDef = Joint('jaw')
+        jawDef = Joint('jaw', parent=defCmpGrp)
         jawDef.setComponent(self)
 
-        eyeLeftDef = Joint('eyeLeft')
+        eyeLeftDef = Joint('eyeLeft', parent=defCmpGrp)
         eyeLeftDef.setComponent(self)
 
-        eyeRightDef = Joint('eyeRight')
+        eyeRightDef = Joint('eyeRight', parent=defCmpGrp)
         eyeRightDef.setComponent(self)
-
-        deformersLayer = self.getLayer('deformers')
-        deformersLayer.addChild(headDef)
-        deformersLayer.addChild(jawDef)
-        deformersLayer.addChild(eyeLeftDef)
-        deformersLayer.addChild(eyeRightDef)
-
-
-        # =====================
-        # Create Component I/O
-        # =====================
-        # Setup component Xfo I/O's
-        headBaseInput = Locator('headBase')
-        headBaseInput.xfo = headCtrl.xfo
-
-        headOutput = Locator('head')
-        headOutput.xfo = headCtrl.xfo
-        jawOutput = Locator('jaw')
-        jawOutput.xfo = jawCtrl.xfo
-        eyeLOutput = Locator('eyeL')
-        eyeLOutput.xfo = eyeLeftCtrl.xfo
-        eyeROutput = Locator('eyeR')
-        eyeROutput.xfo = eyeRightCtrl.xfo
-
-        # Setup componnent Attribute I/O's
-        debugInputAttr = BoolAttribute('debug', True)
-        rightSideInputAttr = BoolAttribute('rightSide', location is 'R')
 
 
         # ==============
         # Constrain I/O
         # ==============
         # Constraint inputs
-        headInputConstraint = PoseConstraint('_'.join([headCtrlSrtBuffer.getName(), 'To', headBaseInput.getName()]))
+        headInputConstraint = PoseConstraint('_'.join([self.headCtrlSpace.getName(), 'To', self.headBaseInputTgt.getName()]))
         headInputConstraint.setMaintainOffset(True)
-        headInputConstraint.addConstrainer(headBaseInput)
-        headCtrlSrtBuffer.addConstraint(headInputConstraint)
+        headInputConstraint.addConstrainer(self.headBaseInputTgt)
+        self.headCtrlSpace.addConstraint(headInputConstraint)
 
         # Constraint outputs
-        headOutputConstraint = PoseConstraint('_'.join([headOutput.getName(), 'To', headCtrl.getName()]))
+        headOutputConstraint = PoseConstraint('_'.join([self.headOutputTgt.getName(), 'To', self.headCtrl.getName()]))
         headOutputConstraint.setMaintainOffset(True)
-        headOutputConstraint.addConstrainer(headCtrl)
-        headOutput.addConstraint(headOutputConstraint)
+        headOutputConstraint.addConstrainer(self.headCtrl)
+        self.headOutputTgt.addConstraint(headOutputConstraint)
 
-        jawOutputConstraint = PoseConstraint('_'.join([jawOutput.getName(), 'To', jawCtrl.getName()]))
+        jawOutputConstraint = PoseConstraint('_'.join([self.jawOutputTgt.getName(), 'To', self.jawCtrl.getName()]))
         jawOutputConstraint.setMaintainOffset(True)
-        jawOutputConstraint.addConstrainer(jawCtrl)
-        jawOutput.addConstraint(jawOutputConstraint)
+        jawOutputConstraint.addConstrainer(self.jawCtrl)
+        self.jawOutputTgt.addConstraint(jawOutputConstraint)
 
-        eyeLOutputConstraint = PoseConstraint('_'.join([eyeLOutput.getName(), 'To', eyeLeftCtrl.getName()]))
+        eyeLOutputConstraint = PoseConstraint('_'.join([self.eyeLOutputTgt.getName(), 'To', self.eyeLeftCtrl.getName()]))
         eyeLOutputConstraint.setMaintainOffset(True)
-        eyeLOutputConstraint.addConstrainer(eyeLeftCtrl)
-        eyeLOutput.addConstraint(eyeLOutputConstraint)
+        eyeLOutputConstraint.addConstrainer(self.eyeLeftCtrl)
+        self.eyeLOutputTgt.addConstraint(eyeLOutputConstraint)
 
-        eyeROutputConstraint = PoseConstraint('_'.join([eyeROutput.getName(), 'To', eyeRightCtrl.getName()]))
+        eyeROutputConstraint = PoseConstraint('_'.join([self.eyeROutputTgt.getName(), 'To', self.eyeRightCtrl.getName()]))
         eyeROutputConstraint.setMaintainOffset(True)
-        eyeROutputConstraint.addConstrainer(eyeRightCtrl)
-        eyeROutput.addConstraint(eyeROutputConstraint)
+        eyeROutputConstraint.addConstrainer(self.eyeRightCtrl)
+        self.eyeROutputTgt.addConstraint(eyeROutputConstraint)
 
 
         # ==================
         # Add Component I/O
         # ==================
         # Add Xfo I/O's
-        self.addInput(headBaseInput)
+        # self.addInput(self.headBaseInputTgt)
 
-        self.addOutput(headOutput)
-        self.addOutput(jawOutput)
-        self.addOutput(eyeLOutput)
-        self.addOutput(eyeROutput)
+        # self.addOutput(self.headOutputTgt)
+        # self.addOutput(self.jawOutputTgt)
+        # self.addOutput(self.eyeLOutputTgt)
+        # self.addOutput(self.eyeROutputTgt)
 
         # Add Attribute I/O's
-        self.addInput(debugInputAttr)
-        self.addInput(rightSideInputAttr)
+        # self.addInput(self.drawDebugInputAttr)
 
 
         # ===============
         # Add Splice Ops
         # ===============
         # Add Deformer Splice Op
-        # spliceOp = SpliceOperator("headDeformerSpliceOp", "HeadConstraintSolver", "KrakenHeadConstraintSolver")
+        # spliceOp = SpliceOperator('headDeformerSpliceOp', 'HeadConstraintSolver', 'KrakenHeadConstraintSolver')
         # self.addOperator(spliceOp)
 
         # # Add Att Inputs
-        # spliceOp.setInput("debug", debugInputAttr)
-        # spliceOp.setInput("rightSide", rightSideInputAttr)
+        # spliceOp.setInput('drawDebug', self.drawDebugInputAttr)
+        # spliceOp.setInput('rigScale', self.rigScaleInputAttr)
 
         # # Add Xfo Inputstrl)
-        # spliceOp.setInput("headConstrainer", headOutput)
-        # spliceOp.setInput("jawConstrainer", jawOutput)
-        # spliceOp.setInput("eyeLeftConstrainer", eyeLOutput)
-        # spliceOp.setInput("eyeRightConstrainer", eyeROutput)
+        # spliceOp.setInput('headConstrainer', self.headOutputTgt)
+        # spliceOp.setInput('jawConstrainer', self.jawOutputTgt)
+        # spliceOp.setInput('eyeLeftConstrainer', self.eyeLOutputTgt)
+        # spliceOp.setInput('eyeRightConstrainer', self.eyeROutputTgt)
 
         # # Add Xfo Outputs
-        # spliceOp.setOutput("headDeformer", headDef)
-        # spliceOp.setOutput("jawDeformer", jawDef)
-        # spliceOp.setOutput("eyeLeftDeformer", eyeLeftDef)
-        # spliceOp.setOutput("eyeRightDeformer", eyeRightDef)
+        # spliceOp.setOutput('headDeformer', headDef)
+        # spliceOp.setOutput('jawDeformer', jawDef)
+        # spliceOp.setOutput('eyeLeftDeformer', eyeLeftDef)
+        # spliceOp.setOutput('eyeRightDeformer', eyeRightDef)
 
         Profiler.getInstance().pop()
 
-    def buildRig(self, parent):
-        pass
+
+    def loadData(self, data=None):
+
+        self.setName(data.get('name', 'head'))
+        location = data.get('location', 'M')
+        self.setLocation(location)
+
+        self.headCtrlSpace.xfo.tr = data['headPosition']
+        self.headCtrl.xfo.tr = data['headPosition']
+        self.eyeLeftCtrlSpace.xfo.tr = data['eyeLeftPosition']
+        self.eyeLeftCtrl.xfo.tr = data['eyeLeftPosition']
+        self.eyeRightCtrlSpace.xfo.tr = data['eyeRightPosition']
+        self.eyeRightCtrl.xfo.tr = data['eyeRightPosition']
+        self.jawCtrlSpace.xfo.tr = data['jawPosition']
+        self.jawCtrl.xfo.tr = data['jawPosition']
+
+        # ============
+        # Set IO Xfos
+        # ============
+        self.headBaseInputTgt.xfo.tr = data['headPosition']
+        self.headOutputTgt.xfo.tr = data['headPosition']
+        self.jawOutputTgt.xfo.tr = data['jawPosition']
+        self.eyeLOutputTgt.xfo.tr = data['eyeLeftPosition']
+        self.eyeROutputTgt.xfo.tr = data['eyeRightPosition']
+
 
 from kraken.core.kraken_system import KrakenSystem
-KrakenSystem.getInstance().registerComponent(HeadComponent)
-
+ks = KrakenSystem.getInstance()
+ks.registerComponent(HeadComponentGuide)
+ks.registerComponent(HeadComponentRig)

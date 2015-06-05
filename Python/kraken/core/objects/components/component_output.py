@@ -1,88 +1,24 @@
-"""Kraken - objects.components.component_output output module.
+"""Kraken - objects.components.component_input input module.
 
 Classes:
-ComponentOutput -- Component output representation.
+ComponentOutput -- Component input representation.
 
 """
 
-from kraken.core.objects.locator import Locator
-from kraken.core.objects.attributes.base_attribute import BaseAttribute
-from kraken.core.objects.constraints.pose_constraint import PoseConstraint
+from kraken.core.objects.scene_item import SceneItem
 
 
-class ComponentOutput(object):
-    """Component Output object."""
+class ComponentOutput(SceneItem):
+    """Component Output Object."""
 
-    def __init__(self, name, connectionObj):
-        super(ComponentOutput, self).__init__()
-        self.name = name
-        self.dataType = None
-        self.source = None
-        self.target = connectionObj
-        self.components = None
+    def __init__(self, name, parent, dataType):
+        super(ComponentOutput, self).__init__(name, parent=parent)
+        self._dataType = None
+        self._connections = []
+        self._target = None
 
-        if isinstance(connectionObj, Locator):
-            self.setDataType('Xfo')
-        elif isinstance(connectionObj, BaseAttribute):
-            self.setDataType('Attribute')
+        self.setDataType(dataType)
 
-
-    # =============
-    # Name methods
-    # =============
-    def setName(self, name):
-        """Sets the name of this input.
-
-        Arguments:
-        name -- String, name of this input.
-
-        Return:
-        True if successful.
-
-        """
-
-        self.name = name
-
-
-    def getName(self):
-        """Returns the name of the object as a string.
-
-        Return:
-        String of the object's name.
-
-        """
-
-        return self.name
-
-
-    # ===============
-    # Component Methods
-    # ===============
-    def getComponent(self):
-        """Returns the component of the object as an object.
-
-        Return:
-        Component of this object.
-
-        """
-
-        return self.component
-
-
-    def setComponent(self, component):
-        """Sets the component attribute of this object.
-
-        Arguments:
-        component -- Object, object that is the component of this one.
-
-        Return:
-        True if successful.
-
-        """
-
-        self.component = component
-
-        return True
 
     # =================
     # DataType Methods
@@ -98,7 +34,7 @@ class ComponentOutput(object):
 
         """
 
-        self.dataType = dataType
+        self._dataType = dataType
 
         return True
 
@@ -111,7 +47,55 @@ class ComponentOutput(object):
 
         """
 
-        return self.dataType
+        return self._dataType
+
+
+    # ====================
+    # Connections Methods
+    # ====================
+    def isConnected(self):
+        """Checks if there is a connection.
+
+        Return:
+        Boolean, whether there are any output connections.
+
+        """
+
+        return len(self._connections) > 0
+
+
+    def getConnection(self, index):
+        """Gets the connection of this input.
+
+        Return:
+        Connection object or None if not set.
+
+        """
+
+        return self._connections[index]
+
+
+    def _addConnection(self, connectionObj):
+        """Doc String.
+
+        Arguments:
+        Arguments -- Type, information.
+
+        Return:
+        True if successful.
+
+        """
+
+        if connectionObj.getDataType() != self.getDataType() and connectionObj.getDataType() != self.getDataType()[:-2]:
+            raise Exception("Data Type mismatch! Cannot connect '" +
+                connectionObj.getDataType() + "' to '" + self.getDataType())
+
+        if connectionObj in self._connections:
+            raise Exception("'connectionObj' is already in the connections.")
+
+        self._connections.append(connectionObj)
+
+        return True
 
 
     # ===============
@@ -128,7 +112,7 @@ class ComponentOutput(object):
 
         """
 
-        self.target = target
+        self._target = target
 
 
     def getTarget(self):
@@ -139,61 +123,4 @@ class ComponentOutput(object):
 
         """
 
-        return self.target
-
-
-    # ===============
-    # Source Methods
-    # ===============
-    def setSource(self, sourceObj):
-        """Sets the source attribute to the supplied output.
-
-        Arguments:
-        sourceObj -- Object, object to connect.
-
-        Return:
-        True if successful.
-
-        """
-
-
-        if self.getDataType() == 'Xfo' and not isinstance(sourceObj, Locator):
-            raise Exception("'Xfo' inputs can only be connected to 'Locator' objects. Object '"
-                + sourceObj.getName() + "' has type:'" + sourceObj.getTypeName() + "'")
-
-        if self.getDataType() == 'Attribute' and not isinstance(sourceObj, BaseAttribute):
-            raise Exception("'Attribute' inputs can only be connected to 'Attribute' objects. Object '"
-                + sourceObj.getName() + "' has type:'" + sourceObj.getTypeName() + "'")
-
-        self.source = sourceObj
-
-        return True
-
-
-    def getSource(self):
-        """Gets the output source object for this input object.
-
-        Return:
-        Connection of this object.
-
-        """
-
-        return self.source
-
-
-    def removeSource(self):
-        """Removes the source to the output that is set.
-
-        Return:
-        True if successful.
-
-        """
-
-        if self.source is None:
-            return True
-
-        self.source = None
-        self.setDataType(None)
-        self.setSource(None)
-
-        return True
+        return self._target
