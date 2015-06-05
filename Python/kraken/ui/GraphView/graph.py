@@ -169,11 +169,7 @@ class Graph(QtGui.QGraphicsWidget):
     #######################
     ## Connections
 
-    def addConnection(self, connectionDef):
-
-        # remove the graph path from the start of the string to get the graph relative path.
-        source = connectionDef['source']
-        target = connectionDef['target']
+    def addConnection(self, source, target):
 
         key = source +">" + target
         if key in self.__connections:
@@ -204,10 +200,6 @@ class Graph(QtGui.QGraphicsWidget):
 
     def removeConnection(self, source, target):
 
-        # remove the graph path from the start of the string to get the graph relative path.
-        source = source[len(self.graphPath)+1:]
-        target = target[len(self.graphPath)+1:]
-
         key = source +">" + target
         if key not in self.__connections:
             raise Exception("Error removeing connection:" + key+ ". Graph does not have a connection between the specified ports.")
@@ -230,11 +222,10 @@ class Graph(QtGui.QGraphicsWidget):
                 componentInput = component.getInputByIndex(i)
                 if componentInput.isConnected():
                     componentOutput = componentInput.getConnection()
-                    connectionJson = {
-                        'source': componentOutput.getParent().getName() + '.' + componentOutput.getName(),
-                        'target': component.getName() + '.' + componentInput.getName()
-                    }
-                    self.addConnection(connectionJson)
+                    self.addConnection(
+                        source = componentOutput.getParent().getName() + '.' + componentOutput.getName(),
+                        target = component.getName() + '.' + componentInput.getName()
+                    )
 
         self.frameAllNodes()
 
