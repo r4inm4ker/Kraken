@@ -98,7 +98,25 @@ class ComponentInspector(QtGui.QWidget):
         self.clear()
 
         def displayAttribute(attribute):
-            attributeWidget = AttributeWidget.constructAttributeWidget( attribute, parentWidget=self)
+
+            class AttributeProxy(object):
+                def __init__(self, attribute, callback):
+                    super(AttributeProxy, self).__init__()
+                    self.attribute = attribute
+                    self.callback = callback
+                def setValue(self, value):
+                    self.attribute.setValue( value )
+                    self.callback( value )
+                def getValue(self):
+                    return self.attribute.getValue()
+                def getDataType(self):
+                    return self.attribute.getDataType()
+
+            if attribute.getName() =='name':
+                attributeProxy = AttributeProxy(attribute=attribute, callback=self.nameChangedEvent)
+                attributeWidget = AttributeWidget.constructAttributeWidget( attributeProxy, parentWidget=self)
+            else:
+                attributeWidget = AttributeWidget.constructAttributeWidget( attribute, parentWidget=self)
             self.addValueWidget(attribute.getName(), attributeWidget)
 
         for i in range(self.component.getNumAttributeGroups()):
@@ -123,6 +141,11 @@ class ComponentInspector(QtGui.QWidget):
 
     ##############################
     ## Events
+
+    def nameChangedEvent(self, name):
+
+        if self.nodeItem is not None:
+            self.nodeItem.nameChanged( name )
 
     def closeEvent(self, event):
         # self.clear()

@@ -31,6 +31,11 @@ class NodeTitle(QtGui.QGraphicsWidget):
         self.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed))
         self.setPreferredSize(self.textSize())
 
+    def setText(self, text):
+        self.__textItem.setPlainText(text)
+        self.__textItem.adjustSize()
+        self.setPreferredSize(self.textSize())
+
     def textSize(self):
         return QtCore.QSizeF(
             self.__textItem.textWidth(),
@@ -260,6 +265,13 @@ class Node(QtGui.QGraphicsWidget):
 
     def inspectorClosed(self):
         self.__inspectorWidget = None
+
+
+    def nameChanged(self, name):
+        self.__titleItem.setText(name)
+
+        # Update the node so that the size is computed.
+        self.adjustSize()
 
     #########################
     ## shut down
