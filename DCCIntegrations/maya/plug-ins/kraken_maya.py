@@ -31,6 +31,7 @@ def getMayaWindow():
 class KrakenMainWindow(QtGui.QMainWindow):
     def __init__(self, parent):
         super(KrakenMainWindow, self).__init__(parent)
+        self.setWindowTitle('Kraken Editor')
         self.setCentralWidget(KrakenUI())
 
 
