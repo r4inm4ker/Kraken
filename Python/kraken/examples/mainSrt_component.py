@@ -183,8 +183,6 @@ class MainSrtComponentRig(MainSrtComponent):
         # Add Component Params to IK control
         mainSrtSettingsAttrGrp = AttributeGroup('DisplayInfo_MainSrtSettings', parent=self.mainSRTCtrl)
         self.rigScaleAttr = FloatAttribute('rigScale', value=1.0, parent=mainSrtSettingsAttrGrp, minValue=0.1, maxValue=100.0)
-        # self.rigScaleAttr.setUIMin(0.1)
-        # self.rigScaleAttr.setUIMax(100.0)
 
         self.rigScaleOutputAttr.connect(self.rigScaleAttr)
 
