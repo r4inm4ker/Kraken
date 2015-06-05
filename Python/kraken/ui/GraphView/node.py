@@ -224,8 +224,8 @@ class Node(QtGui.QGraphicsWidget):
                 if self.isSelected() is False:
                     self.__graph.selectNode(self, clearSelection=False)
             else:
-                if self.isSelected() is False:
-                    self.__graph.selectNode(self, clearSelection=False)
+                if self.isSelected() is False: # and len(self.__graph.getSelectedNodes()) == 0:
+                    self.__graph.selectNode(self, clearSelection=True)
 
                 self.__dragging = True
                 self._lastDragPoint = self.mapToItem(self.__graph.itemGroup(), event.pos())
@@ -262,7 +262,7 @@ class Node(QtGui.QGraphicsWidget):
                     node.pushGraphPosToComponent()
 
             self.setCursor(QtCore.Qt.ArrowCursor)
-            self._panning = False
+            self.__dragging = False
         else:
             super(Node, self).mouseReleaseEvent(event)
 
