@@ -164,13 +164,13 @@ class BasePort(QtGui.QGraphicsWidget):
         self.setLayout(layout)
 
         if self.getDataType().startswith('Xfo'):
-            self.__color = QtGui.QColor(205, 254, 50, 255)
-        elif self.getDataType().startswith('Scalar'):
-            self.__color = QtGui.QColor(205, 50, 254, 255)
+            self.__color = QtGui.QColor(128, 170, 170, 255)
+        elif self.getDataType().startswith('Float'):
+            self.__color = QtGui.QColor(32, 255, 32, 255)
         elif self.getDataType().startswith('Integer'):
-            self.__color = QtGui.QColor(50, 254, 50, 255)
+            self.__color = QtGui.QColor(0, 128, 0, 255)
         elif self.getDataType().startswith('Boolean'):
-            self.__color = QtGui.QColor(254, 105, 50, 255)
+            self.__color = QtGui.QColor(255, 102, 0, 255)
         else:
             self.__color = QtGui.QColor(50, 205, 254, 255)
 

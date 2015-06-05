@@ -58,4 +58,4 @@ class FloatAttribute(NumberAttribute):
 
         """
 
-        return 'Scalar'
+        return 'Float'
