@@ -5,7 +5,7 @@
 
 import sys
 from PySide import QtGui, QtCore
-from node_library import NodeLibrary
+from component_library import ComponentLibrary
 from GraphView.graph_view_widget import GraphViewWidget
 
 from kraken.core.kraken_system import KrakenSystem
@@ -21,7 +21,7 @@ class KrakenUI(QtGui.QWidget):
         self.setWindowTitle("Kraken Editor")
         self.setAcceptDrops(True)
 
-        self.nodeLibrary = NodeLibrary(parent=self)
+        self.nodeLibrary = ComponentLibrary(parent=self)
         self.graphViewWidget = GraphViewWidget(parent=self)
 
         horizontalSplitter = QtGui.QSplitter(QtCore.Qt.Horizontal, parent=self)

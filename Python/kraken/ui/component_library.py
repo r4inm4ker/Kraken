@@ -7,7 +7,7 @@ import json
 from PySide import QtGui, QtCore
 from kraken.core.kraken_system import KrakenSystem
 
-class __ComponentTree(QtGui.QTreeWidget):
+class _ComponentTree(QtGui.QTreeWidget):
 
     def __init__(self, parent=None):
         # constructors of base classes
@@ -52,7 +52,7 @@ class ComponentLibrary(QtGui.QWidget):
         self.searchLineEdit.setFocusPolicy(QtCore.Qt.StrongFocus)
         self.searchLineEdit.setFocus()
 
-        self.nodesList = __ComponentTree(parent)
+        self.nodesList = _ComponentTree(parent)
 
         grid = QtGui.QGridLayout(self)
         grid.addWidget(self.searchLineEdit, 0, 0)
