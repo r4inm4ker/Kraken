@@ -70,8 +70,8 @@ class Node(QtGui.QGraphicsWidget):
 
         self.__graph = graph
         self.__component = component
-
         self.__color = QtGui.QColor(154, 205, 50, 255)
+        self.__inspectorWidget = None
 
         self.__titleItem = NodeTitle(self.__component.getName(), self)
         layout.addItem(self.__titleItem)
@@ -250,10 +250,16 @@ class Node(QtGui.QGraphicsWidget):
             super(Node, self).mouseReleaseEvent(event)
 
     def mouseDoubleClickEvent(self, event):
-        widget = ComponentInspector(component=self.__component, parent=self.__graph.graphView().getGraphViewWidget())
-        widget.show()
+        if self.__inspectorWidget is None:
+            self.__inspectorWidget = ComponentInspector(component=self.__component, parent=self.__graph.graphView().getGraphViewWidget(), nodeItem=self)
+            self.__inspectorWidget.show()
+        else:
+            self.__inspectorWidget.setFocus()
 
         super(Node, self).mouseDoubleClickEvent(event)
+
+    def inspectorClosed(self):
+        self.__inspectorWidget = None
 
     #########################
     ## shut down
