@@ -17,8 +17,8 @@ class PortLabel(QtGui.QGraphicsWidget):
         self.__textItem = QtGui.QGraphicsTextItem(text, self)
         self.__textItem.setDefaultTextColor(color)
         self.__textItem.setFont(self.__font)
-        self.__textItem.translate( hOffset, -8)
-        option=self.__textItem.document().defaultTextOption()
+        self.__textItem.translate(hOffset, -8)
+        option = self.__textItem.document().defaultTextOption()
         option.setWrapMode(QtGui.QTextOption.NoWrap)
         self.__textItem.document().setDefaultTextOption(option)
         self.__textItem.adjustSize()
@@ -47,10 +47,10 @@ class PortLabel(QtGui.QGraphicsWidget):
 
 
 class PortCircle(QtGui.QGraphicsWidget):
-    __radius = 6
+    __radius = 4.5
     __diameter = 2 * __radius
 
-    def __init__(self, port, graph, connectionPointType, hOffset, color):
+    def __init__(self, port, graph, connectionPointType, color):
         super(PortCircle, self).__init__(port)
 
         self.__port = port
@@ -58,13 +58,14 @@ class PortCircle(QtGui.QGraphicsWidget):
         self.__connectionPointType = connectionPointType
 
         self.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed))
-        size = QtCore.QSizeF(
-            self.__diameter * 2,
-            self.__diameter * 2,
-            )
+        size = QtCore.QSizeF(self.__diameter, self.__diameter)
         self.setPreferredSize(size)
         self.setWindowFrameMargins(0, 0, 0, 0)
-        self.translate(hOffset, 0)
+
+        if self.isInConnectionPoint():
+            self.translate(self.__radius * -2, 0)
+        else:
+            self.translate(self.__radius * 2, 0)
 
         self.__defaultPen = QtGui.QPen(QtGui.QColor(25, 25, 25), 1.0)
         self.__hoverPen = QtGui.QPen(QtGui.QColor(255, 255, 100), 1.5)
@@ -159,17 +160,16 @@ class BasePort(QtGui.QGraphicsWidget):
         self.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Fixed))
 
         layout = QtGui.QGraphicsLinearLayout()
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.setSpacing(1)
+        layout.setSpacing(0)
         self.setLayout(layout)
 
-        if self.getDataType() == 'Xfo':
+        if self.getDataType().startswith('Xfo'):
             self.__color = QtGui.QColor(205, 254, 50, 255)
-        elif self.getDataType() == 'Scalar':
+        elif self.getDataType().startswith('Scalar'):
             self.__color = QtGui.QColor(205, 50, 254, 255)
-        elif self.getDataType() == 'Integer':
-            self.__color = QtGui.QColor(205, 254, 50, 255)
-        elif self.getDataType() == 'Boolean':
+        elif self.getDataType().startswith('Integer'):
+            self.__color = QtGui.QColor(50, 254, 50, 255)
+        elif self.getDataType().startswith('Boolean'):
             self.__color = QtGui.QColor(254, 105, 50, 255)
         else:
             self.__color = QtGui.QColor(50, 205, 254, 255)
@@ -180,18 +180,21 @@ class BasePort(QtGui.QGraphicsWidget):
         self.__outCircle = None
 
         if connectionPointType in ["In", "IO"]:
-            self.__inCircle = PortCircle(self, self.__graph, 'In', -11, self.__color)
+            self.__inCircle = PortCircle(self, self.__graph, 'In', self.__color)
             layout.addItem(self.__inCircle)
             layout.setAlignment(self.__inCircle, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
 
+        # Pushes the out port to the side
         if connectionPointType != "In":
             layout.addStretch(2)
 
         # Because the port circle is offset, we also offset the label by the same amount.
         labelHOffset = 0
         if connectionPointType == "In":
+            layout.setContentsMargins(0, 0, 30, 0)
             labelHOffset = -10
         elif connectionPointType == "Out":
+            layout.setContentsMargins(30, 0, 0, 0)
             labelHOffset = 10
 
         if self.__label != "":
@@ -203,7 +206,7 @@ class BasePort(QtGui.QGraphicsWidget):
             layout.addStretch(2)
 
         if connectionPointType in ["Out", "IO"]:
-            self.__outCircle = PortCircle(self, self.__graph, 'Out', 11, self.__color)
+            self.__outCircle = PortCircle(self, self.__graph, 'Out', self.__color)
             layout.addItem(self.__outCircle)
             layout.setAlignment(self.__outCircle, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
 

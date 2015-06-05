@@ -29,6 +29,7 @@ class FloatAttribute(NumberAttribute):
         RTVal
 
         """
+
         return ks.rtVal('Scalar', self._value)
 
 

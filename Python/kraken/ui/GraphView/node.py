@@ -14,6 +14,7 @@ from kraken.ui.component_inspector import ComponentInspector
 class NodeTitle(QtGui.QGraphicsWidget):
     __color = QtGui.QColor(25, 25, 25)
     __font = QtGui.QFont('Decorative', 16)
+    __labelBottomSpacing = 12
 
     def __init__(self, text, parent=None):
         super(NodeTitle, self).__init__(parent)
@@ -22,7 +23,7 @@ class NodeTitle(QtGui.QGraphicsWidget):
         self.__textItem.setDefaultTextColor(self.__color)
         self.__textItem.setFont(self.__font)
         self.__textItem.setPos(0, -2)
-        option=self.__textItem.document().defaultTextOption()
+        option = self.__textItem.document().defaultTextOption()
         option.setWrapMode(QtGui.QTextOption.NoWrap)
         self.__textItem.document().setDefaultTextOption(option)
         self.__textItem.adjustSize()
@@ -33,7 +34,7 @@ class NodeTitle(QtGui.QGraphicsWidget):
     def textSize(self):
         return QtCore.QSizeF(
             self.__textItem.textWidth(),
-            self.__font.pointSizeF() + 8
+            self.__font.pointSizeF() + self.__labelBottomSpacing
             )
 
     def paint(self, painter, option, widget):
@@ -46,6 +47,7 @@ class Node(QtGui.QGraphicsWidget):
     __defaultColor = QtGui.QColor(154, 205, 50, 255)
     __unselectedPen =  QtGui.QPen(QtGui.QColor(25, 25, 25), 1.6)
     __selectedPen =  QtGui.QPen(QtGui.QColor(255, 255, 255, 255), 1.6)
+    __linePen =  QtGui.QPen(QtGui.QColor(25, 25, 25, 255), 1.25)
 
     def __init__(self, graph, component):
         super(Node, self).__init__(graph.itemGroup())
@@ -55,8 +57,8 @@ class Node(QtGui.QGraphicsWidget):
         self.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding))
 
         layout = QtGui.QGraphicsLinearLayout()
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.setSpacing(0)
+        layout.setContentsMargins(5, 0, 5, 7)
+        layout.setSpacing(7)
         layout.setOrientation(QtCore.Qt.Vertical)
         self.setLayout(layout)
 
@@ -80,6 +82,11 @@ class Node(QtGui.QGraphicsWidget):
         for i in range(self.__component.getNumInputs()):
             componentInput = component.getInputByIndex(i)
             self.addInputPort(componentInput)
+
+        # Insert space between input and output ports
+        spacingWidget = QtGui.QGraphicsWidget(self)
+        spacingWidget.setPreferredSize(2.0, 2.0)
+        layout.addItem(spacingWidget)
 
         for i in range(self.__component.getNumOutputs()):
             componentOutput = component.getOutputByIndex(i)
@@ -143,6 +150,26 @@ class Node(QtGui.QGraphicsWidget):
     def paint(self, painter, option, widget):
         rect = self.windowFrameRect()
         painter.setBrush(self.__color)
+
+        painter.setPen(QtGui.QPen(QtGui.QColor(0, 0, 0, 0), 0))
+
+        roundingY = 10
+        roundingX = rect.height() / rect.width() * roundingY
+
+        painter.drawRoundRect(rect, roundingX, roundingY)
+
+        # Title BG
+        titleHeight = self.__titleItem.size().height() - 3
+
+        painter.setBrush(self.__color.darker(125))
+        roundingY = rect.width() * roundingX / titleHeight
+        painter.drawRoundRect(0, 0, rect.width(), titleHeight, roundingX, roundingY)
+        painter.drawRect(0, titleHeight * 0.5 + 2, rect.width(), titleHeight * 0.5)
+
+        # painter.setPen(self.__linePen)
+        # painter.drawLine(QtCore.QPoint(0, titleHeight), QtCore.QPoint(rect.width(), titleHeight))
+
+        painter.setBrush(QtGui.QColor(0, 0, 0, 0))
         if self.__selected:
             painter.setPen(self.__selectedPen)
         else:
