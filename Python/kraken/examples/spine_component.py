@@ -48,16 +48,19 @@ class SpineComponent(Component):
         # Declare IO
         # ===========
         # Declare Inputs Xfos
+        self.spineMainSrtInputTgt = self.createInput('mainSrt', dataType='Xfo', parent=self.inputHrcGrp)
 
         # Declare Output Xfos
+        self.spineCogOutputTgt = self.createOutput('cog', dataType='Xfo', parent=self.outputHrcGrp)
         self.spineBaseOutputTgt = self.createOutput('spineBase', dataType='Xfo', parent=self.outputHrcGrp)
+        self.pelvisOutputTgt = self.createOutput('pelvis', dataType='Xfo', parent=self.outputHrcGrp)
         self.spineEndOutputTgt = self.createOutput('spineEnd', dataType='Xfo', parent=self.outputHrcGrp)
 
         self.spineVertebraeOutput = self.addOutput('spineVertebrae', dataType='Xfo[]')
 
         # Declare Input Attrs
-        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=True, parent=self.cmpInputAttrGrp)
-        self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', parent=self.cmpInputAttrGrp)
+        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=False, parent=self.cmpInputAttrGrp)
+        self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp)
         self.lengthInputAttr = self.createInput('length', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp)
 
         # Declare Output Attrs
@@ -232,6 +235,12 @@ class SpineComponentRig(SpineComponent):
         self.spine04Ctrl = Control('spine04', parent=self.spine04CtrlSpace, shape="circle")
         self.spine04Ctrl.scalePoints(Vec3(6.0, 6.0, 6.0))
 
+        # Pelvis
+        self.pelvisCtrlSpace = CtrlSpace('pelvis', parent=self.cogCtrl)
+        self.pelvisCtrl = Control('pelvis', parent=self.pelvisCtrlSpace, shape="cube")
+        self.pelvisCtrl.alignOnYAxis(negative=True)
+        self.pelvisCtrl.scalePoints(Vec3(2.0, 1.5, 1.5))
+
 
         # ==========
         # Deformers
@@ -241,6 +250,9 @@ class SpineComponentRig(SpineComponent):
         self.deformerJoints = []
         self.spineOutputs = []
         self.setNumDeformers(1)
+
+        pelvisDef = Joint('pelvis', parent=self.defCmpGrp)
+        pelvisDef.setComponent(self)
 
         # =====================
         # Create Component I/O
@@ -253,11 +265,23 @@ class SpineComponentRig(SpineComponent):
         # Constrain I/O
         # ==============
         # Constraint inputs
+        self.spineSrtInputConstraint = PoseConstraint('_'.join([self.cogCtrlSpace.getName(), 'To', self.spineMainSrtInputTgt.getName()]))
+        self.spineSrtInputConstraint.addConstrainer(self.spineMainSrtInputTgt)
+        self.spineSrtInputConstraint.setMaintainOffset(True)
+        self.cogCtrlSpace.addConstraint(self.spineSrtInputConstraint)
 
         # Constraint outputs
+        self.spineCogOutputConstraint = PoseConstraint('_'.join([self.spineCogOutputTgt.getName(), 'To', self.cogCtrl.getName()]))
+        self.spineCogOutputConstraint.addConstrainer(self.cogCtrl)
+        self.spineCogOutputTgt.addConstraint(self.spineCogOutputConstraint)
+
         self.spineBaseOutputConstraint = PoseConstraint('_'.join([self.spineBaseOutputTgt.getName(), 'To', 'spineBase']))
         self.spineBaseOutputConstraint.addConstrainer(self.spineOutputs[0])
         self.spineBaseOutputTgt.addConstraint(self.spineBaseOutputConstraint)
+
+        self.pelvisOutputConstraint = PoseConstraint('_'.join([self.pelvisOutputTgt.getName(), 'To', self.pelvisCtrl.getName()]))
+        self.pelvisOutputConstraint.addConstrainer(self.pelvisCtrl)
+        self.pelvisOutputTgt.addConstraint(self.pelvisOutputConstraint)
 
         self.spineEndOutputConstraint = PoseConstraint('_'.join([self.spineEndOutputTgt.getName(), 'To', 'spineEnd']))
         self.spineEndOutputConstraint.addConstrainer(self.spineOutputs[0])
@@ -267,7 +291,7 @@ class SpineComponentRig(SpineComponent):
         # ===============
         # Add Splice Ops
         # ===============
-        # Add Splice Op
+        # Add Spine Splice Op
         self.bezierSpineSpliceOp = SpliceOperator('spineSpliceOp', 'BezierSpineSolver', 'Kraken')
         self.addOperator(self.bezierSpineSpliceOp)
 
@@ -287,20 +311,35 @@ class SpineComponentRig(SpineComponent):
             self.bezierSpineSpliceOp.setOutput('outputs', spineOutput)
 
         # Add Deformer Splice Op
-        self.outputsToDeformersSpliceOp = SpliceOperator('spineDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken')
-        self.addOperator(self.outputsToDeformersSpliceOp)
+        self.deformersToOutputsSpliceOp = SpliceOperator('spineDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken')
+        self.addOperator(self.deformersToOutputsSpliceOp)
 
         # Add Att Inputs
-        self.outputsToDeformersSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
-        self.outputsToDeformersSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
+        self.deformersToOutputsSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.deformersToOutputsSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
 
         # Add Xfo Outputs
         for spineOutput in self.spineOutputs:
-            self.outputsToDeformersSpliceOp.setInput('constrainers', spineOutput)
+            self.deformersToOutputsSpliceOp.setInput('constrainers', spineOutput)
 
         # Add Xfo Outputs
         for joint in self.deformerJoints:
-            self.outputsToDeformersSpliceOp.setOutput('constrainees', joint)
+            self.deformersToOutputsSpliceOp.setOutput('constrainees', joint)
+
+        # Add Pelvis Splice Op
+        self.pelvisDefSpliceOp = SpliceOperator('pelvisDeformerSpliceOp', 'PoseConstraintSolver', 'Kraken')
+        self.addOperator(self.pelvisDefSpliceOp)
+
+        # Add Att Inputs
+        self.pelvisDefSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.pelvisDefSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
+
+        # Add Xfo Inputs
+        self.pelvisDefSpliceOp.setInput('constrainer', self.pelvisOutputTgt)
+
+        # Add Xfo Outputs
+        self.pelvisDefSpliceOp.setOutput('constrainee', pelvisDef)
+
 
         Profiler.getInstance().pop()
 
@@ -338,6 +377,9 @@ class SpineComponentRig(SpineComponent):
         self.cogCtrlSpace.xfo.tr = cogPosition
         self.cogCtrl.xfo.tr = cogPosition
 
+        self.pelvisCtrlSpace.xfo.tr = cogPosition
+        self.pelvisCtrl.xfo.tr = cogPosition
+
         self.spine01CtrlSpace.xfo.tr = spine01Position
         self.spine01Ctrl.xfo.tr = spine01Position
 
@@ -363,12 +405,12 @@ class SpineComponentRig(SpineComponent):
 
         # Update Deformers Splice Op
         for spineOutput in self.spineOutputs:
-            if spineOutput not in self.outputsToDeformersSpliceOp.getInput("constrainers"):
-                self.outputsToDeformersSpliceOp.setInput("constrainers", spineOutput)
+            if spineOutput not in self.deformersToOutputsSpliceOp.getInput("constrainers"):
+                self.deformersToOutputsSpliceOp.setInput("constrainers", spineOutput)
 
         for joint in self.deformerJoints:
-            if joint not in self.outputsToDeformersSpliceOp.getOutput("constrainees"):
-                self.outputsToDeformersSpliceOp.setOutput("constrainees", joint)
+            if joint not in self.deformersToOutputsSpliceOp.getOutput("constrainees"):
+                self.deformersToOutputsSpliceOp.setOutput("constrainees", joint)
 
         # Updating constraint to use the updated last output.
         self.spineEndOutputConstraint.setConstrainer(self.spineOutputs[-1], index=0)
@@ -384,11 +426,15 @@ class SpineComponentRig(SpineComponent):
         self.bezierSpineSpliceOp.evaluate()
 
         # evaluate the constraint op so that all the joint transforms are updated.
-        self.outputsToDeformersSpliceOp.evaluate()
+        self.deformersToOutputsSpliceOp.evaluate()
+        self.pelvisDefSpliceOp.evaluate()
 
         # evaluate the constraints to ensure the outputs are now in the correct location.
+        self.spineCogOutputConstraint.evaluate()
         self.spineBaseOutputConstraint.evaluate()
+        self.pelvisOutputConstraint.evaluate()
         self.spineEndOutputConstraint.evaluate()
+
 
 
 from kraken.core.kraken_system import KrakenSystem
