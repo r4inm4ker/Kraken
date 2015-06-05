@@ -59,8 +59,8 @@ class GraphViewWidget(QtGui.QWidget):
         buildGuideAction = toolBar.addAction('Build Guide')
         buildGuideAction.triggered.connect(self.buildGuideRig)
 
-        synchGuideAction = toolBar.addAction('Synch Guide')
-        synchGuideAction.triggered.connect(self.synchGuideRig)
+        # synchGuideAction = toolBar.addAction('Synch Guide')
+        # synchGuideAction.triggered.connect(self.synchGuideRig)
 
         buildGuideAction = toolBar.addAction('Build Rig')
         buildGuideAction.triggered.connect(self.buildRig)
@@ -109,6 +109,10 @@ class GraphViewWidget(QtGui.QWidget):
 
     def buildGuideRig(self):
         builder = plugins.getBuilder()
+
+        if self.guideRig.getName().endswith('_guide') is False:
+            self.guideRig.setName(self.guideRig.getName() + '_guide')
+
         builder.build(self.guideRig)
 
     def synchGuideRig(self):
@@ -122,6 +126,8 @@ class GraphViewWidget(QtGui.QWidget):
         rigBuildData = self.guideRig.getRigBuildData()
         rig = Rig()
         rig.loadRigDefinition(rigBuildData)
+
+        rig.setName(rig.getName().replace('_guide', ''))
 
         builder = plugins.getBuilder()
         builder.build(rig)

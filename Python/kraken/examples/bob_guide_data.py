@@ -120,12 +120,12 @@ bob_guide_data = {
         },
         {
             "_comment": "LLeg To Pelvis Connections",
-            "source": "spine.spineBase",
+            "source": "spine.pelvis",
             "target": "L_Leg.pelvisInput"
         },
         {
             "_comment": "RLeg To Pelvis Connections",
-            "source": "spine.spineBase",
+            "source": "spine.pelvis",
             "target": "R_Leg.pelvisInput"
         }
     ]

@@ -97,6 +97,8 @@ class MainPanel(QtGui.QGraphicsWidget):
             # Re-center the graph on the old position.
             self.__itemGroup.translate(newcenter.x() - center.x(), newcenter.y() - center.y())
 
+        self.graph.resize(self.graph.size())
+
     def paint(self, painter, option, widget):
         # return super(MainPanel, self).paint(painter, option, widget)
 

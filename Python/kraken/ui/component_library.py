@@ -18,14 +18,20 @@ class _ComponentTree(QtGui.QTreeWidget):
         self.setColumnCount(1)
         self.setHeaderLabels([''])
 
+
     def mouseMoveEvent(self, event):
         self.dragObject()
 
+
     def dragObject(self):
+
         if not self.selectedIndexes():
             return
+
         drag = QtGui.QDrag(self)
-        text = 'KrakenComponent:' + self.selectedItems()[0].text(0)
+        item = self.selectedItems()[0]
+        componentClassName = item.data(0, QtCore.Qt.UserRole)
+        text = 'KrakenComponent:' + componentClassName
 
         mimeData = QtCore.QMimeData()
         mimeData.setText(text)
@@ -39,8 +45,8 @@ class _ComponentTree(QtGui.QTreeWidget):
         drag.setPixmap(ghostComponent)
         drag.start(QtCore.Qt.IgnoreAction)
 
-class ComponentLibrary(QtGui.QWidget):
 
+class ComponentLibrary(QtGui.QWidget):
 
     def __init__(self, parent=None):
         super(ComponentLibrary, self).__init__(parent)
@@ -63,6 +69,7 @@ class ComponentLibrary(QtGui.QWidget):
         self.showClosestNames()
         self.searchLineEdit.textEdited.connect(self.showClosestNames)
 
+
     def showClosestNames(self):
         self.nodesList.clear()
         fuzzyText = self.searchLineEdit.text()
@@ -77,8 +84,8 @@ class ComponentLibrary(QtGui.QWidget):
                 continue
 
             treeItem = QtGui.QTreeWidgetItem()
-            treeItem.setText(0, componentClassName)
-            # treeItem.setData(0, QtCore.Qt.UserRole, path)
+            treeItem.setText(0, componentClassName.rsplit('.', 1)[-1])
+            treeItem.setData(0, QtCore.Qt.UserRole, componentClassName)
             self.nodesList.addTopLevelItem(treeItem)
 
         self.nodesList.expandAll()
@@ -89,4 +96,3 @@ if __name__ == "__main__":
     widget = ComponentLibrary()
     widget.show()
     sys.exit(app.exec_())
-

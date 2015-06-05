@@ -190,6 +190,7 @@ class ClavicleComponentGuide(ClavicleComponent):
 
         return 'Guide'
 
+
 class ClavicleComponentRig(ClavicleComponent):
     """Clavicle Component"""
 

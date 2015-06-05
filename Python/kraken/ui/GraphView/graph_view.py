@@ -10,6 +10,9 @@ from PySide import QtGui, QtCore
 from kraken.core.maths import Vec2
 
 from graph import Graph
+from node import Node, NodeTitle
+from port import PortLabel
+
 from kraken.core.kraken_system import KrakenSystem
 
 
@@ -61,20 +64,17 @@ class GraphView(QtGui.QGraphicsView):
 
     def mousePressEvent(self, event):
         if event.button() == QtCore.Qt.MouseButton.RightButton:
+
+            return
+
             def __getGraphItem(graphicItem):
                 if isinstance(graphicItem, Node):
-                    return graphicItem
-                if isinstance(graphicItem, SidePanelPort):
-                    return graphicItem
-                if isinstance(graphicItem, ProxySidePanelPort):
                     return graphicItem
                 elif isinstance(graphicItem, MainPanel):
                     return graphicItem
                 elif(isinstance(graphicItem, QtGui.QGraphicsTextItem) or
                      isinstance(graphicItem, NodeTitle) or
-                     isinstance(graphicItem, NodeHeader) or
-                     isinstance(graphicItem, PortLabel) or
-                     isinstance(graphicItem, PortFromPath)):
+                     isinstance(graphicItem, PortLabel)):
                     return __getGraphItem(graphicItem.parentItem())
                 return None
             pos = self.getGraph().mapToScene(event.pos())
