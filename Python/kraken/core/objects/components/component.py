@@ -200,8 +200,10 @@ class Component(Object3D):
                 newInputTgt.setValue(v)
             elif k == 'minValue':
                 newInputTgt.setMin(v)
+                newInputTgt.setUIMin(v)
             elif k == 'maxValue':
                 newInputTgt.setMax(v)
+                newInputTgt.setUIMax(v)
             elif k == 'parent':
                 if dataType.startswith('Xfo'):
                     v.addChild(newInputTgt)
