@@ -212,8 +212,25 @@ class Node(QtGui.QGraphicsWidget):
 
     def mousePressEvent(self, event):
         if event.button() is QtCore.Qt.MouseButton.LeftButton:
-            self.__dragging = True
-            self._lastDragPoint = self.mapToItem(self.__graph.itemGroup(), event.pos())
+
+            modifiers = event.modifiers()
+            if modifiers == QtCore.Qt.ControlModifier:
+                if self.isSelected() is False:
+                    self.__graph.selectNode(self, clearSelection=False)
+                else:
+                    self.__graph.deselectNode(self)
+
+            elif modifiers == QtCore.Qt.ShiftModifier:
+                if self.isSelected() is False:
+                    self.__graph.selectNode(self, clearSelection=False)
+            else:
+                if self.isSelected() is False:
+                    self.__graph.selectNode(self, clearSelection=False)
+
+                self.__dragging = True
+                self._lastDragPoint = self.mapToItem(self.__graph.itemGroup(), event.pos())
+
+
         else:
             super(Node, self).mousePressEvent(event)
 
@@ -237,12 +254,12 @@ class Node(QtGui.QGraphicsWidget):
         if self.__dragging:
                 # TODO: Undo code goes here...
             if not self.isSelected():
-                self.pushGraphPosToComponent( )
+                self.pushGraphPosToComponent()
 
             else:
                 selectedNodes = self.__graph.getSelectedNodes()
                 for node in selectedNodes:
-                    node.pushGraphPosToComponent( )
+                    node.pushGraphPosToComponent()
 
             self.setCursor(QtCore.Qt.ArrowCursor)
             self._panning = False
