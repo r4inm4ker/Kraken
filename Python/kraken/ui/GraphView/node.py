@@ -13,7 +13,8 @@ from kraken.ui.component_inspector import ComponentInspector
 
 class NodeTitle(QtGui.QGraphicsWidget):
     __color = QtGui.QColor(25, 25, 25)
-    __font = QtGui.QFont('Decorative', 16)
+    __font = QtGui.QFont('Decorative', 14)
+    __font.setLetterSpacing(QtGui.QFont.PercentageSpacing, 115)
     __labelBottomSpacing = 12
 
     def __init__(self, text, parent=None):

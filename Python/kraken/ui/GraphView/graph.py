@@ -13,7 +13,8 @@ class Graph(QtGui.QGraphicsWidget):
         super(Graph, self).__init__()
 
         self.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding))
-        self.setMinimumSize(400, 400)
+        parentSize = parent.size()
+        self.setMinimumSize(parentSize.width(), parentSize.height())
 
         self.__parent = parent
         self.__rig = rig

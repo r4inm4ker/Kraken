@@ -17,12 +17,15 @@ from kraken.core.kraken_system import KrakenSystem
 
 
 class GraphView(QtGui.QGraphicsView):
+
     def __init__(self, parent=None):
         super(GraphView, self).__init__(parent)
 
         self.__graphViewWidget = parent
         self.rig = None
         self.graph = None
+
+        self.resize(600, 400)
 
         self.setRenderHint(QtGui.QPainter.Antialiasing)
         self.setRenderHint(QtGui.QPainter.TextAntialiasing)
@@ -48,6 +51,7 @@ class GraphView(QtGui.QGraphicsView):
     def getGraph(self):
         return self.graph
 
+
     ################################################
     ## Graph
     def frameSelectedNodes(self):
@@ -59,9 +63,9 @@ class GraphView(QtGui.QGraphicsView):
     def deleteSelectedNodes(self):
         self.graph.deleteSelectedNodes()
 
+
     ################################################
     ## Events
-
     def mousePressEvent(self, event):
         if event.button() == QtCore.Qt.MouseButton.RightButton:
 

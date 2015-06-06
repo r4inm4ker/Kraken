@@ -88,8 +88,8 @@ class GraphViewWidget(QtGui.QWidget):
     def newRigPreset(self):
         # TODO: clean the rig from the scene if it has been built.
         self.guideRig = Rig()
-        self.graphView.init( self.guideRig )
-        self.nameWidget.setText( 'MyRig' )
+        self.graphView.init(self.guideRig)
+        self.nameWidget.setText('MyRig')
 
     def saveRigPreset(self):
         lastSceneFilePath = os.path.join(GetHomePath(), self.guideRig.getName() )
