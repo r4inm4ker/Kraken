@@ -132,12 +132,16 @@ class GraphViewWidget(QtGui.QWidget):
         builder = plugins.getBuilder()
         builder.build(rig)
 
+    # =======
+    # Events
+    # =======
     def keyPressEvent(self, event):
+
+        modifiers = event.modifiers()
         if event.key() == 96: #'`'
             pos = self.mapFromGlobal(QtGui.QCursor.pos());
             if not self.__contextualNodeList:
                 self.__contextualNodeList = ContextualNodeList(self)
-
 
             scenepos = self.graphView.getGraph().mapToScene(pos)
 
@@ -147,3 +151,10 @@ class GraphViewWidget(QtGui.QWidget):
             # print "scenepos:" + str(scenepos)
             self.__contextualNodeList.showAtPos(pos, scenepos)
 
+        # Ctrl+W
+        elif event.key() == 87 and modifiers == QtCore.Qt.ControlModifier:
+            self.window().close()
+
+        # Ctrl+N
+        elif event.key() == 78 and modifiers == QtCore.Qt.ControlModifier:
+            self.newRigPreset()

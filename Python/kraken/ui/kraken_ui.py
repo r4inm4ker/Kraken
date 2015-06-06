@@ -42,9 +42,9 @@ class KrakenUI(QtGui.QWidget):
         krakenSystem.loadCoreClient()
         krakenSystem.loadExtension('Kraken')
 
+
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     widget = KrakenUI()
     widget.show()
     sys.exit(app.exec_())
-

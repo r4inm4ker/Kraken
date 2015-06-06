@@ -159,7 +159,6 @@ class Graph(QtGui.QGraphicsWidget):
         # Update the main panel when reframing.
         self.__mainPanel.update()
 
-
     def frameSelectedNodes(self):
         self.frameNodes(self.getSelectedNodes())
 
@@ -275,9 +274,7 @@ class Graph(QtGui.QGraphicsWidget):
         self.__selection = []
 
 
-
     #######################
     ## Events
-
     def closeEvent(self, event):
         return super(Graph, self).closeEvent(event)
