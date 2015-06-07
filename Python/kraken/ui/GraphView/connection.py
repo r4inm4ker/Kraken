@@ -43,11 +43,13 @@ class Connection(QtGui.QGraphicsPathItem):
         srcPoint = self.mapFromScene(self.__srcPort.outCircle().centerInSceneCoords())
         dstPoint = self.mapFromScene(self.__dstPort.inCircle().centerInSceneCoords())
 
+        dist_between = dstPoint - srcPoint
+
         self.__path = QtGui.QPainterPath()
         self.__path.moveTo(srcPoint)
         self.__path.cubicTo(
-            srcPoint + QtCore.QPointF(30, 0),
-            dstPoint - QtCore.QPointF(30, 0),
+            srcPoint + QtCore.QPointF(dist_between.x() * 0.4, 0),
+            dstPoint - QtCore.QPointF(dist_between.x() * 0.4, 0),
             dstPoint
             )
         self.setPath(self.__path)

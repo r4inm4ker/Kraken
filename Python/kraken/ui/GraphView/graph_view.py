@@ -1,28 +1,29 @@
-
 #
 # Copyright 2010-2015
 #
 
 import json, difflib
 import os.path
+
 from PySide import QtGui, QtCore
-
-from kraken.core.maths import Vec2
-
 from graph import Graph
 from node import Node, NodeTitle
 from port import PortLabel
 
+from kraken.core.maths import Vec2
 from kraken.core.kraken_system import KrakenSystem
 
 
 class GraphView(QtGui.QGraphicsView):
+
     def __init__(self, parent=None):
         super(GraphView, self).__init__(parent)
 
         self.__graphViewWidget = parent
         self.rig = None
         self.graph = None
+
+        self.resize(600, 400)
 
         self.setRenderHint(QtGui.QPainter.Antialiasing)
         self.setRenderHint(QtGui.QPainter.TextAntialiasing)
@@ -48,6 +49,7 @@ class GraphView(QtGui.QGraphicsView):
     def getGraph(self):
         return self.graph
 
+
     ################################################
     ## Graph
     def frameSelectedNodes(self):
@@ -59,9 +61,9 @@ class GraphView(QtGui.QGraphicsView):
     def deleteSelectedNodes(self):
         self.graph.deleteSelectedNodes()
 
+
     ################################################
     ## Events
-
     def mousePressEvent(self, event):
         if event.button() == QtCore.Qt.MouseButton.RightButton:
 
@@ -114,6 +116,17 @@ class GraphView(QtGui.QGraphicsView):
                     ContextualNewNodeWidget(self, self.__controller, self.getGraph(), 'graph', pos)
                 contextMenu.addAction("New Graph Node").triggered.connect(newGraph)
             contextMenu.popup(event.globalPos())
+
+        elif event.button() == QtCore.Qt.MouseButton.LeftButton:
+
+            graphViewWidget = self.parent()
+            contextualNodeList = graphViewWidget.getContextualNodeList()
+            if contextualNodeList is not None and contextualNodeList.isVisible():
+                contextualNodeList.searchLineEdit.clear()
+                contextualNodeList.hide()
+
+            else:
+                super(GraphView, self).mousePressEvent(event)
 
         else:
             super(GraphView, self).mousePressEvent(event)

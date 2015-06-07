@@ -13,7 +13,8 @@ from kraken.ui.component_inspector import ComponentInspector
 
 class NodeTitle(QtGui.QGraphicsWidget):
     __color = QtGui.QColor(25, 25, 25)
-    __font = QtGui.QFont('Decorative', 16)
+    __font = QtGui.QFont('Decorative', 14)
+    __font.setLetterSpacing(QtGui.QFont.PercentageSpacing, 115)
     __labelBottomSpacing = 12
 
     def __init__(self, text, parent=None):
@@ -217,8 +218,25 @@ class Node(QtGui.QGraphicsWidget):
 
     def mousePressEvent(self, event):
         if event.button() is QtCore.Qt.MouseButton.LeftButton:
-            self.__dragging = True
-            self._lastDragPoint = self.mapToItem(self.__graph.itemGroup(), event.pos())
+
+            modifiers = event.modifiers()
+            if modifiers == QtCore.Qt.ControlModifier:
+                if self.isSelected() is False:
+                    self.__graph.selectNode(self, clearSelection=False)
+                else:
+                    self.__graph.deselectNode(self)
+
+            elif modifiers == QtCore.Qt.ShiftModifier:
+                if self.isSelected() is False:
+                    self.__graph.selectNode(self, clearSelection=False)
+            else:
+                if self.isSelected() is False: # and len(self.__graph.getSelectedNodes()) == 0:
+                    self.__graph.selectNode(self, clearSelection=True)
+
+                self.__dragging = True
+                self._lastDragPoint = self.mapToItem(self.__graph.itemGroup(), event.pos())
+
+
         else:
             super(Node, self).mousePressEvent(event)
 
@@ -242,15 +260,15 @@ class Node(QtGui.QGraphicsWidget):
         if self.__dragging:
                 # TODO: Undo code goes here...
             if not self.isSelected():
-                self.pushGraphPosToComponent( )
+                self.pushGraphPosToComponent()
 
             else:
                 selectedNodes = self.__graph.getSelectedNodes()
                 for node in selectedNodes:
-                    node.pushGraphPosToComponent( )
+                    node.pushGraphPosToComponent()
 
             self.setCursor(QtCore.Qt.ArrowCursor)
-            self._panning = False
+            self.__dragging = False
         else:
             super(Node, self).mouseReleaseEvent(event)
 

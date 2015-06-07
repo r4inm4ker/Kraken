@@ -13,7 +13,8 @@ class Graph(QtGui.QGraphicsWidget):
         super(Graph, self).__init__()
 
         self.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding))
-        self.setMinimumSize(400, 400)
+        parentSize = parent.size()
+        self.setMinimumSize(parentSize.width(), parentSize.height())
 
         self.__parent = parent
         self.__rig = rig
@@ -70,12 +71,30 @@ class Graph(QtGui.QGraphicsWidget):
             node.setSelected(False)
         self.__selection = []
 
-    def selectNode(self, node):
+    def selectNode(self, node, clearSelection=False):
+        if clearSelection is True:
+            self.clearSelection()
+
+        if node in self.__selection:
+            raise IndexError("Node is already in selection!")
+
         node.setSelected(True)
+
         self.__selection.append(node)
+
+    def deselectNode(self, node):
+
+        node.setSelected(False)
+
+        if node not in self.__selection:
+            raise IndexError("Node is not in selection!")
+
+        self.__selection.remove(node)
+
 
     def getSelectedNodes(self):
         return self.__selection
+
 
     def deleteSelectedNodes(self):
         selectedNodes = self.getSelectedNodes()
@@ -94,6 +113,7 @@ class Graph(QtGui.QGraphicsWidget):
         # for node in selectedNodes:
         #     self.__controller.removeNode(nodePath=node.getNodePath())
         # self.__controller.endInteraction()
+
 
     def frameNodes(self, nodes):
         if len(nodes) == 0:
@@ -135,6 +155,9 @@ class Graph(QtGui.QGraphicsWidget):
         windowRect = computeWindowFrame()
         pan = windowRect.center() - nodesRect.center()
         self.itemGroup().translate(pan.x(), pan.y())
+
+        # Update the main panel when reframing.
+        self.__mainPanel.update()
 
     def frameSelectedNodes(self):
         self.frameNodes(self.getSelectedNodes())
@@ -242,9 +265,7 @@ class Graph(QtGui.QGraphicsWidget):
         self.__selection = []
 
 
-
     #######################
     ## Events
-
     def closeEvent(self, event):
         return super(Graph, self).closeEvent(event)
