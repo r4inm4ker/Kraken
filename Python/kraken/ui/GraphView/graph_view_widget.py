@@ -85,6 +85,9 @@ class GraphViewWidget(QtGui.QWidget):
 
         self.newRigPreset()
 
+    def getContextualNodeList(self):
+        return self.__contextualNodeList
+
     def newRigPreset(self):
         # TODO: clean the rig from the scene if it has been built.
         self.guideRig = Rig()
@@ -141,7 +144,10 @@ class GraphViewWidget(QtGui.QWidget):
         if event.key() == 96: #'`'
             pos = self.mapFromGlobal(QtGui.QCursor.pos());
             if not self.__contextualNodeList:
-                self.__contextualNodeList = ContextualNodeList(self)
+                self.__contextualNodeList = ContextualNodeList(self, self.graphView.getGraph())
+            else:
+                # Ensures that the node list is reset to list all components
+                self.__contextualNodeList.showClosestNames()
 
             scenepos = self.graphView.getGraph().mapToScene(pos)
 
