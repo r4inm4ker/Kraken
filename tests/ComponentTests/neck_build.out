@@ -1,14 +1,14 @@
 Failed to find DCC builder. Falling back to Python builder.
 Neck:L
 Neck:L.controls
-Neck:L.controls.neck
-Neck:L.controls.neck.inputs
-Neck:L.controls.neck.inputs.neckBase
-Neck:L.controls.neck.outputs
-Neck:L.controls.neck.outputs.neck
-Neck:L.controls.neck.outputs.neckEnd
-Neck:L.controls.neck.neck
-Neck:L.controls.neck.neck.neck
+Neck:L.controls.Neck:L
+Neck:L.controls.Neck:L.inputs
+Neck:L.controls.Neck:L.inputs.neckBase
+Neck:L.controls.Neck:L.outputs
+Neck:L.controls.Neck:L.outputs.neck
+Neck:L.controls.Neck:L.outputs.neckEnd
+Neck:L.controls.Neck:L.neck
+Neck:L.controls.Neck:L.neck.neck
 Neck:L.deformers
-Neck:L.deformers.neck
-Neck:L.deformers.neck.neck
+Neck:L.deformers.Neck:L
+Neck:L.deformers.Neck:L.neck

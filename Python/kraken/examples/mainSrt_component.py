@@ -60,7 +60,7 @@ class MainSrtComponent(Component):
 class MainSrtComponentGuide(MainSrtComponent):
     """MainSrt Component Guide"""
 
-    def __init__(self, name='mainSrtGuide', parent=None, data=None):
+    def __init__(self, name='mainSrt', parent=None, data=None):
 
         Profiler.getInstance().push("Construct MainSrt Guide Component:" + name)
         super(MainSrtComponentGuide, self).__init__(name, parent)

@@ -1,14 +1,14 @@
 Failed to find DCC builder. Falling back to Python builder.
 Clavicle:L
 Clavicle:L.controls
-Clavicle:L.controls.Clavicle
-Clavicle:L.controls.Clavicle.inputs
-Clavicle:L.controls.Clavicle.inputs.spineEnd
-Clavicle:L.controls.Clavicle.outputs
-Clavicle:L.controls.Clavicle.outputs.clavicle
-Clavicle:L.controls.Clavicle.outputs.clavicleEnd
-Clavicle:L.controls.Clavicle.clavicle
-Clavicle:L.controls.Clavicle.clavicle.clavicle
+Clavicle:L.controls.Clavicle:L
+Clavicle:L.controls.Clavicle:L.inputs
+Clavicle:L.controls.Clavicle:L.inputs.spineEnd
+Clavicle:L.controls.Clavicle:L.outputs
+Clavicle:L.controls.Clavicle:L.outputs.clavicle
+Clavicle:L.controls.Clavicle:L.outputs.clavicleEnd
+Clavicle:L.controls.Clavicle:L.clavicle
+Clavicle:L.controls.Clavicle:L.clavicle.clavicle
 Clavicle:L.deformers
-Clavicle:L.deformers.Clavicle
-Clavicle:L.deformers.Clavicle.clavicle
+Clavicle:L.deformers.Clavicle:L
+Clavicle:L.deformers.Clavicle:L.clavicle
