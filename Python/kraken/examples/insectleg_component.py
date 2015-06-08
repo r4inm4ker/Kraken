@@ -35,7 +35,8 @@ class InsectLegComponent(Component):
         # ================
         # Setup Hierarchy
         # ================
-        self.ctrlCmpGrp = self.getOrCreateConstrolsComponentGroup()
+        self.controlsLayer = self.getOrCreateLayer('controls')
+        self.ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=self.controlsLayer)
 
         # IO Hierarchies
         self.inputHrcGrp = HierarchyGroup('inputs', parent=self.ctrlCmpGrp)
