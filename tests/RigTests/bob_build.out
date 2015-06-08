@@ -1,6 +1,6 @@
 Failed to find DCC builder. Falling back to Python builder.
 char_bob
-char_bob.mainSrt
+char_bob.mainSrt:M
 char_bob.controls
 char_bob.controls.mainSrt
 char_bob.controls.mainSrt.inputs
@@ -159,7 +159,7 @@ char_bob.controls.leg.foot.foot.toe.toe
 char_bob.controls.leg.footRef
 char_bob.controls.leg.UpV
 char_bob.controls.leg.UpV.UpV
-char_bob.spine
+char_bob.spine:M
 char_bob.deformers
 char_bob.deformers.spine
 char_bob.deformers.spine.spine01
@@ -200,11 +200,11 @@ char_bob.deformers.leg.shin
 char_bob.deformers.leg.ankle
 char_bob.deformers.leg.foot
 char_bob.deformers.leg.toe
-char_bob.neck
-char_bob.head
-char_bob.clavicle
-char_bob.clavicle
-char_bob.arm
-char_bob.arm
-char_bob.L_LegComponent
-char_bob.R_LegComponent
+char_bob.neck:M
+char_bob.head:M
+char_bob.clavicle:L
+char_bob.clavicle:R
+char_bob.arm:L
+char_bob.arm:R
+char_bob.Leg:L
+char_bob.Leg:R

@@ -106,12 +106,12 @@ class Rig(Container):
             sourceComponent = self.getChildByDecoratedName(sourceComponentDecoratedName)
             if sourceComponent is None:
                 raise Exception("Error making connection:" + connectionData['source'] + " -> " + \
-                    connectionData['target']+". Source component not found:" + sourceComponent.getPath())
+                    connectionData['target']+". Source component not found:" + sourceComponentDecoratedName)
 
             targetComponent = self.getChildByDecoratedName(targetComponentDecoratedName)
             if targetComponent is None:
                 raise Exception("Error making connection:" + connectionData['source'] + " -> " + \
-                    connectionData['target']+". Target component not found:" + targetComponent.getPath())
+                    connectionData['target']+". Target component not found:" + targetComponentDecoratedName)
 
             outputPort = sourceComponent.getOutputByName(outputName)
             if outputPort is None:

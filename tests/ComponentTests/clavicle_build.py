@@ -11,7 +11,7 @@ Profiler.getInstance().push("clavicle_build")
 
 clavicleGuide = ClavicleComponentGuide("clavicle")
 clavicleGuide.loadData({
-        "name": "L_Clavicle",
+        "name": "Clavicle",
         "location": "L",
         "clavicleXfo": Xfo(Vec3(0.1322, 15.403, -0.5723)),
         "clavicleUpVXfo": Xfo(Vec3(0.0, 1.0, 0.0)),

@@ -1,6 +1,6 @@
 Failed to find DCC builder. Falling back to Python builder.
 char_bob_guide
-char_bob_guide.spine
+char_bob_guide.spine:M
 char_bob_guide.controls
 char_bob_guide.controls.spine
 char_bob_guide.controls.spine.inputs
@@ -110,11 +110,11 @@ char_bob_guide.controls.leg.knee
 char_bob_guide.controls.leg.ankle
 char_bob_guide.controls.leg.toe
 char_bob_guide.controls.leg.toeTip
-char_bob_guide.neck
-char_bob_guide.head
-char_bob_guide.clavicle
-char_bob_guide.arm
-char_bob_guide.clavicle
-char_bob_guide.arm
-char_bob_guide.leg
-char_bob_guide.leg
+char_bob_guide.neck:M
+char_bob_guide.head:M
+char_bob_guide.clavicle:L
+char_bob_guide.arm:L
+char_bob_guide.clavicle:R
+char_bob_guide.arm:R
+char_bob_guide.leg:L
+char_bob_guide.leg:R

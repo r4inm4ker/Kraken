@@ -1,6 +1,6 @@
 Failed to find DCC builder. Falling back to Python builder.
 char_bob
-char_bob.spine
+char_bob.spine:M
 char_bob.controls
 char_bob.controls.spine
 char_bob.controls.spine.inputs
@@ -43,4 +43,4 @@ char_bob.deformers.spine.spine03
 char_bob.deformers.spine.spine04
 char_bob.deformers.clavicle
 char_bob.deformers.clavicle.clavicle
-char_bob.clavicleGuide
+char_bob.clavicleGuide:L

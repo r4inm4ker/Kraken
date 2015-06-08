@@ -1,44 +1,44 @@
 {
   "connections": [
     {
-      "source": "spine.spineEnd", 
+      "source": "spine:M.spineEnd", 
       "_comment": "Neck to Spine", 
-      "target": "neck.neckBase"
+      "target": "neck:M.neckBase"
     }, 
     {
-      "source": "neck.neckEnd", 
+      "source": "neck:M.neckEnd", 
       "_comment": "Head to Neck", 
-      "target": "head.headBase"
+      "target": "head:M.headBase"
     }, 
     {
-      "source": "spine.spineEnd", 
+      "source": "spine:M.spineEnd", 
       "_comment": "LClavicle to Spine", 
-      "target": "L_Clavicle.spineEnd"
+      "target": "Clavicle:L.spineEnd"
     }, 
     {
-      "source": "L_Clavicle.clavicleEnd", 
+      "source": "Clavicle:L.clavicleEnd", 
       "_comment": "LArm to LClavicle", 
-      "target": "L_Arm.clavicleEnd"
+      "target": "Arm:L.clavicleEnd"
     }, 
     {
-      "source": "R_Clavicle.clavicleEnd", 
+      "source": "Clavicle:R.clavicleEnd", 
       "_comment": "RArm to RClavicle", 
-      "target": "R_Arm.clavicleEnd"
+      "target": "Arm:R.clavicleEnd"
     }, 
     {
-      "source": "spine.spineEnd", 
+      "source": "spine:M.spineEnd", 
       "_comment": "RClavicle to Spine", 
-      "target": "R_Clavicle.spineEnd"
+      "target": "Clavicle:R.spineEnd"
     }, 
     {
-      "source": "spine.spineBase", 
+      "source": "spine:M.pelvis", 
       "_comment": "LLeg To Pelvis Connections", 
-      "target": "L_Leg.pelvisInput"
+      "target": "Leg:L.pelvisInput"
     }, 
     {
-      "source": "spine.spineBase", 
+      "source": "spine:M.pelvis", 
       "_comment": "RLeg To Pelvis Connections", 
-      "target": "R_Leg.pelvisInput"
+      "target": "Leg:R.pelvisInput"
     }
   ], 
   "components": [
@@ -125,7 +125,7 @@
       }
     }, 
     {
-      "name": "L_Clavicle", 
+      "name": "Clavicle", 
       "clavicleUpVXfo": {
         "sc": {
           "y": 1.0, 
@@ -205,7 +205,7 @@
       }
     }, 
     {
-      "name": "R_Clavicle", 
+      "name": "Clavicle", 
       "clavicleUpVXfo": {
         "sc": {
           "y": 1.0, 
@@ -311,7 +311,7 @@
           }
         }
       }, 
-      "name": "L_Arm", 
+      "name": "Arm", 
       "bicepXfo": {
         "sc": {
           "y": 1.0, 
@@ -418,7 +418,7 @@
           }
         }
       }, 
-      "name": "R_Arm", 
+      "name": "Arm", 
       "bicepXfo": {
         "sc": {
           "y": 1.0, 
@@ -524,7 +524,7 @@
           }
         }
       }, 
-      "name": "L_Leg", 
+      "name": "Leg", 
       "ankleXfo": {
         "sc": {
           "y": 1.0, 
@@ -654,7 +654,7 @@
           }
         }
       }, 
-      "name": "R_Leg", 
+      "name": "Leg", 
       "ankleXfo": {
         "sc": {
           "y": 1.0, 
