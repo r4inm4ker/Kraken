@@ -50,6 +50,9 @@ class Component(Object3D):
 
         """
 
+        # We decorate the name of the component with the location. This
+        # enables multiple components to have the same name as long as they
+        # have different locations. e.g. Leg:R, and Leg:L
         return self.getName() + ":" + self.getLocation()
 
 
