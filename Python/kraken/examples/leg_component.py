@@ -71,7 +71,7 @@ class LegComponent(Component):
 class LegComponentGuide(LegComponent):
     """Leg Component Guide"""
 
-    def __init__(self, name='legGuide', parent=None, data=None):
+    def __init__(self, name='leg', parent=None, data=None):
 
         Profiler.getInstance().push("Construct Leg Guide Component:" + name)
         super(LegComponentGuide, self).__init__(name, parent)

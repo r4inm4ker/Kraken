@@ -72,6 +72,69 @@ class Rig(Container):
         Profiler.getInstance().pop()
 
 
+    def _loadComponents(self, componentsJson):
+
+        Profiler.getInstance().push("__loadComponents")
+
+        krakenSystem = KrakenSystem.getInstance()
+
+        for componentData in componentsJson:
+            # trim off the class name to get the module path.
+            modulePath = '.'.join(componentData['class'].split('.')[:-1])
+            if modulePath is not "":
+                importlib.import_module(modulePath)
+
+            componentClass = krakenSystem.getComponentClass(componentData['class'])
+            if 'name' in componentData:
+                component = componentClass(name=componentData['name'], parent=self)
+            else:
+                component = componentClass(parent=self)
+            component.loadData(componentData)
+
+        Profiler.getInstance().pop()
+
+
+    def _makeConnections(self, connectionsJson):
+
+        Profiler.getInstance().push("__makeConnections")
+
+        for connectionData in connectionsJson:
+
+            sourceComponentDecoratedName, outputName = connectionData['source'].split('.')
+            targetComponentDecoratedName, inputName = connectionData['target'].split('.')
+
+            sourceComponent = self.getChildByDecoratedName(sourceComponentDecoratedName)
+            if sourceComponent is None:
+                raise Exception("Error making connection:" + connectionData['source'] + " -> " + \
+                    connectionData['target']+". Source component not found:" + sourceComponentDecoratedName)
+
+            targetComponent = self.getChildByDecoratedName(targetComponentDecoratedName)
+            if targetComponent is None:
+                raise Exception("Error making connection:" + connectionData['source'] + " -> " + \
+                    connectionData['target']+". Target component not found:" + targetComponentDecoratedName)
+
+            outputPort = sourceComponent.getOutputByName(outputName)
+            if outputPort is None:
+                raise Exception("Error making connection:" + connectionData['source'] + " -> " + \
+                    connectionData['target']+". Output '" + outputName + "' not found on Component:" + sourceComponent.getPath())
+
+            inputPort = targetComponent.getInputByName(inputName)
+            if inputPort is None:
+                raise Exception("Error making connection:" + connectionData['source'] + " -> " + \
+                    connectionData['target']+". Input '" + inputName + "' not found on Component:" + targetComponent.getPath())
+
+            inputPort.setConnection(outputPort)
+
+        Profiler.getInstance().pop()
+
+    def _loadGraphPositions(self, graphPositions):
+
+        for componentName, graphPos in graphPositions.iteritems():
+
+            component = self.getChildByDecoratedName(componentName)
+            component.setGraphPos( graphPos )
+
+
     def loadRigDefinition(self, jsonData):
         """Load a rig definition from a JSON structure.
 
@@ -90,65 +153,15 @@ class Rig(Container):
         if 'name' in jsonData:
             self.setName(jsonData['name'])
 
-
-        def __loadComponents(componentsJson):
-            Profiler.getInstance().push("__loadComponents")
-
-            for componentData in componentsJson:
-                # trim off the class name to get the module path.
-                modulePath = '.'.join(componentData['class'].split('.')[:-1])
-                if modulePath is not "":
-                    importlib.import_module(modulePath)
-
-                componentClass = krakenSystem.getComponentClass(componentData['class'])
-                if 'name' in componentData:
-                    component = componentClass(name=componentData['name'], parent=self)
-                else:
-                    component = componentClass(parent=self)
-                component.loadData(componentData)
-
-            Profiler.getInstance().pop()
-
-
-        def __makeConnections(connectionsJson):
-
-            Profiler.getInstance().push("__makeConnections")
-
-            for connectionData in connectionsJson:
-                sourceComponentName, outputName = connectionData['source'].split('.')
-                targetComponentName, inputName = connectionData['target'].split('.')
-
-                sourceComponent = self.getChildByName(sourceComponentName)
-                if sourceComponent is None:
-                    raise Exception("Error making connection:" + connectionData['source'] + " -> " + connectionData['target']+". Source component not found:" + sourceComponentName)
-                targetComponent = self.getChildByName(targetComponentName)
-                if targetComponent is None:
-                    raise Exception("Error making connection:" + connectionData['source'] + " -> " + connectionData['target']+". Target component not found:" + targetComponentName)
-                outputPort = sourceComponent.getOutputByName(outputName)
-                if outputPort is None:
-                    raise Exception("Error making connection:" + connectionData['source'] + " -> " + connectionData['target']+". Output '" + outputName + "' not found on Component:" + sourceComponent.getName())
-                inputPort = targetComponent.getInputByName(inputName)
-                if inputPort is None:
-                    raise Exception("Error making connection:" + connectionData['source'] + " -> " + connectionData['target']+". Input '" + inputName + "' not found on Component:" + targetComponent.getName())
-                inputPort.setConnection(outputPort)
-
-            Profiler.getInstance().pop()
-
-        def __loadGraphPositions(graphPositions):
-            for componentName, graphPos in graphPositions.iteritems():
-                component = self.getChildByName(componentName)
-                component.setGraphPos( graphPos )
-
         if 'components' in jsonData:
-            __loadComponents(jsonData['components'])
+            self._loadComponents(jsonData['components'])
 
             if 'connections' in jsonData:
-                __makeConnections(jsonData['connections'])
+                self._makeConnections(jsonData['connections'])
 
 
         if 'graphPositions' in jsonData:
-            __loadGraphPositions(jsonData['graphPositions'])
-
+            self._loadGraphPositions(jsonData['graphPositions'])
 
         Profiler.getInstance().pop()
 
@@ -204,13 +217,13 @@ class Rig(Container):
                 if componentInput.isConnected():
                     componentOutput = componentInput.getConnection()
                     connectionJson = {
-                        'source': componentOutput.getParent().getName() + '.' + componentOutput.getName(),
-                        'target': component.getName() + '.' + componentInput.getName()
+                        'source': componentOutput.getParent().getDecoratedName() + '.' + componentOutput.getName(),
+                        'target': component.getDecoratedName() + '.' + componentInput.getName()
                     }
                     connectionsJson.append(connectionJson)
 
             # Save the graph pos.
-            graphPositions[component.getName()] = component.getGraphPos()
+            graphPositions[component.getDecoratedName()] = component.getGraphPos()
 
         guideData['connections'] = connectionsJson
         guideData['graphPositions'] = graphPositions
@@ -244,13 +257,13 @@ class Rig(Container):
                 if componentInput.isConnected():
                     componentOutput = componentInput.getConnection()
                     connectionJson = {
-                        'source': componentOutput.getParent().getName() + '.' + componentOutput.getName(),
-                        'target': component.getName() + '.' + componentInput.getName()
+                        'source': componentOutput.getParent().getDecoratedName() + '.' + componentOutput.getName(),
+                        'target': component.getDecoratedName() + '.' + componentInput.getName()
                     }
                     connectionsJson.append(connectionJson)
 
             # Save the graph pos.
-            graphPositions[component.getName()] = component.getGraphPos()
+            graphPositions[component.getDecoratedName()] = component.getGraphPos()
 
         guideData['connections'] = connectionsJson
         guideData['graphPositions'] = graphPositions

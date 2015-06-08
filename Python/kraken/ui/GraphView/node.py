@@ -79,7 +79,7 @@ class Node(QtGui.QGraphicsWidget):
         self.__color = QtGui.QColor(154, 205, 50, 255)
         self.__inspectorWidget = None
 
-        self.__titleItem = NodeTitle(self.__component.getName(), self)
+        self.__titleItem = NodeTitle(self.__component.getDecoratedName(), self)
         layout.addItem(self.__titleItem)
         layout.setAlignment(self.__titleItem, QtCore.Qt.AlignCenter | QtCore.Qt.AlignTop)
 
@@ -111,7 +111,7 @@ class Node(QtGui.QGraphicsWidget):
         self.setGraphPos( QtCore.QPointF( self.__component.getGraphPos().x, self.__component.getGraphPos().y ) )
 
     def getName(self):
-        return self.__component.getName()
+        return self.__component.getDecoratedName()
 
     def getComponent(self):
         return self.__component
@@ -286,7 +286,7 @@ class Node(QtGui.QGraphicsWidget):
 
 
     def nameChanged(self, name):
-        self.__titleItem.setText(name)
+        self.__titleItem.setText(self.__component.getDecoratedName())
 
         # Update the node so that the size is computed.
         self.adjustSize()

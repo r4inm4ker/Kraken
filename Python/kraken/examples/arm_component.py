@@ -71,7 +71,7 @@ class ArmComponent(Component):
 class ArmComponentGuide(ArmComponent):
     """Arm Component Guide"""
 
-    def __init__(self, name='armGuide', parent=None, data=None):
+    def __init__(self, name='arm', parent=None, data=None):
 
         Profiler.getInstance().push("Construct Arm Guide Component:" + name)
         super(ArmComponentGuide, self).__init__(name, parent)
@@ -409,6 +409,7 @@ class ArmComponentRig(ArmComponent):
     def loadData(self, data=None):
 
         self.setName(data.get('name', 'arm'))
+        self.ctrlCmpGrp.setName(self.getName())
         location = data.get('location', 'M')
         self.setLocation(location)
 

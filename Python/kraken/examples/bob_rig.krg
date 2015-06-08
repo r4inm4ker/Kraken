@@ -1,80 +1,80 @@
 {
   "connections": [
     {
-      "source": "spine.spineEnd",
-      "target": "neck.neckBase"
+      "source": "spine:M.spineEnd",
+      "target": "neck:M.neckBase"
     },
     {
-      "source": "neck.neckEnd",
-      "target": "head.headBase"
+      "source": "neck:M.neckEnd",
+      "target": "head:M.headBase"
     },
     {
-      "source": "spine.spineEnd",
-      "target": "L_Clavicle.spineEnd"
+      "source": "spine:M.spineEnd",
+      "target": "Clavicle:L.spineEnd"
     },
     {
-      "source": "spine.spineEnd",
-      "target": "R_Clavicle.spineEnd"
+      "source": "spine:M.spineEnd",
+      "target": "Clavicle:R.spineEnd"
     },
     {
-      "source": "L_Clavicle.clavicleEnd",
-      "target": "L_Arm.clavicleEnd"
+      "source": "Clavicle:L.clavicleEnd",
+      "target": "Arm:L.clavicleEnd"
     },
     {
-      "source": "R_Clavicle.clavicleEnd",
-      "target": "R_Arm.clavicleEnd"
+      "source": "Clavicle:R.clavicleEnd",
+      "target": "Arm:R.clavicleEnd"
     },
     {
-      "source": "spine.pelvis",
-      "target": "L_Leg.pelvisInput"
+      "source": "spine:M.pelvis",
+      "target": "Leg:L.pelvisInput"
     },
     {
-      "source": "spine.pelvis",
-      "target": "R_Leg.pelvisInput"
+      "source": "spine:M.pelvis",
+      "target": "Leg:R.pelvisInput"
     }
   ],
   "graphPositions": {
-    "head": {
+    "head:M": {
       "y": 565.5626831054688,
       "x": -773.5648803710938,
       "__mathObjectClass__": "Vec2"
     },
-    "neck": {
+    "neck:M": {
       "y": 551.1128540039062,
       "x": -982.2291259765625,
       "__mathObjectClass__": "Vec2"
     },
-    "spine": {
+    "spine:M": {
       "y": 11.081206321716309,
       "x": -1383.1826171875,
       "__mathObjectClass__": "Vec2"
     },
-    "R_Leg": {
+    "Leg:R": {
       "y": -228.83909606933594,
       "x": -975.4631958007812,
       "__mathObjectClass__": "Vec2"
     },
-    "R_Clavicle": {
+    "Clavicle:R": {
       "y": 283.7149963378906,
       "x": -977.65185546875,
       "__mathObjectClass__": "Vec2"
     },
-    "L_Clavicle": {
+    "Clavicle:L": {
       "y": 21.802101135253906,
       "x": -971.165771484375,
       "__mathObjectClass__": "Vec2"
     },
-    "L_Leg": {
+    "Leg:L": {
       "y": -499.2738342285156,
       "x": -979.3851318359375,
       "__mathObjectClass__": "Vec2"
     },
-    "L_Arm": {
+    "Arm:L": {
       "y": 54.11977767944336,
       "x": -765.1942138671875,
       "__mathObjectClass__": "Vec2"
     },
-    "R_Arm": {
+    "Arm:R": {
       "y": 309.9880065917969,
       "x": -776.0560302734375,
       "__mathObjectClass__": "Vec2"
@@ -171,7 +171,7 @@
       "location": "M"
     },
     {
-      "name": "L_Clavicle",
+      "name": "Clavicle",
       "clavicleUpVXfo": {
         "sc": {
           "y": 1.0,
@@ -251,7 +251,7 @@
       }
     },
     {
-      "name": "R_Clavicle",
+      "name": "Clavicle",
       "clavicleUpVXfo": {
         "sc": {
           "y": 1.0,
@@ -357,7 +357,7 @@
           }
         }
       },
-      "name": "L_Arm",
+      "name": "Arm",
       "bicepXfo": {
         "sc": {
           "y": 1.0,
@@ -464,7 +464,7 @@
           }
         }
       },
-      "name": "R_Arm",
+      "name": "Arm",
       "bicepXfo": {
         "sc": {
           "y": 1.0,
@@ -570,7 +570,7 @@
           }
         }
       },
-      "name": "L_Leg",
+      "name": "Leg",
       "ankleXfo": {
         "sc": {
           "y": 1.0,
@@ -700,7 +700,7 @@
           }
         }
       },
-      "name": "R_Leg",
+      "name": "Leg",
       "ankleXfo": {
         "sc": {
           "y": 1.0,

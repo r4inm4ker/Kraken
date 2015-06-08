@@ -15,32 +15,32 @@ class Synchronizer(Synchronizer):
     # ============
     # DCC Methods
     # ============
-    def getDCCItem(self, decoratedPath):
+    def getDCCItem(self, kObject):
         """Gets the DCC Item from the full decorated path.
 
         Arguments:
-        decoratedPath -- String, full decorated path for the object.
+        kObject -- object, the Kraken Python object that we must find the corresponding DCC item.
 
         Return:
         DCC Object, None if it isn't found.
 
         """
+        fullBuildName = kObject.getBuildName()
 
-        # Softimage matches the Kraken path so we remove decorators.
-        path = decoratedPath.translate(None, ':#')
+        # Softimage matches the Kraken build name
 
-        findItem = si.Dictionary.GetObject(path, False)
+        findItem = si.Dictionary.GetObject(fullBuildName, False)
         if findItem is None:
             return None
 
         return findItem
 
 
-    def syncXfo(self, obj):
+    def syncXfo(self, kObject):
         """Syncs the xfo from the DCC objec to the Kraken object.
 
         Arguments:
-        obj -- Object, object to sync the xfo for.
+        kObject -- Object, object to sync the xfo for.
 
         Return:
         True if successful.
@@ -49,11 +49,11 @@ class Synchronizer(Synchronizer):
 
         hrcMap = self.getHierarchyMap()
 
-        if obj not in hrcMap.keys():
-            print "Warning! 3D Object '" + obj.getName() + "' was not found in the mapping!"
+        if kObject not in hrcMap.keys():
+            print "Warning! 3D Object '" + kObject.getName() + "' was not found in the mapping!"
             return False
 
-        dccItem = hrcMap[obj]['dccItem']
+        dccItem = hrcMap[kObject]['dccItem']
 
         dccXfo = dccItem.Kinematics.Global.GetTransform2(None)
         dccPos = dccXfo.Translation.Get2()
@@ -66,16 +66,16 @@ class Synchronizer(Synchronizer):
 
         newXfo = Xfo(tr=pos, ori=quat, sc=scl)
 
-        obj.xfo = newXfo
+        kObject.xfo = newXfo
 
         return True
 
 
-    def syncAttribute(self, obj):
+    def syncAttribute(self, kObject):
         """Syncs the attribute value from the DCC objec to the Kraken object.
 
         Arguments:
-        obj -- Object, object to sync the attribute value for.
+        kObject -- Object, object to sync the attribute value for.
 
         Return:
         True if successful.
@@ -84,12 +84,12 @@ class Synchronizer(Synchronizer):
 
         hrcMap = self.getHierarchyMap()
 
-        if obj not in hrcMap.keys():
-            print "Warning! Attribute '" + obj.getName() + "' was not found in the mapping!"
+        if kObject not in hrcMap.keys():
+            print "Warning! Attribute '" + kObject.getName() + "' was not found in the mapping!"
             return False
 
-        dccItem = hrcMap[obj]['dccItem']
+        dccItem = hrcMap[kObject]['dccItem']
 
-        obj.setValue(dccItem.Value)
+        kObject.setValue(dccItem.Value)
 
         return True
