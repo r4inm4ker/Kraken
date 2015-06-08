@@ -99,7 +99,7 @@ class SceneItem(object):
         return True
 
 
-    def getFullName(self):
+    def getPath(self):
         """Returns the full hierarchical path to this object.
 
         Return:
@@ -108,7 +108,7 @@ class SceneItem(object):
         """
 
         if self.getParent() is not None:
-            return self.getParent().getFullName() + '.' + self.getName()
+            return self.getParent().getPath() + '.' + self.getName()
 
         return self.getName()
 
@@ -134,7 +134,7 @@ class SceneItem(object):
 
 
         if self.getParent() is not None:
-            return self.getParent().getFullName() + '.' + self.getDecoratedName()
+            return self.getParent().getPath() + '.' + self.getDecoratedName()
 
         return self.getDecoratedName()
 

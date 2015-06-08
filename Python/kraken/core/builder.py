@@ -724,7 +724,7 @@ class Builder(object):
         if objectColor is not None:
 
             if objectColor not in colors.keys():
-                raise ValueError("Invalid color '" + objectColor + "' set on: " + kSceneItem.getFullName())
+                raise ValueError("Invalid color '" + objectColor + "' set on: " + kSceneItem.getPath())
 
             buildColor = objectColor
 

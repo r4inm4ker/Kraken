@@ -507,12 +507,12 @@ class Builder(Builder):
             for eachConstrainer in kConstraint.getConstrainers():
 
                 if eachConstrainer is None:
-                    raise Exception("Constraint '"+kConstraint.getFullName()+"' has invalid connection.");
+                    raise Exception("Constraint '"+kConstraint.getPath()+"' has invalid connection.");
 
                 dccSceneItem = self.getDCCSceneItem(eachConstrainer)
 
                 if dccSceneItem is None:
-                    raise Exception("Constraint '"+kConstraint.getFullName()+"' of type '"+solverTypeName+"' is connected to object without corresponding SceneItem:" + eachConstrainer.getFullName());
+                    raise Exception("Constraint '"+kConstraint.getPath()+"' of type '"+solverTypeName+"' is connected to object without corresponding SceneItem:" + eachConstrainer.getPath());
 
                 connectionTargets = dccSceneItem.FullName + connectionSuffix
                 break
@@ -646,12 +646,12 @@ class Builder(Builder):
 
                         target = kOperator.getOutput(arg.name)
                         if target is None:
-                            raise Exception("Solver '" + kOperator.getFullName() + "' output :'" + arg.name + "' not connected.")
+                            raise Exception("Solver '" + kOperator.getPath() + "' output :'" + arg.name + "' not connected.")
 
                         operatorOwner = self.getDCCSceneItem(target)
 
                         if operatorOwner is None:
-                            raise Exception("Solver '" + kOperator.getFullName() + "' output :'" + arg.name + "' dcc item not found for item:" + target.getFullName())
+                            raise Exception("Solver '" + kOperator.getPath() + "' output :'" + arg.name + "' dcc item not found for item:" + target.getPath())
 
                         targets = operatorOwner.FullName + ".kine.global"
                         operatorOwnerArg = arg.name
@@ -661,12 +661,12 @@ class Builder(Builder):
                         for target in kOperator.getOutput(arg.name):
 
                             if target is None:
-                                raise Exception("Solver '" + kOperator.getFullName() + "' output :'" + arg.name + "' not connected.")
+                                raise Exception("Solver '" + kOperator.getPath() + "' output :'" + arg.name + "' not connected.")
 
                             dccSceneItem = self.getDCCSceneItem(target)
 
                             if dccSceneItem is None:
-                                raise Exception("Solver '" + kOperator.getFullName() + "' output :'" + arg.name + "' dcc item not found for item:" + target.getFullName())
+                                raise Exception("Solver '" + kOperator.getPath() + "' output :'" + arg.name + "' dcc item not found for item:" + target.getPath())
 
                             if targets == "":
                                 operatorOwner = dccSceneItem
@@ -722,7 +722,7 @@ class Builder(Builder):
                         dccSceneItem = self.getDCCSceneItem(connectedObjects[i])
 
                         if dccSceneItem is None:
-                            raise Exception("Operator '"+kOperator.getName()+"' of type '"+solverTypeName+"' arg '"+arg.name+"' dcc item not found for item:" + connectedObjects[i].getFullName());
+                            raise Exception("Operator '"+kOperator.getName()+"' of type '"+solverTypeName+"' arg '"+arg.name+"' dcc item not found for item:" + connectedObjects[i].getPath());
 
                         if i==0:
                             connectionTargets = dccSceneItem.FullName + connectionSuffix
@@ -735,7 +735,7 @@ class Builder(Builder):
                     dccSceneItem = self.getDCCSceneItem(connectedObjects)
 
                     if dccSceneItem is None:
-                        raise Exception("Operator '"+kOperator.getName()+"' of type '"+solverTypeName+"' arg '"+arg.name+"' dcc item not found for item:" + connectedObjects.getFullName());
+                        raise Exception("Operator '"+kOperator.getName()+"' of type '"+solverTypeName+"' arg '"+arg.name+"' dcc item not found for item:" + connectedObjects.getPath());
 
                     connectionTargets = dccSceneItem.FullName + connectionSuffix
 

@@ -173,7 +173,7 @@ class Object3D(SceneItem):
                     location = self.getComponent().getLocation()
 
                 if location not in nameTemplate['locations']:
-                    raise ValueError("Invalid location on: " + self.getFullName())
+                    raise ValueError("Invalid location on: " + self.getPath())
 
                 builtName += location
 
@@ -202,7 +202,7 @@ class Object3D(SceneItem):
                 builtName += self.getContainer().getName()
 
             else:
-                raise ValueError("Unresolvabled token '" + token + "' used on: " + self.getFullName())
+                raise ValueError("Unresolvabled token '" + token + "' used on: " + self.getPath())
 
         return builtName
 

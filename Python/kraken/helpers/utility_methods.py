@@ -11,7 +11,7 @@ def logHierarchy(kObject):
 
     """
 
-    print kObject.getFullName()
+    print kObject.getPath()
     for i in xrange(kObject.getNumChildren()):
         child = kObject.getChildByIndex(i)
         logHierarchy(child)

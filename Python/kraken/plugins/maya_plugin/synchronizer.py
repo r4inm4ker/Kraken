@@ -73,7 +73,7 @@ class Synchronizer(Synchronizer):
         dccItem = hrcMap[obj]['dccItem']
 
         if dccItem is None:
-            print "Warning Syncing. No DCC Item for :" + obj.getFullName()
+            print "Warning Syncing. No DCC Item for :" + obj.getPath()
             return;
 
         dccPos = dccItem.getTranslation()
@@ -111,7 +111,7 @@ class Synchronizer(Synchronizer):
         dccItem = hrcMap[obj]['dccItem']
 
         if dccItem is None:
-            print "Warning Syncing. No DCC Item for :" + obj.getFullName()
+            print "Warning Syncing. No DCC Item for :" + obj.getPath()
             return;
 
         obj.setValue(dccItem.get())
