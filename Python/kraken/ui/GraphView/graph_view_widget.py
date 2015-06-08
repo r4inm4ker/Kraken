@@ -22,12 +22,15 @@ class GraphViewWidget(QtGui.QWidget):
 
         # constructors of base classes
         super(GraphViewWidget, self).__init__(parent)
+        self.setObjectName('graphViewWidget')
 
         self.graphView = GraphView(parent=self)
         self.__contextualNodeList = None
 
         # setup the toobar
         toolBar = QtGui.QToolBar()
+        toolBar.setObjectName('mainToolbar')
+
 
         newAction = toolBar.addAction('New')
         newAction.setShortcut('Ctrl+N')
@@ -47,12 +50,11 @@ class GraphViewWidget(QtGui.QWidget):
         toolBar.addSeparator()
 
         # Setup the name widget
-        toolBar.addWidget(QtGui.QLabel('Name:'))
+        toolBar.addWidget(QtGui.QLabel('Rig Name:'))
         self.nameWidget = QtGui.QLineEdit('', self)
-        def setRigName( text ):
-            self.guideRig.setName( text )
-        self.nameWidget.textChanged.connect(setRigName)
-        toolBar.addWidget( self.nameWidget )
+
+        self.nameWidget.textChanged.connect(self.setRigName)
+        toolBar.addWidget(self.nameWidget)
 
         toolBar.addSeparator()
 
@@ -67,7 +69,6 @@ class GraphViewWidget(QtGui.QWidget):
 
         #########################
         ## Setup hotkeys for the following actions.
-
         deleteShortcut = QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.Key_Delete), self)
         deleteShortcut.activated.connect(self.graphView.deleteSelectedNodes)
 
@@ -77,6 +78,7 @@ class GraphViewWidget(QtGui.QWidget):
         frameShortcut = QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.Key_A), self)
         frameShortcut.activated.connect(self.graphView.frameAllNodes)
 
+        # Setup Layout
         layout = QtGui.QVBoxLayout(self)
         layout.addWidget(toolBar)
         layout.addWidget(self.graphView)
@@ -87,6 +89,9 @@ class GraphViewWidget(QtGui.QWidget):
 
     def getContextualNodeList(self):
         return self.__contextualNodeList
+
+    def setRigName(self, text):
+        self.guideRig.setName(text)
 
     def newRigPreset(self):
         # TODO: clean the rig from the scene if it has been built.

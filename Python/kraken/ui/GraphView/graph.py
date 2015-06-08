@@ -11,6 +11,7 @@ class Graph(QtGui.QGraphicsWidget):
 
     def __init__(self, parent, rig):
         super(Graph, self).__init__()
+        self.setObjectName('graphWidget')
 
         self.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding))
         parentSize = parent.size()
@@ -27,7 +28,6 @@ class Graph(QtGui.QGraphicsWidget):
 
         self.__mainPanel = MainPanel(self)
 
-        self.setContentsMargins(2, 0, 2, 0)
         layout = QtGui.QGraphicsLinearLayout()
         layout.setSpacing(0)
         layout.setContentsMargins(0, 0, 0, 0)

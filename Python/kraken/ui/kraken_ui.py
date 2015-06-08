@@ -17,6 +17,131 @@ class KrakenUI(QtGui.QWidget):
 
         # constructors of base classes
         super(KrakenUI, self).__init__(parent)
+        self.setObjectName('mainUI')
+
+        styleSheet = """
+
+        QWidget#mainUI {
+            background-color: #151515;
+        }
+
+        QSplitter::handle:horizontal {
+            background: #222;
+            width: 13px;
+            margin-top: 2px;
+            margin-bottom: 2px;
+            border-radius: 3px;
+        }
+
+        QTreeWidget#ComponentTree {
+            border: 0;
+            border-radius: 3px;
+            padding: 0;
+            margin: 0;
+
+            color: #e1ffff;
+            background-color: #333;
+        }
+
+        QTreeWidget#ComponentTree::item {
+            padding: 5px 0;
+            margin: 0;
+            spacing: 0;
+        }
+
+        QTreeWidget#ComponentTree::item:hover {
+            background-color: #438f99;
+        }
+
+        QTreeWidget#ComponentTree::item:focus {
+            color: white;
+            background-color: #438f99;
+        }
+
+        QTreeWidget#ComponentTree::item:selected {
+            color: white;
+            background-color: #438f99;
+        }
+
+        QLineEdit {
+            border: 0px;
+            border-radius: 3px;
+            padding: 3px;
+
+            color: #e1ffff;
+            background-color: #333;
+        }
+
+        /* Contextual Node List */
+        QLineEdit#contextNodeListSearchLine {
+            border: 1px solid #111;
+        }
+
+        QListWidget#contextNodeList {
+            background-color: #333;
+        }
+
+        QListWidget#contextNodeList::item {
+            color: #e1ffff;
+        }
+
+        QListWidget#contextNodeList::item:selected {
+            color: white;
+            background-color: #438f99;
+        }
+
+        QListWidget#contextNodeList::item:hover {
+            background-color: #438f99;
+        }
+
+        /* Toolbar */
+        QToolbar#mainToolbar {
+            spacing: 20px;
+        }
+
+        QToolBar {
+            border: 0px;
+            height: 50px;
+            padding: 5px 5px;
+            margin: 0;
+            spacing: 5px;
+
+            background-color: #222;
+        }
+
+        QToolBar::handle {
+            background-color: #FF0000;
+        }
+
+        QToolButton {
+            border-radius: 3px;
+            padding: 5px;
+
+            color: #e1ffff;
+        }
+
+        QToolButton:hover {
+            background-color: #333;
+        }
+
+        QLabel {
+            padding-right: 10px;
+
+            color: #e1ffff;
+        }
+
+        QToolBar::separator {
+            padding: 0 10px;
+            width: 1px;
+        }
+
+        QGraphicsView#graphView {
+            border: 0px;
+        }
+
+        """
+
+        self.setStyleSheet(styleSheet)
 
         self.setWindowTitle("Kraken Editor")
         self.setAcceptDrops(True)
@@ -30,6 +155,8 @@ class KrakenUI(QtGui.QWidget):
 
         horizontalSplitter.setStretchFactor(0, 0)
         horizontalSplitter.setStretchFactor(1, 1)
+
+        horizontalSplitter.setSizes([0, 100])
 
         grid = QtGui.QVBoxLayout(self)
         grid.addWidget(horizontalSplitter)

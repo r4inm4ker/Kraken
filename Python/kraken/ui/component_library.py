@@ -12,11 +12,13 @@ class _ComponentTree(QtGui.QTreeWidget):
     def __init__(self, parent=None):
         # constructors of base classes
         QtGui.QTreeWidget.__init__(self, parent)
+        self.setObjectName('ComponentTree')
 
         self.setDragEnabled(True)
         self.setDragDropMode(QtGui.QTreeWidget.DragOnly)
         self.setColumnCount(1)
         self.setHeaderLabels([''])
+        self.header().close()
 
 
     def mouseMoveEvent(self, event):
@@ -50,13 +52,14 @@ class ComponentLibrary(QtGui.QWidget):
 
     def __init__(self, parent=None):
         super(ComponentLibrary, self).__init__(parent)
+        self.setObjectName('ComponentLibrary')
 
         self.ks = KrakenSystem.getInstance()
         self.ks.loadIniFile()
         # self.controller = controller
         self.searchLineEdit = QtGui.QLineEdit(self)
-        self.searchLineEdit.setFocusPolicy(QtCore.Qt.StrongFocus)
-        self.searchLineEdit.setFocus()
+        # self.searchLineEdit.setFocusPolicy(QtCore.Qt.StrongFocus)
+        # self.searchLineEdit.setFocus()
 
         self.nodesList = _ComponentTree(parent)
 
@@ -75,20 +78,24 @@ class ComponentLibrary(QtGui.QWidget):
         fuzzyText = self.searchLineEdit.text()
 
         for componentClassName in self.componentClassNames:
+            shortName = componentClassName.rsplit('.', 1)[-1]
+
             if fuzzyText != '':
-                if fuzzyText.lower() not in componentClassName.lower():
+                if fuzzyText.lower() not in shortName.lower():
                     continue
 
-            cmpCls = self.ks.getComponentClass( componentClassName )
+            cmpCls = self.ks.getComponentClass(componentClassName)
             if cmpCls.getComponentType() != 'Guide':
                 continue
 
             treeItem = QtGui.QTreeWidgetItem()
-            treeItem.setText(0, componentClassName.rsplit('.', 1)[-1])
+            treeItem.setText(0, shortName)
             treeItem.setData(0, QtCore.Qt.UserRole, componentClassName)
             self.nodesList.addTopLevelItem(treeItem)
 
         self.nodesList.expandAll()
+
+        self.nodesList.setCurrentItem(self.nodesList.topLevelItem(0))
 
 
 if __name__ == "__main__":
