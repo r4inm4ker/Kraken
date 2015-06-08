@@ -274,7 +274,7 @@ class Object3D(SceneItem):
     # ==============
     # Child Methods
     # ==============
-    def checkChildIndex(self, index):
+    def _checkChildIndex(self, index):
         """Checks the supplied index is valid.
 
         Arguments:
@@ -332,7 +332,7 @@ class Object3D(SceneItem):
 
         """
 
-        if self.checkChildIndex(index) is not True:
+        if self._checkChildIndex(index) is not True:
             return False
 
         del self.getChildren()[index]
@@ -411,7 +411,7 @@ class Object3D(SceneItem):
 
         """
 
-        if self.checkChildIndex(index) is not True:
+        if self._checkChildIndex(index) is not True:
             return False
 
         return self.getChildren()[index]
@@ -469,88 +469,6 @@ class Object3D(SceneItem):
         return childrenOfType
 
 
-    def findChild(self, name, childType=None, targetObj=None):
-        """Finds a child by recursively searching the hierarhcy for a child with
-        the given name.
-
-        Arguments:
-        name -- String, name of the child to find.
-        childType -- String, type of object to find.
-        targetObj -- Object, object to search under. Used for recursive searching.
-
-        Return:
-        Object, child if found.
-
-        """
-
-        foundChild = None
-
-        if targetObj == None:
-            targetObj = self
-
-        # Build children
-        for i in xrange(targetObj.getNumChildren()):
-            child = targetObj.getChildByIndex(i)
-
-            if child.getName() == name and child.getTypeName() == childType:
-                foundChild = child
-            else:
-                foundChild = self.findChild(name, childType=childType, targetObj=child)
-
-            if foundChild is not None:
-                break
-
-        return foundChild
-
-
-    def findChildrenByType(self, childType, targetObj=None):
-        """Finds a child by recursively searching the hierarhcy for a child with
-        the given name.
-
-        Arguments:
-        childType -- String, type of children to find.
-        targetObj -- Object, object to search under. Used for recursive searching.
-
-        Return:
-        List, children of the searched type if found.
-
-        """
-
-        childrenOfType = []
-
-        self._findChildByType(childType, childrenOfType)
-
-        return childrenOfType
-
-
-    def _findChildByType(self, childType, foundArray, targetObj=None):
-        """Protected find child by type method.
-
-        Arguments:
-        childType -- Class, type of children to find.
-        foundArray -- List, list of found children to append to.
-        targetObj -- Object, object to search under. Used for recursive searching.
-
-        Return:
-        True if successful.
-
-        """
-
-        if targetObj == None:
-            targetObj = self
-
-        # Build children
-        for i in xrange(targetObj.getNumChildren()):
-            child = targetObj.getChildByIndex(i)
-
-            if type(child).__name__ is childType:
-                foundArray.append(child)
-
-            newFoundChildren = self._findChildByType(childType, foundArray, child)
-
-        return
-
-
     # =============
     # Flag Methods
     # =============
@@ -605,7 +523,7 @@ class Object3D(SceneItem):
     # ========================
     # Attribute Group Methods
     # ========================
-    def checkAttributeGroupIndex(self, index):
+    def _checkAttributeGroupIndex(self, index):
         """Checks the supplied index is valid.
 
         Arguments:
@@ -653,7 +571,7 @@ class Object3D(SceneItem):
 
         """
 
-        if self.checkAttributeGroupIndex(index) is not True:
+        if self._checkAttributeGroupIndex(index) is not True:
             return False
 
         del self._attributeGroups[index]
@@ -709,7 +627,7 @@ class Object3D(SceneItem):
 
         """
 
-        if self.checkAttributeGroupIndex(index) is not True:
+        if self._checkAttributeGroupIndex(index) is not True:
             return False
 
         return self._attributeGroups[index]
