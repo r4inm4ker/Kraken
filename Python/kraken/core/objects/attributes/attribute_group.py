@@ -23,20 +23,6 @@ class AttributeGroup(SceneItem):
             parent.addAttributeGroup(self)
 
 
-    # =============
-    # Name Methods
-    # =============
-    def getDecoratedPath(self):
-        """Gets the decorated path of the object.
-
-        Return:
-        String, decorated path  of the object.
-
-        """
-
-        return self.getName() + ':%'
-
-
     # ==================
     # Attribute Methods
     # ==================

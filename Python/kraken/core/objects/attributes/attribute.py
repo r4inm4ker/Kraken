@@ -28,20 +28,6 @@ class Attribute(SceneItem):
             parent.addAttribute(self)
 
 
-    # =============
-    # Name Methods
-    # =============
-    def getDecoratedName(self):
-        """Gets the decorated name of the object.
-
-        Return:
-        String, decorated name of the object.
-
-        """
-
-        return self.getName() + ":#"
-
-
     # ==============
     # Value Methods
     # ==============

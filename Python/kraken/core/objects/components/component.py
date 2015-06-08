@@ -39,21 +39,6 @@ class Component(Object3D):
 
 
     # =============
-    # Name Methods
-    # =============
-
-    def getDecoratedName(self):
-        """Gets the decorated name of the object.
-
-        Return:
-        String, decorated name of the object.
-
-        """
-
-        return self.getName() + ":" + self.getLocation()
-
-
-    # =============
     # Side Methods
     # =============
     def getLocation(self):

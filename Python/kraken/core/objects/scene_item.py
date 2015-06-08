@@ -113,33 +113,6 @@ class SceneItem(object):
         return self.getName()
 
 
-    def getDecoratedName(self):
-        """Gets the decorated name of the object.
-
-        Return:
-        String, decorated name of the object.
-
-        """
-
-        return self.getName()
-
-
-    def getDecoratedPath(self):
-        """Gets the decorated path of the object.
-
-        Return:
-        String, decorated path  of the object.
-
-        """
-
-
-        if self.getParent() is not None:
-            return self.getParent().getPath() + '.' + self.getDecoratedName()
-
-        return self.getDecoratedName()
-
-
-
     # ===============
     # Parent Methods
     # ===============
