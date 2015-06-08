@@ -463,7 +463,7 @@ class Builder(object):
 
         dccSceneItem = None
 
-        buildName = self.getBuildName(kObject)
+        buildName = kObject.getBuildName()
 
         # Build Object
         if kObject.isTypeOf("Container"):

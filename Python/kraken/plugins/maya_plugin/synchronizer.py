@@ -2,7 +2,7 @@ from kraken.core.maths import Xfo, Vec3, Quat
 
 from kraken.core.synchronizer import Synchronizer
 from kraken.plugins.maya_plugin.utils import *
-
+from kraken.core.objects.attributes.attribute_group import AttributeGroup
 
 class Synchronizer(Synchronizer):
     """The Synchronizer is a singleton object used to synchronize data between
@@ -15,49 +15,49 @@ class Synchronizer(Synchronizer):
     # ============
     # DCC Methods
     # ============
-    def getDCCItem(self, obj):
+    def getDCCItem(self, kObject):
         """Gets the DCC Item from the full decorated path.
 
         Arguments:
-        decoratedPath -- String, full decorated path for the object.
+        kObject -- object, the Kraken Python object that we must find the corresponding DCC item.
 
         Return:
         DCC Object, None if it isn't found.
 
         """
 
-        fullBuildName = obj.getBuildName()
-        decoratedPath = obj.getDecoratedPath()
+        path = kObject.getPath()
         try:
-            path = ''
-            pathSections = decoratedPath.split('.')
-            for pathSection in pathSections:
-                decorator = if ':' in pathSection: pathSection.split(':')[1] else: ''
-                if decorator == '%':
+            pathSections = path.split('.')
+            pathObj = kObject
+            for pathSection in reversed(pathSections):
+                if pathObj.isTypeOf('AttributeGroup'):
                     # The '%' symbol represents an attribute group that we never
                     # build in Maya.
-                    continue
+                    pass
 
-                elif decorator == '#':
+                elif pathObj.isTypeOf('Attribute'):
                     # The '#' symbol represents an attribute object which
                     # requires a '.' seperator in the Maya path.
-                    path += '.' + pathSection
+                    mayaPath += '.' + pathObj.getBuildName()
 
                 else:
-                    path += '|' + pathSection
+                    mayaPath += '|' + pathObj.getBuildName()
 
-            foundItem = pm.PyNode(path)
+                pathObj = pathObj.getParent()
+
+            foundItem = pm.PyNode(mayaPath)
         except:
             return None
 
         return foundItem
 
 
-    def syncXfo(self, obj):
-        """Syncs the xfo from the DCC objec to the Kraken object.
+    def syncXfo(self, kObject):
+        """Syncs the xfo from the DCC object to the Kraken object.
 
         Arguments:
-        obj -- Object, object to sync the xfo for.
+        kObject -- Object, object to sync the xfo for.
 
         Return:
         True if successful.
@@ -66,14 +66,14 @@ class Synchronizer(Synchronizer):
 
         hrcMap = self.getHierarchyMap()
 
-        if obj not in hrcMap.keys():
-            print "Warning! 3D Object '" + obj.getName() + "' was not found in the mapping!"
+        if kObject not in hrcMap.keys():
+            print "Warning! 3D Object '" + kObject.getName() + "' was not found in the mapping!"
             return False
 
-        dccItem = hrcMap[obj]['dccItem']
+        dccItem = hrcMap[kObject]['dccItem']
 
         if dccItem is None:
-            print "Warning Syncing. No DCC Item for :" + obj.getPath()
+            print "Warning Syncing. No DCC Item for :" + kObject.getPath()
             return;
 
         dccPos = dccItem.getTranslation()
@@ -86,16 +86,16 @@ class Synchronizer(Synchronizer):
 
         newXfo = Xfo(tr=pos, ori=quat, sc=scl)
 
-        obj.xfo = newXfo
+        kObject.xfo = newXfo
 
         return True
 
 
-    def syncAttribute(self, obj):
+    def syncAttribute(self, kObject):
         """Syncs the attribute value from the DCC objec to the Kraken object.
 
         Arguments:
-        obj -- Object, object to sync the attribute value for.
+        kObject -- Object, object to sync the attribute value for.
 
         Return:
         True if successful.
@@ -104,16 +104,16 @@ class Synchronizer(Synchronizer):
 
         hrcMap = self.getHierarchyMap()
 
-        if obj not in hrcMap.keys():
-            print "Warning! Attribute '" + obj.getName() + "' was not found in the mapping!"
+        if kObject not in hrcMap.keys():
+            print "Warning! Attribute '" + kObject.getName() + "' was not found in the mapping!"
             return False
 
-        dccItem = hrcMap[obj]['dccItem']
+        dccItem = hrcMap[kObject]['dccItem']
 
         if dccItem is None:
-            print "Warning Syncing. No DCC Item for :" + obj.getPath()
+            print "Warning Syncing. No DCC Item for :" + kObject.getPath()
             return;
 
-        obj.setValue(dccItem.get())
+        kObject.setValue(dccItem.get())
 
         return True
