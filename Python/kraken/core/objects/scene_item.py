@@ -134,10 +134,9 @@ class SceneItem(object):
 
 
         if self.getParent() is not None:
-            return self.getParent().getPath() + '.' + self.getDecoratedName()
+            return self.getParent().getDecoratedPath() + '.' + self.getDecoratedName()
 
         return self.getDecoratedName()
-
 
 
     # ===============

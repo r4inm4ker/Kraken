@@ -433,6 +433,22 @@ class Object3D(SceneItem):
         return None
 
 
+    def getChildByDecoratedName(self, decoratedName):
+        """Returns the child object with the specified name.
+
+        Return:
+        Object if found.
+        None if not found.
+
+        """
+
+        for eachChild in self.getChildren():
+            if eachChild.getDecoratedName() == decoratedName:
+                return eachChild
+
+        return None
+
+
     def getChildrenByType(self, childType):
         """Returns all children that are of the specified type.
 

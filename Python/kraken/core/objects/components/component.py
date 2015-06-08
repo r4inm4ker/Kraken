@@ -160,8 +160,7 @@ class Component(Object3D):
     # Child Methods
     # ==============
     def addChild(self, child):
-        """Adds a child to the component and sets the object's component
-        attribute.
+        """Adds a child to the component and sets the object's component attribute.
 
         Arguments:
         child -- Object, object to add as a child.
