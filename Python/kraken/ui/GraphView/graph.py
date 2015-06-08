@@ -54,7 +54,7 @@ class Graph(QtGui.QGraphicsWidget):
 
     def addNode(self, component):
         node = Node(self, component)
-        self.__nodes[component.getName()] = node
+        self.__nodes[node.getName()] = node
         return node
 
     def getNode(self, name):
@@ -223,8 +223,8 @@ class Graph(QtGui.QGraphicsWidget):
                 if componentInput.isConnected():
                     componentOutput = componentInput.getConnection()
                     self.addConnection(
-                        source = componentOutput.getParent().getName() + '.' + componentOutput.getName(),
-                        target = component.getName() + '.' + componentInput.getName()
+                        source = componentOutput.getParent().getDecoratedName() + '.' + componentOutput.getName(),
+                        target = component.getDecoratedName() + '.' + componentInput.getName()
                     )
 
         self.frameAllNodes()
