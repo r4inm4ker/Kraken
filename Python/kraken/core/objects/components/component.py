@@ -16,6 +16,7 @@ from kraken.core.objects.attributes.string_attribute import StringAttribute
 
 from kraken.core.objects.components.component_input import ComponentInput
 from kraken.core.objects.components.component_output import ComponentOutput
+from kraken.core.objects.component_group import ComponentGroup
 
 
 class Component(Object3D):
@@ -27,6 +28,7 @@ class Component(Object3D):
         self._inputs = []
         self._outputs = []
         self._operators = []
+        self._ctrlCmpGrp = None
 
         self.setShapeVisibility(False)
 
@@ -37,10 +39,35 @@ class Component(Object3D):
         self._graphPos = Vec2()
 
 
-
     # =============
     # Name Methods
     # =============
+
+    def setName(self, name):
+        """Sets the name of the object with a string.
+
+        Arguments:
+        name -- String, the new name for the item.
+
+        Return:
+        True if successful.
+
+        """
+
+        # # Check for existing objects with that name and type.
+        # parent = self.getParent()
+        # if parent is not None:
+        #     foundChild = parent.findChild(name, childType=self.getTypeName())
+        #     if foundChild is not None:
+        #         raise Exception("Child with the same name already exists: '" +
+        #                         name + "'")
+
+        self._name = name
+
+        if self._ctrlCmpGrp is not None:
+            self._ctrlCmpGrp.setName(name)
+
+        return True
 
     def getDecoratedName(self):
         """Gets the decorated name of the object.
@@ -117,9 +144,9 @@ class Component(Object3D):
         return True
 
 
-    # =============
-    # Layer methods
-    # =============
+    # =================
+    # Hierarchy methods
+    # =================
     def getLayer(self, name):
         """Retrieves a layer from the owning container, or generates a layer
         (and warning message)
@@ -157,6 +184,20 @@ class Component(Object3D):
             layer = Layer(name, parent=container)
 
         return layer
+
+
+    def getOrCreateConstrolsComponentGroup(self):
+        """Retrieves a layer from the owning container, or generates a layer (and warning message)
+
+        Return:
+        Layer, the layer from the container, or generated layer.
+
+        """
+
+
+        controlsLayer = self.getOrCreateLayer('controls')
+        self._ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=controlsLayer)
+        return self._ctrlCmpGrp
 
 
     # ==============

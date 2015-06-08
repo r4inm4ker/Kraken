@@ -31,8 +31,7 @@ class NeckComponent(Component):
         # ================
         # Setup Hierarchy
         # ================
-        self.controlsLayer = self.getOrCreateLayer('controls')
-        self.ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=self.controlsLayer)
+        self.ctrlCmpGrp = self.getOrCreateConstrolsComponentGroup()
 
         # IO Hierarchies
         self.inputHrcGrp = HierarchyGroup('inputs', parent=self.ctrlCmpGrp)
