@@ -107,10 +107,37 @@ class SceneItem(object):
 
         """
 
-        if self._parent is not None:
-            return self._parent.getFullName() + '.' + self.getName()
+        if self.getParent() is not None:
+            return self.getParent().getFullName() + '.' + self.getName()
 
         return self.getName()
+
+
+    def getDecoratedName(self):
+        """Gets the decorated name of the object.
+
+        Return:
+        String, decorated name of the object.
+
+        """
+
+        return self.getName()
+
+
+    def getDecoratedPath(self):
+        """Gets the decorated path of the object.
+
+        Return:
+        String, decorated path  of the object.
+
+        """
+
+
+        if self.getParent() is not None:
+            return self.getParent().getFullName() + '.' + self.getDecoratedName()
+
+        return self.getDecoratedName()
+
 
 
     # ===============

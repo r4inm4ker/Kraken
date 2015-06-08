@@ -31,15 +31,15 @@ class Attribute(SceneItem):
     # =============
     # Name Methods
     # =============
-    def getDecoratedPath(self):
-        """Gets the decorated path of the object.
+    def getDecoratedName(self):
+        """Gets the decorated name of the object.
 
         Return:
-        String, decorated path  of the object.
+        String, decorated name of the object.
 
         """
 
-        return self.getParent().getDecoratedPath() + '.' + '#' + self.getName()
+        return self.getName() + ":#"
 
 
     # ==============

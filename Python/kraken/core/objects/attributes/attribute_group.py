@@ -34,10 +34,7 @@ class AttributeGroup(SceneItem):
 
         """
 
-        if self.getParent() is not None and not self.getParent().isTypeOf('Component'):
-            return self.getParent().getDecoratedPath() + '.' + ':' + self.getName()
-
-        return self.getName()
+        return self.getName() + ':%'
 
 
     # ==================

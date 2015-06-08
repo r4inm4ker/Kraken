@@ -119,19 +119,6 @@ class Object3D(SceneItem):
     # =============
     # Name Methods
     # =============
-    def getDecoratedPath(self):
-        """Gets the decorated path of the object.
-
-        Return:
-        String, decorated path  of the object.
-
-        """
-
-        if self.getParent() is not None and not self.getParent().isTypeOf('Component'):
-            return self.getParent().getDecoratedPath() + '.' + self.getBuildName()
-
-        return self.getBuildName()
-
 
     def getBuildName(self):
         """Returns the build name for the object.
@@ -218,6 +205,7 @@ class Object3D(SceneItem):
                 raise ValueError("Unresolvabled token '" + token + "' used on: " + self.getFullName())
 
         return builtName
+
 
 
     # ==================
