@@ -27,25 +27,33 @@ class Synchronizer(Synchronizer):
         """
 
         path = kObject.getPath()
-        try:
-            pathSections = path.split('.')
-            pathObj = kObject
-            for pathSection in reversed(pathSections):
-                if pathObj.isTypeOf('AttributeGroup'):
-                    # The '%' symbol represents an attribute group that we never
-                    # build in Maya.
-                    pass
+        pathSections = path.split('.')
+        pathObj = kObject
+        mayaPath = ''
+        index = len(pathSections) - 1;
+        for pathSection in reversed(pathSections):
 
-                elif pathObj.isTypeOf('Attribute'):
-                    # The '#' symbol represents an attribute object which
-                    # requires a '.' seperator in the Maya path.
-                    mayaPath += '.' + pathObj.getBuildName()
+            if pathObj is None:
+                raise Exception("parent not specified for object, so a full path cannot be resolved to a maya object:" + path)
 
+            if pathObj.isTypeOf('AttributeGroup'):
+                # We don't build an attribute group in Maya, so skip this object
+                pass
+
+            elif pathObj.isTypeOf('Attribute'):
+                # The attribute object requires a '.' seperator in the Maya path.
+                mayaPath = '.' + pathObj.getName()
+
+            else:
+                if index > 0:
+                    mayaPath = '|' + pathObj.getBuildName() + mayaPath
                 else:
-                    mayaPath += '|' + pathObj.getBuildName()
+                    mayaPath = pathObj.getBuildName() + mayaPath
 
-                pathObj = pathObj.getParent()
+            pathObj = pathObj.getParent()
+            index -= 1
 
+        try:
             foundItem = pm.PyNode(mayaPath)
         except:
             return None

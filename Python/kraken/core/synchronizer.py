@@ -75,26 +75,14 @@ class Synchronizer(object):
         # ==============
         # Map Hierarchy
         # ==============
-        if kObject.isTypeOf('Object3D'):
 
-            # Sync Xfo if it's not a Component
-            if kObject.isTypeOf('Component') is False:
-                dccItem = self.getDCCItem(kObject)
-
-                self._hrcMap[kObject] = {
-                               "dccItem": dccItem
-                              }
-
-        elif kObject.isTypeOf('Attribute'):
-            fullBuildName = kObject.getBuildName()
+        # Skip components in the mapping as they are not built into the DCC
+        if kObject.isTypeOf('Component') is False:
             dccItem = self.getDCCItem(kObject)
 
             self._hrcMap[kObject] = {
                            "dccItem": dccItem
                           }
-
-        else:
-            pass
 
         # =======================
         # Iterate over hierarchy
