@@ -15,21 +15,21 @@ class Synchronizer(Synchronizer):
     # ============
     # DCC Methods
     # ============
-    def getDCCItem(self, decoratedPath):
+    def getDCCItem(self, obj):
         """Gets the DCC Item from the full decorated path.
 
         Arguments:
-        decoratedPath -- String, full decorated path for the object.
+        obj -- object, the Kraken Python object that we must find the corresponding DCC item.
 
         Return:
         DCC Object, None if it isn't found.
 
         """
+        fullBuildName = obj.getBuildName()
 
-        # Softimage matches the Kraken path so we remove decorators.
-        path = decoratedPath.translate(None, ':#')
+        # Softimage matches the Kraken build name
 
-        findItem = si.Dictionary.GetObject(path, False)
+        findItem = si.Dictionary.GetObject(fullBuildName, False)
         if findItem is None:
             return None
 

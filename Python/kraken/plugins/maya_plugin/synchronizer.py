@@ -15,7 +15,7 @@ class Synchronizer(Synchronizer):
     # ============
     # DCC Methods
     # ============
-    def getDCCItem(self, decoratedPath):
+    def getDCCItem(self, obj):
         """Gets the DCC Item from the full decorated path.
 
         Arguments:
@@ -26,16 +26,19 @@ class Synchronizer(Synchronizer):
 
         """
 
+        fullBuildName = obj.getBuildName()
+        decoratedPath = obj.getDecoratedPath()
         try:
             path = ''
             pathSections = decoratedPath.split('.')
             for pathSection in pathSections:
-                if pathSection.startswith(':'):
-                    # The ':' symbol represents an attribute group that we never
+                decorator = if ':' in pathSection: pathSection.split(':')[1] else: ''
+                if decorator == '%':
+                    # The '%' symbol represents an attribute group that we never
                     # build in Maya.
                     continue
 
-                elif pathSection.startswith('#'):
+                elif decorator == '#':
                     # The '#' symbol represents an attribute object which
                     # requires a '.' seperator in the Maya path.
                     path += '.' + pathSection

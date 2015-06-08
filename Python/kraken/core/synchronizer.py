@@ -79,20 +79,17 @@ class Synchronizer(object):
 
             # Sync Xfo if it's not a Component
             if obj.isTypeOf('Component') is False:
-                fullBuildName = obj.getDecoratedPath()
-                dccItem = self.getDCCItem(fullBuildName)
+                dccItem = self.getDCCItem(obj)
 
                 self._hrcMap[obj] = {
-                               "buildName": fullBuildName,
                                "dccItem": dccItem
                               }
 
         elif obj.isTypeOf('Attribute'):
-            fullBuildName = obj.getDecoratedPath()
-            dccItem = self.getDCCItem(fullBuildName)
+            fullBuildName = obj.getBuildName()
+            dccItem = self.getDCCItem(obj)
 
             self._hrcMap[obj] = {
-                           "buildName": fullBuildName,
                            "dccItem": dccItem
                           }
 
@@ -208,14 +205,14 @@ class Synchronizer(object):
     # ============
     # DCC Methods
     # ============
-    def getDCCItem(self, decoratedPath):
+    def getDCCItem(self, obj):
         """Gets the DCC Item from the full decorated path.
 
         * This should be re-implemented in the sub-classed synchronizer for each
         plugin.
 
         Arguments:
-        decoratedPath -- String, full decorated path for the object.
+        obj -- object, the Kraken Python object that we must find the corresponding DCC item.
 
         Return:
         DCC Object, None if it isn't found.
