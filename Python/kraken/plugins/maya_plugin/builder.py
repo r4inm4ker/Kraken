@@ -605,7 +605,7 @@ class Builder(Builder):
                         dccSceneItem = self.getDCCSceneItem(opObject)
 
                         if dccSceneItem is None:
-                            raise Exception("Operator '"+kOperator.getName()+"' of type '"+solverTypeName+"' arg '"+arg.name+"' dcc item not found for item:" + opObject.getFullName());
+                            raise Exception("Operator '"+kOperator.getName()+"' of type '"+solverTypeName+"' arg '"+arg.name+"' dcc item not found for item:" + opObject.getPath());
                         connectionTargets.append( { 'opObject': opObject, 'dccSceneItem': dccSceneItem} )
                 else:
                     if connectedObjects is None:
@@ -615,7 +615,7 @@ class Builder(Builder):
                     dccSceneItem = self.getDCCSceneItem(opObject)
 
                     if dccSceneItem is None:
-                        raise Exception("Operator '"+kOperator.getName()+"' of type '"+solverTypeName+"' arg '"+arg.name+"' dcc item not found for item:" + connectedObjects.getFullName());
+                        raise Exception("Operator '"+kOperator.getName()+"' of type '"+solverTypeName+"' arg '"+arg.name+"' dcc item not found for item:" + connectedObjects.getPath());
 
                     connectionTargets = { 'opObject': opObject, 'dccSceneItem': dccSceneItem }
 
@@ -629,7 +629,7 @@ class Builder(Builder):
                         elif isinstance(opObject, Object3D):
                             cmds.connectAttr(str(dccSceneItem.attr('worldMatrix')), tgt)
                         else:
-                            raise Exception(opObject.getFullName() + " with type '" + opObject.getTypeName() + " is not implemented!")
+                            raise Exception(opObject.getPath() + " with type '" + opObject.getTypeName() + " is not implemented!")
 
                     if arg.dataType.endswith('[]'):
                         for i in range(len(connectionTargets)):

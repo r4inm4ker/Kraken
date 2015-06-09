@@ -39,17 +39,22 @@ class MouseGrabber(QtGui.QGraphicsWidget):
 
         self.__mouseOverPortCircle = None
 
+
     def inCircle(self):
         return self
+
 
     def outCircle(self):
         return self
 
+
     def getColor(self):
         return self.__port.getColor()
 
+
     def centerInSceneCoords(self):
         return self.mapToScene(self.__diameter, self.__diameter)
+
 
     def mouseMoveEvent(self, event):
         scenePos = self.mapToItem(self.__graph.itemGroup(), event.pos())
@@ -102,17 +107,14 @@ class MouseGrabber(QtGui.QGraphicsWidget):
                 sourceComponent = sourcePort.getNode().getComponent()
                 targetComponent = targetPort.getNode().getComponent()
 
-                rig = self.__graph.getRig()
-
                 sourceComponentOutputPort = sourceComponent.getOutputByName(sourcePort.getName())
                 targetComponentInputPort = targetComponent.getInputByName(targetPort.getName())
                 targetComponentInputPort.setConnection(sourceComponentOutputPort)
 
-                connectionJson = {
-                    'source': sourceComponent.getName() + '.' + sourceComponentOutputPort.getName(),
-                    'target': targetComponent.getName() + '.' + targetComponentInputPort.getName()
-                }
-                self.__graph.addConnection(connectionJson)
+                self.__graph.addConnection(
+                    source= sourceComponent.getDecoratedName() + '.' + sourceComponentOutputPort.getName(),
+                    target= targetComponent.getDecoratedName() + '.' + targetComponentInputPort.getName()
+                )
 
             except Exception as e:
                 print "Exception in MouseGrabber.mouseReleaseEvent: " + str(e)

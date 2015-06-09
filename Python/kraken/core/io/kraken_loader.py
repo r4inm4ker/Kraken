@@ -219,18 +219,18 @@ class KrakenLoader(object):
 
         """
 
-        if item.getFullName() in self.builtItems:
+        if item.getPath() in self.builtItems:
             # TODO: resolve using a path, instead of the name.
             # This will require that all items have a parent specified
-            print "Warning. Non unique names used in Kraken:" + item.getFullName()
+            print "Warning. Non unique names used in Kraken:" + item.getPath()
 
-        self.builtItems[item.getFullName()] = item
+        self.builtItems[item.getPath()] = item
 
         # Fire any registered callbacks for this item.
         # This enables the loading of objects already created,
         # but dependent on this object to be completed.
-        if item.getFullName() in self.callbacks:
-            for callback in self.callbacks[item.getFullName()]:
+        if item.getPath() in self.callbacks:
+            for callback in self.callbacks[item.getPath()]:
                 callback(item)
 
 

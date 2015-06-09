@@ -98,6 +98,25 @@ class ComponentOutput(SceneItem):
         return True
 
 
+    def _removeConnection(self, connectionObj):
+        """Doc String.
+
+        Arguments:
+        Arguments -- Type, information.
+
+        Return:
+        True if successful.
+
+        """
+
+        if connectionObj not in self._connections:
+            raise Exception("'connectionObj' is not in the connections list.")
+
+        self._connections.remove(connectionObj)
+
+        return True
+
+
     # ===============
     # Target Methods
     # ===============

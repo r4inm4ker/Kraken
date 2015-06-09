@@ -101,6 +101,21 @@ class ComponentInput(SceneItem):
         return True
 
 
+
+    def removeConnection(self):
+        """Removes the connection to the component output.
+
+        Return:
+        True if successful.
+
+        """
+
+        self._connection._removeConnection(self)
+        self._connection = None
+
+        return True
+
+
     # ===============
     # Target Methods
     # ===============

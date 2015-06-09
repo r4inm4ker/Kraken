@@ -37,6 +37,25 @@ class Component(Object3D):
         self._graphPos = Vec2()
 
 
+
+    # =============
+    # Name Methods
+    # =============
+
+    def getDecoratedName(self):
+        """Gets the decorated name of the object.
+
+        Return:
+        String, decorated name of the object.
+
+        """
+
+        # We decorate the name of the component with the location. This
+        # enables multiple components to have the same name as long as they
+        # have different locations. e.g. Leg:R, and Leg:L
+        return self.getName() + ":" + self.getLocation()
+
+
     # =============
     # Side Methods
     # =============
@@ -144,8 +163,7 @@ class Component(Object3D):
     # Child Methods
     # ==============
     def addChild(self, child):
-        """Adds a child to the component and sets the object's component
-        attribute.
+        """Adds a child to the component and sets the object's component attribute.
 
         Arguments:
         child -- Object, object to add as a child.
