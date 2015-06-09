@@ -87,8 +87,8 @@ class Connection(QtGui.QGraphicsPathItem):
                 targetComponentInputPort.removeConnection()
 
                 self.__graph.removeConnection(
-                    source= sourceComponent.getName() + '.' + sourceComponentOutputPort.getName(),
-                    target= targetComponent.getName() + '.' + targetComponentInputPort.getName()
+                    source= sourceComponent.getDecoratedName() + '.' + sourceComponentOutputPort.getName(),
+                    target= targetComponent.getDecoratedName() + '.' + targetComponentInputPort.getName()
                 )
 
                 if delta.x() < 0:
