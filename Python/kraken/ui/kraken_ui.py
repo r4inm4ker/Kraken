@@ -101,6 +101,7 @@ class KrakenUI(QtGui.QWidget):
 
         QToolBar {
             border: 0px;
+            border-radius: 3px;
             height: 50px;
             padding: 5px 5px;
             margin: 0;
@@ -114,20 +115,27 @@ class KrakenUI(QtGui.QWidget):
         }
 
         QToolButton {
+            width: 65px;
             border-radius: 3px;
             padding: 5px;
 
+            background-color: #333;
             color: #e1ffff;
         }
 
         QToolButton:hover {
-            background-color: #333;
+            background-color: #3b3b3b;
         }
 
         QLabel {
             padding-right: 10px;
 
             color: #e1ffff;
+        }
+
+        QLabel#logoWidget {
+            margin: 0px;
+            padding: 0px 5px;
         }
 
         QToolBar::separator {

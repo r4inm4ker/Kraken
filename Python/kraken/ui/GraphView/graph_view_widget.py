@@ -32,6 +32,15 @@ class GraphViewWidget(QtGui.QWidget):
         toolBar.setObjectName('mainToolbar')
 
 
+        logoWidget = QtGui.QLabel()
+        logoWidget.setObjectName('logoWidget')
+        logoWidget.setMinimumHeight(20)
+        logoWidget.setMinimumWidth(97)
+
+        logoPixmap = QtGui.QPixmap(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'images', 'KrakenUI_Logo.png'))
+        logoWidget.setPixmap(logoPixmap)
+        toolBar.addWidget(logoWidget)
+
         newAction = toolBar.addAction('New')
         newAction.setShortcut('Ctrl+N')
         newAction.triggered.connect(self.newRigPreset)
