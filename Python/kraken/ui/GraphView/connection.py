@@ -78,9 +78,19 @@ class Connection(QtGui.QGraphicsPathItem):
             pos = self.mapToItem(self.__graph.itemGroup(), event.pos())
             delta = pos - self._lastDragPoint
             if delta.x() < 0 or delta.x() > 0:
-                self.__graph.controller().beginInteraction("Edit Connection " + self.__srcPort.getPath() + " > " + self.__dstPort.getPath())
-                # Disconnect and create a mouse grabber.
-                self.__graph.controller().removeConnection(source=self.__srcPort.getPath(), target=self.__dstPort.getPath())
+
+                sourceComponent = self.__srcPort.getNode().getComponent()
+                targetComponent = self.__dstPort.getNode().getComponent()
+
+                sourceComponentOutputPort = sourceComponent.getOutputByName(self.__srcPort.getName())
+                targetComponentInputPort = targetComponent.getInputByName(self.__dstPort.getName())
+                targetComponentInputPort.removeConnection()
+
+                self.__graph.removeConnection(
+                    source= sourceComponent.getDecoratedName() + '.' + sourceComponentOutputPort.getName(),
+                    target= targetComponent.getDecoratedName() + '.' + targetComponentInputPort.getName()
+                )
+
                 if delta.x() < 0:
                     MouseGrabber(self.__graph, pos, self.__srcPort, 'In')
                 else:

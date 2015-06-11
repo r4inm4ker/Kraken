@@ -14,13 +14,14 @@ from kraken.examples.arm_component import ArmComponentGuide, ArmComponentRig
 class ComponentInspector(QtGui.QWidget):
     """A widget providing the ability to nest """
 
-    def __init__(self, component, parent=None):
+    def __init__(self, component, parent=None, nodeItem=None):
 
         # constructors of base classes
         super(ComponentInspector, self).__init__(parent)
 
         self.parent = parent
         self.component = component
+        self.nodeItem = nodeItem
 
         self.setAttribute(QtCore.Qt.WA_WindowPropagation, True)
         self.setWindowTitle( self.component.getName() + ":" + self.component.getTypeName() )
@@ -97,7 +98,25 @@ class ComponentInspector(QtGui.QWidget):
         self.clear()
 
         def displayAttribute(attribute):
-            attributeWidget = AttributeWidget.constructAttributeWidget( attribute, parentWidget=self)
+
+            class AttributeProxy(object):
+                def __init__(self, attribute, callback):
+                    super(AttributeProxy, self).__init__()
+                    self.attribute = attribute
+                    self.callback = callback
+                def setValue(self, value):
+                    self.attribute.setValue( value )
+                    self.callback( value )
+                def getValue(self):
+                    return self.attribute.getValue()
+                def getDataType(self):
+                    return self.attribute.getDataType()
+
+            if attribute.getName() =='name':
+                attributeProxy = AttributeProxy(attribute=attribute, callback=self.nameChangedEvent)
+                attributeWidget = AttributeWidget.constructAttributeWidget( attributeProxy, parentWidget=self)
+            else:
+                attributeWidget = AttributeWidget.constructAttributeWidget( attribute, parentWidget=self)
             self.addValueWidget(attribute.getName(), attributeWidget)
 
         for i in range(self.component.getNumAttributeGroups()):
@@ -113,8 +132,8 @@ class ComponentInspector(QtGui.QWidget):
         self.close()
 
     def clear(self):
-        for widget in self._paramWidgets:
-            widget.unregisterNotificationListener()
+        # for widget in self._paramWidgets:
+        #     widget.unregisterNotificationListener()
         while self._paramsLayout.count():
             self._paramsLayout.takeAt(0).widget().deleteLater()
         self._paramWidgets = []
@@ -123,20 +142,20 @@ class ComponentInspector(QtGui.QWidget):
     ##############################
     ## Events
 
-    def portAdded(self, data):
-        self.refresh()
+    def nameChangedEvent(self, name):
 
-    def portRemoved(self, data):
-        self.refresh()
+        if self.nodeItem is not None:
+            self.nodeItem.nameChanged( name )
 
-    def onClose(self, event):
-        self.clear()
-        self.controller.removeNotificationListener('port.added', self.portAdded)
-        self.controller.removeNotificationListener('port.removed', self.portRemoved)
+    def closeEvent(self, event):
+        # self.clear()
+        # self.controller.removeNotificationListener('port.added', self.portAdded)
+        # self.controller.removeNotificationListener('port.removed', self.portRemoved)
 
-        self.controller.removeNotificationListener('scene.new', self.closeWidget)
-        self.controller.removeNotificationListener('scene.load', self.closeWidget)
-
+        # self.controller.removeNotificationListener('scene.new', self.closeWidget)
+        # self.controller.removeNotificationListener('scene.load', self.closeWidget)
+        if self.nodeItem is not None:
+            self.nodeItem.inspectorClosed()
 
 
 if __name__ == "__main__":

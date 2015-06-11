@@ -1,12 +1,12 @@
 Failed to find DCC builder. Falling back to Python builder.
-mainSrt
-mainSrt.controls
-mainSrt.controls.mainSrt
-mainSrt.controls.mainSrt.inputs
-mainSrt.controls.mainSrt.outputs
-mainSrt.controls.mainSrt.outputs.srt
-mainSrt.controls.mainSrt.outputs.offset
-mainSrt.controls.mainSrt.SRT
-mainSrt.controls.mainSrt.SRT.SRT
-mainSrt.controls.mainSrt.SRT.SRT.Offset
-mainSrt.controls.mainSrt.SRT.SRT.Offset.Offset
+mainSrt:M
+mainSrt:M.controls
+mainSrt:M.controls.mainSrt:M
+mainSrt:M.controls.mainSrt:M.inputs
+mainSrt:M.controls.mainSrt:M.outputs
+mainSrt:M.controls.mainSrt:M.outputs.srt
+mainSrt:M.controls.mainSrt:M.outputs.offset
+mainSrt:M.controls.mainSrt:M.SRT
+mainSrt:M.controls.mainSrt:M.SRT.SRT
+mainSrt:M.controls.mainSrt:M.SRT.SRT.Offset
+mainSrt:M.controls.mainSrt:M.SRT.SRT.Offset.Offset

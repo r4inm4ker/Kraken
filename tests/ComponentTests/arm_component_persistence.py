@@ -11,7 +11,7 @@ from kraken.helpers.utility_methods import logHierarchy
 
 armGuide = ArmComponentGuide("arm")
 armGuide.loadData({
-        "name": "L_Arm",
+        "name": "Arm",
         "location": "L",
         "bicepXfo": Xfo(Vec3(2.27, 15.295, -0.753)),
         "forearmXfo": Xfo(Vec3(5.039, 13.56, -0.859)),

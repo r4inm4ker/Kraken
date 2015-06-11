@@ -32,6 +32,11 @@ class NodeTitle(QtGui.QGraphicsWidget):
         self.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed))
         self.setPreferredSize(self.textSize())
 
+    def setText(self, text):
+        self.__textItem.setPlainText(text)
+        self.__textItem.adjustSize()
+        self.setPreferredSize(self.textSize())
+
     def textSize(self):
         return QtCore.QSizeF(
             self.__textItem.textWidth(),
@@ -71,10 +76,10 @@ class Node(QtGui.QGraphicsWidget):
 
         self.__graph = graph
         self.__component = component
-
         self.__color = QtGui.QColor(154, 205, 50, 255)
+        self.__inspectorWidget = None
 
-        self.__titleItem = NodeTitle(self.__component.getName(), self)
+        self.__titleItem = NodeTitle(self.__component.getDecoratedName(), self)
         layout.addItem(self.__titleItem)
         layout.setAlignment(self.__titleItem, QtCore.Qt.AlignCenter | QtCore.Qt.AlignTop)
 
@@ -106,7 +111,7 @@ class Node(QtGui.QGraphicsWidget):
         self.setGraphPos( QtCore.QPointF( self.__component.getGraphPos().x, self.__component.getGraphPos().y ) )
 
     def getName(self):
-        return self.__component.getName()
+        return self.__component.getDecoratedName()
 
     def getComponent(self):
         return self.__component
@@ -268,10 +273,23 @@ class Node(QtGui.QGraphicsWidget):
             super(Node, self).mouseReleaseEvent(event)
 
     def mouseDoubleClickEvent(self, event):
-        widget = ComponentInspector(component=self.__component, parent=self.__graph.graphView().getGraphViewWidget())
-        widget.show()
+        if self.__inspectorWidget is None:
+            self.__inspectorWidget = ComponentInspector(component=self.__component, parent=self.__graph.graphView().getGraphViewWidget(), nodeItem=self)
+            self.__inspectorWidget.show()
+        else:
+            self.__inspectorWidget.setFocus()
 
         super(Node, self).mouseDoubleClickEvent(event)
+
+    def inspectorClosed(self):
+        self.__inspectorWidget = None
+
+
+    def nameChanged(self, name):
+        self.__titleItem.setText(self.__component.getDecoratedName())
+
+        # Update the node so that the size is computed.
+        self.adjustSize()
 
     #########################
     ## shut down

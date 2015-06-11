@@ -70,55 +70,40 @@ class Synchronizer(object):
         return self._hrcMap
 
 
-    def createHierarchyMap(self, obj):
+    def createHierarchyMap(self, kObject):
 
         # ==============
         # Map Hierarchy
         # ==============
-        if obj.isTypeOf('Object3D'):
 
-            # Sync Xfo if it's not a Component
-            if obj.isTypeOf('Component') is False:
-                fullBuildName = obj.getDecoratedPath()
-                dccItem = self.getDCCItem(fullBuildName)
+        # Skip components in the mapping as they are not built into the DCC
+        if kObject.isTypeOf('Component') is False:
+            dccItem = self.getDCCItem(kObject)
 
-                self._hrcMap[obj] = {
-                               "buildName": fullBuildName,
-                               "dccItem": dccItem
-                              }
-
-        elif obj.isTypeOf('Attribute'):
-            fullBuildName = obj.getDecoratedPath()
-            dccItem = self.getDCCItem(fullBuildName)
-
-            self._hrcMap[obj] = {
-                           "buildName": fullBuildName,
+            self._hrcMap[kObject] = {
                            "dccItem": dccItem
                           }
-
-        else:
-            pass
 
         # =======================
         # Iterate over hierarchy
         # =======================
-        if obj.isTypeOf('Object3D'):
+        if kObject.isTypeOf('Object3D'):
             # Iterate over attribute groups
-            for i in xrange(obj.getNumAttributeGroups()):
-                attrGrp = obj.getAttributeGroupByIndex(i)
+            for i in xrange(kObject.getNumAttributeGroups()):
+                attrGrp = kObject.getAttributeGroupByIndex(i)
                 self.createHierarchyMap(attrGrp)
 
         # Iterate over attributes
-        if obj.isTypeOf('AttributeGroup'):
-            for i in xrange(obj.getNumAttributes()):
-                attr = obj.getAttributeByIndex(i)
+        if kObject.isTypeOf('AttributeGroup'):
+            for i in xrange(kObject.getNumAttributes()):
+                attr = kObject.getAttributeByIndex(i)
                 self.createHierarchyMap(attr)
 
-        if obj.isTypeOf('Object3D'):
+        if kObject.isTypeOf('Object3D'):
 
             # Iterate over children
-            for i in xrange(obj.getNumChildren()):
-                child = obj.getChildByIndex(i)
+            for i in xrange(kObject.getNumChildren()):
+                child = kObject.getChildByIndex(i)
                 self.createHierarchyMap(child)
 
         return
@@ -153,12 +138,12 @@ class Synchronizer(object):
         return True
 
 
-    def synchronize(self, obj):
+    def synchronize(self, kObject):
         """Iteration method that traverses the hierarchy and syncs the different
         object types.
 
         Arguments:
-        obj -- Object, object to synchronize.
+        kObject -- Object, object to synchronize.
 
         Return:
         True if successful.
@@ -168,14 +153,14 @@ class Synchronizer(object):
         # =================
         # Synchronize Data
         # =================
-        if obj.isTypeOf('Object3D'):
+        if kObject.isTypeOf('Object3D'):
 
             # Sync Xfo if it's not a Component
-            if obj.isTypeOf('Component') is False:
-                self.syncXfo(obj)
+            if kObject.isTypeOf('Component') is False:
+                self.syncXfo(kObject)
 
-        elif obj.isTypeOf('Attribute'):
-            self.syncAttribute(obj)
+        elif kObject.isTypeOf('Attribute'):
+            self.syncAttribute(kObject)
 
         else:
             pass
@@ -183,23 +168,23 @@ class Synchronizer(object):
         # =======================
         # Iterate over hierarchy
         # =======================
-        if obj.isTypeOf('Object3D'):
+        if kObject.isTypeOf('Object3D'):
             # Iterate over attribute groups
-            for i in xrange(obj.getNumAttributeGroups()):
-                attrGrp = obj.getAttributeGroupByIndex(i)
+            for i in xrange(kObject.getNumAttributeGroups()):
+                attrGrp = kObject.getAttributeGroupByIndex(i)
                 self.synchronize(attrGrp)
 
         # Iterate over attributes
-        if obj.isTypeOf('AttributeGroup'):
-            for i in xrange(obj.getNumAttributes()):
-                attr = obj.getAttributeByIndex(i)
+        if kObject.isTypeOf('AttributeGroup'):
+            for i in xrange(kObject.getNumAttributes()):
+                attr = kObject.getAttributeByIndex(i)
                 self.synchronize(attr)
 
-        if obj.isTypeOf('Object3D'):
+        if kObject.isTypeOf('Object3D'):
 
             # Iterate over children
-            for i in xrange(obj.getNumChildren()):
-                child = obj.getChildByIndex(i)
+            for i in xrange(kObject.getNumChildren()):
+                child = kObject.getChildByIndex(i)
                 self.synchronize(child)
 
         return True
@@ -208,14 +193,14 @@ class Synchronizer(object):
     # ============
     # DCC Methods
     # ============
-    def getDCCItem(self, decoratedPath):
+    def getDCCItem(self, kObject):
         """Gets the DCC Item from the full decorated path.
 
         * This should be re-implemented in the sub-classed synchronizer for each
         plugin.
 
         Arguments:
-        decoratedPath -- String, full decorated path for the object.
+        kObject -- object, the Kraken Python object that we must find the corresponding DCC item.
 
         Return:
         DCC Object, None if it isn't found.
@@ -227,14 +212,14 @@ class Synchronizer(object):
         return dccItem
 
 
-    def syncXfo(self, obj):
+    def syncXfo(self, kObject):
         """Syncs the xfo from the DCC objec to the Kraken object.
 
         * This should be re-implemented in the sub-classed synchronizer for each
         plugin.
 
         Arguments:
-        obj -- Object, object to sync the xfo for.
+        kObject -- Object, object to sync the xfo for.
 
         Return:
         True if successful.
@@ -244,14 +229,14 @@ class Synchronizer(object):
         return True
 
 
-    def syncAttribute(self, obj):
+    def syncAttribute(self, kObject):
         """Syncs the attribute value from the DCC objec to the Kraken object.
 
         * This should be re-implemented in the sub-classed synchronizer for each
         plugin.
 
         Arguments:
-        obj -- Object, object to sync the attribute value for.
+        kObject -- Object, object to sync the attribute value for.
 
         Return:
         True if successful.

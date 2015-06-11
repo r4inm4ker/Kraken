@@ -28,19 +28,6 @@ class Attribute(SceneItem):
             parent.addAttribute(self)
 
 
-    # =============
-    # Name Methods
-    # =============
-    def getDecoratedPath(self):
-        """Gets the decorated path of the object.
-
-        Return:
-        String, decorated path  of the object.
-
-        """
-
-        return self.getParent().getDecoratedPath() + '.' + '#' + self.getName()
-
 
     # ==============
     # Value Methods

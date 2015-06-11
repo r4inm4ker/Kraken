@@ -180,12 +180,13 @@ class PortCircle(QtGui.QGraphicsWidget):
         scenePos = self.mapToItem(self.__graph.itemGroup(), event.pos())
 
         self.unhighlight()
+
+        from connection import Connection
         if self.isInConnectionPoint():
-        #     self.__graph.controller().beginInteraction("Edit connection to:" + self.__port.getPath())
-            MouseGrabber(self.__graph, scenePos, self.__port, 'Out')
+            grabber = MouseGrabber(self.__graph, scenePos, self.__port, 'Out')
+
         elif self.isOutConnectionPoint():
-        #     self.__graph.controller().beginInteraction("Edit connections from:" + self.__port.getPath())
-            MouseGrabber(self.__graph, scenePos, self.__port, 'In')
+            grabber = MouseGrabber(self.__graph, scenePos, self.__port, 'In')
 
     # def paint(self, painter, option, widget):
     #     super(PortCircle, self).paint(painter, option, widget)

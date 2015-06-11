@@ -12,7 +12,7 @@ Profiler.getInstance().push("leg_build")
 
 legGuide = LegComponentGuide("leg")
 legGuide.loadData({
-                   "name": "L_Leg",
+                   "name": "Leg",
                    "location": "L",
                    "femurXfo": Xfo(Vec3(0.9811, 9.769, -0.4572)),
                    "kneeXfo": Xfo(Vec3(1.4488, 5.4418, -0.5348)),

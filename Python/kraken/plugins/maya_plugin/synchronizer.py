@@ -2,7 +2,7 @@ from kraken.core.maths import Xfo, Vec3, Quat
 
 from kraken.core.synchronizer import Synchronizer
 from kraken.plugins.maya_plugin.utils import *
-
+from kraken.core.objects.attributes.attribute_group import AttributeGroup
 
 class Synchronizer(Synchronizer):
     """The Synchronizer is a singleton object used to synchronize data between
@@ -15,46 +15,57 @@ class Synchronizer(Synchronizer):
     # ============
     # DCC Methods
     # ============
-    def getDCCItem(self, decoratedPath):
+    def getDCCItem(self, kObject):
         """Gets the DCC Item from the full decorated path.
 
         Arguments:
-        decoratedPath -- String, full decorated path for the object.
+        kObject -- object, the Kraken Python object that we must find the corresponding DCC item.
 
         Return:
         DCC Object, None if it isn't found.
 
         """
 
-        try:
-            path = ''
-            pathSections = decoratedPath.split('.')
-            for pathSection in pathSections:
-                if pathSection.startswith(':'):
-                    # The ':' symbol represents an attribute group that we never
-                    # build in Maya.
-                    continue
+        path = kObject.getPath()
+        pathSections = path.split('.')
+        pathObj = kObject
+        mayaPath = ''
+        index = len(pathSections) - 1;
+        for pathSection in reversed(pathSections):
 
-                elif pathSection.startswith('#'):
-                    # The '#' symbol represents an attribute object which
-                    # requires a '.' seperator in the Maya path.
-                    path += '.' + pathSection
+            if pathObj is None:
+                raise Exception("parent not specified for object, so a full path cannot be resolved to a maya object:" + path)
 
+            if pathObj.isTypeOf('AttributeGroup'):
+                # We don't build an attribute group in Maya, so skip this object
+                pass
+
+            elif pathObj.isTypeOf('Attribute'):
+                # The attribute object requires a '.' seperator in the Maya path.
+                mayaPath = '.' + pathObj.getName()
+
+            else:
+                if index > 0:
+                    mayaPath = '|' + pathObj.getBuildName() + mayaPath
                 else:
-                    path += '|' + pathSection
+                    mayaPath = pathObj.getBuildName() + mayaPath
 
-            foundItem = pm.PyNode(path)
+            pathObj = pathObj.getParent()
+            index -= 1
+
+        try:
+            foundItem = pm.PyNode(mayaPath)
         except:
             return None
 
         return foundItem
 
 
-    def syncXfo(self, obj):
-        """Syncs the xfo from the DCC objec to the Kraken object.
+    def syncXfo(self, kObject):
+        """Syncs the xfo from the DCC object to the Kraken object.
 
         Arguments:
-        obj -- Object, object to sync the xfo for.
+        kObject -- Object, object to sync the xfo for.
 
         Return:
         True if successful.
@@ -63,14 +74,14 @@ class Synchronizer(Synchronizer):
 
         hrcMap = self.getHierarchyMap()
 
-        if obj not in hrcMap.keys():
-            print "Warning! 3D Object '" + obj.getName() + "' was not found in the mapping!"
+        if kObject not in hrcMap.keys():
+            print "Warning! 3D Object '" + kObject.getName() + "' was not found in the mapping!"
             return False
 
-        dccItem = hrcMap[obj]['dccItem']
+        dccItem = hrcMap[kObject]['dccItem']
 
         if dccItem is None:
-            print "Warning Syncing. No DCC Item for :" + obj.getFullName()
+            print "Warning Syncing. No DCC Item for :" + kObject.getPath()
             return;
 
         dccPos = dccItem.getTranslation()
@@ -83,16 +94,16 @@ class Synchronizer(Synchronizer):
 
         newXfo = Xfo(tr=pos, ori=quat, sc=scl)
 
-        obj.xfo = newXfo
+        kObject.xfo = newXfo
 
         return True
 
 
-    def syncAttribute(self, obj):
+    def syncAttribute(self, kObject):
         """Syncs the attribute value from the DCC objec to the Kraken object.
 
         Arguments:
-        obj -- Object, object to sync the attribute value for.
+        kObject -- Object, object to sync the attribute value for.
 
         Return:
         True if successful.
@@ -101,16 +112,16 @@ class Synchronizer(Synchronizer):
 
         hrcMap = self.getHierarchyMap()
 
-        if obj not in hrcMap.keys():
-            print "Warning! Attribute '" + obj.getName() + "' was not found in the mapping!"
+        if kObject not in hrcMap.keys():
+            print "Warning! Attribute '" + kObject.getName() + "' was not found in the mapping!"
             return False
 
-        dccItem = hrcMap[obj]['dccItem']
+        dccItem = hrcMap[kObject]['dccItem']
 
         if dccItem is None:
-            print "Warning Syncing. No DCC Item for :" + obj.getFullName()
+            print "Warning Syncing. No DCC Item for :" + kObject.getPath()
             return;
 
-        obj.setValue(dccItem.get())
+        kObject.setValue(dccItem.get())
 
         return True
