@@ -12,8 +12,7 @@ from kraken import plugins
 
 
 def GetHomePath():
-    from os.path import expanduser
-    homeDir = expanduser("~")
+    homeDir = os.path.expanduser("~")
     return homeDir
 
 class GraphViewWidget(QtGui.QWidget):

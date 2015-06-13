@@ -1,29 +1,27 @@
-
 #
 # Copyright 2010-2015
 #
-import sys
-import json
+
+import difflib
+
 from PySide import QtGui, QtCore
+
+from kraken.core.maths import Vec2
 from kraken.core.kraken_system import KrakenSystem
 
-class _ComponentTree(QtGui.QTreeWidget):
 
-    def __init__(self, parent=None):
+class NodeList(QtGui.QListWidget):
+
+    def __init__(self, parent):
         # constructors of base classes
-        QtGui.QTreeWidget.__init__(self, parent)
+        QtGui.QListWidget.__init__(self, parent)
         self.setObjectName('ComponentTree')
 
         self.setDragEnabled(True)
         self.setDragDropMode(QtGui.QTreeWidget.DragOnly)
-        self.setColumnCount(1)
-        self.setHeaderLabels([''])
-        self.header().close()
-
 
     def mouseMoveEvent(self, event):
         self.dragObject()
-
 
     def dragObject(self):
 
@@ -32,7 +30,7 @@ class _ComponentTree(QtGui.QTreeWidget):
 
         drag = QtGui.QDrag(self)
         item = self.selectedItems()[0]
-        componentClassName = item.data(0, QtCore.Qt.UserRole)
+        componentClassName = item.data(QtCore.Qt.UserRole)
         text = 'KrakenComponent:' + componentClassName
 
         mimeData = QtCore.QMimeData()
@@ -42,7 +40,7 @@ class _ComponentTree(QtGui.QTreeWidget):
         drag.setHotSpot(QtCore.QPoint(90, 23))
 
         ghostComponent = QtGui.QPixmap(180, 46)
-        ghostComponent.fill(QtGui.QColor(200, 200, 200, 80))
+        ghostComponent.fill(QtGui.QColor(67, 143, 153, 80))
 
         drag.setPixmap(ghostComponent)
         drag.start(QtCore.Qt.IgnoreAction)
@@ -50,30 +48,43 @@ class _ComponentTree(QtGui.QTreeWidget):
 
 class ComponentLibrary(QtGui.QWidget):
 
-    def __init__(self, parent=None):
+    def __init__(self, parent):
         super(ComponentLibrary, self).__init__(parent)
-        self.setObjectName('ComponentLibrary')
+
+        self.setMinimumWidth(175)
+
+        self.searchLineEdit = QtGui.QLineEdit(parent)
+        self.searchLineEdit.setObjectName('contextNodeListSearchLine')
+        self.searchLineEdit.setFocusPolicy(QtCore.Qt.StrongFocus)
+        self.searchLineEdit.setFocus()
+
+        self.nodesList = NodeList(self)
 
         self.ks = KrakenSystem.getInstance()
         self.ks.loadIniFile()
-        # self.controller = controller
-        self.searchLineEdit = QtGui.QLineEdit(self)
-        # self.searchLineEdit.setFocusPolicy(QtCore.Qt.StrongFocus)
-        # self.searchLineEdit.setFocus()
 
-        self.nodesList = _ComponentTree(parent)
+        self.componentClassNames = []
+        for componentClassName in self.ks.getComponentClassNames():
+            cmpCls = self.ks.getComponentClass(componentClassName)
+            if cmpCls.getComponentType() != 'Guide':
+                continue
 
-        grid = QtGui.QGridLayout(self)
-        grid.addWidget(self.searchLineEdit, 0, 0)
-        grid.addWidget(self.nodesList, 1, 0)
+            self.componentClassNames.append(componentClassName)
 
-        self.componentClassNames = self.ks.getComponentClassNames()
-
+        self.nodes = None
         self.showClosestNames()
         self.searchLineEdit.textEdited.connect(self.showClosestNames)
 
+        self.setIndex(0)
+
+        grid = QtGui.QGridLayout()
+        grid.addWidget(self.searchLineEdit, 0, 0)
+        grid.addWidget(self.nodesList, 1, 0)
+        self.setLayout(grid)
+
 
     def showClosestNames(self):
+
         self.nodesList.clear()
         fuzzyText = self.searchLineEdit.text()
 
@@ -88,18 +99,48 @@ class ComponentLibrary(QtGui.QWidget):
             if cmpCls.getComponentType() != 'Guide':
                 continue
 
-            treeItem = QtGui.QTreeWidgetItem()
-            treeItem.setText(0, shortName)
-            treeItem.setData(0, QtCore.Qt.UserRole, componentClassName)
-            self.nodesList.addTopLevelItem(treeItem)
+            item = QtGui.QListWidgetItem(shortName)
+            item._fullClassName = componentClassName
+            item.setData(QtCore.Qt.UserRole, componentClassName)
 
-        self.nodesList.expandAll()
+            self.nodesList.addItem(item)
 
-        self.nodesList.setCurrentItem(self.nodesList.topLevelItem(0))
+        self.nodesList.resize(self.nodesList.frameSize().width(), 20 * self.nodesList.count())
 
+        self.setIndex(0)
 
-if __name__ == "__main__":
-    app = QtGui.QApplication(sys.argv)
-    widget = ComponentLibrary()
-    widget.show()
-    sys.exit(app.exec_())
+    def setIndex(self, index):
+
+        if index > len(self.componentClassNames):
+            return
+
+        if index >= 0:
+            self.index = index
+            self.nodesList.setCurrentItem(self.nodesList.item(self.index))
+
+    def keyPressEvent(self, event):
+        if event.key() == QtCore.Qt.Key_Escape:
+            if self.isVisible():
+                self.searchLineEdit.clear()
+                self.hide()
+
+        elif event.key() == QtCore.Qt.Key_Up or event.key() == QtCore.Qt.Key_Down:
+            if event.key() == QtCore.Qt.Key_Up:
+                newIndex = self.index - 1
+                if newIndex not in range(self.nodesList.count()):
+                    return
+
+                self.setIndex(self.index-1)
+            elif event.key() == QtCore.Qt.Key_Down:
+                newIndex = self.index+1
+                if newIndex not in range(self.nodesList.count()):
+                    return
+
+                self.setIndex(self.index+1)
+
+        elif event.key() == QtCore.Qt.Key_Enter or event.key() == QtCore.Qt.Key_Return:
+            if self.isVisible():
+                self.createNode()
+                self.hide()
+
+        return False
