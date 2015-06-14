@@ -302,18 +302,9 @@ class Node(QtGui.QGraphicsWidget):
         for port in self.__inports:
 
             for connName, conn in connections.iteritems():
-                srcPort = conn.getSrcPort()
                 dstPort = conn.getDstPort()
                 if dstPort == port:
-                    sourceComponent = srcPort.getNode().getComponent()
-                    targetComponent = dstPort.getNode().getComponent()
-
-                    srcCmpDecName = sourceComponent.getDecoratedName()
-                    tgtCmpDecName = targetComponent.getDecoratedName()
-
-                    connToDelete.append([
-                        srcCmpDecName + '.' + srcPort.getName(),
-                        tgtCmpDecName + '.' + dstPort.getName()])
+                    connToDelete.append(conn)
 
             port.destroy()
 
@@ -321,23 +312,23 @@ class Node(QtGui.QGraphicsWidget):
 
             for connName, conn in connections.iteritems():
                 srcPort = conn.getSrcPort()
-                dstPort = conn.getDstPort()
                 if srcPort == port:
-                    sourceComponent = srcPort.getNode().getComponent()
-                    targetComponent = dstPort.getNode().getComponent()
-
-                    srcCmpDecName = sourceComponent.getDecoratedName()
-                    tgtCmpDecName = targetComponent.getDecoratedName()
-
-                    connToDelete.append([
-                        srcCmpDecName + '.' + srcPort.getName(),
-                        tgtCmpDecName + '.' + dstPort.getName()])
+                    connToDelete.append(conn)
 
             port.destroy()
 
-        for connPair in connToDelete:
+        for conn in connToDelete:
+            srcPort = conn.getSrcPort()
+            dstPort = conn.getDstPort()
+
+            sourceComponent = srcPort.getNode().getComponent()
+            targetComponent = dstPort.getNode().getComponent()
+
+            srcCmpDecName = sourceComponent.getDecoratedName()
+            tgtCmpDecName = targetComponent.getDecoratedName()
+
             self.__graph.removeConnection(
-                        source=connPair[0],
-                        target=connPair[1])
+                source=srcCmpDecName + '.' + srcPort.getName(),
+                target=tgtCmpDecName + '.' + dstPort.getName())
 
         self.scene().removeItem(self)
