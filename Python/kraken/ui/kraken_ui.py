@@ -3,12 +3,17 @@
 # Copyright 2010-2015
 #
 
+import os
 import sys
+
 from PySide import QtGui, QtCore
+
+from kraken_splash import KrakenSplash
 from component_library import ComponentLibrary
 from GraphView.graph_view_widget import GraphViewWidget
 
 from kraken.core.kraken_system import KrakenSystem
+
 
 class KrakenUI(QtGui.QWidget):
     """A debugger widget hosting an inspector as well as a graph view"""
@@ -33,7 +38,7 @@ class KrakenUI(QtGui.QWidget):
             border-radius: 3px;
         }
 
-        QTreeWidget#ComponentTree {
+        QListWidget#ComponentTree {
             border: 0;
             border-radius: 3px;
             padding: 0;
@@ -43,22 +48,22 @@ class KrakenUI(QtGui.QWidget):
             background-color: #333;
         }
 
-        QTreeWidget#ComponentTree::item {
+        QListWidget#ComponentTree::item {
             padding: 5px 0;
             margin: 0;
             spacing: 0;
         }
 
-        QTreeWidget#ComponentTree::item:hover {
+        QListWidget#ComponentTree::item:hover {
             background-color: #438f99;
         }
 
-        QTreeWidget#ComponentTree::item:focus {
+        QListWidget#ComponentTree::item:focus {
             color: white;
             background-color: #438f99;
         }
 
-        QTreeWidget#ComponentTree::item:selected {
+        QListWidget#ComponentTree::item:selected {
             color: white;
             background-color: #438f99;
         }
@@ -173,13 +178,21 @@ class KrakenUI(QtGui.QWidget):
         self.graphViewWidget.closeEvent(event)
 
     def showEvent(self, event):
+
+        splash = KrakenSplash(self)
+        splash.show()
+
         krakenSystem = KrakenSystem.getInstance()
         krakenSystem.loadCoreClient()
         krakenSystem.loadExtension('Kraken')
 
+        splash.close()
+
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
+
     widget = KrakenUI()
     widget.show()
+
     sys.exit(app.exec_())

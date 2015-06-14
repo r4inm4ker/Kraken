@@ -55,8 +55,8 @@ class ComponentLibrary(QtGui.QWidget):
 
         self.searchLineEdit = QtGui.QLineEdit(parent)
         self.searchLineEdit.setObjectName('contextNodeListSearchLine')
-        self.searchLineEdit.setFocusPolicy(QtCore.Qt.StrongFocus)
-        self.searchLineEdit.setFocus()
+        # self.searchLineEdit.setFocusPolicy(QtCore.Qt.StrongFocus)
+        # self.searchLineEdit.setFocus()
 
         self.nodesList = NodeList(self)
 
@@ -119,6 +119,8 @@ class ComponentLibrary(QtGui.QWidget):
             self.nodesList.setCurrentItem(self.nodesList.item(self.index))
 
     def keyPressEvent(self, event):
+
+        modifiers = event.modifiers()
         if event.key() == QtCore.Qt.Key_Escape:
             if self.isVisible():
                 self.searchLineEdit.clear()
@@ -142,5 +144,9 @@ class ComponentLibrary(QtGui.QWidget):
             if self.isVisible():
                 self.createNode()
                 self.hide()
+
+        # Ctrl+W
+        elif event.key() == 87 and modifiers == QtCore.Qt.ControlModifier:
+            self.window().close()
 
         return False
