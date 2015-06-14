@@ -192,6 +192,9 @@ class Graph(QtGui.QGraphicsWidget):
     #######################
     ## Connections
 
+    def getConnections(self):
+        return self.__connections
+
     def addConnection(self, source, target):
 
         key = source +">" + target
