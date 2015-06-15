@@ -15,6 +15,7 @@ class NodeList(QtGui.QListWidget):
     def __init__(self, parent):
         # constructors of base classes
         QtGui.QListWidget.__init__(self, parent)
+        self.setObjectName('contextNodeList')
         self.installEventFilter(self)
 
 
@@ -38,6 +39,7 @@ class ContextualNodeList(QtGui.QWidget):
         self.setFixedSize(250, 200)
 
         self.searchLineEdit = QtGui.QLineEdit(parent)
+        self.searchLineEdit.setObjectName('contextNodeListSearchLine')
         self.searchLineEdit.setFocusPolicy(QtCore.Qt.StrongFocus)
         self.searchLineEdit.setFocus()
 
@@ -76,7 +78,6 @@ class ContextualNodeList(QtGui.QWidget):
         self.searchLineEdit.clear()
         self.show()
 
-
     def createNode(self):
         if self.nodesList.currentItem() is not None:
 
@@ -100,7 +101,6 @@ class ContextualNodeList(QtGui.QWidget):
 
         self.nodesList.clear()
         fuzzyText = self.searchLineEdit.text()
-        matches = difflib.get_close_matches(fuzzyText, [x.rsplit('.', 1)[-1] for x in self.componentClassNames], n=3, cutoff=0.2)
 
         for componentClassName in self.componentClassNames:
             shortName = componentClassName.rsplit('.', 1)[-1]
@@ -108,9 +108,6 @@ class ContextualNodeList(QtGui.QWidget):
             if fuzzyText != '':
                 if fuzzyText.lower() not in shortName.lower():
                     continue
-
-            # if fuzzyText != '' and shortName not in matches:
-            #     continue
 
             cmpCls = self.ks.getComponentClass(componentClassName)
             if cmpCls.getComponentType() != 'Guide':
@@ -122,6 +119,7 @@ class ContextualNodeList(QtGui.QWidget):
 
         self.nodesList.resize(self.nodesList.frameSize().width(), 20 * self.nodesList.count())
 
+        self.setIndex(0)
 
     def setIndex(self, index):
 
@@ -132,7 +130,6 @@ class ContextualNodeList(QtGui.QWidget):
             self.index = index
             self.nodesList.setCurrentItem(self.nodesList.item(self.index))
 
-
     def keyPressEvent(self, event):
         if event.key() == QtCore.Qt.Key_Escape:
             if self.isVisible():
@@ -141,8 +138,16 @@ class ContextualNodeList(QtGui.QWidget):
 
         elif event.key() == QtCore.Qt.Key_Up or event.key() == QtCore.Qt.Key_Down:
             if event.key() == QtCore.Qt.Key_Up:
+                newIndex = self.index - 1
+                if newIndex not in range(self.nodesList.count()):
+                    return
+
                 self.setIndex(self.index-1)
             elif event.key() == QtCore.Qt.Key_Down:
+                newIndex = self.index+1
+                if newIndex not in range(self.nodesList.count()):
+                    return
+
                 self.setIndex(self.index+1)
 
         elif event.key() == QtCore.Qt.Key_Enter or event.key() == QtCore.Qt.Key_Return:

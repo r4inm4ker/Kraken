@@ -1,6 +1,8 @@
-import sys, json
+import os
+import sys
+import json
 
-from PySide import QtGui
+from PySide import QtGui, QtCore
 
 import types
 

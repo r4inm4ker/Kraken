@@ -18,6 +18,7 @@ class GraphView(QtGui.QGraphicsView):
 
     def __init__(self, parent=None):
         super(GraphView, self).__init__(parent)
+        self.setObjectName('graphView')
 
         self.__graphViewWidget = parent
         self.rig = None

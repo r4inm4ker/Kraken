@@ -27,6 +27,12 @@ class Connection(QtGui.QGraphicsPathItem):
         self.setZValue(-1)
         # self.setAcceptHoverEvents(True)
 
+    def getSrcPort(self):
+        return self.__srcPort
+
+    def getDstPort(self):
+        return self.__dstPort
+
     def boundingRect(self):
         srcPoint = self.mapFromScene(self.__srcPort.outCircle().centerInSceneCoords())
         dstPoint = self.mapFromScene(self.__dstPort.inCircle().centerInSceneCoords())
