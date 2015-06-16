@@ -109,10 +109,6 @@ class ContextualNodeList(QtGui.QWidget):
                 if fuzzyText.lower() not in shortName.lower():
                     continue
 
-            cmpCls = self.ks.getComponentClass(componentClassName)
-            if cmpCls.getComponentType() != 'Guide':
-                continue
-
             item = QtGui.QListWidgetItem(shortName)
             item._fullClassName = componentClassName
             self.nodesList.addItem(item)

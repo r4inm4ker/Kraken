@@ -17,6 +17,7 @@ class NodeList(QtGui.QListWidget):
         QtGui.QListWidget.__init__(self, parent)
         self.setObjectName('ComponentTree')
 
+        self.setSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding)
         self.setDragEnabled(True)
         self.setDragDropMode(QtGui.QTreeWidget.DragOnly)
 
@@ -93,17 +94,11 @@ class ComponentLibrary(QtGui.QWidget):
                 if fuzzyText.lower() not in shortName.lower():
                     continue
 
-            cmpCls = self.ks.getComponentClass(componentClassName)
-            if cmpCls.getComponentType() != 'Guide':
-                continue
-
             item = QtGui.QListWidgetItem(shortName)
             item._fullClassName = componentClassName
             item.setData(QtCore.Qt.UserRole, componentClassName)
 
             self.nodesList.addItem(item)
-
-        self.nodesList.resize(self.nodesList.frameSize().width(), 20 * self.nodesList.count())
 
         self.setIndex(0)
 
