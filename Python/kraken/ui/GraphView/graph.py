@@ -211,7 +211,7 @@ class Graph(QtGui.QGraphicsWidget):
 
         sourcePort = sourceNode.getOutPort(outputName)
         if not sourcePort:
-            raise Exception("Component '"+sourceNodeName+"'' does not have output:" + sourcePortName)
+            raise Exception("Component '"+sourceNodeName+"' does not have output:" + sourcePortName)
 
         targetNode = self.getNode(targetComponent)
         if not targetNode:
@@ -219,9 +219,12 @@ class Graph(QtGui.QGraphicsWidget):
 
         targetPort = targetNode.getInPort(inputName)
         if not targetPort:
-            raise Exception("Component '"+targetNodeName+"'' does not have input:" + targetPortName)
+            raise Exception("Component '"+targetNodeName+"' does not have input:" + targetPortName)
 
         connection = Connection(self, sourcePort, targetPort)
+        connection.setPortConnection(sourcePort)
+        connection.setPortConnection(targetPort)
+
         self.__connections[key] = connection
 
     def removeConnection(self, source, target):

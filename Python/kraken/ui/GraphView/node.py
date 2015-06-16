@@ -295,40 +295,10 @@ class Node(QtGui.QGraphicsWidget):
     ## shut down
 
     def destroy(self):
-
-        connections = self.__graph.getConnections()
-
-        connToDelete = []
         for port in self.__inports:
-
-            for connName, conn in connections.iteritems():
-                dstPort = conn.getDstPort()
-                if dstPort == port:
-                    connToDelete.append(conn)
-
             port.destroy()
 
         for port in self.__outports:
-
-            for connName, conn in connections.iteritems():
-                srcPort = conn.getSrcPort()
-                if srcPort == port:
-                    connToDelete.append(conn)
-
             port.destroy()
-
-        for conn in connToDelete:
-            srcPort = conn.getSrcPort()
-            dstPort = conn.getDstPort()
-
-            sourceComponent = srcPort.getNode().getComponent()
-            targetComponent = dstPort.getNode().getComponent()
-
-            srcCmpDecName = sourceComponent.getDecoratedName()
-            tgtCmpDecName = targetComponent.getDecoratedName()
-
-            self.__graph.removeConnection(
-                source=srcCmpDecName + '.' + srcPort.getName(),
-                target=tgtCmpDecName + '.' + dstPort.getName())
 
         self.scene().removeItem(self)

@@ -33,6 +33,9 @@ class Connection(QtGui.QGraphicsPathItem):
     def getDstPort(self):
         return self.__dstPort
 
+    def setPortConnection(self, port):
+        port.addConnection(self)
+
     def boundingRect(self):
         srcPoint = self.mapFromScene(self.__srcPort.outCircle().centerInSceneCoords())
         dstPoint = self.mapFromScene(self.__dstPort.inCircle().centerInSceneCoords())
@@ -106,4 +109,11 @@ class Connection(QtGui.QGraphicsPathItem):
 
 
     def destroy(self):
+
+        srcPort = self.getSrcPort()
+        dstPort = self.getDstPort()
+
+        srcPort.removeConnection(self)
+        dstPort.removeConnection(self)
+
         self.scene().removeItem(self)

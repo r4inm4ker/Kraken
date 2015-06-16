@@ -112,8 +112,8 @@ class MouseGrabber(QtGui.QGraphicsWidget):
                 targetComponentInputPort.setConnection(sourceComponentOutputPort)
 
                 self.__graph.addConnection(
-                    source= sourceComponent.getDecoratedName() + '.' + sourceComponentOutputPort.getName(),
-                    target= targetComponent.getDecoratedName() + '.' + targetComponentInputPort.getName()
+                    source=sourceComponent.getDecoratedName() + '.' + sourceComponentOutputPort.getName(),
+                    target=targetComponent.getDecoratedName() + '.' + targetComponentInputPort.getName()
                 )
 
             except Exception as e:
