@@ -201,6 +201,7 @@ class BasePort(QtGui.QGraphicsWidget):
         self.__node = parent
         self.__graph = graph
         self.__componentInput = componentInput
+        self.__connections = []
 
         self.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Fixed))
 
@@ -268,6 +269,57 @@ class BasePort(QtGui.QGraphicsWidget):
     def getGraph(self):
         return self.__graph
 
+    # ===================
+    # Connection Methods
+    # ===================
+    def addConnection(self, connection):
+        """Adds a connection to the list.
+
+        Arguments:
+        connection -- connection, new connection to add.
+
+        Return:
+        True if successful.
+
+        """
+
+        self.__connections.append(connection)
+
+        return True
+
+    def removeConnection(self, connection):
+        """Removes a connection to the list.
+
+        Arguments:
+        connection -- connection, connection to remove.
+
+        Return:
+        True if successful.
+
+        """
+
+        deleteIndex = None
+        for i, conn in enumerate(self.__connections):
+            if conn == connection:
+                deleteIndex = i
+                break
+
+        if deleteIndex is not None:
+            del self.__connections[deleteIndex]
+
+        return True
+
+    def getConnections(self):
+        """Gets the ports connections list.
+
+        Return:
+        List, connections to this port.
+
+        """
+
+        return self.__connections
+
+
     def inCircle(self):
         if self.__inCircle is None:
             raise Exception("Port '" + self.getNode().getName() + "." + self.__label + "' Does not have an 'In' connection point.");
@@ -294,6 +346,21 @@ class BasePort(QtGui.QGraphicsWidget):
     #     painter.drawRect(self.windowFrameRect())
 
     def destroy(self):
+
+        for conn in self.getConnections():
+            srcPort = conn.getSrcPort()
+            dstPort = conn.getDstPort()
+
+            sourceComponent = srcPort.getNode().getComponent()
+            targetComponent = dstPort.getNode().getComponent()
+
+            srcCmpDecName = sourceComponent.getDecoratedName()
+            tgtCmpDecName = targetComponent.getDecoratedName()
+
+            self.__graph.removeConnection(
+                source=srcCmpDecName + '.' + srcPort.getName(),
+                target=tgtCmpDecName + '.' + dstPort.getName())
+
         self.scene().removeItem(self)
 
 
@@ -303,10 +370,7 @@ class InputPort(BasePort):
         super(InputPort, self).__init__(parent, graph, componentInput, 'In')
 
 
-
 class OutputPort(BasePort):
     """docstring for OutputPort"""
     def __init__(self, parent, graph, componentOutput):
         super(OutputPort, self).__init__(parent, graph, componentOutput, 'Out')
-
-
