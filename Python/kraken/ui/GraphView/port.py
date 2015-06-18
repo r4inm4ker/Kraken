@@ -28,6 +28,7 @@ class PortLabel(QtGui.QGraphicsWidget):
 
         self.__connectionPointType = connectionPointType
 
+        self.setAcceptHoverEvents(True)
         self.setPreferredSize(self.textSize())
         self.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed))
         self.setWindowFrameMargins(0, 0, 0, 0)
@@ -221,7 +222,7 @@ class BasePort(QtGui.QGraphicsWidget):
             self.__color = QtGui.QColor(50, 205, 254, 255)
 
         self.__labelColor = QtGui.QColor(25, 25, 25)
-        self.__labelHighlightColor = QtGui.QColor(50, 50, 50)
+        self.__labelHighlightColor = self.__color.lighter(200)
         self.__label = self.__componentInput.getName()
         self.__inCircle = None
         self.__outCircle = None
