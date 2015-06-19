@@ -94,7 +94,6 @@ class ComponentInspector(QtGui.QWidget):
     def addAttrWidget(self, name, widget):
 
         label = QtGui.QLabel(name, self._paramsGroup)
-        label.setMaximumWidth(200)
         label.setContentsMargins(0, 5, 0, 0)
 
         if widget is None:
@@ -122,9 +121,9 @@ class ComponentInspector(QtGui.QWidget):
         if name is not None:
             labelWidget = QtGui.QLabel(name, self._paramsGroup)
             labelWidget.setObjectName('separatorLabel')
-            labelWidget.setSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Preferred)
-            self._paramsLayout.addWidget(labelWidget, self._gridRow, 0, QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop)
-            self._paramsLayout.addWidget(separatorWidget, self._gridRow, 1)
+            labelWidget.setSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.MinimumExpanding)
+            self._paramsLayout.addWidget(labelWidget, self._gridRow, 0)
+            self._paramsLayout.addWidget(separatorWidget, self._gridRow, 1, QtCore.Qt.AlignBottom)
             self._gridRow += 1
         else:
             self._paramsLayout.addWidget(separatorWidget, self._gridRow, 0, 1, 2)
