@@ -10,7 +10,7 @@ from kraken.core.kraken_system import ks
 
 
 class ScalarAttribute(NumberAttribute):
-    sdfghjhkk
+    
     """Float Attribute. Implemented value type checking and limiting."""
 
     def __init__(self, name, value=0.0, minValue=None, maxValue=None, parent=None):
