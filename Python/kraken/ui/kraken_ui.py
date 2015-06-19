@@ -26,8 +26,29 @@ class KrakenUI(QtGui.QWidget):
 
         self.styleSheet = """
 
-        QWidget#mainUI {
-            background-color: #151515;
+
+        QLabel {
+            padding-right: 10px;
+
+            color: #e1ffff;
+        }
+
+        QToolBar::separator {
+            padding: 0 10px;
+            width: 1px;
+        }
+
+        QLineEdit {
+            border: 0px;
+            border-radius: 3px;
+            padding: 3px;
+
+            color: #e1ffff;
+            background-color: #333;
+        }
+
+        QLineEdit:hover {
+            background-color: #3b3b3b;
         }
 
         QSplitter::handle:horizontal {
@@ -38,6 +59,16 @@ class KrakenUI(QtGui.QWidget):
             border-radius: 3px;
         }
 
+        /* ======= */
+        /* Main UI */
+        /* ======= */
+        QWidget#mainUI {
+            background-color: #151515;
+        }
+
+        /* ============== */
+        /* Component Tree */
+        /* ============== */
         QListWidget#ComponentTree {
             border: 0;
             border-radius: 3px;
@@ -68,6 +99,9 @@ class KrakenUI(QtGui.QWidget):
             background-color: #438f99;
         }
 
+        /* =================== */
+        /* Component Inspector */
+        /* =================== */
         QWidget#componentInspector QWidget {
             background-color: #222;
         }
@@ -80,31 +114,44 @@ class KrakenUI(QtGui.QWidget):
             background-color: #333;
         }
 
-        QWidget#componentInspector QFrame#separatorFrame {
-            border: 1px solid #333;
+        QWidget#componentInspector QLineEdit:hover {
+            background-color: #3b3b3b;
+        }
 
-            background-color: #888;
+        QWidget#componentInspector QFrame#separatorFrame {
+            border-bottom: 1px solid #293b3d;
+            border-style: outset;
         }
 
         QWidget#componentInspector QLabel#separatorLabel {
-            border: 0px;
+            border: 1px #293b3d;
+            border-style: outset;
             border-radius: 3px;
-            padding: 3px;
+            padding: 6px;
 
-            background-color: #333;
-            color: #888;
+            background-color: #293b3d;
+            color: #64d7e6;
         }
 
-        QLineEdit {
-            border: 0px;
-            border-radius: 3px;
-            padding: 3px;
-
-            color: #e1ffff;
-            background-color: #333;
+        QWidget#componentInspector QSlider::groove:horizontal {
+            background-color: #3b3b3b;
+            height: 8px;
         }
 
+        QWidget#componentInspector QSlider::handle:horizontal {
+            border: 1px #438f99;
+            border-style: outset;
+            margin: -2px 0;
+            width: 18px;
+
+            background-color: #438f99;
+        }
+
+
+
+        /* ==================== */
         /* Contextual Node List */
+        /* ==================== */
         QLineEdit#contextNodeListSearchLine {
             border: 1px solid #111;
         }
@@ -126,12 +173,14 @@ class KrakenUI(QtGui.QWidget):
             background-color: #438f99;
         }
 
-        /* Toolbar */
+        /* ============ */
+        /* Main Toolbar */
+        /* ============ */
         QToolbar#mainToolbar {
             spacing: 20px;
         }
 
-        QToolBar {
+        QToolBar#mainToolbar {
             border: 0px;
             border-radius: 3px;
             height: 50px;
@@ -142,39 +191,36 @@ class KrakenUI(QtGui.QWidget):
             background-color: #222;
         }
 
-        QToolBar::handle {
+        QToolBar#mainToolbar::handle {
             background-color: #FF0000;
         }
 
-        QToolButton {
+        QToolBar#mainToolbar QToolButton {
             width: 65px;
+            border: 1px #333;
             border-radius: 3px;
+            border-style: outset;
             padding: 5px;
 
             background-color: #333;
             color: #e1ffff;
         }
 
-        QToolButton:hover {
+        QToolBar#mainToolbar QToolButton:hover {
             background-color: #3b3b3b;
         }
 
-        QLabel {
-            padding-right: 10px;
-
-            color: #e1ffff;
-        }
-
+        /* ==== */
+        /* Logo */
+        /* ==== */
         QLabel#logoWidget {
             margin: 0px;
             padding: 0px 5px;
         }
 
-        QToolBar::separator {
-            padding: 0 10px;
-            width: 1px;
-        }
-
+        /* ========== */
+        /* Graph View */
+        /* ========== */
         QGraphicsView#graphView {
             border: 0px;
         }
