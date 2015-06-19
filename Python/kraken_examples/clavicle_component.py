@@ -181,6 +181,17 @@ class ClavicleComponentGuide(ClavicleComponent):
 
         return 'Guide'
 
+    @classmethod
+    def getRigComponentClass(cls):
+        """Returns the corresponding rig component class for this guide component class
+
+        Return:
+        The rig component class.
+
+        """
+
+        return ClavicleComponentRig
+
 
 class ClavicleComponentRig(ClavicleComponent):
     """Clavicle Component"""

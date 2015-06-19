@@ -157,6 +157,7 @@ class HeadComponentGuide(HeadComponent):
 
         return data
 
+
     # ==============
     # Class Methods
     # ==============
@@ -170,6 +171,17 @@ class HeadComponentGuide(HeadComponent):
         """
 
         return 'Guide'
+
+    @classmethod
+    def getRigComponentClass(cls):
+        """Returns the corresponding rig component class for this guide component class
+
+        Return:
+        The rig component class.
+
+        """
+
+        return HeadComponentRig
 
 
 class HeadComponentRig(HeadComponent):

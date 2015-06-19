@@ -1,9 +1,31 @@
-Traceback (most recent call last):
-  File "ComponentTests\insectleg_build.py", line 31, in <module>
-    leg.loadData(insectLegGuideData)
-  File "..\Python\kraken_examples\insectleg_component.py", line 348, in loadData
-    self.fkCtrlSpaces[i].xfo = boneXfos[i]
-  File "..\Python\kraken\core\objects\object_3d.py", line 73, in xfo
-    self._xfo = value.clone()
-AttributeError: 'list' object has no attribute 'clone'
-
+Failed to find DCC builder. Falling back to Python builder.
+insectLeg:L
+insectLeg:L.controls
+insectLeg:L.controls.insectLeg:L
+insectLeg:L.controls.insectLeg:L.inputs
+insectLeg:L.controls.insectLeg:L.inputs.rootInput
+insectLeg:L.controls.insectLeg:L.outputs
+insectLeg:L.controls.insectLeg:L.outputs.legEndXfoOutput
+insectLeg:L.controls.insectLeg:L.outputs.legEndPosOutput
+insectLeg:L.controls.insectLeg:L.outputs.bone00
+insectLeg:L.controls.insectLeg:L.outputs.bone01
+insectLeg:L.controls.insectLeg:L.outputs.bone02
+insectLeg:L.controls.insectLeg:L.outputs.bone03
+insectLeg:L.controls.insectLeg:L.bone00FK
+insectLeg:L.controls.insectLeg:L.bone00FK.bone00FK
+insectLeg:L.controls.insectLeg:L.bone00FK.bone00FK.bone01FK
+insectLeg:L.controls.insectLeg:L.bone00FK.bone00FK.bone01FK.bone01FK
+insectLeg:L.controls.insectLeg:L.bone00FK.bone00FK.bone01FK.bone01FK.bone02FK
+insectLeg:L.controls.insectLeg:L.bone00FK.bone00FK.bone01FK.bone01FK.bone02FK.bone02FK
+insectLeg:L.controls.insectLeg:L.bone00FK.bone00FK.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK
+insectLeg:L.controls.insectLeg:L.bone00FK.bone00FK.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK
+insectLeg:L.controls.insectLeg:L.IK
+insectLeg:L.controls.insectLeg:L.IK.IK
+insectLeg:L.controls.insectLeg:L.UpV
+insectLeg:L.controls.insectLeg:L.UpV.UpV
+insectLeg:L.deformers
+insectLeg:L.deformers.insectLeg:L
+insectLeg:L.deformers.insectLeg:L.bone00
+insectLeg:L.deformers.insectLeg:L.bone01
+insectLeg:L.deformers.insectLeg:L.bone02
+insectLeg:L.deformers.insectLeg:L.bone03

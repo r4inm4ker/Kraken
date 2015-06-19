@@ -692,7 +692,7 @@ class Component(Object3D):
         """
 
         data = {
-            'class':"kraken_examples.arm_component.ArmComponentGuide",
+            'class': self.__class__.__module__ + "." + self.__class__.__name__,
             'name': self.getName(),
             'location': self.getLocation()
            }
@@ -786,10 +786,12 @@ class Component(Object3D):
 
         """
 
+        rigComponentClass = self.getRigComponentClass()
+
         data = {
-            "class": self.__class__.__module__ + "." + self.__class__.__name__,
-            "name": self.getName(),
-            "location":self.getLocation()
+            'class': rigComponentClass.__module__ + '.' + rigComponentClass.__name__,
+            'name': self.getName(),
+            'location': self.getLocation()
         }
 
         # automatically save all attributes. 

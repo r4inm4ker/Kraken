@@ -146,6 +146,16 @@ class MainSrtComponentGuide(MainSrtComponent):
 
         return 'Guide'
 
+    @classmethod
+    def getRigComponentClass(cls):
+        """Returns the corresponding rig component class for this guide component class
+
+        Return:
+        The rig component class.
+
+        """
+
+        return MainSrtComponentRig
 
 class MainSrtComponentRig(MainSrtComponent):
     """MainSrt Component Rig"""
