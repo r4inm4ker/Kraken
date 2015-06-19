@@ -267,7 +267,7 @@ class ClavicleComponentRig(ClavicleComponent):
         self.clavicleCtrl.xfo = data['clavicleXfo']
         self.clavicleCtrl.scalePoints(Vec3(data['clavicleLen'], 0.75, 0.75))
 
-        if location == "R":
+        if data['location'] == "R":
             self.clavicleCtrl.translatePoints(Vec3(0.0, 0.0, -1.0))
         else:
             self.clavicleCtrl.translatePoints(Vec3(0.0, 0.0, 1.0))

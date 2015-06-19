@@ -150,7 +150,7 @@ class InsectLegComponentGuide(InsectLegComponent):
 
         """
 
-        data = super(ClavicleComponentGuide, self).getRigBuildData()
+        data = super(InsectLegComponentGuide, self).getRigBuildData()
 
         # values
 

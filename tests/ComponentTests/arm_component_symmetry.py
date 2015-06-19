@@ -40,6 +40,9 @@ armRight.loadData(rightArmGuide.getRigBuildData())
 builder.build(armLeft)
 builder.build(armRight)
 
-# print '==armLeft=='
-# logHierarchy(armLeft)
+print '==armLeft=='
+logHierarchy(armLeft)
+
+print '==armRight=='
+logHierarchy(armRight)
 

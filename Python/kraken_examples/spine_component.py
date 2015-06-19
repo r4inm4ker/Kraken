@@ -115,7 +115,7 @@ class SpineComponentGuide(SpineComponent):
 
         """
 
-        data = super(NeckComponentGuide, self).saveData()
+        data = super(SpineComponentGuide, self).saveData()
 
         data['cogPosition'] = self.cog.xfo.tr,
         data['spine01Position'] = self.spine01Ctrl.xfo.tr,
@@ -138,7 +138,7 @@ class SpineComponentGuide(SpineComponent):
 
         """
 
-        super(NeckComponentGuide, self).loadData( data )
+        super(SpineComponentGuide, self).loadData( data )
 
         self.cog.xfo.tr = data["cogPosition"]
         self.spine01Ctrl.xfo.tr = data["spine01Position"]
@@ -158,7 +158,7 @@ class SpineComponentGuide(SpineComponent):
 
         """
 
-        data = super(NeckComponentGuide, self).getRigBuildData()
+        data = super(SpineComponentGuide, self).getRigBuildData()
 
         data['cogPosition'] = self.cog.xfo.tr
         data['spine01Position'] = self.spine01Ctrl.xfo.tr
@@ -352,10 +352,17 @@ class SpineComponentRig(SpineComponent):
 
 
     def loadData(self, data=None):
+        """Load a saved guide representation from persisted data.
 
-        self.setName(data.get('name', 'spine'))
-        location = data.get('location', 'M')
-        self.setLocation(location)
+        Arguments:
+        data -- object, The JSON data object.
+
+        Return:
+        True if successful.
+
+        """
+
+        super(SpineComponentRig, self).loadData( data )
 
         cogPosition = data['cogPosition']
         spine01Position = data['spine01Position']

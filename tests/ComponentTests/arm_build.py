@@ -24,10 +24,8 @@ armGuide.loadData({
 
 # Save the arm guid data for persistence.
 saveData = armGuide.saveData()
-print saveData.keys()
 
 armGuideData = armGuide.getRigBuildData()
-print saveData.keys()
 
 arm = ArmComponentRig()
 arm.loadData(armGuideData)
