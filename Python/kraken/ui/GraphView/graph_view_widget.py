@@ -22,6 +22,7 @@ class GraphViewWidget(QtGui.QWidget):
         # constructors of base classes
         super(GraphViewWidget, self).__init__(parent)
         self.setObjectName('graphViewWidget')
+        self.setAttribute(QtCore.Qt.WA_WindowPropagation, True)
 
         self.graphView = GraphView(parent=self)
         self.__contextualNodeList = None

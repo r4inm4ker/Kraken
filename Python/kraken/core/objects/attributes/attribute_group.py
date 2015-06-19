@@ -7,7 +7,9 @@ AttributeGroup - Attribute Group.
 
 from kraken.core.objects.scene_item import SceneItem
 
-
+# TODO: Attribute group has children in the form of attributes, but doesn's support the object 3d interface
+# that provides the getChild* methods. We should clean this up so AttributeGroup supports all the child methods
+# A current bug is that an attribute group can have multiple children with the same name.
 class AttributeGroup(SceneItem):
     """Attribute Group that attributes belong to."""
 

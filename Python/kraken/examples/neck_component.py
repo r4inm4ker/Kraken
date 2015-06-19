@@ -73,8 +73,6 @@ class NeckComponentGuide(NeckComponent):
         # ========
 
         guideSettingsAttrGrp = AttributeGroup("GuideSettings", parent=self)
-        self.nameAttr = StringAttribute('name', value=name, parent=guideSettingsAttrGrp, callback=self.setName)
-        self.locationAttr = StringAttribute('location', value='L', parent=guideSettingsAttrGrp, callback=self.setLocation)
 
         # Guide Controls
         self.neckCtrl = Control('neck', parent=self.ctrlCmpGrp, shape="sphere")

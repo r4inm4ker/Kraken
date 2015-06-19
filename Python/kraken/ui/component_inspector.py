@@ -53,12 +53,12 @@ class ComponentInspector(QtGui.QWidget):
 
         # constructors of base classes
         super(ComponentInspector, self).__init__(parent)
+        self.setObjectName('componentInspector')
 
         self.parent = parent
         self.component = component
         self.nodeItem = nodeItem
 
-        self.setAttribute(QtCore.Qt.WA_WindowPropagation, True)
         self.setWindowTitle( self.component.getName() + ":" + self.component.getTypeName() )
         self.setWindowFlags( QtCore.Qt.Window )
         self.resize( 300, 300 )
@@ -83,8 +83,6 @@ class ComponentInspector(QtGui.QWidget):
 
         self._paramsLayout = QtGui.QGridLayout()
         self._paramsLayout.setAlignment(QtCore.Qt.AlignTop)
-        # self._paramsLayout.setContentsMargins(8, 8, 8, 8)
-        # self._paramsLayout.setSpacing(5)
 
         self._paramsGroup.setLayout(self._paramsLayout)
 
@@ -116,13 +114,23 @@ class ComponentInspector(QtGui.QWidget):
                 self._gridRow += 2
 
             self._paramWidgets.append(widget)
-        self.addSeparator()
 
-    def addSeparator(self):
+    def addSeparator(self, name=None):
+
         separatorWidget = QtGui.QFrame(self._paramsGroup)
         separatorWidget.setFrameShape(QtGui.QFrame.HLine)
-        self._paramsLayout.addWidget(separatorWidget, self._gridRow, 0, 1, 2)
-        self._gridRow += 1
+        separatorWidget.setObjectName('separatorFrame')
+        if name is not None:
+            labelWidget = QtGui.QLabel(name, self._paramsGroup)
+            labelWidget.setObjectName('separatorLabel')
+            labelWidget.setSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Preferred)
+            self._paramsLayout.addWidget(labelWidget, self._gridRow, 0, QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop)
+            self._paramsLayout.addWidget(separatorWidget, self._gridRow, 1)
+            self._gridRow += 1
+        else:
+            self._paramsLayout.addWidget(separatorWidget, self._gridRow, 0, 1, 2)
+            self._gridRow += 1
+
 
     def addStretch(self, stretch):
         self._paramsLayout.addWidget(QtGui.QWidget(self), self._gridRow, 0, 1, 2)
@@ -147,6 +155,7 @@ class ComponentInspector(QtGui.QWidget):
 
         for i in range(self.component.getNumAttributeGroups()):
             grp  = self.component.getAttributeGroupByIndex(i)
+            self.addSeparator(grp.getName())
             for j in range(grp.getNumAttributes()):
                 displayAttribute(grp.getAttributeByIndex(j))
 

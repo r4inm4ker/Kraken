@@ -19,7 +19,7 @@ from kraken.core.objects.control import Control
 
 from kraken.core.objects.attributes.attribute_group import AttributeGroup
 from kraken.core.objects.attributes.bool_attribute import BoolAttribute
-from kraken.core.objects.attributes.float_attribute import FloatAttribute
+from kraken.core.objects.attributes.scalar_attribute import ScalarAttribute
 from kraken.core.objects.attributes.integer_attribute import IntegerAttribute
 from kraken.core.objects.attributes.string_attribute import StringAttribute
 
@@ -109,8 +109,8 @@ class KrakenLoader(object):
         elif "BoolAttribute" in jsonData['__typeHierarchy__']:
             item = BoolAttribute(jsonData['name'])
 
-        elif "FloatAttribute" in jsonData['__typeHierarchy__']:
-            item = FloatAttribute(jsonData['name'])
+        elif "ScalarAttribute" in jsonData['__typeHierarchy__']:
+            item = ScalarAttribute(jsonData['name'])
 
         elif "IntegerAttribute" in jsonData['__typeHierarchy__']:
             item = IntegerAttribute(jsonData['name'])

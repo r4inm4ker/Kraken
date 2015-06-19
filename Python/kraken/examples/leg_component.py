@@ -5,7 +5,7 @@ from kraken.core.maths.xfo import xfoFromDirAndUpV
 from kraken.core.objects.components.component import Component
 
 from kraken.core.objects.attributes.attribute_group import AttributeGroup
-from kraken.core.objects.attributes.float_attribute import FloatAttribute
+from kraken.core.objects.attributes.scalar_attribute import ScalarAttribute
 from kraken.core.objects.attributes.bool_attribute import BoolAttribute
 from kraken.core.objects.attributes.string_attribute import StringAttribute
 
@@ -82,8 +82,6 @@ class LegComponentGuide(LegComponent):
         # ========
 
         guideSettingsAttrGrp = AttributeGroup("GuideSettings", parent=self)
-        self.nameAttr = StringAttribute('name', value=name, parent=guideSettingsAttrGrp, callback=self.setName)
-        self.locationAttr = StringAttribute('location', value='L', parent=guideSettingsAttrGrp, callback=self.setLocation)
 
         # Guide Controls
         self.femurCtrl = Control('femur', parent=self.ctrlCmpGrp, shape="sphere")
@@ -283,18 +281,18 @@ class LegComponentRig(LegComponent):
 
         # Add Component Params to IK control
         footSettingsAttrGrp = AttributeGroup("DisplayInfo_FootSettings", parent=self.footCtrl)
-        footLinkToWorldInputAttr = FloatAttribute('linkToWorld', 1.0, maxValue=1.0, parent=footSettingsAttrGrp)
+        footLinkToWorldInputAttr = ScalarAttribute('linkToWorld', 1.0, maxValue=1.0, parent=footSettingsAttrGrp)
 
         # Add Component Params to IK control
         legSettingsAttrGrp = AttributeGroup("DisplayInfo_LegSettings", parent=self.legIKCtrl)
         legDrawDebugInputAttr = BoolAttribute('drawDebug', value=False, parent=legSettingsAttrGrp)
-        self.legBone0LenInputAttr = FloatAttribute('bone0Len', value=1.0, parent=legSettingsAttrGrp)
-        self.legBone1LenInputAttr = FloatAttribute('bone1Len', value=1.0, parent=legSettingsAttrGrp)
-        legIKBlendInputAttr = FloatAttribute('ikblend', value=1.0, minValue=0.0, maxValue=1.0, parent=legSettingsAttrGrp)
+        self.legBone0LenInputAttr = ScalarAttribute('bone0Len', value=1.0, parent=legSettingsAttrGrp)
+        self.legBone1LenInputAttr = ScalarAttribute('bone1Len', value=1.0, parent=legSettingsAttrGrp)
+        legIKBlendInputAttr = ScalarAttribute('ikblend', value=1.0, minValue=0.0, maxValue=1.0, parent=legSettingsAttrGrp)
         legSoftIKInputAttr = BoolAttribute('softIK', value=True, parent=legSettingsAttrGrp)
-        legSoftDistInputAttr = FloatAttribute('softDist', value=0.0, minValue=0.0, parent=legSettingsAttrGrp)
+        legSoftDistInputAttr = ScalarAttribute('softDist', value=0.0, minValue=0.0, parent=legSettingsAttrGrp)
         legStretchInputAttr = BoolAttribute('stretch', value=True, parent=legSettingsAttrGrp)
-        legStretchBlendInputAttr = FloatAttribute('stretchBlend', value=0.0, minValue=0.0, maxValue=1.0, parent=legSettingsAttrGrp)
+        legStretchBlendInputAttr = ScalarAttribute('stretchBlend', value=0.0, minValue=0.0, maxValue=1.0, parent=legSettingsAttrGrp)
 
         self.drawDebugInputAttr.connect(legDrawDebugInputAttr)
 

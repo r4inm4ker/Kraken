@@ -73,8 +73,6 @@ class HeadComponentGuide(HeadComponent):
         # Controls
         # =========
         guideSettingsAttrGrp = AttributeGroup("GuideSettings", parent=self)
-        self.nameAttr = StringAttribute('name', value=name, parent=guideSettingsAttrGrp, callback=self.setName)
-        self.locationAttr = StringAttribute('location', value='L', parent=guideSettingsAttrGrp, callback=self.setLocation)
 
         self.headCtrl = Control('head', parent=self.ctrlCmpGrp, shape="cube")
         self.headEndCtrl = Control('headEnd', parent=self.ctrlCmpGrp, shape="sphere")

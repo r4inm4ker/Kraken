@@ -339,16 +339,12 @@ class Object3D(SceneItem):
         initName = child.getName()
         name = initName
         suffix = 1
-        # TODO: Attribute group has children in the form of attributes, but doesn's support the object 3d interface
-        # that provides the getChild* methods. We should clean this up so AttributeGroup supports all the child methods
-        # A current bug is that an attribute group can have multiple children with the same name.
-        # if parent.isTypeOf('Object3D'):
+
         while self.getChildByDecoratedName(name + child.getNameDecoration()) != None:
             name = initName + str(suffix).zfill(2)
             suffix += 1
         if initName != name:
             child.setName(name)
-
 
         self.getChildren().append(child)
         child.setParent(self)

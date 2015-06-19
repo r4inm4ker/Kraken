@@ -11,14 +11,13 @@ from kraken.core.objects.scene_item import SceneItem
 class Attribute(SceneItem):
     """Attribute object."""
 
-    def __init__(self, name, value, parent=None, callback=None):
+    def __init__(self, name, value, parent=None):
         super(Attribute, self).__init__(name)
         self._value = value
         self._connection = None
         self._keyable = True
         self._lock = False
         self._animatable = True
-        self._callback = callback
 
         if parent is not None:
             if parent.getTypeName() != 'AttributeGroup':
@@ -55,9 +54,6 @@ class Attribute(SceneItem):
         """
 
         self._value = value
-
-        if self._callback is not None:
-            self._callback(self._value)
 
         return True
 
@@ -232,21 +228,6 @@ class Attribute(SceneItem):
         self._connection = None
 
         return True
-
-
-
-    def setCallback(self, callback):
-        """Sets the callback function of this attribute.
-
-        Return:
-        True if successful.
-
-        """
-
-        self._callback = callback
-
-        return True
-
 
     # ====================
     # Persistence Methods

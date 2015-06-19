@@ -10,7 +10,7 @@ from kraken.core.objects.object_3d import Object3D
 from kraken.core.objects.layer import Layer
 from kraken.core.objects.locator import Locator
 from kraken.core.objects.attributes.bool_attribute import BoolAttribute
-from kraken.core.objects.attributes.float_attribute import FloatAttribute
+from kraken.core.objects.attributes.scalar_attribute import ScalarAttribute
 from kraken.core.objects.attributes.integer_attribute import IntegerAttribute
 from kraken.core.objects.attributes.string_attribute import StringAttribute
 
@@ -227,7 +227,7 @@ class Component(Object3D):
             newInputTgt = BoolAttribute(name)
 
         elif dataType.startswith('Float'):
-            newInputTgt = FloatAttribute(name)
+            newInputTgt = ScalarAttribute(name)
 
         elif dataType.startswith('Integer'):
             newInputTgt = IntegerAttribute(name)
@@ -405,7 +405,7 @@ class Component(Object3D):
             newOutputTgt = BoolAttribute(name)
 
         elif dataType.startswith('Float'):
-            newOutputTgt = FloatAttribute(name)
+            newOutputTgt = ScalarAttribute(name)
 
         elif dataType.startswith('Integer'):
             newOutputTgt = IntegerAttribute(name)
