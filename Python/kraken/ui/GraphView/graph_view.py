@@ -170,15 +170,4 @@ class GraphView(QtGui.QGraphicsView):
         self.graph.resize(event.size())
 
     def closeEvent(self, event):
-
-        # self.__controller.removeNotificationListener('port.created', self.__portCreated)
-        # self.__controller.removeNotificationListener('port.destroyed', self.__portDestroyed)
-        # self.__controller.removeNotificationListener('node.created', self.__nodeCreated)
-        # self.__controller.removeNotificationListener('node.destroyed', self.__nodeDestroyed)
-        # self.__controller.removeNotificationListener('graph.connected', self.__connectionAdded)
-        # self.__controller.removeNotificationListener('graph.disconnected', self.__connectionRemoved)
-        # self.__controller.removeNotificationListener('graph.metadata.changed', self.graphMetadataChanged)
-        # self.__controller.removeNotificationListener('scene.new', self.__onSceneChange)
-        # self.__controller.removeNotificationListener('scene.load', self.__onSceneChange)
-
         return super(GraphView, self).closeEvent(event)

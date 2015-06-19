@@ -95,7 +95,6 @@ class ComponentLibrary(QtGui.QWidget):
                     continue
 
             item = QtGui.QListWidgetItem(shortName)
-            item._fullClassName = componentClassName
             item.setData(QtCore.Qt.UserRole, componentClassName)
 
             self.nodesList.addItem(item)

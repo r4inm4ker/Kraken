@@ -82,8 +82,8 @@ class ArmComponentGuide(ArmComponent):
         # Add Component Params to IK control
         guideSettingsAttrGrp = AttributeGroup("GuideSettings", parent=self)
 
-        self.nameAttr = StringAttribute('name', value='arm', parent=guideSettingsAttrGrp, callback=self.setName)
-        self.locationAttr = StringAttribute('location', value='L', parent=guideSettingsAttrGrp, callback=self.setLocation)
+        # self.nameAttr = StringAttribute('name', value=self.getName(), parent=guideSettingsAttrGrp, callback=self.setName)
+        # self.locationAttr = StringAttribute('location', value=self.getLocation(), parent=guideSettingsAttrGrp, callback=self.setLocation)
         self.bicepFKCtrlSizeInputAttr = FloatAttribute('bicepFKCtrlSize', value=1.75, minValue=0.0,   maxValue=10.0, parent=guideSettingsAttrGrp)
         self.forearmFKCtrlSizeInputAttr = FloatAttribute('forearmFKCtrlSize', value=1.5, minValue=0.0,   maxValue=10.0, parent=guideSettingsAttrGrp)
 

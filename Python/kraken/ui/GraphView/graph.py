@@ -121,12 +121,10 @@ class Graph(QtGui.QGraphicsWidget):
 
         def computeWindowFrame():
             windowRect = self.mapRectToItem(self.itemGroup(), self.windowFrameGeometry())
-            # leftSidePanelRect = self.mapRectToItem(self.itemGroup(), self.__leftPanel.windowFrameGeometry())
-            # rightSidePanelRect = self.mapRectToItem(self.itemGroup(), self.__rightPanel.windowFrameGeometry())
-            # windowRect.setLeft(leftSidePanelRect.right() + 8)
-            # windowRect.setRight(rightSidePanelRect.left() - 8)
-            # windowRect.setTop(windowRect.top() + 8)
-            # windowRect.setBottom(windowRect.bottom() - 8)
+            windowRect.setLeft(windowRect.left() + 16)
+            windowRect.setRight(windowRect.right() - 16)
+            windowRect.setTop(windowRect.top() + 16)
+            windowRect.setBottom(windowRect.bottom() - 16)
             return windowRect
 
         nodesRect = None

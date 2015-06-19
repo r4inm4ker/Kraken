@@ -285,7 +285,7 @@ class Node(QtGui.QGraphicsWidget):
         self.__inspectorWidget = None
 
 
-    def nameChanged(self, name):
+    def nameChanged(self):
         self.__titleItem.setText(self.__component.getDecoratedName())
 
         # Update the node so that the size is computed.
