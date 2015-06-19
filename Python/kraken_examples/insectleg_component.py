@@ -170,8 +170,8 @@ class InsectLegComponentGuide(InsectLegComponent):
 
             boneXfos.append(xfo)
 
-        data['boneXfos'] = boneXfos,
-        data['endXfo'] = self.legCtrls[-1].xfo,
+        data['boneXfos'] = boneXfos
+        data['endXfo'] = self.legCtrls[-1].xfo
         data['boneLengths'] = boneLengths
 
         return data
@@ -189,6 +189,18 @@ class InsectLegComponentGuide(InsectLegComponent):
         """
 
         return 'Guide'
+
+    @classmethod
+    def getRigComponentClass(cls):
+        """Returns the corresponding rig component class for this guide component class
+
+        Return:
+        The rig component class.
+
+        """
+
+        return InsectLegComponentRig
+
 
 class InsectLegComponentRig(InsectLegComponent):
     """Insect Leg Rig"""
@@ -343,7 +355,6 @@ class InsectLegComponentRig(InsectLegComponent):
 
         boneXfos = data['boneXfos']
         boneLengths = data['boneLengths']
-
         for i, each in enumerate(self.fkCtrlSpaces):
             self.fkCtrlSpaces[i].xfo = boneXfos[i]
             self.boneFKCtrls[i].xfo = boneXfos[i]

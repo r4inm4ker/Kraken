@@ -231,6 +231,17 @@ class ArmComponentGuide(ArmComponent):
 
         return 'Guide'
 
+    @classmethod
+    def getRigComponentClass(cls):
+        """Returns the corresponding rig component class for this guide component class
+
+        Return:
+        The rig component class.
+
+        """
+
+        return ArmComponentRig
+
 
 class ArmComponentRig(ArmComponent):
     """Arm Component Rig"""
