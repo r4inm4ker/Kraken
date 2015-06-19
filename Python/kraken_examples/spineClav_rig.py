@@ -3,8 +3,8 @@ from kraken.core.maths import Vec3, Quat, Xfo
 from kraken.core.objects.container import Container
 from kraken.core.objects.layer import Layer
 
-from kraken.examples.clavicle_component import ClavicleComponentGuide, ClavicleComponentRig
-from kraken.examples.spine_component import SpineComponentRig
+from kraken_examples.clavicle_component import ClavicleComponentGuide, ClavicleComponentRig
+from kraken_examples.spine_component import SpineComponentRig
 
 from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy

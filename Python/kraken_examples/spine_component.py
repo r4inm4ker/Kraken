@@ -116,7 +116,7 @@ class SpineComponentGuide(SpineComponent):
         """
 
         data = {
-            'class':"kraken.examples.spine_component.SpineComponentGuide",
+            'class':"kraken_examples.spine_component.SpineComponentGuide",
             'name': self.getName(),
             'location': self.getLocation(),
             'cogPosition': self.cog.xfo.tr,
@@ -164,7 +164,7 @@ class SpineComponentGuide(SpineComponent):
         """
 
         data = {
-            'class':"kraken.examples.spine_component.SpineComponentRig",
+            'class':"kraken_examples.spine_component.SpineComponentRig",
             'name': self.getName(),
             'location':self.getLocation(),
             'cogPosition': self.cog.xfo.tr,

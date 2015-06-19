@@ -129,7 +129,7 @@ class ArmComponentGuide(ArmComponent):
         """
 
         data = {
-            'class':"kraken.examples.arm_component.ArmComponentGuide",
+            'class':"kraken_examples.arm_component.ArmComponentGuide",
             'name': self.getName(),
             'location': self.getLocation(),
             'bicepXfo': self.bicepCtrl.xfo,
@@ -216,7 +216,7 @@ class ArmComponentGuide(ArmComponent):
         upVXfo.tr = upVXfo.transformVector(Vec3(0, 0, 5))
 
         data = {
-            "class":"kraken.examples.arm_component.ArmComponentRig",
+            "class":"kraken_examples.arm_component.ArmComponentRig",
             "name": self.getName(),
             "location":self.getLocation(),
             "bicepXfo": bicepXfo,

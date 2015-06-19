@@ -2,7 +2,7 @@
 from kraken import plugins
 from kraken.core.maths import Xfo, Vec3, Quat
 from kraken.core.profiler import Profiler
-from kraken.examples.clavicle_component import ClavicleComponentGuide, ClavicleComponentRig
+from kraken_examples.clavicle_component import ClavicleComponentGuide, ClavicleComponentRig
 from kraken.helpers.utility_methods import logHierarchy
 import json
 

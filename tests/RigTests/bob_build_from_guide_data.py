@@ -2,7 +2,7 @@ import json
 
 from kraken import plugins
 from kraken.core.objects.rig import Rig
-from kraken.examples.bob_guide_data import bob_guide_data
+from kraken_examples.bob_guide_data import bob_guide_data
 from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
 

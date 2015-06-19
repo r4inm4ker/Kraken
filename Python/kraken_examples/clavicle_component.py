@@ -107,7 +107,7 @@ class ClavicleComponentGuide(ClavicleComponent):
         """
 
         data = {
-            'class':"kraken.examples.clavicle_component.ClavicleComponentGuide",
+            'class':"kraken_examples.clavicle_component.ClavicleComponentGuide",
             'name': self.getName(),
             'location': self.getLocation(),
             'clavicleXfo': self.clavicleCtrl.xfo,
@@ -165,7 +165,7 @@ class ClavicleComponentGuide(ClavicleComponent):
         clavicleLen = claviclePosition.subtract(clavicleEndPosition).length()
 
         data = {
-            "class":"kraken.examples.clavicle_component.ClavicleComponentRig",
+            "class":"kraken_examples.clavicle_component.ClavicleComponentRig",
             "name": self.getName(),
             "location":self.getLocation(),
             "clavicleXfo": clavicleXfo,

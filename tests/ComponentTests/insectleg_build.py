@@ -1,6 +1,6 @@
 from kraken import plugins
 from kraken.core.maths import Vec3
-from kraken.examples.insectleg_component import InsectLegComponentGuide, InsectLegComponentRig
+from kraken_examples.insectleg_component import InsectLegComponentGuide, InsectLegComponentRig
 
 from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy

@@ -103,7 +103,7 @@ class NeckComponentGuide(NeckComponent):
         """
 
         data = {
-            'class':"kraken.examples.neck_component.NeckComponentGuide",
+            'class':"kraken_examples.neck_component.NeckComponentGuide",
             'name': self.getName(),
             'location': self.getLocation(),
             'neckPosition': self.neckCtrl.xfo.tr,
@@ -157,7 +157,7 @@ class NeckComponentGuide(NeckComponent):
         neckXfo.setFromVectors(rootToEnd, bone1Normal, bone1ZAxis, neckPosition)
 
         data = {
-            'class':"kraken.examples.neck_component.NeckComponentRig",
+            'class':"kraken_examples.neck_component.NeckComponentRig",
             'name': self.getName(),
             'location':self.getLocation(),
             'neckXfo': neckXfo
