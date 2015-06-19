@@ -22,8 +22,8 @@ class Component(Object3D):
     """Kraken Component object."""
 
     def __init__(self, name, parent=None, location='M'):
-        super(Component, self).__init__(name, parent)
         self._location = location
+        super(Component, self).__init__(name, parent)
         self._inputs = []
         self._outputs = []
         self._operators = []
@@ -42,7 +42,7 @@ class Component(Object3D):
     # Name Methods
     # =============
 
-    def getDecoratedName(self):
+    def getNameDecoration(self):
         """Gets the decorated name of the object.
 
         Return:
@@ -53,7 +53,7 @@ class Component(Object3D):
         # We decorate the name of the component with the location. This
         # enables multiple components to have the same name as long as they
         # have different locations. e.g. Leg:R, and Leg:L
-        return self.getName() + ":" + self.getLocation()
+        return ":" + self.getLocation()
 
 
     # =============
@@ -82,7 +82,13 @@ class Component(Object3D):
 
         """
 
+        # TODO: check that the given location is a valid value found in the config
+
         self._location = location
+
+        # The new location might cause a name colision.
+        # forcing a name refresh will generate a new name if a collision exists
+        self.setName(self.getName())
 
         return True
 

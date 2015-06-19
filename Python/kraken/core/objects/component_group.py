@@ -34,11 +34,17 @@ class ComponentGroup(Object3D):
 
         """
 
-        # The ComponentGroup's name should always match the component's name.
-        return self.getComponent().getName()
+
+        # During construction of the base class, the name is tested before
+        # the component is assigned.
+        if self.getComponent() is not None:
+            # The ComponentGroup's name should always match the component's name.
+            return self.getComponent().getName()
+        else:
+            return super(ComponentGroup, self).getName()
 
 
-    def getDecoratedName(self):
+    def getNameDecoration(self):
         """Gets the decorated name of the object.
 
         Return:
@@ -46,4 +52,8 @@ class ComponentGroup(Object3D):
 
         """
 
-        return self.getComponent().getDecoratedName()
+        if self.getComponent() is not None:
+            # The ComponentGroup's name should always match the component's name.
+            return self.getComponent().getNameDecoration()
+        else:
+            return super(ComponentGroup, self).getNameDecoration()
