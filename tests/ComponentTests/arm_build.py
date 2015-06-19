@@ -24,18 +24,20 @@ armGuide.loadData({
 
 # Save the arm guid data for persistence.
 saveData = armGuide.saveData()
+print saveData.keys()
 
 armGuideData = armGuide.getRigBuildData()
+print saveData.keys()
 
-arm = ArmComponentRig()
-arm.loadData(armGuideData)
+# arm = ArmComponentRig()
+# arm.loadData(armGuideData)
 
-builder = plugins.getBuilder()
-builder.build(arm)
+# builder = plugins.getBuilder()
+# builder.build(arm)
 
-Profiler.getInstance().pop()
+# Profiler.getInstance().pop()
 
-if __name__ == "__main__":
-    print Profiler.getInstance().generateReport()
-else:
-    logHierarchy(arm)
+# if __name__ == "__main__":
+#     print Profiler.getInstance().generateReport()
+# else:
+#     logHierarchy(arm)
