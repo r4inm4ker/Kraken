@@ -106,14 +106,11 @@ class ClavicleComponentGuide(ClavicleComponent):
 
         """
 
-        data = {
-            'class':"kraken_examples.clavicle_component.ClavicleComponentGuide",
-            'name': self.getName(),
-            'location': self.getLocation(),
-            'clavicleXfo': self.clavicleCtrl.xfo,
-            'clavicleUpVXfo': self.clavicleUpVCtrl.xfo,
-            'clavicleEndXfo': self.clavicleEndCtrl.xfo
-            }
+        data = super(ClavicleComponentGuide, self).saveData()
+
+        data['clavicleXfo'] = self.clavicleCtrl.xfo
+        data['clavicleUpVXfo'] = self.clavicleUpVCtrl.xfo
+        data['clavicleEndXfo'] = self.clavicleEndCtrl.xfo
 
         return data
 
@@ -129,10 +126,8 @@ class ClavicleComponentGuide(ClavicleComponent):
 
         """
 
-        if 'name' in data:
-            self.setName(data['name'])
+        super(ClavicleComponentGuide, self).loadData( data )
 
-        self.setLocation(data['location'])
         self.clavicleCtrl.xfo = data['clavicleXfo']
         self.clavicleUpVCtrl.xfo = self.clavicleCtrl.xfo.multiply(data['clavicleUpVXfo'])
         self.clavicleEndCtrl.xfo = data['clavicleEndXfo']
@@ -147,6 +142,9 @@ class ClavicleComponentGuide(ClavicleComponent):
         The JSON rig data object.
 
         """
+
+        data = super(ClavicleComponentGuide, self).getRigBuildData()
+
 
         # Values
         claviclePosition = self.clavicleCtrl.xfo.tr
@@ -164,13 +162,8 @@ class ClavicleComponentGuide(ClavicleComponent):
 
         clavicleLen = claviclePosition.subtract(clavicleEndPosition).length()
 
-        data = {
-            "class":"kraken_examples.clavicle_component.ClavicleComponentRig",
-            "name": self.getName(),
-            "location":self.getLocation(),
-            "clavicleXfo": clavicleXfo,
-            "clavicleLen": clavicleLen
-           }
+        data['clavicleXfo'] = clavicleXfo
+        data['clavicleLen'] = clavicleLen
 
         return data
 
@@ -187,6 +180,17 @@ class ClavicleComponentGuide(ClavicleComponent):
         """
 
         return 'Guide'
+
+    @classmethod
+    def getRigComponentClass(cls):
+        """Returns the corresponding rig component class for this guide component class
+
+        Return:
+        The rig component class.
+
+        """
+
+        return ClavicleComponentRig
 
 
 class ClavicleComponentRig(ClavicleComponent):
@@ -258,16 +262,23 @@ class ClavicleComponentRig(ClavicleComponent):
 
 
     def loadData(self, data=None):
+        """Load a saved guide representation from persisted data.
 
-        self.setName(data.get('name', 'clavicle'))
-        location = data.get('location', 'M')
-        self.setLocation(location)
+        Arguments:
+        data -- object, The JSON data object.
+
+        Return:
+        True if successful.
+
+        """
+
+        super(ClavicleComponentRig, self).loadData( data )
 
         self.clavicleCtrlSpace.xfo = data['clavicleXfo']
         self.clavicleCtrl.xfo = data['clavicleXfo']
         self.clavicleCtrl.scalePoints(Vec3(data['clavicleLen'], 0.75, 0.75))
 
-        if location == "R":
+        if data['location'] == "R":
             self.clavicleCtrl.translatePoints(Vec3(0.0, 0.0, -1.0))
         else:
             self.clavicleCtrl.translatePoints(Vec3(0.0, 0.0, 1.0))

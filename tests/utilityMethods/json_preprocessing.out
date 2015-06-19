@@ -286,31 +286,6 @@
     }, 
     {
       "forearmFKCtrlSize": 1.5, 
-      "wristXfo": {
-        "sc": {
-          "y": 1.0, 
-          "x": 1.0, 
-          "__mathObjectClass__": "Vec3", 
-          "z": 1.0
-        }, 
-        "__mathObjectClass__": "Xfo", 
-        "tr": {
-          "y": 12.281900405883789, 
-          "x": 7.188600063323975, 
-          "__mathObjectClass__": "Vec3", 
-          "z": 0.49059998989105225
-        }, 
-        "ori": {
-          "__mathObjectClass__": "Quat", 
-          "w": 1.0, 
-          "v": {
-            "y": 0.0, 
-            "x": 0.0, 
-            "__mathObjectClass__": "Vec3", 
-            "z": 0.0
-          }
-        }
-      }, 
       "name": "Arm", 
       "bicepXfo": {
         "sc": {
@@ -337,7 +312,6 @@
           }
         }
       }, 
-      "bicepFKCtrlSize": 1.75, 
       "forearmXfo": {
         "sc": {
           "y": 1.0, 
@@ -363,7 +337,32 @@
           }
         }
       }, 
-      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
       "handXfo": {
         "sc": {
           "y": 1.0, 
@@ -389,35 +388,11 @@
           }
         }
       }, 
-      "location": "L"
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
     }, 
     {
       "forearmFKCtrlSize": 1.5, 
-      "wristXfo": {
-        "sc": {
-          "y": 1.0, 
-          "x": 1.0, 
-          "__mathObjectClass__": "Vec3", 
-          "z": 1.0
-        }, 
-        "__mathObjectClass__": "Xfo", 
-        "tr": {
-          "y": 12.281900405883789, 
-          "x": -7.188600063323975, 
-          "__mathObjectClass__": "Vec3", 
-          "z": 0.49059998989105225
-        }, 
-        "ori": {
-          "__mathObjectClass__": "Quat", 
-          "w": 1.0, 
-          "v": {
-            "y": 0.0, 
-            "x": 0.0, 
-            "__mathObjectClass__": "Vec3", 
-            "z": 0.0
-          }
-        }
-      }, 
       "name": "Arm", 
       "bicepXfo": {
         "sc": {
@@ -444,7 +419,6 @@
           }
         }
       }, 
-      "bicepFKCtrlSize": 1.75, 
       "forearmXfo": {
         "sc": {
           "y": 1.0, 
@@ -470,7 +444,32 @@
           }
         }
       }, 
-      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": -7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "R", 
       "handXfo": {
         "sc": {
           "y": 1.0, 
@@ -496,7 +495,8 @@
           }
         }
       }, 
-      "location": "R"
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
     }, 
     {
       "toeTipXfo": {
@@ -600,6 +600,7 @@
           }
         }
       }, 
+      "location": "L", 
       "class": "kraken_examples.leg_component.LegComponentGuide", 
       "femurXfo": {
         "sc": {
@@ -625,8 +626,7 @@
             "z": 0.0
           }
         }
-      }, 
-      "location": "L"
+      }
     }, 
     {
       "toeTipXfo": {
@@ -730,6 +730,7 @@
           }
         }
       }, 
+      "location": "R", 
       "class": "kraken_examples.leg_component.LegComponentGuide", 
       "femurXfo": {
         "sc": {
@@ -755,8 +756,7 @@
             "z": 0.0
           }
         }
-      }, 
-      "location": "R"
+      }
     }
   ]
 }

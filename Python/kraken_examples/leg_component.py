@@ -118,16 +118,13 @@ class LegComponentGuide(LegComponent):
 
         """
 
-        data = {
-            'class':"kraken_examples.leg_component.LegComponentGuide",
-            'name': self.getName(),
-            'location': self.getLocation(),
-            'femurXfo': self.femurCtrl.xfo,
-            'kneeXfo': self.kneeCtrl.xfo,
-            'ankleXfo': self.ankleCtrl.xfo,
-            'toeXfo': self.toeCtrl.xfo,
-            'toeTipXfo': self.toeTipCtrl.xfo
-           }
+        data = super(LegComponentGuide, self).saveData()
+
+        data['femurXfo'] = self.femurCtrl.xfo,
+        data['kneeXfo'] = self.kneeCtrl.xfo,
+        data['ankleXfo'] = self.ankleCtrl.xfo,
+        data['toeXfo'] = self.toeCtrl.xfo,
+        data['toeTipXfo'] = self.toeTipCtrl.xfo
 
         return data
 
@@ -143,10 +140,8 @@ class LegComponentGuide(LegComponent):
 
         """
 
-        if 'name' in data:
-            self.setName(data['name'])
+        super(LegComponentGuide, self).loadData( data )
 
-        self.setLocation(data['location'])
         self.femurCtrl.xfo = data['femurXfo']
         self.kneeCtrl.xfo = data['kneeXfo']
         self.ankleCtrl.xfo = data['ankleXfo']
@@ -163,6 +158,8 @@ class LegComponentGuide(LegComponent):
         The JSON rig data object.
 
         """
+
+        data = super(LegComponentGuide, self).getRigBuildData()
 
         # Values
         femurPosition = self.femurCtrl.xfo.tr
@@ -208,20 +205,14 @@ class LegComponentGuide(LegComponent):
         upVXfo.tr = kneePosition
         upVXfo.tr = upVXfo.transformVector(Vec3(0, 0, 5))
 
-        data = {
-                'class':'kraken_examples.leg_component.LegComponentRig',
-                'name': self.getName(),
-                'location':self.getLocation(),
-                'femurXfo': femurXfo,
-                'kneeXfo': kneeXfo,
-                'handleXfo': handleXfo,
-                'ankleXfo': ankleXfo,
-                'toeXfo': toeXfo,
-                'upVXfo': upVXfo,
-                'femurLen': femurLen,
-                'shinLen': shinLen
-            }
-
+        data['femurXfo'] = femurXfo
+        data['kneeXfo'] = kneeXfo
+        data['handleXfo'] = handleXfo
+        data['ankleXfo'] = ankleXfo
+        data['toeXfo'] = toeXfo
+        data['upVXfo'] = upVXfo
+        data['femurLen'] = femurLen
+        data['shinLen'] = shinLen
 
         return data
 
@@ -238,6 +229,17 @@ class LegComponentGuide(LegComponent):
         """
 
         return 'Guide'
+
+    @classmethod
+    def getRigComponentClass(cls):
+        """Returns the corresponding rig component class for this guide component class
+
+        Return:
+        The rig component class.
+
+        """
+
+        return LegComponentRig
 
 
 class LegComponentRig(LegComponent):
@@ -438,10 +440,17 @@ class LegComponentRig(LegComponent):
     # Data Methods
     # =============
     def loadData(self, data=None):
+        """Load a saved guide representation from persisted data.
 
-        self.setName(data.get('name', 'leg'))
-        location = data.get('location', 'M')
-        self.setLocation(location)
+        Arguments:
+        data -- object, The JSON data object.
+
+        Return:
+        True if successful.
+
+        """
+
+        super(LegComponentRig, self).loadData( data )
 
         self.femurFKCtrlSpace.xfo = data['femurXfo']
         self.femurFKCtrl.xfo = data['femurXfo']

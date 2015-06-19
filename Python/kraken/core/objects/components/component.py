@@ -5,6 +5,8 @@ Component -- Component representation.
 
 """
 
+from kraken.core.configs.config import Config
+from kraken.helpers.utility_methods import mirrorData
 from kraken.core.maths import *
 from kraken.core.objects.object_3d import Object3D
 from kraken.core.objects.layer import Layer
@@ -674,6 +676,133 @@ class Component(Object3D):
         self._operators.insert(index, self._operators.pop(oldindex))
 
         return True
+
+
+
+    # =============
+    # Data Methods
+    # =============
+    def saveData(self):
+        """Save the data for the component to be persisted.
+
+
+        Return:
+        The JSON data object
+
+        """
+
+        data = {
+            'class': self.__class__.__module__ + "." + self.__class__.__name__,
+            'name': self.getName(),
+            'location': self.getLocation()
+           }
+
+
+        # TODO: AttributeGroup needs to become a hierachy object like all the others.
+        # so it can be traversed usign the regular traversial methods. 
+        # attributeGroups = self.getChildrenByType('AttributeGroup')
+        # attributeGroups = getNumAttributeGroups()
+        # for grp in attributeGroups:
+        for i in range(self.getNumAttributeGroups()):
+            grp = self.getAttributeGroupByIndex(i)
+            for j in range(grp.getNumAttributes()):
+                attr = grp.getAttributeByIndex(j)
+                data[attr.getName()] = attr.getValue()
+
+        return data
+
+
+    def loadData(self, data):
+        """Load a saved guide representation from persisted data.
+
+        Arguments:
+        data -- object, The JSON data object.
+
+        Return:
+        True if successful.
+
+        """
+
+        if 'name' in data:
+            self.setName(data['name'])
+
+        if 'location' in data:
+            self.setLocation(data['location'])
+
+        attributeGroups = self.getChildrenByType('AttributeGroup')
+        for grp in attributeGroups:
+            for i in range(grp.getNumAttributes()):
+                attr = grp.getAttributeByIndex(i)
+                if attr.getName() in data:
+                    attr.setValue(data[attr.getName()])
+
+        return True
+
+    # ==================
+    # Copy/Paste Methods
+    # ==================
+
+    def copyData(self):
+        """Copy the data for the component to our clipboard.
+
+        Return:
+        The JSON data object
+
+        """
+
+        return self.saveData()
+
+
+    def pasteData(self, data):
+        """Paste a copied guide representation.
+
+        Arguments:
+        data -- object, The JSON data object.
+
+        Return:
+        True if successful.
+
+        """
+
+        if data['location'] != self.getLocation():
+            config = Config.getInstance()
+            mirrorMap = config.getNameTemplate()['mirrorMap']
+            if mirrorMap[data['location']] != data['location']:
+                data = mirrorData(data, 0)
+                del data['location']
+            
+        self.loadData( data )
+        return True
+
+    # ==================
+    # Rig Build Methods
+    # =================
+
+    def getRigBuildData(self):
+        """Returns the Guide data used by the Rig Component to define the layout of the final rig..
+
+        Return:
+        The JSON rig data object.
+
+        """
+
+        rigComponentClass = self.getRigComponentClass()
+
+        data = {
+            'class': rigComponentClass.__module__ + '.' + rigComponentClass.__name__,
+            'name': self.getName(),
+            'location': self.getLocation()
+        }
+
+        # automatically save all attributes. 
+        for i in range(self.getNumAttributeGroups()):
+            grp = self.getAttributeGroupByIndex(i)
+            for j in range(grp.getNumAttributes()):
+                attr = grp.getAttributeByIndex(j)
+                data[attr.getName()] = attr.getValue()
+
+        return data
+
 
     # ==============
     # Class Methods

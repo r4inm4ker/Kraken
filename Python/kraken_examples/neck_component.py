@@ -102,13 +102,10 @@ class NeckComponentGuide(NeckComponent):
 
         """
 
-        data = {
-            'class':"kraken_examples.neck_component.NeckComponentGuide",
-            'name': self.getName(),
-            'location': self.getLocation(),
-            'neckPosition': self.neckCtrl.xfo.tr,
-            'neckEndPosition': self.neckEndCtrl.xfo.tr
-           }
+        data = super(NeckComponentGuide, self).saveData()
+
+        data['neckPosition'] = self.neckCtrl.xfo.tr
+        data['neckEndPosition'] = self.neckEndCtrl.xfo.tr
 
         return data
 
@@ -124,10 +121,8 @@ class NeckComponentGuide(NeckComponent):
 
         """
 
-        if 'name' in data:
-            self.setName(data['name'])
+        super(NeckComponentGuide, self).loadData( data )
 
-        self.setLocation(data.get('location', 'M'))
         self.neckCtrl.xfo.tr = data['neckPosition']
         self.neckEndCtrl.xfo.tr = data['neckEndPosition']
 
@@ -141,6 +136,8 @@ class NeckComponentGuide(NeckComponent):
         The JSON rig data object.
 
         """
+
+        data = super(NeckComponentGuide, self).getRigBuildData()
 
         # values
         neckEndPosition = self.neckCtrl.xfo.tr
@@ -156,12 +153,7 @@ class NeckComponentGuide(NeckComponent):
         neckXfo = Xfo()
         neckXfo.setFromVectors(rootToEnd, bone1Normal, bone1ZAxis, neckPosition)
 
-        data = {
-            'class':"kraken_examples.neck_component.NeckComponentRig",
-            'name': self.getName(),
-            'location':self.getLocation(),
-            'neckXfo': neckXfo
-           }
+        data['neckXfo'] = neckXfo
 
         return data
 
@@ -179,6 +171,18 @@ class NeckComponentGuide(NeckComponent):
         """
 
         return 'Guide'
+
+
+    @classmethod
+    def getRigComponentClass(cls):
+        """Returns the corresponding rig component class for this guide component class
+
+        Return:
+        The rig component class.
+
+        """
+
+        return NeckComponentRig
 
 
 class NeckComponentRig(NeckComponent):
@@ -252,10 +256,17 @@ class NeckComponentRig(NeckComponent):
 
 
     def loadData(self, data=None):
+        """Load a saved guide representation from persisted data.
 
-        self.setName(data.get('name', 'neck'))
-        location = data.get('location', 'M')
-        self.setLocation(location)
+        Arguments:
+        data -- object, The JSON data object.
+
+        Return:
+        True if successful.
+
+        """
+
+        super(NeckComponentRig, self).loadData( data )
 
         self.neckCtrlSpace.xfo = data['neckXfo']
         self.neckCtrl.xfo = data['neckXfo']
