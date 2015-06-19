@@ -1,7 +1,7 @@
 import json
 
 from kraken import plugins
-from kraken.examples.spineClav_rig import SpineClavRig
+from kraken_examples.spineClav_rig import SpineClavRig
 from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
 

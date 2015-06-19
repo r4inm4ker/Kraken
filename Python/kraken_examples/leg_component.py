@@ -119,7 +119,7 @@ class LegComponentGuide(LegComponent):
         """
 
         data = {
-            'class':"kraken.examples.leg_component.LegComponentGuide",
+            'class':"kraken_examples.leg_component.LegComponentGuide",
             'name': self.getName(),
             'location': self.getLocation(),
             'femurXfo': self.femurCtrl.xfo,
@@ -209,7 +209,7 @@ class LegComponentGuide(LegComponent):
         upVXfo.tr = upVXfo.transformVector(Vec3(0, 0, 5))
 
         data = {
-                'class':'kraken.examples.leg_component.LegComponentRig',
+                'class':'kraken_examples.leg_component.LegComponentRig',
                 'name': self.getName(),
                 'location':self.getLocation(),
                 'femurXfo': femurXfo,

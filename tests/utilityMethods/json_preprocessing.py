@@ -1,6 +1,6 @@
 import json
 
-from kraken.examples.bob_guide_data import bob_guide_data
+from kraken_examples.bob_guide_data import bob_guide_data
 from kraken.helpers.utility_methods import prepareToSave, prepareToLoad
 
 

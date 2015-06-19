@@ -135,7 +135,7 @@ class MainSrtComponentGuide(MainSrtComponent):
         mainSrtXfo = self.mainSrtCtrl.xfo
 
         data = {
-                "class":"kraken.examples.mainSrt_component.MainSrtComponentRig",
+                "class":"kraken_examples.mainSrt_component.MainSrtComponentRig",
                 "name": self.getName(),
                 "location": self.getLocation(),
                 "mainSrtXfo": mainSrtXfo

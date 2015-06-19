@@ -1,7 +1,7 @@
 from kraken import plugins
 from kraken.core.maths import Xfo, Vec3, Quat
 
-from kraken.examples.mainSrt_component import MainSrtComponentGuide, MainSrtComponentRig
+from kraken_examples.mainSrt_component import MainSrtComponentGuide, MainSrtComponentRig
 
 from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
