@@ -254,7 +254,18 @@ class KrakenSystem(object):
 
         return self.registeredComponents.keys()
 
-    def loadIniFile(self, iniFilePath=None):
+
+    def loadComponentModules(self, iniFilePath=None):
+        """Loads all the component modules specified in the 'KRAKEN_COMPONENT_PATHS' environment variable. 
+        If the environment variable is not set, then the kraken_examples are loaded.
+
+        Return:
+        None
+
+        """
+
+        pathsVar = os.getenv('KRAKEN_COMPONENT_PATHS')
+
         def __importDirRecursive(path, parentModulePath=''):
             for root, dirs, files in os.walk(path, True, None):
 
@@ -269,6 +280,8 @@ class KrakenSystem(object):
                         try:
                             importlib.import_module(module)
                         except ImportError, e:
+                            print "Error loading Kraken components from environment variable:" + str(pathsVar)
+                            print "The paths must point to the root of importable python modules."
                             for arg in e.args:
                                 print arg
                         except Exception, e:
@@ -279,18 +292,15 @@ class KrakenSystem(object):
                 for dirName in dirs:
                     __importDirRecursive(os.path.join(path,dirName), parentModulePath+"."+dirName)
 
-        if iniFilePath is None:
-            iniJson = {
-                'componentModulePaths':{
-                    'kraken.examples': os.path.join(os.path.dirname(kraken.__file__), 'examples')
-                }
-            }
-        else:
-            with open(iniFilePath, 'r') as f:
-                iniJson = json.loads(f.read())
+        if pathsVar is None:
+            # find the kraken examples module in the same folder as the kraken module. 
+            pathsVar = os.path.join(os.path.dirname(os.path.dirname(kraken.__file__)), 'kraken_examples')
 
-        for key, path in iniJson['componentModulePaths'].iteritems():
-            __importDirRecursive(path, key)
+        pathsList = pathsVar.split(';')
+
+        for path in pathsList:
+            __importDirRecursive(path, os.path.basename(path))
+
 
     @classmethod
     def getInstance(cls):
