@@ -83,15 +83,18 @@ class GraphView(QtGui.QGraphicsView):
 
             if isinstance(graphicItem, Node):
                 contextMenu = QtGui.QMenu(self.__graphViewWidget)
+                contextMenu.setObjectName('rightClickContextMenu')
+                contextMenu.setMinimumWidth(150)
 
                 def copySettings():
                     self.__clipboardData = graphicItem.getComponent().copyData()
-                contextMenu.addAction("Copy").triggered.connect(copySettings)
+                contextMenu.addAction("Copy Data").triggered.connect(copySettings)
 
                 if self.__clipboardData is not None:
                     def pasteSettings():
                         graphicItem.getComponent().pasteData(self.__clipboardData)
-                    contextMenu.addAction("Paste").triggered.connect(pasteSettings)
+                    contextMenu.addSeparator()
+                    contextMenu.addAction("Paste Data").triggered.connect(pasteSettings)
 
                 contextMenu.popup(event.globalPos())
 
