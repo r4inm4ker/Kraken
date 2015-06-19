@@ -59,12 +59,14 @@ class KrakenUI(QtGui.QWidget):
             border-radius: 3px;
         }
 
+
         /* ======= */
         /* Main UI */
         /* ======= */
         QWidget#mainUI {
             background-color: #151515;
         }
+
 
         /* ============== */
         /* Component Tree */
@@ -98,6 +100,7 @@ class KrakenUI(QtGui.QWidget):
             color: white;
             background-color: #438f99;
         }
+
 
         /* =================== */
         /* Component Inspector */
@@ -146,7 +149,6 @@ class KrakenUI(QtGui.QWidget):
 
             background-color: #438f99;
         }
-
 
 
         /* ==================== */
@@ -210,6 +212,11 @@ class KrakenUI(QtGui.QWidget):
             background-color: #3b3b3b;
         }
 
+        QToolBar#mainToolbar QToolButton:pressed {
+            border-style: inset;
+            background-color: #3b3b3b;
+        }
+
         /* ==== */
         /* Logo */
         /* ==== */
@@ -223,6 +230,36 @@ class KrakenUI(QtGui.QWidget):
         /* ========== */
         QGraphicsView#graphView {
             border: 0px;
+        }
+
+
+        /* ================ */
+        /* Right Click Menu */
+        /* ================ */
+        QMenu#rightClickContextMenu {
+            border: 1px solid #666;
+            border-radius: 3px;
+            padding: 3px;
+
+            background-color: #333;
+            color: #e1ffff;
+        }
+
+        QMenu#rightClickContextMenu QAbstractItemView {
+            background-color: transparent;
+        }
+
+        QMenu#rightClickContextMenu::item{
+            color: white;
+            padding: 5px;
+        }
+
+        QMenu#rightClickContextMenu::item:selected {
+            background-color: #438f99;
+        }
+
+        QMenu#rightClickContextMenu::item:hover {
+            background-color: #438f99;
         }
 
         """
