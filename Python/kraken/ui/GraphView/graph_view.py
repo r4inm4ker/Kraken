@@ -8,13 +8,15 @@ import os.path
 from PySide import QtGui, QtCore
 from graph import Graph
 from node import Node, NodeTitle
-from port import PortLabel
+from port import PortLabel, InputPort, OutputPort
 
 from kraken.core.maths import Vec2
 from kraken.core.kraken_system import KrakenSystem
 
 
 class GraphView(QtGui.QGraphicsView):
+
+    __clipboardData = None
 
     def __init__(self, parent=None):
         super(GraphView, self).__init__(parent)
@@ -31,9 +33,6 @@ class GraphView(QtGui.QGraphicsView):
 
         self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        # self.setResizeAnchor(QtGui.QGraphicsView.AnchorUnderMouse)
-        # self.setDragMode(QtGui.QGraphicsView.RubberBandDrag)
-        # self.setContentsMargins(0, 0, 0, 0)
 
         self.setAcceptDrops(True)
 
@@ -68,55 +67,33 @@ class GraphView(QtGui.QGraphicsView):
     def mousePressEvent(self, event):
         if event.button() == QtCore.Qt.MouseButton.RightButton:
 
-            return
-
             def __getGraphItem(graphicItem):
                 if isinstance(graphicItem, Node):
                     return graphicItem
-                elif isinstance(graphicItem, MainPanel):
-                    return graphicItem
                 elif(isinstance(graphicItem, QtGui.QGraphicsTextItem) or
                      isinstance(graphicItem, NodeTitle) or
-                     isinstance(graphicItem, PortLabel)):
+                     isinstance(graphicItem, OutputPort) or
+                     isinstance(graphicItem, InputPort)):
                     return __getGraphItem(graphicItem.parentItem())
                 return None
+
             pos = self.getGraph().mapToScene(event.pos())
             graphicItem = __getGraphItem(self.itemAt(int(pos.x()), int(pos.y())))
-            contextMenu = QtGui.QMenu(self.__dfgEditor)
 
-            if isinstance(graphicItem, MainPanel):
-                def newGraphNode():
-                    ContextualNewNodeWidget(self, self.__controller, self.getGraph(), 'graph', pos)
-                contextMenu.addAction("New Graph Node").triggered.connect(newGraphNode)
-                def newFunctionNode():
-                    ContextualNewNodeWidget(self, self.__controller, self.getGraph(), 'function', pos)
-                contextMenu.addAction("New Function Node").triggered.connect(newFunctionNode)
 
-            elif isinstance(graphicItem, ProxySidePanelPort):
-                connectionPointType = graphicItem.getSidePanel().getConnectionPortType()
-                if connectionPointType == 'In':
-                    portType = 'Out'
-                elif connectionPointType == 'Out':
-                    portType = 'In'
-                else:
-                    portType = connectionPointType
-                def addPort():
-                    self.openAddPortDialog(graphPath=self.graph.getGraphPath(), evalPath=self.graph.getEvalPath(), portType=portType)
-                contextMenu.addAction("Add Port").triggered.connect(addPort)
+            if isinstance(graphicItem, Node):
+                contextMenu = QtGui.QMenu(self.__graphViewWidget)
 
-            elif isinstance(graphicItem, SidePanelPort):
-                def editPort():
-                    print "EditPort"
-                contextMenu.addAction("Edit Port").triggered.connect(editPort)
-                def removePort():
-                    self.__controller.removePort(executablePath=self.graph.getGraphPath(), evalPath=self.graph.getEvalPath(), portName=graphicItem.getName())
-                contextMenu.addAction("Remove Port").triggered.connect(removePort)
+                def copySettings():
+                    self.__clipboardData = graphicItem.getComponent().copyData()
+                contextMenu.addAction("Copy").triggered.connect(copySettings)
 
-            elif isinstance(graphicItem, Node):
-                def newGraph():
-                    ContextualNewNodeWidget(self, self.__controller, self.getGraph(), 'graph', pos)
-                contextMenu.addAction("New Graph Node").triggered.connect(newGraph)
-            contextMenu.popup(event.globalPos())
+                if self.__clipboardData is not None:
+                    def pasteSettings():
+                        graphicItem.getComponent().pasteData(self.__clipboardData)
+                    contextMenu.addAction("Paste").triggered.connect(pasteSettings)
+
+                contextMenu.popup(event.globalPos())
 
         elif event.button() == QtCore.Qt.MouseButton.LeftButton:
 

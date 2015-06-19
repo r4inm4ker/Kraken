@@ -128,17 +128,12 @@ class ArmComponentGuide(ArmComponent):
 
         """
 
-        data = {
-            'class':"kraken_examples.arm_component.ArmComponentGuide",
-            'name': self.getName(),
-            'location': self.getLocation(),
-            'bicepXfo': self.bicepCtrl.xfo,
-            'forearmXfo': self.forearmCtrl.xfo,
-            'wristXfo': self.wristCtrl.xfo,
-            'handXfo': self.handCtrl.xfo,
-            'bicepFKCtrlSize': self.bicepFKCtrlSizeInputAttr.getValue(),
-            'forearmFKCtrlSize': self.forearmFKCtrlSizeInputAttr.getValue()
-           }
+        data = super(ArmComponentGuide, self).saveData()
+
+        data['bicepXfo'] = self.bicepCtrl.xfo
+        data['forearmXfo'] = self.forearmCtrl.xfo
+        data['wristXfo'] = self.wristCtrl.xfo
+        data['handXfo'] = self.handCtrl.xfo
 
         return data
 
@@ -154,17 +149,12 @@ class ArmComponentGuide(ArmComponent):
 
         """
 
-        if 'name' in data:
-            self.setName(data['name'])
+        super(ArmComponentGuide, self).loadData( data )
 
-        self.setLocation(data['location'])
         self.bicepCtrl.xfo = data['bicepXfo']
         self.forearmCtrl.xfo = data['forearmXfo']
         self.wristCtrl.xfo = data['wristXfo']
         self.handCtrl.xfo = data['handXfo']
-
-        self.bicepFKCtrlSizeInputAttr.setValue(data['bicepFKCtrlSize'])
-        self.forearmFKCtrlSizeInputAttr.setValue(data['forearmFKCtrlSize'])
 
         return True
 
@@ -176,6 +166,8 @@ class ArmComponentGuide(ArmComponent):
         The JSON rig data object.
 
         """
+
+        data = super(ArmComponentGuide, self).getRigBuildData()
 
         # values
         bicepPosition = self.bicepCtrl.xfo.tr
@@ -215,20 +207,13 @@ class ArmComponentGuide(ArmComponent):
         upVXfo.tr = forearmPosition
         upVXfo.tr = upVXfo.transformVector(Vec3(0, 0, 5))
 
-        data = {
-            "class":"kraken_examples.arm_component.ArmComponentRig",
-            "name": self.getName(),
-            "location":self.getLocation(),
-            "bicepXfo": bicepXfo,
-            "forearmXfo": forearmXfo,
-            "handXfo": handXfo,
-            "armEndXfo": armEndXfo,
-            "upVXfo": upVXfo,
-            "forearmLen": forearmLen,
-            "bicepLen": bicepLen,
-            "bicepFKCtrlSize": self.bicepFKCtrlSizeInputAttr.getValue(),
-            "forearmFKCtrlSize": self.forearmFKCtrlSizeInputAttr.getValue()
-        }
+        data['bicepXfo'] = bicepXfo
+        data['forearmXfo'] = forearmXfo
+        data['handXfo'] = handXfo
+        data['armEndXfo'] = armEndXfo
+        data['upVXfo'] = upVXfo
+        data['forearmLen'] = forearmLen
+        data['bicepLen'] = bicepLen
 
         return data
 
@@ -405,11 +390,17 @@ class ArmComponentRig(ArmComponent):
 
 
     def loadData(self, data=None):
+        """Load a saved guide representation from persisted data.
 
-        self.setName(data.get('name', 'arm'))
-        self.ctrlCmpGrp.setName(self.getName())
-        location = data.get('location', 'M')
-        self.setLocation(location)
+        Arguments:
+        data -- object, The JSON data object.
+
+        Return:
+        True if successful.
+
+        """
+
+        super(ArmComponentRig, self).loadData( data )
 
         self.clavicleEndInputTgt.xfo.tr = data['bicepXfo'].tr
 

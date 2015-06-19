@@ -112,16 +112,13 @@ class InsectLegComponentGuide(InsectLegComponent):
 
         """
 
+        data = super(InsectLegComponentGuide, self).saveData()
+
         jointPositions = []
         for i in xrange(5):
             jointPositions.append(self.legCtrls[i].xfo.tr)
 
-        data = {
-            'class':"kraken_examples.insectleg_component.InsectLegComponentGuide",
-            'name': self.getName(),
-            'location': self.getLocation(),
-            'jointPositions': jointPositions
-            }
+        data['jointPositions'] = jointPositions
 
         return data
 
@@ -137,10 +134,7 @@ class InsectLegComponentGuide(InsectLegComponent):
 
         """
 
-        if 'name' in data:
-            self.setName(data['name'])
-
-        self.setLocation(data['location'])
+        super(InsectLegComponentGuide, self).loadData( data )
 
         for i in xrange(5):
             self.legCtrls[i].xfo.tr = data['jointPositions'][i]
@@ -155,6 +149,8 @@ class InsectLegComponentGuide(InsectLegComponent):
         The JSON rig data object.
 
         """
+
+        data = super(InsectLegComponentGuide, self).getRigBuildData()
 
         # values
 
@@ -174,14 +170,9 @@ class InsectLegComponentGuide(InsectLegComponent):
 
             boneXfos.append(xfo)
 
-        data = {
-            "class":"kraken_examples.insectleg_component.InsectLegComponentRig",
-            "name": self.getName(),
-            "location": self.getLocation(),
-            "boneXfos": boneXfos,
-            "endXfo": self.legCtrls[-1].xfo,
-            "boneLengths": boneLengths
-           }
+        data['boneXfos'] = boneXfos,
+        data['endXfo'] = self.legCtrls[-1].xfo,
+        data['boneLengths'] = boneLengths
 
         return data
 
@@ -338,10 +329,17 @@ class InsectLegComponentRig(InsectLegComponent):
 
 
     def loadData(self, data=None):
+        """Load a saved guide representation from persisted data.
 
-        self.setName(data.get('name', 'InsectLeg'))
-        location = data.get('location', 'M')
-        self.setLocation(location)
+        Arguments:
+        data -- object, The JSON data object.
+
+        Return:
+        True if successful.
+
+        """
+
+        super(InsectLegComponentRig, self).loadData( data )
 
         boneXfos = data['boneXfos']
         boneLengths = data['boneLengths']

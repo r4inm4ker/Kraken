@@ -28,7 +28,7 @@ class AttributeGroup(SceneItem):
     # ==================
     # Attribute Methods
     # ==================
-    def checkAttributeIndex(self, index):
+    def _checkAttributeIndex(self, index):
         """Checks the supplied index is valid.
 
         Arguments:
@@ -76,7 +76,7 @@ class AttributeGroup(SceneItem):
 
         """
 
-        if self.checkAttributeIndex(index) is not True:
+        if self._checkAttributeIndex(index) is not True:
             return False
 
         del self._attributes[index]
@@ -132,7 +132,7 @@ class AttributeGroup(SceneItem):
 
         """
 
-        if self.checkAttributeIndex(index) is not True:
+        if self._checkAttributeIndex(index) is not True:
             return False
 
         return self._attributes[index]

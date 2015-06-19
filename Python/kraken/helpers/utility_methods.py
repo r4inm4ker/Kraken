@@ -1,5 +1,9 @@
 
 from kraken.core.maths.math_object import MathObject
+from kraken.core.maths.vec3 import Vec3
+from kraken.core.maths.xfo import Xfo
+from kraken.core.maths.quat import Quat
+
 from kraken.core.maths import decodeValue
 
 
@@ -56,8 +60,10 @@ def __convertToJSON(jsonData):
             newList.append(__convertToJSON(item))
         return newList
     elif type(jsonData) is dict:
+        newDict = {}
         for key, value in jsonData.iteritems():
-            jsonData[key] = __convertToJSON(value)
+            newDict[key] = __convertToJSON(value)
+        return newDict
     return jsonData
 
 
@@ -73,3 +79,54 @@ def prepareToSave(jsonData):
     """
 
     return __convertToJSON(jsonData)
+
+
+def __mirrorData(jsonData, plane):
+
+    if isinstance(jsonData, Vec3):
+        return jsonData
+
+    if isinstance(jsonData, Quat):
+        newQuat = Quat(jsonData)
+        newQuat.mirror(plane)
+        return newQuat
+
+    elif isinstance(jsonData, Xfo):
+        newXfo = Xfo(jsonData)
+        if plane == 0:
+            newXfo.tr.x = -newXfo.tr.x
+        elif plane == 1:
+            newXfo.tr.y = -newXfo.tr.y
+        elif plane == 2:
+            newXfo.tr.z = -newXfo.tr.z
+        
+        newXfo.ori.mirror(plane)
+        return newXfo
+
+    elif type(jsonData) is list:
+        newList = []
+        for item in jsonData:
+            newList.append(__mirrorData(item, plane))
+        return newList
+
+    elif type(jsonData) is dict:
+        newDict = {}
+        for key, value in jsonData.iteritems():
+            newDict[key] = __mirrorData(value, plane)
+        return newDict
+        
+    return jsonData
+
+
+def mirrorData(jsonData, plane):
+    """Prepares the json data for serialization.
+
+    Arguments:
+    jsonData -- dict, the JSON data to be prepared.
+
+    Return:
+    dict, the prepared JSON hierarchy.
+
+    """
+
+    return __mirrorData(jsonData, plane)
