@@ -117,7 +117,7 @@ class InsectLegComponentGuide(InsectLegComponent):
             jointPositions.append(self.legCtrls[i].xfo.tr)
 
         data = {
-            'class':"kraken.examples.insectleg_component.InsectLegComponentGuide",
+            'class':"kraken_examples.insectleg_component.InsectLegComponentGuide",
             'name': self.getName(),
             'location': self.getLocation(),
             'jointPositions': jointPositions
@@ -175,7 +175,7 @@ class InsectLegComponentGuide(InsectLegComponent):
             boneXfos.append(xfo)
 
         data = {
-            "class":"kraken.examples.insectleg_component.InsectLegComponentRig",
+            "class":"kraken_examples.insectleg_component.InsectLegComponentRig",
             "name": self.getName(),
             "location": self.getLocation(),
             "boneXfos": boneXfos,

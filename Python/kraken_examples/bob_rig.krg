@@ -115,7 +115,7 @@
         "__mathObjectClass__": "Vec3",
         "z": -0.4821000099182129
       },
-      "class": "kraken.examples.spine_component.SpineComponentGuide",
+      "class": "kraken_examples.spine_component.SpineComponentGuide",
       "location": "M"
     },
     {
@@ -126,7 +126,7 @@
         "__mathObjectClass__": "Vec3",
         "z": -0.6915000081062317
       },
-      "class": "kraken.examples.neck_component.NeckComponentGuide",
+      "class": "kraken_examples.neck_component.NeckComponentGuide",
       "neckEndPosition": {
         "y": 17.47559928894043,
         "x": 0.0,
@@ -161,7 +161,7 @@
         "__mathObjectClass__": "Vec3",
         "z": -0.42100000381469727
       },
-      "class": "kraken.examples.head_component.HeadComponentGuide",
+      "class": "kraken_examples.head_component.HeadComponentGuide",
       "eyeLeftPosition": {
         "y": 18.087799072265625,
         "x": 0.349700003862381,
@@ -223,7 +223,7 @@
         }
       },
       "location": "L",
-      "class": "kraken.examples.clavicle_component.ClavicleComponentGuide",
+      "class": "kraken_examples.clavicle_component.ClavicleComponentGuide",
       "clavicleXfo": {
         "sc": {
           "y": 1.0,
@@ -303,7 +303,7 @@
         }
       },
       "location": "R",
-      "class": "kraken.examples.clavicle_component.ClavicleComponentGuide",
+      "class": "kraken_examples.clavicle_component.ClavicleComponentGuide",
       "clavicleXfo": {
         "sc": {
           "y": 1.0,
@@ -409,7 +409,7 @@
           }
         }
       },
-      "class": "kraken.examples.arm_component.ArmComponentGuide",
+      "class": "kraken_examples.arm_component.ArmComponentGuide",
       "handXfo": {
         "sc": {
           "y": 1.0,
@@ -516,7 +516,7 @@
           }
         }
       },
-      "class": "kraken.examples.arm_component.ArmComponentGuide",
+      "class": "kraken_examples.arm_component.ArmComponentGuide",
       "handXfo": {
         "sc": {
           "y": 1.0,
@@ -646,7 +646,7 @@
           }
         }
       },
-      "class": "kraken.examples.leg_component.LegComponentGuide",
+      "class": "kraken_examples.leg_component.LegComponentGuide",
       "femurXfo": {
         "sc": {
           "y": 1.0,
@@ -776,7 +776,7 @@
           }
         }
       },
-      "class": "kraken.examples.leg_component.LegComponentGuide",
+      "class": "kraken_examples.leg_component.LegComponentGuide",
       "femurXfo": {
         "sc": {
           "y": 1.0,

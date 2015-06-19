@@ -1,7 +1,7 @@
 from kraken import plugins
 from kraken.core.maths import Vec3
 
-from kraken.examples.neck_component import NeckComponentGuide, NeckComponentRig
+from kraken_examples.neck_component import NeckComponentGuide, NeckComponentRig
 
 from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy

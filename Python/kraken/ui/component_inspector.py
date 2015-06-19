@@ -9,7 +9,6 @@ from PySide import QtGui, QtCore
 from DataTypeWidgets import AttributeWidget
 from kraken.core.kraken_system import KrakenSystem
 
-from kraken.examples.arm_component import ArmComponentGuide, ArmComponentRig
 
 
 class _NameAttributeProxy(object):
@@ -186,6 +185,7 @@ class ComponentInspector(QtGui.QWidget):
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
 
+    from kraken_examples.arm_component import ArmComponentGuide, ArmComponentRig
     armGuide = ArmComponentGuide("arm")
 
     widget = ComponentInspector(component=armGuide)
