@@ -159,8 +159,6 @@ class ArmComponentGuide(ArmComponent):
         return True
 
 
-
-
     def getRigBuildData(self):
         """Returns the Guide data used by the Rig Component to define the layout of the final rig..
 
