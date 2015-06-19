@@ -128,7 +128,7 @@ class ArmComponentGuide(ArmComponent):
 
         """
 
-        data = super(ArmComponentGuide, self).saveData( )
+        data = super(ArmComponentGuide, self).saveData()
 
         data['bicepXfo'] = self.bicepCtrl.xfo
         data['forearmXfo'] = self.forearmCtrl.xfo
@@ -390,11 +390,17 @@ class ArmComponentRig(ArmComponent):
 
 
     def loadData(self, data=None):
+        """Load a saved guide representation from persisted data.
 
-        self.setName(data.get('name', 'arm'))
-        self.ctrlCmpGrp.setName(self.getName())
-        location = data.get('location', 'M')
-        self.setLocation(location)
+        Arguments:
+        data -- object, The JSON data object.
+
+        Return:
+        True if successful.
+
+        """
+
+        super(ArmComponentRig, self).loadData( data )
 
         self.clavicleEndInputTgt.xfo.tr = data['bicepXfo'].tr
 

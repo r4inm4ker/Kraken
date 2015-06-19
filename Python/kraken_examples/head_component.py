@@ -107,16 +107,13 @@ class HeadComponentGuide(HeadComponent):
 
         """
 
-        data = {
-            'class':"kraken_examples.head_component.HeadComponentGuide",
-            'name': self.getName(),
-            'location': self.getLocation(),
-            'headPosition': self.headCtrl.xfo.tr,
-            'headEndPosition': self.headEndCtrl.xfo.tr,
-            'eyeLeftPosition': self.eyeLeftCtrl.xfo.tr,
-            'eyeRightPosition': self.eyeRightCtrl.xfo.tr,
-            'jawPosition': self.jawCtrl.xfo.tr
-           }
+        data = super(HeadComponentGuide, self).saveData()
+
+        data['headPosition'] = self.headCtrl.xfo.tr
+        data['headEndPosition'] = self.headEndCtrl.xfo.tr
+        data['eyeLeftPosition'] = self.eyeLeftCtrl.xfo.tr
+        data['eyeRightPosition'] = self.eyeRightCtrl.xfo.tr
+        data['jawPosition'] = self.jawCtrl.xfo.tr
 
         return data
 
@@ -132,10 +129,8 @@ class HeadComponentGuide(HeadComponent):
 
         """
 
-        if 'name' in data:
-            self.setName(data['name'])
+        super(HeadComponentGuide, self).loadData( data )
 
-        self.setLocation(data.get('location', 'M'))
         self.headCtrl.xfo.tr = data['headPosition']
         self.headEndCtrl.xfo.tr = data['headEndPosition']
         self.eyeLeftCtrl.xfo.tr = data['eyeLeftPosition']
@@ -152,17 +147,13 @@ class HeadComponentGuide(HeadComponent):
         The JSON rig data object.
 
         """
+        data = super(HeadComponentGuide, self).getRigBuildData()
 
-        data = {
-            'class':"kraken_examples.head_component.HeadComponentRig",
-            'name': self.getName(),
-            'location':self.getLocation(),
-            'headPosition': self.headCtrl.xfo.tr,
-            'headEndPosition': self.headEndCtrl.xfo.tr,
-            'eyeLeftPosition': self.eyeLeftCtrl.xfo.tr,
-            'eyeRightPosition': self.eyeRightCtrl.xfo.tr,
-            'jawPosition': self.jawCtrl.xfo.tr
-           }
+        data['headPosition'] = self.headCtrl.xfo.tr,
+        data['headEndPosition'] = self.headEndCtrl.xfo.tr,
+        data['eyeLeftPosition'] = self.eyeLeftCtrl.xfo.tr,
+        data['eyeRightPosition'] = self.eyeRightCtrl.xfo.tr,
+        data['jawPosition'] = self.jawCtrl.xfo.tr
 
         return data
 
@@ -314,10 +305,17 @@ class HeadComponentRig(HeadComponent):
 
 
     def loadData(self, data=None):
+        """Load a saved guide representation from persisted data.
 
-        self.setName(data.get('name', 'head'))
-        location = data.get('location', 'M')
-        self.setLocation(location)
+        Arguments:
+        data -- object, The JSON data object.
+
+        Return:
+        True if successful.
+
+        """
+
+        super(HeadComponentRig, self).loadData( data )
 
         self.headCtrlSpace.xfo.tr = data['headPosition']
         self.headCtrl.xfo.tr = data['headPosition']

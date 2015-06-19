@@ -83,22 +83,22 @@ class SpineComponentGuide(SpineComponent):
 
         # Guide Controls
         self.cog = Control('cogPosition', parent=self.ctrlCmpGrp, shape="sphere")
-        self.cog.setColor("red")
+        self.cog.setColor('red')
 
-        self.spine01Ctrl = Control('spine01Position', parent=self.ctrlCmpGrp, shape="sphere")
-        self.spine02Ctrl = Control('spine02Position', parent=self.ctrlCmpGrp, shape="sphere")
-        self.spine03Ctrl = Control('spine03Position', parent=self.ctrlCmpGrp, shape="sphere")
-        self.spine04Ctrl = Control('spine04Position', parent=self.ctrlCmpGrp, shape="sphere")
+        self.spine01Ctrl = Control('spine01Position', parent=self.ctrlCmpGrp, shape='sphere')
+        self.spine02Ctrl = Control('spine02Position', parent=self.ctrlCmpGrp, shape='sphere')
+        self.spine03Ctrl = Control('spine03Position', parent=self.ctrlCmpGrp, shape='sphere')
+        self.spine04Ctrl = Control('spine04Position', parent=self.ctrlCmpGrp, shape='sphere')
 
         self.loadData({
-            "name": name,
-            "location": "M",
-            "cogPosition": Vec3(0.0, 11.1351, -0.1382),
-            "spine01Position": Vec3(0.0, 11.1351, -0.1382),
-            "spine02Position": Vec3(0.0, 11.8013, -0.1995),
-            "spine03Position": Vec3(0.0, 12.4496, -0.3649),
-            "spine04Position": Vec3(0.0, 13.1051, -0.4821),
-            "numDeformers": 6
+            'name': name,
+            'location': 'M',
+            'cogPosition': Vec3(0.0, 11.1351, -0.1382),
+            'spine01Position': Vec3(0.0, 11.1351, -0.1382),
+            'spine02Position': Vec3(0.0, 11.8013, -0.1995),
+            'spine03Position': Vec3(0.0, 12.4496, -0.3649),
+            'spine04Position': Vec3(0.0, 13.1051, -0.4821),
+            'numDeformers': 6
         })
 
         Profiler.getInstance().pop()
@@ -115,17 +115,14 @@ class SpineComponentGuide(SpineComponent):
 
         """
 
-        data = {
-            'class':"kraken_examples.spine_component.SpineComponentGuide",
-            'name': self.getName(),
-            'location': self.getLocation(),
-            'cogPosition': self.cog.xfo.tr,
-            'spine01Position': self.spine01Ctrl.xfo.tr,
-            'spine02Position': self.spine02Ctrl.xfo.tr,
-            'spine03Position': self.spine03Ctrl.xfo.tr,
-            'spine04Position': self.spine04Ctrl.xfo.tr,
-            'numDeformers': self.numDeformersAttr.getValue()
-           }
+        data = super(NeckComponentGuide, self).saveData()
+
+        data['cogPosition'] = self.cog.xfo.tr,
+        data['spine01Position'] = self.spine01Ctrl.xfo.tr,
+        data['spine02Position'] = self.spine02Ctrl.xfo.tr,
+        data['spine03Position'] = self.spine03Ctrl.xfo.tr,
+        data['spine04Position'] = self.spine04Ctrl.xfo.tr,
+        data['numDeformers'] = self.numDeformersAttr.getValue()
 
         return data
 
@@ -141,10 +138,8 @@ class SpineComponentGuide(SpineComponent):
 
         """
 
-        if 'name' in data:
-            self.setName(data['name'])
+        super(NeckComponentGuide, self).loadData( data )
 
-        self.setLocation(data.get('location', 'M'))
         self.cog.xfo.tr = data["cogPosition"]
         self.spine01Ctrl.xfo.tr = data["spine01Position"]
         self.spine02Ctrl.xfo.tr = data["spine02Position"]
@@ -163,17 +158,14 @@ class SpineComponentGuide(SpineComponent):
 
         """
 
-        data = {
-            'class':"kraken_examples.spine_component.SpineComponentRig",
-            'name': self.getName(),
-            'location':self.getLocation(),
-            'cogPosition': self.cog.xfo.tr,
-            'spine01Position': self.spine01Ctrl.xfo.tr,
-            'spine02Position': self.spine02Ctrl.xfo.tr,
-            'spine03Position': self.spine03Ctrl.xfo.tr,
-            'spine04Position': self.spine04Ctrl.xfo.tr,
-            'numDeformers': self.numDeformersAttr.getValue()
-           }
+        data = super(NeckComponentGuide, self).getRigBuildData()
+
+        data['cogPosition'] = self.cog.xfo.tr
+        data['spine01Position'] = self.spine01Ctrl.xfo.tr
+        data['spine02Position'] = self.spine02Ctrl.xfo.tr
+        data['spine03Position'] = self.spine03Ctrl.xfo.tr
+        data['spine04Position'] = self.spine04Ctrl.xfo.tr
+        data['numDeformers'] = self.numDeformersAttr.getValue()
 
         return data
 

@@ -74,8 +74,8 @@ class MainSrtComponentGuide(MainSrtComponent):
 
         if data is None:
             data = {
-                    "location": "M",
-                    "mainSrtXfo": Xfo(tr=Vec3(0.0, 0.0, 0.0))
+                    'location': 'M',
+                    'mainSrtXfo': Xfo(tr=Vec3(0.0, 0.0, 0.0))
                    }
 
         self.loadData(data)
@@ -93,12 +93,9 @@ class MainSrtComponentGuide(MainSrtComponent):
         The JSON data object
 
         """
+        data = super(MainSrtComponentGuide, self).saveData()
 
-        data = {
-            "name": self.getName(),
-            "location": self.getLocation(),
-            "mainSrtXfo": self.mainSrtCtrl.xfo
-            }
+        data['mainSrtXfo'] = self.mainSrtCtrl.xfo
 
         return data
 
@@ -114,10 +111,8 @@ class MainSrtComponentGuide(MainSrtComponent):
 
         """
 
-        if 'name' in data:
-            self.setName(data['name'])
+        super(MainSrtComponentGuide, self).loadData( data )
 
-        self.setLocation(data['location'])
         self.mainSrtCtrl.xfo = data['mainSrtXfo']
 
         return True
@@ -131,15 +126,9 @@ class MainSrtComponentGuide(MainSrtComponent):
 
         """
 
-        # values
-        mainSrtXfo = self.mainSrtCtrl.xfo
+        data = super(MainSrtComponentGuide, self).getRigBuildData()
 
-        data = {
-                "class":"kraken_examples.mainSrt_component.MainSrtComponentRig",
-                "name": self.getName(),
-                "location": self.getLocation(),
-                "mainSrtXfo": mainSrtXfo
-               }
+        data['mainSrtXfo'] = self.mainSrtCtrl.xfo
 
         return data
 
@@ -227,10 +216,17 @@ class MainSrtComponentRig(MainSrtComponent):
 
 
     def loadData(self, data=None):
+        """Load a saved guide representation from persisted data.
 
-        self.setName(data.get('name', 'pelvis'))
-        location = data.get('location', 'M')
-        self.setLocation(location)
+        Arguments:
+        data -- object, The JSON data object.
+
+        Return:
+        True if successful.
+
+        """
+
+        super(MainSrtComponentRig, self).loadData( data )
 
         self.mainSRTCtrlSpace.xfo = data['mainSrtXfo']
         self.mainSRTCtrl.xfo = data['mainSrtXfo']
