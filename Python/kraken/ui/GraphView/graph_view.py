@@ -91,7 +91,7 @@ class GraphView(QtGui.QGraphicsView):
                 if self.__clipboardData is not None:
                     def pasteSettings():
                         graphicItem.getComponent().pasteData(self.__clipboardData)
-                    contextMenu.addAction("Paste").triggered.connect(copySettings)
+                    contextMenu.addAction("Paste").triggered.connect(pasteSettings)
 
                 contextMenu.popup(event.globalPos())
 
