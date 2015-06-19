@@ -31,13 +31,14 @@ builder.build(leftArmGuide)
 builder.build(rightArmGuide)
 
 
-# armRigData = armGuide.getRigBuildData()
+armLeft = ArmComponentRig()
+armLeft.loadData(leftArmGuide.getRigBuildData())
 
-# armLeft = ArmComponentRig()
-# armLeft.loadData(armGuide.getRigBuildData())
+armRight = ArmComponentRig()
+armRight.loadData(rightArmGuide.getRigBuildData())
 
-# armRight = ArmComponentRig()
-# armRight.loadData(armGuide.getRigBuildData())
+builder.build(armLeft)
+builder.build(armRight)
 
 # print '==armLeft=='
 # logHierarchy(armLeft)
