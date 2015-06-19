@@ -32,10 +32,9 @@ class NodeList(QtGui.QListWidget):
 
 class ContextualNodeList(QtGui.QWidget):
 
-    def __init__(self, parent, graph):
+    def __init__(self, parent):
         super(ContextualNodeList, self).__init__(parent)
 
-        self.graph = graph
         self.setFixedSize(250, 200)
 
         self.searchLineEdit = QtGui.QLineEdit(parent)
@@ -69,19 +68,21 @@ class ContextualNodeList(QtGui.QWidget):
         self.setLayout(grid)
 
 
-    def showAtPos(self, pos, graphpos):
+    def showAtPos(self, pos, graphpos, graph):
+        self.graph = graph
         posx = pos.x() - self.width() * 0.1
         self.move(posx, pos.y() - 20)
         self.pos = pos
         self.graphpos = graphpos
         self.searchLineEdit.setFocus()
         self.searchLineEdit.clear()
+        self.showClosestNames()
         self.show()
 
     def createNode(self):
         if self.nodesList.currentItem() is not None:
 
-            componentClassName = self.nodesList.currentItem()._fullClassName
+            componentClassName = self.nodesList.currentItem().data(QtCore.Qt.UserRole)
 
             # Add a component to the rig placed at the given position.
             dropPosition = self.graph.mapToItem(self.graph.itemGroup(), self.pos)
@@ -110,7 +111,7 @@ class ContextualNodeList(QtGui.QWidget):
                     continue
 
             item = QtGui.QListWidgetItem(shortName)
-            item._fullClassName = componentClassName
+            item.setData(QtCore.Qt.UserRole, componentClassName)
             self.nodesList.addItem(item)
 
         self.nodesList.resize(self.nodesList.frameSize().width(), 20 * self.nodesList.count())
@@ -192,37 +193,6 @@ class ContextualNewNodeWidget(QtGui.QWidget):
     def createNode(self):
         executablePath = self.searchLineEdit.text()
 
-        # if self.objectType == 'graph':
-        #     nodes = self.graph.getSelectedNodes()
-        #     names = ""
-        #     nodePaths = []
-        #     for node in nodes:
-        #         names += (" " + node.getName())
-        #         nodePaths.append(node.getNodePath())
-        #     self.controller.beginInteraction("Create Graph from nodes:"+ str(names));
-        #     self.graph.clearSelection()
-        #     newGraphPath = self.controller.newGraphNode(
-        #         executablePath=executablePath,
-        #         graphPath=self.graph.getGraphPath(),
-        #         graphPos=QtCore.QPointF(self.pos.x() - 40, self.pos.y() + 20),
-        #         nodePaths=nodePaths
-        #     )
-        # elif self.objectType == 'function':
-
-        #     self.controller.beginInteraction("Create Node");
-        #     # Note: newFunctionNode might midfy the path by inserting 'Fabric' at the begining (Hack to be removed ASAP)
-        #     executablePath = self.controller.newFunctionNode(
-        #         executablePath=executablePath
-        #     )
-
-        #     # Add a node to the graph at the given position.
-        #     self.controller.addNode(
-        #         graphPath=self.graph.getGraphPath(),
-        #         executablePath=executablePath,
-        #         graphPos=QtCore.QPointF(self.pos.x() - 40, self.pos.y() + 20)
-        #     )
-
-        # self.controller.endInteraction()
 
     def keyPressEvent(self, event):
         if event.key() == QtCore.Qt.Key_Escape:

@@ -22,6 +22,7 @@ class GraphViewWidget(QtGui.QWidget):
         # constructors of base classes
         super(GraphViewWidget, self).__init__(parent)
         self.setObjectName('graphViewWidget')
+        self.setAttribute(QtCore.Qt.WA_WindowPropagation, True)
 
         self.graphView = GraphView(parent=self)
         self.__contextualNodeList = None
@@ -157,18 +158,13 @@ class GraphViewWidget(QtGui.QWidget):
         if event.key() == 96: #'`'
             pos = self.mapFromGlobal(QtGui.QCursor.pos());
             if not self.__contextualNodeList:
-                self.__contextualNodeList = ContextualNodeList(self, self.graphView.getGraph())
+                self.__contextualNodeList = ContextualNodeList(self)
             else:
                 # Ensures that the node list is reset to list all components
                 self.__contextualNodeList.showClosestNames()
 
             scenepos = self.graphView.getGraph().mapToScene(pos)
-
-            # xfo = self.graphView.getGraph().itemGroup().transform()
-            # scenepos = xfo.map(pos)
-            # print "pos:" + str(pos)
-            # print "scenepos:" + str(scenepos)
-            self.__contextualNodeList.showAtPos(pos, scenepos)
+            self.__contextualNodeList.showAtPos(pos, scenepos, self.graphView.getGraph())
 
         # Ctrl+W
         elif event.key() == 87 and modifiers == QtCore.Qt.ControlModifier:

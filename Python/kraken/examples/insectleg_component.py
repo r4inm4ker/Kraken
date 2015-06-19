@@ -5,7 +5,7 @@ from kraken.core.maths.xfo import xfoFromDirAndUpV
 from kraken.core.objects.components.component import Component
 
 from kraken.core.objects.attributes.attribute_group import AttributeGroup
-from kraken.core.objects.attributes.float_attribute import FloatAttribute
+from kraken.core.objects.attributes.scalar_attribute import ScalarAttribute
 from kraken.core.objects.attributes.bool_attribute import BoolAttribute
 from kraken.core.objects.attributes.string_attribute import StringAttribute
 
@@ -79,8 +79,6 @@ class InsectLegComponentGuide(InsectLegComponent):
         # Controls
         # =========
         guideSettingsAttrGrp = AttributeGroup("GuideSettings", parent=self)
-        self.nameAttr = StringAttribute('name', value=name, parent=guideSettingsAttrGrp, callback=self.setName)
-        self.locationAttr = StringAttribute('location', value='L', parent=guideSettingsAttrGrp, callback=self.setLocation)
 
         self.legCtrls = []
         for i in xrange(5):
@@ -246,7 +244,7 @@ class InsectLegComponentRig(InsectLegComponent):
         legSettingsAttrGrp = AttributeGroup("DisplayInfo_LegSettings", parent=self.legIKCtrl)
         legdrawDebugInputAttr = BoolAttribute('drawDebug', value=False, parent=legSettingsAttrGrp)
         legUseInitPoseInputAttr = BoolAttribute('useInitPose', value=False, parent=legSettingsAttrGrp)
-        legFkikInputAttr = FloatAttribute('fkik', value=1.0, minValue=0.0,
+        legFkikInputAttr = ScalarAttribute('fkik', value=1.0, minValue=0.0,
             maxValue=1.0, parent=legSettingsAttrGrp)
 
         # Connect IO to controls

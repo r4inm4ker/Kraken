@@ -196,6 +196,7 @@ class Node(QtGui.QGraphicsWidget):
         self.__selected = selected
         self.update()
 
+
     #########################
     ## Graph Pos
 
@@ -204,9 +205,11 @@ class Node(QtGui.QGraphicsWidget):
         size = self.size()
         return QtCore.QPointF(transform.dx()+(size.width()*0.5), transform.dy()+(size.height()*0.5))
 
+
     def setGraphPos(self, graphPos):
         size = self.size()
         self.setTransform(QtGui.QTransform.fromTranslate(graphPos.x()-(size.width()*0.5), graphPos.y()-(size.height()*0.5)), False)
+
 
     def pushGraphPosToComponent(self):
         graphPos = self.getGraphPos()
@@ -240,6 +243,7 @@ class Node(QtGui.QGraphicsWidget):
         else:
             super(Node, self).mousePressEvent(event)
 
+
     def mouseMoveEvent(self, event):
         if self.__dragging:
             newPos = self.mapToItem(self.__graph.itemGroup(), event.pos())
@@ -255,6 +259,7 @@ class Node(QtGui.QGraphicsWidget):
                     node.translate(delta.x(), delta.y())
         else:
             super(Node, self).mouseMoveEvent(event)
+
 
     def mouseReleaseEvent(self, event):
         if self.__dragging:
@@ -272,20 +277,23 @@ class Node(QtGui.QGraphicsWidget):
         else:
             super(Node, self).mouseReleaseEvent(event)
 
+
     def mouseDoubleClickEvent(self, event):
         if self.__inspectorWidget is None:
-            self.__inspectorWidget = ComponentInspector(component=self.__component, parent=self.__graph.graphView().getGraphViewWidget(), nodeItem=self)
+            parentWidget = self.__graph.graphView().getGraphViewWidget()
+            self.__inspectorWidget = ComponentInspector(component=self.__component, parent=parentWidget, nodeItem=self)
             self.__inspectorWidget.show()
         else:
             self.__inspectorWidget.setFocus()
 
         super(Node, self).mouseDoubleClickEvent(event)
 
+
     def inspectorClosed(self):
         self.__inspectorWidget = None
 
 
-    def nameChanged(self, name):
+    def nameChanged(self):
         self.__titleItem.setText(self.__component.getDecoratedName())
 
         # Update the node so that the size is computed.

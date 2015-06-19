@@ -11,8 +11,8 @@ class SceneItem(object):
 
     def __init__(self, name, parent=None):
         super(SceneItem, self).__init__()
-        self._name = name
         self._parent = parent
+        self._name = name
 
 
     # ==============
@@ -86,14 +86,6 @@ class SceneItem(object):
 
         """
 
-        # # Check for existing objects with that name and type.
-        # parent = self.getParent()
-        # if parent is not None:
-        #     foundChild = parent.findChild(name, childType=self.getTypeName())
-        #     if foundChild is not None:
-        #         raise Exception("Child with the same name already exists: '" +
-        #                         name + "'")
-
         self._name = name
 
         return True
@@ -113,6 +105,16 @@ class SceneItem(object):
         return self.getName()
 
 
+    def getNameDecoration(self):
+        """Gets the decorated name of the object.
+
+        Return:
+        String, decorated name of the object.
+
+        """
+
+        return ""
+
     def getDecoratedName(self):
         """Gets the decorated name of the object.
 
@@ -121,7 +123,7 @@ class SceneItem(object):
 
         """
 
-        return self.getName()
+        return self.getName() + self.getNameDecoration()
 
 
     def getDecoratedPath(self):

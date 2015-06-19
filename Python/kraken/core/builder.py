@@ -210,7 +210,7 @@ class Builder(object):
         return True
 
 
-    def buildFloatAttribute(self, kAttribute):
+    def buildScalarAttribute(self, kAttribute):
         """Builds a Float attribute.
 
         Arguments:

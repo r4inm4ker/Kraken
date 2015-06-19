@@ -10,7 +10,7 @@ from kraken.core.objects.object_3d import Object3D
 from kraken.core.objects.layer import Layer
 from kraken.core.objects.locator import Locator
 from kraken.core.objects.attributes.bool_attribute import BoolAttribute
-from kraken.core.objects.attributes.float_attribute import FloatAttribute
+from kraken.core.objects.attributes.scalar_attribute import ScalarAttribute
 from kraken.core.objects.attributes.integer_attribute import IntegerAttribute
 from kraken.core.objects.attributes.string_attribute import StringAttribute
 
@@ -22,8 +22,8 @@ class Component(Object3D):
     """Kraken Component object."""
 
     def __init__(self, name, parent=None, location='M'):
-        super(Component, self).__init__(name, parent)
         self._location = location
+        super(Component, self).__init__(name, parent)
         self._inputs = []
         self._outputs = []
         self._operators = []
@@ -42,7 +42,7 @@ class Component(Object3D):
     # Name Methods
     # =============
 
-    def getDecoratedName(self):
+    def getNameDecoration(self):
         """Gets the decorated name of the object.
 
         Return:
@@ -53,7 +53,7 @@ class Component(Object3D):
         # We decorate the name of the component with the location. This
         # enables multiple components to have the same name as long as they
         # have different locations. e.g. Leg:R, and Leg:L
-        return self.getName() + ":" + self.getLocation()
+        return ":" + self.getLocation()
 
 
     # =============
@@ -82,7 +82,13 @@ class Component(Object3D):
 
         """
 
+        # TODO: check that the given location is a valid value found in the config
+
         self._location = location
+
+        # The new location might cause a name colision.
+        # forcing a name refresh will generate a new name if a collision exists
+        self.setName(self.getName())
 
         return True
 
@@ -221,7 +227,7 @@ class Component(Object3D):
             newInputTgt = BoolAttribute(name)
 
         elif dataType.startswith('Float'):
-            newInputTgt = FloatAttribute(name)
+            newInputTgt = ScalarAttribute(name)
 
         elif dataType.startswith('Integer'):
             newInputTgt = IntegerAttribute(name)
@@ -399,7 +405,7 @@ class Component(Object3D):
             newOutputTgt = BoolAttribute(name)
 
         elif dataType.startswith('Float'):
-            newOutputTgt = FloatAttribute(name)
+            newOutputTgt = ScalarAttribute(name)
 
         elif dataType.startswith('Integer'):
             newOutputTgt = IntegerAttribute(name)

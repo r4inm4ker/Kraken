@@ -24,7 +24,7 @@ class KrakenUI(QtGui.QWidget):
         super(KrakenUI, self).__init__(parent)
         self.setObjectName('mainUI')
 
-        styleSheet = """
+        self.styleSheet = """
 
         QWidget#mainUI {
             background-color: #151515;
@@ -66,6 +66,33 @@ class KrakenUI(QtGui.QWidget):
         QListWidget#ComponentTree::item:selected {
             color: white;
             background-color: #438f99;
+        }
+
+        QWidget#componentInspector QWidget {
+            background-color: #222;
+        }
+
+        QWidget#componentInspector QLineEdit {
+            border: 0px;
+            border-radius: 3px;
+            padding: 3px;
+
+            background-color: #333;
+        }
+
+        QWidget#componentInspector QFrame#separatorFrame {
+            border: 1px solid #333;
+
+            background-color: #888;
+        }
+
+        QWidget#componentInspector QLabel#separatorLabel {
+            border: 0px;
+            border-radius: 3px;
+            padding: 3px;
+
+            background-color: #333;
+            color: #888;
         }
 
         QLineEdit {
@@ -154,7 +181,7 @@ class KrakenUI(QtGui.QWidget):
 
         """
 
-        self.setStyleSheet(styleSheet)
+        self.setStyleSheet(self.styleSheet)
 
         self.setWindowTitle("Kraken Editor")
         self.setAcceptDrops(True)

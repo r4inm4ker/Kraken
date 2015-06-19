@@ -11,8 +11,8 @@ from kraken.core.objects.attributes.attribute import Attribute
 class NumberAttribute(Attribute):
     """Number Attributee. Base class for number attribute types"""
 
-    def __init__(self, name, value=0, minValue=None, maxValue=None, parent=None, callback=None):
-        super(NumberAttribute, self).__init__(name, value=value, parent=parent, callback=callback)
+    def __init__(self, name, value=0, minValue=None, maxValue=None, parent=None):
+        super(NumberAttribute, self).__init__(name, value=value, parent=parent)
 
         self._min = minValue
         self._max = maxValue
@@ -135,7 +135,7 @@ class NumberAttribute(Attribute):
             if type(minimum) is not int or minimum is not None:
                 raise TypeError("UiMin value is not of type 'int' or None.")
 
-        if self.isTypeOf('FloatAttribute'):
+        if self.isTypeOf('ScalarAttribute'):
             if type(minimum) not in (int, float) or minimum is not None:
                 raise TypeError("UiMin value is not of type 'int', 'float' or None.")
 
@@ -175,7 +175,7 @@ class NumberAttribute(Attribute):
             if type(maximum) is not int or maximum is not None:
                 raise TypeError("UiMax value is not of type 'int' or None.")
 
-        if self.isTypeOf('FloatAttribute'):
+        if self.isTypeOf('ScalarAttribute'):
             if type(maximum) not in (int, float) or maximum is not None:
                 raise TypeError("UiMax value is not of type 'int','float', or None.")
 

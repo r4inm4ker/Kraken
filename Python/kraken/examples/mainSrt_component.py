@@ -3,7 +3,7 @@ from kraken.core.maths import Vec3, Vec3, Euler, Quat, Xfo
 from kraken.core.objects.components.component import Component
 
 from kraken.core.objects.attributes.attribute_group import AttributeGroup
-from kraken.core.objects.attributes.float_attribute import FloatAttribute
+from kraken.core.objects.attributes.scalar_attribute import ScalarAttribute
 from kraken.core.objects.attributes.bool_attribute import BoolAttribute
 
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
@@ -182,7 +182,7 @@ class MainSrtComponentRig(MainSrtComponent):
 
         # Add Component Params to IK control
         mainSrtSettingsAttrGrp = AttributeGroup('DisplayInfo_MainSrtSettings', parent=self.mainSRTCtrl)
-        self.rigScaleAttr = FloatAttribute('rigScale', value=1.0, parent=mainSrtSettingsAttrGrp, minValue=0.1, maxValue=100.0)
+        self.rigScaleAttr = ScalarAttribute('rigScale', value=1.0, parent=mainSrtSettingsAttrGrp, minValue=0.1, maxValue=100.0)
 
         self.rigScaleOutputAttr.connect(self.rigScaleAttr)
 

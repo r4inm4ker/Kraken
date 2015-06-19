@@ -206,6 +206,34 @@ class Object3D(SceneItem):
 
         return builtName
 
+    def setName(self, name):
+        """Sets the name of the object with a string.
+
+        Arguments:
+        name -- String, the new name for the item.
+
+        Return:
+        True if successful.
+
+        """
+
+        # check for name collision and adjust the name if they exist
+        if self.getParent() is not None:
+            # Increment name if it already exists
+            initName = name
+            suffix = 1
+            collision = True
+            while collision:
+                child = self.getParent().getChildByDecoratedName(name + self.getNameDecoration())
+                collision = child != None and child is not self
+                if not collision:
+                    break
+                name = initName + str(suffix).zfill(2)
+                suffix += 1
+
+        super(Object3D, self).setName(name)
+
+        return True
 
 
     # ==================
@@ -301,15 +329,22 @@ class Object3D(SceneItem):
 
         """
 
-        # foundChild = self.findChild(child.getName(), childType=child.getTypeName())
-        # if foundChild is not None:
-        #     raise Exception("Child with the same name already exists: '" +
-        #                     child.getName() + "'")
-
         if child.getParent() is not None:
             parent = child.getParent()
             if child in parent.getChildren():
                 parent.getChildren().remove(child)
+
+        # check for name collision and adjust the name if they exist
+        # Increment name if it already exists
+        initName = child.getName()
+        name = initName
+        suffix = 1
+
+        while self.getChildByDecoratedName(name + child.getNameDecoration()) != None:
+            name = initName + str(suffix).zfill(2)
+            suffix += 1
+        if initName != name:
+            child.setName(name)
 
         self.getChildren().append(child)
         child.setParent(self)

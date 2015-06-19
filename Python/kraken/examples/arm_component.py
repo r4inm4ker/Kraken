@@ -8,7 +8,7 @@ from kraken.core.objects.components.component import Component
 
 from kraken.core.objects.attributes.attribute_group import AttributeGroup
 from kraken.core.objects.attributes.bool_attribute import BoolAttribute
-from kraken.core.objects.attributes.float_attribute import FloatAttribute
+from kraken.core.objects.attributes.scalar_attribute import ScalarAttribute
 from kraken.core.objects.attributes.string_attribute import StringAttribute
 
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
@@ -82,10 +82,8 @@ class ArmComponentGuide(ArmComponent):
         # Add Component Params to IK control
         guideSettingsAttrGrp = AttributeGroup("GuideSettings", parent=self)
 
-        self.nameAttr = StringAttribute('name', value='arm', parent=guideSettingsAttrGrp, callback=self.setName)
-        self.locationAttr = StringAttribute('location', value='L', parent=guideSettingsAttrGrp, callback=self.setLocation)
-        self.bicepFKCtrlSizeInputAttr = FloatAttribute('bicepFKCtrlSize', value=1.75, minValue=0.0,   maxValue=10.0, parent=guideSettingsAttrGrp)
-        self.forearmFKCtrlSizeInputAttr = FloatAttribute('forearmFKCtrlSize', value=1.5, minValue=0.0,   maxValue=10.0, parent=guideSettingsAttrGrp)
+        self.bicepFKCtrlSizeInputAttr = ScalarAttribute('bicepFKCtrlSize', value=1.75, minValue=0.0,   maxValue=10.0, parent=guideSettingsAttrGrp)
+        self.forearmFKCtrlSizeInputAttr = ScalarAttribute('forearmFKCtrlSize', value=1.5, minValue=0.0,   maxValue=10.0, parent=guideSettingsAttrGrp)
 
         # =========
         # Controls
@@ -285,17 +283,17 @@ class ArmComponentRig(ArmComponent):
         # Add Params to IK control
         armSettingsAttrGrp = AttributeGroup("DisplayInfo_ArmSettings", parent=self.armIKCtrl)
         armDebugInputAttr = BoolAttribute('drawDebug', value=False, parent=armSettingsAttrGrp)
-        self.armBone0LenInputAttr = FloatAttribute('bone1Len', value=0.0, parent=armSettingsAttrGrp)
-        self.armBone1LenInputAttr = FloatAttribute('bone2Len', value=0.0, parent=armSettingsAttrGrp)
-        armIKBlendInputAttr = FloatAttribute('fkik', value=0.0, minValue=0.0, maxValue=1.0, parent=armSettingsAttrGrp)
+        self.armBone0LenInputAttr = ScalarAttribute('bone1Len', value=0.0, parent=armSettingsAttrGrp)
+        self.armBone1LenInputAttr = ScalarAttribute('bone2Len', value=0.0, parent=armSettingsAttrGrp)
+        armIKBlendInputAttr = ScalarAttribute('fkik', value=0.0, minValue=0.0, maxValue=1.0, parent=armSettingsAttrGrp)
         armSoftIKInputAttr = BoolAttribute('softIK', value=True, parent=armSettingsAttrGrp)
-        armSoftDistInputAttr = FloatAttribute('softDist', value=0.0, minValue=0.0, parent=armSettingsAttrGrp)
+        armSoftDistInputAttr = ScalarAttribute('softDist', value=0.0, minValue=0.0, parent=armSettingsAttrGrp)
         armStretchInputAttr = BoolAttribute('stretch', value=True, parent=armSettingsAttrGrp)
-        armStretchBlendInputAttr = FloatAttribute('stretchBlend', value=0.0, minValue=0.0, maxValue=1.0, parent=armSettingsAttrGrp)
+        armStretchBlendInputAttr = ScalarAttribute('stretchBlend', value=0.0, minValue=0.0, maxValue=1.0, parent=armSettingsAttrGrp)
 
         # Hand Params
         handSettingsAttrGrp = AttributeGroup("DisplayInfo_HandSettings", parent=self.handCtrl)
-        handLinkToWorldInputAttr = FloatAttribute('linkToWorld', 0.0, maxValue=1.0, parent=handSettingsAttrGrp)
+        handLinkToWorldInputAttr = ScalarAttribute('linkToWorld', 0.0, maxValue=1.0, parent=handSettingsAttrGrp)
 
         self.drawDebugInputAttr.connect(armDebugInputAttr)
 

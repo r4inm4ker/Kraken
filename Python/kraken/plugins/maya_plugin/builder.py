@@ -286,7 +286,7 @@ class Builder(Builder):
         return True
 
 
-    def buildFloatAttribute(self, kAttribute):
+    def buildScalarAttribute(self, kAttribute):
         """Builds a Float attribute.
 
         Arguments:
@@ -401,8 +401,8 @@ class Builder(Builder):
             if kAttribute.isTypeOf("BoolAttribute"):
                 self.buildBoolAttribute(kAttribute)
 
-            elif kAttribute.isTypeOf("FloatAttribute"):
-                self.buildFloatAttribute(kAttribute)
+            elif kAttribute.isTypeOf("ScalarAttribute"):
+                self.buildScalarAttribute(kAttribute)
 
             elif kAttribute.isTypeOf("IntegerAttribute"):
                 self.buildIntegerAttribute(kAttribute)
