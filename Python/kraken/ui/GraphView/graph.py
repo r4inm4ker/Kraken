@@ -4,8 +4,9 @@ from PySide import QtGui, QtCore
 
 from node import Node
 from connection import Connection
-
 from main_panel import MainPanel
+from kraken.core.maths import Vec2
+from kraken.core.kraken_system import KrakenSystem
 
 class Graph(QtGui.QGraphicsWidget):
 
@@ -159,12 +160,6 @@ class Graph(QtGui.QGraphicsWidget):
             allnodes.append(node)
         self.frameNodes(allnodes)
 
-    # def createGraphFromSelectedNodes(self):
-    #     nodes = self.getSelectedNodes()
-    #     for name, node in self.__nodes.iteritems():
-    #         allnodes.append(node)
-    #     self.frameNodes(allnodes)
-
     def __nodeCreated(self, event):
         graphPath = '.'.join(event['node']['path'].split('.')[0:-1])
         if graphPath == self.graphPath:
@@ -261,6 +256,73 @@ class Graph(QtGui.QGraphicsWidget):
         self.__nodes = {}
         self.__selection = []
 
+    #######################
+    ## Copy/Paste
+
+    def copySettings(self, pos):
+        nodes = self.getSelectedNodes()
+        clipboardData = {}
+
+        copiedComponents = []
+        for node in nodes:
+            copiedComponents.append(node.getComponent())
+
+        componentsJson = []
+        connectionsJson = []
+        for component in copiedComponents:
+            componentsJson.append(component.copyData())
+
+            for i in range(component.getNumInputs()):
+                componentInput = component.getInputByIndex(i)
+                if componentInput.isConnected():
+                    componentOutput = componentInput.getConnection()
+                    if componentOutput.getParent() in copiedComponents:
+                        connectionJson = {
+                            'source': componentOutput.getParent().getDecoratedName() + '.' + componentOutput.getName(),
+                            'target': component.getDecoratedName() + '.' + componentInput.getName()
+                        }
+                        connectionsJson.append(connectionJson)
+
+        clipboardData = {
+            'components': componentsJson,
+            'connections': connectionsJson,
+            'copyPos': pos
+        }
+        return clipboardData
+
+
+    def pasteSettings(self, clipboardData, pos):
+        krakenSystem = KrakenSystem.getInstance()
+        delta = pos - clipboardData['copyPos']
+        self.clearSelection()
+        pastedComponents = {}
+        for componentData in clipboardData['components']:
+            componentClass = krakenSystem.getComponentClass(componentData['class'])
+            component = componentClass(parent=self.__rig)
+            component.pasteData(componentData)
+            graphPos = component.getGraphPos( )
+            component.setGraphPos(Vec2(graphPos.x + delta.x(), graphPos.y + delta.y()))
+            node = self.addNode(component)
+            self.selectNode(node, False);
+
+            # save a dict of the nodes using the orignal names
+            pastedComponents[componentData['name'] + component.getNameDecoration()] = component
+
+        for connectionData in clipboardData['connections']:
+            sourceComponentDecoratedName, outputName = connectionData['source'].split('.')
+            targetComponentDecoratedName, inputName = connectionData['target'].split('.')
+
+            sourceComponent = pastedComponents[sourceComponentDecoratedName]
+            targetComponent = pastedComponents[targetComponentDecoratedName]
+
+            outputPort = sourceComponent.getOutputByName(outputName)
+            inputPort = targetComponent.getInputByName(inputName)
+
+            inputPort.setConnection(outputPort)
+            self.addConnection(
+                source = sourceComponent.getDecoratedName() + '.' + outputPort.getName(),
+                target = targetComponent.getDecoratedName() + '.' + inputPort.getName()
+            )
 
     #######################
     ## Events

@@ -90,35 +90,7 @@ class GraphView(QtGui.QGraphicsView):
                     contextMenu.setMinimumWidth(150)
 
                     def pasteSettings():
-                        krakenSystem = KrakenSystem.getInstance()
-                        delta = pos - self.__class__._clipboardData['copyPos']
-                        pastedComponents = {}
-                        for componentData in self.__class__._clipboardData['components']:
-                            componentClass = krakenSystem.getComponentClass(componentData['class'])
-                            component = componentClass(parent=self.rig)
-                            component.pasteData(componentData)
-                            graphPos = component.getGraphPos( )
-                            component.setGraphPos(Vec2( graphPos.x + delta.x(), graphPos.y + delta.y() ))
-                            self.graph.addNode(component)
-
-                            # save a dict of the nodes using the orignal names
-                            pastedComponents[componentData['name'] + component.getNameDecoration()] = component
-
-                        for connectionData in self.__class__._clipboardData['connections']:
-                            sourceComponentDecoratedName, outputName = connectionData['source'].split('.')
-                            targetComponentDecoratedName, inputName = connectionData['target'].split('.')
-
-                            sourceComponent = pastedComponents[sourceComponentDecoratedName]
-                            targetComponent = pastedComponents[targetComponentDecoratedName]
-
-                            outputPort = sourceComponent.getOutputByName(outputName)
-                            inputPort = targetComponent.getInputByName(inputName)
-
-                            inputPort.setConnection(outputPort)
-                            self.graph.addConnection(
-                                source = sourceComponent.getDecoratedName() + '.' + outputPort.getName(),
-                                target = targetComponent.getDecoratedName() + '.' + inputPort.getName()
-                            )
+                        self.graph.pasteSettings(self.__class__._clipboardData, pos)
 
                     contextMenu.addAction("Paste Data").triggered.connect(pasteSettings)
                     contextMenu.popup(event.globalPos())
@@ -130,35 +102,7 @@ class GraphView(QtGui.QGraphicsView):
                 contextMenu.setMinimumWidth(150)
 
                 def copySettings():
-                    nodes = self.graph.getSelectedNodes()
-                    self.__class__._clipboardData = {}
-
-                    copiedComponents = []
-                    for node in nodes:
-                        copiedComponents.append(node.getComponent())
-
-                    componentsJson = []
-                    connectionsJson = []
-                    for component in copiedComponents:
-                        componentsJson.append(component.copyData())
-
-                        for i in range(component.getNumInputs()):
-                            componentInput = component.getInputByIndex(i)
-                            if componentInput.isConnected():
-                                componentOutput = componentInput.getConnection()
-                                if componentOutput.getParent() in copiedComponents:
-                                    connectionJson = {
-                                        'source': componentOutput.getParent().getDecoratedName() + '.' + componentOutput.getName(),
-                                        'target': component.getDecoratedName() + '.' + componentInput.getName()
-                                    }
-                                    connectionsJson.append(connectionJson)
-
-                    self.__class__._clipboardData = {
-                        'components': componentsJson,
-                        'connections': connectionsJson,
-                        'copyPos': pos
-                    }
-
+                    self.__class__._clipboardData =  self.graph.copySettings(pos)
 
                 contextMenu.addAction("Copy Data").triggered.connect(copySettings)
 
