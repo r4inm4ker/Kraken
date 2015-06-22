@@ -120,3 +120,16 @@ class Vec2(MathObject):
         self._rtval.set('', ks.rtVal('Scalar', x), ks.rtVal('Scalar', y))
 
         return True
+
+    def add(self, other):
+        """Overload method for the add operator.
+
+        Arguments:
+        other -- Vec2, other vector to add to this one.
+
+        Return:
+        Vec2, new Vec2 of the sum of the two Vec2's.
+
+        """
+
+        return Vec2(self._rtval.add('Vec2', other._rtval))

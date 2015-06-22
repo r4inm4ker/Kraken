@@ -694,7 +694,8 @@ class Component(Object3D):
         data = {
             'class': self.__class__.__module__ + "." + self.__class__.__name__,
             'name': self.getName(),
-            'location': self.getLocation()
+            'location': self.getLocation(),
+            'graphPos': self._graphPos
            }
 
 
@@ -728,6 +729,9 @@ class Component(Object3D):
 
         if 'location' in data:
             self.setLocation(data['location'])
+
+        if 'graphPos' in data:
+            self.setGraphPos(data['graphPos'])
 
         attributeGroups = self.getChildrenByType('AttributeGroup')
         for grp in attributeGroups:

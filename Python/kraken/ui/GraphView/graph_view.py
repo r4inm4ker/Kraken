@@ -16,7 +16,8 @@ from kraken.core.kraken_system import KrakenSystem
 
 class GraphView(QtGui.QGraphicsView):
 
-    __clipboardData = None
+    _clipboardData = None
+    _copyPos = None
 
     def __init__(self, parent=None):
         super(GraphView, self).__init__(parent)
@@ -80,19 +81,90 @@ class GraphView(QtGui.QGraphicsView):
             pos = self.getGraph().mapToScene(event.pos())
             graphicItem = __getGraphItem(self.itemAt(int(pos.x()), int(pos.y())))
 
+            if graphicItem is None:
 
-            if isinstance(graphicItem, Node):
+                if self.__class__._clipboardData is not None:
+
+                    contextMenu = QtGui.QMenu(self.__graphViewWidget)
+                    contextMenu.setObjectName('rightClickContextMenu')
+                    contextMenu.setMinimumWidth(150)
+
+                    def pasteSettings():
+                        krakenSystem = KrakenSystem.getInstance()
+                        delta = pos - self.__class__._clipboardData['copyPos']
+                        pastedComponents = {}
+                        for componentData in self.__class__._clipboardData['components']:
+                            componentClass = krakenSystem.getComponentClass(componentData['class'])
+                            component = componentClass(parent=self.rig)
+                            component.pasteData(componentData)
+                            graphPos = component.getGraphPos( )
+                            component.setGraphPos(Vec2( graphPos.x + delta.x(), graphPos.y + delta.y() ))
+                            self.graph.addNode(component)
+
+                            # save a dict of the nodes using the orignal names
+                            pastedComponents[componentData['name'] + component.getNameDecoration()] = component
+
+                        for connectionData in self.__class__._clipboardData['connections']:
+                            sourceComponentDecoratedName, outputName = connectionData['source'].split('.')
+                            targetComponentDecoratedName, inputName = connectionData['target'].split('.')
+
+                            sourceComponent = pastedComponents[sourceComponentDecoratedName]
+                            targetComponent = pastedComponents[targetComponentDecoratedName]
+
+                            outputPort = sourceComponent.getOutputByName(outputName)
+                            inputPort = targetComponent.getInputByName(inputName)
+
+                            inputPort.setConnection(outputPort)
+                            self.graph.addConnection(
+                                source = sourceComponent.getDecoratedName() + '.' + outputPort.getName(),
+                                target = targetComponent.getDecoratedName() + '.' + inputPort.getName()
+                            )
+
+                    contextMenu.addAction("Paste Data").triggered.connect(pasteSettings)
+                    contextMenu.popup(event.globalPos())
+
+
+            if isinstance(graphicItem, Node) and graphicItem.isSelected():
                 contextMenu = QtGui.QMenu(self.__graphViewWidget)
                 contextMenu.setObjectName('rightClickContextMenu')
                 contextMenu.setMinimumWidth(150)
 
                 def copySettings():
-                    self.__clipboardData = graphicItem.getComponent().copyData()
+                    nodes = self.graph.getSelectedNodes()
+                    self.__class__._clipboardData = {}
+
+                    copiedComponents = []
+                    for node in nodes:
+                        copiedComponents.append(node.getComponent())
+
+                    componentsJson = []
+                    connectionsJson = []
+                    for component in copiedComponents:
+                        componentsJson.append(component.copyData())
+
+                        for i in range(component.getNumInputs()):
+                            componentInput = component.getInputByIndex(i)
+                            if componentInput.isConnected():
+                                componentOutput = componentInput.getConnection()
+                                if componentOutput.getParent() in copiedComponents:
+                                    connectionJson = {
+                                        'source': componentOutput.getParent().getDecoratedName() + '.' + componentOutput.getName(),
+                                        'target': component.getDecoratedName() + '.' + componentInput.getName()
+                                    }
+                                    connectionsJson.append(connectionJson)
+
+                    self.__class__._clipboardData = {
+                        'components': componentsJson,
+                        'connections': connectionsJson,
+                        'copyPos': pos
+                    }
+
+
                 contextMenu.addAction("Copy Data").triggered.connect(copySettings)
 
-                if self.__clipboardData is not None:
+                if self.__class__._clipboardData is not None:
                     def pasteSettings():
-                        graphicItem.getComponent().pasteData(self.__clipboardData)
+                        graphicItem.getComponent().pasteData(self.__class__._clipboardData['components'][0])
                     contextMenu.addSeparator()
                     contextMenu.addAction("Paste Data").triggered.connect(pasteSettings)
 
