@@ -23,6 +23,7 @@ class KrakenUI(QtGui.QWidget):
         # constructors of base classes
         super(KrakenUI, self).__init__(parent)
         self.setObjectName('mainUI')
+        self.setWindowIcon(QtGui.QIcon(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'images', 'Kraken_Icon.png')))
 
         self.styleSheet = """
 
@@ -214,6 +215,9 @@ class KrakenUI(QtGui.QWidget):
 
         QToolBar#mainToolbar QToolButton:pressed {
             border-style: inset;
+            padding-top: 6px;
+            padding-left: 7px;
+
             background-color: #3b3b3b;
         }
 
