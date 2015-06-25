@@ -76,8 +76,7 @@ class Component(Object3D):
         """Sets the location of the component.
 
         Arguments:
-        location -- String, location that the component is on. Valid values: L,
-                            M, R.
+        location -- String, location that the component is on. Valid values: L, M, R.
 
         Return:
         True if successful.
@@ -700,7 +699,7 @@ class Component(Object3D):
 
 
         # TODO: AttributeGroup needs to become a hierachy object like all the others.
-        # so it can be traversed usign the regular traversial methods. 
+        # so it can be traversed usign the regular traversial methods.
         # attributeGroups = self.getChildrenByType('AttributeGroup')
         # attributeGroups = getNumAttributeGroups()
         # for grp in attributeGroups:
@@ -774,7 +773,7 @@ class Component(Object3D):
             if mirrorMap[data['location']] != data['location']:
                 data = mirrorData(data, 0)
                 del data['location']
-            
+
         self.loadData( data )
         return True
 
@@ -798,7 +797,7 @@ class Component(Object3D):
             'location': self.getLocation()
         }
 
-        # automatically save all attributes. 
+        # automatically save all attributes.
         for i in range(self.getNumAttributeGroups()):
             grp = self.getAttributeGroupByIndex(i)
             for j in range(grp.getNumAttributes()):

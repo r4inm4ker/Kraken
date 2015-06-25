@@ -728,7 +728,7 @@ class Quat(MathObject):
         (0.0 to 1.0).
 
         Note: The interpolation of the 2 quaternions will result acceleration
-        and deceleration. Use :kl-ref:`sphericalLinearInterpolate` for an
+        and deceleration. Use `sphericalLinearInterpolate` for an
         interpolation that does not introduce acceleration..
 
         Arguments:

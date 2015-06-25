@@ -196,8 +196,8 @@ class Synchronizer(object):
     def getDCCItem(self, kObject):
         """Gets the DCC Item from the full decorated path.
 
-        * This should be re-implemented in the sub-classed synchronizer for each
-        plugin.
+        **This should be re-implemented in the sub-classed synchronizer for each
+        plugin.**
 
         Arguments:
         kObject -- object, the Kraken Python object that we must find the corresponding DCC item.
@@ -215,8 +215,8 @@ class Synchronizer(object):
     def syncXfo(self, kObject):
         """Syncs the xfo from the DCC objec to the Kraken object.
 
-        * This should be re-implemented in the sub-classed synchronizer for each
-        plugin.
+        **This should be re-implemented in the sub-classed synchronizer for each
+        plugin.**
 
         Arguments:
         kObject -- Object, object to sync the xfo for.
@@ -232,8 +232,8 @@ class Synchronizer(object):
     def syncAttribute(self, kObject):
         """Syncs the attribute value from the DCC objec to the Kraken object.
 
-        * This should be re-implemented in the sub-classed synchronizer for each
-        plugin.
+        **This should be re-implemented in the sub-classed synchronizer for each
+        plugin.**
 
         Arguments:
         kObject -- Object, object to sync the attribute value for.
