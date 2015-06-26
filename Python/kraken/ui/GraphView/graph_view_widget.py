@@ -1,11 +1,10 @@
-
-
 import json, difflib
 import os.path
 from PySide import QtGui, QtCore
 
-from contextual_node_list import ContextualNodeList, ContextualNewNodeWidget
-from graph_view import GraphView
+from kraken.ui.GraphView.contextual_node_list import ContextualNodeList, ContextualNewNodeWidget
+from kraken.ui.GraphView.graph_view import GraphView
+from kraken.ui.kraken_progress import KrakenProgressBar
 
 from kraken.core.objects.rig import Rig
 from kraken import plugins
@@ -14,6 +13,7 @@ from kraken import plugins
 def GetHomePath():
     homeDir = os.path.expanduser("~")
     return homeDir
+
 
 class GraphViewWidget(QtGui.QWidget):
 
@@ -69,9 +69,6 @@ class GraphViewWidget(QtGui.QWidget):
 
         buildGuideAction = toolBar.addAction('Build Guide')
         buildGuideAction.triggered.connect(self.buildGuideRig)
-
-        # synchGuideAction = toolBar.addAction('Synch Guide')
-        # synchGuideAction.triggered.connect(self.synchGuideRig)
 
         buildGuideAction = toolBar.addAction('Build Rig')
         buildGuideAction.triggered.connect(self.buildRig)
@@ -138,16 +135,16 @@ class GraphViewWidget(QtGui.QWidget):
         synchronizer.sync()
 
     def buildRig(self):
-        self.synchGuideRig()
+            self.synchGuideRig()
 
-        rigBuildData = self.guideRig.getRigBuildData()
-        rig = Rig()
-        rig.loadRigDefinition(rigBuildData)
+            rigBuildData = self.guideRig.getRigBuildData()
+            rig = Rig()
+            rig.loadRigDefinition(rigBuildData)
 
-        rig.setName(rig.getName().replace('_guide', ''))
+            rig.setName(rig.getName().replace('_guide', ''))
 
-        builder = plugins.getBuilder()
-        builder.build(rig)
+            builder = plugins.getBuilder()
+            builder.build(rig)
 
     # =======
     # Events
