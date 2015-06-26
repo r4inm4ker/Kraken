@@ -315,16 +315,11 @@ class Graph(QtGui.QGraphicsWidget):
 
             sourceComponent = None
 
-            if connectUnpasted is True:
-                if sourceComponentDecoratedName not in self.getNodes().keys():
-                    print "Can't find node to connect to: " + sourceComponentDecoratedName
-
-                    return
-
+            if sourceComponentDecoratedName in pastedComponents:
+                sourceComponent = pastedComponents[sourceComponentDecoratedName]
+            else:
                 node = self.getNodes()[sourceComponentDecoratedName]
                 sourceComponent = node.getComponent()
-            else:
-                sourceComponent = pastedComponents[sourceComponentDecoratedName]
 
             targetComponent = pastedComponents[targetComponentDecoratedName]
 
