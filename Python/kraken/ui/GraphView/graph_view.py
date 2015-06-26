@@ -92,7 +92,11 @@ class GraphView(QtGui.QGraphicsView):
                     def pasteSettings():
                         self.graph.pasteSettings(self.__class__._clipboardData, pos)
 
-                    contextMenu.addAction("Paste Data").triggered.connect(pasteSettings)
+                    def pasteWithConnections():
+                        self.graph.pasteSettings(self.__class__._clipboardData, pos, connectUnpasted=True)
+
+                    contextMenu.addAction("Paste").triggered.connect(pasteSettings)
+                    contextMenu.addAction("Paste with Connections").triggered.connect(pasteWithConnections)
                     contextMenu.popup(event.globalPos())
 
 
@@ -102,13 +106,15 @@ class GraphView(QtGui.QGraphicsView):
                 contextMenu.setMinimumWidth(150)
 
                 def copySettings():
-                    self.__class__._clipboardData =  self.graph.copySettings(pos)
+                    self.__class__._clipboardData = self.graph.copySettings(pos)
 
-                contextMenu.addAction("Copy Data").triggered.connect(copySettings)
+                contextMenu.addAction("Copy").triggered.connect(copySettings)
 
                 if self.__class__._clipboardData is not None:
+
                     def pasteSettings():
                         graphicItem.getComponent().pasteData(self.__class__._clipboardData['components'][0])
+
                     contextMenu.addSeparator()
                     contextMenu.addAction("Paste Data").triggered.connect(pasteSettings)
 

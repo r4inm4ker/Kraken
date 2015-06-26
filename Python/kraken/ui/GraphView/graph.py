@@ -276,22 +276,23 @@ class Graph(QtGui.QGraphicsWidget):
                 componentInput = component.getInputByIndex(i)
                 if componentInput.isConnected():
                     componentOutput = componentInput.getConnection()
-                    if componentOutput.getParent() in copiedComponents:
-                        connectionJson = {
-                            'source': componentOutput.getParent().getDecoratedName() + '.' + componentOutput.getName(),
-                            'target': component.getDecoratedName() + '.' + componentInput.getName()
-                        }
-                        connectionsJson.append(connectionJson)
+                    connectionJson = {
+                        'source': componentOutput.getParent().getDecoratedName() + '.' + componentOutput.getName(),
+                        'target': component.getDecoratedName() + '.' + componentInput.getName()
+                    }
+
+                    connectionsJson.append(connectionJson)
 
         clipboardData = {
             'components': componentsJson,
             'connections': connectionsJson,
             'copyPos': pos
         }
+
         return clipboardData
 
 
-    def pasteSettings(self, clipboardData, pos):
+    def pasteSettings(self, clipboardData, pos, connectUnpasted=False):
         krakenSystem = KrakenSystem.getInstance()
         delta = pos - clipboardData['copyPos']
         self.clearSelection()
@@ -312,7 +313,19 @@ class Graph(QtGui.QGraphicsWidget):
             sourceComponentDecoratedName, outputName = connectionData['source'].split('.')
             targetComponentDecoratedName, inputName = connectionData['target'].split('.')
 
-            sourceComponent = pastedComponents[sourceComponentDecoratedName]
+            sourceComponent = None
+
+            if connectUnpasted is True:
+                if sourceComponentDecoratedName not in self.getNodes().keys():
+                    print "Can't find node to connect to: " + sourceComponentDecoratedName
+
+                    return
+
+                node = self.getNodes()[sourceComponentDecoratedName]
+                sourceComponent = node.getComponent()
+            else:
+                sourceComponent = pastedComponents[sourceComponentDecoratedName]
+
             targetComponent = pastedComponents[targetComponentDecoratedName]
 
             outputPort = sourceComponent.getOutputByName(outputName)
@@ -323,6 +336,7 @@ class Graph(QtGui.QGraphicsWidget):
                 source = sourceComponent.getDecoratedName() + '.' + outputPort.getName(),
                 target = targetComponent.getDecoratedName() + '.' + inputPort.getName()
             )
+
 
     #######################
     ## Events
