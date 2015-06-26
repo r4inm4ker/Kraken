@@ -130,7 +130,8 @@ class KrakenUI(QtGui.QWidget):
         QWidget#componentInspector QLabel#separatorLabel {
             border: 1px #293b3d;
             border-style: outset;
-            border-radius: 3px;
+            border-top-left-radius: 3px;
+            border-top-right-radius: 3px;
             padding: 6px;
 
             background-color: #293b3d;
