@@ -292,7 +292,7 @@ class Graph(QtGui.QGraphicsWidget):
         return clipboardData
 
 
-    def pasteSettings(self, clipboardData, pos, connectUnpasted=False):
+    def pasteSettings(self, clipboardData, pos):
         krakenSystem = KrakenSystem.getInstance()
         delta = pos - clipboardData['copyPos']
         self.clearSelection()

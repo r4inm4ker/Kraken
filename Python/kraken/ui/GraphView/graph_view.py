@@ -92,11 +92,7 @@ class GraphView(QtGui.QGraphicsView):
                     def pasteSettings():
                         self.graph.pasteSettings(self.__class__._clipboardData, pos)
 
-                    def pasteWithConnections():
-                        self.graph.pasteSettings(self.__class__._clipboardData, pos, connectUnpasted=True)
-
                     contextMenu.addAction("Paste").triggered.connect(pasteSettings)
-                    contextMenu.addAction("Paste with Connections").triggered.connect(pasteWithConnections)
                     contextMenu.popup(event.globalPos())
 
 
