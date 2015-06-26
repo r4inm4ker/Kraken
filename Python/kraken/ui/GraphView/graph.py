@@ -315,9 +315,16 @@ class Graph(QtGui.QGraphicsWidget):
 
             sourceComponent = None
 
+            # The connection is either between nodes that were pasted, or from pasted nodes
+            # to unpasted nodes. We first check that the source component is in the pasted group
+            # else use the node in the graph. 
             if sourceComponentDecoratedName in pastedComponents:
                 sourceComponent = pastedComponents[sourceComponentDecoratedName]
             else:
+                # When we support copying/pasting between rigs, then we may not find the source 
+                # node in the target rig. 
+                if sourceComponentDecoratedName not in self.getNodes().keys():
+                    continue;
                 node = self.getNodes()[sourceComponentDecoratedName]
                 sourceComponent = node.getComponent()
 
