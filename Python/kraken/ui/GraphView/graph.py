@@ -276,18 +276,19 @@ class Graph(QtGui.QGraphicsWidget):
                 componentInput = component.getInputByIndex(i)
                 if componentInput.isConnected():
                     componentOutput = componentInput.getConnection()
-                    if componentOutput.getParent() in copiedComponents:
-                        connectionJson = {
-                            'source': componentOutput.getParent().getDecoratedName() + '.' + componentOutput.getName(),
-                            'target': component.getDecoratedName() + '.' + componentInput.getName()
-                        }
-                        connectionsJson.append(connectionJson)
+                    connectionJson = {
+                        'source': componentOutput.getParent().getDecoratedName() + '.' + componentOutput.getName(),
+                        'target': component.getDecoratedName() + '.' + componentInput.getName()
+                    }
+
+                    connectionsJson.append(connectionJson)
 
         clipboardData = {
             'components': componentsJson,
             'connections': connectionsJson,
             'copyPos': pos
         }
+
         return clipboardData
 
 
@@ -312,7 +313,21 @@ class Graph(QtGui.QGraphicsWidget):
             sourceComponentDecoratedName, outputName = connectionData['source'].split('.')
             targetComponentDecoratedName, inputName = connectionData['target'].split('.')
 
-            sourceComponent = pastedComponents[sourceComponentDecoratedName]
+            sourceComponent = None
+
+            # The connection is either between nodes that were pasted, or from pasted nodes
+            # to unpasted nodes. We first check that the source component is in the pasted group
+            # else use the node in the graph. 
+            if sourceComponentDecoratedName in pastedComponents:
+                sourceComponent = pastedComponents[sourceComponentDecoratedName]
+            else:
+                # When we support copying/pasting between rigs, then we may not find the source 
+                # node in the target rig. 
+                if sourceComponentDecoratedName not in self.getNodes().keys():
+                    continue;
+                node = self.getNodes()[sourceComponentDecoratedName]
+                sourceComponent = node.getComponent()
+
             targetComponent = pastedComponents[targetComponentDecoratedName]
 
             outputPort = sourceComponent.getOutputByName(outputName)
@@ -323,6 +338,7 @@ class Graph(QtGui.QGraphicsWidget):
                 source = sourceComponent.getDecoratedName() + '.' + outputPort.getName(),
                 target = targetComponent.getDecoratedName() + '.' + inputPort.getName()
             )
+
 
     #######################
     ## Events

@@ -4,7 +4,6 @@ from PySide import QtGui, QtCore
 
 from kraken.ui.GraphView.contextual_node_list import ContextualNodeList, ContextualNewNodeWidget
 from kraken.ui.GraphView.graph_view import GraphView
-from kraken.ui.kraken_progress import KrakenProgressBar
 
 from kraken.core.objects.rig import Rig
 from kraken import plugins

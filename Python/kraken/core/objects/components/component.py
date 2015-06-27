@@ -774,7 +774,8 @@ class Component(Object3D):
                 data = mirrorData(data, 0)
                 del data['location']
 
-        self.loadData( data )
+        self.loadData(data)
+
         return True
 
     # ==================
