@@ -82,7 +82,7 @@ class InsectLegComponentGuide(InsectLegComponent):
 
         self.legCtrls = []
         for i in xrange(5):
-            self.legCtrls.append(Control('leg' + str(i).zfill(2), parent=self, shape="sphere"))
+            self.legCtrls.append(Control('leg' + str(i).zfill(2), parent=self.ctrlCmpGrp, shape="sphere"))
 
         if data is None:
             data = {
@@ -304,6 +304,7 @@ class InsectLegComponentRig(InsectLegComponent):
 
         # # Add Att Inputs
         self.NBoneSolverSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.NBoneSolverSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
         self.NBoneSolverSpliceOp.setInput('useInitPose', legUseInitPoseInputAttr)
         self.NBoneSolverSpliceOp.setInput('ikblend', legFkikInputAttr)
         self.NBoneSolverSpliceOp.setInput('tipBoneLen', self.tipBoneLenInputAttr)
@@ -364,7 +365,7 @@ class InsectLegComponentRig(InsectLegComponent):
         self.legIKCtrlSpace.xfo = data['endXfo']
         self.legIKCtrl.xfo = data['endXfo']
 
-        upVOffset = boneXfos[1].transformVector(Vec3(0, 0, 5))
+        upVOffset = boneXfos[1].tr.add(Vec3(3, 3, 0))
         self.legUpVCtrlSpace.xfo.tr = upVOffset
         self.legUpVCtrl.xfo.tr = upVOffset
 
