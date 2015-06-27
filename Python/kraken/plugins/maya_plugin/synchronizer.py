@@ -30,7 +30,7 @@ class Synchronizer(Synchronizer):
         pathSections = path.split('.')
         pathObj = kObject
         mayaPath = ''
-        index = len(pathSections) - 1;
+        index = len(pathSections) - 1
         for pathSection in reversed(pathSections):
 
             if pathObj is None:
@@ -82,7 +82,7 @@ class Synchronizer(Synchronizer):
 
         if dccItem is None:
             print "Warning Syncing. No DCC Item for :" + kObject.getPath()
-            return;
+            return
 
         dccPos = dccItem.getTranslation()
         dccQuat = dccItem.getRotation(quaternion=True).get()
@@ -120,7 +120,7 @@ class Synchronizer(Synchronizer):
 
         if dccItem is None:
             print "Warning Syncing. No DCC Item for :" + kObject.getPath()
-            return;
+            return
 
         kObject.setValue(dccItem.get())
 

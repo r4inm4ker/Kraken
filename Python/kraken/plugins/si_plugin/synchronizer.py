@@ -25,11 +25,32 @@ class Synchronizer(Synchronizer):
         DCC Object, None if it isn't found.
 
         """
-        fullBuildName = kObject.getBuildName()
 
-        # Softimage matches the Kraken build name
+        pathObj = kObject
+        softPath = ''
 
-        findItem = si.Dictionary.GetObject(fullBuildName, False)
+        traverse = True
+        while traverse is True:
+
+            if pathObj is None:
+                raise Exception("Parent not specified for object, so a full path cannot be resolved to a Softimage object: " + kObject.getPath())
+
+            if pathObj.isTypeOf('AttributeGroup'):
+                softPath = '.' + pathObj.getName() + softPath
+
+            elif pathObj.isTypeOf('Attribute'):
+                softPath = '.' + pathObj.getName()
+
+            else:
+                if pathObj.isTypeOf('Layer') or pathObj.isTypeOf('Container'):
+                    softPath = pathObj.getBuildName() + softPath
+                    traverse = False
+                else:
+                    softPath = '.' + pathObj.getBuildName() + softPath
+
+            pathObj = pathObj.getParent()
+
+        findItem = si.Dictionary.GetObject(softPath, False)
         if findItem is None:
             return None
 
@@ -89,6 +110,13 @@ class Synchronizer(Synchronizer):
             return False
 
         dccItem = hrcMap[kObject]['dccItem']
+
+        if dccItem is None:
+            print "Warning Syncing. No DCC Item for :" + kObject.getPath()
+            return
+
+        # log(kObject.getPath())
+        # log(dccItem)
 
         kObject.setValue(dccItem.Value)
 
