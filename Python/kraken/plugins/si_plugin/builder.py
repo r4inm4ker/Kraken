@@ -45,6 +45,8 @@ class Builder(Builder):
 
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
+        si.Refresh()
+
         return dccSceneItem
 
 
@@ -68,6 +70,8 @@ class Builder(Builder):
         dccSceneItem = parentDCCSceneItem.AddModel(None, buildName)
         dccSceneItem.Name = buildName
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
+
+        si.Refresh()
 
         return dccSceneItem
 
@@ -96,6 +100,8 @@ class Builder(Builder):
 
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
+        si.Refresh()
+
         return dccSceneItem
 
 
@@ -119,6 +125,8 @@ class Builder(Builder):
         dccSceneItem = parentDCCSceneItem.AddNull()
         dccSceneItem.Name = buildName
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
+
+        si.Refresh()
 
         return dccSceneItem
 
@@ -144,6 +152,8 @@ class Builder(Builder):
         dccSceneItem.Name = buildName
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
+        si.Refresh()
+
         return dccSceneItem
 
 
@@ -167,6 +177,8 @@ class Builder(Builder):
         dccSceneItem = parentDCCSceneItem.AddNull()
         dccSceneItem.Name = buildName
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
+
+        si.Refresh()
 
         return dccSceneItem
 
@@ -227,6 +239,8 @@ class Builder(Builder):
 
         dccSceneItem.Name = buildName
 
+        si.Refresh()
+
         return dccSceneItem
 
 
@@ -285,6 +299,8 @@ class Builder(Builder):
                 dccSceneItem.ActivePrimitive.Geometry.AddCurve(eachSubCurve, knots, closedSubCurve, 1, constants.siNonUniformParameterization)
 
         dccSceneItem.Name = buildName
+
+        si.Refresh()
 
         return dccSceneItem
 
@@ -914,7 +930,6 @@ class Builder(Builder):
         """
 
         si.SetValue("preferences.scripting.cmdlog", False, "")
-        si.BeginUndo("Kraken SI Build: " + kSceneItem.getName())
 
         return True
 
@@ -926,7 +941,5 @@ class Builder(Builder):
         True if successful.
 
         """
-
-        si.EndUndo()
 
         return True
