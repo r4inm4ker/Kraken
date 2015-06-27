@@ -92,10 +92,8 @@ class Graph(QtGui.QGraphicsWidget):
 
         self.__selection.remove(node)
 
-
     def getSelectedNodes(self):
         return self.__selection
-
 
     def deleteSelectedNodes(self):
         selectedNodes = self.getSelectedNodes()
@@ -108,10 +106,9 @@ class Graph(QtGui.QGraphicsWidget):
             node.destroy()
             del self.__nodes[node.getName()]
 
-
     def frameNodes(self, nodes):
         if len(nodes) == 0:
-            return;
+            return
 
         def computeWindowFrame():
             windowRect = self.mapRectToItem(self.itemGroup(), self.windowFrameGeometry())
@@ -159,6 +156,32 @@ class Graph(QtGui.QGraphicsWidget):
         for name, node in self.__nodes.iteritems():
             allnodes.append(node)
         self.frameNodes(allnodes)
+
+    def getSelectedNodesPos(self):
+        selectedNodes = self.getSelectedNodes()
+
+        leftMostNode = None
+        topMostNode = None
+        for node in selectedNodes:
+            nodePos = node.getGraphPos()
+
+            if leftMostNode is None:
+                leftMostNode = node
+            else:
+                if nodePos.x() < leftMostNode.getGraphPos().x():
+                    leftMostNode = node
+
+            if topMostNode is None:
+                topMostNode = node
+            else:
+                if nodePos.y() < topMostNode.getGraphPos().y():
+                    topMostNode = node
+
+        xPos = leftMostNode.getGraphPos().x()
+        yPos = topMostNode.getGraphPos().y()
+        pos = QtCore.QPoint(xPos, yPos)
+
+        return pos
 
     def __nodeCreated(self, event):
         graphPath = '.'.join(event['node']['path'].split('.')[0:-1])
@@ -219,7 +242,7 @@ class Graph(QtGui.QGraphicsWidget):
         if key not in self.__connections:
             raise Exception("Error removeing connection:" + key+ ". Graph does not have a connection between the specified ports.")
         connection = self.__connections[key]
-        connection.destroy();
+        connection.destroy()
         del self.__connections[key]
 
     #######################
@@ -304,7 +327,7 @@ class Graph(QtGui.QGraphicsWidget):
             graphPos = component.getGraphPos( )
             component.setGraphPos(Vec2(graphPos.x + delta.x(), graphPos.y + delta.y()))
             node = self.addNode(component)
-            self.selectNode(node, False);
+            self.selectNode(node, False)
 
             # save a dict of the nodes using the orignal names
             pastedComponents[componentData['name'] + component.getNameDecoration()] = component
@@ -317,14 +340,14 @@ class Graph(QtGui.QGraphicsWidget):
 
             # The connection is either between nodes that were pasted, or from pasted nodes
             # to unpasted nodes. We first check that the source component is in the pasted group
-            # else use the node in the graph. 
+            # else use the node in the graph.
             if sourceComponentDecoratedName in pastedComponents:
                 sourceComponent = pastedComponents[sourceComponentDecoratedName]
             else:
-                # When we support copying/pasting between rigs, then we may not find the source 
-                # node in the target rig. 
+                # When we support copying/pasting between rigs, then we may not find the source
+                # node in the target rig.
                 if sourceComponentDecoratedName not in self.getNodes().keys():
-                    continue;
+                    continue
                 node = self.getNodes()[sourceComponentDecoratedName]
                 sourceComponent = node.getComponent()
 

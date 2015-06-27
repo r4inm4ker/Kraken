@@ -1,5 +1,6 @@
 import json, difflib
 import os.path
+
 from PySide import QtGui, QtCore
 
 from kraken.ui.GraphView.contextual_node_list import ContextualNodeList, ContextualNewNodeWidget
@@ -169,3 +170,55 @@ class GraphViewWidget(QtGui.QWidget):
         # Ctrl+N
         elif event.key() == 78 and modifiers == QtCore.Qt.ControlModifier:
             self.newRigPreset()
+
+        # Ctrl+C
+        elif event.key() == 67 and modifiers == QtCore.Qt.ControlModifier:
+            graph = self.graphView.getGraph()
+            pos = graph.getSelectedNodesPos()
+            self.graphView.__class__._clipboardData = graph.copySettings(pos)
+
+        # Ctrl+V
+        elif event.key() == 86 and modifiers == QtCore.Qt.ControlModifier:
+            graph = self.graphView.getGraph()
+            clipboardData = self.graphView.__class__._clipboardData
+            newClipboardData = {
+                'components': list(clipboardData['components']),
+                'connections': list(clipboardData['connections']),
+                'copyPos': QtCore.QPoint(clipboardData['copyPos'].x(), clipboardData['copyPos'].y())
+            }
+
+            # Prune out connections to nodes that are outside of those being pasted.
+            components = newClipboardData['components']
+            decoratedCompNames = []
+            for comp in components:
+                decoratedCompNames.append(':'.join([comp['name'], comp['location']]))
+
+            newConnections = []
+            connections = newClipboardData['connections']
+            for i, conn in enumerate(connections):
+                sourceComponentDecoratedName, outputName = conn['source'].split('.')
+                if sourceComponentDecoratedName in decoratedCompNames:
+                    externalIndices.append(conn)
+
+            newClipboardData['connections'] = newConnections
+
+            pos = newClipboardData['copyPos'] + QtCore.QPoint(20, 20)
+            graph.pasteSettings(newClipboardData, pos)
+
+        # Ctrl+Shift+V
+        elif event.key() == 86 and modifiers == (QtCore.Qt.ControlModifier | QtCore.Qt.ShiftModifier):
+            graph = self.graphView.getGraph()
+            clipboardData = self.graphView.__class__._clipboardData
+
+            pos = clipboardData['copyPos'] + QtCore.QPoint(20, 20)
+            graph.pasteSettings(clipboardData, pos)
+
+        # Tab
+        elif event.key() == QtCore.Qt.Key_Tab and modifiers == QtCore.Qt.ControlModifier:
+            splitter = self.parentWidget()
+            sizes = splitter.sizes()
+
+            if sizes[0] == 0:
+                splitter.setSizes([175, sizes[1]])
+            else:
+                splitter.setSizes([0, sizes[1]])
