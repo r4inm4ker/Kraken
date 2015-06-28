@@ -74,4 +74,4 @@ Release 1.0.0
       Renamed srt buffer to ctrl space to be more intuitively named.
 
 
-.. include:: footer.rst
+.. include:: ../footer.rst
