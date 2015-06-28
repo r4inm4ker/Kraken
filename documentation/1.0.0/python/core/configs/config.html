@@ -1,0 +1,523 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Configs &mdash; Kraken Rigging Framework 1.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../../_static/lowdown.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="Kraken Rigging Framework 1.0 documentation" href="../../../index.html"/>
+        <link rel="up" title="Kraken Core" href="../core.html"/>
+        <link rel="next" title="IO" href="../io/io.html"/>
+        <link rel="prev" title="Synchronizer" href="../synchronizer.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+
+        
+          <a href="../../../index.html" class="icon icon-home"> Kraken Rigging Framework
+        
+
+        
+        </a>
+
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../license.html">License</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../integrations.html">Integrations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../integrations/maya.html">Maya Integration</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../integrations/softimage.html">Softimage Integration</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html">Releases</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../releases/release_1.0.0.html">Release 1.0.0</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../kl/kl_guide.html">KL Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../kl/kl_library.html">KL Library</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../kl/solvers/kraken_solver.html">Kraken Solver</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../kl/solvers/kraken_arg.html">Kraken Arg</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../kl/solvers/bezier_spine_solver.html">Bezier Spine Solver</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../kl/solvers/kraken_multiposecon_solver.html">Kraken Multi-Pose Constraint Solver</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../kl/solvers/kraken_posecon_solver.html">Kraken Pose Constraint Solver</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../kl/solvers/kraken_rigscale_solver.html">Kraken Rig Scale Solver</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../kl/solvers/nbone_ik_solver.html">N-Bone IK Solver</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../kl/solvers/twobone_ik_solver.html">Two-Bone IK Solver</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../kl/tutorials/custom_solvers.html">Custom Solvers</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../python_guide.html">Python Guide</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../python_library.html">Python Library</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../core.html">Kraken Core</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../builder.html">Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../kraken_system.html">Kraken System</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../profiler.html">Profiler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../synchronizer.html">Synchronizer</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="">Configs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../io/io.html">IO</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../maths/maths.html">Maths</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../objects/objects.html">Objects</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../helpers/helpers.html">Helpers</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../helpers/utility_methods.html">Utility Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../plugins/plugins.html">Plugins</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../plugins/maya_plugin/maya_plugin.html">Maya Plugin</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../plugins/si_plugin/si_plugin.html">Softimage Plugin</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../ui/ui.html">Kraken UI</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/custom_components.html">Custom Components</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/scripted_builds.html">Scripted Builds</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">Kraken Rigging Framework</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../python_guide.html">Python Guide</a> &raquo;</li>
+      
+          <li><a href="../../python_library.html">Python Library</a> &raquo;</li>
+      
+          <li><a href="../core.html">Kraken Core</a> &raquo;</li>
+      
+    <li>Configs</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../../_sources/python/core/configs/config.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="configs">
+<h1>Configs<a class="headerlink" href="#configs" title="Permalink to this headline">¶</a></h1>
+<p>Kraken has a concept of configuration files that allow you to control how things
+are named, colored, control shapes, and more.</p>
+<p>You can create custom config files by sub-classing the core Config class and
+redefining the methods within. This makes it easy to configure the builds per
+studios, per project or even per character if desired.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="../builder.html#module-kraken.core.builder" title="kraken.core.builder"><code class="xref py py-class docutils literal"><span class="pre">kraken.core.builder</span></code></a></p>
+</div>
+<div class="contents local topic" id="usage-documentation">
+<p class="topic-title first">Usage Documentation</p>
+<ul class="simple">
+<li><a class="reference internal" href="#custom-config-example" id="id1">Custom Config Example</a></li>
+<li><a class="reference internal" href="#using-a-custom-config" id="id2">Using A Custom Config</a></li>
+<li><a class="reference internal" href="#class-documentation" id="id3">Class Documentation</a></li>
+<li><a class="reference internal" href="#indices-and-tables" id="id4">Indices and tables</a></li>
+</ul>
+</div>
+<div class="section" id="custom-config-example">
+<h2><a class="toc-backref" href="#id1">Custom Config Example</a><a class="headerlink" href="#custom-config-example" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27</pre></div></td><td class="code"><div class="highlight"><pre><span class="c"># test_config.py</span>
+
+<span class="kn">from</span> <span class="nn">kraken.core.configs.config</span> <span class="kn">import</span> <span class="n">Config</span>
+
+
+<span class="k">class</span> <span class="nc">TestConfig</span><span class="p">(</span><span class="n">Config</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Config</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
+
+    <span class="c"># ======================</span>
+    <span class="c"># Color Mapping Methods</span>
+    <span class="c"># ======================</span>
+    <span class="k">def</span> <span class="nf">initColorMap</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="c"># This maps different colors for the locations compared to the</span>
+        <span class="c"># default ones.</span>
+        <span class="n">colorMap</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s">&quot;Control&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s">&quot;default&quot;</span><span class="p">:</span> <span class="s">&quot;yellow&quot;</span><span class="p">,</span>
+                                <span class="s">&quot;L&quot;</span><span class="p">:</span> <span class="s">&quot;blue&quot;</span><span class="p">,</span>
+                                <span class="s">&quot;M&quot;</span><span class="p">:</span> <span class="s">&quot;orange&quot;</span><span class="p">,</span>
+                                <span class="s">&quot;R&quot;</span><span class="p">:</span> <span class="s">&quot;green&quot;</span>
+                               <span class="p">}</span>
+                   <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">colorMap</span>
+</pre></div>
+</td></tr></table></div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>When you import your custom config class and use the &#8216;&#8217;getInstance()&#8217;&#8217; method
+before the builder, the builder will use your config instead of the built in
+one.</p>
+<p class="last">The config is cleared from the system after each build.</p>
+</div>
+</div>
+<div class="section" id="using-a-custom-config">
+<h2><a class="toc-backref" href="#id2">Using A Custom Config</a><a class="headerlink" href="#using-a-custom-config" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">kraken</span> <span class="kn">import</span> <span class="n">plugins</span>
+<span class="kn">from</span> <span class="nn">kraken_examples.arm_component</span> <span class="kn">import</span> <span class="n">ArmComponentGuide</span><span class="p">,</span> <span class="n">ArmComponentRig</span>
+
+<span class="kn">from</span> <span class="nn">test_config</span> <span class="kn">import</span> <span class="n">TestConfig</span>
+
+<span class="n">config</span> <span class="o">=</span> <span class="n">TestConfig</span><span class="o">.</span><span class="n">getInstance</span><span class="p">()</span>
+
+<span class="n">arm</span> <span class="o">=</span> <span class="n">ArmComponentRig</span><span class="p">()</span>
+<span class="n">arm</span><span class="o">.</span><span class="n">loadData</span><span class="p">(</span><span class="n">armGuideData</span><span class="p">)</span>
+
+<span class="n">builder</span> <span class="o">=</span> <span class="n">plugins</span><span class="o">.</span><span class="n">getBuilder</span><span class="p">()</span>
+<span class="n">builder</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">arm</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="class-documentation">
+<h2><a class="toc-backref" href="#id3">Class Documentation</a><a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="kraken.core.configs.config.Config">
+<em class="property">class </em><code class="descclassname">kraken.core.configs.config.</code><code class="descname">Config</code><a class="headerlink" href="#kraken.core.configs.config.Config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Base Configuration for Kraken builders.</p>
+<dl class="method">
+<dt id="kraken.core.configs.config.Config.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.configs.config.Config.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.configs.config.Config.initColors">
+<code class="descname">initColors</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.configs.config.Config.initColors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes the color values.</p>
+<p>Return:
+Dict, color definitions.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.configs.config.Config.getColors">
+<code class="descname">getColors</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.configs.config.Config.getColors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the colors defined in the config.</p>
+<p>Return:
+Dict, colors.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.configs.config.Config.initColorMap">
+<code class="descname">initColorMap</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.configs.config.Config.initColorMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes the color values.</p>
+<p>Return:
+Dict, color definitions.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.configs.config.Config.getColorMap">
+<code class="descname">getColorMap</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.configs.config.Config.getColorMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the color map defined in the config.</p>
+<p>Return:
+Dict, color map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.configs.config.Config.initNameTemplate">
+<code class="descname">initNameTemplate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.configs.config.Config.initNameTemplate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes the name template.</p>
+<p>Return:
+Dict, name template.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.configs.config.Config.getNameTemplate">
+<code class="descname">getNameTemplate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.configs.config.Config.getNameTemplate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the naming template for this configuration.</p>
+<p>Return:
+Dict, naming template.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.configs.config.Config.initControlShapes">
+<code class="descname">initControlShapes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.configs.config.Config.initControlShapes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes the control shapes.</p>
+<p>Return:
+True if successful.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.configs.config.Config.getControlShapes">
+<code class="descname">getControlShapes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.configs.config.Config.getControlShapes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the control shapes for this configuration.</p>
+<p>Return:
+Dict, control shapes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.configs.config.Config.getExplicitNaming">
+<code class="descname">getExplicitNaming</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.configs.config.Config.getExplicitNaming" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the value of the explicit naming attribute.</p>
+<p>Return:
+Boolean, current value.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.configs.config.Config.setExplicitNaming">
+<code class="descname">setExplicitNaming</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.configs.config.Config.setExplicitNaming" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the config to use explicit naming.</p>
+<p>Arguments:
+value &#8211; Boolean, whether to use explicit naming or not.</p>
+<p>Return:
+True if successful.</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="kraken.core.configs.config.Config.getInstance">
+<em class="property">classmethod </em><code class="descname">getInstance</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.configs.config.Config.getInstance" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class method returns the singleton instance for the Config.</p>
+<p>Return:
+The singleton instance.</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="kraken.core.configs.config.Config.clearInstance">
+<em class="property">classmethod </em><code class="descname">clearInstance</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.configs.config.Config.clearInstance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clears the instance variable of the config.</p>
+<p>Return:
+True if successful.</p>
+</dd></dl>
+
+</dd></dl>
+
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h2><a class="toc-backref" href="#id4">Indices and tables</a><a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="../../../genindex.html"><span>Index</span></a></li>
+<li><a class="reference internal" href="../../../py-modindex.html"><span>Module Index</span></a></li>
+<li><a class="reference internal" href="../../../search.html"><span>Search Page</span></a></li>
+</ul>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../io/io.html" class="btn btn-neutral float-right" title="IO" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../synchronizer.html" class="btn btn-neutral" title="Synchronizer" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015, Eric Thivierge, Phil Taylor, Hybride Technologies, Fabric Software Inc..
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

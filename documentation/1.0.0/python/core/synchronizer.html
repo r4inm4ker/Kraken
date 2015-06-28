@@ -1,0 +1,400 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Synchronizer &mdash; Kraken Rigging Framework 1.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../_static/lowdown.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="Kraken Rigging Framework 1.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Kraken Core" href="core.html"/>
+        <link rel="next" title="Configs" href="configs/config.html"/>
+        <link rel="prev" title="Profiler" href="profiler.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+
+        
+          <a href="../../index.html" class="icon icon-home"> Kraken Rigging Framework
+        
+
+        
+        </a>
+
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../integrations.html">Integrations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../integrations/maya.html">Maya Integration</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../integrations/softimage.html">Softimage Integration</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html">Releases</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../releases/release_1.0.0.html">Release 1.0.0</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../kl/kl_guide.html">KL Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../kl/kl_library.html">KL Library</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../kl/solvers/kraken_solver.html">Kraken Solver</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../kl/solvers/kraken_arg.html">Kraken Arg</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../kl/solvers/bezier_spine_solver.html">Bezier Spine Solver</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../kl/solvers/kraken_multiposecon_solver.html">Kraken Multi-Pose Constraint Solver</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../kl/solvers/kraken_posecon_solver.html">Kraken Pose Constraint Solver</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../kl/solvers/kraken_rigscale_solver.html">Kraken Rig Scale Solver</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../kl/solvers/nbone_ik_solver.html">N-Bone IK Solver</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../kl/solvers/twobone_ik_solver.html">Two-Bone IK Solver</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../kl/tutorials/custom_solvers.html">Custom Solvers</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../python_guide.html">Python Guide</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../python_library.html">Python Library</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="core.html">Kraken Core</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="builder.html">Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="kraken_system.html">Kraken System</a></li>
+<li class="toctree-l4"><a class="reference internal" href="profiler.html">Profiler</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="">Synchronizer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="configs/config.html">Configs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="io/io.html">IO</a></li>
+<li class="toctree-l4"><a class="reference internal" href="maths/maths.html">Maths</a></li>
+<li class="toctree-l4"><a class="reference internal" href="objects/objects.html">Objects</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../helpers/helpers.html">Helpers</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../helpers/utility_methods.html">Utility Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../plugins/plugins.html">Plugins</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../plugins/maya_plugin/maya_plugin.html">Maya Plugin</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../plugins/si_plugin/si_plugin.html">Softimage Plugin</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../ui/ui.html">Kraken UI</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/custom_components.html">Custom Components</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/scripted_builds.html">Scripted Builds</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">Kraken Rigging Framework</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../python_guide.html">Python Guide</a> &raquo;</li>
+      
+          <li><a href="../python_library.html">Python Library</a> &raquo;</li>
+      
+          <li><a href="core.html">Kraken Core</a> &raquo;</li>
+      
+    <li>Synchronizer</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../_sources/python/core/synchronizer.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="synchronizer">
+<h1>Synchronizer<a class="headerlink" href="#synchronizer" title="Permalink to this headline">¶</a></h1>
+<p>Contents:</p>
+<div class="toctree-wrapper compound">
+<ul class="simple">
+</ul>
+</div>
+<span class="target" id="module-kraken.core.synchronizer"></span><dl class="class">
+<dt id="kraken.core.synchronizer.Synchronizer">
+<em class="property">class </em><code class="descclassname">kraken.core.synchronizer.</code><code class="descname">Synchronizer</code><span class="sig-paren">(</span><em>target=None</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.synchronizer.Synchronizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>The Synchronizer is a singleton object used to synchronize data between
+Kraken objects and the DCC objects.</p>
+<dl class="method">
+<dt id="kraken.core.synchronizer.Synchronizer.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>target=None</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.synchronizer.Synchronizer.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes Synchronizer.</p>
+<p>The target object&#8217;s hierarchy will be traversed and synchronized.</p>
+<p>Arguments:
+target &#8211; Object, top Kraken object to synchronize.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.synchronizer.Synchronizer.getTarget">
+<code class="descname">getTarget</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.synchronizer.Synchronizer.getTarget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the target object of the synchronizer.</p>
+<p>Return:
+Object, the object that is the target of synchronization.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.synchronizer.Synchronizer.setTarget">
+<code class="descname">setTarget</code><span class="sig-paren">(</span><em>target</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.synchronizer.Synchronizer.setTarget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the target for synchronization.</p>
+<p>Arguments:
+target &#8211; Object, top Kraken object to synchronize.</p>
+<p>Return:
+True if successful.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.synchronizer.Synchronizer.getHierarchyMap">
+<code class="descname">getHierarchyMap</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.synchronizer.Synchronizer.getHierarchyMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the hierarchy map from the Inspector.</p>
+<p>Return:
+Dict, the hierarhcy map. None if it hasn&#8217;t been created.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.synchronizer.Synchronizer.createHierarchyMap">
+<code class="descname">createHierarchyMap</code><span class="sig-paren">(</span><em>kObject</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.synchronizer.Synchronizer.createHierarchyMap" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.synchronizer.Synchronizer.clearHierarchyMap">
+<code class="descname">clearHierarchyMap</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.synchronizer.Synchronizer.clearHierarchyMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clears the hierarhcy map data.</p>
+<p>Return:
+True if successful.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.synchronizer.Synchronizer.sync">
+<code class="descname">sync</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.synchronizer.Synchronizer.sync" title="Permalink to this definition">¶</a></dt>
+<dd><p>Synchronizes the target hierarchy with the matching objects in the DCC.</p>
+<p>Return:
+True if successful.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.synchronizer.Synchronizer.synchronize">
+<code class="descname">synchronize</code><span class="sig-paren">(</span><em>kObject</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.synchronizer.Synchronizer.synchronize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iteration method that traverses the hierarchy and syncs the different
+object types.</p>
+<p>Arguments:
+kObject &#8211; Object, object to synchronize.</p>
+<p>Return:
+True if successful.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.synchronizer.Synchronizer.getDCCItem">
+<code class="descname">getDCCItem</code><span class="sig-paren">(</span><em>kObject</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.synchronizer.Synchronizer.getDCCItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the DCC Item from the full decorated path.</p>
+<p><strong>This should be re-implemented in the sub-classed synchronizer for each
+plugin.</strong></p>
+<p>Arguments:
+kObject &#8211; object, the Kraken Python object that we must find the corresponding DCC item.</p>
+<p>Return:
+DCC Object, None if it isn&#8217;t found.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.synchronizer.Synchronizer.syncXfo">
+<code class="descname">syncXfo</code><span class="sig-paren">(</span><em>kObject</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.synchronizer.Synchronizer.syncXfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Syncs the xfo from the DCC objec to the Kraken object.</p>
+<p><strong>This should be re-implemented in the sub-classed synchronizer for each
+plugin.</strong></p>
+<p>Arguments:
+kObject &#8211; Object, object to sync the xfo for.</p>
+<p>Return:
+True if successful.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.synchronizer.Synchronizer.syncAttribute">
+<code class="descname">syncAttribute</code><span class="sig-paren">(</span><em>kObject</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.synchronizer.Synchronizer.syncAttribute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Syncs the attribute value from the DCC objec to the Kraken object.</p>
+<p><strong>This should be re-implemented in the sub-classed synchronizer for each
+plugin.</strong></p>
+<p>Arguments:
+kObject &#8211; Object, object to sync the attribute value for.</p>
+<p>Return:
+True if successful.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="configs/config.html" class="btn btn-neutral float-right" title="Configs" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="profiler.html" class="btn btn-neutral" title="Profiler" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015, Eric Thivierge, Phil Taylor, Hybride Technologies, Fabric Software Inc..
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

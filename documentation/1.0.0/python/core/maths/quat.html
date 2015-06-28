@@ -1,0 +1,712 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Quat &mdash; Kraken Rigging Framework 1.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../../_static/lowdown.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="Kraken Rigging Framework 1.0 documentation" href="../../../index.html"/>
+        <link rel="up" title="Maths" href="maths.html"/>
+        <link rel="next" title="Rotation Order" href="rotation_order.html"/>
+        <link rel="prev" title="Math Object" href="math_object.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+
+        
+          <a href="../../../index.html" class="icon icon-home"> Kraken Rigging Framework
+        
+
+        
+        </a>
+
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../license.html">License</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../integrations.html">Integrations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../integrations/maya.html">Maya Integration</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../integrations/softimage.html">Softimage Integration</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html">Releases</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../releases/release_1.0.0.html">Release 1.0.0</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../kl/kl_guide.html">KL Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../kl/kl_library.html">KL Library</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../kl/solvers/kraken_solver.html">Kraken Solver</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../kl/solvers/kraken_arg.html">Kraken Arg</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../kl/solvers/bezier_spine_solver.html">Bezier Spine Solver</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../kl/solvers/kraken_multiposecon_solver.html">Kraken Multi-Pose Constraint Solver</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../kl/solvers/kraken_posecon_solver.html">Kraken Pose Constraint Solver</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../kl/solvers/kraken_rigscale_solver.html">Kraken Rig Scale Solver</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../kl/solvers/nbone_ik_solver.html">N-Bone IK Solver</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../kl/solvers/twobone_ik_solver.html">Two-Bone IK Solver</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../kl/tutorials/custom_solvers.html">Custom Solvers</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../python_guide.html">Python Guide</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../python_library.html">Python Library</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../core.html">Kraken Core</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../builder.html">Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../kraken_system.html">Kraken System</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../profiler.html">Profiler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../synchronizer.html">Synchronizer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../configs/config.html">Configs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../io/io.html">IO</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="maths.html">Maths</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../objects/objects.html">Objects</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../helpers/helpers.html">Helpers</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../helpers/utility_methods.html">Utility Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../plugins/plugins.html">Plugins</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../plugins/maya_plugin/maya_plugin.html">Maya Plugin</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../plugins/si_plugin/si_plugin.html">Softimage Plugin</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../ui/ui.html">Kraken UI</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/custom_components.html">Custom Components</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/scripted_builds.html">Scripted Builds</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">Kraken Rigging Framework</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../python_guide.html">Python Guide</a> &raquo;</li>
+      
+          <li><a href="../../python_library.html">Python Library</a> &raquo;</li>
+      
+          <li><a href="../core.html">Kraken Core</a> &raquo;</li>
+      
+          <li><a href="maths.html">Maths</a> &raquo;</li>
+      
+    <li>Quat</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../../_sources/python/core/maths/quat.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="quat">
+<h1>Quat<a class="headerlink" href="#quat" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="usage-documentation">
+<p class="topic-title first">Usage Documentation</p>
+<ul class="simple">
+<li><a class="reference internal" href="#class-documentation" id="id1">Class Documentation</a></li>
+<li><a class="reference internal" href="#indices-and-tables" id="id2">Indices and tables</a></li>
+</ul>
+</div>
+<div class="section" id="class-documentation">
+<h2><a class="toc-backref" href="#id1">Class Documentation</a><a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="kraken.core.maths.quat.Quat">
+<em class="property">class </em><code class="descclassname">kraken.core.maths.quat.</code><code class="descname">Quat</code><span class="sig-paren">(</span><em>v=None</em>, <em>w=None</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="math_object.html#kraken.core.maths.math_object.MathObject" title="kraken.core.maths.math_object.MathObject"><code class="xref py py-class docutils literal"><span class="pre">kraken.core.maths.math_object.MathObject</span></code></a></p>
+<p>Quaternion Rotation object.</p>
+<dl class="method">
+<dt id="kraken.core.maths.quat.Quat.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>v=None</em>, <em>w=None</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes the Quaternion.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.maths.quat.Quat.__str__">
+<code class="descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return string version of the Quat object.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="kraken.core.maths.quat.Quat.v">
+<code class="descname">v</code><a class="headerlink" href="#kraken.core.maths.quat.Quat.v" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets vector of this quaternion.</p>
+<p>Return:
+Vec3, vector of the quaternion.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="kraken.core.maths.quat.Quat.w">
+<code class="descname">w</code><a class="headerlink" href="#kraken.core.maths.quat.Quat.w" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets scalar of this quaternion.</p>
+<p>Return:
+Scalar, scalar value of the quaternion.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.maths.quat.Quat.clone">
+<code class="descname">clone</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.clone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a clone of the Quat.</p>
+<p>Return:
+The cloned Quat</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.maths.quat.Quat.set">
+<code class="descname">set</code><span class="sig-paren">(</span><em>v</em>, <em>w</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the quaternion from vector and scalar values.</p>
+<p>Arguments:
+v &#8211; Vec3, vector value.
+w &#8211; Scalar, scalar value.</p>
+<p>Return:
+True if successful.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.maths.quat.Quat.setIdentity">
+<code class="descname">setIdentity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.setIdentity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets this quaternion to the identity.</p>
+<p>Return:
+True if successful.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.maths.quat.Quat.setFromEuler">
+<code class="descname">setFromEuler</code><span class="sig-paren">(</span><em>e</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.setFromEuler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the quaternion from a euler rotation.</p>
+<p>Arguments:
+e &#8211; Euler, euler rotation used to set the quaternion.</p>
+<p>Return:
+Quat, new quaternion set from the euler argument.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.maths.quat.Quat.setFromEulerAngles">
+<code class="descname">setFromEulerAngles</code><span class="sig-paren">(</span><em>angles</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.setFromEulerAngles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets this quat to a given angles vector (in radians) using
+the default XYZ rotation order.</p>
+<p>Arguments:
+angles &#8211; Vec3, angle vector.</p>
+<p>Return:
+Quat, new quaternion set from angles vector.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.maths.quat.Quat.setFromAxisAndAngle">
+<code class="descname">setFromAxisAndAngle</code><span class="sig-paren">(</span><em>axis</em>, <em>angle</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.setFromAxisAndAngle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set this quat to a rotation defined by an axis and an angle
+(in radians).</p>
+<p>Arguments:
+axis &#8211; Vec3, vector axis.
+angle &#8211; Scalar, angle value.</p>
+<p>Return:
+Quat, set from axis and angle values.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.maths.quat.Quat.setFromMat33">
+<code class="descname">setFromMat33</code><span class="sig-paren">(</span><em>mat</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.setFromMat33" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set this quat to the rotation described by a 3x3 rotation matrix.</p>
+<p>Arguments:
+mat &#8211; Mat33, 3 x 3 matrix to set the quaternion from.</p>
+<p>Return:
+Quat, new quaternion set from input Mat33.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.maths.quat.Quat.setFrom2Vectors">
+<code class="descname">setFrom2Vectors</code><span class="sig-paren">(</span><em>sourceDirVec</em>, <em>destDirVec</em>, <em>arbitraryIfAmbiguous=True</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.setFrom2Vectors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the quaternion to the rotation required to rotate the source
+vector to the destination vector.</p>
+<p>Function taken from the &#8216;Game Programming Gems&#8217; article
+&#8216;The Shortest Arc Quat&#8217; by Stan Melax, both vectors must be units.</p>
+<p>Arguments:
+sourceDirVec &#8211; Vec3, source vector.
+destDirVec &#8211; Vec3, destination vector.
+arbitraryIfAmbiguous &#8211; Bool, arbitrary if ambiguous.</p>
+<p>Return:
+Quat, new quaternion set from 2 vectors.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.maths.quat.Quat.setFromDirectionAndUpvector">
+<code class="descname">setFromDirectionAndUpvector</code><span class="sig-paren">(</span><em>direction</em>, <em>upvector</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.setFromDirectionAndUpvector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the quat to represent the direction as the Z axis and the
+upvector pointing along the XY plane.</p>
+<p>Arguments:
+direction &#8211; Vec3, direction vector.
+upvector &#8211; Vec3, up direction vector.</p>
+<p>Return:
+Quat, new quaternion set from direction and up vector.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.maths.quat.Quat.equal">
+<code class="descname">equal</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.equal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks equality of this Quat with another.</p>
+<p>Arguments:
+other &#8211; Mat33, other matrix to check equality with.</p>
+<p>Return:
+True if equal.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.maths.quat.Quat.almostEqual">
+<code class="descname">almostEqual</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.almostEqual" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks almost equality of this Quat with another
+(using a default precision).</p>
+<p>Arguments:
+other &#8211; Mat33, other matrix to check equality with.</p>
+<p>Return:
+True if almost equal.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.maths.quat.Quat.add">
+<code class="descname">add</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overload method for the add operator.</p>
+<p>Arguments:
+other &#8211; Quat, other quaternion to add to this one.</p>
+<p>Return:
+Quat, new Quat of the sum of the two Quat&#8217;s.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.maths.quat.Quat.subtract">
+<code class="descname">subtract</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.subtract" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overload method for the subtract operator.</p>
+<p>Arguments:
+other &#8211; Quat, other quaternion to subtract from this one.</p>
+<p>Return:
+Quat, new Quat of the difference of the two Quat&#8217;s.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.maths.quat.Quat.multiply">
+<code class="descname">multiply</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.multiply" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overload method for the multiply operator.</p>
+<p>Arguments:
+other &#8211; Quat, other quaternion to multiply this one by.</p>
+<p>Return:
+Quat, new Quat of the product of the two Quat&#8217;s.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.maths.quat.Quat.divide">
+<code class="descname">divide</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.divide" title="Permalink to this definition">¶</a></dt>
+<dd><p>Divides this quaternion by another.</p>
+<p>Arguments:
+other &#8211; Quat, quaternion to divide this quaternion by.</p>
+<p>Return:
+Quat, quotient of the division of the quaternion by the other quaternion.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.maths.quat.Quat.multiplyScalar">
+<code class="descname">multiplyScalar</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.multiplyScalar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Product of this quaternion and a scalar.</p>
+<p>Arguments:
+other &#8211; Scalar, scalar value to multiply this quaternion by.</p>
+<p>Return:
+Quat, product of the multiplication of the scalar and this quaternion.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.maths.quat.Quat.divideScalar">
+<code class="descname">divideScalar</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.divideScalar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Divides this quaternion and a scalar.</p>
+<p>Arguments:
+other &#8211; Scalar, value to divide this quaternion by.</p>
+<p>Return:
+Quat, quotient of the division of the quaternion by the scalar.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.maths.quat.Quat.rotateVector">
+<code class="descname">rotateVector</code><span class="sig-paren">(</span><em>v</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.rotateVector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rotates a vector by this quaterion.
+Don&#8217;t forget to normalize the quaternion unless you want axial
+translation as well as rotation..</p>
+<p>Arguments:
+v &#8211; Vec3, vector to rotate.</p>
+<p>Return:
+Vec3, new vector rotated by this quaternion.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.maths.quat.Quat.dot">
+<code class="descname">dot</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.dot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the dot product of this quaternion and another.</p>
+<p>Arguments:
+other &#8211; Quat, other quaternion.</p>
+<p>Return:
+Scalar, dot product.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.maths.quat.Quat.conjugate">
+<code class="descname">conjugate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.conjugate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the conjugate of this quaternion.</p>
+<p>Return:
+Quat, conjugate of this quaternion.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.maths.quat.Quat.lengthSquared">
+<code class="descname">lengthSquared</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.lengthSquared" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the squared lenght of this quaternion.</p>
+<p>Return:
+Scalar, squared length oft his quaternion.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.maths.quat.Quat.length">
+<code class="descname">length</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.length" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the length of this quaternion.</p>
+<p>Return:
+Scalar, length of this quaternion.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.maths.quat.Quat.unit">
+<code class="descname">unit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.unit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets a unit quaternion of this one.</p>
+<p>Return:
+Quat, new unit quaternion from this one.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.maths.quat.Quat.unit_safe">
+<code class="descname">unit_safe</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.unit_safe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets a unit quaternion of this one, no error reported if cannot be
+made unit.</p>
+<p>Return:
+Quat, new unit quaternion.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.maths.quat.Quat.setUnit">
+<code class="descname">setUnit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.setUnit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets this quaternion to a unit quaternion and returns the previous
+length.</p>
+<p>Return:
+Quat, this quaternion.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.maths.quat.Quat.inverse">
+<code class="descname">inverse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.inverse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets an inverse quaternion of this one.</p>
+<p>Return:
+Quat, inverse quaternion to this one.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.maths.quat.Quat.alignWith">
+<code class="descname">alignWith</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.alignWith" title="Permalink to this definition">¶</a></dt>
+<dd><p>Aligns this quaternion with another one ensuring that the delta
+between the Quat values is the shortest path over the hypersphere.</p>
+<p>Arguments:
+other &#8211; Quat, quaternion to align this one with.</p>
+<p>Return:
+Quat, new quaternion aligned to the other.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.maths.quat.Quat.getAngle">
+<code class="descname">getAngle</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.getAngle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the angle of this quaternion (in radians).</p>
+<p>Return:
+Scalar, angle of this quaternion (in radians).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.maths.quat.Quat.getXaxis">
+<code class="descname">getXaxis</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.getXaxis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the X axis of this quaternion.</p>
+<p>Return:
+Vec3, x axis of this quaternion.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.maths.quat.Quat.getYaxis">
+<code class="descname">getYaxis</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.getYaxis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the Y axis of this quaternion.</p>
+<p>Return:
+Vec3, y axis of this quaternion.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.maths.quat.Quat.getZaxis">
+<code class="descname">getZaxis</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.getZaxis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the Z axis of this quaternion.</p>
+<p>Return:
+Vec3, z axis of this quaternion.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.maths.quat.Quat.mirror">
+<code class="descname">mirror</code><span class="sig-paren">(</span><em>axisIndex</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.mirror" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reflects this Quaternion according to the axis provided.</p>
+<p>Arguments:
+axisIndex &#8211; Integer, 0 for the X axis, 1 for the Y axis, and 2 for the Z axis.</p>
+<p>Return:
+Quat, mirrored quaternion.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.maths.quat.Quat.toMat33">
+<code class="descname">toMat33</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.toMat33" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets this quaternion as a 3x3 matrix.</p>
+<p>Return:
+Mat33, matrix derived from this quaternion.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.maths.quat.Quat.toEuler">
+<code class="descname">toEuler</code><span class="sig-paren">(</span><em>rotationOrder</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.toEuler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns this quaternion as a Euler rotation giving a rotation order.</p>
+<p>Arguments:
+rotationOrder &#8211; RotationOrder, rotation order to use to derive the
+euler by.</p>
+<p>Return:
+Euler, euler rotation derived from this quaternion.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.maths.quat.Quat.toEulerAngles">
+<code class="descname">toEulerAngles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.toEulerAngles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets this quaternion as a Euler angles using the rotationorder XYZ.</p>
+<p>Return:
+Vec3, euler angles derived from this quaternion.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.maths.quat.Quat.sphericalLinearInterpolate">
+<code class="descname">sphericalLinearInterpolate</code><span class="sig-paren">(</span><em>q2</em>, <em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.sphericalLinearInterpolate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interpolates two quaternions spherically (slerp) given a scalar blend
+value (0.0 to 1.0).</p>
+<p>Note: This and q2 should be unit Quaternions.</p>
+<p>Arguments:
+q2 &#8211; Quat, quaternion to blend to.
+t &#8211; Scalar, blend value.</p>
+<p>Return:
+Quat, new quaternion blended between this and the input quaternion.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.maths.quat.Quat.linearInterpolate">
+<code class="descname">linearInterpolate</code><span class="sig-paren">(</span><em>other</em>, <em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.linearInterpolate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interpolates two quaternions lineally (lerp) with a given blend value
+(0.0 to 1.0).</p>
+<p>Note: The interpolation of the 2 quaternions will result acceleration
+and deceleration. Use <cite>sphericalLinearInterpolate</cite> for an
+interpolation that does not introduce acceleration..</p>
+<p>Arguments:
+other &#8211; Quat, quaternion to blend to.
+t &#8211; Scalar, blend value.</p>
+<p>Return:
+Quat, new quaternion blended between this and the input quaternion.</p>
+</dd></dl>
+
+</dd></dl>
+
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h2><a class="toc-backref" href="#id2">Indices and tables</a><a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="../../../genindex.html"><span>Index</span></a></li>
+<li><a class="reference internal" href="../../../py-modindex.html"><span>Module Index</span></a></li>
+<li><a class="reference internal" href="../../../search.html"><span>Search Page</span></a></li>
+</ul>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="rotation_order.html" class="btn btn-neutral float-right" title="Rotation Order" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="math_object.html" class="btn btn-neutral" title="Math Object" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015, Eric Thivierge, Phil Taylor, Hybride Technologies, Fabric Software Inc..
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

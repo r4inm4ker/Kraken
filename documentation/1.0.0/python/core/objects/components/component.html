@@ -1,0 +1,676 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Component &mdash; Kraken Rigging Framework 1.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../../../_static/lowdown.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="Kraken Rigging Framework 1.0 documentation" href="../../../../index.html"/>
+        <link rel="up" title="Components" href="components.html"/>
+        <link rel="next" title="Component Input" href="component_input.html"/>
+        <link rel="prev" title="Components" href="components.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+
+        
+          <a href="../../../../index.html" class="icon icon-home"> Kraken Rigging Framework
+        
+
+        
+        </a>
+
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../license.html">License</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../integrations.html">Integrations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../integrations/maya.html">Maya Integration</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../integrations/softimage.html">Softimage Integration</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html">Releases</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../releases/release_1.0.0.html">Release 1.0.0</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../kl/kl_guide.html">KL Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../kl/kl_library.html">KL Library</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../kl/solvers/kraken_solver.html">Kraken Solver</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../kl/solvers/kraken_arg.html">Kraken Arg</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../kl/solvers/bezier_spine_solver.html">Bezier Spine Solver</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../kl/solvers/kraken_multiposecon_solver.html">Kraken Multi-Pose Constraint Solver</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../kl/solvers/kraken_posecon_solver.html">Kraken Pose Constraint Solver</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../kl/solvers/kraken_rigscale_solver.html">Kraken Rig Scale Solver</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../kl/solvers/nbone_ik_solver.html">N-Bone IK Solver</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../kl/solvers/twobone_ik_solver.html">Two-Bone IK Solver</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../kl/tutorials/custom_solvers.html">Custom Solvers</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../../python_guide.html">Python Guide</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../../python_library.html">Python Library</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../../core.html">Kraken Core</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../../builder.html">Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../kraken_system.html">Kraken System</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../profiler.html">Profiler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../synchronizer.html">Synchronizer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../configs/config.html">Configs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../io/io.html">IO</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../maths/maths.html">Maths</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="../objects.html">Objects</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../helpers/helpers.html">Helpers</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../helpers/utility_methods.html">Utility Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../plugins/plugins.html">Plugins</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../plugins/maya_plugin/maya_plugin.html">Maya Plugin</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../plugins/si_plugin/si_plugin.html">Softimage Plugin</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../ui/ui.html">Kraken UI</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/custom_components.html">Custom Components</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/scripted_builds.html">Scripted Builds</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../../index.html">Kraken Rigging Framework</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../../python_guide.html">Python Guide</a> &raquo;</li>
+      
+          <li><a href="../../../python_library.html">Python Library</a> &raquo;</li>
+      
+          <li><a href="../../core.html">Kraken Core</a> &raquo;</li>
+      
+          <li><a href="../objects.html">Objects</a> &raquo;</li>
+      
+          <li><a href="components.html">Components</a> &raquo;</li>
+      
+    <li>Component</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../../../_sources/python/core/objects/components/component.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="component">
+<h1>Component<a class="headerlink" href="#component" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="usage-documentation">
+<p class="topic-title first">Usage Documentation</p>
+<ul class="simple">
+<li><a class="reference internal" href="#class-documentation" id="id1">Class Documentation</a></li>
+<li><a class="reference internal" href="#indices-and-tables" id="id2">Indices and tables</a></li>
+</ul>
+</div>
+<div class="section" id="class-documentation">
+<h2><a class="toc-backref" href="#id1">Class Documentation</a><a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="kraken.core.objects.components.component.Component">
+<em class="property">class </em><code class="descclassname">kraken.core.objects.components.component.</code><code class="descname">Component</code><span class="sig-paren">(</span><em>name</em>, <em>parent=None</em>, <em>location='M'</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../object_3d.html#kraken.core.objects.object_3d.Object3D" title="kraken.core.objects.object_3d.Object3D"><code class="xref py py-class docutils literal"><span class="pre">kraken.core.objects.object_3d.Object3D</span></code></a></p>
+<p>Kraken Component object.</p>
+<dl class="method">
+<dt id="kraken.core.objects.components.component.Component.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>name</em>, <em>parent=None</em>, <em>location='M'</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.objects.components.component.Component.getNameDecoration">
+<code class="descname">getNameDecoration</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.getNameDecoration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the decorated name of the object.</p>
+<p>Return:
+String, decorated name of the object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.objects.components.component.Component.getLocation">
+<code class="descname">getLocation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.getLocation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the location of the component as a string.</p>
+<p>Return:
+String, the location of the component.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.objects.components.component.Component.setLocation">
+<code class="descname">setLocation</code><span class="sig-paren">(</span><em>location</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.setLocation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the location of the component.</p>
+<p>Arguments:
+location &#8211; String, location that the component is on. Valid values: L, M, R.</p>
+<p>Return:
+True if successful.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.objects.components.component.Component.getGraphPos">
+<code class="descname">getGraphPos</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.getGraphPos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the graphPos of the component as a string.</p>
+<p>Return:
+String, the graphPos of the component.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.objects.components.component.Component.setGraphPos">
+<code class="descname">setGraphPos</code><span class="sig-paren">(</span><em>graphPos</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.setGraphPos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the graphPos of the component.</p>
+<p>Arguments:
+graphPos &#8211; Vec2, The position in the graph where this node is placed.</p>
+<p>Return:
+True if successful.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.objects.components.component.Component.getLayer">
+<code class="descname">getLayer</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.getLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves a layer from the owning container, or generates a layer
+(and warning message)</p>
+<p>Return:
+Layer, the layer from the container, or generated layer.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.objects.components.component.Component.getOrCreateLayer">
+<code class="descname">getOrCreateLayer</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.getOrCreateLayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves a layer from the owning container, or generates a layer (and warning message)</p>
+<p>Return:
+Layer, the layer from the container, or generated layer.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.objects.components.component.Component.addChild">
+<code class="descname">addChild</code><span class="sig-paren">(</span><em>child</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.addChild" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a child to the component and sets the object&#8217;s component attribute.</p>
+<p>Arguments:
+child &#8211; Object, object to add as a child.</p>
+<p>Return:
+True if successful.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.objects.components.component.Component.checkInputIndex">
+<code class="descname">checkInputIndex</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.checkInputIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks the supplied index is valid.</p>
+<p>Arguments:
+index &#8211; Integer, input index to check.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.objects.components.component.Component.createInput">
+<code class="descname">createInput</code><span class="sig-paren">(</span><em>name</em>, <em>dataType</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.createInput" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates an input object and also a connected target object that matches
+the data type that is passed.</p>
+<p>Arguments:
+name &#8211; String, name of the input to create.
+dataType &#8211; String, data type of the input.</p>
+<p>Return:
+Object, the connected target object for the input.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.objects.components.component.Component.addInput">
+<code class="descname">addInput</code><span class="sig-paren">(</span><em>name</em>, <em>dataType</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.addInput" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add inputObject to this object.</p>
+<p>Arguments:
+name &#8211; String, name of the input to create.
+dataType &#8211; String, data type of the input.</p>
+<p>Return:
+New input object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.objects.components.component.Component.removeInputByIndex">
+<code class="descname">removeInputByIndex</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.removeInputByIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove ComponentInput at specified index.</p>
+<p>Arguments:
+index &#8211; Integer, index of the ComponentInput to remove.</p>
+<p>Return:
+True if successful.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.objects.components.component.Component.removeInputByName">
+<code class="descname">removeInputByName</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.removeInputByName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes a input from this object by name.</p>
+<p>Arguments:
+name &#8211; String, name of input to remove.</p>
+<p>Return:
+True if successful.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.objects.components.component.Component.getNumInputs">
+<code class="descname">getNumInputs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.getNumInputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the number of inputs this component has.</p>
+<p>Return:
+Integer, number of inputs of this object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.objects.components.component.Component.getInputByIndex">
+<code class="descname">getInputByIndex</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.getInputByIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the input object at specified index.</p>
+<p>Return:
+Input object at specified index.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.objects.components.component.Component.getInputByName">
+<code class="descname">getInputByName</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.getInputByName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the input object with the specified name.</p>
+<p>Return:
+Object if found.
+None if not found.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.objects.components.component.Component.checkOutputIndex">
+<code class="descname">checkOutputIndex</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.checkOutputIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks the supplied index is valid.</p>
+<p>Arguments:
+index &#8211; Integer, output index to check.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.objects.components.component.Component.createOutput">
+<code class="descname">createOutput</code><span class="sig-paren">(</span><em>name</em>, <em>dataType</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.createOutput" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates an output object and also a connected target object that matches
+the data type that is passed.</p>
+<p>Arguments:
+name &#8211; String, name of the output to create.
+dataType &#8211; String, data type of the output.</p>
+<p>Return:
+Object, the connected target object for the output.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.objects.components.component.Component.addOutput">
+<code class="descname">addOutput</code><span class="sig-paren">(</span><em>name</em>, <em>dataType</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.addOutput" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add outputObject to this object.</p>
+<p>Arguments:
+name &#8211; String, name of the output to create.
+dataType &#8211; String, data type of the output.</p>
+<p>Return:
+New output object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.objects.components.component.Component.getNumOutputs">
+<code class="descname">getNumOutputs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.getNumOutputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the number of outputs this component has.</p>
+<p>Return:
+Integer, number of outputs of this object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.objects.components.component.Component.getOutputByIndex">
+<code class="descname">getOutputByIndex</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.getOutputByIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the output object at specified index.</p>
+<p>Return:
+Output object at specified index.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.objects.components.component.Component.getOutputByName">
+<code class="descname">getOutputByName</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.getOutputByName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the output object with the specified name.</p>
+<p>Return:
+Object if found.
+None if not found.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.objects.components.component.Component.checkOperatorIndex">
+<code class="descname">checkOperatorIndex</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.checkOperatorIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks the supplied index is valid.</p>
+<p>Arguments:
+index &#8211; Integer, operator index to check.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.objects.components.component.Component.addOperator">
+<code class="descname">addOperator</code><span class="sig-paren">(</span><em>operator</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.addOperator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a operator to this object.</p>
+<p>Arguments:
+operator &#8211; Object, object that will be a operator of this object.</p>
+<p>Return:
+True if successful.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.objects.components.component.Component.removeOperatorByIndex">
+<code class="descname">removeOperatorByIndex</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.removeOperatorByIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes a operator from this object by index.</p>
+<p>Arguments:
+index &#8211; Integer, index of operator to remove.</p>
+<p>Return:
+True if successful.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.objects.components.component.Component.removeOperatorByName">
+<code class="descname">removeOperatorByName</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.removeOperatorByName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes a operator from this object by name.</p>
+<p>Arguments:
+name &#8211; String, name of operator to remove.</p>
+<p>Return:
+True if successful.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.objects.components.component.Component.getNumOperators">
+<code class="descname">getNumOperators</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.getNumOperators" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the number of operators this object has.</p>
+<p>Return:
+Integer, number of operators of this object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.objects.components.component.Component.getOperatorByIndex">
+<code class="descname">getOperatorByIndex</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.getOperatorByIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the operator object at specified index.</p>
+<p>Return:
+Operator object at specified index.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.objects.components.component.Component.getOperatorByName">
+<code class="descname">getOperatorByName</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.getOperatorByName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the operator object with the specified name.</p>
+<p>Return:
+Object if found.
+None if not found.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.objects.components.component.Component.getOperatorByType">
+<code class="descname">getOperatorByType</code><span class="sig-paren">(</span><em>childType</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.getOperatorByType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all children that are of the specified type.</p>
+<p>Arguments:
+childType &#8211; Type, the object type to search for.</p>
+<p>Return:
+Array of operator objects of the specified type.
+None if no objects of specified type are found.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.objects.components.component.Component.getOperatorIndex">
+<code class="descname">getOperatorIndex</code><span class="sig-paren">(</span><em>operator</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.getOperatorIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the index of the specified operator.</p>
+<p>Arguments:
+operator &#8211; Object, operator to find the index of.</p>
+<p>Return:
+True if successful.
+None if operator not found on component.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.objects.components.component.Component.moveOperatorToIndex">
+<code class="descname">moveOperatorToIndex</code><span class="sig-paren">(</span><em>operator</em>, <em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.moveOperatorToIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Moves an operator to the specified index.</p>
+<p>Arguments:
+operator &#8211; Object, operator to move.
+index &#8211; Integer, index position to move the operator to.</p>
+<p>Return:
+True if successful.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.objects.components.component.Component.saveData">
+<code class="descname">saveData</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.saveData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the data for the component to be persisted.</p>
+<p>Return:
+The JSON data object</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.objects.components.component.Component.loadData">
+<code class="descname">loadData</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.loadData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load a saved guide representation from persisted data.</p>
+<p>Arguments:
+data &#8211; object, The JSON data object.</p>
+<p>Return:
+True if successful.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.objects.components.component.Component.copyData">
+<code class="descname">copyData</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.copyData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy the data for the component to our clipboard.</p>
+<p>Return:
+The JSON data object</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.objects.components.component.Component.pasteData">
+<code class="descname">pasteData</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.pasteData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Paste a copied guide representation.</p>
+<p>Arguments:
+data &#8211; object, The JSON data object.</p>
+<p>Return:
+True if successful.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.objects.components.component.Component.getRigBuildData">
+<code class="descname">getRigBuildData</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.getRigBuildData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the Guide data used by the Rig Component to define the layout of the final rig..</p>
+<p>Return:
+The JSON rig data object.</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="kraken.core.objects.components.component.Component.getComponentType">
+<em class="property">classmethod </em><code class="descname">getComponentType</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.getComponentType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enables introspection of the class prior to construction to determine if it is a guide component.</p>
+<p>Return:
+The true if this component is a guide component.</p>
+</dd></dl>
+
+</dd></dl>
+
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h2><a class="toc-backref" href="#id2">Indices and tables</a><a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="../../../../genindex.html"><span>Index</span></a></li>
+<li><a class="reference internal" href="../../../../py-modindex.html"><span>Module Index</span></a></li>
+<li><a class="reference internal" href="../../../../search.html"><span>Search Page</span></a></li>
+</ul>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="component_input.html" class="btn btn-neutral float-right" title="Component Input" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="components.html" class="btn btn-neutral" title="Components" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015, Eric Thivierge, Phil Taylor, Hybride Technologies, Fabric Software Inc..
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../../',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
