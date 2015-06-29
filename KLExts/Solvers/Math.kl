@@ -157,7 +157,7 @@ function Xfo[] solveNBoneIKWithUpVector(
   Vec3 chainRootPos = basePose[0].tr;
   Integer lastBoneIndex = basePose.size-1;
   Vec3 fkChainTip = basePose[lastBoneIndex].tr;
-  Vec3 vecToFkChainTip = fkChainTip - chainRootPos;
+  Vec3 vecToFkChainTip = (fkChainTip - chainRootPos).unit();
   Vec3 vecToIkGoal = (goalPosition - chainRootPos).unit();
 
   Quat chainOffsetRotation;
@@ -168,10 +168,13 @@ function Xfo[] solveNBoneIKWithUpVector(
   Vec3 vecToUpVPos = upVPosition - chainRootPos;
 
   // project the vectors onto the plane defined by the root and root to goal vector
-  vecToUpVPos = (vecToUpVPos - vecToUpVPos.dot(vecToIkGoal)).unit();
-  fkChainUp = (fkChainUp - fkChainUp.dot(vecToIkGoal)).unit();
+  vecToUpVPos = (vecToUpVPos - (vecToUpVPos.dot(vecToIkGoal) * vecToIkGoal)).unit();
+  fkChainUp = (fkChainUp - (fkChainUp.dot(vecToIkGoal) * vecToIkGoal)).unit();
+
 
   Scalar angle = fkChainUp.angleTo(vecToUpVPos);
+  if( fkChainUp.cross(vecToUpVPos).dot(vecToIkGoal) < 0.0 )
+    angle = -angle;
 
   // Apply the upvector alignment to the chain rotation.
   Quat upVectorOffset;
@@ -181,9 +184,11 @@ function Xfo[] solveNBoneIKWithUpVector(
   // compute a new aligned chain that includes the re-orientation using the upvector.
   Xfo alignedPose[];
   alignedPose.resize(basePose.size);
-  for (Integer i = 0; i < basePose.size()-1; i++) {
+  for (Integer i = 0; i < basePose.size(); i++) {
     alignedPose[i] = chainOffsetRotation * basePose[i];
-    if(i>0)
+    if(i==0)
+      alignedPose[i].tr = chainRootPos;
+    else
       alignedPose[i].tr = alignedPose[i-1].transformVector(basePose[i-1].inverse().transformVector(basePose[i].tr));
   }
 

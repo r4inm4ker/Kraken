@@ -81,7 +81,7 @@ function NBoneIKSolver.solve!
     Xfo ikPose[];
     if (useInitPose == 1) {
       //ikPose = solveNBoneIK(this.initPose, ikgoal.translation());
-      ikPose = solveNBoneIKWithUpVector(this.initPose, ikgoal.translation(), upVector.translation(), Vec3(1, 0, 0));
+      ikPose = solveNBoneIKWithUpVector(this.initPose, ikgoal.translation(), upVector.translation(), Vec3(0, 1, 0));
     }
     else {
       ikPose = solveNBoneIK(xfoPose, ikgoal.translation());
