@@ -59,7 +59,9 @@ class GraphViewWidget(QtGui.QWidget):
         toolBar.addSeparator()
 
         # Setup the name widget
-        toolBar.addWidget(QtGui.QLabel('Rig Name:'))
+        rigNameLabel = QtGui.QLabel('Rig Name:')
+        rigNameLabel.setObjectName('rigNameLabel')
+        toolBar.addWidget(rigNameLabel)
         self.nameWidget = QtGui.QLineEdit('', self)
 
         self.nameWidget.textChanged.connect(self.setRigName)
@@ -198,7 +200,7 @@ class GraphViewWidget(QtGui.QWidget):
             for i, conn in enumerate(connections):
                 sourceComponentDecoratedName, outputName = conn['source'].split('.')
                 if sourceComponentDecoratedName in decoratedCompNames:
-                    externalIndices.append(conn)
+                    newConnections.append(conn)
 
             newClipboardData['connections'] = newConnections
 

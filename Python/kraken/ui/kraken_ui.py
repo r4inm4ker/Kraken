@@ -222,12 +222,18 @@ class KrakenUI(QtGui.QWidget):
             background-color: #3b3b3b;
         }
 
+        QLabel#rigNameLabel {
+            background-color: #222;
+        }
+
         /* ==== */
         /* Logo */
         /* ==== */
         QLabel#logoWidget {
             margin: 0px;
             padding: 0px 5px;
+
+            background-color: #222;
         }
 
         /* ========== */
