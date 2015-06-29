@@ -311,7 +311,7 @@ class InsectLegComponentRig(InsectLegComponent):
 
         # Add Xfo Inputs
         self.NBoneSolverSpliceOp.setInput('ikgoal', self.legIKCtrl)
-        # self.NBoneSolverSpliceOp.setInput('upV', legUpVCtrl)
+        self.NBoneSolverSpliceOp.setInput('upVector', self.legUpVCtrl)
 
         for i in xrange(len(self.boneFKCtrls)):
             self.NBoneSolverSpliceOp.setInput('fkcontrols', self.boneFKCtrls[i])

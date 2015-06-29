@@ -23,6 +23,7 @@ function KrakenSolverArg[] NBoneIKSolver.getArguments(){
   args.push(KrakenSolverArg('useInitPose', 'in', 'Boolean'));
   args.push(KrakenSolverArg('ikblend', 'in', 'Scalar'));
   args.push(KrakenSolverArg('ikgoal', 'in', 'Mat44'));
+  args.push(KrakenSolverArg('upVector', 'in', 'Mat44'));
   args.push(KrakenSolverArg('fkcontrols', 'in', 'Mat44[]'));
   args.push(KrakenSolverArg('tipBoneLen', 'in', 'Scalar'));
   args.push(KrakenSolverArg('pose', 'out', 'Mat44[]'));
@@ -41,6 +42,7 @@ function NBoneIKSolver.solve!
   Boolean useInitPose,
   Scalar ikblend,
   Mat44 ikgoal,
+  Mat44 upVector,
   Mat44 fkcontrols[],
   Scalar tipBoneLen,
   io Mat44 pose[],
@@ -78,7 +80,8 @@ function NBoneIKSolver.solve!
   if(ikblend > 0.0) {
     Xfo ikPose[];
     if (useInitPose == 1) {
-      ikPose = solveNBoneIK(this.initPose, ikgoal.translation());
+      //ikPose = solveNBoneIK(this.initPose, ikgoal.translation());
+      ikPose = solveNBoneIKWithUpVector(this.initPose, ikgoal.translation(), upVector.translation(), Vec3(1, 0, 0));
     }
     else {
       ikPose = solveNBoneIK(xfoPose, ikgoal.translation());
