@@ -67,6 +67,13 @@ class Graph(QtGui.QGraphicsWidget):
     def getNodes(self):
         return self.__nodes
 
+    def nodeNameChanged(self, origName, newName ):
+        if newName in self.__nodes:
+            raise Exception("New name collides with existing node.")
+        node = self.__nodes[origName]
+        self.__nodes[newName] = node
+        del self.__nodes[origName]
+
     def clearSelection(self):
         for node in self.__selection:
             node.setSelected(False)
@@ -345,9 +352,9 @@ class Graph(QtGui.QGraphicsWidget):
             else:
                 # When we support copying/pasting between rigs, then we may not find the source
                 # node in the target rig.
-                if sourceComponentDecoratedName not in self.getNodes().keys():
+                if sourceComponentDecoratedName not in self.__nodes.keys():
                     continue
-                node = self.getNodes()[sourceComponentDecoratedName]
+                node = self.__nodes[sourceComponentDecoratedName]
                 sourceComponent = node.getComponent()
 
             targetComponent = pastedComponents[targetComponentDecoratedName]
