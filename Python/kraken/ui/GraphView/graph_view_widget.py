@@ -185,7 +185,7 @@ class GraphViewWidget(QtGui.QWidget):
             clipboardData = self.graphView.__class__._clipboardData
 
             pos = clipboardData['copyPos'] + QtCore.QPoint(20, 20)
-            graph.pasteSettings(clipboardData, pos)
+            graph.pasteSettings(clipboardData, pos, createConnectionsToExistingNodes=False)
 
         # Ctrl+Shift+V
         elif event.key() == 86 and modifiers == (QtCore.Qt.ControlModifier | QtCore.Qt.ShiftModifier):
@@ -193,7 +193,7 @@ class GraphViewWidget(QtGui.QWidget):
             clipboardData = self.graphView.__class__._clipboardData
 
             pos = clipboardData['copyPos'] + QtCore.QPoint(20, 20)
-            graph.pasteSettings(clipboardData, pos, createConnectionsToExistingNodes=False)
+            graph.pasteSettings(clipboardData, pos)
 
         # Tab
         elif event.key() == QtCore.Qt.Key_Tab and modifiers == QtCore.Qt.ControlModifier:
