@@ -348,19 +348,8 @@ class BasePort(QtGui.QGraphicsWidget):
 
     def destroy(self):
 
-        for conn in self.getConnections():
-            srcPort = conn.getSrcPort()
-            dstPort = conn.getDstPort()
-
-            sourceComponent = srcPort.getNode().getComponent()
-            targetComponent = dstPort.getNode().getComponent()
-
-            srcCmpDecName = sourceComponent.getDecoratedName()
-            tgtCmpDecName = targetComponent.getDecoratedName()
-
-            self.__graph.removeConnection(
-                source=srcCmpDecName + '.' + srcPort.getName(),
-                target=tgtCmpDecName + '.' + dstPort.getName())
+        for connection in self.getConnections():
+            connection.destroy()
 
         self.scene().removeItem(self)
 
