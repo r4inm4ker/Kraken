@@ -116,6 +116,9 @@ class Node(QtGui.QGraphicsWidget):
     def getComponent(self):
         return self.__component
 
+    def getGraph(self):
+        return self.__graph
+
     #########################
     ## Ports
 

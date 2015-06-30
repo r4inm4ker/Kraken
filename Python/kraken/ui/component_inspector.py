@@ -19,8 +19,17 @@ class _NameAttributeProxy(object):
         self.nodeItem = nodeItem
 
     def setValue(self, value):
+        # Store original node name
+        origName = self.nodeItem.getName()
+
         self.component.setName( value )
         self.nodeItem.nameChanged()
+
+        # Remove old key and insert updated one
+        graph = self.nodeItem.getGraph()
+        graphNodes = graph.getNodes()
+        graphNodes[self.nodeItem.getName()] = self.nodeItem
+        del graphNodes[origName]
 
     def getValue(self):
         return self.component.getName()
@@ -36,8 +45,21 @@ class _LocationAttributeProxy(object):
         self.nodeItem = nodeItem
 
     def setValue(self, value):
-        self.component.setLocation( value )
+        # Store original node name
+        origName = self.nodeItem.getName()
+
+        self.component.setLocation(value)
         self.nodeItem.nameChanged()
+
+        # Remove old key and insert updated one
+        graph = self.nodeItem.getGraph()
+        graphNodes = graph.getNodes()
+        graphNodes[self.nodeItem.getName()] = self.nodeItem
+        del graphNodes[origName]
+
+        print graphNodes.keys()
+        print [x.getName() for x in graphNodes.values()]
+
 
     def getValue(self):
         return self.component.getLocation()
