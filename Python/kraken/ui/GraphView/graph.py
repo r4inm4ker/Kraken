@@ -67,6 +67,13 @@ class Graph(QtGui.QGraphicsWidget):
     def getNodes(self):
         return self.__nodes
 
+    def nodeNameChanged(self, origName, newName ):
+        if newName in self.__nodes and self.__nodes[origName] != self.__nodes[newName]:
+            raise Exception("New name collides with existing node.")
+        node = self.__nodes[origName]
+        self.__nodes[newName] = node
+        del self.__nodes[origName]
+
     def clearSelection(self):
         for node in self.__selection:
             node.setSelected(False)
@@ -201,49 +208,31 @@ class Graph(QtGui.QGraphicsWidget):
     #######################
     ## Connections
 
-    def getConnections(self):
-        return self.__connections
-
     def addConnection(self, source, target):
-
-        key = source +">" + target
-        if key in self.__connections:
-            raise Exception("Error adding connection:" + key+ ". Graph already has a connection between the specified ports.")
 
         sourceComponent, outputName = tuple(source.split('.'))
         targetComponent, inputName = tuple(target.split('.'))
-
-        #     sourceNodeName = sourcePath[0]
         sourceNode = self.getNode(sourceComponent)
         if not sourceNode:
-            raise Exception("Component not found:" + sourceNodeName)
+            raise Exception("Component not found:" + sourceNode.getName())
 
         sourcePort = sourceNode.getOutPort(outputName)
         if not sourcePort:
-            raise Exception("Component '"+sourceNodeName+"' does not have output:" + sourcePortName)
+            raise Exception("Component '" + sourceNode.getName() + "' does not have output:" + sourcePort.getName())
+
 
         targetNode = self.getNode(targetComponent)
         if not targetNode:
-            raise Exception("Component not found:" + targetNodeName)
+            raise Exception("Component not found:" + targetNode.getName())
 
         targetPort = targetNode.getInPort(inputName)
         if not targetPort:
-            raise Exception("Component '"+targetNodeName+"' does not have input:" + targetPortName)
+            raise Exception("Component '" + targetNode.getName() + "' does not have input:" + targetPort.getName())
 
         connection = Connection(self, sourcePort, targetPort)
         connection.setPortConnection(sourcePort)
         connection.setPortConnection(targetPort)
 
-        self.__connections[key] = connection
-
-    def removeConnection(self, source, target):
-
-        key = source +">" + target
-        if key not in self.__connections:
-            raise Exception("Error removeing connection:" + key+ ". Graph does not have a connection between the specified ports.")
-        connection = self.__connections[key]
-        connection.destroy()
-        del self.__connections[key]
 
     #######################
     ## Graph
@@ -283,10 +272,10 @@ class Graph(QtGui.QGraphicsWidget):
     ## Copy/Paste
 
     def copySettings(self, pos):
-        nodes = self.getSelectedNodes()
         clipboardData = {}
 
         copiedComponents = []
+        nodes = self.getSelectedNodes()
         for node in nodes:
             copiedComponents.append(node.getComponent())
 
@@ -315,11 +304,12 @@ class Graph(QtGui.QGraphicsWidget):
         return clipboardData
 
 
-    def pasteSettings(self, clipboardData, pos):
+    def pasteSettings(self, clipboardData, pos, createConnectionsToExistingNodes=True):
         krakenSystem = KrakenSystem.getInstance()
         delta = pos - clipboardData['copyPos']
         self.clearSelection()
         pastedComponents = {}
+
         for componentData in clipboardData['components']:
             componentClass = krakenSystem.getComponentClass(componentData['class'])
             component = componentClass(parent=self.__rig)
@@ -344,11 +334,14 @@ class Graph(QtGui.QGraphicsWidget):
             if sourceComponentDecoratedName in pastedComponents:
                 sourceComponent = pastedComponents[sourceComponentDecoratedName]
             else:
+                if not createConnectionsToExistingNodes:
+                    continue;
+                    
                 # When we support copying/pasting between rigs, then we may not find the source
                 # node in the target rig.
-                if sourceComponentDecoratedName not in self.getNodes().keys():
+                if sourceComponentDecoratedName not in self.__nodes.keys():
                     continue
-                node = self.getNodes()[sourceComponentDecoratedName]
+                node = self.__nodes[sourceComponentDecoratedName]
                 sourceComponent = node.getComponent()
 
             targetComponent = pastedComponents[targetComponentDecoratedName]

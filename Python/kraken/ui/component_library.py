@@ -116,7 +116,6 @@ class ComponentLibrary(QtGui.QWidget):
         if event.key() == QtCore.Qt.Key_Escape:
             if self.isVisible():
                 self.searchLineEdit.clear()
-                self.hide()
 
         elif event.key() == QtCore.Qt.Key_Up or event.key() == QtCore.Qt.Key_Down:
             if event.key() == QtCore.Qt.Key_Up:
@@ -135,7 +134,6 @@ class ComponentLibrary(QtGui.QWidget):
         elif event.key() == QtCore.Qt.Key_Enter or event.key() == QtCore.Qt.Key_Return:
             if self.isVisible():
                 self.createNode()
-                self.hide()
 
         # Ctrl+W
         elif event.key() == 87 and modifiers == QtCore.Qt.ControlModifier:

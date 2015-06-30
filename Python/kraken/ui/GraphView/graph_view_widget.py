@@ -183,29 +183,9 @@ class GraphViewWidget(QtGui.QWidget):
         elif event.key() == 86 and modifiers == QtCore.Qt.ControlModifier:
             graph = self.graphView.getGraph()
             clipboardData = self.graphView.__class__._clipboardData
-            newClipboardData = {
-                'components': list(clipboardData['components']),
-                'connections': list(clipboardData['connections']),
-                'copyPos': QtCore.QPoint(clipboardData['copyPos'].x(), clipboardData['copyPos'].y())
-            }
 
-            # Prune out connections to nodes that are outside of those being pasted.
-            components = newClipboardData['components']
-            decoratedCompNames = []
-            for comp in components:
-                decoratedCompNames.append(':'.join([comp['name'], comp['location']]))
-
-            newConnections = []
-            connections = newClipboardData['connections']
-            for i, conn in enumerate(connections):
-                sourceComponentDecoratedName, outputName = conn['source'].split('.')
-                if sourceComponentDecoratedName in decoratedCompNames:
-                    newConnections.append(conn)
-
-            newClipboardData['connections'] = newConnections
-
-            pos = newClipboardData['copyPos'] + QtCore.QPoint(20, 20)
-            graph.pasteSettings(newClipboardData, pos)
+            pos = clipboardData['copyPos'] + QtCore.QPoint(20, 20)
+            graph.pasteSettings(clipboardData, pos, createConnectionsToExistingNodes=False)
 
         # Ctrl+Shift+V
         elif event.key() == 86 and modifiers == (QtCore.Qt.ControlModifier | QtCore.Qt.ShiftModifier):

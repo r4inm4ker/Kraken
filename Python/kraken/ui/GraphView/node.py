@@ -116,6 +116,9 @@ class Node(QtGui.QGraphicsWidget):
     def getComponent(self):
         return self.__component
 
+    def getGraph(self):
+        return self.__graph
+
     #########################
     ## Ports
 
@@ -293,8 +296,9 @@ class Node(QtGui.QGraphicsWidget):
         self.__inspectorWidget = None
 
 
-    def nameChanged(self):
+    def nameChanged(self, origName):
         self.__titleItem.setText(self.__component.getDecoratedName())
+        self.__graph.nodeNameChanged(origName, self.__component.getDecoratedName())
 
         # Update the node so that the size is computed.
         self.adjustSize()
