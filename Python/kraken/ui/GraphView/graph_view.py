@@ -109,7 +109,8 @@ class GraphView(QtGui.QGraphicsView):
                 if self.__class__._clipboardData is not None:
 
                     def pasteSettings():
-                        graphicItem.getComponent().pasteData(self.__class__._clipboardData['components'][0])
+                        # Paste the settings, not modifying the location, because that will be used to determine symmetry.
+                        graphicItem.getComponent().pasteData(self.__class__._clipboardData['components'][0], setLocation=False)
 
                     contextMenu.addSeparator()
                     contextMenu.addAction("Paste Data").triggered.connect(pasteSettings)

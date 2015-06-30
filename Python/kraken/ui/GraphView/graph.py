@@ -68,7 +68,7 @@ class Graph(QtGui.QGraphicsWidget):
         return self.__nodes
 
     def nodeNameChanged(self, origName, newName ):
-        if newName in self.__nodes:
+        if newName in self.__nodes and self.__nodes[origName] != self.__nodes[newName]:
             raise Exception("New name collides with existing node.")
         node = self.__nodes[origName]
         self.__nodes[newName] = node
@@ -208,14 +208,7 @@ class Graph(QtGui.QGraphicsWidget):
     #######################
     ## Connections
 
-    def getConnections(self):
-        return self.__connections
-
     def addConnection(self, source, target):
-
-        key = source +">" + target
-        if key in self.__connections:
-            raise Exception("Error adding connection:" + key+ ". Graph already has a connection between the specified ports.")
 
         sourceComponent, outputName = tuple(source.split('.'))
         targetComponent, inputName = tuple(target.split('.'))
@@ -240,16 +233,6 @@ class Graph(QtGui.QGraphicsWidget):
         connection.setPortConnection(sourcePort)
         connection.setPortConnection(targetPort)
 
-        self.__connections[key] = connection
-
-    def removeConnection(self, source, target):
-
-        key = source +">" + target
-        if key not in self.__connections:
-            raise Exception("Error removeing connection:" + key+ ". Graph does not have a connection between the specified ports.")
-        connection = self.__connections[key]
-        connection.destroy()
-        del self.__connections[key]
 
     #######################
     ## Graph
@@ -289,10 +272,10 @@ class Graph(QtGui.QGraphicsWidget):
     ## Copy/Paste
 
     def copySettings(self, pos):
-        nodes = self.getSelectedNodes()
         clipboardData = {}
 
         copiedComponents = []
+        nodes = self.getSelectedNodes()
         for node in nodes:
             copiedComponents.append(node.getComponent())
 
@@ -317,6 +300,7 @@ class Graph(QtGui.QGraphicsWidget):
             'connections': connectionsJson,
             'copyPos': pos
         }
+        print clipboardData['connections']
 
         return clipboardData
 
@@ -326,6 +310,7 @@ class Graph(QtGui.QGraphicsWidget):
         delta = pos - clipboardData['copyPos']
         self.clearSelection()
         pastedComponents = {}
+
         for componentData in clipboardData['components']:
             componentClass = krakenSystem.getComponentClass(componentData['class'])
             component = componentClass(parent=self.__rig)
@@ -338,9 +323,13 @@ class Graph(QtGui.QGraphicsWidget):
             # save a dict of the nodes using the orignal names
             pastedComponents[componentData['name'] + component.getNameDecoration()] = component
 
+        print pastedComponents.keys()
+        print "clipboardData['connections']:" + str(clipboardData['connections'])
+
         for connectionData in clipboardData['connections']:
             sourceComponentDecoratedName, outputName = connectionData['source'].split('.')
             targetComponentDecoratedName, inputName = connectionData['target'].split('.')
+            print sourceComponentDecoratedName + ">" + targetComponentDecoratedName
 
             sourceComponent = None
 

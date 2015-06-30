@@ -307,7 +307,7 @@ class BasePort(QtGui.QGraphicsWidget):
 
         if deleteIndex is not None:
             del self.__connections[deleteIndex]
-
+        
         return True
 
     def getConnections(self):
