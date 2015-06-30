@@ -212,23 +212,22 @@ class Graph(QtGui.QGraphicsWidget):
 
         sourceComponent, outputName = tuple(source.split('.'))
         targetComponent, inputName = tuple(target.split('.'))
-
-        #     sourceNodeName = sourcePath[0]
         sourceNode = self.getNode(sourceComponent)
         if not sourceNode:
-            raise Exception("Component not found:" + sourceNodeName)
+            raise Exception("Component not found:" + sourceNode.getName())
 
         sourcePort = sourceNode.getOutPort(outputName)
         if not sourcePort:
-            raise Exception("Component '"+sourceNodeName+"' does not have output:" + sourcePortName)
+            raise Exception("Component '" + sourceNode.getName() + "' does not have output:" + sourcePort.getName())
+
 
         targetNode = self.getNode(targetComponent)
         if not targetNode:
-            raise Exception("Component not found:" + targetNodeName)
+            raise Exception("Component not found:" + targetNode.getName())
 
         targetPort = targetNode.getInPort(inputName)
         if not targetPort:
-            raise Exception("Component '"+targetNodeName+"' does not have input:" + targetPortName)
+            raise Exception("Component '" + targetNode.getName() + "' does not have input:" + targetPort.getName())
 
         connection = Connection(self, sourcePort, targetPort)
         connection.setPortConnection(sourcePort)
