@@ -57,10 +57,6 @@ class _LocationAttributeProxy(object):
         graphNodes[self.nodeItem.getName()] = self.nodeItem
         del graphNodes[origName]
 
-        print graphNodes.keys()
-        print [x.getName() for x in graphNodes.values()]
-
-
     def getValue(self):
         return self.component.getLocation()
 
