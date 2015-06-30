@@ -120,10 +120,10 @@ class LegComponentGuide(LegComponent):
 
         data = super(LegComponentGuide, self).saveData()
 
-        data['femurXfo'] = self.femurCtrl.xfo,
-        data['kneeXfo'] = self.kneeCtrl.xfo,
-        data['ankleXfo'] = self.ankleCtrl.xfo,
-        data['toeXfo'] = self.toeCtrl.xfo,
+        data['femurXfo'] = self.femurCtrl.xfo
+        data['kneeXfo'] = self.kneeCtrl.xfo
+        data['ankleXfo'] = self.ankleCtrl.xfo
+        data['toeXfo'] = self.toeCtrl.xfo
         data['toeTipXfo'] = self.toeTipCtrl.xfo
 
         return data
@@ -141,7 +141,7 @@ class LegComponentGuide(LegComponent):
         """
 
         super(LegComponentGuide, self).loadData( data )
-
+        
         self.femurCtrl.xfo = data['femurXfo']
         self.kneeCtrl.xfo = data['kneeXfo']
         self.ankleCtrl.xfo = data['ankleXfo']

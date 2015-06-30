@@ -7,6 +7,7 @@ from connection import Connection
 from main_panel import MainPanel
 from kraken.core.maths import Vec2
 from kraken.core.kraken_system import KrakenSystem
+from kraken.core.configs.config import Config
 
 class Graph(QtGui.QGraphicsWidget):
 
@@ -321,14 +322,23 @@ class Graph(QtGui.QGraphicsWidget):
         return clipboardData
 
 
-    def pasteSettings(self, clipboardData, pos):
+    def pasteSettings(self, clipboardData, pos, mirrored=False):
         krakenSystem = KrakenSystem.getInstance()
         delta = pos - clipboardData['copyPos']
         self.clearSelection()
         pastedComponents = {}
+        nameMapping = {}
         for componentData in clipboardData['components']:
             componentClass = krakenSystem.getComponentClass(componentData['class'])
             component = componentClass(parent=self.__rig)
+            decoratedName = componentData['name'] + component.getNameDecoration()
+            nameMapping[decoratedName] = decoratedName
+            if mirrored:
+                config = Config.getInstance()
+                mirrorMap = config.getNameTemplate()['mirrorMap']
+                component.setLocation(mirrorMap[componentData['location']])
+                nameMapping[decoratedName] = componentData['name'] + component.getNameDecoration()
+
             component.pasteData(componentData)
             graphPos = component.getGraphPos( )
             component.setGraphPos(Vec2(graphPos.x + delta.x(), graphPos.y + delta.y()))
@@ -336,7 +346,9 @@ class Graph(QtGui.QGraphicsWidget):
             self.selectNode(node, False)
 
             # save a dict of the nodes using the orignal names
-            pastedComponents[componentData['name'] + component.getNameDecoration()] = component
+            pastedComponents[nameMapping[decoratedName]] = component
+
+        print nameMapping
 
         for connectionData in clipboardData['connections']:
             sourceComponentDecoratedName, outputName = connectionData['source'].split('.')
@@ -347,8 +359,8 @@ class Graph(QtGui.QGraphicsWidget):
             # The connection is either between nodes that were pasted, or from pasted nodes
             # to unpasted nodes. We first check that the source component is in the pasted group
             # else use the node in the graph.
-            if sourceComponentDecoratedName in pastedComponents:
-                sourceComponent = pastedComponents[sourceComponentDecoratedName]
+            if sourceComponentDecoratedName in nameMapping:
+                sourceComponent = pastedComponents[nameMapping[sourceComponentDecoratedName]]
             else:
                 # When we support copying/pasting between rigs, then we may not find the source
                 # node in the target rig.
@@ -357,6 +369,7 @@ class Graph(QtGui.QGraphicsWidget):
                 node = self.__nodes[sourceComponentDecoratedName]
                 sourceComponent = node.getComponent()
 
+            targetComponentDecoratedName = nameMapping[targetComponentDecoratedName]
             targetComponent = pastedComponents[targetComponentDecoratedName]
 
             outputPort = sourceComponent.getOutputByName(outputName)
