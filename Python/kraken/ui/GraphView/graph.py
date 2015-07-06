@@ -324,8 +324,9 @@ class Graph(QtGui.QGraphicsWidget):
                 mirrorMap = config.getNameTemplate()['mirrorMap']
                 component.setLocation(mirrorMap[componentData['location']])
                 nameMapping[decoratedName] = componentData['name'] + component.getNameDecoration()
-
-            component.pasteData(componentData)
+                component.pasteData(componentData, setLocation=False)
+            else:
+                component.pasteData(componentData, setLocation=True)
             graphPos = component.getGraphPos( )
             component.setGraphPos(Vec2(graphPos.x + delta.x(), graphPos.y + delta.y()))
             node = self.addNode(component)
