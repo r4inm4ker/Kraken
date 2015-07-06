@@ -732,8 +732,8 @@ class Component(Object3D):
         if 'graphPos' in data:
             self.setGraphPos(data['graphPos'])
 
-        attributeGroups = self.getChildrenByType('AttributeGroup')
-        for grp in attributeGroups:
+        for i in range(self.getNumAttributeGroups()):
+            grp  = self.getAttributeGroupByIndex(i)
             for i in range(grp.getNumAttributes()):
                 attr = grp.getAttributeByIndex(i)
                 if attr.getName() in data:
