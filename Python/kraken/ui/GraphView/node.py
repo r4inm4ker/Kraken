@@ -10,6 +10,9 @@ from port import InputPort, OutputPort
 from kraken.core.maths import Vec2
 
 from kraken.ui.component_inspector import ComponentInspector
+from kraken.ui.undoredo.undo_redo_manager import UndoRedoManager
+
+from graph_commands import SelectNodeCommand
 
 class NodeTitle(QtGui.QGraphicsWidget):
     __color = QtGui.QColor(25, 25, 25)
@@ -195,7 +198,7 @@ class Node(QtGui.QGraphicsWidget):
     def isSelected(self):
         return self.__selected
 
-    def setSelected(self, selected):
+    def setSelected(self, selected=True):
         self.__selected = selected
         self.update()
 
@@ -237,7 +240,8 @@ class Node(QtGui.QGraphicsWidget):
                     self.__graph.selectNode(self, clearSelection=False)
             else:
                 if self.isSelected() is False: # and len(self.__graph.getSelectedNodes()) == 0:
-                    self.__graph.selectNode(self, clearSelection=True)
+                    # self.__graph.selectNode(self, clearSelection=True)
+                    UndoRedoManager.getInstance().addCommand(SelectNodeCommand(self.__graph, self))
 
                 self.__dragging = True
                 self._lastDragPoint = self.mapToItem(self.__graph.itemGroup(), event.pos())

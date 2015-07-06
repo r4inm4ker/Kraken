@@ -1,5 +1,24 @@
 from PySide import QtGui
 
+from kraken.ui.undoredo.undo_redo_manager import UndoRedoManager, Command
+
+
+class ValueChangeCommand(Command):
+    def __init__(self, attribute, newValue):
+        super(ValueChangeCommand, self).__init__()
+        self._attribute = attribute
+        self.oldValue = self._attribute.getValue()
+        self.newValue = newValue
+
+    def shortDesc(self):
+        return "Value Change:'" + self._attribute.getName() + "'"
+
+    def redo(self):
+        self._attribute.setValue(self.newValue)
+
+    def undo(self):
+        self._attribute.setValue(self.oldValue)
+
 
 class AttributeWidget(QtGui.QWidget):
 
@@ -62,12 +81,12 @@ class AttributeWidget(QtGui.QWidget):
             self._updatingWidget = False
 
     def beginInteraction(self):
-        # self._controller.beginUndoBracket(name=self._attribute.getName() + " changed")
+        UndoRedoManager.getInstance().openBracket(name=self._attribute.getName() + " changed")
         self.__interactionInProgress = True
 
     def endInteraction(self):
         self.__interactionInProgress = False
-        # self._controller.endUndoBracket()
+        UndoRedoManager.getInstance().closeBracket()
 
     def _invokeSetter(self, value = None):
         if self._updatingWidget:
@@ -84,7 +103,9 @@ class AttributeWidget(QtGui.QWidget):
         # (getWidgetValue should now always return an RTVal)
         value = self.getWidgetValue()
 
-        self._attribute.setValue(value)
+        command = ValueChangeCommand(self._attribute, value)
+        UndoRedoManager.getInstance().addCommand(command, invokeRedoOnAdd=True)
+
         self._firingSetter  = False
 
         if not interactionInProgress:

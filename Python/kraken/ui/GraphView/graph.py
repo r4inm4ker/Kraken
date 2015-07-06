@@ -8,7 +8,8 @@ from main_panel import MainPanel
 from kraken.core.maths import Vec2
 from kraken.core.kraken_system import KrakenSystem
 
-from kraken.ui.undoredo.undo_redo_manager import UndoRedoManager, Command
+from kraken.ui.undoredo.undo_redo_manager import UndoRedoManager
+from graph_commands import ConstructComponentCommand
 
 class Graph(QtGui.QGraphicsWidget):
 
@@ -367,41 +368,4 @@ class Graph(QtGui.QGraphicsWidget):
     ## Events
     def closeEvent(self, event):
         return super(Graph, self).closeEvent(event)
-
-
-    #######################
-    ## Undoable Commands
-
-
-    def undo(self):
-        self.undoManager.undo()
-        
-    def redo(self):
-        self.undoManager.redo()
-        
-
-    def constructNewComponent(self, componentClassName, graphPos):
-
-        class ConstructComponentCommand(Command):
-            def __init__(self, componentClassName, graphPos, graph):
-                super(ConstructComponentCommand, self).__init__()
-                krakenSystem = KrakenSystem.getInstance()
-                self.componentClassName = componentClassName
-                self.componentClass = krakenSystem.getComponentClass( componentClassName )
-                self.graphPos = graphPos
-                self.graph = graph
-
-            def shortDesc(self):
-                return "Add Component '" + self.componentClassName + "'"
-
-            def redo(self):
-                self.component = self.componentClass(parent=self.graph.getRig())
-                self.component.setGraphPos(self.graphPos)
-                self.node = self.graph.addNode(self.component)
-
-            def undo(self):
-                self.graph.removeNode(self.node)
-
-        command = ConstructComponentCommand(componentClassName, graphPos, self)
-        self.undoManager.addCommand(command, invokeRedoOnAdd=True)
 

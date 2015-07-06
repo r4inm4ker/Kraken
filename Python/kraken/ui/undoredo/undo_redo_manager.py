@@ -7,6 +7,8 @@ class UndoRedoManager(object):
     but it is possible to instantiate multiple undomanagers, each one responsible for a separate undo stack. 
 
     """
+
+    __instance = None
     
     def __init__(self):
         super(UndoRedoManager, self).__init__()
@@ -80,10 +82,14 @@ class UndoRedoManager(object):
         """
         assert not self.__currentBracket is None, "UndoRedoManager.cancelBracket() called but bracket has not been opened"
         #print "<<<closeBracket:" + self.__currentBracket.shortDesc()
-        self.closeBracket()
-        self.undo()
-        command = self.__redoStack.pop()
-        command.destroy()
+
+        if self.__currentBracket.getNumCommands() > 0:
+            self.closeBracket()
+            self.undo()
+            command = self.__redoStack.pop()
+            command.destroy()
+        else:
+            self.__currentBracket = self.__currentBracket.getParentCommandBracket()
         self.__fireUpdateCallback()
             
         
@@ -105,12 +111,12 @@ class UndoRedoManager(object):
         return self.__isUndoingOrRedoing
      
 
-    def addCommand(self, command, invokeRedoOnAdd=False):
+    def addCommand(self, command, invokeRedoOnAdd=True):
         """
         Adds a new command to the currently opened undo bracket.
         :param command: A command object which encapsulates the revertable action.
         """
-        
+
         if self.__currentBracket is not None:
             self.__currentBracket.addCommand(command, invokeRedoOnAdd=invokeRedoOnAdd)
         else:
@@ -217,6 +223,11 @@ class UndoRedoManager(object):
             command.logDebug(1)
         print "-------------"
 
+    @classmethod
+    def getInstance(cls):
+        if cls.__instance is None:
+            cls.__instance = UndoRedoManager()
+        return cls.__instance
 
 
 class Command(object):

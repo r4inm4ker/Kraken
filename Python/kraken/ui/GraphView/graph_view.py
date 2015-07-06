@@ -10,6 +10,9 @@ from graph import Graph
 from node import Node, NodeTitle
 from port import PortLabel, InputPort, OutputPort
 
+from kraken.ui.undoredo.undo_redo_manager import UndoRedoManager
+from graph_commands import ConstructComponentCommand
+
 from kraken.core.maths import Vec2
 from kraken.core.kraken_system import KrakenSystem
 
@@ -151,7 +154,8 @@ class GraphView(QtGui.QGraphicsView):
             dropPosition = self.graph.mapToItem(self.graph.itemGroup(), event.pos())
 
             # construct
-            self.graph.constructNewComponent(componentClassName, Vec2(dropPosition.x(), dropPosition.y()) );
+            command = ConstructComponentCommand(self.graph, componentClassName, Vec2(dropPosition.x(), dropPosition.y()))
+            UndoRedoManager.getInstance().addCommand(command, invokeRedoOnAdd=True)
 
             event.acceptProposedAction()
         else:

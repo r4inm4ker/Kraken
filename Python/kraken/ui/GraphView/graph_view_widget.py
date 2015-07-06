@@ -5,6 +5,7 @@ from PySide import QtGui, QtCore
 
 from kraken.ui.GraphView.contextual_node_list import ContextualNodeList, ContextualNewNodeWidget
 from kraken.ui.GraphView.graph_view import GraphView
+from kraken.ui.undoredo.undo_redo_manager import UndoRedoManager
 
 from kraken.core.objects.rig import Rig
 from kraken import plugins
@@ -103,11 +104,9 @@ class GraphViewWidget(QtGui.QWidget):
         pasteUnconnectedShortcut.activated.connect(self.pasteUnconnected)
 
         undoShortcut = QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.CTRL + QtCore.Qt.Key_Z), self)
-        undoShortcut.setContext(QtCore.Qt.WidgetShortcut)
         undoShortcut.activated.connect(self.undo)
 
         redoShortcut = QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.CTRL + QtCore.Qt.Key_Y), self)
-        redoShortcut.setContext(QtCore.Qt.WidgetShortcut)
         redoShortcut.activated.connect(self.redo)
 
         resizeSplitterShortcut = QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.CTRL + QtCore.Qt.Key_Tab), self)
@@ -207,12 +206,11 @@ class GraphViewWidget(QtGui.QWidget):
 
 
     def undo(self):
-        graph = self.graphView.getGraph()
-        graph.undo()
+        UndoRedoManager.getInstance().undo()
         
+
     def redo(self):
-        graph = self.graphView.getGraph()
-        graph.redo()
+        UndoRedoManager.getInstance().redo()
         
         
     def resizeSplitter(self):
@@ -223,6 +221,7 @@ class GraphViewWidget(QtGui.QWidget):
             splitter.setSizes([175, sizes[1]])
         else:
             splitter.setSizes([0, sizes[1]])
+
 
     def openContextualNodeList(self):
         pos = self.mapFromGlobal(QtGui.QCursor.pos());
