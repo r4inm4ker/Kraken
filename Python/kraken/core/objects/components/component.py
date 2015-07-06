@@ -723,11 +723,11 @@ class Component(Object3D):
 
         """
 
-        if 'name' in data:
-            self.setName(data['name'])
-
         if 'location' in data:
             self.setLocation(data['location'])
+
+        if 'name' in data:
+            self.setName(data['name'])
 
         if 'graphPos' in data:
             self.setGraphPos(data['graphPos'])
@@ -756,7 +756,7 @@ class Component(Object3D):
         return self.saveData()
 
 
-    def pasteData(self, data):
+    def pasteData(self, data, setLocation=True):
         """Paste a copied guide representation.
 
         Arguments:
@@ -767,7 +767,7 @@ class Component(Object3D):
 
         """
 
-        if data['location'] != self.getLocation():
+        if not setLocation and data['location'] != self.getLocation():
             config = Config.getInstance()
             mirrorMap = config.getNameTemplate()['mirrorMap']
             if mirrorMap[data['location']] != data['location']:

@@ -94,16 +94,15 @@ class Connection(QtGui.QGraphicsPathItem):
                 sourceComponentOutputPort = sourceComponent.getOutputByName(self.__srcPort.getName())
                 targetComponentInputPort = targetComponent.getInputByName(self.__dstPort.getName())
                 targetComponentInputPort.removeConnection()
-
-                self.__graph.removeConnection(
-                    source= sourceComponent.getDecoratedName() + '.' + sourceComponentOutputPort.getName(),
-                    target= targetComponent.getDecoratedName() + '.' + targetComponentInputPort.getName()
-                )
-
+                
                 if delta.x() < 0:
                     MouseGrabber(self.__graph, pos, self.__srcPort, 'In')
                 else:
                     MouseGrabber(self.__graph, pos, self.__dstPort, 'Out')
+
+                # destory the connection as the MouseGrabber creates a new one
+                self.destroy()
+
         else:
             super(Connection, self).mouseMoveEvent(event)
 
