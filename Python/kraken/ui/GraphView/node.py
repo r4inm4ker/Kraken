@@ -10,8 +10,8 @@ from port import InputPort, OutputPort
 from kraken.core.maths import Vec2
 
 from kraken.ui.component_inspector import ComponentInspector
-from kraken.ui.undoredo.undo_redo_manager import UndoRedoManager
 
+from kraken.ui.undoredo.undo_redo_manager import UndoRedoManager
 from graph_commands import SelectNodeCommand, NodeMoveCommand
 
 class NodeTitle(QtGui.QGraphicsWidget):

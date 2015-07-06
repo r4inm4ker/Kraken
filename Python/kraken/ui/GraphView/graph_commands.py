@@ -13,8 +13,10 @@ class SelectNodeCommand(Command):
     def shortDesc(self):
         return "Select Node '" + self.node.getName() + "'"
 
+
     def redo(self):
         self.graph.selectNode(self.node, clearSelection=self.clearSelection)
+
 
     def undo(self):
         self.graph.deselectNode(self.node)
@@ -25,11 +27,14 @@ class DeselectNodeCommand(Command):
         self.graph = graph
         self.node = node
 
+
     def shortDesc(self):
         return "Deselect Node '" + self.node.getName() + "'"
 
+
     def redo(self):
         self.graph.deselectNode(self.node)
+
 
     def undo(self):
         self.graph.selectNode(self.node, clearSelection=False)
@@ -53,11 +58,13 @@ class SelectionChangeCommand(Command):
     def shortDesc(self):
         return self.desc
 
+
     def redo(self):
         for node in self.selectedNodes:
             self.graph.selectNode(node)
         for node in self.deselectedNodes:
             self.graph.deselectNode(node)
+
 
     def undo(self):
         for node in self.selectedNodes:
@@ -76,13 +83,16 @@ class NodeMoveCommand(Command):
         for node in self.nodes:
             self.desc = self.desc +", " + node.getName();
 
+
     def shortDesc(self):
         return self.desc
+
 
     def redo(self):
         for node in self.nodes:
             node.translate( self.delta.x(), self.delta.y())
             node.pushGraphPosToComponent()
+
 
     def undo(self):
         for node in self.nodes:
@@ -99,15 +109,89 @@ class ConstructComponentCommand(Command):
         krakenSystem = KrakenSystem.getInstance()
         self.componentClass = krakenSystem.getComponentClass( componentClassName )
 
+
     def shortDesc(self):
         return "Add Component '" + self.componentClassName + "'"
+
 
     def redo(self):
         self.component = self.componentClass(parent=self.graph.getRig())
         self.component.setGraphPos(self.graphPos)
         self.node = self.graph.addNode(self.component)
 
+
     def undo(self):
         self.graph.removeNode(self.node)
 
 
+
+class PortConnectCommand(Command):
+    def __init__(self, sourcePort, targetPort, graph):
+        super(PortConnectCommand, self).__init__()
+        self.sourcePort = sourcePort
+        self.targetPort = targetPort
+        self.graph = graph
+        self.scene = self.graph.scene()
+
+        self.sourceComponent = self.sourcePort.getNode().getComponent()
+        self.targetComponent = self.targetPort.getNode().getComponent()
+
+        self.sourceComponentOutputPort = self.sourceComponent.getOutputByName(self.sourcePort.getName())
+        self.targetComponentInputPort = self.targetComponent.getInputByName(self.targetPort.getName())
+        self.connection = None
+
+
+    def shortDesc(self):
+        return "Connect Ports '" + self.sourcePort.getName() + " > " + self.targetPort.getName()
+
+
+    def redo(self):
+        self.targetComponentInputPort.setConnection(self.sourceComponentOutputPort)
+        if self.connection is None:
+            self.connection = self.graph.addConnection(
+                source=self.sourceComponent.getDecoratedName() + '.' + self.sourceComponentOutputPort.getName(),
+                target=self.targetComponent.getDecoratedName() + '.' + self.targetComponentInputPort.getName()
+            )
+        else:
+            self.connection.setVisible(True)
+
+
+    def undo(self):
+        self.targetComponentInputPort.removeConnection()
+        self.connection.setVisible(False)
+
+
+    def destroy(self):
+        self.scene.removeItem(self.connection)
+
+
+class PortDisconnectCommand(Command):
+    def __init__(self, connection, graph):
+        super(PortDisconnectCommand, self).__init__()
+        self.connection = connection
+        self.graph = graph
+        self.scene = self.graph.scene()
+
+        self.sourceComponent = self.connection.getSrcPort().getNode().getComponent()
+        self.targetComponent = self.connection.getDstPort().getNode().getComponent()
+
+        self.sourceComponentOutputPort = self.sourceComponent.getOutputByName(self.connection.getSrcPort().getName())
+        self.targetComponentInputPort = self.targetComponent.getInputByName(self.connection.getDstPort().getName())
+
+
+    def shortDesc(self):
+        return "Disconnect Ports '" + self.connection.getSrcPort().getName() + " > " + self.connection.getDstPort().getName()
+
+
+    def redo(self):
+        self.targetComponentInputPort.removeConnection()
+        self.connection.setVisible(False)
+
+
+    def undo(self):
+        self.targetComponentInputPort.setConnection(self.sourceComponentOutputPort)
+        self.connection.setVisible(True)
+
+
+    def destroy(self):
+        self.scene.removeItem(self.connection)

@@ -206,10 +206,12 @@ class GraphViewWidget(QtGui.QWidget):
 
 
     def undo(self):
+        UndoRedoManager.getInstance().logDebug()
         UndoRedoManager.getInstance().undo()
         
 
     def redo(self):
+        UndoRedoManager.getInstance().logDebug()
         UndoRedoManager.getInstance().redo()
         
         

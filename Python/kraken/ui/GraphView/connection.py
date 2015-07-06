@@ -9,6 +9,9 @@ from PySide import QtGui, QtCore
 
 from mouse_grabber import MouseGrabber
 
+from kraken.ui.undoredo.undo_redo_manager import UndoRedoManager
+from graph_commands import PortDisconnectCommand
+
 class Connection(QtGui.QGraphicsPathItem):
     __defaultPen = QtGui.QPen(QtGui.QColor(168, 134, 3), 2.0)
 
@@ -32,9 +35,7 @@ class Connection(QtGui.QGraphicsPathItem):
 
     def getDstPort(self):
         return self.__dstPort
-
-    def setPortConnection(self, port):
-        port.addConnection(self)
+        
 
     def boundingRect(self):
         srcPoint = self.mapFromScene(self.__srcPort.outCircle().centerInSceneCoords())
@@ -88,20 +89,14 @@ class Connection(QtGui.QGraphicsPathItem):
             delta = pos - self._lastDragPoint
             if delta.x() < 0 or delta.x() > 0:
 
-                sourceComponent = self.__srcPort.getNode().getComponent()
-                targetComponent = self.__dstPort.getNode().getComponent()
-
-                sourceComponentOutputPort = sourceComponent.getOutputByName(self.__srcPort.getName())
-                targetComponentInputPort = targetComponent.getInputByName(self.__dstPort.getName())
-                targetComponentInputPort.removeConnection()
-                
                 if delta.x() < 0:
                     MouseGrabber(self.__graph, pos, self.__srcPort, 'In')
                 else:
                     MouseGrabber(self.__graph, pos, self.__dstPort, 'Out')
 
-                # destory the connection as the MouseGrabber creates a new one
-                self.destroy()
+                command = PortDisconnectCommand( self, self.__graph)
+                UndoRedoManager.getInstance().addCommand(command, invokeRedoOnAdd=True)
+                
 
         else:
             super(Connection, self).mouseMoveEvent(event)

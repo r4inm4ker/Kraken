@@ -238,9 +238,10 @@ class Graph(QtGui.QGraphicsWidget):
             raise Exception("Component '" + targetNode.getName() + "' does not have input:" + targetPort.getName())
 
         connection = Connection(self, sourcePort, targetPort)
-        connection.setPortConnection(sourcePort)
-        connection.setPortConnection(targetPort)
+        sourcePort.addConnection(connection)
+        targetPort.addConnection(connection)
 
+        return connection
 
     #######################
     ## Graph

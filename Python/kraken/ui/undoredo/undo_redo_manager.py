@@ -142,13 +142,13 @@ class UndoRedoManager(object):
 
     def undo(self):
         """Reverts the action at the top of the undo stack"""
-        assert self.haveUndo(), "UndoRedoManager.undo() called but UndoRedoManager.haveUndo() is false"
-        self.__isUndoingOrRedoing = True
-        command = self.__undoStack.pop()
-        command.undo()
-        self.__redoStack.append(command)
-        self.__fireUpdateCallback()
-        self.__isUndoingOrRedoing = False
+        if self.haveUndo():
+            self.__isUndoingOrRedoing = True
+            command = self.__undoStack.pop()
+            command.undo()
+            self.__redoStack.append(command)
+            self.__fireUpdateCallback()
+            self.__isUndoingOrRedoing = False
     
 
     def haveRedo(self):
@@ -163,12 +163,13 @@ class UndoRedoManager(object):
 
     def redo(self):
         """Reapplies the action at the top of the redo stack"""
-        self.__isUndoingOrRedoing = True
-        command = self.__redoStack.pop()
-        command.redo()
-        self.__undoStack.append(command)
-        self.__fireUpdateCallback()
-        self.__isUndoingOrRedoing = False
+        if self.haveRedo():
+            self.__isUndoingOrRedoing = True
+            command = self.__redoStack.pop()
+            command.redo()
+            self.__undoStack.append(command)
+            self.__fireUpdateCallback()
+            self.__isUndoingOrRedoing = False
         
 
     def __clearUndoStack(self):
