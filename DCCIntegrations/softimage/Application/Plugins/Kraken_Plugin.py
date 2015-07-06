@@ -3,6 +3,17 @@
 import win32com.client
 from win32com.client import constants
 
+from win32com.client import constants
+
+import Qt
+Qt.initialize()
+from Qt.QtGui import QMainWindow
+from Qt.QtGui import QWidget
+from PySide import QtWebKit
+from PySide.QtCore import QUrl
+
+from kraken.ui.kraken_ui import KrakenUI
+
 si = Application
 log = si.LogMessage
 
@@ -13,8 +24,8 @@ def XSILoadPlugin(in_reg):
     in_reg.Major = 1
     in_reg.Minor = 0
 
+    in_reg.RegisterMenu(constants.siMenuMainTopLevelID, "Kraken", False, False)
     in_reg.RegisterCommand('OpenKrakenEditor', 'OpenKrakenEditor')
-    #RegistrationInsertionPoint - do not remove this line
 
     return True
 
@@ -23,10 +34,36 @@ def XSIUnloadPlugin(in_reg):
 
     return True
 
+def Kraken_Init( in_ctxt ):
+
+    menu = in_ctxt.source;
+    menu.AddCallbackItem( "Open UI", "OpenKrakenEditor")
+    menu.AddSeparatorItem();
+    menu.AddCallbackItem( "Help", "OpenKrakenHelp" )
 
 # =========
 # Commands
 # =========
+
+class KrakenMainWindow(QMainWindow):
+    def __init__(self, parent):
+        super(KrakenMainWindow, self).__init__(parent)
+        self.setWindowTitle('Kraken Editor')
+        self.setCentralWidget(KrakenUI())
+        self.setAutoFillBackground(True)
+        self.setStyleSheet("background-color: #151515;")
+
+
+def OpenKrakenEditor( in_ctxt=None ):
+
+    sianchor = Application.getQtSoftimageAnchor()
+    sianchor = Qt.wrapinstance( long(sianchor), QWidget )
+    window = KrakenMainWindow(parent=sianchor)
+    window.show()
+
+    return True
+
+
 def OpenKrakenEditor_Init( in_ctxt ):
     cmd = in_ctxt.Source
     cmd.Description = 'Opens the Kraken Editor'
@@ -38,6 +75,30 @@ def OpenKrakenEditor_Init( in_ctxt ):
 
 def OpenKrakenEditor_Execute(  ):
 
-
+    OpenKrakenEditor()
 
     return True
+
+
+class KrakenHelpWindow(QMainWindow):
+    def __init__(self, parent):
+        super(KrakenHelpWindow, self).__init__(parent)
+        self.setWindowTitle('Kraken Help')
+
+        view = QtWebKit.QWebView(self)
+        view.load(QUrl("http://fabric-engine.github.io/Kraken/"))
+
+        self.setCentralWidget(view)
+        self.setAutoFillBackground(True)
+        self.setStyleSheet("background-color: #151515;")
+
+
+def OpenKrakenHelp( in_ctxt ):
+    oMenuItem = in_ctxt.source;
+    
+    sianchor = Application.getQtSoftimageAnchor()
+    sianchor = Qt.wrapinstance( long(sianchor), QWidget )
+    window = KrakenHelpWindow(parent=sianchor)
+    window.show()
+
+
