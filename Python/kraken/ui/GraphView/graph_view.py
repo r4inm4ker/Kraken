@@ -17,7 +17,6 @@ from kraken.core.kraken_system import KrakenSystem
 class GraphView(QtGui.QGraphicsView):
 
     _clipboardData = None
-    _copyPos = None
 
     def __init__(self, parent=None):
         super(GraphView, self).__init__(parent)
@@ -151,15 +150,8 @@ class GraphView(QtGui.QGraphicsView):
             # Add a component to the rig placed at the given position.
             dropPosition = self.graph.mapToItem(self.graph.itemGroup(), event.pos())
 
-            ##############################
-            ## construct
-
-            krakenSystem = KrakenSystem.getInstance()
-            componentClass = krakenSystem.getComponentClass( componentClassName )
-            component = componentClass(parent=self.rig)
-            component.setGraphPos( Vec2(dropPosition.x(), dropPosition.y()) )
-
-            self.graph.addNode(component)
+            # construct
+            self.graph.constructNewComponent(componentClassName, Vec2(dropPosition.x(), dropPosition.y()) );
 
             event.acceptProposedAction()
         else:

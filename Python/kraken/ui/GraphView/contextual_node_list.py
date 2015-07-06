@@ -88,12 +88,7 @@ class ContextualNodeList(QtGui.QWidget):
             dropPosition = self.graph.mapToItem(self.graph.itemGroup(), self.pos)
 
             # Construct the component.
-            krakenSystem = KrakenSystem.getInstance()
-            componentClass = krakenSystem.getComponentClass(componentClassName)
-            component = componentClass(parent=self.graph.getRig())
-            component.setGraphPos(Vec2(dropPosition.x(), dropPosition.y()))
-
-            self.graph.addNode(component)
+            self.graph.constructNewComponent(componentClassName, Vec2(dropPosition.x(), dropPosition.y()));
 
             if self.isVisible():
                 self.hide()

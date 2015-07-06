@@ -8,6 +8,8 @@ from main_panel import MainPanel
 from kraken.core.maths import Vec2
 from kraken.core.kraken_system import KrakenSystem
 
+from kraken.ui.undoredo.undo_redo_manager import UndoRedoManager, Command
+
 class Graph(QtGui.QGraphicsWidget):
 
     def __init__(self, parent, rig):
@@ -37,6 +39,8 @@ class Graph(QtGui.QGraphicsWidget):
 
         self.displayGraph()
 
+        self.undoManager  = UndoRedoManager()
+
     def graphView(self):
         return self.__parent
 
@@ -58,6 +62,12 @@ class Graph(QtGui.QGraphicsWidget):
         node = Node(self, component)
         self.__nodes[node.getName()] = node
         return node
+
+    def removeNode(self, node):
+        component = node.getComponent()
+        self.__rig.removeChild( component )
+        node.destroy()
+        del self.__nodes[node.getName()]
 
     def getNode(self, name):
         if name in self.__nodes:
@@ -102,16 +112,13 @@ class Graph(QtGui.QGraphicsWidget):
     def getSelectedNodes(self):
         return self.__selection
 
+
     def deleteSelectedNodes(self):
         selectedNodes = self.getSelectedNodes()
         names = ""
         for node in selectedNodes:
-            # names += (" " + node.getName())
-            component = node.getComponent()
-            self.__rig.removeChild( component )
+            self.removeNode(node)
 
-            node.destroy()
-            del self.__nodes[node.getName()]
 
     def frameNodes(self, nodes):
         if len(nodes) == 0:
@@ -360,3 +367,41 @@ class Graph(QtGui.QGraphicsWidget):
     ## Events
     def closeEvent(self, event):
         return super(Graph, self).closeEvent(event)
+
+
+    #######################
+    ## Undoable Commands
+
+
+    def undo(self):
+        self.undoManager.undo()
+        
+    def redo(self):
+        self.undoManager.redo()
+        
+
+    def constructNewComponent(self, componentClassName, graphPos):
+
+        class ConstructComponentCommand(Command):
+            def __init__(self, componentClassName, graphPos, graph):
+                super(ConstructComponentCommand, self).__init__()
+                krakenSystem = KrakenSystem.getInstance()
+                self.componentClassName = componentClassName
+                self.componentClass = krakenSystem.getComponentClass( componentClassName )
+                self.graphPos = graphPos
+                self.graph = graph
+
+            def shortDesc(self):
+                return "Add Component '" + self.componentClassName + "'"
+
+            def redo(self):
+                self.component = self.componentClass(parent=self.graph.getRig())
+                self.component.setGraphPos(self.graphPos)
+                self.node = self.graph.addNode(self.component)
+
+            def undo(self):
+                self.graph.removeNode(self.node)
+
+        command = ConstructComponentCommand(componentClassName, graphPos, self)
+        self.undoManager.addCommand(command, invokeRedoOnAdd=True)
+
