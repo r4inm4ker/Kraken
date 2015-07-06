@@ -4,6 +4,7 @@ import win32com.client
 from win32com.client import constants
 
 from win32com.client import constants
+from multiprocessing import Pool
 
 import Qt
 Qt.initialize()
@@ -12,7 +13,11 @@ from Qt.QtGui import QWidget
 from PySide import QtWebKit
 from PySide.QtCore import QUrl
 
+
+import kraken.ui.kraken_ui
+reload(kraken.ui.kraken_ui)
 from kraken.ui.kraken_ui import KrakenUI
+from kraken.ui.kraken_splash import KrakenSplash
 
 si = Application
 log = si.LogMessage
@@ -45,11 +50,21 @@ def Kraken_Init( in_ctxt ):
 # Commands
 # =========
 
+
 class KrakenMainWindow(QMainWindow):
     def __init__(self, parent):
         super(KrakenMainWindow, self).__init__(parent)
         self.setWindowTitle('Kraken Editor')
-        self.setCentralWidget(KrakenUI())
+        self.setCentralWidget(KrakenUI(showSplash=False))
+        self.setAutoFillBackground(True)
+        self.setStyleSheet("background-color: #151515;")
+
+
+class KrakenSplashWindow(QMainWindow):
+    def __init__(self, parent):
+        super(KrakenSplashWindow, self).__init__(parent)
+        self.setWindowTitle('Kraken Splash')
+        self.setCentralWidget(KrakenSplash())
         self.setAutoFillBackground(True)
         self.setStyleSheet("background-color: #151515;")
 
@@ -58,8 +73,14 @@ def OpenKrakenEditor( in_ctxt=None ):
 
     sianchor = Application.getQtSoftimageAnchor()
     sianchor = Qt.wrapinstance( long(sianchor), QWidget )
+    
+    splash = KrakenSplashWindow(parent=sianchor)
+    splash.show()
+
     window = KrakenMainWindow(parent=sianchor)
     window.show()
+
+    splash.hide()
 
     return True
 
