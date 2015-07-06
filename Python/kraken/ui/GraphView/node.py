@@ -297,7 +297,6 @@ class Node(QtGui.QGraphicsWidget):
 
 
     def nameChanged(self, origName):
-        print "nameChanged:" + self.__component.getDecoratedName()
         self.__titleItem.setText(self.__component.getDecoratedName())
         self.__graph.nodeNameChanged(origName, self.__component.getDecoratedName())
 
