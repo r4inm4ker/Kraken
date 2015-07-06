@@ -19,6 +19,22 @@ class SelectNodeCommand(Command):
     def undo(self):
         self.graph.deselectNode(self.node)
 
+class DeselectNodeCommand(Command):
+    def __init__(self, graph, node):
+        super(DeselectNodeCommand, self).__init__()
+        self.graph = graph
+        self.node = node
+
+    def shortDesc(self):
+        return "Deselect Node '" + self.node.getName() + "'"
+
+    def redo(self):
+        self.graph.deselectNode(self.node)
+
+    def undo(self):
+        self.graph.selectNode(self.node, clearSelection=False)
+
+
 
 class SelectionChangeCommand(Command):
     def __init__(self, graph, selectedNodes, deselectedNodes):
@@ -26,7 +42,7 @@ class SelectionChangeCommand(Command):
         self.graph = graph
         self.selectedNodes = selectedNodes
         self.deselectedNodes = deselectedNodes
-        
+
         self.desc = "Deselected: "
         for node in self.deselectedNodes:
             self.desc = self.desc +", " + node.getName();
@@ -49,6 +65,29 @@ class SelectionChangeCommand(Command):
         for node in self.deselectedNodes:
             self.graph.selectNode(node)
 
+        
+
+class NodeMoveCommand(Command):
+    def __init__(self, nodes, delta):
+        super(NodeMoveCommand, self).__init__()
+        self.nodes = nodes
+        self.delta = delta
+        self.desc = "Moved: "
+        for node in self.nodes:
+            self.desc = self.desc +", " + node.getName();
+
+    def shortDesc(self):
+        return self.desc
+
+    def redo(self):
+        for node in self.nodes:
+            node.translate( self.delta.x(), self.delta.y())
+            node.pushGraphPosToComponent()
+
+    def undo(self):
+        for node in self.nodes:
+            node.translate( -self.delta.x(), -self.delta.y())
+            node.pushGraphPosToComponent()
         
 
 class ConstructComponentCommand(Command):
