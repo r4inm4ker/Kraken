@@ -18,6 +18,9 @@ class _NameAttributeProxy(object):
         self.component = component
         self.nodeItem = nodeItem
 
+    def getName(self):
+        return 'name'
+
     def setValue(self, value):
         # Store original node name
         origName = self.nodeItem.getName()
@@ -37,6 +40,9 @@ class _LocationAttributeProxy(object):
         super(_LocationAttributeProxy, self).__init__()
         self.component = component
         self.nodeItem = nodeItem
+
+    def getName(self):
+        return 'location'
 
     def setValue(self, value):
         # Store original node name

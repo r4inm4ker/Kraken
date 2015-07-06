@@ -11,6 +11,9 @@ from kraken.core.maths import Vec2
 
 from kraken.ui.component_inspector import ComponentInspector
 
+from kraken.ui.undoredo.undo_redo_manager import UndoRedoManager
+from graph_commands import SelectNodeCommand, NodeMoveCommand
+
 class NodeTitle(QtGui.QGraphicsWidget):
     __color = QtGui.QColor(25, 25, 25)
     __font = QtGui.QFont('Decorative', 14)
@@ -195,7 +198,7 @@ class Node(QtGui.QGraphicsWidget):
     def isSelected(self):
         return self.__selected
 
-    def setSelected(self, selected):
+    def setSelected(self, selected=True):
         self.__selected = selected
         self.update()
 
@@ -228,20 +231,20 @@ class Node(QtGui.QGraphicsWidget):
             modifiers = event.modifiers()
             if modifiers == QtCore.Qt.ControlModifier:
                 if self.isSelected() is False:
-                    self.__graph.selectNode(self, clearSelection=False)
+                    UndoRedoManager.getInstance().addCommand(SelectNodeCommand(self.__graph, self, clearSelection=False))
                 else:
-                    self.__graph.deselectNode(self)
+                    UndoRedoManager.getInstance().addCommand(DeselectNodeCommand(self.__graph, self))
 
             elif modifiers == QtCore.Qt.ShiftModifier:
                 if self.isSelected() is False:
-                    self.__graph.selectNode(self, clearSelection=False)
+                    UndoRedoManager.getInstance().addCommand(SelectNodeCommand(self.__graph, self, clearSelection=False))
             else:
-                if self.isSelected() is False: # and len(self.__graph.getSelectedNodes()) == 0:
-                    self.__graph.selectNode(self, clearSelection=True)
+                if self.isSelected() is False:
+                    UndoRedoManager.getInstance().addCommand(SelectNodeCommand(self.__graph, self, clearSelection=False))
 
                 self.__dragging = True
-                self._lastDragPoint = self.mapToItem(self.__graph.itemGroup(), event.pos())
-
+                self._mouseDownPoint = self.mapToItem(self.__graph.itemGroup(), event.pos())
+                self._lastDragPoint = self._mouseDownPoint
 
         else:
             super(Node, self).mousePressEvent(event)
@@ -266,14 +269,20 @@ class Node(QtGui.QGraphicsWidget):
 
     def mouseReleaseEvent(self, event):
         if self.__dragging:
-                # TODO: Undo code goes here...
+
             if not self.isSelected():
                 self.pushGraphPosToComponent()
-
+                nodes = [self]
             else:
                 selectedNodes = self.__graph.getSelectedNodes()
                 for node in selectedNodes:
                     node.pushGraphPosToComponent()
+                nodes = selectedNodes
+
+            newPos = self.mapToItem(self.__graph.itemGroup(), event.pos())
+            delta = newPos - self._mouseDownPoint
+            command = NodeMoveCommand(nodes, delta)
+            UndoRedoManager.getInstance().addCommand(command, invokeRedoOnAdd=False)
 
             self.setCursor(QtCore.Qt.ArrowCursor)
             self.__dragging = False

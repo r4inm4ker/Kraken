@@ -182,7 +182,6 @@ class PortCircle(QtGui.QGraphicsWidget):
 
         self.unhighlight()
 
-        from connection import Connection
         if self.isInConnectionPoint():
             grabber = MouseGrabber(self.__graph, scenePos, self.__port, 'Out')
 

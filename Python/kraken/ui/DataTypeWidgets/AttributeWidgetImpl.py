@@ -1,5 +1,27 @@
 from PySide import QtGui
 
+from kraken.ui.undoredo.undo_redo_manager import UndoRedoManager, Command
+
+
+class ValueChangeCommand(Command):
+    def __init__(self, attribute, widget, newValue):
+        super(ValueChangeCommand, self).__init__()
+        self._attribute = attribute
+        self._widget = widget
+        self.oldValue = self._attribute.getValue()
+        self.newValue = newValue
+
+    def shortDesc(self):
+        return "Value Change:'" + self._attribute.getName() + "'"
+
+    def redo(self):
+        self._attribute.setValue(self.newValue)
+        self._widget._onValueChange(self.newValue)
+
+    def undo(self):
+        self._attribute.setValue(self.oldValue)
+        self._widget._onValueChange(self.oldValue)
+
 
 class AttributeWidget(QtGui.QWidget):
 
@@ -51,23 +73,23 @@ class AttributeWidget(QtGui.QWidget):
     def _invokeGetter(self):
         return self._attribute.getValue()
 
-    def _onValueChange(self, data):
+    def _onValueChange(self, value):
         """This method is fired when the port has changed and the widget needs to be updated to display the new value"""
 
         # TODO: some widgets may want to override the updated value, but this behavior makes editing string widgets really annoying
         # as it re-focusses the widget after every change. I made '_onValueChange' protected so that derived widgets can override it.
         if not self.__interactionInProgress:
             self._updatingWidget = True
-            self.setWidgetValue(data['value'])
+            self.setWidgetValue(value)
             self._updatingWidget = False
 
     def beginInteraction(self):
-        # self._controller.beginUndoBracket(name=self._attribute.getName() + " changed")
+        UndoRedoManager.getInstance().openBracket(self._attribute.getName() + " changed")
         self.__interactionInProgress = True
 
     def endInteraction(self):
         self.__interactionInProgress = False
-        # self._controller.endUndoBracket()
+        UndoRedoManager.getInstance().closeBracket()
 
     def _invokeSetter(self, value = None):
         if self._updatingWidget:
@@ -84,7 +106,9 @@ class AttributeWidget(QtGui.QWidget):
         # (getWidgetValue should now always return an RTVal)
         value = self.getWidgetValue()
 
-        self._attribute.setValue(value)
+        command = ValueChangeCommand(self._attribute, self, value)
+        UndoRedoManager.getInstance().addCommand(command, invokeRedoOnAdd=True)
+
         self._firingSetter  = False
 
         if not interactionInProgress:

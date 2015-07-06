@@ -7,6 +7,9 @@
 
 from PySide import QtGui, QtCore
 
+from kraken.ui.undoredo.undo_redo_manager import UndoRedoManager
+from graph_commands import PortConnectCommand
+
 
 class MouseGrabber(QtGui.QGraphicsWidget):
     """docstring for MouseGrabber"""
@@ -38,6 +41,7 @@ class MouseGrabber(QtGui.QGraphicsWidget):
             self.__connection = connection.Connection(self.__graph, port, self)
 
         self.__mouseOverPortCircle = None
+        UndoRedoManager.getInstance().openBracket('Connect Ports')
 
 
     def inCircle(self):
@@ -104,17 +108,10 @@ class MouseGrabber(QtGui.QGraphicsWidget):
                     sourcePort = self.__mouseOverPortCircle.getPort()
                     targetPort = self.__port
 
-                sourceComponent = sourcePort.getNode().getComponent()
-                targetComponent = targetPort.getNode().getComponent()
+                command = PortConnectCommand(sourcePort, targetPort, self.__graph)
+                UndoRedoManager.getInstance().addCommand(command, invokeRedoOnAdd=True)
 
-                sourceComponentOutputPort = sourceComponent.getOutputByName(sourcePort.getName())
-                targetComponentInputPort = targetComponent.getInputByName(targetPort.getName())
-                targetComponentInputPort.setConnection(sourceComponentOutputPort)
-
-                self.__graph.addConnection(
-                    source=sourceComponent.getDecoratedName() + '.' + sourceComponentOutputPort.getName(),
-                    target=targetComponent.getDecoratedName() + '.' + targetComponentInputPort.getName()
-                )
+                UndoRedoManager.getInstance().closeBracket()
 
             except Exception as e:
                 print "Exception in MouseGrabber.mouseReleaseEvent: " + str(e)

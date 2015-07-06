@@ -5,6 +5,7 @@ from PySide import QtGui, QtCore
 
 from kraken.ui.GraphView.contextual_node_list import ContextualNodeList, ContextualNewNodeWidget
 from kraken.ui.GraphView.graph_view import GraphView
+from kraken.ui.undoredo.undo_redo_manager import UndoRedoManager
 
 from kraken.core.objects.rig import Rig
 from kraken import plugins
@@ -86,6 +87,35 @@ class GraphViewWidget(QtGui.QWidget):
         frameShortcut = QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.Key_A), self)
         frameShortcut.activated.connect(self.graphView.frameAllNodes)
 
+        closeShortcut = QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.CTRL + QtCore.Qt.Key_W), self)
+        closeShortcut.activated.connect(self.window().close)
+
+        newRigShortcut = QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.CTRL + QtCore.Qt.Key_N), self)
+        newRigShortcut.setContext(QtCore.Qt.WidgetShortcut)
+        newRigShortcut.activated.connect(self.newRigPreset)
+
+        copyShortcut = QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.CTRL + QtCore.Qt.Key_C), self)
+        copyShortcut.activated.connect(self.copy)
+
+        pasteShortcut = QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.CTRL + QtCore.Qt.SHIFT + QtCore.Qt.Key_V), self)
+        pasteShortcut.activated.connect(self.paste)
+
+        pasteUnconnectedShortcut = QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.CTRL + QtCore.Qt.Key_V), self)
+        pasteUnconnectedShortcut.activated.connect(self.pasteUnconnected)
+
+        undoShortcut = QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.CTRL + QtCore.Qt.Key_Z), self)
+        undoShortcut.activated.connect(self.undo)
+
+        redoShortcut = QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.CTRL + QtCore.Qt.Key_Y), self)
+        redoShortcut.activated.connect(self.redo)
+
+        resizeSplitterShortcut = QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.CTRL + QtCore.Qt.Key_Tab), self)
+        resizeSplitterShortcut.activated.connect(self.resizeSplitter)
+
+        openContextualNodeListShortcut = QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.Key_QuoteLeft), self)
+        openContextualNodeListShortcut.activated.connect(self.openContextualNodeList)
+
+
         # Setup Layout
         layout = QtGui.QVBoxLayout(self)
         layout.addWidget(toolBar)
@@ -149,59 +179,61 @@ class GraphViewWidget(QtGui.QWidget):
         builder = plugins.getBuilder()
         builder.build(rig)
 
-    # =======
-    # Events
-    # =======
-    def keyPressEvent(self, event):
+    # =========
+    # Shortcuts
+    # =========
 
-        modifiers = event.modifiers()
-        if event.key() == 96: #'`'
-            pos = self.mapFromGlobal(QtGui.QCursor.pos());
-            if not self.__contextualNodeList:
-                self.__contextualNodeList = ContextualNodeList(self)
-            else:
-                # Ensures that the node list is reset to list all components
-                self.__contextualNodeList.showClosestNames()
+    def copy(self):
+        graph = self.graphView.getGraph()
+        pos = graph.getSelectedNodesPos()
+        self.graphView.__class__._clipboardData = graph.copySettings(pos)
+        
 
-            scenepos = self.graphView.getGraph().mapToScene(pos)
-            self.__contextualNodeList.showAtPos(pos, scenepos, self.graphView.getGraph())
+    def paste(self):
+        graph = self.graphView.getGraph()
+        clipboardData = self.graphView.__class__._clipboardData
 
-        # Ctrl+W
-        elif event.key() == 87 and modifiers == QtCore.Qt.ControlModifier:
-            self.window().close()
+        pos = clipboardData['copyPos'] + QtCore.QPoint(20, 20)
+        graph.pasteSettings(clipboardData, pos, createConnectionsToExistingNodes=False)
 
-        # Ctrl+N
-        elif event.key() == 78 and modifiers == QtCore.Qt.ControlModifier:
-            self.newRigPreset()
 
-        # Ctrl+C
-        elif event.key() == 67 and modifiers == QtCore.Qt.ControlModifier:
-            graph = self.graphView.getGraph()
-            pos = graph.getSelectedNodesPos()
-            self.graphView.__class__._clipboardData = graph.copySettings(pos)
+    def pasteUnconnected(self):
+        graph = self.graphView.getGraph()
+        clipboardData = self.graphView.__class__._clipboardData
 
-        # Ctrl+V
-        elif event.key() == 86 and modifiers == QtCore.Qt.ControlModifier:
-            graph = self.graphView.getGraph()
-            clipboardData = self.graphView.__class__._clipboardData
+        pos = clipboardData['copyPos'] + QtCore.QPoint(20, 20)
+        graph.pasteSettings(clipboardData, pos, createConnectionsToExistingNodes=False)
 
-            pos = clipboardData['copyPos'] + QtCore.QPoint(20, 20)
-            graph.pasteSettings(clipboardData, pos, createConnectionsToExistingNodes=False)
 
-        # Ctrl+Shift+V
-        elif event.key() == 86 and modifiers == (QtCore.Qt.ControlModifier | QtCore.Qt.ShiftModifier):
-            graph = self.graphView.getGraph()
-            clipboardData = self.graphView.__class__._clipboardData
+    def undo(self):
+        UndoRedoManager.getInstance().logDebug()
+        UndoRedoManager.getInstance().undo()
+        
 
-            pos = clipboardData['copyPos'] + QtCore.QPoint(20, 20)
-            graph.pasteSettings(clipboardData, pos)
+    def redo(self):
+        UndoRedoManager.getInstance().logDebug()
+        UndoRedoManager.getInstance().redo()
+        
+        
+    def resizeSplitter(self):
+        splitter = self.parentWidget()
+        sizes = splitter.sizes()
 
-        # Tab
-        elif event.key() == QtCore.Qt.Key_Tab and modifiers == QtCore.Qt.ControlModifier:
-            splitter = self.parentWidget()
-            sizes = splitter.sizes()
+        if sizes[0] == 0:
+            splitter.setSizes([175, sizes[1]])
+        else:
+            splitter.setSizes([0, sizes[1]])
 
-            if sizes[0] == 0:
-                splitter.setSizes([175, sizes[1]])
-            else:
-                splitter.setSizes([0, sizes[1]])
+
+    def openContextualNodeList(self):
+        pos = self.mapFromGlobal(QtGui.QCursor.pos());
+        if not self.__contextualNodeList:
+            self.__contextualNodeList = ContextualNodeList(self)
+        else:
+            # Ensures that the node list is reset to list all components
+            self.__contextualNodeList.showClosestNames()
+
+        scenepos = self.graphView.getGraph().mapToScene(pos)
+        self.__contextualNodeList.showAtPos(pos, scenepos, self.graphView.getGraph())
+
+

@@ -5,6 +5,10 @@
 
 from PySide import QtGui, QtCore
 from selection_rect import SelectionRect
+import copy
+
+from kraken.ui.undoredo.undo_redo_manager import UndoRedoManager, Command
+from graph_commands import SelectionChangeCommand
 
 
 class MainPanel(QtGui.QGraphicsWidget):
@@ -27,6 +31,7 @@ class MainPanel(QtGui.QGraphicsWidget):
         self._manipulationMode = 0
         self._dragging = False
         self._selectionRect = None
+        self._selectionchanged = False
 
     def itemGroup(self):
         return self.__itemGroup
@@ -37,10 +42,13 @@ class MainPanel(QtGui.QGraphicsWidget):
             self._selectionRect = SelectionRect(self.__itemGroup, mouseDownPos)
             self._dragging = False
             self._manipulationMode = 1
+            self._mouseDownSelection = copy.copy(self.graph.getSelectedNodes())
+
         elif event.button() is QtCore.Qt.MouseButton.MiddleButton:
             self.setCursor(QtCore.Qt.OpenHandCursor)
             self._manipulationMode = 2
             self._lastPanPoint = event.pos()
+
         else:
             super(MainPanel, self).mousePressEvent(event)
 
@@ -52,6 +60,7 @@ class MainPanel(QtGui.QGraphicsWidget):
             for name, node in self.graph.getNodes().iteritems():
                 if not node.isSelected() and self._selectionRect.collidesWithItem(node):
                     self.graph.selectNode(node)
+                    self._selectionchanged = True
             self._dragging = True
 
         elif self._manipulationMode == 2:
@@ -72,9 +81,27 @@ class MainPanel(QtGui.QGraphicsWidget):
                 self.graph.clearSelection()
             self._selectionRect = None
             self._manipulationMode = 0
+
+            selection = self.graph.getSelectedNodes()
+
+            deselectedNodes = []
+            selectedNodes = []
+
+            for node in self._mouseDownSelection:
+                if node not in selection:
+                    deselectedNodes.append(node)
+
+            for node in selection:
+                if node not in self._mouseDownSelection:
+                    selectedNodes.append(node)
+
+            command = SelectionChangeCommand(self.graph, selectedNodes, deselectedNodes)
+            UndoRedoManager.getInstance().addCommand(command, invokeRedoOnAdd=False)
+
         elif self._manipulationMode == 2:
             self.setCursor(QtCore.Qt.ArrowCursor)
             self._manipulationMode = 0
+
         else:
             super(MainPanel, self).mouseReleaseEvent(event)
 

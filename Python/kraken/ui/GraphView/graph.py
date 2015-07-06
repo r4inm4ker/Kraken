@@ -9,6 +9,9 @@ from kraken.core.maths import Vec2
 from kraken.core.kraken_system import KrakenSystem
 from kraken.core.configs.config import Config
 
+from kraken.ui.undoredo.undo_redo_manager import UndoRedoManager
+from graph_commands import ConstructComponentCommand
+
 class Graph(QtGui.QGraphicsWidget):
 
     def __init__(self, parent, rig):
@@ -38,6 +41,8 @@ class Graph(QtGui.QGraphicsWidget):
 
         self.displayGraph()
 
+        self.undoManager  = UndoRedoManager()
+
     def graphView(self):
         return self.__parent
 
@@ -59,6 +64,12 @@ class Graph(QtGui.QGraphicsWidget):
         node = Node(self, component)
         self.__nodes[node.getName()] = node
         return node
+
+    def removeNode(self, node):
+        component = node.getComponent()
+        self.__rig.removeChild( component )
+        node.destroy()
+        del self.__nodes[node.getName()]
 
     def getNode(self, name):
         if name in self.__nodes:
@@ -103,16 +114,13 @@ class Graph(QtGui.QGraphicsWidget):
     def getSelectedNodes(self):
         return self.__selection
 
+
     def deleteSelectedNodes(self):
         selectedNodes = self.getSelectedNodes()
         names = ""
         for node in selectedNodes:
-            # names += (" " + node.getName())
-            component = node.getComponent()
-            self.__rig.removeChild( component )
+            self.removeNode(node)
 
-            node.destroy()
-            del self.__nodes[node.getName()]
 
     def frameNodes(self, nodes):
         if len(nodes) == 0:
@@ -231,9 +239,10 @@ class Graph(QtGui.QGraphicsWidget):
             raise Exception("Component '" + targetNode.getName() + "' does not have input:" + targetPort.getName())
 
         connection = Connection(self, sourcePort, targetPort)
-        connection.setPortConnection(sourcePort)
-        connection.setPortConnection(targetPort)
+        sourcePort.addConnection(connection)
+        targetPort.addConnection(connection)
 
+        return connection
 
     #######################
     ## Graph
@@ -375,3 +384,4 @@ class Graph(QtGui.QGraphicsWidget):
     ## Events
     def closeEvent(self, event):
         return super(Graph, self).closeEvent(event)
+
