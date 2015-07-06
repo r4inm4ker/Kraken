@@ -92,7 +92,11 @@ class GraphView(QtGui.QGraphicsView):
                     def pasteSettings():
                         self.graph.pasteSettings(self.__class__._clipboardData, pos)
 
+                    def pasteSettingsMirrored():
+                        self.graph.pasteSettings(self.__class__._clipboardData, pos, mirrored=True)
+
                     contextMenu.addAction("Paste").triggered.connect(pasteSettings)
+                    contextMenu.addAction("Paste Mirrored").triggered.connect(pasteSettingsMirrored)
                     contextMenu.popup(event.globalPos())
 
 
