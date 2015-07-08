@@ -7,7 +7,10 @@ from PySide import QtGui, QtCore
 import types
 
 import kraken
-from kraken.ui.kraken_ui import KrakenUI
+import kraken.ui.kraken_window
+reload(kraken.ui.kraken_window)
+from kraken.ui.kraken_window import KrakenWindow
+from kraken.ui.kraken_window import createSplash
 
 import maya
 from maya import cmds
@@ -30,13 +33,6 @@ def getMayaWindow():
     return shiboken.wrapInstance(long(ptr), QtGui.QWidget)
 
 
-class KrakenMainWindow(QtGui.QMainWindow):
-    def __init__(self, parent):
-        super(KrakenMainWindow, self).__init__(parent)
-        self.setWindowTitle('Kraken Editor')
-        self.setCentralWidget(KrakenUI())
-
-
 # Command
 class OpenKrakenEditorCommand(OpenMayaMPx.MPxCommand):
   def __init__(self):
@@ -44,8 +40,14 @@ class OpenKrakenEditorCommand(OpenMayaMPx.MPxCommand):
 
   # Invoked when the command is run.
   def doIt(self,argList):
-    window = KrakenMainWindow(parent=getMayaWindow())
+
+    splash = createSplash()
+    splash.show()
+
+    window = KrakenWindow(parent=getMayaWindow())
     window.show()
+
+    splash.finish(window)
 
   # Creator
   @staticmethod
@@ -90,6 +92,8 @@ def setupKrakenMenu():
     # menuEditor = pm.menuItem("KrakenEditorMenuItem", parent=krakenMenu, label="Open Kraken Editor", to=True, subMenu=True)
 
     pm.menuItem(parent=krakenMenu, label="Open Kraken Editor", c="from maya import cmds; cmds.openKrakenEditor()")
+    pm.menuItem(parent=krakenMenu, divider=True)
+    pm.menuItem(parent=krakenMenu, label="Help", c="import webbrowser; webbrowser.open_new_tab('http://fabric-engine.github.io/Kraken')")
 
 
 # Initialize the script plug-in

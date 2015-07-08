@@ -2,22 +2,27 @@
 
 import win32com.client
 from win32com.client import constants
+import os
+import inspect
 
 from win32com.client import constants
 from multiprocessing import Pool
+
+import webbrowser
 
 import Qt
 Qt.initialize()
 from Qt.QtGui import QMainWindow
 from Qt.QtGui import QWidget
+
 from PySide import QtWebKit
-from PySide.QtCore import QUrl
+from PySide import QtGui, QtCore
 
 
-import kraken.ui.kraken_ui
-reload(kraken.ui.kraken_ui)
-from kraken.ui.kraken_ui import KrakenUI
-from kraken.ui.kraken_splash import KrakenSplash
+import kraken.ui.kraken_window
+reload(kraken.ui.kraken_window)
+from kraken.ui.kraken_window import KrakenWindow
+from kraken.ui.kraken_window import createSplash
 
 si = Application
 log = si.LogMessage
@@ -46,46 +51,11 @@ def Kraken_Init( in_ctxt ):
     menu.AddSeparatorItem();
     menu.AddCallbackItem( "Help", "OpenKrakenHelp" )
 
+
 # =========
 # Commands
 # =========
-
-
-class KrakenMainWindow(QMainWindow):
-    def __init__(self, parent):
-        super(KrakenMainWindow, self).__init__(parent)
-        self.setWindowTitle('Kraken Editor')
-        self.setCentralWidget(KrakenUI(showSplash=False))
-        self.setAutoFillBackground(True)
-        self.setStyleSheet("background-color: #151515;")
-
-
-class KrakenSplashWindow(QMainWindow):
-    def __init__(self, parent):
-        super(KrakenSplashWindow, self).__init__(parent)
-        self.setWindowTitle('Kraken Splash')
-        self.setCentralWidget(KrakenSplash())
-        self.setAutoFillBackground(True)
-        self.setStyleSheet("background-color: #151515;")
-
-
-def OpenKrakenEditor( in_ctxt=None ):
-
-    sianchor = Application.getQtSoftimageAnchor()
-    sianchor = Qt.wrapinstance( long(sianchor), QWidget )
-    
-    splash = KrakenSplashWindow(parent=sianchor)
-    splash.show()
-
-    window = KrakenMainWindow(parent=sianchor)
-    window.show()
-
-    splash.hide()
-
-    return True
-
-
-def OpenKrakenEditor_Init( in_ctxt ):
+def OpenKrakenEditor_Init(in_ctxt):
     cmd = in_ctxt.Source
     cmd.Description = 'Opens the Kraken Editor'
     cmd.SetFlag(constants.siCannotBeUsedInBatch, True)
@@ -94,32 +64,34 @@ def OpenKrakenEditor_Init( in_ctxt ):
     return True
 
 
-def OpenKrakenEditor_Execute(  ):
+def OpenKrakenEditor_Execute():
 
     OpenKrakenEditor()
 
     return True
 
 
-class KrakenHelpWindow(QMainWindow):
-    def __init__(self, parent):
-        super(KrakenHelpWindow, self).__init__(parent)
-        self.setWindowTitle('Kraken Help')
+# ==========
+# Callbacks
+# ==========
 
-        view = QtWebKit.QWebView(self)
-        view.load(QUrl("http://fabric-engine.github.io/Kraken/"))
+def OpenKrakenEditor(in_ctxt):
 
-        self.setCentralWidget(view)
-        self.setAutoFillBackground(True)
-        self.setStyleSheet("background-color: #151515;")
-
-
-def OpenKrakenHelp( in_ctxt ):
-    oMenuItem = in_ctxt.source;
-    
     sianchor = Application.getQtSoftimageAnchor()
-    sianchor = Qt.wrapinstance( long(sianchor), QWidget )
-    window = KrakenHelpWindow(parent=sianchor)
+    sianchor = Qt.wrapinstance(long(sianchor), QWidget)
+
+    splash = createSplash()
+    splash.show()
+
+    window = KrakenWindow(parent=sianchor)
     window.show()
 
+    splash.finish(window)
 
+    return True
+
+
+def OpenKrakenHelp(in_ctxt):
+    menuItem = in_ctxt.source
+
+    webbrowser.open_new_tab('http://fabric-engine.github.io/Kraken')

@@ -18,9 +18,7 @@ from kraken.core.kraken_system import KrakenSystem
 class KrakenUI(QtGui.QWidget):
     """A debugger widget hosting an inspector as well as a graph view"""
 
-    def __init__(self, parent=None, showSplash=True):
-
-        self.showSplash = showSplash
+    def __init__(self, parent=None):
 
         # constructors of base classes
         super(KrakenUI, self).__init__(parent)
@@ -54,16 +52,9 @@ class KrakenUI(QtGui.QWidget):
 
     def showEvent(self, event):
 
-        if self.showSplash:
-            splash = KrakenSplash(self)
-            splash.show()
-
         krakenSystem = KrakenSystem.getInstance()
         krakenSystem.loadCoreClient()
         krakenSystem.loadExtension('Kraken')
-
-        if self.showSplash:
-            splash.close()
 
 
 if __name__ == "__main__":
