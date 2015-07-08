@@ -313,8 +313,6 @@ class Graph(QtGui.QGraphicsWidget):
 
         return clipboardData
 
-
-
     def pasteSettings(self, clipboardData, pos, mirrored=False, createConnectionsToExistingNodes=True):
 
         krakenSystem = KrakenSystem.getInstance()
@@ -343,7 +341,7 @@ class Graph(QtGui.QGraphicsWidget):
 
             # save a dict of the nodes using the orignal names
             pastedComponents[nameMapping[decoratedName]] = component
-            
+
 
         for connectionData in clipboardData['connections']:
             sourceComponentDecoratedName, outputName = connectionData['source'].split('.')
@@ -359,7 +357,7 @@ class Graph(QtGui.QGraphicsWidget):
             else:
                 if not createConnectionsToExistingNodes:
                     continue;
-                    
+
                 # When we support copying/pasting between rigs, then we may not find the source
                 # node in the target rig.
                 if sourceComponentDecoratedName not in self.__nodes.keys():
@@ -382,6 +380,3 @@ class Graph(QtGui.QGraphicsWidget):
 
     #######################
     ## Events
-    def closeEvent(self, event):
-        return super(Graph, self).closeEvent(event)
-
