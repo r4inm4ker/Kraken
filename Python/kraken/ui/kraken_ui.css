@@ -36,10 +36,25 @@ QSplitter::handle:horizontal {
 /* ======= */
 /* Main UI */
 /* ======= */
+QMainWindow#KrakenMainWindow {
+    background-color: #151515;
+    color: #e1ffff;
+}
+
+QMainWindow#KrakenMainWindow QStatusBar {
+    border-top: 1px solid #222;
+
+    background-color: #111;
+    color: #e1ffff;
+}
+
+QMainWindow#KrakenMainWindow QStatusBar::item {
+    color: #e1ffff;
+}
+
 QWidget#mainUI {
     background-color: #151515;
 }
-
 
 /* ============== */
 /* Component Tree */
