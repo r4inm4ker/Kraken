@@ -80,7 +80,11 @@ def OpenKrakenEditor(in_ctxt):
     sianchor = Application.getQtSoftimageAnchor()
     sianchor = Qt.wrapinstance(long(sianchor), QWidget)
 
-    splash = createSplash()
+    app = QtGui.QApplication.instance()
+    if not app:
+        app = QtGui.QApplication([])
+
+    splash = createSplash(app)
     splash.show()
 
     window = KrakenWindow(parent=sianchor)
