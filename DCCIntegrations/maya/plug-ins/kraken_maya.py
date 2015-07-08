@@ -8,7 +8,6 @@ import types
 
 import kraken
 import kraken.ui.kraken_window
-reload(kraken.ui.kraken_window)
 from kraken.ui.kraken_window import KrakenWindow
 from kraken.ui.kraken_window import createSplash
 
@@ -41,8 +40,11 @@ class OpenKrakenEditorCommand(OpenMayaMPx.MPxCommand):
   # Invoked when the command is run.
   def doIt(self,argList):
 
-    splash = createSplash()
-    splash.show()
+    app = QtGui.QApplication.instance()
+    if not app:
+        app = QtGui.QApplication([])
+
+    splash = createSplash(app)
 
     window = KrakenWindow(parent=getMayaWindow())
     window.show()
