@@ -53,7 +53,7 @@ class GraphViewWidget(QtGui.QWidget):
         saveAction.setObjectName("saveButton")
 
         loadAction = toolBar.addAction('Load')
-        loadAction.setShortcut('Ctrl+S')
+        loadAction.setShortcut('Ctrl+L')
         loadAction.triggered.connect(self.loadRigPreset)
         saveAction.setObjectName("loadButton")
 
@@ -87,13 +87,6 @@ class GraphViewWidget(QtGui.QWidget):
         frameShortcut = QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.Key_A), self)
         frameShortcut.activated.connect(self.graphView.frameAllNodes)
 
-        closeShortcut = QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.CTRL + QtCore.Qt.Key_W), self)
-        closeShortcut.activated.connect(self.window().close)
-
-        newRigShortcut = QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.CTRL + QtCore.Qt.Key_N), self)
-        newRigShortcut.setContext(QtCore.Qt.WidgetShortcut)
-        newRigShortcut.activated.connect(self.newRigPreset)
-
         copyShortcut = QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.CTRL + QtCore.Qt.Key_C), self)
         copyShortcut.activated.connect(self.copy)
 
@@ -109,12 +102,8 @@ class GraphViewWidget(QtGui.QWidget):
         redoShortcut = QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.CTRL + QtCore.Qt.Key_Y), self)
         redoShortcut.activated.connect(self.redo)
 
-        resizeSplitterShortcut = QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.CTRL + QtCore.Qt.Key_Tab), self)
-        resizeSplitterShortcut.activated.connect(self.resizeSplitter)
-
         openContextualNodeListShortcut = QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.Key_QuoteLeft), self)
         openContextualNodeListShortcut.activated.connect(self.openContextualNodeList)
-
 
         # Setup Layout
         layout = QtGui.QVBoxLayout(self)
@@ -154,6 +143,9 @@ class GraphViewWidget(QtGui.QWidget):
             self.nameWidget.setText( self.guideRig.getName() )
 
     def buildGuideRig(self):
+
+        self.window().statusBar().showMessage('Building Guide')
+
         builder = plugins.getBuilder()
 
         if self.guideRig.getName().endswith('_guide') is False:
@@ -161,12 +153,16 @@ class GraphViewWidget(QtGui.QWidget):
 
         builder.build(self.guideRig)
 
+        self.window().statusBar().showMessage('Ready')
+
     def synchGuideRig(self):
         synchronizer = plugins.getSynchronizer()
         synchronizer.setTarget(self.guideRig)
         synchronizer.sync()
 
     def buildRig(self):
+
+        self.window().statusBar().showMessage('Building Rig')
 
         self.synchGuideRig()
 
@@ -179,6 +175,8 @@ class GraphViewWidget(QtGui.QWidget):
         builder = plugins.getBuilder()
         builder.build(rig)
 
+        self.window().statusBar().showMessage('Ready')
+
     # =========
     # Shortcuts
     # =========
@@ -187,7 +185,7 @@ class GraphViewWidget(QtGui.QWidget):
         graph = self.graphView.getGraph()
         pos = graph.getSelectedNodesPos()
         self.graphView.__class__._clipboardData = graph.copySettings(pos)
-        
+
 
     def paste(self):
         graph = self.graphView.getGraph()
@@ -208,21 +206,11 @@ class GraphViewWidget(QtGui.QWidget):
     def undo(self):
         UndoRedoManager.getInstance().logDebug()
         UndoRedoManager.getInstance().undo()
-        
+
 
     def redo(self):
         UndoRedoManager.getInstance().logDebug()
         UndoRedoManager.getInstance().redo()
-        
-        
-    def resizeSplitter(self):
-        splitter = self.parentWidget()
-        sizes = splitter.sizes()
-
-        if sizes[0] == 0:
-            splitter.setSizes([175, sizes[1]])
-        else:
-            splitter.setSizes([0, sizes[1]])
 
 
     def openContextualNodeList(self):
@@ -235,5 +223,3 @@ class GraphViewWidget(QtGui.QWidget):
 
         scenepos = self.graphView.getGraph().mapToScene(pos)
         self.__contextualNodeList.showAtPos(pos, scenepos, self.graphView.getGraph())
-
-
