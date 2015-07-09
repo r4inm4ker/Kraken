@@ -1,18 +1,25 @@
 
+import copy
 
 from PySide import QtGui, QtCore
 
 from node import Node
 from connection import Connection
-from main_panel import MainPanel
+# from main_panel import MainPanel
+from selection_rect import SelectionRect
 from kraken.core.maths import Vec2
 from kraken.core.kraken_system import KrakenSystem
 from kraken.core.configs.config import Config
 
 from kraken.ui.undoredo.undo_redo_manager import UndoRedoManager
-from graph_commands import ConstructComponentCommand
+from graph_commands import ConstructComponentCommand, SelectionChangeCommand
 
 class Graph(QtGui.QGraphicsWidget):
+
+    __backgroundColor = QtGui.QColor(50, 50, 50)
+    __gridPenS = QtGui.QPen(QtGui.QColor(44, 44, 44, 255), 0.5)
+    __gridPenL = QtGui.QPen(QtGui.QColor(40, 40, 40, 255), 1.0)
+    __gridPenA = QtGui.QPen(QtGui.QColor(30, 30, 30, 255), 2.0)
 
     def __init__(self, parent, rig):
         super(Graph, self).__init__()
@@ -31,13 +38,11 @@ class Graph(QtGui.QGraphicsWidget):
         self.__connections = {}
         self.__selection = []
 
-        self.__mainPanel = MainPanel(self)
-
-        layout = QtGui.QGraphicsLinearLayout()
-        layout.setSpacing(0)
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.addItem(self.__mainPanel)
-        self.setLayout(layout)
+        self.__itemGroup = QtGui.QGraphicsWidget(self)
+        self._manipulationMode = 0
+        self._dragging = False
+        self._selectionRect = None
+        self._selectionchanged = False
 
         self.displayGraph()
 
@@ -46,13 +51,11 @@ class Graph(QtGui.QGraphicsWidget):
     def graphView(self):
         return self.__parent
 
-
     def scene(self):
         return self.__scene
 
     def itemGroup(self):
-        return self.__mainPanel.itemGroup()
-
+        return self.__itemGroup
 
     def getRig(self):
         return self.__rig
@@ -162,7 +165,7 @@ class Graph(QtGui.QGraphicsWidget):
         self.itemGroup().translate(pan.x(), pan.y())
 
         # Update the main panel when reframing.
-        self.__mainPanel.update()
+        # self.__mainPanel.update()
 
     def frameSelectedNodes(self):
         self.frameNodes(self.getSelectedNodes())
@@ -382,6 +385,173 @@ class Graph(QtGui.QGraphicsWidget):
 
     #######################
     ## Events
+
+    def mousePressEvent(self, event):
+        if event.button() is QtCore.Qt.MouseButton.LeftButton:
+            mouseDownPos = self.mapToItem(self.itemGroup(), event.pos())
+            self._selectionRect = SelectionRect(self.__itemGroup, mouseDownPos)
+            self._dragging = False
+            self._manipulationMode = 1
+            self._mouseDownSelection = copy.copy(self.getSelectedNodes())
+
+        elif event.button() is QtCore.Qt.MouseButton.MiddleButton:
+            self.setCursor(QtCore.Qt.OpenHandCursor)
+            self._manipulationMode = 2
+            self._lastPanPoint = event.pos()
+
+        else:
+            super(Graph, self).mousePressEvent(event)
+
+    def mouseMoveEvent(self, event):
+        if self._manipulationMode == 1:
+            dragPoint = self.mapToItem(self.itemGroup(), event.pos())
+            self._selectionRect.setDragPoint(dragPoint)
+            self.clearSelection()
+            for name, node in self.getNodes().iteritems():
+                if not node.isSelected() and self._selectionRect.collidesWithItem(node):
+                    self.selectNode(node)
+                    self._selectionchanged = True
+            self._dragging = True
+
+        elif self._manipulationMode == 2:
+            (xfo, invRes) = self.__itemGroup.transform().inverted()
+            delta = xfo.map(event.pos()) - xfo.map(self._lastPanPoint)
+            self._lastPanPoint = event.pos()
+            self.__itemGroup.translate(delta.x(), delta.y())
+
+            # Call udpate to redraw background
+            self.update()
+        else:
+            super(Graph, self).mouseMoveEvent(event)
+
+    def mouseReleaseEvent(self, event):
+        if self._manipulationMode == 1:
+            self.scene().removeItem(self._selectionRect)
+            if not self._dragging:
+                self.clearSelection()
+            self._selectionRect = None
+            self._manipulationMode = 0
+
+            selection = self.getSelectedNodes()
+
+            deselectedNodes = []
+            selectedNodes = []
+
+            for node in self._mouseDownSelection:
+                if node not in selection:
+                    deselectedNodes.append(node)
+
+            for node in selection:
+                if node not in self._mouseDownSelection:
+                    selectedNodes.append(node)
+
+            command = SelectionChangeCommand(self, selectedNodes, deselectedNodes)
+            UndoRedoManager.getInstance().addCommand(command, invokeRedoOnAdd=False)
+
+        elif self._manipulationMode == 2:
+            self.setCursor(QtCore.Qt.ArrowCursor)
+            self._manipulationMode = 0
+
+        else:
+            super(Graph, self).mouseReleaseEvent(event)
+
+    def wheelEvent(self, event):
+
+        (xfo, invRes) = self.__itemGroup.transform().inverted()
+        topLeft = xfo.map(self.rect().topLeft())
+        bottomRight = xfo.map(self.rect().bottomRight())
+        center = ( topLeft + bottomRight ) * 0.5
+
+        zoomFactor = 1.0 + event.delta() * self.__mouseWheelZoomRate
+
+        transform = self.__itemGroup.transform()
+
+        # Limit zoom to 3x
+        if transform.m22() * zoomFactor >= 2.0 or transform.m22() * zoomFactor <= 0.25:
+            return
+
+        transform.scale(zoomFactor, zoomFactor)
+
+        if transform.m22() > 0.01: # To avoid negative scalling as it would flip the graph
+            self.__itemGroup.setTransform(transform)
+
+            (xfo, invRes) = transform.inverted()
+            topLeft = xfo.map(self.rect().topLeft())
+            bottomRight = xfo.map(self.rect().bottomRight())
+            newcenter = ( topLeft + bottomRight ) * 0.5
+
+            # Re-center the graph on the old position.
+            self.__itemGroup.translate(newcenter.x() - center.x(), newcenter.y() - center.y())
+
+        self.resize(self.size())
+
+        # Call udpate to redraw background
+        self.update()
+
     def closeEvent(self, event):
         return super(Graph, self).closeEvent(event)
+
+
+    #######################
+    ## Drawing
+
+
+    def paint(self, painter, option, widget):
+        # return super(Graph, self).paint(painter, option, widget)
+
+        rect = self.__itemGroup.mapRectFromParent(self.windowFrameRect())
+
+        oldTransform = painter.transform()
+        painter.setTransform(self.__itemGroup.transform(), True)
+
+        painter.fillRect(rect, self.__backgroundColor)
+
+        gridSize = 30
+        left = int(rect.left()) - (int(rect.left()) % gridSize)
+        top = int(rect.top()) - (int(rect.top()) % gridSize)
+
+        # Draw horizontal fine lines
+        gridLines = []
+        painter.setPen(self.__gridPenS)
+        y = float(top)
+        while y < float(rect.bottom()):
+            gridLines.append(QtCore.QLineF( rect.left(), y, rect.right(), y ))
+            y += gridSize
+        painter.drawLines(gridLines)
+
+        # Draw vertical fine lines
+        gridLines = []
+        painter.setPen(self.__gridPenS)
+        x = float(left)
+        while x < float(rect.right()):
+            gridLines.append(QtCore.QLineF( x, rect.top(), x, rect.bottom()))
+            x += gridSize
+        painter.drawLines(gridLines)
+
+        # Draw thick grid
+        gridSize = 30 * 10
+        left = int(rect.left()) - (int(rect.left()) % gridSize)
+        top = int(rect.top()) - (int(rect.top()) % gridSize)
+
+        # Draw vertical thick lines
+        gridLines = []
+        painter.setPen(self.__gridPenL)
+        x = left
+        while x < rect.right():
+            gridLines.append(QtCore.QLineF( x, rect.top(), x, rect.bottom() ))
+            x += gridSize
+        painter.drawLines(gridLines)
+
+        # Draw horizontal thick lines
+        gridLines = []
+        painter.setPen(self.__gridPenL)
+        y = top
+        while y < rect.bottom():
+            gridLines.append(QtCore.QLineF( rect.left(), y, rect.right(), y ))
+            y += gridSize
+        painter.drawLines(gridLines)
+
+        painter.setTransform(oldTransform)
+
+        return super(Graph, self).paint(painter, option, widget)
 
