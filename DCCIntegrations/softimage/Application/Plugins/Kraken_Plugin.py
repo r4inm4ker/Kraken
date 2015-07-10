@@ -84,6 +84,12 @@ def OpenKrakenEditor(in_ctxt):
     if not app:
         app = QtGui.QApplication([])
 
+    for widget in app.topLevelWidgets():
+            if widget.objectName() == 'KrakenMainWindow':
+                widget.showNormal()
+
+                return
+
     splash = createSplash(app)
     splash.show()
 

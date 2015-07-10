@@ -17,6 +17,7 @@ class KrakenWindow(QtGui.QMainWindow):
         super(KrakenWindow, self).__init__(parent)
         self.setObjectName('KrakenMainWindow')
         self.setWindowTitle('Kraken Editor')
+        self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
 
         cssPath = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                'kraken_ui.css')
@@ -60,7 +61,6 @@ class KrakenWindow(QtGui.QMainWindow):
         self.krakenMenu.newAction.triggered.connect(self.kraken_ui.graphViewWidget.newRigPreset)
 
         self.kraken_ui.graphViewWidget.rigNameChanged.connect(self.krakenMenu.updateRigNameLabel)
-        # self.krakenMenu.rigNameLabel.clicked.connect(self.printRigName)
 
 
     # =======
