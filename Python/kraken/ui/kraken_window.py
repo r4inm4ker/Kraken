@@ -66,10 +66,25 @@ class KrakenWindow(QtGui.QMainWindow):
     # =======
     # Events
     # =======
-    def closeUI(self):
+    def closeEvent(self, event):
 
-        self.statusBar().showMessage('Closing')
-        self.close()
+        msgBox = QtGui.QMessageBox(self)
+        msgBox.setObjectName('SaveMessageBox')
+        msgBox.setWindowTitle("Kraken Editor")
+        msgBox.setText("You are closing Kraken.")
+        msgBox.setInformativeText("Do you want to save your changes?")
+        msgBox.setStandardButtons(QtGui.QMessageBox.Save | QtGui.QMessageBox.Discard | QtGui.QMessageBox.Cancel)
+        msgBox.setDefaultButton(QtGui.QMessageBox.Save)
+
+        ret = msgBox.exec_()
+
+        if ret == QtGui.QMessageBox.Cancel:
+            event.ignore()
+
+        elif ret == QtGui.QMessageBox.Save:
+            self.kraken_ui.graphViewWidget.saveRigPreset()
+
+            self.statusBar().showMessage('Closing')
 
 
 def createSplash(app):

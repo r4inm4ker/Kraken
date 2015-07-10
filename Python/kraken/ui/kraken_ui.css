@@ -152,6 +152,33 @@ QDialog QPushButton::pressed {
 }
 
 
+QMessageBox#SaveMessageBox {
+    background-color: #2b2b2b;
+}
+
+QMessageBox#SaveMessageBox QPushButton {
+    border: 1px #333;
+    border-radius: 3px;
+    border-style: outset;
+    padding: 5px;
+    width: 65px;
+
+    background-color: #333;
+    color: #e1ffff;
+}
+
+QMessageBox#SaveMessageBox QPushButton:hover {
+    background-color: #3b3b3b;
+}
+
+QMessageBox#SaveMessageBox QPushButton::pressed {
+    border-style: inset;
+    padding-top: 7px;
+    padding-left: 7px;
+
+    background-color: #3b3b3b;
+}
+
 /* Main UI */
 QWidget#mainUI {
     background-color: #151515;
