@@ -18,6 +18,8 @@ def GetHomePath():
 
 class GraphViewWidget(QtGui.QWidget):
 
+    rigNameChanged = QtCore.Signal()
+
     def __init__(self, parent=None):
 
         # constructors of base classes
@@ -27,54 +29,6 @@ class GraphViewWidget(QtGui.QWidget):
 
         self.graphView = GraphView(parent=self)
         self.__contextualNodeList = None
-
-        # setup the toobar
-        toolBar = QtGui.QToolBar()
-        toolBar.setObjectName('mainToolbar')
-
-
-        logoWidget = QtGui.QLabel()
-        logoWidget.setObjectName('logoWidget')
-        logoWidget.setMinimumHeight(20)
-        logoWidget.setMinimumWidth(97)
-
-        logoPixmap = QtGui.QPixmap(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'images', 'KrakenUI_Logo.png'))
-        logoWidget.setPixmap(logoPixmap)
-        toolBar.addWidget(logoWidget)
-
-        newAction = toolBar.addAction('New')
-        newAction.setShortcut('Ctrl+N')
-        newAction.triggered.connect(self.newRigPreset)
-        newAction.setObjectName("newButton")
-
-        saveAction = toolBar.addAction('Save')
-        saveAction.setShortcut('Ctrl+S')
-        saveAction.triggered.connect(self.saveRigPreset)
-        saveAction.setObjectName("saveButton")
-
-        loadAction = toolBar.addAction('Load')
-        loadAction.setShortcut('Ctrl+L')
-        loadAction.triggered.connect(self.loadRigPreset)
-        saveAction.setObjectName("loadButton")
-
-        toolBar.addSeparator()
-
-        # Setup the name widget
-        rigNameLabel = QtGui.QLabel('Rig Name:')
-        rigNameLabel.setObjectName('rigNameLabel')
-        toolBar.addWidget(rigNameLabel)
-        self.nameWidget = QtGui.QLineEdit('', self)
-
-        self.nameWidget.textChanged.connect(self.setRigName)
-        toolBar.addWidget(self.nameWidget)
-
-        toolBar.addSeparator()
-
-        buildGuideAction = toolBar.addAction('Build Guide')
-        buildGuideAction.triggered.connect(self.buildGuideRig)
-
-        buildGuideAction = toolBar.addAction('Build Rig')
-        buildGuideAction.triggered.connect(self.buildRig)
 
         #########################
         ## Setup hotkeys for the following actions.
@@ -87,15 +41,6 @@ class GraphViewWidget(QtGui.QWidget):
         frameShortcut = QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.Key_A), self)
         frameShortcut.activated.connect(self.graphView.frameAllNodes)
 
-        copyShortcut = QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.CTRL + QtCore.Qt.Key_C), self)
-        copyShortcut.activated.connect(self.copy)
-
-        pasteShortcut = QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.CTRL + QtCore.Qt.SHIFT + QtCore.Qt.Key_V), self)
-        pasteShortcut.activated.connect(self.paste)
-
-        pasteUnconnectedShortcut = QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.CTRL + QtCore.Qt.Key_V), self)
-        pasteUnconnectedShortcut.activated.connect(self.pasteUnconnected)
-
         undoShortcut = QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.CTRL + QtCore.Qt.Key_Z), self)
         undoShortcut.activated.connect(self.undo)
 
@@ -107,7 +52,7 @@ class GraphViewWidget(QtGui.QWidget):
 
         # Setup Layout
         layout = QtGui.QVBoxLayout(self)
-        layout.addWidget(toolBar)
+        # layout.addWidget(toolBar)
         layout.addWidget(self.graphView)
 
         self.setLayout(layout)
@@ -117,14 +62,23 @@ class GraphViewWidget(QtGui.QWidget):
     def getContextualNodeList(self):
         return self.__contextualNodeList
 
+    def editRigName(self):
+        dialog = QtGui.QInputDialog(self)
+        dialog.setObjectName('RigNameDialog')
+        text, ok = dialog.getText(self, 'Edit Rig Name', 'New Rig Name', text=self.guideRig.getName())
+
+        if ok is True:
+            self.setRigName(text)
+
     def setRigName(self, text):
         self.guideRig.setName(text)
+        self.rigNameChanged.emit()
 
     def newRigPreset(self):
         # TODO: clean the rig from the scene if it has been built.
         self.guideRig = Rig()
+        self.setRigName('MyRig')
         self.graphView.init(self.guideRig)
-        self.nameWidget.setText('MyRig')
 
     def saveRigPreset(self):
         lastSceneFilePath = os.path.join(GetHomePath(), self.guideRig.getName() )
@@ -140,7 +94,7 @@ class GraphViewWidget(QtGui.QWidget):
             self.guideRig = Rig()
             self.guideRig.loadRigDefinitionFile(filePath)
             self.graphView.init( self.guideRig )
-            self.nameWidget.setText( self.guideRig.getName() )
+            # self.nameWidget.setText( self.guideRig.getName() )
 
     def buildGuideRig(self):
 
@@ -180,38 +134,46 @@ class GraphViewWidget(QtGui.QWidget):
     # =========
     # Shortcuts
     # =========
-
     def copy(self):
         graph = self.graphView.getGraph()
         pos = graph.getSelectedNodesPos()
         self.graphView.__class__._clipboardData = graph.copySettings(pos)
-
 
     def paste(self):
         graph = self.graphView.getGraph()
         clipboardData = self.graphView.__class__._clipboardData
 
         pos = clipboardData['copyPos'] + QtCore.QPoint(20, 20)
-        graph.pasteSettings(clipboardData, pos, createConnectionsToExistingNodes=False)
-
+        graph.pasteSettings(clipboardData, pos, mirrored=False, createConnectionsToExistingNodes=True)
 
     def pasteUnconnected(self):
         graph = self.graphView.getGraph()
         clipboardData = self.graphView.__class__._clipboardData
 
         pos = clipboardData['copyPos'] + QtCore.QPoint(20, 20)
-        graph.pasteSettings(clipboardData, pos, createConnectionsToExistingNodes=False)
+        graph.pasteSettings(clipboardData, pos, mirrored=False, createConnectionsToExistingNodes=False)
 
+    def pasteMirrored(self):
+        graph = self.graphView.getGraph()
+        clipboardData = self.graphView.__class__._clipboardData
+
+        pos = clipboardData['copyPos'] + QtCore.QPoint(20, 20)
+        graph.pasteSettings(clipboardData, pos, mirrored=True, createConnectionsToExistingNodes=False)
+
+    def pasteMirroredConnected(self):
+        graph = self.graphView.getGraph()
+        clipboardData = self.graphView.__class__._clipboardData
+
+        pos = clipboardData['copyPos'] + QtCore.QPoint(20, 20)
+        graph.pasteSettings(clipboardData, pos, mirrored=True, createConnectionsToExistingNodes=True)
 
     def undo(self):
         UndoRedoManager.getInstance().logDebug()
         UndoRedoManager.getInstance().undo()
 
-
     def redo(self):
         UndoRedoManager.getInstance().logDebug()
         UndoRedoManager.getInstance().redo()
-
 
     def openContextualNodeList(self):
         pos = self.mapFromGlobal(QtGui.QCursor.pos());

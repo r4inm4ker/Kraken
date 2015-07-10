@@ -91,14 +91,11 @@ class GraphView(QtGui.QGraphicsView):
                     contextMenu.setObjectName('rightClickContextMenu')
                     contextMenu.setMinimumWidth(150)
 
-                    def pasteSettings():
-                        self.graph.pasteSettings(self.__class__._clipboardData, pos)
-
-                    def pasteSettingsMirrored():
-                        self.graph.pasteSettings(self.__class__._clipboardData, pos, mirrored=True)
-
-                    contextMenu.addAction("Paste").triggered.connect(pasteSettings)
-                    contextMenu.addAction("Paste Mirrored").triggered.connect(pasteSettingsMirrored)
+                    contextMenu.addAction("Paste").triggered.connect(self.parentWidget().pasteUnconnected)
+                    contextMenu.addAction("Paste Connected").triggered.connect(self.parentWidget().paste)
+                    contextMenu.addSeparator()
+                    contextMenu.addAction("Paste Mirrored").triggered.connect(self.parentWidget().pasteMirrored)
+                    contextMenu.addAction("Paste Mirrored Connected").triggered.connect(self.parentWidget().pasteMirroredConnected)
                     contextMenu.popup(event.globalPos())
 
 
