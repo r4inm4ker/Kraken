@@ -94,7 +94,7 @@ class ContextualNodeList(QtGui.QWidget):
             componentClass = self.ks.getComponentClass( componentClassName )
             component = componentClass(parent=self.graph.getRig())
             component.setGraphPos(Vec2(self.graphpos.x(), self.graphpos.y()))
-            from node import Node
+            from graph_view.node import Node
             self.node = self.graph.addNode(Node(self.graph, component) )
 
 
