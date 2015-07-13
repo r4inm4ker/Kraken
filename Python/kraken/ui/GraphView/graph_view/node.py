@@ -52,7 +52,27 @@ class NodeTitle(QtGui.QGraphicsWidget):
         # painter.drawRect(self.windowFrameRect())
 
 
+class PortList(QtGui.QGraphicsWidget):
+    def __init__(self, parent):
+        super(PortList, self).__init__(parent)
+        layout = QtGui.QGraphicsLinearLayout()
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(7)
+        layout.setOrientation(QtCore.Qt.Vertical)
+        self.setLayout(layout)
+
+    def addPort(self, port, alignment):
+        layout = self.layout()
+        layout.addItem(port)
+        layout.setAlignment(port, alignment)
+        self.adjustSize()
+        return port
+
+
 class Node(QtGui.QGraphicsWidget):
+
+    nameChanged = QtCore.Signal(str, str)
+
     __defaultColor = QtGui.QColor(154, 205, 50, 255)
     __unselectedPen =  QtGui.QPen(QtGui.QColor(25, 25, 25), 1.6)
     __selectedPen =  QtGui.QPen(QtGui.QColor(255, 255, 255, 255), 1.6)
@@ -88,27 +108,54 @@ class Node(QtGui.QGraphicsWidget):
 
         self.__inports = []
         self.__outports = []
-        for i in range(self.__component.getNumInputs()):
-            componentInput = component.getInputByIndex(i)
-            self.addInputPort(componentInput)
+        self.__inputPortsHolder = PortList(self)
+        self.__outputPortsHolder = PortList(self)
+
+
+
+        layout.addItem(self.__inputPortsHolder)
 
         # Insert space between input and output ports
         spacingWidget = QtGui.QGraphicsWidget(self)
         spacingWidget.setPreferredSize(2.0, 2.0)
         layout.addItem(spacingWidget)
-
-        for i in range(self.__component.getNumOutputs()):
-            componentOutput = component.getOutputByIndex(i)
-            self.addOutputPort(componentOutput)
-
+        layout.addItem(self.__outputPortsHolder)
 
         self.__selected = False
         self.__dragging = False
 
-        # Update the node so that the size is computed.
-        self.adjustSize()
+
+        def getPortColor(dataType):
+
+            if dataType.startswith('Xfo'):
+                return QtGui.QColor(128, 170, 170, 255)
+            elif dataType.startswith('Float'):
+                return QtGui.QColor(32, 255, 32, 255)
+            elif dataType.startswith('Integer'):
+                return QtGui.QColor(0, 128, 0, 255)
+            elif dataType.startswith('Boolean'):
+                return QtGui.QColor(255, 102, 0, 255)
+            else:
+                return QtGui.QColor(50, 205, 254, 255)
+
+        for i in range(self.__component.getNumInputs()):
+            componentInput = component.getInputByIndex(i)
+            name = componentInput.getName()
+            dataType = componentInput.getDataType()
+            color = getPortColor(dataType)
+
+            self.addInputPort(InputPort(self, graph, name, color, dataType))
+
+        for i in range(self.__component.getNumOutputs()):
+            componentOutput = component.getOutputByIndex(i)
+            name = componentOutput.getName()
+            dataType = componentOutput.getDataType()
+            color = getPortColor(dataType)
+
+            self.addOutputPort(OutputPort(self, graph, name, color, dataType))
 
         self.setGraphPos( QtCore.QPointF( self.__component.getGraphPos().x, self.__component.getGraphPos().y ) )
+
 
     def getName(self):
         return self.__component.getDecoratedName()
@@ -122,24 +169,14 @@ class Node(QtGui.QGraphicsWidget):
     #########################
     ## Ports
 
-    def addInputPort(self, componentInput):
-        port = InputPort(self, self.__graph, componentInput)
-
-        layout = self.layout()
-        layout.addItem(port)
-        layout.setAlignment(port, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
-
+    def addInputPort(self, port):
+        self.__inputPortsHolder.addPort(port, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
         self.__inports.append(port)
         self.adjustSize()
         return port
 
-    def addOutputPort(self, componentOutput):
-        port = OutputPort(self, self.__graph, componentOutput)
-
-        layout = self.layout()
-        layout.addItem(port)
-        layout.setAlignment(port, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
-
+    def addOutputPort(self, port):
+        self.__outputPortsHolder.addPort(port, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
         self.__outports.append(port)
         self.adjustSize()
         return port
@@ -311,6 +348,13 @@ class Node(QtGui.QGraphicsWidget):
 
     #########################
     ## shut down
+
+    def disconnectAllPorts(self):
+        for port in self.__inports:
+            port.destroy()
+
+        for port in self.__outports:
+            port.destroy()
 
     def destroy(self):
         for port in self.__inports:

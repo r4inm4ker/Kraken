@@ -100,8 +100,7 @@ class GraphView(QtGui.QGraphicsView):
 
         return node
 
-    def removeNode(self, node, destroy=True, emitNotification=True):
-        component = node.getComponent()
+    def removeNode(self, node, emitNotification=True):
         del self.__nodes[node.getName()]
         self.scene().removeItem(node)
 
@@ -113,8 +112,6 @@ class GraphView(QtGui.QGraphicsView):
             return self.__nodes[name]
         return None
 
-    def getNodes(self):
-        return self.__nodes
 
     def nodeNameChanged(self, origName, newName ):
         if newName in self.__nodes and self.__nodes[origName] != self.__nodes[newName]:
@@ -122,6 +119,7 @@ class GraphView(QtGui.QGraphicsView):
         node = self.__nodes[origName]
         self.__nodes[newName] = node
         del self.__nodes[origName]
+
 
     def clearSelection(self):
         for node in self.__selection:
@@ -265,7 +263,7 @@ class GraphView(QtGui.QGraphicsView):
 
         connection = Connection(self, sourcePort, targetPort)
         sourcePort.addConnection(connection)
-        targetPort.addConnection(connection)
+        targetPort.setConnection(connection)
 
         self.connectionAdded.emit(connection)
 
@@ -379,7 +377,7 @@ class GraphView(QtGui.QGraphicsView):
             dragPoint = self.mapToScene(event.pos())
             self._selectionRect.setDragPoint(dragPoint)
             self.clearSelection()
-            for name, node in self.getNodes().iteritems():
+            for name, node in self.__nodes.iteritems():
                 if not node.isSelected() and self._selectionRect.collidesWithItem(node):
                     self.selectNode(node)
                     self._selectionchanged = True
