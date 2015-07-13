@@ -10,7 +10,7 @@ from PySide import QtGui, QtCore
 from mouse_grabber import MouseGrabber
 
 from kraken.ui.undoredo.undo_redo_manager import UndoRedoManager
-from graph_commands import PortDisconnectCommand
+from kraken.ui.GraphView.graph_commands import PortDisconnectCommand
 
 class Connection(QtGui.QGraphicsPathItem):
     __defaultPen = QtGui.QPen(QtGui.QColor(168, 134, 3), 2.0)

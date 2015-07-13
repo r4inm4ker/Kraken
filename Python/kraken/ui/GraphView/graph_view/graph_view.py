@@ -15,7 +15,7 @@ from connection import Connection
 from selection_rect import SelectionRect
 
 from kraken.ui.undoredo.undo_redo_manager import UndoRedoManager
-from graph_commands import ConstructComponentCommand, SelectionChangeCommand
+from kraken.ui.GraphView.graph_commands import ConstructComponentCommand, SelectionChangeCommand
 
 from kraken.core.maths import Vec2
 from kraken.core.kraken_system import KrakenSystem

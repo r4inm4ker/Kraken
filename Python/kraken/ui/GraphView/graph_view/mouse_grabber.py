@@ -8,7 +8,7 @@
 from PySide import QtGui, QtCore
 
 from kraken.ui.undoredo.undo_redo_manager import UndoRedoManager
-from graph_commands import PortConnectCommand
+from kraken.ui.GraphView.graph_commands import PortConnectCommand
 
 
 class MouseGrabber(QtGui.QGraphicsWidget):

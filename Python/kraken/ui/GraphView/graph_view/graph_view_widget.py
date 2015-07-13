@@ -4,10 +4,10 @@ import os.path
 from PySide import QtGui, QtCore
 
 from kraken.ui.GraphView.contextual_node_list import ContextualNodeList, ContextualNewNodeWidget
-from kraken.ui.GraphView.graph_view import GraphView
+from kraken.ui.GraphView.graph_view.graph_view import GraphView
 from kraken.ui.undoredo.undo_redo_manager import UndoRedoManager
 
-from graph_commands import AddNodeCommand
+from kraken.ui.GraphView.graph_commands import AddNodeCommand
 
 from kraken.core.objects.rig import Rig
 from kraken import plugins

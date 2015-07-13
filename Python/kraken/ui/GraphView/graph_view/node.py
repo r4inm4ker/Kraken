@@ -12,7 +12,7 @@ from kraken.core.maths import Vec2
 from kraken.ui.component_inspector import ComponentInspector
 
 from kraken.ui.undoredo.undo_redo_manager import UndoRedoManager
-from graph_commands import SelectNodeCommand, DeselectNodeCommand, NodeMoveCommand
+from kraken.ui.GraphView.graph_commands import SelectNodeCommand, DeselectNodeCommand, NodeMoveCommand
 
 class NodeTitle(QtGui.QGraphicsWidget):
     __color = QtGui.QColor(25, 25, 25)
