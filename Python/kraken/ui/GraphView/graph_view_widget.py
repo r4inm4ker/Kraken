@@ -134,7 +134,7 @@ class GraphViewWidget(QtGui.QWidget):
     def newRigPreset(self):
         # TODO: clean the rig from the scene if it has been built.
         self.guideRig = Rig()
-        self.graphView.init(self.guideRig)
+        self.graphView.displayGraph(self.guideRig)
         self.nameWidget.setText('MyRig')
 
     def saveRigPreset(self):
