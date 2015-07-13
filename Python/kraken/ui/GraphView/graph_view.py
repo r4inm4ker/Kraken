@@ -37,18 +37,6 @@ class GraphView(QtGui.QGraphicsView):
         self.setObjectName('graphView')
 
         self.__graphViewWidget = parent
-        # self.graph = None
-
-        # self.__nodes = {}
-        # self.__connections = {}
-        # self.__selection = []
-
-
-        # self.__scene = QtGui.QGraphicsScene()
-        # self.setScene(self.__scene)
-
-        # self.__itemGroup = QtGui.QGraphicsWidget()
-        # self.__scene.addItem(self.__itemGroup)
 
         self.setRenderHint(QtGui.QPainter.Antialiasing)
         self.setRenderHint(QtGui.QPainter.TextAntialiasing)
@@ -56,18 +44,15 @@ class GraphView(QtGui.QGraphicsView):
         self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
 
-        # self.setResizeAnchor(QtGui.QGraphicsView.NoAnchor)
-        # self.setTransformationAnchor(QtGui.QGraphicsView.NoAnchor)
-
-        self.resize(600, 400)
-        self.setSceneRect(-300, -200, 600, 400)
+        # Explicitly set the scene rect. This ensures all view parameters will be explicitly controlled
+        # in the event handlers of this class. 
+        size = QtCore.QSize(600, 400);
+        self.resize(size)
+        self.setSceneRect(-size.width() * 0.5, -size.height() * 0.5, size.width(), size.height())
 
         self.setAcceptDrops(True)
         self.reset()
 
-
-    # def itemGroup(self):
-    #     return self.__itemGroup
         
     def getGraphViewWidget(self):
         return self.__graphViewWidget
@@ -79,10 +64,7 @@ class GraphView(QtGui.QGraphicsView):
     ################################################
     ## Graph
     def reset(self):
-        self.__scene = QtGui.QGraphicsScene()
-        # self.__itemGroup = QtGui.QGraphicsWidget()
-        # self.__scene.addItem(self.__itemGroup)
-        self.setScene(self.__scene)
+        self.setScene(QtGui.QGraphicsScene())
 
         self.__connections = {}
         self.__nodes = {}
@@ -377,8 +359,6 @@ class GraphView(QtGui.QGraphicsView):
         # print "GraphView.mousePressEvent event.pos:" + str(event.pos())
         if event.button() is QtCore.Qt.MouseButton.LeftButton:
             mouseDownPos = self.mapToScene(event.pos())
-            print "GraphView.mousePressEvent event.pos:" + str(self.mapToScene(event.pos()))
-            print "transform:" + str(self.transform())
 
             self._selectionRect = SelectionRect(parent=None, mouseDownPos=mouseDownPos)
             self.scene().addItem(self._selectionRect)
@@ -390,7 +370,6 @@ class GraphView(QtGui.QGraphicsView):
             self.setCursor(QtCore.Qt.OpenHandCursor)
             self._manipulationMode = 2
             self._lastPanPoint = self.mapToScene(event.pos())
-            print "GraphView.mousePressEvent self._lastPanPoint:" + str(self._lastPanPoint)
 
         # else:
         #     super(GraphView, self).mousePressEvent(event)
@@ -408,16 +387,11 @@ class GraphView(QtGui.QGraphicsView):
 
 
         elif self._manipulationMode == 2:
-            # (xfo, invRes) = self.__itemGroup.transform().inverted()
-            # delta = xfo.map(event.pos()) - xfo.map(self._lastPanPoint)
             delta = self.mapToScene(event.pos()) - self._lastPanPoint
-            print "GraphView.mouseMoveEvent _manipulationMode = 2 delta:" + str(delta)
 
             rect = self.sceneRect()
             rect.translate(-delta.x(), -delta.y())
             self.setSceneRect(rect)
-
-            # self.translate(delta.x(), delta.y())
 
             self._lastPanPoint = self.mapToScene(event.pos())
 
@@ -474,36 +448,10 @@ class GraphView(QtGui.QGraphicsView):
             return
 
         self.scale(zoomFactor, zoomFactor)
-        # self.setTransform(transform)
-
-        # if transform.m22() > 0.01: # To avoid negative scalling as it would flip the graph
-        #     
-
-        #     (xfo, invRes) = transform.inverted()
-        #     topLeft = xfo.map(self.rect().topLeft())
-        #     bottomRight = xfo.map(self.rect().bottomRight())
-        #     newcenter = ( topLeft + bottomRight ) * 0.5
-        #     delta = newcenter - center
-
-        # #     # Re-center the graph on the old position.
-        # #     transform = self.transform()
-        #     # transform.translate(newcenter.x() - center.x(), newcenter.y() - center.y())
-        #     # self.setTransform(transform)
-
-        #     rect = self.sceneRect()
-        #     rect.translate(-delta.x(), -delta.y())
-        #     self.setSceneRect(rect)
-
-
-        # self.resize(self.size())
 
         # Call udpate to redraw background
         self.update()
 
-    def resizeEvent(self, event):
-        size = event.size()
-        self.setSceneRect(-300, -200, size.width(), size.height())
-        # self.graph.resize(event.size())
 
     def dragEnterEvent(self, event):
         textParts = event.mimeData().text().split(':')
@@ -543,60 +491,53 @@ class GraphView(QtGui.QGraphicsView):
 
     def drawBackground(self, painter, rect):
 
-        # rect = self.__itemGroup.mapRectFromParent(self.windowFrameRect())
-
         oldTransform = painter.transform()
-        # painter.setTransform(self.__itemGroup.transform(), True)
-
         painter.fillRect(rect, self.__backgroundColor)
-        # painter.setTransform(self.transform(), True)
 
-        # gridSize = 30
-        # left = int(rect.left()) - (int(rect.left()) % gridSize)
-        # top = int(rect.top()) - (int(rect.top()) % gridSize)
+        gridSize = 30
+        left = int(rect.left()) - (int(rect.left()) % gridSize)
+        top = int(rect.top()) - (int(rect.top()) % gridSize)
 
-        # # Draw horizontal fine lines
-        # gridLines = []
-        # painter.setPen(self.__gridPenS)
-        # y = float(top)
-        # while y < float(rect.bottom()):
-        #     gridLines.append(QtCore.QLineF( rect.left(), y, rect.right(), y ))
-        #     y += gridSize
-        # painter.drawLines(gridLines)
+        # Draw horizontal fine lines
+        gridLines = []
+        painter.setPen(self.__gridPenS)
+        y = float(top)
+        while y < float(rect.bottom()):
+            gridLines.append(QtCore.QLineF( rect.left(), y, rect.right(), y ))
+            y += gridSize
+        painter.drawLines(gridLines)
 
-        # # Draw vertical fine lines
-        # gridLines = []
-        # painter.setPen(self.__gridPenS)
-        # x = float(left)
-        # while x < float(rect.right()):
-        #     gridLines.append(QtCore.QLineF( x, rect.top(), x, rect.bottom()))
-        #     x += gridSize
-        # painter.drawLines(gridLines)
+        # Draw vertical fine lines
+        gridLines = []
+        painter.setPen(self.__gridPenS)
+        x = float(left)
+        while x < float(rect.right()):
+            gridLines.append(QtCore.QLineF( x, rect.top(), x, rect.bottom()))
+            x += gridSize
+        painter.drawLines(gridLines)
 
-        # # Draw thick grid
-        # gridSize = 30 * 10
-        # left = int(rect.left()) - (int(rect.left()) % gridSize)
-        # top = int(rect.top()) - (int(rect.top()) % gridSize)
+        # Draw thick grid
+        gridSize = 30 * 10
+        left = int(rect.left()) - (int(rect.left()) % gridSize)
+        top = int(rect.top()) - (int(rect.top()) % gridSize)
 
-        # # Draw vertical thick lines
-        # gridLines = []
-        # painter.setPen(self.__gridPenL)
-        # x = left
-        # while x < rect.right():
-        #     gridLines.append(QtCore.QLineF( x, rect.top(), x, rect.bottom() ))
-        #     x += gridSize
-        # painter.drawLines(gridLines)
+        # Draw vertical thick lines
+        gridLines = []
+        painter.setPen(self.__gridPenL)
+        x = left
+        while x < rect.right():
+            gridLines.append(QtCore.QLineF( x, rect.top(), x, rect.bottom() ))
+            x += gridSize
+        painter.drawLines(gridLines)
 
-        # # Draw horizontal thick lines
-        # gridLines = []
-        # painter.setPen(self.__gridPenL)
-        # y = top
-        # while y < rect.bottom():
-        #     gridLines.append(QtCore.QLineF( rect.left(), y, rect.right(), y ))
-        #     y += gridSize
-        # painter.drawLines(gridLines)
-
-        # painter.setTransform(oldTransform)
+        # Draw horizontal thick lines
+        gridLines = []
+        painter.setPen(self.__gridPenL)
+        y = top
+        while y < rect.bottom():
+            gridLines.append(QtCore.QLineF( rect.left(), y, rect.right(), y ))
+            y += gridSize
+        painter.drawLines(gridLines)
 
         return super(GraphView, self).drawBackground(painter, rect)
 
