@@ -8,7 +8,6 @@ import sys
 
 from PySide import QtGui, QtCore
 
-from kraken_splash import KrakenSplash
 from component_library import ComponentLibrary
 from GraphView.graph_view_widget import GraphViewWidget
 
@@ -18,16 +17,12 @@ from kraken.core.kraken_system import KrakenSystem
 class KrakenUI(QtGui.QWidget):
     """A debugger widget hosting an inspector as well as a graph view"""
 
-    def __init__(self, parent=None, showSplash=True):
-
-        self.showSplash = showSplash
+    def __init__(self, parent=None):
 
         # constructors of base classes
         super(KrakenUI, self).__init__(parent)
         self.setObjectName('mainUI')
         self.setWindowIcon(QtGui.QIcon(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'images', 'Kraken_Icon.png')))
-
-        self.setStyleSheet( str(open( os.path.join(os.path.dirname(os.path.realpath(__file__)), 'kraken_ui.css') ).read()) )
 
         self.setWindowTitle("Kraken Editor")
         self.setAcceptDrops(True)
@@ -35,35 +30,34 @@ class KrakenUI(QtGui.QWidget):
         self.nodeLibrary = ComponentLibrary(parent=self)
         self.graphViewWidget = GraphViewWidget(parent=self)
 
-        horizontalSplitter = QtGui.QSplitter(QtCore.Qt.Horizontal, parent=self)
-        horizontalSplitter.addWidget(self.nodeLibrary)
-        horizontalSplitter.addWidget(self.graphViewWidget)
+        self.horizontalSplitter = QtGui.QSplitter(QtCore.Qt.Horizontal, parent=self)
+        self.horizontalSplitter.addWidget(self.nodeLibrary)
+        self.horizontalSplitter.addWidget(self.graphViewWidget)
 
-        horizontalSplitter.setStretchFactor(0, 0)
-        horizontalSplitter.setStretchFactor(1, 1)
+        self.horizontalSplitter.setStretchFactor(0, 0)
+        self.horizontalSplitter.setStretchFactor(1, 1)
 
-        horizontalSplitter.setSizes([0, 100])
+        self.horizontalSplitter.setSizes([0, 100])
 
         grid = QtGui.QVBoxLayout(self)
-        grid.addWidget(horizontalSplitter)
-
-
-    def closeEvent(self, event):
-        self.graphViewWidget.closeEvent(event)
+        grid.addWidget(self.horizontalSplitter)
 
 
     def showEvent(self, event):
-
-        if self.showSplash:
-            splash = KrakenSplash(self)
-            splash.show()
 
         krakenSystem = KrakenSystem.getInstance()
         krakenSystem.loadCoreClient()
         krakenSystem.loadExtension('Kraken')
 
-        if self.showSplash:
-            splash.close()
+
+    def resizeSplitter(self):
+        splitter = self.horizontalSplitter
+        sizes = splitter.sizes()
+
+        if sizes[0] == 0:
+            splitter.setSizes([175, sizes[1]])
+        else:
+            splitter.setSizes([0, sizes[1]])
 
 
 if __name__ == "__main__":
