@@ -59,7 +59,7 @@ class Node(QtGui.QGraphicsWidget):
     __linePen =  QtGui.QPen(QtGui.QColor(25, 25, 25, 255), 1.25)
 
     def __init__(self, graph, component):
-        super(Node, self).__init__(graph.itemGroup())
+        super(Node, self).__init__()
 
         self.setMinimumWidth(60)
         self.setMinimumHeight(20)

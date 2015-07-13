@@ -233,7 +233,7 @@ class GraphViewWidget(QtGui.QWidget):
             # Ensures that the node list is reset to list all components
             self.__contextualNodeList.showClosestNames()
 
-        scenepos = self.graphView.getGraph().mapToScene(pos)
-        self.__contextualNodeList.showAtPos(pos, scenepos, self.graphView.getGraph())
+        scenepos = self.graphView.mapToScene(pos)
+        self.__contextualNodeList.showAtPos(pos, scenepos, self.graphView)
 
 

@@ -87,11 +87,8 @@ class ContextualNodeList(QtGui.QWidget):
 
             componentClassName = self.nodesList.currentItem().data(QtCore.Qt.UserRole)
 
-            # Add a component to the rig placed at the given position.
-            dropPosition = self.graph.mapToItem(self.graph.itemGroup(), self.pos)
-
             # construct
-            command = ConstructComponentCommand(self.graph, componentClassName, Vec2(dropPosition.x(), dropPosition.y()))
+            command = ConstructComponentCommand(self.graph, componentClassName, Vec2(self.graphpos.x(), self.graphpos.y()))
             UndoRedoManager.getInstance().addCommand(command, invokeRedoOnAdd=True)
 
 

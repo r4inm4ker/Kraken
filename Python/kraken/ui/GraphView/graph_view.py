@@ -37,25 +37,18 @@ class GraphView(QtGui.QGraphicsView):
         self.setObjectName('graphView')
 
         self.__graphViewWidget = parent
-        self.rig = None
         # self.graph = None
 
-        self.__nodes = {}
-        self.__connections = {}
-        self.__selection = []
+        # self.__nodes = {}
+        # self.__connections = {}
+        # self.__selection = []
 
-        self._manipulationMode = 0
-        self._dragging = False
-        self._selectionRect = None
-        self._selectionchanged = False
 
-        self.__scene = QtGui.QGraphicsScene()
-        self.setScene(self.__scene)
+        # self.__scene = QtGui.QGraphicsScene()
+        # self.setScene(self.__scene)
 
-        self.__itemGroup = QtGui.QGraphicsWidget()
-        self.__scene.addItem(self.__itemGroup)
-
-        self.resize(600, 400)
+        # self.__itemGroup = QtGui.QGraphicsWidget()
+        # self.__scene.addItem(self.__itemGroup)
 
         self.setRenderHint(QtGui.QPainter.Antialiasing)
         self.setRenderHint(QtGui.QPainter.TextAntialiasing)
@@ -66,28 +59,41 @@ class GraphView(QtGui.QGraphicsView):
         # self.setResizeAnchor(QtGui.QGraphicsView.NoAnchor)
         # self.setTransformationAnchor(QtGui.QGraphicsView.NoAnchor)
 
+        self.resize(600, 400)
         self.setSceneRect(-300, -200, 600, 400)
 
         self.setAcceptDrops(True)
+        self.reset()
 
 
-    def itemGroup(self):
-        return self.__itemGroup
+    # def itemGroup(self):
+    #     return self.__itemGroup
         
     def getGraphViewWidget(self):
         return self.__graphViewWidget
+
+
+    def getRig(self):
+        return self.__rig
 
     ################################################
     ## Graph
     def reset(self):
         self.__scene = QtGui.QGraphicsScene()
-        self.__itemGroup = QtGui.QGraphicsWidget()
-        self.__scene.addItem(self.__itemGroup)
+        # self.__itemGroup = QtGui.QGraphicsWidget()
+        # self.__scene.addItem(self.__itemGroup)
         self.setScene(self.__scene)
 
         self.__connections = {}
         self.__nodes = {}
         self.__selection = []
+
+        self._manipulationMode = 0
+        self._dragging = False
+        self._selectionRect = None
+        self._selectionchanged = False
+
+        self.__rig = None
 
     ################################################
     ## Graph
@@ -97,6 +103,7 @@ class GraphView(QtGui.QGraphicsView):
 
     def addNode(self, component):
         node = Node(self, component)
+        self.scene().addItem(node)
         self.__nodes[node.getName()] = node
         return node
 
@@ -162,7 +169,8 @@ class GraphView(QtGui.QGraphicsView):
             return
 
         def computeWindowFrame():
-            windowRect = self.mapRectToItem(self.itemGroup(), self.windowFrameGeometry())
+            # windowRect = self.mapRectToItem(self.itemGroup(), self.windowFrameGeometry())
+            windowRect = self.rect()
             windowRect.setLeft(windowRect.left() + 16)
             windowRect.setRight(windowRect.right() - 16)
             windowRect.setTop(windowRect.top() + 16)
@@ -171,13 +179,15 @@ class GraphView(QtGui.QGraphicsView):
 
         nodesRect = None
         for node in nodes:
-            nodeRect = self.mapToScene(node.transform().map(node.rect())).boundingRect()
+            nodeRectF = node.transform().mapRect(node.rect())
+            nodeRect = QtCore.QRect(nodeRectF.x(), nodeRectF.y(), nodeRectF.width(), nodeRectF.height())
             if nodesRect is None:
                 nodesRect = nodeRect
             else:
                 nodesRect = nodesRect.united(nodeRect)
 
         windowRect = computeWindowFrame()
+
         scaleX = windowRect.width() / nodesRect.width()
         scaleY = windowRect.height() / nodesRect.height()
         if scaleY > scaleX:
@@ -185,19 +195,20 @@ class GraphView(QtGui.QGraphicsView):
         else:
             scale = scaleY
 
-        transform = self.itemGroup().transform()
+        transform = self.transform()
         transform.scale(scale, scale)
         if transform.m11() > 1.0 or transform.m22() > 1.0:
             transform.scale(1.0/transform.m11(), 1.0/transform.m22())
-        self.itemGroup().setTransform(transform)
+        self.setTransform(transform)
 
         # After zooming, recompute the window boundaries and compute the pan.
         windowRect = computeWindowFrame()
         pan = windowRect.center() - nodesRect.center()
-        self.itemGroup().translate(pan.x(), pan.y())
+        print "pan:" + str(pan)
+        self.translate(pan.x(), pan.y())
 
         # Update the main panel when reframing.
-        # self.__mainPanel.update()
+        self.update()
 
     def frameSelectedNodes(self):
         self.frameNodes(self.getSelectedNodes())
@@ -366,7 +377,7 @@ class GraphView(QtGui.QGraphicsView):
         if event.button() is QtCore.Qt.MouseButton.LeftButton:
             mouseDownPos = self.mapToScene(event.pos())
             self._selectionRect = SelectionRect(parent=None, mouseDownPos=mouseDownPos)
-            self.__scene.addItem(self._selectionRect)
+            self.scene().addItem(self._selectionRect)
             self._dragging = False
             self._manipulationMode = 1
             self._mouseDownSelection = copy.copy(self.getSelectedNodes())
@@ -398,8 +409,7 @@ class GraphView(QtGui.QGraphicsView):
             delta = self.mapToScene(event.pos()) - self._lastPanPoint
             print "GraphView.mouseMoveEvent _manipulationMode = 2 delta:" + str(delta)
 
-            # self.__itemGroup.translate(delta.x(), delta.y())
-            self.setTransform(QtGui.QTransform.fromTranslate(delta.x(), delta.y()), True)
+            self.translate(delta.x(), delta.y())
             self._lastPanPoint = self.mapToScene(event.pos())
 
             # Call udpate to redraw background
@@ -497,10 +507,11 @@ class GraphView(QtGui.QGraphicsView):
             componentClassName = textParts[1]
 
             # Add a component to the rig placed at the given position.
-            dropPosition = self.itemGroup().mapFromParent(event.pos())
+            # dropPosition = self.itemGroup().mapFromParent(event.pos())
+            dropPosition = self.mapToScene(event.pos())
 
             # construct
-            command = ConstructComponentCommand(self.graph, componentClassName, Vec2(dropPosition.x(), dropPosition.y()))
+            command = ConstructComponentCommand(self, componentClassName, Vec2(dropPosition.x(), dropPosition.y()))
             UndoRedoManager.getInstance().addCommand(command, invokeRedoOnAdd=True)
 
             event.acceptProposedAction()
