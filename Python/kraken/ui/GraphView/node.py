@@ -104,9 +104,6 @@ class Node(QtGui.QGraphicsWidget):
 
         self.__selected = False
         self.__dragging = False
-        # self.__graph.controller().addNotificationListener('node.posChanged', self.__nodePosChanged)
-        # self.__graph.controller().addNotificationListener('port.created', self.__portAdded)
-        # self.__graph.controller().addNotificationListener('port.destroyed', self.__portRemoved)
 
         # Update the node so that the size is computed.
         self.adjustSize()

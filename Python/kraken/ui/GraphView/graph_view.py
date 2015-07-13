@@ -23,6 +23,13 @@ from kraken.core.kraken_system import KrakenSystem
 
 class GraphView(QtGui.QGraphicsView):
 
+
+    connectionAdded = QtCore.Signal(Connection)
+    nodeAdded = QtCore.Signal(Node)
+    nodeRemoved = QtCore.Signal(Node)
+    selectionChanged = QtCore.Signal(list)
+    selectionMoved = QtCore.Signal(QtCore.QPointF)
+
     _clipboardData = None
 
 
@@ -84,17 +91,26 @@ class GraphView(QtGui.QGraphicsView):
     #####################
     ## Nodes
 
-    def addNode(self, component):
-        node = Node(self, component)
+    def addNode(self, node, emitNotification=True):
         self.scene().addItem(node)
         self.__nodes[node.getName()] = node
+
+        if emitNotification:
+            self.nodeAdded.emit(node)
+
         return node
 
-    def removeNode(self, node):
+    def removeNode(self, node, destroy=True, emitNotification=True):
         component = node.getComponent()
-        self.__rig.removeChild( component )
-        node.destroy()
+        # self.__rig.removeChild( component )
         del self.__nodes[node.getName()]
+        if destroy:
+            node.destroy()
+        else:
+            self.scene().removeItem(node)
+
+        if emitNotification:
+            self.nodeRemoved.emit(node)
 
     def getNode(self, name):
         if name in self.__nodes:
@@ -255,6 +271,8 @@ class GraphView(QtGui.QGraphicsView):
         sourcePort.addConnection(connection)
         targetPort.addConnection(connection)
 
+        self.connectionAdded.emit(connection)
+
         return connection
 
     #######################
@@ -267,7 +285,7 @@ class GraphView(QtGui.QGraphicsView):
         guideComponents = self.__rig.getChildrenByType('Component')
 
         for component in guideComponents:
-            self.addNode(component)
+            self.addNode(Node(self,component))
 
         for component in guideComponents:
             for i in range(component.getNumInputs()):
@@ -595,7 +613,8 @@ class GraphView(QtGui.QGraphicsView):
                 component.pasteData(componentData, setLocation=True)
             graphPos = component.getGraphPos( )
             component.setGraphPos(Vec2(graphPos.x + delta.x(), graphPos.y + delta.y()))
-            node = self.addNode(component)
+            node = Node(self,component)
+            self.addNode(node)
             self.selectNode(node, False)
 
             # save a dict of the nodes using the orignal names

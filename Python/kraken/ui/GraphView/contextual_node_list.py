@@ -88,8 +88,14 @@ class ContextualNodeList(QtGui.QWidget):
             componentClassName = self.nodesList.currentItem().data(QtCore.Qt.UserRole)
 
             # construct
-            command = ConstructComponentCommand(self.graph, componentClassName, Vec2(self.graphpos.x(), self.graphpos.y()))
-            UndoRedoManager.getInstance().addCommand(command, invokeRedoOnAdd=True)
+            # command = ConstructComponentCommand(self.graph, componentClassName, Vec2(self.graphpos.x(), self.graphpos.y()))
+            # UndoRedoManager.getInstance().addCommand(command, invokeRedoOnAdd=True)
+
+            componentClass = self.ks.getComponentClass( componentClassName )
+            component = componentClass(parent=self.graph.getRig())
+            component.setGraphPos(Vec2(self.graphpos.x(), self.graphpos.y()))
+            from node import Node
+            self.node = self.graph.addNode(Node(self.graph, component) )
 
 
             if self.isVisible():

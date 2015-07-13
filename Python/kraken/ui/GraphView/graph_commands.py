@@ -100,6 +100,32 @@ class NodeMoveCommand(Command):
             node.pushGraphPosToComponent()
         
 
+class AddNodeCommand(Command):
+    def __init__(self, graph, rig, node):
+        super(AddNodeCommand, self).__init__()
+        self.graph = graph
+        self.rig = rig
+        self.node = node
+
+
+    def shortDesc(self):
+        return "Add Node '" + self.node.getName() + "'"
+
+
+    def redo(self):
+        self.graph.addNode(self.node, emitNotification=False)
+        self.rig.addChild( self.node.getComponent() )
+
+
+    def undo(self):
+        self.graph.removeNode(self.node, destroy=False, emitNotification=False)
+        self.rig.removeChild( self.node.getComponent() )
+
+
+    def destroy(self):
+        self.node.destroy()
+
+
 class ConstructComponentCommand(Command):
     def __init__(self, graph, componentClassName, graphPos):
         super(ConstructComponentCommand, self).__init__()
@@ -117,7 +143,8 @@ class ConstructComponentCommand(Command):
     def redo(self):
         self.component = self.componentClass(parent=self.graph.getRig())
         self.component.setGraphPos(self.graphPos)
-        self.node = self.graph.addNode(self.component)
+        from node import Node
+        self.node = self.graph.addNode(Node(self.graph, self.component) )
 
 
     def undo(self):

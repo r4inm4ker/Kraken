@@ -7,6 +7,8 @@ from kraken.ui.GraphView.contextual_node_list import ContextualNodeList, Context
 from kraken.ui.GraphView.graph_view import GraphView
 from kraken.ui.undoredo.undo_redo_manager import UndoRedoManager
 
+from graph_commands import AddNodeCommand
+
 from kraken.core.objects.rig import Rig
 from kraken import plugins
 
@@ -58,6 +60,8 @@ class GraphViewWidget(QtGui.QWidget):
         self.setLayout(layout)
 
         self.newRigPreset()
+
+        self.graphView.nodeAdded.connect(self.__onNodeAdded)
 
     def getContextualNodeList(self):
         return self.__contextualNodeList
@@ -189,3 +193,8 @@ class GraphViewWidget(QtGui.QWidget):
         scenepos = self.graphView.mapToScene(pos)
         self.__contextualNodeList.showAtPos(pos, scenepos, self.graphView)
 
+
+    def __onNodeAdded(self, node):
+        print node
+        command = AddNodeCommand(self.graphView, self.guideRig, node)
+        UndoRedoManager.getInstance().addCommand(command, invokeRedoOnAdd=False)
