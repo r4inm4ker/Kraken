@@ -16,7 +16,9 @@ from kraken.core.objects.attributes.scalar_attribute import ScalarAttribute
 from kraken.core.objects.attributes.integer_attribute import IntegerAttribute
 from kraken.core.objects.attributes.string_attribute import StringAttribute
 
+from kraken.core.objects.components.component_input_port import ComponentInputPort
 from kraken.core.objects.components.component_input import ComponentInput
+from kraken.core.objects.components.component_output_port import ComponentOutputPort
 from kraken.core.objects.components.component_output import ComponentOutput
 
 
@@ -39,11 +41,9 @@ class Component(Object3D):
         self._graphPos = Vec2()
 
 
-
     # =============
     # Name Methods
     # =============
-
     def getNameDecoration(self):
         """Gets the decorated name of the object.
 
@@ -218,11 +218,11 @@ class Component(Object3D):
 
         """
 
-        componentInput = self.addInput(name, dataType)
+        componentInputPort = self.addInput(name, dataType)
 
         # Create object
         if dataType.startswith('Xfo'):
-            newInputTgt = Locator(name)
+            newInputTgt = ComponentInput(name)
 
         elif dataType.startswith('Boolean'):
             newInputTgt = BoolAttribute(name)
@@ -254,13 +254,13 @@ class Component(Object3D):
             else:
                 print "Keyword '" + k + "' is not supported with createInput method!"
 
-        componentInput.setTarget(newInputTgt)
+        componentInputPort.setTarget(newInputTgt)
 
         return newInputTgt
 
 
     def addInput(self, name, dataType):
-        """Add inputObject to this object.
+        """Add input port Object to this object.
 
         Arguments:
         name -- String, name of the input to create.
@@ -274,18 +274,18 @@ class Component(Object3D):
         if self.getInputByName(name) is not None:
             raise Exception("'" + name + "' argument is already an output!")
 
-        componentInput = ComponentInput(name, parent=self, dataType=dataType)
+        componentInputPort = ComponentInputPort(name, parent=self, dataType=dataType)
 
-        self._inputs.append(componentInput)
+        self._inputs.append(componentInputPort)
 
-        return componentInput
+        return componentInputPort
 
 
     def removeInputByIndex(self, index):
-        """Remove ComponentInput at specified index.
+        """Remove ComponentInputPort at specified index.
 
         Arguments:
-        index -- Integer, index of the ComponentInput to remove.
+        index -- Integer, index of the ComponentInputPort to remove.
 
         Return:
         True if successful.
@@ -396,11 +396,11 @@ class Component(Object3D):
 
         """
 
-        componentOutput = self.addOutput(name, dataType)
+        componentOutputPort = self.addOutput(name, dataType)
 
         # Create object
         if dataType.startswith('Xfo'):
-            newOutputTgt = Locator(name)
+            newOutputTgt = ComponentOutput(name)
 
         elif dataType.startswith('Boolean'):
             newOutputTgt = BoolAttribute(name)
@@ -430,13 +430,13 @@ class Component(Object3D):
             else:
                 print "Keyword '" + k + "' is not supported with createOutput method!"
 
-        componentOutput.setTarget(newOutputTgt)
+        componentOutputPort.setTarget(newOutputTgt)
 
         return newOutputTgt
 
 
     def addOutput(self, name, dataType):
-        """Add outputObject to this object.
+        """Add output port Object to this object.
 
         Arguments:
         name -- String, name of the output to create.
@@ -450,11 +450,11 @@ class Component(Object3D):
         if self.getOutputByName(name) is not None:
             raise Exception("'outputObject' argument is already an output!")
 
-        componentOutput = ComponentOutput(name, parent=self, dataType=dataType)
+        componentOutputPort = ComponentOutputPort(name, parent=self, dataType=dataType)
 
-        self._outputs.append(componentOutput)
+        self._outputs.append(componentOutputPort)
 
-        return componentOutput
+        return componentOutputPort
 
 
     def getNumOutputs(self):

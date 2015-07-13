@@ -21,11 +21,10 @@ class ComponentGroup(Object3D):
         self.lockScale(True, True, True)
         self.lockTranslation(True, True, True)
 
+
     # =============
     # Name Methods
     # =============
-
-
     def getName(self):
         """Gets the decorated name of the object.
 
