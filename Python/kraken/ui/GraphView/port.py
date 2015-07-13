@@ -79,7 +79,7 @@ class PortLabel(QtGui.QGraphicsWidget):
 
     def mousePressEvent(self, event):
 
-        scenePos = self.mapToItem(self.getPort().getGraph().itemGroup(), event.pos())
+        scenePos = self.mapToScene(event.pos())
 
         #self.unhighlight()
         if self.isInConnectionPoint():
@@ -178,7 +178,7 @@ class PortCircle(QtGui.QGraphicsWidget):
 
     def mousePressEvent(self, event):
 
-        scenePos = self.mapToItem(self.__graph.itemGroup(), event.pos())
+        scenePos = self.mapToScene(event.pos())
 
         self.unhighlight()
 

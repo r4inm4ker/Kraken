@@ -16,9 +16,10 @@ class Connection(QtGui.QGraphicsPathItem):
     __defaultPen = QtGui.QPen(QtGui.QColor(168, 134, 3), 2.0)
 
     def __init__(self, graph, srcPort, dstPort):
-        super(Connection, self).__init__(graph.itemGroup())
+        super(Connection, self).__init__()
 
         self.__graph = graph
+        self.__graph.scene().addItem(self)
         self.__srcPort = srcPort
         self.__dstPort = dstPort
         self.__defaultPen = QtGui.QPen(self.__srcPort.getColor(), 2.0)
@@ -78,14 +79,14 @@ class Connection(QtGui.QGraphicsPathItem):
     def mousePressEvent(self, event):
         if event.button() is QtCore.Qt.MouseButton.LeftButton:
             self.__dragging = True
-            self._lastDragPoint = self.mapToItem(self.__graph.itemGroup(), event.pos())
+            self._lastDragPoint = self.mapToScene(event.pos())
             event.accept()
         else:
             super(Connection, self).mousePressEvent(event)
 
     def mouseMoveEvent(self, event):
         if self.__dragging:
-            pos = self.mapToItem(self.__graph.itemGroup(), event.pos())
+            pos = self.mapToScene(event.pos())
             delta = pos - self._lastDragPoint
             if delta.x() < 0 or delta.x() > 0:
 

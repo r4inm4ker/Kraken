@@ -9,7 +9,8 @@ import os.path
 from PySide import QtGui, QtCore
 # from graph import Graph
 from node import Node, NodeTitle
-from port import PortLabel, InputPort, OutputPort
+from port import BasePort, PortLabel, InputPort, OutputPort
+from connection import Connection
 
 from selection_rect import SelectionRect
 
@@ -151,7 +152,6 @@ class GraphView(QtGui.QGraphicsView):
             return
 
         def computeWindowFrame():
-            # windowRect = self.mapRectToItem(self.itemGroup(), self.windowFrameGeometry())
             windowRect = self.rect()
             windowRect.setLeft(windowRect.left() + 16)
             windowRect.setRight(windowRect.right() - 16)
@@ -356,12 +356,9 @@ class GraphView(QtGui.QGraphicsView):
     #         super(GraphView, self).mousePressEvent(event)
 
     def mousePressEvent(self, event):
-        # print "GraphView.mousePressEvent event.pos:" + str(event.pos())
-        if event.button() is QtCore.Qt.MouseButton.LeftButton:
-            mouseDownPos = self.mapToScene(event.pos())
 
-            self._selectionRect = SelectionRect(parent=None, mouseDownPos=mouseDownPos)
-            self.scene().addItem(self._selectionRect)
+        if event.button() is QtCore.Qt.MouseButton.LeftButton and self.itemAt(event.pos()) is None:
+            self._selectionRect = SelectionRect(graph=self, mouseDownPos=self.mapToScene(event.pos()))
             self._dragging = False
             self._manipulationMode = 1
             self._mouseDownSelection = copy.copy(self.getSelectedNodes())
@@ -371,8 +368,8 @@ class GraphView(QtGui.QGraphicsView):
             self._manipulationMode = 2
             self._lastPanPoint = self.mapToScene(event.pos())
 
-        # else:
-        #     super(GraphView, self).mousePressEvent(event)
+        else:
+            super(GraphView, self).mousePressEvent(event)
 
     def mouseMoveEvent(self, event):
         if self._manipulationMode == 1:
@@ -397,13 +394,24 @@ class GraphView(QtGui.QGraphicsView):
 
             # Call udpate to redraw background
             self.update()
-        # else:
-        #     print "super(GraphView, self).mouseMoveEvent(event)"
-        #     super(GraphView, self).mouseMoveEvent(event)
+        elif self._manipulationMode == 3:
+
+            newPos = self.mapToScene(event.pos())
+            delta = newPos - self._lastDragPoint
+            self._lastDragPoint = newPos
+
+            selectedNodes = self.getSelectedNodes()
+            # Apply the delta to each selected key
+            for node in selectedNodes:
+                node.translate(delta.x(), delta.y())
+
+        else:
+            super(GraphView, self).mouseMoveEvent(event)
 
     def mouseReleaseEvent(self, event):
         if self._manipulationMode == 1:
-            self.scene().removeItem(self._selectionRect)
+            self._selectionRect.destroy()
+            self._selectionRect = None
             if not self._dragging:
                 self.clearSelection()
             self._selectionRect = None
@@ -429,8 +437,8 @@ class GraphView(QtGui.QGraphicsView):
             self.setCursor(QtCore.Qt.ArrowCursor)
             self._manipulationMode = 0
 
-        # else:
-        #     super(Graph, self).mouseReleaseEvent(event)
+        else:
+            super(GraphView, self).mouseReleaseEvent(event)
 
     def wheelEvent(self, event):
 
@@ -471,7 +479,6 @@ class GraphView(QtGui.QGraphicsView):
             componentClassName = textParts[1]
 
             # Add a component to the rig placed at the given position.
-            # dropPosition = self.itemGroup().mapFromParent(event.pos())
             dropPosition = self.mapToScene(event.pos())
 
             # construct

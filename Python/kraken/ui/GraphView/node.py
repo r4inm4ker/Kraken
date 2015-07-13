@@ -243,7 +243,7 @@ class Node(QtGui.QGraphicsWidget):
                     UndoRedoManager.getInstance().addCommand(SelectNodeCommand(self.__graph, self, clearSelection=False))
 
                 self.__dragging = True
-                self._mouseDownPoint = self.mapToItem(self.__graph.itemGroup(), event.pos())
+                self._mouseDownPoint = self.mapToScene(event.pos())
                 self._lastDragPoint = self._mouseDownPoint
 
         else:
@@ -252,7 +252,7 @@ class Node(QtGui.QGraphicsWidget):
 
     def mouseMoveEvent(self, event):
         if self.__dragging:
-            newPos = self.mapToItem(self.__graph.itemGroup(), event.pos())
+            newPos = self.mapToScene(event.pos())
             delta = newPos - self._lastDragPoint
             self._lastDragPoint = newPos
 
@@ -279,7 +279,7 @@ class Node(QtGui.QGraphicsWidget):
                     node.pushGraphPosToComponent()
                 nodes = selectedNodes
 
-            newPos = self.mapToItem(self.__graph.itemGroup(), event.pos())
+            newPos = self.mapToScene(event.pos())
             delta = newPos - self._mouseDownPoint
             command = NodeMoveCommand(nodes, delta)
             UndoRedoManager.getInstance().addCommand(command, invokeRedoOnAdd=False)
