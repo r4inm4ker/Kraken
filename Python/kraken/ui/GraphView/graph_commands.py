@@ -106,6 +106,7 @@ class AddNodeCommand(Command):
         self.graph = graph
         self.rig = rig
         self.node = node
+        self.destoryNode = False
 
 
     def shortDesc(self):
@@ -115,15 +116,48 @@ class AddNodeCommand(Command):
     def redo(self):
         self.graph.addNode(self.node, emitNotification=False)
         self.rig.addChild( self.node.getComponent() )
+        self.destoryNode = False
 
 
     def undo(self):
         self.graph.removeNode(self.node, destroy=False, emitNotification=False)
         self.rig.removeChild( self.node.getComponent() )
+        self.destoryNode = True
 
 
     def destroy(self):
-        self.node.destroy()
+        if self.destoryNode:
+            self.node.destroy()
+
+
+class RemoveNodeCommand(Command):
+    def __init__(self, graph, rig, node):
+        super(RemoveNodeCommand, self).__init__()
+        self.graph = graph
+        self.rig = rig
+        self.node = node
+        self.destoryNode = False
+
+
+    def shortDesc(self):
+        return "Add Node '" + self.node.getName() + "'"
+
+
+    def redo(self):
+        self.graph.removeNode(self.node, destroy=False, emitNotification=False)
+        self.rig.removeChild( self.node.getComponent() )
+        self.destoryNode = True
+
+
+    def undo(self):
+        self.graph.addNode(self.node, emitNotification=False)
+        self.rig.addChild( self.node.getComponent() )
+        self.destoryNode = False
+
+
+    def destroy(self):
+        if self.destoryNode:
+            self.node.destroy()
 
 
 class ConstructComponentCommand(Command):

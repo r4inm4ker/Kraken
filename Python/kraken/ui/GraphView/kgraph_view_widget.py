@@ -7,7 +7,7 @@ from contextual_node_list import ContextualNodeList, ContextualNewNodeWidget
 from graph_view.graph_view_widget import GraphViewWidget
 from kraken.ui.undoredo.undo_redo_manager import UndoRedoManager
 
-from graph_commands import AddNodeCommand
+from graph_commands import AddNodeCommand, RemoveNodeCommand
 
 from kraken.core.objects.rig import Rig
 from kraken import plugins
@@ -43,6 +43,7 @@ class KGraphViewWidget(GraphViewWidget):
         self.newRigPreset()
 
         self.graphView.nodeAdded.connect(self.__onNodeAdded)
+        self.graphView.nodeRemoved.connect(self.__onNodeRemoved)
 
     def getContextualNodeList(self):
         return self.__contextualNodeList
@@ -176,6 +177,11 @@ class KGraphViewWidget(GraphViewWidget):
 
 
     def __onNodeAdded(self, node):
-        print node
         command = AddNodeCommand(self.graphView, self.guideRig, node)
         UndoRedoManager.getInstance().addCommand(command, invokeRedoOnAdd=False)
+
+    def __onNodeRemoved(self, node):
+        print "__onNodeRemoved:" + str(node)
+        command = RemoveNodeCommand(self.graphView, self.guideRig, node)
+        UndoRedoManager.getInstance().addCommand(command, invokeRedoOnAdd=False)
+

@@ -102,12 +102,8 @@ class GraphView(QtGui.QGraphicsView):
 
     def removeNode(self, node, destroy=True, emitNotification=True):
         component = node.getComponent()
-        # self.__rig.removeChild( component )
         del self.__nodes[node.getName()]
-        if destroy:
-            node.destroy()
-        else:
-            self.scene().removeItem(node)
+        self.scene().removeItem(node)
 
         if emitNotification:
             self.nodeRemoved.emit(node)
