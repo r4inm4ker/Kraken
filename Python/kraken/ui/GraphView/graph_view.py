@@ -584,3 +584,101 @@ class GraphView(QtGui.QGraphicsView):
 
         return super(GraphView, self).drawBackground(painter, rect)
 
+    #######################
+    ## Copy/Paste
+
+    def copySettings(self, pos):
+        clipboardData = {}
+
+        copiedComponents = []
+        nodes = self.getSelectedNodes()
+        for node in nodes:
+            copiedComponents.append(node.getComponent())
+
+        componentsJson = []
+        connectionsJson = []
+        for component in copiedComponents:
+            componentsJson.append(component.copyData())
+
+            for i in range(component.getNumInputs()):
+                componentInput = component.getInputByIndex(i)
+                if componentInput.isConnected():
+                    componentOutput = componentInput.getConnection()
+                    connectionJson = {
+                        'source': componentOutput.getParent().getDecoratedName() + '.' + componentOutput.getName(),
+                        'target': component.getDecoratedName() + '.' + componentInput.getName()
+                    }
+
+                    connectionsJson.append(connectionJson)
+
+        clipboardData = {
+            'components': componentsJson,
+            'connections': connectionsJson,
+            'copyPos': pos
+        }
+
+        return clipboardData
+
+    def pasteSettings(self, clipboardData, pos, mirrored=False, createConnectionsToExistingNodes=True):
+
+        krakenSystem = KrakenSystem.getInstance()
+        delta = pos - clipboardData['copyPos']
+        self.clearSelection()
+        pastedComponents = {}
+        nameMapping = {}
+
+        for componentData in clipboardData['components']:
+            componentClass = krakenSystem.getComponentClass(componentData['class'])
+            component = componentClass(parent=self.__rig)
+            decoratedName = componentData['name'] + component.getNameDecoration()
+            nameMapping[decoratedName] = decoratedName
+            if mirrored:
+                config = Config.getInstance()
+                mirrorMap = config.getNameTemplate()['mirrorMap']
+                component.setLocation(mirrorMap[componentData['location']])
+                nameMapping[decoratedName] = componentData['name'] + component.getNameDecoration()
+                component.pasteData(componentData, setLocation=False)
+            else:
+                component.pasteData(componentData, setLocation=True)
+            graphPos = component.getGraphPos( )
+            component.setGraphPos(Vec2(graphPos.x + delta.x(), graphPos.y + delta.y()))
+            node = self.addNode(component)
+            self.selectNode(node, False)
+
+            # save a dict of the nodes using the orignal names
+            pastedComponents[nameMapping[decoratedName]] = component
+
+
+        for connectionData in clipboardData['connections']:
+            sourceComponentDecoratedName, outputName = connectionData['source'].split('.')
+            targetComponentDecoratedName, inputName = connectionData['target'].split('.')
+
+            sourceComponent = None
+
+            # The connection is either between nodes that were pasted, or from pasted nodes
+            # to unpasted nodes. We first check that the source component is in the pasted group
+            # else use the node in the graph.
+            if sourceComponentDecoratedName in nameMapping:
+                sourceComponent = pastedComponents[nameMapping[sourceComponentDecoratedName]]
+            else:
+                if not createConnectionsToExistingNodes:
+                    continue;
+
+                # When we support copying/pasting between rigs, then we may not find the source
+                # node in the target rig.
+                if sourceComponentDecoratedName not in self.__nodes.keys():
+                    continue
+                node = self.__nodes[sourceComponentDecoratedName]
+                sourceComponent = node.getComponent()
+
+            targetComponentDecoratedName = nameMapping[targetComponentDecoratedName]
+            targetComponent = pastedComponents[targetComponentDecoratedName]
+
+            outputPort = sourceComponent.getOutputByName(outputName)
+            inputPort = targetComponent.getInputByName(inputName)
+
+            inputPort.setConnection(outputPort)
+            self.addConnection(
+                source = sourceComponent.getDecoratedName() + '.' + outputPort.getName(),
+                target = targetComponent.getDecoratedName() + '.' + inputPort.getName()
+            )

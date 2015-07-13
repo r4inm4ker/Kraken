@@ -7,7 +7,9 @@ from PySide import QtGui, QtCore
 import types
 
 import kraken
-from kraken.ui.kraken_ui import KrakenUI
+import kraken.ui.kraken_window
+from kraken.ui.kraken_window import KrakenWindow
+from kraken.ui.kraken_window import createSplash
 
 import maya
 from maya import cmds
@@ -18,11 +20,11 @@ import maya.OpenMayaMPx as OpenMayaMPx
 import pymel.core as pm
 
 try:
-  # Maya 2013 with custom pyside build
-  import PySide.shiboken as shiboken
+    # Maya 2013 with custom pyside build
+    import PySide.shiboken as shiboken
 except:
-  # Maya 2014 and higher
-  import shiboken
+    # Maya 2014 and higher
+    import shiboken
 
 
 def getMayaWindow():
@@ -30,51 +32,59 @@ def getMayaWindow():
     return shiboken.wrapInstance(long(ptr), QtGui.QWidget)
 
 
-class KrakenMainWindow(QtGui.QMainWindow):
-    def __init__(self, parent):
-        super(KrakenMainWindow, self).__init__(parent)
-        self.setWindowTitle('Kraken Editor')
-        self.setCentralWidget(KrakenUI())
-
-
 # Command
 class OpenKrakenEditorCommand(OpenMayaMPx.MPxCommand):
-  def __init__(self):
-    OpenMayaMPx.MPxCommand.__init__(self)
+    def __init__(self):
+        OpenMayaMPx.MPxCommand.__init__(self)
 
-  # Invoked when the command is run.
-  def doIt(self,argList):
-    window = KrakenMainWindow(parent=getMayaWindow())
-    window.show()
+    # Invoked when the command is run.
+    def doIt(self,argList):
 
-  # Creator
-  @staticmethod
-  def creator():
-    return OpenMayaMPx.asMPxPtr( OpenKrakenEditorCommand() )
+        app = QtGui.QApplication.instance()
+        if not app:
+            app = QtGui.QApplication([])
+
+        for widget in app.topLevelWidgets():
+            if widget.objectName() == 'KrakenMainWindow':
+                widget.showNormal()
+
+                return
+
+        splash = createSplash(app)
+
+        window = KrakenWindow(parent=getMayaWindow())
+        window.show()
+
+        splash.finish(window)
+
+    # Creator
+    @staticmethod
+    def creator():
+        return OpenMayaMPx.asMPxPtr( OpenKrakenEditorCommand() )
 
 
 class KrakenUndoableCmd(OpenMayaMPx.MPxCommand):
 
   def __init__(self):
-    OpenMayaMPx.MPxCommand.__init__(self)
+        OpenMayaMPx.MPxCommand.__init__(self)
 
   def isUndoable(self):
-    return True
+        return True
 
   def doIt(self, argList):
-    return 0
+        return 0
 
   def redoIt(self):
-    print "TODO: provide undoable command here."
-    return 0
+        print "TODO: provide undoable command here."
+        return 0
 
   def undoIt(self):
-    print "TODO: provide undoable command here."
-    return 0
+        print "TODO: provide undoable command here."
+        return 0
 
   @staticmethod
   def creator():
-    return OpenMayaMPx.asMPxPtr( KrakenUndoableCmd() )
+        return OpenMayaMPx.asMPxPtr( KrakenUndoableCmd() )
 
 
 def setupKrakenMenu():
@@ -90,40 +100,40 @@ def setupKrakenMenu():
     # menuEditor = pm.menuItem("KrakenEditorMenuItem", parent=krakenMenu, label="Open Kraken Editor", to=True, subMenu=True)
 
     pm.menuItem(parent=krakenMenu, label="Open Kraken Editor", c="from maya import cmds; cmds.openKrakenEditor()")
+    pm.menuItem(parent=krakenMenu, divider=True)
+    pm.menuItem(parent=krakenMenu, label="Help", c="import webbrowser; webbrowser.open_new_tab('http://fabric-engine.github.io/Kraken')")
 
 
 # Initialize the script plug-in
 def initializePlugin(mobject):
-  mplugin = OpenMayaMPx.MFnPlugin(mobject)
+    mplugin = OpenMayaMPx.MFnPlugin(mobject)
 
-  try:
-    mplugin.registerCommand( 'openKrakenEditor', OpenKrakenEditorCommand.creator )
-  except:
-    sys.stderr.write( 'Failed to register DFG commands:openKrakenEditor' )
-    raise
+    try:
+        mplugin.registerCommand('openKrakenEditor', OpenKrakenEditorCommand.creator)
+    except:
+        sys.stderr.write('Failed to register commands: openKrakenEditor')
+        raise
 
-  try:
-    mplugin.registerCommand( 'krakenUndoableCmd', KrakenUndoableCmd.creator )
-  except:
-    sys.stderr.write( 'Failed to register DFG commands:krakenUndoableCmd' )
-    raise
+    try:
+        mplugin.registerCommand('krakenUndoableCmd', KrakenUndoableCmd.creator)
+    except:
+        sys.stderr.write('Failed to register commands:krakenUndoableCmd')
+        raise
 
-
-  setupKrakenMenu();
+    setupKrakenMenu();
 
 # Uninitialize the script plug-in
 def uninitializePlugin(mobject):
-  mplugin = OpenMayaMPx.MFnPlugin(mobject)
+    mplugin = OpenMayaMPx.MFnPlugin(mobject)
 
-  unloadMenu();
+    # unloadMenu()
 
-  try:
-    mplugin.deregisterCommand( 'openKrakenEditor' )
-  except:
-    sys.stderr.write( 'Failed to unregister command: openKrakenEditor' )
+    try:
+        mplugin.deregisterCommand('openKrakenEditor')
+    except:
+        sys.stderr.write('Failed to unregister command: openKrakenEditor')
 
-
-  try:
-    mplugin.deregisterCommand( 'krakenUndoableCmd' )
-  except:
-    sys.stderr.write( 'Failed to unregister command: krakenUndoableCmd' )
+    try:
+        mplugin.deregisterCommand('krakenUndoableCmd')
+    except:
+        sys.stderr.write('Failed to unregister command: krakenUndoableCmd')

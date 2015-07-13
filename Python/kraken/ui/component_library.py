@@ -56,6 +56,7 @@ class ComponentLibrary(QtGui.QWidget):
 
         self.searchLineEdit = QtGui.QLineEdit(parent)
         self.searchLineEdit.setObjectName('contextNodeListSearchLine')
+        self.searchLineEdit.setFocusPolicy(QtCore.Qt.ClickFocus)
 
         self.nodesList = NodeList(self)
 

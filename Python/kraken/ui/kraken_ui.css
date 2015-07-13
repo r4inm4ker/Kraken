@@ -32,14 +32,158 @@ QSplitter::handle:horizontal {
     border-radius: 3px;
 }
 
+QSplitter::handle:pressed {
+    background: #438f99;
+}
 
 /* ======= */
 /* Main UI */
 /* ======= */
+QMainWindow#KrakenMainWindow {
+    padding: 0;
+    margin: 0;
+
+    background-color: #151515;
+    color: #e1ffff;
+}
+
+/* Status Bar */
+QMainWindow#KrakenMainWindow QStatusBar {
+    border-top: 1px solid #222;
+
+    background-color: #111;
+    color: #e1ffff;
+}
+
+QMainWindow#KrakenMainWindow QStatusBar::item {
+    color: #e1ffff;
+}
+
+/* Menu Bar */
+QLabel#rigNameLabel {
+    border-bottom: 1px solid #2b2b2b;
+
+    background-color: #1f1f1f;
+}
+
+QLabel#rigNameLabel:hover {
+    color: #69eaff;
+}
+
+QMainWindow#KrakenMainWindow QMenuBar {
+    border-bottom: 1px solid #2b2b2b;
+    padding-bottom: 8px;
+
+    background-color: #1f1f1f;
+    color: #e1ffff;
+}
+
+QMainWindow#KrakenMainWindow QMenuBar::item {
+    border-bottom: 1px solid #2b2b2b;
+    padding: 8px 12px;
+
+    background-color: #1f1f1f;
+}
+
+QMainWindow#KrakenMainWindow QMenuBar::item:selected {
+    background-color: #333;
+}
+
+QMainWindow#KrakenMainWindow QMenuBar::item:pressed {
+    background-color: #333;
+}
+
+QMainWindow#KrakenMainWindow QMenu {
+    border: 1px solid #222;
+
+    background-color: #1b1b1b;
+    color: #e1ffff;
+}
+
+QMainWindow#KrakenMainWindow QMenu::separator {
+    border: 1px solid #222;
+    border-style: none;
+    height: 1px;
+
+    background-color: #2b2b2b;
+}
+
+QMainWindow#KrakenMainWindow QMenu::item {
+    padding: 8px;
+    height: 15px;
+
+    /*background-color: #222;*/
+    color: #e1ffff;
+}
+
+QMainWindow#KrakenMainWindow QMenu::item:selected {
+    background-color: #293b3d;
+}
+
+/* Rig Name Dialog */
+GraphViewWidget#graphViewWidget QDialog {
+    margin: 0;
+    padding: 0;
+
+    background-color: #2b2b2b;
+    color: #e1ffff;
+}
+
+GraphViewWidget#graphViewWidget QDialog QPushButton {
+    border: 1px #333;
+    border-radius: 3px;
+    border-style: outset;
+    padding: 5px;
+    width: 65px;
+
+    background-color: #333;
+    color: #e1ffff;
+}
+
+GraphViewWidget#graphViewWidget QDialog QPushButton:hover {
+    background-color: #3b3b3b;
+}
+
+GraphViewWidget#graphViewWidget QDialog QPushButton::pressed {
+    border-style: inset;
+    padding-top: 7px;
+    padding-left: 7px;
+
+    background-color: #3b3b3b;
+}
+
+/* Save Message Box */
+QMessageBox#SaveMessageBox {
+    background-color: #2b2b2b;
+}
+
+QMessageBox#SaveMessageBox QPushButton {
+    border: 1px #333;
+    border-radius: 3px;
+    border-style: outset;
+    padding: 5px;
+    width: 65px;
+
+    background-color: #333;
+    color: #e1ffff;
+}
+
+QMessageBox#SaveMessageBox QPushButton:hover {
+    background-color: #3b3b3b;
+}
+
+QMessageBox#SaveMessageBox QPushButton::pressed {
+    border-style: inset;
+    padding-top: 7px;
+    padding-left: 7px;
+
+    background-color: #3b3b3b;
+}
+
+/* Main UI */
 QWidget#mainUI {
     background-color: #151515;
 }
-
 
 /* ============== */
 /* Component Tree */
@@ -149,63 +293,14 @@ QListWidget#contextNodeList::item:hover {
     background-color: #438f99;
 }
 
-/* ============ */
-/* Main Toolbar */
-/* ============ */
-QToolbar#mainToolbar {
-    spacing: 20px;
-}
-
-QToolBar#mainToolbar {
-    border: 0px;
-    border-radius: 3px;
-    height: 50px;
-    padding: 5px 5px;
-    margin: 0;
-    spacing: 5px;
-
-    background-color: #222;
-}
-
-QToolBar#mainToolbar::handle {
-    background-color: #FF0000;
-}
-
-QToolBar#mainToolbar QToolButton {
-    width: 65px;
-    border: 1px #333;
-    border-radius: 3px;
-    border-style: outset;
-    padding: 5px;
-
-    background-color: #333;
-    color: #e1ffff;
-}
-
-QToolBar#mainToolbar QToolButton:hover {
-    background-color: #3b3b3b;
-}
-
-QToolBar#mainToolbar QToolButton:pressed {
-    border-style: inset;
-    padding-top: 6px;
-    padding-left: 7px;
-
-    background-color: #3b3b3b;
-}
-
-QLabel#rigNameLabel {
-    background-color: #222;
-}
-
 /* ==== */
 /* Logo */
 /* ==== */
 QLabel#logoWidget {
-    margin: 0px;
-    padding: 0px 5px;
+    border-bottom: 1px solid #2b2b2b;
+    padding: 0px 5px 0px 8px;
 
-    background-color: #222;
+    background-color: #1f1f1f;
 }
 
 /* ========== */
