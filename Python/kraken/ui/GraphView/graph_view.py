@@ -283,79 +283,14 @@ class GraphView(QtGui.QGraphicsView):
 
     ################################################
     ## Events
-    # def mousePressEvent(self, event):
-    #     print "GraphView.mousePressEvent"
-    #     if event.button() == QtCore.Qt.MouseButton.RightButton:
-
-    #         def __getGraphItem(graphicItem):
-    #             if isinstance(graphicItem, Node):
-    #                 return graphicItem
-    #             elif(isinstance(graphicItem, QtGui.QGraphicsTextItem) or
-    #                  isinstance(graphicItem, NodeTitle) or
-    #                  isinstance(graphicItem, OutputPort) or
-    #                  isinstance(graphicItem, InputPort)):
-    #                 return __getGraphItem(graphicItem.parentItem())
-    #             return None
-
-    #         pos = self.getGraph().mapToScene(event.pos())
-    #         graphicItem = __getGraphItem(self.itemAt(int(pos.x()), int(pos.y())))
-
-    #         if graphicItem is None:
-
-    #             if self.__class__._clipboardData is not None:
-
-    #                 contextMenu = QtGui.QMenu(self.__graphViewWidget)
-    #                 contextMenu.setObjectName('rightClickContextMenu')
-    #                 contextMenu.setMinimumWidth(150)
-
-    #                 def pasteSettings():
-    #                     self.graph.pasteSettings(self.__class__._clipboardData, pos)
-
-    #                 def pasteSettingsMirrored():
-    #                     self.graph.pasteSettings(self.__class__._clipboardData, pos, mirrored=True)
-
-    #                 contextMenu.addAction("Paste").triggered.connect(pasteSettings)
-    #                 contextMenu.addAction("Paste Mirrored").triggered.connect(pasteSettingsMirrored)
-    #                 contextMenu.popup(event.globalPos())
-
-
-    #         if isinstance(graphicItem, Node) and graphicItem.isSelected():
-    #             contextMenu = QtGui.QMenu(self.__graphViewWidget)
-    #             contextMenu.setObjectName('rightClickContextMenu')
-    #             contextMenu.setMinimumWidth(150)
-
-    #             def copySettings():
-    #                 self.__class__._clipboardData = self.graph.copySettings(pos)
-
-    #             contextMenu.addAction("Copy").triggered.connect(copySettings)
-
-    #             if self.__class__._clipboardData is not None:
-
-    #                 def pasteSettings():
-    #                     # Paste the settings, not modifying the location, because that will be used to determine symmetry.
-    #                     graphicItem.getComponent().pasteData(self.__class__._clipboardData['components'][0], setLocation=False)
-
-    #                 contextMenu.addSeparator()
-    #                 contextMenu.addAction("Paste Data").triggered.connect(pasteSettings)
-
-    #             contextMenu.popup(event.globalPos())
-
-    #     elif event.button() == QtCore.Qt.MouseButton.LeftButton:
-
-    #         graphViewWidget = self.parent()
-    #         contextualNodeList = graphViewWidget.getContextualNodeList()
-    #         if contextualNodeList is not None and contextualNodeList.isVisible():
-    #             contextualNodeList.searchLineEdit.clear()
-    #             contextualNodeList.hide()
-
-    #         else:
-
-    #             super(GraphView, self).mousePressEvent(event)
-
-    #     else:
-    #         super(GraphView, self).mousePressEvent(event)
 
     def mousePressEvent(self, event):
+
+        # If the contextual node list is open, close it. 
+        contextualNodeList = self.__graphViewWidget.getContextualNodeList()
+        if contextualNodeList is not None and contextualNodeList.isVisible():
+            contextualNodeList.searchLineEdit.clear()
+            contextualNodeList.hide()
 
         if event.button() is QtCore.Qt.MouseButton.LeftButton and self.itemAt(event.pos()) is None:
             self._selectionRect = SelectionRect(graph=self, mouseDownPos=self.mapToScene(event.pos()))
@@ -364,9 +299,63 @@ class GraphView(QtGui.QGraphicsView):
             self._mouseDownSelection = copy.copy(self.getSelectedNodes())
 
         elif event.button() is QtCore.Qt.MouseButton.MiddleButton:
+
             self.setCursor(QtCore.Qt.OpenHandCursor)
             self._manipulationMode = 2
             self._lastPanPoint = self.mapToScene(event.pos())
+
+        elif event.button() == QtCore.Qt.MouseButton.RightButton:
+
+            def graphItemAt(item):
+                if isinstance(item, Node):
+                    return item
+                elif(isinstance(item, QtGui.QGraphicsTextItem) or
+                     isinstance(item, NodeTitle) or
+                     isinstance(item, BasePort)):
+                    return graphItemAt(item.parentItem())
+                return None
+            graphicItem = graphItemAt(self.itemAt(event.pos()))
+            pos = self.mapToScene(event.pos())
+
+            if graphicItem is None:
+
+                if self.__class__._clipboardData is not None:
+
+                    contextMenu = QtGui.QMenu(self.__graphViewWidget)
+                    contextMenu.setObjectName('rightClickContextMenu')
+                    contextMenu.setMinimumWidth(150)
+
+                    def pasteSettings():
+                        self.pasteSettings(self.__class__._clipboardData, pos)
+
+                    def pasteSettingsMirrored():
+                        self.pasteSettings(self.__class__._clipboardData, pos, mirrored=True)
+
+                    contextMenu.addAction("Paste").triggered.connect(pasteSettings)
+                    contextMenu.addAction("Paste Mirrored").triggered.connect(pasteSettingsMirrored)
+                    contextMenu.popup(event.globalPos())
+
+
+            if isinstance(graphicItem, Node) and graphicItem.isSelected():
+                contextMenu = QtGui.QMenu(self.__graphViewWidget)
+                contextMenu.setObjectName('rightClickContextMenu')
+                contextMenu.setMinimumWidth(150)
+
+                def copySettings():
+                    self.__class__._clipboardData = self.copySettings(pos)
+
+                contextMenu.addAction("Copy").triggered.connect(copySettings)
+
+                if self.__class__._clipboardData is not None:
+
+                    def pasteSettings():
+                        # Paste the settings, not modifying the location, because that will be used to determine symmetry.
+                        graphicItem.getComponent().pasteData(self.__class__._clipboardData['components'][0], setLocation=False)
+
+                    contextMenu.addSeparator()
+                    contextMenu.addAction("Paste Data").triggered.connect(pasteSettings)
+
+                contextMenu.popup(event.globalPos())
 
         else:
             super(GraphView, self).mousePressEvent(event)
