@@ -96,7 +96,7 @@ class GraphViewWidget(QtGui.QWidget):
         if len(filePath) > 0:
             self.guideRig = Rig()
             self.guideRig.loadRigDefinitionFile(filePath)
-            self.graphView.init( self.guideRig )
+            self.graphView.displayGraph( self.guideRig )
             # self.nameWidget.setText( self.guideRig.getName() )
 
     def buildGuideRig(self):
