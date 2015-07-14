@@ -120,14 +120,14 @@ class AddNodeCommand(Command):
 
 
     def undo(self):
-        self.graph.removeNode(self.node, destroy=False, emitNotification=False)
+        self.graph.removeNode(self.node, emitNotification=False)
         self.rig.removeChild( self.node.getComponent() )
         self.destoryNode = True
 
 
-    def destroy(self):
-        if self.destoryNode:
-            self.node.destroy()
+    # def destroy(self):
+    #     if self.destoryNode:
+    #         self.node.destroy()
 
 
 class RemoveNodeCommand(Command):
@@ -155,9 +155,9 @@ class RemoveNodeCommand(Command):
         self.destoryNode = False
 
 
-    def destroy(self):
-        if self.destoryNode:
-            self.node.destroy()
+    # def destroy(self):
+    #     if self.destoryNode:
+    #         self.node.destroy()
 
 
 class ConstructComponentCommand(Command):
@@ -256,3 +256,63 @@ class PortDisconnectCommand(Command):
 
     def destroy(self):
         self.scene.removeItem(self.connection)
+
+
+
+class ConnectionAddedCommand(Command):
+    def __init__(self, graph, rig, connection):
+        super(ConnectionAddedCommand, self).__init__()
+        self.graph = graph
+        self.connection = connection
+
+        self.sourceComponent = rig.getChildByDecoratedName(self.connection.getSrcPort().getNode().getName())
+        self.targetComponent = rig.getChildByDecoratedName(self.connection.getDstPort().getNode().getName())
+
+        self.sourceComponentOutputPort = self.sourceComponent.getOutputByName(self.connection.getSrcPort().getName())
+        self.targetComponentInputPort = self.targetComponent.getInputByName(self.connection.getDstPort().getName())
+
+        self.targetComponentInputPort.setConnection(self.sourceComponentOutputPort)
+
+    def shortDesc(self):
+        return "Connect Ports '" + self.connection.getSrcPort().getName() + " > " + self.connection.getDstPort().getName()
+
+
+    def redo(self):
+        self.targetComponentInputPort.setConnection(self.sourceComponentOutputPort)
+        self.connection.connect()
+        self.graph.addConnection(self.connection, emitNotification=False)
+
+
+    def undo(self):
+        self.targetComponentInputPort.removeConnection()
+        self.graph.removeConnection(self.connection, emitNotification=False)
+
+
+class ConnectionRemovedCommand(Command):
+    def __init__(self, graph, rig, connection):
+        super(ConnectionRemovedCommand, self).__init__()
+        self.graph = graph
+        self.connection = connection
+
+        self.sourceComponent = rig.getComponent(self.connection.getSrcPort().getNode().getName())
+        self.targetComponent = rig.getComponent(self.connection.getDstPort().getNode().getName())
+
+        self.sourceComponentOutputPort = self.sourceComponent.getOutputByName(self.connection.getSrcPort().getName())
+        self.targetComponentInputPort = self.targetComponent.getInputByName(self.connection.getDstPort().getName())
+
+        self.targetComponentInputPort.removeConnection()
+
+    def shortDesc(self):
+        return "Disconnect Ports '" + self.connection.getSrcPort().getName() + " > " + self.connection.getDstPort().getName()
+
+
+    def redo(self):
+        self.targetComponentInputPort.removeConnection()
+        self.connection.disconnect()
+        self.graph.removeConnection(self.connection)
+
+    def undo(self):
+        self.targetComponentInputPort.setConnection(self.sourceComponentOutputPort)
+        self.connection.reconnect()
+        self.graph.addConnection(self.connection)
+

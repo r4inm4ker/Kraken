@@ -351,16 +351,16 @@ class Node(QtGui.QGraphicsWidget):
 
     def disconnectAllPorts(self):
         for port in self.__inports:
-            port.destroy()
+            port.disconnect()
 
         for port in self.__outports:
-            port.destroy()
+            port.disconnect()
 
-    def destroy(self):
-        for port in self.__inports:
-            port.destroy()
+    # def destroy(self):
+    #     for port in self.__inports:
+    #         port.destroy()
 
-        for port in self.__outports:
-            port.destroy()
+    #     for port in self.__outports:
+    #         port.destroy()
 
-        self.scene().removeItem(self)
+    #     self.scene().removeItem(self)

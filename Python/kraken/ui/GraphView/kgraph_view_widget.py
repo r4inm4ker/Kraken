@@ -7,7 +7,7 @@ from contextual_node_list import ContextualNodeList, ContextualNewNodeWidget
 from graph_view.graph_view_widget import GraphViewWidget
 from kraken.ui.undoredo.undo_redo_manager import UndoRedoManager
 
-from graph_commands import AddNodeCommand, RemoveNodeCommand
+from graph_commands import AddNodeCommand, RemoveNodeCommand, ConnectionAddedCommand, ConnectionRemovedCommand
 
 from kraken.core.objects.rig import Rig
 from kraken import plugins
@@ -44,6 +44,8 @@ class KGraphViewWidget(GraphViewWidget):
 
         self.graphView.nodeAdded.connect(self.__onNodeAdded)
         self.graphView.nodeRemoved.connect(self.__onNodeRemoved)
+        self.graphView.connectionAdded.connect(self.__onConnectionAdded)
+        self.graphView.connectionRemoved.connect(self.__onConnectionRemoved)
 
     def getContextualNodeList(self):
         return self.__contextualNodeList
@@ -183,5 +185,19 @@ class KGraphViewWidget(GraphViewWidget):
     def __onNodeRemoved(self, node):
         print "__onNodeRemoved:" + str(node)
         command = RemoveNodeCommand(self.graphView, self.guideRig, node)
+        UndoRedoManager.getInstance().addCommand(command, invokeRedoOnAdd=False)
+
+
+    def __onConnectionAdded(self, connection):
+        print "__onConnectionAdded:" + str(connection)
+
+        command = ConnectionAddedCommand(self.graphView, self.guideRig, connection)
+        UndoRedoManager.getInstance().addCommand(command, invokeRedoOnAdd=False)
+
+
+    def __onConnectionRemoved(self, connection):
+        print "__onConnectionRemoved:" + str(connection)
+
+        command = ConnectionRemovedCommand(self.graphView, self.guideRig, connection)
         UndoRedoManager.getInstance().addCommand(command, invokeRedoOnAdd=False)
 

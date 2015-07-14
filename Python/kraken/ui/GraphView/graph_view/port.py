@@ -247,9 +247,9 @@ class BasePort(QtGui.QGraphicsWidget):
     #     painter.setPen(QtGui.QPen(QtGui.QColor(255, 255, 0)))
     #     painter.drawRect(self.windowFrameRect())
 
-    def destroy(self):
+    # def destroy(self):
 
-        self.scene().removeItem(self)
+    #     self.scene().removeItem(self)
 
 
 class InputPort(BasePort):
@@ -293,7 +293,7 @@ class InputPort(BasePort):
 
         return True
 
-    def removeConnection(self):
+    def removeConnection(self, connection):
         """Removes a connection to the list.
         Arguments:
         connection -- connection, connection to remove.
@@ -301,6 +301,8 @@ class InputPort(BasePort):
         True if successful.
         """
 
+        if connection != self.__connection:
+            raise "Port not connected to given connection."
         self.__connection = None
 
         return True
@@ -314,11 +316,11 @@ class InputPort(BasePort):
         return self.__connection
 
 
-    def destroy(self):
+    # def destroy(self):
 
-        self.__connection.destroy()
+    #     self.__connection.destroy()
 
-        super(InputPort, self).destroy(self)
+    #     super(InputPort, self).destroy(self)
 
 
 
@@ -341,7 +343,7 @@ class OutputPort(BasePort):
         self.layout().addItem(self.__outCircle)
         self.layout().setAlignment(self.__outCircle, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
 
-        self.__connections = []
+        self.__connections = set()
 
 
     def outCircle(self):
@@ -360,7 +362,7 @@ class OutputPort(BasePort):
         True if successful.
         """
 
-        self.__connections.append(connection)
+        self.__connections.add(connection)
 
         return True
 
@@ -372,14 +374,7 @@ class OutputPort(BasePort):
         True if successful.
         """
 
-        deleteIndex = None
-        for i, conn in enumerate(self.__connections):
-            if conn == connection:
-                deleteIndex = i
-                break
-
-        if deleteIndex is not None:
-            del self.__connections[deleteIndex]
+        self.__connections.remove(connection)
         
         return True
 
@@ -392,9 +387,9 @@ class OutputPort(BasePort):
         return self.__connections
 
 
-    def destroy(self):
+    # def destroy(self):
 
-        for connection in self.getConnections():
-            connection.destroy()
+    #     for connection in self.getConnections():
+    #         connection.destroy()
 
-        super(OutputPort, self).destroy(self)
+    #     super(OutputPort, self).destroy(self)

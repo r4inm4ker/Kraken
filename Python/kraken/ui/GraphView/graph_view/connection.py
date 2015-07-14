@@ -19,7 +19,6 @@ class Connection(QtGui.QGraphicsPathItem):
         super(Connection, self).__init__()
 
         self.__graph = graph
-        self.__graph.scene().addItem(self)
         self.__srcPort = srcPort
         self.__dstPort = dstPort
         self.__defaultPen = QtGui.QPen(self.__srcPort.getColor(), 2.0)
@@ -29,7 +28,9 @@ class Connection(QtGui.QGraphicsPathItem):
 
         self.setPen(self.__defaultPen)
         self.setZValue(-1)
+
         # self.setAcceptHoverEvents(True)
+        self.connect()
 
     def getSrcPort(self):
         return self.__srcPort
@@ -103,12 +104,16 @@ class Connection(QtGui.QGraphicsPathItem):
             super(Connection, self).mouseMoveEvent(event)
 
 
-    def destroy(self):
+    def disconnect(self):
+        self.__srcPort.removeConnection(self)
+        self.__dstPort.removeConnection(self)
 
-        srcPort = self.getSrcPort()
-        dstPort = self.getDstPort()
 
-        srcPort.removeConnection(self)
-        dstPort.removeConnection(self)
+    def connect(self):
+        self.__srcPort.addConnection(self)
+        self.__dstPort.setConnection(self)
 
-        self.scene().removeItem(self)
+
+    # def destroy(self):
+    #     self.disconnect()
+    #     self.scene().removeItem(self)

@@ -23,10 +23,12 @@ from kraken.core.kraken_system import KrakenSystem
 
 class GraphView(QtGui.QGraphicsView):
 
-
-    connectionAdded = QtCore.Signal(Connection)
     nodeAdded = QtCore.Signal(Node)
     nodeRemoved = QtCore.Signal(Node)
+
+    connectionAdded = QtCore.Signal(Connection)
+    connectionRemoved = QtCore.Signal(Connection)
+
     selectionChanged = QtCore.Signal(list)
     selectionMoved = QtCore.Signal(QtCore.QPointF)
 
@@ -74,9 +76,9 @@ class GraphView(QtGui.QGraphicsView):
     def reset(self):
         self.setScene(QtGui.QGraphicsScene())
 
-        self.__connections = {}
+        self.__connections = set()
         self.__nodes = {}
-        self.__selection = []
+        self.__selection = set()
 
         self._manipulationMode = 0
         self._dragging = False
@@ -124,7 +126,7 @@ class GraphView(QtGui.QGraphicsView):
     def clearSelection(self):
         for node in self.__selection:
             node.setSelected(False)
-        self.__selection = []
+        self.__selection.clear()
 
     def selectNode(self, node, clearSelection=False):
         if clearSelection is True:
@@ -135,7 +137,7 @@ class GraphView(QtGui.QGraphicsView):
 
         node.setSelected(True)
 
-        self.__selection.append(node)
+        self.__selection.add(node)
 
     def deselectNode(self, node):
 
@@ -240,34 +242,55 @@ class GraphView(QtGui.QGraphicsView):
     #######################
     ## Connections
 
-    def addConnection(self, source, target):
+    # def addConnection(self, source, target):
 
-        sourceComponent, outputName = tuple(source.split('.'))
-        targetComponent, inputName = tuple(target.split('.'))
-        sourceNode = self.getNode(sourceComponent)
-        if not sourceNode:
-            raise Exception("Component not found:" + sourceNode.getName())
+    #     sourceComponent, outputName = tuple(source.split('.'))
+    #     targetComponent, inputName = tuple(target.split('.'))
+    #     sourceNode = self.getNode(sourceComponent)
+    #     if not sourceNode:
+    #         raise Exception("Component not found:" + sourceNode.getName())
 
-        sourcePort = sourceNode.getOutPort(outputName)
-        if not sourcePort:
-            raise Exception("Component '" + sourceNode.getName() + "' does not have output:" + sourcePort.getName())
+    #     sourcePort = sourceNode.getOutPort(outputName)
+    #     if not sourcePort:
+    #         raise Exception("Component '" + sourceNode.getName() + "' does not have output:" + sourcePort.getName())
 
 
-        targetNode = self.getNode(targetComponent)
-        if not targetNode:
-            raise Exception("Component not found:" + targetNode.getName())
+    #     targetNode = self.getNode(targetComponent)
+    #     if not targetNode:
+    #         raise Exception("Component not found:" + targetNode.getName())
 
-        targetPort = targetNode.getInPort(inputName)
-        if not targetPort:
-            raise Exception("Component '" + targetNode.getName() + "' does not have input:" + targetPort.getName())
+    #     targetPort = targetNode.getInPort(inputName)
+    #     if not targetPort:
+    #         raise Exception("Component '" + targetNode.getName() + "' does not have input:" + targetPort.getName())
 
-        connection = Connection(self, sourcePort, targetPort)
-        sourcePort.addConnection(connection)
-        targetPort.setConnection(connection)
+    #     connection = Connection(self, sourcePort, targetPort)
+    #     sourcePort.addConnection(connection)
+    #     targetPort.setConnection(connection)
 
-        self.connectionAdded.emit(connection)
+    #     self.connectionAdded.emit(connection)
 
+    #     return connection
+
+    def addConnection(self, connection, emitNotification=True):
+
+        # srcPort = connection.getSrcPort()
+        # dstPoint = connection.getDstPort()
+        # srcPort.addConnection(connection)
+        # dstPoint.setConnection(connection)
+
+        self.__connections.add(connection)
+        self.scene().addItem(connection)
+        if emitNotification:
+            self.connectionAdded.emit(connection)
         return connection
+
+    def removeConnection(self, connection, emitNotification=True):
+
+        connection.disconnect()
+        self.__connections.remove(connection)
+        self.scene().removeItem(connection)
+        if emitNotification:
+            self.connectionRemoved.emit(connection)
 
     #######################
     ## Graph

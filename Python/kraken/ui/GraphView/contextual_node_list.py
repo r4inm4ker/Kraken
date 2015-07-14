@@ -95,8 +95,7 @@ class ContextualNodeList(QtGui.QWidget):
             component = componentClass(parent=self.graph.getRig())
             component.setGraphPos(Vec2(self.graphpos.x(), self.graphpos.y()))
             from graph_view.node import Node
-            self.node = self.graph.addNode(Node(self.graph, component) )
-
+            self.graph.addNode(Node(self.graph, component) )
 
             if self.isVisible():
                 self.hide()

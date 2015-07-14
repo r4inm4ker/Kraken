@@ -42,6 +42,7 @@ class MouseGrabber(QtGui.QGraphicsWidget):
         elif self.__connectionPointType == 'In':
             self.__connection = connection.Connection(self.__graph, port, self)
 
+        self.__graph.addConnection(self.__connection)
         self.__mouseOverPortCircle = None
         UndoRedoManager.getInstance().openBracket('Connect Ports')
 
@@ -102,10 +103,9 @@ class MouseGrabber(QtGui.QGraphicsWidget):
                     sourcePort = self.__mouseOverPortCircle.getPort()
                     targetPort = self.__port
 
-                command = PortConnectCommand(sourcePort, targetPort, self.__graph)
-                UndoRedoManager.getInstance().addCommand(command, invokeRedoOnAdd=True)
-
-                UndoRedoManager.getInstance().closeBracket()
+                from connection import Connection
+                connection = Connection(self.__graph, sourcePort, targetPort)
+                self.__graph.addConnection(connection)
 
             except Exception as e:
                 print "Exception in MouseGrabber.mouseReleaseEvent: " + str(e)
@@ -127,3 +127,19 @@ class MouseGrabber(QtGui.QGraphicsWidget):
         # Destroy the grabber.
         scene.removeItem(self)
         scene.update()
+
+
+    # ===================
+    # Connection Methods
+    # ===================
+    def setConnection(self, connection):
+        pass
+
+    def addConnection(self, connection):
+        pass
+
+    def removeConnection(self, connection=None):
+        pass
+
+    def getConnection(self):
+        pass
