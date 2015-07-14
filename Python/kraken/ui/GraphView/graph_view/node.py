@@ -237,21 +237,22 @@ class Node(QtGui.QGraphicsWidget):
 
             modifiers = event.modifiers()
             if modifiers == QtCore.Qt.ControlModifier:
-                if self.isSelected() is False:
+                if not self.isSelected():
                     self.__graph.selectNode(self, clearSelection=False)
                 else:
                     self.__graph.deselectNode(self)
 
             elif modifiers == QtCore.Qt.ShiftModifier:
-                if self.isSelected() is False:
+                if not self.isSelected():
                     self.__graph.selectNode(self, clearSelection=False)
             else:
-                if self.isSelected() is False:
+                if not self.isSelected():
                     self.__graph.selectNode(self, clearSelection=False)
 
                 self.__dragging = True
                 self._mouseDownPoint = self.mapToScene(event.pos())
                 self._lastDragPoint = self._mouseDownPoint
+                self._nodesMoved = False
 
         else:
             super(Node, self).mousePressEvent(event)
@@ -263,16 +264,17 @@ class Node(QtGui.QGraphicsWidget):
             delta = newPos - self._lastDragPoint
             self.__graph.moveSelectedNodes(delta)
             self._lastDragPoint = newPos
+            self._nodesMoved = True
         else:
             super(Node, self).mouseMoveEvent(event)
 
 
     def mouseReleaseEvent(self, event):
         if self.__dragging:
-
-            newPos = self.mapToScene(event.pos())
-            delta = newPos - self._mouseDownPoint
-            self.__graph.endMoveSelectedNodes(delta)
+            if self._nodesMoved:
+                newPos = self.mapToScene(event.pos())
+                delta = newPos - self._mouseDownPoint
+                self.__graph.endMoveSelectedNodes(delta)
 
             self.setCursor(QtCore.Qt.ArrowCursor)
             self.__dragging = False

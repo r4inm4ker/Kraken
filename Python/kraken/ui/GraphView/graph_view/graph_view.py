@@ -26,6 +26,10 @@ class GraphView(QtGui.QGraphicsView):
     connectionAdded = QtCore.Signal(Connection)
     connectionRemoved = QtCore.Signal(Connection)
 
+    beginNodeSelection = QtCore.Signal()
+    endNodeSelection = QtCore.Signal()
+    nodeSelected = QtCore.Signal(Node)
+    nodeDeselected = QtCore.Signal(Node)
     selectionChanged = QtCore.Signal(list, list)
 
     # During the movement of the nodes, this signal is emitted with the incremental delta.
@@ -122,19 +126,25 @@ class GraphView(QtGui.QGraphicsView):
         self.nodeNameChanged.emit( origName, newName )
 
 
-    def clearSelection(self):
-        for node in self.__selection:
-            node.setSelected(False)
-        self.__selection.clear()
-
-    def selectNode(self, node, clearSelection=False, emitSignal=True):
+    def clearSelection(self, emitSignal=True):
 
         prevSelection = None
         if emitSignal:
             prevSelection = copy.copy(self.__selection)
 
+        for node in self.__selection:
+            node.setSelected(False)
+        self.__selection.clear()
+
+        if emitSignal and len(prevSelection) != 0:
+            self.selectionChanged.emit(prevSelection, [])
+
+    def selectNode(self, node, clearSelection=False, emitSignal=True):
+
+        prevSelection = None
+
         if clearSelection is True:
-            self.clearSelection()
+            self.clearSelection(emitSignal=emitSignal)
 
         if node in self.__selection:
             raise IndexError("Node is already in selection!")
@@ -143,19 +153,7 @@ class GraphView(QtGui.QGraphicsView):
         self.__selection.add(node)
 
         if emitSignal:
-            deselectedNodes = []
-            selectedNodes = []
-
-            for node in prevSelection:
-                if node not in self.__selection:
-                    deselectedNodes.append(node)
-
-            for node in self.__selection:
-                if node not in prevSelection:
-                    selectedNodes.append(node)
-
-            if selectedNodes != deselectedNodes:
-                self.selectionChanged.emit(selectedNodes, deselectedNodes)
+            self.nodeSelected.emit(node)
 
 
     def deselectNode(self, node, emitSignal=True):
@@ -167,11 +165,7 @@ class GraphView(QtGui.QGraphicsView):
         self.__selection.remove(node)
 
         if emitSignal:
-            deselectedNodes = []
-            selectedNodes = []
-
-            deselectedNodes.append(node)
-            self.selectionChanged.emit(selectedNodes, deselectedNodes)
+            self.nodeDeselected.emit(node)
 
     def getSelectedNodes(self):
         return self.__selection
@@ -321,9 +315,10 @@ class GraphView(QtGui.QGraphicsView):
             contextualNodeList.hide()
 
         if event.button() is QtCore.Qt.MouseButton.LeftButton and self.itemAt(event.pos()) is None:
+            self.beginNodeSelection.emit()
             self._manipulationMode = 1
             self._mouseDownSelection = copy.copy(self.getSelectedNodes())
-            self.clearSelection()
+            self.clearSelection(emitSignal=False)
             self._selectionRect = SelectionRect(graph=self, mouseDownPos=self.mapToScene(event.pos()))
 
         elif event.button() is QtCore.Qt.MouseButton.MiddleButton:
@@ -341,7 +336,7 @@ class GraphView(QtGui.QGraphicsView):
             self._selectionRect.setDragPoint(dragPoint)
             for name, node in self.__nodes.iteritems():
                 if not node.isSelected() and self._selectionRect.collidesWithItem(node):
-                    self.selectNode(node)
+                    self.selectNode(node, emitSignal=False)
 
         elif self._manipulationMode == 2:
             delta = self.mapToScene(event.pos()) - self._lastPanPoint
@@ -388,6 +383,8 @@ class GraphView(QtGui.QGraphicsView):
 
             if selectedNodes != deselectedNodes:
                 self.selectionChanged.emit(selectedNodes, deselectedNodes)
+
+            self.endNodeSelection.emit()
 
         elif self._manipulationMode == 2:
             self.setCursor(QtCore.Qt.ArrowCursor)

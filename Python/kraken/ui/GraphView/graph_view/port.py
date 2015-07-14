@@ -11,7 +11,7 @@ from mouse_grabber import MouseGrabber
 class PortLabel(QtGui.QGraphicsWidget):
     __font = QtGui.QFont('Decorative', 12)
 
-    def __init__(self, port, text, connectionPointType, hOffset, color, highlightColor):
+    def __init__(self, port, text, hOffset, color, highlightColor):
         super(PortLabel, self).__init__(port)
         self.__port = port
         self.__text = text
@@ -26,8 +26,6 @@ class PortLabel(QtGui.QGraphicsWidget):
         self.__textItem.document().setDefaultTextOption(option)
         self.__textItem.adjustSize()
 
-        self.__connectionPointType = connectionPointType
-
         self.setAcceptHoverEvents(True)
         self.setPreferredSize(self.textSize())
         self.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed))
@@ -36,9 +34,11 @@ class PortLabel(QtGui.QGraphicsWidget):
     def text(self):
         return self.__text
 
+
     def setColor(self, color):
         self.__textItem.setDefaultTextColor(color)
         self.update()
+
 
     def textSize(self):
         return QtCore.QSizeF(
@@ -46,70 +46,55 @@ class PortLabel(QtGui.QGraphicsWidget):
             self.__font.pointSizeF()
             )
 
+
     def getPort(self):
         return self.__port
 
-    def connectionPointType(self):
-        return self.__connectionPointType
 
-    def isInConnectionPoint(self):
-        return self.__connectionPointType == 'In'
+    def highlight(self):
+        self.setColor(self.__highlightColor)
 
-    def isOutConnectionPoint(self):
-        return self.__connectionPointType == 'Out'
+
+    def unhighlight(self):
+        self.setColor(self._labelColor)
+
+
+    def hoverEnterEvent(self, event):
+        self.highlight()
+        super(PortLabel, self).hoverEnterEvent(event)
+
+
+    def hoverLeaveEvent(self, event):
+        self.unhighlight()
+        super(PortLabel, self).hoverLeaveEvent(event)
+
+
+    def mousePressEvent(self, event):
+        self.__port.mousePressEvent(event)
+
 
     # def paint(self, painter, option, widget):
     #     super(PortLabel, self).paint(painter, option, widget)
     #     painter.setPen(QtGui.QPen(QtGui.QColor(0, 0, 255)))
     #     painter.drawRect(self.windowFrameRect())
 
-    def highlight(self):
-        self.setColor(self.__highlightColor)
-
-    def unhighlight(self):
-        self.setColor(self._labelColor)
-
-    def hoverEnterEvent(self, event):
-        self.highlight()
-        super(PortLabel, self).hoverEnterEvent(event)
-
-    def hoverLeaveEvent(self, event):
-        self.unhighlight()
-        super(PortLabel, self).hoverLeaveEvent(event)
-
-    def mousePressEvent(self, event):
-
-        scenePos = self.mapToScene(event.pos())
-
-        #self.unhighlight()
-        if self.isInConnectionPoint():
-        #     self._graph.controller().beginInteraction("Edit connection to:" + self.__port.getPath())
-            MouseGrabber(self.getPort().getGraph(), scenePos, self.__port, 'Out')
-        elif self.isOutConnectionPoint():
-        #     self._graph.controller().beginInteraction("Edit connections from:" + self.__port.getPath())
-            MouseGrabber(self.getPort().getGraph(), scenePos, self.__port, 'In')
-
 
 class PortCircle(QtGui.QGraphicsWidget):
     __radius = 4.5
     __diameter = 2 * __radius
 
-    def __init__(self, port, graph, connectionPointType, color):
+    def __init__(self, port, graph, hOffset, color, connectionPointType):
         super(PortCircle, self).__init__(port)
 
         self.__port = port
         self._graph = graph
-        self.__connectionPointType = connectionPointType
 
         self.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed))
         size = QtCore.QSizeF(self.__diameter, self.__diameter)
         self.setPreferredSize(size)
         self.setWindowFrameMargins(0, 0, 0, 0)
 
-        if self.isInConnectionPoint():
-            self.translate(self.__radius * -2, 0)
-        else:
-            self.translate(self.__radius * 2, 0)
+        self.translate(self.__radius * hOffset, 0)
 
         self.__defaultPen = QtGui.QPen(QtGui.QColor(25, 25, 25), 1.0)
         self.__hoverPen = QtGui.QPen(QtGui.QColor(255, 255, 100), 1.5)
@@ -124,7 +109,7 @@ class PortCircle(QtGui.QGraphicsWidget):
             self.__diameter,
             self.__diameter,
             )
-        if self.isInConnectionPoint():
+        if connectionPointType == 'In':
             self.__ellipseItem.setStartAngle(270 * 16)
             self.__ellipseItem.setSpanAngle(180 * 16)
         self.__ellipseItem.setParentItem(self)
@@ -133,21 +118,15 @@ class PortCircle(QtGui.QGraphicsWidget):
     def getPort(self):
         return self.__port
 
-    def connectionPointType(self):
-        return self.__connectionPointType
-
-    def isInConnectionPoint(self):
-        return self.__connectionPointType == 'In'
-
-    def isOutConnectionPoint(self):
-        return self.__connectionPointType == 'Out'
 
     def centerInSceneCoords(self):
         return self.__ellipseItem.mapToScene(0, 0)
 
+
     def setColor(self, color):
         self._color = color
         self.__ellipseItem.setBrush(QtGui.QBrush(self._color))
+
 
     def highlight(self):
         self.__ellipseItem.setBrush(QtGui.QBrush(self._color.lighter()))
@@ -159,6 +138,7 @@ class PortCircle(QtGui.QGraphicsWidget):
             self.__diameter * 1.6,
             )
 
+
     def unhighlight(self):
         self.__ellipseItem.setBrush(QtGui.QBrush(self._color))
         self.__ellipseItem.setRect(
@@ -168,25 +148,21 @@ class PortCircle(QtGui.QGraphicsWidget):
             self.__diameter,
             )
 
+
     def hoverEnterEvent(self, event):
         self.highlight()
         super(PortCircle, self).hoverEnterEvent(event)
+
 
     def hoverLeaveEvent(self, event):
         self.unhighlight()
         super(PortCircle, self).hoverLeaveEvent(event)
 
+
     def mousePressEvent(self, event):
-
-        scenePos = self.mapToScene(event.pos())
-
         self.unhighlight()
+        self.__port.mousePressEvent(event)
 
-        if self.isInConnectionPoint():
-            grabber = MouseGrabber(self._graph, scenePos, self.__port, 'Out')
-
-        elif self.isOutConnectionPoint():
-            grabber = MouseGrabber(self._graph, scenePos, self.__port, 'In')
 
     # def paint(self, painter, option, widget):
     #     super(PortCircle, self).paint(painter, option, widget)
@@ -206,6 +182,7 @@ class BasePort(QtGui.QGraphicsWidget):
         self._graph = graph
         self._name = name
         self._dataType = dataType
+        self._connectionPointType = connectionPointType
 
         self.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Fixed))
 
@@ -227,10 +204,6 @@ class BasePort(QtGui.QGraphicsWidget):
     def getGraph(self):
         return self._graph
 
-    # ===================
-    # Connection Methods
-    # ===================
-
     def getColor(self):
         return self._color
 
@@ -241,14 +214,33 @@ class BasePort(QtGui.QGraphicsWidget):
             self.__outCircle.setColor(color)
         self._color = color
 
+    # ===================
+    # Connection Methods
+    # ===================
+
+    def connectionPointType(self):
+        return self._connectionPointType
+
+    def isInConnectionPoint(self):
+        return self._connectionPointType == 'In'
+
+    def isOutConnectionPoint(self):
+        return self._connectionPointType == 'Out'
+
     # def paint(self, painter, option, widget):
     #     super(BasePort, self).paint(painter, option, widget)
     #     painter.setPen(QtGui.QPen(QtGui.QColor(255, 255, 0)))
     #     painter.drawRect(self.windowFrameRect())
 
-    # def disconnect(self):
-    #     pass
-    #     self.scene().removeItem(self)
+    def mousePressEvent(self, event):
+
+        scenePos = self.mapToScene(event.pos())
+
+        #self.unhighlight()
+        if self.isInConnectionPoint():
+            MouseGrabber(self.getGraph(), scenePos, self, 'Out')
+        elif self.isOutConnectionPoint():
+            MouseGrabber(self.getGraph(), scenePos, self, 'In')
 
 
 class InputPort(BasePort):
@@ -256,17 +248,17 @@ class InputPort(BasePort):
     def __init__(self, parent, graph, name, color, dataType):
         super(InputPort, self).__init__(parent, graph, name, color, dataType, 'In')
 
-        self.__inCircle = PortCircle(self, graph, 'In', color)
+        labelHOffset = -10
+        circleHOffset = -2
+
+        self.__inCircle = PortCircle(self, graph, circleHOffset, color, 'In')
+        self.__labelItem = PortLabel(self, name, labelHOffset, self._labelColor, self._labelHighlightColor)
+
         self.layout().addItem(self.__inCircle)
         self.layout().setAlignment(self.__inCircle, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
-
         self.layout().setContentsMargins(0, 0, 30, 0)
-        labelHOffset = -10
-
-        self.__labelItem = PortLabel(self, name, 'In', labelHOffset, self._labelColor, self._labelHighlightColor)
         self.layout().addItem(self.__labelItem)
         self.layout().setAlignment(self.__labelItem, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
-
         self.layout().addStretch(2)
 
         self.__connection = None
@@ -315,11 +307,6 @@ class InputPort(BasePort):
         return self.__connection
 
 
-    # def disconnect(self):
-        
-    #     self.__connection.disconnect()
-
-
 
 
 class OutputPort(BasePort):
@@ -327,17 +314,16 @@ class OutputPort(BasePort):
     def __init__(self, parent, graph, name, color, dataType):
         super(OutputPort, self).__init__(parent, graph, name, color, dataType, 'Out')
 
+        labelHOffset = 10
+        circleHOffset = 2
+
+        self.__labelItem = PortLabel(self, self._name, labelHOffset, self._labelColor, self._labelHighlightColor)
+        self.__outCircle = PortCircle(self, graph, circleHOffset, color, 'Out')
 
         self.layout().addStretch(2)
         self.layout().setContentsMargins(30, 0, 0, 0)
-        labelHOffset = 10
-
-        self.__labelItem = PortLabel(self, self._name, 'Out', labelHOffset, self._labelColor, self._labelHighlightColor)
         self.layout().addItem(self.__labelItem)
         self.layout().setAlignment(self.__labelItem, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
-
-
-        self.__outCircle = PortCircle(self, graph, 'Out', color)
         self.layout().addItem(self.__outCircle)
         self.layout().setAlignment(self.__outCircle, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
 
@@ -383,14 +369,3 @@ class OutputPort(BasePort):
         """
 
         return self.__connections
-
-    # def disconnect(self):
-    #     for connection in self.getConnections():
-    #         connection.disconnect()
-
-    # def destroy(self):
-
-    #     for connection in self.getConnections():
-    #         connection.destroy()
-
-    #     super(OutputPort, self).destroy(self)

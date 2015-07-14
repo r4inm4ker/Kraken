@@ -16,7 +16,7 @@ class UndoRedoManager(object):
         self.__redoStack = []
         self.__currentBracket = None
         self.__isUndoingOrRedoing = False
-        self.__enabled = False
+        self.__enabled = True
         
         self.__fireUpdateCallback()
     
@@ -111,7 +111,7 @@ class UndoRedoManager(object):
         return not self.__currentBracket is None
         
 
-    def addCommand(self, command, invokeRedoOnAdd=True):
+    def addCommand(self, command, invokeRedoOnAdd=False):
         """
         Adds a new command to the currently opened undo bracket.
         :param command: A command object which encapsulates the revertable action.
@@ -377,7 +377,7 @@ class CommandBracket(Command):
         """Returns the number of commands stored in the command bracket"""
         return len(self.__commands)
         
-    def addCommand(self, command, invokeRedoOnAdd=True):
+    def addCommand(self, command, invokeRedoOnAdd=False):
         """Adds a new command to the command bracket
 
         :param command: The command to add to the command bracket

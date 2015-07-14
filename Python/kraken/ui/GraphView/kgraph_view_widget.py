@@ -35,8 +35,14 @@ class KGraphViewWidget(GraphViewWidget):
         graphView.endConnectionManipulation.connect(self.__onEndConnectionManipulationSignal)
         graphView.connectionAdded.connect(self.__onConnectionAdded)
         graphView.connectionRemoved.connect(self.__onConnectionRemoved)
+
+        graphView.beginNodeSelection.connect(self.__onBeginNodeSelection)
+        graphView.endNodeSelection.connect(self.__onEndNodeSelection)
+        graphView.nodeSelected.connect(self.__onNodeSelected)
+        graphView.nodeDeselected.connect(self.__onNodeDeselected)
         graphView.selectionChanged.connect(self.__onSelectionChanged)
         graphView.endSelectionMoved.connect(self.__onSelectionMoved)
+
         graphView.beginDeleteSelection.connect(self.__onBeginDeleteSelection)
         graphView.endDeleteSelection.connect(self.__onEndDeleteSelection)
         
@@ -201,13 +207,13 @@ class KGraphViewWidget(GraphViewWidget):
     def __onNodeAdded(self, node):
         if not UndoRedoManager.getInstance().isUndoingOrRedoing():
             command = graph_commands.AddNodeCommand(self.graphView, self.guideRig, node)
-            UndoRedoManager.getInstance().addCommand(command, invokeRedoOnAdd=False)
+            UndoRedoManager.getInstance().addCommand(command)
 
 
     def __onNodeRemoved(self, node):
         if not UndoRedoManager.getInstance().isUndoingOrRedoing():
             command = graph_commands.RemoveNodeCommand(self.graphView, self.guideRig, node)
-            UndoRedoManager.getInstance().addCommand(command, invokeRedoOnAdd=False)
+            UndoRedoManager.getInstance().addCommand(command)
 
 
     def __onBeginConnectionManipulation(self):
@@ -221,18 +227,42 @@ class KGraphViewWidget(GraphViewWidget):
     def __onConnectionAdded(self, connection):
         if not UndoRedoManager.getInstance().isUndoingOrRedoing():
             command = graph_commands.ConnectionAddedCommand(self.graphView, self.guideRig, connection)
-            UndoRedoManager.getInstance().addCommand(command, invokeRedoOnAdd=False)
+            UndoRedoManager.getInstance().addCommand(command)
 
 
     def __onConnectionRemoved(self, connection):
         if not UndoRedoManager.getInstance().isUndoingOrRedoing():
             command = graph_commands.ConnectionRemovedCommand(self.graphView, self.guideRig, connection)
-            UndoRedoManager.getInstance().addCommand(command, invokeRedoOnAdd=False)
+            UndoRedoManager.getInstance().addCommand(command)
+
+
+    def __onBeginNodeSelection(self):
+        UndoRedoManager.getInstance().openBracket('Select Nodes')
+
+
+    def __onEndNodeSelection(self):
+        UndoRedoManager.getInstance().closeBracket()
+
+
+    def __onNodeSelected(self, node):
+        if not UndoRedoManager.getInstance().isUndoingOrRedoing():
+            command = graph_commands.SelectionChangeCommand(self.graphView, [node], [])
+            UndoRedoManager.getInstance().addCommand(command)
+        UndoRedoManager.getInstance().logDebug()
+
+
+    def __onNodeDeselected(self, node):
+        if not UndoRedoManager.getInstance().isUndoingOrRedoing():
+            command = graph_commands.SelectionChangeCommand(self.graphView, [], [node])
+            UndoRedoManager.getInstance().addCommand(command)
+        UndoRedoManager.getInstance().logDebug()
 
 
     def __onSelectionChanged(self, selectedNodes, deselectedNodes):
-        command = graph_commands.SelectionChangeCommand(self.graphView, selectedNodes, deselectedNodes)
-        UndoRedoManager.getInstance().addCommand(command, invokeRedoOnAdd=False)
+        if not UndoRedoManager.getInstance().isUndoingOrRedoing():
+            command = graph_commands.SelectionChangeCommand(self.graphView, selectedNodes, deselectedNodes)
+            UndoRedoManager.getInstance().addCommand(command)
+        UndoRedoManager.getInstance().logDebug()
 
 
     def __onSelectionMoved(self, nodes, delta):
@@ -241,7 +271,7 @@ class KGraphViewWidget(GraphViewWidget):
 
         if not UndoRedoManager.getInstance().isUndoingOrRedoing():
             command = graph_commands.NodesMoveCommand(self.graphView, nodes, delta)
-            UndoRedoManager.getInstance().addCommand(command, invokeRedoOnAdd=False)
+            UndoRedoManager.getInstance().addCommand(command)
 
 
     def __onBeginDeleteSelection(self):
