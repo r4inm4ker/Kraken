@@ -7,7 +7,7 @@ from contextual_node_list import ContextualNodeList, ContextualNewNodeWidget
 from graph_view.graph_view_widget import GraphViewWidget
 from kraken.ui.undoredo.undo_redo_manager import UndoRedoManager
 
-from graph_commands import AddNodeCommand, RemoveNodeCommand, ConnectionAddedCommand, ConnectionRemovedCommand
+import graph_commands
 
 from kraken.core.objects.rig import Rig
 from kraken import plugins
@@ -48,6 +48,7 @@ class KGraphViewWidget(GraphViewWidget):
         self.graphView.endConnectionManipulation.connect(self.__onEndConnectionManipulationSignal)
         self.graphView.connectionAdded.connect(self.__onConnectionAdded)
         self.graphView.connectionRemoved.connect(self.__onConnectionRemoved)
+        self.graphView.selectionChanged.connect(self.__onSelectionChanged)
 
     def getContextualNodeList(self):
         return self.__contextualNodeList
@@ -179,37 +180,39 @@ class KGraphViewWidget(GraphViewWidget):
         scenepos = self.graphView.mapToScene(pos)
         self.__contextualNodeList.showAtPos(pos, scenepos, self.graphView)
 
+    # ===============
+    # Signal Handlers
+    # ===============
 
     def __onNodeAdded(self, node):
-        command = AddNodeCommand(self.graphView, self.guideRig, node)
+        command = graph_commands.AddNodeCommand(self.graphView, self.guideRig, node)
         UndoRedoManager.getInstance().addCommand(command, invokeRedoOnAdd=False)
 
+
     def __onNodeRemoved(self, node):
-        print "__onNodeRemoved:" + str(node)
-        command = RemoveNodeCommand(self.graphView, self.guideRig, node)
+        command = graph_commands.RemoveNodeCommand(self.graphView, self.guideRig, node)
         UndoRedoManager.getInstance().addCommand(command, invokeRedoOnAdd=False)
 
 
     def __onBeginConnectionManipulation(self):
-        print "__onBeginConnectionManipulation:"
         UndoRedoManager.getInstance().openBracket('Connect Ports')
 
 
     def __onEndConnectionManipulationSignal(self):
-        print "__onEndConnectionManipulationSignal:"
         UndoRedoManager.getInstance().closeBracket()
 
 
     def __onConnectionAdded(self, connection):
-        print "__onConnectionAdded:" + str(connection)
-
-        command = ConnectionAddedCommand(self.graphView, self.guideRig, connection)
+        command = graph_commands.ConnectionAddedCommand(self.graphView, self.guideRig, connection)
         UndoRedoManager.getInstance().addCommand(command, invokeRedoOnAdd=False)
 
 
     def __onConnectionRemoved(self, connection):
-        print "__onConnectionRemoved:" + str(connection)
+        command = graph_commands.ConnectionRemovedCommand(self.graphView, self.guideRig, connection)
+        UndoRedoManager.getInstance().addCommand(command, invokeRedoOnAdd=False)
 
-        command = ConnectionRemovedCommand(self.graphView, self.guideRig, connection)
+
+    def __onSelectionChanged(self, selectedNodes, deselectedNodes):
+        command = graph_commands.SelectionChangeCommand(self.graphView, selectedNodes, deselectedNodes)
         UndoRedoManager.getInstance().addCommand(command, invokeRedoOnAdd=False)
 

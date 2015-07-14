@@ -31,7 +31,7 @@ class GraphView(QtGui.QGraphicsView):
     connectionAdded = QtCore.Signal(Connection)
     connectionRemoved = QtCore.Signal(Connection)
 
-    selectionChanged = QtCore.Signal(list)
+    selectionChanged = QtCore.Signal(list, list)
     selectionMoved = QtCore.Signal(QtCore.QPointF)
 
     _clipboardData = None
@@ -83,9 +83,7 @@ class GraphView(QtGui.QGraphicsView):
         self.__selection = set()
 
         self._manipulationMode = 0
-        self._dragging = False
         self._selectionRect = None
-        self._selectionchanged = False
 
         self.__rig = None
 
@@ -282,7 +280,7 @@ class GraphView(QtGui.QGraphicsView):
 
 
     def addConnection(self, connection, emitNotification=True):
-        
+
         self.__connections.add(connection)
         self.scene().addItem(connection)
         if emitNotification:
@@ -333,10 +331,10 @@ class GraphView(QtGui.QGraphicsView):
             contextualNodeList.hide()
 
         if event.button() is QtCore.Qt.MouseButton.LeftButton and self.itemAt(event.pos()) is None:
-            self._selectionRect = SelectionRect(graph=self, mouseDownPos=self.mapToScene(event.pos()))
-            self._dragging = False
             self._manipulationMode = 1
             self._mouseDownSelection = copy.copy(self.getSelectedNodes())
+            self.clearSelection()
+            self._selectionRect = SelectionRect(graph=self, mouseDownPos=self.mapToScene(event.pos()))
 
         elif event.button() is QtCore.Qt.MouseButton.MiddleButton:
 
@@ -404,13 +402,9 @@ class GraphView(QtGui.QGraphicsView):
         if self._manipulationMode == 1:
             dragPoint = self.mapToScene(event.pos())
             self._selectionRect.setDragPoint(dragPoint)
-            self.clearSelection()
             for name, node in self.__nodes.iteritems():
                 if not node.isSelected() and self._selectionRect.collidesWithItem(node):
                     self.selectNode(node)
-                    self._selectionchanged = True
-            self._dragging = True
-
 
         elif self._manipulationMode == 2:
             delta = self.mapToScene(event.pos()) - self._lastPanPoint
@@ -421,8 +415,6 @@ class GraphView(QtGui.QGraphicsView):
 
             self._lastPanPoint = self.mapToScene(event.pos())
 
-            # Call udpate to redraw background
-            self.update()
         elif self._manipulationMode == 3:
 
             newPos = self.mapToScene(event.pos())
@@ -430,7 +422,8 @@ class GraphView(QtGui.QGraphicsView):
             self._lastDragPoint = newPos
 
             selectedNodes = self.getSelectedNodes()
-            # Apply the delta to each selected key
+
+            # Apply the delta to each selected node
             for node in selectedNodes:
                 node.translate(delta.x(), delta.y())
 
@@ -440,9 +433,6 @@ class GraphView(QtGui.QGraphicsView):
     def mouseReleaseEvent(self, event):
         if self._manipulationMode == 1:
             self._selectionRect.destroy()
-            self._selectionRect = None
-            if not self._dragging:
-                self.clearSelection()
             self._selectionRect = None
             self._manipulationMode = 0
 
@@ -459,8 +449,8 @@ class GraphView(QtGui.QGraphicsView):
                 if node not in self._mouseDownSelection:
                     selectedNodes.append(node)
 
-            command = SelectionChangeCommand(self, selectedNodes, deselectedNodes)
-            UndoRedoManager.getInstance().addCommand(command, invokeRedoOnAdd=False)
+            if selectedNodes != deselectedNodes:
+                self.selectionChanged.emit(selectedNodes, deselectedNodes)
 
         elif self._manipulationMode == 2:
             self.setCursor(QtCore.Qt.ArrowCursor)
@@ -510,9 +500,12 @@ class GraphView(QtGui.QGraphicsView):
             # Add a component to the rig placed at the given position.
             dropPosition = self.mapToScene(event.pos())
 
-            # construct
-            command = ConstructComponentCommand(self, componentClassName, Vec2(dropPosition.x(), dropPosition.y()))
-            UndoRedoManager.getInstance().addCommand(command, invokeRedoOnAdd=True)
+            # construct the node and add it to the graph.
+            krakenSystem = KrakenSystem.getInstance()
+            componentClass = krakenSystem.getComponentClass( componentClassName )
+            component = componentClass(parent=self.getRig())
+            component.setGraphPos(Vec2(dropPosition.x(), dropPosition.y()))
+            self.addNode(Node(self, component) )
 
             event.acceptProposedAction()
         else:
