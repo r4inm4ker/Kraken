@@ -246,8 +246,8 @@ class BasePort(QtGui.QGraphicsWidget):
     #     painter.setPen(QtGui.QPen(QtGui.QColor(255, 255, 0)))
     #     painter.drawRect(self.windowFrameRect())
 
-    # def destroy(self):
-
+    # def disconnect(self):
+    #     pass
     #     self.scene().removeItem(self)
 
 
@@ -315,11 +315,10 @@ class InputPort(BasePort):
         return self.__connection
 
 
-    # def destroy(self):
+    # def disconnect(self):
+        
+    #     self.__connection.disconnect()
 
-    #     self.__connection.destroy()
-
-    #     super(InputPort, self).destroy(self)
 
 
 
@@ -385,6 +384,9 @@ class OutputPort(BasePort):
 
         return self.__connections
 
+    # def disconnect(self):
+    #     for connection in self.getConnections():
+    #         connection.disconnect()
 
     # def destroy(self):
 

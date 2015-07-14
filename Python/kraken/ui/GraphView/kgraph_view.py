@@ -5,6 +5,7 @@
 from PySide import QtGui, QtCore
 
 from graph_view.graph_view import GraphView
+from graph_view.connection import Connection
 from knode import KNode
 
 from kraken.core.maths import Vec2
@@ -14,6 +15,12 @@ from kraken.core.configs.config import Config
 
 class KGraphView(GraphView):
     
+    beginCopyData = QtCore.Signal()
+    endCopyData = QtCore.Signal()
+    
+    beginPasteData = QtCore.Signal()
+    endPasteData = QtCore.Signal()
+
     _clipboardData = None
 
     def __init__(self, parent=None):
@@ -42,12 +49,38 @@ class KGraphView(GraphView):
                 componentInput = component.getInputByIndex(i)
                 if componentInput.isConnected():
                     componentOutput = componentInput.getConnection()
-                    self.addConnection(
-                        source = componentOutput.getParent().getDecoratedName() + '.' + componentOutput.getName(),
-                        target = component.getDecoratedName() + '.' + componentInput.getName()
+
+                    self.connectPorts(
+                        sourceComponent = componentOutput.getParent().getDecoratedName(), outputName = componentOutput.getName(),
+                        targetComponent = component.getDecoratedName(), inputName=componentInput.getName()
                     )
 
         self.frameAllNodes()
+
+
+    def connectPorts(self, sourceComponent, outputName, targetComponent, inputName):
+
+        sourceNode = self.getNode(sourceComponent)
+        if not sourceNode:
+            raise Exception("Component not found:" + sourceNode.getName())
+
+        sourcePort = sourceNode.getOutPort(outputName)
+        if not sourcePort:
+            raise Exception("Component '" + sourceNode.getName() + "' does not have output:" + sourcePort.getName())
+
+
+        targetNode = self.getNode(targetComponent)
+        if not targetNode:
+            raise Exception("Component not found:" + targetNode.getName())
+
+        targetPort = targetNode.getInPort(inputName)
+        if not targetPort:
+            raise Exception("Component '" + targetNode.getName() + "' does not have input:" + targetPort.getName())
+
+        connection = Connection(self, sourcePort, targetPort)
+        self.addConnection(connection, emitSignal=False)
+
+        return connection
 
     ################################################
     ## Events
@@ -243,8 +276,8 @@ class KGraphView(GraphView):
             inputPort = targetComponent.getInputByName(inputName)
 
             inputPort.setConnection(outputPort)
-            self.addConnection(
-                source = sourceComponent.getDecoratedName() + '.' + outputPort.getName(),
-                target = targetComponent.getDecoratedName() + '.' + inputPort.getName()
+            self.connectPorts(
+                sourceComponent = sourceComponent.getDecoratedName(), outputName = outputPort.getName(),
+                targetComponent = targetComponent.getDecoratedName(), inputName=inputPort.getName()
             )
 

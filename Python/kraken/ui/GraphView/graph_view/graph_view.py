@@ -18,6 +18,8 @@ class GraphView(QtGui.QGraphicsView):
     nodeAdded = QtCore.Signal(Node)
     nodeRemoved = QtCore.Signal(Node)
     nodeNameChanged = QtCore.Signal(str, str)
+    beginDeleteSelection = QtCore.Signal()
+    endDeleteSelection = QtCore.Signal()
 
     beginConnectionManipulation = QtCore.Signal()
     endConnectionManipulation = QtCore.Signal()
@@ -86,22 +88,23 @@ class GraphView(QtGui.QGraphicsView):
     ################################################
     ## Nodes
 
-    def addNode(self, node, emitNotification=True):
+    def addNode(self, node, emitSignal=True):
         self.scene().addItem(node)
         self.__nodes[node.getName()] = node
         node.nameChanged.connect(self._onNodeNameChanged)
 
-        if emitNotification:
+        if emitSignal:
             self.nodeAdded.emit(node)
 
         return node
 
-    def removeNode(self, node, emitNotification=True):
+    def removeNode(self, node, emitSignal=True):
+
         del self.__nodes[node.getName()]
         self.scene().removeItem(node)
         node.nameChanged.disconnect(self._onNodeNameChanged)
 
-        if emitNotification:
+        if emitSignal:
             self.nodeRemoved.emit(node)
 
     def getNode(self, name):
@@ -124,10 +127,10 @@ class GraphView(QtGui.QGraphicsView):
             node.setSelected(False)
         self.__selection.clear()
 
-    def selectNode(self, node, clearSelection=False, emitNotification=True):
+    def selectNode(self, node, clearSelection=False, emitSignal=True):
 
         prevSelection = None
-        if emitNotification:
+        if emitSignal:
             prevSelection = copy.copy(self.__selection)
 
         if clearSelection is True:
@@ -139,7 +142,7 @@ class GraphView(QtGui.QGraphicsView):
         node.setSelected(True)
         self.__selection.add(node)
 
-        if emitNotification:
+        if emitSignal:
             deselectedNodes = []
             selectedNodes = []
 
@@ -155,7 +158,7 @@ class GraphView(QtGui.QGraphicsView):
                 self.selectionChanged.emit(selectedNodes, deselectedNodes)
 
 
-    def deselectNode(self, node, emitNotification=True):
+    def deselectNode(self, node, emitSignal=True):
 
         if node not in self.__selection:
             raise IndexError("Node is not in selection!")
@@ -163,7 +166,7 @@ class GraphView(QtGui.QGraphicsView):
         node.setSelected(False)
         self.__selection.remove(node)
 
-        if emitNotification:
+        if emitSignal:
             deselectedNodes = []
             selectedNodes = []
 
@@ -175,10 +178,15 @@ class GraphView(QtGui.QGraphicsView):
 
 
     def deleteSelectedNodes(self):
+        self.beginDeleteSelection.emit()
+
         selectedNodes = self.getSelectedNodes()
         names = ""
         for node in selectedNodes:
+            node.disconnectAllPorts()
             self.removeNode(node)
+
+        self.endDeleteSelection.emit()
 
 
     def frameNodes(self, nodes):
@@ -262,11 +270,11 @@ class GraphView(QtGui.QGraphicsView):
         return pos
 
 
-    def moveSelectedNodes(self, delta, emitNotification=True):
+    def moveSelectedNodes(self, delta, emitSignal=True):
         for node in self.__selection:
             node.translate( delta.x(), delta.y())
 
-        if emitNotification:
+        if emitSignal:
             self.selectionMoved.emit(self.__selection, delta)
 
     # After moving the nodes interactively, this signal is emitted with the final delta. 
@@ -276,35 +284,6 @@ class GraphView(QtGui.QGraphicsView):
     ################################################
     ## Connections
 
-    # def addConnection(self, source, target):
-
-    #     sourceComponent, outputName = tuple(source.split('.'))
-    #     targetComponent, inputName = tuple(target.split('.'))
-    #     sourceNode = self.getNode(sourceComponent)
-    #     if not sourceNode:
-    #         raise Exception("Component not found:" + sourceNode.getName())
-
-    #     sourcePort = sourceNode.getOutPort(outputName)
-    #     if not sourcePort:
-    #         raise Exception("Component '" + sourceNode.getName() + "' does not have output:" + sourcePort.getName())
-
-
-    #     targetNode = self.getNode(targetComponent)
-    #     if not targetNode:
-    #         raise Exception("Component not found:" + targetNode.getName())
-
-    #     targetPort = targetNode.getInPort(inputName)
-    #     if not targetPort:
-    #         raise Exception("Component '" + targetNode.getName() + "' does not have input:" + targetPort.getName())
-
-    #     connection = Connection(self, sourcePort, targetPort)
-    #     sourcePort.addConnection(connection)
-    #     targetPort.setConnection(connection)
-
-    #     self.connectionAdded.emit(connection)
-
-    #     return connection
-
     def emitBeginConnectionManipulationSignal(self):
         self.beginConnectionManipulation.emit()
 
@@ -313,20 +292,20 @@ class GraphView(QtGui.QGraphicsView):
         self.endConnectionManipulation.emit()
 
 
-    def addConnection(self, connection, emitNotification=True):
+    def addConnection(self, connection, emitSignal=True):
 
         self.__connections.add(connection)
         self.scene().addItem(connection)
-        if emitNotification:
+        if emitSignal:
             self.connectionAdded.emit(connection)
         return connection
 
-    def removeConnection(self, connection, emitNotification=True):
+    def removeConnection(self, connection, emitSignal=True):
 
         connection.disconnect()
         self.__connections.remove(connection)
         self.scene().removeItem(connection)
-        if emitNotification:
+        if emitSignal:
             self.connectionRemoved.emit(connection)
 
 

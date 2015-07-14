@@ -37,7 +37,7 @@ class MouseGrabber(QtGui.QGraphicsWidget):
         elif self.__connectionPointType == 'In':
             self.__connection = connection.Connection(self.__graph, port, self)
         # Do not emit a notification for this temporary connection.
-        self.__graph.addConnection(self.__connection, emitNotification=False)
+        self.__graph.addConnection(self.__connection, emitSignal=False)
         self.__mouseOverPortCircle = None
         self.__graph.emitBeginConnectionManipulationSignal()
 
