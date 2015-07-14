@@ -14,7 +14,10 @@ class GraphViewWidget(QtGui.QWidget):
         self.setObjectName('graphViewWidget')
         self.setAttribute(QtCore.Qt.WA_WindowPropagation, True)
 
-        self.graphView = GraphView(parent=self)
+
+    def setGraphView(self, graphView):
+
+        self.graphView = graphView
 
         # Setup Layout
         layout = QtGui.QVBoxLayout(self)
@@ -32,3 +35,6 @@ class GraphViewWidget(QtGui.QWidget):
         frameShortcut = QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.Key_A), self)
         frameShortcut.activated.connect(self.graphView.frameAllNodes)
 
+
+    def getGraphView(self):
+        return self.graphView

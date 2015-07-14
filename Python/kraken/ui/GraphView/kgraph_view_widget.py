@@ -5,8 +5,8 @@ from PySide import QtGui, QtCore
 
 from contextual_node_list import ContextualNodeList, ContextualNewNodeWidget
 from graph_view.graph_view_widget import GraphViewWidget
+from kgraph_view import KGraphView
 from kraken.ui.undoredo.undo_redo_manager import UndoRedoManager
-
 import graph_commands
 
 from kraken.core.objects.rig import Rig
@@ -26,7 +26,19 @@ class KGraphViewWidget(GraphViewWidget):
 
         # constructors of base classes
         super(KGraphViewWidget, self).__init__(parent)
-        self.__contextualNodeList = None
+
+
+        graphView = KGraphView(parent=self)
+        graphView.nodeAdded.connect(self.__onNodeAdded)
+        graphView.nodeRemoved.connect(self.__onNodeRemoved)
+        graphView.beginConnectionManipulation.connect(self.__onBeginConnectionManipulation)
+        graphView.endConnectionManipulation.connect(self.__onEndConnectionManipulationSignal)
+        graphView.connectionAdded.connect(self.__onConnectionAdded)
+        graphView.connectionRemoved.connect(self.__onConnectionRemoved)
+        graphView.selectionChanged.connect(self.__onSelectionChanged)
+        graphView.endSelectionMoved.connect(self.__onSelectionMoved)
+        
+        self.setGraphView(graphView)
 
         #########################
         ## Setup hotkeys for the following actions.
@@ -42,14 +54,7 @@ class KGraphViewWidget(GraphViewWidget):
 
         self.newRigPreset()
 
-        self.graphView.nodeAdded.connect(self.__onNodeAdded)
-        self.graphView.nodeRemoved.connect(self.__onNodeRemoved)
-        self.graphView.beginConnectionManipulation.connect(self.__onBeginConnectionManipulation)
-        self.graphView.endConnectionManipulation.connect(self.__onEndConnectionManipulationSignal)
-        self.graphView.connectionAdded.connect(self.__onConnectionAdded)
-        self.graphView.connectionRemoved.connect(self.__onConnectionRemoved)
-        self.graphView.selectionChanged.connect(self.__onSelectionChanged)
-        self.graphView.endSelectionMoved.connect(self.__onSelectionMoved)
+        self.__contextualNodeList = None
 
     def getContextualNodeList(self):
         return self.__contextualNodeList
@@ -71,7 +76,7 @@ class KGraphViewWidget(GraphViewWidget):
     def newRigPreset(self):
         # TODO: clean the rig from the scene if it has been built.
         self.guideRig = Rig()
-        self.graphView.displayGraph(self.guideRig)
+        self.getGraphView().displayGraph(self.guideRig)
         self.setRigName('MyRig')
 
 
@@ -131,7 +136,7 @@ class KGraphViewWidget(GraphViewWidget):
     # =========
     def copy(self):
         graph = self.graphView.getGraph()
-        pos = graph.getSelectedNodesPos()
+        pos = graph.getSelectedNodesCentroid()
         self.graphView.__class__._clipboardData = graph.copySettings(pos)
 
     def paste(self):
