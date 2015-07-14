@@ -74,9 +74,10 @@ class SelectionChangeCommand(Command):
 
         
 
-class NodeMoveCommand(Command):
-    def __init__(self, nodes, delta):
-        super(NodeMoveCommand, self).__init__()
+class NodesMoveCommand(Command):
+    def __init__(self, graph, nodes, delta):
+        super(NodesMoveCommand, self).__init__()
+        self.graph = graph
         self.nodes = nodes
         self.delta = delta
         self.desc = "Moved: "

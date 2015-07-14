@@ -49,6 +49,7 @@ class KGraphViewWidget(GraphViewWidget):
         self.graphView.connectionAdded.connect(self.__onConnectionAdded)
         self.graphView.connectionRemoved.connect(self.__onConnectionRemoved)
         self.graphView.selectionChanged.connect(self.__onSelectionChanged)
+        self.graphView.endSelectionMoved.connect(self.__onSelectionMoved)
 
     def getContextualNodeList(self):
         return self.__contextualNodeList
@@ -214,5 +215,13 @@ class KGraphViewWidget(GraphViewWidget):
 
     def __onSelectionChanged(self, selectedNodes, deselectedNodes):
         command = graph_commands.SelectionChangeCommand(self.graphView, selectedNodes, deselectedNodes)
+        UndoRedoManager.getInstance().addCommand(command, invokeRedoOnAdd=False)
+
+
+    def __onSelectionMoved(self, nodes, delta):
+        for node in nodes:
+            node.pushGraphPosToComponent()
+
+        command = graph_commands.NodesMoveCommand(self.graphView, nodes, delta)
         UndoRedoManager.getInstance().addCommand(command, invokeRedoOnAdd=False)
 

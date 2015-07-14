@@ -3,19 +3,13 @@
 #
 import copy
 
-import json, difflib
-import os.path
-
 from PySide import QtGui, QtCore
-# from graph import Graph
+
 from node import Node, NodeTitle
 from port import BasePort, PortLabel, InputPort, OutputPort
 from connection import Connection
 
 from selection_rect import SelectionRect
-
-from kraken.ui.undoredo.undo_redo_manager import UndoRedoManager
-from kraken.ui.GraphView.graph_commands import ConstructComponentCommand, SelectionChangeCommand
 
 from kraken.core.maths import Vec2
 from kraken.core.kraken_system import KrakenSystem
@@ -32,10 +26,14 @@ class GraphView(QtGui.QGraphicsView):
     connectionRemoved = QtCore.Signal(Connection)
 
     selectionChanged = QtCore.Signal(list, list)
-    selectionMoved = QtCore.Signal(QtCore.QPointF)
+
+    # During the movement of the nodes, this signal is emitted with the incremental delta.
+    selectionMoved = QtCore.Signal(set, QtCore.QPointF)
+
+    # After moving the nodes interactively, this signal is emitted with the final delta. 
+    endSelectionMoved = QtCore.Signal(set, QtCore.QPointF)
 
     _clipboardData = None
-
 
     __backgroundColor = QtGui.QColor(50, 50, 50)
     __gridPenS = QtGui.QPen(QtGui.QColor(44, 44, 44, 255), 0.5)
@@ -128,7 +126,12 @@ class GraphView(QtGui.QGraphicsView):
             node.setSelected(False)
         self.__selection.clear()
 
-    def selectNode(self, node, clearSelection=False):
+    def selectNode(self, node, clearSelection=False, emitNotification=True):
+
+        prevSelection = None
+        if emitNotification:
+            prevSelection = copy.copy(self.__selection)
+
         if clearSelection is True:
             self.clearSelection()
 
@@ -136,17 +139,38 @@ class GraphView(QtGui.QGraphicsView):
             raise IndexError("Node is already in selection!")
 
         node.setSelected(True)
-
         self.__selection.add(node)
 
-    def deselectNode(self, node):
+        if emitNotification:
+            deselectedNodes = []
+            selectedNodes = []
 
-        node.setSelected(False)
+            for node in prevSelection:
+                if node not in self.__selection:
+                    deselectedNodes.append(node)
+
+            for node in self.__selection:
+                if node not in prevSelection:
+                    selectedNodes.append(node)
+
+            if selectedNodes != deselectedNodes:
+                self.selectionChanged.emit(selectedNodes, deselectedNodes)
+
+
+    def deselectNode(self, node, emitNotification=True):
 
         if node not in self.__selection:
             raise IndexError("Node is not in selection!")
 
+        node.setSelected(False)
         self.__selection.remove(node)
+
+        if emitNotification:
+            deselectedNodes = []
+            selectedNodes = []
+
+            deselectedNodes.append(node)
+            self.selectionChanged.emit(selectedNodes, deselectedNodes)
 
     def getSelectedNodes(self):
         return self.__selection
@@ -238,6 +262,18 @@ class GraphView(QtGui.QGraphicsView):
         pos = QtCore.QPoint(xPos, yPos)
 
         return pos
+
+
+    def moveSelectedNodes(self, delta, emitNotification=True):
+        for node in self.__selection:
+            node.translate( delta.x(), delta.y())
+
+        if emitNotification:
+            self.selectionMoved.emit(self.__selection, delta)
+
+    # After moving the nodes interactively, this signal is emitted with the final delta. 
+    def endMoveSelectedNodes(self, delta):
+        self.endSelectionMoved.emit(self.__selection, delta)
 
     #######################
     ## Connections

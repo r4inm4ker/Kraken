@@ -11,8 +11,6 @@ from kraken.core.maths import Vec2
 
 from kraken.ui.component_inspector import ComponentInspector
 
-from kraken.ui.undoredo.undo_redo_manager import UndoRedoManager
-from kraken.ui.GraphView.graph_commands import SelectNodeCommand, DeselectNodeCommand, NodeMoveCommand
 
 class NodeTitle(QtGui.QGraphicsWidget):
     __color = QtGui.QColor(25, 25, 25)
@@ -265,16 +263,16 @@ class Node(QtGui.QGraphicsWidget):
             modifiers = event.modifiers()
             if modifiers == QtCore.Qt.ControlModifier:
                 if self.isSelected() is False:
-                    UndoRedoManager.getInstance().addCommand(SelectNodeCommand(self.__graph, self, clearSelection=False))
+                    self.__graph.selectNode(self, clearSelection=False)
                 else:
-                    UndoRedoManager.getInstance().addCommand(DeselectNodeCommand(self.__graph, self))
+                    self.__graph.deselectNode(self)
 
             elif modifiers == QtCore.Qt.ShiftModifier:
                 if self.isSelected() is False:
-                    UndoRedoManager.getInstance().addCommand(SelectNodeCommand(self.__graph, self, clearSelection=False))
+                    self.__graph.selectNode(self, clearSelection=False)
             else:
                 if self.isSelected() is False:
-                    UndoRedoManager.getInstance().addCommand(SelectNodeCommand(self.__graph, self, clearSelection=False))
+                    self.__graph.selectNode(self, clearSelection=False)
 
                 self.__dragging = True
                 self._mouseDownPoint = self.mapToScene(event.pos())
@@ -288,15 +286,8 @@ class Node(QtGui.QGraphicsWidget):
         if self.__dragging:
             newPos = self.mapToScene(event.pos())
             delta = newPos - self._lastDragPoint
+            self.__graph.moveSelectedNodes(delta)
             self._lastDragPoint = newPos
-
-            if not self.isSelected():
-                self.translate(delta.x(), delta.y())
-            else:
-                selectedNodes = self.__graph.getSelectedNodes()
-                # Apply the delta to each selected key
-                for node in selectedNodes:
-                    node.translate(delta.x(), delta.y())
         else:
             super(Node, self).mouseMoveEvent(event)
 
@@ -304,19 +295,9 @@ class Node(QtGui.QGraphicsWidget):
     def mouseReleaseEvent(self, event):
         if self.__dragging:
 
-            if not self.isSelected():
-                self.pushGraphPosToComponent()
-                nodes = [self]
-            else:
-                selectedNodes = self.__graph.getSelectedNodes()
-                for node in selectedNodes:
-                    node.pushGraphPosToComponent()
-                nodes = selectedNodes
-
             newPos = self.mapToScene(event.pos())
             delta = newPos - self._mouseDownPoint
-            command = NodeMoveCommand(nodes, delta)
-            UndoRedoManager.getInstance().addCommand(command, invokeRedoOnAdd=False)
+            self.__graph.endMoveSelectedNodes(delta)
 
             self.setCursor(QtCore.Qt.ArrowCursor)
             self.__dragging = False
