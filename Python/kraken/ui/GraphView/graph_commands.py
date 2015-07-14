@@ -294,8 +294,8 @@ class ConnectionRemovedCommand(Command):
         self.graph = graph
         self.connection = connection
 
-        self.sourceComponent = rig.getComponent(self.connection.getSrcPort().getNode().getName())
-        self.targetComponent = rig.getComponent(self.connection.getDstPort().getNode().getName())
+        self.sourceComponent = rig.getChildByDecoratedName(self.connection.getSrcPort().getNode().getName())
+        self.targetComponent = rig.getChildByDecoratedName(self.connection.getDstPort().getNode().getName())
 
         self.sourceComponentOutputPort = self.sourceComponent.getOutputByName(self.connection.getSrcPort().getName())
         self.targetComponentInputPort = self.targetComponent.getInputByName(self.connection.getDstPort().getName())
@@ -308,11 +308,10 @@ class ConnectionRemovedCommand(Command):
 
     def redo(self):
         self.targetComponentInputPort.removeConnection()
-        self.connection.disconnect()
         self.graph.removeConnection(self.connection)
 
     def undo(self):
         self.targetComponentInputPort.setConnection(self.sourceComponentOutputPort)
-        self.connection.reconnect()
+        self.connection.connect()
         self.graph.addConnection(self.connection)
 

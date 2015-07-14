@@ -44,6 +44,8 @@ class KGraphViewWidget(GraphViewWidget):
 
         self.graphView.nodeAdded.connect(self.__onNodeAdded)
         self.graphView.nodeRemoved.connect(self.__onNodeRemoved)
+        self.graphView.beginConnectionManipulation.connect(self.__onBeginConnectionManipulation)
+        self.graphView.endConnectionManipulation.connect(self.__onEndConnectionManipulationSignal)
         self.graphView.connectionAdded.connect(self.__onConnectionAdded)
         self.graphView.connectionRemoved.connect(self.__onConnectionRemoved)
 
@@ -159,12 +161,12 @@ class KGraphViewWidget(GraphViewWidget):
         graph.pasteSettings(clipboardData, pos, mirrored=True, createConnectionsToExistingNodes=True)
 
     def undo(self):
-        UndoRedoManager.getInstance().logDebug()
         UndoRedoManager.getInstance().undo()
+        UndoRedoManager.getInstance().logDebug()
 
     def redo(self):
-        UndoRedoManager.getInstance().logDebug()
         UndoRedoManager.getInstance().redo()
+        UndoRedoManager.getInstance().logDebug()
 
     def openContextualNodeList(self):
         pos = self.mapFromGlobal(QtGui.QCursor.pos());
@@ -186,6 +188,16 @@ class KGraphViewWidget(GraphViewWidget):
         print "__onNodeRemoved:" + str(node)
         command = RemoveNodeCommand(self.graphView, self.guideRig, node)
         UndoRedoManager.getInstance().addCommand(command, invokeRedoOnAdd=False)
+
+
+    def __onBeginConnectionManipulation(self):
+        print "__onBeginConnectionManipulation:"
+        UndoRedoManager.getInstance().openBracket('Connect Ports')
+
+
+    def __onEndConnectionManipulationSignal(self):
+        print "__onEndConnectionManipulationSignal:"
+        UndoRedoManager.getInstance().closeBracket()
 
 
     def __onConnectionAdded(self, connection):

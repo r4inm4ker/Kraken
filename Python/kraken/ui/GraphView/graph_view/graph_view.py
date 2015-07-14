@@ -26,6 +26,8 @@ class GraphView(QtGui.QGraphicsView):
     nodeAdded = QtCore.Signal(Node)
     nodeRemoved = QtCore.Signal(Node)
 
+    beginConnectionManipulation = QtCore.Signal()
+    endConnectionManipulation = QtCore.Signal()
     connectionAdded = QtCore.Signal(Connection)
     connectionRemoved = QtCore.Signal(Connection)
 
@@ -271,13 +273,16 @@ class GraphView(QtGui.QGraphicsView):
 
     #     return connection
 
+    def emitBeginConnectionManipulationSignal(self):
+        self.beginConnectionManipulation.emit()
+
+
+    def emitEndConnectionManipulationSignal(self):
+        self.endConnectionManipulation.emit()
+
+
     def addConnection(self, connection, emitNotification=True):
-
-        # srcPort = connection.getSrcPort()
-        # dstPoint = connection.getDstPort()
-        # srcPort.addConnection(connection)
-        # dstPoint.setConnection(connection)
-
+        
         self.__connections.add(connection)
         self.scene().addItem(connection)
         if emitNotification:

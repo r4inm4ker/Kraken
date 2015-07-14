@@ -96,9 +96,7 @@ class Connection(QtGui.QGraphicsPathItem):
                 else:
                     MouseGrabber(self.__graph, pos, self.__dstPort, 'Out')
 
-                command = PortDisconnectCommand( self, self.__graph)
-                UndoRedoManager.getInstance().addCommand(command, invokeRedoOnAdd=True)
-                
+                self.__graph.removeConnection(self)
 
         else:
             super(Connection, self).mouseMoveEvent(event)

@@ -41,10 +41,10 @@ class MouseGrabber(QtGui.QGraphicsWidget):
             self.__connection = connection.Connection(self.__graph, self, port)
         elif self.__connectionPointType == 'In':
             self.__connection = connection.Connection(self.__graph, port, self)
-
-        self.__graph.addConnection(self.__connection)
+        # Do not emit a notification for this temporary connection.
+        self.__graph.addConnection(self.__connection, emitNotification=False)
         self.__mouseOverPortCircle = None
-        UndoRedoManager.getInstance().openBracket('Connect Ports')
+        self.__graph.emitBeginConnectionManipulationSignal()
 
 
     def inCircle(self):
@@ -106,6 +106,7 @@ class MouseGrabber(QtGui.QGraphicsWidget):
                 from connection import Connection
                 connection = Connection(self.__graph, sourcePort, targetPort)
                 self.__graph.addConnection(connection)
+                self.__graph.emitEndConnectionManipulationSignal()
 
             except Exception as e:
                 print "Exception in MouseGrabber.mouseReleaseEvent: " + str(e)
