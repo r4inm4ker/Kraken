@@ -3,7 +3,7 @@ import os.path
 
 from PySide import QtGui, QtCore
 
-from contextual_node_list import ContextualNodeList, ContextualNewNodeWidget
+from contextual_node_list import ContextualNodeList
 from graph_view.graph_view_widget import GraphViewWidget
 from kgraph_view import KGraphView
 from kraken.ui.undoredo.undo_redo_manager import UndoRedoManager
@@ -38,8 +38,6 @@ class KGraphViewWidget(GraphViewWidget):
 
         graphView.beginNodeSelection.connect(self.__onBeginNodeSelection)
         graphView.endNodeSelection.connect(self.__onEndNodeSelection)
-        graphView.nodeSelected.connect(self.__onNodeSelected)
-        graphView.nodeDeselected.connect(self.__onNodeDeselected)
         graphView.selectionChanged.connect(self.__onSelectionChanged)
         graphView.endSelectionMoved.connect(self.__onSelectionMoved)
 
@@ -245,21 +243,9 @@ class KGraphViewWidget(GraphViewWidget):
         UndoRedoManager.getInstance().closeBracket()
 
 
-    def __onNodeSelected(self, node):
+    def __onSelectionChanged(self, deselectedNodes, selectedNodes):
         if not UndoRedoManager.getInstance().isUndoingOrRedoing():
-            command = graph_commands.SelectionChangeCommand(self.graphView, [node], [])
-            UndoRedoManager.getInstance().addCommand(command)
-
-
-    def __onNodeDeselected(self, node):
-        if not UndoRedoManager.getInstance().isUndoingOrRedoing():
-            command = graph_commands.SelectionChangeCommand(self.graphView, [], [node])
-            UndoRedoManager.getInstance().addCommand(command)
-
-
-    def __onSelectionChanged(self, selectedNodes, deselectedNodes):
-        if not UndoRedoManager.getInstance().isUndoingOrRedoing():
-            command = graph_commands.SelectionChangeCommand(self.graphView, selectedNodes, deselectedNodes)
+            command = graph_commands.SelectionChangeCommand(self.graphView, deselectedNodes, selectedNodes)
             UndoRedoManager.getInstance().addCommand(command)
 
 

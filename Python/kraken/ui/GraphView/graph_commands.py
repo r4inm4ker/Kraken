@@ -4,11 +4,11 @@ from kraken.ui.undoredo.undo_redo_manager import Command
 
 
 class SelectionChangeCommand(Command):
-    def __init__(self, graph, selectedNodes, deselectedNodes):
+    def __init__(self, graph, deselectedNodes, selectedNodes):
         super(SelectionChangeCommand, self).__init__()
         self.graph = graph
-        self.selectedNodes = selectedNodes
         self.deselectedNodes = deselectedNodes
+        self.selectedNodes = selectedNodes
 
         self.desc = "Deselected: ["
         for i in range(len(self.deselectedNodes)):

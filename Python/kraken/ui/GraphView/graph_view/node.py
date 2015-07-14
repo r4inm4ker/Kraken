@@ -247,7 +247,7 @@ class Node(QtGui.QGraphicsWidget):
                     self.__graph.selectNode(self, clearSelection=False)
             else:
                 if not self.isSelected():
-                    self.__graph.selectNode(self, clearSelection=False)
+                    self.__graph.selectNode(self, clearSelection=True)
 
                 self.__dragging = True
                 self._mouseDownPoint = self.mapToScene(event.pos())

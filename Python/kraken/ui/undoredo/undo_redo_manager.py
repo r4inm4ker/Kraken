@@ -136,6 +136,7 @@ class UndoRedoManager(object):
                     return
 
             self.__undoStack.append(command)
+        self.__clearRedoStack()
     
 
     def haveUndo(self):

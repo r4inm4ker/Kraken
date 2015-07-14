@@ -3,6 +3,7 @@
 # Copyright 2010-2015
 #
 
+import sys
 from PySide import QtGui, QtCore
 
 from graph_view import GraphView
@@ -42,3 +43,14 @@ class GraphViewWidget(QtGui.QWidget):
 
     def getGraphView(self):
         return self.graphView
+
+
+
+if __name__ == "__main__":
+    app = QtGui.QApplication(sys.argv)
+
+    widget = GraphViewWidget()
+    widget.setGraphView(GraphView(parent=widget))
+    widget.show()
+
+    sys.exit(app.exec_())

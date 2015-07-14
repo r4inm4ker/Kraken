@@ -28,8 +28,6 @@ class GraphView(QtGui.QGraphicsView):
 
     beginNodeSelection = QtCore.Signal()
     endNodeSelection = QtCore.Signal()
-    nodeSelected = QtCore.Signal(Node)
-    nodeDeselected = QtCore.Signal(Node)
     selectionChanged = QtCore.Signal(list, list)
 
     # During the movement of the nodes, this signal is emitted with the incremental delta.
@@ -128,9 +126,10 @@ class GraphView(QtGui.QGraphicsView):
 
     def clearSelection(self, emitSignal=True):
 
-        prevSelection = None
+        prevSelection = []
         if emitSignal:
-            prevSelection = copy.copy(self.__selection)
+            for node in self.__selection:
+                prevSelection.append(node)
 
         for node in self.__selection:
             node.setSelected(False)
@@ -140,11 +139,13 @@ class GraphView(QtGui.QGraphicsView):
             self.selectionChanged.emit(prevSelection, [])
 
     def selectNode(self, node, clearSelection=False, emitSignal=True):
-
-        prevSelection = None
+        prevSelection = []
+        if emitSignal:
+            for n in self.__selection:
+                prevSelection.append(n)
 
         if clearSelection is True:
-            self.clearSelection(emitSignal=emitSignal)
+            self.clearSelection(emitSignal=False)
 
         if node in self.__selection:
             raise IndexError("Node is already in selection!")
@@ -153,19 +154,33 @@ class GraphView(QtGui.QGraphicsView):
         self.__selection.add(node)
 
         if emitSignal:
-            self.nodeSelected.emit(node)
+
+            newSelection = []
+            for n in self.__selection:
+                newSelection.append(n)
+
+            self.selectionChanged.emit(prevSelection, newSelection)
 
 
     def deselectNode(self, node, emitSignal=True):
-
+                
         if node not in self.__selection:
             raise IndexError("Node is not in selection!")
+
+        prevSelection = []
+        if emitSignal:
+            for n in self.__selection:
+                prevSelection.append(n)
 
         node.setSelected(False)
         self.__selection.remove(node)
 
         if emitSignal:
-            self.nodeDeselected.emit(node)
+            newSelection = []
+            for n in self.__selection:
+                newSelection.append(n)
+
+            self.selectionChanged.emit(prevSelection, newSelection)
 
     def getSelectedNodes(self):
         return self.__selection
@@ -307,13 +322,7 @@ class GraphView(QtGui.QGraphicsView):
     ## Events
 
     def mousePressEvent(self, event):
-
-        # If the contextual node list is open, close it. 
-        contextualNodeList = self.__graphViewWidget.getContextualNodeList()
-        if contextualNodeList is not None and contextualNodeList.isVisible():
-            contextualNodeList.searchLineEdit.clear()
-            contextualNodeList.hide()
-
+        
         if event.button() is QtCore.Qt.MouseButton.LeftButton and self.itemAt(event.pos()) is None:
             self.beginNodeSelection.emit()
             self._manipulationMode = 1
@@ -382,7 +391,7 @@ class GraphView(QtGui.QGraphicsView):
                     selectedNodes.append(node)
 
             if selectedNodes != deselectedNodes:
-                self.selectionChanged.emit(selectedNodes, deselectedNodes)
+                self.selectionChanged.emit(deselectedNodes, selectedNodes)
 
             self.endNodeSelection.emit()
 
