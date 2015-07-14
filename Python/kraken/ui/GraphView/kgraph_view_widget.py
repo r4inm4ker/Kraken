@@ -95,6 +95,7 @@ class KGraphViewWidget(GraphViewWidget):
             self.synchGuideRig()
             self.guideRig.writeRigDefinitionFile(filePath)
 
+
     def loadRigPreset(self):
         lastSceneFilePath = GetHomePath()
         (filePath, filter) = QtGui.QFileDialog.getOpenFileName(self, 'Load Rig Preset', lastSceneFilePath, 'Kraken Rig (*.krg)')
@@ -103,6 +104,7 @@ class KGraphViewWidget(GraphViewWidget):
             self.guideRig.loadRigDefinitionFile(filePath)
             self.graphView.displayGraph( self.guideRig )
             # self.nameWidget.setText( self.guideRig.getName() )
+
 
     def buildGuideRig(self):
 
@@ -114,13 +116,14 @@ class KGraphViewWidget(GraphViewWidget):
             self.guideRig.setName(self.guideRig.getName() + '_guide')
 
         builder.build(self.guideRig)
-
         self.window().statusBar().showMessage('Ready')
+
 
     def synchGuideRig(self):
         synchronizer = plugins.getSynchronizer()
         synchronizer.setTarget(self.guideRig)
         synchronizer.sync()
+
 
     def buildRig(self):
 
@@ -147,12 +150,14 @@ class KGraphViewWidget(GraphViewWidget):
         pos = graph.getSelectedNodesCentroid()
         self.graphView.__class__._clipboardData = graph.copySettings(pos)
 
+
     def paste(self):
         graph = self.graphView.getGraph()
         clipboardData = self.graphView.__class__._clipboardData
 
         pos = clipboardData['copyPos'] + QtCore.QPoint(20, 20)
         graph.pasteSettings(clipboardData, pos, mirrored=False, createConnectionsToExistingNodes=True)
+
 
     def pasteUnconnected(self):
         graph = self.graphView.getGraph()
@@ -161,12 +166,14 @@ class KGraphViewWidget(GraphViewWidget):
         pos = clipboardData['copyPos'] + QtCore.QPoint(20, 20)
         graph.pasteSettings(clipboardData, pos, mirrored=False, createConnectionsToExistingNodes=False)
 
+
     def pasteMirrored(self):
         graph = self.graphView.getGraph()
         clipboardData = self.graphView.__class__._clipboardData
 
         pos = clipboardData['copyPos'] + QtCore.QPoint(20, 20)
         graph.pasteSettings(clipboardData, pos, mirrored=True, createConnectionsToExistingNodes=False)
+
 
     def pasteMirroredConnected(self):
         graph = self.graphView.getGraph()
@@ -175,19 +182,13 @@ class KGraphViewWidget(GraphViewWidget):
         pos = clipboardData['copyPos'] + QtCore.QPoint(20, 20)
         graph.pasteSettings(clipboardData, pos, mirrored=True, createConnectionsToExistingNodes=True)
 
+
     def undo(self):
-        print "-----------------------------"
-        UndoRedoManager.getInstance().logDebug()
-        print "-----------------------------"
         UndoRedoManager.getInstance().undo()
-        UndoRedoManager.getInstance().logDebug()
 
     def redo(self):
-        print "-----------------------------"
-        UndoRedoManager.getInstance().logDebug()
-        print "-----------------------------"
         UndoRedoManager.getInstance().redo()
-        UndoRedoManager.getInstance().logDebug()
+
 
     def openContextualNodeList(self):
         pos = self.mapFromGlobal(QtGui.QCursor.pos());
@@ -248,21 +249,18 @@ class KGraphViewWidget(GraphViewWidget):
         if not UndoRedoManager.getInstance().isUndoingOrRedoing():
             command = graph_commands.SelectionChangeCommand(self.graphView, [node], [])
             UndoRedoManager.getInstance().addCommand(command)
-        UndoRedoManager.getInstance().logDebug()
 
 
     def __onNodeDeselected(self, node):
         if not UndoRedoManager.getInstance().isUndoingOrRedoing():
             command = graph_commands.SelectionChangeCommand(self.graphView, [], [node])
             UndoRedoManager.getInstance().addCommand(command)
-        UndoRedoManager.getInstance().logDebug()
 
 
     def __onSelectionChanged(self, selectedNodes, deselectedNodes):
         if not UndoRedoManager.getInstance().isUndoingOrRedoing():
             command = graph_commands.SelectionChangeCommand(self.graphView, selectedNodes, deselectedNodes)
             UndoRedoManager.getInstance().addCommand(command)
-        UndoRedoManager.getInstance().logDebug()
 
 
     def __onSelectionMoved(self, nodes, delta):
