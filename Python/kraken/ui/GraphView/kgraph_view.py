@@ -4,17 +4,13 @@
 
 from PySide import QtGui, QtCore
 
-
-
 from graph_view.graph_view import GraphView
-from graph_view.node import Node, NodeTitle, PortList
-from graph_view.port import BasePort, PortLabel, InputPort, OutputPort
+from knode import KNode
 
 from kraken.core.maths import Vec2
 from kraken.core.kraken_system import KrakenSystem
 from kraken.core.configs.config import Config
 
-# from knode import KNode
 
 class KGraphView(GraphView):
     
@@ -39,7 +35,7 @@ class KGraphView(GraphView):
         guideComponents = self.__rig.getChildrenByType('Component')
 
         for component in guideComponents:
-            self.addNode(Node(self,component))
+            self.addNode(KNode(self, component))
 
         for component in guideComponents:
             for i in range(component.getNumInputs()):
@@ -66,7 +62,7 @@ class KGraphView(GraphView):
         if event.button() == QtCore.Qt.MouseButton.RightButton:
 
             def graphItemAt(item):
-                if isinstance(item, Node):
+                if isinstance(item, KNode):
                     return item
                 elif item is not None:
                     return graphItemAt(item.parentItem())
@@ -94,7 +90,7 @@ class KGraphView(GraphView):
                     contextMenu.popup(event.globalPos())
 
 
-            if isinstance(graphicItem, Node) and graphicItem.isSelected():
+            if isinstance(graphicItem, KNode) and graphicItem.isSelected():
                 contextMenu = QtGui.QMenu(self.getGraphViewWidget())
                 contextMenu.setObjectName('rightClickContextMenu')
                 contextMenu.setMinimumWidth(150)
@@ -116,7 +112,7 @@ class KGraphView(GraphView):
                 contextMenu.popup(event.globalPos())
 
         else:
-            super(GraphView, self).mousePressEvent(event)
+            super(KGraphView, self).mousePressEvent(event)
 
 
     def dragEnterEvent(self, event):
@@ -144,7 +140,7 @@ class KGraphView(GraphView):
             componentClass = krakenSystem.getComponentClass( componentClassName )
             component = componentClass(parent=self.getRig())
             component.setGraphPos(Vec2(dropPosition.x(), dropPosition.y()))
-            self.addNode(Node(self, component) )
+            self.addNode(KNode(self, component) )
 
             event.acceptProposedAction()
         else:
@@ -210,7 +206,7 @@ class KGraphView(GraphView):
                 component.pasteData(componentData, setLocation=True)
             graphPos = component.getGraphPos( )
             component.setGraphPos(Vec2(graphPos.x + delta.x(), graphPos.y + delta.y()))
-            node = Node(self,component)
+            node = KNode(self,component)
             self.addNode(node)
             self.selectNode(node, False)
 

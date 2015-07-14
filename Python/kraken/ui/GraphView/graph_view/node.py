@@ -3,14 +3,9 @@
 # Copyright 2010-2015
 #
 
-#pylint: disable-msg=W0613
 import json
 from PySide import QtGui, QtCore
 from port import InputPort, OutputPort
-from kraken.core.maths import Vec2
-
-from kraken.ui.component_inspector import ComponentInspector
-
 
 class NodeTitle(QtGui.QGraphicsWidget):
     __color = QtGui.QColor(25, 25, 25)
@@ -76,8 +71,12 @@ class Node(QtGui.QGraphicsWidget):
     __selectedPen =  QtGui.QPen(QtGui.QColor(255, 255, 255, 255), 1.6)
     __linePen =  QtGui.QPen(QtGui.QColor(25, 25, 25, 255), 1.25)
 
-    def __init__(self, graph, component):
+    def __init__(self, graph, name):
         super(Node, self).__init__()
+
+        self.__name = name
+        self.__graph = graph
+        self.__color = QtGui.QColor(154, 205, 50, 255)
 
         self.setMinimumWidth(60)
         self.setMinimumHeight(20)
@@ -89,18 +88,7 @@ class Node(QtGui.QGraphicsWidget):
         layout.setOrientation(QtCore.Qt.Vertical)
         self.setLayout(layout)
 
-        # We have the following sources of information to display a node.
-        # 1. The executable. This defines the ports of the node, and its metadata contains the color and other settings.
-        # 2. The 'Node' or instance of the executable. Its meta data contains the positioin of the node in the graph.
-        # 3. The 'evalDesc' (for lack of a better name). This contains the data types that have been propagated to the ports.
-        # Given the graph path, and the node name, I should be able to acess the node.
-
-        self.__graph = graph
-        self.__component = component
-        self.__color = QtGui.QColor(154, 205, 50, 255)
-        self.__inspectorWidget = None
-
-        self.__titleItem = NodeTitle(self.__component.getDecoratedName(), self)
+        self.__titleItem = NodeTitle(self.__name, self)
         layout.addItem(self.__titleItem)
         layout.setAlignment(self.__titleItem, QtCore.Qt.AlignCenter | QtCore.Qt.AlignTop)
 
@@ -108,8 +96,6 @@ class Node(QtGui.QGraphicsWidget):
         self.__outports = []
         self.__inputPortsHolder = PortList(self)
         self.__outputPortsHolder = PortList(self)
-
-
 
         layout.addItem(self.__inputPortsHolder)
 
@@ -123,46 +109,60 @@ class Node(QtGui.QGraphicsWidget):
         self.__dragging = False
 
 
-        def getPortColor(dataType):
-
-            if dataType.startswith('Xfo'):
-                return QtGui.QColor(128, 170, 170, 255)
-            elif dataType.startswith('Float'):
-                return QtGui.QColor(32, 255, 32, 255)
-            elif dataType.startswith('Integer'):
-                return QtGui.QColor(0, 128, 0, 255)
-            elif dataType.startswith('Boolean'):
-                return QtGui.QColor(255, 102, 0, 255)
-            else:
-                return QtGui.QColor(50, 205, 254, 255)
-
-        for i in range(self.__component.getNumInputs()):
-            componentInput = component.getInputByIndex(i)
-            name = componentInput.getName()
-            dataType = componentInput.getDataType()
-            color = getPortColor(dataType)
-
-            self.addInputPort(InputPort(self, graph, name, color, dataType))
-
-        for i in range(self.__component.getNumOutputs()):
-            componentOutput = component.getOutputByIndex(i)
-            name = componentOutput.getName()
-            dataType = componentOutput.getDataType()
-            color = getPortColor(dataType)
-
-            self.addOutputPort(OutputPort(self, graph, name, color, dataType))
-
-        self.setGraphPos( QtCore.QPointF( self.__component.getGraphPos().x, self.__component.getGraphPos().y ) )
-
-
     def getName(self):
-        return self.__component.getDecoratedName()
+        return self.__name
 
-    def getComponent(self):
-        return self.__component
+
+    def setName(self, name):
+        if name != self.__name:
+            origName = self.__name
+            self.__name = name
+            self.__titleItem.setText(self.__name)
+
+            # Emit an event, so that the graph can update itsself.
+            self.nameChanged.emit(origName, name)
+
+            # Update the node so that the size is computed.
+            self.adjustSize()
+
+
+    def getColor(self):
+        return self.__color
+
+
+    def setColor(self, color):
+        self.__color = color
+        self.update()
+
 
     def getGraph(self):
         return self.__graph
+
+
+    #########################
+    ## Selection
+
+    def isSelected(self):
+        return self.__selected
+
+    def setSelected(self, selected=True):
+        self.__selected = selected
+        self.update()
+
+
+    #########################
+    ## Graph Pos
+
+    def getGraphPos(self):
+        transform = self.transform()
+        size = self.size()
+        return QtCore.QPointF(transform.dx()+(size.width()*0.5), transform.dy()+(size.height()*0.5))
+
+
+    def setGraphPos(self, graphPos):
+        size = self.size()
+        self.setTransform(QtGui.QTransform.fromTranslate(graphPos.x()-(size.width()*0.5), graphPos.y()-(size.height()*0.5)), False)
+
 
     #########################
     ## Ports
@@ -173,11 +173,13 @@ class Node(QtGui.QGraphicsWidget):
         self.adjustSize()
         return port
 
+
     def addOutputPort(self, port):
         self.__outputPortsHolder.addPort(port, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
         self.__outports.append(port)
         self.adjustSize()
         return port
+
 
     def getInPort(self, name):
         for port in self.__inports:
@@ -185,11 +187,13 @@ class Node(QtGui.QGraphicsWidget):
                 return port
         return None
 
+
     def getOutPort(self, name):
         for port in self.__outports:
             if port.getName() == name:
                 return port
         return None
+
 
     def paint(self, painter, option, widget):
         rect = self.windowFrameRect()
@@ -223,35 +227,6 @@ class Node(QtGui.QGraphicsWidget):
         roundingX = rect.height() / rect.width() * roundingY
 
         painter.drawRoundRect(rect, roundingX, roundingY)
-
-    #########################
-    ## Selection
-
-    def isSelected(self):
-        return self.__selected
-
-    def setSelected(self, selected=True):
-        self.__selected = selected
-        self.update()
-
-
-    #########################
-    ## Graph Pos
-
-    def getGraphPos(self):
-        transform = self.transform()
-        size = self.size()
-        return QtCore.QPointF(transform.dx()+(size.width()*0.5), transform.dy()+(size.height()*0.5))
-
-
-    def setGraphPos(self, graphPos):
-        size = self.size()
-        self.setTransform(QtGui.QTransform.fromTranslate(graphPos.x()-(size.width()*0.5), graphPos.y()-(size.height()*0.5)), False)
-
-
-    def pushGraphPosToComponent(self):
-        graphPos = self.getGraphPos()
-        self.__component.setGraphPos( Vec2(graphPos.x(), graphPos.y()) )
 
 
     #########################
@@ -304,28 +279,6 @@ class Node(QtGui.QGraphicsWidget):
         else:
             super(Node, self).mouseReleaseEvent(event)
 
-
-    def mouseDoubleClickEvent(self, event):
-        if self.__inspectorWidget is None:
-            parentWidget = self.__graph.graphView().getGraphViewWidget()
-            self.__inspectorWidget = ComponentInspector(component=self.__component, parent=parentWidget, nodeItem=self)
-            self.__inspectorWidget.show()
-        else:
-            self.__inspectorWidget.setFocus()
-
-        super(Node, self).mouseDoubleClickEvent(event)
-
-
-    def inspectorClosed(self):
-        self.__inspectorWidget = None
-
-
-    def nameChanged(self, origName):
-        self.__titleItem.setText(self.__component.getDecoratedName())
-        self.__graph.nodeNameChanged(origName, self.__component.getDecoratedName())
-
-        # Update the node so that the size is computed.
-        self.adjustSize()
 
     #########################
     ## shut down

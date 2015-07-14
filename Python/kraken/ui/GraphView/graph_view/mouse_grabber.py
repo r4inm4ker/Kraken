@@ -3,8 +3,6 @@
 # Copyright 2010-2015
 #
 
-#pylint: disable-msg=W0613
-
 from PySide import QtGui, QtCore
 
 

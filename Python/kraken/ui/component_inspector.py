@@ -26,7 +26,7 @@ class _NameAttributeProxy(object):
         origName = self.nodeItem.getName()
         self.component.setName(value)
         if origName != self.component.getDecoratedName():
-            self.nodeItem.nameChanged(origName)
+            self.nodeItem.setName(value)
 
     def getValue(self):
         return self.component.getName()
@@ -49,7 +49,7 @@ class _LocationAttributeProxy(object):
         origName = self.nodeItem.getName()
         self.component.setLocation(value)
         if origName != self.component.getDecoratedName():
-            self.nodeItem.nameChanged(origName)
+            self.nodeItem.setName(value)
 
     def getValue(self):
         return self.component.getLocation()

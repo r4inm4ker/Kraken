@@ -8,9 +8,7 @@ from PySide import QtGui, QtCore
 
 from kraken.core.maths import Vec2
 from kraken.core.kraken_system import KrakenSystem
-
-from kraken.ui.undoredo.undo_redo_manager import UndoRedoManager
-from graph_commands import ConstructComponentCommand
+from knode import KNode
 
 
 class NodeList(QtGui.QListWidget):
@@ -87,15 +85,10 @@ class ContextualNodeList(QtGui.QWidget):
 
             componentClassName = self.nodesList.currentItem().data(QtCore.Qt.UserRole)
 
-            # construct
-            # command = ConstructComponentCommand(self.graph, componentClassName, Vec2(self.graphpos.x(), self.graphpos.y()))
-            # UndoRedoManager.getInstance().addCommand(command, invokeRedoOnAdd=True)
-
-            componentClass = self.ks.getComponentClass( componentClassName )
+            componentClass = self.ks.getComponentClass(componentClassName)
             component = componentClass(parent=self.graph.getRig())
             component.setGraphPos(Vec2(self.graphpos.x(), self.graphpos.y()))
-            from graph_view.node import Node
-            self.graph.addNode(Node(self.graph, component) )
+            self.graph.addNode(KNode(self.graph, component))
 
             if self.isVisible():
                 self.hide()

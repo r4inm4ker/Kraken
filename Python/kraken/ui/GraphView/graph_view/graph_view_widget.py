@@ -1,4 +1,8 @@
 
+#
+# Copyright 2010-2015
+#
+
 from PySide import QtGui, QtCore
 
 from graph_view import GraphView

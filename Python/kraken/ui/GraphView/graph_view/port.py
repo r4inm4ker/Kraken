@@ -3,7 +3,6 @@
 # Copyright 2010-2015
 #
 
-#pylint: disable-msg=W0613
 import json
 from PySide import QtGui, QtCore
 from mouse_grabber import MouseGrabber

@@ -1,6 +1,7 @@
 #
 # Copyright 2010-2015
 #
+
 import copy
 
 from PySide import QtGui, QtCore
@@ -16,6 +17,7 @@ class GraphView(QtGui.QGraphicsView):
 
     nodeAdded = QtCore.Signal(Node)
     nodeRemoved = QtCore.Signal(Node)
+    nodeNameChanged = QtCore.Signal(str, str)
 
     beginConnectionManipulation = QtCore.Signal()
     endConnectionManipulation = QtCore.Signal()
@@ -29,6 +31,8 @@ class GraphView(QtGui.QGraphicsView):
 
     # After moving the nodes interactively, this signal is emitted with the final delta. 
     endSelectionMoved = QtCore.Signal(set, QtCore.QPointF)
+
+
 
     _clipboardData = None
 
@@ -85,6 +89,7 @@ class GraphView(QtGui.QGraphicsView):
     def addNode(self, node, emitNotification=True):
         self.scene().addItem(node)
         self.__nodes[node.getName()] = node
+        node.nameChanged.connect(self._onNodeNameChanged)
 
         if emitNotification:
             self.nodeAdded.emit(node)
@@ -94,6 +99,7 @@ class GraphView(QtGui.QGraphicsView):
     def removeNode(self, node, emitNotification=True):
         del self.__nodes[node.getName()]
         self.scene().removeItem(node)
+        node.nameChanged.disconnect(self._onNodeNameChanged)
 
         if emitNotification:
             self.nodeRemoved.emit(node)
@@ -104,12 +110,13 @@ class GraphView(QtGui.QGraphicsView):
         return None
 
 
-    def nodeNameChanged(self, origName, newName ):
+    def _onNodeNameChanged(self, origName, newName ):
         if newName in self.__nodes and self.__nodes[origName] != self.__nodes[newName]:
             raise Exception("New name collides with existing node.")
         node = self.__nodes[origName]
         self.__nodes[newName] = node
         del self.__nodes[origName]
+        self.nodeNameChanged.emit( origName, newName )
 
 
     def clearSelection(self):
