@@ -20,11 +20,14 @@ class PortLabel(QtGui.QGraphicsWidget):
         self.__highlightColor = highlightColor
         self.__textItem.setDefaultTextColor(self._labelColor)
         self.__textItem.setFont(self.__font)
-        self.__textItem.translate(hOffset, -8)
+        self.__textItem.translate(0, self.__font.pointSizeF() * -0.5)
         option = self.__textItem.document().defaultTextOption()
         option.setWrapMode(QtGui.QTextOption.NoWrap)
         self.__textItem.document().setDefaultTextOption(option)
         self.__textItem.adjustSize()
+
+        self.translate(hOffset, 0)
+        self.adjustSize()
 
         self.setAcceptHoverEvents(True)
         self.setPreferredSize(self.textSize())
@@ -70,7 +73,8 @@ class PortLabel(QtGui.QGraphicsWidget):
 
 
     def mousePressEvent(self, event):
-        self.__port.mousePressEvent(event)
+        self.unhighlight()
+        self.__port.mousePressEventHandler(event)
 
 
     # def paint(self, painter, option, widget):
@@ -98,7 +102,6 @@ class PortCircle(QtGui.QGraphicsWidget):
 
         self.__defaultPen = QtGui.QPen(QtGui.QColor(25, 25, 25), 1.0)
         self.__hoverPen = QtGui.QPen(QtGui.QColor(255, 255, 100), 1.5)
-        self.setAcceptHoverEvents(True)
 
         self.__ellipseItem = QtGui.QGraphicsEllipseItem()
         self.__ellipseItem.setPen(self.__defaultPen)
@@ -112,8 +115,10 @@ class PortCircle(QtGui.QGraphicsWidget):
         if connectionPointType == 'In':
             self.__ellipseItem.setStartAngle(270 * 16)
             self.__ellipseItem.setSpanAngle(180 * 16)
+
         self.__ellipseItem.setParentItem(self)
         self.setColor(color)
+        self.setAcceptHoverEvents(True)
 
     def getPort(self):
         return self.__port
@@ -161,7 +166,7 @@ class PortCircle(QtGui.QGraphicsWidget):
 
     def mousePressEvent(self, event):
         self.unhighlight()
-        self.__port.mousePressEvent(event)
+        self.__port.mousePressEventHandler(event)
 
 
     # def paint(self, painter, option, widget):
@@ -227,20 +232,19 @@ class BasePort(QtGui.QGraphicsWidget):
     def isOutConnectionPoint(self):
         return self._connectionPointType == 'Out'
 
-    # def paint(self, painter, option, widget):
-    #     super(BasePort, self).paint(painter, option, widget)
-    #     painter.setPen(QtGui.QPen(QtGui.QColor(255, 255, 0)))
-    #     painter.drawRect(self.windowFrameRect())
-
-    def mousePressEvent(self, event):
+    def mousePressEventHandler(self, event):
+        # the handler for the mouse port, triggered by either the port circle, or the port label.
 
         scenePos = self.mapToScene(event.pos())
-
-        #self.unhighlight()
         if self.isInConnectionPoint():
             MouseGrabber(self.getGraph(), scenePos, self, 'Out')
         elif self.isOutConnectionPoint():
             MouseGrabber(self.getGraph(), scenePos, self, 'In')
+
+    # def paint(self, painter, option, widget):
+    #     super(BasePort, self).paint(painter, option, widget)
+    #     painter.setPen(QtGui.QPen(QtGui.QColor(255, 255, 0)))
+    #     painter.drawRect(self.windowFrameRect())
 
 
 class InputPort(BasePort):
