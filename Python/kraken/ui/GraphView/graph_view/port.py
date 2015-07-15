@@ -173,7 +173,7 @@ class PortCircle(QtGui.QGraphicsWidget):
 class BasePort(QtGui.QGraphicsWidget):
 
     _labelColor = QtGui.QColor(25, 25, 25)
-    _labelHighlightColor = QtGui.QColor(25, 25, 25).lighter(200)
+    _labelHighlightColor = QtGui.QColor(225, 225, 225, 255)
 
     def __init__(self, parent, graph, name, color, dataType, connectionPointType):
         super(BasePort, self).__init__(parent)
