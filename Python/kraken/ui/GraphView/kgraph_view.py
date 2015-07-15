@@ -184,6 +184,9 @@ class KGraphView(GraphView):
     #######################
     ## Copy/Paste
 
+    def getClipboardData(self):
+        return self.__class__._clipboardData
+
     def copySettings(self, pos):
         clipboardData = {}
 
@@ -214,9 +217,12 @@ class KGraphView(GraphView):
             'copyPos': pos
         }
 
-        return clipboardData
+        self.__class__._clipboardData = clipboardData
 
-    def pasteSettings(self, clipboardData, pos, mirrored=False, createConnectionsToExistingNodes=True):
+
+    def pasteSettings(self, pos, mirrored=False, createConnectionsToExistingNodes=True):
+
+        clipboardData = self.__class__._clipboardData
 
         krakenSystem = KrakenSystem.getInstance()
         delta = pos - clipboardData['copyPos']

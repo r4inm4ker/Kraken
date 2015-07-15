@@ -144,41 +144,41 @@ class KGraphViewWidget(GraphViewWidget):
     # Shortcuts
     # =========
     def copy(self):
-        graph = self.graphView.getGraph()
-        pos = graph.getSelectedNodesCentroid()
-        self.graphView.__class__._clipboardData = graph.copySettings(pos)
+        graphView = self.getGraphView()
+        pos = graphView.getSelectedNodesCentroid()
+        graphView.copySettings(pos)
 
 
     def paste(self):
-        graph = self.graphView.getGraph()
-        clipboardData = self.graphView.__class__._clipboardData
+        graphView = self.getGraphView()
+        clipboardData = self.graphView.getClipboardData()
 
         pos = clipboardData['copyPos'] + QtCore.QPoint(20, 20)
-        graph.pasteSettings(clipboardData, pos, mirrored=False, createConnectionsToExistingNodes=True)
+        graphView.pasteSettings(pos, mirrored=False, createConnectionsToExistingNodes=True)
 
 
     def pasteUnconnected(self):
-        graph = self.graphView.getGraph()
-        clipboardData = self.graphView.__class__._clipboardData
+        graphView = self.getGraphView()
+        clipboardData = self.graphView.getClipboardData()
 
         pos = clipboardData['copyPos'] + QtCore.QPoint(20, 20)
-        graph.pasteSettings(clipboardData, pos, mirrored=False, createConnectionsToExistingNodes=False)
+        graphView.pasteSettings(pos, mirrored=False, createConnectionsToExistingNodes=False)
 
 
     def pasteMirrored(self):
-        graph = self.graphView.getGraph()
-        clipboardData = self.graphView.__class__._clipboardData
+        graphView = self.getGraphView()
+        clipboardData = self.graphView.getClipboardData()
 
         pos = clipboardData['copyPos'] + QtCore.QPoint(20, 20)
-        graph.pasteSettings(clipboardData, pos, mirrored=True, createConnectionsToExistingNodes=False)
+        graphView.pasteSettings(pos, mirrored=True, createConnectionsToExistingNodes=False)
 
 
     def pasteMirroredConnected(self):
-        graph = self.graphView.getGraph()
-        clipboardData = self.graphView.__class__._clipboardData
+        graphView = self.getGraphView()
+        clipboardData = self.graphView.getClipboardData()
 
         pos = clipboardData['copyPos'] + QtCore.QPoint(20, 20)
-        graph.pasteSettings(clipboardData, pos, mirrored=True, createConnectionsToExistingNodes=True)
+        graphView.pasteSettings(pos, mirrored=True, createConnectionsToExistingNodes=True)
 
 
     def undo(self):
