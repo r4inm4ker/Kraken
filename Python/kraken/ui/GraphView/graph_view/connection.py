@@ -106,7 +106,3 @@ class Connection(QtGui.QGraphicsPathItem):
         self.__srcPort.addConnection(self)
         self.__dstPort.setConnection(self)
 
-
-    # def destroy(self):
-    #     self.disconnect()
-    #     self.scene().removeItem(self)

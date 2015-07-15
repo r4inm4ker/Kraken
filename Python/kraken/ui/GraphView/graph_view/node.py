@@ -286,11 +286,17 @@ class Node(QtGui.QGraphicsWidget):
     ## shut down
 
     def disconnectAllPorts(self):
+        # gather all the connections into a list, and then delete. 
+        # this is because we can't remove connections from outports while
+        # iterating over the set. 
+        connections = []
         for port in self.__inports:
             if port.getConnection() is not None:
-                self.__graph.removeConnection(port.getConnection())
+                connections.append(port.getConnection())
 
         for port in self.__outports:
             for connection in port.getConnections():
-                self.__graph.removeConnection(connection)
+                connections.append(connection)
 
+        for connection in connections:
+            self.__graph.removeConnection(connection)
