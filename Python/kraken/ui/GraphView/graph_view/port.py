@@ -135,23 +135,10 @@ class PortCircle(QtGui.QGraphicsWidget):
 
     def highlight(self):
         self.__ellipseItem.setBrush(QtGui.QBrush(self._color.lighter()))
-        # make the port bigger to highliht it can accept the connection.
-        self.__ellipseItem.setRect(
-            -self.__radius * 1.6,
-            -self.__radius * 1.6,
-            self.__diameter * 1.6,
-            self.__diameter * 1.6,
-            )
 
 
     def unhighlight(self):
         self.__ellipseItem.setBrush(QtGui.QBrush(self._color))
-        self.__ellipseItem.setRect(
-            -self.__radius,
-            -self.__radius,
-            self.__diameter,
-            self.__diameter,
-            )
 
 
     def hoverEnterEvent(self, event):
