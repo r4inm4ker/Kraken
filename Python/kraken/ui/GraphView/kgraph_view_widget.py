@@ -36,8 +36,6 @@ class KGraphViewWidget(GraphViewWidget):
         graphView.connectionAdded.connect(self.__onConnectionAdded)
         graphView.connectionRemoved.connect(self.__onConnectionRemoved)
 
-        graphView.beginNodeSelection.connect(self.__onBeginNodeSelection)
-        graphView.endNodeSelection.connect(self.__onEndNodeSelection)
         graphView.selectionChanged.connect(self.__onSelectionChanged)
         graphView.endSelectionMoved.connect(self.__onSelectionMoved)
 
@@ -233,14 +231,6 @@ class KGraphViewWidget(GraphViewWidget):
         if not UndoRedoManager.getInstance().isUndoingOrRedoing():
             command = graph_commands.ConnectionRemovedCommand(self.graphView, self.guideRig, connection)
             UndoRedoManager.getInstance().addCommand(command)
-
-
-    def __onBeginNodeSelection(self):
-        UndoRedoManager.getInstance().openBracket('Select Nodes')
-
-
-    def __onEndNodeSelection(self):
-        UndoRedoManager.getInstance().closeBracket()
 
 
     def __onSelectionChanged(self, deselectedNodes, selectedNodes):
