@@ -64,7 +64,7 @@ class KGraphView(GraphView):
         if not sourceNode:
             raise Exception("Component not found:" + sourceNode.getName())
 
-        sourcePort = sourceNode.getOutPort(outputName)
+        sourcePort = sourceNode.getPort(outputName)
         if not sourcePort:
             raise Exception("Component '" + sourceNode.getName() + "' does not have output:" + sourcePort.getName())
 
@@ -73,11 +73,11 @@ class KGraphView(GraphView):
         if not targetNode:
             raise Exception("Component not found:" + targetNode.getName())
 
-        targetPort = targetNode.getInPort(inputName)
+        targetPort = targetNode.getPort(inputName)
         if not targetPort:
             raise Exception("Component '" + targetNode.getName() + "' does not have input:" + targetPort.getName())
 
-        connection = Connection(self, sourcePort, targetPort)
+        connection = Connection(self, sourcePort.outCircle(), targetPort.inCircle())
         self.addConnection(connection, emitSignal=False)
 
         return connection
@@ -281,7 +281,7 @@ class KGraphView(GraphView):
             outputPort = sourceComponent.getOutputByName(outputName)
             inputPort = targetComponent.getInputByName(inputName)
 
-            inputPort.setConnection(outputPort)
+            inputPort.addConnection(outputPort)
             self.connectPorts(
                 sourceComponent = sourceComponent.getDecoratedName(), outputName = outputPort.getName(),
                 targetComponent = targetComponent.getDecoratedName(), inputName=inputPort.getName()

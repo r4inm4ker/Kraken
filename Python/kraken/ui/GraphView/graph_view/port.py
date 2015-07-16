@@ -5,7 +5,6 @@
 
 import json
 from PySide import QtGui, QtCore
-from mouse_grabber import MouseGrabber
 
 
 class PortLabel(QtGui.QGraphicsWidget):
@@ -33,6 +32,8 @@ class PortLabel(QtGui.QGraphicsWidget):
         self.setPreferredSize(self.textSize())
         self.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed))
         self.setWindowFrameMargins(0, 0, 0, 0)
+
+        self.__mousDownPos = None
 
     def text(self):
         return self.__text
@@ -74,7 +75,27 @@ class PortLabel(QtGui.QGraphicsWidget):
 
     def mousePressEvent(self, event):
         self.unhighlight()
-        self.__port.mousePressEventHandler(event)
+
+        if self.__port.inCircle() is not None and self.__port.outCircle() is not None:
+            self.__mousDownPos = self.mapToScene(event.pos())
+
+        elif self.__port.inCircle() is not None:
+            self.__port.inCircle().mousePressEvent(event)
+
+        elif self.__port.outCircle() is not None:
+            self.__port.outCircle().mousePressEvent(event)
+
+
+    def mouseMoveEvent(self, event):
+        scenePos = self.mapToScene(event.pos())
+
+        # When clicking on an UI port label, it is ambigous which connection point should be activated.
+        # We let the user drag the mous in either direction to select the conneciton point to activate.
+        delta = scenePos - self.__mousDownPos
+        if delta.x() < 0:
+            self.__port.inCircle().mousePressEvent(event)
+        else:
+            self.__port.outCircle().mousePressEvent(event)
 
 
     # def paint(self, painter, option, widget):
@@ -92,6 +113,8 @@ class PortCircle(QtGui.QGraphicsWidget):
 
         self.__port = port
         self._graph = graph
+        self._connectionPointType = connectionPointType
+        self.__connections = set()
 
         self.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed))
         size = QtCore.QSizeF(self.__diameter, self.__diameter)
@@ -103,20 +126,19 @@ class PortCircle(QtGui.QGraphicsWidget):
         self.__defaultPen = QtGui.QPen(QtGui.QColor(25, 25, 25), 1.0)
         self.__hoverPen = QtGui.QPen(QtGui.QColor(255, 255, 100), 1.5)
 
-        self.__ellipseItem = QtGui.QGraphicsEllipseItem()
-        self.__ellipseItem.setPen(self.__defaultPen)
-        self.__ellipseItem.setPos(size.width()/2, size.height()/2)
-        self.__ellipseItem.setRect(
+        self._ellipseItem = QtGui.QGraphicsEllipseItem(self)
+        self._ellipseItem.setPen(self.__defaultPen)
+        self._ellipseItem.setPos(size.width()/2, size.height()/2)
+        self._ellipseItem.setRect(
             -self.__radius,
             -self.__radius,
             self.__diameter,
             self.__diameter,
             )
         if connectionPointType == 'In':
-            self.__ellipseItem.setStartAngle(270 * 16)
-            self.__ellipseItem.setSpanAngle(180 * 16)
+            self._ellipseItem.setStartAngle(270 * 16)
+            self._ellipseItem.setSpanAngle(180 * 16)
 
-        self.__ellipseItem.setParentItem(self)
         self.setColor(color)
         self.setAcceptHoverEvents(True)
 
@@ -124,87 +146,26 @@ class PortCircle(QtGui.QGraphicsWidget):
         return self.__port
 
 
+    def getColor(self):
+        return self.getPort().getColor()
+
+
     def centerInSceneCoords(self):
-        return self.__ellipseItem.mapToScene(0, 0)
+        return self._ellipseItem.mapToScene(0, 0)
 
 
     def setColor(self, color):
         self._color = color
-        self.__ellipseItem.setBrush(QtGui.QBrush(self._color))
+        self._ellipseItem.setBrush(QtGui.QBrush(self._color))
 
 
     def highlight(self):
-        self.__ellipseItem.setBrush(QtGui.QBrush(self._color.lighter()))
+        self._ellipseItem.setBrush(QtGui.QBrush(self._color.lighter()))
 
 
     def unhighlight(self):
-        self.__ellipseItem.setBrush(QtGui.QBrush(self._color))
+        self._ellipseItem.setBrush(QtGui.QBrush(self._color))
 
-
-    def hoverEnterEvent(self, event):
-        self.highlight()
-        super(PortCircle, self).hoverEnterEvent(event)
-
-
-    def hoverLeaveEvent(self, event):
-        self.unhighlight()
-        super(PortCircle, self).hoverLeaveEvent(event)
-
-
-    def mousePressEvent(self, event):
-        self.unhighlight()
-        self.__port.mousePressEventHandler(event)
-
-
-    # def paint(self, painter, option, widget):
-    #     super(PortCircle, self).paint(painter, option, widget)
-    #     painter.setPen(QtGui.QPen(QtGui.QColor(255, 255, 0)))
-    #     painter.drawRect(self.windowFrameRect())
-
-
-class BasePort(QtGui.QGraphicsWidget):
-
-    _labelColor = QtGui.QColor(25, 25, 25)
-    _labelHighlightColor = QtGui.QColor(225, 225, 225, 255)
-
-    def __init__(self, parent, graph, name, color, dataType, connectionPointType):
-        super(BasePort, self).__init__(parent)
-
-        self._node = parent
-        self._graph = graph
-        self._name = name
-        self._dataType = dataType
-        self._connectionPointType = connectionPointType
-
-        self.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Fixed))
-
-        layout = QtGui.QGraphicsLinearLayout()
-        layout.setSpacing(0)
-        self.setLayout(layout)
-
-        self._color = color
-
-    def getName(self):
-        return self._name
-
-    def getDataType(self):
-        return self._dataType
-
-    def getNode(self):
-        return self._node
-
-    def getGraph(self):
-        return self._graph
-
-    def getColor(self):
-        return self._color
-
-    def setColor(self, color):
-        if self.__inCircle is not None:
-            self.__inCircle.setColor(color)
-        if self.__outCircle is not None:
-            self.__outCircle.setColor(color)
-        self._color = color
 
     # ===================
     # Connection Methods
@@ -219,116 +180,6 @@ class BasePort(QtGui.QGraphicsWidget):
     def isOutConnectionPoint(self):
         return self._connectionPointType == 'Out'
 
-    def mousePressEventHandler(self, event):
-        # the handler for the mouse port, triggered by either the port circle, or the port label.
-
-        scenePos = self.mapToScene(event.pos())
-        if self.isInConnectionPoint():
-            MouseGrabber(self.getGraph(), scenePos, self, 'Out')
-        elif self.isOutConnectionPoint():
-            MouseGrabber(self.getGraph(), scenePos, self, 'In')
-
-    # def paint(self, painter, option, widget):
-    #     super(BasePort, self).paint(painter, option, widget)
-    #     painter.setPen(QtGui.QPen(QtGui.QColor(255, 255, 0)))
-    #     painter.drawRect(self.windowFrameRect())
-
-
-class InputPort(BasePort):
-    """docstring for InputPort"""
-    def __init__(self, parent, graph, name, color, dataType):
-        super(InputPort, self).__init__(parent, graph, name, color, dataType, 'In')
-
-        labelHOffset = -10
-        circleHOffset = -2
-
-        self.__inCircle = PortCircle(self, graph, circleHOffset, color, 'In')
-        self.__labelItem = PortLabel(self, name, labelHOffset, self._labelColor, self._labelHighlightColor)
-
-        self.layout().addItem(self.__inCircle)
-        self.layout().setAlignment(self.__inCircle, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
-        self.layout().setContentsMargins(0, 0, 30, 0)
-        self.layout().addItem(self.__labelItem)
-        self.layout().setAlignment(self.__labelItem, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
-        self.layout().addStretch(2)
-
-        self.__connection = None
-
-
-    def inCircle(self):
-        if self.__inCircle is None:
-            raise Exception("Port '" + self.getNode().getName() + "." + self.__label + "' Does not have an 'In' connection point.");
-        return self.__inCircle
-
-    # ===================
-    # Connection Methods
-    # ===================
-    def setConnection(self, connection):
-        """Adds a connection to the list.
-        Arguments:
-        connection -- connection, new connection to add.
-        Return:
-        True if successful.
-        """
-
-        self.__connection = connection
-
-        return True
-
-    def removeConnection(self, connection):
-        """Removes a connection to the list.
-        Arguments:
-        connection -- connection, connection to remove.
-        Return:
-        True if successful.
-        """
-
-        if connection != self.__connection:
-            raise "Port not connected to given connection."
-        self.__connection = None
-
-        return True
-
-    def getConnection(self):
-        """Gets the ports connections list.
-        Return:
-        List, connections to this port.
-        """
-
-        return self.__connection
-
-
-
-
-class OutputPort(BasePort):
-    """docstring for OutputPort"""
-    def __init__(self, parent, graph, name, color, dataType):
-        super(OutputPort, self).__init__(parent, graph, name, color, dataType, 'Out')
-
-        labelHOffset = 10
-        circleHOffset = 2
-
-        self.__labelItem = PortLabel(self, self._name, labelHOffset, self._labelColor, self._labelHighlightColor)
-        self.__outCircle = PortCircle(self, graph, circleHOffset, color, 'Out')
-
-        self.layout().addStretch(2)
-        self.layout().setContentsMargins(30, 0, 0, 0)
-        self.layout().addItem(self.__labelItem)
-        self.layout().setAlignment(self.__labelItem, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
-        self.layout().addItem(self.__outCircle)
-        self.layout().setAlignment(self.__outCircle, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
-
-        self.__connections = set()
-
-
-    def outCircle(self):
-        if self.__outCircle is None:
-            raise Exception("Port '" + self.getNode().getName() + "." + self.__label + "' Does not have an 'Out' connection point.");
-        return self.__outCircle
-
-    # ===================
-    # Connection Methods
-    # ===================
     def addConnection(self, connection):
         """Adds a connection to the list.
         Arguments:
@@ -360,3 +211,163 @@ class OutputPort(BasePort):
         """
 
         return self.__connections
+
+    # ======
+    # Events
+    # ======
+
+    def hoverEnterEvent(self, event):
+        self.highlight()
+        super(PortCircle, self).hoverEnterEvent(event)
+
+
+    def hoverLeaveEvent(self, event):
+        self.unhighlight()
+        super(PortCircle, self).hoverLeaveEvent(event)
+
+    def mousePressEvent(self, event):
+
+        self.unhighlight()
+
+        scenePos = self.mapToScene(event.pos())
+
+        from mouse_grabber import MouseGrabber
+        if self.isInConnectionPoint():
+            MouseGrabber(self._graph, scenePos, self, 'Out')
+        elif self.isOutConnectionPoint():
+            MouseGrabber(self._graph, scenePos, self, 'In')
+
+
+    # def paint(self, painter, option, widget):
+    #     super(PortCircle, self).paint(painter, option, widget)
+    #     painter.setPen(QtGui.QPen(QtGui.QColor(255, 255, 0)))
+    #     painter.drawRect(self.windowFrameRect())
+
+
+class BasePort(QtGui.QGraphicsWidget):
+
+    _labelColor = QtGui.QColor(25, 25, 25)
+    _labelHighlightColor = QtGui.QColor(225, 225, 225, 255)
+
+    def __init__(self, parent, graph, name, color, dataType, connectionPointType):
+        super(BasePort, self).__init__(parent)
+
+        self._node = parent
+        self._graph = graph
+        self._name = name
+        self._dataType = dataType
+        self._connectionPointType = connectionPointType
+
+        self.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Fixed))
+
+        layout = QtGui.QGraphicsLinearLayout()
+        layout.setSpacing(0)
+        self.setLayout(layout)
+
+        self._color = color
+
+        self._inCircle = None
+        self._outCircle = None
+
+    def getName(self):
+        return self._name
+
+    def getDataType(self):
+        return self._dataType
+
+    def getNode(self):
+        return self._node
+
+    def getGraph(self):
+        return self._graph
+
+    def getColor(self):
+        return self._color
+
+    def setColor(self, color):
+        if self._inCircle is not None:
+            self._inCircle.setColor(color)
+        if self._outCircle is not None:
+            self._outCircle.setColor(color)
+        self._color = color
+
+
+    def inCircle(self):
+        return self._inCircle
+
+    def outCircle(self):
+        return self._outCircle
+
+    # def paint(self, painter, option, widget):
+    #     super(BasePort, self).paint(painter, option, widget)
+    #     painter.setPen(QtGui.QPen(QtGui.QColor(255, 255, 0)))
+    #     painter.drawRect(self.windowFrameRect())
+
+
+class InputPort(BasePort):
+    """docstring for InputPort"""
+    def __init__(self, parent, graph, name, color, dataType):
+        super(InputPort, self).__init__(parent, graph, name, color, dataType, 'In')
+
+        labelHOffset = -10
+        circleHOffset = -2
+
+        self._inCircle = PortCircle(self, graph, circleHOffset, color, 'In')
+        self._labelItem = PortLabel(self, name, labelHOffset, self._labelColor, self._labelHighlightColor)
+
+        self.layout().addItem(self._inCircle)
+        self.layout().setAlignment(self._inCircle, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
+        self.layout().setContentsMargins(0, 0, 30, 0)
+        self.layout().addItem(self._labelItem)
+        self.layout().setAlignment(self._labelItem, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
+        self.layout().addStretch(2)
+
+        self.__connection = None
+
+
+
+class OutputPort(BasePort):
+    """docstring for OutputPort"""
+    def __init__(self, parent, graph, name, color, dataType):
+        super(OutputPort, self).__init__(parent, graph, name, color, dataType, 'Out')
+
+        labelHOffset = 10
+        circleHOffset = 2
+
+        self._labelItem = PortLabel(self, self._name, labelHOffset, self._labelColor, self._labelHighlightColor)
+        self._outCircle = PortCircle(self, graph, circleHOffset, color, 'Out')
+
+        self.layout().addStretch(2)
+        self.layout().setContentsMargins(30, 0, 0, 0)
+        self.layout().addItem(self._labelItem)
+        self.layout().setAlignment(self._labelItem, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
+        self.layout().addItem(self._outCircle)
+        self.layout().setAlignment(self._outCircle, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
+
+
+class IOPort(BasePort):
+    """docstring for OutputPort"""
+    def __init__(self, parent, graph, name, color, dataType):
+        super(IOPort, self).__init__(parent, graph, name, color, dataType, 'IO')
+
+
+        labelHOffset = 0
+        circleHOffset = -2
+
+        self._inCircle = PortCircle(self, graph, circleHOffset, color, 'In')
+
+        self._labelItem = PortLabel(self, name, labelHOffset, self._labelColor, self._labelHighlightColor)
+
+        circleHOffset = 2
+        self._outCircle = PortCircle(self, graph, circleHOffset, color, 'Out')
+
+        self.layout().setContentsMargins(0, 0, 0, 0)
+        self.layout().addItem(self._inCircle)
+        self.layout().setAlignment(self._inCircle, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
+        self.layout().addStretch(1)
+        self.layout().addItem(self._labelItem)
+        self.layout().setAlignment(self._labelItem, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
+        self.layout().addStretch(1)
+        self.layout().addItem(self._outCircle)
+        self.layout().setAlignment(self._outCircle, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
+

@@ -90,6 +90,10 @@ class PortList(QtGui.QGraphicsWidget):
         self.adjustSize()
         return port
 
+    # def paint(self, painter, option, widget):
+    #     super(PortList, self).paint(painter, option, widget)
+    #     painter.setPen(QtGui.QPen(QtGui.QColor(255, 255, 0)))
+    #     painter.drawRect(self.windowFrameRect())
 
 class Node(QtGui.QGraphicsWidget):
 
@@ -121,17 +125,13 @@ class Node(QtGui.QGraphicsWidget):
         layout.addItem(self.__headerItem)
         layout.setAlignment(self.__headerItem, QtCore.Qt.AlignCenter | QtCore.Qt.AlignTop)
 
-        self.__inports = []
-        self.__outports = []
+        self.__ports = []
         self.__inputPortsHolder = PortList(self)
+        self.__ioPortsHolder = PortList(self)
         self.__outputPortsHolder = PortList(self)
 
         layout.addItem(self.__inputPortsHolder)
-
-        # Insert space between input and output ports
-        spacingWidget = QtGui.QGraphicsWidget(self)
-        spacingWidget.setPreferredSize(2.0, 2.0)
-        layout.addItem(spacingWidget)
+        layout.addItem(self.__ioPortsHolder)
         layout.addItem(self.__outputPortsHolder)
 
         self.__selected = False
@@ -200,29 +200,20 @@ class Node(QtGui.QGraphicsWidget):
     #########################
     ## Ports
 
-    def addInputPort(self, port):
-        self.__inputPortsHolder.addPort(port, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
-        self.__inports.append(port)
+    def addPort(self, port):
+        if isinstance(port, InputPort):
+            self.__inputPortsHolder.addPort(port, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
+        elif isinstance(port, OutputPort):
+            self.__outputPortsHolder.addPort(port, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
+        else:
+            self.__ioPortsHolder.addPort(port, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
+        self.__ports.append(port)
         self.adjustSize()
         return port
 
 
-    def addOutputPort(self, port):
-        self.__outputPortsHolder.addPort(port, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
-        self.__outports.append(port)
-        self.adjustSize()
-        return port
-
-
-    def getInPort(self, name):
-        for port in self.__inports:
-            if port.getName() == name:
-                return port
-        return None
-
-
-    def getOutPort(self, name):
-        for port in self.__outports:
+    def getPort(self, name):
+        for port in self.__ports:
             if port.getName() == name:
                 return port
         return None

@@ -42,7 +42,7 @@ class KNode(Node):
             dataType = componentInput.getDataType()
             color = getPortColor(dataType)
 
-            self.addInputPort(InputPort(self, graph, name, color, dataType))
+            self.addPort(InputPort(self, graph, name, color, dataType))
 
         for i in range(self.__component.getNumOutputs()):
             componentOutput = component.getOutputByIndex(i)
@@ -50,7 +50,7 @@ class KNode(Node):
             dataType = componentOutput.getDataType()
             color = getPortColor(dataType)
 
-            self.addOutputPort(OutputPort(self, graph, name, color, dataType))
+            self.addPort(OutputPort(self, graph, name, color, dataType))
 
         self.setGraphPos( QtCore.QPointF( self.__component.getGraphPos().x, self.__component.getGraphPos().y ) )
 

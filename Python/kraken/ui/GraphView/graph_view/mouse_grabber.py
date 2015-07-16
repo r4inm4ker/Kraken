@@ -4,73 +4,52 @@
 #
 
 from PySide import QtGui, QtCore
+from port import PortCircle
+from connection import Connection
 
-
-class MouseGrabber(QtGui.QGraphicsWidget):
+class MouseGrabber(PortCircle):
     """docstring for MouseGrabber"""
-    __radius = 1
-    __diameter = 2 * __radius
-    def __init__(self, graph, pos, port, connectionPointType):
-        super(MouseGrabber, self).__init__()
-        self.__graph = graph
-        self.__port = port
-        self.__connectionPointType = connectionPointType
 
-        self.__graph.scene().addItem(self)
+    def __init__(self, graph, pos, otherPortCircle, connectionPointType):
+        super(MouseGrabber, self).__init__(None, graph, 0, otherPortCircle.getPort().getColor(), connectionPointType)
 
-        self.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed))
-        size = QtCore.QSizeF(
-            self.__diameter * 2,
-            self.__diameter * 2,
-            )
-        self.setPreferredSize(size)
-        self.setPos(-self.__diameter, -self.__diameter)
-        self.setWindowFrameMargins(0, 0, 0, 0)
+        self._ellipseItem.setPos(0, 0)
+        self.__otherPortCircle = otherPortCircle
+
+        self._graph.scene().addItem(self)
+
 
         self.setZValue(-1)
         self.setTransform(QtGui.QTransform.fromTranslate(pos.x(), pos.y()), False)
         self.grabMouse()
 
         import connection
-        if self.__connectionPointType == 'Out':
-            self.__connection = connection.Connection(self.__graph, self, port)
-        elif self.__connectionPointType == 'In':
-            self.__connection = connection.Connection(self.__graph, port, self)
+        if self.connectionPointType() == 'Out':
+            self.__connection = connection.Connection(self._graph, self, otherPortCircle)
+        elif self.connectionPointType() == 'In':
+            self.__connection = connection.Connection(self._graph, otherPortCircle, self)
         # Do not emit a notification for this temporary connection.
-        self.__graph.addConnection(self.__connection, emitSignal=False)
+        self._graph.addConnection(self.__connection, emitSignal=False)
         self.__mouseOverPortCircle = None
-        self.__graph.emitBeginConnectionManipulationSignal()
-
-
-    def inCircle(self):
-        return self
-
-
-    def outCircle(self):
-        return self
+        self._graph.emitBeginConnectionManipulationSignal()
 
 
     def getColor(self):
-        return self.__port.getColor()
-
-
-    def centerInSceneCoords(self):
-        return self.mapToScene(self.__diameter, self.__diameter)
+        return self.__otherPortCircle.getPort().getColor()
 
 
     def mouseMoveEvent(self, event):
         scenePos = self.mapToScene(event.pos())
         self.setTransform(QtGui.QTransform.fromTranslate(scenePos.x(), scenePos.y()), False)
 
-        import port
         collidingItems = self.collidingItems(QtCore.Qt.IntersectsItemBoundingRect)
-        collidingPortCircles = filter(lambda item: isinstance(item, (port.PortCircle, port.PortLabel)), collidingItems)
+        collidingPortCircles = filter(lambda item: isinstance(item, (PortCircle)), collidingItems)
 
         def canConnect(mouseOverPortCircle):
-            if self.__connectionPointType != mouseOverPortCircle.getPort().connectionPointType():
+            if self.connectionPointType() != mouseOverPortCircle.connectionPointType():
                 return False
 
-            if mouseOverPortCircle.getPort().getDataType() != self.__port.getDataType():
+            if mouseOverPortCircle.getPort().getDataType() != self.__otherPortCircle.getPort().getDataType():
                 return False
 
             return True
@@ -91,17 +70,17 @@ class MouseGrabber(QtGui.QGraphicsWidget):
             self.__mouseOverPortCircle.unhighlight()
             try:
 
-                if self.__connectionPointType == 'In':
-                    sourcePort = self.__port
-                    targetPort = self.__mouseOverPortCircle.getPort()
-                elif self.__connectionPointType == 'Out':
-                    sourcePort = self.__mouseOverPortCircle.getPort()
-                    targetPort = self.__port
+                if self.connectionPointType() == 'In':
+                    sourcePortCircle = self.__otherPortCircle
+                    targetPortCircle = self.__mouseOverPortCircle
+                elif self.connectionPointType() == 'Out':
+                    sourcePortCircle = self.__mouseOverPortCircle
+                    targetPortCircle = self.__otherPortCircle
 
                 from connection import Connection
-                connection = Connection(self.__graph, sourcePort, targetPort)
-                self.__graph.addConnection(connection)
-                self.__graph.emitEndConnectionManipulationSignal()
+                connection = Connection(self._graph, sourcePortCircle, targetPortCircle)
+                self._graph.addConnection(connection)
+                self._graph.emitEndConnectionManipulationSignal()
 
             except Exception as e:
                 print "Exception in MouseGrabber.mouseReleaseEvent: " + str(e)
@@ -110,32 +89,17 @@ class MouseGrabber(QtGui.QGraphicsWidget):
 
 
 
-    def paint(self, painter, option, widget):
-        super(MouseGrabber, self).paint(painter, option, widget)
-        painter.setPen(QtGui.QPen(self.getColor()))
-        painter.drawRect(self.windowFrameRect())
+    # def paint(self, painter, option, widget):
+    #     super(MouseGrabber, self).paint(painter, option, widget)
+    #     painter.setPen(QtGui.QPen(self.getColor()))
+    #     painter.drawRect(self.windowFrameRect())
 
     def destroy(self):
         self.ungrabMouse()
         scene = self.scene()
         # Destroy the temporary connection.
-        self.__graph.removeConnection(self.__connection, emitSignal=False)
+        self._graph.removeConnection(self.__connection, emitSignal=False)
         # Destroy the grabber.
         scene.removeItem(self)
         scene.update()
 
-
-    # ===================
-    # Connection Methods
-    # ===================
-    def setConnection(self, connection):
-        pass
-
-    def addConnection(self, connection):
-        pass
-
-    def removeConnection(self, connection=None):
-        pass
-
-    def getConnection(self):
-        pass

@@ -5,21 +5,20 @@
 
 from PySide import QtGui, QtCore
 
-from mouse_grabber import MouseGrabber
 
 class Connection(QtGui.QGraphicsPathItem):
     __defaultPen = QtGui.QPen(QtGui.QColor(168, 134, 3), 2.0)
 
-    def __init__(self, graph, srcPort, dstPort):
+    def __init__(self, graph, srcPortCircle, dstPortCircle):
         super(Connection, self).__init__()
 
         self.__graph = graph
-        self.__srcPort = srcPort
-        self.__dstPort = dstPort
-        self.__defaultPen = QtGui.QPen(self.__srcPort.getColor(), 2.0)
+        self.__srcPortCircle = srcPortCircle
+        self.__dstPortCircle = dstPortCircle
+        self.__defaultPen = QtGui.QPen(self.__srcPortCircle.getColor(), 2.0)
         self.__hoverPen = QtGui.QPen(QtCore.Qt.SolidLine)
         self.__hoverPen.setWidth(2.5)
-        self.__hoverPen.setColor(self.__srcPort.getColor().lighter())
+        self.__hoverPen.setColor(self.__srcPortCircle.getColor().lighter())
 
         self.setPen(self.__defaultPen)
         self.setZValue(-1)
@@ -28,15 +27,15 @@ class Connection(QtGui.QGraphicsPathItem):
         self.connect()
 
     def getSrcPort(self):
-        return self.__srcPort
+        return self.__srcPortCircle.getPort()
 
     def getDstPort(self):
-        return self.__dstPort
+        return self.__dstPortCircle.getPort()
         
 
     def boundingRect(self):
-        srcPoint = self.mapFromScene(self.__srcPort.outCircle().centerInSceneCoords())
-        dstPoint = self.mapFromScene(self.__dstPort.inCircle().centerInSceneCoords())
+        srcPoint = self.mapFromScene(self.__srcPortCircle.centerInSceneCoords())
+        dstPoint = self.mapFromScene(self.__dstPortCircle.centerInSceneCoords())
         penWidth = self.__defaultPen.width()
 
         return QtCore.QRectF(
@@ -47,8 +46,8 @@ class Connection(QtGui.QGraphicsPathItem):
             ).adjusted(-penWidth/2, -penWidth/2, +penWidth/2, +penWidth/2)
 
     def paint(self, painter, option, widget):
-        srcPoint = self.mapFromScene(self.__srcPort.outCircle().centerInSceneCoords())
-        dstPoint = self.mapFromScene(self.__dstPort.inCircle().centerInSceneCoords())
+        srcPoint = self.mapFromScene(self.__srcPortCircle.centerInSceneCoords())
+        dstPoint = self.mapFromScene(self.__dstPortCircle.centerInSceneCoords())
 
         dist_between = dstPoint - srcPoint
 
@@ -84,12 +83,13 @@ class Connection(QtGui.QGraphicsPathItem):
         if self.__dragging:
             pos = self.mapToScene(event.pos())
             delta = pos - self._lastDragPoint
-            if delta.x() < 0 or delta.x() > 0:
+            if delta.x() != 0:
 
+                import mouse_grabber
                 if delta.x() < 0:
-                    MouseGrabber(self.__graph, pos, self.__srcPort, 'In')
+                    mouse_grabber.MouseGrabber(self.__graph, pos, self.__srcPortCircle, 'In')
                 else:
-                    MouseGrabber(self.__graph, pos, self.__dstPort, 'Out')
+                    mouse_grabber.MouseGrabber(self.__graph, pos, self.__dstPortCircle, 'Out')
 
                 self.__graph.removeConnection(self)
 
@@ -98,11 +98,11 @@ class Connection(QtGui.QGraphicsPathItem):
 
 
     def disconnect(self):
-        self.__srcPort.removeConnection(self)
-        self.__dstPort.removeConnection(self)
+        self.__srcPortCircle.removeConnection(self)
+        self.__dstPortCircle.removeConnection(self)
 
 
     def connect(self):
-        self.__srcPort.addConnection(self)
-        self.__dstPort.setConnection(self)
+        self.__srcPortCircle.addConnection(self)
+        self.__dstPortCircle.addConnection(self)
 
