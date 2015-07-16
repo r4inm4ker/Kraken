@@ -51,36 +51,13 @@ class KGraphView(GraphView):
                     componentOutput = componentInput.getConnection()
 
                     self.connectPorts(
-                        sourceComponent = componentOutput.getParent().getDecoratedName(), outputName = componentOutput.getName(),
-                        targetComponent = component.getDecoratedName(), inputName=componentInput.getName()
+                        srcNode = componentOutput.getParent().getDecoratedName(), outputName = componentOutput.getName(),
+                        tgtNode = component.getDecoratedName(), inputName=componentInput.getName()
                     )
 
         self.frameAllNodes()
 
 
-    def connectPorts(self, sourceComponent, outputName, targetComponent, inputName):
-
-        sourceNode = self.getNode(sourceComponent)
-        if not sourceNode:
-            raise Exception("Component not found:" + sourceNode.getName())
-
-        sourcePort = sourceNode.getPort(outputName)
-        if not sourcePort:
-            raise Exception("Component '" + sourceNode.getName() + "' does not have output:" + sourcePort.getName())
-
-
-        targetNode = self.getNode(targetComponent)
-        if not targetNode:
-            raise Exception("Component not found:" + targetNode.getName())
-
-        targetPort = targetNode.getPort(inputName)
-        if not targetPort:
-            raise Exception("Component '" + targetNode.getName() + "' does not have input:" + targetPort.getName())
-
-        connection = Connection(self, sourcePort.outCircle(), targetPort.inCircle())
-        self.addConnection(connection, emitSignal=False)
-
-        return connection
 
     ################################################
     ## Events
@@ -283,7 +260,7 @@ class KGraphView(GraphView):
 
             inputPort.setConnection(outputPort)
             self.connectPorts(
-                sourceComponent = sourceComponent.getDecoratedName(), outputName = outputPort.getName(),
-                targetComponent = targetComponent.getDecoratedName(), inputName=inputPort.getName()
+                srcNode = sourceComponent.getDecoratedName(), outputName = outputPort.getName(),
+                tgtNode = targetComponent.getDecoratedName(), inputName=inputPort.getName()
             )
 

@@ -321,6 +321,30 @@ class GraphView(QtGui.QGraphicsView):
             self.connectionRemoved.emit(connection)
 
 
+    def connectPorts(self, srcNode, outputName, tgtNode, inputName):
+
+        sourceNode = self.getNode(srcNode)
+        if not sourceNode:
+            raise Exception("Node not found:" + sourceNode.getName())
+
+        sourcePort = sourceNode.getPort(outputName)
+        if not sourcePort:
+            raise Exception("Node '" + sourceNode.getName() + "' does not have output:" + sourcePort.getName())
+
+
+        targetNode = self.getNode(tgtNode)
+        if not targetNode:
+            raise Exception("Node not found:" + targetNode.getName())
+
+        targetPort = targetNode.getPort(inputName)
+        if not targetPort:
+            raise Exception("Node '" + targetNode.getName() + "' does not have input:" + targetPort.getName())
+
+        connection = Connection(self, sourcePort.outCircle(), targetPort.inCircle())
+        self.addConnection(connection, emitSignal=False)
+
+        return connection
+
     ################################################
     ## Events
 
