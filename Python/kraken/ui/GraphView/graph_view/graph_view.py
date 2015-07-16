@@ -6,8 +6,7 @@ import copy
 
 from PySide import QtGui, QtCore
 
-from node import Node, NodeTitle
-from port import BasePort, PortLabel, InputPort, OutputPort
+from node import Node
 from connection import Connection
 
 from selection_rect import SelectionRect

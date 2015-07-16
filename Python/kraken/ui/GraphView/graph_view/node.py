@@ -8,6 +8,7 @@ from PySide import QtGui, QtCore
 from port import InputPort, OutputPort
 
 class NodeTitle(QtGui.QGraphicsWidget):
+
     __color = QtGui.QColor(25, 25, 25)
     __font = QtGui.QFont('Decorative', 14)
     __font.setLetterSpacing(QtGui.QFont.PercentageSpacing, 115)
@@ -15,6 +16,8 @@ class NodeTitle(QtGui.QGraphicsWidget):
 
     def __init__(self, text, parent=None):
         super(NodeTitle, self).__init__(parent)
+
+        self.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed))
 
         self.__textItem = QtGui.QGraphicsTextItem(text, self)
         self.__textItem.setDefaultTextColor(self.__color)
@@ -25,7 +28,6 @@ class NodeTitle(QtGui.QGraphicsWidget):
         self.__textItem.document().setDefaultTextOption(option)
         self.__textItem.adjustSize()
 
-        self.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed))
         self.setPreferredSize(self.textSize())
 
     def setText(self, text):
@@ -39,10 +41,37 @@ class NodeTitle(QtGui.QGraphicsWidget):
             self.__font.pointSizeF() + self.__labelBottomSpacing
             )
 
-    def paint(self, painter, option, widget):
-        super(NodeTitle, self).paint(painter, option, widget)
-        # painter.setPen(QtGui.QPen(QtGui.QColor(0, 255, 0)))
-        # painter.drawRect(self.windowFrameRect())
+    # def paint(self, painter, option, widget):
+    #     super(NodeTitle, self).paint(painter, option, widget)
+    #     painter.setPen(QtGui.QPen(QtGui.QColor(0, 255, 0)))
+    #     painter.drawRect(self.windowFrameRect())
+
+
+class NodeHeader(QtGui.QGraphicsWidget):
+
+    def __init__(self, text, parent=None):
+        super(NodeHeader, self).__init__(parent)
+
+        self.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding))
+
+        layout = QtGui.QGraphicsLinearLayout()
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(3)
+        layout.setOrientation(QtCore.Qt.Horizontal)
+        self.setLayout(layout)
+
+        self._titleWidget = NodeTitle(text, self)
+        layout.addItem(self._titleWidget)
+        layout.setAlignment(self._titleWidget, QtCore.Qt.AlignCenter | QtCore.Qt.AlignTop)
+
+
+    def setText(self, text):
+        self._titleWidget.setText(text)
+
+    # def paint(self, painter, option, widget):
+    #     super(NodeHeader, self).paint(painter, option, widget)
+    #     painter.setPen(QtGui.QPen(QtGui.QColor(0, 255, 100)))
+    #     painter.drawRect(self.windowFrameRect())
 
 
 class PortList(QtGui.QGraphicsWidget):
@@ -88,9 +117,9 @@ class Node(QtGui.QGraphicsWidget):
         layout.setOrientation(QtCore.Qt.Vertical)
         self.setLayout(layout)
 
-        self.__titleItem = NodeTitle(self.__name, self)
-        layout.addItem(self.__titleItem)
-        layout.setAlignment(self.__titleItem, QtCore.Qt.AlignCenter | QtCore.Qt.AlignTop)
+        self.__headerItem = NodeHeader(self.__name, self)
+        layout.addItem(self.__headerItem)
+        layout.setAlignment(self.__headerItem, QtCore.Qt.AlignCenter | QtCore.Qt.AlignTop)
 
         self.__inports = []
         self.__outports = []
@@ -117,7 +146,7 @@ class Node(QtGui.QGraphicsWidget):
         if name != self.__name:
             origName = self.__name
             self.__name = name
-            self.__titleItem.setText(self.__name)
+            self.__headerItem.setText(self.__name)
 
             # Emit an event, so that the graph can update itsself.
             self.nameChanged.emit(origName, name)
@@ -137,6 +166,10 @@ class Node(QtGui.QGraphicsWidget):
 
     def getGraph(self):
         return self.__graph
+
+
+    def getHeader(self):
+        return self.__headerItem
 
 
     #########################
@@ -207,7 +240,7 @@ class Node(QtGui.QGraphicsWidget):
         painter.drawRoundRect(rect, roundingX, roundingY)
 
         # Title BG
-        titleHeight = self.__titleItem.size().height() - 3
+        titleHeight = self.__headerItem.size().height() - 3
 
         painter.setBrush(self.__color.darker(125))
         roundingY = rect.width() * roundingX / titleHeight
