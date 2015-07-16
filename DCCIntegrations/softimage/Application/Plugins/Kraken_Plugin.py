@@ -34,7 +34,10 @@ def XSILoadPlugin(in_reg):
     in_reg.Major = 1
     in_reg.Minor = 0
 
-    in_reg.RegisterMenu(constants.siMenuMainTopLevelID, "Kraken", False, False)
+    krakenLoadMenu = os.getenv('KRAKEN_LOAD_MENU', 'True')
+    if krakenLoadMenu == 'True':
+        in_reg.RegisterMenu(constants.siMenuMainTopLevelID, "Kraken", False, False)
+
     in_reg.RegisterCommand('OpenKrakenEditor', 'OpenKrakenEditor')
 
     return True
@@ -47,7 +50,7 @@ def XSIUnloadPlugin(in_reg):
 def Kraken_Init( in_ctxt ):
 
     menu = in_ctxt.source;
-    menu.AddCallbackItem( "Open UI", "OpenKrakenEditor")
+    menu.AddCommandItem( "Open UI", "OpenKrakenEditor")
     menu.AddSeparatorItem();
     menu.AddCallbackItem( "Help", "OpenKrakenHelp" )
 
@@ -65,17 +68,6 @@ def OpenKrakenEditor_Init(in_ctxt):
 
 
 def OpenKrakenEditor_Execute():
-
-    OpenKrakenEditor()
-
-    return True
-
-
-# ==========
-# Callbacks
-# ==========
-
-def OpenKrakenEditor(in_ctxt):
 
     sianchor = Application.getQtSoftimageAnchor()
     sianchor = Qt.wrapinstance(long(sianchor), QWidget)
@@ -101,6 +93,9 @@ def OpenKrakenEditor(in_ctxt):
     return True
 
 
+# ==========
+# Callbacks
+# ==========
 def OpenKrakenHelp(in_ctxt):
     menuItem = in_ctxt.source
 
