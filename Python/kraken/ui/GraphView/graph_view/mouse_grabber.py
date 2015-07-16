@@ -14,6 +14,9 @@ class MouseGrabber(PortCircle):
         super(MouseGrabber, self).__init__(None, graph, 0, otherPortCircle.getPort().getColor(), connectionPointType)
 
         self._ellipseItem.setPos(0, 0)
+        self._ellipseItem.setStartAngle(0)
+        self._ellipseItem.setSpanAngle(360 * 16)
+
         self.__otherPortCircle = otherPortCircle
 
         self._graph.scene().addItem(self)

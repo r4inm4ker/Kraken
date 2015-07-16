@@ -281,7 +281,7 @@ class KGraphView(GraphView):
             outputPort = sourceComponent.getOutputByName(outputName)
             inputPort = targetComponent.getInputByName(inputName)
 
-            inputPort.addConnection(outputPort)
+            inputPort.setConnection(outputPort)
             self.connectPorts(
                 sourceComponent = sourceComponent.getDecoratedName(), outputName = outputPort.getName(),
                 targetComponent = targetComponent.getDecoratedName(), inputName=inputPort.getName()
