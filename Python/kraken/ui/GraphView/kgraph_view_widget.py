@@ -208,6 +208,8 @@ class KGraphViewWidget(GraphViewWidget):
 
 
     def __onNodeRemoved(self, node):
+        self.guideRig.removeChild( node.getComponent() )
+        
         if not UndoRedoManager.getInstance().isUndoingOrRedoing():
             command = graph_commands.RemoveNodeCommand(self.graphView, self.guideRig, node)
             UndoRedoManager.getInstance().addCommand(command)

@@ -119,7 +119,6 @@ class MouseGrabber(QtGui.QGraphicsWidget):
         self.ungrabMouse()
         scene = self.scene()
         # Destroy the temporary connection.
-        # scene.removeItem(self.__connection)
         self.__graph.removeConnection(self.__connection, emitSignal=False)
         # Destroy the grabber.
         scene.removeItem(self)

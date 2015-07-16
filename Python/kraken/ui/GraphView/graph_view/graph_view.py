@@ -109,6 +109,10 @@ class GraphView(QtGui.QGraphicsView):
         if emitSignal:
             self.nodeRemoved.emit(node)
 
+
+    def hasNode(self, name):
+        return name in self.__nodes
+
     def getNode(self, name):
         if name in self.__nodes:
             return self.__nodes[name]

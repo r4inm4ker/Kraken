@@ -106,17 +106,17 @@ class KGraphView(GraphView):
 
             if graphicItem is None:
 
-                if self.__class__._clipboardData is not None:
+                if self.getClipboardData() is not None:
 
                     contextMenu = QtGui.QMenu(self.getGraphViewWidget())
                     contextMenu.setObjectName('rightClickContextMenu')
                     contextMenu.setMinimumWidth(150)
 
                     def pasteSettings():
-                        self.pasteSettings(self.__class__._clipboardData, pos)
+                        self.pasteSettings(pos)
 
                     def pasteSettingsMirrored():
-                        self.pasteSettings(self.__class__._clipboardData, pos, mirrored=True)
+                        self.pasteSettings(pos, mirrored=True)
 
                     contextMenu.addAction("Paste").triggered.connect(pasteSettings)
                     contextMenu.addAction("Paste Mirrored").triggered.connect(pasteSettingsMirrored)
@@ -129,15 +129,15 @@ class KGraphView(GraphView):
                 contextMenu.setMinimumWidth(150)
 
                 def copySettings():
-                    self.__class__._clipboardData = self.copySettings(pos)
+                    self.copySettings(pos)
 
                 contextMenu.addAction("Copy").triggered.connect(copySettings)
 
-                if self.__class__._clipboardData is not None:
+                if self.getClipboardData() is not None:
 
                     def pasteSettings():
                         # Paste the settings, not modifying the location, because that will be used to determine symmetry.
-                        graphicItem.getComponent().pasteData(self.__class__._clipboardData['components'][0], setLocation=False)
+                        graphicItem.getComponent().pasteData(self.getClipboardData()['components'][0], setLocation=False)
 
                     contextMenu.addSeparator()
                     contextMenu.addAction("Paste Data").triggered.connect(pasteSettings)
@@ -270,9 +270,9 @@ class KGraphView(GraphView):
 
                 # When we support copying/pasting between rigs, then we may not find the source
                 # node in the target rig.
-                if sourceComponentDecoratedName not in self.__nodes.keys():
+                if not self.hasNode(sourceComponentDecoratedName):
                     continue
-                node = self.__nodes[sourceComponentDecoratedName]
+                node = self.getNode(sourceComponentDecoratedName)
                 sourceComponent = node.getComponent()
 
             targetComponentDecoratedName = nameMapping[targetComponentDecoratedName]
