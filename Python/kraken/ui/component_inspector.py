@@ -133,7 +133,7 @@ class ComponentInspector(QtGui.QWidget):
         if name is not None:
             labelWidget = QtGui.QLabel(name, self._paramsGroup)
             labelWidget.setObjectName('separatorLabel')
-            labelWidget.setSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.MinimumExpanding)
+            
             self._paramsLayout.addWidget(labelWidget, self._gridRow, 0)
             self._paramsLayout.addWidget(separatorWidget, self._gridRow, 1, QtCore.Qt.AlignBottom)
             self._gridRow += 1
