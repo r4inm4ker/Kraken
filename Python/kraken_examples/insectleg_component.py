@@ -6,6 +6,7 @@ from kraken.core.objects.components.component import Component
 
 from kraken.core.objects.attributes.attribute_group import AttributeGroup
 from kraken.core.objects.attributes.scalar_attribute import ScalarAttribute
+from kraken.core.objects.attributes.integer_attribute import IntegerAttribute
 from kraken.core.objects.attributes.bool_attribute import BoolAttribute
 from kraken.core.objects.attributes.string_attribute import StringAttribute
 
@@ -247,6 +248,7 @@ class InsectLegComponentRig(InsectLegComponent):
         legSettingsAttrGrp = AttributeGroup("DisplayInfo_LegSettings", parent=self.legIKCtrl)
         legdrawDebugInputAttr = BoolAttribute('drawDebug', value=False, parent=legSettingsAttrGrp)
         legUseInitPoseInputAttr = BoolAttribute('useInitPose', value=True, parent=legSettingsAttrGrp)
+        self.rootIndexInputAttr = IntegerAttribute('rootIndex', value=0, parent=legSettingsAttrGrp)
         legFkikInputAttr = ScalarAttribute('fkik', value=1.0, minValue=0.0,
             maxValue=1.0, parent=legSettingsAttrGrp)
 
@@ -307,6 +309,7 @@ class InsectLegComponentRig(InsectLegComponent):
         self.NBoneSolverSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
         self.NBoneSolverSpliceOp.setInput('useInitPose', legUseInitPoseInputAttr)
         self.NBoneSolverSpliceOp.setInput('ikblend', legFkikInputAttr)
+        self.NBoneSolverSpliceOp.setInput('rootIndex', self.rootIndexInputAttr)
         self.NBoneSolverSpliceOp.setInput('tipBoneLen', self.tipBoneLenInputAttr)
 
         # Add Xfo Inputs
@@ -369,6 +372,8 @@ class InsectLegComponentRig(InsectLegComponent):
         self.legUpVCtrlSpace.xfo.tr = upVOffset
         self.legUpVCtrl.xfo.tr = upVOffset
 
+        # Set max on the rootIndex attribute
+        self.rootIndexInputAttr.setMax(len(boneXfos))
 
         # ============
         # Set IO Xfos
