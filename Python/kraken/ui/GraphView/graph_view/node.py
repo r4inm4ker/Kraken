@@ -314,13 +314,14 @@ class Node(QtGui.QGraphicsWidget):
         # this is because we can't remove connections from outports while
         # iterating over the set. 
         connections = []
-        for port in self.__inports:
-            if port.getConnection() is not None:
-                connections.append(port.getConnection())
 
-        for port in self.__outports:
-            for connection in port.getConnections():
-                connections.append(connection)
+        for port in self.__ports:
+            if port.inCircle():
+                for connection in port.inCircle().getConnections():
+                    connections.append(connection)
+            if port.outCircle():
+                for connection in port.outCircle().getConnections():
+                    connections.append(connection)
 
         for connection in connections:
             self.__graph.removeConnection(connection)
