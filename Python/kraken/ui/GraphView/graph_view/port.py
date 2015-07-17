@@ -161,10 +161,23 @@ class PortCircle(QtGui.QGraphicsWidget):
 
     def highlight(self):
         self._ellipseItem.setBrush(QtGui.QBrush(self._color.lighter()))
+        # make the port bigger to highlight it can accept the connection.
+        self._ellipseItem.setRect(
+            -self.__radius * 1.3,
+            -self.__radius * 1.3,
+            self.__diameter * 1.3,
+            self.__diameter * 1.3,
+            )
 
 
     def unhighlight(self):
         self._ellipseItem.setBrush(QtGui.QBrush(self._color))
+        self._ellipseItem.setRect(
+            -self.__radius,
+            -self.__radius,
+            self.__diameter,
+            self.__diameter,
+            )
 
 
     # ===================
