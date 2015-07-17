@@ -4,7 +4,7 @@
 #
 
 from PySide import QtGui, QtCore
-from port import PortCircle
+from port import PortCircle, PortLabel
 from connection import Connection
 
 class MouseGrabber(PortCircle):
@@ -46,9 +46,22 @@ class MouseGrabber(PortCircle):
         self.setTransform(QtGui.QTransform.fromTranslate(scenePos.x(), scenePos.y()), False)
 
         collidingItems = self.collidingItems(QtCore.Qt.IntersectsItemBoundingRect)
-        collidingPortCircles = filter(lambda item: isinstance(item, (PortCircle)), collidingItems)
+        collidingPortCircles = filter(lambda item: isinstance(item, (PortCircle, PortLabel)), collidingItems)
 
-        def canConnect(mouseOverPortCircle):
+        def canConnect(item):
+            if isinstance(item, PortCircle):
+                mouseOverPortCircle = item
+            else:
+                if self.connectionPointType() == 'In':
+                    mouseOverPortCircle = item.getPort().inCircle()
+                else:
+                    mouseOverPortCircle = item.getPort().outCircle()
+
+                if mouseOverPortCircle == None:
+                    print self.connectionPointType()
+                    print item
+                    return False
+
             if self.connectionPointType() != mouseOverPortCircle.connectionPointType():
                 return False
 
@@ -61,7 +74,15 @@ class MouseGrabber(PortCircle):
         if len(collidingPortCircles) > 0:
             if self.__mouseOverPortCircle and self.__mouseOverPortCircle != collidingPortCircles[0]:
                 self.__mouseOverPortCircle.unhighlight()
-            self.__mouseOverPortCircle = collidingPortCircles[0]
+
+            if isinstance(collidingPortCircles[0], PortCircle):
+                self.__mouseOverPortCircle = collidingPortCircles[0]
+            else:
+                if self.connectionPointType() == 'In':
+                    self.__mouseOverPortCircle = collidingPortCircles[0].getPort().inCircle()
+                else:
+                    self.__mouseOverPortCircle = collidingPortCircles[0].getPort().outCircle()
+
             self.__mouseOverPortCircle.highlight()
         elif self.__mouseOverPortCircle != None:
             self.__mouseOverPortCircle.unhighlight()
