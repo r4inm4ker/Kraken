@@ -27,7 +27,10 @@ class Vec4(MathObject):
 
 
     def __str__(self):
-        """String representation of the Vec4 object."""
+        """String representation of the Vec4 object.
+
+        Returns:
+            str: String representation of the Vec4 object."""
 
         stringRep = "Vec4("
         stringRep += str(self.x) + ","
@@ -42,8 +45,8 @@ class Vec4(MathObject):
     def x(self):
         """Gets x value of this vector.
 
-        Return:
-        Scalar, x value of this vector.
+        Returns:
+            float: x value of this vector.
 
         """
 
@@ -54,11 +57,11 @@ class Vec4(MathObject):
     def x(self, value):
         """Sets x value from the input value.
 
-        Arguments:
-        value -- Scalar, value to set the x property as.
+        Args:
+            value (float): Value to set the x property as.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -71,8 +74,8 @@ class Vec4(MathObject):
     def y(self):
         """Gets y value of this vector.
 
-        Return:
-        Scalar, y value of this vector.
+        Returns:
+            float: y value of this vector.
 
         """
 
@@ -83,11 +86,11 @@ class Vec4(MathObject):
     def y(self, value):
         """Sets y value from the input value.
 
-        Arguments:
-        value -- Scalar, value to set the y property as.
+        Args:
+            value (float): Value to set the y property as.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -100,8 +103,8 @@ class Vec4(MathObject):
     def z(self):
         """Gets z value of this vector.
 
-        Return:
-        Scalar, z value of this vector.
+        Returns:
+            float: z value of this vector.
 
         """
 
@@ -112,11 +115,11 @@ class Vec4(MathObject):
     def z(self, value):
         """Sets y value from the input value.
 
-        Arguments:
-        value -- Scalar, value to set the y property as.
+        Args:
+            value (float): Value to set the y property as.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -129,8 +132,8 @@ class Vec4(MathObject):
     def t(self):
         """Gets t value of this vector.
 
-        Return:
-        Scalar, t value of this vector.
+        Returns:
+            float: t value of this vector.
 
         """
 
@@ -141,11 +144,11 @@ class Vec4(MathObject):
     def t(self, value):
         """Sets t value from the input value.
 
-        Arguments:
-        value -- Scalar, value to set the t property as.
+        Args:
+            value (float): Value to set the t property as.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -155,8 +158,8 @@ class Vec4(MathObject):
     def clone(self):
         """Returns a clone of the Vec4.
 
-        Return:
-        The cloned Vec4
+        Returns:
+            Vec4: The cloned Vec4
 
         """
 
@@ -170,14 +173,14 @@ class Vec4(MathObject):
     def set(self, x, y, z, t):
         """Sets the x, y, z, and t value from the input values.
 
-        Arguments:
-        x -- Scalar, value to set the x property as.
-        y -- Scalar, value to set the x property as.
-        z -- Scalar, value to set the z property as.
-        t -- Scalar, value to set the t property as.
+        Args:
+            x (float): Value to set the x property as.
+            y (float): Value to set the x property as.
+            z (float): Value to set the z property as.
+            t (float): Value to set the t property as.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -190,8 +193,8 @@ class Vec4(MathObject):
     def setNull():
         """Setting all components of the vec3 to 0.0.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -203,11 +206,11 @@ class Vec4(MathObject):
     def equal(self, other):
         """Checks equality of this vec3 with another.
 
-        Arguments:
-        other -- Vec4, other vector to check equality with.
+        Args:
+            other (Vec4): other vector to check equality with.
 
-        Return:
-        True if equal.
+        Returns:
+            bool: True if equal.
 
         """
 
@@ -217,12 +220,12 @@ class Vec4(MathObject):
     def almostEqual(self, other, precision):
         """Checks almost equality of this Vec4 with another.
 
-        Arguments:
-        other -- Vec4, other matrix to check equality with.
-        precision -- Scalar, precision value.
+        Args:
+            other (Vec4): other matrix to check equality with.
+            precision (float): Precision value.
 
-        Return:
-        True if almost equal.
+        Returns:
+            bool: True if almost equal.
 
         """
 
@@ -234,11 +237,11 @@ class Vec4(MathObject):
         """Checks almost equality of this Vec4 with another
         (using a default precision).
 
-        Arguments:
-        other -- Vec4, other vector to check equality with.
+        Args:
+            other (Vec4): other vector to check equality with.
 
-        Return:
-        True if almost equal.
+        Returns:
+            bool: True if almost equal.
 
         """
 
@@ -248,11 +251,11 @@ class Vec4(MathObject):
     def component(self, i ):
         """Gets the component of this Vec4 by index.
 
-        Arguments:
-        i -- Integer, index of the component to return.
+        Args:
+            i (int): index of the component to return.
 
-        Return:
-        Scalar, component of this Vec4.
+        Returns:
+            float: component of this Vec4.
 
         """
 
@@ -262,12 +265,12 @@ class Vec4(MathObject):
     def setComponent(self, i, v ):
         """Sets the component of this Vec4 by index.
 
-        Arguments:
-        i -- Integer, index of the component to set.
-        v -- Scalar, value to set component as.
+        Args:
+            i (int): index of the component to set.
+            v (float): Value to set component as.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -327,11 +330,11 @@ class Vec4(MathObject):
     def add(self, other):
         """Overload method for the add operator.
 
-        Arguments:
-        other -- Vec4, other vector to add to this one.
+        Args:
+            other (Vec4): other vector to add to this one.
 
-        Return:
-        Vec4, new Vec4 of the sum of the two Vec4's.
+        Returns:
+            Vec4: New Vec4 of the sum of the two Vec4's.
 
         """
 
@@ -341,11 +344,11 @@ class Vec4(MathObject):
     def subtract(self, other):
         """Overload method for the subtract operator.
 
-        Arguments:
-        other -- Vec4, other vector to subtract from this one.
+        Args:
+            other (Vec4): other vector to subtract from this one.
 
-        Return:
-        Vec4, new Vec4 of the difference of the two Vec4's.
+        Returns:
+            Vec4: New Vec4 of the difference of the two Vec4's.
 
         """
 
@@ -355,11 +358,11 @@ class Vec4(MathObject):
     def multiply(self, other):
         """Overload method for the multiply operator.
 
-        Arguments:
-        other -- Vec4, other vector to multiply from this one.
+        Args:
+            other (Vec4): other vector to multiply from this one.
 
-        Return:
-        Vec4, new Vec4 of the product of the two Vec4's.
+        Returns:
+            Vec4: New Vec4 of the product of the two Vec4's.
 
         """
 
@@ -369,11 +372,11 @@ class Vec4(MathObject):
     def divide(self, other):
         """Divides this vector and an other.
 
-        Arguments:
-        other -- Vec4, other vector to divide by.
+        Args:
+            other (Vec4): other vector to divide by.
 
-        Return:
-        Vec4, quotient of the division of this vector by the other.
+        Returns:
+            Vec4: Quotient of the division of this vector by the other.
 
         """
 
@@ -383,11 +386,11 @@ class Vec4(MathObject):
     def multiplyScalar(self, other):
         """Product of this vector and a scalar.
 
-        Arguments:
-        other -- Scalar, scalar value to multiply this vector by.
+        Args:
+            other (float): Scalar value to multiply this vector by.
 
-        Return:
-        Vec4, product of the multiplication of the scalar and this vector.
+        Returns:
+            Vec4: Product of the multiplication of the scalar and this vector.
 
         """
 
@@ -397,11 +400,11 @@ class Vec4(MathObject):
     def divideScalar(self, other):
         """Divides this vector and a scalar.
 
-        Arguments:
-        other -- Scalar, value to divide this vector by.
+        Args:
+            other (float): Value to divide this vector by.
 
-        Return:
-        Vec4, quotient of the division of the vector by the scalar.
+        Returns:
+            Vec4: Quotient of the division of the vector by the scalar.
 
         """
 
@@ -411,8 +414,8 @@ class Vec4(MathObject):
     def negate(self):
         """Gets the negated version of this vector.
 
-        Return:
-        Vec4, negation of this vector.
+        Returns:
+            Vec4: Negation of this vector.
 
         """
 
@@ -422,8 +425,8 @@ class Vec4(MathObject):
     def inverse(self):
         """Get the inverse vector of this vector.
 
-        Return:
-        Vec4, inverse of this vector.
+        Returns:
+            Vec4: Inverse of this vector.
 
         """
 
@@ -433,11 +436,11 @@ class Vec4(MathObject):
     def dot(self, other):
         """Gets the dot product of this vector and another.
 
-        Arguments:
-        other -- Vec4, other vector.
+        Args:
+            other (Vec4): other vector.
 
-        Return:
-        Scalar, dot product.
+        Returns:
+            float: dot product.
 
         """
 
@@ -447,11 +450,11 @@ class Vec4(MathObject):
     def cross(self, other):
         """Gets the cross product of this vector and another.
 
-        Arguments:
-        other -- Vec4, other vector.
+        Args:
+            other (Vec4): other vector.
 
-        Return:
-        Vec4, dot product.
+        Returns:
+            Vec4: Dot product.
 
         """
 
@@ -461,8 +464,8 @@ class Vec4(MathObject):
     def lengthSquared(self):
         """Get the squared length of this vector.
 
-        Return:
-        Scalar, squared length oft his vector.
+        Returns:
+            float: squared length oft his vector.
 
         """
 
@@ -472,8 +475,8 @@ class Vec4(MathObject):
     def length(self):
         """Gets the length of this vector.
 
-        Return:
-        Scalar, length of this vector.
+        Returns:
+            float: length of this vector.
 
         """
 
@@ -483,8 +486,8 @@ class Vec4(MathObject):
     def unit(self):
         """Gets a unit vector of this one.
 
-        Return:
-        Vec4, new unit vector from this one.
+        Returns:
+            Vec4: New unit vector from this one.
 
         """
 
@@ -495,8 +498,8 @@ class Vec4(MathObject):
         """Gets a unit vector of this one, no error reported if cannot be
         made unit.
 
-        Return:
-        Vec4, new unit vector.
+        Returns:
+            Vec4: New unit vector.
 
         """
 
@@ -507,8 +510,8 @@ class Vec4(MathObject):
         """Sets this vector to a unit vector and returns the previous
         length.
 
-        Return:
-        Scalar, this vector.
+        Returns:
+            float: this vector.
 
         """
 
@@ -518,8 +521,8 @@ class Vec4(MathObject):
     def normalize(self):
         """Gets a normalized vector from this vector.
 
-        Return:
-        Scalar, previous length.
+        Returns:
+            float: previous length.
 
         """
 
@@ -529,12 +532,12 @@ class Vec4(MathObject):
     def clamp(self, min, max):
         """Clamps this vector per component by a min and max vector.
 
-        Arguments:
-        min -- Scalar, minimum value.
-        max -- Scalar, maximum value.
+        Args:
+            min (float): Minimum value.
+            max (float): Maximum value.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -545,11 +548,11 @@ class Vec4(MathObject):
         """Gets the angle (self, in radians) of this vector to another one
         note expects both vectors to be units (else use angleTo)
 
-        Arguments:
-        other -- Vec4, other vector to get angle to.
+        Args:
+            other (Vec4): other vector to get angle to.
 
-        Return:
-        Scalar, angle.
+        Returns:
+            float: angle.
 
         """
 
@@ -559,11 +562,11 @@ class Vec4(MathObject):
     def angleTo(self, other):
         """Gets the angle (self, in radians) of this vector to another one.
 
-        Arguments:
-        other -- Vec4, other vector to get angle to.
+        Args:
+            other (Vec4): other vector to get angle to.
 
-        Return:
-        Scalar, angle.
+        Returns:
+            float: angle.
 
         """
 
@@ -574,11 +577,11 @@ class Vec4(MathObject):
     def distanceTo(self, other):
         """Doc String.
 
-        Arguments:
-        other -- Vec4, the other vector to measure the distance to.
+        Args:
+            other (Vec4): the other vector to measure the distance to.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -589,12 +592,12 @@ class Vec4(MathObject):
         """Linearly interpolates this vector with another one based on a scalar
         blend value (0.0 to 1.0).
 
-        Arguments:
-        other -- Vec4, vector to blend to.
-        t -- Scalar, blend value.
+        Args:
+            other (Vec4): vector to blend to.
+            t (float): Blend value.
 
-        Return:
-        Vec4, new vector blended between this and the input vector.
+        Returns:
+            Vec4: New vector blended between this and the input vector.
 
         """
 
@@ -605,12 +608,12 @@ class Vec4(MathObject):
         """Returns the distance of this vector to a line defined by two points
         on the line.
 
-        Arguments:
-        lineP0 -- Vec4, point 1 of the line.
-        lineP1 -- Vec4, point 2 of the line.
+        Args:
+            lineP0 (Vec4): point 1 of the line.
+            lineP1 (Vec4): point 2 of the line.
 
-        Return:
-        Scalar, distance to the line.
+        Returns:
+            float: distance to the line.
 
         """
 
@@ -621,12 +624,12 @@ class Vec4(MathObject):
         """Returns the distance of this vector to a line segment defined by the
         start and end points of the line segment
 
-        Arguments:
-        segmentP0 -- Vec4, point 1 of the segment.
-        segmentP1 -- Vec4, point 2 of the segment.
+        Args:
+            segmentP0 (Vec4): point 1 of the segment.
+            segmentP1 (Vec4): point 2 of the segment.
 
-        Return:
-        Scalar, distance to the segment.
+        Returns:
+            float: distance to the segment.
 
         """
 

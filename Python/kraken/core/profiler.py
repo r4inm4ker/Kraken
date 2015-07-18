@@ -28,6 +28,7 @@ class _ProfilerItem(object):
     def endProfiling(self):
         self.end = time.time()
 
+
 class Profiler(object):
     """Kraken profiler object for debugging performance issues."""
 
@@ -40,13 +41,7 @@ class Profiler(object):
 
 
     def reset(self):
-        """Resets the profiler for generating a new report
-
-        Return:
-        None
-
-
-        """
+        """Resets the profiler for generating a new report"""
 
         self.__roots = []
         self.__stack = []
@@ -56,11 +51,8 @@ class Profiler(object):
 
         """Adds a new child to the profiling tree and activates it.
 
-        Arguments:
-        label -- string, The label of the next level of the stack.
-
-        Return:
-        None
+        Args:
+            label (str): The label of the next level of the stack.
 
         """
 
@@ -75,12 +67,7 @@ class Profiler(object):
 
     def pop(self):
         """Deactivates the current item in the tree and returns the profiler to
-        the parent item
-
-        Return:
-        None
-
-        """
+        the parent item"""
 
         end = time.time()
         if len(self.__stack) == 0:
@@ -95,11 +82,11 @@ class Profiler(object):
         """Returns a report string containing all the data gathered turing
         profiling.
 
-        Arguments:
-        listFunctionTotals -- Boolean, list information relating to the total time spent in each function.
+        Args:
+            listFunctionTotals (bool): list information relating to the total time spent in each function.
 
-        Return:
-        the json object
+        Returns:
+            str: The profiler report.
 
         """
 
@@ -146,8 +133,8 @@ class Profiler(object):
     def getInstance(cls):
         """This class method returns the singleton instance for the Profiler
 
-        Return:
-        The singleton instance.
+        Returns:
+            object: The singleton profiler instance.
 
         """
 

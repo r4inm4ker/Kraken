@@ -27,7 +27,10 @@ class Vec2(MathObject):
 
 
     def __str__(self):
-        """String representation of the Vec2 object."""
+        """String representation of the Vec2 object.
+
+        Returns:
+            str: String representation of the Vec2 object."""
 
         return "Vec2(" + str(self.x) + "," + str(self.y) + ")"
 
@@ -36,8 +39,8 @@ class Vec2(MathObject):
     def x(self):
         """Gets x value of this vector.
 
-        Return:
-        Scalar, x value of this vector.
+        Returns:
+            float: X value of this vector.
 
         """
 
@@ -48,11 +51,11 @@ class Vec2(MathObject):
     def x(self, value):
         """Sets x value from the input value.
 
-        Arguments:
-        value -- Scalar, value to set the x property as.
+        Args:
+            value (float): Value to set the x property as.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -65,8 +68,8 @@ class Vec2(MathObject):
     def y(self):
         """Gets y value of this vector.
 
-        Return:
-        Scalar, y value of this vector.
+        Returns:
+            float: Y value of this vector.
 
         """
 
@@ -77,11 +80,11 @@ class Vec2(MathObject):
     def y(self, value):
         """Sets y value from the input value.
 
-        Arguments:
-        value -- Scalar, value to set the y property as.
+        Args:
+            value (float): Value to set the y property as.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -93,8 +96,8 @@ class Vec2(MathObject):
     def clone(self):
         """Returns a clone of the Vec2.
 
-        Return:
-        The cloned Vec2
+        Returns:
+            Vec2: The cloned Vec2
 
         """
 
@@ -108,12 +111,12 @@ class Vec2(MathObject):
     def set(self, x, y):
         """Sets the x and y value from the input values.
 
-        Arguments:
-        x -- Scalar, value to set the x property as.
-        y -- Scalar, value to set the x property as.
+        Args:
+            x (float): Value to set the x property as.
+            y (float): Value to set the x property as.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -124,11 +127,11 @@ class Vec2(MathObject):
     def add(self, other):
         """Overload method for the add operator.
 
-        Arguments:
-        other -- Vec2, other vector to add to this one.
+        Args:
+            other (Vec2): Other vector to add to this one.
 
-        Return:
-        Vec2, new Vec2 of the sum of the two Vec2's.
+        Returns:
+            Vec2: New Vec2 of the sum of the two Vec2's.
 
         """
 

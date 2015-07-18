@@ -21,8 +21,8 @@ class MathObject(object):
     def getRTVal(self):
         """Returns the internal RTVal object owned by the math object.
 
-        Return:
-        RTVal
+        Returns:
+            object: RTVal
 
         """
 
@@ -32,8 +32,8 @@ class MathObject(object):
     def setRTVal(self, rtval):
         """Sets the internal RTVal object owned by the math object.
 
-        Arguments:
-        rtval -- rtval, the internal RTVal object owned by the math object.
+        Args:
+            rtval (object): The internal RTVal object owned by the math object.
 
         """
 
@@ -43,8 +43,8 @@ class MathObject(object):
     def jsonEncode(self):
         """Encodes object to JSON.
 
-        Return:
-        JSON object.
+        Returns:
+            dict: Encoded object.
 
         """
 
@@ -66,12 +66,12 @@ class MathObject(object):
     def jsonDecode(self, jsonData, decodeFn):
         """Encodes object to JSON.
 
-        Arguments:
-        jsonData -- dict, the JSON data used to populate the math object.
-        decodeFn -- decodeFn, the decodeFn that can construct the math members.
+        Args:
+            jsonData (dict): The JSON data used to populate the math object.
+            decodeFn (func): The Decode Function that can construct the math members.
 
-        Return:
-        True of the decode was successful
+        Returns:
+            bool: True of the decode was successful
 
         """
 

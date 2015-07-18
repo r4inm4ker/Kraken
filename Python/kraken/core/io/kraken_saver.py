@@ -18,11 +18,11 @@ class KrakenSaver(object):
     def encodeValue(self, value):
         """Doc String.
 
-        Arguments:
-        value -- MathObject, the math object to be saved.
+        Args:
+            value (MathObject): The math object to be saved.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 

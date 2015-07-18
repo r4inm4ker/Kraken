@@ -33,8 +33,8 @@ class Config(object):
     def initColors(self):
         """Initializes the color values.
 
-        Return:
-        Dict, color definitions.
+        Returns:
+            dict: color definitions.
 
         """
 
@@ -84,8 +84,8 @@ class Config(object):
     def getColors(self):
         """Gets the colors defined in the config.
 
-        Return:
-        Dict, colors.
+        Returns:
+            dict: colors.
 
         """
 
@@ -98,8 +98,8 @@ class Config(object):
     def initColorMap(self):
         """Initializes the color values.
 
-        Return:
-        Dict, color definitions.
+        Returns:
+            dict: color definitions.
 
         """
 
@@ -118,8 +118,8 @@ class Config(object):
     def getColorMap(self):
         """Gets the color map defined in the config.
 
-        Return:
-        Dict, color map.
+        Returns:
+            dict: color map.
 
         """
 
@@ -132,8 +132,8 @@ class Config(object):
     def initNameTemplate(self):
         """Initializes the name template.
 
-        Return:
-        Dict, name template.
+        Returns:
+            dict: name template.
 
         """
 
@@ -175,8 +175,8 @@ class Config(object):
     def getNameTemplate(self):
         """Returns the naming template for this configuration.
 
-        Return:
-        Dict, naming template.
+        Returns:
+            dict: naming template.
 
         """
 
@@ -189,8 +189,8 @@ class Config(object):
     def initControlShapes(self):
         """Initializes the control shapes.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -431,8 +431,8 @@ class Config(object):
     def getControlShapes(self):
         """Returns the control shapes for this configuration.
 
-        Return:
-        Dict, control shapes.
+        Returns:
+            dict: control shapes.
 
         """
 
@@ -445,8 +445,8 @@ class Config(object):
     def getExplicitNaming(self):
         """Returns the value of the explicit naming attribute.
 
-        Return:
-        Boolean, current value.
+        Returns:
+            bool: current value.
 
         """
 
@@ -456,11 +456,11 @@ class Config(object):
     def setExplicitNaming(self, value):
         """Set the config to use explicit naming.
 
-        Arguments:
-        value -- Boolean, whether to use explicit naming or not.
+        Args:
+            value (bool): whether to use explicit naming or not.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -476,8 +476,8 @@ class Config(object):
     def getInstance(cls):
         """This class method returns the singleton instance for the Config.
 
-        Return:
-        The singleton instance.
+        Returns:
+            object: The singleton config instance.
 
         """
 
@@ -494,8 +494,8 @@ class Config(object):
     def clearInstance(cls):
         """Clears the instance variable of the config.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
