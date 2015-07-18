@@ -58,14 +58,18 @@ class MouseGrabber(PortCircle):
                     mouseOverPortCircle = item.getPort().outCircle()
 
                 if mouseOverPortCircle == None:
-                    print self.connectionPointType()
-                    print item
                     return False
 
             if self.connectionPointType() != mouseOverPortCircle.connectionPointType():
                 return False
 
             if mouseOverPortCircle.getPort().getDataType() != self.__otherPortCircle.getPort().getDataType():
+                return False
+
+            # Check if you're trying to connect to the
+            mouseOverPort = mouseOverPortCircle.getPort()
+            otherPort = self.__otherPortCircle.getPort()
+            if mouseOverPort.getNode() == otherPort.getNode():
                 return False
 
             return True

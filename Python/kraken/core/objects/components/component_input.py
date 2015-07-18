@@ -87,6 +87,9 @@ class ComponentInput(SceneItem):
 
         """
 
+        if self.getParent() == connectionObj.getParent():
+            raise Exception("Cannot connect to port on same component!")
+
         if connectionObj.getDataType() != self.getDataType() and connectionObj.getDataType()[:-2] != self.getDataType():
             raise Exception("Data Type mismatch! Cannot connect '" +
                 connectionObj.getDataType() + "' to '" + self.getDataType())
@@ -99,7 +102,6 @@ class ComponentInput(SceneItem):
         connectionObj._addConnection(self)
 
         return True
-
 
 
     def removeConnection(self):

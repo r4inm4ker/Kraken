@@ -115,6 +115,7 @@ class SceneItem(object):
 
         return ""
 
+
     def getDecoratedName(self):
         """Gets the decorated name of the object.
 
