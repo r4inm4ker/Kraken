@@ -54,6 +54,16 @@ class PortLabel(QtGui.QGraphicsWidget):
     def getPort(self):
         return self.__port
 
+    def getPortCircle(self):
+        port = self.getPort()
+
+        if self.isInConnectionPoint():
+            circle = port.inCircle()
+        elif self.isOutConnectionPoint():
+            circle = port.outCircle()
+
+        return circle
+
 
     def highlight(self):
         self.setColor(self.__highlightColor)
@@ -97,6 +107,23 @@ class PortLabel(QtGui.QGraphicsWidget):
         else:
             self.__port.outCircle().mousePressEvent(event)
 
+    # ===================
+    # Connection Methods
+    # ===================
+    def connectionPointType(self):
+        return self.getPort().connectionPointType()
+
+    def isInConnectionPoint(self):
+        return self.getPort().connectionPointType() == 'In'
+
+    def isOutConnectionPoint(self):
+        return self.getPort().connectionPointType() == 'Out'
+
+    def addConnection(self, connection):
+        circle = self.getPortCircle()
+        circle.addConnection(connection)
+
+        return True
 
     # def paint(self, painter, option, widget):
     #     super(PortLabel, self).paint(painter, option, widget)
@@ -183,7 +210,6 @@ class PortCircle(QtGui.QGraphicsWidget):
     # ===================
     # Connection Methods
     # ===================
-
     def connectionPointType(self):
         return self._connectionPointType
 
@@ -214,7 +240,7 @@ class PortCircle(QtGui.QGraphicsWidget):
         """
 
         self.__connections.remove(connection)
-        
+
         return True
 
     def getConnections(self):
@@ -228,7 +254,6 @@ class PortCircle(QtGui.QGraphicsWidget):
     # ======
     # Events
     # ======
-
     def hoverEnterEvent(self, event):
         self.highlight()
         super(PortCircle, self).hoverEnterEvent(event)
@@ -311,6 +336,12 @@ class BasePort(QtGui.QGraphicsWidget):
     def outCircle(self):
         return self._outCircle
 
+    # ===================
+    # Connection Methods
+    # ===================
+    def connectionPointType(self):
+        return self._connectionPointType
+
     # def paint(self, painter, option, widget):
     #     super(BasePort, self).paint(painter, option, widget)
     #     painter.setPen(QtGui.QPen(QtGui.QColor(255, 255, 0)))
@@ -319,6 +350,7 @@ class BasePort(QtGui.QGraphicsWidget):
 
 class InputPort(BasePort):
     """docstring for InputPort"""
+
     def __init__(self, parent, graph, name, color, dataType):
         super(InputPort, self).__init__(parent, graph, name, color, dataType, 'In')
 
@@ -338,9 +370,9 @@ class InputPort(BasePort):
         self.__connection = None
 
 
-
 class OutputPort(BasePort):
     """docstring for OutputPort"""
+
     def __init__(self, parent, graph, name, color, dataType):
         super(OutputPort, self).__init__(parent, graph, name, color, dataType, 'Out')
 
@@ -360,9 +392,9 @@ class OutputPort(BasePort):
 
 class IOPort(BasePort):
     """docstring for OutputPort"""
+
     def __init__(self, parent, graph, name, color, dataType):
         super(IOPort, self).__init__(parent, graph, name, color, dataType, 'IO')
-
 
         labelHOffset = 0
         circleHOffset = -2

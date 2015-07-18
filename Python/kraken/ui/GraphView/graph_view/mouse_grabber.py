@@ -49,7 +49,7 @@ class MouseGrabber(PortCircle):
         collidingPortCircles = filter(lambda item: isinstance(item, (PortCircle, PortLabel)), collidingItems)
 
         def canConnect(item):
-            if isinstance(item, PortCircle):
+            if isinstance(item, (PortCircle, PortLabel)):
                 mouseOverPortCircle = item
             else:
                 if self.connectionPointType() == 'In':
@@ -79,7 +79,7 @@ class MouseGrabber(PortCircle):
             if self.__mouseOverPortCircle and self.__mouseOverPortCircle != collidingPortCircles[0]:
                 self.__mouseOverPortCircle.unhighlight()
 
-            if isinstance(collidingPortCircles[0], PortCircle):
+            if isinstance(collidingPortCircles[0], (PortCircle, PortLabel)):
                 self.__mouseOverPortCircle = collidingPortCircles[0]
             else:
                 if self.connectionPointType() == 'In':
@@ -92,6 +92,7 @@ class MouseGrabber(PortCircle):
             self.__mouseOverPortCircle.unhighlight()
             self.__mouseOverPortCircle = None
 
+
     def mouseReleaseEvent(self, event):
 
         if self.__mouseOverPortCircle is not None:
@@ -100,10 +101,18 @@ class MouseGrabber(PortCircle):
 
                 if self.connectionPointType() == 'In':
                     sourcePortCircle = self.__otherPortCircle
-                    targetPortCircle = self.__mouseOverPortCircle
+
+                    if isinstance(self.__mouseOverPortCircle, PortLabel):
+                        targetPortCircle = self.__mouseOverPortCircle.getPortCircle()
+                    else:
+                        targetPortCircle = self.__mouseOverPortCircle
                 elif self.connectionPointType() == 'Out':
                     sourcePortCircle = self.__mouseOverPortCircle
-                    targetPortCircle = self.__otherPortCircle
+
+                    if isinstance(self.__mouseOverPortCircle, PortLabel):
+                        targetPortCircle = self.__mouseOverPortCircle.getPortCircle()
+                    else:
+                        targetPortCircle = self.__otherPortCircle
 
                 from connection import Connection
                 connection = Connection(self._graph, sourcePortCircle, targetPortCircle)
