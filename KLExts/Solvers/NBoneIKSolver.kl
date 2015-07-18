@@ -26,6 +26,7 @@ function KrakenSolverArg[] NBoneIKSolver.getArguments(){
   args.push(KrakenSolverArg('upVector', 'in', 'Mat44'));
   args.push(KrakenSolverArg('fkcontrols', 'in', 'Mat44[]'));
   args.push(KrakenSolverArg('tipBoneLen', 'in', 'Scalar'));
+  args.push(KrakenSolverArg('rootIndex', 'in', 'Integer'));
   args.push(KrakenSolverArg('pose', 'out', 'Mat44[]'));
   args.push(KrakenSolverArg('legEnd', 'out', 'Mat44'));
   return args;
@@ -45,6 +46,7 @@ function NBoneIKSolver.solve!
   Mat44 upVector,
   Mat44 fkcontrols[],
   Scalar tipBoneLen,
+  Integer rootIndex,
   io Mat44 pose[],
   io Mat44 legEnd
 ) {
@@ -78,18 +80,37 @@ function NBoneIKSolver.solve!
   xfoPose[fkcontrols.size].tr = xfoPose[fkcontrols.size-1].transformVector(boneVectors[boneVectors.size-1]);
 
   if(ikblend > 0.0) {
-    Xfo ikPose[];
-    if (useInitPose == 1) {
-      //ikPose = solveNBoneIK(this.initPose, ikgoal.translation());
-      ikPose = solveNBoneIKWithUpVector(this.initPose, ikgoal.translation(), upVector.translation(), Vec3(0, 1, 0));
+    UInt32 ikIndex = 0;
+    if (rootIndex > this.initPose.size - 3) {
+      report('rootIndex has to leave at least 2 joints at the end of the chain!');
+      ikIndex = this.initPose.size - 3;
     }
     else {
-      ikPose = solveNBoneIK(xfoPose, ikgoal.translation());
+      ikIndex = rootIndex;
     }
 
     // Now blend the IK result with the FK result
-    for(UInt32 i=0; i < xfoPose.size; i++) {
-      xfoPose[i].ori = xfoPose[i].ori.sphericalLinearInterpolate(ikPose[i].ori, ikblend);
+    Xfo initPose[];
+    initPose.resize(this.initPose.size - ikIndex);
+    for(UInt32 i=ikIndex; i < xfoPose.size; i++) {
+      if (useInitPose == 1)
+        initPose[i - ikIndex] = this.initPose[i];
+      else
+        initPose[i - ikIndex] = xfoPose[i];
+    }
+
+    Xfo ikPose[];
+    if (useInitPose == 1) {
+      //ikPose = solveNBoneIK(this.initPose, ikgoal.translation());
+      ikPose = solveNBoneIKWithUpVector(initPose, ikgoal.translation(), upVector.translation(), Vec3(0, 1, 0));
+    }
+    else {
+      ikPose = solveNBoneIK(initPose, ikgoal.translation());
+    }
+
+    // Now blend the IK result with the FK result
+    for(UInt32 i=ikIndex; i < xfoPose.size; i++) {
+      xfoPose[i].ori = xfoPose[i ].ori.sphericalLinearInterpolate(ikPose[i- ikIndex].ori, ikblend);
       if(i>0)
         xfoPose[i].tr = xfoPose[i-1].transformVector(boneVectors[i-1]);
     }

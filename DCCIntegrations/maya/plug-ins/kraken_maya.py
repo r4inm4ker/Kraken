@@ -91,13 +91,11 @@ def setupKrakenMenu():
     mainWindow = maya.mel.eval('$tmpVar=$gMainWindow')
 
     menuName = 'Kraken'
-    lMenus = pm.window(mainWindow, q=True, ma=True)
-    if menuName in lMenus:
+    menus = pm.window(mainWindow, q=True, ma=True)
+    if menuName in menus:
         return
 
     krakenMenu = pm.menu(menuName, parent=mainWindow, label=menuName, to=True)
-
-    # menuEditor = pm.menuItem("KrakenEditorMenuItem", parent=krakenMenu, label="Open Kraken Editor", to=True, subMenu=True)
 
     pm.menuItem(parent=krakenMenu, label="Open Kraken Editor", c="from maya import cmds; cmds.openKrakenEditor()")
     pm.menuItem(parent=krakenMenu, divider=True)
@@ -120,7 +118,9 @@ def initializePlugin(mobject):
         sys.stderr.write('Failed to register commands:krakenUndoableCmd')
         raise
 
-    setupKrakenMenu();
+    krakenLoadMenu = os.getenv('KRAKEN_LOAD_MENU', 'True')
+    if krakenLoadMenu == 'True':
+        setupKrakenMenu()
 
 # Uninitialize the script plug-in
 def uninitializePlugin(mobject):

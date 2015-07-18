@@ -1,4 +1,5 @@
 from kraken.core.maths import Vec3
+from kraken.core.maths.xfo import Xfo
 
 from kraken.core.objects.components.component import Component
 
@@ -147,12 +148,13 @@ class HeadComponentGuide(HeadComponent):
         The JSON rig data object.
 
         """
+
         data = super(HeadComponentGuide, self).getRigBuildData()
 
-        data['headPosition'] = self.headCtrl.xfo.tr,
-        data['headEndPosition'] = self.headEndCtrl.xfo.tr,
-        data['eyeLeftPosition'] = self.eyeLeftCtrl.xfo.tr,
-        data['eyeRightPosition'] = self.eyeRightCtrl.xfo.tr,
+        data['headPosition'] = self.headCtrl.xfo.tr
+        data['headEndPosition'] = self.headEndCtrl.xfo.tr
+        data['eyeLeftPosition'] = self.eyeLeftCtrl.xfo.tr
+        data['eyeRightPosition'] = self.eyeRightCtrl.xfo.tr
         data['jawPosition'] = self.jawCtrl.xfo.tr
 
         return data
@@ -253,24 +255,20 @@ class HeadComponentRig(HeadComponent):
         headInputConstraint.addConstrainer(self.headBaseInputTgt)
         self.headCtrlSpace.addConstraint(headInputConstraint)
 
-        # Constraint outputs
+        # # Constraint outputs
         headOutputConstraint = PoseConstraint('_'.join([self.headOutputTgt.getName(), 'To', self.headCtrl.getName()]))
-        headOutputConstraint.setMaintainOffset(True)
         headOutputConstraint.addConstrainer(self.headCtrl)
         self.headOutputTgt.addConstraint(headOutputConstraint)
 
         jawOutputConstraint = PoseConstraint('_'.join([self.jawOutputTgt.getName(), 'To', self.jawCtrl.getName()]))
-        jawOutputConstraint.setMaintainOffset(True)
         jawOutputConstraint.addConstrainer(self.jawCtrl)
         self.jawOutputTgt.addConstraint(jawOutputConstraint)
 
         eyeLOutputConstraint = PoseConstraint('_'.join([self.eyeLOutputTgt.getName(), 'To', self.eyeLeftCtrl.getName()]))
-        eyeLOutputConstraint.setMaintainOffset(True)
         eyeLOutputConstraint.addConstrainer(self.eyeLeftCtrl)
         self.eyeLOutputTgt.addConstraint(eyeLOutputConstraint)
 
         eyeROutputConstraint = PoseConstraint('_'.join([self.eyeROutputTgt.getName(), 'To', self.eyeRightCtrl.getName()]))
-        eyeROutputConstraint.setMaintainOffset(True)
         eyeROutputConstraint.addConstrainer(self.eyeRightCtrl)
         self.eyeROutputTgt.addConstraint(eyeROutputConstraint)
 

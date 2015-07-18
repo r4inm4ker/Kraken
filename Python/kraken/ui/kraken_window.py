@@ -56,6 +56,9 @@ class KrakenWindow(QtGui.QMainWindow):
 
         self.statusBar().showMessage('Ready')
 
+        self.setGeometry(250, 150, 800, 475)
+        self.center()
+
 
     def createConnections(self):
         self.krakenMenu.newAction.triggered.connect(self.kraken_ui.graphViewWidget.newRigPreset)
@@ -63,9 +66,21 @@ class KrakenWindow(QtGui.QMainWindow):
         self.kraken_ui.graphViewWidget.rigNameChanged.connect(self.krakenMenu.updateRigNameLabel)
 
 
+    def getKrakenUI(self):
+        return self.kraken_ui
+
+
+    def center(self):
+        qr = self.frameGeometry()
+        cp = QtGui.QDesktopWidget().availableGeometry().center()
+        qr.moveCenter(cp)
+        self.move(qr.topLeft())
+
     # =======
     # Events
     # =======
+
+
     def closeEvent(self, event):
 
         msgBox = QtGui.QMessageBox(self)

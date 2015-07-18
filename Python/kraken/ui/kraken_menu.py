@@ -105,7 +105,8 @@ class KrakenMenu(QtGui.QWidget):
 
     def createConnections(self):
 
-        graphViewWidget = self.window().kraken_ui.graphViewWidget
+        krakenUIWidget = self.parentWidget().getKrakenUI()
+        graphViewWidget = krakenUIWidget.graphViewWidget
 
         # File Menu Connections
         self.newAction.triggered.connect(graphViewWidget.newRigPreset)
@@ -129,7 +130,7 @@ class KrakenMenu(QtGui.QWidget):
         self.buildRigAction.triggered.connect(graphViewWidget.buildRig)
 
         # Panels Menu Connections
-        self.compLibAction.triggered.connect(self.window().kraken_ui.resizeSplitter)
+        self.compLibAction.triggered.connect(krakenUIWidget.resizeSplitter)
 
         # Help Menu Connections
         self.onlineHelpAction.triggered.connect(self.openHelp)
@@ -142,7 +143,9 @@ class KrakenMenu(QtGui.QWidget):
     # Events
     # =======
     def updateRigNameLabel(self):
-        graphViewWidget = self.window().kraken_ui.graphViewWidget
+        krakenUIWidget = self.parentWidget().getKrakenUI()
+
+        graphViewWidget = krakenUIWidget.graphViewWidget
         newRigName = graphViewWidget.guideRig.getName()
 
         self.rigNameLabel.setText('Rig Name: ' + newRigName)
