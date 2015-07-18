@@ -77,7 +77,6 @@ class SpineComponentGuide(SpineComponent):
         # =========
         # Controls
         # ========
-
         guideSettingsAttrGrp = AttributeGroup("GuideSettings", parent=self)
         self.numDeformersAttr = IntegerAttribute('numDeformers', value=1, minValue=0, maxValue=20, parent=guideSettingsAttrGrp)
 

@@ -1,3 +1,5 @@
+import math
+
 from kraken.core.maths import Vec3
 from kraken.core.maths.xfo import Xfo
 from kraken.core.maths.xfo import xfoFromDirAndUpV
@@ -67,7 +69,6 @@ class InsectLegComponent(Component):
         # Declare Output Attrs
 
 
-
 class InsectLegComponentGuide(InsectLegComponent):
     """InsectLeg Component Guide"""
 
@@ -80,21 +81,34 @@ class InsectLegComponentGuide(InsectLegComponent):
         # Controls
         # =========
         guideSettingsAttrGrp = AttributeGroup("GuideSettings", parent=self)
+        self.numDigits = IntegerAttribute('numDigits', value=8, minValue=0, maxValue=20, parent=guideSettingsAttrGrp)
+
+
+        numDigits = self.numDigits.getValue()
+        halfPi = math.pi / 2.0
+        step = halfPi / (numDigits - 1)
+
+        yValues = []
+        xValues = []
+        for i in xrange(numDigits):
+            yValues.append(math.sin((i * step) + halfPi) * 10)
+            xValues.append(math.cos((i * step) + halfPi) * -10)
 
         self.legCtrls = []
-        for i in xrange(5):
+        for i in xrange(numDigits):
             self.legCtrls.append(Control('leg' + str(i).zfill(2), parent=self.ctrlCmpGrp, shape="sphere"))
 
         if data is None:
+            spacingY = 10.0 / numDigits - 1
+            spacingZ = 5.0 / numDigits - 1
+
+            jointPositions = []
+            for i in xrange(numDigits):
+                jointPositions.append(Vec3(xValues[i], yValues[i], 0.0))
+
             data = {
                "location": "L",
-               "jointPositions": [
-                  Vec3(0.9811, 9.769, -1.237),
-                  Vec3(5.4488, 8.4418, -1.237),
-                  Vec3(4.0, 3.1516, -1.237),
-                  Vec3(6.841, 1.0, -1.237),
-                  Vec3(9.841, 0.0, -1.237)
-                 ]
+               "jointPositions": jointPositions
               }
 
         self.loadData(data)
@@ -116,7 +130,7 @@ class InsectLegComponentGuide(InsectLegComponent):
         data = super(InsectLegComponentGuide, self).saveData()
 
         jointPositions = []
-        for i in xrange(5):
+        for i in xrange(len(self.legCtrls)):
             jointPositions.append(self.legCtrls[i].xfo.tr)
 
         data['jointPositions'] = jointPositions
@@ -135,9 +149,20 @@ class InsectLegComponentGuide(InsectLegComponent):
 
         """
 
-        super(InsectLegComponentGuide, self).loadData( data )
+        super(InsectLegComponentGuide, self).loadData(data)
 
-        for i in xrange(5):
+        numDigits = len(data['jointPositions'])
+        if numDigits > len(self.legCtrls):
+            for i in xrange(len(self.legCtrls), numDigits):
+                self.legCtrls.append(Control('leg' + str(i).zfill(2), parent=self.ctrlCmpGrp, shape="sphere"))
+        elif numDigits < len(self.legCtrls):
+            numExtraCtrls = len(self.legCtrls) - numDigits
+            for i in xrange(numExtraCtrls):
+                self.legCtrls.pop()
+
+        self.numDigits.setValue(numDigits)
+
+        for i in xrange(len(data['jointPositions'])):
             self.legCtrls[i].xfo.tr = data['jointPositions'][i]
 
         return True
@@ -153,14 +178,14 @@ class InsectLegComponentGuide(InsectLegComponent):
 
         data = super(InsectLegComponentGuide, self).getRigBuildData()
 
-        # values
+        numDigits = self.numDigits.getValue()
 
         # Calculate Xfos
         fw = Vec3(0, 0, 1)
         boneXfos = []
         boneLengths = []
 
-        for i in xrange(4):
+        for i in xrange(numDigits - 1):
             boneVec = self.legCtrls[i + 1].xfo.tr.subtract(self.legCtrls[i].xfo.tr)
             boneLengths.append(boneVec.length())
             bone1Normal = fw.cross(boneVec).unit()
@@ -218,20 +243,7 @@ class InsectLegComponentRig(InsectLegComponent):
         # FK
         self.fkCtrlSpaces = []
         self.boneFKCtrls = []
-        for i in xrange(4):
-            if i==0:
-                parent = self.ctrlCmpGrp
-            else:
-                parent = self.boneFKCtrls[i - 1]
-
-            boneName = 'bone' + str(i).zfill(2) + 'FK'
-            boneFKCtrlSpace = CtrlSpace(boneName, parent=parent)
-
-            boneFKCtrl = Control(boneName, parent=boneFKCtrlSpace, shape="cube")
-            boneFKCtrl.alignOnXAxis()
-
-            self.fkCtrlSpaces.append(boneFKCtrlSpace)
-            self.boneFKCtrls.append(boneFKCtrl)
+        self.setNumControls(4)
 
         # IK Control
         self.legIKCtrlSpace = CtrlSpace('IK', parent=self.ctrlCmpGrp)
@@ -249,8 +261,7 @@ class InsectLegComponentRig(InsectLegComponent):
         legdrawDebugInputAttr = BoolAttribute('drawDebug', value=False, parent=legSettingsAttrGrp)
         legUseInitPoseInputAttr = BoolAttribute('useInitPose', value=True, parent=legSettingsAttrGrp)
         self.rootIndexInputAttr = IntegerAttribute('rootIndex', value=0, parent=legSettingsAttrGrp)
-        legFkikInputAttr = ScalarAttribute('fkik', value=1.0, minValue=0.0,
-            maxValue=1.0, parent=legSettingsAttrGrp)
+        legFkikInputAttr = ScalarAttribute('fkik', value=1.0, minValue=0.0, maxValue=1.0, parent=legSettingsAttrGrp)
 
         # Connect IO to controls
         self.drawDebugInputAttr.connect(legdrawDebugInputAttr)
@@ -265,23 +276,24 @@ class InsectLegComponentRig(InsectLegComponent):
         # Deformers
         # ==========
         deformersLayer = self.getOrCreateLayer('deformers')
-        defCmpGrp = ComponentGroup(self.getName(), self, parent=deformersLayer)
+        self.defCmpGrp = ComponentGroup(self.getName(), self, parent=deformersLayer)
+        self.deformerJoints = []
+        self.boneOutputsTgt = []
+        self.setNumDeformers(4)
 
-        self.boneDefs = []
-        for i in xrange(4):
-            boneDef = Joint('bone' + str(i).zfill(2), parent=defCmpGrp)
-            boneDef.setComponent(self)
-            self.boneDefs.append(boneDef)
+        # for i in xrange(4):
+        #     boneDef = Joint('bone' + str(i).zfill(2), parent=self.defCmpGrp)
+        #     boneDef.setComponent(self)
+        #     self.deformerJoints.append(boneDef)
 
 
         # =====================
         # Create Component I/O
         # =====================
         # Setup component Xfo I/O's
-        self.boneOutputsTgt = []
-        for i in xrange(4):
-            boneOutput = Locator('bone' + str(i).zfill(2), parent=self.outputHrcGrp)
-            self.boneOutputsTgt.append(boneOutput)
+        # for i in xrange(4):
+        #     boneOutput = Locator('bone' + str(i).zfill(2), parent=self.outputHrcGrp)
+        #     self.boneOutputsTgt.append(boneOutput)
 
         # Set IO Targets
         self.boneOutputs.setTarget(self.boneOutputsTgt)
@@ -338,10 +350,46 @@ class InsectLegComponentRig(InsectLegComponent):
             self.outputsToDeformersSpliceOp.setInput('constrainers', self.boneOutputsTgt[i])
 
         # Add Xfo Outputs
-        for i in xrange(len(self.boneDefs)):
-            self.outputsToDeformersSpliceOp.setOutput('constrainees', self.boneDefs[i])
+        for i in xrange(len(self.deformerJoints)):
+            self.outputsToDeformersSpliceOp.setOutput('constrainees', self.deformerJoints[i])
 
         Profiler.getInstance().pop()
+
+
+    def setNumControls(self, numControls):
+
+        # Add new control spaces and controls
+        for i in xrange(len(self.fkCtrlSpaces), numControls):
+            if i==0:
+                parent = self.ctrlCmpGrp
+            else:
+                parent = self.boneFKCtrls[i - 1]
+
+            boneName = 'bone' + str(i).zfill(2) + 'FK'
+            boneFKCtrlSpace = CtrlSpace(boneName, parent=parent)
+
+            boneFKCtrl = Control(boneName, parent=boneFKCtrlSpace, shape="cube")
+            boneFKCtrl.alignOnXAxis()
+
+            self.fkCtrlSpaces.append(boneFKCtrlSpace)
+            self.boneFKCtrls.append(boneFKCtrl)
+
+
+    def setNumDeformers(self, numDeformers):
+
+        # Add new deformers and outputs
+        for i in xrange(len(self.boneOutputsTgt), numDeformers):
+            name = 'bone' + str(i + 1).zfill(2)
+            legOutput = Locator(name, parent=self.outputHrcGrp)
+            self.boneOutputsTgt.append(legOutput)
+
+        for i in xrange(len(self.deformerJoints), numDeformers):
+            name = 'bone' + str(i + 1).zfill(2)
+            boneDef = Joint(name, parent=self.defCmpGrp)
+            boneDef.setComponent(self)
+            self.deformerJoints.append(boneDef)
+
+        return True
 
 
     def loadData(self, data=None):
@@ -359,28 +407,63 @@ class InsectLegComponentRig(InsectLegComponent):
 
         boneXfos = data['boneXfos']
         boneLengths = data['boneLengths']
+
+        # Add extra controls and outputs
+        self.setNumControls(len(boneLengths))
+        self.setNumDeformers(len(boneLengths))
+
         for i, each in enumerate(self.fkCtrlSpaces):
             self.fkCtrlSpaces[i].xfo = boneXfos[i]
             self.boneFKCtrls[i].xfo = boneXfos[i]
-
             self.boneFKCtrls[i].scalePoints(Vec3(boneLengths[i], 1.75, 1.75))
 
         self.legIKCtrlSpace.xfo = data['endXfo']
         self.legIKCtrl.xfo = data['endXfo']
 
-        upVOffset = boneXfos[1].tr.add(Vec3(3, 3, 0))
-        self.legUpVCtrlSpace.xfo.tr = upVOffset
-        self.legUpVCtrl.xfo.tr = upVOffset
+        upVPos = boneXfos[0].transformVector(Vec3(5, 3, 0))
+        self.legUpVCtrlSpace.xfo.tr = upVPos
+        self.legUpVCtrl.xfo.tr = upVPos
 
         # Set max on the rootIndex attribute
         self.rootIndexInputAttr.setMax(len(boneXfos))
+
+        # ==================
+        # Update Splice Ops
+        # ==================
+        # N Bone Op
+        # Add Controls
+        for i in xrange(len(self.boneFKCtrls)):
+            controls = self.NBoneSolverSpliceOp.getInput('fkcontrols')
+            if self.boneFKCtrls[i] not in controls:
+                self.NBoneSolverSpliceOp.setInput('fkcontrols', self.boneFKCtrls[i])
+
+        # Add Xfo Outputs
+        for i in xrange(len(self.boneOutputsTgt)):
+            outputs = self.NBoneSolverSpliceOp.getOutput('pose')
+            if self.boneOutputsTgt[i] not in outputs:
+                self.NBoneSolverSpliceOp.setOutput('pose', self.boneOutputsTgt[i])
+
+        # ==================
+
+        # Outputs To Deformers Op
+        # Add Xfo Inputs
+        for i in xrange(len(self.boneOutputsTgt)):
+            constrainers = self.outputsToDeformersSpliceOp.getInput('constrainers')
+            if self.boneOutputsTgt[i] not in constrainers:
+                self.outputsToDeformersSpliceOp.setInput('constrainers', self.boneOutputsTgt[i])
+
+        # Add Xfo Outputs
+        for i in xrange(len(self.deformerJoints)):
+            constrainees = self.outputsToDeformersSpliceOp.getOutput('constrainees')
+            if self.deformerJoints[i] not in constrainees:
+                self.outputsToDeformersSpliceOp.setOutput('constrainees', self.deformerJoints[i])
 
         # ============
         # Set IO Xfos
         # ============
         self.rootInputTgt.xfo = boneXfos[0]
 
-        for i in xrange(4):
+        for i in xrange(len(boneLengths)):
             self.boneOutputsTgt[i].xfo = boneXfos[i]
 
         self.legEndXfoOutputTgt.xfo = data['endXfo']
@@ -392,6 +475,13 @@ class InsectLegComponentRig(InsectLegComponent):
         tipBoneLen = boneLengths[len(boneLengths) - 1]
         self.tipBoneLenInputAttr.setMax(tipBoneLen * 2.0)
         self.tipBoneLenInputAttr.setValue(tipBoneLen)
+
+        # ====================
+        # Evaluate Splice Ops
+        # ====================
+        # evaluate the nbone op so that all the output transforms are updated.
+        self.NBoneSolverSpliceOp.evaluate()
+        self.outputsToDeformersSpliceOp.evaluate()
 
 
 from kraken.core.kraken_system import KrakenSystem
