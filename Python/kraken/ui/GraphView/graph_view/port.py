@@ -54,6 +54,9 @@ class PortLabel(QtGui.QGraphicsWidget):
     def getPort(self):
         return self.__port
 
+    def getColor(self):
+        return self.getPort().getColor()
+
     def getPortCircle(self):
         port = self.getPort()
 
