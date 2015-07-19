@@ -154,7 +154,7 @@ class InsectLegComponentGuide(InsectLegComponent):
         numDigits = len(data['jointPositions'])
         if numDigits > len(self.legCtrls):
             for i in xrange(len(self.legCtrls), numDigits):
-                self.legCtrls.append(Control('leg' + str(i).zfill(2), parent=self.ctrlCmpGrp, shape="sphere"))
+                self.legCtrls.append(Control('leg' + str(i + 1).zfill(2), parent=self.ctrlCmpGrp, shape="sphere"))
         elif numDigits < len(self.legCtrls):
             numExtraCtrls = len(self.legCtrls) - numDigits
             for i in xrange(numExtraCtrls):
@@ -242,7 +242,7 @@ class InsectLegComponentRig(InsectLegComponent):
         # =========
         # FK
         self.fkCtrlSpaces = []
-        self.boneFKCtrls = []
+        self.fkCtrls = []
         self.setNumControls(4)
 
         # IK Control
@@ -303,7 +303,7 @@ class InsectLegComponentRig(InsectLegComponent):
         # Constrain I/O
         # ==============
         # Constraint inputs
-        legRootInputConstraint = PoseConstraint('_'.join([self.legIKCtrl.getName(), 'To', self.rootInputTgt.getName()]))
+        legRootInputConstraint = PoseConstraint('_'.join([self.fkCtrlSpaces[0].getName(), 'To', self.rootInputTgt.getName()]))
         legRootInputConstraint.setMaintainOffset(True)
         legRootInputConstraint.addConstrainer(self.rootInputTgt)
         self.fkCtrlSpaces[0].addConstraint(legRootInputConstraint)
@@ -328,8 +328,8 @@ class InsectLegComponentRig(InsectLegComponent):
         self.NBoneSolverSpliceOp.setInput('ikgoal', self.legIKCtrl)
         self.NBoneSolverSpliceOp.setInput('upVector', self.legUpVCtrl)
 
-        for i in xrange(len(self.boneFKCtrls)):
-            self.NBoneSolverSpliceOp.setInput('fkcontrols', self.boneFKCtrls[i])
+        for i in xrange(len(self.fkCtrls)):
+            self.NBoneSolverSpliceOp.setInput('fkcontrols', self.fkCtrls[i])
 
         # Add Xfo Outputs
         for i in xrange(len(self.boneOutputsTgt)):
@@ -363,16 +363,16 @@ class InsectLegComponentRig(InsectLegComponent):
             if i==0:
                 parent = self.ctrlCmpGrp
             else:
-                parent = self.boneFKCtrls[i - 1]
+                parent = self.fkCtrls[i - 1]
 
-            boneName = 'bone' + str(i).zfill(2) + 'FK'
+            boneName = 'bone' + str(i + 1).zfill(2) + 'FK'
             boneFKCtrlSpace = CtrlSpace(boneName, parent=parent)
 
             boneFKCtrl = Control(boneName, parent=boneFKCtrlSpace, shape="cube")
             boneFKCtrl.alignOnXAxis()
 
             self.fkCtrlSpaces.append(boneFKCtrlSpace)
-            self.boneFKCtrls.append(boneFKCtrl)
+            self.fkCtrls.append(boneFKCtrl)
 
 
     def setNumDeformers(self, numDeformers):
@@ -414,8 +414,8 @@ class InsectLegComponentRig(InsectLegComponent):
 
         for i, each in enumerate(self.fkCtrlSpaces):
             self.fkCtrlSpaces[i].xfo = boneXfos[i]
-            self.boneFKCtrls[i].xfo = boneXfos[i]
-            self.boneFKCtrls[i].scalePoints(Vec3(boneLengths[i], 1.75, 1.75))
+            self.fkCtrls[i].xfo = boneXfos[i]
+            self.fkCtrls[i].scalePoints(Vec3(boneLengths[i], 1.75, 1.75))
 
         self.legIKCtrlSpace.xfo = data['endXfo']
         self.legIKCtrl.xfo = data['endXfo']
@@ -432,10 +432,10 @@ class InsectLegComponentRig(InsectLegComponent):
         # ==================
         # N Bone Op
         # Add Controls
-        for i in xrange(len(self.boneFKCtrls)):
+        for i in xrange(len(self.fkCtrls)):
             controls = self.NBoneSolverSpliceOp.getInput('fkcontrols')
-            if self.boneFKCtrls[i] not in controls:
-                self.NBoneSolverSpliceOp.setInput('fkcontrols', self.boneFKCtrls[i])
+            if self.fkCtrls[i] not in controls:
+                self.NBoneSolverSpliceOp.setInput('fkcontrols', self.fkCtrls[i])
 
         # Add Xfo Outputs
         for i in xrange(len(self.boneOutputsTgt)):
