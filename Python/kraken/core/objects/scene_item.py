@@ -5,8 +5,9 @@ SceneItem - Base SceneItem Object.
 
 """
 
+from PySide import QtCore
 
-class SceneItem(object):
+class SceneItem(QtCore.QObject):
     """Kraken base object type for any 3D object."""
 
     def __init__(self, name, parent=None):

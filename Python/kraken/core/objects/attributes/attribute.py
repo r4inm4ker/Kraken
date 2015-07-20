@@ -7,9 +7,12 @@ Attribute - Base Attribute.
 
 from kraken.core.objects.scene_item import SceneItem
 
+from PySide import QtCore
 
 class Attribute(SceneItem):
     """Attribute object."""
+
+    QtCore.QSignal valueChanged(object)
 
     def __init__(self, name, value, parent=None):
         super(Attribute, self).__init__(name)
@@ -54,6 +57,7 @@ class Attribute(SceneItem):
         """
 
         self._value = value
+        self.valueChanged.emit(value)
 
         return True
 

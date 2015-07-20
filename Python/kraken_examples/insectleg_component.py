@@ -82,7 +82,9 @@ class InsectLegComponentGuide(InsectLegComponent):
         # =========
         guideSettingsAttrGrp = AttributeGroup("GuideSettings", parent=self)
         self.numDigits = IntegerAttribute('numDigits', value=8, minValue=0, maxValue=20, parent=guideSettingsAttrGrp)
+        self.numDigits.valueChanged.connect(updateNumLegControls)
 
+        self.legCtrls = []
         if data is None:
             numDigits = self.numDigits.getValue() + 1
             halfPi = math.pi / 2.0
@@ -94,7 +96,6 @@ class InsectLegComponentGuide(InsectLegComponent):
                 yValues.append(math.sin((i * step) + halfPi) * 10)
                 xValues.append(math.cos((i * step) + halfPi) * -10)
 
-            self.legCtrls = []
             for i in xrange(numDigits):
                 self.legCtrls.append(Control('leg' + str(i).zfill(2), parent=self.ctrlCmpGrp, shape="sphere"))
 
@@ -110,7 +111,6 @@ class InsectLegComponentGuide(InsectLegComponent):
                "jointPositions": jointPositions,
                "numDigits": self.numDigits.getValue()
               }
-
         self.loadData(data)
 
         Profiler.getInstance().pop()
@@ -168,6 +168,35 @@ class InsectLegComponentGuide(InsectLegComponent):
 
         for i in xrange(numPositions):
             self.legCtrls[i].xfo.tr = data['jointPositions'][i]
+
+        return True
+
+
+    def updateNumLegControls(self, numDigits):
+        """Load a saved guide representation from persisted data.
+
+        Arguments:
+        numDigits -- object, The number of joints inthe chain.
+
+        Return:
+        True if successful.
+
+        """
+        if numDigits == 0:
+            raise IndexError("'numDigits' must be > 0")
+
+
+        if numDigits > len(self.legCtrls):
+            for i in xrange(len(self.legCtrls), numDigits):
+                newCtrl = Control('leg' + str(i + 1).zfill(2), parent=self.ctrlCmpGrp, shape="sphere")
+                # Generate thew new ctrl off the end of the existing one.
+                newCtrl.xfo = self.legCtrls[i-1].xfo.multiply(Xfo(Vec3(10.0, 0.0, 0.0)))
+                self.legCtrls.append(newCtrl)
+
+        elif numDigits < len(self.legCtrls):
+            numExtraCtrls = len(self.legCtrls) - numDigits
+            for i in xrange(numExtraCtrls):
+                self.legCtrls.pop()
 
         return True
 
