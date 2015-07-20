@@ -228,11 +228,11 @@ class FKChainComponentGuide(FKChainComponent):
 
         """
 
-        controlPositions = []
+        guidePositions = []
         for i in xrange(numJoints + 1):
-            controlPositions.append(Vec3(0, 0, i))
+            guidePositions.append(Vec3(0, 0, i))
 
-        return controlPositions
+        return guidePositions
 
 
     # ==============
