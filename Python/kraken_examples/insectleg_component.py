@@ -81,35 +81,21 @@ class InsectLegComponentGuide(InsectLegComponent):
         # Controls
         # =========
         guideSettingsAttrGrp = AttributeGroup("GuideSettings", parent=self)
-        self.numDigits = IntegerAttribute('numDigits', value=8, minValue=2, maxValue=20, parent=guideSettingsAttrGrp)
-        self.numDigits.setValueChangeCallback(self.updateNumLegControls)
+        self.numJoints = IntegerAttribute('numJoints', value=5, minValue=2, maxValue=20, parent=guideSettingsAttrGrp)
+        self.numJoints.setValueChangeCallback(self.updateNumLegControls)
 
-        self.legCtrls = []
+        self.jointCtrls = []
         if data is None:
-            numDigits = self.numDigits.getValue() + 1
-            halfPi = math.pi / 2.0
-            step = halfPi / (numDigits - 1)
+            numJoints = self.numJoints.getValue()
+            jointPositions = self.generateGuidePositions(numJoints)
 
-            yValues = []
-            xValues = []
-            for i in xrange(numDigits):
-                yValues.append(math.sin((i * step) + halfPi) * 10)
-                xValues.append(math.cos((i * step) + halfPi) * -10)
-
-            for i in xrange(numDigits):
-                self.legCtrls.append(Control('leg' + str(i + 1).zfill(2), parent=self.ctrlCmpGrp, shape="sphere"))
-
-            spacingY = 10.0 / numDigits - 1
-            spacingZ = 5.0 / numDigits - 1
-
-            jointPositions = []
-            for i in xrange(numDigits):
-                jointPositions.append(Vec3(xValues[i], yValues[i], 0.0))
+            for i in xrange(numJoints):
+                self.jointCtrls.append(Control('leg' + str(i + 1).zfill(2), parent=self.ctrlCmpGrp, shape="sphere"))
 
             data = {
                "location": "L",
                "jointPositions": jointPositions,
-               "numDigits": self.numDigits.getValue()
+               "numJoints": self.numJoints.getValue()
               }
         self.loadData(data)
 
@@ -130,8 +116,8 @@ class InsectLegComponentGuide(InsectLegComponent):
         data = super(InsectLegComponentGuide, self).saveData()
 
         jointPositions = []
-        for i in xrange(len(self.legCtrls)):
-            jointPositions.append(self.legCtrls[i].xfo.tr)
+        for i in xrange(len(self.jointCtrls)):
+            jointPositions.append(self.jointCtrls[i].xfo.tr)
 
         data['jointPositions'] = jointPositions
 
@@ -152,37 +138,7 @@ class InsectLegComponentGuide(InsectLegComponent):
         super(InsectLegComponentGuide, self).loadData(data)
 
         for i in xrange(len(data['jointPositions'])):
-            self.legCtrls[i].xfo.tr = data['jointPositions'][i]
-
-        return True
-
-
-    def updateNumLegControls(self, numDigits):
-        """Load a saved guide representation from persisted data.
-
-        Arguments:
-        numDigits -- object, The number of joints inthe chain.
-
-        Return:
-        True if successful.
-
-        """
-
-        if numDigits == 0:
-            raise IndexError("'numDigits' must be > 0")
-
-        if numDigits + 1 > len(self.legCtrls):
-            for i in xrange(len(self.legCtrls), numDigits + 1):
-                newCtrl = Control('leg' + str(i + 1).zfill(2), parent=self.ctrlCmpGrp, shape="sphere")
-                # Generate thew new ctrl off the end of the existing one.
-                newCtrl.xfo = self.legCtrls[i-1].xfo.multiply(Xfo(Vec3(10.0, 0.0, 0.0)))
-                self.legCtrls.append(newCtrl)
-
-        elif numDigits + 1 < len(self.legCtrls):
-            numExtraCtrls = len(self.legCtrls) - (numDigits + 1)
-            for i in xrange(numExtraCtrls):
-                extraCtrl = self.legCtrls.pop()
-                self.ctrlCmpGrp.removeChild(extraCtrl)
+            self.jointCtrls[i].xfo.tr = data['jointPositions'][i]
 
         return True
 
@@ -197,29 +153,92 @@ class InsectLegComponentGuide(InsectLegComponent):
 
         data = super(InsectLegComponentGuide, self).getRigBuildData()
 
-        numDigits = self.numDigits.getValue()
+        numJoints = self.numJoints.getValue()
 
         # Calculate Xfos
         fw = Vec3(0, 0, 1)
         boneXfos = []
         boneLengths = []
 
-        for i in xrange(numDigits):
-            boneVec = self.legCtrls[i + 1].xfo.tr.subtract(self.legCtrls[i].xfo.tr)
+        for i in xrange(numJoints):
+            boneVec = self.jointCtrls[i + 1].xfo.tr.subtract(self.jointCtrls[i].xfo.tr)
             boneLengths.append(boneVec.length())
             bone1Normal = fw.cross(boneVec).unit()
             bone1ZAxis = boneVec.cross(bone1Normal).unit()
 
             xfo = Xfo()
-            xfo.setFromVectors(boneVec.unit(), bone1Normal, bone1ZAxis, self.legCtrls[i].xfo.tr)
+            xfo.setFromVectors(boneVec.unit(), bone1Normal, bone1ZAxis, self.jointCtrls[i].xfo.tr)
 
             boneXfos.append(xfo)
 
         data['boneXfos'] = boneXfos
-        data['endXfo'] = self.legCtrls[-1].xfo
+        data['endXfo'] = self.jointCtrls[-1].xfo
         data['boneLengths'] = boneLengths
 
         return data
+
+    # ==========
+    # Callbacks
+    # ==========
+    def updateNumLegControls(self, numJoints):
+        """Load a saved guide representation from persisted data.
+
+        Arguments:
+        numJoints -- object, The number of joints inthe chain.
+
+        Return:
+        True if successful.
+
+        """
+
+        if numJoints == 0:
+            raise IndexError("'numJoints' must be > 0")
+
+        if numJoints + 1 > len(self.jointCtrls):
+            for i in xrange(len(self.jointCtrls), numJoints + 1):
+                newCtrl = Control('leg' + str(i + 1).zfill(2), parent=self.ctrlCmpGrp, shape="sphere")
+                self.jointCtrls.append(newCtrl)
+
+        elif numJoints + 1 < len(self.jointCtrls):
+            numExtraCtrls = len(self.jointCtrls) - (numJoints + 1)
+            for i in xrange(numExtraCtrls):
+                extraCtrl = self.jointCtrls.pop()
+                self.ctrlCmpGrp.removeChild(extraCtrl)
+
+        # Reset the control positions based on new number of joints
+        jointPositions = self.generateGuidePositions(numJoints)
+        for i in xrange(len(self.jointCtrls)):
+            self.jointCtrls[i].xfo.tr = jointPositions[i]
+
+        return True
+
+    def generateGuidePositions(self, numJoints):
+        """Generates the positions for the guide controls based on the number
+        of joints.
+
+        Args:
+            numJoints (int): Number of joints to generate a transform for.
+
+        Returns:
+            list: Guide control positions.
+
+        """
+
+        halfPi = math.pi / 2.0
+        step = halfPi / numJoints
+
+        xValues = []
+        yValues = []
+        for i in xrange(numJoints + 1):
+            xValues.append(math.cos((i * step) + halfPi) * -10)
+            yValues.append(math.sin((i * step) + halfPi) * 10)
+
+        guidePositions = []
+        for i in xrange(numJoints + 1):
+            guidePositions.append(Vec3(xValues[i], yValues[i], 0.0))
+
+        return guidePositions
+
 
     # ==============
     # Class Methods
@@ -418,11 +437,11 @@ class InsectLegComponentRig(InsectLegComponent):
 
         boneXfos = data['boneXfos']
         boneLengths = data['boneLengths']
-        numDigits = data['numDigits']
+        numJoints = data['numJoints']
 
         # Add extra controls and outputs
-        self.setNumControls(numDigits)
-        self.setNumDeformers(numDigits)
+        self.setNumControls(numJoints)
+        self.setNumDeformers(numJoints)
 
         for i, each in enumerate(self.fkCtrlSpaces):
             self.fkCtrlSpaces[i].xfo = boneXfos[i]
