@@ -97,7 +97,7 @@ class InsectLegComponentGuide(InsectLegComponent):
                 xValues.append(math.cos((i * step) + halfPi) * -10)
 
             for i in xrange(numDigits):
-                self.legCtrls.append(Control('leg' + str(i).zfill(2), parent=self.ctrlCmpGrp, shape="sphere"))
+                self.legCtrls.append(Control('leg' + str(i + 1).zfill(2), parent=self.ctrlCmpGrp, shape="sphere"))
 
             spacingY = 10.0 / numDigits - 1
             spacingZ = 5.0 / numDigits - 1
@@ -167,20 +167,25 @@ class InsectLegComponentGuide(InsectLegComponent):
         True if successful.
 
         """
+
         if numDigits == 0:
             raise IndexError("'numDigits' must be > 0")
 
-        if numDigits - 1 > len(self.legCtrls):
-            for i in xrange(len(self.legCtrls), numDigits - 1):
+        if numDigits + 1 > len(self.legCtrls):
+            for i in xrange(len(self.legCtrls), numDigits + 1):
                 newCtrl = Control('leg' + str(i + 1).zfill(2), parent=self.ctrlCmpGrp, shape="sphere")
                 # Generate thew new ctrl off the end of the existing one.
                 newCtrl.xfo = self.legCtrls[i-1].xfo.multiply(Xfo(Vec3(10.0, 0.0, 0.0)))
                 self.legCtrls.append(newCtrl)
 
-        elif numDigits - 1 < len(self.legCtrls):
-            numExtraCtrls = len(self.legCtrls) - numDigits - 1
+        elif numDigits + 1 < len(self.legCtrls):
+            numExtraCtrls = len(self.legCtrls) - (numDigits + 1)
             for i in xrange(numExtraCtrls):
-                self.legCtrls.pop()
+
+                extraCtrl = self.legCtrls.pop()
+                extraCtrlParent = extraCtrl.getParent()
+                extraCtrlParent.removeChild(extraCtrl)
+                del extraCtrl
 
         return True
 
