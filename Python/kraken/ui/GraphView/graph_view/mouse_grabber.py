@@ -78,15 +78,15 @@ class MouseGrabber(PortCircle):
         if len(collidingPortItems) > 0:
 
             if isinstance(collidingPortItems[0], PortCircle):
-                self.setMouseOverPortcircle(collidingPortItems[0])
+                self.setMouseOverPortCircle(collidingPortItems[0])
             else:
                 if self.connectionPointType() == 'In':
-                    self.setMouseOverPortcircle(collidingPortItems[0].getPort().inCircle())
+                    self.setMouseOverPortCircle(collidingPortItems[0].getPort().inCircle())
                 else:
-                    self.setMouseOverPortcircle(collidingPortItems[0].getPort().outCircle())
+                    self.setMouseOverPortCircle(collidingPortItems[0].getPort().outCircle())
 
         elif self.__mouseOverPortCircle != None:
-            self.setMouseOverPortcircle(None)
+            self.setMouseOverPortCircle(None)
 
 
     def mouseReleaseEvent(self, event):
@@ -109,12 +109,12 @@ class MouseGrabber(PortCircle):
             except Exception as e:
                 print "Exception in MouseGrabber.mouseReleaseEvent: " + str(e)
 
-            self.setMouseOverPortcircle(None)
+            self.setMouseOverPortCircle(None)
 
         self.destroy()
 
 
-    def setMouseOverPortcircle(self, portCircle):
+    def setMouseOverPortCircle(self, portCircle):
 
         if self.__mouseOverPortCircle != portCircle:
             if self.__mouseOverPortCircle != None:

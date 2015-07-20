@@ -113,6 +113,7 @@ class PortCircle(QtGui.QGraphicsWidget):
         self._graph = graph
         self._connectionPointType = connectionPointType
         self.__connections = set()
+        self._supportsOnlySingleConnections = connectionPointType == 'In'
 
         self.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed))
         size = QtCore.QSizeF(self.__diameter, self.__diameter)
@@ -190,6 +191,12 @@ class PortCircle(QtGui.QGraphicsWidget):
     def isOutConnectionPoint(self):
         return self._connectionPointType == 'Out'
 
+    def supportsOnlySingleConnections(self):
+        return self._supportsOnlySingleConnections
+
+    def setSupportsOnlySingleConnections(self, value):
+        self._supportsOnlySingleConnections = value
+
     def addConnection(self, connection):
         """Adds a connection to the list.
         Arguments:
@@ -197,6 +204,16 @@ class PortCircle(QtGui.QGraphicsWidget):
         Return:
         True if successful.
         """
+
+        if self._supportsOnlySingleConnections and len(self.__connections) != 0:
+            # gather all the connections into a list, and then remove them from the graph.
+            # This is because we can't remove connections from ports while
+            # iterating over the set.
+            connections = []
+            for c in self.__connections:
+                connections.append(c)
+            for c in connections:
+                self._graph.removeConnection(c)
 
         self.__connections.add(connection)
 
