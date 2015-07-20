@@ -26,7 +26,7 @@ class _NameAttributeProxy(object):
         origName = self.nodeItem.getName()
         self.component.setName(value)
         if origName != self.component.getDecoratedName():
-            self.nodeItem.nameChanged(origName)
+            self.nodeItem.setName(value)
 
     def getValue(self):
         return self.component.getName()
@@ -49,7 +49,7 @@ class _LocationAttributeProxy(object):
         origName = self.nodeItem.getName()
         self.component.setLocation(value)
         if origName != self.component.getDecoratedName():
-            self.nodeItem.nameChanged(origName)
+            self.nodeItem.setName(value)
 
     def getValue(self):
         return self.component.getLocation()
@@ -133,7 +133,7 @@ class ComponentInspector(QtGui.QWidget):
         if name is not None:
             labelWidget = QtGui.QLabel(name, self._paramsGroup)
             labelWidget.setObjectName('separatorLabel')
-            labelWidget.setSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.MinimumExpanding)
+            
             self._paramsLayout.addWidget(labelWidget, self._gridRow, 0)
             self._paramsLayout.addWidget(separatorWidget, self._gridRow, 1, QtCore.Qt.AlignBottom)
             self._gridRow += 1

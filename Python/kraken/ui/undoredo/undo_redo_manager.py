@@ -16,7 +16,7 @@ class UndoRedoManager(object):
         self.__redoStack = []
         self.__currentBracket = None
         self.__isUndoingOrRedoing = False
-        self.__enabled = False
+        self.__enabled = True
         
         self.__fireUpdateCallback()
     
@@ -31,7 +31,19 @@ class UndoRedoManager(object):
     def enabled(self):
         """Returns true if the UndoManager is enabled"""
         return self.__enabled
-            
+
+    def canAddCommand(self):
+        """Returns True if the undo manager is in a state where a command can be added. 
+        A command can only be added if the undo manager is enabled, a bracket has been opened, and the undo manager is not currently undoing or redoing commands. 
+        """
+        return not self.__isUndoingOrRedoing
+    
+
+    def isUndoingOrRedoing(self):
+        """Returns true if the undo manager is currently undoing or redoing."""
+        return self.__isUndoingOrRedoing
+     
+
     def openBracket(self, desc):
         """Opens a new undo bracket so that subsequent updo commands are added to the new bracket.
 
@@ -99,23 +111,19 @@ class UndoRedoManager(object):
         return not self.__currentBracket is None
         
 
-    def canAddCommand(self):
-        """Returns True if the undo manager is in a state where a command can be added. 
-        A command can only be added if the undo manager is enabled, a bracket has been opened, and the undo manager is not currently undoing or redoing commands. 
-        """
-        return self.__enabled and not self.__isUndoingOrRedoing
-    
-
-    def isUndoingOrRedoing(self):
-        """Returns true if the undo manager is currently undoing or redoing."""
-        return self.__isUndoingOrRedoing
-     
-
-    def addCommand(self, command, invokeRedoOnAdd=True):
+    def addCommand(self, command, invokeRedoOnAdd=False):
         """
         Adds a new command to the currently opened undo bracket.
         :param command: A command object which encapsulates the revertable action.
         """
+
+        if not self.__enabled:
+            if invokeRedoOnAdd:
+                command.redo()
+            return;
+
+        if self.__isUndoingOrRedoing:
+            raise Exception("Adding command when undoing or redoing existing commands.")
 
         if self.__currentBracket is not None:
             self.__currentBracket.addCommand(command, invokeRedoOnAdd=invokeRedoOnAdd)
@@ -128,6 +136,7 @@ class UndoRedoManager(object):
                     return
 
             self.__undoStack.append(command)
+        self.__clearRedoStack()
     
 
     def haveUndo(self):
@@ -369,7 +378,7 @@ class CommandBracket(Command):
         """Returns the number of commands stored in the command bracket"""
         return len(self.__commands)
         
-    def addCommand(self, command, invokeRedoOnAdd=True):
+    def addCommand(self, command, invokeRedoOnAdd=False):
         """Adds a new command to the command bracket
 
         :param command: The command to add to the command bracket

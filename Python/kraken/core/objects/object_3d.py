@@ -409,6 +409,12 @@ class Object3D(SceneItem):
         """
 
         self._children.remove(child)
+        child.setParent(None)
+
+        # Un-assign the child the component.
+        if self._component is not None:
+            child.setComponent(None)
+
         return True
 
 

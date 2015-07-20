@@ -8,9 +8,7 @@ from PySide import QtGui, QtCore
 
 from kraken.core.maths import Vec2
 from kraken.core.kraken_system import KrakenSystem
-
-from kraken.ui.undoredo.undo_redo_manager import UndoRedoManager
-from graph_commands import ConstructComponentCommand
+from knode import KNode
 
 
 class NodeList(QtGui.QListWidget):
@@ -87,13 +85,10 @@ class ContextualNodeList(QtGui.QWidget):
 
             componentClassName = self.nodesList.currentItem().data(QtCore.Qt.UserRole)
 
-            # Add a component to the rig placed at the given position.
-            dropPosition = self.graph.mapToItem(self.graph.itemGroup(), self.pos)
-
-            # construct
-            command = ConstructComponentCommand(self.graph, componentClassName, Vec2(dropPosition.x(), dropPosition.y()))
-            UndoRedoManager.getInstance().addCommand(command, invokeRedoOnAdd=True)
-
+            componentClass = self.ks.getComponentClass(componentClassName)
+            component = componentClass(parent=self.graph.getRig())
+            component.setGraphPos(Vec2(self.graphpos.x(), self.graphpos.y()))
+            self.graph.addNode(KNode(self.graph, component))
 
             if self.isVisible():
                 self.hide()
@@ -154,53 +149,3 @@ class ContextualNodeList(QtGui.QWidget):
 
         return False
 
-
-class ContextualNewNodeWidget(QtGui.QWidget):
-
-    def __init__(self, parent, graph, objectType, pos):
-        super(ContextualNewNodeWidget, self).__init__(parent)
-
-        self.graph = graph
-        self.objectType = objectType
-        # self.setFixedSize(350, 300)
-
-        defaultPath = '.'.join(self.graph.getGraphPath().split('.')[0:-1]) + "."
-
-        self.searchLineEdit = QtGui.QLineEdit(parent)
-        self.searchLineEdit.setFocusPolicy(QtCore.Qt.StrongFocus)
-        self.searchLineEdit.setFocus()
-        self.searchLineEdit.installEventFilter(self)
-        self.searchLineEdit.setText(defaultPath)
-
-        grid = QtGui.QGridLayout()
-        grid.addWidget(self.searchLineEdit, 0, 0)
-        self.setLayout(grid)
-
-        posx = pos.x() - self.width() * 0.1
-        self.move(posx, pos.y())
-        self.pos = pos
-        self.show()
-
-    def eventFilter(self, object, event):
-        if event.type()== QtCore.QEvent.WindowDeactivate:
-            self.close()
-            return True
-        elif event.type()== QtCore.QEvent.FocusOut:
-            self.close()
-            return True
-        return False
-
-    def createNode(self):
-        executablePath = self.searchLineEdit.text()
-
-
-    def keyPressEvent(self, event):
-        if event.key() == QtCore.Qt.Key_Escape:
-            if self.isVisible():
-                self.close()
-
-        if event.key() == QtCore.Qt.Key_Enter or event.key() == QtCore.Qt.Key_Return:
-            if self.isVisible():
-                self.createNode()
-                self.close()
-            return True

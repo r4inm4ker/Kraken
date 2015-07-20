@@ -10,11 +10,12 @@ class SelectionRect(QtGui.QGraphicsWidget):
     __backgroundColor = QtGui.QColor(100, 100, 100, 50)
     __pen =  QtGui.QPen(QtGui.QColor(25, 25, 25), 1.0,  QtCore.Qt.DashLine)
 
-    def __init__(self, parent, mouseDownPos):
-        super(SelectionRect, self).__init__(parent)
+    def __init__(self, graph, mouseDownPos):
+        super(SelectionRect, self).__init__()
         self.setZValue(-1)
 
-        # self.__parent = parent
+        self.__graph = graph
+        self.__graph.scene().addItem(self)
         self.__mouseDownPos = mouseDownPos
         self.setPos(self.__mouseDownPos)
         self.resize(0, 0)
@@ -37,3 +38,6 @@ class SelectionRect(QtGui.QGraphicsWidget):
         painter.setBrush(self.__backgroundColor)
         painter.setPen(self.__pen)
         painter.drawRect(rect)
+
+    def destroy(self):
+        self.__graph.scene().removeItem(self)

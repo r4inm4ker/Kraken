@@ -24,7 +24,7 @@ leftArmGuide.loadData({
 rightArmGuide = ArmComponentGuide('arm')
 rightArmGuide.setLocation('R')
 
-rightArmGuide.pasteData(leftArmGuide.copyData())
+rightArmGuide.pasteData(leftArmGuide.copyData(), setLocation=False)
 
 builder = plugins.getBuilder()
 builder.build(leftArmGuide)
