@@ -82,7 +82,7 @@ class InsectLegComponentGuide(InsectLegComponent):
         # =========
         guideSettingsAttrGrp = AttributeGroup("GuideSettings", parent=self)
         self.numDigits = IntegerAttribute('numDigits', value=8, minValue=0, maxValue=20, parent=guideSettingsAttrGrp)
-        self.numDigits.valueChanged.connect(updateNumLegControls)
+        self.numDigits.setValueChangeCallback(self.updateNumLegControls)
 
         self.legCtrls = []
         if data is None:
@@ -167,6 +167,7 @@ class InsectLegComponentGuide(InsectLegComponent):
         self.numDigits.setValue(numDigits)
 
         for i in xrange(numPositions):
+            print i
             self.legCtrls[i].xfo.tr = data['jointPositions'][i]
 
         return True

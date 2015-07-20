@@ -7,12 +7,9 @@ Attribute - Base Attribute.
 
 from kraken.core.objects.scene_item import SceneItem
 
-from PySide import QtCore
 
 class Attribute(SceneItem):
     """Attribute object."""
-
-    QtCore.QSignal valueChanged(object)
 
     def __init__(self, name, value, parent=None):
         super(Attribute, self).__init__(name)
@@ -21,6 +18,7 @@ class Attribute(SceneItem):
         self._keyable = True
         self._lock = False
         self._animatable = True
+        self._callback = None
 
         if parent is not None:
             if parent.getTypeName() != 'AttributeGroup':
@@ -57,7 +55,25 @@ class Attribute(SceneItem):
         """
 
         self._value = value
-        self.valueChanged.emit(value)
+
+        if self._callback is not None:
+            self._callback(value)
+
+        return True
+
+
+    def setValueChangeCallback(self, callback):
+        """Sets the value of the attribute.
+
+        Arguments:
+        value -- Value to set the attribute to.
+
+        Return:
+        True if successful.
+
+        """
+
+        self._callback = callback
 
         return True
 
