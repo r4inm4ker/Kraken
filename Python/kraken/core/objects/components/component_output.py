@@ -13,3 +13,4 @@ class ComponentOutput(Object3D):
 
     def __init__(self, name, parent=None):
         super(ComponentOutput, self).__init__(name, parent=parent)
+        self.setShapeVisibility(False)
