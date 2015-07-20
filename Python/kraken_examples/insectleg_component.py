@@ -181,11 +181,8 @@ class InsectLegComponentGuide(InsectLegComponent):
         elif numDigits + 1 < len(self.legCtrls):
             numExtraCtrls = len(self.legCtrls) - (numDigits + 1)
             for i in xrange(numExtraCtrls):
-
                 extraCtrl = self.legCtrls.pop()
-                extraCtrlParent = extraCtrl.getParent()
-                extraCtrlParent.removeChild(extraCtrl)
-                del extraCtrl
+                self.ctrlCmpGrp.removeChild(extraCtrl)
 
         return True
 
