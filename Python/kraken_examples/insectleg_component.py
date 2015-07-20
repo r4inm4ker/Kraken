@@ -151,23 +151,7 @@ class InsectLegComponentGuide(InsectLegComponent):
 
         super(InsectLegComponentGuide, self).loadData(data)
 
-        numDigits = data['numDigits']
-        numPositions = len(data['jointPositions'])
-        if numPositions <= numDigits:
-            raise IndexError("'jointPositions' (" + str(numPositions) + ") should be 1 more than 'numDigits' (" + str(numDigits) + ").")
-
-        if numPositions > len(self.legCtrls):
-            for i in xrange(len(self.legCtrls), numPositions):
-                self.legCtrls.append(Control('leg' + str(i + 1).zfill(2), parent=self.ctrlCmpGrp, shape="sphere"))
-        elif numPositions < len(self.legCtrls):
-            numExtraCtrls = len(self.legCtrls) - numPositions
-            for i in xrange(numExtraCtrls):
-                self.legCtrls.pop()
-
-        self.numDigits.setValue(numDigits)
-
-        for i in xrange(numPositions):
-            print i
+        for i in xrange(len(data['jointPositions'])):
             self.legCtrls[i].xfo.tr = data['jointPositions'][i]
 
         return True
@@ -186,16 +170,15 @@ class InsectLegComponentGuide(InsectLegComponent):
         if numDigits == 0:
             raise IndexError("'numDigits' must be > 0")
 
-
-        if numDigits > len(self.legCtrls):
-            for i in xrange(len(self.legCtrls), numDigits):
+        if numDigits - 1 > len(self.legCtrls):
+            for i in xrange(len(self.legCtrls), numDigits - 1):
                 newCtrl = Control('leg' + str(i + 1).zfill(2), parent=self.ctrlCmpGrp, shape="sphere")
                 # Generate thew new ctrl off the end of the existing one.
                 newCtrl.xfo = self.legCtrls[i-1].xfo.multiply(Xfo(Vec3(10.0, 0.0, 0.0)))
                 self.legCtrls.append(newCtrl)
 
-        elif numDigits < len(self.legCtrls):
-            numExtraCtrls = len(self.legCtrls) - numDigits
+        elif numDigits - 1 < len(self.legCtrls):
+            numExtraCtrls = len(self.legCtrls) - numDigits - 1
             for i in xrange(numExtraCtrls):
                 self.legCtrls.pop()
 
