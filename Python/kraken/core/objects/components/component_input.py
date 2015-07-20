@@ -13,3 +13,4 @@ class ComponentInput(Object3D):
 
     def __init__(self, name, parent=None):
         super(ComponentInput, self).__init__(name, parent=parent)
+        self.setShapeVisibility(False)
