@@ -81,7 +81,7 @@ class InsectLegComponentGuide(InsectLegComponent):
         # Controls
         # =========
         guideSettingsAttrGrp = AttributeGroup("GuideSettings", parent=self)
-        self.numDigits = IntegerAttribute('numDigits', value=8, minValue=0, maxValue=20, parent=guideSettingsAttrGrp)
+        self.numDigits = IntegerAttribute('numDigits', value=8, minValue=2, maxValue=20, parent=guideSettingsAttrGrp)
         self.numDigits.setValueChangeCallback(self.updateNumLegControls)
 
         self.legCtrls = []
