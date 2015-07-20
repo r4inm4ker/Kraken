@@ -13,6 +13,7 @@ fkChainGuide.loadData(
                         {
                          "name": "fkChain",
                          "location": "L",
+                         "numDigits": 4,
                          "jointPositions": [
                                             Vec3(0.9811, 9.769, -1.237),
                                             Vec3(5.4488, 8.4418, -1.237),

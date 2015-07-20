@@ -83,22 +83,21 @@ class InsectLegComponentGuide(InsectLegComponent):
         guideSettingsAttrGrp = AttributeGroup("GuideSettings", parent=self)
         self.numDigits = IntegerAttribute('numDigits', value=8, minValue=0, maxValue=20, parent=guideSettingsAttrGrp)
 
-
-        numDigits = self.numDigits.getValue()
-        halfPi = math.pi / 2.0
-        step = halfPi / (numDigits - 1)
-
-        yValues = []
-        xValues = []
-        for i in xrange(numDigits):
-            yValues.append(math.sin((i * step) + halfPi) * 10)
-            xValues.append(math.cos((i * step) + halfPi) * -10)
-
-        self.legCtrls = []
-        for i in xrange(numDigits):
-            self.legCtrls.append(Control('leg' + str(i).zfill(2), parent=self.ctrlCmpGrp, shape="sphere"))
-
         if data is None:
+            numDigits = self.numDigits.getValue() + 1
+            halfPi = math.pi / 2.0
+            step = halfPi / (numDigits - 1)
+
+            yValues = []
+            xValues = []
+            for i in xrange(numDigits):
+                yValues.append(math.sin((i * step) + halfPi) * 10)
+                xValues.append(math.cos((i * step) + halfPi) * -10)
+
+            self.legCtrls = []
+            for i in xrange(numDigits):
+                self.legCtrls.append(Control('leg' + str(i).zfill(2), parent=self.ctrlCmpGrp, shape="sphere"))
+
             spacingY = 10.0 / numDigits - 1
             spacingZ = 5.0 / numDigits - 1
 
@@ -108,7 +107,8 @@ class InsectLegComponentGuide(InsectLegComponent):
 
             data = {
                "location": "L",
-               "jointPositions": jointPositions
+               "jointPositions": jointPositions,
+               "numDigits": self.numDigits.getValue()
               }
 
         self.loadData(data)
@@ -151,18 +151,22 @@ class InsectLegComponentGuide(InsectLegComponent):
 
         super(InsectLegComponentGuide, self).loadData(data)
 
-        numDigits = len(data['jointPositions'])
-        if numDigits > len(self.legCtrls):
-            for i in xrange(len(self.legCtrls), numDigits):
+        numDigits = data['numDigits']
+        numPositions = len(data['jointPositions'])
+        if numPositions <= numDigits:
+            raise IndexError("'jointPositions' (" + str(numPositions) + ") should be 1 more than 'numDigits' (" + str(numDigits) + ").")
+
+        if numPositions > len(self.legCtrls):
+            for i in xrange(len(self.legCtrls), numPositions):
                 self.legCtrls.append(Control('leg' + str(i + 1).zfill(2), parent=self.ctrlCmpGrp, shape="sphere"))
-        elif numDigits < len(self.legCtrls):
-            numExtraCtrls = len(self.legCtrls) - numDigits
+        elif numPositions < len(self.legCtrls):
+            numExtraCtrls = len(self.legCtrls) - numPositions
             for i in xrange(numExtraCtrls):
                 self.legCtrls.pop()
 
         self.numDigits.setValue(numDigits)
 
-        for i in xrange(len(data['jointPositions'])):
+        for i in xrange(numPositions):
             self.legCtrls[i].xfo.tr = data['jointPositions'][i]
 
         return True
@@ -185,7 +189,7 @@ class InsectLegComponentGuide(InsectLegComponent):
         boneXfos = []
         boneLengths = []
 
-        for i in xrange(numDigits - 1):
+        for i in xrange(numDigits):
             boneVec = self.legCtrls[i + 1].xfo.tr.subtract(self.legCtrls[i].xfo.tr)
             boneLengths.append(boneVec.length())
             bone1Normal = fw.cross(boneVec).unit()
@@ -281,19 +285,9 @@ class InsectLegComponentRig(InsectLegComponent):
         self.boneOutputsTgt = []
         self.setNumDeformers(4)
 
-        # for i in xrange(4):
-        #     boneDef = Joint('bone' + str(i).zfill(2), parent=self.defCmpGrp)
-        #     boneDef.setComponent(self)
-        #     self.deformerJoints.append(boneDef)
-
-
         # =====================
         # Create Component I/O
         # =====================
-        # Setup component Xfo I/O's
-        # for i in xrange(4):
-        #     boneOutput = Locator('bone' + str(i).zfill(2), parent=self.outputHrcGrp)
-        #     self.boneOutputsTgt.append(boneOutput)
 
         # Set IO Targets
         self.boneOutputs.setTarget(self.boneOutputsTgt)
@@ -366,13 +360,15 @@ class InsectLegComponentRig(InsectLegComponent):
                 parent = self.fkCtrls[i - 1]
 
             boneName = 'bone' + str(i + 1).zfill(2) + 'FK'
-            boneFKCtrlSpace = CtrlSpace(boneName, parent=parent)
+            fkCtrlSpace = CtrlSpace(boneName, parent=parent)
 
-            boneFKCtrl = Control(boneName, parent=boneFKCtrlSpace, shape="cube")
-            boneFKCtrl.alignOnXAxis()
+            fkCtrl = Control(boneName, parent=fkCtrlSpace, shape="cube")
+            fkCtrl.alignOnXAxis()
+            fkCtrl.lockScale(x=True, y=True, z=True)
+            fkCtrl.lockTranslation(x=True, y=True, z=True)
 
-            self.fkCtrlSpaces.append(boneFKCtrlSpace)
-            self.fkCtrls.append(boneFKCtrl)
+            self.fkCtrlSpaces.append(fkCtrlSpace)
+            self.fkCtrls.append(fkCtrl)
 
 
     def setNumDeformers(self, numDeformers):
@@ -407,10 +403,11 @@ class InsectLegComponentRig(InsectLegComponent):
 
         boneXfos = data['boneXfos']
         boneLengths = data['boneLengths']
+        numDigits = data['numDigits']
 
         # Add extra controls and outputs
-        self.setNumControls(len(boneLengths))
-        self.setNumDeformers(len(boneLengths))
+        self.setNumControls(numDigits)
+        self.setNumDeformers(numDigits)
 
         for i, each in enumerate(self.fkCtrlSpaces):
             self.fkCtrlSpaces[i].xfo = boneXfos[i]

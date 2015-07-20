@@ -82,22 +82,21 @@ class FKChainComponentGuide(FKChainComponent):
         guideSettingsAttrGrp = AttributeGroup("GuideSettings", parent=self)
         self.numDigits = IntegerAttribute('numDigits', value=8, minValue=0, maxValue=20, parent=guideSettingsAttrGrp)
 
-
-        numDigits = self.numDigits.getValue()
-        halfPi = math.pi / 2.0
-        step = halfPi / (numDigits - 1)
-
-        yValues = []
-        xValues = []
-        for i in xrange(numDigits):
-            yValues.append(math.sin((i * step) + halfPi) * 10)
-            xValues.append(math.cos((i * step) + halfPi) * -10)
-
-        self.legCtrls = []
-        for i in xrange(numDigits):
-            self.legCtrls.append(Control('leg' + str(i).zfill(2), parent=self.ctrlCmpGrp, shape="sphere"))
-
         if data is None:
+            numDigits = self.numDigits.getValue() + 1
+            halfPi = math.pi / 2.0
+            step = halfPi / (numDigits - 1)
+
+            yValues = []
+            xValues = []
+            for i in xrange(numDigits):
+                yValues.append(math.sin((i * step) + halfPi) * 10)
+                xValues.append(math.cos((i * step) + halfPi) * -10)
+
+            self.legCtrls = []
+            for i in xrange(numDigits):
+                self.legCtrls.append(Control('chain' + str(i).zfill(2), parent=self.ctrlCmpGrp, shape="sphere"))
+
             spacingY = 10.0 / numDigits - 1
             spacingZ = 5.0 / numDigits - 1
 
@@ -107,7 +106,8 @@ class FKChainComponentGuide(FKChainComponent):
 
             data = {
                "location": "L",
-               "jointPositions": jointPositions
+               "jointPositions": jointPositions,
+               "numDigits": self.numDigits.getValue()
               }
 
         self.loadData(data)
@@ -150,18 +150,20 @@ class FKChainComponentGuide(FKChainComponent):
 
         super(FKChainComponentGuide, self).loadData(data)
 
-        numDigits = len(data['jointPositions'])
-        if numDigits > len(self.legCtrls):
-            for i in xrange(len(self.legCtrls), numDigits):
-                self.legCtrls.append(Control('leg' + str(i).zfill(2), parent=self.ctrlCmpGrp, shape="sphere"))
-        elif numDigits < len(self.legCtrls):
-            numExtraCtrls = len(self.legCtrls) - numDigits
+        numDigits = data['numDigits']
+        numPositions = len(data['jointPositions'])
+        if numPositions <= numDigits:
+            raise IndexError("'jointPositions' (" + str(numPositions) + ") should be 1 more than 'numDigits' (" + str(numDigits) + ").")
+
+        if numPositions > len(self.legCtrls):
+            for i in xrange(len(self.legCtrls), numPositions):
+                self.legCtrls.append(Control('chain' + str(i).zfill(2), parent=self.ctrlCmpGrp, shape="sphere"))
+        elif numPositions < len(self.legCtrls):
+            numExtraCtrls = len(self.legCtrls) - numPositions
             for i in xrange(numExtraCtrls):
                 self.legCtrls.pop()
 
-        self.numDigits.setValue(numDigits)
-
-        for i in xrange(len(data['jointPositions'])):
+        for i in xrange(numPositions):
             self.legCtrls[i].xfo.tr = data['jointPositions'][i]
 
         return True
@@ -184,7 +186,7 @@ class FKChainComponentGuide(FKChainComponent):
         boneXfos = []
         boneLengths = []
 
-        for i in xrange(numDigits - 1):
+        for i in xrange(numDigits):
             boneVec = self.legCtrls[i + 1].xfo.tr.subtract(self.legCtrls[i].xfo.tr)
             boneLengths.append(boneVec.length())
             bone1Normal = fw.cross(boneVec).unit()
@@ -330,6 +332,8 @@ class FKChainComponentRig(FKChainComponent):
 
             boneFKCtrl = Control(boneName, parent=boneFKCtrlSpace, shape="cube")
             boneFKCtrl.alignOnXAxis()
+            boneFKCtrl.lockScale(x=True, y=True, z=True)
+            boneFKCtrl.lockTranslation(x=True, y=True, z=True)
 
             self.fkCtrlSpaces.append(boneFKCtrlSpace)
             self.fkCtrls.append(boneFKCtrl)
@@ -367,10 +371,11 @@ class FKChainComponentRig(FKChainComponent):
 
         boneXfos = data['boneXfos']
         boneLengths = data['boneLengths']
+        numDigits = data['numDigits']
 
         # Add extra controls and outputs
-        self.setNumControls(len(boneLengths))
-        self.setNumDeformers(len(boneLengths))
+        self.setNumControls(numDigits)
+        self.setNumDeformers(numDigits)
 
         for i, each in enumerate(self.fkCtrlSpaces):
             self.fkCtrlSpaces[i].xfo = boneXfos[i]
@@ -411,7 +416,7 @@ class FKChainComponentRig(FKChainComponent):
         # ============
         self.rootInputTgt.xfo = boneXfos[0]
 
-        for i in xrange(len(boneLengths)):
+        for i in xrange(numDigits):
             self.boneOutputsTgt[i].xfo = boneXfos[i]
 
         self.chainEndXfoOutputTgt.xfo = data['endXfo']
