@@ -54,20 +54,6 @@ class PortLabel(QtGui.QGraphicsWidget):
     def getPort(self):
         return self.__port
 
-    def getColor(self):
-        return self.getPort().getColor()
-
-    def getPortCircle(self):
-        port = self.getPort()
-
-        if self.isInConnectionPoint():
-            circle = port.inCircle()
-        elif self.isOutConnectionPoint():
-            circle = port.outCircle()
-
-        return circle
-
-
     def highlight(self):
         self.setColor(self.__highlightColor)
 
@@ -109,24 +95,6 @@ class PortLabel(QtGui.QGraphicsWidget):
             self.__port.inCircle().mousePressEvent(event)
         else:
             self.__port.outCircle().mousePressEvent(event)
-
-    # ===================
-    # Connection Methods
-    # ===================
-    def connectionPointType(self):
-        return self.getPort().connectionPointType()
-
-    def isInConnectionPoint(self):
-        return self.getPort().connectionPointType() == 'In'
-
-    def isOutConnectionPoint(self):
-        return self.getPort().connectionPointType() == 'Out'
-
-    def addConnection(self, connection):
-        circle = self.getPortCircle()
-        circle.addConnection(connection)
-
-        return True
 
     # def paint(self, painter, option, widget):
     #     super(PortLabel, self).paint(painter, option, widget)
@@ -309,6 +277,7 @@ class BasePort(QtGui.QGraphicsWidget):
 
         self._inCircle = None
         self._outCircle = None
+        self._labelItem = None
 
     def getName(self):
         return self._name
@@ -338,6 +307,9 @@ class BasePort(QtGui.QGraphicsWidget):
 
     def outCircle(self):
         return self._outCircle
+
+    def labelItem(self):
+        return self._labelItem
 
     # ===================
     # Connection Methods

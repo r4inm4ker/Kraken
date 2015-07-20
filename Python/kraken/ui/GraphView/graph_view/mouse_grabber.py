@@ -33,7 +33,7 @@ class MouseGrabber(PortCircle):
             self.__connection = connection.Connection(self._graph, otherPortCircle, self)
         # Do not emit a notification for this temporary connection.
         self._graph.addConnection(self.__connection, emitSignal=False)
-        self.__mouseOverPortItem = None
+        self.__mouseOverPortCircle = None
         self._graph.emitBeginConnectionManipulationSignal()
 
 
@@ -46,79 +46,60 @@ class MouseGrabber(PortCircle):
         self.setTransform(QtGui.QTransform.fromTranslate(scenePos.x(), scenePos.y()), False)
 
         collidingItems = self.collidingItems(QtCore.Qt.IntersectsItemBoundingRect)
-        collidingPortCircles = filter(lambda item: isinstance(item, (PortCircle, PortLabel)), collidingItems)
+        collidingPortItems = filter(lambda item: isinstance(item, (PortCircle, PortLabel)), collidingItems)
 
         def canConnect(item):
-            if isinstance(item, (PortCircle, PortLabel)):
-                mouseOverPortItem = item
+            if isinstance(item, PortCircle):
+                mouseOverPortCircle = item
             else:
                 if self.connectionPointType() == 'In':
-                    mouseOverPortItem = item.getPort().inCircle()
+                    mouseOverPortCircle = item.getPort().inCircle()
                 else:
-                    mouseOverPortItem = item.getPort().outCircle()
+                    mouseOverPortCircle = item.getPort().outCircle()
 
-                if mouseOverPortItem == None:
+                if mouseOverPortCircle == None:
                     return False
 
-            if self.connectionPointType() != mouseOverPortItem.connectionPointType():
+            if self.connectionPointType() != mouseOverPortCircle.connectionPointType():
                 return False
 
-            if mouseOverPortItem.getPort().getDataType() != self.__otherPortItem.getPort().getDataType():
+            if mouseOverPortCircle.getPort().getDataType() != self.__otherPortItem.getPort().getDataType():
                 return False
 
             # Check if you're trying to connect to the
-            mouseOverPort = mouseOverPortItem.getPort()
+            mouseOverPort = mouseOverPortCircle.getPort()
             otherPort = self.__otherPortItem.getPort()
             if mouseOverPort.getNode() == otherPort.getNode():
                 return False
 
             return True
 
-        collidingPortCircles = filter(lambda port: canConnect(port), collidingPortCircles)
-        if len(collidingPortCircles) > 0:
-            if self.__mouseOverPortItem and self.__mouseOverPortItem != collidingPortCircles[0]:
-                self.__mouseOverPortItem.unhighlight()
+        collidingPortItems = filter(lambda port: canConnect(port), collidingPortItems)
+        if len(collidingPortItems) > 0:
 
-            if isinstance(collidingPortCircles[0], (PortCircle, PortLabel)):
-                self.__mouseOverPortItem = collidingPortCircles[0]
+            if isinstance(collidingPortItems[0], PortCircle):
+                self.setMouseOverPortcircle(collidingPortItems[0])
             else:
                 if self.connectionPointType() == 'In':
-                    self.__mouseOverPortItem = collidingPortCircles[0].getPort().inCircle()
+                    self.setMouseOverPortcircle(collidingPortItems[0].getPort().inCircle())
                 else:
-                    self.__mouseOverPortItem = collidingPortCircles[0].getPort().outCircle()
+                    self.setMouseOverPortcircle(collidingPortItems[0].getPort().outCircle())
 
-            self.__mouseOverPortItem.highlight()
-        elif self.__mouseOverPortItem != None:
-            self.__mouseOverPortItem.unhighlight()
-            self.__mouseOverPortItem = None
+        elif self.__mouseOverPortCircle != None:
+            self.setMouseOverPortcircle(None)
 
 
     def mouseReleaseEvent(self, event):
 
-        if self.__mouseOverPortItem is not None:
-            self.__mouseOverPortItem.unhighlight()
+        if self.__mouseOverPortCircle is not None:
             try:
 
                 if self.connectionPointType() == 'In':
-                    if isinstance(self.__otherPortItem, PortLabel):
-                        sourcePortCircle = self.__otherPortItem.getPortCircle()
-                    else:
-                        sourcePortCircle = self.__otherPortItem
-
-                    if isinstance(self.__mouseOverPortItem, PortLabel):
-                        targetPortCircle = self.__mouseOverPortItem.getPortCircle()
-                    else:
-                        targetPortCircle = self.__mouseOverPortItem
+                    sourcePortCircle = self.__otherPortItem
+                    targetPortCircle = self.__mouseOverPortCircle
                 elif self.connectionPointType() == 'Out':
-                    if isinstance(self.__mouseOverPortItem, PortLabel):
-                        sourcePortCircle = self.__mouseOverPortItem.getPortCircle()
-                    else:
-                        sourcePortCircle = self.__mouseOverPortItem
-
-                    if isinstance(self.__otherPortItem, PortLabel):
-                        targetPortCircle = self.__otherPortItem.getPortCircle()
-                    else:
-                        targetPortCircle = self.__otherPortItem
+                    sourcePortCircle = self.__mouseOverPortCircle
+                    targetPortCircle = self.__otherPortItem
 
                 from connection import Connection
                 connection = Connection(self._graph, sourcePortCircle, targetPortCircle)
@@ -128,9 +109,23 @@ class MouseGrabber(PortCircle):
             except Exception as e:
                 print "Exception in MouseGrabber.mouseReleaseEvent: " + str(e)
 
+            self.setMouseOverPortcircle(None)
+
         self.destroy()
 
 
+    def setMouseOverPortcircle(self, portCircle):
+
+        if self.__mouseOverPortCircle != portCircle:
+            if self.__mouseOverPortCircle != None:
+                self.__mouseOverPortCircle.unhighlight()
+                self.__mouseOverPortCircle.getPort().labelItem().unhighlight()
+
+            self.__mouseOverPortCircle = portCircle
+
+            if self.__mouseOverPortCircle != None:
+                self.__mouseOverPortCircle.highlight()
+                self.__mouseOverPortCircle.getPort().labelItem().highlight()
 
     # def paint(self, painter, option, widget):
     #     super(MouseGrabber, self).paint(painter, option, widget)
