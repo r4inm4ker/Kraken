@@ -302,6 +302,21 @@ class Object3D(SceneItem):
     # ==============
     # Child Methods
     # ==============
+    def hasChild(self, child):
+        """Checks the supplied item is a child
+
+        Arguments:
+        child -- Object, object to check if is is a child of this object.
+
+        """
+
+        for i, eachChild in enumerate(self.getChildren()):
+            if eachChild == child:
+                return True
+
+        return False
+
+
     def _checkChildIndex(self, index):
         """Checks the supplied index is valid.
 
@@ -408,7 +423,14 @@ class Object3D(SceneItem):
 
         """
 
-        self._children.remove(child)
+        try:
+            self._children.remove(child)
+        except Exception as e:
+            names = []
+            for c in self._children:
+                names.append(c.getName())
+            raise Exception("Object '"+self.getPath() + "' does not have child:"+child.getPath() + ". it does have:" + str(names))
+
         child.setParent(None)
 
         # Un-assign the child the component.

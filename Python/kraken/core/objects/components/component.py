@@ -155,9 +155,11 @@ class Component(Object3D):
 
         """
 
+
         container = self.getContainer()
         if container is None:
             container = self
+        print "getOrCreateLayer container:" + str(container.getPath())
 
         layer = container.getChildByName(name)
         if layer is None or not layer.isTypeOf('Layer'):
@@ -808,6 +810,14 @@ class Component(Object3D):
         return data
 
 
+    def detach(self):
+        pass
+
+
+    def attach(self, container):
+        pass
+
+
     # ==============
     # Class Methods
     # ==============
@@ -821,3 +831,4 @@ class Component(Object3D):
         """
 
         return 'Base'
+

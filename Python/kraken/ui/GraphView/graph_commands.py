@@ -56,12 +56,12 @@ class AddNodeCommand(Command):
 
     def redo(self):
         self.graph.addNode(self.node, emitSignal=False)
-        self.rig.addChild( self.node.getComponent() )
+        self.node.getComponent().attach(self.rig)
 
 
     def undo(self):
         self.graph.removeNode(self.node, emitSignal=False)
-        self.rig.removeChild( self.node.getComponent() )
+        self.node.getComponent().detach()
 
 
 class RemoveNodeCommand(Command):
@@ -70,7 +70,6 @@ class RemoveNodeCommand(Command):
         self.graph = graph
         self.rig = rig
         self.node = node
-        self.destoryNode = False
 
 
     def shortDesc(self):
@@ -79,14 +78,12 @@ class RemoveNodeCommand(Command):
 
     def redo(self):
         self.graph.removeNode(self.node, emitSignal=False)
-        self.rig.removeChild( self.node.getComponent() )
-        self.destoryNode = True
+        self.node.getComponent().detach()
 
 
     def undo(self):
         self.graph.addNode(self.node, emitSignal=False)
-        self.rig.addChild( self.node.getComponent() )
-        self.destoryNode = False
+        self.node.getComponent().attach(self.rig)
 
 
 class NodesMoveCommand(Command):
@@ -114,7 +111,7 @@ class NodesMoveCommand(Command):
         for node in self.nodes:
             node.translate( -self.delta.x(), -self.delta.y())
             node.pushGraphPosToComponent()
-        
+
 
 
 class ConnectionAddedCommand(Command):
