@@ -41,7 +41,12 @@ class Quat(MathObject):
 
 
     def __str__(self):
-        """Return string version of the Quat object."""
+        """Return string version of the Quat object.
+
+        Returns:
+            str: String representation of the Quat.
+
+        """
 
         return "Quat(" + str(self.v) + "," + str(self.w) + ")"
 
@@ -50,8 +55,8 @@ class Quat(MathObject):
     def v(self):
         """Gets vector of this quaternion.
 
-        Return:
-        Vec3, vector of the quaternion.
+        Returns:
+            Vec3: Vector of the quaternion.
 
         """
 
@@ -62,11 +67,11 @@ class Quat(MathObject):
     def v(self, value):
         """Sets vector property from the input vector.
 
-        Arguments:
-        value -- Vec3, vector to set quaternion vector as.
+        Args:
+            value (Vec3): vector to set quaternion vector as.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -79,8 +84,8 @@ class Quat(MathObject):
     def w(self):
         """Gets scalar of this quaternion.
 
-        Return:
-        Scalar, scalar value of the quaternion.
+        Returns:
+            float: Scalar value of the quaternion.
 
         """
 
@@ -91,11 +96,11 @@ class Quat(MathObject):
     def w(self, value):
         """Sets scalar property from the input scalar.
 
-        Arguments:
-        value -- Scalar, value to set quaternion scalar as.
+        Args:
+            value -- Scalar, value to set quaternion scalar as.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -106,8 +111,8 @@ class Quat(MathObject):
     def clone(self):
         """Returns a clone of the Quat.
 
-        Return:
-        The cloned Quat
+        Returns:
+            Quat: The cloned Quaternion.
 
         """
 
@@ -121,12 +126,12 @@ class Quat(MathObject):
     def set(self, v, w):
         """Sets the quaternion from vector and scalar values.
 
-        Arguments:
-        v -- Vec3, vector value.
-        w -- Scalar, scalar value.
+        Args:
+            v (Vec3): vector value.
+            w (float): scalar value.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -138,8 +143,8 @@ class Quat(MathObject):
     def setIdentity():
         """Sets this quaternion to the identity.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -152,11 +157,11 @@ class Quat(MathObject):
     def setFromEuler(self, e):
         """Sets the quaternion from a euler rotation.
 
-        Arguments:
-        e -- Euler, euler rotation used to set the quaternion.
+        Args:
+            e (Euler): Euler rotation used to set the quaternion.
 
-        Return:
-        Quat, new quaternion set from the euler argument.
+        Returns:
+            Quat: New quaternion set from the euler argument.
 
         """
 
@@ -167,12 +172,12 @@ class Quat(MathObject):
         """Sets this quat to a given angles vector (in radians) and a rotation
         order.
 
-        Arguments:
-        angles -- Vec3, angle vector.
-        ro -- RotationOrder, roation order to use.
+        Args:
+            angles (Vec3): Angle vector.
+            ro (RotationOrder): Rotation order to use.
 
-        Return:
-        Quat, new quaternion set from angles vector and rotation order.
+        Returns:
+            Quat: New quaternion set from angles vector and rotation order.
 
         """
 
@@ -184,11 +189,11 @@ class Quat(MathObject):
         """Sets this quat to a given angles vector (in radians) using
         the default XYZ rotation order.
 
-        Arguments:
-        angles -- Vec3, angle vector.
+        Args:
+            angles (Vec3): angle vector.
 
-        Return:
-        Quat, new quaternion set from angles vector.
+        Returns:
+            Quat: New quaternion set from angles vector.
 
         """
 
@@ -199,12 +204,12 @@ class Quat(MathObject):
         """Set this quat to a rotation defined by an axis and an angle
         (in radians).
 
-        Arguments:
-        axis -- Vec3, vector axis.
-        angle -- Scalar, angle value.
+        Args:
+            axis (Vec3): vector axis.
+            angle (float): angle value.
 
-        Return:
-        Quat, set from axis and angle values.
+        Returns:
+            Quat: Set from axis and angle values.
 
         """
 
@@ -215,11 +220,11 @@ class Quat(MathObject):
     def setFromMat33(self, mat):
         """Set this quat to the rotation described by a 3x3 rotation matrix.
 
-        Arguments:
-        mat -- Mat33, 3 x 3 matrix to set the quaternion from.
+        Args:
+            mat (Mat33): 3x3 matrix to set the quaternion from.
 
-        Return:
-        Quat, new quaternion set from input Mat33.
+        Returns:
+            Quat: New quaternion set from input Mat33.
 
         """
 
@@ -233,13 +238,13 @@ class Quat(MathObject):
         Function taken from the 'Game Programming Gems' article
         'The Shortest Arc Quat' by Stan Melax, both vectors must be units.
 
-        Arguments:
-        sourceDirVec -- Vec3, source vector.
-        destDirVec -- Vec3, destination vector.
-        arbitraryIfAmbiguous -- Bool, arbitrary if ambiguous.
+        Args:
+            sourceDirVec (Vec3): Source vector.
+            destDirVec (Vec3): Destination vector.
+            arbitraryIfAmbiguous (bool): Arbitrary if ambiguous.
 
-        Return:
-        Quat, new quaternion set from 2 vectors.
+        Returns:
+            Quat: New quaternion set from 2 vectors.
 
         """
 
@@ -251,12 +256,12 @@ class Quat(MathObject):
         """Set the quat to represent the direction as the Z axis and the
         upvector pointing along the XY plane.
 
-        Arguments:
-        direction -- Vec3, direction vector.
-        upvector -- Vec3, up direction vector.
+        Args:
+            direction (Vec3): Direction vector.
+            upvector (Vec3): Up direction vector.
 
-        Return:
-        Quat, new quaternion set from direction and up vector.
+        Returns:
+            Quat: New quaternion set from direction and up vector.
 
         """
 
@@ -267,11 +272,11 @@ class Quat(MathObject):
     def equal(self, other):
         """Checks equality of this Quat with another.
 
-        Arguments:
-        other -- Mat33, other matrix to check equality with.
+        Args:
+            other (Mat33): other matrix to check equality with.
 
-        Return:
-        True if equal.
+        Returns:
+            bool: True if equal.
 
         """
 
@@ -281,12 +286,12 @@ class Quat(MathObject):
     def almostEqual(self, other, precision):
         """Checks almost equality of this Quat with another.
 
-        Arguments:
-        other -- Mat33, other matrix to check equality with.
-        precision -- Scalar, precision value.
+        Args:
+            other (Mat33): other matrix to check equality with.
+            precision (float): precision value.
 
-        Return:
-        True if almost equal.
+        Returns:
+            bool: True if almost equal.
 
         """
 
@@ -298,11 +303,11 @@ class Quat(MathObject):
         """Checks almost equality of this Quat with another
         (using a default precision).
 
-        Arguments:
-        other -- Mat33, other matrix to check equality with.
+        Args:
+            other (Mat33): other matrix to check equality with.
 
-        Return:
-        True if almost equal.
+        Returns:
+            bool: True if almost equal.
 
         """
 
@@ -390,11 +395,11 @@ class Quat(MathObject):
     def add(self, other):
         """Overload method for the add operator.
 
-        Arguments:
-        other -- Quat, other quaternion to add to this one.
+        Args:
+            other (Quat): Other quaternion to add to this one.
 
-        Return:
-        Quat, new Quat of the sum of the two Quat's.
+        Returns:
+            Quat: New Quat of the sum of the two Quat's.
 
         """
 
@@ -404,11 +409,11 @@ class Quat(MathObject):
     def subtract(self, other):
         """Overload method for the subtract operator.
 
-        Arguments:
-        other -- Quat, other quaternion to subtract from this one.
+        Args:
+            other (Quat): Other quaternion to subtract from this one.
 
-        Return:
-        Quat, new Quat of the difference of the two Quat's.
+        Returns:
+            Quat: New Quat of the difference of the two Quat's.
 
         """
 
@@ -418,11 +423,11 @@ class Quat(MathObject):
     def multiply(self, other):
         """Overload method for the multiply operator.
 
-        Arguments:
-        other -- Quat, other quaternion to multiply this one by.
+        Args:
+            other (Quat): Other quaternion to multiply this one by.
 
-        Return:
-        Quat, new Quat of the product of the two Quat's.
+        Returns:
+            Quat: New Quat of the product of the two Quat's.
 
         """
 
@@ -432,11 +437,11 @@ class Quat(MathObject):
     def divide(self, other):
         """Divides this quaternion by another.
 
-        Arguments:
-        other -- Quat, quaternion to divide this quaternion by.
+        Args:
+            other (Quat): Quaternion to divide this quaternion by.
 
-        Return:
-        Quat, quotient of the division of the quaternion by the other quaternion.
+        Returns:
+            Quat: Quotient of the division of the quaternion by the other quaternion.
 
         """
 
@@ -446,11 +451,11 @@ class Quat(MathObject):
     def multiplyScalar(self, other):
         """Product of this quaternion and a scalar.
 
-        Arguments:
-        other -- Scalar, scalar value to multiply this quaternion by.
+        Args:
+            other (float): scalar value to multiply this quaternion by.
 
-        Return:
-        Quat, product of the multiplication of the scalar and this quaternion.
+        Returns:
+            Quat: Product of the multiplication of the scalar and this quaternion.
 
         """
 
@@ -460,11 +465,11 @@ class Quat(MathObject):
     def divideScalar(self, other):
         """Divides this quaternion and a scalar.
 
-        Arguments:
-        other -- Scalar, value to divide this quaternion by.
+        Args:
+            other (float): value to divide this quaternion by.
 
-        Return:
-        Quat, quotient of the division of the quaternion by the scalar.
+        Returns:
+            Quat: Quotient of the division of the quaternion by the scalar.
 
         """
 
@@ -476,11 +481,11 @@ class Quat(MathObject):
         Don't forget to normalize the quaternion unless you want axial
         translation as well as rotation..
 
-        Arguments:
-        v -- Vec3, vector to rotate.
+        Args:
+            v (Vec3): vector to rotate.
 
-        Return:
-        Vec3, new vector rotated by this quaternion.
+        Returns:
+            Vec3: New vector rotated by this quaternion.
 
         """
 
@@ -490,11 +495,11 @@ class Quat(MathObject):
     def dot(self, other):
         """Gets the dot product of this quaternion and another.
 
-        Arguments:
-        other -- Quat, other quaternion.
+        Args:
+            other (Quat): Other quaternion.
 
-        Return:
-        Scalar, dot product.
+        Returns:
+            float: Dot product.
 
         """
 
@@ -504,8 +509,8 @@ class Quat(MathObject):
     def conjugate(self):
         """Get the conjugate of this quaternion.
 
-        Return:
-        Quat, conjugate of this quaternion.
+        Returns:
+            Quat: Conjugate of this quaternion.
 
         """
 
@@ -515,8 +520,8 @@ class Quat(MathObject):
     def lengthSquared(self):
         """Get the squared lenght of this quaternion.
 
-        Return:
-        Scalar, squared length oft his quaternion.
+        Returns:
+            float: Squared length oft his quaternion.
 
         """
 
@@ -526,8 +531,8 @@ class Quat(MathObject):
     def length(self):
         """Gets the length of this quaternion.
 
-        Return:
-        Scalar, length of this quaternion.
+        Returns:
+            float: Length of this quaternion.
 
         """
 
@@ -537,8 +542,8 @@ class Quat(MathObject):
     def unit(self):
         """Gets a unit quaternion of this one.
 
-        Return:
-        Quat, new unit quaternion from this one.
+        Returns:
+            Quat: New unit quaternion from this one.
 
         """
 
@@ -549,8 +554,8 @@ class Quat(MathObject):
         """Gets a unit quaternion of this one, no error reported if cannot be
         made unit.
 
-        Return:
-        Quat, new unit quaternion.
+        Returns:
+            Quat: New unit quaternion.
 
         """
 
@@ -561,8 +566,8 @@ class Quat(MathObject):
         """Sets this quaternion to a unit quaternion and returns the previous
         length.
 
-        Return:
-        Quat, this quaternion.
+        Returns:
+            Quat: This quaternion.
 
         """
 
@@ -572,8 +577,8 @@ class Quat(MathObject):
     def inverse(self):
         """Gets an inverse quaternion of this one.
 
-        Return:
-        Quat, inverse quaternion to this one.
+        Returns:
+            Quat: Inverse quaternion to this one.
 
         """
 
@@ -584,11 +589,11 @@ class Quat(MathObject):
         """Aligns this quaternion with another one ensuring that the delta
         between the Quat values is the shortest path over the hypersphere.
 
-        Arguments:
-        other -- Quat, quaternion to align this one with.
+        Args:
+            other (Quat): Quaternion to align this one with.
 
-        Return:
-        Quat, new quaternion aligned to the other.
+        Returns:
+            Quat: New quaternion aligned to the other.
 
         """
 
@@ -598,8 +603,8 @@ class Quat(MathObject):
     def getAngle(self):
         """Gets the angle of this quaternion (in radians).
 
-        Return:
-        Scalar, angle of this quaternion (in radians).
+        Returns:
+            float: Angle of this quaternion (in radians).
 
         """
 
@@ -609,8 +614,8 @@ class Quat(MathObject):
     def getXaxis(self):
         """Gets the X axis of this quaternion.
 
-        Return:
-        Vec3, x axis of this quaternion.
+        Returns:
+            Vec3: X axis of this quaternion.
 
         """
 
@@ -620,8 +625,8 @@ class Quat(MathObject):
     def getYaxis(self):
         """Gets the Y axis of this quaternion.
 
-        Return:
-        Vec3, y axis of this quaternion.
+        Returns:
+            Vec3: Y axis of this quaternion.
 
         """
 
@@ -631,8 +636,8 @@ class Quat(MathObject):
     def getZaxis(self):
         """Gets the Z axis of this quaternion.
 
-        Return:
-        Vec3, z axis of this quaternion.
+        Returns:
+            Vec3: Z axis of this quaternion.
 
         """
 
@@ -642,11 +647,11 @@ class Quat(MathObject):
     def mirror(self, axisIndex):
         """Reflects this Quaternion according to the axis provided.
 
-        Arguments:
-        axisIndex -- Integer, 0 for the X axis, 1 for the Y axis, and 2 for the Z axis.
+        Args:
+            axisIndex (int): 0 for the X axis, 1 for the Y axis, and 2 for the Z axis.
 
-        Return:
-        Quat, mirrored quaternion.
+        Returns:
+            Quat: Mirrored quaternion.
 
         """
 
@@ -656,8 +661,8 @@ class Quat(MathObject):
     def toMat33(self):
         """Gets this quaternion as a 3x3 matrix.
 
-        Return:
-        Mat33, matrix derived from this quaternion.
+        Returns:
+            Mat33: Matrix derived from this quaternion.
 
         """
 
@@ -667,12 +672,11 @@ class Quat(MathObject):
     def toEuler(self, rotationOrder):
         """Returns this quaternion as a Euler rotation giving a rotation order.
 
-        Arguments:
-        rotationOrder -- RotationOrder, rotation order to use to derive the
-        euler by.
+        Args:
+            rotationOrder (RotationOrder): rotation order to use to derive the euler by.
 
-        Return:
-        Euler, euler rotation derived from this quaternion.
+        Returns:
+            Euler: Euler rotation derived from this quaternion.
 
         """
 
@@ -682,11 +686,11 @@ class Quat(MathObject):
     def toEulerAngles(self, order):
         """Gets this quaternion as a Euler angles using the rotationorder XYZ.
 
-        Arguments:
-        order -- RotationOrder, rotation order used to derive the euler angles.
+        Args:
+            order (RotationOrder): rotation order used to derive the euler angles.
 
-        Return:
-        Vec3, euler angles derived from this quaternion.
+        Returns:
+            Vec3: Euler angles derived from this quaternion.
 
         """
 
@@ -696,8 +700,8 @@ class Quat(MathObject):
     def toEulerAngles():
         """Gets this quaternion as a Euler angles using the rotationorder XYZ.
 
-        Return:
-        Vec3, euler angles derived from this quaternion.
+        Returns:
+            Vec3: Euler angles derived from this quaternion.
 
         """
 
@@ -710,12 +714,12 @@ class Quat(MathObject):
 
         Note: This and q2 should be unit Quaternions.
 
-        Arguments:
-        q2 -- Quat, quaternion to blend to.
-        t -- Scalar, blend value.
+        Args:
+            q2 (Quat): Quaternion to blend to.
+            t (float): blend value.
 
-        Return:
-        Quat, new quaternion blended between this and the input quaternion.
+        Returns:
+            Quat: New quaternion blended between this and the input quaternion.
 
         """
 
@@ -731,12 +735,12 @@ class Quat(MathObject):
         and deceleration. Use `sphericalLinearInterpolate` for an
         interpolation that does not introduce acceleration..
 
-        Arguments:
-        other -- Quat, quaternion to blend to.
-        t -- Scalar, blend value.
+        Args:
+            other (Quat): Quaternion to blend to.
+            t (float): blend value.
 
-        Return:
-        Quat, new quaternion blended between this and the input quaternion.
+        Returns:
+            Quat: New quaternion blended between this and the input quaternion.
 
         """
 

@@ -37,8 +37,8 @@ class Mat33(MathObject):
     def row0(self):
         """Gets row 0 of this matrix.
 
-        Return:
-        Vec3, row 0 vector.
+        Returns:
+            Vec3: Row 0 vector.
 
         """
 
@@ -49,11 +49,11 @@ class Mat33(MathObject):
     def row0(self, value):
         """Sets row 0 as the input vector.
 
-        Arguments:
-        value -- Vec3, vector to set row 0 as.
+        Args:
+            value (Vec3): Vector to set row 0 as.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -66,8 +66,8 @@ class Mat33(MathObject):
     def row1(self):
         """Gets row 1 of this matrix.
 
-        Return:
-        Vec3, row 1 vector.
+        Returns:
+            Vec3: row 1 vector.
 
         """
 
@@ -78,11 +78,11 @@ class Mat33(MathObject):
     def row1(self, value):
         """Sets row 1 as the input vector.
 
-        Arguments:
-        value -- Vec3, vector to set row 1 as.
+        Args:
+            value (Vec3): Vector to set row 1 as.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -95,8 +95,8 @@ class Mat33(MathObject):
     def row2(self):
         """Gets row 2 of this matrix.
 
-        Return:
-        Vec3, row 2 vector.
+        Returns:
+            Vec3: row 2 vector.
 
         """
 
@@ -107,11 +107,11 @@ class Mat33(MathObject):
     def row2(self, value):
         """Sets row 2 as the input vector.
 
-        Arguments:
-        value -- Vec3, vector to set row 2 as.
+        Args:
+            value (Vec3): Vector to set row 2 as.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -123,8 +123,8 @@ class Mat33(MathObject):
     def clone(self):
         """Returns a clone of the Mat33.
 
-        Return:
-        The cloned Mat33
+        Returns:
+            Mat33: The cloned Mat33.
 
         """
 
@@ -139,13 +139,13 @@ class Mat33(MathObject):
     def setRows(self, row0, row1, row2):
         """Setter from vectors, row-wise.
 
-        Arguments:
-        row0 -- Vec3, vector to use to set row 0.
-        row1 -- Vec3, vector to use to set row 1.
-        row2 -- Vec3, vector to use to set row 2.
+        Args:
+            row0 (Vec3): Vector to use to set row 0.
+            row1 (Vec3): Vector to use to set row 1.
+            row2 (Vec3): Vector to use to set row 2.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -157,13 +157,13 @@ class Mat33(MathObject):
     def setColumns(self, col0, col1, col2):
         """Setter from vectors, column-wise.
 
-        Arguments:
-        col0 -- Vec3, vector to use to set column 0.
-        col1 -- Vec3, vector to use to set column 1.
-        col2 -- Vec3, vector to use to set column 2.
+        Args:
+            col0 (Vec3): Vector to use to set column 0.
+            col1 (Vec3): Vector to use to set column 1.
+            col2 (Vec3): Vector to use to set column 2.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -175,8 +175,8 @@ class Mat33(MathObject):
     def setNull(self):
         """Setting all components of the matrix to 0.0.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -188,8 +188,8 @@ class Mat33(MathObject):
     def setIdentity(self):
         """Sets this matrix to the identity matrix.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -201,11 +201,11 @@ class Mat33(MathObject):
     def setDiagonal(self, v):
         """Sets the diagonal components of this matrix to a scalar.
 
-        Arguments:
-        v -- Scalar, value to set diagonals to.
+        Args:
+            v (float): value to set diagonals to.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -218,11 +218,11 @@ class Mat33(MathObject):
         """Sets the diagonal components of this matrix to the components of a
         vector.
 
-        Arguments:
-        v -- Vec3, vector to set diagonals to.
+        Args:
+            v (Vec3): Vector to set diagonals to.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -234,11 +234,11 @@ class Mat33(MathObject):
     def equal(self, other):
         """Checks equality of this Matrix33 with another.
 
-        Arguments:
-        other -- Mat33, other matrix to check equality with.
+        Args:
+            other (Mat33): Other matrix to check equality with.
 
-        Return:
-        True if equal.
+        Returns:
+            bool: True if equal.
 
         """
 
@@ -248,12 +248,12 @@ class Mat33(MathObject):
     def almostEqual(self, other, precision=None):
         """Checks almost equality of this Matrix33 with another.
 
-        Arguments:
-        other -- Mat33, other matrix to check equality with.
-        precision -- Scalar, precision value.
+        Args:
+            other (Mat33): Other matrix to check equality with.
+            precision (float): precision value.
 
-        Return:
-        True if almost equal.
+        Returns:
+            bool: True if almost equal.
 
         """
         if precision is not None:
@@ -321,11 +321,11 @@ class Mat33(MathObject):
     def add(self, other):
         """Overload method for the add operator.
 
-        Arguments:
-        other -- Mat33, other matrix to add to this one.
+        Args:
+            other (Mat33): Other matrix to add to this one.
 
-        Return:
-        Mat33, new Mat33 of the sum of the two Mat33's.
+        Returns:
+            Mat33: New Mat33 of the sum of the two Mat33's.
 
         """
 
@@ -335,11 +335,11 @@ class Mat33(MathObject):
     def subtract(self, other):
         """Overload method for the subtract operator.
 
-        Arguments:
-        other -- Mat33, other matrix to subtract from this one.
+        Args:
+            other (Mat33): Other matrix to subtract from this one.
 
-        Return:
-        Mat33, new Mat33 of the difference of the two Mat33's.
+        Returns:
+            Mat33: New Mat33 of the difference of the two Mat33's.
 
         """
 
@@ -349,11 +349,11 @@ class Mat33(MathObject):
     def multiply(self, other):
         """Overload method for the multiply operator.
 
-        Arguments:
-        other -- Mat33, other matrix to multiply from this one.
+        Args:
+            other (Mat33): Other matrix to multiply from this one.
 
-        Return:
-        Mat33, new Mat33 of the product of the two Mat33's.
+        Returns:
+            Mat33: New Mat33 of the product of the two Mat33's.
 
         """
 
@@ -363,11 +363,11 @@ class Mat33(MathObject):
     def multiplyScalar(self, other):
         """Product of this matrix and a scalar.
 
-        Arguments:
-        other -- Scalar, scalar value to multiply this matrix by.
+        Args:
+            other (float): scalar value to multiply this matrix by.
 
-        Return:
-        Mat33, product of the multiplication of the scalar and this matrix.
+        Returns:
+            Mat33: Product of the multiplication of the scalar and this matrix.
 
         """
 
@@ -377,11 +377,11 @@ class Mat33(MathObject):
     def multiplyVector(self, other):
         """Returns the product of this matrix and a vector.
 
-        Arguments:
-        other -- Vec3, vector to multiply this matrix by.
+        Args:
+            other (Vec3): Vector to multiply this matrix by.
 
-        Return:
-        Vec3, product of the multiplication of the Vec3 and this matrix.
+        Returns:
+            Vec3: product of the multiplication of the Vec3 and this matrix.
 
         """
 
@@ -391,11 +391,11 @@ class Mat33(MathObject):
     def divideScalar(self, other):
         """Divides this matrix and a scalar.
 
-        Arguments:
-        other -- Scalar, value to divide this matrix by.
+        Args:
+            other (float): value to divide this matrix by.
 
-        Return:
-        Mat33, quotient of the division of the matrix by the scalar.
+        Returns:
+            Mat33: Quotient of the division of the matrix by the scalar.
 
         """
 
@@ -405,8 +405,8 @@ class Mat33(MathObject):
     def determinant(self):
         """Gets the determinant of this matrix.
 
-        Return:
-        Scalar, determinant of this matrix.
+        Returns:
+            float: Determinant of this matrix.
 
         """
 
@@ -416,8 +416,8 @@ class Mat33(MathObject):
     def adjoint(self):
         """Gets the adjoint matrix of this matrix.
 
-        Return:
-        Mat33, adjoint of this matrix.
+        Returns:
+            Mat33: Adjoint of this matrix.
 
         """
 
@@ -427,8 +427,8 @@ class Mat33(MathObject):
     def inverse(self):
         """Get the inverse matrix of this matrix.
 
-        Return:
-        Mat33, inverse of this matrix.
+        Returns:
+            Mat33: Inverse of this matrix.
 
         """
 
@@ -439,8 +439,8 @@ class Mat33(MathObject):
         """Get the inverse matrix of this matrix, always checking the
         determinant value.
 
-        Return:
-        Mat33, safe inverse of this matrix.
+        Returns:
+            Mat33: Safe inverse of this matrix.
 
         """
 
@@ -450,8 +450,8 @@ class Mat33(MathObject):
     def transpose(self):
         """Get the transposed matrix of this matrix.
 
-        Return:
-        Mat33, transpose of this matrix.
+        Returns:
+            Mat33: Transpose of this matrix.
 
         """
 

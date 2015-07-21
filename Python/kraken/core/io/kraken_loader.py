@@ -45,13 +45,11 @@ class KrakenLoader(object):
         self.callbacks = {}
 
 
-
-
     def getParentItem(self):
         """Returns the item that was constructed prior to the current item.
 
-        Return:
-        The stored parent item.
+        Returns:
+            object: The stored parent item.
 
         """
 
@@ -64,11 +62,11 @@ class KrakenLoader(object):
     def resolveSceneItem(self, name):
         """Returns a constructed scene item based on the provided name.
 
-        Arguments:
-        name -- String, name of the scene item to find.
+        Args:
+            name (str): name of the scene item to find.
 
-        Return:
-        The resolved scene item.
+        Returns:
+            object: The resolved scene item.
 
         """
 
@@ -83,11 +81,11 @@ class KrakenLoader(object):
     def construct(self, jsonData):
         """Returns a constructed scene item based on the provided json data.
 
-        Arguments:
-        jsondata -- dict, the JSON data to use to decode into a Math value.
+        Args:
+            jsondata (dict): the JSON data to use to decode into a Math value.
 
-        Return:
-        The constructed scene item.
+        Returns:
+            object: The constructed scene item.
 
         """
 
@@ -211,11 +209,8 @@ class KrakenLoader(object):
         automatically, then it can be registered so the loader can provide it
         during resolveSceneItem.
 
-        Arguments:
-        item -- object, an object constructed during the loading process.
-
-        Return:
-        None
+        Args:
+            item (object): an object constructed during the loading process.
 
         """
 
@@ -236,12 +231,7 @@ class KrakenLoader(object):
 
     def registerConstructionCallback(self, name, callback):
         """Register a callback to be invoked when the requested item is
-        constructed.
-
-        Return:
-        None
-
-        """
+        constructed."""
 
         if name in self.builtItems:
             callback(self.builtItems[name])

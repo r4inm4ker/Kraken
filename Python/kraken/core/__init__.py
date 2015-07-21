@@ -10,8 +10,8 @@ def getVersion():
     """Contatenates the version globals and returns the current version of
     Kraken.
 
-    Return:
-    String, current version of Kraken.
+    Returns:
+        str: Current version of Kraken.
 
     """
 

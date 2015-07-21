@@ -9,8 +9,8 @@ class Synchronizer(object):
 
         The target object's hierarchy will be traversed and synchronized.
 
-        Arguments:
-        target -- Object, top Kraken object to synchronize.
+        Args:
+            target (object): top Kraken object to synchronize.
 
         """
 
@@ -28,8 +28,8 @@ class Synchronizer(object):
     def getTarget(self):
         """Gets the target object of the synchronizer.
 
-        Return:
-        Object, the object that is the target of synchronization.
+        Returns:
+            object: The object that is the target of synchronization.
 
         """
 
@@ -39,11 +39,11 @@ class Synchronizer(object):
     def setTarget(self, target):
         """Sets the target for synchronization.
 
-        Arguments:
-        target -- Object, top Kraken object to synchronize.
+        Args:
+            target (object): top Kraken object to synchronize.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -62,8 +62,8 @@ class Synchronizer(object):
     def getHierarchyMap(self):
         """Gets the hierarchy map from the Inspector.
 
-        Return:
-        Dict, the hierarhcy map. None if it hasn't been created.
+        Returns:
+            dict: The hierarhcy map. None if it hasn't been created.
 
         """
 
@@ -112,8 +112,8 @@ class Synchronizer(object):
     def clearHierarchyMap(self):
         """Clears the hierarhcy map data.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -128,8 +128,8 @@ class Synchronizer(object):
     def sync(self):
         """Synchronizes the target hierarchy with the matching objects in the DCC.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -142,11 +142,11 @@ class Synchronizer(object):
         """Iteration method that traverses the hierarchy and syncs the different
         object types.
 
-        Arguments:
-        kObject -- Object, object to synchronize.
+        Args:
+            kObject (object): object to synchronize.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -199,11 +199,11 @@ class Synchronizer(object):
         **This should be re-implemented in the sub-classed synchronizer for each
         plugin.**
 
-        Arguments:
-        kObject -- object, the Kraken Python object that we must find the corresponding DCC item.
+        Args:
+            kObject (object): The Kraken Python object that we must find the corresponding DCC item.
 
-        Return:
-        DCC Object, None if it isn't found.
+        Returns:
+            object: None if it isn't found.
 
         """
 
@@ -218,11 +218,11 @@ class Synchronizer(object):
         **This should be re-implemented in the sub-classed synchronizer for each
         plugin.**
 
-        Arguments:
-        kObject -- Object, object to sync the xfo for.
+        Args:
+            kObject (object): object to sync the xfo for.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -235,11 +235,11 @@ class Synchronizer(object):
         **This should be re-implemented in the sub-classed synchronizer for each
         plugin.**
 
-        Arguments:
-        kObject -- Object, object to sync the attribute value for.
+        Args:
+            kObject (object): object to sync the attribute value for.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 

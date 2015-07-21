@@ -19,11 +19,11 @@ RAD_TO_DEG = 57.29577951308232
 def Math_radToDeg(val):
     """Converts radians to degrees.
 
-    Arguments:
-    val -- Scalar, value to convert to degrees.
+    Args:
+        val (float): value to convert to degrees.
 
-    Return:
-    Scalar, value in degrees.
+    Returns:
+        float: Value in degrees.
 
     """
 
@@ -33,11 +33,11 @@ def Math_radToDeg(val):
 def Math_degToRad(val):
     """Converts degrees to radians.
 
-    Arguments:
-    val -- Scalar, value to convert to radians.
+    Args:
+        val (float): value to convert to radians.
 
-    Return:
-    Scalar, value in radians.
+    Returns:
+        float: Value in radians.
 
     """
 
@@ -48,11 +48,11 @@ def Math_degToRad(val):
 def decodeValue(jsonData):
     """Returns a constructed math value based on the provided json data.
 
-    Arguments:
-    jsondata -- dict, the JSON data to use to decode into a Math value.
+    Args:
+        jsondata (dict): The JSON data to use to decode into a Math value.
 
-    Return:
-    The constructed math value
+    Returns:
+        object: The constructed math value
 
     """
 

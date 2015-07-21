@@ -29,10 +29,10 @@ class Mat44(MathObject):
 
 
     def __str__(self):
-        """String representation of the 3x3 matrix.
+        """String representation of the 4x4 matrix.
 
-        Return:
-        String.
+        Returns:
+            str: String representation of the 4x4 matrix.
 
         """
 
@@ -49,8 +49,8 @@ class Mat44(MathObject):
     def row0(self):
         """Gets row 0 of this matrix.
 
-        Return:
-        Vec4, row 0 vector.
+        Returns:
+            Vec4: row 0 vector.
 
         """
 
@@ -61,11 +61,11 @@ class Mat44(MathObject):
     def row0(self, value):
         """Sets row 0 as the input vector.
 
-        Arguments:
-        value -- Vec4, vector to set row 0 as.
+        Args:
+            value (Vec4): Vector to set row 0 as.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -78,8 +78,8 @@ class Mat44(MathObject):
     def row1(self):
         """Gets row 1 of this matrix.
 
-        Return:
-        Vec4, row 1 vector.
+        Returns:
+            Vec4: row 1 vector.
 
         """
 
@@ -90,11 +90,11 @@ class Mat44(MathObject):
     def row1(self, value):
         """Sets row 1 as the input vector.
 
-        Arguments:
-        value -- Vec4, vector to set row 1 as.
+        Args:
+            value (Vec4): vector to set row 1 as.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -107,8 +107,8 @@ class Mat44(MathObject):
     def row2(self):
         """Gets row 2 of this matrix.
 
-        Return:
-        Vec4, row 2 vector.
+        Returns:
+            Vec4: row 2 vector.
 
         """
 
@@ -119,11 +119,11 @@ class Mat44(MathObject):
     def row2(self, value):
         """Sets row 2 as the input vector.
 
-        Arguments:
-        value -- Vec4, vector to set row 2 as.
+        Args:
+            value (Vec4): vector to set row 2 as.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -136,8 +136,8 @@ class Mat44(MathObject):
     def row3(self):
         """Gets row 3 of this matrix.
 
-        Return:
-        Vec4, row 3 vector.
+        Returns:
+            Vec4: row 3 vector.
 
         """
 
@@ -148,11 +148,11 @@ class Mat44(MathObject):
     def row3(self, value):
         """Sets row 3 as the input vector.
 
-        Arguments:
-        value -- Vec4, vector to set row 3 as.
+        Args:
+        value (Vec4): vector to set row 3 as.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -164,8 +164,8 @@ class Mat44(MathObject):
     def clone(self):
         """Returns a clone of the Mat44.
 
-        Return:
-        The cloned Mat44
+        Returns:
+            Mat44: The cloned Mat44.
 
         """
 
@@ -181,14 +181,14 @@ class Mat44(MathObject):
     def setRows(self, row0, row1, row2, row3):
         """Set from vectors, row-wise.
 
-        Arguments:
-        row0 -- Vec4, vector to use for row 0.
-        row1 -- Vec4, vector to use for row 1.
-        row2 -- Vec4, vector to use for row 2.
-        row3 -- Vec4, vector to use for row 3.
+        Args:
+            row0 (Vec4): vector to use for row 0.
+            row1 (Vec4): vector to use for row 1.
+            row2 (Vec4): vector to use for row 2.
+            row3 (Vec4): vector to use for row 3.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -201,14 +201,14 @@ class Mat44(MathObject):
     def setColumns(self, col0, col1, col2, col3):
         """Setter from vectors, column-wise.
 
-        Arguments:
-        col0 -- Vec4, vector to use for column 0.
-        col1 -- Vec4, vector to use for column 1.
-        col2 -- Vec4, vector to use for column 2.
-        col3 -- Vec4, vector to use for column 3.
+        Args:
+            col0 (Vec4): vector to use for column 0.
+            col1 (Vec4): vector to use for column 1.
+            col2 (Vec4): vector to use for column 2.
+            col3 (Vec4): vector to use for column 3.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -221,8 +221,8 @@ class Mat44(MathObject):
     def setNull(self):
         """Setting all components of the matrix to 0.0.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -234,8 +234,8 @@ class Mat44(MathObject):
     def setIdentity(self):
         """Sets this matrix to the identity matrix.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -247,11 +247,11 @@ class Mat44(MathObject):
     def setDiagonal(self, v):
         """Sets the diagonal components of this matrix to a scalar.
 
-        Arguments:
-        v -- Scalar, value to set diagonals to.
+        Args:
+            v (float): value to set diagonals to.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -264,11 +264,11 @@ class Mat44(MathObject):
         """Sets the diagonal components of this matrix to the components of a
         vector.
 
-        Arguments:
-        v -- Vec3, vector to set diagonals to.
+        Args:
+            v (Vec3): vector to set diagonals to.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -280,11 +280,11 @@ class Mat44(MathObject):
     def equal(self, other):
         """Checks equality of this Matrix44 with another.
 
-        Arguments:
-        other -- Mat44, other matrix to check equality with.
+        Args:
+            other (Mat44): other matrix to check equality with.
 
-        Return:
-        True if equal.
+        Returns:
+            bool: True if equal.
 
         """
 
@@ -294,12 +294,12 @@ class Mat44(MathObject):
     def almostEqual(self, other, precision):
         """Checks almost equality of this Matrix44 with another.
 
-        Arguments:
-        other -- Mat44, other matrix to check equality with.
-        precision -- Scalar, precision value.
+        Args:
+            other (Mat44): other matrix to check equality with.
+            precision (float): precision value.
 
-        Return:
-        True if almost equal.
+        Returns:
+            bool: True if almost equal.
 
         """
 
@@ -311,11 +311,11 @@ class Mat44(MathObject):
         """Checks almost equality of this Matrix44 with another
         (using a default precision).
 
-        Arguments:
-        other -- Mat44, other matrix to check equality with.
+        Args:
+            other (Mat44): other matrix to check equality with.
 
-        Return:
-        True if almost equal.
+        Returns:
+            bool: True if almost equal.
 
         """
 
@@ -370,11 +370,11 @@ class Mat44(MathObject):
     def add(self, other):
         """Overload method for the add operator.
 
-        Arguments:
-        other -- Mat44, other matrix to add to this one.
+        Args:
+            other (Mat44): other matrix to add to this one.
 
-        Return:
-        Mat44, new Mat44 of the sum of the two Mat44's.
+        Returns:
+            Mat44: new Mat44 of the sum of the two Mat44's.
 
         """
 
@@ -384,11 +384,11 @@ class Mat44(MathObject):
     def subtract(self, other):
         """Overload method for the subtract operator.
 
-        Arguments:
-        other -- Mat44, other matrix to subtract from this one.
+        Args:
+            other (Mat44): other matrix to subtract from this one.
 
-        Return:
-        Mat44, new Mat44 of the difference of the two Mat44's.
+        Returns:
+            Mat44: new Mat44 of the difference of the two Mat44's.
 
         """
 
@@ -398,11 +398,11 @@ class Mat44(MathObject):
     def multiply(self, other):
         """Overload method for the multiply operator.
 
-        Arguments:
-        other -- Mat44, other matrix to multiply from this one.
+        Args:
+            other (Mat44): other matrix to multiply from this one.
 
-        Return:
-        Mat44, new Mat44 of the product of the two Mat44's.
+        Returns:
+            Mat44: new Mat44 of the product of the two Mat44's.
 
         """
 
@@ -412,11 +412,11 @@ class Mat44(MathObject):
     def multiplyScalar(self, other):
         """Product of this matrix and a scalar.
 
-        Arguments:
-        other -- Scalar, scalar value to multiply this matrix by.
+        Args:
+            other (float): scalar value to multiply this matrix by.
 
-        Return:
-        Mat44, product of the multiplication of the scalar and this matrix.
+        Returns:
+            Mat44: product of the multiplication of the scalar and this matrix.
 
         """
 
@@ -426,11 +426,11 @@ class Mat44(MathObject):
     def multiplyVector(self, other):
         """Returns the product of this matrix and a vector.
 
-        Arguments:
-        other -- Vec3, vector to multiply this matrix by.
+        Args:
+            other (Vec3): vector to multiply this matrix by.
 
-        Return:
-        Vec3, product of the multiplication of the Vec3 and this matrix.
+        Returns:
+            Vec3: product of the multiplication of the Vec3 and this matrix.
 
         """
 
@@ -440,11 +440,11 @@ class Mat44(MathObject):
     def divideScalar(self, other):
         """Divides this matrix and a scalar.
 
-        Arguments:
-        other -- Scalar, value to divide this matrix by
+        Args:
+            other (float): Value to divide this matrix by
 
-        Return:
-        Mat44, quotient of the division of the matrix by the scalar.
+        Returns:
+            Mat44: Quotient of the division of the matrix by the scalar.
 
         """
 
@@ -454,8 +454,8 @@ class Mat44(MathObject):
     def determinant(self):
         """Gets the determinant of this matrix.
 
-        Return:
-        Scalar, determinant of this matrix.
+        Returns:
+            float: Determinant of this matrix.
 
         """
 
@@ -465,8 +465,8 @@ class Mat44(MathObject):
     def adjoint(self):
         """Gets the adjoint matrix of this matrix.
 
-        Return:
-        Mat44, adjoint of this matrix.
+        Returns:
+            Mat44: Adjoint of this matrix.
 
         """
 
@@ -476,8 +476,8 @@ class Mat44(MathObject):
     def inverse(self):
         """Get the inverse matrix of this matrix.
 
-        Return:
-        Mat44, inverse of this matrix.
+        Returns:
+            Mat44: Inverse of this matrix.
 
         """
 
@@ -488,8 +488,8 @@ class Mat44(MathObject):
         """Get the inverse matrix of this matrix, always checking the
         determinant value.
 
-        Return:
-        Mat44, safe inverse of this matrix.
+        Returns:
+            Mat44: Safe inverse of this matrix.
 
         """
 
@@ -499,8 +499,8 @@ class Mat44(MathObject):
     def transpose(self):
         """Get the transposed matrix of this matrix.
 
-        Return:
-        Mat44, transpose of this matrix.
+        Returns:
+            Mat44: Transpose of this matrix.
 
         """
 

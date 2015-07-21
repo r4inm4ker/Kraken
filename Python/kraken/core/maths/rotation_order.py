@@ -29,7 +29,12 @@ class RotationOrder(MathObject):
 
 
     def __str__(self):
-        """String representation of RotationOrder object."""
+        """String representation of RotationOrder object.
+
+        Returns:
+            str: String representation of the RotationOrder.
+
+        """
 
         return "RotationOrder(order='" + str(self.order) + "')"
 
@@ -38,8 +43,8 @@ class RotationOrder(MathObject):
     def order(self):
         """Gets order value of this Rotation Order.
 
-        Return:
-        Scalar, order value of this Rotation Order.
+        Returns:
+            float: Order value of this Rotation Order.
 
         """
 
@@ -50,11 +55,11 @@ class RotationOrder(MathObject):
     def order(self, value):
         """Sets order value from the input value.
 
-        Arguments:
-        value -- Integer or String, value to set the order property as.
+        Args:
+            value (int, str): Value to set the order property as.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -66,8 +71,8 @@ class RotationOrder(MathObject):
     def clone(self):
         """Returns a clone of the RotationOrder.
 
-        Return:
-        The cloned RotationOrder
+        Returns:
+            RotationOrder: The cloned RotationOrder.
 
         """
 
@@ -80,11 +85,11 @@ class RotationOrder(MathObject):
     def set(self, order):
         """Sets the order value from the input values.
 
-        Arguments:
-        order -- Integer or String, value to set the order property as.
+        Args:
+            order (int, str): Value to set the order property as.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -134,8 +139,8 @@ class RotationOrder(MathObject):
     def isXYZ(self):
         """Checks if this Rotation Order is equal to XYZ.
 
-        Return:
-        Boolean, true if this rotationorder is XYZ.
+        Returns:
+            bool: True if this rotationorder is XYZ.
 
         """
 
@@ -145,8 +150,8 @@ class RotationOrder(MathObject):
     def isYZX(self):
         """Checks if this Rotation Order is equal to YZX.
 
-        Return:
-        Boolean, true if this rotationorder is YZX.
+        Returns:
+            bool: True if this rotationorder is YZX.
 
         """
 
@@ -156,8 +161,8 @@ class RotationOrder(MathObject):
     def isZXY(self):
         """Checks if this Rotation Order is equal to ZXY.
 
-        Return:
-        Boolean, true if this rotationorder is ZXY.
+        Returns:
+            bool: True if this rotationorder is ZXY.
 
         """
 
@@ -167,8 +172,8 @@ class RotationOrder(MathObject):
     def isXZY(self):
         """Checks if this Rotation Order is equal to XZY.
 
-        Return:
-        Boolean, true if this rotationorder is XZY.
+        Returns:
+            bool: True if this rotationorder is XZY.
 
         """
 
@@ -178,8 +183,8 @@ class RotationOrder(MathObject):
     def isZYX(self):
         """Checks if this Rotation Order is equal to ZYX.
 
-        Return:
-        Boolean, true if this rotationorder is ZYX.
+        Returns:
+            bool: True if this rotationorder is ZYX.
 
         """
 
@@ -189,8 +194,8 @@ class RotationOrder(MathObject):
     def isYXZ(self):
         """Checks if this Rotation Order is equal to YXZ.
 
-        Return:
-        Boolean, true if this rotationorder is YXZ.
+        Returns:
+            bool: True if this rotationorder is YXZ.
 
         """
 
@@ -201,8 +206,7 @@ class RotationOrder(MathObject):
         """Checks if this Rotation Order is a reversed one.
 
         Returns:
-        Boolean, true if this rotation order is one of the reversed ones
-        (XZY, ZYX or YXZ).
+            bool: True if this rotation order is one of the reversed ones (XZY, ZYX or YXZ).
 
         """
 
@@ -212,8 +216,8 @@ class RotationOrder(MathObject):
     def setXYZ(self):
         """Sets this rotation order to be XYZ.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -225,8 +229,8 @@ class RotationOrder(MathObject):
     def setYZX(self):
         """Sets this rotation order to be YZX.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -238,8 +242,8 @@ class RotationOrder(MathObject):
     def setZXY(self):
         """Sets this rotation order to be ZXY.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -251,8 +255,8 @@ class RotationOrder(MathObject):
     def setXZY(self):
         """Sets this rotation order to be XZY.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -264,8 +268,8 @@ class RotationOrder(MathObject):
     def setZYX(self):
         """Sets this rotation order to be ZYX.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -277,8 +281,8 @@ class RotationOrder(MathObject):
     def setYXZ(self):
         """Sets this rotation order to be YXZ.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
