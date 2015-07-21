@@ -679,7 +679,6 @@ class Component(Object3D):
         return True
 
 
-
     # =============
     # Data Methods
     # =============
@@ -743,10 +742,10 @@ class Component(Object3D):
 
         return True
 
+
     # ==================
     # Copy/Paste Methods
     # ==================
-
     def copyData(self):
         """Copy the data for the component to our clipboard.
 
@@ -780,10 +779,10 @@ class Component(Object3D):
 
         return True
 
+
     # ==================
     # Rig Build Methods
     # =================
-
     def getRigBuildData(self):
         """Returns the Guide data used by the Rig Component to define the layout of the final rig..
 
@@ -811,11 +810,29 @@ class Component(Object3D):
 
 
     def detach(self):
-        pass
+        """Detaches component from container."""
+
+        self.controlsLayer.removeChild(self.ctrlCmpGrp)
+        container = self.getContainer()
+
+        if self.controlsLayer.getNumChildren() == 0:
+            container.removeChild(self.controlsLayer)
+        container.removeChild(self)
 
 
     def attach(self, container):
-        pass
+        """Attaches component to container.
+
+        Args:
+            container (object): container to attach to.
+
+        """
+
+        if not container.hasChild(self.controlsLayer):
+            container.addChild(self.controlsLayer)
+
+        self.controlsLayer.addChild(self.ctrlCmpGrp)
+        container.addChild(self)
 
 
     # ==============

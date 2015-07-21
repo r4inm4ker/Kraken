@@ -67,24 +67,6 @@ class ArmComponent(Component):
         self.debugOutputAttr = self.createOutput('drawDebug', dataType='Boolean', parent=self.cmpOutputAttrGrp)
 
 
-    def detach(self):
-        self.controlsLayer.removeChild(self.ctrlCmpGrp)
-        container = self.getContainer()
-
-        if self.controlsLayer.getNumChildren() == 0:
-            container.removeChild(self.controlsLayer)
-        container.removeChild(self)
-
-
-    def attach(self, container):
-        if not container.hasChild(self.controlsLayer):
-            container.addChild(self.controlsLayer)
-
-        self.controlsLayer.addChild(self.ctrlCmpGrp)
-        container.addChild(self)
-
-
-
 class ArmComponentGuide(ArmComponent):
     """Arm Component Guide"""
 
