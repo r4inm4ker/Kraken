@@ -83,13 +83,13 @@ class FKChainComponentGuide(FKChainComponent):
         self.numJoints = IntegerAttribute('numJoints', value=4, minValue=1, maxValue=20, parent=guideSettingsAttrGrp)
         self.numJoints.setValueChangeCallback(self.updateNumJointControls)
 
+        self.jointCtrls = []
         if data is None:
             numJoints = self.numJoints.getValue()
             jointPositions = self.generateGuidePositions(numJoints)
 
-            self.jointCtrls = []
             for i in xrange(numJoints + 1):
-                self.jointCtrls.append(Control('chain' + str(i).zfill(2), parent=self.ctrlCmpGrp, shape="sphere"))
+                self.jointCtrls.append(Control('chain' + str(i + 1).zfill(2), parent=self.ctrlCmpGrp, shape="sphere"))
 
             data = {
                "location": "L",

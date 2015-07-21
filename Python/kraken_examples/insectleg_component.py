@@ -97,6 +97,7 @@ class InsectLegComponentGuide(InsectLegComponent):
                "jointPositions": jointPositions,
                "numJoints": self.numJoints.getValue()
               }
+
         self.loadData(data)
 
         Profiler.getInstance().pop()
