@@ -67,7 +67,6 @@ class ArmComponent(Component):
         self.debugOutputAttr = self.createOutput('drawDebug', dataType='Boolean', parent=self.cmpOutputAttrGrp)
 
 
-
 class ArmComponentGuide(ArmComponent):
     """Arm Component Guide"""
 
