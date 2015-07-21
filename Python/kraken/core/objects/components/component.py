@@ -812,12 +812,7 @@ class Component(Object3D):
     def detach(self):
         """Detaches component from container."""
 
-        self.controlsLayer.removeChild(self.ctrlCmpGrp)
-        container = self.getContainer()
-
-        if self.controlsLayer.getNumChildren() == 0:
-            container.removeChild(self.controlsLayer)
-        container.removeChild(self)
+        pass
 
 
     def attach(self, container):
@@ -828,11 +823,7 @@ class Component(Object3D):
 
         """
 
-        if not container.hasChild(self.controlsLayer):
-            container.addChild(self.controlsLayer)
-
-        self.controlsLayer.addChild(self.ctrlCmpGrp)
-        container.addChild(self)
+        pass
 
 
     # ==============
