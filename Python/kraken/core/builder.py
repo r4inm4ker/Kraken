@@ -10,7 +10,7 @@ from kraken.core.kraken_system import KrakenSystem
 from kraken.core.configs.config import Config
 from kraken.core.profiler import Profiler
 
-from kraken.core.objects.components.base_example_component import BaseExampleComponent
+from kraken.core.objects.components.component import Component
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
 
