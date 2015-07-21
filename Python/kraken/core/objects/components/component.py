@@ -159,7 +159,6 @@ class Component(Object3D):
         container = self.getContainer()
         if container is None:
             container = self
-        print "getOrCreateLayer container:" + str(container.getPath())
 
         layer = container.getChildByName(name)
         if layer is None or not layer.isTypeOf('Layer'):

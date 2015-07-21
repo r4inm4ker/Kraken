@@ -142,11 +142,14 @@ class InsectLegComponentGuide(InsectLegComponent):
 
         numJoints = self.numJoints.getValue()
 
+        # Calculate FW
+        toFirst = self.jointCtrls[0].xfo.tr.subtract(self.jointCtrls[1].xfo.tr).unit()
+        toTip = self.jointCtrls[0].xfo.tr.subtract(self.jointCtrls[-1].xfo.tr).unit()
+        fw = toTip.cross(toFirst).unit()
+
         # Calculate Xfos
-        fw = Vec3(0, 0, 1)
         boneXfos = []
         boneLengths = []
-
         for i in xrange(numJoints):
             boneVec = self.jointCtrls[i + 1].xfo.tr.subtract(self.jointCtrls[i].xfo.tr)
             boneLengths.append(boneVec.length())
