@@ -1,6 +1,6 @@
 from kraken.core.maths import Vec3, Vec3, Euler, Quat, Xfo
 
-from kraken.core.objects.components.component import Component
+from kraken.core.objects.components.base_example_component import BaseExampleComponent
 
 from kraken.core.objects.attributes.attribute_group import AttributeGroup
 from kraken.core.objects.attributes.scalar_attribute import ScalarAttribute
@@ -21,24 +21,11 @@ from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
 
 
-class MainSrtComponent(Component):
+class MainSrtComponent(BaseExampleComponent):
     """MainSrt Component Base"""
 
     def __init__(self, name='mainSrtBase', parent=None, data=None):
         super(MainSrtComponent, self).__init__(name, parent)
-
-        # ================
-        # Setup Hierarchy
-        # ================
-        self.controlsLayer = self.getOrCreateLayer('controls')
-        self.ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=self.controlsLayer)
-
-        # IO Hierarchies
-        self.inputHrcGrp = HierarchyGroup('inputs', parent=self.ctrlCmpGrp)
-        self.cmpInputAttrGrp = AttributeGroup('inputs', parent=self.inputHrcGrp)
-
-        self.outputHrcGrp = HierarchyGroup('outputs', parent=self.ctrlCmpGrp)
-        self.cmpOutputAttrGrp = AttributeGroup('outputs', parent=self.outputHrcGrp)
 
 
         # ===========
