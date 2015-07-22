@@ -344,6 +344,7 @@ class InsectLegComponentRig(InsectLegComponent):
         self.NBoneSolverSpliceOp.setInput('tipBoneLen', self.tipBoneLenInputAttr)
 
         # Add Xfo Inputs
+        self.NBoneSolverSpliceOp.setInput('chainBase', self.rootInputTgt)
         self.NBoneSolverSpliceOp.setInput('ikgoal', self.legIKCtrl)
         self.NBoneSolverSpliceOp.setInput('upVector', self.legUpVCtrl)
 
