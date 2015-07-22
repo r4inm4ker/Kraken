@@ -1,5 +1,4 @@
 require InlineDrawing;
-require Kraken;
 
 object NBoneIKSolver : KrakenSolver {
   Xfo initPose[];
@@ -92,11 +91,13 @@ function NBoneIKSolver.solve!
       ikIndex = rootIndex;
     }
 
-    // Calculate the initpose offset by the chain base input
     Xfo offsetInitPose[];
     offsetInitPose.resize(this.initPose.size);
-    for (Integer i=0; i < this.initPose.size; i++) {
-      offsetInitPose[i] = chainBase * (this.initPose[0].inverse() * this.initPose[i]);
+    if (useInitPose == 1) {
+      // Calculate the initpose offset by the chain base input
+      for (Integer i=0; i < this.initPose.size; i++) {
+        offsetInitPose[i] = chainBase * (this.initPose[0].inverse() * this.initPose[i]);
+      }
     }
 
     // Now blend the IK result with the FK result
