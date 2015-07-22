@@ -71,10 +71,14 @@ class Synchronizer(Synchronizer):
         hrcMap = self.getHierarchyMap()
 
         if kObject not in hrcMap.keys():
-            print "Warning! 3D Object '" + kObject.getName() + "' was not found in the mapping!"
+            log("Warning! 3D Object '" + kObject.getName() + "' was not found in the mapping!", 8)
             return False
 
         dccItem = hrcMap[kObject]['dccItem']
+
+        if dccItem is None:
+            log("Warning Syncing. No DCC Item for :" + kObject.getPath(), 8)
+            return
 
         dccXfo = dccItem.Kinematics.Global.GetTransform2(None)
         dccPos = dccXfo.Translation.Get2()
@@ -106,17 +110,14 @@ class Synchronizer(Synchronizer):
         hrcMap = self.getHierarchyMap()
 
         if kObject not in hrcMap.keys():
-            print "Warning! Attribute '" + kObject.getName() + "' was not found in the mapping!"
+            log("Warning! Attribute '" + kObject.getName() + "' was not found in the mapping!", 8)
             return False
 
         dccItem = hrcMap[kObject]['dccItem']
 
         if dccItem is None:
-            print "Warning Syncing. No DCC Item for :" + kObject.getPath()
+            log("Warning Syncing. No DCC Item for :" + kObject.getPath(), 8)
             return
-
-        # log(kObject.getPath())
-        # log(dccItem)
 
         kObject.setValue(dccItem.Value)
 
