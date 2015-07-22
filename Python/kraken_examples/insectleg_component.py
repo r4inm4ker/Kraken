@@ -298,6 +298,7 @@ class InsectLegComponentRig(InsectLegComponent):
         self.legUpVCtrlSpace = CtrlSpace('UpV', parent=self.ctrlCmpGrp)
         self.legUpVCtrl = Control('UpV', parent=self.legUpVCtrlSpace, shape="triangle")
         self.legUpVCtrl.alignOnZAxis()
+        self.legUpVCtrl.rotatePoints(0, 90, 0)
 
 
         # ==========
@@ -412,6 +413,38 @@ class InsectLegComponentRig(InsectLegComponent):
         return True
 
 
+    def calculateUpVXfo(self, boneXfos, endXfo):
+        """Calculates the transform for the UpV control.
+
+        Args:
+            boneXfos (list): Bone transforms.
+            endXfo (Xfo): Transform for the end of the chain.
+
+        Returns:
+            Xfo: Up Vector transform.
+
+        """
+
+
+        # Calculate FW
+        toFirst = boneXfos[1].tr.subtract(boneXfos[0].tr).unit()
+        toTip = endXfo.tr.subtract(boneXfos[0].tr).unit()
+        fw = toTip.cross(toFirst).unit()
+
+        chainNormal = fw.cross(toTip).unit()
+        chainZAxis = toTip.cross(chainNormal).unit()
+
+        chainXfo = Xfo()
+        chainXfo.setFromVectors(toTip.unit(), chainNormal, chainZAxis, boneXfos[0].tr)
+
+        rootToTip = endXfo.tr.subtract(boneXfos[0].tr).length()
+
+        upVXfo = Xfo()
+        upVXfo.tr = chainXfo.transformVector(Vec3(rootToTip / 2.0, rootToTip / 2.0, 0.0))
+
+        return upVXfo
+
+
     def loadData(self, data=None):
         """Load a saved guide representation from persisted data.
 
@@ -428,6 +461,7 @@ class InsectLegComponentRig(InsectLegComponent):
         boneXfos = data['boneXfos']
         boneLengths = data['boneLengths']
         numJoints = data['numJoints']
+        endXfo = data['endXfo']
 
         # Add extra controls and outputs
         self.setNumControls(numJoints)
@@ -438,12 +472,12 @@ class InsectLegComponentRig(InsectLegComponent):
             self.fkCtrls[i].xfo = boneXfos[i]
             self.fkCtrls[i].scalePoints(Vec3(boneLengths[i], 1.75, 1.75))
 
-        self.legIKCtrlSpace.xfo = data['endXfo']
-        self.legIKCtrl.xfo = data['endXfo']
+        self.legIKCtrlSpace.xfo = endXfo
+        self.legIKCtrl.xfo = endXfo
 
-        upVPos = boneXfos[0].transformVector(Vec3(5, 3, 0))
-        self.legUpVCtrlSpace.xfo.tr = upVPos
-        self.legUpVCtrl.xfo.tr = upVPos
+        upVXfo = self.calculateUpVXfo(boneXfos, endXfo)
+        self.legUpVCtrlSpace.xfo = upVXfo
+        self.legUpVCtrl.xfo = upVXfo
 
         # Set max on the rootIndex attribute
         self.rootIndexInputAttr.setMax(len(boneXfos))
@@ -487,8 +521,8 @@ class InsectLegComponentRig(InsectLegComponent):
         for i in xrange(len(boneLengths)):
             self.boneOutputsTgt[i].xfo = boneXfos[i]
 
-        self.legEndXfoOutputTgt.xfo = data['endXfo']
-        self.legEndPosOutputTgt.xfo = data['endXfo']
+        self.legEndXfoOutputTgt.xfo = endXfo
+        self.legEndPosOutputTgt.xfo = endXfo
 
         # =============
         # Set IO Attrs
