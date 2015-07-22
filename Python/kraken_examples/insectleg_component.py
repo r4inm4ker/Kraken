@@ -268,6 +268,11 @@ class InsectLegComponentRig(InsectLegComponent):
         # =========
         # Controls
         # =========
+
+        # Chain Base
+        self.chainBase = Locator('ChainBase', parent=self.ctrlCmpGrp)
+        self.chainBase.setShapeVisibility(False)
+
         # FK
         self.fkCtrlSpaces = []
         self.fkCtrls = []
@@ -328,6 +333,11 @@ class InsectLegComponentRig(InsectLegComponent):
         self.fkCtrlSpaces[0].addConstraint(legRootInputConstraint)
 
 
+        chainBaseInputConstraint = PoseConstraint('_'.join([self.chainBase.getName(), 'To', self.rootInputTgt.getName()]))
+        chainBaseInputConstraint.setMaintainOffset(True)
+        chainBaseInputConstraint.addConstrainer(self.rootInputTgt)
+        self.chainBase.addConstraint(chainBaseInputConstraint)
+
         # ===============
         # Add Splice Ops
         # ===============
@@ -344,6 +354,7 @@ class InsectLegComponentRig(InsectLegComponent):
         self.NBoneSolverSpliceOp.setInput('tipBoneLen', self.tipBoneLenInputAttr)
 
         # Add Xfo Inputs
+        self.NBoneSolverSpliceOp.setInput('chainBase', self.chainBase)
         self.NBoneSolverSpliceOp.setInput('ikgoal', self.legIKCtrl)
         self.NBoneSolverSpliceOp.setInput('upVector', self.legUpVCtrl)
 
@@ -467,10 +478,13 @@ class InsectLegComponentRig(InsectLegComponent):
         self.setNumControls(numJoints)
         self.setNumDeformers(numJoints)
 
+        # Scale controls based on bone lengths
         for i, each in enumerate(self.fkCtrlSpaces):
             self.fkCtrlSpaces[i].xfo = boneXfos[i]
             self.fkCtrls[i].xfo = boneXfos[i]
             self.fkCtrls[i].scalePoints(Vec3(boneLengths[i], 1.75, 1.75))
+
+        self.chainBase.xfo = boneXfos[0]
 
         self.legIKCtrlSpace.xfo = endXfo
         self.legIKCtrl.xfo = endXfo
