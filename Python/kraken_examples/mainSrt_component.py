@@ -52,17 +52,28 @@ class MainSrtComponentGuide(MainSrtComponent):
         Profiler.getInstance().push("Construct MainSrt Guide Component:" + name)
         super(MainSrtComponentGuide, self).__init__(name, parent)
 
+        # =========
+        # Attributes
+        # =========
+        # Add Component Params to IK control
+        guideSettingsAttrGrp = AttributeGroup("GuideSettings", parent=self)
+
+        self.bicepFKCtrlSizeInputAttr = ScalarAttribute('mainSrtSize', value=9.0, minValue=1.0,   maxValue=50.0, parent=guideSettingsAttrGrp)
 
         # =========
         # Controls
         # =========
+        mainSrtSize = self.bicepFKCtrlSizeInputAttr.getValue()
+
         # Guide Controls
         self.mainSrtCtrl = Control('mainSrt', parent=self.ctrlCmpGrp, shape="cube")
+        self.mainSrtCtrl.scalePoints(Vec3(mainSrtSize, 1.0, mainSrtSize))
 
         if data is None:
             data = {
-                    'location': 'M',
-                    'mainSrtXfo': Xfo(tr=Vec3(0.0, 0.0, 0.0))
+                    "location": 'M',
+                    "mainSrtSize": self.bicepFKCtrlSizeInputAttr.getValue(),
+                    "mainSrtXfo": Xfo(tr=Vec3(0.0, 0.0, 0.0))
                    }
 
         self.loadData(data)
@@ -82,7 +93,8 @@ class MainSrtComponentGuide(MainSrtComponent):
         """
         data = super(MainSrtComponentGuide, self).saveData()
 
-        data['mainSrtXfo'] = self.mainSrtCtrl.xfo
+        data["mainSrtSize"] = self.bicepFKCtrlSizeInputAttr.getValue()
+        data["mainSrtXfo"] = self.mainSrtCtrl.xfo
 
         return data
 
@@ -100,7 +112,8 @@ class MainSrtComponentGuide(MainSrtComponent):
 
         super(MainSrtComponentGuide, self).loadData( data )
 
-        self.mainSrtCtrl.xfo = data['mainSrtXfo']
+        self.bicepFKCtrlSizeInputAttr.setValue(data["mainSrtSize"])
+        self.mainSrtCtrl.xfo = data["mainSrtXfo"]
 
         return True
 
@@ -115,7 +128,8 @@ class MainSrtComponentGuide(MainSrtComponent):
 
         data = super(MainSrtComponentGuide, self).getRigBuildData()
 
-        data['mainSrtXfo'] = self.mainSrtCtrl.xfo
+        data["mainSrtSize"] = self.bicepFKCtrlSizeInputAttr.getValue()
+        data["mainSrtXfo"] = self.mainSrtCtrl.xfo
 
         return data
 
@@ -159,12 +173,10 @@ class MainSrtComponentRig(MainSrtComponent):
         # Add Controls
         self.mainSRTCtrlSpace = CtrlSpace('SRT', parent=self.ctrlCmpGrp)
         self.mainSRTCtrl = Control('SRT', shape='circle', parent=self.mainSRTCtrlSpace)
-        self.mainSRTCtrl.scalePoints(Vec3(9.2, 1.0, 9.2))
 
         self.offsetCtrlSpace = CtrlSpace('Offset', parent=self.mainSRTCtrl)
         self.offsetCtrl = Control('Offset', shape='circle', parent=self.offsetCtrlSpace)
         self.offsetCtrl.setColor("orange")
-        self.offsetCtrl.scalePoints(Vec3(8.7, 1.0, 8.7))
 
         # Add Component Params to IK control
         mainSrtSettingsAttrGrp = AttributeGroup('DisplayInfo_MainSrtSettings', parent=self.mainSRTCtrl)
@@ -225,16 +237,25 @@ class MainSrtComponentRig(MainSrtComponent):
 
         super(MainSrtComponentRig, self).loadData( data )
 
-        self.mainSRTCtrlSpace.xfo = data['mainSrtXfo']
-        self.mainSRTCtrl.xfo = data['mainSrtXfo']
-        self.offsetCtrlSpace.xfo = data['mainSrtXfo']
-        self.offsetCtrl.xfo = data['mainSrtXfo']
+        # ================
+        # Resize Controls
+        # ================
+        self.mainSRTCtrl.scalePoints(Vec3(data["mainSrtSize"], 1.0, data["mainSrtSize"]))
+        self.offsetCtrl.scalePoints(Vec3(data["mainSrtSize"] - 0.5, 1.0, data["mainSrtSize"] - 0.5))
+
+        # =======================
+        # Set Control Transforms
+        # =======================
+        self.mainSRTCtrlSpace.xfo = data["mainSrtXfo"]
+        self.mainSRTCtrl.xfo = data["mainSrtXfo"]
+        self.offsetCtrlSpace.xfo = data["mainSrtXfo"]
+        self.offsetCtrl.xfo = data["mainSrtXfo"]
 
         # ============
         # Set IO Xfos
         # ============
-        self.srtOutputTgt = data['mainSrtXfo']
-        self.offsetOutputTgt = data['mainSrtXfo']
+        self.srtOutputTgt = data["mainSrtXfo"]
+        self.offsetOutputTgt = data["mainSrtXfo"]
 
         self.rigScaleSpliceOp.evaluate()
 
