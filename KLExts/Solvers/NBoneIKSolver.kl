@@ -65,7 +65,7 @@ function NBoneIKSolver.solve!
     }
     this.initPose = fkPose;
     fkPose[fkcontrols.size] = fkPose[fkcontrols.size-1];
-    fkPose[fkcontrols.size].tr = fkPose[fkcontrols.size-1].transformVector(fkPose[fkcontrols.size-2].inverse().transformVector(fkPose[fkcontrols.size-1].tr));
+    fkPose[fkcontrols.size].tr = fkPose[fkcontrols.size-1].transformVector(Vec3(tipBoneLen, 0.0, 0.0));
   }
 
   Xfo xfoPose[];
