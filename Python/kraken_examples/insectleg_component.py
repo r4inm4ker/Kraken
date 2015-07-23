@@ -398,7 +398,7 @@ class InsectLegComponentRig(InsectLegComponent):
             boneName = 'bone' + str(i + 1).zfill(2) + 'FK'
             fkCtrlSpace = CtrlSpace(boneName, parent=parent)
 
-            fkCtrl = Control(boneName, parent=fkCtrlSpace, shape="cube")
+            fkCtrl = Control(boneName, parent=fkCtrlSpace, shape="fkCircle")
             fkCtrl.alignOnXAxis()
             fkCtrl.lockScale(x=True, y=True, z=True)
             fkCtrl.lockTranslation(x=True, y=True, z=True)
