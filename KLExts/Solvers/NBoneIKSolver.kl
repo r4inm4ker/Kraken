@@ -65,16 +65,21 @@ function NBoneIKSolver.solve!
     }
     this.initPose = fkPose;
     fkPose[fkcontrols.size] = fkPose[fkcontrols.size-1];
-    fkPose[fkcontrols.size].tr = fkPose[fkcontrols.size-1].transformVector(Vec3(tipBoneLen, 0.0, 0.0));
+    fkPose[fkcontrols.size].tr = fkPose[fkcontrols.size-1].transformVector(fkPose[fkcontrols.size-2].inverse().transformVector(fkPose[fkcontrols.size-1].tr));
   }
 
   Xfo xfoPose[];
+  Vec3 boneVectors[];
   xfoPose.resize(fkcontrols.size+1);
+  boneVectors.resize(fkcontrols.size);
   for(UInt32 i=0; i < fkcontrols.size; i++) {
     xfoPose[i] = Xfo(fkcontrols[i]);
+    if(i>0)
+      boneVectors[i-1] = xfoPose[i-1].inverse().transformVector(xfoPose[i].tr);
   }
+  boneVectors[boneVectors.size-1] = Vec3(tipBoneLen, 0.0, 0.0);
   xfoPose[fkcontrols.size] = xfoPose[fkcontrols.size-1];
-  xfoPose[fkcontrols.size].tr = xfoPose[fkcontrols.size-1].transformVector(Vec3(tipBoneLen, 0.0, 0.0));
+  xfoPose[fkcontrols.size].tr = xfoPose[fkcontrols.size-1].transformVector(boneVectors[boneVectors.size-1]);
 
   if(ikblend > 0.0) {
     UInt32 ikIndex = 0;
@@ -117,7 +122,7 @@ function NBoneIKSolver.solve!
     for(UInt32 i=ikIndex; i < xfoPose.size; i++) {
       xfoPose[i].ori = xfoPose[i ].ori.sphericalLinearInterpolate(ikPose[i- ikIndex].ori, ikblend);
       if(i>0)
-        xfoPose[i].tr = xfoPose[i-1].transformVector(Vec3(tipBoneLen, 0.0, 0.0));
+        xfoPose[i].tr = xfoPose[i-1].transformVector(boneVectors[i-1]);
     }
   }
 
@@ -128,10 +133,11 @@ function NBoneIKSolver.solve!
 
   // Set debugging visibility.
   this.setDebug(drawDebug);
-  if(this.drawDebug){
+  if(this.drawDebug) {
+
     Color boneColor(1.0, 1.0, 0);
     for(UInt32 i=0; i<pose.size; i++){
-      Scalar boneLength = xfoPose[i-1].tr.distanceTo(xfoPose[i].tr);
+      Scalar boneLength = boneVectors[i].length();
       etDrawBone(this.handle.rootTransform, 'bone'+i, pose[i], boneLength, boneLength * 0.15, boneColor);
     }
   }
