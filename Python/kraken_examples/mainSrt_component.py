@@ -257,8 +257,6 @@ class MainSrtComponentRig(MainSrtComponent):
         self.srtOutputTgt = data["mainSrtXfo"]
         self.offsetOutputTgt = data["mainSrtXfo"]
 
-        self.rigScaleSpliceOp.evaluate()
-
 
 from kraken.core.kraken_system import KrakenSystem
 ks = KrakenSystem.getInstance()
