@@ -409,7 +409,7 @@ class Config(object):
                                                 [-0.5, 0.0, -0.5]
                                                ],
                                      "degree": 1,
-                                     "closed": False
+                                     "closed": True
                                     }
                                    ],
                          "triangle": [
