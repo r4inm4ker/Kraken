@@ -143,7 +143,7 @@ class KrakenMenu(QtGui.QWidget):
     # Events
     # =======
     def updateRigNameLabel(self):
-        krakenUIWidget = self.parentWidget().getKrakenUI()
+        krakenUIWidget = self.window().getKrakenUI()
 
         graphViewWidget = krakenUIWidget.graphViewWidget
         newRigName = graphViewWidget.guideRig.getName()
