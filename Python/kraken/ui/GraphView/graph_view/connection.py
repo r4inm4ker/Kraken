@@ -7,7 +7,7 @@ from PySide import QtGui, QtCore
 
 
 class Connection(QtGui.QGraphicsPathItem):
-    __defaultPen = QtGui.QPen(QtGui.QColor(168, 134, 3), 2.0)
+    __defaultPen = QtGui.QPen(QtGui.QColor(168, 134, 3), 1.5)
 
     def __init__(self, graph, srcPortCircle, dstPortCircle):
         super(Connection, self).__init__()
@@ -15,10 +15,19 @@ class Connection(QtGui.QGraphicsPathItem):
         self.__graph = graph
         self.__srcPortCircle = srcPortCircle
         self.__dstPortCircle = dstPortCircle
-        self.__defaultPen = QtGui.QPen(self.__srcPortCircle.getColor(), 2.0)
-        self.__hoverPen = QtGui.QPen(QtCore.Qt.SolidLine)
-        self.__hoverPen.setWidth(2.5)
-        self.__hoverPen.setColor(self.__srcPortCircle.getColor().lighter())
+
+        connectionColor = QtGui.QColor(0, 0, 0)
+        connectionColor.setRgbF(*self.__srcPortCircle.getColor().getRgbF())
+        connectionColor.setAlpha(125)
+
+        self.__defaultPen = QtGui.QPen(connectionColor, 1.5, s=QtCore.Qt.DashLine)
+        self.__defaultPen.setDashPattern([1, 2, 2, 1])
+
+        connectionHoverColor = connectionColor
+        connectionHoverColor.setAlpha(255)
+
+        self.__hoverPen = QtGui.QPen(connectionHoverColor, 1.5, s=QtCore.Qt.DashLine)
+        self.__hoverPen.setDashPattern([1, 2, 2, 1])
 
         self.setPen(self.__defaultPen)
         self.setZValue(-1)
