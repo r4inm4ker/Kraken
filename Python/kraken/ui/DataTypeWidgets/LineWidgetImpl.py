@@ -27,6 +27,11 @@ class LineWidget(AttributeWidget):
                 if self._value != value:
                     self._value = value
                     self._invokeSetter()
+
+                    # The attribute might have modified the string value, (due to name collisions for example)
+                    # So retrieve it again here. Note: Ideally we should be listening to events from the attributes.
+                    self._widget.setText(attribute.getValue())
+
             self._widget.editingFinished.connect(invokeSetter)
         else:
             self._widget.setReadOnly(True)
