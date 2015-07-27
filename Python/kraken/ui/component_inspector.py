@@ -36,10 +36,11 @@ class _NameAttributeProxy(object):
 
 class _LocationAttributeProxy(object):
 
-    def __init__(self, component, nodeItem):
+    def __init__(self, component, nodeItem, nameWidget):
         super(_LocationAttributeProxy, self).__init__()
         self.component = component
         self.nodeItem = nodeItem
+        self.nameWidget = nameWidget
 
     def getName(self):
         return 'location'
@@ -50,6 +51,12 @@ class _LocationAttributeProxy(object):
         self.component.setLocation(value)
         if origName != self.component.getDecoratedName():
             self.nodeItem.setName(self.component.getDecoratedName())
+
+            # this is a hack to force the UI to update to reflect changes in the rig.
+            # Ideally, we should be using an MVC pattern where the UI listens to changes
+            # in the model, but we don't have an event system in KRaken. Instead we have to
+            # push changes to the UI widgets. (an awkward and not-scalable solution.)
+            self.nameWidget.setWidgetValue(self.component.getName())
 
     def getValue(self):
         return self.component.getLocation()
@@ -154,7 +161,7 @@ class ComponentInspector(QtGui.QWidget):
         nameWidget = AttributeWidget.constructAttributeWidget( nameAttributeProxy, parentWidget=self)
         self.addAttrWidget("name", nameWidget)
 
-        locationAttributeProxy = _LocationAttributeProxy(component=self.component, nodeItem=self.nodeItem)
+        locationAttributeProxy = _LocationAttributeProxy(component=self.component, nodeItem=self.nodeItem, nameWidget=nameWidget)
         locationWidget = AttributeWidget.constructAttributeWidget( locationAttributeProxy, parentWidget=self)
         self.addAttrWidget("location", locationWidget)
 
