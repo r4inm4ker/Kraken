@@ -173,10 +173,12 @@ class MainSrtComponentRig(MainSrtComponent):
         # Add Controls
         self.mainSRTCtrlSpace = CtrlSpace('SRT', parent=self.ctrlCmpGrp)
         self.mainSRTCtrl = Control('SRT', shape='circle', parent=self.mainSRTCtrlSpace)
+        self.mainSRTCtrl.lockScale(x=True, y=True, z=True)
 
         self.offsetCtrlSpace = CtrlSpace('Offset', parent=self.mainSRTCtrl)
         self.offsetCtrl = Control('Offset', shape='circle', parent=self.offsetCtrlSpace)
         self.offsetCtrl.setColor("orange")
+        self.offsetCtrl.lockScale(x=True, y=True, z=True)
 
         # Add Component Params to IK control
         mainSrtSettingsAttrGrp = AttributeGroup('DisplayInfo_MainSrtSettings', parent=self.mainSRTCtrl)
