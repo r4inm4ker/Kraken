@@ -519,6 +519,18 @@ class Config(object):
 
 
     @classmethod
+    def setInstance(cls):
+        """Sets this class t be the singleton instance Config.
+
+        Returns:
+            object: The singleton config instance.
+
+        """
+
+        Config.__instance = cls()
+
+
+    @classmethod
     def clearInstance(cls):
         """Clears the instance variable of the config.
 
