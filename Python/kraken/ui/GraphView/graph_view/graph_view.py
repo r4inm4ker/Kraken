@@ -32,7 +32,7 @@ class GraphView(QtGui.QGraphicsView):
     # During the movement of the nodes, this signal is emitted with the incremental delta.
     selectionMoved = QtCore.Signal(set, QtCore.QPointF)
 
-    # After moving the nodes interactively, this signal is emitted with the final delta. 
+    # After moving the nodes interactively, this signal is emitted with the final delta.
     endSelectionMoved = QtCore.Signal(set, QtCore.QPointF)
 
 
@@ -60,7 +60,7 @@ class GraphView(QtGui.QGraphicsView):
         self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
 
         # Explicitly set the scene rect. This ensures all view parameters will be explicitly controlled
-        # in the event handlers of this class. 
+        # in the event handlers of this class.
         size = QtCore.QSize(600, 400);
         self.resize(size)
         self.setSceneRect(-size.width() * 0.5, -size.height() * 0.5, size.width(), size.height())
@@ -68,7 +68,7 @@ class GraphView(QtGui.QGraphicsView):
         self.setAcceptDrops(True)
         self.reset()
 
-        
+
     def getGraphViewWidget(self):
         return self.__graphViewWidget
 
@@ -166,7 +166,7 @@ class GraphView(QtGui.QGraphicsView):
 
 
     def deselectNode(self, node, emitSignal=True):
-                
+
         if node not in self.__selection:
             raise IndexError("Node is not in selection!")
 
@@ -289,7 +289,7 @@ class GraphView(QtGui.QGraphicsView):
         if emitSignal:
             self.selectionMoved.emit(self.__selection, delta)
 
-    # After moving the nodes interactively, this signal is emitted with the final delta. 
+    # After moving the nodes interactively, this signal is emitted with the final delta.
     def endMoveSelectedNodes(self, delta):
         self.endSelectionMoved.emit(self.__selection, delta)
 
@@ -349,7 +349,7 @@ class GraphView(QtGui.QGraphicsView):
     ## Events
 
     def mousePressEvent(self, event):
-        
+
         if event.button() is QtCore.Qt.MouseButton.LeftButton and self.itemAt(event.pos()) is None:
             self.beginNodeSelection.emit()
             self._manipulationMode = 1
@@ -441,7 +441,7 @@ class GraphView(QtGui.QGraphicsView):
         transform = self.transform()
 
         # Limit zoom to 3x
-        if transform.m22() * zoomFactor >= 2.0 or transform.m22() * zoomFactor <= 0.25:
+        if transform.m22() * zoomFactor >= 2.0:
             return
 
         self.scale(zoomFactor, zoomFactor)
