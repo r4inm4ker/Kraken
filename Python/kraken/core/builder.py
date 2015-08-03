@@ -469,7 +469,7 @@ class Builder(object):
         buildName = kObject.getBuildName()
 
         if self._debugMode:
-            print "building:" + kObject.getPath()
+            print "building:" + kObject.getPath() + " as:" + buildName
 
         # Build Object
         if kObject.isTypeOf("Container"):

@@ -1,35 +1,35 @@
 Failed to find DCC builder. Falling back to Python builder.
-building:insectLeg
-building:insectLeg.controls
-building:insectLeg.controls.insectLeg
-building:insectLeg.controls.insectLeg.inputs
-building:insectLeg.controls.insectLeg.inputs.rootInput
-building:insectLeg.controls.insectLeg.outputs
-building:insectLeg.controls.insectLeg.outputs.legEndXfoOutput
-building:insectLeg.controls.insectLeg.outputs.legEndPosOutput
-building:insectLeg.controls.insectLeg.outputs.bone01
-building:insectLeg.controls.insectLeg.outputs.bone02
-building:insectLeg.controls.insectLeg.outputs.bone03
-building:insectLeg.controls.insectLeg.outputs.bone04
-building:insectLeg.controls.insectLeg.ChainBase
-building:insectLeg.controls.insectLeg.bone01FK
-building:insectLeg.controls.insectLeg.bone01FK.bone01FK
-building:insectLeg.controls.insectLeg.bone01FK.bone01FK.bone02FK
-building:insectLeg.controls.insectLeg.bone01FK.bone01FK.bone02FK.bone02FK
-building:insectLeg.controls.insectLeg.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK
-building:insectLeg.controls.insectLeg.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK
-building:insectLeg.controls.insectLeg.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK.bone04FK
-building:insectLeg.controls.insectLeg.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK.bone04FK.bone04FK
-building:insectLeg.controls.insectLeg.IK
-building:insectLeg.controls.insectLeg.IK.IK
-building:insectLeg.controls.insectLeg.UpV
-building:insectLeg.controls.insectLeg.UpV.UpV
-building:insectLeg.deformers
-building:insectLeg.deformers.insectLeg
-building:insectLeg.deformers.insectLeg.bone01
-building:insectLeg.deformers.insectLeg.bone02
-building:insectLeg.deformers.insectLeg.bone03
-building:insectLeg.deformers.insectLeg.bone04
+building:insectLeg as:LinsectLeg
+building:insectLeg.controls as:controls
+building:insectLeg.controls.insectLeg as:insectLeg_L_cmp
+building:insectLeg.controls.insectLeg.inputs as:insectLeg_L_inputs_hrc
+building:insectLeg.controls.insectLeg.inputs.rootInput as:insectLeg_L_rootInput_cmpIn
+building:insectLeg.controls.insectLeg.outputs as:insectLeg_L_outputs_hrc
+building:insectLeg.controls.insectLeg.outputs.legEndXfoOutput as:insectLeg_L_legEndXfoOutput_cmpOut
+building:insectLeg.controls.insectLeg.outputs.legEndPosOutput as:insectLeg_L_legEndPosOutput_cmpOut
+building:insectLeg.controls.insectLeg.outputs.bone01 as:insectLeg_L_bone01_loc
+building:insectLeg.controls.insectLeg.outputs.bone02 as:insectLeg_L_bone02_loc
+building:insectLeg.controls.insectLeg.outputs.bone03 as:insectLeg_L_bone03_loc
+building:insectLeg.controls.insectLeg.outputs.bone04 as:insectLeg_L_bone04_loc
+building:insectLeg.controls.insectLeg.ChainBase as:insectLeg_L_ChainBase_loc
+building:insectLeg.controls.insectLeg.bone01FK as:insectLeg_L_bone01FK_ctrlSpace
+building:insectLeg.controls.insectLeg.bone01FK.bone01FK as:insectLeg_L_bone01FK_ctrl
+building:insectLeg.controls.insectLeg.bone01FK.bone01FK.bone02FK as:insectLeg_L_bone02FK_ctrlSpace
+building:insectLeg.controls.insectLeg.bone01FK.bone01FK.bone02FK.bone02FK as:insectLeg_L_bone02FK_ctrl
+building:insectLeg.controls.insectLeg.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK as:insectLeg_L_bone03FK_ctrlSpace
+building:insectLeg.controls.insectLeg.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK as:insectLeg_L_bone03FK_ctrl
+building:insectLeg.controls.insectLeg.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK.bone04FK as:insectLeg_L_bone04FK_ctrlSpace
+building:insectLeg.controls.insectLeg.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK.bone04FK.bone04FK as:insectLeg_L_bone04FK_ctrl
+building:insectLeg.controls.insectLeg.IK as:insectLeg_L_IK_ctrlSpace
+building:insectLeg.controls.insectLeg.IK.IK as:insectLeg_L_IK_ctrl
+building:insectLeg.controls.insectLeg.UpV as:insectLeg_L_UpV_ctrlSpace
+building:insectLeg.controls.insectLeg.UpV.UpV as:insectLeg_L_UpV_ctrl
+building:insectLeg.deformers as:deformers
+building:insectLeg.deformers.insectLeg as:insectLeg_L_cmp
+building:insectLeg.deformers.insectLeg.bone01 as:insectLeg_L_bone01_def
+building:insectLeg.deformers.insectLeg.bone02 as:insectLeg_L_bone02_def
+building:insectLeg.deformers.insectLeg.bone03 as:insectLeg_L_bone03_def
+building:insectLeg.deformers.insectLeg.bone04 as:insectLeg_L_bone04_def
 insectLeg:L
 insectLeg:L.controls
 insectLeg:L.controls.insectLeg:L
