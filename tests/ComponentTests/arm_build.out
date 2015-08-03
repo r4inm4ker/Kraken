@@ -1,31 +1,31 @@
 Failed to find DCC builder. Falling back to Python builder.
-building:Arm
-building:Arm.controls
-building:Arm.controls.Arm
-building:Arm.controls.Arm.inputs
-building:Arm.controls.Arm.inputs.globalSRT
-building:Arm.controls.Arm.inputs.clavicleEnd
-building:Arm.controls.Arm.outputs
-building:Arm.controls.Arm.outputs.bicep
-building:Arm.controls.Arm.outputs.forearm
-building:Arm.controls.Arm.outputs.armEndXfo
-building:Arm.controls.Arm.outputs.hand
-building:Arm.controls.Arm.bicepFK
-building:Arm.controls.Arm.bicepFK.bicepFK
-building:Arm.controls.Arm.bicepFK.bicepFK.forearmFK
-building:Arm.controls.Arm.bicepFK.bicepFK.forearmFK.forearmFK
-building:Arm.controls.Arm.hand
-building:Arm.controls.Arm.hand.hand
-building:Arm.controls.Arm.IK
-building:Arm.controls.Arm.IK.IK
-building:Arm.controls.Arm.UpV
-building:Arm.controls.Arm.UpV.UpV
-building:Arm.deformers
-building:Arm.deformers.Arm
-building:Arm.deformers.Arm.bicep
-building:Arm.deformers.Arm.forearm
-building:Arm.deformers.Arm.wrist
-building:Arm.deformers.Arm.hand
+building:Arm as:LArm
+building:Arm.controls as:controls
+building:Arm.controls.Arm as:Arm_L_cmp
+building:Arm.controls.Arm.inputs as:Arm_L_inputs_hrc
+building:Arm.controls.Arm.inputs.globalSRT as:Arm_L_globalSRT_cmpIn
+building:Arm.controls.Arm.inputs.clavicleEnd as:Arm_L_clavicleEnd_cmpIn
+building:Arm.controls.Arm.outputs as:Arm_L_outputs_hrc
+building:Arm.controls.Arm.outputs.bicep as:Arm_L_bicep_cmpOut
+building:Arm.controls.Arm.outputs.forearm as:Arm_L_forearm_cmpOut
+building:Arm.controls.Arm.outputs.armEndXfo as:Arm_L_armEndXfo_cmpOut
+building:Arm.controls.Arm.outputs.hand as:Arm_L_hand_cmpOut
+building:Arm.controls.Arm.bicepFK as:Arm_L_bicepFK_ctrlSpace
+building:Arm.controls.Arm.bicepFK.bicepFK as:Arm_L_bicepFK_ctrl
+building:Arm.controls.Arm.bicepFK.bicepFK.forearmFK as:Arm_L_forearmFK_ctrlSpace
+building:Arm.controls.Arm.bicepFK.bicepFK.forearmFK.forearmFK as:Arm_L_forearmFK_ctrl
+building:Arm.controls.Arm.hand as:Arm_L_hand_ctrlSpace
+building:Arm.controls.Arm.hand.hand as:Arm_L_hand_ctrl
+building:Arm.controls.Arm.IK as:Arm_L_IK_ctrlSpace
+building:Arm.controls.Arm.IK.IK as:Arm_L_IK_ctrl
+building:Arm.controls.Arm.UpV as:Arm_L_UpV_ctrlSpace
+building:Arm.controls.Arm.UpV.UpV as:Arm_L_UpV_ctrl
+building:Arm.deformers as:deformers
+building:Arm.deformers.Arm as:Arm_L_cmp
+building:Arm.deformers.Arm.bicep as:Arm_L_bicep_def
+building:Arm.deformers.Arm.forearm as:Arm_L_forearm_def
+building:Arm.deformers.Arm.wrist as:Arm_L_wrist_def
+building:Arm.deformers.Arm.hand as:Arm_L_hand_def
 Arm:L
 Arm:L.controls
 Arm:L.controls.Arm:L
