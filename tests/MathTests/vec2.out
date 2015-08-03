@@ -1,0 +1,5 @@
+vec2:Vec2(2.0,0.0)
+length:2.0
+vec2:Vec2(1.0,2.0)
+length:2.23606801033
+clone:Vec2(1.0,2.0)
