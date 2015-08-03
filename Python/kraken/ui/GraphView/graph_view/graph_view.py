@@ -441,7 +441,7 @@ class GraphView(QtGui.QGraphicsView):
         transform = self.transform()
 
         # Limit zoom to 3x
-        if transform.m22() * zoomFactor >= 2.0 or transform.m22() * zoomFactor <= 0.25:
+        if transform.m22() * zoomFactor >= 2.0:
             return
 
         self.scale(zoomFactor, zoomFactor)
