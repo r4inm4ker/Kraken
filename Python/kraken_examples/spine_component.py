@@ -102,11 +102,11 @@ class SpineComponentGuide(SpineComponent):
 
         data = super(SpineComponentGuide, self).saveData()
 
-        data['cogPosition'] = self.cog.xfo.tr,
-        data['spine01Position'] = self.spine01Ctrl.xfo.tr,
-        data['spine02Position'] = self.spine02Ctrl.xfo.tr,
-        data['spine03Position'] = self.spine03Ctrl.xfo.tr,
-        data['spine04Position'] = self.spine04Ctrl.xfo.tr,
+        data['cogPosition'] = self.cog.xfo.tr
+        data['spine01Position'] = self.spine01Ctrl.xfo.tr
+        data['spine02Position'] = self.spine02Ctrl.xfo.tr
+        data['spine03Position'] = self.spine03Ctrl.xfo.tr
+        data['spine04Position'] = self.spine04Ctrl.xfo.tr
         data['numDeformers'] = self.numDeformersAttr.getValue()
 
         return data
