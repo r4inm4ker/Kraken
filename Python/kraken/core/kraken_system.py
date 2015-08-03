@@ -326,9 +326,10 @@ class KrakenSystem(object):
                             modulePath = parentModulePath + '.' + os.path.basename(path)
                         moduleFilefound = True
 
-            for item in contents:
-                if os.path.isfile(os.path.join(path, item)):
-                    if modulePath != '':
+
+            if moduleFilefound:
+                for item in contents:
+                    if os.path.isfile(os.path.join(path, item)):
                         # parse all the files of given path and import python modules
                         if item.endswith(".py") and item != "__init__.py":
                             module = modulePath+"."+item[:-3]
@@ -348,7 +349,7 @@ class KrakenSystem(object):
             for item in contents:
                 if os.path.isdir(os.path.join(path, item)):
                     if moduleFilefound:
-                        __importDirRecursive(os.path.join(path, item), modulePath+"."+item)
+                        __importDirRecursive(os.path.join(path, item), modulePath)
                     else:
                         __importDirRecursive(os.path.join(path, item))
 
