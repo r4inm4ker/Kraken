@@ -22,13 +22,22 @@ class NodeList(QtGui.QListWidget):
 
     def eventFilter(self, object, event):
         if event.type()== QtCore.QEvent.WindowDeactivate:
-            self.parent().hide()
+            self.parent().close()
             return True
         elif event.type()== QtCore.QEvent.FocusOut:
-            self.parent().hide()
+            self.parent().close()
             return True
 
         return False
+
+
+class SearchLineEdit(QtGui.QLineEdit):
+
+    def __init__(self, parent):
+        super(SearchLineEdit, self).__init__(parent)
+
+    def focusOutEvent(self, event):
+        self.parent().close()
 
 
 class ContextualNodeList(QtGui.QWidget):
@@ -38,9 +47,9 @@ class ContextualNodeList(QtGui.QWidget):
 
         self.setFixedSize(250, 200)
 
-        self.searchLineEdit = QtGui.QLineEdit(parent)
+        self.searchLineEdit = SearchLineEdit(self)
         self.searchLineEdit.setObjectName('contextNodeListSearchLine')
-        self.searchLineEdit.setFocusPolicy(QtCore.Qt.StrongFocus)
+        # self.searchLineEdit.setFocusPolicy(QtCore.Qt.StrongFocus)
         self.searchLineEdit.setFocus()
 
         self.nodesList = NodeList(self)
@@ -91,7 +100,7 @@ class ContextualNodeList(QtGui.QWidget):
             self.graph.addNode(KNode(self.graph, component))
 
             if self.isVisible():
-                self.hide()
+                self.close()
 
     def showClosestNames(self):
 
@@ -126,7 +135,7 @@ class ContextualNodeList(QtGui.QWidget):
         if event.key() == QtCore.Qt.Key_Escape:
             if self.isVisible():
                 self.searchLineEdit.clear()
-                self.hide()
+                self.close()
 
         elif event.key() == QtCore.Qt.Key_Up or event.key() == QtCore.Qt.Key_Down:
             if event.key() == QtCore.Qt.Key_Up:
@@ -145,7 +154,9 @@ class ContextualNodeList(QtGui.QWidget):
         elif event.key() == QtCore.Qt.Key_Enter or event.key() == QtCore.Qt.Key_Return:
             if self.isVisible():
                 self.createNode()
-                self.hide()
+                self.close()
 
         return False
 
+    def focusOutEvent(self, event):
+        self.close()

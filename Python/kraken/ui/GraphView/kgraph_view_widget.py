@@ -58,10 +58,6 @@ class KGraphViewWidget(GraphViewWidget):
 
         self.newRigPreset()
 
-        self.__contextualNodeList = None
-
-    def getContextualNodeList(self):
-        return self.__contextualNodeList
 
     def editRigName(self):
         dialog = QtGui.QInputDialog(self)
@@ -188,14 +184,11 @@ class KGraphViewWidget(GraphViewWidget):
 
     def openContextualNodeList(self):
         pos = self.mapFromGlobal(QtGui.QCursor.pos());
-        if not self.__contextualNodeList:
-            self.__contextualNodeList = ContextualNodeList(self)
-        else:
-            # Ensures that the node list is reset to list all components
-            self.__contextualNodeList.showClosestNames()
+
+        contextualNodeList = ContextualNodeList(self)
 
         scenepos = self.graphView.mapToScene(pos)
-        self.__contextualNodeList.showAtPos(pos, scenepos, self.graphView)
+        contextualNodeList.showAtPos(pos, scenepos, self.graphView)
 
     # ===============
     # Signal Handlers
