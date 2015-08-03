@@ -55,14 +55,14 @@ class ArmComponent(BaseExampleComponent):
 class ArmComponentGuide(ArmComponent):
     """Arm Component Guide"""
 
-    def __init__(self, name='arm', parent=None, data=None):
+    def __init__(self, name='arm', parent=None):
 
         Profiler.getInstance().push("Construct Arm Guide Component:" + name)
         super(ArmComponentGuide, self).__init__(name, parent)
 
-        # =========
+        # ===========
         # Attributes
-        # =========
+        # ===========
         # Add Component Params to IK control
         guideSettingsAttrGrp = AttributeGroup("GuideSettings", parent=self)
 
@@ -82,8 +82,7 @@ class ArmComponentGuide(ArmComponent):
         self.handCtrl = Control('hand', parent=self.ctrlCmpGrp, shape="cube")
         self.handCtrl.setColor('blue')
 
-        if data is None:
-            data = {
+        data = {
             "name": name,
             "location": "L",
             "bicepXfo": Xfo(Vec3(2.27, 15.295, -0.753)),
