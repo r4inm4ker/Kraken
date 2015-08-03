@@ -15,6 +15,7 @@ from kraken.core.objects.attributes.string_attribute import StringAttribute
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
 from kraken.core.objects.component_group import ComponentGroup
+from kraken.core.objects.components.component_output import ComponentOutput
 from kraken.core.objects.hierarchy_group import HierarchyGroup
 from kraken.core.objects.locator import Locator
 from kraken.core.objects.joint import Joint
@@ -362,7 +363,7 @@ class FKChainComponentRig(FKChainComponent):
         # Add new deformers and outputs
         for i in xrange(len(self.boneOutputsTgt), numDeformers):
             name = 'bone' + str(i + 1).zfill(2)
-            legOutput = Locator(name, parent=self.outputHrcGrp)
+            legOutput = ComponentOutput(name, parent=self.outputHrcGrp)
             self.boneOutputsTgt.append(legOutput)
 
         for i in xrange(len(self.deformerJoints), numDeformers):
