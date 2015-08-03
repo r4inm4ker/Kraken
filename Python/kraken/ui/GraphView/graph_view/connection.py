@@ -35,6 +35,12 @@ class Connection(QtGui.QGraphicsPathItem):
         self.setAcceptHoverEvents(True)
         self.connect()
 
+    def getSrcPortCircle(self):
+        return self.__srcPortCircle
+
+    def getDstPortCircle(self):
+        return self.__dstPortCircle
+
     def getSrcPort(self):
         return self.__srcPortCircle.getPort()
 
@@ -94,13 +100,13 @@ class Connection(QtGui.QGraphicsPathItem):
             delta = pos - self._lastDragPoint
             if delta.x() != 0:
 
+                self.__graph.removeConnection(self)
+
                 import mouse_grabber
                 if delta.x() < 0:
                     mouse_grabber.MouseGrabber(self.__graph, pos, self.__srcPortCircle, 'In')
                 else:
                     mouse_grabber.MouseGrabber(self.__graph, pos, self.__dstPortCircle, 'Out')
-
-                self.__graph.removeConnection(self)
 
         else:
             super(Connection, self).mouseMoveEvent(event)
