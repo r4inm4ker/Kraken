@@ -3,6 +3,8 @@ import sys
 import webbrowser
 
 from PySide import QtGui, QtCore
+from kraken.core.kraken_system import KrakenSystem
+from kraken.core.configs.config import Config
 
 
 class KrakenMenu(QtGui.QWidget):
@@ -89,11 +91,23 @@ class KrakenMenu(QtGui.QWidget):
         logoPixmap = QtGui.QPixmap(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'images', 'KrakenUI_Logo.png'))
         logoWidget.setPixmap(logoPixmap)
 
+
+
+        self.configsWidget = QtGui.QComboBox(self)
+        self.configsWidget.setMinimumWidth(160)
+        self.configsWidget.addItem('Default Config')
+
+        configs = KrakenSystem.getInstance().getConfigClassNames()
+        for config in configs:
+            self.configsWidget.addItem(config.split('.')[-1])
+
         self.rigNameLabel = RigNameLabel('Rig Name:')
 
         # Add Widgets
         self.menuLayout.addWidget(logoWidget, 0)
         self.menuLayout.addWidget(self.menuBar, 3)
+        self.menuLayout.addWidget(self.configsWidget, 0)
+        self.menuLayout.addSpacing(10)
         self.menuLayout.addWidget(self.rigNameLabel, 0)
 
         self.setLayout(self.menuLayout)
@@ -135,6 +149,8 @@ class KrakenMenu(QtGui.QWidget):
         # Help Menu Connections
         self.onlineHelpAction.triggered.connect(self.openHelp)
 
+        self.configsWidget.currentIndexChanged.connect(self.setCurrentConfig)
+
         # Rig Name Label
         self.rigNameLabel.clicked.connect(graphViewWidget.editRigName)
 
@@ -149,6 +165,17 @@ class KrakenMenu(QtGui.QWidget):
         newRigName = graphViewWidget.guideRig.getName()
 
         self.rigNameLabel.setText('Rig Name: ' + newRigName)
+
+
+    def setCurrentConfig(self):
+        index = self.configsWidget.currentIndex()
+        if index == 0:
+            Config.makeCurrent()
+        else:
+            ks = KrakenSystem.getInstance()
+            configs = ks.getConfigClassNames()
+            configClass = ks.getConfigClass(configs[index-1])
+            configClass.makeCurrent()
 
 
 class RigNameLabel(QtGui.QLabel):

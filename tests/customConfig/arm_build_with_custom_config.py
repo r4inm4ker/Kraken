@@ -60,7 +60,7 @@ builder = plugins.getBuilder()
 builder.build(arm)
 
 # Set the custom config as the new singleton value.
-CustomConfig.setInstance()
+CustomConfig.makeCurrent()
 
 builder = plugins.getBuilder()
 builder.build(arm)

@@ -10,10 +10,11 @@ import sys
 import json
 import imp
 import importlib
-import kraken
-from kraken.core.profiler import Profiler
+from collections import OrderedDict
 import FabricEngine.Core
 
+import kraken
+from kraken.core.profiler import Profiler
 
 class KrakenSystem(object):
     """The KrakenSystem is a singleton object used to provide an interface with
@@ -31,7 +32,8 @@ class KrakenSystem(object):
         self.registeredTypes = None
         self.loadedExtensions = []
 
-        self.registeredComponents = {}
+        self.registeredConfigs = OrderedDict()
+        self.registeredComponents = OrderedDict()
 
 
     def loadCoreClient(self):
@@ -109,6 +111,9 @@ class KrakenSystem(object):
             self.loadedExtensions.append(extension)
             Profiler.getInstance().pop()
 
+    # ==============
+    # RTVal Methods
+    # ==============
 
     def constructRTVal(self, dataType, defaultValue=None):
         """Constructs a new RTVal using the given name and optional devault value.
@@ -199,6 +204,58 @@ class KrakenSystem(object):
         else:
             return "None"
 
+    # ==================
+    # Config Methods
+    # ==================
+
+    def registerConfig(self, configClass):
+        """Registers a config Python class with the KrakenSystem so ti can be built by the rig builder.
+
+        Args:
+            configClass (str): The Python class of the config
+
+        """
+
+        configModulePath = configClass.__module__ + "." + configClass.__name__
+        print "registerConfig:" +configModulePath
+        if configModulePath in self.registeredConfigs:
+            # we allow reregistring of configs because as a componet's class is edited
+            # it will be re-imported by python(in Maya), and the classes reregistered.
+            pass
+
+        self.registeredConfigs[configModulePath] = configClass
+
+
+    def getConfigClass(self, className):
+        """Returns the registered Python config class with the given name
+
+        Args:
+            className (str): The name of the Python config class
+
+        Returns:
+            object: The Python config class
+
+        """
+
+        if className not in self.registeredConfigs:
+            raise Exception("Config with that class not registered:" + className)
+
+        return self.registeredConfigs[className]
+
+
+    def getConfigClassNames(self):
+        """Returns the names of the registered Python config classes
+
+        Returns:
+            list: The array of config class names.
+
+        """
+
+        return self.registeredConfigs.keys()
+
+    # ==================
+    # Component Methods
+    # ==================
 
     def registerComponent(self, componentClass):
         """Registers a component Python class with the KrakenSystem so ti can be built by the rig builder.
@@ -245,7 +302,7 @@ class KrakenSystem(object):
         return self.registeredComponents.keys()
 
 
-    def loadComponentModules(self, iniFilePath=None):
+    def loadComponentModules(self):
         """Loads all the component modules specified in the 'KRAKEN_COMPONENT_PATHS' environment variable.
 
         If the environment variable is not set, then the kraken_examples are loaded.
@@ -276,10 +333,12 @@ class KrakenSystem(object):
                         if item.endswith(".py") and item != "__init__.py":
                             module = modulePath+"."+item[:-3]
                             try:
+                                print module
                                 importlib.import_module(module)
 
                             except ImportError, e:
-                                print "Error loading Kraken components from environment variable:" + str(pathsVar)
+                                print e
+                                print "Error loading Kraken components from environment variable:" + str(path)
                                 print "The paths must point to the root of importable python modules."
                                 for arg in e.args:
                                     print arg
@@ -305,7 +364,6 @@ class KrakenSystem(object):
         if pathsVar is not None:
             pathsList = pathsVar.split(';')
             for path in pathsList:
-                print "__importDirRecursive:" + path
                 __importDirRecursive(path)
 
 
@@ -320,6 +378,7 @@ class KrakenSystem(object):
 
         if cls.__instance is None:
             cls.__instance = KrakenSystem()
+            # cls.__instance.loadComponentModules()
 
         return cls.__instance
 

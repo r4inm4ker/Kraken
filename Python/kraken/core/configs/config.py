@@ -519,7 +519,7 @@ class Config(object):
 
 
     @classmethod
-    def setInstance(cls):
+    def makeCurrent(cls):
         """Sets this class t be the singleton instance Config.
 
         Returns:
@@ -527,6 +527,7 @@ class Config(object):
 
         """
 
+        Config.__instance = None
         Config.__instance = cls()
 
 
@@ -542,3 +543,4 @@ class Config(object):
         Config.__instance = None
 
         return True
+
