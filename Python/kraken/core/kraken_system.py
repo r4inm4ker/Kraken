@@ -6,6 +6,7 @@ KrakenSystem - Class for constructing the Fabric Engine Core client.
 """
 
 import os
+import sys
 import json
 import imp
 import importlib
@@ -251,42 +252,61 @@ class KrakenSystem(object):
 
         """
 
-        pathsVar = os.getenv('KRAKEN_COMPONENT_PATHS')
 
         def __importDirRecursive(path, parentModulePath=''):
-            for root, dirs, files in os.walk(path, True, None):
+            contents = os.listdir(path)
+            moduleFilefound = False
+            for item in contents:
+                if os.path.isfile(os.path.join(path, item)):
+                    if item == "__init__.py":
+                        if parentModulePath == '':
+                            modulePath = os.path.basename(path)
 
-                # parse all the files of given path and import python modules
-                for sfile in files:
-                    if sfile.endswith(".py"):
-                        if sfile == "__init__.py":
-                            module = parentModulePath
+                            moduleParentFolder = os.path.split( path )[0]
+                            if moduleParentFolder not in sys.path:
+                                sys.path.append(moduleParentFolder)
                         else:
-                            module = parentModulePath+"."+sfile[:-3]
+                            modulePath = parentModulePath + '.' + os.path.basename(path)
+                        moduleFilefound = True
 
-                        try:
-                            importlib.import_module(module)
-                        except ImportError, e:
-                            print "Error loading Kraken components from environment variable:" + str(pathsVar)
-                            print "The paths must point to the root of importable python modules."
-                            for arg in e.args:
-                                print arg
-                        except Exception, e:
-                            for arg in e.args:
-                                print arg
+            for item in contents:
+                if os.path.isfile(os.path.join(path, item)):
+                    if modulePath != '':
+                        # parse all the files of given path and import python modules
+                        if item.endswith(".py") and item != "__init__.py":
+                            module = modulePath+"."+item[:-3]
+                            try:
+                                importlib.import_module(module)
 
-                # Now reload sub modules
-                for dirName in dirs:
-                    __importDirRecursive(os.path.join(path,dirName), parentModulePath+"."+dirName)
+                            except ImportError, e:
+                                print "Error loading Kraken components from environment variable:" + str(pathsVar)
+                                print "The paths must point to the root of importable python modules."
+                                for arg in e.args:
+                                    print arg
 
-        if pathsVar is None:
-            # find the kraken examples module in the same folder as the kraken module.
-            pathsVar = os.path.join(os.path.dirname(os.path.dirname(kraken.__file__)), 'kraken_examples')
+                            except Exception, e:
+                                for arg in e.args:
+                                    print arg
 
-        pathsList = pathsVar.split(';')
 
-        for path in pathsList:
-            __importDirRecursive(path, os.path.basename(path))
+            for item in contents:
+                if os.path.isdir(os.path.join(path, item)):
+                    if moduleFilefound:
+                        __importDirRecursive(os.path.join(path, item), modulePath+"."+item)
+                    else:
+                        __importDirRecursive(os.path.join(path, item))
+
+
+        # find the kraken examples module in the same folder as the kraken module.
+        examplePaths = os.path.join(os.path.dirname(os.path.dirname(kraken.__file__)), 'kraken_examples')
+        __importDirRecursive(examplePaths)
+
+        pathsVar = os.getenv('KRAKEN_COMPONENT_PATHS')
+        if pathsVar is not None:
+            pathsList = pathsVar.split(';')
+            for path in pathsList:
+                print "__importDirRecursive:" + path
+                __importDirRecursive(path)
 
 
     @classmethod
