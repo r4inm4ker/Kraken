@@ -13,7 +13,6 @@ class KrakenMenu(QtGui.QWidget):
     def __init__(self, parent=None):
         super(KrakenMenu, self).__init__(parent)
         self.setObjectName('menuWidget')
-        self.parent = parent
 
         self.createLayout()
         self.createConnections()
@@ -167,8 +166,12 @@ class KrakenMenu(QtGui.QWidget):
         self.rigNameLabel.setText('Rig Name: ' + newRigName)
 
 
-    def setCurrentConfig(self):
-        index = self.configsWidget.currentIndex()
+    def setCurrentConfig(self, index = None):
+        if index is None:
+            index = self.configsWidget.currentIndex()
+        else:
+            self.configsWidget.setCurrentIndex(index)
+
         if index == 0:
             Config.makeCurrent()
         else:
@@ -176,6 +179,21 @@ class KrakenMenu(QtGui.QWidget):
             configs = ks.getConfigClassNames()
             configClass = ks.getConfigClass(configs[index-1])
             configClass.makeCurrent()
+
+
+    def writeSettings(self, settings):
+        settings.beginGroup("KrakenMenu")
+        settings.setValue("currentConfig", self.configsWidget.currentIndex())
+        settings.endGroup()
+
+
+    def readSettings(self, settings):
+        settings.beginGroup("KrakenMenu")
+        if settings.contains('currentConfig'):
+            currentConfig = int(settings.value("currentConfig", 0))
+            self.setCurrentConfig(currentConfig)
+        settings.endGroup()
+
 
 
 class RigNameLabel(QtGui.QLabel):

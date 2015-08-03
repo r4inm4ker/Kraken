@@ -11,6 +11,7 @@ import json
 import imp
 import importlib
 from collections import OrderedDict
+
 import FabricEngine.Core
 
 import kraken
@@ -217,9 +218,8 @@ class KrakenSystem(object):
         """
 
         configModulePath = configClass.__module__ + "." + configClass.__name__
-        print "registerConfig:" +configModulePath
         if configModulePath in self.registeredConfigs:
-            # we allow reregistring of configs because as a componet's class is edited
+            # we allow reregistring of configs because as a config's class is edited
             # it will be re-imported by python(in Maya), and the classes reregistered.
             pass
 
@@ -267,7 +267,7 @@ class KrakenSystem(object):
 
         componentModulePath = componentClass.__module__ + "." + componentClass.__name__
         if componentModulePath in self.registeredComponents:
-            # we allow reregistring of components because as a componet's class is edited
+            # we allow reregistring of components because as a component's class is edited
             # it will be re-imported by python(in Maya), and the classes reregistered.
             pass
 
@@ -333,13 +333,10 @@ class KrakenSystem(object):
                         if item.endswith(".py") and item != "__init__.py":
                             module = modulePath+"."+item[:-3]
                             try:
-                                print module
                                 importlib.import_module(module)
 
                             except ImportError, e:
                                 print e
-                                print "Error loading Kraken components from environment variable:" + str(path)
-                                print "The paths must point to the root of importable python modules."
                                 for arg in e.args:
                                     print arg
 
@@ -360,7 +357,7 @@ class KrakenSystem(object):
         examplePaths = os.path.join(os.path.dirname(os.path.dirname(kraken.__file__)), 'kraken_examples')
         __importDirRecursive(examplePaths)
 
-        pathsVar = os.getenv('KRAKEN_COMPONENT_PATHS')
+        pathsVar = os.getenv('KRAKEN_PATHS')
         if pathsVar is not None:
             pathsList = pathsVar.split(';')
             for path in pathsList:
