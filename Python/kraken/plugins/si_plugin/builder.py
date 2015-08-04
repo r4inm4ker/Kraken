@@ -707,8 +707,21 @@ class Builder(Builder):
             for i in xrange(len(args)):
                 arg = args[i]
 
+
                 # Skip arg if it's the target arg
                 if arg.name == operatorOwnerArg:
+                    continue
+
+                if arg.dataType == 'EvalContext':
+                    si.fabricSplice("addInputPort", spliceOpPath, "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\" }", "")
+                    continue
+                if arg.name == 'time':
+                    si.fabricSplice("addInputPort", spliceOpPath, "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\" }", "")
+                    si.SetExpr(spliceOpPath+".time", "T", "")
+                    continue
+                if arg.name == 'frame':
+                    si.fabricSplice("addInputPort", spliceOpPath, "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\" }", "")
+                    si.SetExpr(spliceOpPath+".frame", "Fc", "")
                     continue
 
                 # Append the suffix based on the argument type, Softimage Only

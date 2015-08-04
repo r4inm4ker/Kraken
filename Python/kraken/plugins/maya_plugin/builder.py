@@ -601,6 +601,17 @@ class Builder(Builder):
             args = kOperator.getSolverArgs()
             for i in xrange(len(args)):
                 arg = args[i]
+                if arg.dataType == 'EvalContext':
+                    cmds.fabricSplice("addInputPort", spliceNode, json.dumps({"portName": arg.name, "dataType": arg.dataType, "addMayaAttr": False }), "")
+                    continue
+                if arg.name == 'time':
+                    cmds.fabricSplice("addInputPort", spliceNode, json.dumps({"portName": arg.name, "dataType": arg.dataType, "addMayaAttr": True }), "")
+                    cmds.expression( o=spliceNode + '.time', s=spliceNode + '.time = time;' )
+                    continue
+                if arg.name == 'frame':
+                    cmds.fabricSplice("addInputPort", spliceNode, json.dumps({"portName": arg.name, "dataType": arg.dataType, "addMayaAttr": True }), "")
+                    cmds.expression( o=spliceNode + '.frame', s=spliceNode + '.frame = frame;' )
+                    continue
 
                 portArgs = {"portName": arg.name, "dataType": arg.dataType, "extension":"", "addMayaAttr": True }
 

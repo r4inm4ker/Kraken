@@ -287,10 +287,9 @@ class TentacleComponentRig(TentacleComponent):
         tentacleSettingsAttrGrp = AttributeGroup("DisplayInfo_LegSettings", parent=self.tentacleIKCtrl)
         tentacledrawDebugInputAttr = BoolAttribute('drawDebug', value=False, parent=tentacleSettingsAttrGrp)
         fkikInputAttr = ScalarAttribute('fkik', value=1.0, minValue=0.0, maxValue=1.0, parent=tentacleSettingsAttrGrp)
-        timeInputAttr = ScalarAttribute('time', value=1.0, minValue=0.0, maxValue=200.0, parent=tentacleSettingsAttrGrp)
-        waveLengthInputAttr = ScalarAttribute('waveLength', value=1.0, minValue=0.0, maxValue=10.0, parent=tentacleSettingsAttrGrp)
-        waveAmplitudeInputAttr = ScalarAttribute('waveAmplitude', value=1.0, minValue=0.0, maxValue=10.0, parent=tentacleSettingsAttrGrp)
-        waveFrequencyInputAttr = ScalarAttribute('waveFrequency', value=1.0, minValue=0.0, maxValue=10.0, parent=tentacleSettingsAttrGrp)
+        waveLengthInputAttr = ScalarAttribute('waveLength', value=1.0, minValue=0.0, maxValue=5.0, parent=tentacleSettingsAttrGrp)
+        waveAmplitudeInputAttr = ScalarAttribute('waveAmplitude', value=0.6, minValue=-3.0, maxValue=3.0, parent=tentacleSettingsAttrGrp)
+        waveFrequencyInputAttr = ScalarAttribute('waveFrequency', value=2.0, minValue=0.0, maxValue=10.0, parent=tentacleSettingsAttrGrp)
         tipBiasInputAttr = ScalarAttribute('tipBias', value=1.0, minValue=0.0, maxValue=1.0, parent=tentacleSettingsAttrGrp)
 
         # Connect IO to controls
@@ -339,7 +338,6 @@ class TentacleComponentRig(TentacleComponent):
         self.tentacleSolverSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
         self.tentacleSolverSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
         self.tentacleSolverSpliceOp.setInput('ikblend', fkikInputAttr)
-        self.tentacleSolverSpliceOp.setInput('time', timeInputAttr)
         self.tentacleSolverSpliceOp.setInput('waveLength', waveLengthInputAttr)
         self.tentacleSolverSpliceOp.setInput('waveAmplitude', waveAmplitudeInputAttr)
         self.tentacleSolverSpliceOp.setInput('waveFrequency', waveFrequencyInputAttr)

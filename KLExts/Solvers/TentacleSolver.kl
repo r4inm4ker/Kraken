@@ -13,8 +13,8 @@ function TentacleSolver()
 // Return Arguments for Kraken
 function KrakenSolverArg[] TentacleSolver.getArguments(){
   KrakenSolverArg args[] = this.parent.getArguments();
-  args.push(KrakenSolverArg('ikblend', 'in', 'Scalar'));
   args.push(KrakenSolverArg('time', 'in', 'Scalar'));
+  args.push(KrakenSolverArg('ikblend', 'in', 'Scalar'));
   args.push(KrakenSolverArg('waveLength', 'in', 'Scalar'));
   args.push(KrakenSolverArg('waveAmplitude', 'in', 'Scalar'));
   args.push(KrakenSolverArg('waveFrequency', 'in', 'Scalar'));
@@ -29,6 +29,149 @@ function KrakenSolverArg[] TentacleSolver.getArguments(){
 }
 
 
+function Xfo[] solveTentacleIK(
+  in Xfo basePose[],
+  in Vec3 goalPosition
+) {
+
+  // Scalar boneLengths[];
+  Vec3 boneVectors[];
+  Xfo ikpose[];
+  // Scalar remainingChainLength = 0;
+  // boneLengths.resize(basePose.size());
+  boneVectors.resize(basePose.size());
+  ikpose.resize(basePose.size());
+  for (Integer i = 0; i < basePose.size()-1; i++) {
+    ikpose[i] = basePose[i];
+    // Note: Scaling of bones is currently not supported.
+    boneVectors[i] = basePose[i].inverse().transformVector(basePose[i+1].tr);
+    // // boneLengths[i] = boneVectors[i].length();
+    // remainingChainLength += abs(boneLengths[i] /* basePose[i].sc.x*/);
+  }
+
+  Vec3 chainRootPos = basePose[0].tr;
+  Integer lastBoneIndex = basePose.size-1;
+  Vec3 fkChainTip = basePose[lastBoneIndex].tr;
+
+  // Apply the soft limit to the distance to the IK goal
+  Vec3 vecToIkGoal = goalPosition - chainRootPos;
+  Scalar distToIkGoal = vecToIkGoal.length();
+  Quat chainOffsetRotation;
+
+  for (Integer i = 0; i < basePose.size()-1; i++) {
+    Vec3 vecToFkChainTip;
+    Xfo boneXfo;
+    Integer boneIndex = i;
+    boneXfo = basePose[i];
+    if (i == 0) {
+      vecToFkChainTip = fkChainTip - boneXfo.tr;
+    }
+    else {
+      // Transform the bone position by the overall chain offset.
+      // vecToFkChainTip = fkChainTip - (chainRootPos + (boneXfo.tr - chainRootPos));
+
+      // Calculate a new pose position based on the parent bones new orientation
+      boneXfo.tr = ikpose[i-1].transformVector(boneVectors[i-1]);
+      vecToFkChainTip = fkChainTip - boneXfo.tr;
+    }
+    Scalar distToFkChainTip = vecToFkChainTip.length();
+    vecToFkChainTip *= 1.0 / distToFkChainTip;
+
+    vecToIkGoal = goalPosition - boneXfo.tr;
+    distToIkGoal = vecToIkGoal.length();
+    vecToIkGoal *= 1.0 / distToIkGoal; // normalize the vector
+    // Scalar boneLength = abs(boneLengths[i] /* boneXfo.sc.x*/);
+
+    if (i == 0) {
+    //   // For the first bone calculate and store the overall chain offset towards the ik target
+      chainOffsetRotation.setFrom2Vectors(vecToFkChainTip, vecToIkGoal);
+
+    //   fkChainTip = boneXfo.tr + (vecToIkGoal * distToFkChainTip);
+    //   // boneXfo.ori = chainOffsetRotation * boneXfo.ori;
+    }
+    // else {
+      // Apply the chain offset, and apply any incremental correction.
+      // This additional correction is required due to a new bone position based on the new parent orientation
+      Quat boneOffsetRotation;
+      boneOffsetRotation.setFrom2Vectors(vecToFkChainTip, vecToIkGoal);
+      Float32 fraction = Float32(i) / Float32(basePose.size()-1);
+      boneOffsetRotation = Quat().sphericalLinearInterpolate(chainOffsetRotation, fraction).sphericalLinearInterpolate(boneOffsetRotation, fraction);
+      boneXfo.ori = boneOffsetRotation * boneXfo.ori;
+    // }
+
+    // // Based on the bone index, select an appropriate method to solve
+    // if (i <= (basePose.size() - 3)) {
+    //   // Remove the current bones length from the chain.
+    //   remainingChainLength -= boneLength;
+    //   Vec3 boneLengthVector;
+    //   //if(boneLengths[i] < 0.0 /* || boneXfo.sc.x < 0.0*/)
+    //   //  boneLengthVector = boneXfo.ori.rotateVector(Vec3(-1.0, 0.0, 0.0));
+    //   //else
+    //     boneLengthVector = boneXfo.ori.rotateVector(boneVectors[i].unit());
+
+    //   // this is the current angle of the bone.
+    //   Scalar fkBoneAngle = acos(Math_clamp(boneLengthVector.dot(vecToIkGoal), -1.0, 1.0));
+
+    //   if(fkBoneAngle < 0.0001){
+    //     // If the bone is already pointing directly at the target, we can't work with it.
+    //     // in debug mode, report and error...
+    //     continue;
+    //   }
+
+    //   Vec3 bendAxis = vecToIkGoal.cross(boneLengthVector);
+    //   bendAxis.setUnit();
+    //   Scalar ikBoneAngle;
+
+    //   if (i == (basePose.size() - 3)) {
+    //     // Use trigonometry to determine the ikBoneAngle
+    //     // Law of cosines. a = BoneLength; b = Child BoneLength; c = Distance to the Ik Goal;
+    //     ikBoneAngle = acos(Math_clamp((sq(boneLength) + sq(distToIkGoal) - sq(remainingChainLength)) / (2.0 * boneLength * distToIkGoal), - 1.0, 1.0));
+    //   }
+    //   else {
+    //     Scalar maxFkBoneAngle, maxIkBoneAngle;
+
+    //     // distance from the bone tip to the ik gloal
+    //     if (distToFkChainTip > remainingChainLength) {
+    //       // Using the law of cosines, calculate the maximum angle of this bone using the fk Chain tip
+    //       maxFkBoneAngle = acos(Math_clamp((sq(boneLength) + sq(distToFkChainTip) - sq(remainingChainLength)) / (2.0 * boneLength * distToFkChainTip), - 1.0, 1.0));
+    //     }
+    //     else {
+    //       // Add on the remaining chain length as radians.
+    //       maxFkBoneAngle = acos(Math_clamp((boneLength * 0.5) / remainingChainLength, 0.0, 1.0));
+    //       maxFkBoneAngle += (remainingChainLength - distToFkChainTip) / boneLength;
+    //     }
+
+    //     // distance from the bone tip to the ik gloal
+    //     if (distToIkGoal > remainingChainLength) {
+    //       // Using the law of cosines, calculate the maximum angle of this bone using the fk Chain tip
+    //       maxIkBoneAngle = acos(Math_clamp((sq(boneLength) + sq(distToIkGoal) - sq(remainingChainLength)) / (2.0 * boneLength * distToIkGoal), - 1.0, 1.0));
+    //     }
+    //     else {
+    //       // Add on the remaining chain length as radians.
+    //       maxIkBoneAngle = acos(Math_clamp((boneLength * 0.5) / remainingChainLength, 0.0, 1.0));
+    //       maxIkBoneAngle += (remainingChainLength - distToIkGoal) / boneLength;
+    //     }
+
+    //     ikBoneAngle = maxIkBoneAngle * (fkBoneAngle / maxFkBoneAngle);
+    //   }
+
+    //   // Subtract off the current angle the bone has with the vecToIkGoal to keep the delta
+    //   Scalar deltaBoneAngle = (ikBoneAngle - fkBoneAngle);
+
+    //   // Apply the rotation to the current bones
+    //   Quat offset;
+    //   offset.setFromAxisAndAngle(bendAxis, deltaBoneAngle);
+    //   boneXfo.ori = offset * boneXfo.ori;
+
+    // }
+
+    ikpose[boneIndex] = boneXfo;
+  }
+  ikpose[lastBoneIndex].tr = ikpose[lastBoneIndex-1].transformVector(boneVectors[lastBoneIndex-1]);
+  return ikpose;
+}
+
+
 
 
 // Solve
@@ -36,8 +179,8 @@ function TentacleSolver.solve!
 (
   Boolean drawDebug,
   Scalar rigScale,
-  Scalar ikblend,
   Scalar time,
+  Scalar ikblend,
   Scalar waveLength,
   Scalar waveAmplitude,
   Scalar waveFrequency,
@@ -52,6 +195,7 @@ function TentacleSolver.solve!
   if(fkcontrols.size != pose.size)
     throw("Error in TentacleSolver. The number of FKControls does not match the number of joints");
 
+  report('time:' + time);
   report('waveLength:' + waveLength);
   report('waveAmplitude:' + waveAmplitude);
   report('waveFrequency:' + waveFrequency);
@@ -68,11 +212,13 @@ function TentacleSolver.solve!
       localXfo = parentInv * xfo;
       boneVectors[i-1] = localXfo.tr;
     }
-    // Float32 fraction = Float32(i) / Float32(fkcontrols.size);
-    // Float32 bias = 1.0 - (((cos(fraction * PI) * 0.5) + 0.5) * tipBias);
-    // Quat wave;
-    // wave.setFromAxisAndAngle( Vec3(0.0, 0.0, 1.0), cos( time + ( fraction *  waveLength * PI)) * waveAmplitude * bias);
-    // localXfo.ori *= wave;
+
+    Scalar fraction = Scalar(i) / Scalar(fkcontrols.size);
+    Scalar bias = 1.0 - (((cos(fraction * PI) * 0.5) + 0.5) * tipBias);
+    report(i+":" + bias);
+    Quat wave;
+    wave.setFromAxisAndAngle( Vec3(0.0, 0.0, 1.0), cos( (time * -waveFrequency) + ( fraction *  waveLength * PI)) * waveAmplitude * bias);
+    localXfo.ori *= wave;
 
     if(i>0)
       xfoPose[i] = xfoPose[i-1] * localXfo;
@@ -85,12 +231,12 @@ function TentacleSolver.solve!
 
   if(ikblend > 0.0) {
 
-    Xfo ikPose[] = solveNBoneIK(xfoPose, ikgoal.translation());
+    Xfo ikPose[] = solveTentacleIK(xfoPose, ikgoal.translation());
 
 
     // Now blend the IK result with the FK result
     for(UInt32 i=0; i < xfoPose.size; i++) {
-      xfoPose[i].ori = xfoPose[i ].ori.sphericalLinearInterpolate(ikPose[i].ori, ikblend);
+      xfoPose[i].ori = xfoPose[i].ori.sphericalLinearInterpolate(ikPose[i].ori, ikblend);
       if(i>0)
         xfoPose[i].tr = xfoPose[i-1].transformVector(boneVectors[i-1]);
     }

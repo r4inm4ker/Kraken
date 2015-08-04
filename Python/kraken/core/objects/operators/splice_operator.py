@@ -161,6 +161,16 @@ class SpliceOperator(Operator):
         argVals = []
         for i in xrange(len(self.args)):
             arg = self.args[i]
+            if arg.dataType == 'EvalContext':
+                argVals.append(ks.constructRTVal(arg.dataType))
+                continue
+            if arg.name == 'time':
+                argVals.append(ks.constructRTVal(arg.dataType))
+                continue
+            if arg.name == 'frame':
+                argVals.append(ks.constructRTVal(arg.dataType))
+                continue
+
             if arg.connectionType == 'in':
                 if str(arg.dataType).endswith('[]'):
                     rtValArray = ks.rtVal(arg.dataType[:-2]+'Array')
