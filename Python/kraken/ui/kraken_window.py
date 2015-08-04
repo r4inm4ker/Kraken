@@ -83,13 +83,12 @@ class KrakenWindow(QtGui.QMainWindow):
         qr.moveCenter(cp)
         self.move(qr.topLeft())
 
+
     # =========
     # Settings
     # =========
-
     def getSettings(self):
         return self.settings
-
 
     def writeSettings(self):
         self.settings.beginGroup("MainWindow")
@@ -98,8 +97,6 @@ class KrakenWindow(QtGui.QMainWindow):
         self.settings.endGroup()
         self.krakenMenu.writeSettings(self.settings)
         self.krakenUI.writeSettings(self.settings)
-        print self.settings.allKeys()
-
 
     def readSettings(self):
         self.settings.beginGroup("MainWindow")
@@ -113,8 +110,6 @@ class KrakenWindow(QtGui.QMainWindow):
     # =======
     # Events
     # =======
-
-
     def closeEvent(self, event):
 
         msgBox = QtGui.QMessageBox(self)

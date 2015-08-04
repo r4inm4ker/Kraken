@@ -85,16 +85,29 @@ class KrakenMenu(QtGui.QWidget):
         logoWidget = QtGui.QLabel()
         logoWidget.setObjectName('logoWidget')
         logoWidget.setMinimumHeight(20)
-        logoWidget.setMinimumWidth(97)
+        logoWidget.setMinimumWidth(110)
 
         logoPixmap = QtGui.QPixmap(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'images', 'KrakenUI_Logo.png'))
         logoWidget.setPixmap(logoPixmap)
 
+        # Config Widget
+        self.configsParent = QtGui.QFrame(self)
+        self.configsParent.setObjectName('configParent')
+        self.configsParent.setFrameStyle(QtGui.QFrame.NoFrame)
+        self.configsParent.setMinimumWidth(160)
 
+        self.configsLayout = QtGui.QVBoxLayout()
+        self.configsLayout.setContentsMargins(0, 0, 0, 0)
+        self.configsLayout.setSpacing(0)
 
-        self.configsWidget = QtGui.QComboBox(self)
+        self.configsWidget = QtGui.QComboBox()
+        self.configsWidget.setAutoFillBackground(True)
+        self.configsWidget.setObjectName('configWidget')
         self.configsWidget.setMinimumWidth(160)
         self.configsWidget.addItem('Default Config')
+
+        self.configsLayout.addWidget(self.configsWidget)
+        self.configsParent.setLayout(self.configsLayout)
 
         configs = KrakenSystem.getInstance().getConfigClassNames()
         for config in configs:
@@ -105,8 +118,7 @@ class KrakenMenu(QtGui.QWidget):
         # Add Widgets
         self.menuLayout.addWidget(logoWidget, 0)
         self.menuLayout.addWidget(self.menuBar, 3)
-        self.menuLayout.addWidget(self.configsWidget, 0)
-        self.menuLayout.addSpacing(10)
+        self.menuLayout.addWidget(self.configsParent, 0)
         self.menuLayout.addWidget(self.rigNameLabel, 0)
 
         self.setLayout(self.menuLayout)
