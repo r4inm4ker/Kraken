@@ -698,7 +698,7 @@ class Builder(Builder):
             spliceOpPath = operatorOwner.FullName + ".kine.global.SpliceOp"
 
             # Create Splice Operator
-            si.fabricSplice('newSplice', "{\"targets\":\"" + targets + "\", \"portName\":\"" + arg.name + "\", \"portMode\":\"out\"}", "", "")
+            opPath = si.fabricSplice('newSplice', "{\"targets\":\"" + targets + "\", \"portName\":\"" + arg.name + "\", \"portMode\":\"out\"}", "", "")
 
             # Add the private/non-mayaAttr port that stores the Solver object
             si.fabricSplice("addInternalPort", spliceOpPath, "{\"portName\":\"solver\", \"dataType\":\"" + solverTypeName + "\", \"extension\":\"" + kOperator.getExtension() + "\", \"portMode\":\"io\"}", "")
@@ -717,24 +717,10 @@ class Builder(Builder):
                     continue
                 if arg.name == 'time':
                     si.fabricSplice("addParameter", spliceOpPath, "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\" }", "")
-                    spliceOp = si.Dictionary.GetObject(spliceOpPath)
-                    timeParameter = spliceOp.Parameters(arg.name)
-                    if timeParameter is None:
-                        log("'" + arg.name + "' parameter was not found!", 2)
-                        continue
-
-                    timeParameter.AddExpression("T")
                     continue
 
                 if arg.name == 'frame':
                     si.fabricSplice("addParameter", spliceOpPath, "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\" }", "")
-                    spliceOp = si.Dictionary.GetObject(spliceOpPath)
-                    frameParameter = spliceOp.Parameters(arg.name)
-                    if frameParameter is None:
-                        log("'" + arg.name + "' parameter was not found!", 2)
-                        continue
-
-                    frameParameter.AddExpression("Fc")
                     continue
 
                 # Append the suffix based on the argument type, Softimage Only
@@ -794,6 +780,25 @@ class Builder(Builder):
             opSourceCode = kOperator.generateSourceCode()
 
             si.fabricSplice('addKLOperator', spliceOpPath, '{"opName": "' + kOperator.getName() + '"}', opSourceCode)
+
+            # Check for Time and Frame arguments and set expressions
+            spliceOp = si.Dictionary.GetObject(spliceOpPath, False)
+            timeParameter = spliceOp.Parameters("time")
+            if timeParameter is None:
+                si.SetValue("preferences.scripting.cmdlog", True, "")
+                log("'time' parameter was not found!", 2)
+                si.SetValue("preferences.scripting.cmdlog", False, "")
+
+            timeParameter.AddExpression("T")
+
+            spliceOp = si.Dictionary.GetObject(spliceOpPath, False)
+            frameParameter = spliceOp.Parameters("frame")
+            if frameParameter is None:
+                si.SetValue("preferences.scripting.cmdlog", True, "")
+                log("'frame' parameter was not found!", 2)
+                si.SetValue("preferences.scripting.cmdlog", False, "")
+
+            frameParameter.AddExpression("Fc")
 
         finally:
             pass
