@@ -58,28 +58,28 @@ building:char_bob_guide.controls.arm.bicepFK as:arm_L_bicepFK_ctrl
 building:char_bob_guide.controls.arm.forearmFK as:arm_L_forearmFK_ctrl
 building:char_bob_guide.controls.arm.wristFK as:arm_L_wristFK_ctrl
 building:char_bob_guide.controls.arm.hand as:arm_L_hand_ctrl
-building:char_bob_guide.controls.clavicle as:clavicle_R_cmp
-building:char_bob_guide.controls.clavicle.inputs as:clavicle_R_inputs_hrc
-building:char_bob_guide.controls.clavicle.inputs.spineEnd as:clavicle_R_spineEnd_cmpIn
-building:char_bob_guide.controls.clavicle.outputs as:clavicle_R_outputs_hrc
-building:char_bob_guide.controls.clavicle.outputs.clavicle as:clavicle_R_clavicle_cmpOut
-building:char_bob_guide.controls.clavicle.outputs.clavicleEnd as:clavicle_R_clavicleEnd_cmpOut
-building:char_bob_guide.controls.clavicle.clavicle as:clavicle_R_clavicle_ctrl
-building:char_bob_guide.controls.clavicle.clavicleUpV as:clavicle_R_clavicleUpV_ctrl
-building:char_bob_guide.controls.clavicle.clavicleEnd as:clavicle_R_clavicleEnd_ctrl
-building:char_bob_guide.controls.arm as:arm_R_cmp
-building:char_bob_guide.controls.arm.inputs as:arm_R_inputs_hrc
-building:char_bob_guide.controls.arm.inputs.globalSRT as:arm_R_globalSRT_cmpIn
-building:char_bob_guide.controls.arm.inputs.clavicleEnd as:arm_R_clavicleEnd_cmpIn
-building:char_bob_guide.controls.arm.outputs as:arm_R_outputs_hrc
-building:char_bob_guide.controls.arm.outputs.bicep as:arm_R_bicep_cmpOut
-building:char_bob_guide.controls.arm.outputs.forearm as:arm_R_forearm_cmpOut
-building:char_bob_guide.controls.arm.outputs.armEndXfo as:arm_R_armEndXfo_cmpOut
-building:char_bob_guide.controls.arm.outputs.hand as:arm_R_hand_cmpOut
-building:char_bob_guide.controls.arm.bicepFK as:arm_R_bicepFK_ctrl
-building:char_bob_guide.controls.arm.forearmFK as:arm_R_forearmFK_ctrl
-building:char_bob_guide.controls.arm.wristFK as:arm_R_wristFK_ctrl
-building:char_bob_guide.controls.arm.hand as:arm_R_hand_ctrl
+building:char_bob_guide.controls.clavicle01 as:clavicle01_R_cmp
+building:char_bob_guide.controls.clavicle01.inputs as:clavicle01_R_inputs_hrc
+building:char_bob_guide.controls.clavicle01.inputs.spineEnd as:clavicle01_R_spineEnd_cmpIn
+building:char_bob_guide.controls.clavicle01.outputs as:clavicle01_R_outputs_hrc
+building:char_bob_guide.controls.clavicle01.outputs.clavicle as:clavicle01_R_clavicle_cmpOut
+building:char_bob_guide.controls.clavicle01.outputs.clavicleEnd as:clavicle01_R_clavicleEnd_cmpOut
+building:char_bob_guide.controls.clavicle01.clavicle as:clavicle01_R_clavicle_ctrl
+building:char_bob_guide.controls.clavicle01.clavicleUpV as:clavicle01_R_clavicleUpV_ctrl
+building:char_bob_guide.controls.clavicle01.clavicleEnd as:clavicle01_R_clavicleEnd_ctrl
+building:char_bob_guide.controls.arm01 as:arm01_R_cmp
+building:char_bob_guide.controls.arm01.inputs as:arm01_R_inputs_hrc
+building:char_bob_guide.controls.arm01.inputs.globalSRT as:arm01_R_globalSRT_cmpIn
+building:char_bob_guide.controls.arm01.inputs.clavicleEnd as:arm01_R_clavicleEnd_cmpIn
+building:char_bob_guide.controls.arm01.outputs as:arm01_R_outputs_hrc
+building:char_bob_guide.controls.arm01.outputs.bicep as:arm01_R_bicep_cmpOut
+building:char_bob_guide.controls.arm01.outputs.forearm as:arm01_R_forearm_cmpOut
+building:char_bob_guide.controls.arm01.outputs.armEndXfo as:arm01_R_armEndXfo_cmpOut
+building:char_bob_guide.controls.arm01.outputs.hand as:arm01_R_hand_cmpOut
+building:char_bob_guide.controls.arm01.bicepFK as:arm01_R_bicepFK_ctrl
+building:char_bob_guide.controls.arm01.forearmFK as:arm01_R_forearmFK_ctrl
+building:char_bob_guide.controls.arm01.wristFK as:arm01_R_wristFK_ctrl
+building:char_bob_guide.controls.arm01.hand as:arm01_R_hand_ctrl
 building:char_bob_guide.controls.leg as:leg_L_cmp
 building:char_bob_guide.controls.leg.inputs as:leg_L_inputs_hrc
 building:char_bob_guide.controls.leg.inputs.globalSRT as:leg_L_globalSRT_cmpIn
@@ -95,29 +95,29 @@ building:char_bob_guide.controls.leg.knee as:leg_L_knee_ctrl
 building:char_bob_guide.controls.leg.ankle as:leg_L_ankle_ctrl
 building:char_bob_guide.controls.leg.toe as:leg_L_toe_ctrl
 building:char_bob_guide.controls.leg.toeTip as:leg_L_toeTip_ctrl
-building:char_bob_guide.controls.leg as:leg_R_cmp
-building:char_bob_guide.controls.leg.inputs as:leg_R_inputs_hrc
-building:char_bob_guide.controls.leg.inputs.globalSRT as:leg_R_globalSRT_cmpIn
-building:char_bob_guide.controls.leg.inputs.pelvisInput as:leg_R_pelvisInput_cmpIn
-building:char_bob_guide.controls.leg.outputs as:leg_R_outputs_hrc
-building:char_bob_guide.controls.leg.outputs.femur as:leg_R_femur_cmpOut
-building:char_bob_guide.controls.leg.outputs.shin as:leg_R_shin_cmpOut
-building:char_bob_guide.controls.leg.outputs.legEndXfo as:leg_R_legEndXfo_cmpOut
-building:char_bob_guide.controls.leg.outputs.foot as:leg_R_foot_cmpOut
-building:char_bob_guide.controls.leg.outputs.toe as:leg_R_toe_cmpOut
-building:char_bob_guide.controls.leg.femur as:leg_R_femur_ctrl
-building:char_bob_guide.controls.leg.knee as:leg_R_knee_ctrl
-building:char_bob_guide.controls.leg.ankle as:leg_R_ankle_ctrl
-building:char_bob_guide.controls.leg.toe as:leg_R_toe_ctrl
-building:char_bob_guide.controls.leg.toeTip as:leg_R_toeTip_ctrl
+building:char_bob_guide.controls.leg01 as:leg01_R_cmp
+building:char_bob_guide.controls.leg01.inputs as:leg01_R_inputs_hrc
+building:char_bob_guide.controls.leg01.inputs.globalSRT as:leg01_R_globalSRT_cmpIn
+building:char_bob_guide.controls.leg01.inputs.pelvisInput as:leg01_R_pelvisInput_cmpIn
+building:char_bob_guide.controls.leg01.outputs as:leg01_R_outputs_hrc
+building:char_bob_guide.controls.leg01.outputs.femur as:leg01_R_femur_cmpOut
+building:char_bob_guide.controls.leg01.outputs.shin as:leg01_R_shin_cmpOut
+building:char_bob_guide.controls.leg01.outputs.legEndXfo as:leg01_R_legEndXfo_cmpOut
+building:char_bob_guide.controls.leg01.outputs.foot as:leg01_R_foot_cmpOut
+building:char_bob_guide.controls.leg01.outputs.toe as:leg01_R_toe_cmpOut
+building:char_bob_guide.controls.leg01.femur as:leg01_R_femur_ctrl
+building:char_bob_guide.controls.leg01.knee as:leg01_R_knee_ctrl
+building:char_bob_guide.controls.leg01.ankle as:leg01_R_ankle_ctrl
+building:char_bob_guide.controls.leg01.toe as:leg01_R_toe_ctrl
+building:char_bob_guide.controls.leg01.toeTip as:leg01_R_toeTip_ctrl
 building:char_bob_guide.neck as:Mneck
 building:char_bob_guide.head as:Mhead
 building:char_bob_guide.clavicle as:Lclavicle
 building:char_bob_guide.arm as:Larm
-building:char_bob_guide.clavicle as:Rclavicle
-building:char_bob_guide.arm as:Rarm
+building:char_bob_guide.clavicle01 as:Rclavicle01
+building:char_bob_guide.arm01 as:Rarm01
 building:char_bob_guide.leg as:Lleg
-building:char_bob_guide.leg as:Rleg
+building:char_bob_guide.leg01 as:Rleg01
 char_bob_guide
 char_bob_guide.spine:M
 char_bob_guide.controls
@@ -177,28 +177,28 @@ char_bob_guide.controls.arm:L.bicepFK
 char_bob_guide.controls.arm:L.forearmFK
 char_bob_guide.controls.arm:L.wristFK
 char_bob_guide.controls.arm:L.hand
-char_bob_guide.controls.clavicle:R
-char_bob_guide.controls.clavicle:R.inputs
-char_bob_guide.controls.clavicle:R.inputs.spineEnd
-char_bob_guide.controls.clavicle:R.outputs
-char_bob_guide.controls.clavicle:R.outputs.clavicle
-char_bob_guide.controls.clavicle:R.outputs.clavicleEnd
-char_bob_guide.controls.clavicle:R.clavicle
-char_bob_guide.controls.clavicle:R.clavicleUpV
-char_bob_guide.controls.clavicle:R.clavicleEnd
-char_bob_guide.controls.arm:R
-char_bob_guide.controls.arm:R.inputs
-char_bob_guide.controls.arm:R.inputs.globalSRT
-char_bob_guide.controls.arm:R.inputs.clavicleEnd
-char_bob_guide.controls.arm:R.outputs
-char_bob_guide.controls.arm:R.outputs.bicep
-char_bob_guide.controls.arm:R.outputs.forearm
-char_bob_guide.controls.arm:R.outputs.armEndXfo
-char_bob_guide.controls.arm:R.outputs.hand
-char_bob_guide.controls.arm:R.bicepFK
-char_bob_guide.controls.arm:R.forearmFK
-char_bob_guide.controls.arm:R.wristFK
-char_bob_guide.controls.arm:R.hand
+char_bob_guide.controls.clavicle01:R
+char_bob_guide.controls.clavicle01:R.inputs
+char_bob_guide.controls.clavicle01:R.inputs.spineEnd
+char_bob_guide.controls.clavicle01:R.outputs
+char_bob_guide.controls.clavicle01:R.outputs.clavicle
+char_bob_guide.controls.clavicle01:R.outputs.clavicleEnd
+char_bob_guide.controls.clavicle01:R.clavicle
+char_bob_guide.controls.clavicle01:R.clavicleUpV
+char_bob_guide.controls.clavicle01:R.clavicleEnd
+char_bob_guide.controls.arm01:R
+char_bob_guide.controls.arm01:R.inputs
+char_bob_guide.controls.arm01:R.inputs.globalSRT
+char_bob_guide.controls.arm01:R.inputs.clavicleEnd
+char_bob_guide.controls.arm01:R.outputs
+char_bob_guide.controls.arm01:R.outputs.bicep
+char_bob_guide.controls.arm01:R.outputs.forearm
+char_bob_guide.controls.arm01:R.outputs.armEndXfo
+char_bob_guide.controls.arm01:R.outputs.hand
+char_bob_guide.controls.arm01:R.bicepFK
+char_bob_guide.controls.arm01:R.forearmFK
+char_bob_guide.controls.arm01:R.wristFK
+char_bob_guide.controls.arm01:R.hand
 char_bob_guide.controls.leg:L
 char_bob_guide.controls.leg:L.inputs
 char_bob_guide.controls.leg:L.inputs.globalSRT
@@ -214,26 +214,26 @@ char_bob_guide.controls.leg:L.knee
 char_bob_guide.controls.leg:L.ankle
 char_bob_guide.controls.leg:L.toe
 char_bob_guide.controls.leg:L.toeTip
-char_bob_guide.controls.leg:R
-char_bob_guide.controls.leg:R.inputs
-char_bob_guide.controls.leg:R.inputs.globalSRT
-char_bob_guide.controls.leg:R.inputs.pelvisInput
-char_bob_guide.controls.leg:R.outputs
-char_bob_guide.controls.leg:R.outputs.femur
-char_bob_guide.controls.leg:R.outputs.shin
-char_bob_guide.controls.leg:R.outputs.legEndXfo
-char_bob_guide.controls.leg:R.outputs.foot
-char_bob_guide.controls.leg:R.outputs.toe
-char_bob_guide.controls.leg:R.femur
-char_bob_guide.controls.leg:R.knee
-char_bob_guide.controls.leg:R.ankle
-char_bob_guide.controls.leg:R.toe
-char_bob_guide.controls.leg:R.toeTip
+char_bob_guide.controls.leg01:R
+char_bob_guide.controls.leg01:R.inputs
+char_bob_guide.controls.leg01:R.inputs.globalSRT
+char_bob_guide.controls.leg01:R.inputs.pelvisInput
+char_bob_guide.controls.leg01:R.outputs
+char_bob_guide.controls.leg01:R.outputs.femur
+char_bob_guide.controls.leg01:R.outputs.shin
+char_bob_guide.controls.leg01:R.outputs.legEndXfo
+char_bob_guide.controls.leg01:R.outputs.foot
+char_bob_guide.controls.leg01:R.outputs.toe
+char_bob_guide.controls.leg01:R.femur
+char_bob_guide.controls.leg01:R.knee
+char_bob_guide.controls.leg01:R.ankle
+char_bob_guide.controls.leg01:R.toe
+char_bob_guide.controls.leg01:R.toeTip
 char_bob_guide.neck:M
 char_bob_guide.head:M
 char_bob_guide.clavicle:L
 char_bob_guide.arm:L
-char_bob_guide.clavicle:R
-char_bob_guide.arm:R
+char_bob_guide.clavicle01:R
+char_bob_guide.arm01:R
 char_bob_guide.leg:L
-char_bob_guide.leg:R
+char_bob_guide.leg01:R

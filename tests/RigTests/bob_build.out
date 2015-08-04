@@ -19,10 +19,10 @@ building:char_bob.controls.spine.outputs.cog as:spine_M_cog_cmpOut
 building:char_bob.controls.spine.outputs.spineBase as:spine_M_spineBase_cmpOut
 building:char_bob.controls.spine.outputs.pelvis as:spine_M_pelvis_cmpOut
 building:char_bob.controls.spine.outputs.spineEnd as:spine_M_spineEnd_cmpOut
-building:char_bob.controls.spine.outputs.spine01 as:spine_M_spine01_loc
-building:char_bob.controls.spine.outputs.spine02 as:spine_M_spine02_loc
-building:char_bob.controls.spine.outputs.spine03 as:spine_M_spine03_loc
-building:char_bob.controls.spine.outputs.spine04 as:spine_M_spine04_loc
+building:char_bob.controls.spine.outputs.spine01 as:spine_M_spine01_cmpOut
+building:char_bob.controls.spine.outputs.spine02 as:spine_M_spine02_cmpOut
+building:char_bob.controls.spine.outputs.spine03 as:spine_M_spine03_cmpOut
+building:char_bob.controls.spine.outputs.spine04 as:spine_M_spine04_cmpOut
 building:char_bob.controls.spine.cog as:spine_M_cog_ctrlSpace
 building:char_bob.controls.spine.cog.cog as:spine_M_cog_ctrl
 building:char_bob.controls.spine.cog.cog.spine01 as:spine_M_spine01_ctrlSpace
