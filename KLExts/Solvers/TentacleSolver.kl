@@ -1,0 +1,114 @@
+require InlineDrawing;
+
+object TentacleSolver : KrakenSolver {
+};
+
+// Default Constructor
+function TentacleSolver()
+{
+
+}
+
+
+// Return Arguments for Kraken
+function KrakenSolverArg[] TentacleSolver.getArguments(){
+  KrakenSolverArg args[] = this.parent.getArguments();
+  args.push(KrakenSolverArg('ikblend', 'in', 'Scalar'));
+  args.push(KrakenSolverArg('time', 'in', 'Scalar'));
+  args.push(KrakenSolverArg('waveLength', 'in', 'Scalar'));
+  args.push(KrakenSolverArg('waveAmplitude', 'in', 'Scalar'));
+  args.push(KrakenSolverArg('waveFrequency', 'in', 'Scalar'));
+  args.push(KrakenSolverArg('tipBias', 'in', 'Scalar'));
+  args.push(KrakenSolverArg('chainBase', 'in', 'Mat44'));
+  args.push(KrakenSolverArg('ikgoal', 'in', 'Mat44'));
+  args.push(KrakenSolverArg('fkcontrols', 'in', 'Mat44[]'));
+  args.push(KrakenSolverArg('tipBoneLen', 'in', 'Scalar'));
+  args.push(KrakenSolverArg('pose', 'out', 'Mat44[]'));
+  args.push(KrakenSolverArg('tentacleEnd', 'out', 'Mat44'));
+  return args;
+}
+
+
+
+
+// Solve
+function TentacleSolver.solve!
+(
+  Boolean drawDebug,
+  Scalar rigScale,
+  Scalar ikblend,
+  Scalar time,
+  Scalar waveLength,
+  Scalar waveAmplitude,
+  Scalar waveFrequency,
+  Scalar tipBias,
+  Mat44 chainBase,
+  Mat44 ikgoal,
+  Mat44 fkcontrols[],
+  Scalar tipBoneLen,
+  io Mat44 pose[],
+  io Mat44 tentacleEnd
+) {
+  if(fkcontrols.size != pose.size)
+    throw("Error in TentacleSolver. The number of FKControls does not match the number of joints");
+
+  report('waveLength:' + waveLength);
+  report('waveAmplitude:' + waveAmplitude);
+  report('waveFrequency:' + waveFrequency);
+  report('tipBias:' + tipBias);
+  Xfo xfoPose[];
+  Vec3 boneVectors[];
+  xfoPose.resize(fkcontrols.size+1);
+  boneVectors.resize(fkcontrols.size);
+  for(UInt32 i=0; i < fkcontrols.size; i++) {
+    Xfo xfo(fkcontrols[i]);
+    Xfo localXfo = xfo;
+    if(i>0){
+      Xfo parentInv = Xfo(fkcontrols[i-1]).inverse();
+      localXfo = parentInv * xfo;
+      boneVectors[i-1] = localXfo.tr;
+    }
+    // Float32 fraction = Float32(i) / Float32(fkcontrols.size);
+    // Float32 bias = 1.0 - (((cos(fraction * PI) * 0.5) + 0.5) * tipBias);
+    // Quat wave;
+    // wave.setFromAxisAndAngle( Vec3(0.0, 0.0, 1.0), cos( time + ( fraction *  waveLength * PI)) * waveAmplitude * bias);
+    // localXfo.ori *= wave;
+
+    if(i>0)
+      xfoPose[i] = xfoPose[i-1] * localXfo;
+    else
+      xfoPose[i] = localXfo;
+  }
+  boneVectors[boneVectors.size-1] = Vec3(tipBoneLen, 0.0, 0.0);
+  xfoPose[fkcontrols.size] = xfoPose[fkcontrols.size-1];
+  xfoPose[fkcontrols.size].tr = xfoPose[fkcontrols.size-1].transformVector(boneVectors[boneVectors.size-1]);
+
+  if(ikblend > 0.0) {
+
+    Xfo ikPose[] = solveNBoneIK(xfoPose, ikgoal.translation());
+
+
+    // Now blend the IK result with the FK result
+    for(UInt32 i=0; i < xfoPose.size; i++) {
+      xfoPose[i].ori = xfoPose[i ].ori.sphericalLinearInterpolate(ikPose[i].ori, ikblend);
+      if(i>0)
+        xfoPose[i].tr = xfoPose[i-1].transformVector(boneVectors[i-1]);
+    }
+  }
+
+  // Convert the Xfos back to Mat44s
+  for(UInt32 i=0; i < pose.size; i++)
+    pose[i] = xfoPose[i].toMat44();
+  tentacleEnd = xfoPose[xfoPose.size-1].toMat44();
+
+  // Set debugging visibility.
+  this.setDebug(drawDebug);
+  if(this.drawDebug) {
+
+    Color boneColor(1.0, 1.0, 0);
+    for(UInt32 i=0; i<pose.size; i++){
+      Scalar boneLength = boneVectors[i].length();
+      etDrawBone(this.handle.rootTransform, 'bone'+i, pose[i], boneLength, boneLength * 0.15, boneColor);
+    }
+  }
+}

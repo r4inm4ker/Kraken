@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "ComponentTests\tentacle_build.py", line 3, in <module>
+    from kraken_examples.tentacle_component import TentacleComponentGuide, TentacleComponentRig
+ImportError: cannot import name TentacleComponentGuide
+
