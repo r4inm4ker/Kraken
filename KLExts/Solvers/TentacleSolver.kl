@@ -1,12 +1,13 @@
 require InlineDrawing;
 
 object TentacleSolver : KrakenSolver {
+    Vec3 trCurr;
+    Vec3 trPrev;
 };
 
 // Default Constructor
 function TentacleSolver()
 {
-
 }
 
 
@@ -22,6 +23,10 @@ function KrakenSolverArg[] TentacleSolver.getArguments(){
   args.push(KrakenSolverArg('waveAmplitude_Z', 'in', 'Scalar'));
   args.push(KrakenSolverArg('waveFrequency_Z', 'in', 'Scalar'));
   args.push(KrakenSolverArg('tipBias', 'in', 'Scalar'));
+  args.push(KrakenSolverArg('springStrength', 'in', 'Scalar'));
+  args.push(KrakenSolverArg('dampening', 'in', 'Scalar'));
+  args.push(KrakenSolverArg('simulationWeight', 'in', 'Scalar'));
+  args.push(KrakenSolverArg('softLimitBounds', 'in', 'Scalar'));
   args.push(KrakenSolverArg('chainBase', 'in', 'Mat44'));
   args.push(KrakenSolverArg('ikgoal', 'in', 'Mat44'));
   args.push(KrakenSolverArg('fkcontrols', 'in', 'Mat44[]'));
@@ -30,6 +35,65 @@ function KrakenSolverArg[] TentacleSolver.getArguments(){
   args.push(KrakenSolverArg('tentacleEnd', 'out', 'Mat44'));
   return args;
 }
+
+function Scalar softTentacleLimit(
+  Scalar val,
+  Scalar maxVal,
+  Vec2 maxValSoftening
+) {
+  Keyframe key1, key2;
+
+  if (val > (maxVal - maxValSoftening.x)) {
+    if (val > (maxVal + maxValSoftening.y)) {
+      return maxVal;
+    }
+
+    key1.time = maxVal - maxValSoftening.x;
+    key1.value = maxVal - maxValSoftening.x;
+    key1.outTangent.x = maxValSoftening.x * 0.5;
+    key1.outTangent.y = maxValSoftening.x * 0.5;
+
+    key2.time = maxVal + maxValSoftening.y;
+    key2.value = maxVal;
+    key2.inTangent.x = maxValSoftening.y * - 0.5;
+    key2.inTangent.y = 0;
+
+    return key1.interpolate(key2, val);
+  }
+  else {
+    return val;
+  }
+}
+
+
+function TentacleSolver.solveDynamics!(io Vec3 goalPosition, Scalar springStrength, Scalar dampening, Scalar simulationWeight, Scalar softLimitBounds ){
+
+  Scalar timeStep = 1.0/30.0;
+  Scalar mass = 1.0;
+  Vec3 force(0.0,0.0,0.0);
+
+
+  Vec3 temp = this.trCurr;
+  this.trPrev = this.trPrev.linearInterpolate(this.trCurr, dampening);
+
+  force += ((goalPosition - this.trCurr) * springStrength);
+  this.trCurr += (this.trCurr - this.trPrev) + ((force / mass) * (timeStep * timeStep));
+
+  // Apply a soft limit to the distance the verlet bone and move from the attach point.
+  Vec3 vecToAttachXfo = this.trCurr - goalPosition;
+  Scalar distToAttachXfo = vecToAttachXfo.length();
+  if(distToAttachXfo > softLimitBounds * 0.5){
+    this.trCurr = goalPosition + (vecToAttachXfo * (softTentacleLimit(
+      distToAttachXfo,
+      softLimitBounds,
+      Vec2(softLimitBounds * 0.5, softLimitBounds * 1.5)
+    )/distToAttachXfo));
+  }
+
+  goalPosition = goalPosition.linearInterpolate(this.trCurr, simulationWeight);
+  this.trPrev = temp;
+}
+
 
 
 function Xfo[] solveTentacleIK(
@@ -126,6 +190,12 @@ function TentacleSolver.solve!
   Scalar waveAmplitude_Z,
   Scalar waveFrequency_Z,
   Scalar tipBias,
+
+  Scalar springStrength,
+  Scalar dampening,
+  Scalar simulationWeight,
+  Scalar softLimitBounds,
+
   Mat44 chainBase,
   Mat44 ikgoal,
   Mat44 fkcontrols[],
@@ -171,8 +241,10 @@ function TentacleSolver.solve!
   xfoPose[fkcontrols.size].tr = xfoPose[fkcontrols.size-1].transformVector(boneVectors[boneVectors.size-1]);
 
   if(ikblend > 0.0) {
+    Vec3 goalPosition = ikgoal.translation();
+    this.solveDynamics(goalPosition, springStrength, dampening, simulationWeight, softLimitBounds );
 
-    Xfo ikPose[] = solveTentacleIK(xfoPose, ikgoal.translation());
+    Xfo ikPose[] = solveTentacleIK(xfoPose, goalPosition);
 
 
     // Now blend the IK result with the FK result

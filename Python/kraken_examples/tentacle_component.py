@@ -295,6 +295,11 @@ class TentacleComponentRig(TentacleComponent):
         waveFrequency_ZInputAttr = ScalarAttribute('waveFrequency_Z', value=3.354, minValue=0.0, maxValue=10.0, parent=tentacleSettingsAttrGrp)
         tipBiasInputAttr = ScalarAttribute('tipBias', value=1.0, minValue=0.0, maxValue=1.0, parent=tentacleSettingsAttrGrp)
 
+        springStrengthInputAttr = ScalarAttribute('springStrength', value=0.3, minValue=0.0, maxValue=1.0, parent=tentacleSettingsAttrGrp)
+        dampeningInputAttr = ScalarAttribute('dampening', value=0.03, minValue=0.0, maxValue=1.0, parent=tentacleSettingsAttrGrp)
+        simulationWeightInputAttr = ScalarAttribute('simulationWeight', value=1.0, minValue=0.0, maxValue=1.0, parent=tentacleSettingsAttrGrp)
+        softLimitBoundsInputAttr = ScalarAttribute('softLimitBounds', value=5.0, minValue=0.0, maxValue=10.0, parent=tentacleSettingsAttrGrp)
+
         # Connect IO to controls
         self.drawDebugInputAttr.connect(tentacledrawDebugInputAttr)
 
@@ -348,6 +353,12 @@ class TentacleComponentRig(TentacleComponent):
         self.tentacleSolverSpliceOp.setInput('waveAmplitude_Z', waveAmplitude_ZInputAttr)
         self.tentacleSolverSpliceOp.setInput('waveFrequency_Z', waveFrequency_ZInputAttr)
         self.tentacleSolverSpliceOp.setInput('tipBias', tipBiasInputAttr)
+
+        self.tentacleSolverSpliceOp.setInput('springStrength', springStrengthInputAttr)
+        self.tentacleSolverSpliceOp.setInput('dampening', dampeningInputAttr)
+        self.tentacleSolverSpliceOp.setInput('simulationWeight', simulationWeightInputAttr)
+        self.tentacleSolverSpliceOp.setInput('softLimitBounds', softLimitBoundsInputAttr)
+
         self.tentacleSolverSpliceOp.setInput('tipBoneLen', self.tipBoneLenInputAttr)
 
         # Add Xfo Inputs
