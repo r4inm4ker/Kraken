@@ -717,11 +717,24 @@ class Builder(Builder):
                     continue
                 if arg.name == 'time':
                     si.fabricSplice("addParameter", spliceOpPath, "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\" }", "")
-                    si.SetExpr(spliceOpPath+"."+arg.name, "T", "")
+                    spliceOp = si.Dictionary.GetObject(spliceOpPath)
+                    timeParameter = spliceOp.Parameters(arg.name)
+                    if timeParameter is None:
+                        log("'" + arg.name + "' parameter was not found!", 2)
+                        continue
+
+                    timeParameter.AddExpression("T")
                     continue
+
                 if arg.name == 'frame':
                     si.fabricSplice("addParameter", spliceOpPath, "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\" }", "")
-                    si.SetExpr(spliceOpPath+"."+arg.name, "Fc", "")
+                    spliceOp = si.Dictionary.GetObject(spliceOpPath)
+                    frameParameter = spliceOp.Parameters(arg.name)
+                    if frameParameter is None:
+                        log("'" + arg.name + "' parameter was not found!", 2)
+                        continue
+
+                    frameParameter.AddExpression("Fc")
                     continue
 
                 # Append the suffix based on the argument type, Softimage Only
