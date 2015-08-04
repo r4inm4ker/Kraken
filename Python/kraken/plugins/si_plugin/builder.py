@@ -716,12 +716,12 @@ class Builder(Builder):
                     si.fabricSplice("addInputPort", spliceOpPath, "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\" }", "")
                     continue
                 if arg.name == 'time':
-                    si.fabricSplice("addInputPort", spliceOpPath, "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\" }", "")
-                    si.SetExpr(spliceOpPath+".time", "T", "")
+                    si.fabricSplice("addParameter", spliceOpPath, "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\" }", "")
+                    si.SetExpr(spliceOpPath+"."+arg.name, "T", "")
                     continue
                 if arg.name == 'frame':
-                    si.fabricSplice("addInputPort", spliceOpPath, "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\" }", "")
-                    si.SetExpr(spliceOpPath+".frame", "Fc", "")
+                    si.fabricSplice("addParameter", spliceOpPath, "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\" }", "")
+                    si.SetExpr(spliceOpPath+"."+arg.name, "Fc", "")
                     continue
 
                 # Append the suffix based on the argument type, Softimage Only
