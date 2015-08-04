@@ -784,21 +784,13 @@ class Builder(Builder):
             # Check for Time and Frame arguments and set expressions
             spliceOp = si.Dictionary.GetObject(spliceOpPath, False)
             timeParameter = spliceOp.Parameters("time")
-            if timeParameter is None:
-                si.SetValue("preferences.scripting.cmdlog", True, "")
-                log("'time' parameter was not found!", 2)
-                si.SetValue("preferences.scripting.cmdlog", False, "")
-
-            timeParameter.AddExpression("T")
+            if timeParameter is not None:
+                timeParameter.AddExpression("T")
 
             spliceOp = si.Dictionary.GetObject(spliceOpPath, False)
             frameParameter = spliceOp.Parameters("frame")
-            if frameParameter is None:
-                si.SetValue("preferences.scripting.cmdlog", True, "")
-                log("'frame' parameter was not found!", 2)
-                si.SetValue("preferences.scripting.cmdlog", False, "")
-
-            frameParameter.AddExpression("Fc")
+            if frameParameter is not None:
+                frameParameter.AddExpression("Fc")
 
         finally:
             pass
