@@ -286,10 +286,13 @@ class TentacleComponentRig(TentacleComponent):
         # Add Component Params to IK control
         tentacleSettingsAttrGrp = AttributeGroup("DisplayInfo_LegSettings", parent=self.tentacleIKCtrl)
         tentacledrawDebugInputAttr = BoolAttribute('drawDebug', value=False, parent=tentacleSettingsAttrGrp)
-        fkikInputAttr = ScalarAttribute('fkik', value=1.0, minValue=0.0, maxValue=1.0, parent=tentacleSettingsAttrGrp)
-        waveLengthInputAttr = ScalarAttribute('waveLength', value=1.0, minValue=0.0, maxValue=5.0, parent=tentacleSettingsAttrGrp)
-        waveAmplitudeInputAttr = ScalarAttribute('waveAmplitude', value=0.6, minValue=-3.0, maxValue=3.0, parent=tentacleSettingsAttrGrp)
-        waveFrequencyInputAttr = ScalarAttribute('waveFrequency', value=2.0, minValue=0.0, maxValue=10.0, parent=tentacleSettingsAttrGrp)
+        fkikInputAttr = ScalarAttribute('fkik', value=0.0, minValue=0.0, maxValue=1.0, parent=tentacleSettingsAttrGrp)
+        waveLength_YInputAttr = ScalarAttribute('waveLength_Y', value=1.0, minValue=0.0, maxValue=5.0, parent=tentacleSettingsAttrGrp)
+        waveAmplitude_YInputAttr = ScalarAttribute('waveAmplitude_Y', value=0.6, minValue=-3.0, maxValue=3.0, parent=tentacleSettingsAttrGrp)
+        waveFrequency_YInputAttr = ScalarAttribute('waveFrequency_Y', value=2.0, minValue=0.0, maxValue=10.0, parent=tentacleSettingsAttrGrp)
+        waveLength_ZInputAttr = ScalarAttribute('waveLength_Z', value=2.329, minValue=0.0, maxValue=5.0, parent=tentacleSettingsAttrGrp)
+        waveAmplitude_ZInputAttr = ScalarAttribute('waveAmplitude_Z', value=0.6, minValue=-3.0, maxValue=3.0, parent=tentacleSettingsAttrGrp)
+        waveFrequency_ZInputAttr = ScalarAttribute('waveFrequency_Z', value=3.354, minValue=0.0, maxValue=10.0, parent=tentacleSettingsAttrGrp)
         tipBiasInputAttr = ScalarAttribute('tipBias', value=1.0, minValue=0.0, maxValue=1.0, parent=tentacleSettingsAttrGrp)
 
         # Connect IO to controls
@@ -338,9 +341,12 @@ class TentacleComponentRig(TentacleComponent):
         self.tentacleSolverSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
         self.tentacleSolverSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
         self.tentacleSolverSpliceOp.setInput('ikblend', fkikInputAttr)
-        self.tentacleSolverSpliceOp.setInput('waveLength', waveLengthInputAttr)
-        self.tentacleSolverSpliceOp.setInput('waveAmplitude', waveAmplitudeInputAttr)
-        self.tentacleSolverSpliceOp.setInput('waveFrequency', waveFrequencyInputAttr)
+        self.tentacleSolverSpliceOp.setInput('waveLength_Y', waveLength_YInputAttr)
+        self.tentacleSolverSpliceOp.setInput('waveAmplitude_Y', waveAmplitude_YInputAttr)
+        self.tentacleSolverSpliceOp.setInput('waveFrequency_Y', waveFrequency_YInputAttr)
+        self.tentacleSolverSpliceOp.setInput('waveLength_Z', waveLength_ZInputAttr)
+        self.tentacleSolverSpliceOp.setInput('waveAmplitude_Z', waveAmplitude_ZInputAttr)
+        self.tentacleSolverSpliceOp.setInput('waveFrequency_Z', waveFrequency_ZInputAttr)
         self.tentacleSolverSpliceOp.setInput('tipBias', tipBiasInputAttr)
         self.tentacleSolverSpliceOp.setInput('tipBoneLen', self.tipBoneLenInputAttr)
 
