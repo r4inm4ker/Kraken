@@ -155,6 +155,7 @@ class Component(Object3D):
 
         """
 
+
         container = self.getContainer()
         if container is None:
             container = self
@@ -677,7 +678,6 @@ class Component(Object3D):
         return True
 
 
-
     # =============
     # Data Methods
     # =============
@@ -741,10 +741,10 @@ class Component(Object3D):
 
         return True
 
+
     # ==================
     # Copy/Paste Methods
     # ==================
-
     def copyData(self):
         """Copy the data for the component to our clipboard.
 
@@ -778,10 +778,10 @@ class Component(Object3D):
 
         return True
 
+
     # ==================
     # Rig Build Methods
     # =================
-
     def getRigBuildData(self):
         """Returns the Guide data used by the Rig Component to define the layout of the final rig..
 
@@ -808,6 +808,23 @@ class Component(Object3D):
         return data
 
 
+    def detach(self):
+        """Detaches component from container."""
+
+        pass
+
+
+    def attach(self, container):
+        """Attaches component to container.
+
+        Args:
+            container (object): container to attach to.
+
+        """
+
+        pass
+
+
     # ==============
     # Class Methods
     # ==============
@@ -821,3 +838,4 @@ class Component(Object3D):
         """
 
         return 'Base'
+

@@ -19,11 +19,13 @@ class Builder(object):
     plugin."""
 
 
-    def __init__(self):
+    def __init__(self, debugMode = False):
         super(Builder, self).__init__()
         self._buildElements = []
 
         self.config = Config.getInstance()
+
+        self._debugMode = debugMode
 
 
     # ====================
@@ -461,9 +463,13 @@ class Builder(object):
 
         """
 
+
         dccSceneItem = None
 
         buildName = kObject.getBuildName()
+
+        if self._debugMode:
+            print "building:" + kObject.getPath() + " as:" + buildName
 
         # Build Object
         if kObject.isTypeOf("Container"):
@@ -580,9 +586,13 @@ class Builder(object):
 
             # Build input connections
             for i in xrange(kObject.getNumInputs()):
+
                 componentInput = kObject.getInputByIndex(i)
                 if componentInput.getTarget() is None or componentInput.getConnection() is None:
                     continue
+
+                if self._debugMode:
+                    print "buildConnection:" + componentInput.getName()
 
                 if componentInput.getDataType().startswith('Xfo'):
                     self.buildXfoConnection(componentInput)

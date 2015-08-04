@@ -41,7 +41,7 @@ class KGraphViewWidget(GraphViewWidget):
 
         graphView.beginDeleteSelection.connect(self.__onBeginDeleteSelection)
         graphView.endDeleteSelection.connect(self.__onEndDeleteSelection)
-        
+
         self.setGraphView(graphView)
 
         #########################
@@ -58,10 +58,6 @@ class KGraphViewWidget(GraphViewWidget):
 
         self.newRigPreset()
 
-        self.__contextualNodeList = None
-
-    def getContextualNodeList(self):
-        return self.__contextualNodeList
 
     def editRigName(self):
         dialog = QtGui.QInputDialog(self)
@@ -188,14 +184,11 @@ class KGraphViewWidget(GraphViewWidget):
 
     def openContextualNodeList(self):
         pos = self.mapFromGlobal(QtGui.QCursor.pos());
-        if not self.__contextualNodeList:
-            self.__contextualNodeList = ContextualNodeList(self)
-        else:
-            # Ensures that the node list is reset to list all components
-            self.__contextualNodeList.showClosestNames()
+
+        contextualNodeList = ContextualNodeList(self)
 
         scenepos = self.graphView.mapToScene(pos)
-        self.__contextualNodeList.showAtPos(pos, scenepos, self.graphView)
+        contextualNodeList.showAtPos(pos, scenepos, self.graphView)
 
     # ===============
     # Signal Handlers
@@ -208,8 +201,8 @@ class KGraphViewWidget(GraphViewWidget):
 
 
     def __onNodeRemoved(self, node):
-        self.guideRig.removeChild( node.getComponent() )
-        
+        node.getComponent().detach()
+
         if not UndoRedoManager.getInstance().isUndoingOrRedoing():
             command = graph_commands.RemoveNodeCommand(self.graphView, self.guideRig, node)
             UndoRedoManager.getInstance().addCommand(command)

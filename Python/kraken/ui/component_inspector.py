@@ -26,7 +26,7 @@ class _NameAttributeProxy(object):
         origName = self.nodeItem.getName()
         self.component.setName(value)
         if origName != self.component.getDecoratedName():
-            self.nodeItem.setName(value)
+            self.nodeItem.setName(self.component.getDecoratedName())
 
     def getValue(self):
         return self.component.getName()
@@ -36,10 +36,11 @@ class _NameAttributeProxy(object):
 
 class _LocationAttributeProxy(object):
 
-    def __init__(self, component, nodeItem):
+    def __init__(self, component, nodeItem, nameWidget):
         super(_LocationAttributeProxy, self).__init__()
         self.component = component
         self.nodeItem = nodeItem
+        self.nameWidget = nameWidget
 
     def getName(self):
         return 'location'
@@ -49,7 +50,13 @@ class _LocationAttributeProxy(object):
         origName = self.nodeItem.getName()
         self.component.setLocation(value)
         if origName != self.component.getDecoratedName():
-            self.nodeItem.setName(value)
+            self.nodeItem.setName(self.component.getDecoratedName())
+
+            # this is a hack to force the UI to update to reflect changes in the rig.
+            # Ideally, we should be using an MVC pattern where the UI listens to changes
+            # in the model, but we don't have an event system in KRaken. Instead we have to
+            # push changes to the UI widgets. (an awkward and not-scalable solution.)
+            self.nameWidget.setWidgetValue(self.component.getName())
 
     def getValue(self):
         return self.component.getLocation()
@@ -133,7 +140,7 @@ class ComponentInspector(QtGui.QWidget):
         if name is not None:
             labelWidget = QtGui.QLabel(name, self._paramsGroup)
             labelWidget.setObjectName('separatorLabel')
-            
+
             self._paramsLayout.addWidget(labelWidget, self._gridRow, 0)
             self._paramsLayout.addWidget(separatorWidget, self._gridRow, 1, QtCore.Qt.AlignBottom)
             self._gridRow += 1
@@ -154,7 +161,7 @@ class ComponentInspector(QtGui.QWidget):
         nameWidget = AttributeWidget.constructAttributeWidget( nameAttributeProxy, parentWidget=self)
         self.addAttrWidget("name", nameWidget)
 
-        locationAttributeProxy = _LocationAttributeProxy(component=self.component, nodeItem=self.nodeItem)
+        locationAttributeProxy = _LocationAttributeProxy(component=self.component, nodeItem=self.nodeItem, nameWidget=nameWidget)
         locationWidget = AttributeWidget.constructAttributeWidget( locationAttributeProxy, parentWidget=self)
         self.addAttrWidget("location", locationWidget)
 

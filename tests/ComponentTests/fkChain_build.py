@@ -1,17 +1,17 @@
 from kraken import plugins
 from kraken.core.maths import Vec3
-from kraken_examples.insectleg_component import InsectLegComponentGuide, InsectLegComponentRig
+from kraken_examples.fkChain_component import FKChainComponentGuide, FKChainComponentRig
 
 from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
 
 
-Profiler.getInstance().push("insectLeg_build")
+Profiler.getInstance().push("fkChain_build")
 
-insectLegGuide = InsectLegComponentGuide("insectLeg")
-insectLegGuide.loadData(
+fkChainGuide = FKChainComponentGuide("fkChain")
+fkChainGuide.loadData(
                         {
-                         "name": "insectLeg",
+                         "name": "fkChain",
                          "location": "L",
                          "numJoints": 4,
                          "jointPositions": [
@@ -24,19 +24,19 @@ insectLegGuide.loadData(
                         })
 
 # Save the hand guide data for persistence.
-saveData = insectLegGuide.saveData()
+saveData = fkChainGuide.saveData()
 
-insectLegGuideData = insectLegGuide.getRigBuildData()
+fkChainGuideData = fkChainGuide.getRigBuildData()
 
-leg = InsectLegComponentRig()
-leg.loadData(insectLegGuideData)
+chain = FKChainComponentRig()
+chain.loadData(fkChainGuideData)
 
 builder = plugins.getBuilder()
-builder.build(leg)
+builder.build(chain)
 
 Profiler.getInstance().pop()
 
 if __name__ == "__main__":
     print Profiler.getInstance().generateReport()
 else:
-    logHierarchy(leg)
+    logHierarchy(chain)

@@ -25,11 +25,11 @@ from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
 
 
-class SpineComponent(BaseExampleComponent):
+class FabriceSpine(BaseExampleComponent):
     """Spine Component"""
 
     def __init__(self, name="spineBase", parent=None):
-        super(SpineComponent, self).__init__(name, parent)
+        super(FabriceSpine, self).__init__(name, parent)
 
         # ===========
         # Declare IO
@@ -53,13 +53,13 @@ class SpineComponent(BaseExampleComponent):
         # Declare Output Attrs
 
 
-class SpineComponentGuide(SpineComponent):
-    """Spine Component Guide"""
+class FabriceSpineGuide(FabriceSpine):
+    """Fabrice Spine Component Guide"""
 
     def __init__(self, name='spine', parent=None):
 
-        Profiler.getInstance().push("Construct Spine Guide Component:" + name)
-        super(SpineComponentGuide, self).__init__(name, parent)
+        Profiler.getInstance().push("Construct Fabrice Spine Guide Component:" + name)
+        super(FabriceSpineGuide, self).__init__(name, parent)
 
         # =========
         # Controls
@@ -79,11 +79,11 @@ class SpineComponentGuide(SpineComponent):
         self.loadData({
             'name': name,
             'location': 'M',
-            'cogPosition': Vec3(0.0, 11.1351, -0.1382),
-            'spine01Position': Vec3(0.0, 11.1351, -0.1382),
-            'spine02Position': Vec3(0.0, 11.8013, -0.1995),
-            'spine03Position': Vec3(0.0, 12.4496, -0.3649),
-            'spine04Position': Vec3(0.0, 13.1051, -0.4821),
+            'cogPosition': Vec3(0.0, 0.65, -3.1),
+            'spine01Position': Vec3(0.0, 0.65, -3.1),
+            'spine02Position': Vec3(0.0, 1.15, -2.0),
+            'spine03Position': Vec3(0.0, 1.6, -0.7),
+            'spine04Position': Vec3(0.0, 1.65, 0.75),
             'numDeformers': 6
         })
 
@@ -101,7 +101,7 @@ class SpineComponentGuide(SpineComponent):
 
         """
 
-        data = super(SpineComponentGuide, self).saveData()
+        data = super(FabriceSpineGuide, self).saveData()
 
         data['cogPosition'] = self.cog.xfo.tr
         data['spine01Position'] = self.spine01Ctrl.xfo.tr
@@ -124,7 +124,7 @@ class SpineComponentGuide(SpineComponent):
 
         """
 
-        super(SpineComponentGuide, self).loadData( data )
+        super(FabriceSpineGuide, self).loadData( data )
 
         self.cog.xfo.tr = data["cogPosition"]
         self.spine01Ctrl.xfo.tr = data["spine01Position"]
@@ -144,7 +144,7 @@ class SpineComponentGuide(SpineComponent):
 
         """
 
-        data = super(SpineComponentGuide, self).getRigBuildData()
+        data = super(FabriceSpineGuide, self).getRigBuildData()
 
         data['cogPosition'] = self.cog.xfo.tr
         data['spine01Position'] = self.spine01Ctrl.xfo.tr
@@ -179,16 +179,16 @@ class SpineComponentGuide(SpineComponent):
 
         """
 
-        return SpineComponentRig
+        return FabriceSpineRig
 
 
-class SpineComponentRig(SpineComponent):
-    """Spine Component"""
+class FabriceSpineRig(FabriceSpine):
+    """Fabrice Spine Component"""
 
     def __init__(self, name="spine", parent=None):
 
         Profiler.getInstance().push("Construct Spine Rig Component:" + name)
-        super(SpineComponentRig, self).__init__(name, parent)
+        super(FabriceSpineRig, self).__init__(name, parent)
 
 
         # =========
@@ -197,35 +197,44 @@ class SpineComponentRig(SpineComponent):
         # COG
         self.cogCtrlSpace = CtrlSpace('cog', parent=self.ctrlCmpGrp)
         self.cogCtrl = Control('cog', parent=self.cogCtrlSpace, shape="circle")
+        self.cogCtrl.rotatePoints(90, 0, 0)
         self.cogCtrl.scalePoints(Vec3(6.0, 6.0, 6.0))
         self.cogCtrl.setColor("orange")
 
-        # Spine01
-        self.spine01CtrlSpace = CtrlSpace('spine01', parent=self.cogCtrl)
-        self.spine01Ctrl = Control('spine01', parent=self.spine01CtrlSpace, shape="circle")
-        self.spine01Ctrl.scalePoints(Vec3(4.0, 4.0, 4.0))
+        # Spine Base
+        self.spineBaseCtrlSpace = CtrlSpace('spineBase', parent=self.cogCtrl)
+        self.spineBaseCtrl = Control('spineBase', parent=self.spineBaseCtrlSpace, shape="pin")
+        self.spineBaseCtrl.rotatePoints(90, 0, 0)
+        self.spineBaseCtrl.translatePoints(0, 1.5, 0)
+        # self.spineBaseCtrl.scalePoints(Vec3(4.0, 4.0, 4.0))
 
-        # Spine02
-        self.spine02CtrlSpace = CtrlSpace('spine02', parent=self.spine01Ctrl)
-        self.spine02Ctrl = Control('spine02', parent=self.spine02CtrlSpace, shape="circle")
-        self.spine02Ctrl.scalePoints(Vec3(4.5, 4.5, 4.5))
+        # Spine Base Handle
+        self.spineBaseHandleCtrlSpace = CtrlSpace('spineBaseHandle', parent=self.spineBaseCtrl)
+        self.spineBaseHandleCtrl = Control('spineBaseHandle', parent=self.spineBaseHandleCtrlSpace, shape="pin")
+        self.spineBaseHandleCtrl.rotatePoints(90, 0, 0)
+        self.spineBaseHandleCtrl.translatePoints(0, 1.5, 0)
+        # self.spineBaseHandleCtrl.scalePoints(Vec3(4.5, 4.5, 4.5))
 
+        # Spine End
+        self.spineEndCtrlSpace = CtrlSpace('spineEnd', parent=self.cogCtrl)
+        self.spineEndCtrl = Control('spineEnd', parent=self.spineEndCtrlSpace, shape="pin")
+        self.spineEndCtrl.rotatePoints(90, 0, 0)
+        self.spineEndCtrl.translatePoints(0, 1.5, 0)
+        # self.spineEndCtrl.scalePoints(Vec3(6.0, 6.0, 6.0))
 
-        # Spine03
-        self.spine03CtrlSpace = CtrlSpace('spine03', parent=self.spine02Ctrl)
-        self.spine03Ctrl = Control('spine03', parent=self.spine03CtrlSpace, shape="circle")
-        self.spine03Ctrl.scalePoints(Vec3(4.5, 4.5, 4.5))
-        self.spine03Ctrl.setColor("blue")
-
-        # Spine04
-        self.spine04CtrlSpace = CtrlSpace('spine04', parent=self.cogCtrl)
-        self.spine04Ctrl = Control('spine04', parent=self.spine04CtrlSpace, shape="circle")
-        self.spine04Ctrl.scalePoints(Vec3(6.0, 6.0, 6.0))
+        # Spine End Handle
+        self.spineEndHandleCtrlSpace = CtrlSpace('spineEndHandle', parent=self.spineEndCtrl)
+        self.spineEndHandleCtrl = Control('spineEndHandle', parent=self.spineEndHandleCtrlSpace, shape="pin")
+        self.spineEndHandleCtrl.rotatePoints(90, 0, 0)
+        self.spineEndHandleCtrl.translatePoints(0, 1.5, 0)
+        # self.spineEndHandleCtrl.scalePoints(Vec3(4.5, 4.5, 4.5))
+        self.spineEndHandleCtrl.setColor("blue")
 
         # Pelvis
         self.pelvisCtrlSpace = CtrlSpace('pelvis', parent=self.cogCtrl)
         self.pelvisCtrl = Control('pelvis', parent=self.pelvisCtrlSpace, shape="cube")
         self.pelvisCtrl.alignOnYAxis(negative=True)
+        self.pelvisCtrl.rotatePoints(90, 0, 0)
         self.pelvisCtrl.scalePoints(Vec3(2.0, 1.5, 1.5))
 
 
@@ -288,10 +297,10 @@ class SpineComponentRig(SpineComponent):
         self.bezierSpineSpliceOp.setInput('length', self.lengthInputAttr)
 
         # Add Xfo Inputs
-        self.bezierSpineSpliceOp.setInput('base', self.spine01Ctrl)
-        self.bezierSpineSpliceOp.setInput('baseHandle', self.spine02Ctrl)
+        self.bezierSpineSpliceOp.setInput('base', self.spineBaseCtrl)
+        self.bezierSpineSpliceOp.setInput('baseHandle', self.spineBaseHandleCtrl)
         self.bezierSpineSpliceOp.setInput('tipHandle', self.spine03Ctrl)
-        self.bezierSpineSpliceOp.setInput('tip', self.spine04Ctrl)
+        self.bezierSpineSpliceOp.setInput('tip', self.spineEndCtrl)
 
         # Add Xfo Outputs
         for spineOutput in self.spineOutputs:
@@ -359,7 +368,7 @@ class SpineComponentRig(SpineComponent):
 
         """
 
-        super(SpineComponentRig, self).loadData( data )
+        super(FabriceSpineRig, self).loadData( data )
 
         cogPosition = data['cogPosition']
         spine01Position = data['spine01Position']
@@ -374,17 +383,17 @@ class SpineComponentRig(SpineComponent):
         self.pelvisCtrlSpace.xfo.tr = cogPosition
         self.pelvisCtrl.xfo.tr = cogPosition
 
-        self.spine01CtrlSpace.xfo.tr = spine01Position
-        self.spine01Ctrl.xfo.tr = spine01Position
+        self.spineBaseCtrlSpace.xfo.tr = spine01Position
+        self.spineBaseCtrl.xfo.tr = spine01Position
 
-        self.spine02CtrlSpace.xfo.tr = spine02Position
-        self.spine02Ctrl.xfo.tr = spine02Position
+        self.spineBaseHandleCtrlSpace.xfo.tr = spine02Position
+        self.spineBaseHandleCtrl.xfo.tr = spine02Position
 
-        self.spine03CtrlSpace.xfo.tr = spine03Position
-        self.spine03Ctrl.xfo.tr = spine03Position
+        self.spineEndHandleCtrlSpace.xfo.tr = spine03Position
+        self.spineEndHandleCtrl.xfo.tr = spine03Position
 
-        self.spine04CtrlSpace.xfo.tr = spine04Position
-        self.spine04Ctrl.xfo.tr = spine04Position
+        self.spineEndCtrlSpace.xfo.tr = spine04Position
+        self.spineEndCtrl.xfo.tr = spine04Position
 
         length = spine01Position.distanceTo(spine02Position) + spine02Position.distanceTo(spine03Position) + spine03Position.distanceTo(spine04Position)
         self.lengthInputAttr.setMax(length * 3.0)
@@ -433,5 +442,5 @@ class SpineComponentRig(SpineComponent):
 
 from kraken.core.kraken_system import KrakenSystem
 ks = KrakenSystem.getInstance()
-ks.registerComponent(SpineComponentGuide)
-ks.registerComponent(SpineComponentRig)
+ks.registerComponent(FabriceSpineGuide)
+ks.registerComponent(FabriceSpineRig)

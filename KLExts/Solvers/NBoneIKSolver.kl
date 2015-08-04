@@ -22,6 +22,7 @@ function KrakenSolverArg[] NBoneIKSolver.getArguments(){
   KrakenSolverArg args[] = this.parent.getArguments();
   args.push(KrakenSolverArg('useInitPose', 'in', 'Boolean'));
   args.push(KrakenSolverArg('ikblend', 'in', 'Scalar'));
+  args.push(KrakenSolverArg('chainBase', 'in', 'Mat44'));
   args.push(KrakenSolverArg('ikgoal', 'in', 'Mat44'));
   args.push(KrakenSolverArg('upVector', 'in', 'Mat44'));
   args.push(KrakenSolverArg('fkcontrols', 'in', 'Mat44[]'));
@@ -42,6 +43,7 @@ function NBoneIKSolver.solve!
   Scalar rigScale,
   Boolean useInitPose,
   Scalar ikblend,
+  Mat44 chainBase,
   Mat44 ikgoal,
   Mat44 upVector,
   Mat44 fkcontrols[],
@@ -63,7 +65,7 @@ function NBoneIKSolver.solve!
     }
     this.initPose = fkPose;
     fkPose[fkcontrols.size] = fkPose[fkcontrols.size-1];
-    fkPose[fkcontrols.size].tr = fkPose[fkcontrols.size-1].transformVector(fkPose[fkcontrols.size-2].inverse().transformVector(fkPose[fkcontrols.size-1].tr));
+    fkPose[fkcontrols.size].tr = fkPose[fkcontrols.size-1].transformVector(Vec3(tipBoneLen, 0.0, 0.0));
   }
 
   Xfo xfoPose[];
@@ -89,19 +91,27 @@ function NBoneIKSolver.solve!
       ikIndex = rootIndex;
     }
 
+    Xfo offsetInitPose[];
+    offsetInitPose.resize(this.initPose.size);
+    if (useInitPose == 1) {
+      // Calculate the initpose offset by the chain base input
+      for (Integer i=0; i < this.initPose.size; i++) {
+        offsetInitPose[i] = chainBase * (this.initPose[0].inverse() * this.initPose[i]);
+      }
+    }
+
     // Now blend the IK result with the FK result
     Xfo initPose[];
     initPose.resize(this.initPose.size - ikIndex);
     for(UInt32 i=ikIndex; i < xfoPose.size; i++) {
       if (useInitPose == 1)
-        initPose[i - ikIndex] = this.initPose[i];
+        initPose[i - ikIndex] = offsetInitPose[i];
       else
         initPose[i - ikIndex] = xfoPose[i];
     }
 
     Xfo ikPose[];
     if (useInitPose == 1) {
-      //ikPose = solveNBoneIK(this.initPose, ikgoal.translation());
       ikPose = solveNBoneIKWithUpVector(initPose, ikgoal.translation(), upVector.translation(), Vec3(0, 1, 0));
     }
     else {

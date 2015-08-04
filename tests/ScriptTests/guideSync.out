@@ -1,2 +1,18 @@
 Failed to find DCC builder. Falling back to Python builder.
+building:armGuide as:armGuide
+building:armGuide.Arm as:LArm
+building:armGuide.controls as:armGuide_controls
+building:armGuide.controls.Arm as:Arm_L_cmp
+building:armGuide.controls.Arm.inputs as:Arm_L_inputs_hrc
+building:armGuide.controls.Arm.inputs.globalSRT as:Arm_L_globalSRT_cmpIn
+building:armGuide.controls.Arm.inputs.clavicleEnd as:Arm_L_clavicleEnd_cmpIn
+building:armGuide.controls.Arm.outputs as:Arm_L_outputs_hrc
+building:armGuide.controls.Arm.outputs.bicep as:Arm_L_bicep_cmpOut
+building:armGuide.controls.Arm.outputs.forearm as:Arm_L_forearm_cmpOut
+building:armGuide.controls.Arm.outputs.armEndXfo as:Arm_L_armEndXfo_cmpOut
+building:armGuide.controls.Arm.outputs.hand as:Arm_L_hand_cmpOut
+building:armGuide.controls.Arm.bicepFK as:Arm_L_bicepFK_ctrl
+building:armGuide.controls.Arm.forearmFK as:Arm_L_forearmFK_ctrl
+building:armGuide.controls.Arm.wristFK as:Arm_L_wristFK_ctrl
+building:armGuide.controls.Arm.hand as:Arm_L_hand_ctrl
 armGuide.Arm:L

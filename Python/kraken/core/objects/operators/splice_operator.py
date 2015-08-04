@@ -94,18 +94,23 @@ class SpliceOperator(Operator):
         # Start constructing the source code.
         opSourceCode = ""
         opSourceCode += "require Kraken;\n"
-        opSourceCode += "require " + self.getExtension() + ";\n\n"
+
+        if self.getExtension() != "Kraken":
+            opSourceCode += "require " + self.getExtension() + ";"
+
+        opSourceCode += "\n\n"
+
         opSourceCode += "operator " + self.getName() + "(\n"
 
-        opSourceCode += "    io " + self.solverTypeName + " solver,\n"
+        opSourceCode += "  io " + self.solverTypeName + " solver,\n"
 
         # In SpliceMaya, output arrays are not resized by the system prior to calling into Splice, so we
         # explicily resize the arrays in the generated operator stub code.
         arrayResizing = "";
         for argName, arraySize in arraySizes.iteritems():
-            arrayResizing += "    "+argName+".resize("+str(arraySize)+");\n"
+            arrayResizing += "  "+argName+".resize("+str(arraySize)+");\n"
 
-        functionCall = "    solver.solve("
+        functionCall = "  solver.solve("
         for i in xrange(len(self.args)):
             arg = self.args[i]
             # Connect the ports to the inputs/outputs in the rig.
@@ -118,7 +123,7 @@ class SpliceOperator(Operator):
             if outDataType.endswith('[]'):
                 outDataType = outDataType[:-2]
                 suffix = "[]"
-            opSourceCode += "    " + outArgType + " " + outDataType + " " + arg.name + suffix
+            opSourceCode += "  " + outArgType + " " + outDataType + " " + arg.name + suffix
             if i == len(self.args) - 1:
                 opSourceCode += "\n"
             else:
@@ -130,7 +135,7 @@ class SpliceOperator(Operator):
                 functionCall += arg.name + ", "
         functionCall += ");\n"
 
-        opSourceCode += "    )\n"
+        opSourceCode += "  )\n"
         opSourceCode += "{\n"
         opSourceCode += arrayResizing
         opSourceCode += functionCall

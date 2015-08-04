@@ -18,6 +18,8 @@ from Qt.QtGui import QWidget
 from PySide import QtWebKit
 from PySide import QtGui, QtCore
 
+from kraken.core.objects.rig import Rig
+from kraken import plugins
 
 import kraken.ui.kraken_window
 reload(kraken.ui.kraken_window)
@@ -39,6 +41,8 @@ def XSILoadPlugin(in_reg):
         in_reg.RegisterMenu(constants.siMenuMainTopLevelID, "Kraken", False, False)
 
     in_reg.RegisterCommand('OpenKrakenEditor', 'OpenKrakenEditor')
+    in_reg.RegisterCommand('BuildKrakenGuide', 'BuildKrakenGuide')
+    in_reg.RegisterCommand('BuildKrakenRig', 'BuildKrakenRig')
 
     return True
 
@@ -51,6 +55,9 @@ def Kraken_Init( in_ctxt ):
 
     menu = in_ctxt.source;
     menu.AddCommandItem( "Open UI", "OpenKrakenEditor")
+    menu.AddSeparatorItem();
+    menu.AddCommandItem("Build Guide", "BuildKrakenGuide")
+    menu.AddCommandItem("Build Rig", "BuildKrakenRig")
     menu.AddSeparatorItem();
     menu.AddCallbackItem( "Help", "OpenKrakenHelp" )
 
@@ -91,6 +98,119 @@ def OpenKrakenEditor_Execute():
     splash.finish(window)
 
     return True
+
+
+def BuildKrakenGuide_Init(in_ctxt):
+    cmd = in_ctxt.Source
+    cmd.Description = 'Builds a Kraken Guide from a .krg File'
+    cmd.ReturnValue = True
+
+    args = cmd.Arguments
+    args.Add('rigFilePath', constants.siArgumentInput, "", constants.siString)
+
+    return True
+
+
+def BuildKrakenGuide_Execute(rigFilePath):
+
+    if rigFilePath == "" and si.Interactive is True:
+
+        fileBrowser = XSIUIToolkit.FileBrowser
+        fileBrowser.DialogTitle = "Select a Kraken Rig File"
+        fileBrowser.InitialDirectory = si.ActiveProject3.Path
+        fileBrowser.Filter = "Kraken Rig (*.krg)|*.krg||"
+        fileBrowser.ShowOpen()
+
+        fileName = fileBrowser.FilePathName
+        if fileName != "":
+            rigFilePath = fileName
+        else:
+            log("User Cancelled.", 4)
+            return False
+
+    elif rigFilePath == "" and si.Interactive is False:
+        log("No rig file path specified in batch mode!", 2)
+        return False
+
+    guideRig = Rig()
+    guideRig.loadRigDefinitionFile(rigFilePath)
+
+    builtRig = None
+    progressBar = None
+    try:
+
+        progressBar = XSIUIToolkit.ProgressBar
+        progressBar.Caption = "Building Kraken Guide: " + guideRig.getName()
+        progressBar.CancelEnabled = False
+        progressBar.Visible = True
+
+        builder = plugins.getBuilder()
+        builtRig = builder.build(guideRig)
+
+    finally:
+        if progressBar is not None:
+            progressBar.Visible = False
+
+    return builtRig
+
+
+def BuildKrakenRig_Init(in_ctxt):
+    cmd = in_ctxt.Source
+    cmd.Description = 'Builds a Kraken Rig from a .krg File'
+    cmd.ReturnValue = True
+
+    args = cmd.Arguments
+    args.Add('rigFilePath', constants.siArgumentInput, "", constants.siString)
+
+    return True
+
+
+def BuildKrakenRig_Execute(rigFilePath):
+
+    if rigFilePath == "" and si.Interactive is True:
+
+        fileBrowser = XSIUIToolkit.FileBrowser
+        fileBrowser.DialogTitle = "Select a Kraken Rig File"
+        fileBrowser.InitialDirectory = si.ActiveProject3.Path
+        fileBrowser.Filter = "Kraken Rig (*.krg)|*.krg||"
+        fileBrowser.ShowOpen()
+
+        fileName = fileBrowser.FilePathName
+        if fileName != "":
+             rigFilePath = fileName
+        else:
+            log("User Cancelled.", 4)
+            return False
+
+    elif rigFilePath == "" and si.Interactive is False:
+        log("No rig file path specified in batch mode!", 2)
+        return False
+
+    guideRig = Rig()
+    guideRig.loadRigDefinitionFile(rigFilePath)
+    rigBuildData = guideRig.getRigBuildData()
+
+    rig = Rig()
+    rig.loadRigDefinition(rigBuildData)
+    rig.setName(guideRig.getName().replace('_Guide', ''))
+
+    builtRig = None
+    progressBar = None
+    try:
+
+        progressBar = XSIUIToolkit.ProgressBar
+        progressBar.Caption = "Building Kraken Rig: " + rig.getName()
+        progressBar.CancelEnabled = False
+        progressBar.Visible = True
+
+        builder = plugins.getBuilder()
+        builtRig = builder.build(rig)
+
+    finally:
+        if progressBar is not None:
+            progressBar.Visible = False
+
+    return builtRig
 
 
 # ==========

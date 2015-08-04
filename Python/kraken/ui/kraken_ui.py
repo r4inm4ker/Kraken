@@ -36,8 +36,9 @@ class KrakenUI(QtGui.QWidget):
 
         self.horizontalSplitter.setStretchFactor(0, 0)
         self.horizontalSplitter.setStretchFactor(1, 1)
-
         self.horizontalSplitter.setSizes([0, 100])
+        self.horizontalSplitter.splitterMoved.connect(self.splitterMoved)
+        self.nodeLibraryExpandedSize = 175
 
         grid = QtGui.QVBoxLayout(self)
         grid.addWidget(self.horizontalSplitter)
@@ -55,9 +56,26 @@ class KrakenUI(QtGui.QWidget):
         sizes = splitter.sizes()
 
         if sizes[0] == 0:
-            splitter.setSizes([175, sizes[1]])
+            splitter.setSizes([self.nodeLibraryExpandedSize, sizes[1]])
         else:
             splitter.setSizes([0, sizes[1]])
+
+
+    def splitterMoved(self, pos, index):
+        self.nodeLibraryExpandedSize = pos
+
+
+    def writeSettings(self, settings):
+        settings.beginGroup("KrakenUI")
+        settings.setValue("horizontalSplitterSizes", self.nodeLibraryExpandedSize)
+        settings.endGroup()
+
+
+    def readSettings(self, settings):
+        settings.beginGroup("KrakenUI")
+        if settings.contains('horizontalSplitterSizes'):
+            self.nodeLibraryExpandedSize = settings.value("horizontalSplitterSizes", 175)
+        settings.endGroup()
 
 
 if __name__ == "__main__":

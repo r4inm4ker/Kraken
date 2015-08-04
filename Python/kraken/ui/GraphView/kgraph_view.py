@@ -14,10 +14,10 @@ from kraken.core.configs.config import Config
 
 
 class KGraphView(GraphView):
-    
+
     beginCopyData = QtCore.Signal()
     endCopyData = QtCore.Signal()
-    
+
     beginPasteData = QtCore.Signal()
     endPasteData = QtCore.Signal()
 
@@ -62,12 +62,6 @@ class KGraphView(GraphView):
     ################################################
     ## Events
     def mousePressEvent(self, event):
-
-        # If the contextual node list is open, close it. 
-        contextualNodeList = self.getGraphViewWidget().getContextualNodeList()
-        if contextualNodeList is not None and contextualNodeList.isVisible():
-            contextualNodeList.searchLineEdit.clear()
-            contextualNodeList.hide()
 
         if event.button() == QtCore.Qt.MouseButton.RightButton:
 

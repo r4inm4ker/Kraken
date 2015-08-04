@@ -3,6 +3,8 @@ import sys
 import webbrowser
 
 from PySide import QtGui, QtCore
+from kraken.core.kraken_system import KrakenSystem
+from kraken.core.configs.config import Config
 
 
 class KrakenMenu(QtGui.QWidget):
@@ -11,7 +13,6 @@ class KrakenMenu(QtGui.QWidget):
     def __init__(self, parent=None):
         super(KrakenMenu, self).__init__(parent)
         self.setObjectName('menuWidget')
-        self.parent = parent
 
         self.createLayout()
         self.createConnections()
@@ -84,16 +85,40 @@ class KrakenMenu(QtGui.QWidget):
         logoWidget = QtGui.QLabel()
         logoWidget.setObjectName('logoWidget')
         logoWidget.setMinimumHeight(20)
-        logoWidget.setMinimumWidth(97)
+        logoWidget.setMinimumWidth(110)
 
         logoPixmap = QtGui.QPixmap(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'images', 'KrakenUI_Logo.png'))
         logoWidget.setPixmap(logoPixmap)
+
+        # Config Widget
+        self.configsParent = QtGui.QFrame(self)
+        self.configsParent.setObjectName('configParent')
+        self.configsParent.setFrameStyle(QtGui.QFrame.NoFrame)
+        self.configsParent.setMinimumWidth(160)
+
+        self.configsLayout = QtGui.QVBoxLayout()
+        self.configsLayout.setContentsMargins(0, 0, 0, 0)
+        self.configsLayout.setSpacing(0)
+
+        self.configsWidget = QtGui.QComboBox()
+        self.configsWidget.setAutoFillBackground(True)
+        self.configsWidget.setObjectName('configWidget')
+        self.configsWidget.setMinimumWidth(160)
+        self.configsWidget.addItem('Default Config')
+
+        self.configsLayout.addWidget(self.configsWidget)
+        self.configsParent.setLayout(self.configsLayout)
+
+        configs = KrakenSystem.getInstance().getConfigClassNames()
+        for config in configs:
+            self.configsWidget.addItem(config.split('.')[-1])
 
         self.rigNameLabel = RigNameLabel('Rig Name:')
 
         # Add Widgets
         self.menuLayout.addWidget(logoWidget, 0)
         self.menuLayout.addWidget(self.menuBar, 3)
+        self.menuLayout.addWidget(self.configsParent, 0)
         self.menuLayout.addWidget(self.rigNameLabel, 0)
 
         self.setLayout(self.menuLayout)
@@ -135,6 +160,8 @@ class KrakenMenu(QtGui.QWidget):
         # Help Menu Connections
         self.onlineHelpAction.triggered.connect(self.openHelp)
 
+        self.configsWidget.currentIndexChanged.connect(self.setCurrentConfig)
+
         # Rig Name Label
         self.rigNameLabel.clicked.connect(graphViewWidget.editRigName)
 
@@ -143,12 +170,42 @@ class KrakenMenu(QtGui.QWidget):
     # Events
     # =======
     def updateRigNameLabel(self):
-        krakenUIWidget = self.parentWidget().getKrakenUI()
+        krakenUIWidget = self.window().getKrakenUI()
 
         graphViewWidget = krakenUIWidget.graphViewWidget
         newRigName = graphViewWidget.guideRig.getName()
 
         self.rigNameLabel.setText('Rig Name: ' + newRigName)
+
+
+    def setCurrentConfig(self, index = None):
+        if index is None:
+            index = self.configsWidget.currentIndex()
+        else:
+            self.configsWidget.setCurrentIndex(index)
+
+        if index == 0:
+            Config.makeCurrent()
+        else:
+            ks = KrakenSystem.getInstance()
+            configs = ks.getConfigClassNames()
+            configClass = ks.getConfigClass(configs[index-1])
+            configClass.makeCurrent()
+
+
+    def writeSettings(self, settings):
+        settings.beginGroup("KrakenMenu")
+        settings.setValue("currentConfig", self.configsWidget.currentIndex())
+        settings.endGroup()
+
+
+    def readSettings(self, settings):
+        settings.beginGroup("KrakenMenu")
+        if settings.contains('currentConfig'):
+            currentConfig = int(settings.value("currentConfig", 0))
+            self.setCurrentConfig(currentConfig)
+        settings.endGroup()
+
 
 
 class RigNameLabel(QtGui.QLabel):

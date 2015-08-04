@@ -409,7 +409,7 @@ class Config(object):
                                                 [-0.5, 0.0, -0.5]
                                                ],
                                      "degree": 1,
-                                     "closed": False
+                                     "closed": True
                                     }
                                    ],
                          "triangle": [
@@ -422,6 +422,34 @@ class Config(object):
                                        "degree": 1,
                                        "closed": True
                                       }
+                                     ],
+                         "fkCircle": [
+                                      {
+                                       "points": [
+                                                  [0.0, 0.35, -0.35],
+                                                  [0.0, 0.46, -0.09],
+                                                  [0.0, 0.55, 0.0],
+                                                  [0.0, 0.46, 0.09],
+                                                  [0.0, 0.35, 0.35],
+                                                  [0.0, 0.09, 0.46],
+                                                  [0.0, 0.0, 0.55],
+                                                  [-0.0, -0.09, 0.46],
+                                                  [-0.0, -0.35, 0.35],
+                                                  [-0.0, -0.5, 0.0],
+                                                  [-0.0, -0.35, -0.35],
+                                                  [0.0, 0.0, -0.5]
+                                                 ],
+                                        "degree": 1,
+                                        "closed": True
+                                       },
+                                       {
+                                        "points": [
+                                                   [0.0, 0.0, 0.0],
+                                                   [1.0, 0.0, 0.0]
+                                                  ],
+                                        "degree": 1,
+                                        "closed": False
+                                       }
                                      ]
                         }
 
@@ -491,6 +519,19 @@ class Config(object):
 
 
     @classmethod
+    def makeCurrent(cls):
+        """Sets this class t be the singleton instance Config.
+
+        Returns:
+            object: The singleton config instance.
+
+        """
+
+        Config.__instance = None
+        Config.__instance = cls()
+
+
+    @classmethod
     def clearInstance(cls):
         """Clears the instance variable of the config.
 
@@ -502,3 +543,4 @@ class Config(object):
         Config.__instance = None
 
         return True
+

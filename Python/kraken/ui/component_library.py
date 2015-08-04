@@ -64,7 +64,7 @@ class ComponentLibrary(QtGui.QWidget):
         self.ks.loadComponentModules()
 
         self.componentClassNames = []
-        for componentClassName in self.ks.getComponentClassNames():
+        for componentClassName in sorted(self.ks.getComponentClassNames()):
             cmpCls = self.ks.getComponentClass(componentClassName)
             if cmpCls.getComponentType() != 'Guide':
                 continue

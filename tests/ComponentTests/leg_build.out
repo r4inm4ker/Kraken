@@ -1,4 +1,36 @@
 Failed to find DCC builder. Falling back to Python builder.
+building:Leg as:LLeg
+building:Leg.controls as:controls
+building:Leg.controls.Leg as:Leg_L_cmp
+building:Leg.controls.Leg.inputs as:Leg_L_inputs_hrc
+building:Leg.controls.Leg.inputs.globalSRT as:Leg_L_globalSRT_cmpIn
+building:Leg.controls.Leg.inputs.pelvisInput as:Leg_L_pelvisInput_cmpIn
+building:Leg.controls.Leg.outputs as:Leg_L_outputs_hrc
+building:Leg.controls.Leg.outputs.femur as:Leg_L_femur_cmpOut
+building:Leg.controls.Leg.outputs.shin as:Leg_L_shin_cmpOut
+building:Leg.controls.Leg.outputs.legEndXfo as:Leg_L_legEndXfo_cmpOut
+building:Leg.controls.Leg.outputs.foot as:Leg_L_foot_cmpOut
+building:Leg.controls.Leg.outputs.toe as:Leg_L_toe_cmpOut
+building:Leg.controls.Leg.femurFK as:Leg_L_femurFK_ctrlSpace
+building:Leg.controls.Leg.femurFK.femurFK as:Leg_L_femurFK_ctrl
+building:Leg.controls.Leg.femurFK.femurFK.shinFK as:Leg_L_shinFK_ctrlSpace
+building:Leg.controls.Leg.femurFK.femurFK.shinFK.shinFK as:Leg_L_shinFK_ctrl
+building:Leg.controls.Leg.IK as:Leg_L_IK_ctrlSpace
+building:Leg.controls.Leg.IK.IK as:Leg_L_IK_ctrl
+building:Leg.controls.Leg.foot as:Leg_L_foot_ctrlSpace
+building:Leg.controls.Leg.foot.foot as:Leg_L_foot_ctrl
+building:Leg.controls.Leg.foot.foot.toe as:Leg_L_toe_ctrlSpace
+building:Leg.controls.Leg.foot.foot.toe.toe as:Leg_L_toe_ctrl
+building:Leg.controls.Leg.footRef as:Leg_L_footRef_loc
+building:Leg.controls.Leg.UpV as:Leg_L_UpV_ctrlSpace
+building:Leg.controls.Leg.UpV.UpV as:Leg_L_UpV_ctrl
+building:Leg.deformers as:deformers
+building:Leg.deformers.Leg as:Leg_L_cmp
+building:Leg.deformers.Leg.femur as:Leg_L_femur_def
+building:Leg.deformers.Leg.shin as:Leg_L_shin_def
+building:Leg.deformers.Leg.ankle as:Leg_L_ankle_def
+building:Leg.deformers.Leg.foot as:Leg_L_foot_def
+building:Leg.deformers.Leg.toe as:Leg_L_toe_def
 Leg:L
 Leg:L.controls
 Leg:L.controls.Leg:L

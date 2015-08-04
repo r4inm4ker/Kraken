@@ -346,8 +346,16 @@ class Builder(Builder):
 
         """
 
+        mininum = kAttribute.getMin()
+        if mininum == None:
+            mininum = 0
+
+        maximum = kAttribute.getMax()
+        if maximum == None:
+            maximum = kAttribute.getValue() * 2
+
         parentDCCSceneItem = self.getDCCSceneItem(kAttribute.getParent().getParent())
-        parentDCCSceneItem.addAttr(kAttribute.getName(), niceName=kAttribute.getName(), attributeType="long", defaultValue=kAttribute.getValue(), minValue=kAttribute.min, maxValue=kAttribute.max, keyable=True)
+        parentDCCSceneItem.addAttr(kAttribute.getName(), niceName=kAttribute.getName(), attributeType="long", defaultValue=kAttribute.getValue(), minValue=mininum, maxValue=maximum, keyable=True)
         parentDCCSceneItem.attr(kAttribute.getName())
         dccSceneItem = parentDCCSceneItem.attr(kAttribute.getName())
 

@@ -18,6 +18,7 @@ class Attribute(SceneItem):
         self._keyable = True
         self._lock = False
         self._animatable = True
+        self._callback = None
 
         if parent is not None:
             if parent.getTypeName() != 'AttributeGroup':
@@ -54,6 +55,25 @@ class Attribute(SceneItem):
         """
 
         self._value = value
+
+        if self._callback is not None:
+            self._callback(value)
+
+        return True
+
+
+    def setValueChangeCallback(self, callback):
+        """Sets the value of the attribute.
+
+        Arguments:
+        value -- Value to set the attribute to.
+
+        Return:
+        True if successful.
+
+        """
+
+        self._callback = callback
 
         return True
 
