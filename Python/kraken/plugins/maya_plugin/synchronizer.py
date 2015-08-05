@@ -2,7 +2,8 @@ from kraken.core.maths import Xfo, Vec3, Quat
 
 from kraken.core.synchronizer import Synchronizer
 from kraken.plugins.maya_plugin.utils import *
-from kraken.core.objects.attributes.attribute_group import AttributeGroup
+from kraken.plugins.maya_plugin.utils.curves import curveToKraken
+
 
 class Synchronizer(Synchronizer):
     """The Synchronizer is a singleton object used to synchronize data between
@@ -123,5 +124,35 @@ class Synchronizer(Synchronizer):
             return
 
         kObject.setValue(dccItem.get())
+
+        return True
+
+
+    def syncCurveData(self, kObject):
+        """Syncs the curve data from the DCC object to the Kraken object.
+
+        Args:
+            kObject (object): object to sync the curve data for.
+
+        Returns:
+            bool: True if successful.
+
+        """
+
+        hrcMap = self.getHierarchyMap()
+
+        if kObject not in hrcMap.keys():
+            print "Warning! 3D Object '" + kObject.getName() + "' was not found in the mapping!"
+            return False
+
+        dccItem = hrcMap[kObject]['dccItem']
+
+        if dccItem is None:
+            print "Warning Syncing. No DCC Item for :" + kObject.getPath()
+            return
+
+        # Get Curve Data from Softimage Curve
+        data = curveToKraken(dccItem)
+        kObject.setCurveData(data)
 
         return True

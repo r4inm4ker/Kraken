@@ -69,6 +69,7 @@ class SpineComponentGuide(SpineComponent):
 
         # Guide Controls
         self.cog = Control('cogPosition', parent=self.ctrlCmpGrp, shape="sphere")
+        self.cog.scalePoints(Vec3(1.2, 1.2, 1.2))
         self.cog.setColor('red')
 
         self.spine01Ctrl = Control('spine01Position', parent=self.ctrlCmpGrp, shape='sphere')
