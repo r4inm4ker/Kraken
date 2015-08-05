@@ -59,7 +59,7 @@ class KrakenWindow(QtGui.QMainWindow):
         mainWidget.setLayout(self.mainLayout)
         self.setCentralWidget(mainWidget)
 
-        self.statusBar().showMessage('Ready')
+        self.statusBar().showMessage('Ready', 2000)
 
         self.setGeometry(250, 150, 800, 475)
         self.center()

@@ -100,15 +100,44 @@ class KGraphViewWidget(GraphViewWidget):
 
     def buildGuideRig(self):
 
-        self.window().statusBar().showMessage('Building Guide')
+        try:
+            self.window().statusBar().showMessage('Building Guide')
 
-        builder = plugins.getBuilder()
+            builder = plugins.getBuilder()
 
-        if self.guideRig.getName().endswith('_guide') is False:
-            self.guideRig.setName(self.guideRig.getName() + '_guide')
+            if self.guideRig.getName().endswith('_guide') is False:
+                self.guideRig.setName(self.guideRig.getName() + '_guide')
 
-        builder.build(self.guideRig)
-        self.window().statusBar().showMessage('Ready')
+            builder.build(self.guideRig)
+
+        except Exception as e:
+            print e
+
+            statusBar = self.window().statusBar()
+            warningLabel = QtGui.QLabel('Error Building: ' + ', '.join([x for x in e.args]))
+            warningLabel.setMaximumWidth(200)
+            warningLabel.setStyleSheet("QLabel { border-radius: 3px; background-color: #AA0000}")
+
+            def addWarning():
+                self.window().statusBar().clearMessage()
+
+                statusBar.addWidget(warningLabel, 1)
+                statusBar.repaint()
+
+                timer.start()
+
+            def endWarning():
+                timer.stop()
+                statusBar.removeWidget(warningLabel)
+                statusBar.repaint()
+
+                self.window().statusBar().showMessage('Ready', 2000)
+
+            timer = QtCore.QTimer()
+            timer.setInterval(2000)
+            timer.timeout.connect(endWarning)
+
+            addWarning()
 
 
     def synchGuideRig(self):
@@ -119,20 +148,48 @@ class KGraphViewWidget(GraphViewWidget):
 
     def buildRig(self):
 
-        self.window().statusBar().showMessage('Building Rig')
+        try:
+            self.window().statusBar().showMessage('Building Rig')
 
-        self.synchGuideRig()
+            self.synchGuideRig()
 
-        rigBuildData = self.guideRig.getRigBuildData()
-        rig = Rig()
-        rig.loadRigDefinition(rigBuildData)
+            rigBuildData = self.guideRig.getRigBuildData()
+            rig = Rig()
+            rig.loadRigDefinition(rigBuildData)
 
-        rig.setName(rig.getName().replace('_guide', ''))
+            rig.setName(rig.getName().replace('_guide', ''))
 
-        builder = plugins.getBuilder()
-        builder.build(rig)
+            builder = plugins.getBuilder()
+            builder.build(rig)
 
-        self.window().statusBar().showMessage('Ready')
+        except Exception as e:
+            print e
+
+            statusBar = self.window().statusBar()
+            warningLabel = QtGui.QLabel('Error Building: ' + ', '.join([x for x in e.args]))
+            warningLabel.setMaximumWidth(200)
+            warningLabel.setStyleSheet("QLabel { border-radius: 3px; background-color: #AA0000}")
+
+            def addWarning():
+                self.window().statusBar().clearMessage()
+
+                statusBar.addWidget(warningLabel, 1)
+                statusBar.repaint()
+
+                timer.start()
+
+            def endWarning():
+                timer.stop()
+                statusBar.removeWidget(warningLabel)
+                statusBar.repaint()
+
+                self.window().statusBar().showMessage('Ready', 2000)
+
+            timer = QtCore.QTimer()
+            timer.setInterval(2000)
+            timer.timeout.connect(endWarning)
+
+            addWarning()
 
     # =========
     # Shortcuts
