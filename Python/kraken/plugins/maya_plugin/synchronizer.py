@@ -125,3 +125,17 @@ class Synchronizer(Synchronizer):
         kObject.setValue(dccItem.get())
 
         return True
+
+
+    def syncCurveData(self, kObject):
+        """Syncs the curve data from the DCC object to the Kraken object.
+
+        Args:
+            kObject (object): object to sync the curve data for.
+
+        Returns:
+            bool: True if successful.
+
+        """
+
+        return True

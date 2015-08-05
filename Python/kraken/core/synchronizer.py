@@ -159,6 +159,10 @@ class Synchronizer(object):
             if kObject.isTypeOf('Component') is False:
                 self.syncXfo(kObject)
 
+            # Sync Curves / Controls
+            if kObject.isTypeOf('Curve') is True:
+                self.syncCurveData(kObject)
+
         elif kObject.isTypeOf('Attribute'):
             self.syncAttribute(kObject)
 
@@ -213,7 +217,7 @@ class Synchronizer(object):
 
 
     def syncXfo(self, kObject):
-        """Syncs the xfo from the DCC objec to the Kraken object.
+        """Syncs the xfo from the DCC object to the Kraken object.
 
         **This should be re-implemented in the sub-classed synchronizer for each
         plugin.**
@@ -230,13 +234,30 @@ class Synchronizer(object):
 
 
     def syncAttribute(self, kObject):
-        """Syncs the attribute value from the DCC objec to the Kraken object.
+        """Syncs the attribute value from the DCC object to the Kraken object.
 
         **This should be re-implemented in the sub-classed synchronizer for each
         plugin.**
 
         Args:
             kObject (object): object to sync the attribute value for.
+
+        Returns:
+            bool: True if successful.
+
+        """
+
+        return True
+
+
+    def syncCurveData(self, kObject):
+        """Syncs the curve data from the DCC object to the Kraken object.
+
+        **This should be re-implemented in the sub-classed synchronizer for each
+        plugin.**
+
+        Args:
+            kObject (object): object to sync the curve data for.
 
         Returns:
             bool: True if successful.
