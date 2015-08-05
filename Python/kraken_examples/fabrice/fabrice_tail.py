@@ -100,7 +100,7 @@ class FabriceTailGuide(FabriceTail):
         # Add Splice Ops
         # ===============
         # Add Tail Splice Op
-        self.bezierSpineSpliceOp = SpliceOperator('spineGuideSpliceOp', 'BezierSpineSolver', 'Kraken')
+        self.bezierSpineSpliceOp = SpliceOperator('spineGuideSpliceOp', 'BezierSpineSolver', 'Kraken', alwaysEval=True)
         self.addOperator(self.bezierSpineSpliceOp)
 
         # Add Att Inputs
