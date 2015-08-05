@@ -58,21 +58,19 @@ class MainSrtComponentGuide(MainSrtComponent):
         # Add Component Params to IK control
         guideSettingsAttrGrp = AttributeGroup("GuideSettings", parent=self)
 
-        self.bicepFKCtrlSizeInputAttr = ScalarAttribute('mainSrtSize', value=9.0, minValue=1.0,   maxValue=50.0, parent=guideSettingsAttrGrp)
+        self.mainSrtSizeInputAttr = ScalarAttribute('mainSrtSize', value=5.0, minValue=1.0, maxValue=50.0, parent=guideSettingsAttrGrp)
 
         # =========
         # Controls
         # =========
-        mainSrtSize = self.bicepFKCtrlSizeInputAttr.getValue()
 
         # Guide Controls
-        self.mainSrtCtrl = Control('mainSrt', parent=self.ctrlCmpGrp, shape="cube")
-        self.mainSrtCtrl.scalePoints(Vec3(mainSrtSize, 1.0, mainSrtSize))
+        self.mainSrtCtrl = Control('mainSrt', parent=self.ctrlCmpGrp, shape="circle")
 
         if data is None:
             data = {
                     "location": 'M',
-                    "mainSrtSize": self.bicepFKCtrlSizeInputAttr.getValue(),
+                    "mainSrtSize": self.mainSrtSizeInputAttr.getValue(),
                     "mainSrtXfo": Xfo(tr=Vec3(0.0, 0.0, 0.0))
                    }
 
@@ -93,7 +91,7 @@ class MainSrtComponentGuide(MainSrtComponent):
         """
         data = super(MainSrtComponentGuide, self).saveData()
 
-        data["mainSrtSize"] = self.bicepFKCtrlSizeInputAttr.getValue()
+        data["mainSrtSize"] = self.mainSrtSizeInputAttr.getValue()
         data["mainSrtXfo"] = self.mainSrtCtrl.xfo
 
         return data
@@ -112,8 +110,10 @@ class MainSrtComponentGuide(MainSrtComponent):
 
         super(MainSrtComponentGuide, self).loadData( data )
 
-        self.bicepFKCtrlSizeInputAttr.setValue(data["mainSrtSize"])
+        self.mainSrtSizeInputAttr.setValue(data["mainSrtSize"])
         self.mainSrtCtrl.xfo = data["mainSrtXfo"]
+
+        self.mainSrtCtrl.scalePoints(Vec3(data["mainSrtSize"], 1.0, data["mainSrtSize"]))
 
         return True
 
@@ -128,7 +128,7 @@ class MainSrtComponentGuide(MainSrtComponent):
 
         data = super(MainSrtComponentGuide, self).getRigBuildData()
 
-        data["mainSrtSize"] = self.bicepFKCtrlSizeInputAttr.getValue()
+        data["mainSrtSize"] = self.mainSrtSizeInputAttr.getValue()
         data["mainSrtXfo"] = self.mainSrtCtrl.xfo
 
         return data
