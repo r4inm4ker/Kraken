@@ -36,7 +36,9 @@ class FabriceTail(BaseExampleComponent):
         # ===========
         # Declare Inputs Xfos
         self.tailMainSrtInputTgt = self.createInput('mainSrt', dataType='Xfo', parent=self.inputHrcGrp)
+        self.cogInputTgt = self.createInput('cog', dataType='Xfo', parent=self.inputHrcGrp)
         self.spineEndInputTgt = self.createInput('spineEnd', dataType='Xfo', parent=self.inputHrcGrp)
+        self.spineEndCtrlInputTgt = self.createInput('spineEndCtrl', dataType='Xfo', parent=self.inputHrcGrp)
 
         # Declare Output Xfos
         self.tailBaseOutputTgt = self.createOutput('tailBase', dataType='Xfo', parent=self.outputHrcGrp)
@@ -67,22 +69,28 @@ class FabriceTailGuide(FabriceTail):
         self.numDeformersAttr = IntegerAttribute('numDeformers', value=1, minValue=0, maxValue=20, parent=guideSettingsAttrGrp)
 
         # Guide Controls
-        self.spine01Ctrl = Control('spine01Position', parent=self.ctrlCmpGrp, shape='sphere')
-        self.spine01Ctrl.scalePoints(Vec3(1.2, 1.2, 1.2))
-        self.spine01Ctrl.setColor("turqoise")
+        self.tailBaseCtrl = Control('tailBase', parent=self.ctrlCmpGrp, shape='sphere')
+        self.tailBaseCtrl.scalePoints(Vec3(1.2, 1.2, 1.2))
+        self.tailBaseCtrl.setColor("turqoise")
 
-        self.spine02Ctrl = Control('spine02Position', parent=self.ctrlCmpGrp, shape='sphere')
-        self.spine02Ctrl.setColor("turqoise")
+        self.tailBaseHandleCtrl = Control('tailBaseHandle', parent=self.ctrlCmpGrp, shape='pin')
+        self.tailBaseHandleCtrl.rotatePoints(90, 0, 0)
+        self.tailBaseHandleCtrl.translatePoints(Vec3(0, 1.0, 0))
+        self.tailBaseHandleCtrl.setColor("turqoise")
 
-        self.spine03Ctrl = Control('spine03Position', parent=self.ctrlCmpGrp, shape='sphere')
-        self.spine03Ctrl.setColor("turqoise")
+        self.tailEndHandleCtrl = Control('tailEndHandle', parent=self.ctrlCmpGrp, shape='pin')
+        self.tailEndHandleCtrl.rotatePoints(90, 0, 0)
+        self.tailEndHandleCtrl.translatePoints(Vec3(0, 1.0, 0))
+        self.tailEndHandleCtrl.setColor("turqoise")
 
-        self.spine04Ctrl = Control('spine04Position', parent=self.ctrlCmpGrp, shape='sphere')
-        self.spine04Ctrl.setColor("turqoise")
+        self.tailEndCtrl = Control('tailEnd', parent=self.ctrlCmpGrp, shape='pin')
+        self.tailEndCtrl.rotatePoints(90, 0, 0)
+        self.tailEndCtrl.translatePoints(Vec3(0, 1.0, 0))
+        self.tailEndCtrl.setColor("turqoise")
 
         self.spineOutputs = []
         for i in xrange(6):
-            debugCtrl = Locator('tail' + str(i+1).zfill(2), parent=self.outputHrcGrp)
+            debugCtrl = ComponentOutput('tail' + str(i+1).zfill(2), parent=self.outputHrcGrp)
             self.spineOutputs.append(debugCtrl)
 
         # ===============
@@ -98,10 +106,10 @@ class FabriceTailGuide(FabriceTail):
         self.bezierSpineSpliceOp.setInput('length', self.lengthInputAttr)
 
         # Add Xfo Inputs
-        self.bezierSpineSpliceOp.setInput('base', self.spine01Ctrl)
-        self.bezierSpineSpliceOp.setInput('baseHandle', self.spine02Ctrl)
-        self.bezierSpineSpliceOp.setInput('tipHandle', self.spine03Ctrl)
-        self.bezierSpineSpliceOp.setInput('tip', self.spine04Ctrl)
+        self.bezierSpineSpliceOp.setInput('base', self.tailBaseCtrl)
+        self.bezierSpineSpliceOp.setInput('baseHandle', self.tailBaseHandleCtrl)
+        self.bezierSpineSpliceOp.setInput('tipHandle', self.tailEndHandleCtrl)
+        self.bezierSpineSpliceOp.setInput('tip', self.tailEndCtrl)
 
         # Add Xfo Outputs
         for spineOutput in self.spineOutputs:
@@ -110,10 +118,13 @@ class FabriceTailGuide(FabriceTail):
         self.loadData({
             'name': name,
             'location': 'M',
-            'spine01Position': Vec3(0.0, 0.65, -3.1),
-            'spine02Position': Vec3(0.0, 0.157, -4.7),
-            'spine03Position': Vec3(0.0, 0.0625, -6.165),
-            'spine04Position': Vec3(0.0, -0.22, -7.42),
+            'tailBasePos': Vec3(0.0, 0.65, -3.1),
+            'tailBaseHandlePos': Vec3(0.0, 0.157, -4.7),
+            'tailBaseHandleCtrlCrvData': self.cogCtrl.getCurveData(),
+            'tailEndHandlePos': Vec3(0.0, 0.0625, -6.165),
+            'tipHandleCtrlCrvData': self.cogCtrl.getCurveData(),
+            'tailEndPos': Vec3(0.0, -0.22, -7.42),
+            'tipCtrlCrvData': self.cogCtrl.getCurveData(),
             'numDeformers': 6
         })
 
@@ -133,10 +144,10 @@ class FabriceTailGuide(FabriceTail):
 
         data = super(FabriceTailGuide, self).saveData()
 
-        data['spine01Position'] = self.spine01Ctrl.xfo.tr
-        data['spine02Position'] = self.spine02Ctrl.xfo.tr
-        data['spine03Position'] = self.spine03Ctrl.xfo.tr
-        data['spine04Position'] = self.spine04Ctrl.xfo.tr
+        data['tailBasePos'] = self.tailBaseCtrl.xfo.tr
+        data['tailBaseHandlePos'] = self.tailBaseHandleCtrl.xfo.tr
+        data['tailEndHandlePos'] = self.tailEndHandleCtrl.xfo.tr
+        data['tailEndPos'] = self.tailEndCtrl.xfo.tr
         data['numDeformers'] = self.numDeformersAttr.getValue()
 
         return data
@@ -155,13 +166,13 @@ class FabriceTailGuide(FabriceTail):
 
         super(FabriceTailGuide, self).loadData( data )
 
-        self.spine01Ctrl.xfo.tr = data["spine01Position"]
-        self.spine02Ctrl.xfo.tr = data["spine02Position"]
-        self.spine03Ctrl.xfo.tr = data["spine03Position"]
-        self.spine04Ctrl.xfo.tr = data["spine04Position"]
+        self.tailBaseCtrl.xfo.tr = data["tailBasePos"]
+        self.tailBaseHandleCtrl.xfo.tr = data["tailBaseHandlePos"]
+        self.tailEndHandleCtrl.xfo.tr = data["tailEndHandlePos"]
+        self.tailEndCtrl.xfo.tr = data["tailEndPos"]
         self.numDeformersAttr.setValue(data["numDeformers"])
 
-        length = data["spine01Position"].distanceTo(data["spine02Position"]) + data["spine02Position"].distanceTo(data["spine03Position"]) + data["spine03Position"].distanceTo(data["spine04Position"])
+        length = data["tailBasePos"].distanceTo(data["tailBaseHandlePos"]) + data["tailBaseHandlePos"].distanceTo(data["tailEndHandlePos"]) + data["tailEndHandlePos"].distanceTo(data["tailEndPos"])
         self.lengthInputAttr.setMax(length * 3.0)
         self.lengthInputAttr.setValue(length)
 
@@ -180,10 +191,10 @@ class FabriceTailGuide(FabriceTail):
 
         data = super(FabriceTailGuide, self).getRigBuildData()
 
-        data['spine01Position'] = self.spine01Ctrl.xfo.tr
-        data['spine02Position'] = self.spine02Ctrl.xfo.tr
-        data['spine03Position'] = self.spine03Ctrl.xfo.tr
-        data['spine04Position'] = self.spine04Ctrl.xfo.tr
+        data['tailBasePos'] = self.tailBaseCtrl.xfo.tr
+        data['tailBaseHandlePos'] = self.tailBaseHandleCtrl.xfo.tr
+        data['tailEndHandlePos'] = self.tailEndHandleCtrl.xfo.tr
+        data['tailEndPos'] = self.tailEndCtrl.xfo.tr
         data['numDeformers'] = self.numDeformersAttr.getValue()
 
         return data
@@ -229,32 +240,32 @@ class FabriceTailRig(FabriceTail):
         # =========
 
         # Tail Base
-        self.tailBaseCtrlSpace = CtrlSpace('tailBase', parent=self.ctrlCmpGrp)
-        self.tailBaseCtrl = Control('tailBase', parent=self.tailBaseCtrlSpace, shape="circle")
-        self.tailBaseCtrl.rotatePoints(90, 0, 0)
-        self.tailBaseCtrl.scalePoints(Vec3(2.0, 2.0, 2.0))
-        self.tailBaseCtrl.setColor("greenBlue")
+        # self.tailBaseCtrlSpace = CtrlSpace('tailBase', parent=self.ctrlCmpGrp)
+        # self.tailBaseCtrl = Control('tailBase', parent=self.tailBaseCtrlSpace, shape="circle")
+        # self.tailBaseCtrl.rotatePoints(90, 0, 0)
+        # self.tailBaseCtrl.scalePoints(Vec3(2.0, 2.0, 2.0))
+        # self.tailBaseCtrl.setColor("greenBlue")
 
         # Tail Base Handle
-        self.tailBaseHandleCtrlSpace = CtrlSpace('tailBaseHandle', parent=self.tailBaseCtrl)
+        self.tailBaseHandleCtrlSpace = CtrlSpace('tailBaseHandle', parent=self.ctrlCmpGrp)
         self.tailBaseHandleCtrl = Control('tailBaseHandle', parent=self.tailBaseHandleCtrlSpace, shape="circle")
         self.tailBaseHandleCtrl.rotatePoints(90, 0, 0)
         self.tailBaseHandleCtrl.scalePoints(Vec3(2.0, 2.0, 2.0))
         self.tailBaseHandleCtrl.setColor("turqoise")
 
-        # Tail End
-        self.tailEndCtrlSpace = CtrlSpace('tailEnd', parent=self.ctrlCmpGrp)
-        self.tailEndCtrl = Control('tailEnd', parent=self.tailEndCtrlSpace, shape="circle")
-        self.tailEndCtrl.rotatePoints(90, 0, 0)
-        self.tailEndCtrl.scalePoints(Vec3(2.0, 2.0, 2.0))
-        self.tailEndCtrl.setColor("greenBlue")
-
         # Tail End Handle
-        self.tailEndHandleCtrlSpace = CtrlSpace('tailEndHandle', parent=self.tailEndCtrl)
+        self.tailEndHandleCtrlSpace = CtrlSpace('tailEndHandle', parent=self.ctrlCmpGrp)
         self.tailEndHandleCtrl = Control('tailEndHandle', parent=self.tailEndHandleCtrlSpace, shape="circle")
         self.tailEndHandleCtrl.rotatePoints(90, 0, 0)
         self.tailEndHandleCtrl.scalePoints(Vec3(2.0, 2.0, 2.0))
         self.tailEndHandleCtrl.setColor("turqoise")
+
+        # Tail End
+        self.tailEndCtrlSpace = CtrlSpace('tailEnd', parent=self.tailEndHandleCtrl)
+        self.tailEndCtrl = Control('tailEnd', parent=self.tailEndCtrlSpace, shape="circle")
+        self.tailEndCtrl.rotatePoints(90, 0, 0)
+        self.tailEndCtrl.scalePoints(Vec3(2.0, 2.0, 2.0))
+        self.tailEndCtrl.setColor("greenBlue")
 
 
         # ==========
@@ -278,10 +289,15 @@ class FabriceTailRig(FabriceTail):
         # Constrain I/O
         # ==============
         # Constraint inputs
-        self.tailBaseInputConstraint = PoseConstraint('_'.join([self.tailBaseCtrlSpace.getName(), 'To', self.spineEndInputTgt.getName()]))
-        self.tailBaseInputConstraint.addConstrainer(self.spineEndInputTgt)
-        self.tailBaseInputConstraint.setMaintainOffset(True)
-        self.tailBaseCtrlSpace.addConstraint(self.tailBaseInputConstraint)
+        self.tailBaseHandleInputConstraint = PoseConstraint('_'.join([self.tailBaseHandleCtrlSpace.getName(), 'To', self.spineEndCtrlInputTgt.getName()]))
+        self.tailBaseHandleInputConstraint.addConstrainer(self.spineEndCtrlInputTgt)
+        self.tailBaseHandleInputConstraint.setMaintainOffset(True)
+        self.tailBaseHandleCtrlSpace.addConstraint(self.tailBaseHandleInputConstraint)
+
+        self.tailEndHandleInputConstraint = PoseConstraint('_'.join([self.tailEndHandleCtrlSpace.getName(), 'To', self.cogInputTgt.getName()]))
+        self.tailEndHandleInputConstraint.addConstrainer(self.cogInputTgt)
+        self.tailEndHandleInputConstraint.setMaintainOffset(True)
+        self.tailEndHandleCtrlSpace.addConstraint(self.tailEndHandleInputConstraint)
 
         # Constraint outputs
         self.tailBaseOutputConstraint = PoseConstraint('_'.join([self.tailBaseOutputTgt.getName(), 'To', 'spineBase']))
@@ -306,7 +322,7 @@ class FabriceTailRig(FabriceTail):
         self.bezierTailSpliceOp.setInput('length', self.lengthInputAttr)
 
         # Add Xfo Inputs
-        self.bezierTailSpliceOp.setInput('base', self.tailBaseCtrl)
+        self.bezierTailSpliceOp.setInput('base', self.spineEndInputTgt)
         self.bezierTailSpliceOp.setInput('baseHandle', self.tailBaseHandleCtrl)
         self.bezierTailSpliceOp.setInput('tipHandle', self.tailEndHandleCtrl)
         self.bezierTailSpliceOp.setInput('tip', self.tailEndCtrl)
@@ -364,25 +380,25 @@ class FabriceTailRig(FabriceTail):
 
         super(FabriceTailRig, self).loadData( data )
 
-        spine01Position = data['spine01Position']
-        spine02Position = data['spine02Position']
-        spine03Position = data['spine03Position']
-        spine04Position = data['spine04Position']
+        tailBasePos = data['tailBasePos']
+        tailBaseHandlePos = data['tailBaseHandlePos']
+        tailEndHandlePos = data['tailEndHandlePos']
+        tailEndPos = data['tailEndPos']
         numDeformers = data['numDeformers']
 
-        self.tailBaseCtrlSpace.xfo.tr = spine01Position
-        self.tailBaseCtrl.xfo.tr = spine01Position
+        self.spineEndInputTgt.xfo.tr = tailBasePos
+        self.spineEndCtrlInputTgt.xfo.tr = tailBasePos
 
-        self.tailBaseHandleCtrlSpace.xfo.tr = spine02Position
-        self.tailBaseHandleCtrl.xfo.tr = spine02Position
+        self.tailBaseHandleCtrlSpace.xfo.tr = tailBaseHandlePos
+        self.tailBaseHandleCtrl.xfo.tr = tailBaseHandlePos
 
-        self.tailEndHandleCtrlSpace.xfo.tr = spine03Position
-        self.tailEndHandleCtrl.xfo.tr = spine03Position
+        self.tailEndHandleCtrlSpace.xfo.tr = tailEndHandlePos
+        self.tailEndHandleCtrl.xfo.tr = tailEndHandlePos
 
-        self.tailEndCtrlSpace.xfo.tr = spine04Position
-        self.tailEndCtrl.xfo.tr = spine04Position
+        self.tailEndCtrlSpace.xfo.tr = tailEndPos
+        self.tailEndCtrl.xfo.tr = tailEndPos
 
-        length = spine01Position.distanceTo(spine02Position) + spine02Position.distanceTo(spine03Position) + spine03Position.distanceTo(spine04Position)
+        length = tailBasePos.distanceTo(tailBaseHandlePos) + tailBaseHandlePos.distanceTo(tailEndHandlePos) + tailEndHandlePos.distanceTo(tailEndPos)
         self.lengthInputAttr.setMax(length * 3.0)
         self.lengthInputAttr.setValue(length)
 
@@ -419,6 +435,7 @@ class FabriceTailRig(FabriceTail):
         self.deformersToOutputsSpliceOp.evaluate()
 
         # evaluate the constraints to ensure the outputs are now in the correct location.
+        self.tailBaseHandleInputConstraint.evaluate()
         self.tailBaseOutputConstraint.evaluate()
         self.tailEndOutputConstraint.evaluate()
 

@@ -191,7 +191,7 @@ class FabriceHeadRig(FabriceHead):
         self.headAimUpV.setShapeVisibility(False)
 
         # Head
-        self.headAim = Locator('headAim', parent=self.headAimCtrl)
+        self.headAim = Locator('headAim', parent=self.ctrlCmpGrp)
         self.headAim.setShapeVisibility(False)
 
         self.headCtrlSpace = CtrlSpace('head', parent=self.ctrlCmpGrp)
