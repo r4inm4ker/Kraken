@@ -1,0 +1,16 @@
+<snippet>
+    <content><![CDATA[
+"""${1:Doc String}.
+
+Arguments:
+${2:Arguments} -- ${3:Type}, ${4:information}.
+
+Return:
+${5:True if successful}.
+
+"""
+
+]]></content>
+    <tabTrigger>docString</tabTrigger>
+    <scope>source.python</scope>
+</snippet>

@@ -303,9 +303,9 @@ class KrakenSystem(object):
 
 
     def loadComponentModules(self):
-        """Loads all the component modules specified in the 'KRAKEN_COMPONENT_PATHS' environment variable.
+        """Loads all the component modules and configs specified in the 'KRAKEN_PATHS' environment variable.
 
-        If the environment variable is not set, then the kraken_examples are loaded.
+        The kraken_examples are loaded at all times.
 
         """
 

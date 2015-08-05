@@ -120,6 +120,41 @@ QMainWindow#KrakenMainWindow QMenu::item:selected {
     background-color: #293b3d;
 }
 
+/* Config Widget */
+QFrame#configParent {
+    border-bottom: 1px solid #2b2b2b;
+    padding: 0 20px 0 0;
+
+    background-color: #1f1f1f;
+}
+
+QComboBox#configWidget {
+    border: 0;
+    border-radius: 3px;
+    padding: 3px 3px 3px 6px;
+    margin: 0;
+
+    color: #e1ffff;
+    background-color: #333;
+}
+
+QComboBox#configWidget::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 8px;
+    background-color: #438f99;
+
+    border-top: 1px solid #54b3bf;
+    border-right: 1px solid #54b3bf;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+QComboBox#configWidget QAbstractItemView {
+    color: #e1ffff;
+    background-color: #333;
+}
+
 /* Rig Name Dialog */
 GraphViewWidget#graphViewWidget QDialog {
     margin: 0;
