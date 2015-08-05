@@ -90,7 +90,10 @@ class FabriceTailGuide(FabriceTail):
 
         self.spineOutputs = []
         for i in xrange(6):
-            debugCtrl = ComponentOutput('tail' + str(i+1).zfill(2), parent=self.outputHrcGrp)
+            debugCtrl = Control('spine' + str(i+1).zfill(2), parent=self.outputHrcGrp, shape="vertebra")
+            debugCtrl.rotatePoints(0, -90, 0)
+            debugCtrl.scalePoints(Vec3(0.5, 0.5, 0.5))
+            debugCtrl.setColor('turqoise')
             self.spineOutputs.append(debugCtrl)
 
         # ===============
