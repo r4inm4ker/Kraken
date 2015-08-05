@@ -25,24 +25,24 @@ from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
 
 
-class FabriceSpine(BaseExampleComponent):
-    """Spine Component"""
+class FabriceTail(BaseExampleComponent):
+    """Fabrice Tail Component"""
 
-    def __init__(self, name="spineBase", parent=None):
-        super(FabriceSpine, self).__init__(name, parent)
+    def __init__(self, name="fabriceTailBase", parent=None):
+        super(FabriceTail, self).__init__(name, parent)
 
         # ===========
         # Declare IO
         # ===========
         # Declare Inputs Xfos
-        self.spineMainSrtInputTgt = self.createInput('mainSrt', dataType='Xfo', parent=self.inputHrcGrp)
+        self.tailMainSrtInputTgt = self.createInput('mainSrt', dataType='Xfo', parent=self.inputHrcGrp)
+        self.spineEndInputTgt = self.createInput('spineEnd', dataType='Xfo', parent=self.inputHrcGrp)
 
         # Declare Output Xfos
-        self.spineCogOutputTgt = self.createOutput('cog', dataType='Xfo', parent=self.outputHrcGrp)
-        self.spineBaseOutputTgt = self.createOutput('spineBase', dataType='Xfo', parent=self.outputHrcGrp)
-        self.spineEndOutputTgt = self.createOutput('spineEnd', dataType='Xfo', parent=self.outputHrcGrp)
+        self.tailBaseOutputTgt = self.createOutput('tailBase', dataType='Xfo', parent=self.outputHrcGrp)
+        self.tailEndOutputTgt = self.createOutput('tailEnd', dataType='Xfo', parent=self.outputHrcGrp)
 
-        self.spineVertebraeOutput = self.addOutput('spineVertebrae', dataType='Xfo[]')
+        self.tailVertebraeOutput = self.addOutput('tailVertebrae', dataType='Xfo[]')
 
         # Declare Input Attrs
         self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=False, parent=self.cmpInputAttrGrp)
@@ -52,13 +52,13 @@ class FabriceSpine(BaseExampleComponent):
         # Declare Output Attrs
 
 
-class FabriceSpineGuide(FabriceSpine):
-    """Fabrice Spine Component Guide"""
+class FabriceTailGuide(FabriceTail):
+    """Fabrice Tail Component Guide"""
 
-    def __init__(self, name='spine', parent=None):
+    def __init__(self, name='tail', parent=None):
 
-        Profiler.getInstance().push("Construct Fabrice Spine Guide Component:" + name)
-        super(FabriceSpineGuide, self).__init__(name, parent)
+        Profiler.getInstance().push("Construct Fabrice Tail Guide Component:" + name)
+        super(FabriceTailGuide, self).__init__(name, parent)
 
         # =========
         # Controls
@@ -67,24 +67,28 @@ class FabriceSpineGuide(FabriceSpine):
         self.numDeformersAttr = IntegerAttribute('numDeformers', value=1, minValue=0, maxValue=20, parent=guideSettingsAttrGrp)
 
         # Guide Controls
-        self.cog = Control('cogPosition', parent=self.ctrlCmpGrp, shape="sphere")
-        self.cog.scalePoints(Vec3(1.2, 1.2, 1.2))
-        self.cog.setColor('red')
-
         self.spine01Ctrl = Control('spine01Position', parent=self.ctrlCmpGrp, shape='sphere')
+        self.spine01Ctrl.scalePoints(Vec3(1.2, 1.2, 1.2))
+        self.spine01Ctrl.setColor("turqoise")
+
         self.spine02Ctrl = Control('spine02Position', parent=self.ctrlCmpGrp, shape='sphere')
+        self.spine02Ctrl.setColor("turqoise")
+
         self.spine03Ctrl = Control('spine03Position', parent=self.ctrlCmpGrp, shape='sphere')
+        self.spine03Ctrl.setColor("turqoise")
+
         self.spine04Ctrl = Control('spine04Position', parent=self.ctrlCmpGrp, shape='sphere')
+        self.spine04Ctrl.setColor("turqoise")
 
         self.spineOutputs = []
         for i in xrange(6):
-            debugCtrl = Locator('spine' + str(i+1).zfill(2), parent=self.outputHrcGrp)
+            debugCtrl = Locator('tail' + str(i+1).zfill(2), parent=self.outputHrcGrp)
             self.spineOutputs.append(debugCtrl)
 
         # ===============
         # Add Splice Ops
         # ===============
-        # Add Spine Splice Op
+        # Add Tail Splice Op
         self.bezierSpineSpliceOp = SpliceOperator('spineGuideSpliceOp', 'BezierSpineSolver', 'Kraken')
         self.addOperator(self.bezierSpineSpliceOp)
 
@@ -106,11 +110,10 @@ class FabriceSpineGuide(FabriceSpine):
         self.loadData({
             'name': name,
             'location': 'M',
-            'cogPosition': Vec3(0.0, 1.65, 0.75),
-            'spine01Position': Vec3(0.0, 1.65, 0.75),
-            'spine02Position': Vec3(0.0, 1.6, -0.7),
-            'spine03Position': Vec3(0.0, 1.15, -2.0),
-            'spine04Position': Vec3(0.0, 0.65, -3.1),
+            'spine01Position': Vec3(0.0, 0.65, -3.1),
+            'spine02Position': Vec3(0.0, 0.157, -4.7),
+            'spine03Position': Vec3(0.0, 0.0625, -6.165),
+            'spine04Position': Vec3(0.0, -0.22, -7.42),
             'numDeformers': 6
         })
 
@@ -128,9 +131,8 @@ class FabriceSpineGuide(FabriceSpine):
 
         """
 
-        data = super(FabriceSpineGuide, self).saveData()
+        data = super(FabriceTailGuide, self).saveData()
 
-        data['cogPosition'] = self.cog.xfo.tr
         data['spine01Position'] = self.spine01Ctrl.xfo.tr
         data['spine02Position'] = self.spine02Ctrl.xfo.tr
         data['spine03Position'] = self.spine03Ctrl.xfo.tr
@@ -151,9 +153,8 @@ class FabriceSpineGuide(FabriceSpine):
 
         """
 
-        super(FabriceSpineGuide, self).loadData( data )
+        super(FabriceTailGuide, self).loadData( data )
 
-        self.cog.xfo.tr = data["cogPosition"]
         self.spine01Ctrl.xfo.tr = data["spine01Position"]
         self.spine02Ctrl.xfo.tr = data["spine02Position"]
         self.spine03Ctrl.xfo.tr = data["spine03Position"]
@@ -177,9 +178,8 @@ class FabriceSpineGuide(FabriceSpine):
 
         """
 
-        data = super(FabriceSpineGuide, self).getRigBuildData()
+        data = super(FabriceTailGuide, self).getRigBuildData()
 
-        data['cogPosition'] = self.cog.xfo.tr
         data['spine01Position'] = self.spine01Ctrl.xfo.tr
         data['spine02Position'] = self.spine02Ctrl.xfo.tr
         data['spine03Position'] = self.spine03Ctrl.xfo.tr
@@ -212,54 +212,49 @@ class FabriceSpineGuide(FabriceSpine):
 
         """
 
-        return FabriceSpineRig
+        return FabriceTailRig
 
 
-class FabriceSpineRig(FabriceSpine):
-    """Fabrice Spine Component"""
+class FabriceTailRig(FabriceTail):
+    """Fabrice Tail Component"""
 
-    def __init__(self, name="spine", parent=None):
+    def __init__(self, name="fabriceTail", parent=None):
 
-        Profiler.getInstance().push("Construct Spine Rig Component:" + name)
-        super(FabriceSpineRig, self).__init__(name, parent)
+        Profiler.getInstance().push("Construct Tail Rig Component:" + name)
+        super(FabriceTailRig, self).__init__(name, parent)
 
 
         # =========
         # Controls
         # =========
-        # COG
-        self.cogCtrlSpace = CtrlSpace('cog', parent=self.ctrlCmpGrp)
-        self.cogCtrl = Control('cog', parent=self.cogCtrlSpace, shape="circle")
-        self.cogCtrl.rotatePoints(90, 0, 0)
-        self.cogCtrl.scalePoints(Vec3(3.0, 3.0, 3.0))
-        self.cogCtrl.translatePoints(Vec3(0.0, 0.0, 0.2))
-        self.cogCtrl.setColor("orange")
 
-        # Spine Base
-        self.spineBaseCtrlSpace = CtrlSpace('spineBase', parent=self.cogCtrl)
-        self.spineBaseCtrl = Control('spineBase', parent=self.spineBaseCtrlSpace, shape="pin")
-        self.spineBaseCtrl.rotatePoints(90, 0, 0)
-        self.spineBaseCtrl.translatePoints(Vec3(0, 1.0, 0))
+        # Tail Base
+        self.tailBaseCtrlSpace = CtrlSpace('tailBase', parent=self.ctrlCmpGrp)
+        self.tailBaseCtrl = Control('tailBase', parent=self.tailBaseCtrlSpace, shape="circle")
+        self.tailBaseCtrl.rotatePoints(90, 0, 0)
+        self.tailBaseCtrl.scalePoints(Vec3(2.0, 2.0, 2.0))
+        self.tailBaseCtrl.setColor("greenBlue")
 
-        # Spine Base Handle
-        self.spineBaseHandleCtrlSpace = CtrlSpace('spineBaseHandle', parent=self.spineBaseCtrl)
-        self.spineBaseHandleCtrl = Control('spineBaseHandle', parent=self.spineBaseHandleCtrlSpace, shape="pin")
-        self.spineBaseHandleCtrl.rotatePoints(90, 0, 0)
-        self.spineBaseHandleCtrl.translatePoints(Vec3(0, 1.0, 0))
-        self.spineBaseHandleCtrl.setColor("orange")
+        # Tail Base Handle
+        self.tailBaseHandleCtrlSpace = CtrlSpace('tailBaseHandle', parent=self.tailBaseCtrl)
+        self.tailBaseHandleCtrl = Control('tailBaseHandle', parent=self.tailBaseHandleCtrlSpace, shape="circle")
+        self.tailBaseHandleCtrl.rotatePoints(90, 0, 0)
+        self.tailBaseHandleCtrl.scalePoints(Vec3(2.0, 2.0, 2.0))
+        self.tailBaseHandleCtrl.setColor("turqoise")
 
-        # Spine End
-        self.spineEndCtrlSpace = CtrlSpace('spineEnd', parent=self.cogCtrl)
-        self.spineEndCtrl = Control('spineEnd', parent=self.spineEndCtrlSpace, shape="pin")
-        self.spineEndCtrl.rotatePoints(90, 0, 0)
-        self.spineEndCtrl.translatePoints(Vec3(0, 1.0, 0))
+        # Tail End
+        self.tailEndCtrlSpace = CtrlSpace('tailEnd', parent=self.ctrlCmpGrp)
+        self.tailEndCtrl = Control('tailEnd', parent=self.tailEndCtrlSpace, shape="circle")
+        self.tailEndCtrl.rotatePoints(90, 0, 0)
+        self.tailEndCtrl.scalePoints(Vec3(2.0, 2.0, 2.0))
+        self.tailEndCtrl.setColor("greenBlue")
 
-        # Spine End Handle
-        self.spineEndHandleCtrlSpace = CtrlSpace('spineEndHandle', parent=self.spineEndCtrl)
-        self.spineEndHandleCtrl = Control('spineEndHandle', parent=self.spineEndHandleCtrlSpace, shape="pin")
-        self.spineEndHandleCtrl.rotatePoints(90, 0, 0)
-        self.spineEndHandleCtrl.translatePoints(Vec3(0, 1.0, 0))
-        self.spineEndHandleCtrl.setColor("orange")
+        # Tail End Handle
+        self.tailEndHandleCtrlSpace = CtrlSpace('tailEndHandle', parent=self.tailEndCtrl)
+        self.tailEndHandleCtrl = Control('tailEndHandle', parent=self.tailEndHandleCtrlSpace, shape="circle")
+        self.tailEndHandleCtrl.rotatePoints(90, 0, 0)
+        self.tailEndHandleCtrl.scalePoints(Vec3(2.0, 2.0, 2.0))
+        self.tailEndHandleCtrl.setColor("turqoise")
 
 
         # ==========
@@ -268,7 +263,7 @@ class FabriceSpineRig(FabriceSpine):
         deformersLayer = self.getOrCreateLayer('deformers')
         self.defCmpGrp = ComponentGroup(self.getName(), self, parent=deformersLayer)
         self.deformerJoints = []
-        self.spineOutputs = []
+        self.tailOutputs = []
         self.setNumDeformers(1)
 
 
@@ -276,56 +271,52 @@ class FabriceSpineRig(FabriceSpine):
         # Create Component I/O
         # =====================
         # Setup component Xfo I/O's
-        self.spineVertebraeOutput.setTarget(self.spineOutputs)
+        self.tailVertebraeOutput.setTarget(self.tailOutputs)
 
 
         # ==============
         # Constrain I/O
         # ==============
         # Constraint inputs
-        self.spineSrtInputConstraint = PoseConstraint('_'.join([self.cogCtrlSpace.getName(), 'To', self.spineMainSrtInputTgt.getName()]))
-        self.spineSrtInputConstraint.addConstrainer(self.spineMainSrtInputTgt)
-        self.spineSrtInputConstraint.setMaintainOffset(True)
-        self.cogCtrlSpace.addConstraint(self.spineSrtInputConstraint)
+        self.tailBaseInputConstraint = PoseConstraint('_'.join([self.tailBaseCtrlSpace.getName(), 'To', self.spineEndInputTgt.getName()]))
+        self.tailBaseInputConstraint.addConstrainer(self.spineEndInputTgt)
+        self.tailBaseInputConstraint.setMaintainOffset(True)
+        self.tailBaseCtrlSpace.addConstraint(self.tailBaseInputConstraint)
 
         # Constraint outputs
-        self.spineCogOutputConstraint = PoseConstraint('_'.join([self.spineCogOutputTgt.getName(), 'To', self.cogCtrl.getName()]))
-        self.spineCogOutputConstraint.addConstrainer(self.cogCtrl)
-        self.spineCogOutputTgt.addConstraint(self.spineCogOutputConstraint)
+        self.tailBaseOutputConstraint = PoseConstraint('_'.join([self.tailBaseOutputTgt.getName(), 'To', 'spineBase']))
+        self.tailBaseOutputConstraint.addConstrainer(self.tailOutputs[0])
+        self.tailBaseOutputTgt.addConstraint(self.tailBaseOutputConstraint)
 
-        self.spineBaseOutputConstraint = PoseConstraint('_'.join([self.spineBaseOutputTgt.getName(), 'To', 'spineBase']))
-        self.spineBaseOutputConstraint.addConstrainer(self.spineOutputs[0])
-        self.spineBaseOutputTgt.addConstraint(self.spineBaseOutputConstraint)
-
-        self.spineEndOutputConstraint = PoseConstraint('_'.join([self.spineEndOutputTgt.getName(), 'To', 'spineEnd']))
-        self.spineEndOutputConstraint.addConstrainer(self.spineOutputs[0])
-        self.spineEndOutputTgt.addConstraint(self.spineEndOutputConstraint)
+        self.tailEndOutputConstraint = PoseConstraint('_'.join([self.tailEndOutputTgt.getName(), 'To', 'spineEnd']))
+        self.tailEndOutputConstraint.addConstrainer(self.tailOutputs[0])
+        self.tailEndOutputTgt.addConstraint(self.tailEndOutputConstraint)
 
 
         # ===============
         # Add Splice Ops
         # ===============
-        # Add Spine Splice Op
-        self.bezierSpineSpliceOp = SpliceOperator('spineSpliceOp', 'BezierSpineSolver', 'Kraken')
-        self.addOperator(self.bezierSpineSpliceOp)
+        # Add Tail Splice Op
+        self.bezierTailSpliceOp = SpliceOperator('tailSpliceOp', 'BezierSpineSolver', 'Kraken')
+        self.addOperator(self.bezierTailSpliceOp)
 
         # Add Att Inputs
-        self.bezierSpineSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
-        self.bezierSpineSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
-        self.bezierSpineSpliceOp.setInput('length', self.lengthInputAttr)
+        self.bezierTailSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.bezierTailSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
+        self.bezierTailSpliceOp.setInput('length', self.lengthInputAttr)
 
         # Add Xfo Inputs
-        self.bezierSpineSpliceOp.setInput('base', self.spineBaseCtrl)
-        self.bezierSpineSpliceOp.setInput('baseHandle', self.spineBaseHandleCtrl)
-        self.bezierSpineSpliceOp.setInput('tipHandle', self.spineEndHandleCtrl)
-        self.bezierSpineSpliceOp.setInput('tip', self.spineEndCtrl)
+        self.bezierTailSpliceOp.setInput('base', self.tailBaseCtrl)
+        self.bezierTailSpliceOp.setInput('baseHandle', self.tailBaseHandleCtrl)
+        self.bezierTailSpliceOp.setInput('tipHandle', self.tailEndHandleCtrl)
+        self.bezierTailSpliceOp.setInput('tip', self.tailEndCtrl)
 
         # Add Xfo Outputs
-        for spineOutput in self.spineOutputs:
-            self.bezierSpineSpliceOp.setOutput('outputs', spineOutput)
+        for tailOutput in self.tailOutputs:
+            self.bezierTailSpliceOp.setOutput('outputs', tailOutput)
 
         # Add Deformer Splice Op
-        self.deformersToOutputsSpliceOp = SpliceOperator('spineDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken')
+        self.deformersToOutputsSpliceOp = SpliceOperator('tailDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken')
         self.addOperator(self.deformersToOutputsSpliceOp)
 
         # Add Att Inputs
@@ -333,8 +324,8 @@ class FabriceSpineRig(FabriceSpine):
         self.deformersToOutputsSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
 
         # Add Xfo Outputs
-        for spineOutput in self.spineOutputs:
-            self.deformersToOutputsSpliceOp.setInput('constrainers', spineOutput)
+        for tailOutput in self.tailOutputs:
+            self.deformersToOutputsSpliceOp.setInput('constrainers', tailOutput)
 
         # Add Xfo Outputs
         for joint in self.deformerJoints:
@@ -346,16 +337,16 @@ class FabriceSpineRig(FabriceSpine):
     def setNumDeformers(self, numDeformers):
 
         # Add new deformers and outputs
-        for i in xrange(len(self.spineOutputs), numDeformers):
-            name = 'spine' + str(i + 1).zfill(2)
-            spineOutput = ComponentOutput(name, parent=self.outputHrcGrp)
-            self.spineOutputs.append(spineOutput)
+        for i in xrange(len(self.tailOutputs), numDeformers):
+            name = 'tail' + str(i + 1).zfill(2)
+            tailOutput = ComponentOutput(name, parent=self.outputHrcGrp)
+            self.tailOutputs.append(tailOutput)
 
         for i in xrange(len(self.deformerJoints), numDeformers):
-            name = 'spine' + str(i + 1).zfill(2)
-            spineDef = Joint(name, parent=self.defCmpGrp)
-            spineDef.setComponent(self)
-            self.deformerJoints.append(spineDef)
+            name = 'tail' + str(i + 1).zfill(2)
+            tailDef = Joint(name, parent=self.defCmpGrp)
+            tailDef.setComponent(self)
+            self.deformerJoints.append(tailDef)
 
         return True
 
@@ -371,29 +362,25 @@ class FabriceSpineRig(FabriceSpine):
 
         """
 
-        super(FabriceSpineRig, self).loadData( data )
+        super(FabriceTailRig, self).loadData( data )
 
-        cogPosition = data['cogPosition']
         spine01Position = data['spine01Position']
         spine02Position = data['spine02Position']
         spine03Position = data['spine03Position']
         spine04Position = data['spine04Position']
         numDeformers = data['numDeformers']
 
-        self.cogCtrlSpace.xfo.tr = cogPosition
-        self.cogCtrl.xfo.tr = cogPosition
+        self.tailBaseCtrlSpace.xfo.tr = spine01Position
+        self.tailBaseCtrl.xfo.tr = spine01Position
 
-        self.spineBaseCtrlSpace.xfo.tr = spine01Position
-        self.spineBaseCtrl.xfo.tr = spine01Position
+        self.tailBaseHandleCtrlSpace.xfo.tr = spine02Position
+        self.tailBaseHandleCtrl.xfo.tr = spine02Position
 
-        self.spineBaseHandleCtrlSpace.xfo.tr = spine02Position
-        self.spineBaseHandleCtrl.xfo.tr = spine02Position
+        self.tailEndHandleCtrlSpace.xfo.tr = spine03Position
+        self.tailEndHandleCtrl.xfo.tr = spine03Position
 
-        self.spineEndHandleCtrlSpace.xfo.tr = spine03Position
-        self.spineEndHandleCtrl.xfo.tr = spine03Position
-
-        self.spineEndCtrlSpace.xfo.tr = spine04Position
-        self.spineEndCtrl.xfo.tr = spine04Position
+        self.tailEndCtrlSpace.xfo.tr = spine04Position
+        self.tailEndCtrl.xfo.tr = spine04Position
 
         length = spine01Position.distanceTo(spine02Position) + spine02Position.distanceTo(spine03Position) + spine03Position.distanceTo(spine04Position)
         self.lengthInputAttr.setMax(length * 3.0)
@@ -402,21 +389,21 @@ class FabriceSpineRig(FabriceSpine):
         # Update number of deformers and outputs
         self.setNumDeformers(numDeformers)
 
-        for spineOutput in self.spineOutputs:
-            if spineOutput not in self.bezierSpineSpliceOp.getOutput("outputs"):
-                self.bezierSpineSpliceOp.setOutput("outputs", spineOutput)
+        for tailOutput in self.tailOutputs:
+            if tailOutput not in self.bezierTailSpliceOp.getOutput("outputs"):
+                self.bezierTailSpliceOp.setOutput("outputs", tailOutput)
 
         # Update Deformers Splice Op
-        for spineOutput in self.spineOutputs:
-            if spineOutput not in self.deformersToOutputsSpliceOp.getInput("constrainers"):
-                self.deformersToOutputsSpliceOp.setInput("constrainers", spineOutput)
+        for tailOutput in self.tailOutputs:
+            if tailOutput not in self.deformersToOutputsSpliceOp.getInput("constrainers"):
+                self.deformersToOutputsSpliceOp.setInput("constrainers", tailOutput)
 
         for joint in self.deformerJoints:
             if joint not in self.deformersToOutputsSpliceOp.getOutput("constrainees"):
                 self.deformersToOutputsSpliceOp.setOutput("constrainees", joint)
 
         # Updating constraint to use the updated last output.
-        self.spineEndOutputConstraint.setConstrainer(self.spineOutputs[-1], index=0)
+        self.tailEndOutputConstraint.setConstrainer(self.tailOutputs[-1], index=0)
 
         # ============
         # Set IO Xfos
@@ -426,19 +413,18 @@ class FabriceSpineRig(FabriceSpine):
         # Evaluate Splice Ops
         # ====================
         # evaluate the spine op so that all the output transforms are updated.
-        self.bezierSpineSpliceOp.evaluate()
+        self.bezierTailSpliceOp.evaluate()
 
         # evaluate the constraint op so that all the joint transforms are updated.
         self.deformersToOutputsSpliceOp.evaluate()
 
         # evaluate the constraints to ensure the outputs are now in the correct location.
-        self.spineCogOutputConstraint.evaluate()
-        self.spineBaseOutputConstraint.evaluate()
-        self.spineEndOutputConstraint.evaluate()
+        self.tailBaseOutputConstraint.evaluate()
+        self.tailEndOutputConstraint.evaluate()
 
 
 
 from kraken.core.kraken_system import KrakenSystem
 ks = KrakenSystem.getInstance()
-ks.registerComponent(FabriceSpineGuide)
-ks.registerComponent(FabriceSpineRig)
+ks.registerComponent(FabriceTailGuide)
+ks.registerComponent(FabriceTailRig)
