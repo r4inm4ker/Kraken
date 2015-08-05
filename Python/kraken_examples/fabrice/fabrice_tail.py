@@ -120,11 +120,11 @@ class FabriceTailGuide(FabriceTail):
             'location': 'M',
             'tailBasePos': Vec3(0.0, 0.65, -3.1),
             'tailBaseHandlePos': Vec3(0.0, 0.157, -4.7),
-            'tailBaseHandleCtrlCrvData': self.cogCtrl.getCurveData(),
+            'tailBaseHandleCtrlCrvData': self.tailBaseHandleCtrl.getCurveData(),
             'tailEndHandlePos': Vec3(0.0, 0.0625, -6.165),
-            'tipHandleCtrlCrvData': self.cogCtrl.getCurveData(),
+            'tailEndHandleCtrlCrvData': self.tailEndHandleCtrl.getCurveData(),
             'tailEndPos': Vec3(0.0, -0.22, -7.42),
-            'tipCtrlCrvData': self.cogCtrl.getCurveData(),
+            'tailEndCtrlCrvData': self.tailEndCtrl.getCurveData(),
             'numDeformers': 6
         })
 
@@ -145,9 +145,16 @@ class FabriceTailGuide(FabriceTail):
         data = super(FabriceTailGuide, self).saveData()
 
         data['tailBasePos'] = self.tailBaseCtrl.xfo.tr
+
         data['tailBaseHandlePos'] = self.tailBaseHandleCtrl.xfo.tr
+        data['tailBaseHandleCtrlCrvData'] = self.tailBaseHandleCtrl.getCurveData()
+
         data['tailEndHandlePos'] = self.tailEndHandleCtrl.xfo.tr
+        data['tailEndHandleCtrlCrvData'] = self.tailEndHandleCtrl.getCurveData()
+
         data['tailEndPos'] = self.tailEndCtrl.xfo.tr
+        data['tailEndCtrlCrvData'] = self.tailEndCtrl.getCurveData()
+
         data['numDeformers'] = self.numDeformersAttr.getValue()
 
         return data
@@ -167,9 +174,16 @@ class FabriceTailGuide(FabriceTail):
         super(FabriceTailGuide, self).loadData( data )
 
         self.tailBaseCtrl.xfo.tr = data["tailBasePos"]
+
         self.tailBaseHandleCtrl.xfo.tr = data["tailBaseHandlePos"]
+        self.tailBaseHandleCtrl.setCurveData(data['tailBaseHandleCtrlCrvData'])
+
         self.tailEndHandleCtrl.xfo.tr = data["tailEndHandlePos"]
+        self.tailEndHandleCtrl.setCurveData(data['tailEndHandleCtrlCrvData'])
+
         self.tailEndCtrl.xfo.tr = data["tailEndPos"]
+        self.tailEndCtrl.setCurveData(data['tailEndCtrlCrvData'])
+
         self.numDeformersAttr.setValue(data["numDeformers"])
 
         length = data["tailBasePos"].distanceTo(data["tailBaseHandlePos"]) + data["tailBaseHandlePos"].distanceTo(data["tailEndHandlePos"]) + data["tailEndHandlePos"].distanceTo(data["tailEndPos"])
@@ -192,9 +206,16 @@ class FabriceTailGuide(FabriceTail):
         data = super(FabriceTailGuide, self).getRigBuildData()
 
         data['tailBasePos'] = self.tailBaseCtrl.xfo.tr
+
         data['tailBaseHandlePos'] = self.tailBaseHandleCtrl.xfo.tr
+        data['tailBaseHandleCtrlCrvData'] = self.tailBaseHandleCtrl.getCurveData()
+
         data['tailEndHandlePos'] = self.tailEndHandleCtrl.xfo.tr
+        data['tailEndHandleCtrlCrvData'] = self.tailEndHandleCtrl.getCurveData()
+
         data['tailEndPos'] = self.tailEndCtrl.xfo.tr
+        data['tailEndCtrlCrvData'] = self.tailEndCtrl.getCurveData()
+
         data['numDeformers'] = self.numDeformersAttr.getValue()
 
         return data
@@ -248,23 +269,17 @@ class FabriceTailRig(FabriceTail):
 
         # Tail Base Handle
         self.tailBaseHandleCtrlSpace = CtrlSpace('tailBaseHandle', parent=self.ctrlCmpGrp)
-        self.tailBaseHandleCtrl = Control('tailBaseHandle', parent=self.tailBaseHandleCtrlSpace, shape="circle")
-        self.tailBaseHandleCtrl.rotatePoints(90, 0, 0)
-        self.tailBaseHandleCtrl.scalePoints(Vec3(2.0, 2.0, 2.0))
+        self.tailBaseHandleCtrl = Control('tailBaseHandle', parent=self.tailBaseHandleCtrlSpace, shape="pin")
         self.tailBaseHandleCtrl.setColor("turqoise")
 
         # Tail End Handle
         self.tailEndHandleCtrlSpace = CtrlSpace('tailEndHandle', parent=self.ctrlCmpGrp)
-        self.tailEndHandleCtrl = Control('tailEndHandle', parent=self.tailEndHandleCtrlSpace, shape="circle")
-        self.tailEndHandleCtrl.rotatePoints(90, 0, 0)
-        self.tailEndHandleCtrl.scalePoints(Vec3(2.0, 2.0, 2.0))
+        self.tailEndHandleCtrl = Control('tailEndHandle', parent=self.tailEndHandleCtrlSpace, shape="pin")
         self.tailEndHandleCtrl.setColor("turqoise")
 
         # Tail End
         self.tailEndCtrlSpace = CtrlSpace('tailEnd', parent=self.tailEndHandleCtrl)
-        self.tailEndCtrl = Control('tailEnd', parent=self.tailEndCtrlSpace, shape="circle")
-        self.tailEndCtrl.rotatePoints(90, 0, 0)
-        self.tailEndCtrl.scalePoints(Vec3(2.0, 2.0, 2.0))
+        self.tailEndCtrl = Control('tailEnd', parent=self.tailEndCtrlSpace, shape="pin")
         self.tailEndCtrl.setColor("greenBlue")
 
 
@@ -381,22 +396,33 @@ class FabriceTailRig(FabriceTail):
         super(FabriceTailRig, self).loadData( data )
 
         tailBasePos = data['tailBasePos']
+
         tailBaseHandlePos = data['tailBaseHandlePos']
+        tailBaseHandleCtrlCrvData = data['tailBaseHandleCtrlCrvData']
+
         tailEndHandlePos = data['tailEndHandlePos']
+        tailEndHandleCtrlCrvData = data['tailEndHandleCtrlCrvData']
+
         tailEndPos = data['tailEndPos']
+        tailEndCtrlCrvData = data['tailEndCtrlCrvData']
+
         numDeformers = data['numDeformers']
 
+        # Set Xfos
         self.spineEndInputTgt.xfo.tr = tailBasePos
         self.spineEndCtrlInputTgt.xfo.tr = tailBasePos
 
         self.tailBaseHandleCtrlSpace.xfo.tr = tailBaseHandlePos
         self.tailBaseHandleCtrl.xfo.tr = tailBaseHandlePos
+        self.tailBaseHandleCtrl.setCurveData(tailBaseHandleCtrlCrvData)
 
         self.tailEndHandleCtrlSpace.xfo.tr = tailEndHandlePos
         self.tailEndHandleCtrl.xfo.tr = tailEndHandlePos
+        self.tailEndHandleCtrl.setCurveData(tailEndHandleCtrlCrvData)
 
         self.tailEndCtrlSpace.xfo.tr = tailEndPos
         self.tailEndCtrl.xfo.tr = tailEndPos
+        self.tailEndCtrl.setCurveData(tailEndCtrlCrvData)
 
         length = tailBasePos.distanceTo(tailBaseHandlePos) + tailBaseHandlePos.distanceTo(tailEndHandlePos) + tailEndHandlePos.distanceTo(tailEndPos)
         self.lengthInputAttr.setMax(length * 3.0)
