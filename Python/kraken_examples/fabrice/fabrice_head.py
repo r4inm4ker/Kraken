@@ -74,6 +74,7 @@ class FabriceHeadGuide(FabriceHead):
             data = {
                     "name": name,
                     "location": "M",
+                    "headCtrlCrvData": self.headCtrl.getCurveData(),
                     "headXfo": Xfo(Vec3(0.0, 1.67, 1.75)),
                     "jawPosition": Vec3(0.0, 1.2787, 2.0078)
                    }
@@ -96,6 +97,7 @@ class FabriceHeadGuide(FabriceHead):
 
         data = super(FabriceHeadGuide, self).saveData()
 
+        data['headCtrlCrvData'] = self.headCtrl.getCurveData()
         data['headXfo'] = self.headCtrl.xfo
         data['jawPosition'] = self.jawCtrl.xfo.tr
 
@@ -115,6 +117,7 @@ class FabriceHeadGuide(FabriceHead):
 
         super(FabriceHeadGuide, self).loadData( data )
 
+        self.headCtrl.setCurveData(data['headCtrlCrvData'])
         self.headCtrl.xfo = data['headXfo']
         self.jawCtrl.xfo.tr = data['jawPosition']
 
@@ -131,6 +134,7 @@ class FabriceHeadGuide(FabriceHead):
 
         data = super(FabriceHeadGuide, self).getRigBuildData()
 
+        data['headCtrlCrvData'] = self.headCtrl.getCurveData()
         data['headXfo'] = self.headCtrl.xfo
         data['jawPosition'] = self.jawCtrl.xfo.tr
 
@@ -258,11 +262,13 @@ class FabriceHeadRig(FabriceHead):
 
         super(FabriceHeadRig, self).loadData( data )
 
+        headCtrlCrvData = data['headCtrlCrvData']
         headXfo = data['headXfo']
         jawPosition = data['jawPosition']
 
         self.headCtrlSpace.xfo = headXfo
         self.headCtrl.xfo = headXfo
+        self.headCtrl.setCurveData(headCtrlCrvData)
         self.jawCtrlSpace.xfo.tr = jawPosition
         self.jawCtrl.xfo.tr = jawPosition
 
