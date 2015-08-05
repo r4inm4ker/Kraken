@@ -59,10 +59,9 @@ class FabriceHeadGuide(FabriceHead):
         # =========
         guideSettingsAttrGrp = AttributeGroup("GuideSettings", parent=self)
 
-        self.headCtrl = Control('head', parent=self.ctrlCmpGrp, shape="cube")
-        self.headCtrl.alignOnZAxis()
-        self.headCtrl.scalePoints(Vec3(0.75, 0.75, 1.5))
-        self.headCtrl.translatePoints(Vec3(0.0, -0.25, 0.0))
+        self.headCtrl = Control('head', parent=self.ctrlCmpGrp, shape="circle")
+        self.headCtrl.rotatePoints(90.0, 0.0, 0.0)
+        self.headCtrl.scalePoints(Vec3(3.5, 3.5, 3.5))
 
         self.jawCtrl = Control('jaw', parent=self.ctrlCmpGrp, shape="cube")
         self.jawCtrl.alignOnZAxis()
@@ -74,9 +73,10 @@ class FabriceHeadGuide(FabriceHead):
             data = {
                     "name": name,
                     "location": "M",
-                    "headCtrlCrvData": self.headCtrl.getCurveData(),
                     "headXfo": Xfo(Vec3(0.0, 1.67, 1.75)),
-                    "jawPosition": Vec3(0.0, 1.2787, 2.0078)
+                    "headCtrlCrvData": self.headCtrl.getCurveData(),
+                    "jawPosition": Vec3(0.0, 1.2787, 2.0078),
+                    "jawCtrlCrvData": self.jawCtrl.getCurveData(),
                    }
 
         self.loadData(data)
@@ -97,9 +97,10 @@ class FabriceHeadGuide(FabriceHead):
 
         data = super(FabriceHeadGuide, self).saveData()
 
-        data['headCtrlCrvData'] = self.headCtrl.getCurveData()
         data['headXfo'] = self.headCtrl.xfo
+        data['headCtrlCrvData'] = self.headCtrl.getCurveData()
         data['jawPosition'] = self.jawCtrl.xfo.tr
+        data['jawCtrlCrvData'] = self.jawCtrl.getCurveData()
 
         return data
 
@@ -117,9 +118,10 @@ class FabriceHeadGuide(FabriceHead):
 
         super(FabriceHeadGuide, self).loadData( data )
 
-        self.headCtrl.setCurveData(data['headCtrlCrvData'])
         self.headCtrl.xfo = data['headXfo']
+        self.headCtrl.setCurveData(data['headCtrlCrvData'])
         self.jawCtrl.xfo.tr = data['jawPosition']
+        self.jawCtrl.setCurveData(data['jawCtrlCrvData'])
 
         return True
 
@@ -134,9 +136,10 @@ class FabriceHeadGuide(FabriceHead):
 
         data = super(FabriceHeadGuide, self).getRigBuildData()
 
-        data['headCtrlCrvData'] = self.headCtrl.getCurveData()
         data['headXfo'] = self.headCtrl.xfo
+        data['headCtrlCrvData'] = self.headCtrl.getCurveData()
         data['jawPosition'] = self.jawCtrl.xfo.tr
+        data['jawCtrlCrvData'] = self.jawCtrl.getCurveData()
 
         return data
 
@@ -179,22 +182,25 @@ class FabriceHeadRig(FabriceHead):
         # =========
         # Controls
         # =========
+        # Head Aim
+        self.headAimCtrlSpace = CtrlSpace('headAim', parent=self.ctrlCmpGrp)
+        self.headAimCtrl = Control('headAim', parent=self.headAimCtrlSpace, shape="sphere")
+        self.headAimCtrl.scalePoints(Vec3(0.35, 0.35, 0.35))
+
+        self.headAimUpV = Locator('headAimUpV', parent=self.headAimCtrl)
+        self.headAimUpV.setShapeVisibility(False)
+
         # Head
+        self.headAim = Locator('headAim', parent=self.headAimCtrl)
+        self.headAim.setShapeVisibility(False)
+
         self.headCtrlSpace = CtrlSpace('head', parent=self.ctrlCmpGrp)
         self.headCtrl = Control('head', parent=self.headCtrlSpace, shape="circle")
-        self.headCtrl.rotatePoints(90.0, 0.0, 0.0)
-        self.headCtrl.scalePoints(Vec3(3, 3, 3))
-        self.headCtrl.translatePoints(Vec3(0.0, 0.0, 0.25))
 
         # Jaw
         self.jawCtrlSpace = CtrlSpace('jawCtrlSpace', parent=self.headCtrl)
         self.jawCtrl = Control('jaw', parent=self.jawCtrlSpace, shape="cube")
-        self.jawCtrl.alignOnYAxis(negative=True)
-        self.jawCtrl.alignOnZAxis()
-        self.jawCtrl.scalePoints(Vec3(1.45, 0.65, 1.25))
-        self.jawCtrl.translatePoints(Vec3(0, -0.25, 0))
         self.jawCtrl.setColor("orange")
-
 
         # ==========
         # Deformers
@@ -212,11 +218,16 @@ class FabriceHeadRig(FabriceHead):
         # ==============
         # Constrain I/O
         # ==============
+        self.headToAimConstraint = PoseConstraint('_'.join([self.headCtrlSpace.getName(), 'To', self.headAim.getName()]))
+        self.headToAimConstraint.setMaintainOffset(True)
+        self.headToAimConstraint.addConstrainer(self.headAim)
+        self.headCtrlSpace.addConstraint(self.headToAimConstraint)
+
         # Constraint inputs
-        self.headInputConstraint = PoseConstraint('_'.join([self.headCtrlSpace.getName(), 'To', self.headBaseInputTgt.getName()]))
-        self.headInputConstraint.setMaintainOffset(True)
-        self.headInputConstraint.addConstrainer(self.headBaseInputTgt)
-        self.headCtrlSpace.addConstraint(self.headInputConstraint)
+        self.headAimInputConstraint = PoseConstraint('_'.join([self.headAimCtrlSpace.getName(), 'To', self.headBaseInputTgt.getName()]))
+        self.headAimInputConstraint.setMaintainOffset(True)
+        self.headAimInputConstraint.addConstrainer(self.headBaseInputTgt)
+        self.headAimCtrlSpace.addConstraint(self.headAimInputConstraint)
 
         # # Constraint outputs
         self.headOutputConstraint = PoseConstraint('_'.join([self.headOutputTgt.getName(), 'To', self.headCtrl.getName()]))
@@ -230,7 +241,26 @@ class FabriceHeadRig(FabriceHead):
         # ===============
         # Add Splice Ops
         # ===============
+
+        # Add Aim Splice Op
+        # =================
+        self.headAimSpliceOp = SpliceOperator('headAimSpliceOp', 'DirectionConstraintSolver', 'Kraken')
+        self.addOperator(self.headAimSpliceOp)
+
+        # Add Att Inputs
+        self.headAimSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.headAimSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
+
+        # Add Xfo Inputs
+        self.headAimSpliceOp.setInput('position', self.headBaseInputTgt)
+        self.headAimSpliceOp.setInput('upVector', self.headAimUpV)
+        self.headAimSpliceOp.setInput('atVector', self.headAimCtrl)
+
+        # Add Xfo Outputs
+        self.headAimSpliceOp.setOutput('constrainee', self.headAim)
+
         # Add Deformer Splice Op
+        # ======================
         self.deformersToOutputsSpliceOp = SpliceOperator('headDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken')
         self.addOperator(self.deformersToOutputsSpliceOp)
 
@@ -262,15 +292,26 @@ class FabriceHeadRig(FabriceHead):
 
         super(FabriceHeadRig, self).loadData( data )
 
-        headCtrlCrvData = data['headCtrlCrvData']
         headXfo = data['headXfo']
+        headCtrlCrvData = data['headCtrlCrvData']
         jawPosition = data['jawPosition']
+        jawCtrlCrvData = data['jawCtrlCrvData']
 
+        self.headAimCtrlSpace.xfo.ori = headXfo.ori
+        self.headAimCtrlSpace.xfo.tr = headXfo.tr.add(Vec3(0, 0, 4))
+        self.headAimCtrl.xfo = self.headAimCtrlSpace.xfo
+
+        self.headAimUpV.xfo.ori = self.headAimCtrl.xfo.ori
+        self.headAimUpV.xfo.tr = self.headAimCtrl.xfo.tr.add(Vec3(0, 3, 0))
+
+        self.headAim.xfo = headXfo
         self.headCtrlSpace.xfo = headXfo
         self.headCtrl.xfo = headXfo
         self.headCtrl.setCurveData(headCtrlCrvData)
+
         self.jawCtrlSpace.xfo.tr = jawPosition
         self.jawCtrl.xfo.tr = jawPosition
+        self.jawCtrl.setCurveData(jawCtrlCrvData)
 
         # ============
         # Set IO Xfos
@@ -283,10 +324,12 @@ class FabriceHeadRig(FabriceHead):
         # Evaluate Splice Ops
         # ====================
         # evaluate the constraint op so that all the joint transforms are updated.
+        self.headAimSpliceOp.evaluate()
         self.deformersToOutputsSpliceOp.evaluate()
 
         # evaluate the constraints to ensure the outputs are now in the correct location.
-        self.headInputConstraint.evaluate()
+        self.headToAimConstraint.evaluate()
+        self.headAimInputConstraint.evaluate()
         self.headOutputConstraint.evaluate()
         self.jawOutputConstraint.evaluate()
 
