@@ -127,7 +127,7 @@ function BezierSpineSolver.solve!
     preXfo = outXfo;
     outputs[i] = outXfo.toMat44();
   }
-/*
+
 
   // Set debugging visibility.
   this.setDebug(drawDebug);
@@ -139,9 +139,9 @@ function BezierSpineSolver.solve!
     }
     drawLineStrip(this.handle.rootTransform, 'curve', positions, Color(1.0, 0.0, 0));
 
-    Color boneColor(1.0, 1.0, 0);
-    for(UInt32 i=0; i<outputs.size; i++)
-      etDrawBone(this.handle.rootTransform, 'constraint'+i, outputs[i], segLength, segLength * 0.25, boneColor);
+    // Color boneColor(1.0, 1.0, 0);
+    // for(UInt32 i=0; i<outputs.size; i++)
+    //   etDrawBone(this.handle.rootTransform, 'constraint'+i, outputs[i], segLength, segLength * 0.25, boneColor);
   }
-  */
+
 }

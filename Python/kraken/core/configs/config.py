@@ -195,6 +195,15 @@ class Config(object):
         """
 
         controlShapes = {
+                         "point": [
+                                   {
+                                    "points": [
+                                               [0.0, 0.0, 0.0],
+                                              ],
+                                    "degree": 1,
+                                    "closed": False
+                                   }
+                                  ],
                          "arrow": [
                                    {
                                     "points": [
