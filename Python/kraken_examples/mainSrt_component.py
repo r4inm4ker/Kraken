@@ -41,7 +41,7 @@ class MainSrtComponent(BaseExampleComponent):
         self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=False, parent=self.cmpInputAttrGrp)
 
         # Declare Output Attrs
-        self.rigScaleOutputAttr = self.createOutput('rigScale', dataType='Float', parent=self.cmpOutputAttrGrp)
+        self.rigScaleOutputAttr = self.createOutput('rigScale', dataType='Float', value=1.0, parent=self.cmpOutputAttrGrp)
 
 
 class MainSrtComponentGuide(MainSrtComponent):
