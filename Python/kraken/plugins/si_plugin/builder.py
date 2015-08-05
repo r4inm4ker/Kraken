@@ -776,6 +776,8 @@ class Builder(Builder):
                 elif arg.connectionType in ['io', 'out']:
                     si.fabricSplice("addOutputPort", spliceOpPath, connectionArgs, "")
 
+
+
             # Generate the operator source code.
             opSourceCode = kOperator.generateSourceCode()
 
@@ -791,6 +793,10 @@ class Builder(Builder):
             frameParameter = spliceOp.Parameters("frame")
             if frameParameter is not None:
                 frameParameter.AddExpression("Fc")
+
+            alwaysEval = kOperator.getAlwaysEval()
+            if alwaysEval is True:
+                spliceOp.Parameters("alwaysevaluate").Value = True
 
         finally:
             pass
