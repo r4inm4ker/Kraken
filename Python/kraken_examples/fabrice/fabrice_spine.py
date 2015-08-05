@@ -41,6 +41,7 @@ class FabriceSpine(BaseExampleComponent):
         self.spineCogOutputTgt = self.createOutput('cog', dataType='Xfo', parent=self.outputHrcGrp)
         self.spineBaseOutputTgt = self.createOutput('spineBase', dataType='Xfo', parent=self.outputHrcGrp)
         self.spineEndOutputTgt = self.createOutput('spineEnd', dataType='Xfo', parent=self.outputHrcGrp)
+        self.spineEndCtrlOutputTgt = self.createOutput('spineEndCtrl', dataType='Xfo', parent=self.outputHrcGrp)
 
         self.spineVertebraeOutput = self.addOutput('spineVertebrae', dataType='Xfo[]')
 
@@ -67,18 +68,34 @@ class FabriceSpineGuide(FabriceSpine):
         self.numDeformersAttr = IntegerAttribute('numDeformers', value=1, minValue=0, maxValue=20, parent=guideSettingsAttrGrp)
 
         # Guide Controls
-        self.cog = Control('cogPosition', parent=self.ctrlCmpGrp, shape="sphere")
-        self.cog.scalePoints(Vec3(1.2, 1.2, 1.2))
-        self.cog.setColor('red')
+        self.cogCtrl = Control('cog', parent=self.ctrlCmpGrp, shape="circle")
+        self.cogCtrl.rotatePoints(90, 0, 0)
+        self.cogCtrl.scalePoints(Vec3(3.0, 3.0, 3.0))
+        self.cogCtrl.setColor('red')
 
-        self.spine01Ctrl = Control('spine01Position', parent=self.ctrlCmpGrp, shape='sphere')
-        self.spine02Ctrl = Control('spine02Position', parent=self.ctrlCmpGrp, shape='sphere')
-        self.spine03Ctrl = Control('spine03Position', parent=self.ctrlCmpGrp, shape='sphere')
-        self.spine04Ctrl = Control('spine04Position', parent=self.ctrlCmpGrp, shape='sphere')
+        self.spineBaseCtrl = Control('spineBase', parent=self.ctrlCmpGrp, shape='pin')
+        self.spineBaseCtrl.rotatePoints(90, 0, 0)
+        self.spineBaseCtrl.translatePoints(Vec3(0, 1.0, 0))
+
+        self.spineBaseHandleCtrl = Control('spineBaseHandle', parent=self.ctrlCmpGrp, shape='pin')
+        self.spineBaseHandleCtrl.rotatePoints(90, 0, 0)
+        self.spineBaseHandleCtrl.translatePoints(Vec3(0, 1.0, 0))
+
+        self.spineEndHandleCtrl = Control('spineEndHandle', parent=self.ctrlCmpGrp, shape='pin')
+        self.spineEndHandleCtrl.rotatePoints(90, 0, 0)
+        self.spineEndHandleCtrl.translatePoints(Vec3(0, 1.0, 0))
+
+        self.spineEndCtrl = Control('spineEnd', parent=self.ctrlCmpGrp, shape='pin')
+        self.spineEndCtrl.rotatePoints(90, 0, 0)
+        self.spineEndCtrl.translatePoints(Vec3(0, 1.0, 0))
+
 
         self.spineOutputs = []
         for i in xrange(6):
-            debugCtrl = Locator('spine' + str(i+1).zfill(2), parent=self.outputHrcGrp)
+            debugCtrl = Control('spine' + str(i+1).zfill(2), parent=self.outputHrcGrp, shape="vertebra")
+            debugCtrl.rotatePoints(0, -90, 0)
+            debugCtrl.scalePoints(Vec3(0.5, 0.5, 0.5))
+            debugCtrl.setColor("yellowLight")
             self.spineOutputs.append(debugCtrl)
 
         # ===============
@@ -94,10 +111,10 @@ class FabriceSpineGuide(FabriceSpine):
         self.bezierSpineSpliceOp.setInput('length', self.lengthInputAttr)
 
         # Add Xfo Inputs
-        self.bezierSpineSpliceOp.setInput('base', self.spine01Ctrl)
-        self.bezierSpineSpliceOp.setInput('baseHandle', self.spine02Ctrl)
-        self.bezierSpineSpliceOp.setInput('tipHandle', self.spine03Ctrl)
-        self.bezierSpineSpliceOp.setInput('tip', self.spine04Ctrl)
+        self.bezierSpineSpliceOp.setInput('base', self.spineBaseCtrl)
+        self.bezierSpineSpliceOp.setInput('baseHandle', self.spineBaseHandleCtrl)
+        self.bezierSpineSpliceOp.setInput('tipHandle', self.spineEndHandleCtrl)
+        self.bezierSpineSpliceOp.setInput('tip', self.spineEndCtrl)
 
         # Add Xfo Outputs
         for spineOutput in self.spineOutputs:
@@ -106,11 +123,16 @@ class FabriceSpineGuide(FabriceSpine):
         self.loadData({
             'name': name,
             'location': 'M',
-            'cogPosition': Vec3(0.0, 1.65, 0.75),
-            'spine01Position': Vec3(0.0, 1.65, 0.75),
-            'spine02Position': Vec3(0.0, 1.6, -0.7),
-            'spine03Position': Vec3(0.0, 1.15, -2.0),
-            'spine04Position': Vec3(0.0, 0.65, -3.1),
+            'cogPos': Vec3(0.0, 1.65, 0.75),
+            'cogCtrlCrvData': self.cogCtrl.getCurveData(),
+            'spineBasePos': Vec3(0.0, 1.65, 0.75),
+            'spineBaseCtrlCrvData': self.spineBaseCtrl.getCurveData(),
+            'spineBaseHandlePos': Vec3(0.0, 1.6, -0.7),
+            'spineBaseHandleCtrlCrvData': self.spineBaseHandleCtrl.getCurveData(),
+            'spineEndHandlePos': Vec3(0.0, 1.15, -2.0),
+            'spineEndHandleCtrlCrvData': self.spineEndHandleCtrl.getCurveData(),
+            'spineEndPos': Vec3(0.0, 0.65, -3.1),
+            'spineEndCtrlCrvData': self.spineEndCtrl.getCurveData(),
             'numDeformers': 6
         })
 
@@ -130,11 +152,21 @@ class FabriceSpineGuide(FabriceSpine):
 
         data = super(FabriceSpineGuide, self).saveData()
 
-        data['cogPosition'] = self.cog.xfo.tr
-        data['spine01Position'] = self.spine01Ctrl.xfo.tr
-        data['spine02Position'] = self.spine02Ctrl.xfo.tr
-        data['spine03Position'] = self.spine03Ctrl.xfo.tr
-        data['spine04Position'] = self.spine04Ctrl.xfo.tr
+        data['cogPos'] = self.cogCtrl.xfo.tr
+        data['cogCtrlCrvData'] = self.cogCtrl.getCurveData()
+
+        data['spineBasePos'] = self.spineBaseCtrl.xfo.tr
+        data['spineBaseCtrlCrvData'] = self.spineBaseCtrl.getCurveData()
+
+        data['spineBaseHandlePos'] = self.spineBaseHandleCtrl.xfo.tr
+        data['spineBaseHandleCtrlCrvData'] = self.spineBaseHandleCtrl.getCurveData()
+
+        data['spineEndHandlePos'] = self.spineEndHandleCtrl.xfo.tr
+        data['spineEndHandleCtrlCrvData'] = self.spineEndHandleCtrl.getCurveData()
+
+        data['spineEndPos'] = self.spineEndCtrl.xfo.tr
+        data['spineEndCtrlCrvData'] = self.spineEndCtrl.getCurveData()
+
         data['numDeformers'] = self.numDeformersAttr.getValue()
 
         return data
@@ -153,14 +185,24 @@ class FabriceSpineGuide(FabriceSpine):
 
         super(FabriceSpineGuide, self).loadData( data )
 
-        self.cog.xfo.tr = data["cogPosition"]
-        self.spine01Ctrl.xfo.tr = data["spine01Position"]
-        self.spine02Ctrl.xfo.tr = data["spine02Position"]
-        self.spine03Ctrl.xfo.tr = data["spine03Position"]
-        self.spine04Ctrl.xfo.tr = data["spine04Position"]
+        self.cogCtrl.xfo.tr = data["cogPos"]
+        self.cogCtrl.setCurveData(data['cogCtrlCrvData'])
+
+        self.spineBaseCtrl.xfo.tr = data["spineBasePos"]
+        self.spineBaseCtrl.setCurveData(data['spineBaseCtrlCrvData'])
+
+        self.spineBaseHandleCtrl.xfo.tr = data["spineBaseHandlePos"]
+        self.spineBaseHandleCtrl.setCurveData(data['spineBaseHandleCtrlCrvData'])
+
+        self.spineEndHandleCtrl.xfo.tr = data["spineEndHandlePos"]
+        self.spineEndHandleCtrl.setCurveData(data['spineEndHandleCtrlCrvData'])
+
+        self.spineEndCtrl.xfo.tr = data["spineEndPos"]
+        self.spineEndCtrl.setCurveData(data['spineEndCtrlCrvData'])
+
         self.numDeformersAttr.setValue(data["numDeformers"])
 
-        length = data["spine01Position"].distanceTo(data["spine02Position"]) + data["spine02Position"].distanceTo(data["spine03Position"]) + data["spine03Position"].distanceTo(data["spine04Position"])
+        length = data["spineBasePos"].distanceTo(data["spineBaseHandlePos"]) + data["spineBaseHandlePos"].distanceTo(data["spineEndHandlePos"]) + data["spineEndHandlePos"].distanceTo(data["spineEndPos"])
         self.lengthInputAttr.setMax(length * 3.0)
         self.lengthInputAttr.setValue(length)
 
@@ -179,11 +221,21 @@ class FabriceSpineGuide(FabriceSpine):
 
         data = super(FabriceSpineGuide, self).getRigBuildData()
 
-        data['cogPosition'] = self.cog.xfo.tr
-        data['spine01Position'] = self.spine01Ctrl.xfo.tr
-        data['spine02Position'] = self.spine02Ctrl.xfo.tr
-        data['spine03Position'] = self.spine03Ctrl.xfo.tr
-        data['spine04Position'] = self.spine04Ctrl.xfo.tr
+        data['cogPos'] = self.cogCtrl.xfo.tr
+        data['cogCtrlCrvData'] = self.cogCtrl.getCurveData()
+
+        data['spineBasePos'] = self.spineBaseCtrl.xfo.tr
+        data['spineBaseCtrlCrvData'] = self.spineBaseCtrl.getCurveData()
+
+        data['spineBaseHandlePos'] = self.spineBaseHandleCtrl.xfo.tr
+        data['spineBaseHandleCtrlCrvData'] = self.spineBaseHandleCtrl.getCurveData()
+
+        data['spineEndHandlePos'] = self.spineEndHandleCtrl.xfo.tr
+        data['spineEndHandleCtrlCrvData'] = self.spineEndHandleCtrl.getCurveData()
+
+        data['spineEndPos'] = self.spineEndCtrl.xfo.tr
+        data['spineEndCtrlCrvData'] = self.spineEndCtrl.getCurveData()
+
         data['numDeformers'] = self.numDeformersAttr.getValue()
 
         return data
@@ -301,6 +353,10 @@ class FabriceSpineRig(FabriceSpine):
         self.spineEndOutputConstraint.addConstrainer(self.spineOutputs[0])
         self.spineEndOutputTgt.addConstraint(self.spineEndOutputConstraint)
 
+        self.spineEndCtrlOutputConstraint = PoseConstraint('_'.join([self.spineEndCtrlOutputTgt.getName(), 'To', self.spineEndCtrl.getName()]))
+        self.spineEndCtrlOutputConstraint.addConstrainer(self.spineEndCtrl)
+        self.spineEndCtrlOutputTgt.addConstraint(self.spineEndCtrlOutputConstraint)
+
 
         # ===============
         # Add Splice Ops
@@ -373,29 +429,46 @@ class FabriceSpineRig(FabriceSpine):
 
         super(FabriceSpineRig, self).loadData( data )
 
-        cogPosition = data['cogPosition']
-        spine01Position = data['spine01Position']
-        spine02Position = data['spine02Position']
-        spine03Position = data['spine03Position']
-        spine04Position = data['spine04Position']
+        # Get Data
+        cogPos = data['cogPos']
+        cogCtrlCrvData = data['cogCtrlCrvData']
+
+        spineBasePos = data['spineBasePos']
+        spineBaseCtrlCrvData = data['spineBaseCtrlCrvData']
+
+        spineBaseHandlePos = data['spineBaseHandlePos']
+        spineBaseHandleCtrlCrvData = data['spineBaseHandleCtrlCrvData']
+
+        spineEndHandlePos = data['spineEndHandlePos']
+        spineEndHandleCtrlCrvData = data['spineEndHandleCtrlCrvData']
+
+        spineEndPos = data['spineEndPos']
+        spineEndCtrlCrvData = data['spineEndCtrlCrvData']
+
         numDeformers = data['numDeformers']
 
-        self.cogCtrlSpace.xfo.tr = cogPosition
-        self.cogCtrl.xfo.tr = cogPosition
+        # Set Xfos
+        self.cogCtrlSpace.xfo.tr = cogPos
+        self.cogCtrl.xfo.tr = cogPos
+        self.cogCtrl.setCurveData(cogCtrlCrvData)
 
-        self.spineBaseCtrlSpace.xfo.tr = spine01Position
-        self.spineBaseCtrl.xfo.tr = spine01Position
+        self.spineBaseCtrlSpace.xfo.tr = spineBasePos
+        self.spineBaseCtrl.xfo.tr = spineBasePos
+        self.spineBaseCtrl.setCurveData(spineBaseCtrlCrvData)
 
-        self.spineBaseHandleCtrlSpace.xfo.tr = spine02Position
-        self.spineBaseHandleCtrl.xfo.tr = spine02Position
+        self.spineBaseHandleCtrlSpace.xfo.tr = spineBaseHandlePos
+        self.spineBaseHandleCtrl.xfo.tr = spineBaseHandlePos
+        self.spineBaseHandleCtrl.setCurveData(spineBaseHandleCtrlCrvData)
 
-        self.spineEndHandleCtrlSpace.xfo.tr = spine03Position
-        self.spineEndHandleCtrl.xfo.tr = spine03Position
+        self.spineEndHandleCtrlSpace.xfo.tr = spineEndHandlePos
+        self.spineEndHandleCtrl.xfo.tr = spineEndHandlePos
+        self.spineEndHandleCtrl.setCurveData(spineEndHandleCtrlCrvData)
 
-        self.spineEndCtrlSpace.xfo.tr = spine04Position
-        self.spineEndCtrl.xfo.tr = spine04Position
+        self.spineEndCtrlSpace.xfo.tr = spineEndPos
+        self.spineEndCtrl.xfo.tr = spineEndPos
+        self.spineEndCtrl.setCurveData(spineEndCtrlCrvData)
 
-        length = spine01Position.distanceTo(spine02Position) + spine02Position.distanceTo(spine03Position) + spine03Position.distanceTo(spine04Position)
+        length = spineBasePos.distanceTo(spineBaseHandlePos) + spineBaseHandlePos.distanceTo(spineEndHandlePos) + spineEndHandlePos.distanceTo(spineEndPos)
         self.lengthInputAttr.setMax(length * 3.0)
         self.lengthInputAttr.setValue(length)
 
