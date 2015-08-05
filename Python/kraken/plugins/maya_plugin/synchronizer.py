@@ -142,13 +142,13 @@ class Synchronizer(Synchronizer):
         hrcMap = self.getHierarchyMap()
 
         if kObject not in hrcMap.keys():
-            log("Warning! 3D Object '" + kObject.getName() + "' was not found in the mapping!", 8)
+            print "Warning! 3D Object '" + kObject.getName() + "' was not found in the mapping!"
             return False
 
         dccItem = hrcMap[kObject]['dccItem']
 
         if dccItem is None:
-            log("Warning Syncing. No DCC Item for :" + kObject.getPath(), 8)
+            print "Warning Syncing. No DCC Item for :" + kObject.getPath()
             return
 
         # Get Curve Data from Softimage Curve
