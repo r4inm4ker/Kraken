@@ -1,0 +1,110 @@
+{
+  "connections": [], 
+  "graphPositions": {
+    "Tentacle:L": {
+      "y": -18.0, 
+      "x": -24.0, 
+      "__mathObjectClass__": "Vec2"
+    }
+  }, 
+  "name": "MyRig_guide", 
+  "components": [
+    {
+      "graphPos": {
+        "y": -18.0, 
+        "x": -24.0, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "Tentacle", 
+      "jointPositions": [
+        {
+          "y": 10.0, 
+          "x": -6.123233998228043e-16, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.0
+        }, 
+        {
+          "y": 9.927088737487793, 
+          "x": 1.205366849899292, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.0
+        }, 
+        {
+          "y": 9.709418296813965, 
+          "x": 2.3931565284729004, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.0
+        }, 
+        {
+          "y": 9.350162506103516, 
+          "x": 3.546048879623413, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.0
+        }, 
+        {
+          "y": 8.854559898376465, 
+          "x": 4.647231578826904, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.0
+        }, 
+        {
+          "y": 8.229838371276855, 
+          "x": 5.680647373199463, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.0
+        }, 
+        {
+          "y": 7.485107421875, 
+          "x": 6.631226539611816, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.0
+        }, 
+        {
+          "y": 6.631226539611816, 
+          "x": 7.485107421875, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.0
+        }, 
+        {
+          "y": 5.680647373199463, 
+          "x": 8.229838371276855, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.0
+        }, 
+        {
+          "y": 4.647231578826904, 
+          "x": 8.854559898376465, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.0
+        }, 
+        {
+          "y": 3.546048879623413, 
+          "x": 9.350162506103516, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.0
+        }, 
+        {
+          "y": 2.3931565284729004, 
+          "x": 9.709418296813965, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.0
+        }, 
+        {
+          "y": 1.205366849899292, 
+          "x": 9.927088737487793, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.0
+        }, 
+        {
+          "y": 1.2246467996456087e-15, 
+          "x": 10.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.0
+        }
+      ], 
+      "location": "L", 
+      "numJoints": 13, 
+      "class": "kraken_examples.tentacle_component.TentacleComponentGuide"
+    }
+  ]
+}

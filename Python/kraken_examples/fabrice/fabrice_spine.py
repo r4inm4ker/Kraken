@@ -102,7 +102,7 @@ class FabriceSpineGuide(FabriceSpine):
         # Add Splice Ops
         # ===============
         # Add Spine Splice Op
-        self.bezierSpineSpliceOp = SpliceOperator('spineGuideSpliceOp', 'BezierSpineSolver', 'Kraken')
+        self.bezierSpineSpliceOp = SpliceOperator('spineGuideSpliceOp', 'BezierSpineSolver', 'Kraken', alwaysEval=True)
         self.addOperator(self.bezierSpineSpliceOp)
 
         # Add Att Inputs

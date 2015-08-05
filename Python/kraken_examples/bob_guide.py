@@ -27,14 +27,16 @@ class BobGuide(Container):
         neckComponentGuide = NeckComponentGuide('neck', self)
         headComponent = HeadComponentGuide("head", self)
 
-        clavicleLeftComponentGuide = ClavicleComponentGuide("clavicle", self, data={
+        clavicleLeftComponentGuide = ClavicleComponentGuide("clavicle", self)
+        clavicleLeftComponentGuide.loadData({
             "location": "L",
             "clavicleXfo": Xfo(Vec3(0.1322, 15.403, -0.5723)),
             "clavicleUpVXfo": Xfo(Vec3(0.0, 1.0, 0.0)),
             "clavicleEndXfo": Xfo(Vec3(2.27, 15.295, -0.753))
         })
 
-        armLeftComponentGuide = ArmComponentGuide("arm", self, data={
+        armLeftComponentGuide = ArmComponentGuide("arm", self)
+        armLeftComponentGuide.loadData({
             "location": "L",
             "bicepXfo": Xfo(Vec3(2.27, 15.295, -0.753)),
             "forearmXfo": Xfo(Vec3(5.039, 13.56, -0.859)),
@@ -44,14 +46,16 @@ class BobGuide(Container):
             "bicepFKCtrlSize": 1.75,
             "forearmFKCtrlSize": 1.5})
 
-        clavicleRightComponentGuide = ClavicleComponentGuide("clavicle", self, data={
+        clavicleRightComponentGuide = ClavicleComponentGuide("clavicle", self)
+        clavicleRightComponentGuide.loadData({
             "location": "R",
             "clavicleXfo": Xfo(Vec3(-0.1322, 15.403, -0.5723)),
             "clavicleUpVXfo": Xfo(Vec3(0.0, 1.0, 0.0)),
             "clavicleEndXfo": Xfo(Vec3(-2.27, 15.295, -0.753))
         })
 
-        armRightComponentGuide = ArmComponentGuide("arm", self, data={
+        armRightComponentGuide = ArmComponentGuide("arm", self)
+        armRightComponentGuide.loadData({
             "location": "R",
             "bicepXfo": Xfo(Vec3(-2.27, 15.295, -0.753)),
             "forearmXfo": Xfo(Vec3(-5.039, 13.56, -0.859)),
@@ -62,7 +66,8 @@ class BobGuide(Container):
             "forearmFKCtrlSize": 1.5
         })
 
-        legLeftComponentGuide = LegComponentGuide("leg", self, data={
+        legLeftComponentGuide = LegComponentGuide("leg", self)
+        legLeftComponentGuide.loadData({
             "location": "L",
             "femurXfo": Xfo(Vec3(0.9811, 9.769, -0.4572)),
             "kneeXfo": Xfo(Vec3(1.4488, 5.4418, -0.5348)),
@@ -71,7 +76,8 @@ class BobGuide(Container):
             "toeTipXfo": Xfo(Vec3(1.85, 0.4, 1.5))
         })
 
-        legRightComponentGuide = LegComponentGuide("leg", self, data={
+        legRightComponentGuide = LegComponentGuide("leg", self)
+        legRightComponentGuide.loadData({
             "location": "R",
             "femurXfo": Xfo(Vec3(-0.9811, 9.769, -0.4572)),
             "kneeXfo": Xfo(Vec3(-1.4488, 5.4418, -0.5348)),

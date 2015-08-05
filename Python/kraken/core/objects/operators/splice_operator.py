@@ -21,11 +21,12 @@ class SpliceOperator(Operator):
     # an attirbute array called 'klOperators' that contains sets of what we
     # currently have setup.
 
-    def __init__(self, name, solverTypeName, extension):
+    def __init__(self, name, solverTypeName, extension, alwaysEval=False):
         super(SpliceOperator, self).__init__(name)
 
         self.solverTypeName = solverTypeName
         self.extension = extension
+        self.alwaysEval = alwaysEval # This is for Softimage only to force eval.
 
         # Load the Fabric Engine client and construct the RTVal for the Solver
         ks.loadCoreClient()
@@ -70,6 +71,18 @@ class SpliceOperator(Operator):
         """
 
         return self.extension
+
+
+    def getAlwaysEval(self):
+        """Gets the value of the alwaysEval attribute.
+
+        Returns:
+            bool: Whether the operator is set to always evaluate.
+
+        """
+
+        return self.alwaysEval
+
 
 
     def getSolverArgs(self):
@@ -161,6 +174,16 @@ class SpliceOperator(Operator):
         argVals = []
         for i in xrange(len(self.args)):
             arg = self.args[i]
+            if arg.dataType == 'EvalContext':
+                argVals.append(ks.constructRTVal(arg.dataType))
+                continue
+            if arg.name == 'time':
+                argVals.append(ks.constructRTVal(arg.dataType))
+                continue
+            if arg.name == 'frame':
+                argVals.append(ks.constructRTVal(arg.dataType))
+                continue
+
             if arg.connectionType == 'in':
                 if str(arg.dataType).endswith('[]'):
                     rtValArray = ks.rtVal(arg.dataType[:-2]+'Array')

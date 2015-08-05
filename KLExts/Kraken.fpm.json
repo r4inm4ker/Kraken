@@ -10,6 +10,7 @@
     "Solvers/KrakenMultiPoseConstraintSolver.kl"
     "Solvers/BezierSpineSolver.kl",
     "Solvers/TwoBoneIKSolver.kl",
-    "Solvers/NBoneIKSolver.kl"
+    "Solvers/NBoneIKSolver.kl",
+    "Solvers/TentacleSolver.kl"
   ]
 }
