@@ -41,7 +41,7 @@ class KNodePortCircle(PortCircle):
         super(KNodePortCircle, self).__init__(port, graph, hOffset, color, connectionPointType)
 
         if self.getPort().getDataType().endswith('[]'):
-            self.setDefaultPen(QtGui.QPen(QtGui.QColor(255, 25, 25), 1.5))
+            self.setDefaultPen(QtGui.QPen(QtGui.QColor(204, 0, 0), 1.5))
             self.setHoverPen(QtGui.QPen(QtGui.QColor(255, 155, 100), 2.0))
 
 
