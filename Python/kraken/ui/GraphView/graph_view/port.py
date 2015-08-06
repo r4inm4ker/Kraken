@@ -392,7 +392,7 @@ class BasePort(QtGui.QGraphicsWidget):
         self._inCircleHolder.setItem(inCircle)
         self._inCircle = inCircle
         self.layout().insertStretch(2, 2)
-
+        self.updatecontentMargins()
 
     def outCircle(self):
         return self._outCircle
@@ -402,6 +402,16 @@ class BasePort(QtGui.QGraphicsWidget):
         self._outCircleHolder.setItem(outCircle)
         self._outCircle = outCircle
         self.layout().insertStretch(1, 2)
+        self.updatecontentMargins()
+
+    def updatecontentMargins(self):
+        left = 0
+        right = 0
+        if self._inCircle is None:
+            left = 30
+        if self._outCircle is None:
+            right = 30
+        self.layout().setContentsMargins(left, 0, right, 0)
 
 
     def labelItem(self):
