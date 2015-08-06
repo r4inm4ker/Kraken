@@ -285,10 +285,10 @@ class TentacleComponentRig(TentacleComponent):
         tentacledrawDebugInputAttr = BoolAttribute('drawDebug', value=False, parent=tentacleSettingsAttrGrp)
         fkikInputAttr = ScalarAttribute('fkik', value=0.0, minValue=0.0, maxValue=1.0, parent=tentacleSettingsAttrGrp)
         waveLength_YInputAttr = ScalarAttribute('waveLength_Y', value=1.0, minValue=0.0, maxValue=5.0, parent=tentacleSettingsAttrGrp)
-        waveAmplitude_YInputAttr = ScalarAttribute('waveAmplitude_Y', value=0.6, minValue=-3.0, maxValue=3.0, parent=tentacleSettingsAttrGrp)
+        waveAmplitude_YInputAttr = ScalarAttribute('waveAmplitude_Y', value=0.0, minValue=-3.0, maxValue=3.0, parent=tentacleSettingsAttrGrp)
         waveFrequency_YInputAttr = ScalarAttribute('waveFrequency_Y', value=2.0, minValue=0.0, maxValue=10.0, parent=tentacleSettingsAttrGrp)
         waveLength_ZInputAttr = ScalarAttribute('waveLength_Z', value=2.329, minValue=0.0, maxValue=5.0, parent=tentacleSettingsAttrGrp)
-        waveAmplitude_ZInputAttr = ScalarAttribute('waveAmplitude_Z', value=0.6, minValue=-3.0, maxValue=3.0, parent=tentacleSettingsAttrGrp)
+        waveAmplitude_ZInputAttr = ScalarAttribute('waveAmplitude_Z', value=0.0, minValue=-3.0, maxValue=3.0, parent=tentacleSettingsAttrGrp)
         waveFrequency_ZInputAttr = ScalarAttribute('waveFrequency_Z', value=3.354, minValue=0.0, maxValue=10.0, parent=tentacleSettingsAttrGrp)
         tipBiasInputAttr = ScalarAttribute('tipBias', value=1.0, minValue=0.0, maxValue=1.0, parent=tentacleSettingsAttrGrp)
 
@@ -326,6 +326,11 @@ class TentacleComponentRig(TentacleComponent):
         tentacleRootInputConstraint.addConstrainer(self.rootInputTgt)
         self.fkCtrlSpaces[0].addConstraint(tentacleRootInputConstraint)
 
+        tentacleRootInputConstraint = PoseConstraint('_'.join([self.tentacleIKCtrlSpace.getName(), 'To', self.rootInputTgt.getName()]))
+        tentacleRootInputConstraint.setMaintainOffset(True)
+        tentacleRootInputConstraint.addConstrainer(self.rootInputTgt)
+        self.tentacleIKCtrlSpace.addConstraint(tentacleRootInputConstraint)
+
 
         chainBaseInputConstraint = PoseConstraint('_'.join([self.chainBase.getName(), 'To', self.rootInputTgt.getName()]))
         chainBaseInputConstraint.setMaintainOffset(True)
@@ -336,7 +341,7 @@ class TentacleComponentRig(TentacleComponent):
         # Add Splice Ops
         # ===============
         # Add Splice Op
-        self.tentacleSolverSpliceOp = SpliceOperator('tentacleSpliceOp', 'TentacleSolver', 'Kraken')
+        self.tentacleSolverSpliceOp = SpliceOperator('tentacleSpliceOp', 'TentacleSolver', 'Kraken', alwaysEval=True)
         self.addOperator(self.tentacleSolverSpliceOp)
 
         # # Add Att Inputs
@@ -373,7 +378,7 @@ class TentacleComponentRig(TentacleComponent):
 
 
         # Add Deformer Splice Op
-        self.outputsToDeformersSpliceOp = SpliceOperator('TentacleDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken')
+        self.outputsToDeformersSpliceOp = SpliceOperator('TentacleDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken', alwaysEval=True)
         self.addOperator(self.outputsToDeformersSpliceOp)
 
         # Add Att Inputs

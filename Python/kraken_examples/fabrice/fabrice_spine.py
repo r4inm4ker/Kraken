@@ -324,6 +324,9 @@ class FabriceSpineRig(FabriceSpine):
         # ==========
         deformersLayer = self.getOrCreateLayer('deformers')
         self.defCmpGrp = ComponentGroup(self.getName(), self, parent=deformersLayer)
+        self.chestDef = Joint('chest', parent=self.defCmpGrp)
+        self.chestDef.setComponent(self)
+
         self.deformerJoints = []
         self.spineOutputs = []
         self.setNumDeformers(1)
@@ -339,6 +342,13 @@ class FabriceSpineRig(FabriceSpine):
         # ==============
         # Constrain I/O
         # ==============
+        # Constraint deformers
+        self.chestDefConstraint = PoseConstraint('_'.join([self.chestDef.getName(), 'To', self.cogCtrl.getName()]))
+        self.chestDefConstraint.addConstrainer(self.cogCtrl)
+        self.chestDefConstraint.setMaintainOffset(True)
+        self.chestDef.addConstraint(self.chestDefConstraint)
+
+
         # Constraint inputs
         self.spineSrtInputConstraint = PoseConstraint('_'.join([self.cogCtrlSpace.getName(), 'To', self.spineMainSrtInputTgt.getName()]))
         self.spineSrtInputConstraint.addConstrainer(self.spineMainSrtInputTgt)
@@ -367,7 +377,7 @@ class FabriceSpineRig(FabriceSpine):
         # Add Splice Ops
         # ===============
         # Add Spine Splice Op
-        self.bezierSpineSpliceOp = SpliceOperator('spineSpliceOp', 'BezierSpineSolver', 'Kraken')
+        self.bezierSpineSpliceOp = SpliceOperator('spineSpliceOp', 'BezierSpineSolver', 'Kraken', alwaysEval=True)
         self.addOperator(self.bezierSpineSpliceOp)
 
         # Add Att Inputs

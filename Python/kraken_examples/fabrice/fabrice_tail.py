@@ -338,7 +338,7 @@ class FabriceTailRig(FabriceTail):
         # Add Splice Ops
         # ===============
         # Add Tail Splice Op
-        self.bezierTailSpliceOp = SpliceOperator('tailSpliceOp', 'BezierSpineSolver', 'Kraken')
+        self.bezierTailSpliceOp = SpliceOperator('tailSpliceOp', 'BezierSpineSolver', 'Kraken', alwaysEval=True)
         self.addOperator(self.bezierTailSpliceOp)
 
         # Add Att Inputs

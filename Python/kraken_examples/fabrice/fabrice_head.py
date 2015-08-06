@@ -250,7 +250,7 @@ class FabriceHeadRig(FabriceHead):
 
         # Add Aim Splice Op
         # =================
-        self.headAimSpliceOp = SpliceOperator('headAimSpliceOp', 'DirectionConstraintSolver', 'Kraken')
+        self.headAimSpliceOp = SpliceOperator('headAimSpliceOp', 'DirectionConstraintSolver', 'Kraken', alwaysEval=True)
         self.addOperator(self.headAimSpliceOp)
 
         # Add Att Inputs
@@ -267,7 +267,7 @@ class FabriceHeadRig(FabriceHead):
 
         # Add Deformer Splice Op
         # ======================
-        self.deformersToOutputsSpliceOp = SpliceOperator('headDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken')
+        self.deformersToOutputsSpliceOp = SpliceOperator('headDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken', alwaysEval=True)
         self.addOperator(self.deformersToOutputsSpliceOp)
 
         # Add Att Inputs
