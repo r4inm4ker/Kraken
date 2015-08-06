@@ -374,3 +374,21 @@ QMenu#rightClickContextMenu::item:selected {
 QMenu#rightClickContextMenu::item:hover {
     background-color: #438f99;
 }
+
+
+/* ================= */
+/* Edit Index Widget */
+/* ================= */
+QWidget#editIndexWidget {
+    color: #FFF;
+    background-color: #222;
+}
+
+QSpinBox#editIndexSpinBox {
+    border: 1px solid #111;
+    border-radius: 3px;
+    padding: 3px;
+
+    color: #FFF;
+    background-color: #333;
+}
