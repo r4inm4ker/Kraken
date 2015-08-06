@@ -1,5 +1,6 @@
 import json, difflib
 import os.path
+import traceback
 
 from PySide import QtGui, QtCore
 
@@ -111,7 +112,7 @@ class KGraphViewWidget(GraphViewWidget):
             builder.build(self.guideRig)
 
         except Exception as e:
-            print e
+            print traceback.format_exc()
 
             statusBar = self.window().statusBar()
             warningLabel = QtGui.QLabel('Error Building: ' + ', '.join([x for x in e.args]))
@@ -163,7 +164,7 @@ class KGraphViewWidget(GraphViewWidget):
             builder.build(rig)
 
         except Exception as e:
-            print e
+            print traceback.format_exc()
 
             statusBar = self.window().statusBar()
             warningLabel = QtGui.QLabel('Error Building: ' + ', '.join([x for x in e.args]))
