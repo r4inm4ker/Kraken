@@ -76,28 +76,22 @@ class PortLabel(QtGui.QGraphicsWidget):
 
 
     def mousePressEvent(self, event):
-        self.unhighlight()
-
-        if self.__port.inCircle() is not None and self.__port.outCircle() is not None:
-            self.__mousDownPos = self.mapToScene(event.pos())
-
-        elif self.__port.inCircle() is not None:
-            self.__port.inCircle().mousePressEvent(event)
-
-        elif self.__port.outCircle() is not None:
-            self.__port.outCircle().mousePressEvent(event)
+        self.__mousDownPos = self.mapToScene(event.pos())
 
 
     def mouseMoveEvent(self, event):
+        self.unhighlight()
         scenePos = self.mapToScene(event.pos())
 
         # When clicking on an UI port label, it is ambigous which connection point should be activated.
-        # We let the user drag the mous in either direction to select the conneciton point to activate.
+        # We let the user drag the mouse in either direction to select the conneciton point to activate.
         delta = scenePos - self.__mousDownPos
         if delta.x() < 0:
-            self.__port.inCircle().mousePressEvent(event)
+            if self.__port.inCircle() is not None:
+                self.__port.inCircle().mousePressEvent(event)
         else:
-            self.__port.outCircle().mousePressEvent(event)
+            if self.__port.outCircle() is not None:
+                self.__port.outCircle().mousePressEvent(event)
 
     # def paint(self, painter, option, widget):
     #     super(PortLabel, self).paint(painter, option, widget)
@@ -201,6 +195,23 @@ class PortCircle(QtGui.QGraphicsWidget):
     def setSupportsOnlySingleConnections(self, value):
         self._supportsOnlySingleConnections = value
 
+    def canConnectTo(self, otherPortCircle):
+
+        if self.connectionPointType() == otherPortCircle.connectionPointType():
+            return False
+
+        if self.getPort().getDataType() != otherPortCircle.getPort().getDataType():
+            return False
+
+        # Check if you're trying to connect to a port on the same node.
+        # TODO: Do propper cycle checking..
+        otherPort = otherPortCircle.getPort()
+        port = self.getPort()
+        if otherPort.getNode() == port.getNode():
+            return False
+
+        return True
+
     def addConnection(self, connection):
         """Adds a connection to the list.
         Arguments:
@@ -284,19 +295,14 @@ class ItemHolder(QtGui.QGraphicsWidget):
         layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(layout)
 
-
     def setItem(self, item):
         item.setParentItem(self)
         self.layout().addItem(item)
 
-
-    def setHOffset(self, hOffset):
-        self.translate(hOffset, 0)
-
-    def paint(self, painter, option, widget):
-        super(ItemHolder, self).paint(painter, option, widget)
-        painter.setPen(QtGui.QPen(QtGui.QColor(255, 255, 0)))
-        painter.drawRect(self.windowFrameRect())
+    # def paint(self, painter, option, widget):
+    #     super(ItemHolder, self).paint(painter, option, widget)
+    #     painter.setPen(QtGui.QPen(QtGui.QColor(255, 255, 0)))
+    #     painter.drawRect(self.windowFrameRect())
 
 
 
@@ -377,11 +383,6 @@ class BasePort(QtGui.QGraphicsWidget):
         self._inCircleHolder.setItem(inCircle)
         self._inCircle = inCircle
         self.layout().insertStretch(2, 2)
-        if self._outCircle is None:
-            self.layout().setAlignment(self._labelItemHolder, QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
-        else:
-            self.layout().setAlignment(self._labelItemHolder, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
-
 
 
     def outCircle(self):
@@ -392,10 +393,6 @@ class BasePort(QtGui.QGraphicsWidget):
         self._outCircleHolder.setItem(outCircle)
         self._outCircle = outCircle
         self.layout().insertStretch(1, 2)
-        if self._inCircle is None:
-            self.layout().setAlignment(self._labelItemHolder, QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
-        else:
-            self.layout().setAlignment(self._labelItemHolder, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
 
 
     def labelItem(self):
@@ -420,7 +417,6 @@ class BasePort(QtGui.QGraphicsWidget):
 
 
 class InputPort(BasePort):
-    """docstring for InputPort"""
 
     def __init__(self, parent, graph, name, color, dataType):
         super(InputPort, self).__init__(parent, graph, name, color, dataType, 'In')
@@ -431,7 +427,6 @@ class InputPort(BasePort):
 
 
 class OutputPort(BasePort):
-    """docstring for OutputPort"""
 
     def __init__(self, parent, graph, name, color, dataType):
         super(OutputPort, self).__init__(parent, graph, name, color, dataType, 'Out')
@@ -442,7 +437,6 @@ class OutputPort(BasePort):
 
 
 class IOPort(BasePort):
-    """docstring for OutputPort"""
 
     def __init__(self, parent, graph, name, color, dataType):
         super(IOPort, self).__init__(parent, graph, name, color, dataType, 'IO')

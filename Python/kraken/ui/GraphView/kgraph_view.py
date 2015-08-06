@@ -7,7 +7,7 @@ from PySide import QtGui, QtCore
 from graph_view.graph_view import GraphView
 from graph_view.connection import Connection
 from knode import KNode
-
+from edit_index_widget import EditIndexWidget
 from kraken.core.maths import Vec2
 from kraken.core.kraken_system import KrakenSystem
 from kraken.core.configs.config import Config
@@ -68,6 +68,8 @@ class KGraphView(GraphView):
             def graphItemAt(item):
                 if isinstance(item, KNode):
                     return item
+                if isinstance(item, Connection):
+                    return item
                 elif item is not None:
                     return graphItemAt(item.parentItem())
                 return None
@@ -114,6 +116,27 @@ class KGraphView(GraphView):
                     contextMenu.addAction("Paste Data").triggered.connect(pasteSettings)
 
                 contextMenu.popup(event.globalPos())
+
+            elif isinstance(graphicItem, Connection):
+
+                outPort = graphicItem.getSrcPortCircle().getPort()
+                inPort = graphicItem.getDstPortCircle().getPort()
+                if outPort.getDataType() != inPort.getDataType():
+
+                    if outPort.getDataType().startswith(inPort.getDataType()) and outPort.getDataType().endswith('[]'):
+
+                        globalPos = event.globalPos()
+                        contextMenu = QtGui.QMenu(self.getGraphViewWidget())
+                        contextMenu.setObjectName('rightClickContextMenu')
+                        contextMenu.setMinimumWidth(150)
+
+                        def editIndex():
+                            componentInput = graphicItem.getDstPortCircle().getPort().getComponentInput()
+                            EditIndexWidget(componentInput, pos=globalPos, parent=self.getGraphViewWidget())
+
+                        contextMenu.addAction("EditIndex").triggered.connect(editIndex)
+                        contextMenu.popup(globalPos)
+
 
         else:
             super(KGraphView, self).mousePressEvent(event)
