@@ -14,6 +14,7 @@ from kraken.core.objects.attributes.string_attribute import StringAttribute
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
 from kraken.core.objects.component_group import ComponentGroup
+from kraken.core.objects.components.component_output import ComponentOutput
 from kraken.core.objects.hierarchy_group import HierarchyGroup
 from kraken.core.objects.locator import Locator
 from kraken.core.objects.joint import Joint
@@ -274,14 +275,10 @@ class TentacleComponentRig(TentacleComponent):
 
         # IK Control
         self.tentacleIKCtrlSpace = CtrlSpace('IK', parent=self.ctrlCmpGrp)
-        self.tentacleIKCtrl = Control('IK', parent=self.tentacleIKCtrlSpace, shape="pin")
-
-        if self.getLocation() == 'R':
-            self.tentacleIKCtrl.rotatePoints(0, 90, 0)
-            self.tentacleIKCtrl.translatePoints(Vec3(-1.0, 0.0, 0.0))
-        else:
-            self.tentacleIKCtrl.rotatePoints(0, -90, 0)
-            self.tentacleIKCtrl.translatePoints(Vec3(1.0, 0.0, 0.0))
+        self.tentacleIKCtrl = Control('IK', parent=self.tentacleIKCtrlSpace, shape="sphere")
+        self.tentacleIKCtrl.scalePoints(Vec3(0.25, 0.25, 0.25))
+        self.tentacleIKCtrl.lockScale(x=True, y=True, z=True)
+        self.tentacleIKCtrl.lockRotation(x=True, y=True, z=True)
 
         # Add Component Params to IK control
         tentacleSettingsAttrGrp = AttributeGroup("DisplayInfo_LegSettings", parent=self.tentacleIKCtrl)
@@ -420,7 +417,7 @@ class TentacleComponentRig(TentacleComponent):
         # Add new deformers and outputs
         for i in xrange(len(self.boneOutputsTgt), numDeformers):
             name = 'bone' + str(i + 1).zfill(2)
-            tentacleOutput = Locator(name, parent=self.outputHrcGrp)
+            tentacleOutput = ComponentOutput(name, parent=self.outputHrcGrp)
             self.boneOutputsTgt.append(tentacleOutput)
 
         for i in xrange(len(self.deformerJoints), numDeformers):
@@ -458,7 +455,7 @@ class TentacleComponentRig(TentacleComponent):
         for i, each in enumerate(self.fkCtrlSpaces):
             self.fkCtrlSpaces[i].xfo = boneXfos[i]
             self.fkCtrls[i].xfo = boneXfos[i]
-            self.fkCtrls[i].scalePoints(Vec3(boneLengths[i], 1.75, 1.75))
+            self.fkCtrls[i].scalePoints(Vec3(Vec3(boneLengths[i], boneLengths[i] * 0.45, boneLengths[i] * 0.45)))
 
         self.chainBase.xfo = boneXfos[0]
 

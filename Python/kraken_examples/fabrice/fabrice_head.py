@@ -186,6 +186,8 @@ class FabriceHeadRig(FabriceHead):
         self.headAimCtrlSpace = CtrlSpace('headAim', parent=self.ctrlCmpGrp)
         self.headAimCtrl = Control('headAim', parent=self.headAimCtrlSpace, shape="sphere")
         self.headAimCtrl.scalePoints(Vec3(0.35, 0.35, 0.35))
+        self.headAimCtrl.lockScale(x=True, y=True, z=True)
+        self.headAimCtrl.lockRotation(x=True, y=True, z=True)
 
         self.headAimUpV = Locator('headAimUpV', parent=self.headAimCtrl)
         self.headAimUpV.setShapeVisibility(False)
@@ -196,10 +198,14 @@ class FabriceHeadRig(FabriceHead):
 
         self.headCtrlSpace = CtrlSpace('head', parent=self.ctrlCmpGrp)
         self.headCtrl = Control('head', parent=self.headCtrlSpace, shape="circle")
+        self.headCtrl.lockTranslation(x=True, y=True, z=True)
+        self.headCtrl.lockScale(x=True, y=True, z=True)
 
         # Jaw
         self.jawCtrlSpace = CtrlSpace('jawCtrlSpace', parent=self.headCtrl)
         self.jawCtrl = Control('jaw', parent=self.jawCtrlSpace, shape="cube")
+        self.jawCtrl.lockTranslation(x=True, y=True, z=True)
+        self.jawCtrl.lockScale(x=True, y=True, z=True)
         self.jawCtrl.setColor("orange")
 
         # ==========

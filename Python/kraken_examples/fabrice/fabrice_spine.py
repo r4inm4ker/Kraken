@@ -285,6 +285,7 @@ class FabriceSpineRig(FabriceSpine):
         self.cogCtrl.rotatePoints(90, 0, 0)
         self.cogCtrl.scalePoints(Vec3(3.0, 3.0, 3.0))
         self.cogCtrl.translatePoints(Vec3(0.0, 0.0, 0.2))
+        self.cogCtrl.lockScale(x=True, y=True, z=True)
         self.cogCtrl.setColor("orange")
 
         # Spine Base
@@ -292,18 +293,21 @@ class FabriceSpineRig(FabriceSpine):
         self.spineBaseCtrl = Control('spineBase', parent=self.spineBaseCtrlSpace, shape="pin")
         self.spineBaseCtrl.rotatePoints(90, 0, 0)
         self.spineBaseCtrl.translatePoints(Vec3(0, 1.0, 0))
+        self.spineBaseCtrl.lockScale(x=True, y=True, z=True)
 
         # Spine Base Handle
         self.spineBaseHandleCtrlSpace = CtrlSpace('spineBaseHandle', parent=self.spineBaseCtrl)
         self.spineBaseHandleCtrl = Control('spineBaseHandle', parent=self.spineBaseHandleCtrlSpace, shape="pin")
         self.spineBaseHandleCtrl.rotatePoints(90, 0, 0)
         self.spineBaseHandleCtrl.translatePoints(Vec3(0, 1.0, 0))
+        self.spineBaseHandleCtrl.lockScale(x=True, y=True, z=True)
         self.spineBaseHandleCtrl.setColor("orange")
 
         # Spine End
         self.spineEndCtrlSpace = CtrlSpace('spineEnd', parent=self.cogCtrl)
         self.spineEndCtrl = Control('spineEnd', parent=self.spineEndCtrlSpace, shape="pin")
         self.spineEndCtrl.rotatePoints(90, 0, 0)
+        self.spineEndCtrl.lockScale(x=True, y=True, z=True)
         self.spineEndCtrl.translatePoints(Vec3(0, 1.0, 0))
 
         # Spine End Handle
@@ -311,6 +315,7 @@ class FabriceSpineRig(FabriceSpine):
         self.spineEndHandleCtrl = Control('spineEndHandle', parent=self.spineEndHandleCtrlSpace, shape="pin")
         self.spineEndHandleCtrl.rotatePoints(90, 0, 0)
         self.spineEndHandleCtrl.translatePoints(Vec3(0, 1.0, 0))
+        self.spineEndHandleCtrl.lockScale(x=True, y=True, z=True)
         self.spineEndHandleCtrl.setColor("orange")
 
 
@@ -381,7 +386,7 @@ class FabriceSpineRig(FabriceSpine):
             self.bezierSpineSpliceOp.setOutput('outputs', spineOutput)
 
         # Add Deformer Splice Op
-        self.deformersToOutputsSpliceOp = SpliceOperator('spineDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken')
+        self.deformersToOutputsSpliceOp = SpliceOperator('spineDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken', alwaysEval=True)
         self.addOperator(self.deformersToOutputsSpliceOp)
 
         # Add Att Inputs

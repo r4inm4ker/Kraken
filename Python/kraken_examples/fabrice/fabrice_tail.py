@@ -71,21 +71,25 @@ class FabriceTailGuide(FabriceTail):
         # Guide Controls
         self.tailBaseCtrl = Control('tailBase', parent=self.ctrlCmpGrp, shape='sphere')
         self.tailBaseCtrl.scalePoints(Vec3(1.2, 1.2, 1.2))
+        self.tailBaseCtrl.lockScale(x=True, y=True, z=True)
         self.tailBaseCtrl.setColor("turqoise")
 
         self.tailBaseHandleCtrl = Control('tailBaseHandle', parent=self.ctrlCmpGrp, shape='pin')
         self.tailBaseHandleCtrl.rotatePoints(90, 0, 0)
         self.tailBaseHandleCtrl.translatePoints(Vec3(0, 1.0, 0))
+        self.tailBaseHandleCtrl.lockScale(x=True, y=True, z=True)
         self.tailBaseHandleCtrl.setColor("turqoise")
 
         self.tailEndHandleCtrl = Control('tailEndHandle', parent=self.ctrlCmpGrp, shape='pin')
         self.tailEndHandleCtrl.rotatePoints(90, 0, 0)
         self.tailEndHandleCtrl.translatePoints(Vec3(0, 1.0, 0))
+        self.tailEndHandleCtrl.lockScale(x=True, y=True, z=True)
         self.tailEndHandleCtrl.setColor("turqoise")
 
         self.tailEndCtrl = Control('tailEnd', parent=self.ctrlCmpGrp, shape='pin')
         self.tailEndCtrl.rotatePoints(90, 0, 0)
         self.tailEndCtrl.translatePoints(Vec3(0, 1.0, 0))
+        self.tailEndCtrl.lockScale(x=True, y=True, z=True)
         self.tailEndCtrl.setColor("turqoise")
 
         self.spineOutputs = []
@@ -273,16 +277,19 @@ class FabriceTailRig(FabriceTail):
         # Tail Base Handle
         self.tailBaseHandleCtrlSpace = CtrlSpace('tailBaseHandle', parent=self.ctrlCmpGrp)
         self.tailBaseHandleCtrl = Control('tailBaseHandle', parent=self.tailBaseHandleCtrlSpace, shape="pin")
+        self.tailBaseHandleCtrl.lockScale(x=True, y=True, z=True)
         self.tailBaseHandleCtrl.setColor("turqoise")
 
         # Tail End Handle
         self.tailEndHandleCtrlSpace = CtrlSpace('tailEndHandle', parent=self.ctrlCmpGrp)
         self.tailEndHandleCtrl = Control('tailEndHandle', parent=self.tailEndHandleCtrlSpace, shape="pin")
+        self.tailEndHandleCtrl.lockScale(x=True, y=True, z=True)
         self.tailEndHandleCtrl.setColor("turqoise")
 
         # Tail End
         self.tailEndCtrlSpace = CtrlSpace('tailEnd', parent=self.tailEndHandleCtrl)
         self.tailEndCtrl = Control('tailEnd', parent=self.tailEndCtrlSpace, shape="pin")
+        self.tailEndCtrl.lockScale(x=True, y=True, z=True)
         self.tailEndCtrl.setColor("greenBlue")
 
 
@@ -350,7 +357,7 @@ class FabriceTailRig(FabriceTail):
             self.bezierTailSpliceOp.setOutput('outputs', tailOutput)
 
         # Add Deformer Splice Op
-        self.deformersToOutputsSpliceOp = SpliceOperator('tailDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken')
+        self.deformersToOutputsSpliceOp = SpliceOperator('tailDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken', alwaysEval=True)
         self.addOperator(self.deformersToOutputsSpliceOp)
 
         # Add Att Inputs
