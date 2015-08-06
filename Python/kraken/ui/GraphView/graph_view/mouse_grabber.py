@@ -60,19 +60,8 @@ class MouseGrabber(PortCircle):
                 if mouseOverPortCircle == None:
                     return False
 
-            if self.connectionPointType() != mouseOverPortCircle.connectionPointType():
-                return False
+            return mouseOverPortCircle.canConnectTo(self.__otherPortItem)
 
-            if mouseOverPortCircle.getPort().getDataType() != self.__otherPortItem.getPort().getDataType():
-                return False
-
-            # Check if you're trying to connect to the
-            mouseOverPort = mouseOverPortCircle.getPort()
-            otherPort = self.__otherPortItem.getPort()
-            if mouseOverPort.getNode() == otherPort.getNode():
-                return False
-
-            return True
 
         collidingPortItems = filter(lambda port: canConnect(port), collidingPortItems)
         if len(collidingPortItems) > 0:
