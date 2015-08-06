@@ -149,6 +149,8 @@ class Builder(Builder):
             parentDCCSceneItem = si.ActiveProject3.ActiveScene.Root
 
         dccSceneItem = parentDCCSceneItem.AddNull()
+        dccSceneItem.Parameters('primary_icon').Value = 2
+        dccSceneItem.Parameters('size').Value = 0.125
         dccSceneItem.Name = buildName
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
