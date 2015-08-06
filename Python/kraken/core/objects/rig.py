@@ -124,7 +124,7 @@ class Rig(Container):
                     connectionData['target']+". Input '" + inputName + "' not found on Component:" + targetComponent.getPath())
 
             inputPort.setConnection(outputPort)
-            inputPort.setIndex(connectionData['targetIndex'])
+            inputPort.setIndex(connectionData.get('targetIndex', 0))
 
         Profiler.getInstance().pop()
 
