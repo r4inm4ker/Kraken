@@ -68,6 +68,7 @@ class KGraphView(GraphView):
         if outPort is not None and inPort is not None and outPort.getDataType() != inPort.getDataType():
             if outPort.getDataType().startswith(inPort.getDataType()) and outPort.getDataType().endswith('[]'):
                 connection.setPenStyle(QtCore.Qt.DashDotLine)
+                connection.setPenWidth(2.5)
 
         return connection
 

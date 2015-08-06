@@ -15,19 +15,20 @@ class Connection(QtGui.QGraphicsPathItem):
         self.__graph = graph
         self.__srcPortCircle = srcPortCircle
         self.__dstPortCircle = dstPortCircle
-        self.__penStyle = QtCore.Qt.DashLine
+        penStyle = QtCore.Qt.DashLine
 
         self.__connectionColor = QtGui.QColor(0, 0, 0)
         self.__connectionColor.setRgbF(*self.__srcPortCircle.getColor().getRgbF())
         self.__connectionColor.setAlpha(125)
 
-        self.__defaultPen = QtGui.QPen(self.__connectionColor, 1.5, s=self.__penStyle)
+        self.__defaultPen = QtGui.QPen(self.__connectionColor, 1.5, s=penStyle)
         self.__defaultPen.setDashPattern([1, 2, 2, 1])
 
-        self.__connectionHoverColor = self.__connectionColor
+        self.__connectionHoverColor = QtGui.QColor(0, 0, 0)
+        self.__connectionHoverColor.setRgbF(*self.__srcPortCircle.getColor().getRgbF())
         self.__connectionHoverColor.setAlpha(255)
 
-        self.__hoverPen = QtGui.QPen(self.__connectionHoverColor, 1.5, s=self.__penStyle)
+        self.__hoverPen = QtGui.QPen(self.__connectionHoverColor, 1.5, s=penStyle)
         self.__hoverPen.setDashPattern([1, 2, 2, 1])
 
         self.setPen(self.__defaultPen)
@@ -38,10 +39,15 @@ class Connection(QtGui.QGraphicsPathItem):
 
 
     def setPenStyle(self, penStyle):
-        self.__penStyle = penStyle
-        self.__defaultPen = QtGui.QPen(self.__connectionColor, 1.5, s=self.__penStyle)
-        self.__hoverPen = QtGui.QPen(self.__connectionHoverColor, 1.5, s=self.__penStyle)
-        self.setPen(self.__defaultPen)
+        self.__defaultPen.setStyle(penStyle)
+        self.__hoverPen.setStyle(penStyle)
+        self.setPen(self.__defaultPen) # Force a redraw
+
+
+    def setPenWidth(self, width):
+        self.__defaultPen.setWidthF(width)
+        self.__hoverPen.setWidthF(width)
+        self.setPen(self.__defaultPen) # Force a redraw
 
 
     def getSrcPortCircle(self):
