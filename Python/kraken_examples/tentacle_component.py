@@ -66,7 +66,7 @@ class TentacleComponentGuide(TentacleComponent):
         # Controls
         # =========
         guideSettingsAttrGrp = AttributeGroup("GuideSettings", parent=self)
-        self.numJoints = IntegerAttribute('numJoints', value=12, minValue=2, maxValue=20, parent=guideSettingsAttrGrp)
+        self.numJoints = IntegerAttribute('numJoints', value=12, minValue=4, maxValue=20, parent=guideSettingsAttrGrp)
         self.numJoints.setValueChangeCallback(self.updateNumLegControls)
 
         self.jointCtrls = []
