@@ -192,7 +192,7 @@ def BuildKrakenRig_Execute(rigFilePath):
 
     rig = Rig()
     rig.loadRigDefinition(rigBuildData)
-    rig.setName(guideRig.getName().replace('_Guide', ''))
+    rig.setName(guideRig.getName().replace('_guide', ''))
 
     builtRig = None
     progressBar = None
