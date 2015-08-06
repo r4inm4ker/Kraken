@@ -80,6 +80,10 @@ class MouseGrabber(PortCircle):
 
     def mouseReleaseEvent(self, event):
 
+        # Destroy the temporary connection.
+        self._graph.removeConnection(self.__connection, emitSignal=False)
+        self.__connection = None
+
         if self.__mouseOverPortCircle is not None:
             try:
 
@@ -124,8 +128,8 @@ class MouseGrabber(PortCircle):
     def destroy(self):
         self.ungrabMouse()
         scene = self.scene()
-        # Destroy the temporary connection.
-        self._graph.removeConnection(self.__connection, emitSignal=False)
+        if self.__connection is not None:
+            self._graph.removeConnection(self.__connection, emitSignal=False)
         # Destroy the grabber.
         scene.removeItem(self)
         scene.update()

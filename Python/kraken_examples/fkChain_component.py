@@ -399,7 +399,7 @@ class FKChainComponentRig(FKChainComponent):
         for i, each in enumerate(self.fkCtrlSpaces):
             self.fkCtrlSpaces[i].xfo = boneXfos[i]
             self.fkCtrls[i].xfo = boneXfos[i]
-            self.fkCtrls[i].scalePoints(Vec3(boneLengths[i], 1.75, 1.75))
+            self.fkCtrls[i].scalePoints(Vec3(boneLengths[i], boneLengths[i] * 0.45, boneLengths[i] * 0.45))
 
         # ==================
         # Update Splice Ops
