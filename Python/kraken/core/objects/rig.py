@@ -124,6 +124,7 @@ class Rig(Container):
                     connectionData['target']+". Input '" + inputName + "' not found on Component:" + targetComponent.getPath())
 
             inputPort.setConnection(outputPort)
+            inputPort.setIndex(connectionData['targetIndex'])
 
         Profiler.getInstance().pop()
 
@@ -218,7 +219,8 @@ class Rig(Container):
                     componentOutput = componentInput.getConnection()
                     connectionJson = {
                         'source': componentOutput.getParent().getDecoratedName() + '.' + componentOutput.getName(),
-                        'target': component.getDecoratedName() + '.' + componentInput.getName()
+                        'target': component.getDecoratedName() + '.' + componentInput.getName(),
+                        'targetIndex': componentInput.getIndex()
                     }
                     connectionsJson.append(connectionJson)
 
@@ -258,7 +260,8 @@ class Rig(Container):
                     componentOutput = componentInput.getConnection()
                     connectionJson = {
                         'source': componentOutput.getParent().getDecoratedName() + '.' + componentOutput.getName(),
-                        'target': component.getDecoratedName() + '.' + componentInput.getName()
+                        'target': component.getDecoratedName() + '.' + componentInput.getName(),
+                        'targetIndex': componentInput.getIndex()
                     }
                     connectionsJson.append(connectionJson)
 

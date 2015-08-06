@@ -26,8 +26,6 @@ class EditIndexWidget(QtGui.QWidget):
         self.componentInput = componentInput
         self.setWindowTitle( "Edit " + self.componentInput.getName() + " Index" )
         self.setWindowFlags( QtCore.Qt.Window )
-
-        # self.setObjectName('componentInspector') # TODO: Style me pretty...
         self.setFixedSize(150, 60)
 
         self.editLabel = QtGui.QLabel('Array Index')
