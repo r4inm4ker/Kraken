@@ -25,18 +25,20 @@ class PortLabel(QtGui.QGraphicsWidget):
         self.__textItem.document().setDefaultTextOption(option)
         self.__textItem.adjustSize()
 
-        self.translate(hOffset, 0)
-        self.adjustSize()
-
-        self.setAcceptHoverEvents(True)
         self.setPreferredSize(self.textSize())
         self.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed))
         self.setWindowFrameMargins(0, 0, 0, 0)
+        self.setHOffset(hOffset)
 
+        self.setAcceptHoverEvents(True)
         self.__mousDownPos = None
 
     def text(self):
         return self.__text
+
+
+    def setHOffset(self, hOffset):
+        self.translate(hOffset, 0)
 
 
     def setColor(self, color):
@@ -53,6 +55,7 @@ class PortLabel(QtGui.QGraphicsWidget):
 
     def getPort(self):
         return self.__port
+
 
     def highlight(self):
         self.setColor(self.__highlightColor)
@@ -103,6 +106,7 @@ class PortLabel(QtGui.QGraphicsWidget):
 
 
 class PortCircle(QtGui.QGraphicsWidget):
+
     __radius = 4.5
     __diameter = 2 * __radius
 
@@ -270,6 +274,32 @@ class PortCircle(QtGui.QGraphicsWidget):
     #     painter.drawRect(self.windowFrameRect())
 
 
+class ItemHolder(QtGui.QGraphicsWidget):
+    """docstring for ItemHolder"""
+    def __init__(self, parent):
+        super(ItemHolder, self).__init__(parent)
+
+        layout = QtGui.QGraphicsLinearLayout()
+        layout.setSpacing(0)
+        layout.setContentsMargins(0, 0, 0, 0)
+        self.setLayout(layout)
+
+
+    def setItem(self, item):
+        item.setParentItem(self)
+        self.layout().addItem(item)
+
+
+    def setHOffset(self, hOffset):
+        self.translate(hOffset, 0)
+
+    def paint(self, painter, option, widget):
+        super(ItemHolder, self).paint(painter, option, widget)
+        painter.setPen(QtGui.QPen(QtGui.QColor(255, 255, 0)))
+        painter.drawRect(self.windowFrameRect())
+
+
+
 class BasePort(QtGui.QGraphicsWidget):
 
     _labelColor = QtGui.QColor(25, 25, 25)
@@ -288,6 +318,7 @@ class BasePort(QtGui.QGraphicsWidget):
 
         layout = QtGui.QGraphicsLinearLayout()
         layout.setSpacing(0)
+        layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(layout)
 
         self._color = color
@@ -296,20 +327,39 @@ class BasePort(QtGui.QGraphicsWidget):
         self._outCircle = None
         self._labelItem = None
 
+        self._inCircleHolder = ItemHolder(self)
+        self._outCircleHolder = ItemHolder(self)
+        self._labelItemHolder = ItemHolder(self)
+
+        self.layout().addItem(self._inCircleHolder)
+        self.layout().setAlignment(self._inCircleHolder, QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
+
+        self.layout().addItem(self._labelItemHolder)
+        self.layout().setAlignment(self._labelItemHolder, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
+
+        self.layout().addItem(self._outCircleHolder)
+        self.layout().setAlignment(self._outCircleHolder, QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+
+
     def getName(self):
         return self._name
+
 
     def getDataType(self):
         return self._dataType
 
+
     def getNode(self):
         return self._node
+
 
     def getGraph(self):
         return self._graph
 
+
     def getColor(self):
         return self._color
+
 
     def setColor(self, color):
         if self._inCircle is not None:
@@ -322,11 +372,40 @@ class BasePort(QtGui.QGraphicsWidget):
     def inCircle(self):
         return self._inCircle
 
+
+    def setInCircle(self, inCircle):
+        self._inCircleHolder.setItem(inCircle)
+        self._inCircle = inCircle
+        self.layout().insertStretch(2, 2)
+        if self._outCircle is None:
+            self.layout().setAlignment(self._labelItemHolder, QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
+        else:
+            self.layout().setAlignment(self._labelItemHolder, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
+
+
+
     def outCircle(self):
         return self._outCircle
 
+
+    def setOutCircle(self, outCircle):
+        self._outCircleHolder.setItem(outCircle)
+        self._outCircle = outCircle
+        self.layout().insertStretch(1, 2)
+        if self._inCircle is None:
+            self.layout().setAlignment(self._labelItemHolder, QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+        else:
+            self.layout().setAlignment(self._labelItemHolder, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
+
+
     def labelItem(self):
         return self._labelItem
+
+
+    def setLabelItem(self, labelItem):
+        self._labelItemHolder.setItem(labelItem)
+        self._labelItem = labelItem
+
 
     # ===================
     # Connection Methods
@@ -346,20 +425,9 @@ class InputPort(BasePort):
     def __init__(self, parent, graph, name, color, dataType):
         super(InputPort, self).__init__(parent, graph, name, color, dataType, 'In')
 
-        labelHOffset = -10
-        circleHOffset = -2
+        self.setInCircle(PortCircle(self, graph, -2, color, 'In'))
+        self.setLabelItem(PortLabel(self, name, -10, self._labelColor, self._labelHighlightColor))
 
-        self._inCircle = PortCircle(self, graph, circleHOffset, color, 'In')
-        self._labelItem = PortLabel(self, name, labelHOffset, self._labelColor, self._labelHighlightColor)
-
-        self.layout().addItem(self._inCircle)
-        self.layout().setAlignment(self._inCircle, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
-        self.layout().setContentsMargins(0, 0, 30, 0)
-        self.layout().addItem(self._labelItem)
-        self.layout().setAlignment(self._labelItem, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
-        self.layout().addStretch(2)
-
-        self.__connection = None
 
 
 class OutputPort(BasePort):
@@ -368,18 +436,9 @@ class OutputPort(BasePort):
     def __init__(self, parent, graph, name, color, dataType):
         super(OutputPort, self).__init__(parent, graph, name, color, dataType, 'Out')
 
-        labelHOffset = 10
-        circleHOffset = 2
+        self.setLabelItem(PortLabel(self, self._name, 10, self._labelColor, self._labelHighlightColor))
+        self.setOutCircle(PortCircle(self, graph, 2, color, 'Out'))
 
-        self._labelItem = PortLabel(self, self._name, labelHOffset, self._labelColor, self._labelHighlightColor)
-        self._outCircle = PortCircle(self, graph, circleHOffset, color, 'Out')
-
-        self.layout().addStretch(2)
-        self.layout().setContentsMargins(30, 0, 0, 0)
-        self.layout().addItem(self._labelItem)
-        self.layout().setAlignment(self._labelItem, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
-        self.layout().addItem(self._outCircle)
-        self.layout().setAlignment(self._outCircle, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
 
 
 class IOPort(BasePort):
@@ -388,23 +447,8 @@ class IOPort(BasePort):
     def __init__(self, parent, graph, name, color, dataType):
         super(IOPort, self).__init__(parent, graph, name, color, dataType, 'IO')
 
-        labelHOffset = 0
-        circleHOffset = -2
+        self.setInCircle(PortCircle(self, graph, -2, color, 'In'))
+        self.setLabelItem(PortLabel(self, self._name, 0, self._labelColor, self._labelHighlightColor))
+        self.setOutCircle(PortCircle(self, graph, 2, color, 'Out'))
 
-        self._inCircle = PortCircle(self, graph, circleHOffset, color, 'In')
-
-        self._labelItem = PortLabel(self, name, labelHOffset, self._labelColor, self._labelHighlightColor)
-
-        circleHOffset = 2
-        self._outCircle = PortCircle(self, graph, circleHOffset, color, 'Out')
-
-        self.layout().setContentsMargins(0, 0, 0, 0)
-        self.layout().addItem(self._inCircle)
-        self.layout().setAlignment(self._inCircle, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
-        self.layout().addStretch(1)
-        self.layout().addItem(self._labelItem)
-        self.layout().setAlignment(self._labelItem, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
-        self.layout().addStretch(1)
-        self.layout().addItem(self._outCircle)
-        self.layout().setAlignment(self._outCircle, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
 
