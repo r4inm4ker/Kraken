@@ -15,18 +15,19 @@ class Connection(QtGui.QGraphicsPathItem):
         self.__graph = graph
         self.__srcPortCircle = srcPortCircle
         self.__dstPortCircle = dstPortCircle
+        self.__penStyle = QtCore.Qt.DashLine
 
-        connectionColor = QtGui.QColor(0, 0, 0)
-        connectionColor.setRgbF(*self.__srcPortCircle.getColor().getRgbF())
-        connectionColor.setAlpha(125)
+        self.__connectionColor = QtGui.QColor(0, 0, 0)
+        self.__connectionColor.setRgbF(*self.__srcPortCircle.getColor().getRgbF())
+        self.__connectionColor.setAlpha(125)
 
-        self.__defaultPen = QtGui.QPen(connectionColor, 1.5, s=QtCore.Qt.DashLine)
+        self.__defaultPen = QtGui.QPen(self.__connectionColor, 1.5, s=self.__penStyle)
         self.__defaultPen.setDashPattern([1, 2, 2, 1])
 
-        connectionHoverColor = connectionColor
-        connectionHoverColor.setAlpha(255)
+        self.__connectionHoverColor = self.__connectionColor
+        self.__connectionHoverColor.setAlpha(255)
 
-        self.__hoverPen = QtGui.QPen(connectionHoverColor, 1.5, s=QtCore.Qt.DashLine)
+        self.__hoverPen = QtGui.QPen(self.__connectionHoverColor, 1.5, s=self.__penStyle)
         self.__hoverPen.setDashPattern([1, 2, 2, 1])
 
         self.setPen(self.__defaultPen)
@@ -35,14 +36,25 @@ class Connection(QtGui.QGraphicsPathItem):
         self.setAcceptHoverEvents(True)
         self.connect()
 
+
+    def setPenStyle(self, penStyle):
+        self.__penStyle = penStyle
+        self.__defaultPen = QtGui.QPen(self.__connectionColor, 1.5, s=self.__penStyle)
+        self.__hoverPen = QtGui.QPen(self.__connectionHoverColor, 1.5, s=self.__penStyle)
+        self.setPen(self.__defaultPen)
+
+
     def getSrcPortCircle(self):
         return self.__srcPortCircle
+
 
     def getDstPortCircle(self):
         return self.__dstPortCircle
 
+
     def getSrcPort(self):
         return self.__srcPortCircle.getPort()
+
 
     def getDstPort(self):
         return self.__dstPortCircle.getPort()
@@ -59,6 +71,7 @@ class Connection(QtGui.QGraphicsPathItem):
             abs(dstPoint.x() - srcPoint.x()),
             abs(dstPoint.y() - srcPoint.y()),
             ).adjusted(-penWidth/2, -penWidth/2, +penWidth/2, +penWidth/2)
+
 
     def paint(self, painter, option, widget):
         srcPoint = self.mapFromScene(self.__srcPortCircle.centerInSceneCoords())
@@ -82,9 +95,11 @@ class Connection(QtGui.QGraphicsPathItem):
         self.setPen(self.__hoverPen)
         super(Connection, self).hoverEnterEvent(event)
 
+
     def hoverLeaveEvent(self, event):
         self.setPen(self.__defaultPen)
         super(Connection, self).hoverLeaveEvent(event)
+
 
     def mousePressEvent(self, event):
         if event.button() is QtCore.Qt.MouseButton.LeftButton:
@@ -93,6 +108,7 @@ class Connection(QtGui.QGraphicsPathItem):
             event.accept()
         else:
             super(Connection, self).mousePressEvent(event)
+
 
     def mouseMoveEvent(self, event):
         if self.__dragging:
@@ -111,9 +127,11 @@ class Connection(QtGui.QGraphicsPathItem):
         else:
             super(Connection, self).mouseMoveEvent(event)
 
+
     def disconnect(self):
         self.__srcPortCircle.removeConnection(self)
         self.__dstPortCircle.removeConnection(self)
+
 
     def connect(self):
         self.__srcPortCircle.addConnection(self)

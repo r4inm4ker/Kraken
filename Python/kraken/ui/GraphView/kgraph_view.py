@@ -58,6 +58,18 @@ class KGraphView(GraphView):
         self.frameAllNodes()
 
 
+    def addConnection(self, connection, emitSignal=True):
+
+        result = super(KGraphView, self).addConnection(connection, emitSignal=emitSignal)
+
+        # Indicate that this is an indexed connection.
+        outPort = connection.getSrcPortCircle().getPort()
+        inPort = connection.getDstPortCircle().getPort()
+        if outPort is not None and inPort is not None and outPort.getDataType() != inPort.getDataType():
+            if outPort.getDataType().startswith(inPort.getDataType()) and outPort.getDataType().endswith('[]'):
+                connection.setPenStyle(QtCore.Qt.DashDotLine)
+
+        return connection
 
     ################################################
     ## Events

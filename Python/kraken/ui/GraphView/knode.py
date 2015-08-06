@@ -40,6 +40,10 @@ class KNodePortCircle(PortCircle):
     def __init__(self, port, graph, hOffset, color, connectionPointType):
         super(KNodePortCircle, self).__init__(port, graph, hOffset, color, connectionPointType)
 
+        if self.getPort().getDataType().endswith('[]'):
+            self.setDefaultPen(QtGui.QPen(QtGui.QColor(255, 25, 25), 1.5))
+            self.setHoverPen(QtGui.QPen(QtGui.QColor(255, 155, 100), 2.0))
+
 
     def canConnectTo(self, otherPortCircle):
 
@@ -67,6 +71,7 @@ class KNodePortCircle(PortCircle):
             return False
 
         return True
+
 
 
 class KNodeInputPort(BasePort):
