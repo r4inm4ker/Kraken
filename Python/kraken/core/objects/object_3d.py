@@ -5,6 +5,8 @@ Object3D - Base Object3D Object.
 
 """
 
+import re
+
 from kraken.core.configs.config import Config
 from kraken.core.objects.scene_item import SceneItem
 from kraken.core.maths.xfo import Xfo
@@ -228,8 +230,13 @@ class Object3D(SceneItem):
                 collision = child != None and child is not self
                 if not collision:
                     break
-                name = initName + str(suffix).zfill(2)
-                suffix += 1
+
+                result = re.split(r"(\d+)$", initName, 1)
+                if len(result) > 1:
+                    name = result[0] + str(int(result[1]) + 1).zfill(2)
+                else:
+                    name = initName + str(suffix).zfill(2)
+                    suffix += 1
 
         super(Object3D, self).setName(name)
 
