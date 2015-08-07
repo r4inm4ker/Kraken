@@ -393,7 +393,7 @@ class FKChainComponentRig(FKChainComponent):
         self.setNumControls(numJoints)
         self.setNumDeformers(numJoints)
 
-        for i, each in enumerate(self.fkCtrlSpaces):
+        for i in xrange(numJoints):
             self.fkCtrlSpaces[i].xfo = boneXfos[i]
             self.fkCtrls[i].xfo = boneXfos[i]
             self.fkCtrls[i].scalePoints(Vec3(boneLengths[i], boneLengths[i] * 0.45, boneLengths[i] * 0.45))
