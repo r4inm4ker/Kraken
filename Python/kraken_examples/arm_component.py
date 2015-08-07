@@ -322,9 +322,14 @@ class ArmComponentRig(ArmComponent):
         self.bicepFKCtrlSpace.addConstraint(self.armRootInputConstraint)
 
         # Constraint outputs
-        handConstraint = PoseConstraint('_'.join([self.handOutputTgt.getName(), 'To', self.handCtrl.getName()]))
-        handConstraint.addConstrainer(self.handCtrl)
-        self.handOutputTgt.addConstraint(handConstraint)
+        self.handConstraint = PoseConstraint('_'.join([self.handOutputTgt.getName(), 'To', self.handCtrl.getName()]))
+        self.handConstraint.addConstrainer(self.handCtrl)
+        self.handOutputTgt.addConstraint(self.handConstraint)
+
+        self.handCtrlSpaceConstraint = PoseConstraint('_'.join([self.handCtrlSpace.getName(), 'To', self.armEndXfoOutputTgt.getName()]))
+        self.handCtrlSpaceConstraint.setMaintainOffset(True)
+        self.handCtrlSpaceConstraint.addConstrainer(self.armEndXfoOutputTgt)
+        self.handCtrlSpace.addConstraint(self.handCtrlSpaceConstraint)
 
 
         # ===============
@@ -438,6 +443,9 @@ class ArmComponentRig(ArmComponent):
         self.armIKCtrlSpaceInputConstraint.evaluate()
         self.armUpVCtrlSpaceInputConstraint.evaluate()
         self.armRootInputConstraint.evaluate()
+        self.armRootInputConstraint.evaluate()
+        self.handConstraint.evaluate()
+        self.handCtrlSpaceConstraint.evaluate()
 
         # Eval Operators
         self.spliceOp.evaluate()
