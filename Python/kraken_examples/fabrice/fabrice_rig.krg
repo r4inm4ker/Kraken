@@ -2245,7 +2245,7 @@
       "class": "kraken_examples.tentacle_component.TentacleComponentGuide"
     }, 
     {
-      "forearmFKCtrlSize": 1.5, 
+      "forearmFKCtrlSize": 0.5, 
       "graphPos": {
         "y": -289.6148986816406, 
         "x": -57.57198715209961, 
@@ -2354,7 +2354,7 @@
         }
       }, 
       "class": "kraken_examples.arm_component.ArmComponentGuide", 
-      "bicepFKCtrlSize": 1.75
+      "bicepFKCtrlSize": 0.7
     }, 
     {
       "graphPos": {

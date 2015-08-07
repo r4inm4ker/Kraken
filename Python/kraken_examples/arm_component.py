@@ -251,9 +251,9 @@ class ArmComponentRig(ArmComponent):
         self.forearmFKCtrl.alignOnXAxis()
 
         self.handCtrlSpace = CtrlSpace('hand', parent=self.ctrlCmpGrp)
-        self.handCtrl = Control('hand', parent=self.handCtrlSpace, shape="cube")
-        self.handCtrl.alignOnXAxis()
-        self.handCtrl.scalePoints(Vec3(2.0, 0.75, 1.25))
+        self.handCtrl = Control('hand', parent=self.handCtrlSpace, shape="circle")
+        self.handCtrl.rotatePoints(0, 0, 90)
+        self.handCtrl.scalePoints(Vec3(1.0, 0.75, 0.75))
 
         # Arm IK
         self.armIKCtrlSpace = CtrlSpace('IK', parent=self.ctrlCmpGrp)
