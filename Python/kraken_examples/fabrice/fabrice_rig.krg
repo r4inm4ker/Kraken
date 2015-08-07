@@ -264,6 +264,46 @@
       "source": "mainSrt:M.rigScale", 
       "target": "arm:R.rigScale", 
       "targetIndex": 0
+    }, 
+    {
+      "source": "arm:L.hand", 
+      "target": "finger01:L.rootInput", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "mainSrt:M.rigScale", 
+      "target": "finger01:L.rigScale", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm:L.hand", 
+      "target": "finger02:L.rootInput", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "mainSrt:M.rigScale", 
+      "target": "finger02:L.rigScale", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm:L.hand", 
+      "target": "finger03:L.rootInput", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "mainSrt:M.rigScale", 
+      "target": "finger03:L.rigScale", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm:L.hand", 
+      "target": "thumb:L.rootInput", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "mainSrt:M.rigScale", 
+      "target": "thumb:L.rigScale", 
+      "targetIndex": 0
     }
   ], 
   "graphPositions": {
@@ -283,8 +323,8 @@
       "__mathObjectClass__": "Vec2"
     }, 
     "mainSrt:M": {
-      "y": 145.10708618164062, 
-      "x": -740.2589111328125, 
+      "y": 48.085323333740234, 
+      "x": -1522.24267578125, 
       "__mathObjectClass__": "Vec2"
     }, 
     "mainTentacle:R": {
@@ -318,8 +358,8 @@
       "__mathObjectClass__": "Vec2"
     }, 
     "spine:M": {
-      "y": 170.09555053710938, 
-      "x": -434.6600646972656, 
+      "y": 73.07379150390625, 
+      "x": -1216.643798828125, 
       "__mathObjectClass__": "Vec2"
     }, 
     "lipTentacle03:R": {
@@ -333,13 +373,18 @@
       "__mathObjectClass__": "Vec2"
     }, 
     "legFin:R": {
-      "y": -227.23190307617188, 
-      "x": 216.4665069580078, 
+      "y": -278.91876220703125, 
+      "x": 392.8099365234375, 
       "__mathObjectClass__": "Vec2"
     }, 
     "lipTentacle04:L": {
       "y": 933.3529052734375, 
       "x": 1461.4114990234375, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "thumb:L": {
+      "y": -444.10015869140625, 
+      "x": -506.20684814453125, 
       "__mathObjectClass__": "Vec2"
     }, 
     "lipTentacle01:R": {
@@ -348,8 +393,8 @@
       "__mathObjectClass__": "Vec2"
     }, 
     "clavicle:L": {
-      "y": -145.63902282714844, 
-      "x": -251.11807250976562, 
+      "y": -242.66078186035156, 
+      "x": -1033.101806640625, 
       "__mathObjectClass__": "Vec2"
     }, 
     "jawTentacle:L": {
@@ -368,8 +413,8 @@
       "__mathObjectClass__": "Vec2"
     }, 
     "arm:R": {
-      "y": 429.3063049316406, 
-      "x": -27.551097869873047, 
+      "y": 332.2845458984375, 
+      "x": -809.5348510742188, 
       "__mathObjectClass__": "Vec2"
     }, 
     "lipTentacle02:R": {
@@ -382,14 +427,29 @@
       "x": 1542.9141845703125, 
       "__mathObjectClass__": "Vec2"
     }, 
+    "finger03:L": {
+      "y": -1022.2736206054688, 
+      "x": -501.4962158203125, 
+      "__mathObjectClass__": "Vec2"
+    }, 
     "tailBackFin:R": {
       "y": -297.5018615722656, 
       "x": 1013.6631469726562, 
       "__mathObjectClass__": "Vec2"
     }, 
+    "finger02:L": {
+      "y": -839.78369140625, 
+      "x": -500.9560546875, 
+      "__mathObjectClass__": "Vec2"
+    }, 
     "arm:L": {
-      "y": -289.6148986816406, 
-      "x": -57.57198715209961, 
+      "y": -386.63665771484375, 
+      "x": -839.5557250976562, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "finger01:L": {
+      "y": -652.3511962890625, 
+      "x": -504.04791259765625, 
       "__mathObjectClass__": "Vec2"
     }, 
     "jawTentacle:R": {
@@ -403,8 +463,8 @@
       "__mathObjectClass__": "Vec2"
     }, 
     "clavicle:R": {
-      "y": 339.4352722167969, 
-      "x": -213.19696044921875, 
+      "y": 242.41351318359375, 
+      "x": -995.1806640625, 
       "__mathObjectClass__": "Vec2"
     }, 
     "tailBackFin:L": {
@@ -413,8 +473,8 @@
       "__mathObjectClass__": "Vec2"
     }, 
     "legFin:L": {
-      "y": 320.07373046875, 
-      "x": 224.9405975341797, 
+      "y": 268.3868713378906, 
+      "x": 401.2840270996094, 
       "__mathObjectClass__": "Vec2"
     }
   }, 
@@ -422,8 +482,8 @@
   "components": [
     {
       "graphPos": {
-        "y": 145.10708618164062, 
-        "x": -740.2589111328125, 
+        "y": 48.085323333740234, 
+        "x": -1522.24267578125, 
         "__mathObjectClass__": "Vec2"
       }, 
       "mainSrtXfo": {
@@ -543,8 +603,8 @@
               -0.76
             ]
           ], 
-          "degree": 1, 
-          "closed": false
+          "closed": false, 
+          "degree": 1
         }
       ], 
       "location": "M", 
@@ -577,8 +637,8 @@
               -0.46
             ]
           ], 
-          "degree": 1, 
-          "closed": false
+          "closed": false, 
+          "degree": 1
         }, 
         {
           "points": [
@@ -608,8 +668,8 @@
               1.17
             ]
           ], 
-          "degree": 1, 
-          "closed": false
+          "closed": false, 
+          "degree": 1
         }, 
         {
           "points": [
@@ -624,8 +684,8 @@
               1.17
             ]
           ], 
-          "degree": 1, 
-          "closed": false
+          "closed": false, 
+          "degree": 1
         }, 
         {
           "points": [
@@ -640,8 +700,8 @@
               1.17
             ]
           ], 
-          "degree": 1, 
-          "closed": false
+          "closed": false, 
+          "degree": 1
         }, 
         {
           "points": [
@@ -656,8 +716,8 @@
               1.53
             ]
           ], 
-          "degree": 1, 
-          "closed": false
+          "closed": false, 
+          "degree": 1
         }, 
         {
           "points": [
@@ -672,8 +732,8 @@
               1.53
             ]
           ], 
-          "degree": 1, 
-          "closed": false
+          "closed": false, 
+          "degree": 1
         }
       ], 
       "class": "kraken_examples.fabrice.fabrice_head.FabriceHeadGuide"
@@ -733,13 +793,13 @@
               -0.26
             ]
           ], 
-          "degree": 1, 
-          "closed": false
+          "closed": false, 
+          "degree": 1
         }
       ], 
       "graphPos": {
-        "y": 170.09555053710938, 
-        "x": -434.6600646972656, 
+        "y": 73.07379150390625, 
+        "x": -1216.643798828125, 
         "__mathObjectClass__": "Vec2"
       }, 
       "name": "spine", 
@@ -812,8 +872,8 @@
               0.0
             ]
           ], 
-          "degree": 1, 
-          "closed": false
+          "closed": false, 
+          "degree": 1
         }
       ], 
       "spineEndPos": {
@@ -882,8 +942,8 @@
               -0.26
             ]
           ], 
-          "degree": 1, 
-          "closed": false
+          "closed": false, 
+          "degree": 1
         }
       ], 
       "location": "M", 
@@ -941,8 +1001,8 @@
               -0.25
             ]
           ], 
-          "degree": 1, 
-          "closed": false
+          "closed": false, 
+          "degree": 1
         }
       ], 
       "spineEndCtrlCrvData": [
@@ -999,8 +1059,8 @@
               -0.26
             ]
           ], 
-          "degree": 1, 
-          "closed": false
+          "closed": false, 
+          "degree": 1
         }
       ]
     }, 
@@ -1078,8 +1138,8 @@
               0.0
             ]
           ], 
-          "degree": 1, 
-          "closed": false
+          "closed": false, 
+          "degree": 1
         }
       ], 
       "tailEndHandleCtrlCrvData": [
@@ -1136,8 +1196,8 @@
               0.0
             ]
           ], 
-          "degree": 1, 
-          "closed": false
+          "closed": false, 
+          "degree": 1
         }
       ], 
       "tailEndCtrlCrvData": [
@@ -1194,8 +1254,8 @@
               0.0
             ]
           ], 
-          "degree": 1, 
-          "closed": false
+          "closed": false, 
+          "degree": 1
         }
       ], 
       "location": "M", 
@@ -1473,8 +1533,8 @@
     }, 
     {
       "graphPos": {
-        "y": -227.23190307617188, 
-        "x": 216.4665069580078, 
+        "y": -278.91876220703125, 
+        "x": 392.8099365234375, 
         "__mathObjectClass__": "Vec2"
       }, 
       "name": "legFin", 
@@ -1516,8 +1576,8 @@
     }, 
     {
       "graphPos": {
-        "y": 320.07373046875, 
-        "x": 224.9405975341797, 
+        "y": 268.3868713378906, 
+        "x": 401.2840270996094, 
         "__mathObjectClass__": "Vec2"
       }, 
       "name": "legFin", 
@@ -2282,8 +2342,8 @@
     {
       "forearmFKCtrlSize": 0.5, 
       "graphPos": {
-        "y": -289.6148986816406, 
-        "x": -57.57198715209961, 
+        "y": -386.63665771484375, 
+        "x": -839.5557250976562, 
         "__mathObjectClass__": "Vec2"
       }, 
       "name": "arm", 
@@ -2393,8 +2453,8 @@
     }, 
     {
       "graphPos": {
-        "y": -145.63902282714844, 
-        "x": -251.11807250976562, 
+        "y": -242.66078186035156, 
+        "x": -1033.101806640625, 
         "__mathObjectClass__": "Vec2"
       }, 
       "name": "clavicle", 
@@ -2447,8 +2507,8 @@
               0.29
             ]
           ], 
-          "degree": 1, 
-          "closed": true
+          "closed": true, 
+          "degree": 1
         }, 
         {
           "points": [
@@ -2473,8 +2533,8 @@
               0.35
             ]
           ], 
-          "degree": 1, 
-          "closed": true
+          "closed": true, 
+          "degree": 1
         }, 
         {
           "points": [
@@ -2489,8 +2549,8 @@
               0.35
             ]
           ], 
-          "degree": 1, 
-          "closed": false
+          "closed": false, 
+          "degree": 1
         }, 
         {
           "points": [
@@ -2505,8 +2565,8 @@
               0.35
             ]
           ], 
-          "degree": 1, 
-          "closed": false
+          "closed": false, 
+          "degree": 1
         }, 
         {
           "points": [
@@ -2521,8 +2581,8 @@
               0.35
             ]
           ], 
-          "degree": 1, 
-          "closed": false
+          "closed": false, 
+          "degree": 1
         }, 
         {
           "points": [
@@ -2537,8 +2597,8 @@
               0.35
             ]
           ], 
-          "degree": 1, 
-          "closed": false
+          "closed": false, 
+          "degree": 1
         }
       ], 
       "location": "L", 
@@ -2546,8 +2606,8 @@
     }, 
     {
       "graphPos": {
-        "y": 339.4352722167969, 
-        "x": -213.19696044921875, 
+        "y": 242.41351318359375, 
+        "x": -995.1806640625, 
         "__mathObjectClass__": "Vec2"
       }, 
       "name": "clavicle", 
@@ -2600,8 +2660,8 @@
               -0.29
             ]
           ], 
-          "degree": 1, 
-          "closed": true
+          "closed": true, 
+          "degree": 1
         }, 
         {
           "points": [
@@ -2626,8 +2686,8 @@
               -0.35
             ]
           ], 
-          "degree": 1, 
-          "closed": true
+          "closed": true, 
+          "degree": 1
         }, 
         {
           "points": [
@@ -2642,8 +2702,8 @@
               -0.35
             ]
           ], 
-          "degree": 1, 
-          "closed": false
+          "closed": false, 
+          "degree": 1
         }, 
         {
           "points": [
@@ -2658,8 +2718,8 @@
               -0.35
             ]
           ], 
-          "degree": 1, 
-          "closed": false
+          "closed": false, 
+          "degree": 1
         }, 
         {
           "points": [
@@ -2674,8 +2734,8 @@
               -0.35
             ]
           ], 
-          "degree": 1, 
-          "closed": false
+          "closed": false, 
+          "degree": 1
         }, 
         {
           "points": [
@@ -2690,8 +2750,8 @@
               -0.35
             ]
           ], 
-          "degree": 1, 
-          "closed": false
+          "closed": false, 
+          "degree": 1
         }
       ], 
       "location": "R", 
@@ -2700,8 +2760,8 @@
     {
       "forearmFKCtrlSize": 0.5, 
       "graphPos": {
-        "y": 429.3063049316406, 
-        "x": -27.551097869873047, 
+        "y": 332.2845458984375, 
+        "x": -809.5348510742188, 
         "__mathObjectClass__": "Vec2"
       }, 
       "name": "arm", 
@@ -2808,6 +2868,154 @@
       }, 
       "class": "kraken_examples.arm_component.ArmComponentGuide", 
       "bicepFKCtrlSize": 0.7
+    }, 
+    {
+      "graphPos": {
+        "y": -652.3511962890625, 
+        "x": -504.04791259765625, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "finger01", 
+      "jointPositions": [
+        {
+          "y": -2.1013293266296387, 
+          "x": 2.2770838737487793, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.4539865553379059
+        }, 
+        {
+          "y": -2.3500492572784424, 
+          "x": 2.2399728298187256, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.5470582246780396
+        }, 
+        {
+          "y": -2.501328468322754, 
+          "x": 2.195899486541748, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.5964988470077515
+        }, 
+        {
+          "y": -2.6370127201080322, 
+          "x": 2.1358449459075928, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.6274918913841248
+        }
+      ], 
+      "location": "L", 
+      "numJoints": 3, 
+      "class": "kraken_examples.fkChain_component.FKChainComponentGuide"
+    }, 
+    {
+      "graphPos": {
+        "y": -839.78369140625, 
+        "x": -500.9560546875, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "finger02", 
+      "jointPositions": [
+        {
+          "y": -2.1623921394348145, 
+          "x": 2.2910704612731934, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.26892560720443726
+        }, 
+        {
+          "y": -2.370389461517334, 
+          "x": 2.290038585662842, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.2983821630477905
+        }, 
+        {
+          "y": -2.5715436935424805, 
+          "x": 2.253817558288574, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.3264226019382477
+        }, 
+        {
+          "y": -2.7121987342834473, 
+          "x": 2.199932336807251, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.34344640374183655
+        }
+      ], 
+      "location": "L", 
+      "numJoints": 3, 
+      "class": "kraken_examples.fkChain_component.FKChainComponentGuide"
+    }, 
+    {
+      "graphPos": {
+        "y": -1022.2736206054688, 
+        "x": -501.4962158203125, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "finger03", 
+      "jointPositions": [
+        {
+          "y": -2.161360502243042, 
+          "x": 2.302130937576294, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.06858975440263748
+        }, 
+        {
+          "y": -2.4072506427764893, 
+          "x": 2.2914366722106934, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.045459117740392685
+        }, 
+        {
+          "y": -2.5590081214904785, 
+          "x": 2.2485196590423584, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.02486220933496952
+        }, 
+        {
+          "y": -2.696593999862671, 
+          "x": 2.189281463623047, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.001661250600591302
+        }
+      ], 
+      "location": "L", 
+      "numJoints": 3, 
+      "class": "kraken_examples.fkChain_component.FKChainComponentGuide"
+    }, 
+    {
+      "graphPos": {
+        "y": -444.10015869140625, 
+        "x": -506.20684814453125, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "thumb", 
+      "jointPositions": [
+        {
+          "y": -1.5963988304138184, 
+          "x": 2.1687889099121094, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.26245519518852234
+        }, 
+        {
+          "y": -1.741388201713562, 
+          "x": 2.094137191772461, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.45734935998916626
+        }, 
+        {
+          "y": -1.8935860395431519, 
+          "x": 1.9875142574310303, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.5878706574440002
+        }, 
+        {
+          "y": -2.0308427810668945, 
+          "x": 1.8656368255615234, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.6672841906547546
+        }
+      ], 
+      "location": "L", 
+      "numJoints": 3, 
+      "class": "kraken_examples.fkChain_component.FKChainComponentGuide"
     }
   ]
 }
