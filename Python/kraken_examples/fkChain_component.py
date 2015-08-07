@@ -76,7 +76,14 @@ class FKChainComponentGuide(FKChainComponent):
             jointPositions = self.generateGuidePositions(numJoints)
 
             for i in xrange(numJoints + 1):
-                self.jointCtrls.append(Control('chain' + str(i + 1).zfill(2), parent=self.ctrlCmpGrp, shape="sphere"))
+                if i == 0:
+                    ctrlParent = self.ctrlCmpGrp
+                else:
+                    ctrlParent = self.jointCtrls[i - 1]
+
+                newCtrl = Control('chain' + str(i + 1).zfill(2), parent=ctrlParent, shape="sphere")
+                newCtrl.scalePoints(Vec3(0.25, 0.25, 0.25))
+                self.jointCtrls.append(newCtrl)
 
             data = {
                "location": "L",
@@ -184,7 +191,12 @@ class FKChainComponentGuide(FKChainComponent):
 
         if numJoints + 1 > len(self.jointCtrls):
             for i in xrange(len(self.jointCtrls), numJoints + 1):
-                newCtrl = Control('chain' + str(i + 1).zfill(2), parent=self.ctrlCmpGrp, shape="sphere")
+                if i == 0:
+                    ctrlParent = self.ctrlCmpGrp
+                else:
+                    ctrlParent = self.jointCtrls[i - 1]
+
+                newCtrl = Control('chain' + str(i + 1).zfill(2), parent=ctrlParent, shape="sphere")
                 newCtrl.scalePoints(Vec3(0.25, 0.25, 0.25))
                 # Generate thew new ctrl off the end of the existing one.
                 newCtrl.xfo = self.jointCtrls[i-1].xfo.multiply(Xfo(Vec3(10.0, 0.0, 0.0)))
@@ -194,7 +206,7 @@ class FKChainComponentGuide(FKChainComponent):
             numExtraCtrls = len(self.jointCtrls) - (numJoints + 1)
             for i in xrange(numExtraCtrls):
                 extraCtrl = self.jointCtrls.pop()
-                self.ctrlCmpGrp.removeChild(extraCtrl)
+                extraCtrl.getParent().removeChild(extraCtrl)
 
         # Reset the control positions based on new number of joints
         jointPositions = self.generateGuidePositions(numJoints)
