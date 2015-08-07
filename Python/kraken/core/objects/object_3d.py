@@ -233,10 +233,11 @@ class Object3D(SceneItem):
 
                 result = re.split(r"(\d+)$", initName, 1)
                 if len(result) > 1:
-                    name = result[0] + str(int(result[1]) + 1).zfill(2)
-                else:
-                    name = initName + str(suffix).zfill(2)
-                    suffix += 1
+                    initName = result[0]
+                    suffix = int(result[1])
+
+                name = initName + str(suffix).zfill(2)
+                suffix += 1
 
         super(Object3D, self).setName(name)
 
