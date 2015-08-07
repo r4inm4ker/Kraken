@@ -465,19 +465,6 @@ class FabriceTailRig(FabriceTail):
         # Update number of deformers and outputs
         self.setNumDeformers(numDeformers)
 
-        for tailOutput in self.tailOutputs:
-            if tailOutput not in self.bezierTailSpliceOp.getOutput("outputs"):
-                self.bezierTailSpliceOp.setOutput("outputs", tailOutput)
-
-        # Update Deformers Splice Op
-        for tailOutput in self.tailOutputs:
-            if tailOutput not in self.deformersToOutputsSpliceOp.getInput("constrainers"):
-                self.deformersToOutputsSpliceOp.setInput("constrainers", tailOutput)
-
-        for joint in self.deformerJoints:
-            if joint not in self.deformersToOutputsSpliceOp.getOutput("constrainees"):
-                self.deformersToOutputsSpliceOp.setOutput("constrainees", joint)
-
         # Updating constraint to use the updated last output.
         self.tailEndOutputConstraint.setConstrainer(self.tailOutputs[-1], index=0)
 

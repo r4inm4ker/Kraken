@@ -377,12 +377,10 @@ class TentacleComponentRig(TentacleComponent):
         self.tentacleSolverSpliceOp.setInput('chainBase', self.chainBase)
         self.tentacleSolverSpliceOp.setInput('ikgoal', self.tentacleIKCtrl)
 
-        for i in xrange(len(self.fkCtrls)):
-            self.tentacleSolverSpliceOp.setInput('fkcontrols', self.fkCtrls[i])
+        self.tentacleSolverSpliceOp.setInput('fkcontrols', self.fkCtrls)
 
         # Add Xfo Outputs
-        for i in xrange(len(self.boneOutputsTgt)):
-            self.tentacleSolverSpliceOp.setOutput('pose', self.boneOutputsTgt[i])
+        self.tentacleSolverSpliceOp.setOutput('pose', self.boneOutputsTgt)
 
         self.tentacleSolverSpliceOp.setOutput('tentacleEnd', self.tentacleEndXfoOutputTgt)
 
@@ -396,12 +394,10 @@ class TentacleComponentRig(TentacleComponent):
         self.outputsToDeformersSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
 
         # Add Xfo Inputs
-        for i in xrange(len(self.boneOutputsTgt)):
-            self.outputsToDeformersSpliceOp.setInput('constrainers', self.boneOutputsTgt[i])
+        self.outputsToDeformersSpliceOp.setInput('constrainers', self.boneOutputsTgt)
 
         # Add Xfo Outputs
-        for i in xrange(len(self.deformerJoints)):
-            self.outputsToDeformersSpliceOp.setOutput('constrainees', self.deformerJoints[i])
+        self.outputsToDeformersSpliceOp.setOutput('constrainees', self.deformerJoints)
 
         Profiler.getInstance().pop()
 
@@ -476,37 +472,6 @@ class TentacleComponentRig(TentacleComponent):
 
         self.tentacleIKCtrlSpace.xfo = endXfo
         self.tentacleIKCtrl.xfo = endXfo
-
-        # ==================
-        # Update Splice Ops
-        # ==================
-        # N Bone Op
-        # Add Controls
-        for i in xrange(len(self.fkCtrls)):
-            controls = self.tentacleSolverSpliceOp.getInput('fkcontrols')
-            if self.fkCtrls[i] not in controls:
-                self.tentacleSolverSpliceOp.setInput('fkcontrols', self.fkCtrls[i])
-
-        # Add Xfo Outputs
-        for i in xrange(len(self.boneOutputsTgt)):
-            outputs = self.tentacleSolverSpliceOp.getOutput('pose')
-            if self.boneOutputsTgt[i] not in outputs:
-                self.tentacleSolverSpliceOp.setOutput('pose', self.boneOutputsTgt[i])
-
-        # ==================
-
-        # Outputs To Deformers Op
-        # Add Xfo Inputs
-        for i in xrange(len(self.boneOutputsTgt)):
-            constrainers = self.outputsToDeformersSpliceOp.getInput('constrainers')
-            if self.boneOutputsTgt[i] not in constrainers:
-                self.outputsToDeformersSpliceOp.setInput('constrainers', self.boneOutputsTgt[i])
-
-        # Add Xfo Outputs
-        for i in xrange(len(self.deformerJoints)):
-            constrainees = self.outputsToDeformersSpliceOp.getOutput('constrainees')
-            if self.deformerJoints[i] not in constrainees:
-                self.outputsToDeformersSpliceOp.setOutput('constrainees', self.deformerJoints[i])
 
         # ============
         # Set IO Xfos

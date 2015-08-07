@@ -275,12 +275,10 @@ class FabriceHeadRig(FabriceHead):
         self.deformersToOutputsSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
 
         # Add Xfo Outputs
-        for output in [self.headOutputTgt, self.jawOutputTgt]:
-            self.deformersToOutputsSpliceOp.setInput('constrainers', output)
+        self.deformersToOutputsSpliceOp.setInput('constrainers', [self.headOutputTgt, self.jawOutputTgt])
 
         # Add Xfo Outputs
-        for joint in [headDef, jawDef]:
-            self.deformersToOutputsSpliceOp.setOutput('constrainees', joint)
+        self.deformersToOutputsSpliceOp.setOutput('constrainees', [headDef, jawDef])
 
         Profiler.getInstance().pop()
 

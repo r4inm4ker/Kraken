@@ -383,14 +383,10 @@ class LegComponentRig(LegComponent):
         self.outputsToDeformersSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
 
         # Add Xfo Inputs
-        self.outputsToDeformersSpliceOp.setInput('constrainers', self.femurOutputTgt)
-        self.outputsToDeformersSpliceOp.setInput('constrainers', self.shinOutputTgt)
-        self.outputsToDeformersSpliceOp.setInput('constrainers', self.legEndXfoOutputTgt)
+        self.outputsToDeformersSpliceOp.setInput('constrainers', [self.femurOutputTgt, self.shinOutputTgt, self.legEndXfoOutputTgt])
 
         # Add Xfo Outputs
-        self.outputsToDeformersSpliceOp.setOutput('constrainees', femurDef)
-        self.outputsToDeformersSpliceOp.setOutput('constrainees', shinDef)
-        self.outputsToDeformersSpliceOp.setOutput('constrainees', ankleDef)
+        self.outputsToDeformersSpliceOp.setOutput('constrainees', [femurDef, shinDef, ankleDef])
 
         # Add Foot Deformer Splice Op
         self.footDefSpliceOp = SpliceOperator('footDeformerSpliceOp', 'PoseConstraintSolver', 'Kraken')

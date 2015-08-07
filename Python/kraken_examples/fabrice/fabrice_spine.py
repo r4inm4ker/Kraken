@@ -125,8 +125,7 @@ class FabriceSpineGuide(FabriceSpine):
         self.bezierSpineSpliceOp.setInput('tip', self.spineEndCtrl)
 
         # Add Xfo Outputs
-        for spineOutput in self.spineOutputs:
-            self.bezierSpineSpliceOp.setOutput('outputs', spineOutput)
+        self.bezierSpineSpliceOp.setOutput('outputs', self.spineOutputs)
 
         self.loadData({
             'name': name,
@@ -406,8 +405,7 @@ class FabriceSpineRig(FabriceSpine):
         self.bezierSpineSpliceOp.setInput('tip', self.spineEndCtrl)
 
         # Add Xfo Outputs
-        for spineOutput in self.spineOutputs:
-            self.bezierSpineSpliceOp.setOutput('outputs', spineOutput)
+        self.bezierSpineSpliceOp.setOutput('outputs', self.spineOutputs)
 
         # Add Deformer Splice Op
         self.deformersToOutputsSpliceOp = SpliceOperator('spineDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken', alwaysEval=True)
@@ -418,12 +416,10 @@ class FabriceSpineRig(FabriceSpine):
         self.deformersToOutputsSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
 
         # Add Xfo Outputs
-        for spineOutput in self.spineOutputs:
-            self.deformersToOutputsSpliceOp.setInput('constrainers', spineOutput)
+        self.deformersToOutputsSpliceOp.setInput('constrainers', self.spineOutputs)
 
         # Add Xfo Outputs
-        for joint in self.deformerJoints:
-            self.deformersToOutputsSpliceOp.setOutput('constrainees', joint)
+        self.deformersToOutputsSpliceOp.setOutput('constrainees', self.deformerJoints)
 
         Profiler.getInstance().pop()
 
@@ -503,19 +499,6 @@ class FabriceSpineRig(FabriceSpine):
 
         # Update number of deformers and outputs
         self.setNumDeformers(numDeformers)
-
-        for spineOutput in self.spineOutputs:
-            if spineOutput not in self.bezierSpineSpliceOp.getOutput("outputs"):
-                self.bezierSpineSpliceOp.setOutput("outputs", spineOutput)
-
-        # Update Deformers Splice Op
-        for spineOutput in self.spineOutputs:
-            if spineOutput not in self.deformersToOutputsSpliceOp.getInput("constrainers"):
-                self.deformersToOutputsSpliceOp.setInput("constrainers", spineOutput)
-
-        for joint in self.deformerJoints:
-            if joint not in self.deformersToOutputsSpliceOp.getOutput("constrainees"):
-                self.deformersToOutputsSpliceOp.setOutput("constrainees", joint)
 
         # Updating constraint to use the updated last output.
         self.spineEndOutputConstraint.setConstrainer(self.spineOutputs[-1], index=0)

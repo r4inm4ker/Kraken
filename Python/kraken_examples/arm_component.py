@@ -369,16 +369,10 @@ class ArmComponentRig(ArmComponent):
         self.outputsToDeformersSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
 
         # Add Xfo Inputs
-        self.outputsToDeformersSpliceOp.setInput('constrainers', self.bicepOutputTgt)
-        self.outputsToDeformersSpliceOp.setInput('constrainers', self.forearmOutputTgt)
-        self.outputsToDeformersSpliceOp.setInput('constrainers', self.armEndXfoOutputTgt)
-        self.outputsToDeformersSpliceOp.setInput('constrainers', self.handOutputTgt)
+        self.outputsToDeformersSpliceOp.setInput('constrainers', [self.bicepOutputTgt, self.forearmOutputTgt, self.armEndXfoOutputTgt, self.handOutputTgt])
 
         # Add Xfo Outputs
-        self.outputsToDeformersSpliceOp.setOutput('constrainees', bicepDef)
-        self.outputsToDeformersSpliceOp.setOutput('constrainees', forearmDef)
-        self.outputsToDeformersSpliceOp.setOutput('constrainees', wristDef)
-        self.outputsToDeformersSpliceOp.setOutput('constrainees', handDef)
+        self.outputsToDeformersSpliceOp.setOutput('constrainees', [bicepDef, forearmDef, wristDef, handDef])
 
         Profiler.getInstance().pop()
 
