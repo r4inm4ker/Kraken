@@ -1,5 +1,5 @@
 import json, difflib
-import os.path
+import os
 import traceback
 
 from PySide import QtGui, QtCore
@@ -14,9 +14,10 @@ from kraken.core.objects.rig import Rig
 from kraken import plugins
 
 
-def GetHomePath():
-    homeDir = os.path.expanduser("~")
-    return homeDir
+def GetKrakenPath():
+    if 'KRAKEN_PATH' in os.environ:
+        return os.environ['KRAKEN_PATH']
+    return os.path.expanduser("~")
 
 
 class KGraphViewWidget(GraphViewWidget):
@@ -82,21 +83,31 @@ class KGraphViewWidget(GraphViewWidget):
 
 
     def saveRigPreset(self):
-        lastSceneFilePath = os.path.join(GetHomePath(), self.guideRig.getName() )
-        (filePath, filter) = QtGui.QFileDialog.getSaveFileName(self, 'Save Rig Preset', lastSceneFilePath, 'Kraken Rig (*.krg)')
+        settings = self.window().getSettings()
+        settings.beginGroup('Files')
+        lastFilePath = settings.value("lastFilePath", os.path.join(GetKrakenPath(), self.guideRig.getName() ))
+        settings.endGroup()
+        (filePath, filter) = QtGui.QFileDialog.getSaveFileName(self, 'Save Rig Preset', lastFilePath, 'Kraken Rig (*.krg)')
         if len(filePath) > 0:
             self.synchGuideRig()
             self.guideRig.writeRigDefinitionFile(filePath)
 
 
     def loadRigPreset(self):
-        lastSceneFilePath = GetHomePath()
-        (filePath, filter) = QtGui.QFileDialog.getOpenFileName(self, 'Load Rig Preset', lastSceneFilePath, 'Kraken Rig (*.krg)')
+        settings = self.window().getSettings()
+        settings.beginGroup('Files')
+        lastFilePath = settings.value("lastFilePath", os.path.join(GetKrakenPath(), self.guideRig.getName() ))
+        settings.endGroup()
+        (filePath, filter) = QtGui.QFileDialog.getOpenFileName(self, 'Load Rig Preset', lastFilePath, 'Kraken Rig (*.krg)')
         if len(filePath) > 0:
             self.guideRig = Rig()
             self.guideRig.loadRigDefinitionFile(filePath)
             self.graphView.displayGraph( self.guideRig )
             # self.nameWidget.setText( self.guideRig.getName() )
+
+            settings.beginGroup('Files')
+            lastFilePath = settings.setValue("lastFilePath", filePath)
+            settings.endGroup()
 
 
     def buildGuideRig(self):

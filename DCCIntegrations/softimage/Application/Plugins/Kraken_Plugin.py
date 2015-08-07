@@ -36,6 +36,10 @@ def XSILoadPlugin(in_reg):
     in_reg.Major = 1
     in_reg.Minor = 0
 
+    pluginPath = in_reg.OriginPath
+    krakenDir = os.path.normpath(XSIUtils.BuildPath(pluginPath, "..", "..", "..", ".."))
+    os.environ['KRAKEN_PATH']  = krakenDir
+
     krakenLoadMenu = os.getenv('KRAKEN_LOAD_MENU', 'True')
     if krakenLoadMenu == 'True':
         in_reg.RegisterMenu(constants.siMenuMainTopLevelID, "Kraken", False, False)
@@ -44,12 +48,12 @@ def XSILoadPlugin(in_reg):
     in_reg.RegisterCommand('BuildKrakenGuide', 'BuildKrakenGuide')
     in_reg.RegisterCommand('BuildKrakenRig', 'BuildKrakenRig')
 
-    return True
 
 def XSIUnloadPlugin(in_reg):
     log(in_reg.Name + ' has been unloaded.', constants.siVerbose)
 
     return True
+
 
 def Kraken_Init( in_ctxt ):
 
