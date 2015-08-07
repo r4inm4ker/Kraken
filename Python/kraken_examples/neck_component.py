@@ -32,16 +32,16 @@ class NeckComponent(BaseExampleComponent):
         # Declare IO
         # ===========
         # Declare Inputs Xfos
-        self.neckBaseInputTgt = self.createInput('neckBase', dataType='Xfo', parent=self.inputHrcGrp)
+        self.neckBaseInputTgt = self.createInput('neckBase', dataType='Xfo', parent=self.inputHrcGrp).getTarget()
 
         # Declare Output Xfos
-        self.neckOutputTgt = self.createOutput('neck', dataType='Xfo', parent=self.outputHrcGrp)
-        self.neckEndOutputTgt = self.createOutput('neckEnd', dataType='Xfo', parent=self.outputHrcGrp)
+        self.neckOutputTgt = self.createOutput('neck', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
+        self.neckEndOutputTgt = self.createOutput('neckEnd', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
 
         # Declare Input Attrs
-        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=False, parent=self.cmpInputAttrGrp)
-        self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp)
-        self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', value=self.getLocation() is 'R', parent=self.cmpInputAttrGrp)
+        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=False, parent=self.cmpInputAttrGrp).getTarget()
+        self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp).getTarget()
+        self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', value=self.getLocation() is 'R', parent=self.cmpInputAttrGrp).getTarget()
 
         # Declare Output Attrs
 

@@ -39,17 +39,17 @@ class TentacleComponent(BaseExampleComponent):
         # Declare IO
         # ===========
         # Declare Inputs Xfos
-        self.rootInputTgt = self.createInput('rootInput', dataType='Xfo', parent=self.inputHrcGrp)
+        self.rootInputTgt = self.createInput('rootInput', dataType='Xfo', parent=self.inputHrcGrp).getTarget()
 
         # Declare Output Xfos
-        self.boneOutputs = self.addOutput('boneOutputs', dataType='Xfo[]')
+        self.boneOutputs = self.createOutput('boneOutputs', dataType='Xfo[]')
 
-        self.tentacleEndXfoOutputTgt = self.createOutput('tentacleEndXfoOutput', dataType='Xfo', parent=self.outputHrcGrp)
+        self.tentacleEndXfoOutputTgt = self.createOutput('tentacleEndXfoOutput', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
 
         # Declare Input Attrs
-        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=False, parent=self.cmpInputAttrGrp)
-        self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp)
-        self.tipBoneLenInputAttr = self.createInput('tipBoneLen', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp)
+        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=False, parent=self.cmpInputAttrGrp).getTarget()
+        self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp).getTarget()
+        self.tipBoneLenInputAttr = self.createInput('tipBoneLen', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp).getTarget()
 
         # Declare Output Attrs
 

@@ -35,21 +35,21 @@ class FabriceTail(BaseExampleComponent):
         # Declare IO
         # ===========
         # Declare Inputs Xfos
-        self.tailMainSrtInputTgt = self.createInput('mainSrt', dataType='Xfo', parent=self.inputHrcGrp)
-        self.cogInputTgt = self.createInput('cog', dataType='Xfo', parent=self.inputHrcGrp)
-        self.spineEndInputTgt = self.createInput('spineEnd', dataType='Xfo', parent=self.inputHrcGrp)
-        self.spineEndCtrlInputTgt = self.createInput('spineEndCtrl', dataType='Xfo', parent=self.inputHrcGrp)
+        self.tailMainSrtInputTgt = self.createInput('mainSrt', dataType='Xfo', parent=self.inputHrcGrp).getTarget()
+        self.cogInputTgt = self.createInput('cog', dataType='Xfo', parent=self.inputHrcGrp).getTarget()
+        self.spineEndInputTgt = self.createInput('spineEnd', dataType='Xfo', parent=self.inputHrcGrp).getTarget()
+        self.spineEndCtrlInputTgt = self.createInput('spineEndCtrl', dataType='Xfo', parent=self.inputHrcGrp).getTarget()
 
         # Declare Output Xfos
-        self.tailBaseOutputTgt = self.createOutput('tailBase', dataType='Xfo', parent=self.outputHrcGrp)
-        self.tailEndOutputTgt = self.createOutput('tailEnd', dataType='Xfo', parent=self.outputHrcGrp)
+        self.tailBaseOutputTgt = self.createOutput('tailBase', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
+        self.tailEndOutputTgt = self.createOutput('tailEnd', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
 
-        self.tailVertebraeOutput = self.addOutput('tailVertebrae', dataType='Xfo[]')
+        self.tailVertebraeOutput = self.createOutput('tailVertebrae', dataType='Xfo[]')
 
         # Declare Input Attrs
-        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=False, parent=self.cmpInputAttrGrp)
-        self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp)
-        self.lengthInputAttr = self.createInput('length', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp)
+        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=False, parent=self.cmpInputAttrGrp).getTarget()
+        self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp).getTarget()
+        self.lengthInputAttr = self.createInput('length', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp).getTarget()
 
         # Declare Output Attrs
 

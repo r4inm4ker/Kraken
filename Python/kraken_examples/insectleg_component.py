@@ -43,15 +43,15 @@ class InsectLegComponent(BaseExampleComponent):
         self.rootInputTgt = self.createInput('rootInput', dataType='Xfo', parent=self.inputHrcGrp)
 
         # Declare Output Xfos
-        self.boneOutputs = self.addOutput('boneOutputs', dataType='Xfo[]')
+        self.boneOutputs = self.createOutput('boneOutputs', dataType='Xfo[]')
 
-        self.legEndXfoOutputTgt = self.createOutput('legEndXfoOutput', dataType='Xfo', parent=self.outputHrcGrp)
-        self.legEndPosOutputTgt = self.createOutput('legEndPosOutput', dataType='Xfo', parent=self.outputHrcGrp)
+        self.legEndXfoOutputTgt = self.createOutput('legEndXfoOutput', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
+        self.legEndPosOutputTgt = self.createOutput('legEndPosOutput', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
 
         # Declare Input Attrs
-        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=False, parent=self.cmpInputAttrGrp)
-        self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp)
-        self.tipBoneLenInputAttr = self.createInput('tipBoneLen', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp)
+        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=False, parent=self.cmpInputAttrGrp).getTarget()
+        self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp).getTarget()
+        self.tipBoneLenInputAttr = self.createInput('tipBoneLen', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp).getTarget()
 
         # Declare Output Attrs
 
@@ -172,10 +172,10 @@ class InsectLegComponentGuide(InsectLegComponent):
     # Callbacks
     # ==========
     def updateNumLegControls(self, numJoints):
-        """Load a saved guide representation from persisted data.
+        """Generate the guide controls for the variable outputes array.
 
         Arguments:
-        numJoints -- object, The number of joints inthe chain.
+        numJoints -- object, The number of joints in the chain.
 
         Return:
         True if successful.
