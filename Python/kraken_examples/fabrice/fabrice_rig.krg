@@ -1,96 +1,219 @@
 {
   "connections": [
     {
-      "source": "spine:M.cog", 
-      "target": "head:M.headBase"
+      "source": "spine:M.spineBase", 
+      "target": "head:M.headBase", 
+      "targetIndex": 0
     }, 
     {
       "source": "mainSrt:M.rigScale", 
-      "target": "head:M.rigScale"
+      "target": "head:M.rigScale", 
+      "targetIndex": 0
     }, 
     {
       "source": "mainSrt:M.offset", 
-      "target": "spine:M.mainSrt"
+      "target": "spine:M.mainSrt", 
+      "targetIndex": 0
     }, 
     {
       "source": "mainSrt:M.rigScale", 
-      "target": "spine:M.rigScale"
+      "target": "spine:M.rigScale", 
+      "targetIndex": 0
     }, 
     {
       "source": "mainSrt:M.offset", 
-      "target": "tail:M.mainSrt"
+      "target": "tail:M.mainSrt", 
+      "targetIndex": 0
     }, 
     {
       "source": "spine:M.cog", 
-      "target": "tail:M.cog"
+      "target": "tail:M.cog", 
+      "targetIndex": 0
     }, 
     {
       "source": "spine:M.spineEnd", 
-      "target": "tail:M.spineEnd"
+      "target": "tail:M.spineEnd", 
+      "targetIndex": 0
     }, 
     {
       "source": "spine:M.spineEndCtrl", 
-      "target": "tail:M.spineEndCtrl"
+      "target": "tail:M.spineEndCtrl", 
+      "targetIndex": 0
     }, 
     {
       "source": "mainSrt:M.rigScale", 
-      "target": "tail:M.rigScale"
+      "target": "tail:M.rigScale", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "tail:M.tailVertebrae", 
+      "target": "tailBackFin:L.rootInput", 
+      "targetIndex": 2
     }, 
     {
       "source": "mainSrt:M.rigScale", 
-      "target": "tailBackFin:L.rigScale"
+      "target": "tailBackFin:L.rigScale", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "tail:M.tailVertebrae", 
+      "target": "tailBackFin:R.rootInput", 
+      "targetIndex": 2
     }, 
     {
       "source": "mainSrt:M.rigScale", 
-      "target": "tailBackFin:R.rigScale"
+      "target": "tailBackFin:R.rigScale", 
+      "targetIndex": 0
     }, 
     {
       "source": "tail:M.tailEnd", 
-      "target": "tailOuterFlipper:L.rootInput"
+      "target": "tailOuterFlipper:L.rootInput", 
+      "targetIndex": 0
     }, 
     {
       "source": "mainSrt:M.rigScale", 
-      "target": "tailOuterFlipper:L.rigScale"
+      "target": "tailOuterFlipper:L.rigScale", 
+      "targetIndex": 0
     }, 
     {
       "source": "tail:M.tailEnd", 
-      "target": "tailOuterFlipper:R.rootInput"
+      "target": "tailOuterFlipper:R.rootInput", 
+      "targetIndex": 0
     }, 
     {
       "source": "mainSrt:M.rigScale", 
-      "target": "tailOuterFlipper:R.rigScale"
+      "target": "tailOuterFlipper:R.rigScale", 
+      "targetIndex": 0
     }, 
     {
       "source": "tail:M.tailEnd", 
-      "target": "tailInnerFlipper:L.rootInput"
+      "target": "tailInnerFlipper:L.rootInput", 
+      "targetIndex": 0
     }, 
     {
       "source": "mainSrt:M.rigScale", 
-      "target": "tailInnerFlipper:L.rigScale"
+      "target": "tailInnerFlipper:L.rigScale", 
+      "targetIndex": 0
     }, 
     {
       "source": "tail:M.tailEnd", 
-      "target": "tailInnerFlipper:R.rootInput"
+      "target": "tailInnerFlipper:R.rootInput", 
+      "targetIndex": 0
     }, 
     {
       "source": "mainSrt:M.rigScale", 
-      "target": "tailInnerFlipper:R.rigScale"
+      "target": "tailInnerFlipper:R.rigScale", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "spine:M.spineVertebrae", 
+      "target": "legFin:R.rootInput", 
+      "targetIndex": 5
+    }, 
+    {
+      "source": "spine:M.spineVertebrae", 
+      "target": "legFin:L.rootInput", 
+      "targetIndex": 5
     }, 
     {
       "source": "head:M.head", 
-      "target": "mainTentacle:R.rootInput"
+      "target": "mainTentacle:R.rootInput", 
+      "targetIndex": 0
     }, 
     {
       "source": "mainSrt:M.rigScale", 
-      "target": "mainTentacle:R.rigScale"
+      "target": "mainTentacle:R.rigScale", 
+      "targetIndex": 0
     }, 
     {
       "source": "head:M.head", 
-      "target": "mainTentacle:L.rootInput"
+      "target": "mainTentacle:L.rootInput", 
+      "targetIndex": 0
     }, 
     {
       "source": "mainSrt:M.rigScale", 
-      "target": "mainTentacle:L.rigScale"
+      "target": "mainTentacle:L.rigScale", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "head:M.jaw", 
+      "target": "jawTentacle:L.rootInput", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "mainSrt:M.rigScale", 
+      "target": "jawTentacle:L.rigScale", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "head:M.jaw", 
+      "target": "jawTentacle:R.rootInput", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "mainSrt:M.rigScale", 
+      "target": "jawTentacle:R.rigScale", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "head:M.jaw", 
+      "target": "chinTentacle:R.rootInput", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "mainSrt:M.rigScale", 
+      "target": "chinTentacle:R.rigScale", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "head:M.jaw", 
+      "target": "chinTentacle:L.rootInput", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "mainSrt:M.rigScale", 
+      "target": "chinTentacle:L.rigScale", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "head:M.head", 
+      "target": "lipTentacle01:L.rootInput", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "head:M.head", 
+      "target": "lipTentacle02:L.rootInput", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "head:M.head", 
+      "target": "lipTentacle03:L.rootInput", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "head:M.head", 
+      "target": "lipTentacle04:L.rootInput", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "head:M.head", 
+      "target": "lipTentacle02:R.rootInput", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "head:M.head", 
+      "target": "lipTentacle01:R.rootInput", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "head:M.head", 
+      "target": "lipTentacle04:R.rootInput", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "head:M.head", 
+      "target": "lipTentacle03:R.rootInput", 
+      "targetIndex": 0
     }
   ], 
   "graphPositions": {
@@ -99,59 +222,29 @@
       "x": 1759.80224609375, 
       "__mathObjectClass__": "Vec2"
     }, 
+    "tail:M": {
+      "y": -51.06990432739258, 
+      "x": 726.25341796875, 
+      "__mathObjectClass__": "Vec2"
+    }, 
     "tailOuterFlipper:R": {
       "y": -249.15206909179688, 
       "x": 1538.907958984375, 
       "__mathObjectClass__": "Vec2"
     }, 
-    "tail:M": {
-      "y": -57.0, 
-      "x": 366.0, 
-      "__mathObjectClass__": "Vec2"
-    }, 
-    "spine:M": {
-      "y": -48.099334716796875, 
-      "x": 118.61441040039062, 
-      "__mathObjectClass__": "Vec2"
-    }, 
-    "legFin:R": {
-      "y": -230.1969451904297, 
-      "x": 1137.1141357421875, 
-      "__mathObjectClass__": "Vec2"
-    }, 
     "mainSrt:M": {
-      "y": -46.3208122253418, 
-      "x": -207.8457489013672, 
+      "y": 145.10708618164062, 
+      "x": -740.2589111328125, 
       "__mathObjectClass__": "Vec2"
     }, 
     "mainTentacle:R": {
-      "y": 596.108642578125, 
-      "x": 672.60986328125, 
+      "y": 985.0018310546875, 
+      "x": 387.2431640625, 
       "__mathObjectClass__": "Vec2"
     }, 
     "mainTentacle:L": {
-      "y": 880.7105712890625, 
-      "x": 675.1289672851562, 
-      "__mathObjectClass__": "Vec2"
-    }, 
-    "head:M": {
-      "y": 712.981201171875, 
-      "x": 377.43560791015625, 
-      "__mathObjectClass__": "Vec2"
-    }, 
-    "legFin:L": {
-      "y": 156.99606323242188, 
-      "x": 1153.0008544921875, 
-      "__mathObjectClass__": "Vec2"
-    }, 
-    "tailBackFin:R": {
-      "y": -250.0610809326172, 
-      "x": 733.466064453125, 
-      "__mathObjectClass__": "Vec2"
-    }, 
-    "tailBackFin:L": {
-      "y": 233.30848693847656, 
-      "x": 731.539306640625, 
+      "y": 1300.5133056640625, 
+      "x": 393.0740051269531, 
       "__mathObjectClass__": "Vec2"
     }, 
     "tailInnerFlipper:R": {
@@ -159,9 +252,99 @@
       "x": 1756.871337890625, 
       "__mathObjectClass__": "Vec2"
     }, 
+    "chinTentacle:L": {
+      "y": 1005.830322265625, 
+      "x": 2154.172119140625, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "chinTentacle:R": {
+      "y": 1318.2373046875, 
+      "x": 2182.873779296875, 
+      "__mathObjectClass__": "Vec2"
+    }, 
     "tailOuterFlipper:L": {
       "y": 235.77798461914062, 
       "x": 1542.9141845703125, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "spine:M": {
+      "y": 170.09555053710938, 
+      "x": -434.6600646972656, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "lipTentacle03:R": {
+      "y": 1263.8848876953125, 
+      "x": 1246.941650390625, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "lipTentacle02:L": {
+      "y": 932.1420288085938, 
+      "x": 1023.0636596679688, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "legFin:R": {
+      "y": -227.23190307617188, 
+      "x": 216.4665069580078, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "lipTentacle04:L": {
+      "y": 933.3529052734375, 
+      "x": 1461.4114990234375, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "lipTentacle01:R": {
+      "y": 1256.509033203125, 
+      "x": 784.8030395507812, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "tailBackFin:R": {
+      "y": -297.5018615722656, 
+      "x": 1013.6631469726562, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "lipTentacle01:L": {
+      "y": 925.97705078125, 
+      "x": 776.4661865234375, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "lipTentacle04:R": {
+      "y": 1263.8848876953125, 
+      "x": 1469.748291015625, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "lipTentacle02:R": {
+      "y": 1262.6739501953125, 
+      "x": 1031.4005126953125, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "lipTentacle03:L": {
+      "y": 933.3529052734375, 
+      "x": 1238.6048583984375, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "jawTentacle:L": {
+      "y": 1000.1921997070312, 
+      "x": 1865.5682373046875, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "jawTentacle:R": {
+      "y": 1311.6138916015625, 
+      "x": 1880.4019775390625, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "head:M": {
+      "y": 1134.9918212890625, 
+      "x": 135.1214599609375, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "tailBackFin:L": {
+      "y": 310.3997497558594, 
+      "x": 1019.1490478515625, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "legFin:L": {
+      "y": 320.07373046875, 
+      "x": 224.9405975341797, 
       "__mathObjectClass__": "Vec2"
     }
   }, 
@@ -169,8 +352,8 @@
   "components": [
     {
       "graphPos": {
-        "y": -46.3208122253418, 
-        "x": -207.8457489013672, 
+        "y": 145.10708618164062, 
+        "x": -740.2589111328125, 
         "__mathObjectClass__": "Vec2"
       }, 
       "mainSrtXfo": {
@@ -230,8 +413,8 @@
         }
       }, 
       "graphPos": {
-        "y": 712.981201171875, 
-        "x": 377.43560791015625, 
+        "y": 1134.9918212890625, 
+        "x": 135.1214599609375, 
         "__mathObjectClass__": "Vec2"
       }, 
       "name": "head", 
@@ -290,8 +473,8 @@
               -0.76
             ]
           ], 
-          "closed": false, 
-          "degree": 1
+          "degree": 1, 
+          "closed": false
         }
       ], 
       "location": "M", 
@@ -324,8 +507,8 @@
               -0.46
             ]
           ], 
-          "closed": false, 
-          "degree": 1
+          "degree": 1, 
+          "closed": false
         }, 
         {
           "points": [
@@ -355,8 +538,8 @@
               1.17
             ]
           ], 
-          "closed": false, 
-          "degree": 1
+          "degree": 1, 
+          "closed": false
         }, 
         {
           "points": [
@@ -371,8 +554,8 @@
               1.17
             ]
           ], 
-          "closed": false, 
-          "degree": 1
+          "degree": 1, 
+          "closed": false
         }, 
         {
           "points": [
@@ -387,8 +570,8 @@
               1.17
             ]
           ], 
-          "closed": false, 
-          "degree": 1
+          "degree": 1, 
+          "closed": false
         }, 
         {
           "points": [
@@ -403,8 +586,8 @@
               1.53
             ]
           ], 
-          "closed": false, 
-          "degree": 1
+          "degree": 1, 
+          "closed": false
         }, 
         {
           "points": [
@@ -419,8 +602,8 @@
               1.53
             ]
           ], 
-          "closed": false, 
-          "degree": 1
+          "degree": 1, 
+          "closed": false
         }
       ], 
       "class": "kraken_examples.fabrice.fabrice_head.FabriceHeadGuide"
@@ -480,13 +663,13 @@
               -0.26
             ]
           ], 
-          "closed": false, 
-          "degree": 1
+          "degree": 1, 
+          "closed": false
         }
       ], 
       "graphPos": {
-        "y": -48.099334716796875, 
-        "x": 118.61441040039062, 
+        "y": 170.09555053710938, 
+        "x": -434.6600646972656, 
         "__mathObjectClass__": "Vec2"
       }, 
       "name": "spine", 
@@ -516,51 +699,51 @@
             [
               1.05, 
               1.05, 
-              -0.0
+              0.0
             ], 
             [
               1.5, 
-              -0.0, 
-              -0.0
+              0.0, 
+              0.0
             ], 
             [
               1.05, 
               -1.05, 
-              -0.0
+              0.0
             ], 
             [
-              -0.0, 
+              0.0, 
               -1.5, 
-              -0.0
+              0.0
             ], 
             [
               -1.05, 
               -1.05, 
-              -0.0
+              0.0
             ], 
             [
               -1.5, 
-              -0.0, 
-              -0.0
+              0.0, 
+              0.0
             ], 
             [
               -1.05, 
               1.05, 
-              -0.0
+              0.0
             ], 
             [
-              -0.0, 
+              0.0, 
               1.5, 
-              -0.0
+              0.0
             ], 
             [
               1.05, 
               1.05, 
-              -0.0
+              0.0
             ]
           ], 
-          "closed": false, 
-          "degree": 1
+          "degree": 1, 
+          "closed": false
         }
       ], 
       "spineEndPos": {
@@ -629,8 +812,8 @@
               -0.26
             ]
           ], 
-          "closed": false, 
-          "degree": 1
+          "degree": 1, 
+          "closed": false
         }
       ], 
       "location": "M", 
@@ -688,8 +871,8 @@
               -0.25
             ]
           ], 
-          "closed": false, 
-          "degree": 1
+          "degree": 1, 
+          "closed": false
         }
       ], 
       "spineEndCtrlCrvData": [
@@ -746,15 +929,15 @@
               -0.26
             ]
           ], 
-          "closed": false, 
-          "degree": 1
+          "degree": 1, 
+          "closed": false
         }
       ]
     }, 
     {
       "graphPos": {
-        "y": -57.0, 
-        "x": 366.0, 
+        "y": -51.06990432739258, 
+        "x": 726.25341796875, 
         "__mathObjectClass__": "Vec2"
       }, 
       "name": "tail", 
@@ -825,8 +1008,8 @@
               0.0
             ]
           ], 
-          "closed": false, 
-          "degree": 1
+          "degree": 1, 
+          "closed": false
         }
       ], 
       "tailEndHandleCtrlCrvData": [
@@ -883,8 +1066,8 @@
               0.0
             ]
           ], 
-          "closed": false, 
-          "degree": 1
+          "degree": 1, 
+          "closed": false
         }
       ], 
       "tailEndCtrlCrvData": [
@@ -941,8 +1124,8 @@
               0.0
             ]
           ], 
-          "closed": false, 
-          "degree": 1
+          "degree": 1, 
+          "closed": false
         }
       ], 
       "location": "M", 
@@ -962,8 +1145,8 @@
     }, 
     {
       "graphPos": {
-        "y": 233.30848693847656, 
-        "x": 731.539306640625, 
+        "y": 310.3997497558594, 
+        "x": 1019.1490478515625, 
         "__mathObjectClass__": "Vec2"
       }, 
       "name": "tailBackFin", 
@@ -1005,8 +1188,8 @@
     }, 
     {
       "graphPos": {
-        "y": -250.0610809326172, 
-        "x": 733.466064453125, 
+        "y": -297.5018615722656, 
+        "x": 1013.6631469726562, 
         "__mathObjectClass__": "Vec2"
       }, 
       "name": "tailBackFin", 
@@ -1220,8 +1403,8 @@
     }, 
     {
       "graphPos": {
-        "y": -230.1969451904297, 
-        "x": 1137.1141357421875, 
+        "y": -227.23190307617188, 
+        "x": 216.4665069580078, 
         "__mathObjectClass__": "Vec2"
       }, 
       "name": "legFin", 
@@ -1263,8 +1446,8 @@
     }, 
     {
       "graphPos": {
-        "y": 156.99606323242188, 
-        "x": 1153.0008544921875, 
+        "y": 320.07373046875, 
+        "x": 224.9405975341797, 
         "__mathObjectClass__": "Vec2"
       }, 
       "name": "legFin", 
@@ -1306,8 +1489,8 @@
     }, 
     {
       "graphPos": {
-        "y": 596.108642578125, 
-        "x": 672.60986328125, 
+        "y": 985.0018310546875, 
+        "x": 387.2431640625, 
         "__mathObjectClass__": "Vec2"
       }, 
       "name": "mainTentacle", 
@@ -1397,8 +1580,8 @@
     }, 
     {
       "graphPos": {
-        "y": 880.7105712890625, 
-        "x": 675.1289672851562, 
+        "y": 1300.5133056640625, 
+        "x": 393.0740051269531, 
         "__mathObjectClass__": "Vec2"
       }, 
       "name": "mainTentacle", 
@@ -1484,6 +1667,546 @@
       ], 
       "location": "L", 
       "numJoints": 12, 
+      "class": "kraken_examples.tentacle_component.TentacleComponentGuide"
+    }, 
+    {
+      "graphPos": {
+        "y": 1000.1921997070312, 
+        "x": 1865.5682373046875, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "jawTentacle", 
+      "jointPositions": [
+        {
+          "y": 0.22633609175682068, 
+          "x": 0.2349855750799179, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 2.7130157947540283
+        }, 
+        {
+          "y": -0.15863274037837982, 
+          "x": 0.31380510330200195, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 2.6677799224853516
+        }, 
+        {
+          "y": -0.5436015725135803, 
+          "x": 0.3926246464252472, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 2.622544050216675
+        }, 
+        {
+          "y": -0.9285703897476196, 
+          "x": 0.47144415974617004, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 2.577307939529419
+        }, 
+        {
+          "y": -1.3135391473770142, 
+          "x": 0.5502637028694153, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 2.532072067260742
+        }, 
+        {
+          "y": -1.6985080242156982, 
+          "x": 0.6290832161903381, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 2.4868361949920654
+        }, 
+        {
+          "y": -2.0834767818450928, 
+          "x": 0.707902729511261, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 2.4416000843048096
+        }
+      ], 
+      "location": "L", 
+      "numJoints": 6, 
+      "class": "kraken_examples.tentacle_component.TentacleComponentGuide"
+    }, 
+    {
+      "graphPos": {
+        "y": 1311.6138916015625, 
+        "x": 1880.4019775390625, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "jawTentacle", 
+      "jointPositions": [
+        {
+          "y": 0.22633609175682068, 
+          "x": -0.2349855750799179, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 2.7130157947540283
+        }, 
+        {
+          "y": -0.15863274037837982, 
+          "x": -0.31380510330200195, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 2.6677799224853516
+        }, 
+        {
+          "y": -0.5436015725135803, 
+          "x": -0.3926246464252472, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 2.622544050216675
+        }, 
+        {
+          "y": -0.9285703897476196, 
+          "x": -0.47144415974617004, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 2.577307939529419
+        }, 
+        {
+          "y": -1.3135391473770142, 
+          "x": -0.5502637028694153, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 2.532072067260742
+        }, 
+        {
+          "y": -1.6985080242156982, 
+          "x": -0.6290832161903381, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 2.4868361949920654
+        }, 
+        {
+          "y": -2.0834767818450928, 
+          "x": -0.707902729511261, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 2.4416000843048096
+        }
+      ], 
+      "location": "R", 
+      "numJoints": 6, 
+      "class": "kraken_examples.tentacle_component.TentacleComponentGuide"
+    }, 
+    {
+      "graphPos": {
+        "y": 1318.2373046875, 
+        "x": 2182.873779296875, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "chinTentacle", 
+      "jointPositions": [
+        {
+          "y": 0.3834247887134552, 
+          "x": -0.13539153337478638, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.290700674057007
+        }, 
+        {
+          "y": 0.2208506315946579, 
+          "x": -0.15329782664775848, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.2689287662506104
+        }, 
+        {
+          "y": 0.06334078311920166, 
+          "x": -0.1710050404071808, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.2230801582336426
+        }, 
+        {
+          "y": -0.09009790420532227, 
+          "x": -0.18844947218894958, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.164965867996216
+        }, 
+        {
+          "y": -0.24431300163269043, 
+          "x": -0.20594735443592072, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.1089611053466797
+        }
+      ], 
+      "location": "R", 
+      "numJoints": 4, 
+      "class": "kraken_examples.tentacle_component.TentacleComponentGuide"
+    }, 
+    {
+      "graphPos": {
+        "y": 1005.830322265625, 
+        "x": 2154.172119140625, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "chinTentacle", 
+      "jointPositions": [
+        {
+          "y": 0.3834247887134552, 
+          "x": 0.13539153337478638, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.290700674057007
+        }, 
+        {
+          "y": 0.2208506315946579, 
+          "x": 0.15329782664775848, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.2689287662506104
+        }, 
+        {
+          "y": 0.06334078311920166, 
+          "x": 0.1710050404071808, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.2230801582336426
+        }, 
+        {
+          "y": -0.09009790420532227, 
+          "x": 0.18844947218894958, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.164965867996216
+        }, 
+        {
+          "y": -0.24431300163269043, 
+          "x": 0.20594735443592072, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.1089611053466797
+        }
+      ], 
+      "location": "L", 
+      "numJoints": 4, 
+      "class": "kraken_examples.tentacle_component.TentacleComponentGuide"
+    }, 
+    {
+      "graphPos": {
+        "y": 925.97705078125, 
+        "x": 776.4661865234375, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "lipTentacle01", 
+      "jointPositions": [
+        {
+          "y": 1.3076437711715698, 
+          "x": 0.1197250485420227, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.6557157039642334
+        }, 
+        {
+          "y": 1.195380449295044, 
+          "x": 0.1412828415632248, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.706284523010254
+        }, 
+        {
+          "y": 1.0831170082092285, 
+          "x": 0.16284064948558807, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.7568531036376953
+        }, 
+        {
+          "y": 0.9708537459373474, 
+          "x": 0.18439844250679016, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.807421922683716
+        }, 
+        {
+          "y": 0.8557242155075073, 
+          "x": 0.20605504512786865, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.851024627685547
+        }
+      ], 
+      "location": "L", 
+      "numJoints": 4, 
+      "class": "kraken_examples.tentacle_component.TentacleComponentGuide"
+    }, 
+    {
+      "graphPos": {
+        "y": 932.1420288085938, 
+        "x": 1023.0636596679688, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "lipTentacle02", 
+      "jointPositions": [
+        {
+          "y": 1.3163892030715942, 
+          "x": 0.30118700861930847, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.4741311073303223
+        }, 
+        {
+          "y": 0.9539358615875244, 
+          "x": 0.34673449397087097, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.6045122146606445
+        }, 
+        {
+          "y": 0.6405370235443115, 
+          "x": 0.3900597095489502, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.7288107872009277
+        }, 
+        {
+          "y": 0.3176825940608978, 
+          "x": 0.4205450117588043, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.819960594177246
+        }, 
+        {
+          "y": -0.059714674949645996, 
+          "x": 0.4544149935245514, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.9108657836914062
+        }
+      ], 
+      "location": "L", 
+      "numJoints": 4, 
+      "class": "kraken_examples.tentacle_component.TentacleComponentGuide"
+    }, 
+    {
+      "graphPos": {
+        "y": 933.3529052734375, 
+        "x": 1238.6048583984375, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "lipTentacle03", 
+      "jointPositions": [
+        {
+          "y": 1.3076437711715698, 
+          "x": 0.44905033707618713, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.2543389797210693
+        }, 
+        {
+          "y": 1.1404930353164673, 
+          "x": 0.4747715890407562, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.3216705322265625
+        }, 
+        {
+          "y": 0.9519971609115601, 
+          "x": 0.5125977993011475, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.3890016078948975
+        }, 
+        {
+          "y": 0.7589067220687866, 
+          "x": 0.5652794241905212, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.454113006591797
+        }, 
+        {
+          "y": 0.5582349896430969, 
+          "x": 0.6145014762878418, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.522956371307373
+        }
+      ], 
+      "location": "L", 
+      "numJoints": 4, 
+      "class": "kraken_examples.tentacle_component.TentacleComponentGuide"
+    }, 
+    {
+      "graphPos": {
+        "y": 933.3529052734375, 
+        "x": 1461.4114990234375, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "lipTentacle04", 
+      "jointPositions": [
+        {
+          "y": 1.2631747722625732, 
+          "x": 0.566874623298645, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.005354881286621
+        }, 
+        {
+          "y": 1.1281297206878662, 
+          "x": 0.6050151586532593, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.0593392848968506
+        }, 
+        {
+          "y": 0.9896672964096069, 
+          "x": 0.6453487277030945, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.109907865524292
+        }, 
+        {
+          "y": 0.8375360369682312, 
+          "x": 0.6900312304496765, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.1718616485595703
+        }, 
+        {
+          "y": 0.683677613735199, 
+          "x": 0.7326377630233765, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.1858630180358887
+        }
+      ], 
+      "location": "L", 
+      "numJoints": 4, 
+      "class": "kraken_examples.tentacle_component.TentacleComponentGuide"
+    }, 
+    {
+      "graphPos": {
+        "y": 1262.6739501953125, 
+        "x": 1031.4005126953125, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "lipTentacle02", 
+      "jointPositions": [
+        {
+          "y": 1.3163892030715942, 
+          "x": -0.30118700861930847, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.4741311073303223
+        }, 
+        {
+          "y": 0.9539358615875244, 
+          "x": -0.34673449397087097, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.6045122146606445
+        }, 
+        {
+          "y": 0.6405370235443115, 
+          "x": -0.3900597095489502, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.7288107872009277
+        }, 
+        {
+          "y": 0.3176825940608978, 
+          "x": -0.4205450117588043, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.819960594177246
+        }, 
+        {
+          "y": -0.059714674949645996, 
+          "x": -0.4544149935245514, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.9108657836914062
+        }
+      ], 
+      "location": "R", 
+      "numJoints": 4, 
+      "class": "kraken_examples.tentacle_component.TentacleComponentGuide"
+    }, 
+    {
+      "graphPos": {
+        "y": 1256.509033203125, 
+        "x": 784.8030395507812, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "lipTentacle01", 
+      "jointPositions": [
+        {
+          "y": 1.3076437711715698, 
+          "x": -0.1197250485420227, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.6557157039642334
+        }, 
+        {
+          "y": 1.195380449295044, 
+          "x": -0.1412828415632248, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.706284523010254
+        }, 
+        {
+          "y": 1.0831170082092285, 
+          "x": -0.16284064948558807, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.7568531036376953
+        }, 
+        {
+          "y": 0.9708537459373474, 
+          "x": -0.18439844250679016, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.807421922683716
+        }, 
+        {
+          "y": 0.8557242155075073, 
+          "x": -0.20605504512786865, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.851024627685547
+        }
+      ], 
+      "location": "R", 
+      "numJoints": 4, 
+      "class": "kraken_examples.tentacle_component.TentacleComponentGuide"
+    }, 
+    {
+      "graphPos": {
+        "y": 1263.8848876953125, 
+        "x": 1469.748291015625, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "lipTentacle04", 
+      "jointPositions": [
+        {
+          "y": 1.2631747722625732, 
+          "x": -0.566874623298645, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.005354881286621
+        }, 
+        {
+          "y": 1.1281297206878662, 
+          "x": -0.6050151586532593, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.0593392848968506
+        }, 
+        {
+          "y": 0.9896672964096069, 
+          "x": -0.6453487277030945, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.109907865524292
+        }, 
+        {
+          "y": 0.8375360369682312, 
+          "x": -0.6900312304496765, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.1718616485595703
+        }, 
+        {
+          "y": 0.683677613735199, 
+          "x": -0.7326377630233765, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.1858630180358887
+        }
+      ], 
+      "location": "R", 
+      "numJoints": 4, 
+      "class": "kraken_examples.tentacle_component.TentacleComponentGuide"
+    }, 
+    {
+      "graphPos": {
+        "y": 1263.8848876953125, 
+        "x": 1246.941650390625, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "lipTentacle03", 
+      "jointPositions": [
+        {
+          "y": 1.3076437711715698, 
+          "x": -0.44905033707618713, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.2543389797210693
+        }, 
+        {
+          "y": 1.1404930353164673, 
+          "x": -0.4747715890407562, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.3216705322265625
+        }, 
+        {
+          "y": 0.9519971609115601, 
+          "x": -0.5125977993011475, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.3890016078948975
+        }, 
+        {
+          "y": 0.7589067220687866, 
+          "x": -0.5652794241905212, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.454113006591797
+        }, 
+        {
+          "y": 0.5582349896430969, 
+          "x": -0.6145014762878418, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 3.522956371307373
+        }
+      ], 
+      "location": "R", 
+      "numJoints": 4, 
       "class": "kraken_examples.tentacle_component.TentacleComponentGuide"
     }
   ]
