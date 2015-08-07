@@ -379,6 +379,16 @@ class Builder(object):
         inputTarget = componentInput.getTarget()
 
         if connection.getDataType().endswith('[]'):
+            if componentInput.getIndex() > len(connection.getTarget()) - 1:
+
+                inputParent = componentInput.getParent()
+                inputParentDecoration = inputParent.getNameDecoration()
+                fullInputName = inputParent.getName() + inputParentDecoration + "." + componentInput.getName()
+
+                raise Exception(fullInputName + " index ("
+                                + str(componentInput.getIndex()) + ") is out of range ("
+                                + str(len(connection.getTarget()) - 1) + ")!")
+
             connectionTarget = connection.getTarget()[componentInput.getIndex()]
         else:
             connectionTarget = connection.getTarget()
