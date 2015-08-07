@@ -34,7 +34,7 @@ class KrakenWindow(QtGui.QMainWindow):
         iconPath = os.path.join(uiDir, 'images', 'Kraken_Icon.png')
         self.setWindowIcon(QtGui.QIcon(iconPath))
 
-        self.settings = QtCore.QSettings("Moose Soft", "Clipper")
+        self.settings = QtCore.QSettings("Kraken", "Kraken Editor")
 
         self.createLayout()
         self.createConnections()
