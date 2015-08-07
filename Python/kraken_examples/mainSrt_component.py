@@ -34,14 +34,14 @@ class MainSrtComponent(BaseExampleComponent):
         # Declare Inputs Xfos
 
         # Declare Output Xfos
-        self.srtOutputTgt = self.createOutput('srt', dataType='Xfo', parent=self.outputHrcGrp)
-        self.offsetOutputTgt = self.createOutput('offset', dataType='Xfo', parent=self.outputHrcGrp)
+        self.srtOutputTgt = self.createOutput('srt', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
+        self.offsetOutputTgt = self.createOutput('offset', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
 
         # Declare Input Attrs
-        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=False, parent=self.cmpInputAttrGrp)
+        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=False, parent=self.cmpInputAttrGrp).getTarget()
 
         # Declare Output Attrs
-        self.rigScaleOutputAttr = self.createOutput('rigScale', dataType='Float', value=1.0, parent=self.cmpOutputAttrGrp)
+        self.rigScaleOutputAttr = self.createOutput('rigScale', dataType='Float', value=1.0, parent=self.cmpOutputAttrGrp).getTarget()
 
 
 class MainSrtComponentGuide(MainSrtComponent):

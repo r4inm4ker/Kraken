@@ -257,7 +257,7 @@ class Component(Object3D):
 
         componentInputPort.setTarget(newInputTgt)
 
-        return newInputTgt
+        return componentInputPort
 
 
     def addInput(self, name, dataType):
@@ -399,21 +399,24 @@ class Component(Object3D):
 
         componentOutputPort = self.addOutput(name, dataType)
 
-        # Create object
-        if dataType.startswith('Xfo'):
-            newOutputTgt = ComponentOutput(name)
+        if dataType.endswith('[]'):
+            newOutputTgt = []
+        else:
+            # Create object
+            if dataType.startswith('Xfo'):
+                newOutputTgt = ComponentOutput(name)
 
-        elif dataType.startswith('Boolean'):
-            newOutputTgt = BoolAttribute(name)
+            elif dataType.startswith('Boolean'):
+                newOutputTgt = BoolAttribute(name)
 
-        elif dataType.startswith('Float'):
-            newOutputTgt = ScalarAttribute(name)
+            elif dataType.startswith('Float'):
+                newOutputTgt = ScalarAttribute(name)
 
-        elif dataType.startswith('Integer'):
-            newOutputTgt = IntegerAttribute(name)
+            elif dataType.startswith('Integer'):
+                newOutputTgt = IntegerAttribute(name)
 
-        elif dataType.startswith('String'):
-            newOutputTgt = StringAttribute(name)
+            elif dataType.startswith('String'):
+                newOutputTgt = StringAttribute(name)
 
         # Handle keyword arguments
         for k, v in kwargs.iteritems():
@@ -424,6 +427,9 @@ class Component(Object3D):
             elif k == 'maxValue':
                 newOutputTgt.setMax(v)
             elif k == 'parent':
+                if isinstance(newOutputTgt, list):
+                    raise Exception("Array outputs cannot be assigned to a parent. Each element in the array must be parented individually: " + name + ".")
+
                 if dataType.startswith('Xfo'):
                     v.addChild(newOutputTgt)
                 else:
@@ -433,7 +439,7 @@ class Component(Object3D):
 
         componentOutputPort.setTarget(newOutputTgt)
 
-        return newOutputTgt
+        return componentOutputPort
 
 
     def addOutput(self, name, dataType):

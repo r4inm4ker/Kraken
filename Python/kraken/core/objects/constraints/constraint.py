@@ -107,7 +107,7 @@ class Constraint(SceneItem):
 
         if not isinstance(kObject3D, Object3D):
             raise Exception("'kObject3D' argument is not a valid instance type. '"
-                             + kObject3D.getName() + "': " + type(kObject3D) +
+                             + kObject3D.getName() + "': " + str(type(kObject3D)) +
                              ". Must be an instance of 'Object3D'.")
 
         if kObject3D in self._constrainers:

@@ -32,17 +32,17 @@ class HeadComponent(BaseExampleComponent):
         # Declare IO
         # ===========
         # Declare Inputs Xfos
-        self.headBaseInputTgt = self.createInput('headBase', dataType='Xfo', parent=self.inputHrcGrp)
+        self.headBaseInputTgt = self.createInput('headBase', dataType='Xfo', parent=self.inputHrcGrp).getTarget()
 
         # Declare Output Xfos
-        self.headOutputTgt = self.createOutput('head', dataType='Xfo', parent=self.outputHrcGrp)
-        self.jawOutputTgt = self.createOutput('jaw', dataType='Xfo', parent=self.outputHrcGrp)
-        self.eyeLOutputTgt = self.createOutput('eyeL', dataType='Xfo', parent=self.outputHrcGrp)
-        self.eyeROutputTgt = self.createOutput('eyeR', dataType='Xfo', parent=self.outputHrcGrp)
+        self.headOutputTgt = self.createOutput('head', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
+        self.jawOutputTgt = self.createOutput('jaw', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
+        self.eyeLOutputTgt = self.createOutput('eyeL', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
+        self.eyeROutputTgt = self.createOutput('eyeR', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
 
         # Declare Input Attrs
-        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=False, parent=self.cmpInputAttrGrp)
-        self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp)
+        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=False, parent=self.cmpInputAttrGrp).getTarget()
+        self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp).getTarget()
 
         # Declare Output Attrs
 

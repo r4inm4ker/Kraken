@@ -40,18 +40,18 @@ class InsectLegComponent(BaseExampleComponent):
         # Declare IO
         # ===========
         # Declare Inputs Xfos
-        self.rootInputTgt = self.createInput('rootInput', dataType='Xfo', parent=self.inputHrcGrp)
+        self.rootInputTgt = self.createInput('rootInput', dataType='Xfo', parent=self.inputHrcGrp).getTarget()
 
         # Declare Output Xfos
-        self.boneOutputs = self.addOutput('boneOutputs', dataType='Xfo[]')
+        self.boneOutputs = self.createOutput('boneOutputs', dataType='Xfo[]')
 
-        self.legEndXfoOutputTgt = self.createOutput('legEndXfoOutput', dataType='Xfo', parent=self.outputHrcGrp)
-        self.legEndPosOutputTgt = self.createOutput('legEndPosOutput', dataType='Xfo', parent=self.outputHrcGrp)
+        self.legEndXfoOutputTgt = self.createOutput('legEndXfoOutput', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
+        self.legEndPosOutputTgt = self.createOutput('legEndPosOutput', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
 
         # Declare Input Attrs
-        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=False, parent=self.cmpInputAttrGrp)
-        self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp)
-        self.tipBoneLenInputAttr = self.createInput('tipBoneLen', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp)
+        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=False, parent=self.cmpInputAttrGrp).getTarget()
+        self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp).getTarget()
+        self.tipBoneLenInputAttr = self.createInput('tipBoneLen', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp).getTarget()
 
         # Declare Output Attrs
 
@@ -172,10 +172,10 @@ class InsectLegComponentGuide(InsectLegComponent):
     # Callbacks
     # ==========
     def updateNumLegControls(self, numJoints):
-        """Load a saved guide representation from persisted data.
+        """Generate the guide controls for the variable outputes array.
 
         Arguments:
-        numJoints -- object, The number of joints inthe chain.
+        numJoints -- object, The number of joints in the chain.
 
         Return:
         True if successful.
@@ -359,12 +359,10 @@ class InsectLegComponentRig(InsectLegComponent):
         self.nBoneSolverSpliceOp.setInput('ikgoal', self.legIKCtrl)
         self.nBoneSolverSpliceOp.setInput('upVector', self.legUpVCtrl)
 
-        for i in xrange(len(self.fkCtrls)):
-            self.nBoneSolverSpliceOp.setInput('fkcontrols', self.fkCtrls[i])
+        self.nBoneSolverSpliceOp.setInput('fkcontrols', self.fkCtrls)
 
         # Add Xfo Outputs
-        for i in xrange(len(self.boneOutputsTgt)):
-            self.nBoneSolverSpliceOp.setOutput('pose', self.boneOutputsTgt[i])
+        self.nBoneSolverSpliceOp.setOutput('pose', self.boneOutputsTgt)
 
         self.nBoneSolverSpliceOp.setOutput('legEnd', self.legEndPosOutputTgt)
 
@@ -377,12 +375,10 @@ class InsectLegComponentRig(InsectLegComponent):
         self.outputsToDeformersSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
 
         # Add Xfo Inputs
-        for i in xrange(len(self.boneOutputsTgt)):
-            self.outputsToDeformersSpliceOp.setInput('constrainers', self.boneOutputsTgt[i])
+        self.outputsToDeformersSpliceOp.setInput('constrainers', self.boneOutputsTgt)
 
         # Add Xfo Outputs
-        for i in xrange(len(self.deformerJoints)):
-            self.outputsToDeformersSpliceOp.setOutput('constrainees', self.deformerJoints[i])
+        self.outputsToDeformersSpliceOp.setOutput('constrainees', self.deformerJoints)
 
         Profiler.getInstance().pop()
 
@@ -496,37 +492,6 @@ class InsectLegComponentRig(InsectLegComponent):
 
         # Set max on the rootIndex attribute
         self.rootIndexInputAttr.setMax(len(boneXfos))
-
-        # ==================
-        # Update Splice Ops
-        # ==================
-        # N Bone Op
-        # Add Controls
-        for i in xrange(len(self.fkCtrls)):
-            controls = self.nBoneSolverSpliceOp.getInput('fkcontrols')
-            if self.fkCtrls[i] not in controls:
-                self.nBoneSolverSpliceOp.setInput('fkcontrols', self.fkCtrls[i])
-
-        # Add Xfo Outputs
-        for i in xrange(len(self.boneOutputsTgt)):
-            outputs = self.nBoneSolverSpliceOp.getOutput('pose')
-            if self.boneOutputsTgt[i] not in outputs:
-                self.nBoneSolverSpliceOp.setOutput('pose', self.boneOutputsTgt[i])
-
-        # ==================
-
-        # Outputs To Deformers Op
-        # Add Xfo Inputs
-        for i in xrange(len(self.boneOutputsTgt)):
-            constrainers = self.outputsToDeformersSpliceOp.getInput('constrainers')
-            if self.boneOutputsTgt[i] not in constrainers:
-                self.outputsToDeformersSpliceOp.setInput('constrainers', self.boneOutputsTgt[i])
-
-        # Add Xfo Outputs
-        for i in xrange(len(self.deformerJoints)):
-            constrainees = self.outputsToDeformersSpliceOp.getOutput('constrainees')
-            if self.deformerJoints[i] not in constrainees:
-                self.outputsToDeformersSpliceOp.setOutput('constrainees', self.deformerJoints[i])
 
         # ============
         # Set IO Xfos

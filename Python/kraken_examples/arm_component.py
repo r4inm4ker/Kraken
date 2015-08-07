@@ -34,22 +34,22 @@ class ArmComponent(BaseExampleComponent):
         # Declare IO
         # ===========
         # Declare Inputs Xfos
-        self.globalSRTInputTgt = self.createInput('globalSRT', dataType='Xfo', parent=self.inputHrcGrp)
-        self.clavicleEndInputTgt = self.createInput('clavicleEnd', dataType='Xfo', parent=self.inputHrcGrp)
+        self.globalSRTInputTgt = self.createInput('globalSRT', dataType='Xfo', parent=self.inputHrcGrp).getTarget()
+        self.clavicleEndInputTgt = self.createInput('clavicleEnd', dataType='Xfo', parent=self.inputHrcGrp).getTarget()
 
         # Declare Output Xfos
-        self.bicepOutputTgt = self.createOutput('bicep', dataType='Xfo', parent=self.outputHrcGrp)
-        self.forearmOutputTgt = self.createOutput('forearm', dataType='Xfo', parent=self.outputHrcGrp)
-        self.armEndXfoOutputTgt = self.createOutput('armEndXfo', dataType='Xfo', parent=self.outputHrcGrp)
-        self.handOutputTgt = self.createOutput('hand', dataType='Xfo', parent=self.outputHrcGrp)
+        self.bicepOutputTgt = self.createOutput('bicep', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
+        self.forearmOutputTgt = self.createOutput('forearm', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
+        self.armEndXfoOutputTgt = self.createOutput('armEndXfo', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
+        self.handOutputTgt = self.createOutput('hand', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
 
         # Declare Input Attrs
-        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', parent=self.cmpInputAttrGrp)
-        self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp)
-        self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', parent=self.cmpInputAttrGrp)
+        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', parent=self.cmpInputAttrGrp).getTarget()
+        self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp).getTarget()
+        self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', parent=self.cmpInputAttrGrp).getTarget()
 
         # Declare Output Attrs
-        self.debugOutputAttr = self.createOutput('drawDebug', dataType='Boolean', parent=self.cmpOutputAttrGrp)
+        self.debugOutputAttr = self.createOutput('drawDebug', dataType='Boolean', parent=self.cmpOutputAttrGrp).getTarget()
 
 
 class ArmComponentGuide(ArmComponent):
@@ -374,16 +374,10 @@ class ArmComponentRig(ArmComponent):
         self.outputsToDeformersSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
 
         # Add Xfo Inputs
-        self.outputsToDeformersSpliceOp.setInput('constrainers', self.bicepOutputTgt)
-        self.outputsToDeformersSpliceOp.setInput('constrainers', self.forearmOutputTgt)
-        self.outputsToDeformersSpliceOp.setInput('constrainers', self.armEndXfoOutputTgt)
-        self.outputsToDeformersSpliceOp.setInput('constrainers', self.handOutputTgt)
+        self.outputsToDeformersSpliceOp.setInput('constrainers', [self.bicepOutputTgt, self.forearmOutputTgt, self.armEndXfoOutputTgt, self.handOutputTgt])
 
         # Add Xfo Outputs
-        self.outputsToDeformersSpliceOp.setOutput('constrainees', bicepDef)
-        self.outputsToDeformersSpliceOp.setOutput('constrainees', forearmDef)
-        self.outputsToDeformersSpliceOp.setOutput('constrainees', wristDef)
-        self.outputsToDeformersSpliceOp.setOutput('constrainees', handDef)
+        self.outputsToDeformersSpliceOp.setOutput('constrainees', [bicepDef, forearmDef, wristDef, handDef])
 
         Profiler.getInstance().pop()
 

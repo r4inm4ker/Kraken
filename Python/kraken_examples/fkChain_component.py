@@ -40,17 +40,17 @@ class FKChainComponent(BaseExampleComponent):
         # Declare IO
         # ===========
         # Declare Inputs Xfos
-        self.rootInputTgt = self.createInput('rootInput', dataType='Xfo', parent=self.inputHrcGrp)
+        self.rootInputTgt = self.createInput('rootInput', dataType='Xfo', parent=self.inputHrcGrp).getTarget()
 
         # Declare Output Xfos
-        self.boneOutputs = self.addOutput('boneOutputs', dataType='Xfo[]')
+        self.boneOutputs = self.createOutput('boneOutputs', dataType='Xfo[]')
 
-        self.chainEndXfoOutputTgt = self.createOutput('chainEndXfoOutput', dataType='Xfo', parent=self.outputHrcGrp)
-        self.chainEndPosOutputTgt = self.createOutput('chainEndPosOutput', dataType='Xfo', parent=self.outputHrcGrp)
+        self.chainEndXfoOutputTgt = self.createOutput('chainEndXfoOutput', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
+        self.chainEndPosOutputTgt = self.createOutput('chainEndPosOutput', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
 
         # Declare Input Attrs
-        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=False, parent=self.cmpInputAttrGrp)
-        self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp)
+        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=False, parent=self.cmpInputAttrGrp).getTarget()
+        self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp).getTarget()
 
         # Declare Output Attrs
 
@@ -312,12 +312,10 @@ class FKChainComponentRig(FKChainComponent):
         self.outputsToControlsSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
 
         # Add Xfo Inputs
-        for i in xrange(len(self.fkCtrls)):
-            self.outputsToControlsSpliceOp.setInput('constrainers', self.fkCtrls[i])
+        self.outputsToControlsSpliceOp.setInput('constrainers', self.fkCtrls)
 
         # Add Xfo Outputs
-        for i in xrange(len(self.boneOutputsTgt)):
-            self.outputsToControlsSpliceOp.setOutput('constrainees', self.boneOutputsTgt[i])
+        self.outputsToControlsSpliceOp.setOutput('constrainees', self.boneOutputsTgt)
 
         # Add Deformer Splice Op
         self.deformersToOutputsSpliceOp = SpliceOperator('fkChainDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken')
@@ -328,12 +326,10 @@ class FKChainComponentRig(FKChainComponent):
         self.deformersToOutputsSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
 
         # Add Xfo Inputs
-        for i in xrange(len(self.boneOutputsTgt)):
-            self.deformersToOutputsSpliceOp.setInput('constrainers', self.boneOutputsTgt[i])
+        self.deformersToOutputsSpliceOp.setInput('constrainers', self.boneOutputsTgt)
 
         # Add Xfo Outputs
-        for i in xrange(len(self.deformerJoints)):
-            self.deformersToOutputsSpliceOp.setOutput('constrainees', self.deformerJoints[i])
+        self.deformersToOutputsSpliceOp.setOutput('constrainees', self.deformerJoints)
 
         Profiler.getInstance().pop()
 
@@ -401,35 +397,6 @@ class FKChainComponentRig(FKChainComponent):
             self.fkCtrlSpaces[i].xfo = boneXfos[i]
             self.fkCtrls[i].xfo = boneXfos[i]
             self.fkCtrls[i].scalePoints(Vec3(boneLengths[i], boneLengths[i] * 0.45, boneLengths[i] * 0.45))
-
-        # ==================
-        # Update Splice Ops
-        # ==================
-        # Outputs To Controls Op
-        # Update Controls
-        for i in xrange(len(self.fkCtrls)):
-            constrainers = self.outputsToControlsSpliceOp.getInput('constrainers')
-            if self.fkCtrls[i] not in constrainers:
-                self.outputsToControlsSpliceOp.setInput('constrainers', self.fkCtrls[i])
-
-        # Update Outputs
-        for i in xrange(len(self.boneOutputsTgt)):
-            constrainees = self.outputsToControlsSpliceOp.getOutput('constrainees')
-            if self.boneOutputsTgt[i] not in constrainees:
-                self.outputsToControlsSpliceOp.setOutput('constrainees', self.boneOutputsTgt[i])
-
-        # Deformers To Outputs Op
-        # Update Outputs
-        for i in xrange(len(self.boneOutputsTgt)):
-            constrainers = self.deformersToOutputsSpliceOp.getInput('constrainers')
-            if self.boneOutputsTgt[i] not in constrainers:
-                self.deformersToOutputsSpliceOp.setInput('constrainers', self.boneOutputsTgt[i])
-
-        # Update Deformers
-        for i in xrange(len(self.deformerJoints)):
-            constrainees = self.deformersToOutputsSpliceOp.getOutput('constrainees')
-            if self.deformerJoints[i] not in constrainees:
-                self.deformersToOutputsSpliceOp.setOutput('constrainees', self.deformerJoints[i])
 
         # ============
         # Set IO Xfos
