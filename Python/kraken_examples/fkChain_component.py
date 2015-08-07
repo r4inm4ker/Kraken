@@ -336,38 +336,60 @@ class FKChainComponentRig(FKChainComponent):
 
     def setNumControls(self, numControls):
 
-        # Add new control spaces and controls
-        for i in xrange(len(self.fkCtrlSpaces), numControls):
-            if i==0:
-                parent = self.ctrlCmpGrp
-            else:
-                parent = self.fkCtrls[i - 1]
+        # Add more controls
+        if numControls > len(self.fkCtrlSpaces):
+            for i in xrange(len(self.fkCtrlSpaces), numControls):
+                if i==0:
+                    parent = self.ctrlCmpGrp
+                else:
+                    parent = self.fkCtrls[i - 1]
 
-            boneName = 'bone' + str(i + 1).zfill(2) + 'FK'
-            boneFKCtrlSpace = CtrlSpace(boneName, parent=parent)
+                boneName = 'bone' + str(i + 1).zfill(2) + 'FK'
+                boneFKCtrlSpace = CtrlSpace(boneName, parent=parent)
 
-            boneFKCtrl = Control(boneName, parent=boneFKCtrlSpace, shape="cube")
-            boneFKCtrl.alignOnXAxis()
-            boneFKCtrl.lockScale(x=True, y=True, z=True)
-            boneFKCtrl.lockTranslation(x=True, y=True, z=True)
+                boneFKCtrl = Control(boneName, parent=boneFKCtrlSpace, shape="cube")
+                boneFKCtrl.alignOnXAxis()
+                boneFKCtrl.lockScale(x=True, y=True, z=True)
+                boneFKCtrl.lockTranslation(x=True, y=True, z=True)
 
-            self.fkCtrlSpaces.append(boneFKCtrlSpace)
-            self.fkCtrls.append(boneFKCtrl)
+                self.fkCtrlSpaces.append(boneFKCtrlSpace)
+                self.fkCtrls.append(boneFKCtrl)
+
+        # Remove extra ctrls
+        elif numControls < len(self.fkCtrlSpaces):
+            numExtraCtrls = len(self.fkCtrls) - numControls
+            for i in xrange(numExtraCtrls):
+                extraCtrlSpace = self.fkCtrlSpaces.pop()
+                extraCtrl = self.fkCtrls.pop()
+                extraCtrlSpace.getParent().removeChild(extraCtrlSpace)
+                extraCtrl.getParent().removeChild(extraCtrl)
 
 
     def setNumDeformers(self, numDeformers):
 
-        # Add new deformers and outputs
-        for i in xrange(len(self.boneOutputsTgt), numDeformers):
-            name = 'bone' + str(i + 1).zfill(2)
-            legOutput = ComponentOutput(name, parent=self.outputHrcGrp)
-            self.boneOutputsTgt.append(legOutput)
+        # Add more deformers and outputs
+        if numDeformers > len(self.boneOutputsTgt):
+            for i in xrange(len(self.boneOutputsTgt), numDeformers):
+                name = 'bone' + str(i + 1).zfill(2)
 
-        for i in xrange(len(self.deformerJoints), numDeformers):
-            name = 'bone' + str(i + 1).zfill(2)
-            boneDef = Joint(name, parent=self.defCmpGrp)
-            boneDef.setComponent(self)
-            self.deformerJoints.append(boneDef)
+                legOutput = ComponentOutput(name, parent=self.outputHrcGrp)
+                self.boneOutputsTgt.append(legOutput)
+
+                boneDef = Joint(name, parent=self.defCmpGrp)
+                boneDef.setComponent(self)
+                self.deformerJoints.append(boneDef)
+
+        # Remove extra deformers and outputs
+        elif numDeformers < len(self.boneOutputsTgt):
+            numExtraOutputs = len(self.boneOutputsTgt) - numDeformers
+            numExtraDefs = len(self.deformerJoints) - numDeformers
+
+            for i in xrange(numExtraOutputs):
+                extraOutput = self.boneOutputsTgt.pop()
+                extraDef = self.deformerJoints.pop()
+
+                extraOutput.getParent().removeChild(extraOutput)
+                extraDef.getParent().removeChild(extraDef)
 
         return True
 
