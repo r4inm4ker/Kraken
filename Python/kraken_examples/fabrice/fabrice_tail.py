@@ -67,6 +67,8 @@ class FabriceTailGuide(FabriceTail):
         # ========
         guideSettingsAttrGrp = AttributeGroup("GuideSettings", parent=self)
         self.numDeformersAttr = IntegerAttribute('numDeformers', value=1, minValue=0, maxValue=20, parent=guideSettingsAttrGrp)
+        self.numDeformersAttr.setValueChangeCallback(self.updateNumDeformers)
+
 
         # Guide Controls
         self.tailBaseCtrl = Control('tailBase', parent=self.ctrlCmpGrp, shape='sphere')
@@ -92,25 +94,13 @@ class FabriceTailGuide(FabriceTail):
         self.tailEndCtrl.lockScale(x=True, y=True, z=True)
         self.tailEndCtrl.setColor("turqoise")
 
-        self.spineOutputs = []
-        for i in xrange(6):
-            debugCtrl = Control('spine' + str(i+1).zfill(2), parent=self.outputHrcGrp, shape="vertebra")
-            debugCtrl.rotatePoints(0, -90, 0)
-            debugCtrl.scalePoints(Vec3(0.5, 0.5, 0.5))
-            debugCtrl.setColor('turqoise')
-            self.spineOutputs.append(debugCtrl)
-
-        # =====================
-        # Create Component I/O
-        # =====================
-        # Setup component Xfo I/O's
-        self.tailVertebraeOutput.setTarget(self.spineOutputs)
-
         # ===============
         # Add Splice Ops
         # ===============
         # Add Tail Splice Op
         self.bezierSpineSpliceOp = SpliceOperator('spineGuideSpliceOp', 'BezierSpineSolver', 'Kraken', alwaysEval=True)
+        self.bezierSpineSpliceOp.setOutput('outputs', self.tailVertebraeOutput.getTarget())
+
         self.addOperator(self.bezierSpineSpliceOp)
 
         # Add Att Inputs
@@ -123,10 +113,6 @@ class FabriceTailGuide(FabriceTail):
         self.bezierSpineSpliceOp.setInput('baseHandle', self.tailBaseHandleCtrl)
         self.bezierSpineSpliceOp.setInput('tipHandle', self.tailEndHandleCtrl)
         self.bezierSpineSpliceOp.setInput('tip', self.tailEndCtrl)
-
-        # Add Xfo Outputs
-        for spineOutput in self.spineOutputs:
-            self.bezierSpineSpliceOp.setOutput('outputs', spineOutput)
 
         self.loadData({
             'name': name,
@@ -143,6 +129,41 @@ class FabriceTailGuide(FabriceTail):
 
         Profiler.getInstance().pop()
 
+
+    # ==========
+    # Callbacks
+    # ==========
+    def updateNumDeformers(self, count):
+        """Generate the guide controls for the variable outputes array.
+
+        Arguments:
+        count -- object, The number of joints inthe chain.
+
+        Return:
+        True if successful.
+
+        """
+
+        if count == 0:
+            raise IndexError("'count' must be > 0")
+
+
+        vertebraeOutputs = self.tailVertebraeOutput.getTarget()
+        if count > len(vertebraeOutputs):
+            for i in xrange(len(vertebraeOutputs), count):
+                debugCtrl = Control('spine' + str(i+1).zfill(2), parent=self.outputHrcGrp, shape="vertebra")
+                debugCtrl.rotatePoints(0, -90, 0)
+                debugCtrl.scalePoints(Vec3(0.5, 0.5, 0.5))
+                debugCtrl.setColor('turqoise')
+                vertebraeOutputs.append(debugCtrl)
+
+        elif count < len(vertebraeOutputs):
+            numExtraCtrls = len(vertebraeOutputs) - count
+            for i in xrange(numExtraCtrls):
+                extraCtrl = vertebraeOutputs.pop()
+                self.outputHrcGrp.removeChild(extraCtrl)
+
+        return True
 
     # =============
     # Data Methods
@@ -359,8 +380,7 @@ class FabriceTailRig(FabriceTail):
         self.bezierTailSpliceOp.setInput('tip', self.tailEndCtrl)
 
         # Add Xfo Outputs
-        for tailOutput in self.tailOutputs:
-            self.bezierTailSpliceOp.setOutput('outputs', tailOutput)
+        self.bezierTailSpliceOp.setOutput('outputs', self.tailOutputs)
 
         # Add Deformer Splice Op
         self.deformersToOutputsSpliceOp = SpliceOperator('tailDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken', alwaysEval=True)
@@ -371,12 +391,10 @@ class FabriceTailRig(FabriceTail):
         self.deformersToOutputsSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
 
         # Add Xfo Outputs
-        for tailOutput in self.tailOutputs:
-            self.deformersToOutputsSpliceOp.setInput('constrainers', tailOutput)
+        self.deformersToOutputsSpliceOp.setInput('constrainers', self.tailOutputs)
 
         # Add Xfo Outputs
-        for joint in self.deformerJoints:
-            self.deformersToOutputsSpliceOp.setOutput('constrainees', joint)
+        self.deformersToOutputsSpliceOp.setOutput('constrainees', self.deformerJoints)
 
         Profiler.getInstance().pop()
 
