@@ -6,6 +6,8 @@ OrientationConstraint - Orientation Constraint.
 """
 
 from constraint import Constraint
+from kraken.core.maths.vec3 import Vec3
+from kraken.core.maths.quat import Quat
 
 
 class OrientationConstraint(Constraint):
