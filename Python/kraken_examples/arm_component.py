@@ -251,9 +251,9 @@ class ArmComponentRig(ArmComponent):
         self.forearmFKCtrl.alignOnXAxis()
 
         self.handCtrlSpace = CtrlSpace('hand', parent=self.ctrlCmpGrp)
-        self.handCtrl = Control('hand', parent=self.handCtrlSpace, shape="cube")
-        self.handCtrl.alignOnXAxis()
-        self.handCtrl.scalePoints(Vec3(2.0, 0.75, 1.25))
+        self.handCtrl = Control('hand', parent=self.handCtrlSpace, shape="circle")
+        self.handCtrl.rotatePoints(0, 0, 90)
+        self.handCtrl.scalePoints(Vec3(1.0, 0.75, 0.75))
 
         # Arm IK
         self.armIKCtrlSpace = CtrlSpace('IK', parent=self.ctrlCmpGrp)
@@ -322,9 +322,14 @@ class ArmComponentRig(ArmComponent):
         self.bicepFKCtrlSpace.addConstraint(self.armRootInputConstraint)
 
         # Constraint outputs
-        handConstraint = PoseConstraint('_'.join([self.handOutputTgt.getName(), 'To', self.handCtrl.getName()]))
-        handConstraint.addConstrainer(self.handCtrl)
-        self.handOutputTgt.addConstraint(handConstraint)
+        self.handConstraint = PoseConstraint('_'.join([self.handOutputTgt.getName(), 'To', self.handCtrl.getName()]))
+        self.handConstraint.addConstrainer(self.handCtrl)
+        self.handOutputTgt.addConstraint(self.handConstraint)
+
+        self.handCtrlSpaceConstraint = PoseConstraint('_'.join([self.handCtrlSpace.getName(), 'To', self.armEndXfoOutputTgt.getName()]))
+        self.handCtrlSpaceConstraint.setMaintainOffset(True)
+        self.handCtrlSpaceConstraint.addConstrainer(self.armEndXfoOutputTgt)
+        self.handCtrlSpace.addConstraint(self.handCtrlSpaceConstraint)
 
 
         # ===============
@@ -432,6 +437,9 @@ class ArmComponentRig(ArmComponent):
         self.armIKCtrlSpaceInputConstraint.evaluate()
         self.armUpVCtrlSpaceInputConstraint.evaluate()
         self.armRootInputConstraint.evaluate()
+        self.armRootInputConstraint.evaluate()
+        self.handConstraint.evaluate()
+        self.handCtrlSpaceConstraint.evaluate()
 
         # Eval Operators
         self.spliceOp.evaluate()

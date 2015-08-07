@@ -16,7 +16,7 @@ def curveToKraken(curve):
     data = []
     for eachCrv in crvList.Curves:
         subCurveData = {
-            'points': [[round(y, 2) for y in list(x.Position.Get2())] for x in eachCrv.ControlPoints],
+            'points': [[round(y, 3) for y in list(x.Position.Get2())] for x in eachCrv.ControlPoints],
             'degree': eachCrv.Degree,
             'closed': eachCrv.Get2()[2]
         }

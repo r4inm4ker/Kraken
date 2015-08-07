@@ -17,7 +17,7 @@ def curveToKraken(curve):
     data = []
     for eachShape in shapes:
         subCurveData = {
-            'points': [[round(y, 2) for y in [x.x, x.y, x.z]] for x in eachShape.getCVs()],
+            'points': [[round(y, 3) for y in [x.x, x.y, x.z]] for x in eachShape.getCVs()],
             'degree': eachShape.degree(),
             'closed': eachShape.form() == 'closed'
         }
