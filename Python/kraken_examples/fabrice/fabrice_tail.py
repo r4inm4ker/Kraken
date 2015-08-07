@@ -100,6 +100,12 @@ class FabriceTailGuide(FabriceTail):
             debugCtrl.setColor('turqoise')
             self.spineOutputs.append(debugCtrl)
 
+        # =====================
+        # Create Component I/O
+        # =====================
+        # Setup component Xfo I/O's
+        self.tailVertebraeOutput.setTarget(self.spineOutputs)
+
         # ===============
         # Add Splice Ops
         # ===============

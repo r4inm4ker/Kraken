@@ -70,12 +70,16 @@ class TentacleComponentGuide(TentacleComponent):
         self.numJoints.setValueChangeCallback(self.updateNumLegControls)
 
         self.jointCtrls = []
+        self.tentacleOutputs = []
         if data is None:
             numJoints = self.numJoints.getValue()
             jointPositions = self.generateGuidePositions(numJoints)
 
             for i in xrange(numJoints):
                 self.jointCtrls.append(Control('tentacle' + str(i + 1).zfill(2), parent=self.ctrlCmpGrp, shape="sphere"))
+                self.tentacleOutputs.append(ComponentOutput('tentacle' + str(i + 1).zfill(2), parent=self.outputHrcGrp))
+
+            self.boneOutputs.setTarget(self.tentacleOutputs)
 
             data = {
                "location": "L",
@@ -188,11 +192,17 @@ class TentacleComponentGuide(TentacleComponent):
                 newCtrl = Control('tentacle' + str(i + 1).zfill(2), parent=self.ctrlCmpGrp, shape="sphere")
                 self.jointCtrls.append(newCtrl)
 
+                newOutput = ComponentOutput('tentacle' + str(i + 1).zfill(2), parent=self.outputHrcGrp)
+                self.tentacleOutputs.append(newOutput)
+
         elif numJoints + 1 < len(self.jointCtrls):
             numExtraCtrls = len(self.jointCtrls) - (numJoints + 1)
             for i in xrange(numExtraCtrls):
                 extraCtrl = self.jointCtrls.pop()
                 self.ctrlCmpGrp.removeChild(extraCtrl)
+
+                extraOutput = self.tentacleOutputs.pop()
+                self.outputHrcGrp.removeChild(extraOutput)
 
         # Reset the control positions based on new number of joints
         jointPositions = self.generateGuidePositions(numJoints)

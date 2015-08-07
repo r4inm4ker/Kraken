@@ -100,6 +100,12 @@ class FabriceSpineGuide(FabriceSpine):
             debugCtrl.setColor("yellowLight")
             self.spineOutputs.append(debugCtrl)
 
+        # =====================
+        # Create Component I/O
+        # =====================
+        # Setup component Xfo I/O's
+        self.spineVertebraeOutput.setTarget(self.spineOutputs)
+
         # ===============
         # Add Splice Ops
         # ===============
