@@ -239,6 +239,31 @@
       "source": "mainSrt:M.rigScale", 
       "target": "clavicle:L.rigScale", 
       "targetIndex": 0
+    }, 
+    {
+      "source": "spine:M.spineBase", 
+      "target": "clavicle:R.spineEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "mainSrt:M.rigScale", 
+      "target": "clavicle:R.rigScale", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "mainSrt:M.offset", 
+      "target": "arm:R.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "clavicle:R.clavicle", 
+      "target": "arm:R.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "mainSrt:M.rigScale", 
+      "target": "arm:R.rigScale", 
+      "targetIndex": 0
     }
   ], 
   "graphPositions": {
@@ -287,9 +312,9 @@
       "x": 2182.873779296875, 
       "__mathObjectClass__": "Vec2"
     }, 
-    "tailOuterFlipper:L": {
-      "y": 235.77798461914062, 
-      "x": 1542.9141845703125, 
+    "lipTentacle03:L": {
+      "y": 933.3529052734375, 
+      "x": 1238.6048583984375, 
       "__mathObjectClass__": "Vec2"
     }, 
     "spine:M": {
@@ -322,9 +347,14 @@
       "x": 784.8030395507812, 
       "__mathObjectClass__": "Vec2"
     }, 
-    "tailBackFin:R": {
-      "y": -297.5018615722656, 
-      "x": 1013.6631469726562, 
+    "clavicle:L": {
+      "y": -145.63902282714844, 
+      "x": -251.11807250976562, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "jawTentacle:L": {
+      "y": 1000.1921997070312, 
+      "x": 1865.5682373046875, 
       "__mathObjectClass__": "Vec2"
     }, 
     "lipTentacle01:L": {
@@ -337,19 +367,24 @@
       "x": 1469.748291015625, 
       "__mathObjectClass__": "Vec2"
     }, 
+    "arm:R": {
+      "y": 429.3063049316406, 
+      "x": -27.551097869873047, 
+      "__mathObjectClass__": "Vec2"
+    }, 
     "lipTentacle02:R": {
       "y": 1262.6739501953125, 
       "x": 1031.4005126953125, 
       "__mathObjectClass__": "Vec2"
     }, 
-    "lipTentacle03:L": {
-      "y": 933.3529052734375, 
-      "x": 1238.6048583984375, 
+    "tailOuterFlipper:L": {
+      "y": 235.77798461914062, 
+      "x": 1542.9141845703125, 
       "__mathObjectClass__": "Vec2"
     }, 
-    "jawTentacle:L": {
-      "y": 1000.1921997070312, 
-      "x": 1865.5682373046875, 
+    "tailBackFin:R": {
+      "y": -297.5018615722656, 
+      "x": 1013.6631469726562, 
       "__mathObjectClass__": "Vec2"
     }, 
     "arm:L": {
@@ -367,9 +402,9 @@
       "x": 135.1214599609375, 
       "__mathObjectClass__": "Vec2"
     }, 
-    "clavicle:L": {
-      "y": -145.63902282714844, 
-      "x": -251.11807250976562, 
+    "clavicle:R": {
+      "y": 339.4352722167969, 
+      "x": -213.19696044921875, 
       "__mathObjectClass__": "Vec2"
     }, 
     "tailBackFin:L": {
@@ -2508,6 +2543,271 @@
       ], 
       "location": "L", 
       "class": "kraken_examples.fabrice.fabrice_clavicle.FabriceClavicleGuide"
+    }, 
+    {
+      "graphPos": {
+        "y": 339.4352722167969, 
+        "x": -213.19696044921875, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "clavicle", 
+      "clavicleXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 0.5636031627655029, 
+          "x": -0.12303343415260315, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.8992853164672852
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.04801255837082863, 
+          "v": {
+            "y": -0.8267956376075745, 
+            "x": -0.17073561251163483, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.533810019493103
+          }
+        }
+      }, 
+      "clavicleCtrlCrvData": [
+        {
+          "points": [
+            [
+              0.0, 
+              0.13, 
+              -0.29
+            ], 
+            [
+              0.0, 
+              -0.13, 
+              -0.29
+            ], 
+            [
+              0.79, 
+              -0.13, 
+              -0.29
+            ], 
+            [
+              0.79, 
+              0.13, 
+              -0.29
+            ]
+          ], 
+          "closed": true, 
+          "degree": 1
+        }, 
+        {
+          "points": [
+            [
+              0.0, 
+              0.13, 
+              -0.35
+            ], 
+            [
+              0.0, 
+              -0.13, 
+              -0.35
+            ], 
+            [
+              0.79, 
+              -0.13, 
+              -0.35
+            ], 
+            [
+              0.79, 
+              0.13, 
+              -0.35
+            ]
+          ], 
+          "closed": true, 
+          "degree": 1
+        }, 
+        {
+          "points": [
+            [
+              0.0, 
+              0.13, 
+              -0.29
+            ], 
+            [
+              0.0, 
+              0.13, 
+              -0.35
+            ]
+          ], 
+          "closed": false, 
+          "degree": 1
+        }, 
+        {
+          "points": [
+            [
+              0.79, 
+              0.13, 
+              -0.29
+            ], 
+            [
+              0.79, 
+              0.13, 
+              -0.35
+            ]
+          ], 
+          "closed": false, 
+          "degree": 1
+        }, 
+        {
+          "points": [
+            [
+              0.0, 
+              -0.13, 
+              -0.29
+            ], 
+            [
+              0.0, 
+              -0.13, 
+              -0.35
+            ]
+          ], 
+          "closed": false, 
+          "degree": 1
+        }, 
+        {
+          "points": [
+            [
+              0.79, 
+              -0.13, 
+              -0.29
+            ], 
+            [
+              0.79, 
+              -0.13, 
+              -0.35
+            ]
+          ], 
+          "closed": false, 
+          "degree": 1
+        }
+      ], 
+      "location": "R", 
+      "class": "kraken_examples.fabrice.fabrice_clavicle.FabriceClavicleGuide"
+    }, 
+    {
+      "forearmFKCtrlSize": 0.5, 
+      "graphPos": {
+        "y": 429.3063049316406, 
+        "x": -27.551097869873047, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 0.8723318576812744, 
+          "x": -1.2360057830810547, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.7097070813179016
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 6.123234262925839e-17, 
+          "v": {
+            "y": 1.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": -0.1910308301448822, 
+          "x": -1.9247136116027832, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.1406746357679367
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 6.123234262925839e-17, 
+          "v": {
+            "y": 1.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": -1.2001428604125977, 
+          "x": -2.191831350326538, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.04277660325169563
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 6.123234262925839e-17, 
+          "v": {
+            "y": 1.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "R", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": -1.2001428604125977, 
+          "x": -2.191831350326538, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.04277660325169563
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.10624898225069046, 
+          "v": {
+            "y": -0.7270824909210205, 
+            "x": 0.6711507439613342, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.09807563573122025
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 0.7
     }
   ]
 }
