@@ -214,6 +214,31 @@
       "source": "head:M.head", 
       "target": "lipTentacle03:R.rootInput", 
       "targetIndex": 0
+    }, 
+    {
+      "source": "mainSrt:M.offset", 
+      "target": "arm:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "clavicle:L.clavicle", 
+      "target": "arm:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "mainSrt:M.rigScale", 
+      "target": "arm:L.rigScale", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "spine:M.spineBase", 
+      "target": "clavicle:L.spineEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "mainSrt:M.rigScale", 
+      "target": "clavicle:L.rigScale", 
+      "targetIndex": 0
     }
   ], 
   "graphPositions": {
@@ -327,6 +352,11 @@
       "x": 1865.5682373046875, 
       "__mathObjectClass__": "Vec2"
     }, 
+    "arm:L": {
+      "y": -289.6148986816406, 
+      "x": -57.57198715209961, 
+      "__mathObjectClass__": "Vec2"
+    }, 
     "jawTentacle:R": {
       "y": 1311.6138916015625, 
       "x": 1880.4019775390625, 
@@ -335,6 +365,11 @@
     "head:M": {
       "y": 1134.9918212890625, 
       "x": 135.1214599609375, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "clavicle:L": {
+      "y": -145.63902282714844, 
+      "x": -251.11807250976562, 
       "__mathObjectClass__": "Vec2"
     }, 
     "tailBackFin:L": {
@@ -473,8 +508,8 @@
               -0.76
             ]
           ], 
-          "degree": 1, 
-          "closed": false
+          "closed": false, 
+          "degree": 1
         }
       ], 
       "location": "M", 
@@ -507,8 +542,8 @@
               -0.46
             ]
           ], 
-          "degree": 1, 
-          "closed": false
+          "closed": false, 
+          "degree": 1
         }, 
         {
           "points": [
@@ -538,8 +573,8 @@
               1.17
             ]
           ], 
-          "degree": 1, 
-          "closed": false
+          "closed": false, 
+          "degree": 1
         }, 
         {
           "points": [
@@ -554,8 +589,8 @@
               1.17
             ]
           ], 
-          "degree": 1, 
-          "closed": false
+          "closed": false, 
+          "degree": 1
         }, 
         {
           "points": [
@@ -570,8 +605,8 @@
               1.17
             ]
           ], 
-          "degree": 1, 
-          "closed": false
+          "closed": false, 
+          "degree": 1
         }, 
         {
           "points": [
@@ -586,8 +621,8 @@
               1.53
             ]
           ], 
-          "degree": 1, 
-          "closed": false
+          "closed": false, 
+          "degree": 1
         }, 
         {
           "points": [
@@ -602,8 +637,8 @@
               1.53
             ]
           ], 
-          "degree": 1, 
-          "closed": false
+          "closed": false, 
+          "degree": 1
         }
       ], 
       "class": "kraken_examples.fabrice.fabrice_head.FabriceHeadGuide"
@@ -663,8 +698,8 @@
               -0.26
             ]
           ], 
-          "degree": 1, 
-          "closed": false
+          "closed": false, 
+          "degree": 1
         }
       ], 
       "graphPos": {
@@ -742,8 +777,8 @@
               0.0
             ]
           ], 
-          "degree": 1, 
-          "closed": false
+          "closed": false, 
+          "degree": 1
         }
       ], 
       "spineEndPos": {
@@ -812,8 +847,8 @@
               -0.26
             ]
           ], 
-          "degree": 1, 
-          "closed": false
+          "closed": false, 
+          "degree": 1
         }
       ], 
       "location": "M", 
@@ -871,8 +906,8 @@
               -0.25
             ]
           ], 
-          "degree": 1, 
-          "closed": false
+          "closed": false, 
+          "degree": 1
         }
       ], 
       "spineEndCtrlCrvData": [
@@ -929,8 +964,8 @@
               -0.26
             ]
           ], 
-          "degree": 1, 
-          "closed": false
+          "closed": false, 
+          "degree": 1
         }
       ]
     }, 
@@ -1008,8 +1043,8 @@
               0.0
             ]
           ], 
-          "degree": 1, 
-          "closed": false
+          "closed": false, 
+          "degree": 1
         }
       ], 
       "tailEndHandleCtrlCrvData": [
@@ -1066,8 +1101,8 @@
               0.0
             ]
           ], 
-          "degree": 1, 
-          "closed": false
+          "closed": false, 
+          "degree": 1
         }
       ], 
       "tailEndCtrlCrvData": [
@@ -1124,8 +1159,8 @@
               0.0
             ]
           ], 
-          "degree": 1, 
-          "closed": false
+          "closed": false, 
+          "degree": 1
         }
       ], 
       "location": "M", 
@@ -2208,6 +2243,271 @@
       "location": "R", 
       "numJoints": 4, 
       "class": "kraken_examples.tentacle_component.TentacleComponentGuide"
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": -289.6148986816406, 
+        "x": -57.57198715209961, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 0.8723318576812744, 
+          "x": 1.2360057830810547, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.7097070813179016
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": -0.1910308301448822, 
+          "x": 1.9247136116027832, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.1406746357679367
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": -1.2001428604125977, 
+          "x": 2.191831350326538, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.04277660325169563
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": -1.2001428604125977, 
+          "x": 2.191831350326538, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.04277660325169563
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.7270824909210205, 
+          "v": {
+            "y": -0.10624898225069046, 
+            "x": -0.09807563573122025, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.6711507439613342
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "graphPos": {
+        "y": -145.63902282714844, 
+        "x": -251.11807250976562, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "clavicle", 
+      "clavicleXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 0.5636031627655029, 
+          "x": 0.12303343415260315, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.8992853164672852
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.8267956376075745, 
+          "v": {
+            "y": -0.04801255837082863, 
+            "x": 0.533810019493103, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.17073561251163483
+          }
+        }
+      }, 
+      "clavicleCtrlCrvData": [
+        {
+          "points": [
+            [
+              0.0, 
+              -0.13, 
+              0.29
+            ], 
+            [
+              0.0, 
+              0.13, 
+              0.29
+            ], 
+            [
+              0.79, 
+              0.13, 
+              0.29
+            ], 
+            [
+              0.79, 
+              -0.13, 
+              0.29
+            ]
+          ], 
+          "closed": true, 
+          "degree": 1
+        }, 
+        {
+          "points": [
+            [
+              0.0, 
+              -0.13, 
+              0.35
+            ], 
+            [
+              0.0, 
+              0.13, 
+              0.35
+            ], 
+            [
+              0.79, 
+              0.13, 
+              0.35
+            ], 
+            [
+              0.79, 
+              -0.13, 
+              0.35
+            ]
+          ], 
+          "closed": true, 
+          "degree": 1
+        }, 
+        {
+          "points": [
+            [
+              0.0, 
+              -0.13, 
+              0.29
+            ], 
+            [
+              0.0, 
+              -0.13, 
+              0.35
+            ]
+          ], 
+          "closed": false, 
+          "degree": 1
+        }, 
+        {
+          "points": [
+            [
+              0.79, 
+              -0.13, 
+              0.29
+            ], 
+            [
+              0.79, 
+              -0.13, 
+              0.35
+            ]
+          ], 
+          "closed": false, 
+          "degree": 1
+        }, 
+        {
+          "points": [
+            [
+              0.0, 
+              0.13, 
+              0.29
+            ], 
+            [
+              0.0, 
+              0.13, 
+              0.35
+            ]
+          ], 
+          "closed": false, 
+          "degree": 1
+        }, 
+        {
+          "points": [
+            [
+              0.79, 
+              0.13, 
+              0.29
+            ], 
+            [
+              0.79, 
+              0.13, 
+              0.35
+            ]
+          ], 
+          "closed": false, 
+          "degree": 1
+        }
+      ], 
+      "location": "L", 
+      "class": "kraken_examples.fabrice.fabrice_clavicle.FabriceClavicleGuide"
     }
   ]
 }
