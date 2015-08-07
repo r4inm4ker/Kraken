@@ -34,14 +34,14 @@ class FabriceClavicle(BaseExampleComponent):
         # Declare IO
         # ===========
         # Declare Inputs Xfos
-        self.spineEndInputTgt = self.createInput('spineEnd', dataType='Xfo', parent=self.inputHrcGrp)
+        self.spineEndInputTgt = self.createInput('spineEnd', dataType='Xfo', parent=self.inputHrcGrp).getTarget()
 
         # Declare Output Xfos
-        self.clavicleOutputTgt = self.createOutput('clavicle', dataType='Xfo', parent=self.outputHrcGrp)
+        self.clavicleOutputTgt = self.createOutput('clavicle', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
 
         # Declare Input Attrs
-        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=False, parent=self.cmpInputAttrGrp)
-        self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp)
+        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=False, parent=self.cmpInputAttrGrp).getTarget()
+        self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp).getTarget()
 
         # Declare Output Attrs
 
@@ -238,7 +238,7 @@ class FabriceClavicleRig(FabriceClavicle):
 
         self.clavicleCtrlSpace.xfo = data['clavicleXfo']
         self.clavicleCtrl.xfo = data['clavicleXfo']
-        self.clavicleCtrl.setCurveData(data['clavicleCtrlCrvData'])s
+        self.clavicleCtrl.setCurveData(data['clavicleCtrlCrvData'])
 
         # ============
         # Set IO Xfos
