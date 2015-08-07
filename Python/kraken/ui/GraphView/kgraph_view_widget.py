@@ -92,6 +92,10 @@ class KGraphViewWidget(GraphViewWidget):
             self.synchGuideRig()
             self.guideRig.writeRigDefinitionFile(filePath)
 
+            settings.beginGroup('Files')
+            lastFilePath = settings.setValue("lastFilePath", filePath)
+            settings.endGroup()
+
 
     def loadRigPreset(self):
         settings = self.window().getSettings()
