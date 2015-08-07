@@ -67,7 +67,7 @@ class TentacleComponentGuide(TentacleComponent):
         # =========
         guideSettingsAttrGrp = AttributeGroup("GuideSettings", parent=self)
         self.numJoints = IntegerAttribute('numJoints', value=5, minValue=2, maxValue=20, parent=guideSettingsAttrGrp)
-        self.numJoints.setValueChangeCallback(self.updateNumLegControls)
+        self.numJoints.setValueChangeCallback(self.updateNumControls)
 
         self.jointCtrls = []
         self.tentacleOutputs = []
@@ -173,7 +173,7 @@ class TentacleComponentGuide(TentacleComponent):
     # ==========
     # Callbacks
     # ==========
-    def updateNumLegControls(self, numJoints):
+    def updateNumControls(self, numJoints):
         """Load a saved guide representation from persisted data.
 
         Arguments:

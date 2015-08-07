@@ -68,6 +68,7 @@ class FabriceSpineGuide(FabriceSpine):
         # ========
         guideSettingsAttrGrp = AttributeGroup("GuideSettings", parent=self)
         self.numDeformersAttr = IntegerAttribute('numDeformers', value=1, minValue=0, maxValue=20, parent=guideSettingsAttrGrp)
+        self.numDeformersAttr.setValueChangeCallback(self.updateNumDeformers)
 
         # Guide Controls
         self.cogCtrl = Control('cog', parent=self.ctrlCmpGrp, shape="circle")
@@ -91,21 +92,6 @@ class FabriceSpineGuide(FabriceSpine):
         self.spineEndCtrl.rotatePoints(90, 0, 0)
         self.spineEndCtrl.translatePoints(Vec3(0, 1.0, 0))
 
-
-        self.spineOutputs = []
-        for i in xrange(6):
-            debugCtrl = Control('spine' + str(i+1).zfill(2), parent=self.outputHrcGrp, shape="vertebra")
-            debugCtrl.rotatePoints(0, -90, 0)
-            debugCtrl.scalePoints(Vec3(0.5, 0.5, 0.5))
-            debugCtrl.setColor("yellowLight")
-            self.spineOutputs.append(debugCtrl)
-
-        # =====================
-        # Create Component I/O
-        # =====================
-        # Setup component Xfo I/O's
-        self.spineVertebraeOutput.setTarget(self.spineOutputs)
-
         # ===============
         # Add Splice Ops
         # ===============
@@ -125,7 +111,7 @@ class FabriceSpineGuide(FabriceSpine):
         self.bezierSpineSpliceOp.setInput('tip', self.spineEndCtrl)
 
         # Add Xfo Outputs
-        self.bezierSpineSpliceOp.setOutput('outputs', self.spineOutputs)
+        self.bezierSpineSpliceOp.setOutput('outputs', self.tailVertebraeOutput.getTarget())
 
         self.loadData({
             'name': name,
@@ -144,6 +130,41 @@ class FabriceSpineGuide(FabriceSpine):
         })
 
         Profiler.getInstance().pop()
+
+    # ==========
+    # Callbacks
+    # ==========
+    def updateNumDeformers(self, count):
+        """Generate the guide controls for the variable outputes array.
+
+        Arguments:
+        count -- object, The number of joints inthe chain.
+
+        Return:
+        True if successful.
+
+        """
+
+        if count == 0:
+            raise IndexError("'count' must be > 0")
+
+
+        vertebraeOutputs = self.tailVertebraeOutput.getTarget()
+        if count > len(vertebraeOutputs):
+            for i in xrange(len(vertebraeOutputs), count):
+                debugCtrl = Control('spine' + str(i+1).zfill(2), parent=self.outputHrcGrp, shape="vertebra")
+                debugCtrl.rotatePoints(0, -90, 0)
+                debugCtrl.scalePoints(Vec3(0.5, 0.5, 0.5))
+                debugCtrl.setColor("yellowLight")
+                vertebraeOutputs.append(debugCtrl)
+
+        elif count < len(vertebraeOutputs):
+            numExtraCtrls = len(vertebraeOutputs) - count
+            for i in xrange(numExtraCtrls):
+                extraCtrl = vertebraeOutputs.pop()
+                self.outputHrcGrp.removeChild(extraCtrl)
+
+        return True
 
 
     # =============
