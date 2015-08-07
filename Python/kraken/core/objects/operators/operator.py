@@ -21,7 +21,32 @@ class Operator(SceneItem):
     # ==============
     # Input Methods
     # ==============
-    def setInput(self, name, operatorInput):
+
+
+    def resizeInput(self, name, count):
+        """Resizes and array output to a given size.
+
+        Arguments:
+        name -- String, name of the output.
+        count -- Object, output object.
+
+        Return:
+        True if successful.
+
+        """
+
+        if name not in self.inputs:
+            raise Exception("Input with name '" + name + "' was not found in operator: " + self.getName() + ".")
+
+        if isinstance(self.inputs[name], list):
+            self.inputs.resize(count)
+        else:
+            raise Exception("Output is not an array output: " + name + ".")
+
+        return True
+
+
+    def setInput(self, name, operatorInput, index=0):
         """Sets the input by the given name.
 
         Arguments:
@@ -37,7 +62,13 @@ class Operator(SceneItem):
             raise Exception("Input with name '" + name + "' was not found in operator: " + self.getName() + ".")
 
         if isinstance(self.inputs[name], list):
-            self.inputs[name].append(operatorInput)
+            # Set the entire output array
+            if isinstance(operatorInput, list):
+                self.inputs[name] = operatorInput
+            else:
+                if index >= len(self.inputs[name]):
+                    raise Exception("Out of range index for array output index: " + str(index) + " size: " + len(self.inputs[name]) + ".")
+                self.inputs[name][index] = operatorInput
         else:
             self.inputs[name] = operatorInput
 
@@ -64,7 +95,31 @@ class Operator(SceneItem):
     # ==============
     # Output Methods
     # ==============
-    def setOutput(self, name, operatorOutput):
+
+    def resizeOutput(self, name, count):
+        """Resizes and array output to a given size.
+
+        Arguments:
+        name -- String, name of the output.
+        count -- Object, output object.
+
+        Return:
+        True if successful.
+
+        """
+
+        if name not in self.outputs:
+            raise Exception("Output with name '" + name + "' was not found in operator: " + self.getName() + ".")
+
+        if isinstance(self.outputs[name], list):
+            self.outputs.resize(count)
+        else:
+            raise Exception("Output is not an array output: " + name + ".")
+
+        return True
+
+
+    def setOutput(self, name, operatorOutput, index=0):
         """Sets the output by the given name.
 
         Arguments:
@@ -80,7 +135,13 @@ class Operator(SceneItem):
             raise Exception("Output with name '" + name + "' was not found in operator: " + self.getName() + ".")
 
         if isinstance(self.outputs[name], list):
-            self.outputs[name].append(operatorOutput)
+            # Set the entire output array
+            if isinstance(operatorOutput, list):
+                self.outputs[name] = operatorOutput
+            else:
+                if index >= len(self.outputs[name]):
+                    raise Exception("Out of range index for array output index: " + str(index) + " size: " + len(self.outputs[name]) + ".")
+                self.outputs[name][index] = operatorOutput
         else:
             self.outputs[name] = operatorOutput
 
