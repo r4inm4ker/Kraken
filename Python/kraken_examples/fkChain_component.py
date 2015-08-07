@@ -185,6 +185,7 @@ class FKChainComponentGuide(FKChainComponent):
         if numJoints + 1 > len(self.jointCtrls):
             for i in xrange(len(self.jointCtrls), numJoints + 1):
                 newCtrl = Control('chain' + str(i + 1).zfill(2), parent=self.ctrlCmpGrp, shape="sphere")
+                newCtrl.scalePoints(Vec3(0.25, 0.25, 0.25))
                 # Generate thew new ctrl off the end of the existing one.
                 newCtrl.xfo = self.jointCtrls[i-1].xfo.multiply(Xfo(Vec3(10.0, 0.0, 0.0)))
                 self.jointCtrls.append(newCtrl)
