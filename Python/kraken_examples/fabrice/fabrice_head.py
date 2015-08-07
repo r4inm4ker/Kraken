@@ -250,7 +250,7 @@ class FabriceHeadRig(FabriceHead):
 
         # Add Aim Splice Op
         # =================
-        self.headAimSpliceOp = SpliceOperator('headAimSpliceOp', 'DirectionConstraintSolver', 'Kraken', alwaysEval=True)
+        self.headAimSpliceOp = SpliceOperator('headAimSpliceOp', 'DirectionConstraintSolver', 'Kraken')
         self.addOperator(self.headAimSpliceOp)
 
         # Add Att Inputs

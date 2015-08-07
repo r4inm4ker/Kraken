@@ -9,6 +9,8 @@ from kraken.core.objects.attributes.scalar_attribute import ScalarAttribute
 from kraken.core.objects.attributes.string_attribute import StringAttribute
 
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
+from kraken.core.objects.constraints.position_constraint import PositionConstraint
+from kraken.core.objects.constraints.orientation_constraint import OrientationConstraint
 
 from kraken.core.objects.component_group import ComponentGroup
 from kraken.core.objects.components.component_output import ComponentOutput
@@ -338,16 +340,16 @@ class FabriceSpineRig(FabriceSpine):
         # Setup component Xfo I/O's
         self.spineVertebraeOutput.setTarget(self.spineOutputs)
 
+        # =====================
+        # Constraint Deformers
+        # =====================
+        self.chestDefConstraint = PoseConstraint('_'.join([self.chestDef.getName(), 'To', self.spineBaseOutputTgt.getName()]))
+        self.chestDefConstraint.addConstrainer(self.spineBaseOutputTgt)
+        self.chestDef.addConstraint(self.chestDefConstraint)
 
         # ==============
         # Constrain I/O
         # ==============
-        # Constraint deformers
-        self.chestDefConstraint = PoseConstraint('_'.join([self.chestDef.getName(), 'To', self.cogCtrl.getName()]))
-        self.chestDefConstraint.addConstrainer(self.cogCtrl)
-        self.chestDefConstraint.setMaintainOffset(True)
-        self.chestDef.addConstraint(self.chestDefConstraint)
-
 
         # Constraint inputs
         self.spineSrtInputConstraint = PoseConstraint('_'.join([self.cogCtrlSpace.getName(), 'To', self.spineMainSrtInputTgt.getName()]))
@@ -360,10 +362,16 @@ class FabriceSpineRig(FabriceSpine):
         self.spineCogOutputConstraint.addConstrainer(self.cogCtrl)
         self.spineCogOutputTgt.addConstraint(self.spineCogOutputConstraint)
 
-        self.spineBaseOutputConstraint = PoseConstraint('_'.join([self.spineBaseOutputTgt.getName(), 'To', 'spineBase']))
-        self.spineBaseOutputConstraint.addConstrainer(self.spineOutputs[0])
-        self.spineBaseOutputTgt.addConstraint(self.spineBaseOutputConstraint)
+        # Spine Base
+        self.spineBaseOutputPosConstraint = PositionConstraint('_'.join([self.spineBaseOutputTgt.getName(), 'PosTo', self.spineOutputs[0].getName()]))
+        self.spineBaseOutputPosConstraint.addConstrainer(self.spineOutputs[0])
+        self.spineBaseOutputTgt.addConstraint(self.spineBaseOutputPosConstraint)
 
+        self.spineBaseOutputOriConstraint = OrientationConstraint('_'.join([self.spineBaseOutputTgt.getName(), 'PosTo', self.cogCtrl.getName()]))
+        self.spineBaseOutputOriConstraint.addConstrainer(self.cogCtrl)
+        self.spineBaseOutputTgt.addConstraint(self.spineBaseOutputOriConstraint)
+
+        # Spine End
         self.spineEndOutputConstraint = PoseConstraint('_'.join([self.spineEndOutputTgt.getName(), 'To', 'spineEnd']))
         self.spineEndOutputConstraint.addConstrainer(self.spineOutputs[0])
         self.spineEndOutputTgt.addConstraint(self.spineEndOutputConstraint)
@@ -377,7 +385,7 @@ class FabriceSpineRig(FabriceSpine):
         # Add Splice Ops
         # ===============
         # Add Spine Splice Op
-        self.bezierSpineSpliceOp = SpliceOperator('spineSpliceOp', 'BezierSpineSolver', 'Kraken', alwaysEval=True)
+        self.bezierSpineSpliceOp = SpliceOperator('spineSpliceOp', 'BezierSpineSolver', 'Kraken')
         self.addOperator(self.bezierSpineSpliceOp)
 
         # Add Att Inputs
@@ -520,9 +528,12 @@ class FabriceSpineRig(FabriceSpine):
         self.deformersToOutputsSpliceOp.evaluate()
 
         # evaluate the constraints to ensure the outputs are now in the correct location.
+        self.spineSrtInputConstraint.evaluate()
         self.spineCogOutputConstraint.evaluate()
-        self.spineBaseOutputConstraint.evaluate()
+        self.spineBaseOutputPosConstraint.evaluate()
+        self.spineBaseOutputOriConstraint.evaluate()
         self.spineEndOutputConstraint.evaluate()
+        self.spineEndCtrlOutputConstraint.evaluate()
 
 
 

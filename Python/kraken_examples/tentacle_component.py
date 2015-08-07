@@ -341,7 +341,7 @@ class TentacleComponentRig(TentacleComponent):
         # Add Splice Ops
         # ===============
         # Add Splice Op
-        self.tentacleSolverSpliceOp = SpliceOperator('tentacleSpliceOp', 'TentacleSolver', 'Kraken', alwaysEval=True)
+        self.tentacleSolverSpliceOp = SpliceOperator('tentacleSpliceOp', 'TentacleSolver', 'Kraken')
         self.addOperator(self.tentacleSolverSpliceOp)
 
         # # Add Att Inputs
