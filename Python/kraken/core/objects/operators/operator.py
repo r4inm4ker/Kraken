@@ -67,7 +67,7 @@ class Operator(SceneItem):
                 self.inputs[name] = operatorInput
             else:
                 if index >= len(self.inputs[name]):
-                    raise Exception("Out of range index for array output index: " + str(index) + " size: " + len(self.inputs[name]) + ".")
+                    raise Exception("Out of range index for array output index: " + str(index) + " size: " + str(len(self.inputs[name])) + ".")
                 self.inputs[name][index] = operatorInput
         else:
             self.inputs[name] = operatorInput
@@ -140,7 +140,7 @@ class Operator(SceneItem):
                 self.outputs[name] = operatorOutput
             else:
                 if index >= len(self.outputs[name]):
-                    raise Exception("Out of range index for array output index: " + str(index) + " size: " + len(self.outputs[name]) + ".")
+                    raise Exception("Out of range index for array output index: " + str(index) + " size: " + str(len(self.outputs[name])) + ".")
                 self.outputs[name][index] = operatorOutput
         else:
             self.outputs[name] = operatorOutput
