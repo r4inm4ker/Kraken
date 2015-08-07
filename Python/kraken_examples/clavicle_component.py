@@ -65,7 +65,8 @@ class ClavicleComponentGuide(ClavicleComponent):
         guideSettingsAttrGrp = AttributeGroup("GuideSettings", parent=self)
 
         self.clavicleCtrl = Control('clavicle', parent=self.ctrlCmpGrp, shape="sphere")
-        self.clavicleUpVCtrl = Control('clavicleUpV', parent=self.ctrlCmpGrp, shape="sphere")
+        self.clavicleUpVCtrl = Control('clavicleUpV', parent=self.ctrlCmpGrp, shape="triangle")
+        self.clavicleUpVCtrl.setColor('red')
         self.clavicleEndCtrl = Control('clavicleEnd', parent=self.ctrlCmpGrp, shape="sphere")
 
         if data is None:
