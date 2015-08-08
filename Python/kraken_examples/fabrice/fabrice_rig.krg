@@ -306,7 +306,7 @@
       "targetIndex": 0
     }, 
     {
-      "source": "arm:L.hand", 
+      "source": "arm:R.hand", 
       "target": "finger02:R.rootInput", 
       "targetIndex": 0
     }, 
@@ -316,7 +316,7 @@
       "targetIndex": 0
     }, 
     {
-      "source": "arm:L.hand", 
+      "source": "arm:R.hand", 
       "target": "finger01:R.rootInput", 
       "targetIndex": 0
     }, 
@@ -326,7 +326,7 @@
       "targetIndex": 0
     }, 
     {
-      "source": "arm:L.hand", 
+      "source": "arm:R.hand", 
       "target": "thumb:R.rootInput", 
       "targetIndex": 0
     }, 
@@ -336,7 +336,7 @@
       "targetIndex": 0
     }, 
     {
-      "source": "arm:L.hand", 
+      "source": "arm:R.hand", 
       "target": "finger03:R.rootInput", 
       "targetIndex": 0
     }, 
@@ -663,8 +663,8 @@
               -0.76
             ]
           ], 
-          "closed": false, 
-          "degree": 1
+          "degree": 1, 
+          "closed": false
         }
       ], 
       "location": "M", 
@@ -697,8 +697,8 @@
               -0.46
             ]
           ], 
-          "closed": false, 
-          "degree": 1
+          "degree": 1, 
+          "closed": false
         }, 
         {
           "points": [
@@ -728,8 +728,8 @@
               1.17
             ]
           ], 
-          "closed": false, 
-          "degree": 1
+          "degree": 1, 
+          "closed": false
         }, 
         {
           "points": [
@@ -744,8 +744,8 @@
               1.17
             ]
           ], 
-          "closed": false, 
-          "degree": 1
+          "degree": 1, 
+          "closed": false
         }, 
         {
           "points": [
@@ -760,8 +760,8 @@
               1.17
             ]
           ], 
-          "closed": false, 
-          "degree": 1
+          "degree": 1, 
+          "closed": false
         }, 
         {
           "points": [
@@ -776,8 +776,8 @@
               1.53
             ]
           ], 
-          "closed": false, 
-          "degree": 1
+          "degree": 1, 
+          "closed": false
         }, 
         {
           "points": [
@@ -792,8 +792,8 @@
               1.53
             ]
           ], 
-          "closed": false, 
-          "degree": 1
+          "degree": 1, 
+          "closed": false
         }
       ], 
       "class": "kraken_examples.fabrice.fabrice_head.FabriceHeadGuide"
@@ -853,8 +853,8 @@
               -0.26
             ]
           ], 
-          "closed": false, 
-          "degree": 1
+          "degree": 1, 
+          "closed": false
         }
       ], 
       "graphPos": {
@@ -932,8 +932,8 @@
               0.0
             ]
           ], 
-          "closed": false, 
-          "degree": 1
+          "degree": 1, 
+          "closed": false
         }
       ], 
       "spineEndPos": {
@@ -1002,8 +1002,8 @@
               -0.26
             ]
           ], 
-          "closed": false, 
-          "degree": 1
+          "degree": 1, 
+          "closed": false
         }
       ], 
       "location": "M", 
@@ -1061,8 +1061,8 @@
               -0.25
             ]
           ], 
-          "closed": false, 
-          "degree": 1
+          "degree": 1, 
+          "closed": false
         }
       ], 
       "spineEndCtrlCrvData": [
@@ -1119,8 +1119,8 @@
               -0.26
             ]
           ], 
-          "closed": false, 
-          "degree": 1
+          "degree": 1, 
+          "closed": false
         }
       ]
     }, 
@@ -1198,8 +1198,8 @@
               0.0
             ]
           ], 
-          "closed": false, 
-          "degree": 1
+          "degree": 1, 
+          "closed": false
         }
       ], 
       "tailEndHandleCtrlCrvData": [
@@ -1256,8 +1256,8 @@
               0.0
             ]
           ], 
-          "closed": false, 
-          "degree": 1
+          "degree": 1, 
+          "closed": false
         }
       ], 
       "tailEndCtrlCrvData": [
@@ -1314,8 +1314,8 @@
               0.0
             ]
           ], 
-          "closed": false, 
-          "degree": 1
+          "degree": 1, 
+          "closed": false
         }
       ], 
       "location": "M", 
@@ -2567,8 +2567,8 @@
               0.29
             ]
           ], 
-          "closed": true, 
-          "degree": 1
+          "degree": 1, 
+          "closed": true
         }, 
         {
           "points": [
@@ -2593,8 +2593,8 @@
               0.35
             ]
           ], 
-          "closed": true, 
-          "degree": 1
+          "degree": 1, 
+          "closed": true
         }, 
         {
           "points": [
@@ -2609,8 +2609,8 @@
               0.35
             ]
           ], 
-          "closed": false, 
-          "degree": 1
+          "degree": 1, 
+          "closed": false
         }, 
         {
           "points": [
@@ -2625,8 +2625,8 @@
               0.35
             ]
           ], 
-          "closed": false, 
-          "degree": 1
+          "degree": 1, 
+          "closed": false
         }, 
         {
           "points": [
@@ -2641,8 +2641,8 @@
               0.35
             ]
           ], 
-          "closed": false, 
-          "degree": 1
+          "degree": 1, 
+          "closed": false
         }, 
         {
           "points": [
@@ -2657,8 +2657,8 @@
               0.35
             ]
           ], 
-          "closed": false, 
-          "degree": 1
+          "degree": 1, 
+          "closed": false
         }
       ], 
       "location": "L", 
@@ -2720,8 +2720,8 @@
               -0.29
             ]
           ], 
-          "closed": true, 
-          "degree": 1
+          "degree": 1, 
+          "closed": true
         }, 
         {
           "points": [
@@ -2746,8 +2746,8 @@
               -0.35
             ]
           ], 
-          "closed": true, 
-          "degree": 1
+          "degree": 1, 
+          "closed": true
         }, 
         {
           "points": [
@@ -2762,8 +2762,8 @@
               -0.35
             ]
           ], 
-          "closed": false, 
-          "degree": 1
+          "degree": 1, 
+          "closed": false
         }, 
         {
           "points": [
@@ -2778,8 +2778,8 @@
               -0.35
             ]
           ], 
-          "closed": false, 
-          "degree": 1
+          "degree": 1, 
+          "closed": false
         }, 
         {
           "points": [
@@ -2794,8 +2794,8 @@
               -0.35
             ]
           ], 
-          "closed": false, 
-          "degree": 1
+          "degree": 1, 
+          "closed": false
         }, 
         {
           "points": [
@@ -2810,8 +2810,8 @@
               -0.35
             ]
           ], 
-          "closed": false, 
-          "degree": 1
+          "degree": 1, 
+          "closed": false
         }
       ], 
       "location": "R", 
