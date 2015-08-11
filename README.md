@@ -1,7 +1,7 @@
 Kraken
 ======
+Kraken provides a flexible, customizable and extendable framework that leverages Fabric Engine’s Splice API. Kraken deploys across 3D applications and because of its use of Fabric Engine Splice, maintains functionality no matter what DCC is used to build a rig.
 
-Private repo for the kraken project until we decide to go OSS
 
 License
 =======
