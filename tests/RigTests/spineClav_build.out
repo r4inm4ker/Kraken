@@ -1,0 +1,92 @@
+Failed to find DCC builder. Falling back to Python builder.
+building:char_bob as:char_bob
+building:char_bob.spine as:Mspine
+building:char_bob.controls as:char_bob_controls
+building:char_bob.controls.spine as:spine_M_cmp
+building:char_bob.controls.spine.inputs as:spine_M_inputs_hrc
+building:char_bob.controls.spine.inputs.mainSrt as:spine_M_mainSrt_cmpIn
+building:char_bob.controls.spine.outputs as:spine_M_outputs_hrc
+building:char_bob.controls.spine.outputs.cog as:spine_M_cog_cmpOut
+building:char_bob.controls.spine.outputs.spineBase as:spine_M_spineBase_cmpOut
+building:char_bob.controls.spine.outputs.pelvis as:spine_M_pelvis_cmpOut
+building:char_bob.controls.spine.outputs.spineEnd as:spine_M_spineEnd_cmpOut
+building:char_bob.controls.spine.outputs.spine01 as:spine_M_spine01_cmpOut
+building:char_bob.controls.spine.outputs.spine02 as:spine_M_spine02_cmpOut
+building:char_bob.controls.spine.outputs.spine03 as:spine_M_spine03_cmpOut
+building:char_bob.controls.spine.outputs.spine04 as:spine_M_spine04_cmpOut
+building:char_bob.controls.spine.cog as:spine_M_cog_ctrlSpace
+building:char_bob.controls.spine.cog.cog as:spine_M_cog_ctrl
+building:char_bob.controls.spine.cog.cog.spine01 as:spine_M_spine01_ctrlSpace
+building:char_bob.controls.spine.cog.cog.spine01.spine01 as:spine_M_spine01_ctrl
+building:char_bob.controls.spine.cog.cog.spine01.spine01.spine02 as:spine_M_spine02_ctrlSpace
+building:char_bob.controls.spine.cog.cog.spine01.spine01.spine02.spine02 as:spine_M_spine02_ctrl
+building:char_bob.controls.spine.cog.cog.spine01.spine01.spine02.spine02.spine03 as:spine_M_spine03_ctrlSpace
+building:char_bob.controls.spine.cog.cog.spine01.spine01.spine02.spine02.spine03.spine03 as:spine_M_spine03_ctrl
+building:char_bob.controls.spine.cog.cog.spine04 as:spine_M_spine04_ctrlSpace
+building:char_bob.controls.spine.cog.cog.spine04.spine04 as:spine_M_spine04_ctrl
+building:char_bob.controls.spine.cog.cog.pelvis as:spine_M_pelvis_ctrlSpace
+building:char_bob.controls.spine.cog.cog.pelvis.pelvis as:spine_M_pelvis_ctrl
+building:char_bob.controls.clavicleGuide as:clavicleGuide_L_cmp
+building:char_bob.controls.clavicleGuide.inputs as:clavicleGuide_L_inputs_hrc
+building:char_bob.controls.clavicleGuide.inputs.spineEnd as:clavicleGuide_L_spineEnd_cmpIn
+building:char_bob.controls.clavicleGuide.outputs as:clavicleGuide_L_outputs_hrc
+building:char_bob.controls.clavicleGuide.outputs.clavicle as:clavicleGuide_L_clavicle_cmpOut
+building:char_bob.controls.clavicleGuide.outputs.clavicleEnd as:clavicleGuide_L_clavicleEnd_cmpOut
+building:char_bob.controls.clavicleGuide.clavicle as:clavicleGuide_L_clavicle_ctrlSpace
+building:char_bob.controls.clavicleGuide.clavicle.clavicle as:clavicleGuide_L_clavicle_ctrl
+building:char_bob.deformers as:char_bob_deformers
+building:char_bob.deformers.spine as:spine_M_cmp
+building:char_bob.deformers.spine.spine01 as:spine_M_spine01_def
+building:char_bob.deformers.spine.pelvis as:spine_M_pelvis_def
+building:char_bob.deformers.spine.spine02 as:spine_M_spine02_def
+building:char_bob.deformers.spine.spine03 as:spine_M_spine03_def
+building:char_bob.deformers.spine.spine04 as:spine_M_spine04_def
+building:char_bob.deformers.clavicleGuide as:clavicleGuide_L_cmp
+building:char_bob.deformers.clavicleGuide.clavicle as:clavicleGuide_L_clavicle_def
+building:char_bob.clavicleGuide as:LclavicleGuide
+buildConnection:spineEnd
+char_bob
+char_bob.spine:M
+char_bob.controls
+char_bob.controls.spine:M
+char_bob.controls.spine:M.inputs
+char_bob.controls.spine:M.inputs.mainSrt
+char_bob.controls.spine:M.outputs
+char_bob.controls.spine:M.outputs.cog
+char_bob.controls.spine:M.outputs.spineBase
+char_bob.controls.spine:M.outputs.pelvis
+char_bob.controls.spine:M.outputs.spineEnd
+char_bob.controls.spine:M.outputs.spine01
+char_bob.controls.spine:M.outputs.spine02
+char_bob.controls.spine:M.outputs.spine03
+char_bob.controls.spine:M.outputs.spine04
+char_bob.controls.spine:M.cog
+char_bob.controls.spine:M.cog.cog
+char_bob.controls.spine:M.cog.cog.spine01
+char_bob.controls.spine:M.cog.cog.spine01.spine01
+char_bob.controls.spine:M.cog.cog.spine01.spine01.spine02
+char_bob.controls.spine:M.cog.cog.spine01.spine01.spine02.spine02
+char_bob.controls.spine:M.cog.cog.spine01.spine01.spine02.spine02.spine03
+char_bob.controls.spine:M.cog.cog.spine01.spine01.spine02.spine02.spine03.spine03
+char_bob.controls.spine:M.cog.cog.spine04
+char_bob.controls.spine:M.cog.cog.spine04.spine04
+char_bob.controls.spine:M.cog.cog.pelvis
+char_bob.controls.spine:M.cog.cog.pelvis.pelvis
+char_bob.controls.clavicleGuide:L
+char_bob.controls.clavicleGuide:L.inputs
+char_bob.controls.clavicleGuide:L.inputs.spineEnd
+char_bob.controls.clavicleGuide:L.outputs
+char_bob.controls.clavicleGuide:L.outputs.clavicle
+char_bob.controls.clavicleGuide:L.outputs.clavicleEnd
+char_bob.controls.clavicleGuide:L.clavicle
+char_bob.controls.clavicleGuide:L.clavicle.clavicle
+char_bob.deformers
+char_bob.deformers.spine:M
+char_bob.deformers.spine:M.spine01
+char_bob.deformers.spine:M.pelvis
+char_bob.deformers.spine:M.spine02
+char_bob.deformers.spine:M.spine03
+char_bob.deformers.spine:M.spine04
+char_bob.deformers.clavicleGuide:L
+char_bob.deformers.clavicleGuide:L.clavicle
+char_bob.clavicleGuide:L

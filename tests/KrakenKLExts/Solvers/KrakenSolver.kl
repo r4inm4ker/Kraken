@@ -1,5 +1,0 @@
-require Kraken;
-
-interface KrakenSolver{
-    KrakenSolverArg[] getArguments();
-};

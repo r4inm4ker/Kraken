@@ -1,0 +1,161 @@
+require InlineDrawing;
+
+object TwoBoneIKSolver : KrakenSolver {
+  Xfo initPose[];
+};
+
+// Default Constructor
+function TwoBoneIKSolver()
+{
+
+}
+
+function TwoBoneIKSolver(
+  Xfo initPose[])
+{
+  this.initPose = initPose;
+}
+
+
+// Return Arguments for Kraken
+function KrakenSolverArg[] TwoBoneIKSolver.getArguments(){
+  KrakenSolverArg args[] = this.parent.getArguments();
+  args.push(KrakenSolverArg('rightSide', 'in', 'Boolean'));
+
+  args.push(KrakenSolverArg('ikblend', 'in', 'Scalar'));
+  args.push(KrakenSolverArg('softIK', 'in', 'Boolean'));
+  args.push(KrakenSolverArg('softDist', 'in', 'Scalar'));
+  args.push(KrakenSolverArg('stretch', 'in', 'Boolean'));
+  args.push(KrakenSolverArg('stretchBlend', 'in', 'Scalar'));
+
+  args.push(KrakenSolverArg('root', 'in', 'Mat44'));
+  args.push(KrakenSolverArg('bone0FK', 'in', 'Mat44'));
+  args.push(KrakenSolverArg('bone1FK', 'in', 'Mat44'));
+  args.push(KrakenSolverArg('ikHandle', 'in', 'Mat44'));
+  args.push(KrakenSolverArg('upV', 'in', 'Mat44'));
+
+  args.push(KrakenSolverArg('bone0Len', 'in', 'Scalar'));
+  args.push(KrakenSolverArg('bone1Len', 'in', 'Scalar'));
+  args.push(KrakenSolverArg('bone0Out', 'out', 'Mat44'));
+  args.push(KrakenSolverArg('bone1Out', 'out', 'Mat44'));
+  args.push(KrakenSolverArg('bone2Out', 'out', 'Mat44'));
+  return args;
+}
+
+
+require Math;
+require Animation;
+
+
+function solve2BoneIK(
+  in Scalar bone0Length,
+  in Scalar bone1Length,
+  in Vec3 rootPosition,
+  in Vec3 upVPosition,
+  in Vec3 goalPosition,
+  io Xfo bone0Xfo,
+  io Xfo bone1Xfo,
+) {
+
+  Vec3 rootToGoal = goalPosition - rootPosition;
+  Vec3 rootToUpV = upVPosition - rootPosition;
+
+  bone0Xfo.tr = rootPosition;
+
+  Vec3 xaxis = rootToGoal.unit();
+  Vec3 zaxis = xaxis.cross(rootToUpV.unit()).cross(xaxis).unit().negate();
+  Vec3 yaxis = zaxis.cross(xaxis).unit();
+  bone0Xfo.ori.setFromMat33(Mat33(xaxis, yaxis, zaxis).transpose());
+
+  Scalar distToIkGoal = rootToGoal.length();
+  // Use trigonometry to determine the ikBoneAngle
+  // Law of cosines. a = BoneLength; b = Child BoneLength; c = Distance to the Ik Goal;
+  Scalar ikBoneAngle = acos(Math_clamp((sq(bone0Length) + sq(distToIkGoal) - sq(bone1Length)) / (2.0 * bone0Length * distToIkGoal), - 1.0, 1.0));
+
+  // Apply the rotation in the coordinate space of the bone.
+  Quat offset;
+  offset.setFromAxisAndAngle(Vec3(0.0, 1.0, 0.0), ikBoneAngle);
+  bone0Xfo.ori = bone0Xfo.ori * offset;
+
+  // transform the vector without applying scale.
+  bone1Xfo.tr = bone0Xfo.tr + bone0Xfo.ori.rotateVector(Vec3(bone0Length, 0.0, 0.0));
+  bone1Xfo.ori = bone0Xfo.ori;
+
+  offset.setFrom2Vectors(bone1Xfo.ori.getXaxis(), (goalPosition - bone1Xfo.tr).unit());
+  bone1Xfo.ori = offset * bone1Xfo.ori;
+}
+
+
+
+// Solve
+function TwoBoneIKSolver.solve!
+(
+  Boolean drawDebug,
+  Scalar rigScale,
+  Boolean rightSide,
+
+  Scalar ikblend,
+  Boolean softIK,
+  Scalar softDist,
+  Boolean stretch,
+  Scalar stretchBlend,
+
+  Mat44 root,
+  Mat44 bone0FK,
+  Mat44 bone1FK,
+  Mat44 ikHandle,
+  Mat44 upV,
+
+  Scalar bone0Len,
+  Scalar bone1Len,
+  io Mat44 bone0Out,
+  io Mat44 bone1Out,
+  io Mat44 bone2Out
+){
+  Xfo bone0FkXfo = Xfo(bone0FK);
+  Xfo bone1FkXfo = Xfo(bone1FK);
+  Xfo bone0Xfo = bone0FkXfo;
+  Xfo bone1Xfo = bone1FkXfo;
+  Xfo bone2Xfo;
+
+  Scalar scaledBone0Len = bone0Len * rigScale;
+  Scalar scaledBone1Len = bone1Len * rigScale;
+
+  if(ikblend > 0.0){
+    solve2BoneIK(
+      scaledBone0Len,
+      scaledBone1Len,
+      root.translation(),
+      upV.translation(),
+      ikHandle.translation(),
+      bone0Xfo,
+      bone1Xfo
+    );
+    bone0Xfo.ori = bone0FkXfo.ori.sphericalLinearInterpolate(bone0Xfo.ori, ikblend);
+    bone1Xfo.tr = bone0Xfo.transformVector(Vec3(bone0Len, 0.0, 0.0));
+    bone1Xfo.ori = bone1FkXfo.ori.sphericalLinearInterpolate(bone1Xfo.ori, ikblend);
+  }
+
+  // project bone2 to the end of bone 1
+  bone2Xfo = bone1Xfo;
+  bone2Xfo.tr = bone1Xfo.transformVector(Vec3(bone1Len, 0.0, 0.0));
+
+  // Set scaling
+  Vec3 outScaling = Vec3(rigScale, rigScale, rigScale);
+  bone0Xfo.sc = outScaling;
+  bone1Xfo.sc = outScaling;
+  bone2Xfo.sc = outScaling;
+
+  bone0Out = bone0Xfo.toMat44();
+  bone1Out = bone1Xfo.toMat44();
+  bone2Out = bone2Xfo.toMat44();
+
+  // Set debugging visibility.
+  this.setDebug(drawDebug);
+  if(this.drawDebug){
+
+    Color boneColor(1.0, 1.0, 0);
+    etDrawBone(this.handle.rootTransform, 'bone0', bone0Xfo, scaledBone0Len, scaledBone0Len * 0.15, boneColor);
+    etDrawBone(this.handle.rootTransform, 'bone1', bone1Xfo, scaledBone1Len, scaledBone1Len * 0.15, boneColor);
+  }
+}

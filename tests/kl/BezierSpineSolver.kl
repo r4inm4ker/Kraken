@@ -1,0 +1,20 @@
+
+require Kraken;
+
+operator entry(){
+	BezierSpineSolver solver();
+
+    Boolean debug     = true;
+    Scalar rigScale   = 1.0;
+    Scalar length     = 8.0;
+    Mat44 base        = Xfo(Vec3(0, 1, 0)).toMat44();
+    Mat44 baseHandle  = Xfo(Vec3(0, 4, 0)).toMat44();
+    Mat44 tipHandle   = Xfo(Vec3(4, 6, 0)).toMat44();
+    Mat44 tip         = Xfo(Vec3(4, 10, 0)).toMat44();
+    Mat44 outputs[];
+    outputs.resize(6);
+
+    solver.solve(debug, rigScale, length, base, baseHandle, tipHandle, tip, outputs);
+
+    report(outputs);
+}

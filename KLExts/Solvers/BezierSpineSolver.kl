@@ -1,0 +1,153 @@
+require InlineDrawing;
+
+object BezierSpineSolver : KrakenSolver {
+};
+
+
+// Return Arguments for Kraken
+function KrakenSolverArg[] BezierSpineSolver.getArguments(){
+  KrakenSolverArg args[] = this.parent.getArguments();
+  args.push(KrakenSolverArg('length', 'in', 'Scalar'));
+  args.push(KrakenSolverArg('base', 'in', 'Mat44'));
+  args.push(KrakenSolverArg('baseHandle', 'in', 'Mat44'));
+  args.push(KrakenSolverArg('tipHandle', 'in', 'Mat44'));
+  args.push(KrakenSolverArg('tip', 'in', 'Mat44'));
+  args.push(KrakenSolverArg('outputs', 'out', 'Mat44[]'));
+  return args;
+}
+
+function Vec3[4] bezierCoeffs(Vec3 p0, Vec3 p1, Vec3 p2, Vec3 p3){
+  Vec3 coeffs[4];
+  coeffs[0] = p3 - p0 - 3.0 * p2 + 3.0 * p1;
+  coeffs[1] = p0 - 2.0 * p1 + p2;
+  coeffs[2] = -p0 + p1;
+  coeffs[3] = p0;
+  return coeffs;
+}
+
+function Vec3 evalBezier(Vec3 coeffs[4], Scalar t){
+  Scalar t2 = t * t;
+  Scalar t3 = t2 * t;
+  return coeffs[0] * t3 + 3.0 * coeffs[1] * t2 + 3.0 * coeffs[2] * t + coeffs[3];
+}
+
+function Scalar[] measureBezierLength(Vec3 coeffs[4], UInt32 numSamples){
+  Scalar distances[];
+  distances.resize(numSamples);
+  Vec3 p_prev;
+  for(UInt32 i=0; i<numSamples; i++){
+    Scalar t = Scalar(i)/Scalar(numSamples-1);
+    Vec3 p = evalBezier(coeffs, t);
+    if(i == 0)
+      distances[0] = 0.0;
+    else
+      distances[i] = distances[i-1] + p.distanceTo(p_prev);
+    p_prev = p;
+  }
+  return distances;
+}
+
+
+// Solve
+function BezierSpineSolver.solve!
+(
+  Boolean drawDebug,
+  Scalar rigScale,
+  Scalar length,
+  Mat44 base,
+  Mat44 baseHandle,
+  Mat44 tipHandle,
+  Mat44 tip,
+  io Mat44 outputs[]
+  )
+{
+  Vec3 coeffs[4] = bezierCoeffs(base.translation(), baseHandle.translation(), tipHandle.translation(), tip.translation());
+  // sample the curve 2x for every output joint
+  Scalar distances[] = measureBezierLength(coeffs, outputs.size*2);
+  Scalar chainLength = distances[distances.size-1];
+  Scalar segLength = (length * rigScale) / Scalar(outputs.size);
+  Scalar currIndex = 1;
+  Xfo baseXfo(base);
+  Xfo tipXfo(tip);
+
+  // Adding an offset to align the output's x axis down the length of the spine.
+  Quat xAlignmentOffset;
+  xAlignmentOffset.setFromAxisAndAngle(Vec3(0,1,0), HALF_PI);
+  baseXfo.ori = baseXfo.ori * xAlignmentOffset;
+  tipXfo.ori = tipXfo.ori * xAlignmentOffset;
+
+  Xfo preXfo;
+  for(UInt32 i=0; i<outputs.size; i++){
+
+    Xfo outXfo;
+    {
+      // Compute the translation by projecting the local vector by the parent matrix.
+      if(i==0)
+        outXfo.tr = base.translation();
+      else
+        // transform the vector without applying scale.
+        outXfo.tr = preXfo.tr + preXfo.ori.rotateVector(Vec3(segLength, 0.0, 0.0));
+    }
+
+    {
+      // Compute the rotation by linear interpollating the base and tip controllers.
+      Scalar fractVal = Scalar(i+0.5) / Scalar(outputs.size);
+      outXfo.ori = baseXfo.ori.sphericalLinearInterpolate(tipXfo.ori, fractVal );
+    }
+    {
+      // Determin the curve parameter for the tip of the joint
+      // by walking the curve's distance values.
+      Scalar tipDist = segLength * (i+1);
+      Scalar curveTipParam;
+      if(tipDist < chainLength){
+        for(UInt32 j=currIndex; j<distances.size; j++){
+          if(distances[j] > tipDist){
+            currIndex = j-1;
+            curveTipParam = (Scalar(currIndex) / Scalar(distances.size)) + (((tipDist - distances[j-1]) / segLength) * (1.0 / Scalar(distances.size)));
+            break;
+          }
+        }
+      }
+      else
+        curveTipParam = 1.0 + (((tipDist - chainLength) / segLength) * outputs.size);
+
+      // Compute the postion on the curve of the tip of the spine.
+      Vec3 targ;
+      if(curveTipParam < 1.0)
+        // Measure the exact position on the curve using the computed parameter.
+        targ = evalBezier(coeffs, curveTipParam);
+      else
+        // project a postiion off the end of the bezier curve
+        targ = tipXfo.tr + (tipXfo.tr - tipHandle.translation()).unit() * ((curveTipParam - 1.0) * segLength);
+
+      // Align the joint so it points at the target position computed.
+      Quat alignment;
+      alignment.setFrom2Vectors(outXfo.ori.getXaxis(), (targ - outXfo.tr).unit());
+      outXfo.ori = alignment * outXfo.ori;
+    }
+
+    // Set scaling
+    Vec3 outScaling = Vec3(rigScale, rigScale, rigScale);
+    outXfo.sc = outScaling;
+
+    preXfo = outXfo;
+    outputs[i] = outXfo.toMat44();
+  }
+
+
+  // Set debugging visibility.
+  this.setDebug(drawDebug);
+  if(this.drawDebug){
+
+    Vec3 positions[];
+    for(UInt32 i=0; i<20; i++){
+      positions.push(evalBezier(coeffs, Scalar(i)/Scalar(20)));
+    }
+    drawLineStrip(this.handle.rootTransform, 'curve', positions, Color(1.0, 0.0, 0));
+
+    // Color boneColor(1.0, 1.0, 0);
+    // for(UInt32 i=0; i<outputs.size; i++)
+    //   etDrawBone(this.handle.rootTransform, 'constraint'+i, outputs[i], segLength, segLength * 0.25, boneColor);
+  }
+
+}

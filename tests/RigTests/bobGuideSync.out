@@ -1,0 +1,247 @@
+Failed to find DCC builder. Falling back to Python builder.
+building:char_bob as:char_bob
+building:char_bob.spine as:Mspine
+building:char_bob.controls as:char_bob_controls
+building:char_bob.controls.spine as:spine_M_cmp
+building:char_bob.controls.spine.inputs as:spine_M_inputs_hrc
+building:char_bob.controls.spine.inputs.mainSrt as:spine_M_mainSrt_cmpIn
+building:char_bob.controls.spine.outputs as:spine_M_outputs_hrc
+building:char_bob.controls.spine.outputs.cog as:spine_M_cog_cmpOut
+building:char_bob.controls.spine.outputs.spineBase as:spine_M_spineBase_cmpOut
+building:char_bob.controls.spine.outputs.pelvis as:spine_M_pelvis_cmpOut
+building:char_bob.controls.spine.outputs.spineEnd as:spine_M_spineEnd_cmpOut
+building:char_bob.controls.spine.cogPosition as:spine_M_cogPosition_ctrl
+building:char_bob.controls.spine.spine01Position as:spine_M_spine01Position_ctrl
+building:char_bob.controls.spine.spine02Position as:spine_M_spine02Position_ctrl
+building:char_bob.controls.spine.spine03Position as:spine_M_spine03Position_ctrl
+building:char_bob.controls.spine.spine04Position as:spine_M_spine04Position_ctrl
+building:char_bob.controls.neck as:neck_M_cmp
+building:char_bob.controls.neck.inputs as:neck_M_inputs_hrc
+building:char_bob.controls.neck.inputs.neckBase as:neck_M_neckBase_cmpIn
+building:char_bob.controls.neck.outputs as:neck_M_outputs_hrc
+building:char_bob.controls.neck.outputs.neck as:neck_M_neck_cmpOut
+building:char_bob.controls.neck.outputs.neckEnd as:neck_M_neckEnd_cmpOut
+building:char_bob.controls.neck.neck as:neck_M_neck_ctrl
+building:char_bob.controls.neck.neckEnd as:neck_M_neckEnd_ctrl
+building:char_bob.controls.head as:head_M_cmp
+building:char_bob.controls.head.inputs as:head_M_inputs_hrc
+building:char_bob.controls.head.inputs.headBase as:head_M_headBase_cmpIn
+building:char_bob.controls.head.outputs as:head_M_outputs_hrc
+building:char_bob.controls.head.outputs.head as:head_M_head_cmpOut
+building:char_bob.controls.head.outputs.jaw as:head_M_jaw_cmpOut
+building:char_bob.controls.head.outputs.eyeL as:head_M_eyeL_cmpOut
+building:char_bob.controls.head.outputs.eyeR as:head_M_eyeR_cmpOut
+building:char_bob.controls.head.head as:head_M_head_ctrl
+building:char_bob.controls.head.headEnd as:head_M_headEnd_ctrl
+building:char_bob.controls.head.eyeLeft as:head_M_eyeLeft_ctrl
+building:char_bob.controls.head.eyeRight as:head_M_eyeRight_ctrl
+building:char_bob.controls.head.jaw as:head_M_jaw_ctrl
+building:char_bob.controls.Clavicle as:Clavicle_L_cmp
+building:char_bob.controls.Clavicle.inputs as:Clavicle_L_inputs_hrc
+building:char_bob.controls.Clavicle.inputs.spineEnd as:Clavicle_L_spineEnd_cmpIn
+building:char_bob.controls.Clavicle.outputs as:Clavicle_L_outputs_hrc
+building:char_bob.controls.Clavicle.outputs.clavicle as:Clavicle_L_clavicle_cmpOut
+building:char_bob.controls.Clavicle.outputs.clavicleEnd as:Clavicle_L_clavicleEnd_cmpOut
+building:char_bob.controls.Clavicle.clavicle as:Clavicle_L_clavicle_ctrl
+building:char_bob.controls.Clavicle.clavicleUpV as:Clavicle_L_clavicleUpV_ctrl
+building:char_bob.controls.Clavicle.clavicleEnd as:Clavicle_L_clavicleEnd_ctrl
+building:char_bob.controls.Clavicle as:Clavicle_R_cmp
+building:char_bob.controls.Clavicle.inputs as:Clavicle_R_inputs_hrc
+building:char_bob.controls.Clavicle.inputs.spineEnd as:Clavicle_R_spineEnd_cmpIn
+building:char_bob.controls.Clavicle.outputs as:Clavicle_R_outputs_hrc
+building:char_bob.controls.Clavicle.outputs.clavicle as:Clavicle_R_clavicle_cmpOut
+building:char_bob.controls.Clavicle.outputs.clavicleEnd as:Clavicle_R_clavicleEnd_cmpOut
+building:char_bob.controls.Clavicle.clavicle as:Clavicle_R_clavicle_ctrl
+building:char_bob.controls.Clavicle.clavicleUpV as:Clavicle_R_clavicleUpV_ctrl
+building:char_bob.controls.Clavicle.clavicleEnd as:Clavicle_R_clavicleEnd_ctrl
+building:char_bob.controls.Arm as:Arm_L_cmp
+building:char_bob.controls.Arm.inputs as:Arm_L_inputs_hrc
+building:char_bob.controls.Arm.inputs.globalSRT as:Arm_L_globalSRT_cmpIn
+building:char_bob.controls.Arm.inputs.clavicleEnd as:Arm_L_clavicleEnd_cmpIn
+building:char_bob.controls.Arm.outputs as:Arm_L_outputs_hrc
+building:char_bob.controls.Arm.outputs.bicep as:Arm_L_bicep_cmpOut
+building:char_bob.controls.Arm.outputs.forearm as:Arm_L_forearm_cmpOut
+building:char_bob.controls.Arm.outputs.armEndXfo as:Arm_L_armEndXfo_cmpOut
+building:char_bob.controls.Arm.outputs.hand as:Arm_L_hand_cmpOut
+building:char_bob.controls.Arm.bicepFK as:Arm_L_bicepFK_ctrl
+building:char_bob.controls.Arm.forearmFK as:Arm_L_forearmFK_ctrl
+building:char_bob.controls.Arm.wristFK as:Arm_L_wristFK_ctrl
+building:char_bob.controls.Arm.hand as:Arm_L_hand_ctrl
+building:char_bob.controls.Arm as:Arm_R_cmp
+building:char_bob.controls.Arm.inputs as:Arm_R_inputs_hrc
+building:char_bob.controls.Arm.inputs.globalSRT as:Arm_R_globalSRT_cmpIn
+building:char_bob.controls.Arm.inputs.clavicleEnd as:Arm_R_clavicleEnd_cmpIn
+building:char_bob.controls.Arm.outputs as:Arm_R_outputs_hrc
+building:char_bob.controls.Arm.outputs.bicep as:Arm_R_bicep_cmpOut
+building:char_bob.controls.Arm.outputs.forearm as:Arm_R_forearm_cmpOut
+building:char_bob.controls.Arm.outputs.armEndXfo as:Arm_R_armEndXfo_cmpOut
+building:char_bob.controls.Arm.outputs.hand as:Arm_R_hand_cmpOut
+building:char_bob.controls.Arm.bicepFK as:Arm_R_bicepFK_ctrl
+building:char_bob.controls.Arm.forearmFK as:Arm_R_forearmFK_ctrl
+building:char_bob.controls.Arm.wristFK as:Arm_R_wristFK_ctrl
+building:char_bob.controls.Arm.hand as:Arm_R_hand_ctrl
+building:char_bob.controls.Leg as:Leg_L_cmp
+building:char_bob.controls.Leg.inputs as:Leg_L_inputs_hrc
+building:char_bob.controls.Leg.inputs.globalSRT as:Leg_L_globalSRT_cmpIn
+building:char_bob.controls.Leg.inputs.pelvisInput as:Leg_L_pelvisInput_cmpIn
+building:char_bob.controls.Leg.outputs as:Leg_L_outputs_hrc
+building:char_bob.controls.Leg.outputs.femur as:Leg_L_femur_cmpOut
+building:char_bob.controls.Leg.outputs.shin as:Leg_L_shin_cmpOut
+building:char_bob.controls.Leg.outputs.legEndXfo as:Leg_L_legEndXfo_cmpOut
+building:char_bob.controls.Leg.outputs.foot as:Leg_L_foot_cmpOut
+building:char_bob.controls.Leg.outputs.toe as:Leg_L_toe_cmpOut
+building:char_bob.controls.Leg.femur as:Leg_L_femur_ctrl
+building:char_bob.controls.Leg.knee as:Leg_L_knee_ctrl
+building:char_bob.controls.Leg.ankle as:Leg_L_ankle_ctrl
+building:char_bob.controls.Leg.toe as:Leg_L_toe_ctrl
+building:char_bob.controls.Leg.toeTip as:Leg_L_toeTip_ctrl
+building:char_bob.controls.Leg as:Leg_R_cmp
+building:char_bob.controls.Leg.inputs as:Leg_R_inputs_hrc
+building:char_bob.controls.Leg.inputs.globalSRT as:Leg_R_globalSRT_cmpIn
+building:char_bob.controls.Leg.inputs.pelvisInput as:Leg_R_pelvisInput_cmpIn
+building:char_bob.controls.Leg.outputs as:Leg_R_outputs_hrc
+building:char_bob.controls.Leg.outputs.femur as:Leg_R_femur_cmpOut
+building:char_bob.controls.Leg.outputs.shin as:Leg_R_shin_cmpOut
+building:char_bob.controls.Leg.outputs.legEndXfo as:Leg_R_legEndXfo_cmpOut
+building:char_bob.controls.Leg.outputs.foot as:Leg_R_foot_cmpOut
+building:char_bob.controls.Leg.outputs.toe as:Leg_R_toe_cmpOut
+building:char_bob.controls.Leg.femur as:Leg_R_femur_ctrl
+building:char_bob.controls.Leg.knee as:Leg_R_knee_ctrl
+building:char_bob.controls.Leg.ankle as:Leg_R_ankle_ctrl
+building:char_bob.controls.Leg.toe as:Leg_R_toe_ctrl
+building:char_bob.controls.Leg.toeTip as:Leg_R_toeTip_ctrl
+building:char_bob.neck as:Mneck
+building:char_bob.head as:Mhead
+building:char_bob.Clavicle as:LClavicle
+building:char_bob.Clavicle as:RClavicle
+building:char_bob.Arm as:LArm
+building:char_bob.Arm as:RArm
+building:char_bob.Leg as:LLeg
+building:char_bob.Leg as:RLeg
+buildConnection:neckBase
+buildConnection:headBase
+buildConnection:spineEnd
+buildConnection:spineEnd
+buildConnection:clavicleEnd
+buildConnection:clavicleEnd
+buildConnection:pelvisInput
+buildConnection:pelvisInput
+char_bob
+char_bob.spine:M
+char_bob.controls
+char_bob.controls.spine:M
+char_bob.controls.spine:M.inputs
+char_bob.controls.spine:M.inputs.mainSrt
+char_bob.controls.spine:M.outputs
+char_bob.controls.spine:M.outputs.cog
+char_bob.controls.spine:M.outputs.spineBase
+char_bob.controls.spine:M.outputs.pelvis
+char_bob.controls.spine:M.outputs.spineEnd
+char_bob.controls.spine:M.cogPosition
+char_bob.controls.spine:M.spine01Position
+char_bob.controls.spine:M.spine02Position
+char_bob.controls.spine:M.spine03Position
+char_bob.controls.spine:M.spine04Position
+char_bob.controls.neck:M
+char_bob.controls.neck:M.inputs
+char_bob.controls.neck:M.inputs.neckBase
+char_bob.controls.neck:M.outputs
+char_bob.controls.neck:M.outputs.neck
+char_bob.controls.neck:M.outputs.neckEnd
+char_bob.controls.neck:M.neck
+char_bob.controls.neck:M.neckEnd
+char_bob.controls.head:M
+char_bob.controls.head:M.inputs
+char_bob.controls.head:M.inputs.headBase
+char_bob.controls.head:M.outputs
+char_bob.controls.head:M.outputs.head
+char_bob.controls.head:M.outputs.jaw
+char_bob.controls.head:M.outputs.eyeL
+char_bob.controls.head:M.outputs.eyeR
+char_bob.controls.head:M.head
+char_bob.controls.head:M.headEnd
+char_bob.controls.head:M.eyeLeft
+char_bob.controls.head:M.eyeRight
+char_bob.controls.head:M.jaw
+char_bob.controls.Clavicle:L
+char_bob.controls.Clavicle:L.inputs
+char_bob.controls.Clavicle:L.inputs.spineEnd
+char_bob.controls.Clavicle:L.outputs
+char_bob.controls.Clavicle:L.outputs.clavicle
+char_bob.controls.Clavicle:L.outputs.clavicleEnd
+char_bob.controls.Clavicle:L.clavicle
+char_bob.controls.Clavicle:L.clavicleUpV
+char_bob.controls.Clavicle:L.clavicleEnd
+char_bob.controls.Clavicle:R
+char_bob.controls.Clavicle:R.inputs
+char_bob.controls.Clavicle:R.inputs.spineEnd
+char_bob.controls.Clavicle:R.outputs
+char_bob.controls.Clavicle:R.outputs.clavicle
+char_bob.controls.Clavicle:R.outputs.clavicleEnd
+char_bob.controls.Clavicle:R.clavicle
+char_bob.controls.Clavicle:R.clavicleUpV
+char_bob.controls.Clavicle:R.clavicleEnd
+char_bob.controls.Arm:L
+char_bob.controls.Arm:L.inputs
+char_bob.controls.Arm:L.inputs.globalSRT
+char_bob.controls.Arm:L.inputs.clavicleEnd
+char_bob.controls.Arm:L.outputs
+char_bob.controls.Arm:L.outputs.bicep
+char_bob.controls.Arm:L.outputs.forearm
+char_bob.controls.Arm:L.outputs.armEndXfo
+char_bob.controls.Arm:L.outputs.hand
+char_bob.controls.Arm:L.bicepFK
+char_bob.controls.Arm:L.forearmFK
+char_bob.controls.Arm:L.wristFK
+char_bob.controls.Arm:L.hand
+char_bob.controls.Arm:R
+char_bob.controls.Arm:R.inputs
+char_bob.controls.Arm:R.inputs.globalSRT
+char_bob.controls.Arm:R.inputs.clavicleEnd
+char_bob.controls.Arm:R.outputs
+char_bob.controls.Arm:R.outputs.bicep
+char_bob.controls.Arm:R.outputs.forearm
+char_bob.controls.Arm:R.outputs.armEndXfo
+char_bob.controls.Arm:R.outputs.hand
+char_bob.controls.Arm:R.bicepFK
+char_bob.controls.Arm:R.forearmFK
+char_bob.controls.Arm:R.wristFK
+char_bob.controls.Arm:R.hand
+char_bob.controls.Leg:L
+char_bob.controls.Leg:L.inputs
+char_bob.controls.Leg:L.inputs.globalSRT
+char_bob.controls.Leg:L.inputs.pelvisInput
+char_bob.controls.Leg:L.outputs
+char_bob.controls.Leg:L.outputs.femur
+char_bob.controls.Leg:L.outputs.shin
+char_bob.controls.Leg:L.outputs.legEndXfo
+char_bob.controls.Leg:L.outputs.foot
+char_bob.controls.Leg:L.outputs.toe
+char_bob.controls.Leg:L.femur
+char_bob.controls.Leg:L.knee
+char_bob.controls.Leg:L.ankle
+char_bob.controls.Leg:L.toe
+char_bob.controls.Leg:L.toeTip
+char_bob.controls.Leg:R
+char_bob.controls.Leg:R.inputs
+char_bob.controls.Leg:R.inputs.globalSRT
+char_bob.controls.Leg:R.inputs.pelvisInput
+char_bob.controls.Leg:R.outputs
+char_bob.controls.Leg:R.outputs.femur
+char_bob.controls.Leg:R.outputs.shin
+char_bob.controls.Leg:R.outputs.legEndXfo
+char_bob.controls.Leg:R.outputs.foot
+char_bob.controls.Leg:R.outputs.toe
+char_bob.controls.Leg:R.femur
+char_bob.controls.Leg:R.knee
+char_bob.controls.Leg:R.ankle
+char_bob.controls.Leg:R.toe
+char_bob.controls.Leg:R.toeTip
+char_bob.neck:M
+char_bob.head:M
+char_bob.Clavicle:L
+char_bob.Clavicle:R
+char_bob.Arm:L
+char_bob.Arm:R
+char_bob.Leg:L
+char_bob.Leg:R

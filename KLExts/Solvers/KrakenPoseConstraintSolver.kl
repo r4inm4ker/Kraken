@@ -1,0 +1,34 @@
+require InlineDrawing;
+require Geometry;
+
+object PoseConstraintSolver : KrakenSolver {
+};
+
+
+// Return Arguments for Kraken
+function KrakenSolverArg[] PoseConstraintSolver.getArguments(){
+  KrakenSolverArg args[] = this.parent.getArguments();
+  args.push(KrakenSolverArg('constrainer', 'in', 'Mat44'));
+  args.push(KrakenSolverArg('constrainee', 'out', 'Mat44'));
+  return args;
+}
+
+
+// Solve
+function PoseConstraintSolver.solve!
+(
+  in Boolean drawDebug,
+  in Scalar rigScale,
+  in Mat44 constrainer,
+  io Mat44 constrainee
+  )
+{
+  constrainee = constrainer;
+
+  // Set debugging visibility.
+  this.setDebug(this.drawDebug);
+  if(this.drawDebug){
+    Color boneColor = Color(0.0, 0.0, 1.0);
+    etDrawBone(this.handle.rootTransform, 'singleBone', constrainer, 1.0, 0.25, boneColor);
+  }
+}

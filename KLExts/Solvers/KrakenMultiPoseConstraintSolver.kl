@@ -1,0 +1,54 @@
+require InlineDrawing;
+require Geometry;
+
+object MultiPoseConstraintSolver : KrakenSolver {
+};
+
+
+// Return Arguments for Kraken
+function KrakenSolverArg[] MultiPoseConstraintSolver.getArguments(){
+  KrakenSolverArg args[] = this.parent.getArguments();
+  args.push(KrakenSolverArg('constrainers', 'in', 'Mat44[]'));
+  args.push(KrakenSolverArg('constrainees', 'out', 'Mat44[]'));
+  return args;
+}
+
+
+// Solve
+function MultiPoseConstraintSolver.solve!
+(
+  in Boolean drawDebug,
+  in Scalar rigScale,
+  in Mat44 constrainers[],
+  io Mat44 constrainees[]
+  )
+{
+  if(constrainers.size != 1 && constrainers.size != constrainees.size)
+    throw("Error in MultiPoseConstraintSolver. The number of constrainees must be 1 or match the number of constrainers. constrainers.size:" + constrainers.size + "; constrainees.size:" + constrainees.size);
+
+  if(constrainees.size() == 1){
+    Xfo xfo();
+    for(UInt32 i=0; i<constrainers.size; i++){
+      Xfo constrainersXfo(constrainers[i]);
+      xfo.tr += constrainersXfo.tr;
+      xfo.ori += constrainersXfo.ori;
+      xfo.sc += constrainersXfo.sc;
+    }
+    xfo.tr /= Scalar(constrainers.size);
+    xfo.ori.setUnit();
+    xfo.sc /= Scalar(constrainers.size);
+    constrainees[0] = xfo.toMat44();
+  }
+  else{
+    for(UInt32 i=0; i<constrainers.size; i++)
+      constrainees[i] = constrainers[i];
+  }
+
+  // Set debugging visibility.
+  this.setDebug(drawDebug);
+  if(this.drawDebug){
+    Color boneColor(1.0, 1.0, 0);
+    for(UInt32 i=0; i<constrainers.size; i++)
+      etDrawBone(this.handle.rootTransform, 'constraint'+i, constrainees[i], 1.0, 0.25, boneColor);
+  }
+}
