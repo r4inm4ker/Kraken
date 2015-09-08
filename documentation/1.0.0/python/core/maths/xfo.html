@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Xfo &mdash; Kraken Rigging Framework 1.0 documentation</title>
+  <title>Xfo &mdash; Kraken Rigging Framework 1.0.0 documentation</title>
   
 
   
@@ -32,7 +32,7 @@
   
 
   
-    <link rel="top" title="Kraken Rigging Framework 1.0 documentation" href="../../../index.html"/>
+    <link rel="top" title="Kraken Rigging Framework 1.0.0 documentation" href="../../../index.html"/>
         <link rel="up" title="Maths" href="maths.html"/>
         <link rel="next" title="Objects" href="../objects/objects.html"/>
         <link rel="prev" title="Vec4" href="vec4.html"/> 
@@ -81,6 +81,14 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a><ul class="simple">
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html">Releases</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../releases/release_1.0.0.html">Release 1.0.0</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../integrations.html">Integrations</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../integrations/maya.html">Maya Integration</a><ul class="simple">
 </ul>
@@ -90,10 +98,9 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../../releases.html">Releases</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../releases/release_1.0.0.html">Release 1.0.0</a><ul class="simple">
 </ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_interface.html">User Interface</a><ul class="simple">
 </ul>
 </li>
 </ul>
@@ -239,114 +246,223 @@
 <dt id="kraken.core.maths.xfo.Xfo.__str__">
 <code class="descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.xfo.Xfo.__str__" title="Permalink to this definition">¶</a></dt>
 <dd><p>String representation of Transform.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">String representation of Transform.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="kraken.core.maths.xfo.Xfo.tr">
 <code class="descname">tr</code><a class="headerlink" href="#kraken.core.maths.xfo.Xfo.tr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets translation property of this transform.</p>
-<p>Return:
-Scalar, translation property of this transform.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Translation property of this transform.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="kraken.core.maths.xfo.Xfo.ori">
 <code class="descname">ori</code><a class="headerlink" href="#kraken.core.maths.xfo.Xfo.ori" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets orientation property of this transform.</p>
-<p>Return:
-Scalar, orientation property of this transform.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Orientation property of this transform.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="kraken.core.maths.xfo.Xfo.sc">
 <code class="descname">sc</code><a class="headerlink" href="#kraken.core.maths.xfo.Xfo.sc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets scaling property of this transform.</p>
-<p>Return:
-Scalar, scaling property of this transform.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Scaling property of this transform.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.xfo.Xfo.clone">
 <code class="descname">clone</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.xfo.Xfo.clone" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a clone of the Xfo.</p>
-<p>Return:
-The cloned Xfo</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The cloned Xfo</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.xfo.Xfo.set">
 <code class="descname">set</code><span class="sig-paren">(</span><em>tr</em>, <em>ori</em>, <em>sc</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.xfo.Xfo.set" title="Permalink to this definition">¶</a></dt>
 <dd><p>Setter from the translation, rotation and scaling.</p>
-<p>Arguments:
-tr &#8211; Vec3, vector to set the translation by.
-ori &#8211; Quat, quaternion to set the orientation by.
-sc &#8211; Vec3, vector to set the scaling by.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>tr</strong> (<a class="reference internal" href="vec3.html#kraken.core.maths.vec3.Vec3" title="kraken.core.maths.vec3.Vec3"><em>Vec3</em></a>) &#8211; Vector to set the translation by.</li>
+<li><strong>ori</strong> (<a class="reference internal" href="quat.html#kraken.core.maths.quat.Quat" title="kraken.core.maths.quat.Quat"><em>Quat</em></a>) &#8211; Quaternion to set the orientation by.</li>
+<li><strong>sc</strong> (<a class="reference internal" href="vec3.html#kraken.core.maths.vec3.Vec3" title="kraken.core.maths.vec3.Vec3"><em>Vec3</em></a>) &#8211; Vector to set the scaling by.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if successful.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bool</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.xfo.Xfo.setIdentity">
 <code class="descname">setIdentity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.xfo.Xfo.setIdentity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets this transform to the identity.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.xfo.Xfo.setFromMat44">
 <code class="descname">setFromMat44</code><span class="sig-paren">(</span><em>m</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.xfo.Xfo.setFromMat44" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets this transform from the supplied matrix.</p>
-<p>Arguments:
-m &#8211; Mat44, 4x4 matrix to set the transform from.</p>
-<p>Return:
-Xfo, new transform set from input Mat44.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>m</strong> (<a class="reference internal" href="mat44.html#kraken.core.maths.mat44.Mat44" title="kraken.core.maths.mat44.Mat44"><em>Mat44</em></a>) &#8211; 4x4 matrix to set the transform from.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">New transform set from input Mat44.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#kraken.core.maths.xfo.Xfo" title="kraken.core.maths.xfo.Xfo">Xfo</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.xfo.Xfo.toMat44">
 <code class="descname">toMat44</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.xfo.Xfo.toMat44" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets a Mat44 from this xfo.</p>
-<p>Return:
-Mat44, matrix from this transform.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Matrix from this transform.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="mat44.html#kraken.core.maths.mat44.Mat44" title="kraken.core.maths.mat44.Mat44">Mat44</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.xfo.Xfo.multiply">
 <code class="descname">multiply</code><span class="sig-paren">(</span><em>xfo</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.xfo.Xfo.multiply" title="Permalink to this definition">¶</a></dt>
 <dd><p>Overload method for the multiply operator.</p>
-<p>Arguments:
-xfo &#8211; Xfo, other transform to multiply this one by.</p>
-<p>Return:
-Xfo, new Xfo of the product of the two Xfo&#8217;s.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>xfo</strong> (<a class="reference internal" href="#kraken.core.maths.xfo.Xfo" title="kraken.core.maths.xfo.Xfo"><em>Xfo</em></a>) &#8211; Other transform to multiply this one by.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">New Xfo of the product of the two Xfo&#8217;s.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#kraken.core.maths.xfo.Xfo" title="kraken.core.maths.xfo.Xfo">Xfo</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.xfo.Xfo.transformVector">
 <code class="descname">transformVector</code><span class="sig-paren">(</span><em>v</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.xfo.Xfo.transformVector" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transforms a vector by this transform.</p>
-<p>Arguments:
-v &#8211; Vec3, vector to transform.</p>
-<p>Return:
-Vec3, new vector transformed by this transform.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>v</strong> (<a class="reference internal" href="vec3.html#kraken.core.maths.vec3.Vec3" title="kraken.core.maths.vec3.Vec3"><em>Vec3</em></a>) &#8211; Vector to transform.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">New vector transformed by this transform.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="vec3.html#kraken.core.maths.vec3.Vec3" title="kraken.core.maths.vec3.Vec3">Vec3</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.xfo.Xfo.transformRay">
 <code class="descname">transformRay</code><span class="sig-paren">(</span><em>ray</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.xfo.Xfo.transformRay" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transforms a ray vector by this transform.</p>
-<p>Arguments:
-ray &#8211; Vec3, ray vector to transform.</p>
-<p>Return:
-Ray, new ray vector transformed by this transform.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ray</strong> (<a class="reference internal" href="vec3.html#kraken.core.maths.vec3.Vec3" title="kraken.core.maths.vec3.Vec3"><em>Vec3</em></a>) &#8211; Ray vector to transform.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">New ray vector transformed by this transform.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">Ray</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.xfo.Xfo.inverse">
 <code class="descname">inverse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.xfo.Xfo.inverse" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the inverse transform of this transform.</p>
-<p>Return:
-Xfo, inverse of this transform.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Inverse of this transform.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#kraken.core.maths.xfo.Xfo" title="kraken.core.maths.xfo.Xfo">Xfo</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -355,10 +471,18 @@ Xfo, inverse of this transform.</p>
 <dd><p>Transforms a vector with this xfo inversely</p>
 <p>Note: We have &#8216;inverseTransformVector&#8217; because Xfos with non-uniform
 scaling cannot be inverted as Xfos.</p>
-<p>Arguments:
-vec &#8211; Vec3, vector to be inversely transformed.</p>
-<p>Return:
-Vec3, inversely transformed vector.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>vec</strong> (<a class="reference internal" href="vec3.html#kraken.core.maths.vec3.Vec3" title="kraken.core.maths.vec3.Vec3"><em>Vec3</em></a>) &#8211; Vector to be inversely transformed.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Inversely transformed vector.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="vec3.html#kraken.core.maths.vec3.Vec3" title="kraken.core.maths.vec3.Vec3">Vec3</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -366,24 +490,50 @@ Vec3, inversely transformed vector.</p>
 <code class="descname">linearInterpolate</code><span class="sig-paren">(</span><em>other</em>, <em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.xfo.Xfo.linearInterpolate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Linearly interpolates this transform with another one based on a
 scalar blend value (0.0 to 1.0).</p>
-<p>Arguments:
-other &#8211; Xfo, transform to blend to.
-t &#8211; Scalar, blend value.</p>
-<p>Return:
-Xfo, new transform blended between this and the input transform.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>other</strong> (<a class="reference internal" href="#kraken.core.maths.xfo.Xfo" title="kraken.core.maths.xfo.Xfo"><em>Xfo</em></a>) &#8211; Transform to blend to.</li>
+<li><strong>t</strong> (<em>float</em>) &#8211; Blend value.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">New transform blended between this and the input transform.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#kraken.core.maths.xfo.Xfo" title="kraken.core.maths.xfo.Xfo">Xfo</a></p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.xfo.Xfo.setFromVectors">
 <code class="descname">setFromVectors</code><span class="sig-paren">(</span><em>inVec1</em>, <em>inVec2</em>, <em>inVec3</em>, <em>translation</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.xfo.Xfo.setFromVectors" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set Xfo values from 3 axis vectors and a translation vector.</p>
-<p>Arguments:
-inVec1 &#8211; Vec3, x axis vector.
-inVec2 &#8211; Vec3, y axis vector.
-inVec3 &#8211; Vec3, z axis vector.
-translation &#8211; Vec3, translation vector.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>inVec1</strong> (<a class="reference internal" href="vec3.html#kraken.core.maths.vec3.Vec3" title="kraken.core.maths.vec3.Vec3"><em>Vec3</em></a>) &#8211; X axis vector.</li>
+<li><strong>inVec2</strong> (<a class="reference internal" href="vec3.html#kraken.core.maths.vec3.Vec3" title="kraken.core.maths.vec3.Vec3"><em>Vec3</em></a>) &#8211; Y axis vector.</li>
+<li><strong>inVec3</strong> (<a class="reference internal" href="vec3.html#kraken.core.maths.vec3.Vec3" title="kraken.core.maths.vec3.Vec3"><em>Vec3</em></a>) &#8211; Z axis vector.</li>
+<li><strong>translation</strong> (<a class="reference internal" href="vec3.html#kraken.core.maths.vec3.Vec3" title="kraken.core.maths.vec3.Vec3"><em>Vec3</em></a>) &#8211; Translation vector.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if successful.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bool</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -445,7 +595,7 @@ True if successful.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'1.0',
+            VERSION:'1.0.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

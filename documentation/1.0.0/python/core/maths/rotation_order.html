@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Rotation Order &mdash; Kraken Rigging Framework 1.0 documentation</title>
+  <title>Rotation Order &mdash; Kraken Rigging Framework 1.0.0 documentation</title>
   
 
   
@@ -32,7 +32,7 @@
   
 
   
-    <link rel="top" title="Kraken Rigging Framework 1.0 documentation" href="../../../index.html"/>
+    <link rel="top" title="Kraken Rigging Framework 1.0.0 documentation" href="../../../index.html"/>
         <link rel="up" title="Maths" href="maths.html"/>
         <link rel="next" title="Vec2" href="vec2.html"/>
         <link rel="prev" title="Quat" href="quat.html"/> 
@@ -81,6 +81,14 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a><ul class="simple">
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html">Releases</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../releases/release_1.0.0.html">Release 1.0.0</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../integrations.html">Integrations</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../integrations/maya.html">Maya Integration</a><ul class="simple">
 </ul>
@@ -90,10 +98,9 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../../releases.html">Releases</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../releases/release_1.0.0.html">Release 1.0.0</a><ul class="simple">
 </ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_interface.html">User Interface</a><ul class="simple">
 </ul>
 </li>
 </ul>
@@ -239,137 +246,274 @@
 <dt id="kraken.core.maths.rotation_order.RotationOrder.__str__">
 <code class="descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.rotation_order.RotationOrder.__str__" title="Permalink to this definition">¶</a></dt>
 <dd><p>String representation of RotationOrder object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">String representation of the RotationOrder.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="kraken.core.maths.rotation_order.RotationOrder.order">
 <code class="descname">order</code><a class="headerlink" href="#kraken.core.maths.rotation_order.RotationOrder.order" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets order value of this Rotation Order.</p>
-<p>Return:
-Scalar, order value of this Rotation Order.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Order value of this Rotation Order.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.rotation_order.RotationOrder.clone">
 <code class="descname">clone</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.rotation_order.RotationOrder.clone" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a clone of the RotationOrder.</p>
-<p>Return:
-The cloned RotationOrder</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The cloned RotationOrder.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#kraken.core.maths.rotation_order.RotationOrder" title="kraken.core.maths.rotation_order.RotationOrder">RotationOrder</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.rotation_order.RotationOrder.set">
 <code class="descname">set</code><span class="sig-paren">(</span><em>order</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.rotation_order.RotationOrder.set" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the order value from the input values.</p>
-<p>Arguments:
-order &#8211; Integer or String, value to set the order property as.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>order</strong> (<em>int, str</em>) &#8211; Value to set the order property as.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.rotation_order.RotationOrder.isXYZ">
 <code class="descname">isXYZ</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.rotation_order.RotationOrder.isXYZ" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if this Rotation Order is equal to XYZ.</p>
-<p>Return:
-Boolean, true if this rotationorder is XYZ.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if this rotationorder is XYZ.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.rotation_order.RotationOrder.isYZX">
 <code class="descname">isYZX</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.rotation_order.RotationOrder.isYZX" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if this Rotation Order is equal to YZX.</p>
-<p>Return:
-Boolean, true if this rotationorder is YZX.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if this rotationorder is YZX.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.rotation_order.RotationOrder.isZXY">
 <code class="descname">isZXY</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.rotation_order.RotationOrder.isZXY" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if this Rotation Order is equal to ZXY.</p>
-<p>Return:
-Boolean, true if this rotationorder is ZXY.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if this rotationorder is ZXY.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.rotation_order.RotationOrder.isXZY">
 <code class="descname">isXZY</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.rotation_order.RotationOrder.isXZY" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if this Rotation Order is equal to XZY.</p>
-<p>Return:
-Boolean, true if this rotationorder is XZY.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if this rotationorder is XZY.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.rotation_order.RotationOrder.isZYX">
 <code class="descname">isZYX</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.rotation_order.RotationOrder.isZYX" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if this Rotation Order is equal to ZYX.</p>
-<p>Return:
-Boolean, true if this rotationorder is ZYX.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if this rotationorder is ZYX.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.rotation_order.RotationOrder.isYXZ">
 <code class="descname">isYXZ</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.rotation_order.RotationOrder.isYXZ" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if this Rotation Order is equal to YXZ.</p>
-<p>Return:
-Boolean, true if this rotationorder is YXZ.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if this rotationorder is YXZ.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.rotation_order.RotationOrder.isReversed">
 <code class="descname">isReversed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.rotation_order.RotationOrder.isReversed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if this Rotation Order is a reversed one.</p>
-<p>Returns:
-Boolean, true if this rotation order is one of the reversed ones
-(XZY, ZYX or YXZ).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if this rotation order is one of the reversed ones (XZY, ZYX or YXZ).</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.rotation_order.RotationOrder.setXYZ">
 <code class="descname">setXYZ</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.rotation_order.RotationOrder.setXYZ" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets this rotation order to be XYZ.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.rotation_order.RotationOrder.setYZX">
 <code class="descname">setYZX</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.rotation_order.RotationOrder.setYZX" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets this rotation order to be YZX.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.rotation_order.RotationOrder.setZXY">
 <code class="descname">setZXY</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.rotation_order.RotationOrder.setZXY" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets this rotation order to be ZXY.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.rotation_order.RotationOrder.setXZY">
 <code class="descname">setXZY</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.rotation_order.RotationOrder.setXZY" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets this rotation order to be XZY.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.rotation_order.RotationOrder.setZYX">
 <code class="descname">setZYX</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.rotation_order.RotationOrder.setZYX" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets this rotation order to be ZYX.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.rotation_order.RotationOrder.setYXZ">
 <code class="descname">setYXZ</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.rotation_order.RotationOrder.setYXZ" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets this rotation order to be YXZ.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -431,7 +575,7 @@ True if successful.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'1.0',
+            VERSION:'1.0.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>User Interface &mdash; Kraken Rigging Framework 1.0 documentation</title>
+  <title>User Interface &mdash; Kraken Rigging Framework 1.0.0 documentation</title>
   
 
   
@@ -32,7 +32,7 @@
   
 
   
-    <link rel="top" title="Kraken Rigging Framework 1.0 documentation" href="index.html"/>
+    <link rel="top" title="Kraken Rigging Framework 1.0.0 documentation" href="index.html"/>
         <link rel="next" title="KL Guide" href="kl/kl_guide.html"/>
         <link rel="prev" title="Softimage Integration" href="integrations/softimage.html"/> 
 
@@ -214,36 +214,84 @@
   <div class="section" id="user-interface">
 <h1>User Interface<a class="headerlink" href="#user-interface" title="Permalink to this headline">¶</a></h1>
 <p>Kraken comes with a nodal inteface that allows for quickly prototyping rigs and re-using the configuration at a later time.</p>
+<div class="contents local topic" id="table-of-contents">
+<p class="topic-title first">Table of Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#menu-bar-1" id="id1">Menu Bar (1)</a><ul>
+<li><a class="reference internal" href="#file-menu" id="id2">File Menu</a></li>
+<li><a class="reference internal" href="#edit-menu" id="id3">Edit Menu</a></li>
+<li><a class="reference internal" href="#build-menu" id="id4">Build Menu</a></li>
+<li><a class="reference internal" href="#panels-menu" id="id5">Panels Menu</a></li>
+<li><a class="reference internal" href="#help-menu" id="id6">Help Menu</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#config-drop-down-2" id="id7">Config Drop Down (2)</a></li>
+<li><a class="reference internal" href="#rig-name-3" id="id8">Rig Name (3)</a></li>
+<li><a class="reference internal" href="#component-library-4" id="id9">Component Library (4)</a></li>
+<li><a class="reference internal" href="#contextual-node-list-5" id="id10">Contextual Node list (5)</a></li>
+<li><a class="reference internal" href="#nodes-graph-6" id="id11">Nodes &amp; Graph (6)</a></li>
+<li><a class="reference internal" href="#keyboard-commands" id="id12">Keyboard Commands</a></li>
+<li><a class="reference internal" href="#indices-and-tables" id="id13">Indices and tables</a></li>
+</ul>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
 <img alt="_images/Kraken_UI.jpg" src="_images/Kraken_UI.jpg" />
-<div class="section" id="ui-sections">
-<h2>UI Sections<a class="headerlink" href="#ui-sections" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="component-library">
-<h3>Component Library<a class="headerlink" href="#component-library" title="Permalink to this headline">¶</a></h3>
-<p>The component library is a list of registered components that you can instance into the graph. Using the <code class="docutils literal"><span class="pre">KRAKEN_COMPONENTS</span></code> environment variable will allow you to register your custom components.
-|</p>
+<div class="line-block">
+<div class="line"><br /></div>
 </div>
-<div class="section" id="contextual-node-list">
-<h3>Contextual Node list<a class="headerlink" href="#contextual-node-list" title="Permalink to this headline">¶</a></h3>
-<p>The contextual node list reflects the component library but is a floating widget that allows you to type in the name of the component you want and create it without having the component library visible. Type the name select from the list and hit enter.
-|</p>
+<div class="section" id="menu-bar-1">
+<h2><a class="toc-backref" href="#id1">Menu Bar (1)</a><a class="headerlink" href="#menu-bar-1" title="Permalink to this headline">¶</a></h2>
+<p>The menu bar provides items to easily interact with the graph.</p>
+<div class="section" id="file-menu">
+<h3><a class="toc-backref" href="#id2">File Menu</a><a class="headerlink" href="#file-menu" title="Permalink to this headline">¶</a></h3>
+<div class="line-block">
+<div class="line"><br /></div>
 </div>
-<div class="section" id="graph">
-<h3>Graph<a class="headerlink" href="#graph" title="Permalink to this headline">¶</a></h3>
-<p>The graph is where you instance components as nodes and create connections. You can only make connections between component ports which are of the same type. Only Vec3&#8217;s will connect to Vec3 ports for example. You can click and drag from a label or port to another port to connect it.
-|</p>
-</div>
-<div class="section" id="graph-toolbar">
-<h3>Graph Toolbar<a class="headerlink" href="#graph-toolbar" title="Permalink to this headline">¶</a></h3>
-<p>The graph toolbar is where you can interact with the current graph.</p>
 <dl class="docutils">
 <dt>New</dt>
 <dd>Creates a new graph flushing the current one.</dd>
 <dt>Save</dt>
-<dd>Saves the current graph to a <code class="docutils literal"><span class="pre">*.krig</span></code> file at the specified location.</dd>
+<dd>Saves the current graph to a <code class="docutils literal"><span class="pre">*.krg</span></code> file at the specified location.</dd>
 <dt>Load</dt>
-<dd>Load a <code class="docutils literal"><span class="pre">*.krig</span></code> file into the graph as a new graph. The current graph will be cleared.</dd>
+<dd>Load a <code class="docutils literal"><span class="pre">*.krg</span></code> file into the graph as a new graph. The current graph will be cleared.</dd>
+<dt>Close</dt>
+<dd>Closes the UI and asks to save the current rig.</dd>
+</dl>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<div class="section" id="edit-menu">
+<h3><a class="toc-backref" href="#id3">Edit Menu</a><a class="headerlink" href="#edit-menu" title="Permalink to this headline">¶</a></h3>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<dl class="docutils">
+<dt>Copy</dt>
+<dd>Copies the selected nodes in the graph.</dd>
+<dt>Paste</dt>
+<dd>Pastes a copy of the components.</dd>
+<dt>Paste Connected</dt>
+<dd>Pastes a copy of the components and keeps connections.</dd>
+<dt>Paste Mirrored</dt>
+<dd>Pastes a mirroried copy of the components.</dd>
+<dt>Paste Mirrored Connected</dt>
+<dd>Pastes a mirroried copy of the components and keeps connections.</dd>
 <dt>Rig Name</dt>
-<dd>The name of the rig you are going to build. This will be the name that you will see on the top container node and layers.</dd>
+<dd>Allows you to edit the rig name via a modal input box.</dd>
+</dl>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<div class="section" id="build-menu">
+<h3><a class="toc-backref" href="#id4">Build Menu</a><a class="headerlink" href="#build-menu" title="Permalink to this headline">¶</a></h3>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<dl class="docutils">
 <dt>Build Guide</dt>
 <dd>Builds the guide for the current graph. Each component will have it&#8217;s guide structure built. From there you can manipulate the guide to match the proportions of your character.</dd>
 <dt>Build Rig</dt>
@@ -255,9 +303,78 @@
 <div class="line"><br /></div>
 </div>
 </div>
+<div class="section" id="panels-menu">
+<h3><a class="toc-backref" href="#id5">Panels Menu</a><a class="headerlink" href="#panels-menu" title="Permalink to this headline">¶</a></h3>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<dl class="docutils">
+<dt>Component Library</dt>
+<dd>Toggles the component library to be visible.</dd>
+</dl>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<div class="section" id="help-menu">
+<h3><a class="toc-backref" href="#id6">Help Menu</a><a class="headerlink" href="#help-menu" title="Permalink to this headline">¶</a></h3>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<dl class="docutils">
+<dt>Online Help</dt>
+<dd>Opens a browser page to the Kraken web page.</dd>
+</dl>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+</div>
+<div class="section" id="config-drop-down-2">
+<h2><a class="toc-backref" href="#id7">Config Drop Down (2)</a><a class="headerlink" href="#config-drop-down-2" title="Permalink to this headline">¶</a></h2>
+<p>The config drop down allows the user to specify a configuration to use while building. Configurations allow you to customize naming, colors, and more.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="python/core/configs/config.html"><em>Configs</em></a></p>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<div class="section" id="rig-name-3">
+<h2><a class="toc-backref" href="#id8">Rig Name (3)</a><a class="headerlink" href="#rig-name-3" title="Permalink to this headline">¶</a></h2>
+<p>The rig name widget allows you to quickly change the name of the rig that you&#8217;re currently working in. Double clicking on the widget displays an input box to change the name.</p>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<div class="section" id="component-library-4">
+<h2><a class="toc-backref" href="#id9">Component Library (4)</a><a class="headerlink" href="#component-library-4" title="Permalink to this headline">¶</a></h2>
+<p>The component library is a list of registered components that you can instance into the graph. Using the <code class="docutils literal"><span class="pre">KRAKEN_COMPONENTS</span></code> environment variable will allow you to register your custom components.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="installation.html"><em>Installation</em></a> for information on how to add custom components.</p>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<div class="section" id="contextual-node-list-5">
+<h2><a class="toc-backref" href="#id10">Contextual Node list (5)</a><a class="headerlink" href="#contextual-node-list-5" title="Permalink to this headline">¶</a></h2>
+<p>The contextual node list reflects the component library but is a floating widget that allows you to type in the name of the component you want and create it without having the component library visible. Type the name select from the list and hit enter.</p>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<div class="section" id="nodes-graph-6">
+<h2><a class="toc-backref" href="#id11">Nodes &amp; Graph (6)</a><a class="headerlink" href="#nodes-graph-6" title="Permalink to this headline">¶</a></h2>
+<p>The graph is where you instance components as nodes and create connections. You can only make connections between component ports which are of the same type. Only Vec3&#8217;s will connect to Vec3 ports for example. You can click and drag from a label or port to another port to connect it.</p>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
 </div>
 <div class="section" id="keyboard-commands">
-<h2>Keyboard Commands<a class="headerlink" href="#keyboard-commands" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id12">Keyboard Commands</a><a class="headerlink" href="#keyboard-commands" title="Permalink to this headline">¶</a></h2>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
@@ -275,14 +392,14 @@
 <tr class="row-even"><td>Ctrl+N</td>
 <td>New Graph (Clears current graph)</td>
 </tr>
+<tr class="row-odd"><td>Ctrl+S</td>
+<td>Save Graph</td>
+</tr>
+<tr class="row-even"><td>Ctrl+L</td>
+<td>Load Graph (Clears current graph)</td>
+</tr>
 <tr class="row-odd"><td>Ctrl+W</td>
 <td>Closes the Interface</td>
-</tr>
-<tr class="row-even"><td>` (Tilde)</td>
-<td>Opens the contextual node list over the graph</td>
-</tr>
-<tr class="row-odd"><td>Ctrl+Tab</td>
-<td>Toggles the Component Library</td>
 </tr>
 <tr class="row-even"><td>Ctrl+C</td>
 <td>Copy Selected Nodes</td>
@@ -293,14 +410,30 @@
 <tr class="row-even"><td>Ctrl+Shift+V</td>
 <td>Paste Copied Nodes with connections</td>
 </tr>
+<tr class="row-odd"><td>Ctrl+G</td>
+<td>Builds the Guide Rig</td>
+</tr>
+<tr class="row-even"><td>Ctrl+B</td>
+<td>Builds the Rig</td>
+</tr>
+<tr class="row-odd"><td>Ctrl+H</td>
+<td>Opens the Kraken Page</td>
+</tr>
+<tr class="row-even"><td>Ctrl+Tab</td>
+<td>Toggles the Component Library</td>
+</tr>
+<tr class="row-odd"><td>` (Tilde)</td>
+<td>Opens the contextual node list over the graph</td>
+</tr>
 </tbody>
 </table>
 <div class="line-block">
 <div class="line"><br /></div>
 <div class="line"><br /></div>
 </div>
+</div>
 <div class="section" id="indices-and-tables">
-<h3>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h3>
+<h2><a class="toc-backref" href="#id13">Indices and tables</a><a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><a class="reference internal" href="genindex.html"><span>Index</span></a></li>
 <li><a class="reference internal" href="py-modindex.html"><span>Module Index</span></a></li>
@@ -308,7 +441,6 @@
 </ul>
 <div class="line-block">
 <div class="line"><br /></div>
-</div>
 </div>
 </div>
 </div>
@@ -352,7 +484,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'1.0',
+            VERSION:'1.0.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

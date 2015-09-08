@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Component Input &mdash; Kraken Rigging Framework 1.0 documentation</title>
+  <title>Component Input &mdash; Kraken Rigging Framework 1.0.0 documentation</title>
   
 
   
@@ -32,7 +32,7 @@
   
 
   
-    <link rel="top" title="Kraken Rigging Framework 1.0 documentation" href="../../../../index.html"/>
+    <link rel="top" title="Kraken Rigging Framework 1.0.0 documentation" href="../../../../index.html"/>
         <link rel="up" title="Components" href="components.html"/>
         <link rel="next" title="Component Output" href="component_output.html"/>
         <link rel="prev" title="Component" href="component.html"/> 
@@ -81,6 +81,14 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a><ul class="simple">
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html">Releases</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../releases/release_1.0.0.html">Release 1.0.0</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../integrations.html">Integrations</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../../integrations/maya.html">Maya Integration</a><ul class="simple">
 </ul>
@@ -90,10 +98,9 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html">Releases</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../../releases/release_1.0.0.html">Release 1.0.0</a><ul class="simple">
 </ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../user_interface.html">User Interface</a><ul class="simple">
 </ul>
 </li>
 </ul>
@@ -228,101 +235,13 @@
 <h2><a class="toc-backref" href="#id1">Class Documentation</a><a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="kraken.core.objects.components.component_input.ComponentInput">
-<em class="property">class </em><code class="descclassname">kraken.core.objects.components.component_input.</code><code class="descname">ComponentInput</code><span class="sig-paren">(</span><em>name</em>, <em>parent</em>, <em>dataType</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component_input.ComponentInput" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="../scene_item.html#kraken.core.objects.scene_item.SceneItem" title="kraken.core.objects.scene_item.SceneItem"><code class="xref py py-class docutils literal"><span class="pre">kraken.core.objects.scene_item.SceneItem</span></code></a></p>
-<p>Component Input Object.</p>
+<em class="property">class </em><code class="descclassname">kraken.core.objects.components.component_input.</code><code class="descname">ComponentInput</code><span class="sig-paren">(</span><em>name</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component_input.ComponentInput" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../object_3d.html#kraken.core.objects.object_3d.Object3D" title="kraken.core.objects.object_3d.Object3D"><code class="xref py py-class docutils literal"><span class="pre">kraken.core.objects.object_3d.Object3D</span></code></a></p>
+<p>ComponentInput object.</p>
 <dl class="method">
 <dt id="kraken.core.objects.components.component_input.ComponentInput.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>name</em>, <em>parent</em>, <em>dataType</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component_input.ComponentInput.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>name</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component_input.ComponentInput.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
-
-<dl class="method">
-<dt id="kraken.core.objects.components.component_input.ComponentInput.setDataType">
-<code class="descname">setDataType</code><span class="sig-paren">(</span><em>dataType</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component_input.ComponentInput.setDataType" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets the data type for this input.</p>
-<p>Arguments:
-dataType &#8211; String, type of input source.</p>
-<p>Return:
-True if successful.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="kraken.core.objects.components.component_input.ComponentInput.getDataType">
-<code class="descname">getDataType</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component_input.ComponentInput.getDataType" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the data type for this input.</p>
-<p>Return:
-String, data type of this input.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="kraken.core.objects.components.component_input.ComponentInput.isConnected">
-<code class="descname">isConnected</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component_input.ComponentInput.isConnected" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks if there is a connection.</p>
-<p>Return:
-Boolean, whether it is connected or not.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="kraken.core.objects.components.component_input.ComponentInput.getConnection">
-<code class="descname">getConnection</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component_input.ComponentInput.getConnection" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets the connection of this input.</p>
-<p>Return:
-Connection object or None if not set.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="kraken.core.objects.components.component_input.ComponentInput.setConnection">
-<code class="descname">setConnection</code><span class="sig-paren">(</span><em>connectionObj</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component_input.ComponentInput.setConnection" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets the connection to the component output.</p>
-<p>Arguments:
-connectionObj &#8211; ComponentOutput, output object to connect to.</p>
-<p>Return:
-True if successful.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="kraken.core.objects.components.component_input.ComponentInput.removeConnection">
-<code class="descname">removeConnection</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component_input.ComponentInput.removeConnection" title="Permalink to this definition">¶</a></dt>
-<dd><p>Removes the connection to the component output.</p>
-<p>Return:
-True if successful.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="kraken.core.objects.components.component_input.ComponentInput.setTarget">
-<code class="descname">setTarget</code><span class="sig-paren">(</span><em>target</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component_input.ComponentInput.setTarget" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets the taret for this input.</p>
-<p>Arguments:
-target &#8211; Object, kraken object that is the target of this input.</p>
-<p>Return:
-True if successful.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="kraken.core.objects.components.component_input.ComponentInput.getTarget">
-<code class="descname">getTarget</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component_input.ComponentInput.getTarget" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the target of the input.</p>
-<p>Return:
-Object, the target of the input.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="kraken.core.objects.components.component_input.ComponentInput.getIndex">
-<code class="descname">getIndex</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component_input.ComponentInput.getIndex" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets the index of the connection.</p>
-<p>Return:
-Integer, the index of the connection.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="kraken.core.objects.components.component_input.ComponentInput.setIndex">
-<code class="descname">setIndex</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component_input.ComponentInput.setIndex" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets the index of the connection.</p>
-<p>Arguments:
-Index &#8211; Integer, the index to set this to.</p>
-<p>Return:
-True if successful.</p>
-</dd></dl>
 
 </dd></dl>
 
@@ -383,7 +302,7 @@ True if successful.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../../',
-            VERSION:'1.0',
+            VERSION:'1.0.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

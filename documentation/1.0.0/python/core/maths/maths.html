@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Maths &mdash; Kraken Rigging Framework 1.0 documentation</title>
+  <title>Maths &mdash; Kraken Rigging Framework 1.0.0 documentation</title>
   
 
   
@@ -32,7 +32,7 @@
   
 
   
-    <link rel="top" title="Kraken Rigging Framework 1.0 documentation" href="../../../index.html"/>
+    <link rel="top" title="Kraken Rigging Framework 1.0.0 documentation" href="../../../index.html"/>
         <link rel="up" title="Kraken Core" href="../core.html"/>
         <link rel="next" title="Euler" href="euler.html"/>
         <link rel="prev" title="Kraken Saver" href="../io/kraken_saver.html"/> 
@@ -81,6 +81,14 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a><ul class="simple">
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html">Releases</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../releases/release_1.0.0.html">Release 1.0.0</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../integrations.html">Integrations</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../integrations/maya.html">Maya Integration</a><ul class="simple">
 </ul>
@@ -90,10 +98,9 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../../releases.html">Releases</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../releases/release_1.0.0.html">Release 1.0.0</a><ul class="simple">
 </ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_interface.html">User Interface</a><ul class="simple">
 </ul>
 </li>
 </ul>
@@ -258,30 +265,54 @@
 <dt id="kraken.core.maths.Math_radToDeg">
 <code class="descclassname">kraken.core.maths.</code><code class="descname">Math_radToDeg</code><span class="sig-paren">(</span><em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.Math_radToDeg" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts radians to degrees.</p>
-<p>Arguments:
-val &#8211; Scalar, value to convert to degrees.</p>
-<p>Return:
-Scalar, value in degrees.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>val</strong> (<em>float</em>) &#8211; value to convert to degrees.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Value in degrees.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="kraken.core.maths.Math_degToRad">
 <code class="descclassname">kraken.core.maths.</code><code class="descname">Math_degToRad</code><span class="sig-paren">(</span><em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.Math_degToRad" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts degrees to radians.</p>
-<p>Arguments:
-val &#8211; Scalar, value to convert to radians.</p>
-<p>Return:
-Scalar, value in radians.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>val</strong> (<em>float</em>) &#8211; value to convert to radians.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Value in radians.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="kraken.core.maths.decodeValue">
 <code class="descclassname">kraken.core.maths.</code><code class="descname">decodeValue</code><span class="sig-paren">(</span><em>jsonData</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.decodeValue" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a constructed math value based on the provided json data.</p>
-<p>Arguments:
-jsondata &#8211; dict, the JSON data to use to decode into a Math value.</p>
-<p>Return:
-The constructed math value</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>jsondata</strong> (<em>dict</em>) &#8211; The JSON data to use to decode into a Math value.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The constructed math value</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">object</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <div class="line-block">
@@ -341,7 +372,7 @@ The constructed math value</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'1.0',
+            VERSION:'1.0.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true
