@@ -6,6 +6,7 @@ PositionConstraint - Position Constraint.
 """
 
 from constraint import Constraint
+from kraken.core.maths.vec3 import Vec3
 
 
 class PositionConstraint(Constraint):

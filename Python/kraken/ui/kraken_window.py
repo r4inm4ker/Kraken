@@ -34,7 +34,7 @@ class KrakenWindow(QtGui.QMainWindow):
         iconPath = os.path.join(uiDir, 'images', 'Kraken_Icon.png')
         self.setWindowIcon(QtGui.QIcon(iconPath))
 
-        self.settings = QtCore.QSettings("Moose Soft", "Clipper")
+        self.settings = QtCore.QSettings("Kraken", "Kraken Editor")
 
         self.createLayout()
         self.createConnections()
@@ -59,7 +59,7 @@ class KrakenWindow(QtGui.QMainWindow):
         mainWidget.setLayout(self.mainLayout)
         self.setCentralWidget(mainWidget)
 
-        self.statusBar().showMessage('Ready')
+        self.statusBar().showMessage('Ready', 2000)
 
         self.setGeometry(250, 150, 800, 475)
         self.center()

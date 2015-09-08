@@ -7,10 +7,10 @@ building:insectLeg.controls.insectLeg.inputs.rootInput as:insectLeg_L_rootInput_
 building:insectLeg.controls.insectLeg.outputs as:insectLeg_L_outputs_hrc
 building:insectLeg.controls.insectLeg.outputs.legEndXfoOutput as:insectLeg_L_legEndXfoOutput_cmpOut
 building:insectLeg.controls.insectLeg.outputs.legEndPosOutput as:insectLeg_L_legEndPosOutput_cmpOut
-building:insectLeg.controls.insectLeg.outputs.bone01 as:insectLeg_L_bone01_loc
-building:insectLeg.controls.insectLeg.outputs.bone02 as:insectLeg_L_bone02_loc
-building:insectLeg.controls.insectLeg.outputs.bone03 as:insectLeg_L_bone03_loc
-building:insectLeg.controls.insectLeg.outputs.bone04 as:insectLeg_L_bone04_loc
+building:insectLeg.controls.insectLeg.outputs.bone01 as:insectLeg_L_bone01_cmpOut
+building:insectLeg.controls.insectLeg.outputs.bone02 as:insectLeg_L_bone02_cmpOut
+building:insectLeg.controls.insectLeg.outputs.bone03 as:insectLeg_L_bone03_cmpOut
+building:insectLeg.controls.insectLeg.outputs.bone04 as:insectLeg_L_bone04_cmpOut
 building:insectLeg.controls.insectLeg.ChainBase as:insectLeg_L_ChainBase_loc
 building:insectLeg.controls.insectLeg.bone01FK as:insectLeg_L_bone01FK_ctrlSpace
 building:insectLeg.controls.insectLeg.bone01FK.bone01FK as:insectLeg_L_bone01FK_ctrl

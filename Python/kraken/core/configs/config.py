@@ -195,6 +195,15 @@ class Config(object):
         """
 
         controlShapes = {
+                         "point": [
+                                   {
+                                    "points": [
+                                               [0.0, 0.0, 0.0],
+                                              ],
+                                    "degree": 1,
+                                    "closed": False
+                                   }
+                                  ],
                          "arrow": [
                                    {
                                     "points": [
@@ -450,6 +459,28 @@ class Config(object):
                                         "degree": 1,
                                         "closed": False
                                        }
+                                     ],
+                         "vertebra": [
+                                      {
+                                       "points": [
+                                                  [-0.5, -0.0, -0.5],
+                                                  [0.5, 0.0, -0.5],
+                                                  [0.25, 0.0, 0.5],
+                                                  [-0.25, -0.0, 0.5]
+                                                 ],
+                                       "closed": True,
+                                       "degree": 1
+                                      },
+                                      {
+                                       "points": [
+                                                  [0.0, 0.0, -0.5],
+                                                  [0.0, 0.5, -0.5],
+                                                  [0.0, 0.25, 0.5],
+                                                  [0.0, 0.0, 0.5]
+                                                 ],
+                                       "closed": True,
+                                       "degree": 1
+                                      }
                                      ]
                         }
 

@@ -1,9 +1,9 @@
 """Kraken Core."""
 
-VERSION_MAJOR = 0
+VERSION_MAJOR = 1
 VERSION_MINOR = 0
-VERSION_BUILD = 1
-VERSION_SUFFIX = "alpha"
+VERSION_BUILD = 0
+VERSION_SUFFIX = ""
 
 
 def getVersion():

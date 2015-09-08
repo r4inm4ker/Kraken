@@ -1,0 +1,273 @@
+require InlineDrawing;
+
+object TentacleSolver : KrakenSolver {
+    Vec3 trCurr;
+    Vec3 trPrev;
+};
+
+// Default Constructor
+function TentacleSolver()
+{
+}
+
+
+// Return Arguments for Kraken
+function KrakenSolverArg[] TentacleSolver.getArguments(){
+  KrakenSolverArg args[] = this.parent.getArguments();
+  args.push(KrakenSolverArg('time', 'in', 'Scalar'));
+  args.push(KrakenSolverArg('ikblend', 'in', 'Scalar'));
+  args.push(KrakenSolverArg('waveLength_Y', 'in', 'Scalar'));
+  args.push(KrakenSolverArg('waveAmplitude_Y', 'in', 'Scalar'));
+  args.push(KrakenSolverArg('waveFrequency_Y', 'in', 'Scalar'));
+  args.push(KrakenSolverArg('waveLength_Z', 'in', 'Scalar'));
+  args.push(KrakenSolverArg('waveAmplitude_Z', 'in', 'Scalar'));
+  args.push(KrakenSolverArg('waveFrequency_Z', 'in', 'Scalar'));
+  args.push(KrakenSolverArg('tipBias', 'in', 'Scalar'));
+  args.push(KrakenSolverArg('springStrength', 'in', 'Scalar'));
+  args.push(KrakenSolverArg('dampening', 'in', 'Scalar'));
+  args.push(KrakenSolverArg('simulationWeight', 'in', 'Scalar'));
+  args.push(KrakenSolverArg('softLimitBounds', 'in', 'Scalar'));
+  args.push(KrakenSolverArg('chainBase', 'in', 'Mat44'));
+  args.push(KrakenSolverArg('ikgoal', 'in', 'Mat44'));
+  args.push(KrakenSolverArg('fkcontrols', 'in', 'Mat44[]'));
+  args.push(KrakenSolverArg('tipBoneLen', 'in', 'Scalar'));
+  args.push(KrakenSolverArg('pose', 'out', 'Mat44[]'));
+  args.push(KrakenSolverArg('tentacleEnd', 'out', 'Mat44'));
+  return args;
+}
+
+function Scalar softTentacleLimit(
+  Scalar val,
+  Scalar maxVal,
+  Vec2 maxValSoftening
+) {
+  Keyframe key1, key2;
+
+  if (val > (maxVal - maxValSoftening.x)) {
+    if (val > (maxVal + maxValSoftening.y)) {
+      return maxVal;
+    }
+
+    key1.time = maxVal - maxValSoftening.x;
+    key1.value = maxVal - maxValSoftening.x;
+    key1.outTangent.x = maxValSoftening.x * 0.5;
+    key1.outTangent.y = maxValSoftening.x * 0.5;
+
+    key2.time = maxVal + maxValSoftening.y;
+    key2.value = maxVal;
+    key2.inTangent.x = maxValSoftening.y * - 0.5;
+    key2.inTangent.y = 0;
+
+    return key1.interpolate(key2, val);
+  }
+  else {
+    return val;
+  }
+}
+
+
+function TentacleSolver.solveDynamics!(io Vec3 goalPosition, Scalar springStrength, Scalar dampening, Scalar simulationWeight, Scalar softLimitBounds ){
+
+  Scalar timeStep = 1.0/30.0;
+  Scalar mass = 1.0;
+  Vec3 force(0.0,0.0,0.0);
+
+
+  Vec3 temp = this.trCurr;
+  this.trPrev = this.trPrev.linearInterpolate(this.trCurr, dampening);
+
+  force += ((goalPosition - this.trCurr) * springStrength);
+  this.trCurr += (this.trCurr - this.trPrev) + ((force / mass) * (timeStep * timeStep));
+
+  // Apply a soft limit to the distance the verlet bone and move from the attach point.
+  Vec3 vecToAttachXfo = this.trCurr - goalPosition;
+  Scalar distToAttachXfo = vecToAttachXfo.length();
+  if(distToAttachXfo > softLimitBounds * 0.5){
+    this.trCurr = goalPosition + (vecToAttachXfo * (softTentacleLimit(
+      distToAttachXfo,
+      softLimitBounds,
+      Vec2(softLimitBounds * 0.5, softLimitBounds * 1.5)
+    )/distToAttachXfo));
+  }
+
+  goalPosition = goalPosition.linearInterpolate(this.trCurr, simulationWeight);
+  this.trPrev = temp;
+}
+
+
+
+function Xfo[] solveTentacleIK(
+  in Xfo basePose[],
+  in Vec3 goalPosition
+) {
+
+  // Scalar boneLengths[];
+  Vec3 boneVectors[];
+  Xfo ikpose[];
+  // Scalar remainingChainLength = 0;
+  // boneLengths.resize(basePose.size());
+  boneVectors.resize(basePose.size());
+  ikpose.resize(basePose.size());
+  for (Integer i = 0; i < basePose.size()-1; i++) {
+    ikpose[i] = basePose[i];
+    // Note: Scaling of bones is currently not supported.
+    boneVectors[i] = basePose[i].inverse().transformVector(basePose[i+1].tr);
+    // // boneLengths[i] = boneVectors[i].length();
+    // remainingChainLength += abs(boneLengths[i] /* basePose[i].sc.x*/);
+  }
+
+  Vec3 chainRootPos = basePose[0].tr;
+  Integer lastBoneIndex = basePose.size-1;
+  Vec3 fkChainTip = basePose[lastBoneIndex].tr;
+
+  // Apply the soft limit to the distance to the IK goal
+  Vec3 vecToIkGoal = goalPosition - chainRootPos;
+  Scalar distToIkGoal = vecToIkGoal.length();
+  Quat chainOffsetRotation;
+
+  for (Integer i = 0; i < basePose.size()-1; i++) {
+    Vec3 vecToFkChainTip;
+    Xfo boneXfo;
+    Integer boneIndex = i;
+    boneXfo = basePose[i];
+    if (i == 0) {
+      vecToFkChainTip = fkChainTip - boneXfo.tr;
+    }
+    else {
+      // Transform the bone position by the overall chain offset.
+      // vecToFkChainTip = fkChainTip - (chainRootPos + (boneXfo.tr - chainRootPos));
+
+      // Calculate a new pose position based on the parent bones new orientation
+      boneXfo.tr = ikpose[i-1].transformVector(boneVectors[i-1]);
+      vecToFkChainTip = fkChainTip - boneXfo.tr;
+    }
+    Scalar distToFkChainTip = vecToFkChainTip.length();
+    vecToFkChainTip *= 1.0 / distToFkChainTip;
+
+    vecToIkGoal = goalPosition - boneXfo.tr;
+    distToIkGoal = vecToIkGoal.length();
+    vecToIkGoal *= 1.0 / distToIkGoal; // normalize the vector
+    // Scalar boneLength = abs(boneLengths[i] /* boneXfo.sc.x*/);
+
+    if (i == 0) {
+    //   // For the first bone calculate and store the overall chain offset towards the ik target
+      chainOffsetRotation.setFrom2Vectors(vecToFkChainTip, vecToIkGoal);
+
+    //   fkChainTip = boneXfo.tr + (vecToIkGoal * distToFkChainTip);
+    //   // boneXfo.ori = chainOffsetRotation * boneXfo.ori;
+    }
+    // else {
+      // Apply the chain offset, and apply any incremental correction.
+      // This additional correction is required due to a new bone position based on the new parent orientation
+      Quat boneOffsetRotation;
+      boneOffsetRotation.setFrom2Vectors(vecToFkChainTip, vecToIkGoal);
+      Float32 fraction = Float32(i) / Float32(basePose.size()-1);
+      boneOffsetRotation = Quat().sphericalLinearInterpolate(chainOffsetRotation, fraction).sphericalLinearInterpolate(boneOffsetRotation, fraction);
+      boneXfo.ori = boneOffsetRotation * boneXfo.ori;
+    // }
+
+
+    ikpose[boneIndex] = boneXfo;
+  }
+  ikpose[lastBoneIndex].tr = ikpose[lastBoneIndex-1].transformVector(boneVectors[lastBoneIndex-1]);
+  return ikpose;
+}
+
+
+
+
+// Solve
+function TentacleSolver.solve!
+(
+  Boolean drawDebug,
+  Scalar rigScale,
+  Scalar time,
+  Scalar ikblend,
+  Scalar waveLength_Y,
+  Scalar waveAmplitude_Y,
+  Scalar waveFrequency_Y,
+  Scalar waveLength_Z,
+  Scalar waveAmplitude_Z,
+  Scalar waveFrequency_Z,
+  Scalar tipBias,
+
+  Scalar springStrength,
+  Scalar dampening,
+  Scalar simulationWeight,
+  Scalar softLimitBounds,
+
+  Mat44 chainBase,
+  Mat44 ikgoal,
+  Mat44 fkcontrols[],
+  Scalar tipBoneLen,
+  io Mat44 pose[],
+  io Mat44 tentacleEnd
+) {
+  if(fkcontrols.size != pose.size)
+    throw("Error in TentacleSolver. The number of FKControls does not match the number of joints");
+
+  Xfo xfoPose[];
+  Vec3 boneVectors[];
+  xfoPose.resize(fkcontrols.size+1);
+  boneVectors.resize(fkcontrols.size);
+  for(UInt32 i=0; i < fkcontrols.size; i++) {
+    Xfo xfo(fkcontrols[i]);
+    Xfo localXfo = xfo;
+    if(i>0){
+      Xfo parentInv = Xfo(fkcontrols[i-1]).inverse();
+      localXfo = parentInv * xfo;
+      boneVectors[i-1] = localXfo.tr;
+    }
+
+    Scalar fraction = Scalar(i) / Scalar(fkcontrols.size);
+    Scalar bias = 1.0 - (((cos(fraction * PI) * 0.5) + 0.5) * tipBias);
+
+    Quat wave;
+    wave.setFromEuler(Euler(
+      0.0,
+      cos( (time * -waveFrequency_Y) + ( fraction *  waveLength_Y * PI)) * waveAmplitude_Y * bias,
+      cos( (time * -waveFrequency_Z) + ( fraction *  waveLength_Z * PI)) * waveAmplitude_Z * bias
+      ));
+
+    localXfo.ori *= wave;
+
+    if(i>0)
+      xfoPose[i] = xfoPose[i-1] * localXfo;
+    else
+      xfoPose[i] = localXfo;
+  }
+  boneVectors[boneVectors.size-1] = Vec3(tipBoneLen, 0.0, 0.0);
+  xfoPose[fkcontrols.size] = xfoPose[fkcontrols.size-1];
+  xfoPose[fkcontrols.size].tr = xfoPose[fkcontrols.size-1].transformVector(boneVectors[boneVectors.size-1]);
+
+  if(ikblend > 0.0) {
+    Vec3 goalPosition = ikgoal.translation();
+    this.solveDynamics(goalPosition, springStrength, dampening, simulationWeight, softLimitBounds );
+
+    Xfo ikPose[] = solveTentacleIK(xfoPose, goalPosition);
+
+
+    // Now blend the IK result with the FK result
+    for(UInt32 i=0; i < xfoPose.size; i++) {
+      xfoPose[i].ori = xfoPose[i].ori.sphericalLinearInterpolate(ikPose[i].ori, ikblend);
+      if(i>0)
+        xfoPose[i].tr = xfoPose[i-1].transformVector(boneVectors[i-1]);
+    }
+  }
+
+  // Convert the Xfos back to Mat44s
+  for(UInt32 i=0; i < pose.size; i++)
+    pose[i] = xfoPose[i].toMat44();
+  tentacleEnd = xfoPose[xfoPose.size-1].toMat44();
+
+  // Set debugging visibility.
+  this.setDebug(drawDebug);
+  if(this.drawDebug) {
+
+    Color boneColor(1.0, 1.0, 0);
+    for(UInt32 i=0; i<pose.size; i++){
+      Scalar boneLength = boneVectors[i].length();
+      etDrawBone(this.handle.rootTransform, 'bone'+i, pose[i], boneLength, boneLength * 0.15, boneColor);
+    }
+  }
+}

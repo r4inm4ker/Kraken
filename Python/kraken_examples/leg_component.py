@@ -35,23 +35,23 @@ class LegComponent(BaseExampleComponent):
         # Declare IO
         # ===========
         # Declare Inputs Xfos
-        self.globalSRTInputTgt = self.createInput('globalSRT', dataType='Xfo', parent=self.inputHrcGrp)
-        self.legPelvisInputTgt = self.createInput('pelvisInput', dataType='Xfo', parent=self.inputHrcGrp)
+        self.globalSRTInputTgt = self.createInput('globalSRT', dataType='Xfo', parent=self.inputHrcGrp).getTarget()
+        self.legPelvisInputTgt = self.createInput('pelvisInput', dataType='Xfo', parent=self.inputHrcGrp).getTarget()
 
         # Declare Output Xfos
-        self.femurOutputTgt = self.createOutput('femur', dataType='Xfo', parent=self.outputHrcGrp)
-        self.shinOutputTgt = self.createOutput('shin', dataType='Xfo', parent=self.outputHrcGrp)
-        self.legEndXfoOutputTgt = self.createOutput('legEndXfo', dataType='Xfo', parent=self.outputHrcGrp)
-        self.footOutputTgt = self.createOutput('foot', dataType='Xfo', parent=self.outputHrcGrp)
-        self.toeOutputTgt = self.createOutput('toe', dataType='Xfo', parent=self.outputHrcGrp)
+        self.femurOutputTgt = self.createOutput('femur', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
+        self.shinOutputTgt = self.createOutput('shin', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
+        self.legEndXfoOutputTgt = self.createOutput('legEndXfo', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
+        self.footOutputTgt = self.createOutput('foot', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
+        self.toeOutputTgt = self.createOutput('toe', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
 
         # Declare Input Attrs
-        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=False, parent=self.cmpInputAttrGrp)
-        self.rigScaleInputAttr = self.createInput('rigScale', value=1.0, dataType='Float', parent=self.cmpInputAttrGrp)
-        self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', value=False, parent=self.cmpInputAttrGrp)
+        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=False, parent=self.cmpInputAttrGrp).getTarget()
+        self.rigScaleInputAttr = self.createInput('rigScale', value=1.0, dataType='Float', parent=self.cmpInputAttrGrp).getTarget()
+        self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', value=False, parent=self.cmpInputAttrGrp).getTarget()
 
         # Declare Output Attrs
-        self.drawDebugOutputAttr = self.createOutput('drawDebug', dataType='Boolean', value=False, parent=self.cmpOutputAttrGrp)
+        self.drawDebugOutputAttr = self.createOutput('drawDebug', dataType='Boolean', value=False, parent=self.cmpOutputAttrGrp).getTarget()
 
 
 class LegComponentGuide(LegComponent):
@@ -383,14 +383,10 @@ class LegComponentRig(LegComponent):
         self.outputsToDeformersSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
 
         # Add Xfo Inputs
-        self.outputsToDeformersSpliceOp.setInput('constrainers', self.femurOutputTgt)
-        self.outputsToDeformersSpliceOp.setInput('constrainers', self.shinOutputTgt)
-        self.outputsToDeformersSpliceOp.setInput('constrainers', self.legEndXfoOutputTgt)
+        self.outputsToDeformersSpliceOp.setInput('constrainers', [self.femurOutputTgt, self.shinOutputTgt, self.legEndXfoOutputTgt])
 
         # Add Xfo Outputs
-        self.outputsToDeformersSpliceOp.setOutput('constrainees', femurDef)
-        self.outputsToDeformersSpliceOp.setOutput('constrainees', shinDef)
-        self.outputsToDeformersSpliceOp.setOutput('constrainees', ankleDef)
+        self.outputsToDeformersSpliceOp.setOutput('constrainees', [femurDef, shinDef, ankleDef])
 
         # Add Foot Deformer Splice Op
         self.footDefSpliceOp = SpliceOperator('footDeformerSpliceOp', 'PoseConstraintSolver', 'Kraken')

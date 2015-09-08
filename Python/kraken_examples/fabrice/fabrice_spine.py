@@ -9,6 +9,8 @@ from kraken.core.objects.attributes.scalar_attribute import ScalarAttribute
 from kraken.core.objects.attributes.string_attribute import StringAttribute
 
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
+from kraken.core.objects.constraints.position_constraint import PositionConstraint
+from kraken.core.objects.constraints.orientation_constraint import OrientationConstraint
 
 from kraken.core.objects.component_group import ComponentGroup
 from kraken.core.objects.components.component_output import ComponentOutput
@@ -35,20 +37,20 @@ class FabriceSpine(BaseExampleComponent):
         # Declare IO
         # ===========
         # Declare Inputs Xfos
-        self.spineMainSrtInputTgt = self.createInput('mainSrt', dataType='Xfo', parent=self.inputHrcGrp)
+        self.spineMainSrtInputTgt = self.createInput('mainSrt', dataType='Xfo', parent=self.inputHrcGrp).getTarget()
 
         # Declare Output Xfos
-        self.spineCogOutputTgt = self.createOutput('cog', dataType='Xfo', parent=self.outputHrcGrp)
-        self.spineBaseOutputTgt = self.createOutput('spineBase', dataType='Xfo', parent=self.outputHrcGrp)
-        self.pelvisOutputTgt = self.createOutput('pelvis', dataType='Xfo', parent=self.outputHrcGrp)
-        self.spineEndOutputTgt = self.createOutput('spineEnd', dataType='Xfo', parent=self.outputHrcGrp)
+        self.spineCogOutputTgt = self.createOutput('cog', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
+        self.spineBaseOutputTgt = self.createOutput('spineBase', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
+        self.spineEndOutputTgt = self.createOutput('spineEnd', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
+        self.spineEndCtrlOutputTgt = self.createOutput('spineEndCtrl', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
 
-        self.spineVertebraeOutput = self.addOutput('spineVertebrae', dataType='Xfo[]')
+        self.spineVertebraeOutput = self.createOutput('spineVertebrae', dataType='Xfo[]')
 
         # Declare Input Attrs
-        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=False, parent=self.cmpInputAttrGrp)
-        self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp)
-        self.lengthInputAttr = self.createInput('length', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp)
+        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=False, parent=self.cmpInputAttrGrp).getTarget()
+        self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp).getTarget()
+        self.lengthInputAttr = self.createInput('length', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp).getTarget()
 
         # Declare Output Attrs
 
@@ -66,28 +68,103 @@ class FabriceSpineGuide(FabriceSpine):
         # ========
         guideSettingsAttrGrp = AttributeGroup("GuideSettings", parent=self)
         self.numDeformersAttr = IntegerAttribute('numDeformers', value=1, minValue=0, maxValue=20, parent=guideSettingsAttrGrp)
+        self.numDeformersAttr.setValueChangeCallback(self.updateNumDeformers)
 
         # Guide Controls
-        self.cog = Control('cogPosition', parent=self.ctrlCmpGrp, shape="sphere")
-        self.cog.setColor('red')
+        self.cogCtrl = Control('cog', parent=self.ctrlCmpGrp, shape="circle")
+        self.cogCtrl.rotatePoints(90, 0, 0)
+        self.cogCtrl.scalePoints(Vec3(3.0, 3.0, 3.0))
+        self.cogCtrl.setColor('red')
 
-        self.spine01Ctrl = Control('spine01Position', parent=self.ctrlCmpGrp, shape='sphere')
-        self.spine02Ctrl = Control('spine02Position', parent=self.ctrlCmpGrp, shape='sphere')
-        self.spine03Ctrl = Control('spine03Position', parent=self.ctrlCmpGrp, shape='sphere')
-        self.spine04Ctrl = Control('spine04Position', parent=self.ctrlCmpGrp, shape='sphere')
+        self.spineBaseCtrl = Control('spineBase', parent=self.ctrlCmpGrp, shape='pin')
+        self.spineBaseCtrl.rotatePoints(90, 0, 0)
+        self.spineBaseCtrl.translatePoints(Vec3(0, 1.0, 0))
+
+        self.spineBaseHandleCtrl = Control('spineBaseHandle', parent=self.ctrlCmpGrp, shape='pin')
+        self.spineBaseHandleCtrl.rotatePoints(90, 0, 0)
+        self.spineBaseHandleCtrl.translatePoints(Vec3(0, 1.0, 0))
+
+        self.spineEndHandleCtrl = Control('spineEndHandle', parent=self.ctrlCmpGrp, shape='pin')
+        self.spineEndHandleCtrl.rotatePoints(90, 0, 0)
+        self.spineEndHandleCtrl.translatePoints(Vec3(0, 1.0, 0))
+
+        self.spineEndCtrl = Control('spineEnd', parent=self.ctrlCmpGrp, shape='pin')
+        self.spineEndCtrl.rotatePoints(90, 0, 0)
+        self.spineEndCtrl.translatePoints(Vec3(0, 1.0, 0))
+
+        # ===============
+        # Add Splice Ops
+        # ===============
+        # Add Spine Splice Op
+        self.bezierSpineSpliceOp = SpliceOperator('spineGuideSpliceOp', 'BezierSpineSolver', 'Kraken', alwaysEval=True)
+        self.addOperator(self.bezierSpineSpliceOp)
+
+        # Add Att Inputs
+        self.bezierSpineSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.bezierSpineSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
+        self.bezierSpineSpliceOp.setInput('length', self.lengthInputAttr)
+
+        # Add Xfo Inputs
+        self.bezierSpineSpliceOp.setInput('base', self.spineBaseCtrl)
+        self.bezierSpineSpliceOp.setInput('baseHandle', self.spineBaseHandleCtrl)
+        self.bezierSpineSpliceOp.setInput('tipHandle', self.spineEndHandleCtrl)
+        self.bezierSpineSpliceOp.setInput('tip', self.spineEndCtrl)
+
+        # Add Xfo Outputs
+        self.bezierSpineSpliceOp.setOutput('outputs', self.spineVertebraeOutput.getTarget())
 
         self.loadData({
             'name': name,
             'location': 'M',
-            'cogPosition': Vec3(0.0, 0.65, -3.1),
-            'spine01Position': Vec3(0.0, 0.65, -3.1),
-            'spine02Position': Vec3(0.0, 1.15, -2.0),
-            'spine03Position': Vec3(0.0, 1.6, -0.7),
-            'spine04Position': Vec3(0.0, 1.65, 0.75),
+            'cogPos': Vec3(0.0, 1.65, 0.75),
+            'cogCtrlCrvData': self.cogCtrl.getCurveData(),
+            'spineBasePos': Vec3(0.0, 1.65, 0.75),
+            'spineBaseCtrlCrvData': self.spineBaseCtrl.getCurveData(),
+            'spineBaseHandlePos': Vec3(0.0, 1.6, -0.7),
+            'spineBaseHandleCtrlCrvData': self.spineBaseHandleCtrl.getCurveData(),
+            'spineEndHandlePos': Vec3(0.0, 1.15, -2.0),
+            'spineEndHandleCtrlCrvData': self.spineEndHandleCtrl.getCurveData(),
+            'spineEndPos': Vec3(0.0, 0.65, -3.1),
+            'spineEndCtrlCrvData': self.spineEndCtrl.getCurveData(),
             'numDeformers': 6
         })
 
         Profiler.getInstance().pop()
+
+    # ==========
+    # Callbacks
+    # ==========
+    def updateNumDeformers(self, count):
+        """Generate the guide controls for the variable outputes array.
+
+        Arguments:
+        count -- object, The number of joints inthe chain.
+
+        Return:
+        True if successful.
+
+        """
+
+        if count == 0:
+            raise IndexError("'count' must be > 0")
+
+
+        vertebraeOutputs = self.spineVertebraeOutput.getTarget()
+        if count > len(vertebraeOutputs):
+            for i in xrange(len(vertebraeOutputs), count):
+                debugCtrl = Control('spine' + str(i+1).zfill(2), parent=self.outputHrcGrp, shape="vertebra")
+                debugCtrl.rotatePoints(0, -90, 0)
+                debugCtrl.scalePoints(Vec3(0.5, 0.5, 0.5))
+                debugCtrl.setColor("yellowLight")
+                vertebraeOutputs.append(debugCtrl)
+
+        elif count < len(vertebraeOutputs):
+            numExtraCtrls = len(vertebraeOutputs) - count
+            for i in xrange(numExtraCtrls):
+                extraCtrl = vertebraeOutputs.pop()
+                self.outputHrcGrp.removeChild(extraCtrl)
+
+        return True
 
 
     # =============
@@ -103,11 +180,21 @@ class FabriceSpineGuide(FabriceSpine):
 
         data = super(FabriceSpineGuide, self).saveData()
 
-        data['cogPosition'] = self.cog.xfo.tr
-        data['spine01Position'] = self.spine01Ctrl.xfo.tr
-        data['spine02Position'] = self.spine02Ctrl.xfo.tr
-        data['spine03Position'] = self.spine03Ctrl.xfo.tr
-        data['spine04Position'] = self.spine04Ctrl.xfo.tr
+        data['cogPos'] = self.cogCtrl.xfo.tr
+        data['cogCtrlCrvData'] = self.cogCtrl.getCurveData()
+
+        data['spineBasePos'] = self.spineBaseCtrl.xfo.tr
+        data['spineBaseCtrlCrvData'] = self.spineBaseCtrl.getCurveData()
+
+        data['spineBaseHandlePos'] = self.spineBaseHandleCtrl.xfo.tr
+        data['spineBaseHandleCtrlCrvData'] = self.spineBaseHandleCtrl.getCurveData()
+
+        data['spineEndHandlePos'] = self.spineEndHandleCtrl.xfo.tr
+        data['spineEndHandleCtrlCrvData'] = self.spineEndHandleCtrl.getCurveData()
+
+        data['spineEndPos'] = self.spineEndCtrl.xfo.tr
+        data['spineEndCtrlCrvData'] = self.spineEndCtrl.getCurveData()
+
         data['numDeformers'] = self.numDeformersAttr.getValue()
 
         return data
@@ -126,12 +213,28 @@ class FabriceSpineGuide(FabriceSpine):
 
         super(FabriceSpineGuide, self).loadData( data )
 
-        self.cog.xfo.tr = data["cogPosition"]
-        self.spine01Ctrl.xfo.tr = data["spine01Position"]
-        self.spine02Ctrl.xfo.tr = data["spine02Position"]
-        self.spine03Ctrl.xfo.tr = data["spine03Position"]
-        self.spine04Ctrl.xfo.tr = data["spine04Position"]
+        self.cogCtrl.xfo.tr = data["cogPos"]
+        self.cogCtrl.setCurveData(data['cogCtrlCrvData'])
+
+        self.spineBaseCtrl.xfo.tr = data["spineBasePos"]
+        self.spineBaseCtrl.setCurveData(data['spineBaseCtrlCrvData'])
+
+        self.spineBaseHandleCtrl.xfo.tr = data["spineBaseHandlePos"]
+        self.spineBaseHandleCtrl.setCurveData(data['spineBaseHandleCtrlCrvData'])
+
+        self.spineEndHandleCtrl.xfo.tr = data["spineEndHandlePos"]
+        self.spineEndHandleCtrl.setCurveData(data['spineEndHandleCtrlCrvData'])
+
+        self.spineEndCtrl.xfo.tr = data["spineEndPos"]
+        self.spineEndCtrl.setCurveData(data['spineEndCtrlCrvData'])
+
         self.numDeformersAttr.setValue(data["numDeformers"])
+
+        length = data["spineBasePos"].distanceTo(data["spineBaseHandlePos"]) + data["spineBaseHandlePos"].distanceTo(data["spineEndHandlePos"]) + data["spineEndHandlePos"].distanceTo(data["spineEndPos"])
+        self.lengthInputAttr.setMax(length * 3.0)
+        self.lengthInputAttr.setValue(length)
+
+        self.bezierSpineSpliceOp.evaluate()
 
         return True
 
@@ -146,11 +249,21 @@ class FabriceSpineGuide(FabriceSpine):
 
         data = super(FabriceSpineGuide, self).getRigBuildData()
 
-        data['cogPosition'] = self.cog.xfo.tr
-        data['spine01Position'] = self.spine01Ctrl.xfo.tr
-        data['spine02Position'] = self.spine02Ctrl.xfo.tr
-        data['spine03Position'] = self.spine03Ctrl.xfo.tr
-        data['spine04Position'] = self.spine04Ctrl.xfo.tr
+        data['cogPos'] = self.cogCtrl.xfo.tr
+        data['cogCtrlCrvData'] = self.cogCtrl.getCurveData()
+
+        data['spineBasePos'] = self.spineBaseCtrl.xfo.tr
+        data['spineBaseCtrlCrvData'] = self.spineBaseCtrl.getCurveData()
+
+        data['spineBaseHandlePos'] = self.spineBaseHandleCtrl.xfo.tr
+        data['spineBaseHandleCtrlCrvData'] = self.spineBaseHandleCtrl.getCurveData()
+
+        data['spineEndHandlePos'] = self.spineEndHandleCtrl.xfo.tr
+        data['spineEndHandleCtrlCrvData'] = self.spineEndHandleCtrl.getCurveData()
+
+        data['spineEndPos'] = self.spineEndCtrl.xfo.tr
+        data['spineEndCtrlCrvData'] = self.spineEndCtrl.getCurveData()
+
         data['numDeformers'] = self.numDeformersAttr.getValue()
 
         return data
@@ -198,44 +311,40 @@ class FabriceSpineRig(FabriceSpine):
         self.cogCtrlSpace = CtrlSpace('cog', parent=self.ctrlCmpGrp)
         self.cogCtrl = Control('cog', parent=self.cogCtrlSpace, shape="circle")
         self.cogCtrl.rotatePoints(90, 0, 0)
-        self.cogCtrl.scalePoints(Vec3(6.0, 6.0, 6.0))
+        self.cogCtrl.scalePoints(Vec3(3.0, 3.0, 3.0))
+        self.cogCtrl.translatePoints(Vec3(0.0, 0.0, 0.2))
+        self.cogCtrl.lockScale(x=True, y=True, z=True)
         self.cogCtrl.setColor("orange")
 
         # Spine Base
         self.spineBaseCtrlSpace = CtrlSpace('spineBase', parent=self.cogCtrl)
         self.spineBaseCtrl = Control('spineBase', parent=self.spineBaseCtrlSpace, shape="pin")
         self.spineBaseCtrl.rotatePoints(90, 0, 0)
-        self.spineBaseCtrl.translatePoints(0, 1.5, 0)
-        # self.spineBaseCtrl.scalePoints(Vec3(4.0, 4.0, 4.0))
+        self.spineBaseCtrl.translatePoints(Vec3(0, 1.0, 0))
+        self.spineBaseCtrl.lockScale(x=True, y=True, z=True)
 
         # Spine Base Handle
         self.spineBaseHandleCtrlSpace = CtrlSpace('spineBaseHandle', parent=self.spineBaseCtrl)
         self.spineBaseHandleCtrl = Control('spineBaseHandle', parent=self.spineBaseHandleCtrlSpace, shape="pin")
         self.spineBaseHandleCtrl.rotatePoints(90, 0, 0)
-        self.spineBaseHandleCtrl.translatePoints(0, 1.5, 0)
-        # self.spineBaseHandleCtrl.scalePoints(Vec3(4.5, 4.5, 4.5))
+        self.spineBaseHandleCtrl.translatePoints(Vec3(0, 1.0, 0))
+        self.spineBaseHandleCtrl.lockScale(x=True, y=True, z=True)
+        self.spineBaseHandleCtrl.setColor("orange")
 
         # Spine End
         self.spineEndCtrlSpace = CtrlSpace('spineEnd', parent=self.cogCtrl)
         self.spineEndCtrl = Control('spineEnd', parent=self.spineEndCtrlSpace, shape="pin")
         self.spineEndCtrl.rotatePoints(90, 0, 0)
-        self.spineEndCtrl.translatePoints(0, 1.5, 0)
-        # self.spineEndCtrl.scalePoints(Vec3(6.0, 6.0, 6.0))
+        self.spineEndCtrl.lockScale(x=True, y=True, z=True)
+        self.spineEndCtrl.translatePoints(Vec3(0, 1.0, 0))
 
         # Spine End Handle
         self.spineEndHandleCtrlSpace = CtrlSpace('spineEndHandle', parent=self.spineEndCtrl)
         self.spineEndHandleCtrl = Control('spineEndHandle', parent=self.spineEndHandleCtrlSpace, shape="pin")
         self.spineEndHandleCtrl.rotatePoints(90, 0, 0)
-        self.spineEndHandleCtrl.translatePoints(0, 1.5, 0)
-        # self.spineEndHandleCtrl.scalePoints(Vec3(4.5, 4.5, 4.5))
-        self.spineEndHandleCtrl.setColor("blue")
-
-        # Pelvis
-        self.pelvisCtrlSpace = CtrlSpace('pelvis', parent=self.cogCtrl)
-        self.pelvisCtrl = Control('pelvis', parent=self.pelvisCtrlSpace, shape="cube")
-        self.pelvisCtrl.alignOnYAxis(negative=True)
-        self.pelvisCtrl.rotatePoints(90, 0, 0)
-        self.pelvisCtrl.scalePoints(Vec3(2.0, 1.5, 1.5))
+        self.spineEndHandleCtrl.translatePoints(Vec3(0, 1.0, 0))
+        self.spineEndHandleCtrl.lockScale(x=True, y=True, z=True)
+        self.spineEndHandleCtrl.setColor("orange")
 
 
         # ==========
@@ -243,12 +352,13 @@ class FabriceSpineRig(FabriceSpine):
         # ==========
         deformersLayer = self.getOrCreateLayer('deformers')
         self.defCmpGrp = ComponentGroup(self.getName(), self, parent=deformersLayer)
+        self.chestDef = Joint('chest', parent=self.defCmpGrp)
+        self.chestDef.setComponent(self)
+
         self.deformerJoints = []
         self.spineOutputs = []
         self.setNumDeformers(1)
 
-        pelvisDef = Joint('pelvis', parent=self.defCmpGrp)
-        pelvisDef.setComponent(self)
 
         # =====================
         # Create Component I/O
@@ -256,10 +366,17 @@ class FabriceSpineRig(FabriceSpine):
         # Setup component Xfo I/O's
         self.spineVertebraeOutput.setTarget(self.spineOutputs)
 
+        # =====================
+        # Constraint Deformers
+        # =====================
+        self.chestDefConstraint = PoseConstraint('_'.join([self.chestDef.getName(), 'To', self.spineBaseOutputTgt.getName()]))
+        self.chestDefConstraint.addConstrainer(self.spineBaseOutputTgt)
+        self.chestDef.addConstraint(self.chestDefConstraint)
 
         # ==============
         # Constrain I/O
         # ==============
+
         # Constraint inputs
         self.spineSrtInputConstraint = PoseConstraint('_'.join([self.cogCtrlSpace.getName(), 'To', self.spineMainSrtInputTgt.getName()]))
         self.spineSrtInputConstraint.addConstrainer(self.spineMainSrtInputTgt)
@@ -271,17 +388,23 @@ class FabriceSpineRig(FabriceSpine):
         self.spineCogOutputConstraint.addConstrainer(self.cogCtrl)
         self.spineCogOutputTgt.addConstraint(self.spineCogOutputConstraint)
 
-        self.spineBaseOutputConstraint = PoseConstraint('_'.join([self.spineBaseOutputTgt.getName(), 'To', 'spineBase']))
-        self.spineBaseOutputConstraint.addConstrainer(self.spineOutputs[0])
-        self.spineBaseOutputTgt.addConstraint(self.spineBaseOutputConstraint)
+        # Spine Base
+        self.spineBaseOutputPosConstraint = PositionConstraint('_'.join([self.spineBaseOutputTgt.getName(), 'PosTo', self.spineOutputs[0].getName()]))
+        self.spineBaseOutputPosConstraint.addConstrainer(self.spineOutputs[0])
+        self.spineBaseOutputTgt.addConstraint(self.spineBaseOutputPosConstraint)
 
-        self.pelvisOutputConstraint = PoseConstraint('_'.join([self.pelvisOutputTgt.getName(), 'To', self.pelvisCtrl.getName()]))
-        self.pelvisOutputConstraint.addConstrainer(self.pelvisCtrl)
-        self.pelvisOutputTgt.addConstraint(self.pelvisOutputConstraint)
+        self.spineBaseOutputOriConstraint = OrientationConstraint('_'.join([self.spineBaseOutputTgt.getName(), 'PosTo', self.cogCtrl.getName()]))
+        self.spineBaseOutputOriConstraint.addConstrainer(self.cogCtrl)
+        self.spineBaseOutputTgt.addConstraint(self.spineBaseOutputOriConstraint)
 
+        # Spine End
         self.spineEndOutputConstraint = PoseConstraint('_'.join([self.spineEndOutputTgt.getName(), 'To', 'spineEnd']))
         self.spineEndOutputConstraint.addConstrainer(self.spineOutputs[0])
         self.spineEndOutputTgt.addConstraint(self.spineEndOutputConstraint)
+
+        self.spineEndCtrlOutputConstraint = PoseConstraint('_'.join([self.spineEndCtrlOutputTgt.getName(), 'To', self.spineEndCtrl.getName()]))
+        self.spineEndCtrlOutputConstraint.addConstrainer(self.spineEndCtrl)
+        self.spineEndCtrlOutputTgt.addConstraint(self.spineEndCtrlOutputConstraint)
 
 
         # ===============
@@ -299,15 +422,14 @@ class FabriceSpineRig(FabriceSpine):
         # Add Xfo Inputs
         self.bezierSpineSpliceOp.setInput('base', self.spineBaseCtrl)
         self.bezierSpineSpliceOp.setInput('baseHandle', self.spineBaseHandleCtrl)
-        self.bezierSpineSpliceOp.setInput('tipHandle', self.spine03Ctrl)
+        self.bezierSpineSpliceOp.setInput('tipHandle', self.spineEndHandleCtrl)
         self.bezierSpineSpliceOp.setInput('tip', self.spineEndCtrl)
 
         # Add Xfo Outputs
-        for spineOutput in self.spineOutputs:
-            self.bezierSpineSpliceOp.setOutput('outputs', spineOutput)
+        self.bezierSpineSpliceOp.setOutput('outputs', self.spineOutputs)
 
         # Add Deformer Splice Op
-        self.deformersToOutputsSpliceOp = SpliceOperator('spineDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken')
+        self.deformersToOutputsSpliceOp = SpliceOperator('spineDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken', alwaysEval=True)
         self.addOperator(self.deformersToOutputsSpliceOp)
 
         # Add Att Inputs
@@ -315,27 +437,10 @@ class FabriceSpineRig(FabriceSpine):
         self.deformersToOutputsSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
 
         # Add Xfo Outputs
-        for spineOutput in self.spineOutputs:
-            self.deformersToOutputsSpliceOp.setInput('constrainers', spineOutput)
+        self.deformersToOutputsSpliceOp.setInput('constrainers', self.spineOutputs)
 
         # Add Xfo Outputs
-        for joint in self.deformerJoints:
-            self.deformersToOutputsSpliceOp.setOutput('constrainees', joint)
-
-        # Add Pelvis Splice Op
-        self.pelvisDefSpliceOp = SpliceOperator('pelvisDeformerSpliceOp', 'PoseConstraintSolver', 'Kraken')
-        self.addOperator(self.pelvisDefSpliceOp)
-
-        # Add Att Inputs
-        self.pelvisDefSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
-        self.pelvisDefSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
-
-        # Add Xfo Inputs
-        self.pelvisDefSpliceOp.setInput('constrainer', self.pelvisOutputTgt)
-
-        # Add Xfo Outputs
-        self.pelvisDefSpliceOp.setOutput('constrainee', pelvisDef)
-
+        self.deformersToOutputsSpliceOp.setOutput('constrainees', self.deformerJoints)
 
         Profiler.getInstance().pop()
 
@@ -370,50 +475,51 @@ class FabriceSpineRig(FabriceSpine):
 
         super(FabriceSpineRig, self).loadData( data )
 
-        cogPosition = data['cogPosition']
-        spine01Position = data['spine01Position']
-        spine02Position = data['spine02Position']
-        spine03Position = data['spine03Position']
-        spine04Position = data['spine04Position']
+        # Get Data
+        cogPos = data['cogPos']
+        cogCtrlCrvData = data['cogCtrlCrvData']
+
+        spineBasePos = data['spineBasePos']
+        spineBaseCtrlCrvData = data['spineBaseCtrlCrvData']
+
+        spineBaseHandlePos = data['spineBaseHandlePos']
+        spineBaseHandleCtrlCrvData = data['spineBaseHandleCtrlCrvData']
+
+        spineEndHandlePos = data['spineEndHandlePos']
+        spineEndHandleCtrlCrvData = data['spineEndHandleCtrlCrvData']
+
+        spineEndPos = data['spineEndPos']
+        spineEndCtrlCrvData = data['spineEndCtrlCrvData']
+
         numDeformers = data['numDeformers']
 
-        self.cogCtrlSpace.xfo.tr = cogPosition
-        self.cogCtrl.xfo.tr = cogPosition
+        # Set Xfos
+        self.cogCtrlSpace.xfo.tr = cogPos
+        self.cogCtrl.xfo.tr = cogPos
+        self.cogCtrl.setCurveData(cogCtrlCrvData)
 
-        self.pelvisCtrlSpace.xfo.tr = cogPosition
-        self.pelvisCtrl.xfo.tr = cogPosition
+        self.spineBaseCtrlSpace.xfo.tr = spineBasePos
+        self.spineBaseCtrl.xfo.tr = spineBasePos
+        self.spineBaseCtrl.setCurveData(spineBaseCtrlCrvData)
 
-        self.spineBaseCtrlSpace.xfo.tr = spine01Position
-        self.spineBaseCtrl.xfo.tr = spine01Position
+        self.spineBaseHandleCtrlSpace.xfo.tr = spineBaseHandlePos
+        self.spineBaseHandleCtrl.xfo.tr = spineBaseHandlePos
+        self.spineBaseHandleCtrl.setCurveData(spineBaseHandleCtrlCrvData)
 
-        self.spineBaseHandleCtrlSpace.xfo.tr = spine02Position
-        self.spineBaseHandleCtrl.xfo.tr = spine02Position
+        self.spineEndHandleCtrlSpace.xfo.tr = spineEndHandlePos
+        self.spineEndHandleCtrl.xfo.tr = spineEndHandlePos
+        self.spineEndHandleCtrl.setCurveData(spineEndHandleCtrlCrvData)
 
-        self.spineEndHandleCtrlSpace.xfo.tr = spine03Position
-        self.spineEndHandleCtrl.xfo.tr = spine03Position
+        self.spineEndCtrlSpace.xfo.tr = spineEndPos
+        self.spineEndCtrl.xfo.tr = spineEndPos
+        self.spineEndCtrl.setCurveData(spineEndCtrlCrvData)
 
-        self.spineEndCtrlSpace.xfo.tr = spine04Position
-        self.spineEndCtrl.xfo.tr = spine04Position
-
-        length = spine01Position.distanceTo(spine02Position) + spine02Position.distanceTo(spine03Position) + spine03Position.distanceTo(spine04Position)
+        length = spineBasePos.distanceTo(spineBaseHandlePos) + spineBaseHandlePos.distanceTo(spineEndHandlePos) + spineEndHandlePos.distanceTo(spineEndPos)
         self.lengthInputAttr.setMax(length * 3.0)
         self.lengthInputAttr.setValue(length)
 
         # Update number of deformers and outputs
         self.setNumDeformers(numDeformers)
-
-        for spineOutput in self.spineOutputs:
-            if spineOutput not in self.bezierSpineSpliceOp.getOutput("outputs"):
-                self.bezierSpineSpliceOp.setOutput("outputs", spineOutput)
-
-        # Update Deformers Splice Op
-        for spineOutput in self.spineOutputs:
-            if spineOutput not in self.deformersToOutputsSpliceOp.getInput("constrainers"):
-                self.deformersToOutputsSpliceOp.setInput("constrainers", spineOutput)
-
-        for joint in self.deformerJoints:
-            if joint not in self.deformersToOutputsSpliceOp.getOutput("constrainees"):
-                self.deformersToOutputsSpliceOp.setOutput("constrainees", joint)
 
         # Updating constraint to use the updated last output.
         self.spineEndOutputConstraint.setConstrainer(self.spineOutputs[-1], index=0)
@@ -430,13 +536,14 @@ class FabriceSpineRig(FabriceSpine):
 
         # evaluate the constraint op so that all the joint transforms are updated.
         self.deformersToOutputsSpliceOp.evaluate()
-        self.pelvisDefSpliceOp.evaluate()
 
         # evaluate the constraints to ensure the outputs are now in the correct location.
+        self.spineSrtInputConstraint.evaluate()
         self.spineCogOutputConstraint.evaluate()
-        self.spineBaseOutputConstraint.evaluate()
-        self.pelvisOutputConstraint.evaluate()
+        self.spineBaseOutputPosConstraint.evaluate()
+        self.spineBaseOutputOriConstraint.evaluate()
         self.spineEndOutputConstraint.evaluate()
+        self.spineEndCtrlOutputConstraint.evaluate()
 
 
 

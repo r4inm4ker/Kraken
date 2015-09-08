@@ -2,7 +2,6 @@ import math
 
 from kraken.core.maths import Vec3
 from kraken.core.maths.xfo import Xfo
-from kraken.core.maths.xfo import xfoFromDirAndUpV
 
 from kraken.core.objects.components.base_example_component import BaseExampleComponent
 
@@ -29,12 +28,12 @@ from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
 
 
-class InsectLegComponent(BaseExampleComponent):
+class TentacleComponent(BaseExampleComponent):
     """Insect Leg Base"""
 
-    def __init__(self, name='InsectLegBase', parent=None):
+    def __init__(self, name='TentacleBase', parent=None):
 
-        super(InsectLegComponent, self).__init__(name, parent)
+        super(TentacleComponent, self).__init__(name, parent)
 
         # ===========
         # Declare IO
@@ -45,8 +44,7 @@ class InsectLegComponent(BaseExampleComponent):
         # Declare Output Xfos
         self.boneOutputs = self.createOutput('boneOutputs', dataType='Xfo[]')
 
-        self.legEndXfoOutputTgt = self.createOutput('legEndXfoOutput', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
-        self.legEndPosOutputTgt = self.createOutput('legEndPosOutput', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
+        self.tentacleEndXfoOutputTgt = self.createOutput('tentacleEndXfoOutput', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
 
         # Declare Input Attrs
         self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=False, parent=self.cmpInputAttrGrp).getTarget()
@@ -56,28 +54,32 @@ class InsectLegComponent(BaseExampleComponent):
         # Declare Output Attrs
 
 
-class InsectLegComponentGuide(InsectLegComponent):
-    """InsectLeg Component Guide"""
+class TentacleComponentGuide(TentacleComponent):
+    """Tentacle Component Guide"""
 
-    def __init__(self, name='InsectLeg', parent=None, data=None):
+    def __init__(self, name='Tentacle', parent=None, data=None):
 
-        Profiler.getInstance().push("Construct InsectLeg Guide Component:" + name)
-        super(InsectLegComponentGuide, self).__init__(name, parent)
+        Profiler.getInstance().push("Construct Tentacle Guide Component:" + name)
+        super(TentacleComponentGuide, self).__init__(name, parent)
 
         # =========
         # Controls
         # =========
         guideSettingsAttrGrp = AttributeGroup("GuideSettings", parent=self)
         self.numJoints = IntegerAttribute('numJoints', value=5, minValue=2, maxValue=20, parent=guideSettingsAttrGrp)
-        self.numJoints.setValueChangeCallback(self.updateNumLegControls)
+        self.numJoints.setValueChangeCallback(self.updateNumControls)
 
         self.jointCtrls = []
+        self.tentacleOutputs = []
         if data is None:
             numJoints = self.numJoints.getValue()
             jointPositions = self.generateGuidePositions(numJoints)
 
             for i in xrange(numJoints):
-                self.jointCtrls.append(Control('leg' + str(i + 1).zfill(2), parent=self.ctrlCmpGrp, shape="sphere"))
+                self.jointCtrls.append(Control('tentacle' + str(i + 1).zfill(2), parent=self.ctrlCmpGrp, shape="sphere"))
+                self.tentacleOutputs.append(ComponentOutput('tentacle' + str(i + 1).zfill(2), parent=self.outputHrcGrp))
+
+            self.boneOutputs.setTarget(self.tentacleOutputs)
 
             data = {
                "location": "L",
@@ -101,7 +103,7 @@ class InsectLegComponentGuide(InsectLegComponent):
 
         """
 
-        data = super(InsectLegComponentGuide, self).saveData()
+        data = super(TentacleComponentGuide, self).saveData()
 
         jointPositions = []
         for i in xrange(len(self.jointCtrls)):
@@ -123,7 +125,7 @@ class InsectLegComponentGuide(InsectLegComponent):
 
         """
 
-        super(InsectLegComponentGuide, self).loadData(data)
+        super(TentacleComponentGuide, self).loadData(data)
 
         for i in xrange(len(data['jointPositions'])):
             self.jointCtrls[i].xfo.tr = data['jointPositions'][i]
@@ -139,7 +141,7 @@ class InsectLegComponentGuide(InsectLegComponent):
 
         """
 
-        data = super(InsectLegComponentGuide, self).getRigBuildData()
+        data = super(TentacleComponentGuide, self).getRigBuildData()
 
         numJoints = self.numJoints.getValue()
 
@@ -171,11 +173,11 @@ class InsectLegComponentGuide(InsectLegComponent):
     # ==========
     # Callbacks
     # ==========
-    def updateNumLegControls(self, numJoints):
-        """Generate the guide controls for the variable outputes array.
+    def updateNumControls(self, numJoints):
+        """Load a saved guide representation from persisted data.
 
         Arguments:
-        numJoints -- object, The number of joints in the chain.
+        numJoints -- object, The number of joints inthe chain.
 
         Return:
         True if successful.
@@ -187,14 +189,20 @@ class InsectLegComponentGuide(InsectLegComponent):
 
         if numJoints + 1 > len(self.jointCtrls):
             for i in xrange(len(self.jointCtrls), numJoints + 1):
-                newCtrl = Control('leg' + str(i + 1).zfill(2), parent=self.ctrlCmpGrp, shape="sphere")
+                newCtrl = Control('tentacle' + str(i + 1).zfill(2), parent=self.ctrlCmpGrp, shape="sphere")
                 self.jointCtrls.append(newCtrl)
+
+                newOutput = ComponentOutput('tentacle' + str(i + 1).zfill(2), parent=self.outputHrcGrp)
+                self.tentacleOutputs.append(newOutput)
 
         elif numJoints + 1 < len(self.jointCtrls):
             numExtraCtrls = len(self.jointCtrls) - (numJoints + 1)
             for i in xrange(numExtraCtrls):
                 extraCtrl = self.jointCtrls.pop()
                 self.ctrlCmpGrp.removeChild(extraCtrl)
+
+                extraOutput = self.tentacleOutputs.pop()
+                self.outputHrcGrp.removeChild(extraOutput)
 
         # Reset the control positions based on new number of joints
         jointPositions = self.generateGuidePositions(numJoints)
@@ -218,15 +226,11 @@ class InsectLegComponentGuide(InsectLegComponent):
         halfPi = math.pi / 2.0
         step = halfPi / numJoints
 
-        xValues = []
-        yValues = []
-        for i in xrange(numJoints + 1):
-            xValues.append(math.cos((i * step) + halfPi) * -10)
-            yValues.append(math.sin((i * step) + halfPi) * 10)
-
         guidePositions = []
         for i in xrange(numJoints + 1):
-            guidePositions.append(Vec3(xValues[i], yValues[i], 0.0))
+            x = math.cos((i * step) + halfPi) * -10
+            y = math.sin((i * step) + halfPi) * 10
+            guidePositions.append(Vec3(x, y, 0.0))
 
         return guidePositions
 
@@ -254,16 +258,16 @@ class InsectLegComponentGuide(InsectLegComponent):
 
         """
 
-        return InsectLegComponentRig
+        return TentacleComponentRig
 
 
-class InsectLegComponentRig(InsectLegComponent):
+class TentacleComponentRig(TentacleComponent):
     """Insect Leg Rig"""
 
-    def __init__(self, name='InsectLeg', parent=None):
+    def __init__(self, name='Tentacle', parent=None):
 
-        Profiler.getInstance().push("Construct InsectLeg Rig Component:" + name)
-        super(InsectLegComponentRig, self).__init__(name, parent)
+        Profiler.getInstance().push("Construct Tentacle Rig Component:" + name)
+        super(TentacleComponentRig, self).__init__(name, parent)
 
 
         # =========
@@ -277,35 +281,34 @@ class InsectLegComponentRig(InsectLegComponent):
         # FK
         self.fkCtrlSpaces = []
         self.fkCtrls = []
-        self.setNumControls(4)
+        self.setNumControls(2)
 
         # IK Control
-        self.legIKCtrlSpace = CtrlSpace('IK', parent=self.ctrlCmpGrp)
-        self.legIKCtrl = Control('IK', parent=self.legIKCtrlSpace, shape="pin")
-
-        if self.getLocation() == 'R':
-            self.legIKCtrl.rotatePoints(0, 90, 0)
-            self.legIKCtrl.translatePoints(Vec3(-1.0, 0.0, 0.0))
-        else:
-            self.legIKCtrl.rotatePoints(0, -90, 0)
-            self.legIKCtrl.translatePoints(Vec3(1.0, 0.0, 0.0))
+        self.tentacleIKCtrlSpace = CtrlSpace('IK', parent=self.ctrlCmpGrp)
+        self.tentacleIKCtrl = Control('IK', parent=self.tentacleIKCtrlSpace, shape="sphere")
+        self.tentacleIKCtrl.scalePoints(Vec3(0.25, 0.25, 0.25))
+        self.tentacleIKCtrl.lockScale(x=True, y=True, z=True)
+        self.tentacleIKCtrl.lockRotation(x=True, y=True, z=True)
 
         # Add Component Params to IK control
-        legSettingsAttrGrp = AttributeGroup("DisplayInfo_LegSettings", parent=self.legIKCtrl)
-        legdrawDebugInputAttr = BoolAttribute('drawDebug', value=False, parent=legSettingsAttrGrp)
-        legUseInitPoseInputAttr = BoolAttribute('useInitPose', value=True, parent=legSettingsAttrGrp)
-        self.rootIndexInputAttr = IntegerAttribute('rootIndex', value=0, parent=legSettingsAttrGrp)
-        legFkikInputAttr = ScalarAttribute('fkik', value=1.0, minValue=0.0, maxValue=1.0, parent=legSettingsAttrGrp)
+        tentacleSettingsAttrGrp = AttributeGroup("DisplayInfo_LegSettings", parent=self.tentacleIKCtrl)
+        tentacledrawDebugInputAttr = BoolAttribute('drawDebug', value=False, parent=tentacleSettingsAttrGrp)
+        fkikInputAttr = ScalarAttribute('fkik', value=0.0, minValue=0.0, maxValue=1.0, parent=tentacleSettingsAttrGrp)
+        waveLength_YInputAttr = ScalarAttribute('waveLength_Y', value=1.0, minValue=0.0, maxValue=5.0, parent=tentacleSettingsAttrGrp)
+        waveAmplitude_YInputAttr = ScalarAttribute('waveAmplitude_Y', value=0.0, minValue=-3.0, maxValue=3.0, parent=tentacleSettingsAttrGrp)
+        waveFrequency_YInputAttr = ScalarAttribute('waveFrequency_Y', value=2.0, minValue=0.0, maxValue=10.0, parent=tentacleSettingsAttrGrp)
+        waveLength_ZInputAttr = ScalarAttribute('waveLength_Z', value=2.329, minValue=0.0, maxValue=5.0, parent=tentacleSettingsAttrGrp)
+        waveAmplitude_ZInputAttr = ScalarAttribute('waveAmplitude_Z', value=0.0, minValue=-3.0, maxValue=3.0, parent=tentacleSettingsAttrGrp)
+        waveFrequency_ZInputAttr = ScalarAttribute('waveFrequency_Z', value=3.354, minValue=0.0, maxValue=10.0, parent=tentacleSettingsAttrGrp)
+        tipBiasInputAttr = ScalarAttribute('tipBias', value=1.0, minValue=0.0, maxValue=1.0, parent=tentacleSettingsAttrGrp)
+
+        springStrengthInputAttr = ScalarAttribute('springStrength', value=0.3, minValue=0.0, maxValue=1.0, parent=tentacleSettingsAttrGrp)
+        dampeningInputAttr = ScalarAttribute('dampening', value=0.03, minValue=0.0, maxValue=1.0, parent=tentacleSettingsAttrGrp)
+        simulationWeightInputAttr = ScalarAttribute('simulationWeight', value=1.0, minValue=0.0, maxValue=1.0, parent=tentacleSettingsAttrGrp)
+        softLimitBoundsInputAttr = ScalarAttribute('softLimitBounds', value=5.0, minValue=0.0, maxValue=10.0, parent=tentacleSettingsAttrGrp)
 
         # Connect IO to controls
-        self.drawDebugInputAttr.connect(legdrawDebugInputAttr)
-
-        # UpV
-        self.legUpVCtrlSpace = CtrlSpace('UpV', parent=self.ctrlCmpGrp)
-        self.legUpVCtrl = Control('UpV', parent=self.legUpVCtrlSpace, shape="triangle")
-        self.legUpVCtrl.alignOnZAxis()
-        self.legUpVCtrl.rotatePoints(0, 90, 0)
-
+        self.drawDebugInputAttr.connect(tentacledrawDebugInputAttr)
 
         # ==========
         # Deformers
@@ -328,10 +331,15 @@ class InsectLegComponentRig(InsectLegComponent):
         # Constrain I/O
         # ==============
         # Constraint inputs
-        legRootInputConstraint = PoseConstraint('_'.join([self.fkCtrlSpaces[0].getName(), 'To', self.rootInputTgt.getName()]))
-        legRootInputConstraint.setMaintainOffset(True)
-        legRootInputConstraint.addConstrainer(self.rootInputTgt)
-        self.fkCtrlSpaces[0].addConstraint(legRootInputConstraint)
+        tentacleRootInputConstraint = PoseConstraint('_'.join([self.fkCtrlSpaces[0].getName(), 'To', self.rootInputTgt.getName()]))
+        tentacleRootInputConstraint.setMaintainOffset(True)
+        tentacleRootInputConstraint.addConstrainer(self.rootInputTgt)
+        self.fkCtrlSpaces[0].addConstraint(tentacleRootInputConstraint)
+
+        tentacleRootInputConstraint = PoseConstraint('_'.join([self.tentacleIKCtrlSpace.getName(), 'To', self.rootInputTgt.getName()]))
+        tentacleRootInputConstraint.setMaintainOffset(True)
+        tentacleRootInputConstraint.addConstrainer(self.rootInputTgt)
+        self.tentacleIKCtrlSpace.addConstraint(tentacleRootInputConstraint)
 
 
         chainBaseInputConstraint = PoseConstraint('_'.join([self.chainBase.getName(), 'To', self.rootInputTgt.getName()]))
@@ -343,31 +351,42 @@ class InsectLegComponentRig(InsectLegComponent):
         # Add Splice Ops
         # ===============
         # Add Splice Op
-        self.nBoneSolverSpliceOp = SpliceOperator('legSpliceOp', 'NBoneIKSolver', 'Kraken')
-        self.addOperator(self.nBoneSolverSpliceOp)
+        self.tentacleSolverSpliceOp = SpliceOperator('tentacleSpliceOp', 'TentacleSolver', 'Kraken')
+        self.addOperator(self.tentacleSolverSpliceOp)
 
         # # Add Att Inputs
-        self.nBoneSolverSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
-        self.nBoneSolverSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
-        self.nBoneSolverSpliceOp.setInput('useInitPose', legUseInitPoseInputAttr)
-        self.nBoneSolverSpliceOp.setInput('ikblend', legFkikInputAttr)
-        self.nBoneSolverSpliceOp.setInput('rootIndex', self.rootIndexInputAttr)
-        self.nBoneSolverSpliceOp.setInput('tipBoneLen', self.tipBoneLenInputAttr)
+        self.tentacleSolverSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.tentacleSolverSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
+        self.tentacleSolverSpliceOp.setInput('ikblend', fkikInputAttr)
+        self.tentacleSolverSpliceOp.setInput('waveLength_Y', waveLength_YInputAttr)
+        self.tentacleSolverSpliceOp.setInput('waveAmplitude_Y', waveAmplitude_YInputAttr)
+        self.tentacleSolverSpliceOp.setInput('waveFrequency_Y', waveFrequency_YInputAttr)
+        self.tentacleSolverSpliceOp.setInput('waveLength_Z', waveLength_ZInputAttr)
+        self.tentacleSolverSpliceOp.setInput('waveAmplitude_Z', waveAmplitude_ZInputAttr)
+        self.tentacleSolverSpliceOp.setInput('waveFrequency_Z', waveFrequency_ZInputAttr)
+        self.tentacleSolverSpliceOp.setInput('tipBias', tipBiasInputAttr)
+
+        self.tentacleSolverSpliceOp.setInput('springStrength', springStrengthInputAttr)
+        self.tentacleSolverSpliceOp.setInput('dampening', dampeningInputAttr)
+        self.tentacleSolverSpliceOp.setInput('simulationWeight', simulationWeightInputAttr)
+        self.tentacleSolverSpliceOp.setInput('softLimitBounds', softLimitBoundsInputAttr)
+
+        self.tentacleSolverSpliceOp.setInput('tipBoneLen', self.tipBoneLenInputAttr)
 
         # Add Xfo Inputs
-        self.nBoneSolverSpliceOp.setInput('chainBase', self.chainBase)
-        self.nBoneSolverSpliceOp.setInput('ikgoal', self.legIKCtrl)
-        self.nBoneSolverSpliceOp.setInput('upVector', self.legUpVCtrl)
+        self.tentacleSolverSpliceOp.setInput('chainBase', self.chainBase)
+        self.tentacleSolverSpliceOp.setInput('ikgoal', self.tentacleIKCtrl)
 
-        self.nBoneSolverSpliceOp.setInput('fkcontrols', self.fkCtrls)
+        self.tentacleSolverSpliceOp.setInput('fkcontrols', self.fkCtrls)
 
         # Add Xfo Outputs
-        self.nBoneSolverSpliceOp.setOutput('pose', self.boneOutputsTgt)
+        self.tentacleSolverSpliceOp.setOutput('pose', self.boneOutputsTgt)
 
-        self.nBoneSolverSpliceOp.setOutput('legEnd', self.legEndPosOutputTgt)
+        self.tentacleSolverSpliceOp.setOutput('tentacleEnd', self.tentacleEndXfoOutputTgt)
+
 
         # Add Deformer Splice Op
-        self.outputsToDeformersSpliceOp = SpliceOperator('insectLegDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken')
+        self.outputsToDeformersSpliceOp = SpliceOperator('TentacleDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken', alwaysEval=True)
         self.addOperator(self.outputsToDeformersSpliceOp)
 
         # Add Att Inputs
@@ -409,8 +428,8 @@ class InsectLegComponentRig(InsectLegComponent):
         # Add new deformers and outputs
         for i in xrange(len(self.boneOutputsTgt), numDeformers):
             name = 'bone' + str(i + 1).zfill(2)
-            legOutput = ComponentOutput(name, parent=self.outputHrcGrp)
-            self.boneOutputsTgt.append(legOutput)
+            tentacleOutput = ComponentOutput(name, parent=self.outputHrcGrp)
+            self.boneOutputsTgt.append(tentacleOutput)
 
         for i in xrange(len(self.deformerJoints), numDeformers):
             name = 'bone' + str(i + 1).zfill(2)
@@ -419,38 +438,6 @@ class InsectLegComponentRig(InsectLegComponent):
             self.deformerJoints.append(boneDef)
 
         return True
-
-
-    def calculateUpVXfo(self, boneXfos, endXfo):
-        """Calculates the transform for the UpV control.
-
-        Args:
-            boneXfos (list): Bone transforms.
-            endXfo (Xfo): Transform for the end of the chain.
-
-        Returns:
-            Xfo: Up Vector transform.
-
-        """
-
-
-        # Calculate FW
-        toFirst = boneXfos[1].tr.subtract(boneXfos[0].tr).unit()
-        toTip = endXfo.tr.subtract(boneXfos[0].tr).unit()
-        fw = toTip.cross(toFirst).unit()
-
-        chainNormal = fw.cross(toTip).unit()
-        chainZAxis = toTip.cross(chainNormal).unit()
-
-        chainXfo = Xfo()
-        chainXfo.setFromVectors(toTip.unit(), chainNormal, chainZAxis, boneXfos[0].tr)
-
-        rootToTip = endXfo.tr.subtract(boneXfos[0].tr).length()
-
-        upVXfo = Xfo()
-        upVXfo.tr = chainXfo.transformVector(Vec3(rootToTip / 2.0, rootToTip / 2.0, 0.0))
-
-        return upVXfo
 
 
     def loadData(self, data=None):
@@ -464,7 +451,7 @@ class InsectLegComponentRig(InsectLegComponent):
 
         """
 
-        super(InsectLegComponentRig, self).loadData( data )
+        super(TentacleComponentRig, self).loadData( data )
 
         boneXfos = data['boneXfos']
         boneLengths = data['boneLengths']
@@ -479,19 +466,12 @@ class InsectLegComponentRig(InsectLegComponent):
         for i, each in enumerate(self.fkCtrlSpaces):
             self.fkCtrlSpaces[i].xfo = boneXfos[i]
             self.fkCtrls[i].xfo = boneXfos[i]
-            self.fkCtrls[i].scalePoints(Vec3(boneLengths[i], 1.75, 1.75))
+            self.fkCtrls[i].scalePoints(Vec3(Vec3(boneLengths[i], boneLengths[i] * 0.45, boneLengths[i] * 0.45)))
 
         self.chainBase.xfo = boneXfos[0]
 
-        self.legIKCtrlSpace.xfo = endXfo
-        self.legIKCtrl.xfo = endXfo
-
-        upVXfo = self.calculateUpVXfo(boneXfos, endXfo)
-        self.legUpVCtrlSpace.xfo = upVXfo
-        self.legUpVCtrl.xfo = upVXfo
-
-        # Set max on the rootIndex attribute
-        self.rootIndexInputAttr.setMax(len(boneXfos))
+        self.tentacleIKCtrlSpace.xfo = endXfo
+        self.tentacleIKCtrl.xfo = endXfo
 
         # ============
         # Set IO Xfos
@@ -501,8 +481,7 @@ class InsectLegComponentRig(InsectLegComponent):
         for i in xrange(len(boneLengths)):
             self.boneOutputsTgt[i].xfo = boneXfos[i]
 
-        self.legEndXfoOutputTgt.xfo = endXfo
-        self.legEndPosOutputTgt.xfo = endXfo
+        self.tentacleEndXfoOutputTgt.xfo = endXfo
 
         # =============
         # Set IO Attrs
@@ -515,11 +494,11 @@ class InsectLegComponentRig(InsectLegComponent):
         # Evaluate Splice Ops
         # ====================
         # evaluate the nbone op so that all the output transforms are updated.
-        self.nBoneSolverSpliceOp.evaluate()
+        self.tentacleSolverSpliceOp.evaluate()
         self.outputsToDeformersSpliceOp.evaluate()
 
 
 from kraken.core.kraken_system import KrakenSystem
 ks = KrakenSystem.getInstance()
-ks.registerComponent(InsectLegComponentGuide)
-ks.registerComponent(InsectLegComponentRig)
+ks.registerComponent(TentacleComponentGuide)
+ks.registerComponent(TentacleComponentRig)

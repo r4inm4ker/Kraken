@@ -24,11 +24,11 @@ from kraken.helpers.utility_methods import logHierarchy
 
 
 
-class ClavicleComponent(BaseExampleComponent):
+class FabriceClavicle(BaseExampleComponent):
     """Clavicle Component Base"""
 
     def __init__(self, name='clavicle', parent=None, data=None):
-        super(ClavicleComponent, self).__init__(name, parent)
+        super(FabriceClavicle, self).__init__(name, parent)
 
         # ===========
         # Declare IO
@@ -38,24 +38,22 @@ class ClavicleComponent(BaseExampleComponent):
 
         # Declare Output Xfos
         self.clavicleOutputTgt = self.createOutput('clavicle', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
-        self.clavicleEndOutputTgt = self.createOutput('clavicleEnd', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
 
         # Declare Input Attrs
         self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=False, parent=self.cmpInputAttrGrp).getTarget()
         self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp).getTarget()
-        self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', value=self.getLocation() is 'R', parent=self.cmpInputAttrGrp).getTarget()
 
         # Declare Output Attrs
 
 
 
-class ClavicleComponentGuide(ClavicleComponent):
+class FabriceClavicleGuide(FabriceClavicle):
     """Clavicle Component Guide"""
 
-    def __init__(self, name='clavicle', parent=None, data=None):
+    def __init__(self, name='clavicle', parent=None):
 
         Profiler.getInstance().push("Construct Clavicle Guide Component:" + name)
-        super(ClavicleComponentGuide, self).__init__(name, parent)
+        super(FabriceClavicleGuide, self).__init__(name, parent)
 
 
         # =========
@@ -64,19 +62,16 @@ class ClavicleComponentGuide(ClavicleComponent):
         # Guide Controls
         guideSettingsAttrGrp = AttributeGroup("GuideSettings", parent=self)
 
-        self.clavicleCtrl = Control('clavicle', parent=self.ctrlCmpGrp, shape="sphere")
-        self.clavicleUpVCtrl = Control('clavicleUpV', parent=self.ctrlCmpGrp, shape="triangle")
-        self.clavicleUpVCtrl.setColor('red')
-        self.clavicleEndCtrl = Control('clavicleEnd', parent=self.ctrlCmpGrp, shape="sphere")
+        self.clavicleCtrl = Control('clavicle', parent=self.ctrlCmpGrp, shape="cube")
+        self.clavicleCtrl.alignOnXAxis()
+        self.clavicleCtrl.scalePoints(Vec3(1.0, 0.25, 0.25))
 
-        if data is None:
-            data = {
-                    "name": name,
-                    "location": "L",
-                    "clavicleXfo": Xfo(Vec3(0.1322, 15.403, -0.5723)),
-                    "clavicleUpVXfo": Xfo(Vec3(0.0, 1.0, 0.0)),
-                    "clavicleEndXfo": Xfo(Vec3(2.27, 15.295, -0.753))
-                   }
+        data = {
+                "name": name,
+                "location": "L",
+                "clavicleXfo": Xfo(Vec3(0.1322, 15.403, -0.5723)),
+                'clavicleCtrlCrvData': self.clavicleCtrl.getCurveData()
+               }
 
         self.loadData(data)
 
@@ -94,11 +89,10 @@ class ClavicleComponentGuide(ClavicleComponent):
 
         """
 
-        data = super(ClavicleComponentGuide, self).saveData()
+        data = super(FabriceClavicleGuide, self).saveData()
 
         data['clavicleXfo'] = self.clavicleCtrl.xfo
-        data['clavicleUpVXfo'] = self.clavicleUpVCtrl.xfo
-        data['clavicleEndXfo'] = self.clavicleEndCtrl.xfo
+        data['clavicleCtrlCrvData'] = self.clavicleCtrl.getCurveData()
 
         return data
 
@@ -114,11 +108,10 @@ class ClavicleComponentGuide(ClavicleComponent):
 
         """
 
-        super(ClavicleComponentGuide, self).loadData( data )
+        super(FabriceClavicleGuide, self).loadData( data )
 
         self.clavicleCtrl.xfo = data['clavicleXfo']
-        self.clavicleUpVCtrl.xfo = self.clavicleCtrl.xfo.multiply(data['clavicleUpVXfo'])
-        self.clavicleEndCtrl.xfo = data['clavicleEndXfo']
+        self.clavicleCtrl.setCurveData(data['clavicleCtrlCrvData'])
 
         return True
 
@@ -131,29 +124,14 @@ class ClavicleComponentGuide(ClavicleComponent):
 
         """
 
-        data = super(ClavicleComponentGuide, self).getRigBuildData()
+        data = super(FabriceClavicleGuide, self).getRigBuildData()
 
 
-        # Values
-        claviclePosition = self.clavicleCtrl.xfo.tr
-        clavicleUpV = self.clavicleUpVCtrl.xfo.tr
-        clavicleEndPosition = self.clavicleEndCtrl.xfo.tr
-
-        # Calculate Clavicle Xfo
-        rootToEnd = clavicleEndPosition.subtract(claviclePosition).unit()
-        rootToUpV = clavicleUpV.subtract(claviclePosition).unit()
-        bone1ZAxis = rootToUpV.cross(rootToEnd).unit()
-        bone1Normal = bone1ZAxis.cross(rootToEnd).unit()
-
-        clavicleXfo = Xfo()
-        clavicleXfo.setFromVectors(rootToEnd, bone1Normal, bone1ZAxis, claviclePosition)
-
-        clavicleLen = claviclePosition.subtract(clavicleEndPosition).length()
-
-        data['clavicleXfo'] = clavicleXfo
-        data['clavicleLen'] = clavicleLen
+        data['clavicleXfo'] = self.clavicleCtrl.xfo
+        data['clavicleCtrlCrvData'] = self.clavicleCtrl.getCurveData()
 
         return data
+
 
     # ==============
     # Class Methods
@@ -178,16 +156,16 @@ class ClavicleComponentGuide(ClavicleComponent):
 
         """
 
-        return ClavicleComponentRig
+        return FabriceClavicleRig
 
 
-class ClavicleComponentRig(ClavicleComponent):
+class FabriceClavicleRig(FabriceClavicle):
     """Clavicle Component"""
 
     def __init__(self, name='Clavicle', parent=None):
 
         Profiler.getInstance().push("Construct Clavicle Rig Component:" + name)
-        super(ClavicleComponentRig, self).__init__(name, parent)
+        super(FabriceClavicleRig, self).__init__(name, parent)
 
 
         # =========
@@ -224,10 +202,6 @@ class ClavicleComponentRig(ClavicleComponent):
         clavicleConstraint.addConstrainer(self.clavicleCtrl)
         self.clavicleOutputTgt.addConstraint(clavicleConstraint)
 
-        clavicleEndConstraint = PoseConstraint('_'.join([self.clavicleEndOutputTgt.getName(), 'To', self.clavicleCtrl.getName()]))
-        clavicleEndConstraint.addConstrainer(self.clavicleCtrl)
-        self.clavicleEndOutputTgt.addConstraint(clavicleEndConstraint)
-
 
         # ===============
         # Add Splice Ops
@@ -260,26 +234,20 @@ class ClavicleComponentRig(ClavicleComponent):
 
         """
 
-        super(ClavicleComponentRig, self).loadData( data )
+        super(FabriceClavicleRig, self).loadData( data )
 
         self.clavicleCtrlSpace.xfo = data['clavicleXfo']
         self.clavicleCtrl.xfo = data['clavicleXfo']
-        self.clavicleCtrl.scalePoints(Vec3(data['clavicleLen'], 0.75, 0.75))
-
-        if data['location'] == "R":
-            self.clavicleCtrl.translatePoints(Vec3(0.0, 0.0, -1.0))
-        else:
-            self.clavicleCtrl.translatePoints(Vec3(0.0, 0.0, 1.0))
+        self.clavicleCtrl.setCurveData(data['clavicleCtrlCrvData'])
 
         # ============
         # Set IO Xfos
         # ============
         self.spineEndInputTgt.xfo = data['clavicleXfo']
-        self.clavicleEndOutputTgt.xfo = data['clavicleXfo']
         self.clavicleOutputTgt.xfo = data['clavicleXfo']
 
 
 from kraken.core.kraken_system import KrakenSystem
 ks = KrakenSystem.getInstance()
-ks.registerComponent(ClavicleComponentGuide)
-ks.registerComponent(ClavicleComponentRig)
+ks.registerComponent(FabriceClavicleGuide)
+ks.registerComponent(FabriceClavicleRig)

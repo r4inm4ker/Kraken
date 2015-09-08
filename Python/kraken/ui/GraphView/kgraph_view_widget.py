@@ -1,5 +1,6 @@
 import json, difflib
-import os.path
+import os
+import traceback
 
 from PySide import QtGui, QtCore
 
@@ -13,9 +14,10 @@ from kraken.core.objects.rig import Rig
 from kraken import plugins
 
 
-def GetHomePath():
-    homeDir = os.path.expanduser("~")
-    return homeDir
+def GetKrakenPath():
+    if 'KRAKEN_PATH' in os.environ:
+        return os.environ['KRAKEN_PATH']
+    return os.path.expanduser("~")
 
 
 class KGraphViewWidget(GraphViewWidget):
@@ -81,34 +83,77 @@ class KGraphViewWidget(GraphViewWidget):
 
 
     def saveRigPreset(self):
-        lastSceneFilePath = os.path.join(GetHomePath(), self.guideRig.getName() )
-        (filePath, filter) = QtGui.QFileDialog.getSaveFileName(self, 'Save Rig Preset', lastSceneFilePath, 'Kraken Rig (*.krg)')
+        settings = self.window().getSettings()
+        settings.beginGroup('Files')
+        lastFilePath = settings.value("lastFilePath", os.path.join(GetKrakenPath(), self.guideRig.getName() ))
+        settings.endGroup()
+        (filePath, filter) = QtGui.QFileDialog.getSaveFileName(self, 'Save Rig Preset', lastFilePath, 'Kraken Rig (*.krg)')
         if len(filePath) > 0:
             self.synchGuideRig()
             self.guideRig.writeRigDefinitionFile(filePath)
 
+            settings.beginGroup('Files')
+            lastFilePath = settings.setValue("lastFilePath", filePath)
+            settings.endGroup()
+
 
     def loadRigPreset(self):
-        lastSceneFilePath = GetHomePath()
-        (filePath, filter) = QtGui.QFileDialog.getOpenFileName(self, 'Load Rig Preset', lastSceneFilePath, 'Kraken Rig (*.krg)')
+        settings = self.window().getSettings()
+        settings.beginGroup('Files')
+        lastFilePath = settings.value("lastFilePath", os.path.join(GetKrakenPath(), self.guideRig.getName() ))
+        settings.endGroup()
+        (filePath, filter) = QtGui.QFileDialog.getOpenFileName(self, 'Load Rig Preset', lastFilePath, 'Kraken Rig (*.krg)')
         if len(filePath) > 0:
             self.guideRig = Rig()
             self.guideRig.loadRigDefinitionFile(filePath)
             self.graphView.displayGraph( self.guideRig )
             # self.nameWidget.setText( self.guideRig.getName() )
 
+            settings.beginGroup('Files')
+            lastFilePath = settings.setValue("lastFilePath", filePath)
+            settings.endGroup()
+
 
     def buildGuideRig(self):
 
-        self.window().statusBar().showMessage('Building Guide')
+        try:
+            self.window().statusBar().showMessage('Building Guide')
 
-        builder = plugins.getBuilder()
+            builder = plugins.getBuilder()
 
-        if self.guideRig.getName().endswith('_guide') is False:
-            self.guideRig.setName(self.guideRig.getName() + '_guide')
+            if self.guideRig.getName().endswith('_guide') is False:
+                self.guideRig.setName(self.guideRig.getName() + '_guide')
 
-        builder.build(self.guideRig)
-        self.window().statusBar().showMessage('Ready')
+            builder.build(self.guideRig)
+
+        except Exception as e:
+            print traceback.format_exc()
+
+            statusBar = self.window().statusBar()
+            warningLabel = QtGui.QLabel('Error Building: ' + ', '.join([x for x in e.args]))
+            warningLabel.setMaximumWidth(200)
+            warningLabel.setStyleSheet("QLabel { border-radius: 3px; background-color: #AA0000}")
+
+            def addWarning():
+                self.window().statusBar().clearMessage()
+
+                statusBar.addWidget(warningLabel, 1)
+                statusBar.repaint()
+
+                timer.start()
+
+            def endWarning():
+                timer.stop()
+                statusBar.removeWidget(warningLabel)
+                statusBar.repaint()
+
+                self.window().statusBar().showMessage('Ready', 2000)
+
+            timer = QtCore.QTimer()
+            timer.setInterval(2000)
+            timer.timeout.connect(endWarning)
+
+            addWarning()
 
 
     def synchGuideRig(self):
@@ -119,20 +164,48 @@ class KGraphViewWidget(GraphViewWidget):
 
     def buildRig(self):
 
-        self.window().statusBar().showMessage('Building Rig')
+        try:
+            self.window().statusBar().showMessage('Building Rig')
 
-        self.synchGuideRig()
+            self.synchGuideRig()
 
-        rigBuildData = self.guideRig.getRigBuildData()
-        rig = Rig()
-        rig.loadRigDefinition(rigBuildData)
+            rigBuildData = self.guideRig.getRigBuildData()
+            rig = Rig()
+            rig.loadRigDefinition(rigBuildData)
 
-        rig.setName(rig.getName().replace('_guide', ''))
+            rig.setName(rig.getName().replace('_guide', ''))
 
-        builder = plugins.getBuilder()
-        builder.build(rig)
+            builder = plugins.getBuilder()
+            builder.build(rig)
 
-        self.window().statusBar().showMessage('Ready')
+        except Exception as e:
+            print traceback.format_exc()
+
+            statusBar = self.window().statusBar()
+            warningLabel = QtGui.QLabel('Error Building: ' + ', '.join([x for x in e.args]))
+            warningLabel.setMaximumWidth(200)
+            warningLabel.setStyleSheet("QLabel { border-radius: 3px; background-color: #AA0000}")
+
+            def addWarning():
+                self.window().statusBar().clearMessage()
+
+                statusBar.addWidget(warningLabel, 1)
+                statusBar.repaint()
+
+                timer.start()
+
+            def endWarning():
+                timer.stop()
+                statusBar.removeWidget(warningLabel)
+                statusBar.repaint()
+
+                self.window().statusBar().showMessage('Ready', 2000)
+
+            timer = QtCore.QTimer()
+            timer.setInterval(2000)
+            timer.timeout.connect(endWarning)
+
+            addWarning()
 
     # =========
     # Shortcuts

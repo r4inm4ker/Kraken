@@ -74,7 +74,8 @@ class BobRig(Container):
         clavicleRightComponent = ClavicleComponentRig("clavicle", self)
         clavicleRightComponent.loadData(data=clavicleRightComponentGuide.getRigBuildData())
 
-        armLeftComponentGuide = ArmComponentGuide("arm", data={
+        armLeftComponentGuide = ArmComponentGuide("arm")
+        armLeftComponentGuide.loadData({
             "location":"L",
             "bicepXfo": Xfo(Vec3(2.27, 15.295, -0.753)),
             "forearmXfo": Xfo(Vec3(5.039, 13.56, -0.859)),
@@ -88,7 +89,8 @@ class BobRig(Container):
         armLeftComponent = ArmComponentRig("arm", self)
         armLeftComponent.loadData(data=armLeftComponentGuide.getRigBuildData())
 
-        armRightComponentGuide = ArmComponentGuide("arm", data={
+        armRightComponentGuide = ArmComponentGuide("arm")
+        armRightComponentGuide.loadData({
             "location":"R",
             "bicepXfo": Xfo(Vec3(-2.27, 15.295, -0.753)),
             "forearmXfo": Xfo(Vec3(-5.039, 13.56, -0.859)),
@@ -102,7 +104,8 @@ class BobRig(Container):
         armRightComponent = ArmComponentRig("arm", self)
         armRightComponent.loadData(data=armRightComponentGuide.getRigBuildData() )
 
-        legLeftComponentGuide = LegComponentGuide("leg", data={
+        legLeftComponentGuide = LegComponentGuide("leg")
+        legLeftComponentGuide.loadData({
             "name":"Leg",
             "location": "L",
             "femurXfo": Xfo(Vec3(0.9811, 9.769, -0.4572)),
@@ -115,7 +118,8 @@ class BobRig(Container):
         legLeftComponent = LegComponentRig("leg", self)
         legLeftComponent.loadData(data=legLeftComponentGuide.getRigBuildData())
 
-        legRightComponentGuide = LegComponentGuide("leg", data={
+        legRightComponentGuide = LegComponentGuide("leg")
+        legRightComponentGuide.loadData({
             "name":"Leg",
             "location": "R",
             "femurXfo": Xfo(Vec3(-0.9811, 9.769, -0.4572)),

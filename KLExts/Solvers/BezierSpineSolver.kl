@@ -70,6 +70,12 @@ function BezierSpineSolver.solve!
   Xfo baseXfo(base);
   Xfo tipXfo(tip);
 
+  // Adding an offset to align the output's x axis down the length of the spine.
+  Quat xAlignmentOffset;
+  xAlignmentOffset.setFromAxisAndAngle(Vec3(0,1,0), HALF_PI);
+  baseXfo.ori = baseXfo.ori * xAlignmentOffset;
+  tipXfo.ori = tipXfo.ori * xAlignmentOffset;
+
   Xfo preXfo;
   for(UInt32 i=0; i<outputs.size; i++){
 
@@ -80,7 +86,7 @@ function BezierSpineSolver.solve!
         outXfo.tr = base.translation();
       else
         // transform the vector without applying scale.
-        outXfo.tr = preXfo.tr + preXfo.ori.rotateVector(Vec3(0.0, segLength, 0.0));
+        outXfo.tr = preXfo.tr + preXfo.ori.rotateVector(Vec3(segLength, 0.0, 0.0));
     }
 
     {
@@ -116,7 +122,7 @@ function BezierSpineSolver.solve!
 
       // Align the joint so it points at the target position computed.
       Quat alignment;
-      alignment.setFrom2Vectors(outXfo.ori.getYaxis(), (targ - outXfo.tr).unit());
+      alignment.setFrom2Vectors(outXfo.ori.getXaxis(), (targ - outXfo.tr).unit());
       outXfo.ori = alignment * outXfo.ori;
     }
 
@@ -127,7 +133,7 @@ function BezierSpineSolver.solve!
     preXfo = outXfo;
     outputs[i] = outXfo.toMat44();
   }
-/*
+
 
   // Set debugging visibility.
   this.setDebug(drawDebug);
@@ -139,9 +145,9 @@ function BezierSpineSolver.solve!
     }
     drawLineStrip(this.handle.rootTransform, 'curve', positions, Color(1.0, 0.0, 0));
 
-    Color boneColor(1.0, 1.0, 0);
-    for(UInt32 i=0; i<outputs.size; i++)
-      etDrawBone(this.handle.rootTransform, 'constraint'+i, outputs[i], segLength, segLength * 0.25, boneColor);
+    // Color boneColor(1.0, 1.0, 0);
+    // for(UInt32 i=0; i<outputs.size; i++)
+    //   etDrawBone(this.handle.rootTransform, 'constraint'+i, outputs[i], segLength, segLength * 0.25, boneColor);
   }
-  */
+
 }

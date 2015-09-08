@@ -149,6 +149,8 @@ class Builder(Builder):
             parentDCCSceneItem = si.ActiveProject3.ActiveScene.Root
 
         dccSceneItem = parentDCCSceneItem.AddNull()
+        dccSceneItem.Parameters('primary_icon').Value = 2
+        dccSceneItem.Parameters('size').Value = 0.125
         dccSceneItem.Name = buildName
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
@@ -698,7 +700,7 @@ class Builder(Builder):
             spliceOpPath = operatorOwner.FullName + ".kine.global.SpliceOp"
 
             # Create Splice Operator
-            si.fabricSplice('newSplice', "{\"targets\":\"" + targets + "\", \"portName\":\"" + arg.name + "\", \"portMode\":\"out\"}", "", "")
+            opPath = si.fabricSplice('newSplice', "{\"targets\":\"" + targets + "\", \"portName\":\"" + arg.name + "\", \"portMode\":\"out\"}", "", "")
 
             # Add the private/non-mayaAttr port that stores the Solver object
             si.fabricSplice("addInternalPort", spliceOpPath, "{\"portName\":\"solver\", \"dataType\":\"" + solverTypeName + "\", \"extension\":\"" + kOperator.getExtension() + "\", \"portMode\":\"io\"}", "")
@@ -707,8 +709,20 @@ class Builder(Builder):
             for i in xrange(len(args)):
                 arg = args[i]
 
+
                 # Skip arg if it's the target arg
                 if arg.name == operatorOwnerArg:
+                    continue
+
+                if arg.dataType == 'EvalContext':
+                    si.fabricSplice("addInputPort", spliceOpPath, "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\" }", "")
+                    continue
+                if arg.name == 'time':
+                    si.fabricSplice("addParameter", spliceOpPath, "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\" }", "")
+                    continue
+
+                if arg.name == 'frame':
+                    si.fabricSplice("addParameter", spliceOpPath, "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\" }", "")
                     continue
 
                 # Append the suffix based on the argument type, Softimage Only
@@ -764,10 +778,27 @@ class Builder(Builder):
                 elif arg.connectionType in ['io', 'out']:
                     si.fabricSplice("addOutputPort", spliceOpPath, connectionArgs, "")
 
+
+
             # Generate the operator source code.
             opSourceCode = kOperator.generateSourceCode()
 
             si.fabricSplice('addKLOperator', spliceOpPath, '{"opName": "' + kOperator.getName() + '"}', opSourceCode)
+
+            # Check for Time and Frame arguments and set expressions
+            spliceOp = si.Dictionary.GetObject(spliceOpPath, False)
+            timeParameter = spliceOp.Parameters("time")
+            if timeParameter is not None:
+                timeParameter.AddExpression("T")
+
+            spliceOp = si.Dictionary.GetObject(spliceOpPath, False)
+            frameParameter = spliceOp.Parameters("frame")
+            if frameParameter is not None:
+                frameParameter.AddExpression("Fc")
+
+            alwaysEval = kOperator.getAlwaysEval()
+            if alwaysEval is True:
+                spliceOp.Parameters("alwaysevaluate").Value = True
 
         finally:
             pass

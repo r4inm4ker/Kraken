@@ -7,10 +7,10 @@ building:fkChain.controls.fkChain.inputs.rootInput as:fkChain_L_rootInput_cmpIn
 building:fkChain.controls.fkChain.outputs as:fkChain_L_outputs_hrc
 building:fkChain.controls.fkChain.outputs.chainEndXfoOutput as:fkChain_L_chainEndXfoOutput_cmpOut
 building:fkChain.controls.fkChain.outputs.chainEndPosOutput as:fkChain_L_chainEndPosOutput_cmpOut
-building:fkChain.controls.fkChain.outputs.bone01 as:fkChain_L_bone01_loc
-building:fkChain.controls.fkChain.outputs.bone02 as:fkChain_L_bone02_loc
-building:fkChain.controls.fkChain.outputs.bone03 as:fkChain_L_bone03_loc
-building:fkChain.controls.fkChain.outputs.bone04 as:fkChain_L_bone04_loc
+building:fkChain.controls.fkChain.outputs.bone01 as:fkChain_L_bone01_cmpOut
+building:fkChain.controls.fkChain.outputs.bone02 as:fkChain_L_bone02_cmpOut
+building:fkChain.controls.fkChain.outputs.bone03 as:fkChain_L_bone03_cmpOut
+building:fkChain.controls.fkChain.outputs.bone04 as:fkChain_L_bone04_cmpOut
 building:fkChain.controls.fkChain.bone01FK as:fkChain_L_bone01FK_ctrlSpace
 building:fkChain.controls.fkChain.bone01FK.bone01FK as:fkChain_L_bone01FK_ctrl
 building:fkChain.controls.fkChain.bone01FK.bone01FK.bone02FK as:fkChain_L_bone02FK_ctrlSpace

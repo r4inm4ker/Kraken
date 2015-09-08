@@ -35,20 +35,20 @@ class SpineComponent(BaseExampleComponent):
         # Declare IO
         # ===========
         # Declare Inputs Xfos
-        self.spineMainSrtInputTgt = self.createInput('mainSrt', dataType='Xfo', parent=self.inputHrcGrp)
+        self.spineMainSrtInputTgt = self.createInput('mainSrt', dataType='Xfo', parent=self.inputHrcGrp).getTarget()
 
         # Declare Output Xfos
-        self.spineCogOutputTgt = self.createOutput('cog', dataType='Xfo', parent=self.outputHrcGrp)
-        self.spineBaseOutputTgt = self.createOutput('spineBase', dataType='Xfo', parent=self.outputHrcGrp)
-        self.pelvisOutputTgt = self.createOutput('pelvis', dataType='Xfo', parent=self.outputHrcGrp)
-        self.spineEndOutputTgt = self.createOutput('spineEnd', dataType='Xfo', parent=self.outputHrcGrp)
+        self.spineCogOutputTgt = self.createOutput('cog', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
+        self.spineBaseOutputTgt = self.createOutput('spineBase', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
+        self.pelvisOutputTgt = self.createOutput('pelvis', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
+        self.spineEndOutputTgt = self.createOutput('spineEnd', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
 
-        self.spineVertebraeOutput = self.addOutput('spineVertebrae', dataType='Xfo[]')
+        self.spineVertebraeOutput = self.createOutput('spineVertebrae', dataType='Xfo[]')
 
         # Declare Input Attrs
-        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=False, parent=self.cmpInputAttrGrp)
-        self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp)
-        self.lengthInputAttr = self.createInput('length', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp)
+        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=False, parent=self.cmpInputAttrGrp).getTarget()
+        self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp).getTarget()
+        self.lengthInputAttr = self.createInput('length', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp).getTarget()
 
         # Declare Output Attrs
 
@@ -69,6 +69,7 @@ class SpineComponentGuide(SpineComponent):
 
         # Guide Controls
         self.cog = Control('cogPosition', parent=self.ctrlCmpGrp, shape="sphere")
+        self.cog.scalePoints(Vec3(1.2, 1.2, 1.2))
         self.cog.setColor('red')
 
         self.spine01Ctrl = Control('spine01Position', parent=self.ctrlCmpGrp, shape='sphere')
@@ -294,8 +295,7 @@ class SpineComponentRig(SpineComponent):
         self.bezierSpineSpliceOp.setInput('tip', self.spine04Ctrl)
 
         # Add Xfo Outputs
-        for spineOutput in self.spineOutputs:
-            self.bezierSpineSpliceOp.setOutput('outputs', spineOutput)
+        self.bezierSpineSpliceOp.setOutput('outputs', self.spineOutputs)
 
         # Add Deformer Splice Op
         self.deformersToOutputsSpliceOp = SpliceOperator('spineDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken')
@@ -306,12 +306,10 @@ class SpineComponentRig(SpineComponent):
         self.deformersToOutputsSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
 
         # Add Xfo Outputs
-        for spineOutput in self.spineOutputs:
-            self.deformersToOutputsSpliceOp.setInput('constrainers', spineOutput)
+        self.deformersToOutputsSpliceOp.setInput('constrainers', self.spineOutputs)
 
         # Add Xfo Outputs
-        for joint in self.deformerJoints:
-            self.deformersToOutputsSpliceOp.setOutput('constrainees', joint)
+        self.deformersToOutputsSpliceOp.setOutput('constrainees', self.deformerJoints)
 
         # Add Pelvis Splice Op
         self.pelvisDefSpliceOp = SpliceOperator('pelvisDeformerSpliceOp', 'PoseConstraintSolver', 'Kraken')
@@ -392,19 +390,6 @@ class SpineComponentRig(SpineComponent):
 
         # Update number of deformers and outputs
         self.setNumDeformers(numDeformers)
-
-        for spineOutput in self.spineOutputs:
-            if spineOutput not in self.bezierSpineSpliceOp.getOutput("outputs"):
-                self.bezierSpineSpliceOp.setOutput("outputs", spineOutput)
-
-        # Update Deformers Splice Op
-        for spineOutput in self.spineOutputs:
-            if spineOutput not in self.deformersToOutputsSpliceOp.getInput("constrainers"):
-                self.deformersToOutputsSpliceOp.setInput("constrainers", spineOutput)
-
-        for joint in self.deformerJoints:
-            if joint not in self.deformersToOutputsSpliceOp.getOutput("constrainees"):
-                self.deformersToOutputsSpliceOp.setOutput("constrainees", joint)
 
         # Updating constraint to use the updated last output.
         self.spineEndOutputConstraint.setConstrainer(self.spineOutputs[-1], index=0)
