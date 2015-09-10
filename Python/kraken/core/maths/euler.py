@@ -161,8 +161,7 @@ class Euler(MathObject):
             object: Rotation Order of this Euler.
 
         """
-
-        return RotationOrder(self._rtval.ro.getSimpleType())
+        return RotationOrder(self._rtval.ro)
 
 
     @ro.setter

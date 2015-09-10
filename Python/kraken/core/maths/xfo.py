@@ -208,22 +208,6 @@ class Xfo(MathObject):
 
         return Mat44(self._rtval.toMat44('Mat44'))
 
-    # # Equals operator
-    # def Boolean self, == (Xfo a, Xfo b):
-
-
-    # # Not equals operator
-    # def Boolean self, != (Xfo a, Xfo b):
-
-
-
-    # # Multiplies two transforms
-    # def Xfo self, * (in Xfo local, in Xfo global):
-
-
-    # # Multiplies this transform with another one
-    # def  *= self, (in Xfo global):
-
 
     def multiply(self, xfo):
         """Overload method for the multiply operator.

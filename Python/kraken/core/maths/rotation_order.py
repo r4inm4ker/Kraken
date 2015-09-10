@@ -48,7 +48,7 @@ class RotationOrder(MathObject):
 
         """
 
-        return self._rtval.order
+        return self._rtval.order.getSimpleType()
 
 
     @order.setter
