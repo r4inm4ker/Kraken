@@ -149,7 +149,7 @@ class Vec2(MathObject):
 
         """
 
-        return self._rtval.set('Boolean', other._rtval)
+        return self._rtval.set('Boolean', other._rtval).getSimpleType()
 
 
     def almostEqual(self, other, precision):
@@ -164,7 +164,7 @@ class Vec2(MathObject):
 
         """
 
-        return self._rtval.almostEqual('Boolean', other._rtval, ks.rtVal('Scalar', precision))
+        return self._rtval.almostEqual('Boolean', other._rtval, ks.rtVal('Scalar', precision)).getSimpleType()
 
 
     def almostEqual(self, other):
@@ -179,7 +179,7 @@ class Vec2(MathObject):
 
         """
 
-        return self._rtval.almostEqual('Boolean', other._rtval)
+        return self._rtval.almostEqual('Boolean', other._rtval).getSimpleType()
 
 
     def component(self, i):
@@ -193,7 +193,7 @@ class Vec2(MathObject):
 
         """
 
-        return self._rtval.component('Scalar', ks.rtVal('Size', i))
+        return self._rtval.component('Scalar', ks.rtVal('Size', i)).getSimpleType()
 
 
     # Sets the component of this vector by index
@@ -209,7 +209,7 @@ class Vec2(MathObject):
 
         """
 
-        return self._rtval.setComponent('', ks.rtVal('Size', i),
+        self._rtval.setComponent('', ks.rtVal('Size', i),
                                         ks.rtVal('Scalar', v))
 
 
@@ -331,7 +331,7 @@ class Vec2(MathObject):
 
         """
 
-        return self._rtval.dot('Scalar', other._rtval)
+        return self._rtval.dot('Scalar', other._rtval).getSimpleType()
 
 
     def cross(self, other):
@@ -356,7 +356,7 @@ class Vec2(MathObject):
 
         """
 
-        return self._rtval.lengthSquared('Scalar')
+        return self._rtval.lengthSquared('Scalar').getSimpleType()
 
 
     def length(self):
@@ -367,7 +367,7 @@ class Vec2(MathObject):
 
         """
 
-        return self._rtval.length('Scalar')
+        return self._rtval.length('Scalar').getSimpleType()
 
 
     def unit(self):
@@ -402,7 +402,7 @@ class Vec2(MathObject):
 
         """
 
-        return self._rtval.setUnit('Scalar')
+        return self._rtval.setUnit('Scalar').getSimpleType()
 
 
     def normalize(self):
@@ -413,7 +413,7 @@ class Vec2(MathObject):
 
         """
 
-        return self._rtval.normalize('Scalar')
+        return self._rtval.normalize('Scalar').getSimpleType()
 
 
     def clamp(self, min, max):
@@ -443,7 +443,7 @@ class Vec2(MathObject):
 
         """
 
-        return self._rtval.unitsAngleTo('Scalar', other._rtval)
+        return self._rtval.unitsAngleTo('Scalar', other._rtval).getSimpleType()
 
 
     def angleTo(self, other):
@@ -457,7 +457,7 @@ class Vec2(MathObject):
 
         """
 
-        return self._rtval.angleTo('Scalar', other._rtval)
+        return self._rtval.angleTo('Scalar', other._rtval).getSimpleType()
 
 
     # Returns the distance of this vector to another one
@@ -472,7 +472,7 @@ class Vec2(MathObject):
 
         """
 
-        return self._rtval.distanceTo('Scalar', other._rtval)
+        return self._rtval.distanceTo('Scalar', other._rtval).getSimpleType()
 
 
     def linearInterpolate(self, other, t):
@@ -504,7 +504,7 @@ class Vec2(MathObject):
 
         """
 
-        return self._rtval.distanceToLine('Scalar', lineP0._rtval, lineP1._rtval)
+        return self._rtval.distanceToLine('Scalar', lineP0._rtval, lineP1._rtval).getSimpleType()
 
 
     def distanceToSegment(self, segmentP0, segmentP1):
@@ -520,4 +520,4 @@ class Vec2(MathObject):
 
         """
 
-        return self._rtval.distanceToSegment('Scalar', segmentP0._rtval, segmentP1._rtval)
+        return self._rtval.distanceToSegment('Scalar', segmentP0._rtval, segmentP1._rtval).getSimpleType()

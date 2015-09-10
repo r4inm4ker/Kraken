@@ -180,7 +180,7 @@ class Vec3(MathObject):
 
         """
 
-        return self._rtval.set('Boolean', other._rtval)
+        return self._rtval.set('Boolean', other._rtval).getSimpleType()
 
 
     def almostEqual(self, other, precision):
@@ -195,7 +195,7 @@ class Vec3(MathObject):
 
         """
 
-        return self._rtval.almostEqual('Boolean', other._rtval, ks.rtVal('Scalar', precision))
+        return self._rtval.almostEqual('Boolean', other._rtval, ks.rtVal('Scalar', precision)).getSimpleType()
 
 
     def almostEqual(self, other):
@@ -210,7 +210,7 @@ class Vec3(MathObject):
 
         """
 
-        return self._rtval.almostEqual('Boolean', other._rtval)
+        return self._rtval.almostEqual('Boolean', other._rtval).getSimpleType()
 
 
     def component(self, i):
@@ -224,7 +224,7 @@ class Vec3(MathObject):
 
         """
 
-        return self._rtval.component('Scalar', ks.rtVal('Size', i))
+        return self._rtval.component('Scalar', ks.rtVal('Size', i)).getSimpleType()
 
 
     # Sets the component of this vector by index
@@ -240,58 +240,8 @@ class Vec3(MathObject):
 
         """
 
-        return self._rtval.setComponent('', ks.rtVal('Size', i),
+        self._rtval.setComponent('', ks.rtVal('Size', i),
                                         ks.rtVal('Scalar', v))
-
-
-    # # Equals operator
-    # def Boolean == (Vec a, Vec b):
-
-    # # Not equals operator
-    # def Boolean != (Vec a, Vec b):
-
-    # # unary -
-    # def Vec -Vec():
-
-    # # Adds to vectors
-    # def Vec + (Vec a, Vec b):
-
-    # # Adds a vector to this one
-    # def  += (Vec other):
-
-    # # Subtracts two vectors
-    # def Vec - (Vec a, Vec b):
-
-    # # Subtracts a vector from this one
-    # def  -= (Vec other):
-
-    # # Multiplies a scalar and a vector
-    # def Vec * (Scalar a, Vec b):
-
-    # # Multiplies a vector and a scalar
-    # def Vec * (Vec a, Scalar b):
-
-    # # Multiplies two vectors
-    # def Vec * (Vec a, Vec b):
-
-
-    # # Multiplies this vector with a scalar
-    # def  *= (Scalar other):
-
-    # # Multiplies this vector with another one
-    # def  *= (Vec other):
-
-    # # Divides two vectors
-    # def Vec / (Vec a, Vec b):
-
-    # # Divides a vector by a scalar
-    # def Vec / (Vec a, Scalar b):
-
-    # # Divides this vector with a scalar
-    # def  /= (Scalar other):
-
-    # # Divides this vector with another one
-    # def  /= (Vec other):
 
 
     def add(self, other):
@@ -411,7 +361,7 @@ class Vec3(MathObject):
 
         """
 
-        return self._rtval.dot('Scalar', other._rtval)
+        return self._rtval.dot('Scalar', other._rtval).getSimpleType()
 
 
     def cross(self, other):
@@ -436,7 +386,7 @@ class Vec3(MathObject):
 
         """
 
-        return self._rtval.lengthSquared('Scalar')
+        return self._rtval.lengthSquared('Scalar').getSimpleType()
 
 
     def length(self):
@@ -447,7 +397,7 @@ class Vec3(MathObject):
 
         """
 
-        return self._rtval.length('Scalar')
+        return self._rtval.length('Scalar').getSimpleType()
 
 
     def unit(self):
@@ -482,7 +432,7 @@ class Vec3(MathObject):
 
         """
 
-        return self._rtval.setUnit('Scalar')
+        return self._rtval.setUnit('Scalar').getSimpleType()
 
 
     def normalize(self):
@@ -493,7 +443,7 @@ class Vec3(MathObject):
 
         """
 
-        return self._rtval.normalize('Scalar')
+        return self._rtval.normalize('Scalar').getSimpleType()
 
 
     def clamp(self, min, max):
@@ -523,7 +473,7 @@ class Vec3(MathObject):
 
         """
 
-        return self._rtval.unitsAngleTo('Scalar', other._rtval)
+        return self._rtval.unitsAngleTo('Scalar', other._rtval).getSimpleType()
 
 
     def angleTo(self, other):
@@ -537,7 +487,7 @@ class Vec3(MathObject):
 
         """
 
-        return self._rtval.angleTo('Scalar', other._rtval)
+        return self._rtval.angleTo('Scalar', other._rtval).getSimpleType()
 
 
     # Returns the distance of this vector to another one
@@ -552,7 +502,7 @@ class Vec3(MathObject):
 
         """
 
-        return self._rtval.distanceTo('Scalar', other._rtval)
+        return self._rtval.distanceTo('Scalar', other._rtval).getSimpleType()
 
 
     def linearInterpolate(self, other, t):
@@ -584,7 +534,7 @@ class Vec3(MathObject):
 
         """
 
-        return self._rtval.distanceToLine('Scalar', lineP0._rtval, lineP1._rtval)
+        return self._rtval.distanceToLine('Scalar', lineP0._rtval, lineP1._rtval).getSimpleType()
 
 
     def distanceToSegment(self, segmentP0, segmentP1):
@@ -600,4 +550,4 @@ class Vec3(MathObject):
 
         """
 
-        return self._rtval.distanceToSegment('Scalar', segmentP0._rtval, segmentP1._rtval)
+        return self._rtval.distanceToSegment('Scalar', segmentP0._rtval, segmentP1._rtval).getSimpleType()
