@@ -89,7 +89,7 @@ class Quat(MathObject):
 
         """
 
-        return self._rtval.w
+        return self._rtval.w.getSimpleType()
 
 
     @w.setter

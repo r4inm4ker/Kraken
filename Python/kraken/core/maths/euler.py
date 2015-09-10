@@ -90,7 +90,7 @@ class Euler(MathObject):
 
         """
 
-        return self._rtval.x
+        return self._rtval.x.getSimpleType()
 
 
     @x.setter
@@ -114,7 +114,7 @@ class Euler(MathObject):
 
         """
 
-        return self._rtval.y
+        return self._rtval.y.getSimpleType()
 
 
     @y.setter
@@ -138,7 +138,7 @@ class Euler(MathObject):
 
         """
 
-        return self._rtval.z
+        return self._rtval.z.getSimpleType()
 
 
     @z.setter
@@ -162,7 +162,7 @@ class Euler(MathObject):
 
         """
 
-        return RotationOrder(self._rtval.ro)
+        return RotationOrder(self._rtval.ro.getSimpleType())
 
 
     @ro.setter

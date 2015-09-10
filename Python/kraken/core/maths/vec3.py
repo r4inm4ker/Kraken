@@ -46,7 +46,7 @@ class Vec3(MathObject):
 
         """
 
-        return self._rtval.x
+        return self._rtval.x.getSimpleType()
 
 
     @x.setter
@@ -75,7 +75,7 @@ class Vec3(MathObject):
 
         """
 
-        return self._rtval.y
+        return self._rtval.y.getSimpleType()
 
 
     @y.setter
@@ -102,7 +102,7 @@ class Vec3(MathObject):
 
         """
 
-        return self._rtval.z
+        return self._rtval.z.getSimpleType()
 
 
     @z.setter
