@@ -510,15 +510,23 @@ class Builder(Builder):
             ks.loadCoreClient()
             ks.loadExtension('Kraken')
             solverTypeName = 'PoseConstraintSolver'
-            target = constraineeDCCSceneItem.FullName + ".kine.global"
-            spliceOpPath = target + ".SpliceOp"
+            target = constraineeDCCSceneItem.FullName# + ".kine.global"
+            spliceOpPath = target + ".kine.global.CanvasOp"
 
-            si.fabricSplice('newSplice', "{\"targets\":\"" + target + "\", \"portName\":\"constrainee\", \"portMode\":\"out\"}", "", "")
+            # si.fabricSplice('newSplice', "{\"targets\":\"" + target + "\", \"portName\":\"constrainee\", \"portMode\":\"out\"}", "", "")
+            si.FabricCanvasOpApply(target, "", True, "", "")
+
+
+            # si.FabricCanvasAddFunc("polymsh.kine.global.CanvasOp", "", "func", "dfgEntry {\n  // result = a + b;\n}\n", "-4", "27")
 
             # Add the private/non-mayaAttr port that stores the Solver object
-            si.fabricSplice("addInternalPort", spliceOpPath, "{\"portName\":\"solver\", \"dataType\":\"" + solverTypeName + "\", \"extension\":\"Kraken\", \"portMode\":\"io\"}", "")
-            si.fabricSplice("addInternalPort", spliceOpPath, "{\"portName\":\"debug\", \"dataType\":\"Boolean\", \"extension\":\"Kraken\", \"portMode\":\"io\"}", "")
-            si.fabricSplice("addInternalPort", spliceOpPath, "{\"portName\":\"rightSide\", \"dataType\":\"Boolean\", \"extension\":\"Kraken\", \"portMode\":\"io\"}", "")
+            # si.fabricSplice("addInternalPort", spliceOpPath, "{\"portName\":\"solver\", \"dataType\":\"" + solverTypeName + "\", \"extension\":\"Kraken\", \"portMode\":\"io\"}", "")
+            # si.fabricSplice("addInternalPort", spliceOpPath, "{\"portName\":\"debug\", \"dataType\":\"Boolean\", \"extension\":\"Kraken\", \"portMode\":\"io\"}", "")
+            # si.fabricSplice("addInternalPort", spliceOpPath, "{\"portName\":\"rightSide\", \"dataType\":\"Boolean\", \"extension\":\"Kraken\", \"portMode\":\"io\"}", "")
+
+            si.FabricCanvasAddPort(spliceOpPath, "", "solver", "In", solverTypeName, "Kraken")
+            si.FabricCanvasAddPort(spliceOpPath, "", "debug", "In", "Boolean", "")
+            si.FabricCanvasAddPort(spliceOpPath, "", "rightSide", "In", "Boolean", "")
 
             connectionTargets = ""
             connectionSuffix = ".kine.global"
@@ -535,7 +543,8 @@ class Builder(Builder):
                 connectionTargets = dccSceneItem.FullName + connectionSuffix
                 break
 
-            si.fabricSplice("addInputPort", spliceOpPath, "{\"portName\":\"constrainer\", \"dataType\":\"Mat44\", \"extension\":\"\", \"targets\":\"" + connectionTargets + "\"}", "")
+            si.FabricCanvasAddPort(spliceOpPath, "", "constrainer", "In", "Mat44", "")
+            # si.fabricSplice("addInputPort", spliceOpPath, "{\"portName\":\"constrainer\", \"dataType\":\"Mat44\", \"extension\":\"\", \"targets\":\"" + connectionTargets + "\"}", "")
 
             # Generate the operator source code.
             opSourceCode = ""
@@ -656,6 +665,19 @@ class Builder(Builder):
             operatorOwner = None
             targets = None
             operatorOwnerArg = None
+
+            dfgOpJson = {
+              "objectType" : "Graph",
+              "title" : "",
+              "ports" : [ ],
+              "extDeps" : { "Math" : "*" },
+              "nodes" : [],
+              "connections" : {},
+              "args" : []
+              }
+
+
+
             for i in xrange(len(args)):
                 arg = args[i]
 
@@ -700,10 +722,12 @@ class Builder(Builder):
             spliceOpPath = operatorOwner.FullName + ".kine.global.SpliceOp"
 
             # Create Splice Operator
-            opPath = si.fabricSplice('newSplice', "{\"targets\":\"" + targets + "\", \"portName\":\"" + arg.name + "\", \"portMode\":\"out\"}", "", "")
+            # opPath = si.fabricSplice('newSplice', "{\"targets\":\"" + targets + "\", \"portName\":\"" + arg.name + "\", \"portMode\":\"out\"}", "", "")
+            si.FabricCanvasOpApply(operatorOwner.FullName, "", True, "", "")
 
             # Add the private/non-mayaAttr port that stores the Solver object
-            si.fabricSplice("addInternalPort", spliceOpPath, "{\"portName\":\"solver\", \"dataType\":\"" + solverTypeName + "\", \"extension\":\"" + kOperator.getExtension() + "\", \"portMode\":\"io\"}", "")
+            # si.fabricSplice("addInternalPort", spliceOpPath, "{\"portName\":\"solver\", \"dataType\":\"" + solverTypeName + "\", \"extension\":\"" + kOperator.getExtension() + "\", \"portMode\":\"io\"}", "")
+            si.FabricCanvasAddPort(spliceOpPath, "", "solver", "In", solverTypeName, kOperator.getExtension())
 
             # connect the operator to the objects in the DCC
             for i in xrange(len(args)):
@@ -714,15 +738,9 @@ class Builder(Builder):
                 if arg.name == operatorOwnerArg:
                     continue
 
-                if arg.dataType == 'EvalContext':
-                    si.fabricSplice("addInputPort", spliceOpPath, "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\" }", "")
-                    continue
-                if arg.name == 'time':
-                    si.fabricSplice("addParameter", spliceOpPath, "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\" }", "")
-                    continue
-
-                if arg.name == 'frame':
-                    si.fabricSplice("addParameter", spliceOpPath, "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\" }", "")
+                if arg.dataType == 'EvalContext' or arg.name == 'time' or arg.name == 'frame':
+                    # si.fabricSplice("addInputPort", spliceOpPath, "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\" }", "")
+                    si.FabricCanvasAddPort(spliceOpPath, "", arg.name, "In", arg.dataType, "")
                     continue
 
                 # Append the suffix based on the argument type, Softimage Only
@@ -780,25 +798,33 @@ class Builder(Builder):
 
 
 
-            # Generate the operator source code.
-            opSourceCode = kOperator.generateSourceCode()
+            # si.fabricSplice('addKLOperator', spliceOpPath, '{"opName": "' + kOperator.getName() + '"}', opSourceCode)
 
-            si.fabricSplice('addKLOperator', spliceOpPath, '{"opName": "' + kOperator.getName() + '"}', opSourceCode)
+            # Generate the operator source code.
+            opSourceCode = kOperator.generateSourceCode(arraySizes=arraySizes)
+            cmds.FabricCanvasAddFunc(spliceNode, "", kOperator.getName(), opSourceCode, "100", "100")
+
+
+            Application.FabricCanvasOpApply("null1", "{\n  \"objectType\" : \"Graph\",\n  \"title\" : \"\",\n  \"ports\" : [\n    {\n      \"objectType\" : \"Port\",\n      \"nodePortType\" : \"Out\",\n      \"name\" : \"target\",\n      \"execPortType\" : \"In\",\n      \"typeSpec\" : \"Mat44\"\n      }\n    ],\n  \"extDeps\" : {\n    \"Math\" : \"*\"\n    },\n  \"nodes\" : [],\n  \"connections\" : {},\n  \"args\" : [\n    {\n      \"type\" : \"Mat44\",\n      \"value\" : {\n        \"row0\" : {\n          \"x\" : 1,\n          \"y\" : 0,\n          \"z\" : 0,\n          \"t\" : 0\n          },\n        \"row1\" : {\n          \"x\" : 0,\n          \"y\" : 1,\n          \"z\" : 0,\n          \"t\" : 0\n          },\n        \"row2\" : {\n          \"x\" : 0,\n          \"y\" : 0,\n          \"z\" : 1,\n          \"t\" : 0\n          },\n        \"row3\" : {\n          \"x\" : 0,\n          \"y\" : 0,\n          \"z\" : 0,\n          \"t\" : 1\n          }\n        },\n      \"ext\" : \"Math\"\n      }\n    ]\n  }", True, "null1.kine.global.CanvasOp", "")
+
+            Application.FabricCanvasAddPort("null.kine.global.CanvasOp", "func", "bar", "In", "Scalar", "")
+            Application.FabricCanvasSetCode("null.kine.global.CanvasOp", "func", "dfgEntry {\n  //result = lhs + rhs;\n  report(foo);\n}\n")
 
             # Check for Time and Frame arguments and set expressions
-            spliceOp = si.Dictionary.GetObject(spliceOpPath, False)
-            timeParameter = spliceOp.Parameters("time")
-            if timeParameter is not None:
-                timeParameter.AddExpression("T")
+            # TODO: add the expressions as the ports are added to be consistent with Maya.
+            # spliceOp = si.Dictionary.GetObject(spliceOpPath, False)
+            # timeParameter = spliceOp.Parameters("time")
+            # if timeParameter is not None:
+            #     timeParameter.AddExpression("T")
 
-            spliceOp = si.Dictionary.GetObject(spliceOpPath, False)
-            frameParameter = spliceOp.Parameters("frame")
-            if frameParameter is not None:
-                frameParameter.AddExpression("Fc")
+            # spliceOp = si.Dictionary.GetObject(spliceOpPath, False)
+            # frameParameter = spliceOp.Parameters("frame")
+            # if frameParameter is not None:
+            #     frameParameter.AddExpression("Fc")
 
-            alwaysEval = kOperator.getAlwaysEval()
-            if alwaysEval is True:
-                spliceOp.Parameters("alwaysevaluate").Value = True
+            # alwaysEval = kOperator.getAlwaysEval()
+            # if alwaysEval is True:
+            #     spliceOp.Parameters("alwaysevaluate").Value = True
 
         finally:
             pass

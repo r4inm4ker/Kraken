@@ -591,40 +591,45 @@ class Builder(Builder):
             solverTypeName = kOperator.getSolverTypeName()
 
             # Create Splice Operator
-            spliceNode = pm.createNode('spliceMayaNode', name=kOperator.getName() + "_SpliceOp")
+            spliceNode = cmds.createNode('dfgMayaNode', name=kOperator.getName() + "_SpliceOp")
 
-            # Add the private/non-mayaAttr port that stores the Solver object
-            cmds.fabricSplice("addIOPort", spliceNode, "{\"portName\":\"solver\", \"dataType\":\"" + solverTypeName + "\", \"extension\":\"" + kOperator.getExtension() + "\", \"addMayaAttr\": false}")
+            cmds.FabricCanvasAddFunc(mayaNode=spliceNode, execPath="", title=kOperator.getName(), code="dfgEntry {}", xPos="100", yPos="100")
+            # cmds.FabricCanvasAddPort(mayaNode=spliceNode, execPath="", desiredPortName="solver", portType="In", typeSpec=solverTypeName, connectToPortPath="" )
+            cmds.FabricCanvasAddVar(mayaNode=spliceNode, execPath="", desiredNodeName="solver", type=solverTypeName, extDep=kOperator.getExtension() )
+            cmds.FabricCanvasAddPort(mayaNode=spliceNode, execPath=kOperator.getName(), desiredPortName="solver", portType="In", typeSpec=solverTypeName, connectToPortPath="")
+            cmds.FabricCanvasConnect(mayaNode=spliceNode, execPath="", srcPortPath="solver", dstPortPath=kOperator.getName()+".solver")
 
             arraySizes = {}
             # connect the operator to the objects in the DCC
             args = kOperator.getSolverArgs()
             for i in xrange(len(args)):
                 arg = args[i]
+
+                if arg.connectionType == 'in':
+                    cmds.FabricCanvasAddPort(mayaNode=spliceNode, execPath="", desiredPortName=arg.name, portType="In", typeSpec=arg.dataType, connectToPortPath="")
+                    cmds.FabricCanvasAddPort(mayaNode=spliceNode, execPath=kOperator.getName(), desiredPortName=arg.name, portType="In", typeSpec=arg.dataType, connectToPortPath="")
+                    cmds.FabricCanvasConnect(mayaNode=spliceNode, execPath="", srcPortPath=arg.name, dstPortPath=kOperator.getName()+"."+arg.name)
+                elif arg.connectionType in ['io', 'out']:
+                    cmds.FabricCanvasAddPort(mayaNode=spliceNode, execPath="", desiredPortName=arg.name, portType="Out", typeSpec=arg.dataType, connectToPortPath="")
+                    cmds.FabricCanvasAddPort(mayaNode=spliceNode, execPath=kOperator.getName(), desiredPortName=arg.name, portType="Out", typeSpec=arg.dataType, connectToPortPath="")
+                    cmds.FabricCanvasConnect(mayaNode=spliceNode, execPath="", srcPortPath=kOperator.getName()+"."+arg.name, dstPortPath=arg.name)
+
                 if arg.dataType == 'EvalContext':
-                    cmds.fabricSplice("addInputPort", spliceNode, json.dumps({"portName": arg.name, "dataType": arg.dataType, "addMayaAttr": False }), "")
                     continue
                 if arg.name == 'time':
-                    cmds.fabricSplice("addInputPort", spliceNode, json.dumps({"portName": arg.name, "dataType": arg.dataType, "addMayaAttr": True }), "")
                     cmds.expression( o=spliceNode + '.time', s=spliceNode + '.time = time;' )
                     continue
                 if arg.name == 'frame':
-                    cmds.fabricSplice("addInputPort", spliceNode, json.dumps({"portName": arg.name, "dataType": arg.dataType, "addMayaAttr": True }), "")
                     cmds.expression( o=spliceNode + '.frame', s=spliceNode + '.frame = frame;' )
                     continue
 
-                portArgs = {"portName": arg.name, "dataType": arg.dataType, "extension":"", "addMayaAttr": True }
-
                 # Get the argument's input from the DCC
-                # Note: this used to be a try/catch statement, which seemed quite strange to me.
-                # I've replaced with a proper test with an exception if the item is not found.
                 if arg.connectionType == 'in':
                     connectedObjects = kOperator.getInput(arg.name)
                 elif arg.connectionType in ['io', 'out']:
                     connectedObjects = kOperator.getOutput(arg.name)
 
                 if arg.dataType.endswith('[]'):
-                    portArgs['arrayType'] = "Array (Multi)"
 
                     # In SpliceMaya, output arrays are not resized by the system prior to calling into Splice, so we
                     # explicily resize the arrays in the generated operator stub code.
@@ -656,7 +661,6 @@ class Builder(Builder):
 
                 # Add the splice Port for each arg.
                 if arg.connectionType == 'in':
-                    cmds.fabricSplice("addInputPort", spliceNode, json.dumps(portArgs), "")
 
                     def connectInput(tgt, opObject, dccSceneItem):
                         if isinstance(opObject, Attribute):
@@ -694,10 +698,9 @@ class Builder(Builder):
                     else:
                         connectOutput(str(spliceNode.attr(arg.name)), connectionTargets['opObject'], connectionTargets['dccSceneItem'])
 
-            # Generate the operator source code.
-            opSourceCode = kOperator.generateSourceCode(arraySizes=arraySizes)
 
-            cmds.fabricSplice('addKLOperator', spliceNode, '{"opName": "' + kOperator.getName() + '"}', opSourceCode)
+            opSourceCode = kOperator.generateSourceCode(arraySizes=arraySizes)
+            cmds.FabricCanvasSetCode(mayaNode=spliceNode, execPath=kOperator.getName(), code=opSourceCode)
 
         finally:
             pass
