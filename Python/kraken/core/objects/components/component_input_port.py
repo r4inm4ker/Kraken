@@ -27,11 +27,11 @@ class ComponentInputPort(SceneItem):
     def setDataType(self, dataType):
         """Sets the data type for this input.
 
-        Arguments:
-        dataType -- String, type of input source.
+        Args:
+            dataType (str): Type of input source.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -43,8 +43,8 @@ class ComponentInputPort(SceneItem):
     def getDataType(self):
         """Returns the data type for this input.
 
-        Return:
-        String, data type of this input.
+        Returns:
+            str: Data type of this input.
 
         """
 
@@ -57,8 +57,8 @@ class ComponentInputPort(SceneItem):
     def isConnected(self):
         """Checks if there is a connection.
 
-        Return:
-        Boolean, whether it is connected or not.
+        Returns:
+            bool: Whether it is connected or not.
 
         """
 
@@ -68,8 +68,8 @@ class ComponentInputPort(SceneItem):
     def getConnection(self):
         """Gets the connection of this input.
 
-        Return:
-        Connection object or None if not set.
+        Returns:
+            Connection object or None if not set.
 
         """
 
@@ -79,11 +79,11 @@ class ComponentInputPort(SceneItem):
     def setConnection(self, connectionObj):
         """Sets the connection to the component output.
 
-        Arguments:
-        connectionObj -- ComponentOutput, output object to connect to.
+        Args:
+            connectionObj (ComponentOutput): Output object to connect to.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -105,8 +105,8 @@ class ComponentInputPort(SceneItem):
     def removeConnection(self):
         """Removes the connection to the component output.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -122,11 +122,11 @@ class ComponentInputPort(SceneItem):
     def setTarget(self, target):
         """Sets the taret for this input.
 
-        Arguments:
-        target -- Object, kraken object that is the target of this input.
+        Args:
+            target (Object): Kraken object that is the target of this input.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -136,8 +136,8 @@ class ComponentInputPort(SceneItem):
     def getTarget(self):
         """Returns the target of the input.
 
-        Return:
-        Object, the target of the input.
+        Returns:
+            Object, the target of the input.
 
         """
 
@@ -150,8 +150,8 @@ class ComponentInputPort(SceneItem):
     def getIndex(self):
         """Gets the index of the connection.
 
-        Return:
-        Integer, the index of the connection.
+        Returns:
+            Integer, the index of the connection.
 
         """
 
@@ -161,11 +161,11 @@ class ComponentInputPort(SceneItem):
     def setIndex(self, index):
         """Sets the index of the connection.
 
-        Arguments:
-        Index -- Integer, the index to set this to.
+        Args:
+            index (int): The index to set this to.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
