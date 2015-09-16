@@ -18,13 +18,13 @@ class BoolAttribute(Attribute):
 
 
     def setValue(self, value):
-        """Sets the value of the attribute.
+        """Sets the value of the attribute..
 
-        Arguments:
-        value -- Value to set the attribute to.
+        Args:
+            value (bool): Value to set the attribute to.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -39,8 +39,8 @@ class BoolAttribute(Attribute):
     def getRTVal(self):
         """Returns and RTVal object for this attribute.
 
-        Return:
-        RTVal
+        Returns:
+            RTVal: RTVal object of the attribute.
 
         """
 
@@ -50,8 +50,11 @@ class BoolAttribute(Attribute):
     def getDataType(self):
         """Returns the name of the data type for this attribute.
 
-        Return:
-        string
+        Note:
+            This is a localized method specific to the Boolean Attribute.
+
+        Returns:
+            str: String name of the attribute type.
 
         """
 

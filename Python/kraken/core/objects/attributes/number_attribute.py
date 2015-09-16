@@ -24,13 +24,13 @@ class NumberAttribute(Attribute):
     # Value Methods
     # ==============
     def setValue(self, value):
-        """Sets the value of the attribute.
+        """Sets the value of the attribute..
 
-        Arguments:
-        value -- Value to set the attribute to.
+        Args:
+            value: Value to set the attribute to.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -48,8 +48,8 @@ class NumberAttribute(Attribute):
     def getMin(self):
         """Gets the minimum value for this attribute.
 
-        Return:
-        Float / Integer - minimum value.
+        Returns:
+            float, int: minimum value.
 
         """
 
@@ -59,13 +59,14 @@ class NumberAttribute(Attribute):
     def setMin(self, minimum):
         """Sets the minimum value for the attribute.
 
-        Note: Only works on float or integer attributes.
+        Note:
+            Only works on float or integer attributes.
 
-        Arguments:
-        minimum -- float / integer, minimum value the attribute can have.
+        Args:
+            minimum (float, int): minimum value the attribute can have.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -79,8 +80,8 @@ class NumberAttribute(Attribute):
     def getMax(self):
         """Gets the maximum value for this attribute.
 
-        Return:
-        Float / Integer - maximum value.
+        Returns:
+            float, int: maximum value.
 
         """
 
@@ -90,13 +91,14 @@ class NumberAttribute(Attribute):
     def setMax(self, maximum):
         """Sets the maximum value for the attribute.
 
-        Note: Only works on float or integer attributes.
+        Note:
+            Only works on float or integer attributes.
 
-        Arguments:
-        maximum -- float / integer, maximum value the attribute can have.
+        Args:
+            maximum (float, int): maximum value the attribute can have.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -110,8 +112,8 @@ class NumberAttribute(Attribute):
     def getUIMin(self):
         """Gets the default minimum ui slider value for this attribute.
 
-        Return:
-        Float / Integer - default minimum ui slider value.
+        Returns:
+            float, int: default minimum ui slider value.
 
         """
 
@@ -121,13 +123,14 @@ class NumberAttribute(Attribute):
     def setUIMin(self, minimum):
         """Sets the default minimum ui slider value for the attribute.
 
-        Note: Only works on float or integer attributes.
+        Note:
+            Only works on float or integer attributes.
 
-        Arguments:
-        minimum -- float / integer, default minimum ui slider value.
+        Args:
+            minimum (float, int): default minimum ui slider value.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -150,8 +153,8 @@ class NumberAttribute(Attribute):
     def getUIMax(self):
         """Gets the default maximum ui slider value for this attribute.
 
-        Return:
-        Float / Integer - default maximum ui slider value.
+        Returns:
+            float, int: default maximum ui slider value.
 
         """
 
@@ -161,13 +164,14 @@ class NumberAttribute(Attribute):
     def setUIMax(self, maximum):
         """Sets the default maximum ui slider value for the attribute.
 
-        Note: Only works on float or integer attributes.
+        Note:
+            Only works on float or integer attributes.
 
-        Arguments:
-        maximum -- float / integer, default maximum ui slider value.
+        Args:
+            maximum (float, int): default maximum ui slider value.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
