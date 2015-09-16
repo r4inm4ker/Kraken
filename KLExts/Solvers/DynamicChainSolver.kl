@@ -88,125 +88,126 @@ function DynamicChainSolver.solve!(
   if (frame <= resetframe) {
     this.reset(fkPose, animPose);
   }
-
-  Boolean initilized = this.trPrev.size == animPose.size;
-  if(!initilized){
-    this.init(fkPose, animPose);
-  }
-
-  if (simulate != true) {
-    animPose = fkPose;
-  }
   else {
-
-    ///////////////////////////////////////////////////////
-    // Compute the Verlet simulation of the strand
-    Vec3 temp[] = this.trCurr.clone();
-    for (Integer i=0; i < animPose.size; i++) {
-
-      Scalar timeStep = 1.0 / 24.0;
-      Scalar mass = Math_linearInterpolate(massStart, massEnd, Scalar(i) / Scalar(animPose.size - 1));
-      Vec3 force = Vec3(0, gravity, 0);
-
-      this.trPrev[i] = this.trPrev[i].linearInterpolate(this.trCurr[i], dampening);
-
-      // The force that pulls the simulation back to the source pose.
-      // (confusing as it overlaps with simulation weight, but has a slighly different behavior. Maybe we should just remove.)
-      // Vec3 attachedTr = animPose.getXfo(boneIndex).transformVector(Vec3(bones[boneIndex].length, 0.0, 0.0));
-      // force += ((attachedTr - this.trCurr[i]) * this.springStrengths);
-      Vec3 delta = (force / mass) * (timeStep * timeStep);
-      this.trCurr[i] += (this.trCurr[i] - this.trPrev[i]) + delta;
-
+    Boolean initilized = this.trPrev.size == animPose.size;
+    if(!initilized){
+      this.init(fkPose, animPose);
     }
 
-    ///////////////////////////////////////////////
-    // Now apply the inter-link constraints that keep the chain from stretching
-    Vec3 temp2[] = this.trCurr.clone();
-    for (Integer i = 0; initilized && i < animPose.size; i++) {
+    if (simulate != true) {
+      animPose = fkPose;
+    }
+    else {
 
-      Vec3 prevAnchor;
-      if(i==0){
-        prevAnchor = animPose[0].translation();
+      ///////////////////////////////////////////////////////
+      // Compute the Verlet simulation of the strand
+      Vec3 temp[] = this.trCurr.clone();
+      for (Integer i=0; i < animPose.size; i++) {
+
+        Scalar timeStep = 1.0 / 24.0;
+        Scalar mass = Math_linearInterpolate(massStart, massEnd, Scalar(i) / Scalar(animPose.size - 1));
+        Vec3 force = Vec3(0, gravity, 0);
+
+        this.trPrev[i] = this.trPrev[i].linearInterpolate(this.trCurr[i], dampening);
+
+        // The force that pulls the simulation back to the source pose.
+        // (confusing as it overlaps with simulation weight, but has a slighly different behavior. Maybe we should just remove.)
+        // Vec3 attachedTr = animPose.getXfo(boneIndex).transformVector(Vec3(bones[boneIndex].length, 0.0, 0.0));
+        // force += ((attachedTr - this.trCurr[i]) * this.springStrengths);
+        Vec3 delta = (force / mass) * (timeStep * timeStep);
+        this.trCurr[i] += (this.trCurr[i] - this.trPrev[i]) + delta;
+
       }
-      else{
-        prevAnchor = temp2[i-1];
-      }
 
-      // if(this.drawDebug){
-      //   vectorShape2.drawLine(temp2[i], prevAnchor);
-      // }
+      ///////////////////////////////////////////////
+      // Now apply the inter-link constraints that keep the chain from stretching
+      Vec3 temp2[] = this.trCurr.clone();
+      for (Integer i = 0; initilized && i < animPose.size; i++) {
 
-      Vec3 prevVec = (prevAnchor - temp2[i]);
-      Scalar prevVecLength = prevVec.length();
-      Scalar boneLength = this.boneLengths[i];
-      this.trCurr[i] += (prevVec * ((prevVecLength - boneLength)/prevVecLength)) * 0.45;
-
-      if(i<(animPose.size - 1)){
-        Vec3 nextAnchor = temp2[i+1];
+        Vec3 prevAnchor;
+        if(i==0){
+          prevAnchor = animPose[0].translation();
+        }
+        else{
+          prevAnchor = temp2[i-1];
+        }
 
         // if(this.drawDebug){
-        //   vectorShape2.drawLine(temp2[i], nextAnchor);
+        //   vectorShape2.drawLine(temp2[i], prevAnchor);
         // }
 
-        Vec3 nextVec = (nextAnchor - temp2[i]);
-        Scalar nextVecLength = nextVec.length();
-        Scalar nextBoneLength = this.boneLengths[i+1];
-        this.trCurr[i] += (nextVec * ((nextVecLength - nextBoneLength)/nextVecLength)) * 0.45;
-      }
-    }
+        Vec3 prevVec = (prevAnchor - temp2[i]);
+        Scalar prevVecLength = prevVec.length();
+        Scalar boneLength = this.boneLengths[i];
+        this.trCurr[i] += (prevVec * ((prevVecLength - boneLength)/prevVecLength)) * 0.45;
 
-    ///////////////////////////////////////////////
-    // Now apply the simulation to the pose.
+        if(i<(animPose.size - 1)){
+          Vec3 nextAnchor = temp2[i+1];
 
-    for (Integer i = 0; i < animPose.size; i++) {
-      Xfo boneXfo = fkPose[i];
-      if(i>0){
-        boneXfo.tr = animPose[i-1] * Vec3(this.boneLengths[i-1], 0.0, 0.0);
-      }
+          // if(this.drawDebug){
+          //   vectorShape2.drawLine(temp2[i], nextAnchor);
+          // }
 
-      Vec3 boneTip = boneXfo.transformVector(Vec3(this.boneLengths[i], 0.0, 0.0));
-      Vec3 simulatedTr = this.trCurr[i];
-
-      // Linear Interp between start / end sim blend values to distribute blend along chain.
-      Scalar simBlend = Math_linearInterpolate(simBlendStart, simBlendEnd, Scalar(i) / Scalar(animPose.size - 1));
-
-      // Rotate the bone to look at the simulated point.
-      Quat boneOffsetRotation;
-      boneOffsetRotation.setFrom2Vectors(boneXfo.ori.getXaxis(), (simulatedTr - boneXfo.tr).unit());
-      boneOffsetRotation = Quat().sphericalLinearInterpolate(boneOffsetRotation, simBlend);
-
-      // TODO: Do some logic here to limit the rotation compared to the previous bone to prevent self intersection
-
-      // We align the last animPose item to the previous item to stabilize the tip.
-      if (i == animPose.size - 1) {
-        boneXfo.ori.setFromMat33(animPose[i - 1].upperLeft());
-      }
-      else {
-        boneXfo.ori = boneOffsetRotation * boneXfo.ori;
+          Vec3 nextVec = (nextAnchor - temp2[i]);
+          Scalar nextVecLength = nextVec.length();
+          Scalar nextBoneLength = this.boneLengths[i+1];
+          this.trCurr[i] += (nextVec * ((nextVecLength - nextBoneLength)/nextVecLength)) * 0.45;
+        }
       }
 
-      animPose[i] = boneXfo.toMat44();
+      ///////////////////////////////////////////////
+      // Now apply the simulation to the pose.
 
-      // Integrate the results back into the simulationso that the next evaluation is based on the resulting pose.
-      this.trCurr[i] = boneXfo.transformVector(Vec3(this.boneLengths[i], 0.0, 0.0));
+      for (Integer i = 0; i < animPose.size; i++) {
+        Xfo boneXfo = fkPose[i];
+        if(i>0){
+          boneXfo.tr = animPose[i-1] * Vec3(this.boneLengths[i-1], 0.0, 0.0);
+        }
 
-      //////////////////////////////////////////////
-      // Debugging
+        Vec3 boneTip = boneXfo.transformVector(Vec3(this.boneLengths[i], 0.0, 0.0));
+        Vec3 simulatedTr = this.trCurr[i];
+
+        // Linear Interp between start / end sim blend values to distribute blend along chain.
+        Scalar simBlend = Math_linearInterpolate(simBlendStart, simBlendEnd, Scalar(i) / Scalar(animPose.size - 1));
+
+        // Rotate the bone to look at the simulated point.
+        Quat boneOffsetRotation;
+        boneOffsetRotation.setFrom2Vectors(boneXfo.ori.getXaxis(), (simulatedTr - boneXfo.tr).unit());
+        boneOffsetRotation = Quat().sphericalLinearInterpolate(boneOffsetRotation, simBlend);
+
+        // TODO: Do some logic here to limit the rotation compared to the previous bone to prevent self intersection
+
+        // We align the last animPose item to the previous item to stabilize the tip.
+        if (i == animPose.size - 1) {
+          boneXfo.ori.setFromMat33(animPose[i - 1].upperLeft());
+        }
+        else {
+          boneXfo.ori = boneOffsetRotation * boneXfo.ori;
+        }
+
+        animPose[i] = boneXfo.toMat44();
+
+        // Integrate the results back into the simulationso that the next evaluation is based on the resulting pose.
+        this.trCurr[i] = boneXfo.transformVector(Vec3(this.boneLengths[i], 0.0, 0.0));
+
+        //////////////////////////////////////////////
+        // Debugging
+        // if(this.drawDebug){
+        //   boneShape.drawLine(boneXfo.tr, boneTip);
+        //   vectorShape1.drawPoint(simulatedTr);
+        //   vectorShape1.drawLine(boneXfo.tr, this.trCurr[i]);
+        // }
+      }
+
+      this.trPrev = temp;
+
       // if(this.drawDebug){
-      //   boneShape.drawLine(boneXfo.tr, boneTip);
-      //   vectorShape1.drawPoint(simulatedTr);
-      //   vectorShape1.drawLine(boneXfo.tr, this.trCurr[i]);
+      //   drawing.pushTransform(Xfo());
+      //   drawing.drawShape(this.solverName + 'boneShape', Color(1.0, 0.0, 0.0, 1.0));
+      //   drawing.drawShape(this.solverName + 'vectorShape1', Color(0.0, 1.0, 0.0, 1.0));
+      //   drawing.drawShape(this.solverName + 'vectorShape2', Color(0.0, 0.0, 1.0, 1.0));
+      //   drawing.popTransform();
       // }
     }
-
-    this.trPrev = temp;
-
-    // if(this.drawDebug){
-    //   drawing.pushTransform(Xfo());
-    //   drawing.drawShape(this.solverName + 'boneShape', Color(1.0, 0.0, 0.0, 1.0));
-    //   drawing.drawShape(this.solverName + 'vectorShape1', Color(0.0, 1.0, 0.0, 1.0));
-    //   drawing.drawShape(this.solverName + 'vectorShape2', Color(0.0, 0.0, 1.0, 1.0));
-    //   drawing.popTransform();
-    // }
   }
 }
