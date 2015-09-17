@@ -393,6 +393,9 @@ QSpinBox#editIndexSpinBox {
     background-color: #333;
 }
 
+/* =========== */
+/* Output Log  */
+/* =========== */
 QPushButton#outputLog_button {
     border: 1px #333;
     border-radius: 3px;
@@ -414,5 +417,26 @@ QPushButton#outputLog_button::pressed {
     padding-top: 7px;
     padding-left: 7px;
 
+    background-color: #3b3b3b;
+}
+
+/* ====== */
+/* Dialog */
+/* ====== */
+QDialog#outputLog {
+    background-color: #151515;
+    color: #FFF;
+}
+
+QDialog#outputLog QTextEdit {
+    border: 0px;
+    border-radius: 3px;
+    padding: 3px;
+
+    color: #e1ffff;
+    background-color: #333;
+}
+
+QDialog#outputLog QTextEdit:hover {
     background-color: #3b3b3b;
 }

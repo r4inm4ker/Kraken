@@ -156,6 +156,7 @@ class OutputLogDialog(QtGui.QDialog):
 
     def __init__(self, parent=None):
         super(OutputLogDialog, self).__init__(parent)
+        self.setObjectName('outputLog')
         self.resize(700, 300)
         self.setWindowTitle('Kraken Output Log')
 
@@ -168,11 +169,10 @@ class OutputLogDialog(QtGui.QDialog):
 
         self.textWidget = QtGui.QTextEdit()
         self.textWidget.setLineWrapMode(QtGui.QTextEdit.NoWrap)
-        self.closeButton = QtGui.QPushButton('Close')
+        self.textWidget.setReadOnly(True)
 
         self.outputLogLayout = QtGui.QVBoxLayout(self)
         self.outputLogLayout.addWidget(self.textWidget)
-        self.outputLogLayout.addWidget(self.closeButton)
 
         self.setLayout(self.outputLogLayout)
 
@@ -180,7 +180,7 @@ class OutputLogDialog(QtGui.QDialog):
     def createConnections(self):
         """Connects widgets to methods or other signals."""
 
-        self.closeButton.clicked.connect(self.close)
+        pass
 
 
     def setText(self, text):
