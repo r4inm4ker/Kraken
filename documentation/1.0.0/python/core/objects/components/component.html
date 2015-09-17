@@ -34,7 +34,7 @@
   
     <link rel="top" title="Kraken Rigging Framework 1.0.0 documentation" href="../../../../index.html"/>
         <link rel="up" title="Components" href="components.html"/>
-        <link rel="next" title="Component Input" href="component_input.html"/>
+        <link rel="next" title="Base Example Component" href="base_example_component.html"/>
         <link rel="prev" title="Components" href="components.html"/> 
 
   
@@ -247,79 +247,155 @@
 <dt id="kraken.core.objects.components.component.Component.getNameDecoration">
 <code class="descname">getNameDecoration</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.getNameDecoration" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the decorated name of the object.</p>
-<p>Return:
-String, decorated name of the object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Decorated name of the object.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.components.component.Component.getLocation">
 <code class="descname">getLocation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.getLocation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the location of the component as a string.</p>
-<p>Return:
-String, the location of the component.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Location of the component.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.components.component.Component.setLocation">
 <code class="descname">setLocation</code><span class="sig-paren">(</span><em>location</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.setLocation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the location of the component.</p>
-<p>Arguments:
-location &#8211; String, location that the component is on. Valid values: L, M, R.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>location</strong> (<em>str</em>) &#8211; Location that the component is on.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.components.component.Component.getGraphPos">
 <code class="descname">getGraphPos</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.getGraphPos" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the graphPos of the component as a string.</p>
-<p>Return:
-String, the graphPos of the component.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The graphPos of the component.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.components.component.Component.setGraphPos">
 <code class="descname">setGraphPos</code><span class="sig-paren">(</span><em>graphPos</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.setGraphPos" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the graphPos of the component.</p>
-<p>Arguments:
-graphPos &#8211; Vec2, The position in the graph where this node is placed.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>graphPos</strong> (<a class="reference internal" href="../../maths/vec2.html#kraken.core.maths.vec2.Vec2" title="kraken.core.maths.vec2.Vec2"><em>Vec2</em></a>) &#8211; The position in the graph where this node is placed.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.components.component.Component.getLayer">
 <code class="descname">getLayer</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.getLayer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieves a layer from the owning container, or generates a layer
-(and warning message)</p>
-<p>Return:
-Layer, the layer from the container, or generated layer.</p>
+(and warning message).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The layer from the container, or generated layer.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="../layer.html#kraken.core.objects.layer.Layer" title="kraken.core.objects.layer.Layer">Layer</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.components.component.Component.getOrCreateLayer">
 <code class="descname">getOrCreateLayer</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.getOrCreateLayer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieves a layer from the owning container, or generates a layer (and warning message)</p>
-<p>Return:
-Layer, the layer from the container, or generated layer.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<em>str</em>) &#8211; Name of the layer to retrieve or create.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The layer from the container, or generated layer.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="../layer.html#kraken.core.objects.layer.Layer" title="kraken.core.objects.layer.Layer">Layer</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.components.component.Component.addChild">
 <code class="descname">addChild</code><span class="sig-paren">(</span><em>child</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.addChild" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a child to the component and sets the object&#8217;s component attribute.</p>
-<p>Arguments:
-child &#8211; Object, object to add as a child.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>child</strong> (<em>Object</em>) &#8211; Object to add as a child.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.components.component.Component.checkInputIndex">
 <code class="descname">checkInputIndex</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.checkInputIndex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks the supplied index is valid.</p>
-<p>Arguments:
-index &#8211; Integer, input index to check.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> (<em>int</em>) &#8211; Input index to check.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -327,75 +403,154 @@ index &#8211; Integer, input index to check.</p>
 <code class="descname">createInput</code><span class="sig-paren">(</span><em>name</em>, <em>dataType</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.createInput" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates an input object and also a connected target object that matches
 the data type that is passed.</p>
-<p>Arguments:
-name &#8211; String, name of the input to create.
-dataType &#8211; String, data type of the input.</p>
-<p>Return:
-Object, the connected target object for the input.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<em>str</em>) &#8211; Name of the input to create.</li>
+<li><strong>dataType</strong> (<em>str</em>) &#8211; Data type of the input.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The connected target object for the input.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Object</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.components.component.Component.addInput">
 <code class="descname">addInput</code><span class="sig-paren">(</span><em>name</em>, <em>dataType</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.addInput" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add input port Object to this object.</p>
-<p>Arguments:
-name &#8211; String, name of the input to create.
-dataType &#8211; String, data type of the input.</p>
-<p>Return:
-New input object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<em>str</em>) &#8211; Name of the input to create.</li>
+<li><strong>dataType</strong> (<em>str</em>) &#8211; Data type of the input.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">New input object.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Object</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.components.component.Component.removeInputByIndex">
 <code class="descname">removeInputByIndex</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.removeInputByIndex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove ComponentInputPort at specified index.</p>
-<p>Arguments:
-index &#8211; Integer, index of the ComponentInputPort to remove.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> (<em>int</em>) &#8211; Index of the ComponentInputPort to remove.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.components.component.Component.removeInputByName">
 <code class="descname">removeInputByName</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.removeInputByName" title="Permalink to this definition">¶</a></dt>
 <dd><p>Removes a input from this object by name.</p>
-<p>Arguments:
-name &#8211; String, name of input to remove.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<em>str</em>) &#8211; Name of input to remove.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.components.component.Component.getNumInputs">
 <code class="descname">getNumInputs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.getNumInputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the number of inputs this component has.</p>
-<p>Return:
-Integer, number of inputs of this object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">number of inputs of this object.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.components.component.Component.getInputByIndex">
 <code class="descname">getInputByIndex</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.getInputByIndex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the input object at specified index.</p>
-<p>Return:
-Input object at specified index.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> (<em>int</em>) &#8211; Index of the input to return.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Input object at specified index.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">Object</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.components.component.Component.getInputByName">
 <code class="descname">getInputByName</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.getInputByName" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the input object with the specified name.</p>
-<p>Return:
-Object if found.
-None if not found.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<em>str</em>) &#8211; Name of the input to return.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Input object.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">Object</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.components.component.Component.checkOutputIndex">
 <code class="descname">checkOutputIndex</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.checkOutputIndex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks the supplied index is valid.</p>
-<p>Arguments:
-index &#8211; Integer, output index to check.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> (<em>int</em>) &#8211; Output index to check.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -403,193 +558,387 @@ index &#8211; Integer, output index to check.</p>
 <code class="descname">createOutput</code><span class="sig-paren">(</span><em>name</em>, <em>dataType</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.createOutput" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates an output object and also a connected target object that matches
 the data type that is passed.</p>
-<p>Arguments:
-name &#8211; String, name of the output to create.
-dataType &#8211; String, data type of the output.</p>
-<p>Return:
-Object, the connected target object for the output.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<em>str</em>) &#8211; Name of the output to create.</li>
+<li><strong>dataType</strong> (<em>str</em>) &#8211; Data type of the output.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The connected target object for the output.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Object</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.components.component.Component.addOutput">
 <code class="descname">addOutput</code><span class="sig-paren">(</span><em>name</em>, <em>dataType</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.addOutput" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add output port Object to this object.</p>
-<p>Arguments:
-name &#8211; String, name of the output to create.
-dataType &#8211; String, data type of the output.</p>
-<p>Return:
-New output object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<em>str</em>) &#8211; Name of the output to create.</li>
+<li><strong>dataType</strong> (<em>str</em>) &#8211; Data type of the output.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">New output object.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Object</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.components.component.Component.getNumOutputs">
 <code class="descname">getNumOutputs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.getNumOutputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the number of outputs this component has.</p>
-<p>Return:
-Integer, number of outputs of this object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Number of outputs of this object.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.components.component.Component.getOutputByIndex">
 <code class="descname">getOutputByIndex</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.getOutputByIndex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the output object at specified index.</p>
-<p>Return:
-Output object at specified index.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> (<em>int</em>) &#8211; Index of the output to return.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Output object at specified index.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.components.component.Component.getOutputByName">
 <code class="descname">getOutputByName</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.getOutputByName" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the output object with the specified name.</p>
-<p>Return:
-Object if found.
-None if not found.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<em>str</em>) &#8211; Name of the output to return.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Output object.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">Object</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.components.component.Component.checkOperatorIndex">
 <code class="descname">checkOperatorIndex</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.checkOperatorIndex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks the supplied index is valid.</p>
-<p>Arguments:
-index &#8211; Integer, operator index to check.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> (<em>int</em>) &#8211; operator index to check.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the index is valid.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.components.component.Component.addOperator">
 <code class="descname">addOperator</code><span class="sig-paren">(</span><em>operator</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.addOperator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a operator to this object.</p>
-<p>Arguments:
-operator &#8211; Object, object that will be a operator of this object.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>operator</strong> (<em>Object</em>) &#8211; Object that will be a operator of this object.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.components.component.Component.removeOperatorByIndex">
 <code class="descname">removeOperatorByIndex</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.removeOperatorByIndex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Removes a operator from this object by index.</p>
-<p>Arguments:
-index &#8211; Integer, index of operator to remove.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> (<em>int</em>) &#8211; Index of operator to remove.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.components.component.Component.removeOperatorByName">
 <code class="descname">removeOperatorByName</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.removeOperatorByName" title="Permalink to this definition">¶</a></dt>
 <dd><p>Removes a operator from this object by name.</p>
-<p>Arguments:
-name &#8211; String, name of operator to remove.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<em>str</em>) &#8211; Name of operator to remove.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.components.component.Component.getNumOperators">
 <code class="descname">getNumOperators</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.getNumOperators" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the number of operators this object has.</p>
-<p>Return:
-Integer, number of operators of this object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Number of operators of this object.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.components.component.Component.getOperatorByIndex">
 <code class="descname">getOperatorByIndex</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.getOperatorByIndex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the operator object at specified index.</p>
-<p>Return:
-Operator object at specified index.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> (<em>int</em>) &#8211; Index of the operator to return.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Operator object at specified index.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">Object</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.components.component.Component.getOperatorByName">
 <code class="descname">getOperatorByName</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.getOperatorByName" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the operator object with the specified name.</p>
-<p>Return:
-Object if found.
-None if not found.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<em>str</em>) &#8211; Name of the operator to return.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Operator if found.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">Object</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.components.component.Component.getOperatorByType">
 <code class="descname">getOperatorByType</code><span class="sig-paren">(</span><em>childType</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.getOperatorByType" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns all children that are of the specified type.</p>
-<p>Arguments:
-childType &#8211; Type, the object type to search for.</p>
-<p>Return:
-Array of operator objects of the specified type.
-None if no objects of specified type are found.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>childType</strong> (<em>str</em>) &#8211; The object type to search for.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Array of operator objects of the specified type.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.components.component.Component.getOperatorIndex">
 <code class="descname">getOperatorIndex</code><span class="sig-paren">(</span><em>operator</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.getOperatorIndex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the index of the specified operator.</p>
-<p>Arguments:
-operator &#8211; Object, operator to find the index of.</p>
-<p>Return:
-True if successful.
-None if operator not found on component.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>operator</strong> (<em>Object</em>) &#8211; Operator to find the index of.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Operator if found.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">Object</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.components.component.Component.moveOperatorToIndex">
 <code class="descname">moveOperatorToIndex</code><span class="sig-paren">(</span><em>operator</em>, <em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.moveOperatorToIndex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Moves an operator to the specified index.</p>
-<p>Arguments:
-operator &#8211; Object, operator to move.
-index &#8211; Integer, index position to move the operator to.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>operator</strong> (<em>Object</em>) &#8211; Operator to move.</li>
+<li><strong>index</strong> (<em>int</em>) &#8211; Index position to move the operator to.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if successful.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bool</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.components.component.Component.saveData">
 <code class="descname">saveData</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.saveData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save the data for the component to be persisted.</p>
-<p>Return:
-The JSON data object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The JSON data object</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.components.component.Component.loadData">
 <code class="descname">loadData</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.loadData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load a saved guide representation from persisted data.</p>
-<p>Arguments:
-data &#8211; object, The JSON data object.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>dict</em>) &#8211; The JSON data object.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.components.component.Component.copyData">
 <code class="descname">copyData</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.copyData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Copy the data for the component to our clipboard.</p>
-<p>Return:
-The JSON data object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The JSON data object</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.components.component.Component.pasteData">
 <code class="descname">pasteData</code><span class="sig-paren">(</span><em>data</em>, <em>setLocation=True</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.pasteData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Paste a copied guide representation.</p>
-<p>Arguments:
-data &#8211; object, The JSON data object.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> (<em>dict</em>) &#8211; The JSON data object.</li>
+<li><strong>setLocation</strong> (<em>bool</em>) &#8211; Whether to set the location after pasting data.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if successful.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bool</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.components.component.Component.getRigBuildData">
 <code class="descname">getRigBuildData</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.getRigBuildData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the Guide data used by the Rig Component to define the layout of the final rig..</p>
-<p>Return:
-The JSON rig data object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The JSON rig data object.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.components.component.Component.detach">
 <code class="descname">detach</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.detach" title="Permalink to this definition">¶</a></dt>
 <dd><p>Detaches component from container.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">NotImplemented</span></code> &#8211;
+This method should be implemented in sub-classes.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -602,6 +951,9 @@ The JSON rig data object.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>container</strong> (<em>object</em>) &#8211; container to attach to.</td>
 </tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">NotImplemented</span></code> &#8211;
+This method should be implemented in sub-classes.</td>
+</tr>
 </tbody>
 </table>
 </dd></dl>
@@ -610,8 +962,20 @@ The JSON rig data object.</p>
 <dt id="kraken.core.objects.components.component.Component.getComponentType">
 <em class="property">classmethod </em><code class="descname">getComponentType</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component.Component.getComponentType" title="Permalink to this definition">¶</a></dt>
 <dd><p>Enables introspection of the class prior to construction to determine if it is a guide component.</p>
-<p>Return:
-The true if this component is a guide component.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This is a localized method specific to the Component object.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">String name of the Component type.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -640,7 +1004,7 @@ The true if this component is a guide component.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="component_input.html" class="btn btn-neutral float-right" title="Component Input" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="base_example_component.html" class="btn btn-neutral float-right" title="Base Example Component" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="components.html" class="btn btn-neutral" title="Components" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>

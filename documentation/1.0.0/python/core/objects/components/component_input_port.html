@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Boolean Attribute &mdash; Kraken Rigging Framework 1.0.0 documentation</title>
+  <title>Component Input Port &mdash; Kraken Rigging Framework 1.0.0 documentation</title>
   
 
   
@@ -33,9 +33,9 @@
 
   
     <link rel="top" title="Kraken Rigging Framework 1.0.0 documentation" href="../../../../index.html"/>
-        <link rel="up" title="Attributes" href="attributes.html"/>
-        <link rel="next" title="Integer Attribute" href="integer_attribute.html"/>
-        <link rel="prev" title="Attribute Group" href="attribute_group.html"/> 
+        <link rel="up" title="Components" href="components.html"/>
+        <link rel="next" title="Component Output" href="component_output.html"/>
+        <link rel="prev" title="Component Input" href="component_input.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -207,13 +207,13 @@
       
           <li><a href="../objects.html">Objects</a> &raquo;</li>
       
-          <li><a href="attributes.html">Attributes</a> &raquo;</li>
+          <li><a href="components.html">Components</a> &raquo;</li>
       
-    <li>Boolean Attribute</li>
+    <li>Component Input Port</li>
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="../../../../_sources/python/core/objects/attributes/bool_attribute.txt" rel="nofollow"> View page source</a>
+            <a href="../../../../_sources/python/core/objects/components/component_input_port.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -222,8 +222,8 @@
 </div>
           <div role="main" class="document">
             
-  <div class="section" id="boolean-attribute">
-<h1>Boolean Attribute<a class="headerlink" href="#boolean-attribute" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="component-input-port">
+<h1>Component Input Port<a class="headerlink" href="#component-input-port" title="Permalink to this headline">¶</a></h1>
 <div class="contents local topic" id="usage-documentation">
 <p class="topic-title first">Usage Documentation</p>
 <ul class="simple">
@@ -234,24 +234,24 @@
 <div class="section" id="class-documentation">
 <h2><a class="toc-backref" href="#id1">Class Documentation</a><a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="kraken.core.objects.attributes.bool_attribute.BoolAttribute">
-<em class="property">class </em><code class="descclassname">kraken.core.objects.attributes.bool_attribute.</code><code class="descname">BoolAttribute</code><span class="sig-paren">(</span><em>name</em>, <em>value=False</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.attributes.bool_attribute.BoolAttribute" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="attribute.html#kraken.core.objects.attributes.attribute.Attribute" title="kraken.core.objects.attributes.attribute.Attribute"><code class="xref py py-class docutils literal"><span class="pre">kraken.core.objects.attributes.attribute.Attribute</span></code></a></p>
-<p>Boolean Attribute. Implemented value type checking and limiting.</p>
+<dt id="kraken.core.objects.components.component_input_port.ComponentInputPort">
+<em class="property">class </em><code class="descclassname">kraken.core.objects.components.component_input_port.</code><code class="descname">ComponentInputPort</code><span class="sig-paren">(</span><em>name</em>, <em>parent</em>, <em>dataType</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component_input_port.ComponentInputPort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../scene_item.html#kraken.core.objects.scene_item.SceneItem" title="kraken.core.objects.scene_item.SceneItem"><code class="xref py py-class docutils literal"><span class="pre">kraken.core.objects.scene_item.SceneItem</span></code></a></p>
+<p>Component Input Object.</p>
 <dl class="method">
-<dt id="kraken.core.objects.attributes.bool_attribute.BoolAttribute.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>name</em>, <em>value=False</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.attributes.bool_attribute.BoolAttribute.__init__" title="Permalink to this definition">¶</a></dt>
+<dt id="kraken.core.objects.components.component_input_port.ComponentInputPort.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>name</em>, <em>parent</em>, <em>dataType</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component_input_port.ComponentInputPort.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="kraken.core.objects.attributes.bool_attribute.BoolAttribute.setValue">
-<code class="descname">setValue</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.attributes.bool_attribute.BoolAttribute.setValue" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets the value of the attribute..</p>
+<dt id="kraken.core.objects.components.component_input_port.ComponentInputPort.setDataType">
+<code class="descname">setDataType</code><span class="sig-paren">(</span><em>dataType</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component_input_port.ComponentInputPort.setDataType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the data type for this input.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> (<em>bool</em>) &#8211; Value to set the attribute to.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dataType</strong> (<em>str</em>) &#8211; Type of input source.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
 </tr>
@@ -262,36 +262,144 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="kraken.core.objects.attributes.bool_attribute.BoolAttribute.getRTVal">
-<code class="descname">getRTVal</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.attributes.bool_attribute.BoolAttribute.getRTVal" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns and RTVal object for this attribute.</p>
+<dt id="kraken.core.objects.components.component_input_port.ComponentInputPort.getDataType">
+<code class="descname">getDataType</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component_input_port.ComponentInputPort.getDataType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the data type for this input.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">RTVal object of the attribute.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Data type of this input.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">RTVal</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="method">
-<dt id="kraken.core.objects.attributes.bool_attribute.BoolAttribute.getDataType">
-<code class="descname">getDataType</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.attributes.bool_attribute.BoolAttribute.getDataType" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the name of the data type for this attribute.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This is a localized method specific to the Boolean Attribute.</p>
-</div>
+<dt id="kraken.core.objects.components.component_input_port.ComponentInputPort.isConnected">
+<code class="descname">isConnected</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component_input_port.ComponentInputPort.isConnected" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if there is a connection.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">String name of the attribute type.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Whether it is connected or not.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.objects.components.component_input_port.ComponentInputPort.getConnection">
+<code class="descname">getConnection</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component_input_port.ComponentInputPort.getConnection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the connection of this input.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Connection object or None if not set.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.objects.components.component_input_port.ComponentInputPort.setConnection">
+<code class="descname">setConnection</code><span class="sig-paren">(</span><em>connectionObj</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component_input_port.ComponentInputPort.setConnection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the connection to the component output.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>connectionObj</strong> (<a class="reference internal" href="component_output.html#kraken.core.objects.components.component_output.ComponentOutput" title="kraken.core.objects.components.component_output.ComponentOutput"><em>ComponentOutput</em></a>) &#8211; Output object to connect to.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.objects.components.component_input_port.ComponentInputPort.removeConnection">
+<code class="descname">removeConnection</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component_input_port.ComponentInputPort.removeConnection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes the connection to the component output.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.objects.components.component_input_port.ComponentInputPort.setTarget">
+<code class="descname">setTarget</code><span class="sig-paren">(</span><em>target</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component_input_port.ComponentInputPort.setTarget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the taret for this input.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>target</strong> (<em>Object</em>) &#8211; Kraken object that is the target of this input.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.objects.components.component_input_port.ComponentInputPort.getTarget">
+<code class="descname">getTarget</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component_input_port.ComponentInputPort.getTarget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the target of the input.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Object, the target of the input.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.objects.components.component_input_port.ComponentInputPort.getIndex">
+<code class="descname">getIndex</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component_input_port.ComponentInputPort.getIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the index of the connection.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Integer, the index of the connection.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.objects.components.component_input_port.ComponentInputPort.setIndex">
+<code class="descname">setIndex</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.component_input_port.ComponentInputPort.setIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the index of the connection.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> (<em>int</em>) &#8211; The index to set this to.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
 </tr>
 </tbody>
 </table>
@@ -323,10 +431,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="integer_attribute.html" class="btn btn-neutral float-right" title="Integer Attribute" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="component_output.html" class="btn btn-neutral float-right" title="Component Output" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="attribute_group.html" class="btn btn-neutral" title="Attribute Group" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="component_input.html" class="btn btn-neutral" title="Component Input" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
