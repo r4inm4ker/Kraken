@@ -28,8 +28,8 @@ class ComponentGroup(Object3D):
     def getName(self):
         """Gets the decorated name of the object.
 
-        Return:
-        String, decorated name of the object.
+        Returns:
+            str: Decorated name of the object.
 
         """
 
@@ -46,8 +46,8 @@ class ComponentGroup(Object3D):
     def getNameDecoration(self):
         """Gets the decorated name of the object.
 
-        Return:
-        String, decorated name of the object.
+        Returns:
+            str: Decorated name of the object.
 
         """
 
