@@ -25,11 +25,11 @@ class Rig(Container):
     def writeRigDefinitionFile(self, filepath):
         """Load a rig definition from a file on disk.
 
-        Arguments:
-        filepath -- string, the file path of the rig definition file.
+        Args:
+            filepath (str): The file path of the rig definition file.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -49,11 +49,11 @@ class Rig(Container):
     def loadRigDefinitionFile(self, filepath):
         """Load a rig definition from a file on disk.
 
-        Arguments:
-        filepath -- string, the file path of the rig definition file.
+        Args:
+            filepath (str): The file path of the rig definition file.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -73,6 +73,13 @@ class Rig(Container):
 
 
     def _loadComponents(self, componentsJson):
+        """Loads components from a JSON dict.
+
+        Args:
+            componentsJson (dict): Dictionary of components to load.
+
+        """
+
 
         Profiler.getInstance().push("__loadComponents")
 
@@ -95,6 +102,13 @@ class Rig(Container):
 
 
     def _makeConnections(self, connectionsJson):
+        """Makes connections based on JSON dict.
+
+        Args:
+            connectionsJson (dict): Dictionary of connections to make.
+
+        """
+
 
         Profiler.getInstance().push("__makeConnections")
 
@@ -128,7 +142,14 @@ class Rig(Container):
 
         Profiler.getInstance().pop()
 
+
     def _loadGraphPositions(self, graphPositions):
+        """Loads the graph positions of the components.
+
+        Args:
+            graphPositions (dict): Positions for the components.
+
+        """
 
         for componentName, graphPos in graphPositions.iteritems():
 
@@ -139,11 +160,11 @@ class Rig(Container):
     def loadRigDefinition(self, jsonData):
         """Load a rig definition from a JSON structure.
 
-        Arguments:
-        jsonData -- dict, the JSON data containing the rig definition.
+        Args:
+            jsonData (dict): JSON data containing the rig definition.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -171,11 +192,11 @@ class Rig(Container):
     def writeGuideDefinitionFile(self, filepath):
         """Writes a rig definition to a file on disk.
 
-        Arguments:
-        filepath -- string, the file path of the rig definition file.
+        Args:
+            filepath (str): The file path of the rig definition file.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -195,8 +216,8 @@ class Rig(Container):
     def getData(self):
         """Get the graph definition of the rig. This method is used to save the state of the guide itself.
 
-        Return:
-        The JSON data struture of the rig data
+        Returns:
+            dict: The JSON data struture of the rig data
 
         """
 
@@ -236,8 +257,8 @@ class Rig(Container):
     def getRigBuildData(self):
         """Get the graph definition of the guide for building the final rig.
 
-        Return:
-        The JSON data struture of the guide rig data
+        Returns:
+            dict: The JSON data struture of the guide rig data
 
         """
 

@@ -26,12 +26,12 @@ class Builder(Builder):
     def buildContainer(self, kSceneItem, buildName):
         """Builds a container / namespace object.
 
-        Arguments:
-        kSceneItem -- Object, kSceneItem that represents a container to be built.
-        buildName -- String, The name to use on the built object.
+        Args:
+            kSceneItem (object): kSceneItem that represents a container to be built.
+            buildName (str): The name to use on the built object.
 
-        Return:
-        Node that is created..
+        Returns:
+            object: Node that is created.
 
         """
 
@@ -53,12 +53,12 @@ class Builder(Builder):
     def buildLayer(self, kSceneItem, buildName):
         """Builds a layer object.
 
-        Arguments:
-        kSceneItem -- Object, kSceneItem that represents a layer to be built.
-        buildName -- String, The name to use on the built object.
+        Args:
+            kSceneItem (object): kSceneItem that represents a layer to be built.
+            buildName (str): The name to use on the built object.
 
-        Return:
-        Node that is created..
+        Returns:
+            object: Node that is created.
 
         """
 
@@ -79,12 +79,12 @@ class Builder(Builder):
     def buildHierarchyGroup(self, kSceneItem, buildName):
         """Builds a hierarchy group object.
 
-        Arguments:
-        kSceneItem -- Object, kSceneItem that represents a group to be built.
-        buildName -- String, The name to use on the built object.
+        Args:
+            kSceneItem (object): kSceneItem that represents a group to be built.
+            buildName (str): The name to use on the built object.
 
-        Return:
-        DCC Scene Item that is created.
+        Returns:
+            object: DCC Scene Item that is created.
 
         """
 
@@ -108,12 +108,12 @@ class Builder(Builder):
     def buildGroup(self, kSceneItem, buildName):
         """Builds a locator / null object.
 
-        Arguments:
-        kSceneItem -- Object, kSceneItem that represents a group to be built.
-        buildName -- String, The name to use on the built object.
+        Args:
+            kSceneItem (object): kSceneItem that represents a group to be built.
+            buildName (str): The name to use on the built object.
 
-        Return:
-        Node that is created.
+        Returns:
+            object: Node that is created.
 
         """
 
@@ -134,12 +134,12 @@ class Builder(Builder):
     def buildJoint(self, kSceneItem, buildName):
         """Builds a joint object.
 
-        Arguments:
-        kSceneItem -- Object, kSceneItem that represents a joint to be built.
-        buildName -- String, The name to use on the built object.
+        Args:
+            kSceneItem (object): kSceneItem that represents a joint to be built.
+            buildName (str): The name to use on the built object.
 
-        Return:
-        DCC Scene Item that is created.
+        Returns:
+            object: DCC Scene Item that is created.
 
         """
 
@@ -162,12 +162,12 @@ class Builder(Builder):
     def buildLocator(self, kSceneItem, buildName):
         """Builds a locator / null object.
 
-        Arguments:
-        kSceneItem -- Object, kSceneItem that represents a locator / null to be built.
-        buildName -- String, The name to use on the built object.
+        Args:
+            kSceneItem (object): kSceneItem that represents a locator / null to be built.
+            buildName (str): The name to use on the built object.
 
-        Return:
-        Node that is created.
+        Returns:
+            object: Node that is created.
 
         """
 
@@ -188,12 +188,12 @@ class Builder(Builder):
     def buildCurve(self, kSceneItem, buildName):
         """Builds a Curve object.
 
-        Arguments:
-        kSceneItem -- Object, kSceneItem that represents a curve to be built.
-        buildName -- String, The name to use on the built object.
+        Args:
+            kSceneItem (object): kSceneItem that represents a curve to be built.
+            buildName (str): The name to use on the built object.
 
-        Return:
-        Node that is created.
+        Returns:
+            object: Node that is created.
 
         """
 
@@ -249,12 +249,12 @@ class Builder(Builder):
     def buildControl(self, kSceneItem, buildName):
         """Builds a Control object.
 
-        Arguments:
-        kSceneItem -- Object, kSceneItem that represents a control to be built.
-        buildName -- String, The name to use on the built object.
+        Args:
+            kSceneItem (object): kSceneItem that represents a control to be built.
+            buildName (str): The name to use on the built object.
 
-        Return:
-        Node that is created.
+        Returns:
+            object: Node that is created.
 
         """
 
@@ -313,11 +313,11 @@ class Builder(Builder):
     def buildBoolAttribute(self, kAttribute):
         """Builds a Bool attribute.
 
-        Arguments:
-        kAttribute -- Object, kAttribute that represents a boolean attribute to be built.
+        Args:
+            kAttribute (object): kAttribute that represents a boolean attribute to be built.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -333,11 +333,11 @@ class Builder(Builder):
     def buildScalarAttribute(self, kAttribute):
         """Builds a Float attribute.
 
-        Arguments:
-        kAttribute -- Object, kAttribute that represents a float attribute to be built.
+        Args:
+            kAttribute (object): kAttribute that represents a float attribute to be built.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -352,11 +352,11 @@ class Builder(Builder):
     def buildIntegerAttribute(self, kAttribute):
         """Builds a Integer attribute.
 
-        Arguments:
-        kAttribute -- Object, kAttribute that represents a integer attribute to be built.
+        Args:
+            kAttribute (object): kAttribute that represents a integer attribute to be built.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -371,11 +371,11 @@ class Builder(Builder):
     def buildStringAttribute(self, kAttribute):
         """Builds a String attribute.
 
-        Arguments:
-        kAttribute -- Object, kAttribute that represents a string attribute to be built.
+        Args:
+            kAttribute (object): kAttribute that represents a string attribute to be built.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -390,11 +390,11 @@ class Builder(Builder):
     def buildAttributeGroup(self, kAttributeGroup):
         """Builds attribute groups on the DCC object.
 
-        Arguments:
-        kAttributeGroup -- SceneItem, kraken object to build the attribute group on.
+        Args:
+            kAttributeGroup (object): Kraken object to build the attribute group on.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -429,11 +429,11 @@ class Builder(Builder):
     def connectAttribute(self, kAttribute):
         """Connects the driver attribute to this one.
 
-        Arguments:
-        kAttribute -- Object, attribute to connect.
+        Args:
+            kAttribute (object): Attribute to connect.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -451,11 +451,11 @@ class Builder(Builder):
     def buildOrientationConstraint(self, kConstraint):
         """Builds an orientation constraint represented by the kConstraint.
 
-        Arguments:
-        kConstraint -- Object, kraken constraint object to build.
+        Args:
+            kConstraint (object): Kraken constraint object to build.
 
-        Return:
-        dccSceneItem that was created.
+        Returns:
+            object: dccSceneItem that was created.
 
         """
 
@@ -474,11 +474,11 @@ class Builder(Builder):
     def buildPoseConstraint(self, kConstraint):
         """Builds an pose constraint represented by the kConstraint.
 
-        Arguments:
-        kConstraint -- Object, kraken constraint object to build.
+        Args:
+            kConstraint (object): kraken constraint object to build.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -559,11 +559,11 @@ class Builder(Builder):
     def buildPositionConstraint(self, kConstraint):
         """Builds an position constraint represented by the kConstraint.
 
-        Arguments:
-        kConstraint -- Object, kraken constraint object to build.
+        Args:
+            kConstraint (object): kraken constraint object to build.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -582,11 +582,11 @@ class Builder(Builder):
     def buildScaleConstraint(self, kConstraint):
         """Builds an scale constraint represented by the kConstraint.
 
-        Arguments:
-        kConstraint -- Object, kraken constraint object to build.
+        Args:
+            kConstraint (object): kraken constraint object to build.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -608,11 +608,11 @@ class Builder(Builder):
     def buildAttributeConnection(self, connectionInput):
         """Builds the link between the target and connection target.
 
-        Arguments:
-        connectionInput -- Object, kraken component input to build connections for.
+        Args:
+            connectionInput (object): kraken component input to build connections for.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -641,11 +641,11 @@ class Builder(Builder):
     def buildSpliceOperators(self, kOperator):
         """Builds Splice Operators on the components.
 
-        Arguments:
-        kOperator -- Object, kraken operator that represents a Splice operator.
+        Args:
+            kOperator (object): kraken operator that represents a Splice operator.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
         try:
@@ -812,11 +812,11 @@ class Builder(Builder):
     def lockParameters(self, kSceneItem):
         """Locks flagged SRT parameters.
 
-        Arguments:
-        kSceneItem -- Object, kraken object to lock the SRT parameters on.
+        Args:
+            kSceneItem (object): kraken object to lock the SRT parameters on.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -870,11 +870,11 @@ class Builder(Builder):
     def setVisibility(self, kSceneItem):
         """Sets the visibility of the object after its been created.
 
-        Arguments:
-        kSceneItem -- Object, kraken object to set the visibility on.
+        Args:
+            kSceneItem (object): kraken object to set the visibility on.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -892,11 +892,11 @@ class Builder(Builder):
     def setObjectColor(self, kSceneItem):
         """Sets the color on the dccSceneItem.
 
-        Arguments:
-        kSceneItem -- Object, kraken object to set the color on.
+        Args:
+            kSceneItem (object): kraken object to set the color on.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -919,11 +919,11 @@ class Builder(Builder):
     def setTransform(self, kSceneItem):
         """Translates the transform to Softimage transform.
 
-        Arguments:
-        kSceneItem -- Object: object to set the transform on.
+        Args:
+            kSceneItem (object): object to set the transform on.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -952,11 +952,11 @@ class Builder(Builder):
     def _preBuild(self, kSceneItem):
         """Pre-Build commands.
 
-        Arguments:
-        kSceneItem -- Object, kraken kSceneItem object to build.
+        Args:
+            kSceneItem (object): kraken kSceneItem object to build.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -968,8 +968,8 @@ class Builder(Builder):
     def _postBuild(self):
         """Post-Build commands.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 

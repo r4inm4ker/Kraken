@@ -26,11 +26,11 @@ class ComponentOutputPort(SceneItem):
     def setDataType(self, dataType):
         """Sets the data type for this input.
 
-        Arguments:
-        dataType -- String, type of input source.
+        Args:
+            dataType (str): type of input source.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -42,8 +42,8 @@ class ComponentOutputPort(SceneItem):
     def getDataType(self):
         """Returns the data type for this input.
 
-        Return:
-        String, data type of this input.
+        Returns:
+            str: Data type of this input.
 
         """
 
@@ -56,8 +56,8 @@ class ComponentOutputPort(SceneItem):
     def isConnected(self):
         """Checks if there is a connection.
 
-        Return:
-        Boolean, whether there are any output connections.
+        Returns:
+            bool: Whether there are any output connections.
 
         """
 
@@ -67,8 +67,11 @@ class ComponentOutputPort(SceneItem):
     def getConnection(self, index):
         """Gets the connection of this input.
 
-        Return:
-        Connection object or None if not set.
+        Args:
+            index (int): Index of connection to return.
+
+        Returns:
+            object: Connection object or None if not set.
 
         """
 
@@ -76,13 +79,13 @@ class ComponentOutputPort(SceneItem):
 
 
     def _addConnection(self, connectionObj):
-        """Doc String.
+        """Adds a connection to the output.
 
-        Arguments:
-        Arguments -- Type, information.
+        Args:
+            connectionObj (object): Object to set as a connection.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -99,13 +102,13 @@ class ComponentOutputPort(SceneItem):
 
 
     def _removeConnection(self, connectionObj):
-        """Doc String.
+        """Removes a connection.
 
-        Arguments:
-        Arguments -- Type, information.
+        Args:
+            connectionObj (object): Object to remove the connection for.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -123,11 +126,11 @@ class ComponentOutputPort(SceneItem):
     def setTarget(self, target):
         """Sets the taret for this input.
 
-        Arguments:
-        target -- Object, kraken object that is the target of this input.
+        Args:
+            target (object): Kraken object that is the target of this input.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -137,8 +140,8 @@ class ComponentOutputPort(SceneItem):
     def getTarget(self):
         """Returns the target of the input.
 
-        Return:
-        Object, the target of the input.
+        Returns:
+            Object, the target of the input.
 
         """
 

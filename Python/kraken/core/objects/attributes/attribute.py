@@ -35,8 +35,7 @@ class Attribute(SceneItem):
     def getValue(self):
         """Returns the value of the attribute.
 
-        Return:
-        Value of the attribute.
+        Returns: Attribute Value.
 
         """
 
@@ -44,13 +43,13 @@ class Attribute(SceneItem):
 
 
     def setValue(self, value):
-        """Sets the value of the attribute.
+        """Sets attribute value.
 
-        Arguments:
-        value -- Value to set the attribute to.
+        Args:
+            value: Value to set the attribute to.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -65,11 +64,12 @@ class Attribute(SceneItem):
     def setValueChangeCallback(self, callback):
         """Sets the value of the attribute.
 
-        Arguments:
-        value -- Value to set the attribute to.
 
-        Return:
-        True if successful.
+        Args:
+            callback: Value to set the attribute to.
+
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -81,8 +81,11 @@ class Attribute(SceneItem):
     def getKeyable(self):
         """Returns the keyable state of the attribute.
 
-        Return:
-        Keyable state of the attribute.
+        Args:
+            argument (Type): description.
+
+        Returns:
+            bool: Keyable state of the attribute.
 
         """
 
@@ -92,11 +95,11 @@ class Attribute(SceneItem):
     def setKeyable(self, value):
         """Sets the keyable state of the attribute.
 
-        Arguments:
-        value -- Bool, keyable state.
+        Args:
+            value (bool): keyable state.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -109,24 +112,24 @@ class Attribute(SceneItem):
 
 
     def getLock(self):
-            """Returns the Lock state of the attribute.
+        """Returns the Lock state of the attribute.
 
-            Return:
-            Lock state of the attribute.
+        Returns:
+            bool: Lock state of the attribute.
 
-            """
+        """
 
-            return self._lock
+        return self._lock
 
 
     def setLock(self, value):
-        """Sets the lock state of the attribute.
+        """Sets the lock state of the attribute..
 
-        Arguments:
-        value -- Bool, lock state.
+        Args:
+            value (bool): lock state.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -139,13 +142,13 @@ class Attribute(SceneItem):
 
 
     def setAnimatable(self, value):
-        """Sets the animatable state of the attribute.
+        """Sets the animatable state of the attribute..
 
-        Arguments:
-        value -- Bool, animatable state.
+        Args:
+            value (bool): animatable state.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -158,39 +161,51 @@ class Attribute(SceneItem):
 
 
     def getAnimatable(self):
-            """Returns the animatable state of the attribute.
+        """Returns the animatable state of the attribute..
 
-            Return:
-            Animatable state of the attribute.
+        Returns:
+            bool: True if Animatable state of the attribute.
 
-            """
+        """
 
-            return self._animatable
+        return self._animatable
 
 
     def getRTVal(self):
         """Returns and RTVal object for this attribute.
 
-        Return:
-        RTVal
+        Note:
+            This method should be re-implemented in concrete attribute classes.
+
+        Returns:
+            RTVal: RTVal object for this attribute.
+
+        Raises:
+            NotImplemented: Must be implemented by concrete attribute classes.
 
         """
 
-        raise Exception("getRTVal must be implemented by concrete attribute classes")
+        raise NotImplemented("This method should be re-implemented in concrete attribute classes.")
 
 
     def validateValue(self, value):
         """Validates the incoming value is the correct type.
 
-        Arguments:
-        value -- Type, value to check the type of.
+        Note:
+            This method should be re-implemented in concrete attribute classes.
 
-        Return:
-        True if successful.
+        Args:
+            value: value to check the type of.
+
+        Returns:
+            bool: True if valid.
+
+        Raises:
+            NotImplemented: This method should be re-implemented in concrete attribute classes.
 
         """
 
-        return True
+        raise NotImplemented("This method should be re-implemented in concrete attribute classes.")
 
 
     # ===================
@@ -199,8 +214,8 @@ class Attribute(SceneItem):
     def isConnected(self):
         """Returns whether the attribute is connected or not.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if is connected.
 
         """
 
@@ -211,10 +226,10 @@ class Attribute(SceneItem):
 
 
     def getConnection(self):
-        """Returns the connected attribute.
+        """Returns the connected attribute..
 
-        Return:
-        Object, attribute driving this attribute.
+        Returns:
+            Object: attribute driving this attribute.
 
         """
 
@@ -222,13 +237,13 @@ class Attribute(SceneItem):
 
 
     def connect(self, attribute):
-        """Connects this attribute with another.
+        """Connects this attribute with another..
 
-        Arguments:
-        attribute -- Object, attribute that will drive this one.
+        Args:
+            attribute (Object): attribute that will drive this one.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -238,10 +253,10 @@ class Attribute(SceneItem):
 
 
     def disconnect(self):
-        """Clears the connection of this attribute.
+        """Clears the connection of this attribute..
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -253,12 +268,13 @@ class Attribute(SceneItem):
     # Persistence Methods
     # ====================
     def jsonEncode(self, saver):
-        """Sets the color of this object.
+        """Encodes the object to a JSON structure.
 
-        Arguments:
+        Args:
+            saver (Object): saver object.
 
-        Return:
-        A JSON structure containing the data for this SceneItem.
+        Returns:
+            Dict: A JSON structure containing the data for this SceneItem.
 
         """
 
@@ -282,12 +298,17 @@ class Attribute(SceneItem):
 
 
     def jsonDecode(self, loader, jsonData):
-        """Returns the color of the object.
+        """Returns the color of the object..
 
-        Return:
-        True if decoding was successful
+        Args:
+            loader (Object): Loader object.
+            jsonData (Dict): JSON object structure.
+
+        Returns:
+            bool: True if successful.
 
         """
+
         self.name =  jsonData['name']
         self._value =  loader.decodeValue(jsonData['value'])
 

@@ -27,8 +27,8 @@ class Constraint(SceneItem):
         """Returns the whether the constraint should maintain offset when it's
         built or not.
 
-        Return:
-        Boolean, whether the constraint should maintain offset or not.
+        Returns:
+            bool: Whether the constraint should maintain offset or not.
 
         """
 
@@ -38,11 +38,11 @@ class Constraint(SceneItem):
     def setMaintainOffset(self, value):
         """Sets the constraint to maintain offset when creating the constraint.
 
-        Arguments:
-        value -- Boolean, whether the constraint should maintain offset or not.
+        Args:
+            value (bool): Whether the constraint should maintain offset or not.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -52,11 +52,11 @@ class Constraint(SceneItem):
     def setConstrainee(self, constrainee):
         """Sets the constrainee object for this constraint.
 
-        Arguments:
-        constrainee -- Object, kSceneItem that will be constrained.
+        Args:
+            constrainee (Object): Object that will be constrained.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -68,8 +68,8 @@ class Constraint(SceneItem):
     def getConstrainee(self):
         """Returns the constrainee object for this constraint.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -79,11 +79,11 @@ class Constraint(SceneItem):
     def addConstrainer(self, kObject3D):
         """Adds a constrainer object to this constraint.
 
-        Arguments:
-        kObject3D -- Object, kObject3D that will constrain the constrainee.
+        Args:
+            kObject3D (Object): kObject3D that will constrain the constrainee.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -96,12 +96,12 @@ class Constraint(SceneItem):
     def setConstrainer(self, kObject3D, index=0):
         """Sets the constrainer at the specified index.
 
-        Arguments:
-        kObject3D -- kObject3D, Kraken 3D object.
-        index -- Integer, index of the constraint to set.
+        Args:
+            kObject3D (object): Kraken 3D object.
+            index (int): index of the constraint to set.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -121,11 +121,11 @@ class Constraint(SceneItem):
     def removeConstrainerByIndex(self, index):
         """Removes a constrainer object by its index.
 
-        Arguments:
-        index -- Integer, index of the constrainer you want to remove.
+        Args:
+            index (int): Index of the constrainer you want to remove.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -135,8 +135,8 @@ class Constraint(SceneItem):
     def getConstrainers(self):
         """Returns the constrainers of this constraint.
 
-        Return:
-        List, constrainer objects.
+        Returns:
+            list: Constrainer objects.
 
         """
 
@@ -147,12 +147,13 @@ class Constraint(SceneItem):
     # Persistence Methods
     # ================
     def jsonEncode(self, saver):
-        """Returns the data for this object encoded as a JSON hierarchy.
+        """Encodes the object to a JSON structure.
 
-        Arguments:
+        Args:
+            saver (Object): saver object.
 
-        Return:
-        A JSON structure containing the data for this SceneItem.
+        Returns:
+            Dict: A JSON structure containing the data for this SceneItem.
 
         """
 
@@ -175,10 +176,14 @@ class Constraint(SceneItem):
 
 
     def jsonDecode(self, loader, jsonData):
-        """Returns the color of the object.
+        """Returns the color of the object..
 
-        Return:
-        True if decoding was successful
+        Args:
+            loader (Object): Loader object.
+            jsonData (Dict): JSON object structure.
+
+        Returns:
+            bool: True if successful.
 
         """
 

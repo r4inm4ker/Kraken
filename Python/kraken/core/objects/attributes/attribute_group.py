@@ -31,11 +31,11 @@ class AttributeGroup(SceneItem):
     def _checkAttributeIndex(self, index):
         """Checks the supplied index is valid.
 
-        Arguments:
-        index -- Integer, attribute index to check.
+        Args:
+            index (int): attribute index to check.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if valid.
 
         """
 
@@ -46,13 +46,13 @@ class AttributeGroup(SceneItem):
 
 
     def addAttribute(self, attribute):
-        """Adds an attribute to this object.
+        """Adds an attribute to this object..
 
-        Arguments:
-        attribute -- Object, attribute object to add to this object.
+        Args:
+            attribute (Object): attribute object to add to this object.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -66,13 +66,13 @@ class AttributeGroup(SceneItem):
 
 
     def removeAttributeByIndex(self, index):
-        """Removes attribute at specified index.
+        """Removes attribute at specified index..
 
-        Arguments:
-        index -- Integer, index of attribute to remove.
+        Args:
+            index (int): index of the attribute to remove.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -85,13 +85,13 @@ class AttributeGroup(SceneItem):
 
 
     def removeAttributeByName(self, name):
-        """Removes the attribute with the specified name.
+        """Removes the attribute with the specified name..
 
-        Arguments:
-        name -- String, name of the attribute to remove.
+        Args:
+            name (str): name of the attribute to remove.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -112,8 +112,8 @@ class AttributeGroup(SceneItem):
     def getNumAttributes(self):
         """Returns the number of attributes as an integer.
 
-        Return:
-        Integer of the number of attributes on this object.
+        Returns:
+            int: Number of attributes on this object.
 
         """
 
@@ -121,14 +121,13 @@ class AttributeGroup(SceneItem):
 
 
     def getAttributeByIndex(self, index):
-        """Returns the attribute at the specified index.
+        """Returns the attribute at the specified index..
 
-        Arguments:
-        index -- Integer, index of the attribute to return.
+        Args:
+            index (int): index of the attribute to return.
 
-        Return:
-        Attribute at the specified index.
-        False if not a valid index.
+        Returns:
+            Attribute: The attribute at the specified index.
 
         """
 
@@ -139,14 +138,13 @@ class AttributeGroup(SceneItem):
 
 
     def getAttributeByName(self, name):
-        """Return the attribute with the specified name.
+        """Return the attribute with the specified name..
 
-        Arguments:
-        name -- String, name of the attribute to return.
+        Args:
+            name (str): Name of the attribute to return.
 
-        Return:
-        Attribute with the specified name.
-        None if not found.
+        Returns:
+            Attribute: The attribute with the specified name.
 
         """
 
@@ -161,12 +159,13 @@ class AttributeGroup(SceneItem):
     # Persistence Methods
     # ====================
     def jsonEncode(self, saver):
-        """Returns the data for this object encoded as a JSON hierarchy.
+        """Encodes the object to a JSON structure.
 
-        Arguments:
+        Args:
+            saver (Object): saver object.
 
-        Return:
-        A JSON structure containing the data for this SceneItem.
+        Returns:
+            Dict: A JSON structure containing the data for this SceneItem.
 
         """
 
@@ -189,10 +188,14 @@ class AttributeGroup(SceneItem):
 
 
     def jsonDecode(self, loader, jsonData):
-        """Returns the color of the object.
+        """Returns the color of the object..
 
-        Return:
-        the decoded object.
+        Args:
+            loader (Object): Loader object.
+            jsonData (Dict): JSON object structure.
+
+        Returns:
+            bool: True if successful.
 
         """
 

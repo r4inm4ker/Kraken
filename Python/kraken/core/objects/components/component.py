@@ -47,8 +47,8 @@ class Component(Object3D):
     def getNameDecoration(self):
         """Gets the decorated name of the object.
 
-        Return:
-        String, decorated name of the object.
+        Returns:
+            str: Decorated name of the object.
 
         """
 
@@ -64,8 +64,8 @@ class Component(Object3D):
     def getLocation(self):
         """Returns the location of the component as a string.
 
-        Return:
-        String, the location of the component.
+        Returns:
+            str: Location of the component.
 
         """
 
@@ -75,11 +75,11 @@ class Component(Object3D):
     def setLocation(self, location):
         """Sets the location of the component.
 
-        Arguments:
-        location -- String, location that the component is on. Valid values: L, M, R.
+        Args:
+            location (str): Location that the component is on.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -100,8 +100,8 @@ class Component(Object3D):
     def getGraphPos(self):
         """Returns the graphPos of the component as a string.
 
-        Return:
-        String, the graphPos of the component.
+        Returns:
+            str: The graphPos of the component.
 
         """
 
@@ -111,11 +111,11 @@ class Component(Object3D):
     def setGraphPos(self, graphPos):
         """Sets the graphPos of the component.
 
-        Arguments:
-        graphPos -- Vec2, The position in the graph where this node is placed.
+        Args:
+            graphPos (Vec2): The position in the graph where this node is placed.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -129,10 +129,10 @@ class Component(Object3D):
     # =============
     def getLayer(self, name):
         """Retrieves a layer from the owning container, or generates a layer
-        (and warning message)
+        (and warning message).
 
-        Return:
-        Layer, the layer from the container, or generated layer.
+        Returns:
+            Layer: The layer from the container, or generated layer.
 
         """
 
@@ -150,11 +150,13 @@ class Component(Object3D):
     def getOrCreateLayer(self, name):
         """Retrieves a layer from the owning container, or generates a layer (and warning message)
 
-        Return:
-        Layer, the layer from the container, or generated layer.
+        Args:
+            name (str): Name of the layer to retrieve or create.
+
+        Returns:
+            Layer: The layer from the container, or generated layer.
 
         """
-
 
         container = self.getContainer()
         if container is None:
@@ -173,11 +175,11 @@ class Component(Object3D):
     def addChild(self, child):
         """Adds a child to the component and sets the object's component attribute.
 
-        Arguments:
-        child -- Object, object to add as a child.
+        Args:
+            child (Object): Object to add as a child.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -195,8 +197,11 @@ class Component(Object3D):
     def checkInputIndex(self, index):
         """Checks the supplied index is valid.
 
-        Arguments:
-        index -- Integer, input index to check.
+        Args:
+            index (int): Input index to check.
+
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -210,12 +215,12 @@ class Component(Object3D):
         """Creates an input object and also a connected target object that matches
         the data type that is passed.
 
-        Arguments:
-        name -- String, name of the input to create.
-        dataType -- String, data type of the input.
+        Args:
+            name (str): Name of the input to create.
+            dataType (str): Data type of the input.
 
-        Return:
-        Object, the connected target object for the input.
+        Returns:
+            Object: The connected target object for the input.
 
         """
 
@@ -263,12 +268,12 @@ class Component(Object3D):
     def addInput(self, name, dataType):
         """Add input port Object to this object.
 
-        Arguments:
-        name -- String, name of the input to create.
-        dataType -- String, data type of the input.
+        Args:
+            name (str): Name of the input to create.
+            dataType (str): Data type of the input.
 
-        Return:
-        New input object.
+        Returns:
+            Object: New input object.
 
         """
 
@@ -285,11 +290,11 @@ class Component(Object3D):
     def removeInputByIndex(self, index):
         """Remove ComponentInputPort at specified index.
 
-        Arguments:
-        index -- Integer, index of the ComponentInputPort to remove.
+        Args:
+            index (int): Index of the ComponentInputPort to remove.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -304,11 +309,11 @@ class Component(Object3D):
     def removeInputByName(self, name):
         """Removes a input from this object by name.
 
-        Arguments:
-        name -- String, name of input to remove.
+        Args:
+            name (str): Name of input to remove.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -329,8 +334,8 @@ class Component(Object3D):
     def getNumInputs(self):
         """Returns the number of inputs this component has.
 
-        Return:
-        Integer, number of inputs of this object.
+        Returns:
+            int: number of inputs of this object.
 
         """
 
@@ -340,8 +345,11 @@ class Component(Object3D):
     def getInputByIndex(self, index):
         """Returns the input object at specified index.
 
-        Return:
-        Input object at specified index.
+        Args:
+            index (int): Index of the input to return.
+
+        Returns:
+            Object: Input object at specified index.
 
         """
 
@@ -354,9 +362,11 @@ class Component(Object3D):
     def getInputByName(self, name):
         """Returns the input object with the specified name.
 
-        Return:
-        Object if found.
-        None if not found.
+        Args:
+            name (str): Name of the input to return.
+
+        Returns:
+            Object: Input object.
 
         """
 
@@ -373,8 +383,11 @@ class Component(Object3D):
     def checkOutputIndex(self, index):
         """Checks the supplied index is valid.
 
-        Arguments:
-        index -- Integer, output index to check.
+        Args:
+            index (int): Output index to check.
+
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -388,12 +401,12 @@ class Component(Object3D):
         """Creates an output object and also a connected target object that matches
         the data type that is passed.
 
-        Arguments:
-        name -- String, name of the output to create.
-        dataType -- String, data type of the output.
+        Args:
+            name (str): Name of the output to create.
+            dataType (str): Data type of the output.
 
-        Return:
-        Object, the connected target object for the output.
+        Returns:
+            Object: The connected target object for the output.
 
         """
 
@@ -445,12 +458,12 @@ class Component(Object3D):
     def addOutput(self, name, dataType):
         """Add output port Object to this object.
 
-        Arguments:
-        name -- String, name of the output to create.
-        dataType -- String, data type of the output.
+        Args:
+            name (str): Name of the output to create.
+            dataType (str): Data type of the output.
 
-        Return:
-        New output object.
+        Returns:
+            Object: New output object.
 
         """
 
@@ -467,8 +480,8 @@ class Component(Object3D):
     def getNumOutputs(self):
         """Returns the number of outputs this component has.
 
-        Return:
-        Integer, number of outputs of this object.
+        Returns:
+            int: Number of outputs of this object.
 
         """
 
@@ -478,8 +491,11 @@ class Component(Object3D):
     def getOutputByIndex(self, index):
         """Returns the output object at specified index.
 
-        Return:
-        Output object at specified index.
+        Args:
+            index (int): Index of the output to return.
+
+        Returns:
+            Output object at specified index.
 
         """
 
@@ -492,9 +508,11 @@ class Component(Object3D):
     def getOutputByName(self, name):
         """Returns the output object with the specified name.
 
-        Return:
-        Object if found.
-        None if not found.
+        Args:
+            name (str): Name of the output to return.
+
+        Returns:
+            Object: Output object.
 
         """
 
@@ -511,8 +529,11 @@ class Component(Object3D):
     def checkOperatorIndex(self, index):
         """Checks the supplied index is valid.
 
-        Arguments:
-        index -- Integer, operator index to check.
+        Args:
+            index (int): operator index to check.
+
+        Returns:
+            bool: True if the index is valid.
 
         """
 
@@ -525,11 +546,11 @@ class Component(Object3D):
     def addOperator(self, operator):
         """Adds a operator to this object.
 
-        Arguments:
-        operator -- Object, object that will be a operator of this object.
+        Args:
+            operator (Object): Object that will be a operator of this object.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -545,11 +566,11 @@ class Component(Object3D):
     def removeOperatorByIndex(self, index):
         """Removes a operator from this object by index.
 
-        Arguments:
-        index -- Integer, index of operator to remove.
+        Args:
+            index (int): Index of operator to remove.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -564,11 +585,11 @@ class Component(Object3D):
     def removeOperatorByName(self, name):
         """Removes a operator from this object by name.
 
-        Arguments:
-        name -- String, name of operator to remove.
+        Args:
+            name (str): Name of operator to remove.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -589,8 +610,8 @@ class Component(Object3D):
     def getNumOperators(self):
         """Returns the number of operators this object has.
 
-        Return:
-        Integer, number of operators of this object.
+        Returns:
+            int: Number of operators of this object.
 
         """
 
@@ -600,8 +621,11 @@ class Component(Object3D):
     def getOperatorByIndex(self, index):
         """Returns the operator object at specified index.
 
-        Return:
-        Operator object at specified index.
+        Args:
+            index (int): Index of the operator to return.
+
+        Returns:
+            Object: Operator object at specified index.
 
         """
 
@@ -614,9 +638,11 @@ class Component(Object3D):
     def getOperatorByName(self, name):
         """Returns the operator object with the specified name.
 
-        Return:
-        Object if found.
-        None if not found.
+        Args:
+            name (str): Name of the operator to return.
+
+        Returns:
+            Object: Operator if found.
 
         """
 
@@ -630,12 +656,11 @@ class Component(Object3D):
     def getOperatorByType(self, childType):
         """Returns all children that are of the specified type.
 
-        Arguments:
-        childType -- Type, the object type to search for.
+        Args:
+            childType (str): The object type to search for.
 
-        Return:
-        Array of operator objects of the specified type.
-        None if no objects of specified type are found.
+        Returns:
+            list: Array of operator objects of the specified type.
 
         """
 
@@ -650,12 +675,11 @@ class Component(Object3D):
     def getOperatorIndex(self, operator):
         """Return the index of the specified operator.
 
-        Arguments:
-        operator -- Object, operator to find the index of.
+        Args:
+            operator (Object): Operator to find the index of.
 
-        Return:
-        True if successful.
-        None if operator not found on component.
+        Returns:
+            Object: Operator if found.
 
         """
 
@@ -669,12 +693,12 @@ class Component(Object3D):
     def moveOperatorToIndex(self, operator, index):
         """Moves an operator to the specified index.
 
-        Arguments:
-        operator -- Object, operator to move.
-        index -- Integer, index position to move the operator to.
+        Args:
+            operator (Object): Operator to move.
+            index (int): Index position to move the operator to.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -690,9 +714,8 @@ class Component(Object3D):
     def saveData(self):
         """Save the data for the component to be persisted.
 
-
-        Return:
-        The JSON data object
+        Returns:
+            dict: The JSON data object
 
         """
 
@@ -721,11 +744,11 @@ class Component(Object3D):
     def loadData(self, data):
         """Load a saved guide representation from persisted data.
 
-        Arguments:
-        data -- object, The JSON data object.
+        Args:
+            data (dict): The JSON data object.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -754,8 +777,8 @@ class Component(Object3D):
     def copyData(self):
         """Copy the data for the component to our clipboard.
 
-        Return:
-        The JSON data object
+        Returns:
+            dict: The JSON data object
 
         """
 
@@ -765,11 +788,12 @@ class Component(Object3D):
     def pasteData(self, data, setLocation=True):
         """Paste a copied guide representation.
 
-        Arguments:
-        data -- object, The JSON data object.
+        Args:
+            data (dict): The JSON data object.
+            setLocation (bool): Whether to set the location after pasting data.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -791,8 +815,8 @@ class Component(Object3D):
     def getRigBuildData(self):
         """Returns the Guide data used by the Rig Component to define the layout of the final rig..
 
-        Return:
-        The JSON rig data object.
+        Returns:
+            dict: The JSON rig data object.
 
         """
 
@@ -815,9 +839,14 @@ class Component(Object3D):
 
 
     def detach(self):
-        """Detaches component from container."""
+        """Detaches component from container.
 
-        pass
+        Raises:
+            NotImplemented: This method should be implemented in sub-classes.
+
+        """
+
+        raise NotImplemented("This method should be implemented in sub-classes.")
 
 
     def attach(self, container):
@@ -826,9 +855,12 @@ class Component(Object3D):
         Args:
             container (object): container to attach to.
 
+        Raises:
+            NotImplemented: This method should be implemented in sub-classes.
+
         """
 
-        pass
+        raise NotImplemented("This method should be implemented in sub-classes.")
 
 
     # ==============
@@ -838,8 +870,11 @@ class Component(Object3D):
     def getComponentType(cls):
         """Enables introspection of the class prior to construction to determine if it is a guide component.
 
-        Return:
-        The true if this component is a guide component.
+        Note:
+            This is a localized method specific to the Component object.
+
+        Returns:
+            str: String name of the Component type.
 
         """
 
