@@ -126,34 +126,10 @@ class KGraphViewWidget(GraphViewWidget):
 
             builder.build(self.guideRig)
 
+            raise Exception("stopping for Eric")
+
         except Exception as e:
-            print traceback.format_exc()
-
-            statusBar = self.window().statusBar()
-            warningLabel = QtGui.QLabel('Error Building: ' + ', '.join([x for x in e.args]))
-            warningLabel.setMaximumWidth(200)
-            warningLabel.setStyleSheet("QLabel { border-radius: 3px; background-color: #AA0000}")
-
-            def addWarning():
-                self.window().statusBar().clearMessage()
-
-                statusBar.addWidget(warningLabel, 1)
-                statusBar.repaint()
-
-                timer.start()
-
-            def endWarning():
-                timer.stop()
-                statusBar.removeWidget(warningLabel)
-                statusBar.repaint()
-
-                self.window().statusBar().showMessage('Ready', 2000)
-
-            timer = QtCore.QTimer()
-            timer.setInterval(2000)
-            timer.timeout.connect(endWarning)
-
-            addWarning()
+            self.reportMessage('Error Building', level='error', exception=e)
 
 
     def synchGuideRig(self):
@@ -179,33 +155,7 @@ class KGraphViewWidget(GraphViewWidget):
             builder.build(rig)
 
         except Exception as e:
-            print traceback.format_exc()
-
-            statusBar = self.window().statusBar()
-            warningLabel = QtGui.QLabel('Error Building: ' + ', '.join([x for x in e.args]))
-            warningLabel.setMaximumWidth(200)
-            warningLabel.setStyleSheet("QLabel { border-radius: 3px; background-color: #AA0000}")
-
-            def addWarning():
-                self.window().statusBar().clearMessage()
-
-                statusBar.addWidget(warningLabel, 1)
-                statusBar.repaint()
-
-                timer.start()
-
-            def endWarning():
-                timer.stop()
-                statusBar.removeWidget(warningLabel)
-                statusBar.repaint()
-
-                self.window().statusBar().showMessage('Ready', 2000)
-
-            timer = QtCore.QTimer()
-            timer.setInterval(2000)
-            timer.timeout.connect(endWarning)
-
-            addWarning()
+            self.reportMessage('Error Building', level='error', exception=e)
 
     # =========
     # Shortcuts
@@ -263,10 +213,61 @@ class KGraphViewWidget(GraphViewWidget):
         scenepos = self.graphView.mapToScene(pos)
         contextualNodeList.showAtPos(pos, scenepos, self.graphView)
 
+
+    # ==================
+    # Message Reporting
+    # ==================
+    def reportMessage(self, message, level='error', exception=None):
+        """Shows an error message in the status bar.
+
+        Args:
+            message (str): Message to display to the user.
+
+        """
+
+        statusBar = self.window().statusBar()
+
+        if exception is not None:
+            messageLabel = QtGui.QLabel(level[0].upper() + level[1:] + ": " + message + '; ' + ', '.join([x for x in exception.args]))
+        else:
+            messageLabel = QtGui.QLabel(level[0].upper() + level[1:] + ": " + message)
+
+        messageColors = {
+            'information': '#009900',
+            'warning': '#CC3300',
+            'error': '#AA0000'
+        }
+
+        if level not in messageColors.keys():
+            level = 'error'
+
+        messageLabel.setStyleSheet("QLabel { border-radius: 3px; background-color: " + messageColors[level] + "}")
+
+        def addMessage():
+            self.window().statusBar().clearMessage()
+
+            statusBar.addWidget(messageLabel, 1)
+            statusBar.repaint()
+
+            timer.start()
+
+        def endMessage():
+            timer.stop()
+            statusBar.removeWidget(messageLabel)
+            statusBar.repaint()
+
+            self.window().statusBar().showMessage('Ready', 2000)
+
+        timer = QtCore.QTimer()
+        timer.setInterval(3500)
+        timer.timeout.connect(endMessage)
+
+        addMessage()
+
+
     # ===============
     # Signal Handlers
     # ===============
-
     def __onNodeAdded(self, node):
         if not UndoRedoManager.getInstance().isUndoingOrRedoing():
             command = graph_commands.AddNodeCommand(self.graphView, self.guideRig, node)
