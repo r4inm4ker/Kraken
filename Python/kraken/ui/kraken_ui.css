@@ -392,3 +392,27 @@ QSpinBox#editIndexSpinBox {
     color: #FFF;
     background-color: #333;
 }
+
+QPushButton#outputLog_button {
+    border: 1px #333;
+    border-radius: 3px;
+    border-style: outset;
+    padding: 5px;
+    width: 35px;
+    margin-right: 10px;
+
+    background-color: #333;
+    color: #e1ffff;
+}
+
+QPushButton#outputLog_button:hover {
+    background-color: #3b3b3b;
+}
+
+QPushButton#outputLog_button::pressed {
+    border-style: inset;
+    padding-top: 7px;
+    padding-left: 7px;
+
+    background-color: #3b3b3b;
+}

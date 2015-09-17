@@ -8,6 +8,7 @@ import kraken.ui.kraken_ui
 reload(kraken.ui.kraken_ui)
 from kraken.ui.kraken_menu import KrakenMenu
 from kraken.ui.kraken_ui import KrakenUI
+from kraken.ui.output_log import OutputLog
 
 
 class KrakenWindow(QtGui.QMainWindow):
@@ -18,6 +19,10 @@ class KrakenWindow(QtGui.QMainWindow):
         self.setObjectName('KrakenMainWindow')
         self.setWindowTitle('Kraken Editor')
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
+
+        # Set system output to write to output log object
+        self.outputLog = OutputLog()
+        sys.stdout = self.outputLog
 
         QtCore.QCoreApplication.setOrganizationName("Kraken")
         QtCore.QCoreApplication.setApplicationName("Kraken Editor")
@@ -41,6 +46,12 @@ class KrakenWindow(QtGui.QMainWindow):
 
 
     def createLayout(self):
+
+        # Setup Status Bar
+        statusBar = self.statusBar()
+        self.outputLogButton = QtGui.QPushButton('Log', self)
+        self.outputLogButton.setObjectName('outputLog_button')
+        statusBar.insertPermanentWidget(0, self.outputLogButton)
 
         mainWidget = QtGui.QWidget()
 
@@ -68,8 +79,8 @@ class KrakenWindow(QtGui.QMainWindow):
 
 
     def createConnections(self):
+        self.outputLogButton.clicked.connect(self.showOutputLog)
         self.krakenMenu.newAction.triggered.connect(self.krakenUI.graphViewWidget.newRigPreset)
-
         self.krakenUI.graphViewWidget.rigNameChanged.connect(self.krakenMenu.updateRigNameLabel)
 
 
@@ -132,6 +143,51 @@ class KrakenWindow(QtGui.QMainWindow):
             self.statusBar().showMessage('Closing')
 
         self.writeSettings()
+
+
+    def showOutputLog(self):
+        outputDialog = OutputLogDialog(self)
+        outputDialog.show()
+        outputDialog.setText(self.outputLog.getLog())
+
+
+class OutputLogDialog(QtGui.QDialog):
+    """Output Dialog"""
+
+    def __init__(self, parent=None):
+        super(OutputLogDialog, self).__init__(parent)
+        self.resize(700, 300)
+        self.setWindowTitle('Kraken Output Log')
+
+        self.createLayout()
+        self.createConnections()
+
+
+    def createLayout(self):
+        """Sets up the layout for the dialog."""
+
+        self.textWidget = QtGui.QTextEdit()
+        self.textWidget.setLineWrapMode(QtGui.QTextEdit.NoWrap)
+        self.closeButton = QtGui.QPushButton('Close')
+
+        self.outputLogLayout = QtGui.QVBoxLayout(self)
+        self.outputLogLayout.addWidget(self.textWidget)
+        self.outputLogLayout.addWidget(self.closeButton)
+
+        self.setLayout(self.outputLogLayout)
+
+
+    def createConnections(self):
+        """Connects widgets to methods or other signals."""
+
+        self.closeButton.clicked.connect(self.close)
+
+
+    def setText(self, text):
+        """Sets the text of the text widget."""
+
+        self.textWidget.setText(text)
+
 
 
 def createSplash(app):
