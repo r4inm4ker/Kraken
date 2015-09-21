@@ -36,6 +36,10 @@ class KrakenMenu(QtGui.QWidget):
         self.saveAction.setShortcut('Ctrl+S')
         self.saveAction.setObjectName("saveAction")
 
+        self.saveAsAction = self.fileMenu.addAction('&Save As')
+        self.saveAsAction.setShortcut('Ctrl+Shift+S')
+        self.saveAsAction.setObjectName("saveAsAction")
+
         self.loadAction = self.fileMenu.addAction('&Load')
         self.loadAction.setShortcut('Ctrl+L')
         self.loadAction.setObjectName("loadAction")
@@ -138,6 +142,7 @@ class KrakenMenu(QtGui.QWidget):
         self.newAction.triggered.connect(self.updateRigNameLabel)
 
         self.saveAction.triggered.connect(graphViewWidget.saveRigPreset)
+        self.saveAsAction.triggered.connect(graphViewWidget.saveAsRigPreset)
         self.loadAction.triggered.connect(graphViewWidget.loadRigPreset)
         self.loadAction.triggered.connect(self.updateRigNameLabel)
         self.closeAction.triggered.connect(self.window().close)
