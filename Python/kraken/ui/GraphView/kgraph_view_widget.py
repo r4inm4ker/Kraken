@@ -83,17 +83,34 @@ class KGraphViewWidget(GraphViewWidget):
 
 
     def saveRigPreset(self):
-        settings = self.window().getSettings()
-        settings.beginGroup('Files')
-        lastFilePath = settings.value("lastFilePath", os.path.join(GetKrakenPath(), self.guideRig.getName() ))
-        settings.endGroup()
-        (filePath, filter) = QtGui.QFileDialog.getSaveFileName(self, 'Save Rig Preset', lastFilePath, 'Kraken Rig (*.krg)')
-        if len(filePath) > 0:
+
+        if self.openedFile is None or not os.path.exists(self.openedFile):
+            settings = self.window().getSettings()
+            settings.beginGroup('Files')
+            lastFilePath = settings.value("lastFilePath", os.path.join(GetKrakenPath(), self.guideRig.getName() ))
+            settings.endGroup()
+            (filePath, filter) = QtGui.QFileDialog.getSaveFileName(self, 'Save Rig Preset', lastFilePath, 'Kraken Rig (*.krg)')
+            if len(filePath) > 0:
+                self.synchGuideRig()
+                self.guideRig.writeRigDefinitionFile(filePath)
+
+                settings.beginGroup('Files')
+                lastFilePath = settings.setValue("lastFilePath", filePath)
+                settings.endGroup()
+
+        else:
+            settings = self.window().getSettings()
+            settings.beginGroup('Files')
+            lastFilePath = settings.value("lastFilePath", os.path.join(GetKrakenPath(), self.guideRig.getName() ))
+            settings.endGroup()
+
             self.synchGuideRig()
-            self.guideRig.writeRigDefinitionFile(filePath)
+            self.guideRig.writeRigDefinitionFile(lastFilePath)
+
+            print "Saved file: " + lastFilePath
 
             settings.beginGroup('Files')
-            lastFilePath = settings.setValue("lastFilePath", filePath)
+            lastFilePath = settings.setValue("lastFilePath", lastFilePath)
             settings.endGroup()
 
 
@@ -112,6 +129,8 @@ class KGraphViewWidget(GraphViewWidget):
             settings.beginGroup('Files')
             lastFilePath = settings.setValue("lastFilePath", filePath)
             settings.endGroup()
+
+            self.openedFile = filePath
 
 
     def buildGuideRig(self):
