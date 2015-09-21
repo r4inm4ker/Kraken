@@ -18,7 +18,6 @@ class KrakenWindow(QtGui.QMainWindow):
         super(KrakenWindow, self).__init__(parent)
         self.setObjectName('KrakenMainWindow')
         self.setWindowTitle('Kraken Editor')
-        self.setWindowIconText('blah')
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
 
         # Set system output to write to output log object
