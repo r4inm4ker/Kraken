@@ -16,6 +16,7 @@ class GraphViewWidget(QtGui.QWidget):
 
         # constructors of base classes
         super(GraphViewWidget, self).__init__(parent)
+        self.openedFile = None
         self.setObjectName('graphViewWidget')
         self.setAttribute(QtCore.Qt.WA_WindowPropagation, True)
 
