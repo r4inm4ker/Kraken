@@ -86,59 +86,44 @@ class KGraphViewWidget(GraphViewWidget):
         self.window().setWindowTitle('Kraken Editor')
 
 
-    def saveAsRigPreset(self):
+    def saveRig(self, saveAs=False):
+
         settings = self.window().getSettings()
         settings.beginGroup('Files')
-        lastFilePath = settings.value("lastFilePath", os.path.join(GetKrakenPath(), self.guideRig.getName() ))
+        filePath = settings.value("lastFilePath", os.path.join(GetKrakenPath(), self.guideRig.getName() ))
         settings.endGroup()
-        (filePath, filter) = QtGui.QFileDialog.getSaveFileName(self, 'Save Rig Preset', os.path.dirname(os.path.abspath(lastFilePath)), 'Kraken Rig (*.krg)')
-        if len(filePath) > 0:
-            self.synchGuideRig()
-            self.guideRig.writeRigDefinitionFile(filePath)
 
-            print "Saved file as: " + lastFilePath
+        if saveAs is True:
 
-            settings.beginGroup('Files')
-            lastFilePath = settings.setValue("lastFilePath", filePath)
-            settings.endGroup()
+            (saveAsFilePath, filter) = QtGui.QFileDialog.getSaveFileName(self, 'Save Rig Preset', os.path.dirname(os.path.abspath(filePath)), 'Kraken Rig (*.krg)')
+            if len(saveAsFilePath) > 0:
+                filePath = saveAsFilePath
+            else:
+                return False
 
-            self.openedFile = filePath
+        self.synchGuideRig()
+        self.guideRig.writeRigDefinitionFile(filePath)
+
+        settings.beginGroup('Files')
+        lastFilePath = settings.setValue("lastFilePath", filePath)
+        settings.endGroup()
+
+        self.openedFile = filePath
+
+        print "Saved file: " + filePath
+
+
+    def saveAsRigPreset(self):
+        self.saveRig(saveAs=True)
 
 
     def saveRigPreset(self):
 
         if self.openedFile is None or not os.path.exists(self.openedFile):
-            settings = self.window().getSettings()
-            settings.beginGroup('Files')
-            lastFilePath = settings.value("lastFilePath", os.path.join(GetKrakenPath(), self.guideRig.getName() ))
-            settings.endGroup()
-            (filePath, filter) = QtGui.QFileDialog.getSaveFileName(self, 'Save Rig Preset', os.path.dirname(os.path.abspath(lastFilePath)), 'Kraken Rig (*.krg)')
-            if len(filePath) > 0:
-                self.synchGuideRig()
-                self.guideRig.writeRigDefinitionFile(filePath)
-
-                print "Saved file: " + lastFilePath
-
-                settings.beginGroup('Files')
-                lastFilePath = settings.setValue("lastFilePath", filePath)
-                settings.endGroup()
-
-                self.openedFile = filePath
+            self.saveRig(saveAs=True)
 
         else:
-            settings = self.window().getSettings()
-            settings.beginGroup('Files')
-            lastFilePath = settings.value("lastFilePath", os.path.join(GetKrakenPath(), self.guideRig.getName() ))
-            settings.endGroup()
-
-            self.synchGuideRig()
-            self.guideRig.writeRigDefinitionFile(lastFilePath)
-
-            print "Saved file: " + lastFilePath
-
-            settings.beginGroup('Files')
-            lastFilePath = settings.setValue("lastFilePath", lastFilePath)
-            settings.endGroup()
+            self.saveRig(saveAs=False)
 
 
     def loadRigPreset(self):
