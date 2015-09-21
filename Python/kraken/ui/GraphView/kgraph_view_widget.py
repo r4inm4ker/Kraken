@@ -126,8 +126,6 @@ class KGraphViewWidget(GraphViewWidget):
 
             builder.build(self.guideRig)
 
-            raise Exception("stopping for Eric")
-
         except Exception as e:
             self.reportMessage('Error Building', level='error', exception=e)
 
