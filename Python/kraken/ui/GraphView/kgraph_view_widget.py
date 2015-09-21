@@ -81,20 +81,49 @@ class KGraphViewWidget(GraphViewWidget):
         self.getGraphView().displayGraph(self.guideRig)
         self.setRigName('MyRig')
 
+        self.openedFile = None
 
-    def saveRigPreset(self):
+        self.window().setWindowTitle('Kraken Editor')
+
+
+    def saveRig(self, saveAs=False):
+
         settings = self.window().getSettings()
         settings.beginGroup('Files')
-        lastFilePath = settings.value("lastFilePath", os.path.join(GetKrakenPath(), self.guideRig.getName() ))
+        filePath = settings.value("lastFilePath", os.path.join(GetKrakenPath(), self.guideRig.getName() ))
         settings.endGroup()
-        (filePath, filter) = QtGui.QFileDialog.getSaveFileName(self, 'Save Rig Preset', os.path.dirname(os.path.abspath(lastFilePath)), 'Kraken Rig (*.krg)')
-        if len(filePath) > 0:
-            self.synchGuideRig()
-            self.guideRig.writeRigDefinitionFile(filePath)
 
-            settings.beginGroup('Files')
-            lastFilePath = settings.setValue("lastFilePath", filePath)
-            settings.endGroup()
+        if saveAs is True:
+
+            (saveAsFilePath, filter) = QtGui.QFileDialog.getSaveFileName(self, 'Save Rig Preset', os.path.dirname(os.path.abspath(filePath)), 'Kraken Rig (*.krg)')
+            if len(saveAsFilePath) > 0:
+                filePath = saveAsFilePath
+            else:
+                return False
+
+        self.synchGuideRig()
+        self.guideRig.writeRigDefinitionFile(filePath)
+
+        settings.beginGroup('Files')
+        lastFilePath = settings.setValue("lastFilePath", filePath)
+        settings.endGroup()
+
+        self.openedFile = filePath
+
+        print "Saved file: " + filePath
+
+
+    def saveAsRigPreset(self):
+        self.saveRig(saveAs=True)
+
+
+    def saveRigPreset(self):
+
+        if self.openedFile is None or not os.path.exists(self.openedFile):
+            self.saveRig(saveAs=True)
+
+        else:
+            self.saveRig(saveAs=False)
 
 
     def loadRigPreset(self):
@@ -112,6 +141,10 @@ class KGraphViewWidget(GraphViewWidget):
             settings.beginGroup('Files')
             lastFilePath = settings.setValue("lastFilePath", filePath)
             settings.endGroup()
+
+            self.openedFile = filePath
+
+            self.window().setWindowTitle(filePath + '[*] - ' + self.window().windowTitle())
 
 
     def buildGuideRig(self):
