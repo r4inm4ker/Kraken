@@ -203,7 +203,7 @@ def createSplash(app):
     splashImgPath = os.path.join(uiDir, 'images', 'KrakenUI_Splash.png')
     splashPixmap.load(splashImgPath)
 
-    splash = QtGui.QSplashScreen(splashPixmap, QtCore.Qt.WindowStaysOnTopHint)
+    splash = QtGui.QSplashScreen(splashPixmap)
     splash.setMask(splashPixmap.mask())
     splash.showMessage("Loading Extensions...",
                        QtCore.Qt.AlignBottom | QtCore.Qt.AlignLeft,
