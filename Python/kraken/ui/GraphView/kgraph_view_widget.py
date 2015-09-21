@@ -113,6 +113,8 @@ class KGraphViewWidget(GraphViewWidget):
             lastFilePath = settings.setValue("lastFilePath", filePath)
             settings.endGroup()
 
+            self.reportMessage('Loaded Rig file: ' + filePath, level='information')
+
 
     def buildGuideRig(self):
 
@@ -226,9 +228,13 @@ class KGraphViewWidget(GraphViewWidget):
         statusBar = self.window().statusBar()
 
         if exception is not None:
-            messageLabel = QtGui.QLabel(level[0].upper() + level[1:] + ": " + message + '; ' + ', '.join([x for x in exception.args]))
+            fullMessage = level[0].upper() + level[1:] + ": " + message + '; ' + ', '.join([x for x in exception.args])
         else:
-            messageLabel = QtGui.QLabel(level[0].upper() + level[1:] + ": " + message)
+            fullMessage = level[0].upper() + level[1:] + ": " + message
+
+        messageLabel = QtGui.QLabel(fullMessage)
+
+        print fullMessage
 
         messageColors = {
             'information': '#009900',
