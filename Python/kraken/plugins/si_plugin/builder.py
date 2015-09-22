@@ -661,65 +661,52 @@ class Builder(Builder):
             solverTypeName = kOperator.getSolverTypeName()
             args = kOperator.getSolverArgs()
 
+
+            def findPortOfType(connectionType, dataType):
+                for i in xrange(len(args)):
+                    arg = args[i]
+                    argName = arg.name.getSimpleType()
+                    argDataType = arg.dataType.getSimpleType()
+                    argConnectionType = arg.connectionType.getSimpleType()
+
+                    if argConnectionType == connectionType and argDataType == dataType:
+                        return argName
+
+                return None
+
+
             # Find operatorOwner to attach Splice Operator to.
             operatorOwner = None
-            targets = None
+            operatorOwnerKine = None
             operatorOwnerArg = None
 
-            for i in xrange(len(args)):
-                arg = args[i]
-
-                if arg.connectionType == 'io' or arg.connectionType == 'out':
-                    if arg.dataType == 'Mat44':
-
-                        target = kOperator.getOutput(arg.name)
-                        if target is None:
-                            raise Exception("Solver '" + kOperator.getPath() + "' output :'" + arg.name + "' not connected.")
-
-                        operatorOwner = self.getDCCSceneItem(target)
-
-                        if operatorOwner is None:
-                            raise Exception("Solver '" + kOperator.getPath() + "' output :'" + arg.name + "' dcc item not found for item:" + target.getPath())
-
-                        targets = operatorOwner.FullName + ".kine.global"
-                        operatorOwnerArg = arg.name
-                        break
-                    elif arg.dataType == 'Mat44[]':
-                        targets = ""
-                        for target in kOperator.getOutput(arg.name):
-
-                            if target is None:
-                                raise Exception("Solver '" + kOperator.getPath() + "' output :'" + arg.name + "' not connected.")
-
-                            dccSceneItem = self.getDCCSceneItem(target)
-
-                            if dccSceneItem is None:
-                                raise Exception("Solver '" + kOperator.getPath() + "' output :'" + arg.name + "' dcc item not found for item:" + target.getPath())
-
-                            if targets == "":
-                                operatorOwner = dccSceneItem
-                                targets = dccSceneItem.FullName + ".kine.global"
-                            else:
-                                targets = targets + "," + dccSceneItem.FullName + ".kine.global"
-                        operatorOwnerArg = arg.name
-                        break
-
-            if operatorOwner is None:
+            ownerOutPort = findPortOfType('Mat44', 'out')
+            if ownerOutPort is None:
+                ownerOutPort = findPortOfType('Mat44', 'io')
+            if ownerOutPort is None:
+                ownerOutPort = findPortOfType('Mat44[]', 'io')
+            if ownerOutPort is None:
                 raise Exception("Solver '" + kOperator.getName() + "' has no Mat44 outputs!")
-
-            #canvasOpPath = operatorOwner.FullName + ".kine.global.SpliceOp"
 
             # Create Splice Operator
             canvasOpPath = si.FabricCanvasOpApply(operatorOwner.FullName, "", True, "", "")
             print canvasOpPath
             canvasOp = si.Dictionary.GetObject(canvasOpPath, False)
-            si.FabricCanvasSetExtDeps(binding=canvasOpPath, execPath="", extDep="Kraken:*" )
+            si.FabricCanvasSetExtDeps(canvasOpPath, "", "Kraken" )
 
-            si.FabricCanvasAddFunc(binding=canvasOpPath, execPath="", title=kOperator.getName(), code="dfgEntry {}", xPos="100", yPos="100")
-            si.FabricCanvasAddPort(binding=canvasOpPath, execPath=kOperator.getName(), desiredPortName="solver", portType="IO", typeSpec=solverTypeName, connectToPortPath="", extDep="Kraken:*")
-            si.FabricCanvasAddPort(binding=canvasOpPath, execPath="", desiredPortName="solver", portType="IO", typeSpec=solverTypeName, connectToPortPath="", extDep="Kraken:*" )
-            si.FabricCanvasConnect(binding=canvasOpPath, execPath="", srcPortPath="solver", dstPortPath=kOperator.getName()+".solver")
-            si.FabricCanvasConnect(binding=canvasOpPath, execPath="", srcPortPath=kOperator.getName()+".solver", dstPortPath="solver")
+            si.FabricCanvasAddFunc(canvasOpPath, "", kOperator.getName(), "dfgEntry {}", "100", "100")
+            si.FabricCanvasAddPort(canvasOpPath, kOperator.getName(), "solver", "IO", solverTypeName, "", "Kraken")
+            si.FabricCanvasAddPort(canvasOpPath, "", "solver", "IO", solverTypeName, "", "Kraken" )
+            si.FabricCanvasConnect(canvasOpPath, "", "solver", kOperator.getName()+".solver")
+            si.FabricCanvasConnect(canvasOpPath, "", kOperator.getName()+".solver", "solver")
+
+            # print canvasOp.GetNumPortGroups()
+            # print canvasOp.PortGroups
+            # print canvasOp.PortGroups.Item
+            # print canvasOp.PortGroups[canvasOp.GetNumPortGroups()]
+            # print canvasOp.PortGroups.Item[canvasOp.GetNumPortGroups()-1]
+            # portGroupIndex = canvasOp.PortGroups.Item[canvasOp.GetNumPortGroups()-1].Index;
+            # print portGroupIndex
 
             # connect the operator to the objects in the DCC
             for i in xrange(len(args)):
@@ -729,34 +716,59 @@ class Builder(Builder):
                 argConnectionType = arg.connectionType.getSimpleType()
 
                 # Skip arg if it's the target arg
-                if argName == operatorOwnerArg:
-                    continue
+                # if argName == operatorOwnerArg:
+                #     continue
+
+                print "FabricCanvasAddPort: " + str(canvasOpPath) + " " + argName + " " + argDataType + " " + argConnectionType
 
                 if argConnectionType == 'in':
-                    cmds.FabricCanvasAddPort(binding=canvasOpPath, execPath="", desiredPortName=argName, portType="In", typeSpec=argDataType, connectToPortPath="")
-                    cmds.FabricCanvasAddPort(binding=canvasOpPath, execPath=kOperator.getName(), desiredPortName=argName, portType="In", typeSpec=argDataType, connectToPortPath="")
-                    cmds.FabricCanvasConnect(binding=canvasOpPath, execPath="", srcPortPath=argName, dstPortPath=kOperator.getName()+"."+argName)
+                    si.FabricCanvasAddPort(canvasOpPath, "", argName, "In", argDataType, "")
+                    si.FabricCanvasAddPort(canvasOpPath, kOperator.getName(), argName, "In", argDataType, "")
+                    si.FabricCanvasConnect(canvasOpPath, "", argName, kOperator.getName()+"."+argName)
                 elif argConnectionType in ['io', 'out']:
-                    cmds.FabricCanvasAddPort(binding=canvasOpPath, execPath="", desiredPortName=argName, portType="Out", typeSpec=argDataType, connectToPortPath="")
-                    cmds.FabricCanvasAddPort(binding=canvasOpPath, execPath=kOperator.getName(), desiredPortName=argName, portType="Out", typeSpec=argDataType, connectToPortPath="")
-                    cmds.FabricCanvasConnect(binding=canvasOpPath, execPath="", srcPortPath=kOperator.getName()+"."+argName, dstPortPath=argName)
-
+                    si.FabricCanvasAddPort(canvasOpPath, "", argName, "Out", argDataType, "")
+                    si.FabricCanvasAddPort(canvasOpPath, kOperator.getName(), argName, "Out", argDataType, "")
+                    si.FabricCanvasConnect(canvasOpPath, "", kOperator.getName()+"."+argName, argName)
 
                 if argDataType == 'EvalContext':
                     continue
 
+                portGroupIndex = -1
                 # Append the suffix based on the argument type, Softimage Only
                 if argDataType == 'Mat44' or argDataType == 'Mat44[]':
                     connectionSuffix = ".kine.global"
 
+                    print "FabricCanvasOpPortMapDefine:" + portmapDefinition
                     portmapDefinition = argName+"|XSI Port"
-                    cmds.FabricCanvasOpPortMapDefine(binding=canvasOpPath, portmapDefinition=portmapDefinition)
+
+                    canvasOpPath2 = str(canvasOpPath) + ":"
+                    si.FabricCanvasOpPortMapDefine(canvasOpPath, portmapDefinition)
+                    canvasOpPath = str(canvasOpPath2)[:-1]
+
+                    canvasOp = si.Dictionary.GetObject(canvasOpPath, False)
+                    print canvasOp.GetNumPortGroups()
+                    print canvasOp.PortGroups
+                    print canvasOp.PortGroups.Item
+                    # print canvasOp.PortGroups.Item[canvasOp.GetNumPortGroups()-1]
+                    portGroupIndex = canvasOp.GetNumPortGroups()-1;
 
                 elif argDataType in ['Scalar', 'Boolean']:
                     connectionSuffix = ""
 
                     portmapDefinition = argName+"|XSI Parameter"
-                    cmds.FabricCanvasOpPortMapDefine(binding=canvasOpPath, portmapDefinition=portmapDefinition)
+                    print "FabricCanvasOpPortMapDefine:" + portmapDefinition
+
+                    canvasOpPath2 = str(canvasOpPath) + ":"
+                    si.FabricCanvasOpPortMapDefine(canvasOpPath, portmapDefinition)
+                    canvasOpPath = str(canvasOpPath2)[:-1]
+
+                    canvasOp = si.Dictionary.GetObject(canvasOpPath, False)
+                    print canvasOp.GetNumPortGroups()
+                    # print canvasOp.PortGroups
+                    # print canvasOp.PortGroups.Item
+                    # print canvasOp.PortGroups[canvasOp.GetNumPortGroups()]
+                    # print canvasOp.PortGroups.Item[canvasOp.GetNumPortGroups()-1]
+                    # portGroupIndex = canvasOp.PortGroups.Item[canvasOp.GetNumPortGroups()-1].Index
 
                     if argName == 'time':
                         timeParameter = canvasOp.Parameters("time")
@@ -768,6 +780,7 @@ class Builder(Builder):
                         if frameParameter is not None:
                             frameParameter.AddExpression("Fc")
                         continue
+
                 else:
                     connectionSuffix = ""
 
@@ -805,41 +818,22 @@ class Builder(Builder):
                     if dccSceneItem is None:
                         raise Exception("Operator '"+kOperator.getName()+"' of type '"+solverTypeName+"' arg '"+argName+"' dcc item not found for item:" + connectedObjects.getPath());
 
-                    connectionTargets = dccSceneItem.FullName + connectionSuffix
+                    if argName == operatorOwnerArg:
+                        canvasOp.ConnectToGroup(portGroupIndex, operatorOwnerKine)
+                    else:
+                        if argDataType == 'Mat44':
+                            canvasOp.ConnectToGroup(portGroupIndex, dccSceneItem)
 
-                connectionArgs = "{\"portName\":\"" + argName + "\", \"dataType\":\"" + argDataType + "\", \"extension\":\"\", \"targets\":\"" + connectionTargets + "\"}"
+                    #     if argDataType in ['Scalar', 'Boolean']:
+                    #         parameter = canvasOp.Parameters(argName)
+                    #         canvasOp.ConnectToGroup(parameter, dccSceneItem)
 
-                # Add the splice Port for each arg.
-                if argConnectionType == 'in':
-                    si.fabricSplice("addInputPort", canvasOpPath, connectionArgs, "")
-
-                elif argConnectionType in ['io', 'out']:
-                    si.fabricSplice("addOutputPort", canvasOpPath, connectionArgs, "")
-
-
-            # si.fabricSplice('addKLOperator', canvasOpPath, '{"opName": "' + kOperator.getName() + '"}', opSourceCode)
 
             # Generate the operator source code.
-            opSourceCode = kOperator.generateSourceCode(arraySizes=arraySizes)
+            opSourceCode = kOperator.generateSourceCode()
             print opSourceCode
-            cmds.FabricCanvasSetCode(binding=canvasOpPath, execPath=kOperator.getName(), code=opSourceCode)
+            si.FabricCanvasSetCode(canvasOpPath, kOperator.getName(), opSourceCode)
 
-
-            # Check for Time and Frame arguments and set expressions
-            # TODO: add the expressions as the ports are added to be consistent with Maya.
-            # canvasOp = si.Dictionary.GetObject(canvasOpPath, False)
-            # timeParameter = canvasOp.Parameters("time")
-            # if timeParameter is not None:
-            #     timeParameter.AddExpression("T")
-
-            # canvasOp = si.Dictionary.GetObject(canvasOpPath, False)
-            # frameParameter = canvasOp.Parameters("frame")
-            # if frameParameter is not None:
-            #     frameParameter.AddExpression("Fc")
-
-            # alwaysEval = kOperator.getAlwaysEval()
-            # if alwaysEval is True:
-            #     canvasOp.Parameters("alwaysevaluate").Value = True
 
         finally:
             pass
