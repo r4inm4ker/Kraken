@@ -30,8 +30,12 @@ class KrakenWindow(QtGui.QMainWindow):
         cssPath = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                'kraken_ui.css')
 
+        styleData = ''
         with open(cssPath) as cssFile:
             styleData = cssFile.read()
+
+        styleData = styleData.replace('$FULL_PATH$', os.path.dirname(os.path.realpath(__file__)) + '/images/')
+        styleData = styleData.replace('\\', '/')
 
         self.setStyleSheet(styleData)
 

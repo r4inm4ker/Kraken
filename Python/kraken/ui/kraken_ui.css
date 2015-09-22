@@ -237,25 +237,25 @@ QTreeWidget#ComponentTree::branch:has-children:!has-siblings:closed,
 QTreeWidget#ComponentTree::branch:closed:has-children:has-siblings
 {
     border-image: none;
-    image: url(images/treeWidget-branch-closed.png);
+    image: url($FULL_PATH$treeWidget-branch-closed.png);
 }
 
 QTreeWidget#ComponentTree::branch:open:has-children:!has-siblings,
 QTreeWidget#ComponentTree::branch:open:has-children:has-siblings  {
         border-image: none;
-        image: url(images/treeWidget-branch-open.png);
+        image: url($FULL_PATH$treeWidget-branch-open.png);
 }
 
 QTreeWidget#ComponentTree::branch:has-siblings:!adjoins-item {
-    border-image: url(images/treeWidget-vline.png) 0;
+    border-image: url($FULL_PATH$treeWidget-vline.png) 0;
 }
 
 QTreeWidget#ComponentTree::branch:has-siblings:adjoins-item {
-    border-image: url(images/treeWidget-branch-more.png) 0;
+    border-image: url($FULL_PATH$treeWidget-branch-more.png) 0;
 }
 
 QTreeWidget#ComponentTree::branch:!has-children:!has-siblings:adjoins-item {
-    border-image: url(images/treeWidget-branch-end.png) 0;
+    border-image: url($FULL_PATH$treeWidget-branch-end.png) 0;
 }
 
 QTreeWidget#ComponentTree::item {
@@ -474,20 +474,16 @@ QScrollBar:vertical {
     border: 2px solid #111;
     background: #111;
     width: 20px;
-    margin: 22px 0 22px 0;
+    margin: 20px 0 20px 0;
 }
 
 QScrollBar::handle:vertical {
-    border-top: 1px solid #333;
-    border-right: 1px solid #333;
     border-radius: 3px;
     background: #222;
     min-height: 20px;
 }
 
 QScrollBar::handle:vertical:hover {
-    border-top: 1px solid #333;
-    border-right: 1px solid #333;
     border-radius: 3px;
     background: #292929;
     min-height: 20px;
@@ -496,10 +492,6 @@ QScrollBar::handle:vertical:hover {
 QScrollBar::add-line:vertical {
     background: #222;
 
-    border-top: 1px solid #333;
-    border-right: 1px solid #333;
-    border-bottom: 1px solid #151515;
-    border-left: 1px solid #151515;
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
     border-bottom-right-radius: 3px;
@@ -512,10 +504,6 @@ QScrollBar::add-line:vertical {
 QScrollBar::add-line:vertical:hover {
     background: #292929;
 
-    border-top: 1px solid #333;
-    border-right: 1px solid #333;
-    border-bottom: 1px solid #151515;
-    border-left: 1px solid #151515;
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
     border-bottom-right-radius: 3px;
@@ -528,27 +516,25 @@ QScrollBar::add-line:vertical:hover {
 QScrollBar::add-line:vertical::pressed {
     background-color: #438f99;
 
-    border-top: 1px solid #54b3bf;
-    border-right: 1px solid #54b3bf;
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
     border-bottom-right-radius: 3px;
     border-bottom-left-radius: 3px;
     height: 20px;
+    padding-bottom: -1px;
+    padding-right: -1px;
     subcontrol-position: bottom;
     subcontrol-origin: margin;
 }
 
 QScrollBar::sub-line:vertical {
-    border-top: 1px solid #333;
-    border-right: 1px solid #333;
-    border-bottom: 1px solid #151515;
-    border-left: 1px solid #151515;
+    background: #222;
+
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
     border-bottom-right-radius: 0px;
     border-bottom-left-radius: 0px;
-    background: #222;
+    border-bottom: 3px solid #111;
     height: 20px;
     subcontrol-position: top;
     subcontrol-origin: margin;
@@ -557,14 +543,11 @@ QScrollBar::sub-line:vertical {
 QScrollBar::sub-line:vertical:hover {
     background: #292929;
 
-    border-top: 1px solid #333;
-    border-right: 1px solid #333;
-    border-bottom: 1px solid #151515;
-    border-left: 1px solid #151515;
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
     border-bottom-right-radius: 0px;
     border-bottom-left-radius: 0px;
+    border-bottom: 3px solid #111;
     height: 20px;
     subcontrol-position: top;
     subcontrol-origin: margin;
@@ -573,25 +556,26 @@ QScrollBar::sub-line:vertical:hover {
 QScrollBar::sub-line:vertical::pressed {
     background-color: #438f99;
 
-    border-top: 1px solid #54b3bf;
-    border-right: 1px solid #54b3bf;
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
     border-bottom-right-radius: 0px;
     border-bottom-left-radius: 0px;
+    border-bottom: 3px solid #111;
     height: 20px;
+    padding-top: 1px;
+    padding-left: 1px;
     subcontrol-position: top;
     subcontrol-origin: margin;
 }
 
 QScrollBar::up-arrow:vertical  {
     border-image: none;
-    image: url(images/scroll-up-arrow.png);
+    image: url($FULL_PATH$scroll-up-arrow.png);
 }
 
 QScrollBar::down-arrow:vertical {
     border-image: none;
-    image: url(images/scroll-down-arrow.png);
+    image: url($FULL_PATH$scroll-down-arrow.png);
 }
 
 QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
@@ -609,16 +593,12 @@ QScrollBar:horizontal {
 }
 
 QScrollBar::handle:horizontal {
-    border-top: 1px solid #333;
-    border-right: 1px solid #333;
     border-radius: 3px;
     background: #222;
     min-height: 20px;
 }
 
 QScrollBar::handle:horizontal:hover {
-    border-top: 1px solid #333;
-    border-right: 1px solid #333;
     border-radius: 3px;
     background: #292929;
     min-height: 20px;
@@ -717,12 +697,12 @@ QScrollBar::sub-line:horizontal::pressed {
 
 QScrollBar::left-arrow:horizontal  {
     border-image: none;
-    image: url(images/scroll-left-arrow.png);
+    image: url($FULL_PATH$scroll-left-arrow.png);
 }
 
 QScrollBar::right-arrow:horizontal {
     border-image: none;
-    image: url(images/scroll-right-arrow.png);
+    image: url($FULL_PATH$scroll-right-arrow.png);
 }
 
 QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
