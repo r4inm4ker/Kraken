@@ -44,12 +44,12 @@ class SpliceOperator(Operator):
             argConnectionType = arg.connectionType.getSimpleType()
 
             if argConnectionType == 'in':
-                if str(argDataType).endswith('[]'):
+                if argDataType.endswith('[]'):
                     self.inputs[argName] = []
                 else:
                     self.inputs[argName] = None
             else:
-                if str(arg.dataType).endswith('[]'):
+                if argDataType.endswith('[]'):
                     self.outputs[argName] = []
                 else:
                     self.outputs[argName] = None
@@ -111,35 +111,19 @@ class SpliceOperator(Operator):
         # Start constructing the source code.
         opSourceCode = "dfgEntry {\n"
 
-
         # In SpliceMaya, output arrays are not resized by the system prior to calling into Splice, so we
         # explicily resize the arrays in the generated operator stub code.
         for argName, arraySize in arraySizes.iteritems():
             opSourceCode += "  "+argName+".resize("+str(arraySize)+");\n"
 
-        opSourceCode += "  solver.solve("
+        opSourceCode += "  solver.solve(\n"
         for i in xrange(len(self.args)):
-            arg = self.args[i]
-            # Connect the ports to the inputs/outputs in the rig.
-            if arg.connectionType == 'out':
-                outArgType = 'io'
-            else:
-                outArgType = arg.connectionType
-            suffix = ""
-            outDataType = arg.dataType
-            if outDataType.endswith('[]'):
-                outDataType = outDataType[:-2]
-                suffix = "[]"
-            opSourceCode += "  " + outArgType + " " + outDataType + " " + arg.name + suffix
+            argName = self.args[i].name.getSimpleType()
             if i == len(self.args) - 1:
-                opSourceCode += "\n"
+                opSourceCode += "    " + argName + "\n"
             else:
-                opSourceCode += ",\n"
+                opSourceCode += "    " + argName + ",\n"
 
-            if i == len(self.args) - 1:
-                opSourceCode += arg.name
-            else:
-                opSourceCode += arg.name + ", "
         opSourceCode += "  );\n"
         opSourceCode += "}\n"
 
