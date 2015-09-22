@@ -76,7 +76,6 @@ class KGraphViewWidget(GraphViewWidget):
 
 
     def newRigPreset(self):
-        # TODO: clean the rig from the scene if it has been built.
         self.guideRig = Rig()
         self.getGraphView().displayGraph(self.guideRig)
         self.setRigName('MyRig')
@@ -110,7 +109,7 @@ class KGraphViewWidget(GraphViewWidget):
 
         self.openedFile = filePath
 
-        print "Saved file: " + filePath
+        self.reportMessage('Saved Rig file: ' + filePath, level='information')
 
 
     def saveAsRigPreset(self):
