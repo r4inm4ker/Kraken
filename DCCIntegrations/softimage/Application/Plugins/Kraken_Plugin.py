@@ -40,6 +40,10 @@ def XSILoadPlugin(in_reg):
     krakenDir = os.path.normpath(XSIUtils.BuildPath(pluginPath, "..", "..", "..", ".."))
     os.environ['KRAKEN_PATH']  = krakenDir
 
+    krakenExtsDir = os.path.join(krakenDir, 'KLExts')
+    if krakenExtsDir not in  os.environ['FABRIC_EXTS_PATH']:
+        os.environ['FABRIC_EXTS_PATH'] = krakenExtsDir + ';' + os.environ['FABRIC_EXTS_PATH']
+
     krakenLoadMenu = os.getenv('KRAKEN_LOAD_MENU', 'True')
     if krakenLoadMenu == 'True':
         in_reg.RegisterMenu(constants.siMenuMainTopLevelID, "Kraken", False, False)

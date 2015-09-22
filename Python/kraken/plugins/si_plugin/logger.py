@@ -1,4 +1,6 @@
 
+import sys
+import sipyutils
 
 class OutputLog(object):
     """Output messages and errors are stored in this object and can be recalled
@@ -6,11 +8,14 @@ class OutputLog(object):
 
     def __init__(self):
         super(OutputLog, self).__init__()
+        self._stdout = sys.stdout
+        sys.stdout = self
         self._outputLog = ""
-
 
     def write(self, text):
         self._outputLog += str(text)
+        self._stdout.write(text)
+        si.LogMessage(text)
 
 
     def getLog(self):

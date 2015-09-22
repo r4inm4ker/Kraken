@@ -64,3 +64,33 @@ def getSynchronizer():
         dccSynchronizer = synchronizer.Synchronizer()
 
     return dccSynchronizer
+
+
+def getLogger():
+    """Returns the appropriate log fn module for the DCC.
+
+    Return:
+    Function, function pointer for the DCC
+
+    """
+
+    logger = None
+
+    for eachPlugin in __all__:
+        mod = __import__("kraken.plugins." + eachPlugin, fromlist=['dccTest'])
+        reload(mod)
+
+        if mod.dccTest() is True:
+            loaded_mod = __import__("kraken.plugins." + eachPlugin + ".logger", fromlist=['logger'])
+            reload(loaded_mod)
+            loaded_class = getattr(loaded_mod, 'OutputLog')
+
+            logger = loaded_class()
+
+    if logger is None:
+        print "Failed to find DCC logger. Falling back to Python logger."
+
+        from logger import OutputLog
+        logger = OutputLog()
+
+    return logger
