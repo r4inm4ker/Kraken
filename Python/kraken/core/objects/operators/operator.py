@@ -26,12 +26,12 @@ class Operator(SceneItem):
     def resizeInput(self, name, count):
         """Resizes and array output to a given size.
 
-        Arguments:
-        name -- String, name of the output.
-        count -- Object, output object.
+        Args:
+            name (str): Name of the output.
+            count (Object): Output object.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -49,12 +49,12 @@ class Operator(SceneItem):
     def setInput(self, name, operatorInput, index=0):
         """Sets the input by the given name.
 
-        Arguments:
-        name -- String, name of the input.
-        operatorInput -- Object, input object.
+        Args:
+            name (str): Name of the input.
+            operatorInput (Object): Input object.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -78,11 +78,11 @@ class Operator(SceneItem):
     def getInput(self, name):
         """Returns the input with the specified name.
 
-        Arguments:
-        name -- String, name of the input to get.
+        Args:
+            name (str): Name of the input to get.
 
-        Return:
-        Object, input object.
+        Returns:
+            object: Input object.
 
         """
 
@@ -99,12 +99,12 @@ class Operator(SceneItem):
     def resizeOutput(self, name, count):
         """Resizes and array output to a given size.
 
-        Arguments:
-        name -- String, name of the output.
-        count -- Object, output object.
+        Args:
+            name (str): Name of the output.
+            count (Object): Output object.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -122,12 +122,12 @@ class Operator(SceneItem):
     def setOutput(self, name, operatorOutput, index=0):
         """Sets the output by the given name.
 
-        Arguments:
-        name -- String, name of the output.
-        operatorOutput -- Object, output object.
+        Args:
+            name (str): Name of the output.
+            operatorOutput (Object): Output object.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -151,11 +151,11 @@ class Operator(SceneItem):
     def getOutput(self, name):
         """Returns the output with the specified name.
 
-        Arguments:
-        name -- String, name of the output to get.
+        Args:
+            name (str): Name of the output to get.
 
-        Return:
-        Object, output object.
+        Returns:
+            Object: Output object.
 
         """
 

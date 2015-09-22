@@ -7,7 +7,7 @@ from kraken.core.objects.hierarchy_group import HierarchyGroup
 
 
 class BaseExampleComponent(Component):
-    """Arm Component Base"""
+    """Example Component Base"""
 
     def __init__(self, name='', parent=None, data=None):
         super(BaseExampleComponent, self).__init__(name, parent)
@@ -31,7 +31,6 @@ class BaseExampleComponent(Component):
            performed in the constructor. It removes all elements that were added
            to the rig. It is invoked by the UI when deleting components from a guide rig.
         """
-
 
         self.controlsLayer.removeChild(self.ctrlCmpGrp)
         container = self.getContainer()

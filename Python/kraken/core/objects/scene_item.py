@@ -21,8 +21,8 @@ class SceneItem(object):
     def getTypeName(self):
         """Returns the class name of this object.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -32,8 +32,8 @@ class SceneItem(object):
     def getTypeHierarchyNames(self):
         """Returns the class name of this object.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -49,8 +49,8 @@ class SceneItem(object):
     def isTypeOf(self, typeName):
         """Returns the class name of this object.
 
-        Return:
-        True if the scene item is of the given type.
+        Returns:
+            bool: True if the scene item is of the given type.
 
         """
 
@@ -67,8 +67,8 @@ class SceneItem(object):
     def getName(self):
         """Returns the name of the object as a string.
 
-        Return:
-        String of the object's name.
+        Returns:
+            str: Object's name.
 
         """
 
@@ -79,10 +79,10 @@ class SceneItem(object):
         """Sets the name of the object with a string.
 
         Arguments:
-        name -- String, the new name for the item.
+            name (str): The new name for the item.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -94,8 +94,8 @@ class SceneItem(object):
     def getPath(self):
         """Returns the full hierarchical path to this object.
 
-        Return:
-        String, full name of the object.
+        Returns:
+            str: Full name of the object.
 
         """
 
@@ -108,8 +108,8 @@ class SceneItem(object):
     def getNameDecoration(self):
         """Gets the decorated name of the object.
 
-        Return:
-        String, decorated name of the object.
+        Returns:
+            str: Decorated name of the object.
 
         """
 
@@ -119,8 +119,8 @@ class SceneItem(object):
     def getDecoratedName(self):
         """Gets the decorated name of the object.
 
-        Return:
-        String, decorated name of the object.
+        Returns:
+            str: Decorated name of the object.
 
         """
 
@@ -130,8 +130,8 @@ class SceneItem(object):
     def getDecoratedPath(self):
         """Gets the decorated path of the object.
 
-        Return:
-        String, decorated path  of the object.
+        Returns:
+            str: Decorated path  of the object.
 
         """
 
@@ -148,8 +148,8 @@ class SceneItem(object):
     def getParent(self):
         """Returns the parent of the object as an object.
 
-        Return:
-        Parent of this object.
+        Returns:
+            Object: Parent of this object.
 
         """
 
@@ -160,10 +160,10 @@ class SceneItem(object):
         """Sets the parent attribute of this object.
 
         Arguments:
-        parent -- Object, object that is the parent of this one.
+        parent (Object): Object that is the parent of this one.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 

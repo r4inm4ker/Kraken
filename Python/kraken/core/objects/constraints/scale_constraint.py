@@ -18,8 +18,8 @@ class ScaleConstraint(Constraint):
     def evaluate(self):
         """invokes the constraint causing the output value to be computed.
 
-        Return:
-        Boolean, True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 

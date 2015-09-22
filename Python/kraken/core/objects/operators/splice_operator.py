@@ -58,8 +58,8 @@ class SpliceOperator(Operator):
     def getSolverTypeName(self):
         """Returns the solver type name for this operator.
 
-        Return:
-        String, name of the solver type this operator uses.
+        Returns:
+            str: Name of the solver type this operator uses.
 
         """
 
@@ -69,8 +69,8 @@ class SpliceOperator(Operator):
     def getExtension(self):
         """Returns the extention this operator uses.
 
-        Return:
-        String, name of the extension this solver uses.
+        Returns:
+            str: Name of the extension this solver uses.
 
         """
 
@@ -92,8 +92,8 @@ class SpliceOperator(Operator):
     def getSolverArgs(self):
         """Returns the args array defined by the KL Operator.
 
-        Return:
-        RTValArray, args array defined by the KL Operator.
+        Returns:
+            RTValArray: Args array defined by the KL Operator.
 
         """
 
@@ -103,8 +103,8 @@ class SpliceOperator(Operator):
     def generateSourceCode(self, arraySizes={}):
         """Returns the source code for a stub operator that will invoke the KL operator
 
-        Return:
-        String, The source code for the stub operator.
+        Returns:
+            str: The source code for the stub operator.
 
         """
 
@@ -133,8 +133,8 @@ class SpliceOperator(Operator):
     def evaluate(self):
         """invokes the Splice operator causing the output values to be computed.
 
-        Return:
-        Boolean, True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 

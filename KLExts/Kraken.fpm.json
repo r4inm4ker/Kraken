@@ -11,6 +11,7 @@
     "Solvers/BezierSpineSolver.kl",
     "Solvers/TwoBoneIKSolver.kl",
     "Solvers/NBoneIKSolver.kl",
-    "Solvers/TentacleSolver.kl"
+    "Solvers/TentacleSolver.kl",
+    "Solvers/DynamicChainSolver.kl"
   ]
 }

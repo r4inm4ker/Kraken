@@ -10,7 +10,6 @@ from kraken.core.kraken_system import ks
 
 
 class ScalarAttribute(NumberAttribute):
-    
     """Float Attribute. Implemented value type checking and limiting."""
 
     def __init__(self, name, value=0.0, minValue=None, maxValue=None, parent=None):
@@ -26,8 +25,8 @@ class ScalarAttribute(NumberAttribute):
     def getRTVal(self):
         """Returns and RTVal object for this attribute.
 
-        Return:
-        RTVal
+        Returns:
+            RTVal: RTVal object of the attribute.
 
         """
 
@@ -37,11 +36,14 @@ class ScalarAttribute(NumberAttribute):
     def validateValue(self, value):
         """Validates the incoming value is the correct type.
 
-        Arguments:
-        value -- Type, value to check the type of.
+        Note:
+            This is a localized method specific to the Scalar Attribute.
 
-        Return:
-        True if successful.
+        Args:
+            value (int): value to check the type of.
+
+        Returns:
+            bool: True if valid.
 
         """
 
@@ -54,8 +56,8 @@ class ScalarAttribute(NumberAttribute):
     def getDataType(self):
         """Returns the name of the data type for this attribute.
 
-        Return:
-        string
+        Returns:
+            str: String name of the attribute type.
 
         """
 

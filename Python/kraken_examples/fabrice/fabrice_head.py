@@ -187,7 +187,6 @@ class FabriceHeadRig(FabriceHead):
         self.headAimCtrl = Control('headAim', parent=self.headAimCtrlSpace, shape="sphere")
         self.headAimCtrl.scalePoints(Vec3(0.35, 0.35, 0.35))
         self.headAimCtrl.lockScale(x=True, y=True, z=True)
-        self.headAimCtrl.lockRotation(x=True, y=True, z=True)
 
         self.headAimUpV = Locator('headAimUpV', parent=self.headAimCtrl)
         self.headAimUpV.setShapeVisibility(False)
