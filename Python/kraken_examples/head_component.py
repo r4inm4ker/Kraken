@@ -66,6 +66,10 @@ class HeadComponentGuide(HeadComponent):
         self.eyeLeftCtrl = Control('eyeLeft', parent=self.ctrlCmpGrp, shape="sphere")
         self.eyeRightCtrl = Control('eyeRight', parent=self.ctrlCmpGrp, shape="sphere")
         self.jawCtrl = Control('jaw', parent=self.ctrlCmpGrp, shape="cube")
+        self.jawCtrl.alignOnZAxis()
+        self.jawCtrl.scalePoints(Vec3(2.0, 0.5, 2.0))
+        self.jawCtrl.alignOnYAxis(negative=True)
+        self.jawCtrl.setColor('orange')
 
         if data is None:
             data = {
@@ -241,7 +245,7 @@ class HeadComponentRig(HeadComponent):
         headInputConstraint.addConstrainer(self.headBaseInputTgt)
         self.headCtrlSpace.addConstraint(headInputConstraint)
 
-        # # Constraint outputs
+        # Constraint outputs
         headOutputConstraint = PoseConstraint('_'.join([self.headOutputTgt.getName(), 'To', self.headCtrl.getName()]))
         headOutputConstraint.addConstrainer(self.headCtrl)
         self.headOutputTgt.addConstraint(headOutputConstraint)
@@ -258,44 +262,24 @@ class HeadComponentRig(HeadComponent):
         eyeROutputConstraint.addConstrainer(self.eyeRightCtrl)
         self.eyeROutputTgt.addConstraint(eyeROutputConstraint)
 
-
-        # ==================
-        # Add Component I/O
-        # ==================
-        # Add Xfo I/O's
-        # self.addInput(self.headBaseInputTgt)
-
-        # self.addOutput(self.headOutputTgt)
-        # self.addOutput(self.jawOutputTgt)
-        # self.addOutput(self.eyeLOutputTgt)
-        # self.addOutput(self.eyeROutputTgt)
-
-        # Add Attribute I/O's
-        # self.addInput(self.drawDebugInputAttr)
-
-
         # ===============
         # Add Splice Ops
         # ===============
+
         # Add Deformer Splice Op
-        # spliceOp = SpliceOperator('headDeformerSpliceOp', 'HeadConstraintSolver', 'KrakenHeadConstraintSolver')
-        # self.addOperator(spliceOp)
+        # ======================
+        self.deformersToOutputsSpliceOp = SpliceOperator('headDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken', alwaysEval=True)
+        self.addOperator(self.deformersToOutputsSpliceOp)
 
-        # # Add Att Inputs
-        # spliceOp.setInput('drawDebug', self.drawDebugInputAttr)
-        # spliceOp.setInput('rigScale', self.rigScaleInputAttr)
+        # Add Att Inputs
+        self.deformersToOutputsSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.deformersToOutputsSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
 
-        # # Add Xfo Inputstrl)
-        # spliceOp.setInput('headConstrainer', self.headOutputTgt)
-        # spliceOp.setInput('jawConstrainer', self.jawOutputTgt)
-        # spliceOp.setInput('eyeLeftConstrainer', self.eyeLOutputTgt)
-        # spliceOp.setInput('eyeRightConstrainer', self.eyeROutputTgt)
+        # Add Xfo Outputs
+        self.deformersToOutputsSpliceOp.setInput('constrainers', [self.headOutputTgt, self.jawOutputTgt, self.eyeLOutputTgt, self.eyeROutputTgt])
 
-        # # Add Xfo Outputs
-        # spliceOp.setOutput('headDeformer', headDef)
-        # spliceOp.setOutput('jawDeformer', jawDef)
-        # spliceOp.setOutput('eyeLeftDeformer', eyeLeftDef)
-        # spliceOp.setOutput('eyeRightDeformer', eyeRightDef)
+        # Add Xfo Outputs
+        self.deformersToOutputsSpliceOp.setOutput('constrainees', [headDef, jawDef, eyeLeftDef, eyeRightDef])
 
         Profiler.getInstance().pop()
 
