@@ -336,6 +336,11 @@ class LegComponentRig(LegComponent):
         self.footOutputConstraint.addConstrainer(self.footCtrl)
         self.footOutputTgt.addConstraint(self.footOutputConstraint)
 
+        self.footCtrlSpaceConstraint = PoseConstraint('_'.join([self.footCtrlSpace.getName(), 'To', self.legEndXfoOutputTgt.getName()]))
+        self.footCtrlSpaceConstraint.setMaintainOffset(True)
+        self.footCtrlSpaceConstraint.addConstrainer(self.legEndXfoOutputTgt)
+        self.footCtrlSpace.addConstraint(self.footCtrlSpaceConstraint)
+
         self.toeOutputConstraint = PoseConstraint('_'.join([self.toeOutputTgt.getName(), 'To', self.toeCtrl.getName()]))
         self.toeOutputConstraint.addConstrainer(self.toeCtrl)
         self.toeOutputTgt.addConstraint(self.toeOutputConstraint)
