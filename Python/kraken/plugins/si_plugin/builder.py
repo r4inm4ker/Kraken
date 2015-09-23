@@ -706,8 +706,6 @@ class Builder(Builder):
 
             def addCanvasPorts(canvasOpPath, portName, canvasGraphPort, portDataType, argConnectionType, dccSceneItem):
 
-                print "FabricCanvasAddPort: " + str(canvasOpPath) + " " + portName + " " + portDataType + " " + argConnectionType
-
                 if argConnectionType == 'in':
                     si.FabricCanvasAddPort(canvasOpPath, "", portName, "In", portDataType, "")
                     si.FabricCanvasConnect(canvasOpPath, "", portName, canvasGraphPort)
@@ -725,10 +723,10 @@ class Builder(Builder):
 
                     canvasOpPath2 = str(canvasOpPath) + ":"
                     si.FabricCanvasOpPortMapDefine(canvasOpPath, portmapDefinition)
-                    portGroupIndex = canvasOp.GetNumPortGroups()-1;
                     canvasOpPath = str(canvasOpPath2)[:-1]
 
                     canvasOp = si.Dictionary.GetObject(canvasOpPath, False)
+                    portGroupIndex = canvasOp.GetNumPortGroups()-1;
 
                     if portName == ownerArgName:
                         print "Connecting to Self:" + operatorOwner.FullName
@@ -742,7 +740,6 @@ class Builder(Builder):
                 elif portDataType in ['Scalar', 'Boolean']:
 
                     portmapDefinition = portName+"|XSI Parameter"
-                    print "FabricCanvasOpPortMapDefine:" + portmapDefinition
 
                     canvasOpPath2 = str(canvasOpPath) + ":"
                     si.FabricCanvasOpPortMapDefine(canvasOpPath, portmapDefinition)
@@ -751,7 +748,6 @@ class Builder(Builder):
 
                     parameter = canvasOp.Parameters(portName)
                     if parameter is not None:
-                        print "parameter:" + str(portName)
                         if portName == 'time':
                             parameter.AddExpression("T")
                             return
@@ -811,18 +807,16 @@ class Builder(Builder):
                     for j in range(len(connectedObjects)):
                         dccSceneItem = self.getDCCSceneItem(connectedObjects[j])
                         if dccSceneItem is None:
-                            raise Exception("Operator:'"+kOperator.getName()+"' of type:'"+solverTypeName+"' arg:'"+argName+"' dcc item not found for item:" + connectedObject.getPath())
+                            raise Exception("Operator:'"+kOperator.getName()+"' of type:'"+solverTypeName+"' arg:'"+argName+"' dcc item not found for item:" + connectedObjects[j].getPath())
                         addCanvasPorts(canvasOpPath, argName+str(j), arrayNode+".value"+str(j), elementDataType, argConnectionType, dccSceneItem)
 
 
                 else:
                     if argConnectionType == 'in':
                         connectedObject = kOperator.getInput(argName)
-                        print "FabricCanvasAddPort canvasOpPath:" + str(canvasOpPath) + " kOperator:" + str(kOperator.getName()) + " argName:" + str(argName) + " argDataType:" + str(argDataType)
                         si.FabricCanvasAddPort(canvasOpPath, kOperator.getName(), argName, "In", argDataType, "")
                     elif argConnectionType in ['io', 'out']:
                         connectedObject = kOperator.getOutput(argName)
-                        print "FabricCanvasAddPort canvasOpPath:" + str(canvasOpPath) + " kOperator:" + str(kOperator.getName()) + " argName:" + str(argName) + " argDataType:" + str(argDataType)
                         si.FabricCanvasAddPort(canvasOpPath, kOperator.getName(), argName, "Out", argDataType, "")
 
                     dccSceneItem = self.getDCCSceneItem(connectedObject)
