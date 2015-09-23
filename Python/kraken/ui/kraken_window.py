@@ -6,9 +6,10 @@ from PySide import QtGui, QtCore
 
 import kraken.ui.kraken_ui
 reload(kraken.ui.kraken_ui)
+import kraken.ui.images_rc
 from kraken.ui.kraken_menu import KrakenMenu
 from kraken.ui.kraken_ui import KrakenUI
-from kraken.ui.output_log import OutputLog
+from kraken.plugins.logger import OutputLog
 
 
 class KrakenWindow(QtGui.QMainWindow):
@@ -18,6 +19,7 @@ class KrakenWindow(QtGui.QMainWindow):
         super(KrakenWindow, self).__init__(parent)
         self.setObjectName('KrakenMainWindow')
         self.setWindowTitle('Kraken Editor')
+        self.setWindowIcon(QtGui.QIcon(':/images/Kraken_Icon.png'))
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
 
         # Set system output to write to output log object
@@ -26,6 +28,7 @@ class KrakenWindow(QtGui.QMainWindow):
 
         QtCore.QCoreApplication.setOrganizationName("Kraken")
         QtCore.QCoreApplication.setApplicationName("Kraken Editor")
+        self.settings = QtCore.QSettings("Kraken", "Kraken Editor")
 
         cssPath = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                'kraken_ui.css')
@@ -34,16 +37,7 @@ class KrakenWindow(QtGui.QMainWindow):
         with open(cssPath) as cssFile:
             styleData = cssFile.read()
 
-        styleData = styleData.replace('$FULL_PATH$', os.path.dirname(os.path.realpath(__file__)) + '/images/')
-        styleData = styleData.replace('\\', '/')
-
         self.setStyleSheet(styleData)
-
-        uiDir = os.path.dirname(inspect.getfile(KrakenUI))
-        iconPath = os.path.join(uiDir, 'images', 'Kraken_Icon.png')
-        self.setWindowIcon(QtGui.QIcon(iconPath))
-
-        self.settings = QtCore.QSettings("Kraken", "Kraken Editor")
 
         self.createLayout()
         self.createConnections()
@@ -203,9 +197,7 @@ def createSplash(app):
     """
 
     uiDir = os.path.dirname(inspect.getfile(KrakenUI))
-    splashPixmap = QtGui.QPixmap()
-    splashImgPath = os.path.join(uiDir, 'images', 'KrakenUI_Splash.png')
-    splashPixmap.load(splashImgPath)
+    splashPixmap = QtGui.QPixmap(':/images/KrakenUI_Splash.png')
 
     splash = QtGui.QSplashScreen(splashPixmap)
     splash.setMask(splashPixmap.mask())

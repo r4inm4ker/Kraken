@@ -237,25 +237,25 @@ QTreeWidget#ComponentTree::branch:has-children:!has-siblings:closed,
 QTreeWidget#ComponentTree::branch:closed:has-children:has-siblings
 {
     border-image: none;
-    image: url($FULL_PATH$treeWidget-branch-closed.png);
+    image: url(:images/treeWidget-branch-closed.png);
 }
 
 QTreeWidget#ComponentTree::branch:open:has-children:!has-siblings,
 QTreeWidget#ComponentTree::branch:open:has-children:has-siblings  {
         border-image: none;
-        image: url($FULL_PATH$treeWidget-branch-open.png);
+        image: url(:images/treeWidget-branch-open.png);
 }
 
 QTreeWidget#ComponentTree::branch:has-siblings:!adjoins-item {
-    border-image: url($FULL_PATH$treeWidget-vline.png) 0;
+    border-image: url(:images/treeWidget-vline.png) 0;
 }
 
 QTreeWidget#ComponentTree::branch:has-siblings:adjoins-item {
-    border-image: url($FULL_PATH$treeWidget-branch-more.png) 0;
+    border-image: url(:images/treeWidget-branch-more.png) 0;
 }
 
 QTreeWidget#ComponentTree::branch:!has-children:!has-siblings:adjoins-item {
-    border-image: url($FULL_PATH$treeWidget-branch-end.png) 0;
+    border-image: url(:images/treeWidget-branch-end.png) 0;
 }
 
 QTreeWidget#ComponentTree::item {
@@ -570,12 +570,12 @@ QScrollBar::sub-line:vertical::pressed {
 
 QScrollBar::up-arrow:vertical  {
     border-image: none;
-    image: url($FULL_PATH$scroll-up-arrow.png);
+    image: url(:images/scroll-up-arrow.png);
 }
 
 QScrollBar::down-arrow:vertical {
     border-image: none;
-    image: url($FULL_PATH$scroll-down-arrow.png);
+    image: url(:images/scroll-down-arrow.png);
 }
 
 QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
@@ -697,12 +697,12 @@ QScrollBar::sub-line:horizontal::pressed {
 
 QScrollBar::left-arrow:horizontal  {
     border-image: none;
-    image: url($FULL_PATH$scroll-left-arrow.png);
+    image: url(:images/scroll-left-arrow.png);
 }
 
 QScrollBar::right-arrow:horizontal {
     border-image: none;
-    image: url($FULL_PATH$scroll-right-arrow.png);
+    image: url(:images/scroll-right-arrow.png);
 }
 
 QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {

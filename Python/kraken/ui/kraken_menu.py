@@ -91,7 +91,7 @@ class KrakenMenu(QtGui.QWidget):
         logoWidget.setMinimumHeight(20)
         logoWidget.setMinimumWidth(110)
 
-        logoPixmap = QtGui.QPixmap(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'images', 'KrakenUI_Logo.png'))
+        logoPixmap = QtGui.QPixmap(':/images/KrakenUI_Logo.png')
         logoWidget.setPixmap(logoPixmap)
 
         # Config Widget
