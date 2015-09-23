@@ -8,14 +8,12 @@ class OutputLog(object):
 
     def __init__(self):
         super(OutputLog, self).__init__()
-        print('super(OutputLog, self).__init__()')
         self._stdout = sys.stdout
         sys.stdout = self
         self._outputLog = ""
 
     def write(self, text):
         self._outputLog += str(text)
-        self._stdout.write('text')
         self._stdout.write(text)
 
 
