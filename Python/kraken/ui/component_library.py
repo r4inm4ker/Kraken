@@ -10,33 +10,124 @@ from kraken.core.maths import Vec2
 from kraken.core.kraken_system import KrakenSystem
 
 
-class NodeList(QtGui.QListWidget):
+class ComponentTreeWidget(QtGui.QTreeWidget):
+    """Component Tree Widget"""
 
     def __init__(self, parent):
-        # constructors of base classes
-        QtGui.QListWidget.__init__(self, parent)
+        super(ComponentTreeWidget, self).__init__(parent)
         self.setObjectName('ComponentTree')
-
-        self.setSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding)
+        self.header().close()
+        self.setColumnCount(1)
         self.setDragEnabled(True)
         self.setDragDropMode(QtGui.QTreeWidget.DragOnly)
 
+        self._data = self.generateData()
+
+        self.buildWidgets()
+
+
+    def buildWidgets(self):
+        """Method to build the tree widgets."""
+
+        self.clear()
+        self.__iterateOnData(self._data, parentWidget=self)
+
+
+    def __iterateOnData(self, data, parentWidget=None):
+        """Private method to recursively build the tree widgets.
+
+        Args:
+            data (dict): Data to iterate on.
+
+        """
+
+        for item in data['components']:
+
+            treeItem = QtGui.QTreeWidgetItem(parentWidget)
+            treeItem.setData(0, QtCore.Qt.UserRole, data['components'][item])
+            treeItem.setText(0, item)
+
+        for item in data['subDirs'].keys():
+
+            treeItem = QtGui.QTreeWidgetItem(parentWidget)
+            treeItem.setData(0, QtCore.Qt.UserRole, 'Folder')
+            treeItem.setText(0, item)
+
+            self.__iterateOnData(data['subDirs'][item], parentWidget=treeItem)
+
+
+    def generateData(self):
+        """Generates a dictionary with a tree structure of the component paths.
+
+        Returns:
+            dict: Component tree structure.
+
+        """
+
+        self.ks = KrakenSystem.getInstance()
+        self.ks.loadComponentModules()
+
+        componentClassNames = []
+        for componentClassName in sorted(self.ks.getComponentClassNames()):
+            cmpCls = self.ks.getComponentClass(componentClassName)
+            if cmpCls.getComponentType() != 'Guide':
+                continue
+
+            componentClassNames.append(componentClassName)
+
+
+        data = {'subDirs': {}, 'components': {}}
+        for classItem in componentClassNames:
+
+            nameSplit = classItem.rsplit('.', 1)
+
+            className = nameSplit[-1]
+            path = nameSplit[0].split('.')
+            path.pop(len(path) - 1)
+
+            parent = None
+            for i, part in enumerate(path):
+
+                if i == 0:
+                    if part not in data['subDirs'].keys():
+                        data['subDirs'][part] = {'subDirs': {}, 'components': {}}
+
+                    parent = data['subDirs'][part]
+
+                    continue
+
+                if part in parent['subDirs'].keys():
+                        parent = parent['subDirs'][part]
+                        continue
+
+                parent['subDirs'][part] = {'subDirs': {}, 'components': {}}
+                parent = parent['subDirs'][part]
+
+            parent['components'][className] = classItem
+
+        return data
+
     def mouseMoveEvent(self, event):
         self.dragObject()
+
 
     def dragObject(self):
 
         if not self.selectedIndexes():
             return
 
-        drag = QtGui.QDrag(self)
         item = self.selectedItems()[0]
-        componentClassName = item.data(QtCore.Qt.UserRole)
-        text = 'KrakenComponent:' + componentClassName
+        role = item.data(0, QtCore.Qt.UserRole)
+
+        if role == 'Folder':
+            return
+
+        text = 'KrakenComponent:' + role
 
         mimeData = QtCore.QMimeData()
         mimeData.setText(text)
 
+        drag = QtGui.QDrag(self)
         drag.setMimeData(mimeData)
         drag.setHotSpot(QtCore.QPoint(90, 23))
 
@@ -54,90 +145,8 @@ class ComponentLibrary(QtGui.QWidget):
 
         self.setMinimumWidth(175)
 
-        self.searchLineEdit = QtGui.QLineEdit(parent)
-        self.searchLineEdit.setObjectName('contextNodeListSearchLine')
-        self.searchLineEdit.setFocusPolicy(QtCore.Qt.ClickFocus)
-
-        self.nodesList = NodeList(self)
-
-        self.ks = KrakenSystem.getInstance()
-        self.ks.loadComponentModules()
-
-        self.componentClassNames = []
-        for componentClassName in sorted(self.ks.getComponentClassNames()):
-            cmpCls = self.ks.getComponentClass(componentClassName)
-            if cmpCls.getComponentType() != 'Guide':
-                continue
-
-            self.componentClassNames.append(componentClassName)
-
-        self.nodes = None
-        self.showClosestNames()
-        self.searchLineEdit.textEdited.connect(self.showClosestNames)
-
-        self.setIndex(0)
+        self.componentTreeWidget = ComponentTreeWidget(self)
 
         grid = QtGui.QGridLayout()
-        grid.addWidget(self.searchLineEdit, 0, 0)
-        grid.addWidget(self.nodesList, 1, 0)
+        grid.addWidget(self.componentTreeWidget, 0, 0)
         self.setLayout(grid)
-
-
-    def showClosestNames(self):
-
-        self.nodesList.clear()
-        fuzzyText = self.searchLineEdit.text()
-
-        for componentClassName in self.componentClassNames:
-            shortName = componentClassName.rsplit('.', 1)[-1]
-
-            if fuzzyText != '':
-                if fuzzyText.lower() not in shortName.lower():
-                    continue
-
-            item = QtGui.QListWidgetItem(shortName)
-            item.setData(QtCore.Qt.UserRole, componentClassName)
-
-            self.nodesList.addItem(item)
-
-        self.setIndex(0)
-
-    def setIndex(self, index):
-
-        if index > len(self.componentClassNames):
-            return
-
-        if index >= 0:
-            self.index = index
-            self.nodesList.setCurrentItem(self.nodesList.item(self.index))
-
-    def keyPressEvent(self, event):
-
-        modifiers = event.modifiers()
-        if event.key() == QtCore.Qt.Key_Escape:
-            if self.isVisible():
-                self.searchLineEdit.clear()
-
-        elif event.key() == QtCore.Qt.Key_Up or event.key() == QtCore.Qt.Key_Down:
-            if event.key() == QtCore.Qt.Key_Up:
-                newIndex = self.index - 1
-                if newIndex not in range(self.nodesList.count()):
-                    return
-
-                self.setIndex(self.index-1)
-            elif event.key() == QtCore.Qt.Key_Down:
-                newIndex = self.index+1
-                if newIndex not in range(self.nodesList.count()):
-                    return
-
-                self.setIndex(self.index+1)
-
-        elif event.key() == QtCore.Qt.Key_Enter or event.key() == QtCore.Qt.Key_Return:
-            if self.isVisible():
-                self.createNode()
-
-        # Ctrl+W
-        elif event.key() == 87 and modifiers == QtCore.Qt.ControlModifier:
-            self.window().close()
-
-        return False
