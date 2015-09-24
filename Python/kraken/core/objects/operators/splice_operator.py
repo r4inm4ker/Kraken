@@ -116,6 +116,8 @@ class SpliceOperator(Operator):
         for argName, arraySize in arraySizes.iteritems():
             opSourceCode += "  "+argName+".resize("+str(arraySize)+");\n"
 
+        opSourceCode += "  if(solver == null)\n"
+        opSourceCode += "    solver = " + self.solverTypeName + "();\n"
         opSourceCode += "  solver.solve(\n"
         for i in xrange(len(self.args)):
             argName = self.args[i].name.getSimpleType()

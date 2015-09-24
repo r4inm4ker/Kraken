@@ -594,19 +594,13 @@ class Builder(Builder):
 
             # Create Splice Operator
             spliceNode = cmds.createNode('dfgMayaNode', name=kOperator.getName())
-            cmds.FabricCanvasSetExtDeps(mayaNode=spliceNode, execPath="", extDep="Kraken:*" )
+            cmds.FabricCanvasSetExtDeps(mayaNode=spliceNode, execPath="", extDep="Kraken" )
 
             cmds.FabricCanvasAddFunc(mayaNode=spliceNode, execPath="", title=kOperator.getName(), code="dfgEntry {}", xPos="100", yPos="100")
-            cmds.FabricCanvasAddPort(mayaNode=spliceNode, execPath=kOperator.getName(), desiredPortName="solver", portType="IO", typeSpec=solverTypeName, connectToPortPath="", extDep="Kraken:*")
-            cmds.FabricCanvasAddPort(mayaNode=spliceNode, execPath="", desiredPortName="solver", portType="IO", typeSpec=solverTypeName, connectToPortPath="", extDep="Kraken:*" )
+            cmds.FabricCanvasAddPort(mayaNode=spliceNode, execPath=kOperator.getName(), desiredPortName="solver", portType="IO", typeSpec=solverTypeName, connectToPortPath="", extDep="Kraken")
+            cmds.FabricCanvasAddPort(mayaNode=spliceNode, execPath="", desiredPortName="solver", portType="IO", typeSpec=solverTypeName, connectToPortPath="", extDep="Kraken" )
             cmds.FabricCanvasConnect(mayaNode=spliceNode, execPath="", srcPortPath="solver", dstPortPath=kOperator.getName()+".solver")
             cmds.FabricCanvasConnect(mayaNode=spliceNode, execPath="", srcPortPath=kOperator.getName()+".solver", dstPortPath="solver")
-
-            #cmds.FabricCanvasAddVar(mayaNode=spliceNode, execPath="", desiredNodeName="solver", type=solverTypeName, extDep=kOperator.getExtension() )
-            #cmds.FabricCanvasConnect(mayaNode=spliceNode, execPath="", srcPortPath="solver.value", dstPortPath=kOperator.getName()+".solver")
-            # cmds.FabricCanvasAddSet(mayaNode=spliceNode, execPath="", desiredNodeName="setsolver", type=solverTypeName, extDep=kOperator.getExtension() )
-            # cmds.FabricCanvasConnect(mayaNode=spliceNode, execPath="", srcPortPath=kOperator.getName()+".solver", dstPortPath="setsolver.value")
-
 
             arraySizes = {}
             # connect the operator to the objects in the DCC
@@ -688,25 +682,25 @@ class Builder(Builder):
                     else:
                         connectInput( spliceNode + "." + argName, connectionTargets['opObject'], connectionTargets['dccSceneItem'])
 
-                # elif argConnectionType in ['io', 'out']:
+                elif argConnectionType in ['io', 'out']:
 
-                #     def connectOutput(src, opObject, dccSceneItem):
-                #         if isinstance(opObject, Attribute):
-                #             cmds.connectAttr(src, str(dccSceneItem))
+                    def connectOutput(src, opObject, dccSceneItem):
+                        if isinstance(opObject, Attribute):
+                            cmds.connectAttr(src, str(dccSceneItem))
 
-                #         elif isinstance(opObject, Object3D):
-                #             decomposeNode = pm.createNode('decomposeMatrix')
-                #             cmds.connectAttr(src, str(decomposeNode.attr("inputMatrix")))
+                        elif isinstance(opObject, Object3D):
+                            decomposeNode = pm.createNode('decomposeMatrix')
+                            cmds.connectAttr(src, str(decomposeNode.attr("inputMatrix")))
 
-                #             decomposeNode.attr("outputRotate").connect(dccSceneItem.attr("rotate"))
-                #             decomposeNode.attr("outputScale").connect(dccSceneItem.attr("scale"))
-                #             decomposeNode.attr("outputTranslate").connect(dccSceneItem.attr("translate"))
+                            decomposeNode.attr("outputRotate").connect(dccSceneItem.attr("rotate"))
+                            decomposeNode.attr("outputScale").connect(dccSceneItem.attr("scale"))
+                            decomposeNode.attr("outputTranslate").connect(dccSceneItem.attr("translate"))
 
-                #     if argDataType.endswith('[]'):
-                #         for i in range(len(connectionTargets)):
-                #             connectOutput(str(spliceNode + "." + argName)+'['+str(i)+']', connectionTargets[i]['opObject'], connectionTargets[i]['dccSceneItem'])
-                #     else:
-                #         connectOutput(str(spliceNode + "." + argName), connectionTargets['opObject'], connectionTargets['dccSceneItem'])
+                    if argDataType.endswith('[]'):
+                        for i in range(len(connectionTargets)):
+                            connectOutput(str(spliceNode + "." + argName)+'['+str(i)+']', connectionTargets[i]['opObject'], connectionTargets[i]['dccSceneItem'])
+                    else:
+                        connectOutput(str(spliceNode + "." + argName), connectionTargets['opObject'], connectionTargets['dccSceneItem'])
 
 
             opSourceCode = kOperator.generateSourceCode(arraySizes=arraySizes)
