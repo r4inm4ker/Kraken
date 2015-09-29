@@ -719,23 +719,13 @@ class Builder(Builder):
                 # Append the suffix based on the argument type, Softimage Only
                 if portDataType == 'Mat44':
                     portmapDefinition = portName+"|XSI Port"
-                    print "FabricCanvasOpPortMapDefine:" + portmapDefinition
 
                     canvasOpPath2 = str(canvasOpPath) + ":"
                     si.FabricCanvasOpPortMapDefine(canvasOpPath, portmapDefinition)
                     canvasOpPath = str(canvasOpPath2)[:-1]
 
                     canvasOp = si.Dictionary.GetObject(canvasOpPath, False)
-                    portGroupIndex = canvasOp.GetNumPortGroups()-1;
-
-                    if portName == ownerArgName:
-                        print "Connecting to Self:" + operatorOwner.FullName
-                        operatorOwnerKine =  si.Dictionary.GetObject(operatorOwner.FullName+".kine.global", False)
-                        canvasOp.ConnectToGroup(portGroupIndex, operatorOwnerKine)
-                    else:
-                        dccSceneItemKine =  si.Dictionary.GetObject(dccSceneItem.FullName+".kine.global", False)
-                        print "ConnectToGroup:" + str(canvasOp) + ":" + str(portGroupIndex) + ":" + str(dccSceneItemKine)
-                        canvasOp.ConnectToGroup(portGroupIndex, dccSceneItemKine)
+                    si.FabricCanvasOpConnectPort(canvasOpPath, portName, dccSceneItem.FullName+".kine.global")
 
                 elif portDataType in ['Scalar', 'Boolean']:
 
@@ -828,7 +818,6 @@ class Builder(Builder):
 
             # Generate the operator source code.
             opSourceCode = kOperator.generateSourceCode(arraySizes=arraySizes)
-            print opSourceCode
             si.FabricCanvasSetCode(canvasOpPath, kOperator.getName(), opSourceCode)
 
 
