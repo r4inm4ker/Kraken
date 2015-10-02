@@ -704,7 +704,6 @@ class Builder(Builder):
 
 
             opSourceCode = kOperator.generateSourceCode(arraySizes=arraySizes)
-            print opSourceCode
             cmds.FabricCanvasSetCode(mayaNode=spliceNode, execPath=kOperator.getName(), code=opSourceCode)
 
         finally:

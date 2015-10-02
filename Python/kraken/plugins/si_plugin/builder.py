@@ -513,16 +513,7 @@ class Builder(Builder):
             target = constraineeDCCSceneItem.FullName# + ".kine.global"
             canvasOpPath = target + ".kine.global.CanvasOp"
 
-            # si.fabricSplice('newSplice', "{\"targets\":\"" + target + "\", \"portName\":\"constrainee\", \"portMode\":\"out\"}", "", "")
             si.FabricCanvasOpApply(target, "", True, "", "")
-
-
-            # si.FabricCanvasAddFunc("polymsh.kine.global.CanvasOp", "", "func", "dfgEntry {\n  // result = a + b;\n}\n", "-4", "27")
-
-            # Add the private/non-mayaAttr port that stores the Solver object
-            # si.fabricSplice("addInternalPort", canvasOpPath, "{\"portName\":\"solver\", \"dataType\":\"" + solverTypeName + "\", \"extension\":\"Kraken\", \"portMode\":\"io\"}", "")
-            # si.fabricSplice("addInternalPort", canvasOpPath, "{\"portName\":\"debug\", \"dataType\":\"Boolean\", \"extension\":\"Kraken\", \"portMode\":\"io\"}", "")
-            # si.fabricSplice("addInternalPort", canvasOpPath, "{\"portName\":\"rightSide\", \"dataType\":\"Boolean\", \"extension\":\"Kraken\", \"portMode\":\"io\"}", "")
 
             si.FabricCanvasAddPort(canvasOpPath, "", "solver", "In", solverTypeName, "Kraken")
             si.FabricCanvasAddPort(canvasOpPath, "", "debug", "In", "Boolean", "")
@@ -693,7 +684,6 @@ class Builder(Builder):
 
             # Create Splice Operator
             canvasOpPath = si.FabricCanvasOpApply(operatorOwner.FullName, "", True, "", "")
-            print canvasOpPath
             canvasOp = si.Dictionary.GetObject(canvasOpPath, False)
             si.FabricCanvasSetExtDeps(canvasOpPath, "", "Kraken" )
 
@@ -755,7 +745,6 @@ class Builder(Builder):
                 argName = arg.name.getSimpleType()
                 argDataType = arg.dataType.getSimpleType()
                 argConnectionType = arg.connectionType.getSimpleType()
-                print "-------------"+argName+"-------------"
 
                 canvasOpPath2 = str(canvasOpPath) + ":"
 
