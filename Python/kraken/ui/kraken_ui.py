@@ -23,7 +23,7 @@ class KrakenUI(QtGui.QWidget):
         # constructors of base classes
         super(KrakenUI, self).__init__(parent)
         self.setObjectName('mainUI')
-        self.setWindowIcon(':/images/Kraken_Icon.png')
+        self.setWindowIcon(QtGui.QIcon(':/images/Kraken_Icon.png'))
 
         self.setWindowTitle("Kraken Editor")
         self.setAcceptDrops(True)
