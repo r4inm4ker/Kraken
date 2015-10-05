@@ -201,7 +201,7 @@ class KrakenSystem(object):
         """
 
         if ks.isRTVal(rtval):
-            return json.loads(rtval.type("Type").jsonDesc("String"))['name']
+            return json.loads(rtval.type("Type").jsonDesc("String").getSimpleType())['name']
         else:
             return "None"
 

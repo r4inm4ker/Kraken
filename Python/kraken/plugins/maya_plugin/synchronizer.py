@@ -19,11 +19,11 @@ class Synchronizer(Synchronizer):
     def getDCCItem(self, kObject):
         """Gets the DCC Item from the full decorated path.
 
-        Arguments:
-        kObject -- object, the Kraken Python object that we must find the corresponding DCC item.
+        Args:
+            kObject (object): The Kraken Python object that we must find the corresponding DCC item.
 
-        Return:
-        DCC Object, None if it isn't found.
+        Returns:
+            object: The created DCC object.
 
         """
 
@@ -65,11 +65,11 @@ class Synchronizer(Synchronizer):
     def syncXfo(self, kObject):
         """Syncs the xfo from the DCC object to the Kraken object.
 
-        Arguments:
-        kObject -- Object, object to sync the xfo for.
+        Args:
+            kObject (object): Object to sync the xfo for.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -103,11 +103,11 @@ class Synchronizer(Synchronizer):
     def syncAttribute(self, kObject):
         """Syncs the attribute value from the DCC objec to the Kraken object.
 
-        Arguments:
-        kObject -- Object, object to sync the attribute value for.
+        Args:
+            kObject (object): Object to sync the attribute value for.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 

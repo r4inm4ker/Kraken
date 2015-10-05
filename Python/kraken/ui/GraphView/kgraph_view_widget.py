@@ -76,25 +76,53 @@ class KGraphViewWidget(GraphViewWidget):
 
 
     def newRigPreset(self):
-        # TODO: clean the rig from the scene if it has been built.
         self.guideRig = Rig()
         self.getGraphView().displayGraph(self.guideRig)
         self.setRigName('MyRig')
 
+        self.openedFile = None
 
-    def saveRigPreset(self):
+        self.window().setWindowTitle('Kraken Editor')
+
+
+    def saveRig(self, saveAs=False):
+
         settings = self.window().getSettings()
         settings.beginGroup('Files')
-        lastFilePath = settings.value("lastFilePath", os.path.join(GetKrakenPath(), self.guideRig.getName() ))
+        filePath = settings.value("lastFilePath", os.path.join(GetKrakenPath(), self.guideRig.getName() ))
         settings.endGroup()
-        (filePath, filter) = QtGui.QFileDialog.getSaveFileName(self, 'Save Rig Preset', lastFilePath, 'Kraken Rig (*.krg)')
-        if len(filePath) > 0:
-            self.synchGuideRig()
-            self.guideRig.writeRigDefinitionFile(filePath)
 
-            settings.beginGroup('Files')
-            lastFilePath = settings.setValue("lastFilePath", filePath)
-            settings.endGroup()
+        if saveAs is True:
+
+            (saveAsFilePath, filter) = QtGui.QFileDialog.getSaveFileName(self, 'Save Rig Preset', os.path.dirname(os.path.abspath(filePath)), 'Kraken Rig (*.krg)')
+            if len(saveAsFilePath) > 0:
+                filePath = saveAsFilePath
+            else:
+                return False
+
+        self.synchGuideRig()
+        self.guideRig.writeRigDefinitionFile(filePath)
+
+        settings.beginGroup('Files')
+        lastFilePath = settings.setValue("lastFilePath", filePath)
+        settings.endGroup()
+
+        self.openedFile = filePath
+
+        self.reportMessage('Saved Rig file: ' + filePath, level='information')
+
+
+    def saveAsRigPreset(self):
+        self.saveRig(saveAs=True)
+
+
+    def saveRigPreset(self):
+
+        if self.openedFile is None or not os.path.exists(self.openedFile):
+            self.saveRig(saveAs=True)
+
+        else:
+            self.saveRig(saveAs=False)
 
 
     def loadRigPreset(self):
@@ -102,7 +130,7 @@ class KGraphViewWidget(GraphViewWidget):
         settings.beginGroup('Files')
         lastFilePath = settings.value("lastFilePath", os.path.join(GetKrakenPath(), self.guideRig.getName() ))
         settings.endGroup()
-        (filePath, filter) = QtGui.QFileDialog.getOpenFileName(self, 'Load Rig Preset', lastFilePath, 'Kraken Rig (*.krg)')
+        (filePath, filter) = QtGui.QFileDialog.getOpenFileName(self, 'Load Rig Preset', os.path.dirname(os.path.abspath(lastFilePath)), 'Kraken Rig (*.krg)')
         if len(filePath) > 0:
             self.guideRig = Rig()
             self.guideRig.loadRigDefinitionFile(filePath)
@@ -112,6 +140,12 @@ class KGraphViewWidget(GraphViewWidget):
             settings.beginGroup('Files')
             lastFilePath = settings.setValue("lastFilePath", filePath)
             settings.endGroup()
+
+            self.openedFile = filePath
+
+            self.window().setWindowTitle(filePath + '[*] - ' + self.window().windowTitle())
+
+            self.reportMessage('Loaded Rig file: ' + filePath, level='information')
 
 
     def buildGuideRig(self):
@@ -127,33 +161,10 @@ class KGraphViewWidget(GraphViewWidget):
             builder.build(self.guideRig)
 
         except Exception as e:
-            print traceback.format_exc()
-
-            statusBar = self.window().statusBar()
-            warningLabel = QtGui.QLabel('Error Building: ' + ', '.join([x for x in e.args]))
-            warningLabel.setMaximumWidth(200)
-            warningLabel.setStyleSheet("QLabel { border-radius: 3px; background-color: #AA0000}")
-
-            def addWarning():
-                self.window().statusBar().clearMessage()
-
-                statusBar.addWidget(warningLabel, 1)
-                statusBar.repaint()
-
-                timer.start()
-
-            def endWarning():
-                timer.stop()
-                statusBar.removeWidget(warningLabel)
-                statusBar.repaint()
-
-                self.window().statusBar().showMessage('Ready', 2000)
-
-            timer = QtCore.QTimer()
-            timer.setInterval(2000)
-            timer.timeout.connect(endWarning)
-
-            addWarning()
+            # Add the callstak to the log
+            callstack = traceback.format_exc()
+            print callstack
+            self.reportMessage('Error Building', level='error', exception=e)
 
 
     def synchGuideRig(self):
@@ -179,33 +190,10 @@ class KGraphViewWidget(GraphViewWidget):
             builder.build(rig)
 
         except Exception as e:
-            print traceback.format_exc()
-
-            statusBar = self.window().statusBar()
-            warningLabel = QtGui.QLabel('Error Building: ' + ', '.join([x for x in e.args]))
-            warningLabel.setMaximumWidth(200)
-            warningLabel.setStyleSheet("QLabel { border-radius: 3px; background-color: #AA0000}")
-
-            def addWarning():
-                self.window().statusBar().clearMessage()
-
-                statusBar.addWidget(warningLabel, 1)
-                statusBar.repaint()
-
-                timer.start()
-
-            def endWarning():
-                timer.stop()
-                statusBar.removeWidget(warningLabel)
-                statusBar.repaint()
-
-                self.window().statusBar().showMessage('Ready', 2000)
-
-            timer = QtCore.QTimer()
-            timer.setInterval(2000)
-            timer.timeout.connect(endWarning)
-
-            addWarning()
+            # Add the callstak to the log
+            callstack = traceback.format_exc()
+            print callstack
+            self.reportMessage('Error Building', level='error', exception=e)
 
     # =========
     # Shortcuts
@@ -263,10 +251,65 @@ class KGraphViewWidget(GraphViewWidget):
         scenepos = self.graphView.mapToScene(pos)
         contextualNodeList.showAtPos(pos, scenepos, self.graphView)
 
+
+    # ==================
+    # Message Reporting
+    # ==================
+    def reportMessage(self, message, level='error', exception=None):
+        """Shows an error message in the status bar.
+
+        Args:
+            message (str): Message to display to the user.
+
+        """
+
+        statusBar = self.window().statusBar()
+
+        if exception is not None:
+            fullMessage = level[0].upper() + level[1:] + ": " + message + '; ' + ', '.join([x for x in exception.args])
+        else:
+            fullMessage = level[0].upper() + level[1:] + ": " + message
+
+        messageLabel = QtGui.QLabel(fullMessage)
+
+        print fullMessage
+
+        messageColors = {
+            'information': '#009900',
+            'warning': '#CC3300',
+            'error': '#AA0000'
+        }
+
+        if level not in messageColors.keys():
+            level = 'error'
+
+        messageLabel.setStyleSheet("QLabel { border-radius: 3px; background-color: " + messageColors[level] + "}")
+
+        def addMessage():
+            self.window().statusBar().clearMessage()
+
+            statusBar.addWidget(messageLabel, 1)
+            statusBar.repaint()
+
+            timer.start()
+
+        def endMessage():
+            timer.stop()
+            statusBar.removeWidget(messageLabel)
+            statusBar.repaint()
+
+            self.window().statusBar().showMessage('Ready', 2000)
+
+        timer = QtCore.QTimer()
+        timer.setInterval(3500)
+        timer.timeout.connect(endMessage)
+
+        addMessage()
+
+
     # ===============
     # Signal Handlers
     # ===============
-
     def __onNodeAdded(self, node):
         if not UndoRedoManager.getInstance().isUndoingOrRedoing():
             command = graph_commands.AddNodeCommand(self.graphView, self.guideRig, node)

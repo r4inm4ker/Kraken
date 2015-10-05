@@ -25,21 +25,25 @@ class IntegerAttribute(NumberAttribute):
     def getRTVal(self):
         """Returns and RTVal object for this attribute.
 
-        Return:
-        RTVal
+        Returns:
+            RTVal: RTVal object of the attribute.
 
         """
+
         return ks.rtVal('Integer', self._value)
 
 
     def validateValue(self, value):
         """Validates the incoming value is the correct type.
 
-        Arguments:
-        value -- Type, value to check the type of.
+        Note:
+            This is a localized method specific to the Integer Attribute.
 
-        Return:
-        True if successful.
+        Args:
+            value (int): value to check the type of.
+
+        Returns:
+            Boolean: True if valid.
 
         """
 
@@ -53,8 +57,11 @@ class IntegerAttribute(NumberAttribute):
     def getDataType(self):
         """Returns the name of the data type for this attribute.
 
-        Return:
-        string
+        Note:
+            This is a localized method specific to the Integer Attribute.
+
+        Returns:
+            str: String name of the attribute type.
 
         """
 

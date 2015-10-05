@@ -89,7 +89,7 @@ class Quat(MathObject):
 
         """
 
-        return self._rtval.w
+        return self._rtval.w.getSimpleType()
 
 
     @w.setter
@@ -280,7 +280,7 @@ class Quat(MathObject):
 
         """
 
-        return self._rtval.equal('Boolean', ks.rtVal('Quat', other))
+        return self._rtval.equal('Boolean', ks.rtVal('Quat', other)).getSimpleType()
 
 
     def almostEqual(self, other, precision):
@@ -296,7 +296,7 @@ class Quat(MathObject):
         """
 
         return self._rtval.almostEqual('Boolean', ks.rtVal('Quat', other),
-                                       ks.rtVal('Scalar', precision))
+                                       ks.rtVal('Scalar', precision)).getSimpleType()
 
 
     def almostEqual(self, other):
@@ -311,85 +311,7 @@ class Quat(MathObject):
 
         """
 
-        return self._rtval.almostEqual('Boolean', ks.rtVal('Quat', other))
-
-
-    # # Equals operator
-    # def Boolean == (Quat a, Quat b):
-    #   return a.v == b.v && a.w == b.w;
-    # }
-
-    # # Not equals operator
-    # def Boolean != (Quat a, Quat b):
-    #   return a.v != b.v || a.w != b.w;
-    # }
-
-    # # Adds two quaternions
-    # def Quat + (in Quat a, in Quat b):
-    #   return Quat(a.w + b.w, a.v + b.v);
-    # }
-
-    # # Adds another quaternion to this one
-    # def  += (in Quat b):
-    #   this = this + b;
-    # }
-
-    # # Subtracts two quaternions
-    # def Quat - (in Quat a, in Quat b):
-    #   return Quat(a.w - b.w, a.v - b.v);
-    # }
-
-    # # Subtracts another quaternion from this one
-    # def  -= (in Quat b):
-    #   this = this - b;
-    # }
-
-    # # Multiplies two quaternions
-    # def Quat * (in Quat a, in Quat b):
-    #   return Quat(a.w * b.w - a.v.dot(b.v), a.v.cross(b.v) + (a.w * b.v) + (a.v * b.w));
-    # }
-
-    # # Multiplies this quaternion with another one
-    # def  *= (in Quat b):
-    #   this = this * b;
-    # }
-
-    # # Multiplies a scalar with a quaternion
-    # def Quat * (in Scalar a, in Quat b):
-    #   return Quat(a * b.w, a * b.v);
-    # }
-
-    # # Multiplies a quaternion with a scalar
-    # def Quat * (in Quat a, in Scalar b):
-    #   return Quat(a.w * b, a.v * b);
-    # }
-
-    # # Multiplies this quaternion with a scalar
-    # def  *= (in Scalar b):
-    #   this = this * b;
-    # }
-
-    # # Returns the division of two quaternions
-    # def Quat / (in Quat a, in Quat b):
-    #   return Quat(a.w * b.w + a.v.dot(b.v), (a.v * b.w) - (a.w * b.v) - a.v.cross(b.v));
-    # }
-
-    # # Divides this quaternion by another one
-    # def  /= (in Quat b):
-    #   this = this / b;
-    # }
-
-    # # Returns the division of a quaternion and a scalar
-    # def Quat / (Quat a, Scalar b):
-    #   if( Boolean(Fabric_Guarded) && Math_badDivisor( b ) )
-    #     Math_reportBadDivisor( b, "divide" );
-    #   return a * (1.0 / b);
-    # }
-
-    # # Divides this quaternion by a scalar
-    # def  /= (in Scalar b):
-    #   this = this / b;
-    # }
+        return self._rtval.almostEqual('Boolean', ks.rtVal('Quat', other)).getSimpleType()
 
 
     def add(self, other):
@@ -503,7 +425,7 @@ class Quat(MathObject):
 
         """
 
-        return self._rtval.dot('Scalar', ks.rtVal('Quat', other))
+        return self._rtval.dot('Scalar', ks.rtVal('Quat', other)).getSimpleType()
 
 
     def conjugate(self):
@@ -525,7 +447,7 @@ class Quat(MathObject):
 
         """
 
-        return self._rtval.lengthSquared('Scalar')
+        return self._rtval.lengthSquared('Scalar').getSimpleType()
 
 
     def length(self):
@@ -536,7 +458,7 @@ class Quat(MathObject):
 
         """
 
-        return self._rtval.length('Scalar')
+        return self._rtval.length('Scalar').getSimpleType()
 
 
     def unit(self):
@@ -571,7 +493,7 @@ class Quat(MathObject):
 
         """
 
-        return self._rtval.setUnit('Scalar')
+        return self._rtval.setUnit('Scalar').getSimpleType()
 
 
     def inverse(self):
@@ -608,7 +530,7 @@ class Quat(MathObject):
 
         """
 
-        return self._rtval.getAngle('Scalar')
+        return self._rtval.getAngle('Scalar').getSimpleType()
 
 
     def getXaxis(self):

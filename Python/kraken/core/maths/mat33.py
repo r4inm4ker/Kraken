@@ -57,7 +57,7 @@ class Mat33(MathObject):
 
         """
 
-        self._rtval.row0 = ks.rtVal('Scalar', value)
+        self._rtval.row0 = ks.rtVal('Vec3', value)
 
         return True
 
@@ -86,7 +86,7 @@ class Mat33(MathObject):
 
         """
 
-        self._rtval.row1 = ks.rtVal('Scalar', value)
+        self._rtval.row1 = ks.rtVal('Vec3', value)
 
         return True
 
@@ -115,7 +115,7 @@ class Mat33(MathObject):
 
         """
 
-        self._rtval.row2 = ks.rtVal('Scalar', value)
+        self._rtval.row2 = ks.rtVal('Vec3', value)
 
         return True
 
@@ -242,7 +242,7 @@ class Mat33(MathObject):
 
         """
 
-        return self._rtval.equal('Boolean', ks.rtVal('Mat33', other))
+        return self._rtval.equal('Boolean', ks.rtVal('Mat33', other)).getSimpleType()
 
 
     def almostEqual(self, other, precision=None):
@@ -257,65 +257,9 @@ class Mat33(MathObject):
 
         """
         if precision is not None:
-            return self._rtval.almostEqual('Boolean', ks.rtVal('Mat33', other), ks.rtVal('Scalar', precision))
+            return self._rtval.almostEqual('Boolean', ks.rtVal('Mat33', other), ks.rtVal('Scalar', precision)).getSimpleType()
         else:
-            return self._rtval.almostEqual('Boolean', ks.rtVal('Mat33', other))
-
-
-    # # Equals operator
-    # def Boolean == (Mat33 a, Mat33 b):
-
-
-    # # Not equals operator
-    # def Boolean != (Mat33 a, Mat33 b):
-
-
-    # # Returns the addition of two matrices
-    # def Mat33 + (Mat33 a, Mat33 b):
-
-
-    # # Adds another matrix to this one
-    # def  += (Mat33 other):
-
-
-    # # Returns the subtraction of two matrices
-    # def Mat33 - (Mat33 a, Mat33 b):
-
-
-    # # Subtracts another matrix from this one
-    # def  -= (Mat33 other):
-
-
-    # # Returns the product of two matrices
-    # function Mat33 * (Mat33 left, Mat33 right):
-
-
-    # # Returns the product of a matrix and a Vec3
-    # def Vec3 * (Mat33 mat33, Vec3 vec3):
-
-
-    # # Returns the product of a matrix and a scalar
-    # def Mat33 * (Mat33 mat33, Scalar s):
-
-
-    # # Returns the product of a scalar and a matrix
-    # def Mat33 * (Scalar s, Mat33 mat33):
-
-
-    # # Multiplies this matrix with another one
-    # def  *= (Mat33 other):
-
-
-    # # Multiplies this matrix with a scalar
-    # def  *= (Scalar other):
-
-
-    # # Returns the division of a matrix and a scalar
-    # def Mat33 / (Mat33 mat33, Scalar s):
-
-
-    # # Divides this matrix by a scalar
-    # def  /= (Scalar other):
+            return self._rtval.almostEqual('Boolean', ks.rtVal('Mat33', other)).getSimpleType()
 
 
     def add(self, other):
@@ -410,7 +354,7 @@ class Mat33(MathObject):
 
         """
 
-        return self._rtval.determinant('Scalar')
+        return self._rtval.determinant('Scalar').getSimpleType()
 
 
     def adjoint(self):

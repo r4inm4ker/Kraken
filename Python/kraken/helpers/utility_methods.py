@@ -10,8 +10,8 @@ from kraken.core.maths import decodeValue
 def logHierarchy(kObject):
     """Traverses the given Kraken hierarchy and logs the names of all the objects.
 
-    Return:
-    None
+    Args:
+        Object: The object to start logging on.
 
     """
 
@@ -39,11 +39,11 @@ def __convertFromJSON(jsonData):
 def prepareToLoad(jsonData):
     """Prepares the json data for loading into kraken.
 
-    Arguments:
-    jsonData -- dict, the JSON data to be prepared.
+    Args:
+        jsonData (dict): The JSON data to be prepared.
 
-    Return:
-    dict, the prepared JSON hierarchy.
+    Returns:
+        dict: The prepared JSON hierarchy.
 
     """
 
@@ -70,11 +70,11 @@ def __convertToJSON(jsonData):
 def prepareToSave(jsonData):
     """Prepares the json data for serialization.
 
-    Arguments:
-    jsonData -- dict, the JSON data to be prepared.
+    Args:
+        jsonData (dict): The JSON data to be prepared.
 
-    Return:
-    dict, the prepared JSON hierarchy.
+    Returns:
+        dict: The prepared JSON hierarchy.
 
     """
 
@@ -99,7 +99,7 @@ def __mirrorData(jsonData, plane):
             newXfo.tr.y = -newXfo.tr.y
         elif plane == 2:
             newXfo.tr.z = -newXfo.tr.z
-        
+
         newXfo.ori.mirror(plane)
         return newXfo
 
@@ -114,18 +114,18 @@ def __mirrorData(jsonData, plane):
         for key, value in jsonData.iteritems():
             newDict[key] = __mirrorData(value, plane)
         return newDict
-        
+
     return jsonData
 
 
 def mirrorData(jsonData, plane):
     """Prepares the json data for serialization.
 
-    Arguments:
-    jsonData -- dict, the JSON data to be prepared.
+    Args:
+        jsonData (dict): The JSON data to be prepared.
 
-    Return:
-    dict, the prepared JSON hierarchy.
+    Returns:
+        dict: The prepared JSON hierarchy.
 
     """
 

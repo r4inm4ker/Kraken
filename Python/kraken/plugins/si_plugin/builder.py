@@ -26,12 +26,12 @@ class Builder(Builder):
     def buildContainer(self, kSceneItem, buildName):
         """Builds a container / namespace object.
 
-        Arguments:
-        kSceneItem -- Object, kSceneItem that represents a container to be built.
-        buildName -- String, The name to use on the built object.
+        Args:
+            kSceneItem (object): kSceneItem that represents a container to be built.
+            buildName (str): The name to use on the built object.
 
-        Return:
-        Node that is created..
+        Returns:
+            object: Node that is created.
 
         """
 
@@ -53,12 +53,12 @@ class Builder(Builder):
     def buildLayer(self, kSceneItem, buildName):
         """Builds a layer object.
 
-        Arguments:
-        kSceneItem -- Object, kSceneItem that represents a layer to be built.
-        buildName -- String, The name to use on the built object.
+        Args:
+            kSceneItem (object): kSceneItem that represents a layer to be built.
+            buildName (str): The name to use on the built object.
 
-        Return:
-        Node that is created..
+        Returns:
+            object: Node that is created.
 
         """
 
@@ -79,12 +79,12 @@ class Builder(Builder):
     def buildHierarchyGroup(self, kSceneItem, buildName):
         """Builds a hierarchy group object.
 
-        Arguments:
-        kSceneItem -- Object, kSceneItem that represents a group to be built.
-        buildName -- String, The name to use on the built object.
+        Args:
+            kSceneItem (object): kSceneItem that represents a group to be built.
+            buildName (str): The name to use on the built object.
 
-        Return:
-        DCC Scene Item that is created.
+        Returns:
+            object: DCC Scene Item that is created.
 
         """
 
@@ -108,12 +108,12 @@ class Builder(Builder):
     def buildGroup(self, kSceneItem, buildName):
         """Builds a locator / null object.
 
-        Arguments:
-        kSceneItem -- Object, kSceneItem that represents a group to be built.
-        buildName -- String, The name to use on the built object.
+        Args:
+            kSceneItem (object): kSceneItem that represents a group to be built.
+            buildName (str): The name to use on the built object.
 
-        Return:
-        Node that is created.
+        Returns:
+            object: Node that is created.
 
         """
 
@@ -134,12 +134,12 @@ class Builder(Builder):
     def buildJoint(self, kSceneItem, buildName):
         """Builds a joint object.
 
-        Arguments:
-        kSceneItem -- Object, kSceneItem that represents a joint to be built.
-        buildName -- String, The name to use on the built object.
+        Args:
+            kSceneItem (object): kSceneItem that represents a joint to be built.
+            buildName (str): The name to use on the built object.
 
-        Return:
-        DCC Scene Item that is created.
+        Returns:
+            object: DCC Scene Item that is created.
 
         """
 
@@ -162,12 +162,12 @@ class Builder(Builder):
     def buildLocator(self, kSceneItem, buildName):
         """Builds a locator / null object.
 
-        Arguments:
-        kSceneItem -- Object, kSceneItem that represents a locator / null to be built.
-        buildName -- String, The name to use on the built object.
+        Args:
+            kSceneItem (object): kSceneItem that represents a locator / null to be built.
+            buildName (str): The name to use on the built object.
 
-        Return:
-        Node that is created.
+        Returns:
+            object: Node that is created.
 
         """
 
@@ -188,12 +188,12 @@ class Builder(Builder):
     def buildCurve(self, kSceneItem, buildName):
         """Builds a Curve object.
 
-        Arguments:
-        kSceneItem -- Object, kSceneItem that represents a curve to be built.
-        buildName -- String, The name to use on the built object.
+        Args:
+            kSceneItem (object): kSceneItem that represents a curve to be built.
+            buildName (str): The name to use on the built object.
 
-        Return:
-        Node that is created.
+        Returns:
+            object: Node that is created.
 
         """
 
@@ -249,12 +249,12 @@ class Builder(Builder):
     def buildControl(self, kSceneItem, buildName):
         """Builds a Control object.
 
-        Arguments:
-        kSceneItem -- Object, kSceneItem that represents a control to be built.
-        buildName -- String, The name to use on the built object.
+        Args:
+            kSceneItem (object): kSceneItem that represents a control to be built.
+            buildName (str): The name to use on the built object.
 
-        Return:
-        Node that is created.
+        Returns:
+            object: Node that is created.
 
         """
 
@@ -313,11 +313,11 @@ class Builder(Builder):
     def buildBoolAttribute(self, kAttribute):
         """Builds a Bool attribute.
 
-        Arguments:
-        kAttribute -- Object, kAttribute that represents a boolean attribute to be built.
+        Args:
+            kAttribute (object): kAttribute that represents a boolean attribute to be built.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -333,11 +333,11 @@ class Builder(Builder):
     def buildScalarAttribute(self, kAttribute):
         """Builds a Float attribute.
 
-        Arguments:
-        kAttribute -- Object, kAttribute that represents a float attribute to be built.
+        Args:
+            kAttribute (object): kAttribute that represents a float attribute to be built.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -352,11 +352,11 @@ class Builder(Builder):
     def buildIntegerAttribute(self, kAttribute):
         """Builds a Integer attribute.
 
-        Arguments:
-        kAttribute -- Object, kAttribute that represents a integer attribute to be built.
+        Args:
+            kAttribute (object): kAttribute that represents a integer attribute to be built.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -371,11 +371,11 @@ class Builder(Builder):
     def buildStringAttribute(self, kAttribute):
         """Builds a String attribute.
 
-        Arguments:
-        kAttribute -- Object, kAttribute that represents a string attribute to be built.
+        Args:
+            kAttribute (object): kAttribute that represents a string attribute to be built.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -390,11 +390,11 @@ class Builder(Builder):
     def buildAttributeGroup(self, kAttributeGroup):
         """Builds attribute groups on the DCC object.
 
-        Arguments:
-        kAttributeGroup -- SceneItem, kraken object to build the attribute group on.
+        Args:
+            kAttributeGroup (object): Kraken object to build the attribute group on.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -429,11 +429,11 @@ class Builder(Builder):
     def connectAttribute(self, kAttribute):
         """Connects the driver attribute to this one.
 
-        Arguments:
-        kAttribute -- Object, attribute to connect.
+        Args:
+            kAttribute (object): Attribute to connect.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -451,11 +451,11 @@ class Builder(Builder):
     def buildOrientationConstraint(self, kConstraint):
         """Builds an orientation constraint represented by the kConstraint.
 
-        Arguments:
-        kConstraint -- Object, kraken constraint object to build.
+        Args:
+            kConstraint (object): Kraken constraint object to build.
 
-        Return:
-        dccSceneItem that was created.
+        Returns:
+            object: dccSceneItem that was created.
 
         """
 
@@ -474,11 +474,11 @@ class Builder(Builder):
     def buildPoseConstraint(self, kConstraint):
         """Builds an pose constraint represented by the kConstraint.
 
-        Arguments:
-        kConstraint -- Object, kraken constraint object to build.
+        Args:
+            kConstraint (object): kraken constraint object to build.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -510,15 +510,14 @@ class Builder(Builder):
             ks.loadCoreClient()
             ks.loadExtension('Kraken')
             solverTypeName = 'PoseConstraintSolver'
-            target = constraineeDCCSceneItem.FullName + ".kine.global"
-            spliceOpPath = target + ".SpliceOp"
+            target = constraineeDCCSceneItem.FullName# + ".kine.global"
+            canvasOpPath = target + ".kine.global.CanvasOp"
 
-            si.fabricSplice('newSplice', "{\"targets\":\"" + target + "\", \"portName\":\"constrainee\", \"portMode\":\"out\"}", "", "")
+            si.FabricCanvasOpApply(target, "", True, "", "")
 
-            # Add the private/non-mayaAttr port that stores the Solver object
-            si.fabricSplice("addInternalPort", spliceOpPath, "{\"portName\":\"solver\", \"dataType\":\"" + solverTypeName + "\", \"extension\":\"Kraken\", \"portMode\":\"io\"}", "")
-            si.fabricSplice("addInternalPort", spliceOpPath, "{\"portName\":\"debug\", \"dataType\":\"Boolean\", \"extension\":\"Kraken\", \"portMode\":\"io\"}", "")
-            si.fabricSplice("addInternalPort", spliceOpPath, "{\"portName\":\"rightSide\", \"dataType\":\"Boolean\", \"extension\":\"Kraken\", \"portMode\":\"io\"}", "")
+            si.FabricCanvasAddPort(canvasOpPath, "", "solver", "In", solverTypeName, "Kraken")
+            si.FabricCanvasAddPort(canvasOpPath, "", "debug", "In", "Boolean", "")
+            si.FabricCanvasAddPort(canvasOpPath, "", "rightSide", "In", "Boolean", "")
 
             connectionTargets = ""
             connectionSuffix = ".kine.global"
@@ -535,7 +534,8 @@ class Builder(Builder):
                 connectionTargets = dccSceneItem.FullName + connectionSuffix
                 break
 
-            si.fabricSplice("addInputPort", spliceOpPath, "{\"portName\":\"constrainer\", \"dataType\":\"Mat44\", \"extension\":\"\", \"targets\":\"" + connectionTargets + "\"}", "")
+            si.FabricCanvasAddPort(canvasOpPath, "", "constrainer", "In", "Mat44", "")
+            # si.fabricSplice("addInputPort", canvasOpPath, "{\"portName\":\"constrainer\", \"dataType\":\"Mat44\", \"extension\":\"\", \"targets\":\"" + connectionTargets + "\"}", "")
 
             # Generate the operator source code.
             opSourceCode = ""
@@ -551,7 +551,7 @@ class Builder(Builder):
             opSourceCode += "    solver.solve(debug, rightSide, constrainer, constrainee);"
             opSourceCode += "}\n"
 
-            si.fabricSplice('addKLOperator', spliceOpPath, '{"opName": "poseConstraint"}', opSourceCode)
+            si.fabricSplice('addKLOperator', canvasOpPath, '{"opName": "poseConstraint"}', opSourceCode)
 
         return dccSceneItem
 
@@ -559,11 +559,11 @@ class Builder(Builder):
     def buildPositionConstraint(self, kConstraint):
         """Builds an position constraint represented by the kConstraint.
 
-        Arguments:
-        kConstraint -- Object, kraken constraint object to build.
+        Args:
+            kConstraint (object): kraken constraint object to build.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -582,11 +582,11 @@ class Builder(Builder):
     def buildScaleConstraint(self, kConstraint):
         """Builds an scale constraint represented by the kConstraint.
 
-        Arguments:
-        kConstraint -- Object, kraken constraint object to build.
+        Args:
+            kConstraint (object): kraken constraint object to build.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -608,11 +608,11 @@ class Builder(Builder):
     def buildAttributeConnection(self, connectionInput):
         """Builds the link between the target and connection target.
 
-        Arguments:
-        connectionInput -- Object, kraken component input to build connections for.
+        Args:
+            connectionInput (object): kraken component input to build connections for.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -641,164 +641,174 @@ class Builder(Builder):
     def buildSpliceOperators(self, kOperator):
         """Builds Splice Operators on the components.
 
-        Arguments:
-        kOperator -- Object, kraken operator that represents a Splice operator.
+        Args:
+            kOperator (object): kraken operator that represents a Splice operator.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
         try:
             solverTypeName = kOperator.getSolverTypeName()
             args = kOperator.getSolverArgs()
 
+
+            def findPortOfType(dataTypes, connectionTypes):
+                for i in xrange(len(args)):
+                    arg = args[i]
+                    argName = arg.name.getSimpleType()
+                    argDataType = arg.dataType.getSimpleType()
+                    argConnectionType = arg.connectionType.getSimpleType()
+
+                    if argDataType in dataTypes and argConnectionType in connectionTypes:
+                        return i
+
+                return -1
+
             # Find operatorOwner to attach Splice Operator to.
-            operatorOwner = None
-            targets = None
-            operatorOwnerArg = None
-            for i in xrange(len(args)):
-                arg = args[i]
-
-                if arg.connectionType == 'io' or arg.connectionType == 'out':
-                    if arg.dataType == 'Mat44':
-
-                        target = kOperator.getOutput(arg.name)
-                        if target is None:
-                            raise Exception("Solver '" + kOperator.getPath() + "' output :'" + arg.name + "' not connected.")
-
-                        operatorOwner = self.getDCCSceneItem(target)
-
-                        if operatorOwner is None:
-                            raise Exception("Solver '" + kOperator.getPath() + "' output :'" + arg.name + "' dcc item not found for item:" + target.getPath())
-
-                        targets = operatorOwner.FullName + ".kine.global"
-                        operatorOwnerArg = arg.name
-                        break
-                    elif arg.dataType == 'Mat44[]':
-                        targets = ""
-                        for target in kOperator.getOutput(arg.name):
-
-                            if target is None:
-                                raise Exception("Solver '" + kOperator.getPath() + "' output :'" + arg.name + "' not connected.")
-
-                            dccSceneItem = self.getDCCSceneItem(target)
-
-                            if dccSceneItem is None:
-                                raise Exception("Solver '" + kOperator.getPath() + "' output :'" + arg.name + "' dcc item not found for item:" + target.getPath())
-
-                            if targets == "":
-                                operatorOwner = dccSceneItem
-                                targets = dccSceneItem.FullName + ".kine.global"
-                            else:
-                                targets = targets + "," + dccSceneItem.FullName + ".kine.global"
-                        operatorOwnerArg = arg.name
-                        break
-
-            if operatorOwner is None:
+            ownerOutPortIndex = findPortOfType(['Mat44', 'Mat44[]'], ['out', 'io'])
+            if ownerOutPortIndex is -1:
                 raise Exception("Solver '" + kOperator.getName() + "' has no Mat44 outputs!")
 
-            spliceOpPath = operatorOwner.FullName + ".kine.global.SpliceOp"
+            ownerArg = args[ownerOutPortIndex]
+            ownerArgName = ownerArg.name.getSimpleType()
+            ownerArgDataType = ownerArg.dataType.getSimpleType()
+            ownerArgConnectionType = ownerArg.connectionType.getSimpleType()
+
+            if ownerArgDataType == 'Mat44[]':
+                operatorOwner = self.getDCCSceneItem( kOperator.getOutput(ownerArgName)[0] )
+                ownerArgName = ownerArgName+str(0)
+            else:
+                operatorOwner = self.getDCCSceneItem( kOperator.getOutput(ownerArgName) )
+
 
             # Create Splice Operator
-            opPath = si.fabricSplice('newSplice', "{\"targets\":\"" + targets + "\", \"portName\":\"" + arg.name + "\", \"portMode\":\"out\"}", "", "")
+            canvasOpPath = si.FabricCanvasOpApply(operatorOwner.FullName, "", True, "", "")
+            canvasOp = si.Dictionary.GetObject(canvasOpPath, False)
+            si.FabricCanvasSetExtDeps(canvasOpPath, "", "Kraken" )
 
-            # Add the private/non-mayaAttr port that stores the Solver object
-            si.fabricSplice("addInternalPort", spliceOpPath, "{\"portName\":\"solver\", \"dataType\":\"" + solverTypeName + "\", \"extension\":\"" + kOperator.getExtension() + "\", \"portMode\":\"io\"}", "")
+            si.FabricCanvasAddFunc(canvasOpPath, "", kOperator.getName(), "dfgEntry {}", "400", "0")
+            si.FabricCanvasAddPort(canvasOpPath, kOperator.getName(), "solver", "IO", solverTypeName, "", "Kraken")
+            si.FabricCanvasAddPort(canvasOpPath, "", "solver", "IO", solverTypeName, "", "Kraken" )
+            si.FabricCanvasConnect(canvasOpPath, "", "solver", kOperator.getName()+".solver")
+            si.FabricCanvasConnect(canvasOpPath, "", kOperator.getName()+".solver", "solver")
 
+
+            def addCanvasPorts(canvasOpPath, portName, canvasGraphPort, portDataType, argConnectionType, dccSceneItem):
+
+                if argConnectionType == 'in':
+                    si.FabricCanvasAddPort(canvasOpPath, "", portName, "In", portDataType, "")
+                    si.FabricCanvasConnect(canvasOpPath, "", portName, canvasGraphPort)
+                elif argConnectionType in ['io', 'out']:
+                    si.FabricCanvasAddPort(canvasOpPath, "", portName, "Out", portDataType, "")
+                    si.FabricCanvasConnect(canvasOpPath, "", canvasGraphPort, portName)
+
+                if portDataType == 'EvalContext':
+                    return
+
+                # Append the suffix based on the argument type, Softimage Only
+                if portDataType == 'Mat44':
+                    portmapDefinition = portName+"|XSI Port"
+
+                    canvasOpPath2 = str(canvasOpPath) + ":"
+                    si.FabricCanvasOpPortMapDefine(canvasOpPath, portmapDefinition)
+                    canvasOpPath = str(canvasOpPath2)[:-1]
+
+                    canvasOp = si.Dictionary.GetObject(canvasOpPath, False)
+                    si.FabricCanvasOpConnectPort(canvasOpPath, portName, dccSceneItem.FullName+".kine.global")
+
+                elif portDataType in ['Scalar', 'Boolean']:
+
+                    portmapDefinition = portName+"|XSI Parameter"
+
+                    canvasOpPath2 = str(canvasOpPath) + ":"
+                    si.FabricCanvasOpPortMapDefine(canvasOpPath, portmapDefinition)
+                    canvasOpPath = str(canvasOpPath2)[:-1]
+                    canvasOp = si.Dictionary.GetObject(canvasOpPath, False)
+
+                    parameter = canvasOp.Parameters(portName)
+                    if parameter is not None:
+                        if portName == 'time':
+                            parameter.AddExpression("T")
+                            return
+                        if portName == 'frame':
+                            parameter.AddExpression("Fc")
+                            return
+                        else:
+                            parameter.AddExpression(dccSceneItem.FullName)
+
+
+            arraySizes = {}
             # connect the operator to the objects in the DCC
             for i in xrange(len(args)):
                 arg = args[i]
+                argName = arg.name.getSimpleType()
+                argDataType = arg.dataType.getSimpleType()
+                argConnectionType = arg.connectionType.getSimpleType()
 
+                canvasOpPath2 = str(canvasOpPath) + ":"
 
-                # Skip arg if it's the target arg
-                if arg.name == operatorOwnerArg:
-                    continue
+                if argDataType.endswith('[]'):
+                    elementDataType = argDataType[:-2]
+                    if argConnectionType == 'in':
+                        connectedObjects = kOperator.getInput(argName)
 
-                if arg.dataType == 'EvalContext':
-                    si.fabricSplice("addInputPort", spliceOpPath, "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\" }", "")
-                    continue
-                if arg.name == 'time':
-                    si.fabricSplice("addParameter", spliceOpPath, "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\" }", "")
-                    continue
+                        arrayNode = si.FabricCanvasAddFunc(canvasOpPath, "", argName+"_ComposeArray", "dfgEntry {}", "40", str(i * 100))
+                        si.FabricCanvasAddPort(canvasOpPath, arrayNode, "array", "Out", argDataType, "")
+                        arrayNodeCode = "dfgEntry { \n  array.resize("+str(len(connectedObjects))+");\n"
+                        for j in range(len(connectedObjects)):
+                            si.FabricCanvasAddPort(canvasOpPath, arrayNode, "value"+str(j), "In", elementDataType, "", "")
+                            arrayNodeCode += "  array["+str(j)+"] = value"+str(j)+";\n"
+                        arrayNodeCode += "}"
+                        si.FabricCanvasSetCode(canvasOpPath, arrayNode, arrayNodeCode)
 
-                if arg.name == 'frame':
-                    si.fabricSplice("addParameter", spliceOpPath, "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\" }", "")
-                    continue
+                        si.FabricCanvasAddPort(canvasOpPath, kOperator.getName(), argName, "In", argDataType, "")
+                        si.FabricCanvasConnect(canvasOpPath, "", arrayNode+".array", kOperator.getName()+"."+argName)
 
-                # Append the suffix based on the argument type, Softimage Only
-                if arg.dataType == 'Mat44' or arg.dataType == 'Mat44[]':
-                    connectionSuffix = ".kine.global"
-                elif arg.dataType in ['Scalar', 'Boolean']:
-                    connectionSuffix = ""
-                else:
-                    connectionSuffix = ""
+                    elif argConnectionType in ['io', 'out']:
+                        connectedObjects = kOperator.getOutput(argName)
 
+                        arrayNode = si.FabricCanvasAddFunc(canvasOpPath, "", argName+"_DecomposeArray", "dfgEntry {}", "800", str(i * 100))
+                        si.FabricCanvasAddPort(canvasOpPath, arrayNode, "array", "In", argDataType, "")
+                        arrayNodeCode = "dfgEntry { \n"
+                        for j in range(len(connectedObjects)):
+                            si.FabricCanvasAddPort(canvasOpPath, arrayNode, "value"+str(j), "Out", elementDataType, "", "")
+                            arrayNodeCode += "  value"+str(j)+" = array["+str(j)+"];\n"
+                        arrayNodeCode += "}"
+                        si.FabricCanvasSetCode(canvasOpPath, arrayNode, arrayNodeCode)
 
-                # Get the argument's input from the DCC
-                # Note: this used to be a try/catch statement, which seemed quite strange to me.
-                # I've replaced with a proper test with an exception if the item is not found.
-                if arg.connectionType == 'in':
-                    connectedObjects = kOperator.getInput(arg.name)
-                elif arg.connectionType in ['io', 'out']:
-                    connectedObjects = kOperator.getOutput(arg.name)
+                        si.FabricCanvasAddPort(canvasOpPath, kOperator.getName(), argName, "Out", argDataType, "")
+                        si.FabricCanvasConnect(canvasOpPath, "", kOperator.getName()+"."+argName, arrayNode+".array")
 
-                if arg.dataType.endswith('[]'):
+                        # OutArrays must be resized by the splice op.
+                        arraySizes[argName] = len(connectedObjects)
 
-                    if len(connectedObjects) == 0:
-                        raise Exception("Operator '"+kOperator.getName()+"' of type '"+solverTypeName+"' arg '"+arg.name+"' not connected.");
-
-                    connectionTargets = ""
-                    for i in range(len(connectedObjects)):
-                        dccSceneItem = self.getDCCSceneItem(connectedObjects[i])
-
+                    for j in range(len(connectedObjects)):
+                        dccSceneItem = self.getDCCSceneItem(connectedObjects[j])
                         if dccSceneItem is None:
-                            raise Exception("Operator '"+kOperator.getName()+"' of type '"+solverTypeName+"' arg '"+arg.name+"' dcc item not found for item:" + connectedObjects[i].getPath());
+                            raise Exception("Operator:'"+kOperator.getName()+"' of type:'"+solverTypeName+"' arg:'"+argName+"' dcc item not found for item:" + connectedObjects[j].getPath())
+                        addCanvasPorts(canvasOpPath, argName+str(j), arrayNode+".value"+str(j), elementDataType, argConnectionType, dccSceneItem)
 
-                        if i==0:
-                            connectionTargets = dccSceneItem.FullName + connectionSuffix
-                        else:
-                            connectionTargets = connectionTargets + "," + dccSceneItem.FullName + connectionSuffix
+
                 else:
-                    if connectedObjects is None:
-                        raise Exception("Operator '"+kOperator.getName()+"' of type '"+solverTypeName+"' arg '"+arg.name+"' not connected.");
+                    if argConnectionType == 'in':
+                        connectedObject = kOperator.getInput(argName)
+                        si.FabricCanvasAddPort(canvasOpPath, kOperator.getName(), argName, "In", argDataType, "")
+                    elif argConnectionType in ['io', 'out']:
+                        connectedObject = kOperator.getOutput(argName)
+                        si.FabricCanvasAddPort(canvasOpPath, kOperator.getName(), argName, "Out", argDataType, "")
 
-                    dccSceneItem = self.getDCCSceneItem(connectedObjects)
-
+                    dccSceneItem = self.getDCCSceneItem(connectedObject)
                     if dccSceneItem is None:
-                        raise Exception("Operator '"+kOperator.getName()+"' of type '"+solverTypeName+"' arg '"+arg.name+"' dcc item not found for item:" + connectedObjects.getPath());
+                        raise Exception("Operator:'"+kOperator.getName()+"' of type:'"+solverTypeName+"' arg:'"+argName+"' dcc item not found for item:" + connectedObject.getPath());
+                    addCanvasPorts(canvasOpPath, argName, kOperator.getName()+"."+argName, argDataType, argConnectionType, dccSceneItem)
 
-                    connectionTargets = dccSceneItem.FullName + connectionSuffix
-
-                connectionArgs = "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\", \"extension\":\"\", \"targets\":\"" + connectionTargets + "\"}"
-
-                # Add the splice Port for each arg.
-                if arg.connectionType == 'in':
-                    si.fabricSplice("addInputPort", spliceOpPath, connectionArgs, "")
-
-                elif arg.connectionType in ['io', 'out']:
-                    si.fabricSplice("addOutputPort", spliceOpPath, connectionArgs, "")
-
-
+                canvasOpPath = canvasOpPath2[:-1]
 
             # Generate the operator source code.
-            opSourceCode = kOperator.generateSourceCode()
+            opSourceCode = kOperator.generateSourceCode(arraySizes=arraySizes)
+            si.FabricCanvasSetCode(canvasOpPath, kOperator.getName(), opSourceCode)
 
-            si.fabricSplice('addKLOperator', spliceOpPath, '{"opName": "' + kOperator.getName() + '"}', opSourceCode)
-
-            # Check for Time and Frame arguments and set expressions
-            spliceOp = si.Dictionary.GetObject(spliceOpPath, False)
-            timeParameter = spliceOp.Parameters("time")
-            if timeParameter is not None:
-                timeParameter.AddExpression("T")
-
-            spliceOp = si.Dictionary.GetObject(spliceOpPath, False)
-            frameParameter = spliceOp.Parameters("frame")
-            if frameParameter is not None:
-                frameParameter.AddExpression("Fc")
-
-            alwaysEval = kOperator.getAlwaysEval()
-            if alwaysEval is True:
-                spliceOp.Parameters("alwaysevaluate").Value = True
 
         finally:
             pass
@@ -812,11 +822,11 @@ class Builder(Builder):
     def lockParameters(self, kSceneItem):
         """Locks flagged SRT parameters.
 
-        Arguments:
-        kSceneItem -- Object, kraken object to lock the SRT parameters on.
+        Args:
+            kSceneItem (object): kraken object to lock the SRT parameters on.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -870,11 +880,11 @@ class Builder(Builder):
     def setVisibility(self, kSceneItem):
         """Sets the visibility of the object after its been created.
 
-        Arguments:
-        kSceneItem -- Object, kraken object to set the visibility on.
+        Args:
+            kSceneItem (object): kraken object to set the visibility on.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -892,11 +902,11 @@ class Builder(Builder):
     def setObjectColor(self, kSceneItem):
         """Sets the color on the dccSceneItem.
 
-        Arguments:
-        kSceneItem -- Object, kraken object to set the color on.
+        Args:
+            kSceneItem (object): kraken object to set the color on.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -919,11 +929,11 @@ class Builder(Builder):
     def setTransform(self, kSceneItem):
         """Translates the transform to Softimage transform.
 
-        Arguments:
-        kSceneItem -- Object: object to set the transform on.
+        Args:
+            kSceneItem (object): object to set the transform on.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -952,11 +962,11 @@ class Builder(Builder):
     def _preBuild(self, kSceneItem):
         """Pre-Build commands.
 
-        Arguments:
-        kSceneItem -- Object, kraken kSceneItem object to build.
+        Args:
+            kSceneItem (object): kraken kSceneItem object to build.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -968,8 +978,8 @@ class Builder(Builder):
     def _postBuild(self):
         """Post-Build commands.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
