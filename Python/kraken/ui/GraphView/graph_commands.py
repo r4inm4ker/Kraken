@@ -104,13 +104,11 @@ class NodesMoveCommand(Command):
     def redo(self):
         for node in self.nodes:
             node.translate( self.delta.x(), self.delta.y())
-            node.pushGraphPosToComponent()
 
 
     def undo(self):
         for node in self.nodes:
             node.translate( -self.delta.x(), -self.delta.y())
-            node.pushGraphPosToComponent()
 
 
 

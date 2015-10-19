@@ -345,9 +345,6 @@ class KGraphViewWidget(GraphViewWidget):
 
 
     def __onSelectionMoved(self, nodes, delta):
-        for node in nodes:
-            node.pushGraphPosToComponent()
-
         if not UndoRedoManager.getInstance().isUndoingOrRedoing():
             command = graph_commands.NodesMoveCommand(self.graphView, nodes, delta)
             UndoRedoManager.getInstance().addCommand(command)

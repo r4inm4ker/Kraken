@@ -141,11 +141,6 @@ class KNode(Node):
         self.__component.setGraphPos( Vec2(graphPos.x(), graphPos.y()) )
 
 
-    def pushGraphPosToComponent(self):
-        graphPos = self.getGraphPos()
-        self.__component.setGraphPos( Vec2(graphPos.x(), graphPos.y()) )
-
-
     #########################
     ## Events
 
