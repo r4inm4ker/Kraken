@@ -93,7 +93,6 @@ class Connection(QtGui.QGraphicsPathItem):
             dstPoint
             )
         self.setPath(self.__path)
-        self.prepareGeometryChange()
         super(Connection, self).paint(painter, option, widget)
 
 
