@@ -4,8 +4,8 @@
 
 from PySide import QtGui, QtCore
 
-from graph_view.graph_view import GraphView
-from graph_view.connection import Connection
+from pyflowgraph.graph_view import GraphView
+from pyflowgraph.connection import Connection
 from knode import KNode
 from edit_index_widget import EditIndexWidget
 from kraken.core.maths import Vec2

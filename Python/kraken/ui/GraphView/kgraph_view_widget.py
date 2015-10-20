@@ -5,7 +5,7 @@ import traceback
 from PySide import QtGui, QtCore
 
 from contextual_node_list import ContextualNodeList
-from graph_view.graph_view_widget import GraphViewWidget
+from pyflowgraph.graph_view_widget import GraphViewWidget
 from kgraph_view import KGraphView
 from kraken.ui.undoredo.undo_redo_manager import UndoRedoManager
 import graph_commands
