@@ -98,7 +98,7 @@ class FabriceTailGuide(FabriceTail):
         # Add Splice Ops
         # ===============
         # Add Tail Splice Op
-        self.bezierSpineSpliceOp = SpliceOperator('spineGuideSpliceOp', 'BezierSpineSolver', 'Kraken', alwaysEval=True)
+        self.bezierSpineSpliceOp = SpliceOperator('spineGuideSpliceOp', 'BezierSpineSolver', 'Kraken')
         self.bezierSpineSpliceOp.setOutput('outputs', self.tailVertebraeOutput.getTarget())
 
         self.addOperator(self.bezierSpineSpliceOp)
@@ -383,7 +383,7 @@ class FabriceTailRig(FabriceTail):
         self.bezierTailSpliceOp.setOutput('outputs', self.tailOutputs)
 
         # Add Deformer Splice Op
-        self.deformersToOutputsSpliceOp = SpliceOperator('tailDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken', alwaysEval=True)
+        self.deformersToOutputsSpliceOp = SpliceOperator('tailDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken')
         self.addOperator(self.deformersToOutputsSpliceOp)
 
         # Add Att Inputs

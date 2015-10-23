@@ -386,7 +386,7 @@ class TentacleComponentRig(TentacleComponent):
 
 
         # Add Deformer Splice Op
-        self.outputsToDeformersSpliceOp = SpliceOperator('TentacleDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken', alwaysEval=True)
+        self.outputsToDeformersSpliceOp = SpliceOperator('TentacleDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken')
         self.addOperator(self.outputsToDeformersSpliceOp)
 
         # Add Att Inputs

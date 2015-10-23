@@ -266,7 +266,7 @@ class FabriceHeadRig(FabriceHead):
 
         # Add Deformer Splice Op
         # ======================
-        self.deformersToOutputsSpliceOp = SpliceOperator('headDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken', alwaysEval=True)
+        self.deformersToOutputsSpliceOp = SpliceOperator('headDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken')
         self.addOperator(self.deformersToOutputsSpliceOp)
 
         # Add Att Inputs

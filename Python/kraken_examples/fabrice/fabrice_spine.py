@@ -96,7 +96,7 @@ class FabriceSpineGuide(FabriceSpine):
         # Add Splice Ops
         # ===============
         # Add Spine Splice Op
-        self.bezierSpineSpliceOp = SpliceOperator('spineGuideSpliceOp', 'BezierSpineSolver', 'Kraken', alwaysEval=True)
+        self.bezierSpineSpliceOp = SpliceOperator('spineGuideSpliceOp', 'BezierSpineSolver', 'Kraken')
         self.addOperator(self.bezierSpineSpliceOp)
 
         # Add Att Inputs
@@ -429,7 +429,7 @@ class FabriceSpineRig(FabriceSpine):
         self.bezierSpineSpliceOp.setOutput('outputs', self.spineOutputs)
 
         # Add Deformer Splice Op
-        self.deformersToOutputsSpliceOp = SpliceOperator('spineDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken', alwaysEval=True)
+        self.deformersToOutputsSpliceOp = SpliceOperator('spineDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken')
         self.addOperator(self.deformersToOutputsSpliceOp)
 
         # Add Att Inputs
