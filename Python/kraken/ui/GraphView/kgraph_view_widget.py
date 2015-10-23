@@ -161,6 +161,9 @@ class KGraphViewWidget(GraphViewWidget):
             builder.build(self.guideRig)
 
         except Exception as e:
+            # Add the callstak to the log
+            callstack = traceback.format_exc()
+            print callstack
             self.reportMessage('Error Building', level='error', exception=e)
 
 
@@ -187,6 +190,9 @@ class KGraphViewWidget(GraphViewWidget):
             builder.build(rig)
 
         except Exception as e:
+            # Add the callstak to the log
+            callstack = traceback.format_exc()
+            print callstack
             self.reportMessage('Error Building', level='error', exception=e)
 
     # =========

@@ -9,7 +9,7 @@ reload(kraken.ui.kraken_ui)
 import kraken.ui.images_rc
 from kraken.ui.kraken_menu import KrakenMenu
 from kraken.ui.kraken_ui import KrakenUI
-from kraken.plugins.logger import OutputLog
+from kraken import plugins
 
 
 class KrakenWindow(QtGui.QMainWindow):
@@ -23,8 +23,7 @@ class KrakenWindow(QtGui.QMainWindow):
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
 
         # Set system output to write to output log object
-        self.outputLog = OutputLog()
-        sys.stdout = self.outputLog
+        self.outputLog = plugins.getLogger()
 
         QtCore.QCoreApplication.setOrganizationName("Kraken")
         QtCore.QCoreApplication.setApplicationName("Kraken Editor")

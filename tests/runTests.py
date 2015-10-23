@@ -6,6 +6,25 @@ import StringIO
 import contextlib
 import traceback
 
+
+import os
+import sys
+
+
+krakenDir=os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..'))
+print krakenDir
+
+fabricEngineDir=os.path.normpath("D:/temp/FabricEngine-pablo-Windows-x86_64-20150909-105847/")
+
+os.environ['PATH'] = os.path.join(fabricEngineDir, 'bin') + ';' + os.environ['PATH']
+
+PYTHON_VERSION = sys.version[:3]
+sys.path.append( os.path.join(fabricEngineDir, 'Python', PYTHON_VERSION ) )
+
+os.environ['FABRIC_EXTS_PATH'] = os.path.join(fabricEngineDir, 'Exts') + ';' + os.path.join(krakenDir, 'KLExts') + ';' + os.environ['FABRIC_EXTS_PATH']
+
+
+
 failedTests = []
 updatedReferences = []
 
