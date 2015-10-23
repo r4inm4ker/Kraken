@@ -23,7 +23,7 @@ from kraken.core.objects.ctrlSpace import CtrlSpace
 from kraken.core.objects.layer import Layer
 from kraken.core.objects.control import Control
 
-from kraken.core.objects.operators.splice_operator import SpliceOperator
+from kraken.core.objects.operators.kl_operator import KLOperator
 
 from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
@@ -343,7 +343,7 @@ class InsectLegComponentRig(InsectLegComponent):
         # Add Splice Ops
         # ===============
         # Add Splice Op
-        self.nBoneSolverSpliceOp = SpliceOperator('legSpliceOp', 'NBoneIKSolver', 'Kraken')
+        self.nBoneSolverSpliceOp = KLOperator('legSpliceOp', 'NBoneIKSolver', 'Kraken')
         self.addOperator(self.nBoneSolverSpliceOp)
 
         # # Add Att Inputs
@@ -367,7 +367,7 @@ class InsectLegComponentRig(InsectLegComponent):
         self.nBoneSolverSpliceOp.setOutput('legEnd', self.legEndPosOutputTgt)
 
         # Add Deformer Splice Op
-        self.outputsToDeformersSpliceOp = SpliceOperator('insectLegDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken')
+        self.outputsToDeformersSpliceOp = KLOperator('insectLegDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken')
         self.addOperator(self.outputsToDeformersSpliceOp)
 
         # Add Att Inputs

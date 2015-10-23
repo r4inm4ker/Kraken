@@ -21,7 +21,7 @@ from kraken.core.objects.ctrlSpace import CtrlSpace
 from kraken.core.objects.layer import Layer
 from kraken.core.objects.control import Control
 
-from kraken.core.objects.operators.splice_operator import SpliceOperator
+from kraken.core.objects.operators.kl_operator import KLOperator
 
 from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
@@ -96,7 +96,7 @@ class FabriceSpineGuide(FabriceSpine):
         # Add Splice Ops
         # ===============
         # Add Spine Splice Op
-        self.bezierSpineSpliceOp = SpliceOperator('spineGuideSpliceOp', 'BezierSpineSolver', 'Kraken')
+        self.bezierSpineSpliceOp = KLOperator('spineGuideSpliceOp', 'BezierSpineSolver', 'Kraken')
         self.addOperator(self.bezierSpineSpliceOp)
 
         # Add Att Inputs
@@ -411,7 +411,7 @@ class FabriceSpineRig(FabriceSpine):
         # Add Splice Ops
         # ===============
         # Add Spine Splice Op
-        self.bezierSpineSpliceOp = SpliceOperator('spineSpliceOp', 'BezierSpineSolver', 'Kraken')
+        self.bezierSpineSpliceOp = KLOperator('spineSpliceOp', 'BezierSpineSolver', 'Kraken')
         self.addOperator(self.bezierSpineSpliceOp)
 
         # Add Att Inputs
@@ -429,7 +429,7 @@ class FabriceSpineRig(FabriceSpine):
         self.bezierSpineSpliceOp.setOutput('outputs', self.spineOutputs)
 
         # Add Deformer Splice Op
-        self.deformersToOutputsSpliceOp = SpliceOperator('spineDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken')
+        self.deformersToOutputsSpliceOp = KLOperator('spineDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken')
         self.addOperator(self.deformersToOutputsSpliceOp)
 
         # Add Att Inputs

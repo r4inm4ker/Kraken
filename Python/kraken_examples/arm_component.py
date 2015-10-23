@@ -18,7 +18,7 @@ from kraken.core.objects.joint import Joint
 from kraken.core.objects.ctrlSpace import CtrlSpace
 from kraken.core.objects.control import Control
 
-from kraken.core.objects.operators.splice_operator import SpliceOperator
+from kraken.core.objects.operators.kl_operator import KLOperator
 
 from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
@@ -336,7 +336,7 @@ class ArmComponentRig(ArmComponent):
         # Add Splice Ops
         # ===============
         # Add Splice Op
-        self.spliceOp = SpliceOperator('armSpliceOp', 'TwoBoneIKSolver', 'Kraken')
+        self.spliceOp = KLOperator('armSpliceOp', 'TwoBoneIKSolver', 'Kraken')
         self.addOperator(self.spliceOp)
 
         # Add Att Inputs
@@ -366,7 +366,7 @@ class ArmComponentRig(ArmComponent):
 
 
         # Add Deformer Splice Op
-        self.outputsToDeformersSpliceOp = SpliceOperator('armDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken')
+        self.outputsToDeformersSpliceOp = KLOperator('armDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken')
         self.addOperator(self.outputsToDeformersSpliceOp)
 
         # Add Att Inputs

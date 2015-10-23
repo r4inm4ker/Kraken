@@ -18,7 +18,7 @@ from kraken.core.objects.joint import Joint
 from kraken.core.objects.ctrlSpace import CtrlSpace
 from kraken.core.objects.control import Control
 
-from kraken.core.objects.operators.splice_operator import SpliceOperator
+from kraken.core.objects.operators.kl_operator import KLOperator
 
 from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
@@ -345,7 +345,7 @@ class LegComponentRig(LegComponent):
         # Add Splice Ops
         # ===============
         # Add Leg Splice Op
-        self.legIKSpliceOp = SpliceOperator('legSpliceOp', 'TwoBoneIKSolver', 'Kraken')
+        self.legIKSpliceOp = KLOperator('legSpliceOp', 'TwoBoneIKSolver', 'Kraken')
         self.addOperator(self.legIKSpliceOp)
 
         # Add Att Inputs
@@ -375,7 +375,7 @@ class LegComponentRig(LegComponent):
 
 
         # Add Leg Deformer Splice Op
-        self.outputsToDeformersSpliceOp = SpliceOperator('legDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken')
+        self.outputsToDeformersSpliceOp = KLOperator('legDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken')
         self.addOperator(self.outputsToDeformersSpliceOp)
 
         # Add Att Inputs
@@ -389,7 +389,7 @@ class LegComponentRig(LegComponent):
         self.outputsToDeformersSpliceOp.setOutput('constrainees', [femurDef, shinDef, ankleDef])
 
         # Add Foot Deformer Splice Op
-        self.footDefSpliceOp = SpliceOperator('footDeformerSpliceOp', 'PoseConstraintSolver', 'Kraken')
+        self.footDefSpliceOp = KLOperator('footDeformerSpliceOp', 'PoseConstraintSolver', 'Kraken')
         self.addOperator(self.footDefSpliceOp)
 
         # Add Att Inputs
@@ -403,7 +403,7 @@ class LegComponentRig(LegComponent):
         self.footDefSpliceOp.setOutput('constrainee', self.footDef)
 
         # Add Toe Deformer Splice Op
-        self.toeDefSpliceOp = SpliceOperator('toeDeformerSpliceOp', 'PoseConstraintSolver', 'Kraken')
+        self.toeDefSpliceOp = KLOperator('toeDeformerSpliceOp', 'PoseConstraintSolver', 'Kraken')
         self.addOperator(self.toeDefSpliceOp)
 
         # Add Att Inputs
