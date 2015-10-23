@@ -423,7 +423,7 @@ class Builder(object):
     # =========================
     # Operator Builder Methods
     # =========================
-    def buildSpliceOperators(self, kOperator):
+    def buildKLOperator(self, kOperator):
         """Builds Splice Operators on the components.
 
         Args:
@@ -663,8 +663,8 @@ class Builder(object):
             for i in xrange(kObject.getNumOperators()):
                 operator = kObject.getOperatorByIndex(i)
 
-                if operator.isTypeOf('SpliceOperator'):
-                    self.buildSpliceOperators(operator)
+                if operator.isTypeOf('KLOperator'):
+                    self.buildKLOperator(operator)
 
                 else:
                     raise NotImplementedError(operator.getName() + ' has an unsupported type: ' + str(type(kObject)))

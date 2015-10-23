@@ -1,7 +1,7 @@
-"""Kraken - objects.operators.splice_operator module.
+"""Kraken - objects.operators.kl_operator module.
 
 Classes:
-SpliceOperator - Splice operator object.
+KLOperator - Splice operator object.
 
 """
 
@@ -12,7 +12,7 @@ from kraken.core.objects.attributes.attribute import Attribute
 from kraken.core.kraken_system import ks
 
 
-class SpliceOperator(Operator):
+class KLOperator(Operator):
     """Splice Operator representation."""
 
     # TODO: Look in to expanding the Splice operator to be able to handle more
@@ -22,7 +22,7 @@ class SpliceOperator(Operator):
     # currently have setup.
 
     def __init__(self, name, solverTypeName, extension, alwaysEval=False):
-        super(SpliceOperator, self).__init__(name)
+        super(KLOperator, self).__init__(name)
 
         self.solverTypeName = solverTypeName
         self.extension = extension

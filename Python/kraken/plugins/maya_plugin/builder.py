@@ -578,7 +578,7 @@ class Builder(Builder):
     # =========================
     # Operator Builder Methods
     # =========================
-    def buildSpliceOperators(self, kOperator):
+    def buildKLOperator(self, kOperator):
         """Builds Splice Operators on the components.
 
         Args:
