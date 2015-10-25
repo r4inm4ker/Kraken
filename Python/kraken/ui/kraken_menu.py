@@ -80,6 +80,11 @@ class KrakenMenu(QtGui.QWidget):
         self.compLibAction = self.panelsMenu.addAction('Component &Library')
         self.compLibAction.setShortcut('Ctrl+Tab')
 
+        # View Menu
+        self.viewMenu = self.menuBar.addMenu('&View')
+        self.snapToGridAction = self.viewMenu.addAction('&Snap To Grid')
+        self.snapToGridAction.setCheckable(True)
+
         # Help Menu
         self.helpMenu = self.menuBar.addMenu('&Help')
         self.onlineHelpAction = self.helpMenu.addAction('Online &Help')
@@ -161,6 +166,9 @@ class KrakenMenu(QtGui.QWidget):
 
         # Panels Menu Connections
         self.compLibAction.triggered.connect(krakenUIWidget.resizeSplitter)
+
+        # View Menu Connections
+        self.snapToGridAction.triggered[bool].connect(graphViewWidget.graphView.setSnapToGrid)
 
         # Help Menu Connections
         self.onlineHelpAction.triggered.connect(self.openHelp)
