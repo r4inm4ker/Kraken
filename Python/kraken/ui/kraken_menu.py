@@ -209,16 +209,25 @@ class KrakenMenu(QtGui.QWidget):
     def writeSettings(self, settings):
         settings.beginGroup("KrakenMenu")
         settings.setValue("currentConfig", self.configsWidget.currentIndex())
+        settings.setValue("snapToGrid", self.snapToGridAction.isChecked())
         settings.endGroup()
 
 
     def readSettings(self, settings):
-        settings.beginGroup("KrakenMenu")
-        if settings.contains('currentConfig'):
-            currentConfig = int(settings.value("currentConfig", 0))
-            self.setCurrentConfig(currentConfig)
-        settings.endGroup()
+        krakenUIWidget = self.window().krakenUI
+        graphViewWidget = krakenUIWidget.graphViewWidget
 
+        settings.beginGroup('KrakenMenu')
+        if settings.contains('currentConfig'):
+            currentConfig = int(settings.value('currentConfig', 0))
+            self.setCurrentConfig(currentConfig)
+
+        if settings.contains('snapToGrid'):
+            snapToGrid = bool(settings.value('snapToGrid'))
+            self.snapToGridAction.setChecked(snapToGrid)
+            graphViewWidget.graphView.setSnapToGrid(snapToGrid)
+
+        settings.endGroup()
 
 
 class RigNameLabel(QtGui.QLabel):
