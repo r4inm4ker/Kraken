@@ -96,22 +96,22 @@ class FabriceSpineGuide(FabriceSpine):
         # Add Splice Ops
         # ===============
         # Add Spine Splice Op
-        self.bezierSpineSpliceOp = KLOperator('spineGuideSpliceOp', 'BezierSpineSolver', 'Kraken')
-        self.addOperator(self.bezierSpineSpliceOp)
+        self.bezierSpineKLOp = KLOperator('spineGuideKLOp', 'BezierSpineSolver', 'Kraken')
+        self.addOperator(self.bezierSpineKLOp)
 
         # Add Att Inputs
-        self.bezierSpineSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
-        self.bezierSpineSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
-        self.bezierSpineSpliceOp.setInput('length', self.lengthInputAttr)
+        self.bezierSpineKLOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.bezierSpineKLOp.setInput('rigScale', self.rigScaleInputAttr)
+        self.bezierSpineKLOp.setInput('length', self.lengthInputAttr)
 
         # Add Xfo Inputs
-        self.bezierSpineSpliceOp.setInput('base', self.spineBaseCtrl)
-        self.bezierSpineSpliceOp.setInput('baseHandle', self.spineBaseHandleCtrl)
-        self.bezierSpineSpliceOp.setInput('tipHandle', self.spineEndHandleCtrl)
-        self.bezierSpineSpliceOp.setInput('tip', self.spineEndCtrl)
+        self.bezierSpineKLOp.setInput('base', self.spineBaseCtrl)
+        self.bezierSpineKLOp.setInput('baseHandle', self.spineBaseHandleCtrl)
+        self.bezierSpineKLOp.setInput('tipHandle', self.spineEndHandleCtrl)
+        self.bezierSpineKLOp.setInput('tip', self.spineEndCtrl)
 
         # Add Xfo Outputs
-        self.bezierSpineSpliceOp.setOutput('outputs', self.spineVertebraeOutput.getTarget())
+        self.bezierSpineKLOp.setOutput('outputs', self.spineVertebraeOutput.getTarget())
 
         self.loadData({
             'name': name,
@@ -234,7 +234,7 @@ class FabriceSpineGuide(FabriceSpine):
         self.lengthInputAttr.setMax(length * 3.0)
         self.lengthInputAttr.setValue(length)
 
-        self.bezierSpineSpliceOp.evaluate()
+        self.bezierSpineKLOp.evaluate()
 
         return True
 
@@ -411,36 +411,36 @@ class FabriceSpineRig(FabriceSpine):
         # Add Splice Ops
         # ===============
         # Add Spine Splice Op
-        self.bezierSpineSpliceOp = KLOperator('spineSpliceOp', 'BezierSpineSolver', 'Kraken')
-        self.addOperator(self.bezierSpineSpliceOp)
+        self.bezierSpineKLOp = KLOperator('spineKLOp', 'BezierSpineSolver', 'Kraken')
+        self.addOperator(self.bezierSpineKLOp)
 
         # Add Att Inputs
-        self.bezierSpineSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
-        self.bezierSpineSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
-        self.bezierSpineSpliceOp.setInput('length', self.lengthInputAttr)
+        self.bezierSpineKLOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.bezierSpineKLOp.setInput('rigScale', self.rigScaleInputAttr)
+        self.bezierSpineKLOp.setInput('length', self.lengthInputAttr)
 
         # Add Xfo Inputs
-        self.bezierSpineSpliceOp.setInput('base', self.spineBaseCtrl)
-        self.bezierSpineSpliceOp.setInput('baseHandle', self.spineBaseHandleCtrl)
-        self.bezierSpineSpliceOp.setInput('tipHandle', self.spineEndHandleCtrl)
-        self.bezierSpineSpliceOp.setInput('tip', self.spineEndCtrl)
+        self.bezierSpineKLOp.setInput('base', self.spineBaseCtrl)
+        self.bezierSpineKLOp.setInput('baseHandle', self.spineBaseHandleCtrl)
+        self.bezierSpineKLOp.setInput('tipHandle', self.spineEndHandleCtrl)
+        self.bezierSpineKLOp.setInput('tip', self.spineEndCtrl)
 
         # Add Xfo Outputs
-        self.bezierSpineSpliceOp.setOutput('outputs', self.spineOutputs)
+        self.bezierSpineKLOp.setOutput('outputs', self.spineOutputs)
 
         # Add Deformer Splice Op
-        self.deformersToOutputsSpliceOp = KLOperator('spineDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken')
-        self.addOperator(self.deformersToOutputsSpliceOp)
+        self.deformersToOutputsKLOp = KLOperator('spineDeformerKLOp', 'MultiPoseConstraintSolver', 'Kraken')
+        self.addOperator(self.deformersToOutputsKLOp)
 
         # Add Att Inputs
-        self.deformersToOutputsSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
-        self.deformersToOutputsSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
+        self.deformersToOutputsKLOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.deformersToOutputsKLOp.setInput('rigScale', self.rigScaleInputAttr)
 
         # Add Xfo Outputs
-        self.deformersToOutputsSpliceOp.setInput('constrainers', self.spineOutputs)
+        self.deformersToOutputsKLOp.setInput('constrainers', self.spineOutputs)
 
         # Add Xfo Outputs
-        self.deformersToOutputsSpliceOp.setOutput('constrainees', self.deformerJoints)
+        self.deformersToOutputsKLOp.setOutput('constrainees', self.deformerJoints)
 
         Profiler.getInstance().pop()
 
@@ -532,10 +532,10 @@ class FabriceSpineRig(FabriceSpine):
         # Evaluate Splice Ops
         # ====================
         # evaluate the spine op so that all the output transforms are updated.
-        self.bezierSpineSpliceOp.evaluate()
+        self.bezierSpineKLOp.evaluate()
 
         # evaluate the constraint op so that all the joint transforms are updated.
-        self.deformersToOutputsSpliceOp.evaluate()
+        self.deformersToOutputsKLOp.evaluate()
 
         # evaluate the constraints to ensure the outputs are now in the correct location.
         self.spineSrtInputConstraint.evaluate()

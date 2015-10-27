@@ -98,21 +98,21 @@ class FabriceTailGuide(FabriceTail):
         # Add Splice Ops
         # ===============
         # Add Tail Splice Op
-        self.bezierSpineSpliceOp = KLOperator('spineGuideSpliceOp', 'BezierSpineSolver', 'Kraken')
-        self.bezierSpineSpliceOp.setOutput('outputs', self.tailVertebraeOutput.getTarget())
+        self.bezierSpineKLOp = KLOperator('spineGuideKLOp', 'BezierSpineSolver', 'Kraken')
+        self.bezierSpineKLOp.setOutput('outputs', self.tailVertebraeOutput.getTarget())
 
-        self.addOperator(self.bezierSpineSpliceOp)
+        self.addOperator(self.bezierSpineKLOp)
 
         # Add Att Inputs
-        self.bezierSpineSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
-        self.bezierSpineSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
-        self.bezierSpineSpliceOp.setInput('length', self.lengthInputAttr)
+        self.bezierSpineKLOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.bezierSpineKLOp.setInput('rigScale', self.rigScaleInputAttr)
+        self.bezierSpineKLOp.setInput('length', self.lengthInputAttr)
 
         # Add Xfo Inputs
-        self.bezierSpineSpliceOp.setInput('base', self.tailBaseCtrl)
-        self.bezierSpineSpliceOp.setInput('baseHandle', self.tailBaseHandleCtrl)
-        self.bezierSpineSpliceOp.setInput('tipHandle', self.tailEndHandleCtrl)
-        self.bezierSpineSpliceOp.setInput('tip', self.tailEndCtrl)
+        self.bezierSpineKLOp.setInput('base', self.tailBaseCtrl)
+        self.bezierSpineKLOp.setInput('baseHandle', self.tailBaseHandleCtrl)
+        self.bezierSpineKLOp.setInput('tipHandle', self.tailEndHandleCtrl)
+        self.bezierSpineKLOp.setInput('tip', self.tailEndCtrl)
 
         self.loadData({
             'name': name,
@@ -224,7 +224,7 @@ class FabriceTailGuide(FabriceTail):
         self.lengthInputAttr.setMax(length * 3.0)
         self.lengthInputAttr.setValue(length)
 
-        self.bezierSpineSpliceOp.evaluate()
+        self.bezierSpineKLOp.evaluate()
 
         return True
 
@@ -365,36 +365,36 @@ class FabriceTailRig(FabriceTail):
         # Add Splice Ops
         # ===============
         # Add Tail Splice Op
-        self.bezierTailSpliceOp = KLOperator('tailSpliceOp', 'BezierSpineSolver', 'Kraken')
-        self.addOperator(self.bezierTailSpliceOp)
+        self.bezierTailKLOp = KLOperator('tailKLOp', 'BezierSpineSolver', 'Kraken')
+        self.addOperator(self.bezierTailKLOp)
 
         # Add Att Inputs
-        self.bezierTailSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
-        self.bezierTailSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
-        self.bezierTailSpliceOp.setInput('length', self.lengthInputAttr)
+        self.bezierTailKLOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.bezierTailKLOp.setInput('rigScale', self.rigScaleInputAttr)
+        self.bezierTailKLOp.setInput('length', self.lengthInputAttr)
 
         # Add Xfo Inputs
-        self.bezierTailSpliceOp.setInput('base', self.spineEndInputTgt)
-        self.bezierTailSpliceOp.setInput('baseHandle', self.tailBaseHandleCtrl)
-        self.bezierTailSpliceOp.setInput('tipHandle', self.tailEndHandleCtrl)
-        self.bezierTailSpliceOp.setInput('tip', self.tailEndCtrl)
+        self.bezierTailKLOp.setInput('base', self.spineEndInputTgt)
+        self.bezierTailKLOp.setInput('baseHandle', self.tailBaseHandleCtrl)
+        self.bezierTailKLOp.setInput('tipHandle', self.tailEndHandleCtrl)
+        self.bezierTailKLOp.setInput('tip', self.tailEndCtrl)
 
         # Add Xfo Outputs
-        self.bezierTailSpliceOp.setOutput('outputs', self.tailOutputs)
+        self.bezierTailKLOp.setOutput('outputs', self.tailOutputs)
 
         # Add Deformer Splice Op
-        self.deformersToOutputsSpliceOp = KLOperator('tailDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken')
-        self.addOperator(self.deformersToOutputsSpliceOp)
+        self.deformersToOutputsKLOp = KLOperator('tailDeformerKLOp', 'MultiPoseConstraintSolver', 'Kraken')
+        self.addOperator(self.deformersToOutputsKLOp)
 
         # Add Att Inputs
-        self.deformersToOutputsSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
-        self.deformersToOutputsSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
+        self.deformersToOutputsKLOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.deformersToOutputsKLOp.setInput('rigScale', self.rigScaleInputAttr)
 
         # Add Xfo Outputs
-        self.deformersToOutputsSpliceOp.setInput('constrainers', self.tailOutputs)
+        self.deformersToOutputsKLOp.setInput('constrainers', self.tailOutputs)
 
         # Add Xfo Outputs
-        self.deformersToOutputsSpliceOp.setOutput('constrainees', self.deformerJoints)
+        self.deformersToOutputsKLOp.setOutput('constrainees', self.deformerJoints)
 
         Profiler.getInstance().pop()
 
@@ -476,10 +476,10 @@ class FabriceTailRig(FabriceTail):
         # Evaluate Splice Ops
         # ====================
         # evaluate the spine op so that all the output transforms are updated.
-        self.bezierTailSpliceOp.evaluate()
+        self.bezierTailKLOp.evaluate()
 
         # evaluate the constraint op so that all the joint transforms are updated.
-        self.deformersToOutputsSpliceOp.evaluate()
+        self.deformersToOutputsKLOp.evaluate()
 
         # evaluate the constraints to ensure the outputs are now in the correct location.
         self.tailBaseHandleInputConstraint.evaluate()

@@ -280,50 +280,50 @@ class SpineComponentRig(SpineComponent):
         # Add Splice Ops
         # ===============
         # Add Spine Splice Op
-        self.bezierSpineSpliceOp = KLOperator('spineSpliceOp', 'BezierSpineSolver', 'Kraken')
-        self.addOperator(self.bezierSpineSpliceOp)
+        self.bezierSpineKLOp = KLOperator('spineKLOp', 'BezierSpineSolver', 'Kraken')
+        self.addOperator(self.bezierSpineKLOp)
 
         # Add Att Inputs
-        self.bezierSpineSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
-        self.bezierSpineSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
-        self.bezierSpineSpliceOp.setInput('length', self.lengthInputAttr)
+        self.bezierSpineKLOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.bezierSpineKLOp.setInput('rigScale', self.rigScaleInputAttr)
+        self.bezierSpineKLOp.setInput('length', self.lengthInputAttr)
 
         # Add Xfo Inputs
-        self.bezierSpineSpliceOp.setInput('base', self.spine01Ctrl)
-        self.bezierSpineSpliceOp.setInput('baseHandle', self.spine02Ctrl)
-        self.bezierSpineSpliceOp.setInput('tipHandle', self.spine03Ctrl)
-        self.bezierSpineSpliceOp.setInput('tip', self.spine04Ctrl)
+        self.bezierSpineKLOp.setInput('base', self.spine01Ctrl)
+        self.bezierSpineKLOp.setInput('baseHandle', self.spine02Ctrl)
+        self.bezierSpineKLOp.setInput('tipHandle', self.spine03Ctrl)
+        self.bezierSpineKLOp.setInput('tip', self.spine04Ctrl)
 
         # Add Xfo Outputs
-        self.bezierSpineSpliceOp.setOutput('outputs', self.spineOutputs)
+        self.bezierSpineKLOp.setOutput('outputs', self.spineOutputs)
 
         # Add Deformer Splice Op
-        self.deformersToOutputsSpliceOp = KLOperator('spineDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken')
-        self.addOperator(self.deformersToOutputsSpliceOp)
+        self.deformersToOutputsKLOp = KLOperator('spineDeformerKLOp', 'MultiPoseConstraintSolver', 'Kraken')
+        self.addOperator(self.deformersToOutputsKLOp)
 
         # Add Att Inputs
-        self.deformersToOutputsSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
-        self.deformersToOutputsSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
+        self.deformersToOutputsKLOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.deformersToOutputsKLOp.setInput('rigScale', self.rigScaleInputAttr)
 
         # Add Xfo Outputs
-        self.deformersToOutputsSpliceOp.setInput('constrainers', self.spineOutputs)
+        self.deformersToOutputsKLOp.setInput('constrainers', self.spineOutputs)
 
         # Add Xfo Outputs
-        self.deformersToOutputsSpliceOp.setOutput('constrainees', self.deformerJoints)
+        self.deformersToOutputsKLOp.setOutput('constrainees', self.deformerJoints)
 
         # Add Pelvis Splice Op
-        self.pelvisDefSpliceOp = KLOperator('pelvisDeformerSpliceOp', 'PoseConstraintSolver', 'Kraken')
-        self.addOperator(self.pelvisDefSpliceOp)
+        self.pelvisDefKLOp = KLOperator('pelvisDeformerKLOp', 'PoseConstraintSolver', 'Kraken')
+        self.addOperator(self.pelvisDefKLOp)
 
         # Add Att Inputs
-        self.pelvisDefSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
-        self.pelvisDefSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
+        self.pelvisDefKLOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.pelvisDefKLOp.setInput('rigScale', self.rigScaleInputAttr)
 
         # Add Xfo Inputs
-        self.pelvisDefSpliceOp.setInput('constrainer', self.pelvisOutputTgt)
+        self.pelvisDefKLOp.setInput('constrainer', self.pelvisOutputTgt)
 
         # Add Xfo Outputs
-        self.pelvisDefSpliceOp.setOutput('constrainee', pelvisDef)
+        self.pelvisDefKLOp.setOutput('constrainee', pelvisDef)
 
 
         Profiler.getInstance().pop()
@@ -402,11 +402,11 @@ class SpineComponentRig(SpineComponent):
         # Evaluate Splice Ops
         # ====================
         # evaluate the spine op so that all the output transforms are updated.
-        self.bezierSpineSpliceOp.evaluate()
+        self.bezierSpineKLOp.evaluate()
 
         # evaluate the constraint op so that all the joint transforms are updated.
-        self.deformersToOutputsSpliceOp.evaluate()
-        self.pelvisDefSpliceOp.evaluate()
+        self.deformersToOutputsKLOp.evaluate()
+        self.pelvisDefKLOp.evaluate()
 
         # evaluate the constraints to ensure the outputs are now in the correct location.
         self.spineCogOutputConstraint.evaluate()

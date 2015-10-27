@@ -278,7 +278,7 @@ class HeadComponentRig(HeadComponent):
         # Add Splice Ops
         # ===============
         # Add Deformer Splice Op
-        # spliceOp = KLOperator('headDeformerSpliceOp', 'HeadConstraintSolver', 'KrakenHeadConstraintSolver')
+        # spliceOp = KLOperator('headDeformerKLOp', 'HeadConstraintSolver', 'KrakenHeadConstraintSolver')
         # self.addOperator(spliceOp)
 
         # # Add Att Inputs

@@ -225,7 +225,7 @@ class NeckComponentRig(NeckComponent):
         # Add Splice Ops
         # ===============
         #Add Deformer Splice Op
-        spliceOp = KLOperator('neckDeformerSpliceOp', 'PoseConstraintSolver', 'Kraken')
+        spliceOp = KLOperator('neckDeformerKLOp', 'PoseConstraintSolver', 'Kraken')
         self.addOperator(spliceOp)
 
         # Add Att Inputs

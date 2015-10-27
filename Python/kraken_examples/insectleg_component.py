@@ -343,42 +343,42 @@ class InsectLegComponentRig(InsectLegComponent):
         # Add Splice Ops
         # ===============
         # Add Splice Op
-        self.nBoneSolverSpliceOp = KLOperator('legSpliceOp', 'NBoneIKSolver', 'Kraken')
-        self.addOperator(self.nBoneSolverSpliceOp)
+        self.nBoneSolverKLOp = KLOperator('legKLOp', 'NBoneIKSolver', 'Kraken')
+        self.addOperator(self.nBoneSolverKLOp)
 
         # # Add Att Inputs
-        self.nBoneSolverSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
-        self.nBoneSolverSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
-        self.nBoneSolverSpliceOp.setInput('useInitPose', legUseInitPoseInputAttr)
-        self.nBoneSolverSpliceOp.setInput('ikblend', legFkikInputAttr)
-        self.nBoneSolverSpliceOp.setInput('rootIndex', self.rootIndexInputAttr)
-        self.nBoneSolverSpliceOp.setInput('tipBoneLen', self.tipBoneLenInputAttr)
+        self.nBoneSolverKLOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.nBoneSolverKLOp.setInput('rigScale', self.rigScaleInputAttr)
+        self.nBoneSolverKLOp.setInput('useInitPose', legUseInitPoseInputAttr)
+        self.nBoneSolverKLOp.setInput('ikblend', legFkikInputAttr)
+        self.nBoneSolverKLOp.setInput('rootIndex', self.rootIndexInputAttr)
+        self.nBoneSolverKLOp.setInput('tipBoneLen', self.tipBoneLenInputAttr)
 
         # Add Xfo Inputs
-        self.nBoneSolverSpliceOp.setInput('chainBase', self.chainBase)
-        self.nBoneSolverSpliceOp.setInput('ikgoal', self.legIKCtrl)
-        self.nBoneSolverSpliceOp.setInput('upVector', self.legUpVCtrl)
+        self.nBoneSolverKLOp.setInput('chainBase', self.chainBase)
+        self.nBoneSolverKLOp.setInput('ikgoal', self.legIKCtrl)
+        self.nBoneSolverKLOp.setInput('upVector', self.legUpVCtrl)
 
-        self.nBoneSolverSpliceOp.setInput('fkcontrols', self.fkCtrls)
+        self.nBoneSolverKLOp.setInput('fkcontrols', self.fkCtrls)
 
         # Add Xfo Outputs
-        self.nBoneSolverSpliceOp.setOutput('pose', self.boneOutputsTgt)
+        self.nBoneSolverKLOp.setOutput('pose', self.boneOutputsTgt)
 
-        self.nBoneSolverSpliceOp.setOutput('legEnd', self.legEndPosOutputTgt)
+        self.nBoneSolverKLOp.setOutput('legEnd', self.legEndPosOutputTgt)
 
         # Add Deformer Splice Op
-        self.outputsToDeformersSpliceOp = KLOperator('insectLegDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken')
-        self.addOperator(self.outputsToDeformersSpliceOp)
+        self.outputsToDeformersKLOp = KLOperator('insectLegDeformerKLOp', 'MultiPoseConstraintSolver', 'Kraken')
+        self.addOperator(self.outputsToDeformersKLOp)
 
         # Add Att Inputs
-        self.outputsToDeformersSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
-        self.outputsToDeformersSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
+        self.outputsToDeformersKLOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.outputsToDeformersKLOp.setInput('rigScale', self.rigScaleInputAttr)
 
         # Add Xfo Inputs
-        self.outputsToDeformersSpliceOp.setInput('constrainers', self.boneOutputsTgt)
+        self.outputsToDeformersKLOp.setInput('constrainers', self.boneOutputsTgt)
 
         # Add Xfo Outputs
-        self.outputsToDeformersSpliceOp.setOutput('constrainees', self.deformerJoints)
+        self.outputsToDeformersKLOp.setOutput('constrainees', self.deformerJoints)
 
         Profiler.getInstance().pop()
 
@@ -515,8 +515,8 @@ class InsectLegComponentRig(InsectLegComponent):
         # Evaluate Splice Ops
         # ====================
         # evaluate the nbone op so that all the output transforms are updated.
-        self.nBoneSolverSpliceOp.evaluate()
-        self.outputsToDeformersSpliceOp.evaluate()
+        self.nBoneSolverKLOp.evaluate()
+        self.outputsToDeformersKLOp.evaluate()
 
 
 from kraken.core.kraken_system import KrakenSystem
