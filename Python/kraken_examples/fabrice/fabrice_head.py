@@ -17,6 +17,7 @@ from kraken.core.objects.ctrlSpace import CtrlSpace
 from kraken.core.objects.control import Control
 
 from kraken.core.objects.operators.kl_operator import KLOperator
+from kraken.core.objects.operators.canvas_operator import CanvasOperator
 
 from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
@@ -249,20 +250,21 @@ class FabriceHeadRig(FabriceHead):
 
         # Add Aim Splice Op
         # =================
-        self.headAimKLOp = KLOperator('headAimKLOp', 'DirectionConstraintSolver', 'Kraken')
-        self.addOperator(self.headAimKLOp)
+        # self.headAimCanvasOp = KLOperator('headAimCanvasOp', 'DirectionConstraintSolver', 'Kraken')
+        self.headAimCanvasOp = CanvasOperator('headAimCanvasOp', 'Kraken.DirectionConstraintSolver')
+        self.addOperator(self.headAimCanvasOp)
 
         # Add Att Inputs
-        self.headAimKLOp.setInput('drawDebug', self.drawDebugInputAttr)
-        self.headAimKLOp.setInput('rigScale', self.rigScaleInputAttr)
+        self.headAimCanvasOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.headAimCanvasOp.setInput('rigScale', self.rigScaleInputAttr)
 
         # Add Xfo Inputs
-        self.headAimKLOp.setInput('position', self.headBaseInputTgt)
-        self.headAimKLOp.setInput('upVector', self.headAimUpV)
-        self.headAimKLOp.setInput('atVector', self.headAimCtrl)
+        self.headAimCanvasOp.setInput('position', self.headBaseInputTgt)
+        self.headAimCanvasOp.setInput('upVector', self.headAimUpV)
+        self.headAimCanvasOp.setInput('atVector', self.headAimCtrl)
 
         # Add Xfo Outputs
-        self.headAimKLOp.setOutput('constrainee', self.headAim)
+        self.headAimCanvasOp.setOutput('constrainee', self.headAim)
 
         # Add Deformer Splice Op
         # ======================
@@ -327,7 +329,7 @@ class FabriceHeadRig(FabriceHead):
         # Evaluate Splice Ops
         # ====================
         # evaluate the constraint op so that all the joint transforms are updated.
-        self.headAimKLOp.evaluate()
+        self.headAimCanvasOp.evaluate()
         self.deformersToOutputsKLOp.evaluate()
 
         # evaluate the constraints to ensure the outputs are now in the correct location.
