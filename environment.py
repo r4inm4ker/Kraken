@@ -26,7 +26,13 @@ os.environ['FABRIC_EXTS_PATH'] = os.path.join(fabricEngineDir, 'Exts') + ';' + o
 
 os.environ['KRAKEN_PATHS'] = os.path.join(krakenDir, 'extraComponents')
 
+
+os.environ['PYTHONPATH'] = os.path.join(krakenDir, 'Python') + ';' + os.environ['PYTHONPATH']
+
+
+
 from PySide import QtGui
+import kraken
 from kraken.ui.kraken_window import KrakenWindow, createSplash
 
 app = QtGui.QApplication(sys.argv)
