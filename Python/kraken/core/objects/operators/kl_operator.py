@@ -42,7 +42,7 @@ class KLOperator(Operator):
             argDataType = arg.dataType.getSimpleType()
             argConnectionType = arg.connectionType.getSimpleType()
 
-            if argConnectionType == 'in':
+            if argConnectionType == 'In':
                 if argDataType.endswith('[]'):
                     self.inputs[argName] = []
                 else:
@@ -150,7 +150,7 @@ class KLOperator(Operator):
                 argVals.append(ks.constructRTVal(argDataType))
                 continue
 
-            if argConnectionType == 'in':
+            if argConnectionType == 'In':
                 if str(argDataType).endswith('[]'):
                     rtValArray = ks.rtVal(argDataType[:-2]+'Array')
                     rtValArray.resize(len(self.inputs[argName]))
@@ -184,7 +184,7 @@ class KLOperator(Operator):
             argDataType = arg.dataType.getSimpleType()
             argConnectionType = arg.connectionType.getSimpleType()
 
-            if argConnectionType != 'in':
+            if argConnectionType != 'In':
                 if argDataType.endswith('[]'):
                     for j in xrange(len(argVals[i])):
                         setRTVal(self.outputs[argName][j], argVals[i][j])

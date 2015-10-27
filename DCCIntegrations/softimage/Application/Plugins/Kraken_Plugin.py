@@ -40,6 +40,7 @@ def XSILoadPlugin(in_reg):
     krakenDir = os.path.normpath(XSIUtils.BuildPath(pluginPath, "..", "..", "..", ".."))
     os.environ['KRAKEN_PATH']  = krakenDir
 
+    # NOTE: The following lines appear to have no effect in 2.0. We have to use a launcher bat file.
     krakenExtsDir = os.path.join(krakenDir, 'KLExts')
     if krakenExtsDir not in os.environ['FABRIC_EXTS_PATH']:
         os.environ['FABRIC_EXTS_PATH'] = krakenExtsDir + ';' + os.environ['FABRIC_EXTS_PATH']
@@ -47,7 +48,6 @@ def XSILoadPlugin(in_reg):
     canvasPresetsDir = os.path.join(krakenDir, 'CanvasPresets')
     if canvasPresetsDir not in os.environ['FABRIC_DFG_PATH']:
         os.environ['FABRIC_DFG_PATH'] = canvasPresetsDir + ';' + os.environ['FABRIC_DFG_PATH']
-
 
     krakenLoadMenu = os.getenv('KRAKEN_LOAD_MENU', 'True')
     if krakenLoadMenu == 'True':

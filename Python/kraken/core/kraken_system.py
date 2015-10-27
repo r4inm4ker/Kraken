@@ -81,6 +81,10 @@ class KrakenSystem(object):
                 self.client = FabricEngine.Core.createClient({"contextID": contextID})
 
             elif host == "Softimage":
+
+                print "========================================================"
+                print os.environ['FABRIC_DFG_PATH']
+
                 from win32com.client.dynamic import Dispatch
                 si = Dispatch("XSI.Application").Application
                 contextID = si.fabricSplice('getClientContextID')
@@ -88,8 +92,14 @@ class KrakenSystem(object):
                     si.fabricSplice('constructClient')
                     contextID = si.fabricSplice('getClientContextID')
 
+
                 # Pull out the Splice client.
                 self.client = FabricEngine.Core.createClient({"contextID": contextID})
+
+                # host.addPresetDir('', 'Kraken', os.path.join(krakenDir, 'CanvasPresets'))
+
+                print self.client.DFG.host.getPresetDesc('Kraken')
+                print "========================================================"
 
             self.loadExtension('Math')
 

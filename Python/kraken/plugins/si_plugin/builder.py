@@ -639,7 +639,7 @@ class Builder(Builder):
     # Operator Builder Methods
     # =========================
     def buildKLOperator(self, kOperator):
-        """Builds Splice Operators on the components.
+        """Builds KL Operators on the components.
 
         Args:
             kOperator (object): kraken operator that represents a Splice operator.
@@ -666,7 +666,7 @@ class Builder(Builder):
                 return -1
 
             # Find operatorOwner to attach Splice Operator to.
-            ownerOutPortIndex = findPortOfType(['Mat44', 'Mat44[]'], ['out', 'io'])
+            ownerOutPortIndex = findPortOfType(['Mat44', 'Mat44[]'], ['Out', 'IO'])
             if ownerOutPortIndex is -1:
                 raise Exception("Solver '" + kOperator.getName() + "' has no Mat44 outputs!")
 
@@ -696,10 +696,10 @@ class Builder(Builder):
 
             def addCanvasPorts(canvasOpPath, portName, canvasGraphPort, portDataType, argConnectionType, dccSceneItem):
 
-                if argConnectionType == 'in':
+                if argConnectionType == 'In':
                     si.FabricCanvasAddPort(canvasOpPath, "", portName, "In", portDataType, "")
                     si.FabricCanvasConnect(canvasOpPath, "", portName, canvasGraphPort)
-                elif argConnectionType in ['io', 'out']:
+                elif argConnectionType in ['IO', 'Out']:
                     si.FabricCanvasAddPort(canvasOpPath, "", portName, "Out", portDataType, "")
                     si.FabricCanvasConnect(canvasOpPath, "", canvasGraphPort, portName)
 
@@ -750,7 +750,7 @@ class Builder(Builder):
 
                 if argDataType.endswith('[]'):
                     elementDataType = argDataType[:-2]
-                    if argConnectionType == 'in':
+                    if argConnectionType == 'In':
                         connectedObjects = kOperator.getInput(argName)
 
                         arrayNode = si.FabricCanvasAddFunc(canvasOpPath, "", argName+"_ComposeArray", "dfgEntry {}", "40", str(i * 100))
@@ -765,7 +765,7 @@ class Builder(Builder):
                         si.FabricCanvasAddPort(canvasOpPath, kOperator.getName(), argName, "In", argDataType, "")
                         si.FabricCanvasConnect(canvasOpPath, "", arrayNode+".array", kOperator.getName()+"."+argName)
 
-                    elif argConnectionType in ['io', 'out']:
+                    elif argConnectionType in ['IO', 'Out']:
                         connectedObjects = kOperator.getOutput(argName)
 
                         arrayNode = si.FabricCanvasAddFunc(canvasOpPath, "", argName+"_DecomposeArray", "dfgEntry {}", "800", str(i * 100))
@@ -791,10 +791,10 @@ class Builder(Builder):
 
 
                 else:
-                    if argConnectionType == 'in':
+                    if argConnectionType == 'In':
                         connectedObject = kOperator.getInput(argName)
                         si.FabricCanvasAddPort(canvasOpPath, kOperator.getName(), argName, "In", argDataType, "")
-                    elif argConnectionType in ['io', 'out']:
+                    elif argConnectionType in ['IO', 'Out']:
                         connectedObject = kOperator.getOutput(argName)
                         si.FabricCanvasAddPort(canvasOpPath, kOperator.getName(), argName, "Out", argDataType, "")
 
@@ -815,6 +815,169 @@ class Builder(Builder):
 
         return True
 
+
+    def buildCanvasOperator(self, kOperator):
+        """Builds Canvas Operators on the components.
+
+        Args:
+            kOperator (object): kraken operator that represents a Splice operator.
+
+        Returns:
+            bool: True if successful.
+
+        """
+        try:
+            graphDesc = kOperator.getGraphDesc()
+            graphNodeName = kOperator.getPresetPath().split('.')[-1]
+
+
+            def findPortOfType(dataTypes, connectionTypes):
+                for port in graphDesc['ports']:
+                    portName = port['name']
+                    portConnectionType = port['execPortType']
+                    portDataType = port['typeSpec']
+
+                    if portDataType in dataTypes and portConnectionType in connectionTypes:
+                        return port
+
+                return None
+
+            # Find operatorOwner to attach Splice Operator to.
+            ownerOutPort = findPortOfType(['Mat44', 'Mat44[]'], ['Out', 'IO'])
+            if ownerOutPort is None:
+                raise Exception("Graph '" + graphNodeName + "' has no Mat44 outputs!")
+
+            ownerOutPortName = ownerOutPort['name']
+            ownerOutPortDataType = ownerOutPort['typeSpec']
+            ownerOutPortConnectionType = ownerOutPort['execPortType']
+
+            if ownerOutPortDataType == 'Mat44[]':
+                operatorOwner = self.getDCCSceneItem( kOperator.getOutput(ownerOutPortName)[0] )
+                ownerOutPortName = ownerOutPortName+str(0)
+            else:
+                operatorOwner = self.getDCCSceneItem( kOperator.getOutput(ownerOutPortName) )
+
+
+            # Create Splice Operator
+            canvasOpPath = si.FabricCanvasOpApply(operatorOwner.FullName, "", True, "", "")
+            canvasOp = si.Dictionary.GetObject(canvasOpPath, False)
+
+            si.FabricCanvasSetExtDeps(canvasOpPath, "", "Kraken" )
+            si.FabricCanvasInstPreset(canvasOpPath, "", kOperator.getPresetPath(), "400", "0")
+
+
+            def addCanvasPorts(canvasOpPath, portName, canvasGraphPort, portDataType, argConnectionType, dccSceneItem):
+
+                if argConnectionType == 'In':
+                    si.FabricCanvasAddPort(canvasOpPath, "", portName, "In", portDataType, "")
+                    si.FabricCanvasConnect(canvasOpPath, "", portName, canvasGraphPort)
+                elif argConnectionType in ['IO', 'Out']:
+                    si.FabricCanvasAddPort(canvasOpPath, "", portName, "Out", portDataType, "")
+                    si.FabricCanvasConnect(canvasOpPath, "", canvasGraphPort, portName)
+
+                if portDataType == 'EvalContext':
+                    return
+
+                # Append the suffix based on the argument type, Softimage Only
+                if portDataType == 'Mat44':
+                    portmapDefinition = portName+"|XSI Port"
+
+                    canvasOpPath2 = str(canvasOpPath) + ":"
+                    si.FabricCanvasOpPortMapDefine(canvasOpPath, portmapDefinition)
+                    canvasOpPath = str(canvasOpPath2)[:-1]
+
+                    canvasOp = si.Dictionary.GetObject(canvasOpPath, False)
+                    si.FabricCanvasOpConnectPort(canvasOpPath, portName, dccSceneItem.FullName+".kine.global")
+
+                elif portDataType in ['Scalar', 'Boolean']:
+
+                    portmapDefinition = portName+"|XSI Parameter"
+
+                    canvasOpPath2 = str(canvasOpPath) + ":"
+                    si.FabricCanvasOpPortMapDefine(canvasOpPath, portmapDefinition)
+                    canvasOpPath = str(canvasOpPath2)[:-1]
+                    canvasOp = si.Dictionary.GetObject(canvasOpPath, False)
+
+                    parameter = canvasOp.Parameters(portName)
+                    if parameter is not None:
+                        if portName == 'time':
+                            parameter.AddExpression("T")
+                            return
+                        if portName == 'frame':
+                            parameter.AddExpression("Fc")
+                            return
+                        else:
+                            parameter.AddExpression(dccSceneItem.FullName)
+
+
+            arraySizes = {}
+            # connect the operator to the objects in the DCC
+            for port in graphDesc['ports']:
+                portName = port['name']
+                portConnectionType = port['execPortType']
+                portDataType = port['typeSpec']
+
+                if portConnectionType not in ['In', 'IO', 'Out']:
+                    raise Exception("Invalid connection type:" + portConnectionType)
+
+                canvasOpPath2 = str(canvasOpPath) + ":"
+
+                if portDataType.endswith('[]'):
+                    elementDataType = portDataType[:-2]
+                    if portConnectionType == 'In':
+                        connectedObjects = kOperator.getInput(portName)
+
+                        arrayNode = si.FabricCanvasAddFunc(canvasOpPath, "", portName+"_ComposeArray", "dfgEntry {}", "40", str(i * 100))
+                        si.FabricCanvasAddPort(canvasOpPath, arrayNode, "array", "Out", portDataType, "")
+                        arrayNodeCode = "dfgEntry { \n  array.resize("+str(len(connectedObjects))+");\n"
+                        for j in range(len(connectedObjects)):
+                            si.FabricCanvasAddPort(canvasOpPath, arrayNode, "value"+str(j), "In", elementDataType, "", "")
+                            arrayNodeCode += "  array["+str(j)+"] = value"+str(j)+";\n"
+                        arrayNodeCode += "}"
+                        si.FabricCanvasSetCode(canvasOpPath, arrayNode, arrayNodeCode)
+
+                        si.FabricCanvasConnect(canvasOpPath, "", arrayNode+".array", graphNodeName+"."+portName)
+
+                    elif portConnectionType in ['IO', 'Out']:
+                        connectedObjects = kOperator.getOutput(portName)
+
+                        arrayNode = si.FabricCanvasAddFunc(canvasOpPath, "", portName+"_DecomposeArray", "dfgEntry {}", "800", str(i * 100))
+                        si.FabricCanvasAddPort(canvasOpPath, arrayNode, "array", "In", portDataType, "")
+                        arrayNodeCode = "dfgEntry { \n"
+                        for j in range(len(connectedObjects)):
+                            si.FabricCanvasAddPort(canvasOpPath, arrayNode, "value"+str(j), "Out", elementDataType, "", "")
+                            arrayNodeCode += "  value"+str(j)+" = array["+str(j)+"];\n"
+                        arrayNodeCode += "}"
+                        si.FabricCanvasSetCode(canvasOpPath, arrayNode, arrayNodeCode)
+
+                        si.FabricCanvasConnect(canvasOpPath, "", graphNodeName+"."+portName, arrayNode+".array")
+
+                        # OutArrays must be resized by the splice op.
+                        arraySizes[portName] = len(connectedObjects)
+
+                    for j in range(len(connectedObjects)):
+                        dccSceneItem = self.getDCCSceneItem(connectedObjects[j])
+                        if dccSceneItem is None:
+                            raise Exception("Operator:'"+kOperator.getName()+"' of type:'"+kOperator.getPresetPath()+"' port:'"+portName+"' dcc item not found for item:" + connectedObjects[j].getPath())
+                        addCanvasPorts(canvasOpPath, portName+str(j), arrayNode+".value"+str(j), elementDataType, portConnectionType, dccSceneItem)
+
+                else:
+                    if portConnectionType == 'In':
+                        connectedObject = kOperator.getInput(portName)
+                    elif portConnectionType in ['IO', 'Out']:
+                        connectedObject = kOperator.getOutput(portName)
+
+                    dccSceneItem = self.getDCCSceneItem(connectedObject)
+                    if dccSceneItem is None:
+                        raise Exception("Operator:'"+kOperator.getName()+"' of type:'"+kOperator.getPresetPath()+"' port:'"+portName+"' dcc item not found for item:" + connectedObject.getPath());
+                    addCanvasPorts(canvasOpPath, portName, graphNodeName+"."+portName, portDataType, portConnectionType, dccSceneItem)
+
+                canvasOpPath = canvasOpPath2[:-1]
+
+        finally:
+            pass
+
+        return True
 
     # ==================
     # Parameter Methods

@@ -21,21 +21,19 @@ class CanvasOperator(Operator):
     # an attirbute array called 'klOperators' that contains sets of what we
     # currently have setup.
 
-    def __init__(self, name, canvasPresetName):
+    def __init__(self, name, canvasPresetPath):
         super(CanvasOperator, self).__init__(name)
 
-        self.canvasPresetName = canvasPresetName
+        self.canvasPresetPath = canvasPresetPath
 
+        print "CanvasOperator:" + canvasPresetPath
         # Load the Fabric Engine client and construct the RTVal for the Solver
-        host = ks.getCoreClient().DFG.host
-
-
         def getPresetDesc(path):
-            fileContents = open( host.getPresetImportPathname(path) ).read()
+            fileContents = open( ks.getCoreClient().DFG.host.getPresetImportPathname(path) ).read()
             fileContents = "".join(fileContents.split('\n'))
             fileContents = "  ".join(fileContents.split('\t'))
             return json.loads(fileContents)
-        self.graphDesc = getPresetDesc(self.canvasPresetName)
+        self.graphDesc = getPresetDesc(self.canvasPresetPath)
 
         # Initialize the inputs and outputs based on the given args.
         for port in self.graphDesc['ports']:
@@ -45,6 +43,7 @@ class CanvasOperator(Operator):
                 portDataType = port['typeSpec']
             else:
                 portDataType = '$TYPE$'
+            print "portDataType:" + portName + ":" +portDataType
 
             if portConnectionType == 'In':
                 if portDataType.endswith('[]'):
@@ -58,7 +57,7 @@ class CanvasOperator(Operator):
                     self.outputs[portName] = None
 
 
-    def getPresetTypeName(self):
+    def getPresetPath(self):
         """Returns the solver type name for this operator.
 
         Returns:
@@ -66,21 +65,10 @@ class CanvasOperator(Operator):
 
         """
 
-        return self.canvasGraphName
+        return self.canvasPresetPath
 
 
-    def getExtension(self):
-        """Returns the extention this operator uses.
-
-        Returns:
-            str: Name of the extension this solver uses.
-
-        """
-
-        return self.extension
-
-
-    def getSolverArgs(self):
+    def getGraphDesc(self):
         """Returns the args array defined by the KL Operator.
 
         Returns:
@@ -88,7 +76,7 @@ class CanvasOperator(Operator):
 
         """
 
-        return self.args
+        return self.graphDesc
 
 
     def evaluate(self):
@@ -145,7 +133,7 @@ class CanvasOperator(Operator):
 
 
         host = ks.getCoreClient().DFG.host
-        binding = host.createBindingToPreset(self.canvasPresetName, portVals)
+        binding = host.createBindingToPreset(self.canvasPresetPath, portVals)
         binding.execute()
 
         # Now put the computed values out to the connected output objects.
