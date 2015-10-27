@@ -27,7 +27,7 @@ function Xfo[] solveNBoneIK(
   }
 
   Vec3 chainRootPos = basePose[0].tr;
-  Integer lastBoneIndex = basePose.size-1;
+  Integer lastBoneIndex = basePose.size()-1;
   Vec3 fkChainTip = basePose[lastBoneIndex].tr;
 
   // Apply the soft limit to the distance to the IK goal
@@ -180,7 +180,7 @@ function Xfo[] solveNBoneIKWithUpVector(
   Quat upVectorOffset;
   upVectorOffset.setFromAxisAndAngle(vecToIkGoal, angle);
   chainOffsetRotation = upVectorOffset * chainOffsetRotation;
-  
+
   // compute a new aligned chain that includes the re-orientation using the upvector.
   Xfo alignedPose[];
   alignedPose.resize(basePose.size);
@@ -192,7 +192,7 @@ function Xfo[] solveNBoneIKWithUpVector(
       alignedPose[i].tr = alignedPose[i-1].transformVector(basePose[i-1].inverse().transformVector(basePose[i].tr));
   }
 
-  // Now solve the chain like normal. 
+  // Now solve the chain like normal.
   return solveNBoneIK(alignedPose, goalPosition);
 }
 
