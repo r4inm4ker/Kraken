@@ -55,7 +55,7 @@ class KGraphViewWidget(GraphViewWidget):
         redoShortcut = QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.CTRL + QtCore.Qt.Key_Y), self)
         redoShortcut.activated.connect(self.redo)
 
-        openContextualNodeListShortcut = QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.Key_QuoteLeft), self)
+        openContextualNodeListShortcut = QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.Key_Tab), self)
         openContextualNodeListShortcut.activated.connect(self.openContextualNodeList)
 
         self.newRigPreset()

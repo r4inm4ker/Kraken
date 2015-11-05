@@ -80,6 +80,11 @@ class KrakenMenu(QtGui.QWidget):
         self.compLibAction = self.panelsMenu.addAction('Component &Library')
         self.compLibAction.setShortcut('Ctrl+Tab')
 
+        # View Menu
+        self.viewMenu = self.menuBar.addMenu('&View')
+        self.snapToGridAction = self.viewMenu.addAction('&Snap To Grid')
+        self.snapToGridAction.setCheckable(True)
+
         # Help Menu
         self.helpMenu = self.menuBar.addMenu('&Help')
         self.onlineHelpAction = self.helpMenu.addAction('Online &Help')
@@ -162,6 +167,9 @@ class KrakenMenu(QtGui.QWidget):
         # Panels Menu Connections
         self.compLibAction.triggered.connect(krakenUIWidget.resizeSplitter)
 
+        # View Menu Connections
+        self.snapToGridAction.triggered[bool].connect(graphViewWidget.graphView.setSnapToGrid)
+
         # Help Menu Connections
         self.onlineHelpAction.triggered.connect(self.openHelp)
 
@@ -201,16 +209,25 @@ class KrakenMenu(QtGui.QWidget):
     def writeSettings(self, settings):
         settings.beginGroup("KrakenMenu")
         settings.setValue("currentConfig", self.configsWidget.currentIndex())
+        settings.setValue("snapToGrid", self.snapToGridAction.isChecked())
         settings.endGroup()
 
 
     def readSettings(self, settings):
-        settings.beginGroup("KrakenMenu")
-        if settings.contains('currentConfig'):
-            currentConfig = int(settings.value("currentConfig", 0))
-            self.setCurrentConfig(currentConfig)
-        settings.endGroup()
+        krakenUIWidget = self.window().krakenUI
+        graphViewWidget = krakenUIWidget.graphViewWidget
 
+        settings.beginGroup('KrakenMenu')
+        if settings.contains('currentConfig'):
+            currentConfig = int(settings.value('currentConfig', 0))
+            self.setCurrentConfig(currentConfig)
+
+        if settings.contains('snapToGrid'):
+            snapToGrid = bool(settings.value('snapToGrid'))
+            self.snapToGridAction.setChecked(snapToGrid)
+            graphViewWidget.graphView.setSnapToGrid(snapToGrid)
+
+        settings.endGroup()
 
 
 class RigNameLabel(QtGui.QLabel):

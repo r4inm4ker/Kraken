@@ -73,7 +73,6 @@ class KNodePortCircle(PortCircle):
         return True
 
 
-
 class KNodeInputPort(BasePort):
 
     def __init__(self, parent, graph, componentInput):
