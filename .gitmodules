@@ -1,3 +1,0 @@
-[submodule "Python/kraken/ui/GraphView/pyflowgraph"]
-	path = Python/kraken/ui/GraphView/pyflowgraph
-	url = git@bitbucket.org:hordesoftware/pyflowgraph.git
