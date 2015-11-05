@@ -4,8 +4,8 @@
 
 from PySide import QtGui, QtCore
 
-from graph_view.graph_view import GraphView
-from graph_view.connection import Connection
+from pyflowgraph.graph_view import GraphView
+from pyflowgraph.connection import Connection
 from knode import KNode
 from edit_index_widget import EditIndexWidget
 from kraken.core.maths import Vec2
@@ -180,7 +180,10 @@ class KGraphView(GraphView):
             componentClass = krakenSystem.getComponentClass( componentClassName )
             component = componentClass(parent=self.getRig())
             component.setGraphPos(Vec2(dropPosition.x(), dropPosition.y()))
-            self.addNode(KNode(self, component) )
+            node = KNode(self, component)
+            nodeColor = component.getComponentColor()
+            node.setColor(QtGui.QColor(nodeColor[0], nodeColor[1], nodeColor[2], nodeColor[3]))
+            self.addNode(node)
 
             event.acceptProposedAction()
         else:

@@ -1,0 +1,7111 @@
+{
+  "connections": [
+    {
+      "source": "arm:L.bicep", 
+      "target": "arm01:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm:L.forearm", 
+      "target": "arm01:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm01:L.bicep", 
+      "target": "arm02:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm01:L.forearm", 
+      "target": "arm02:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm02:L.bicep", 
+      "target": "arm03:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm02:L.forearm", 
+      "target": "arm03:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm03:L.bicep", 
+      "target": "arm04:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm03:L.forearm", 
+      "target": "arm04:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm04:L.bicep", 
+      "target": "arm05:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm04:L.forearm", 
+      "target": "arm05:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm05:L.forearm", 
+      "target": "arm06:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm05:L.bicep", 
+      "target": "arm06:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm12:L.forearm", 
+      "target": "arm07:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm12:L.bicep", 
+      "target": "arm07:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm10:L.bicep", 
+      "target": "arm08:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm10:L.forearm", 
+      "target": "arm08:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm13:L.bicep", 
+      "target": "arm09:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm13:L.forearm", 
+      "target": "arm09:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm06:L.bicep", 
+      "target": "arm10:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm06:L.forearm", 
+      "target": "arm10:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm08:L.bicep", 
+      "target": "arm11:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm08:L.forearm", 
+      "target": "arm11:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm09:L.bicep", 
+      "target": "arm12:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm09:L.forearm", 
+      "target": "arm12:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm11:L.bicep", 
+      "target": "arm13:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm11:L.forearm", 
+      "target": "arm13:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm26:L.forearm", 
+      "target": "arm14:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm26:L.bicep", 
+      "target": "arm14:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm21:L.bicep", 
+      "target": "arm15:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm21:L.forearm", 
+      "target": "arm15:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm23:L.bicep", 
+      "target": "arm16:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm23:L.forearm", 
+      "target": "arm16:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm27:L.bicep", 
+      "target": "arm17:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm27:L.forearm", 
+      "target": "arm17:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm22:L.bicep", 
+      "target": "arm18:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm22:L.forearm", 
+      "target": "arm18:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm17:L.bicep", 
+      "target": "arm19:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm17:L.forearm", 
+      "target": "arm19:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm25:L.bicep", 
+      "target": "arm20:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm25:L.forearm", 
+      "target": "arm20:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm14:L.bicep", 
+      "target": "arm21:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm14:L.forearm", 
+      "target": "arm21:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm16:L.bicep", 
+      "target": "arm22:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm16:L.forearm", 
+      "target": "arm22:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm15:L.bicep", 
+      "target": "arm23:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm15:L.forearm", 
+      "target": "arm23:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm18:L.forearm", 
+      "target": "arm24:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm18:L.bicep", 
+      "target": "arm24:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm07:L.bicep", 
+      "target": "arm25:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm07:L.forearm", 
+      "target": "arm25:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm19:L.bicep", 
+      "target": "arm26:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm19:L.forearm", 
+      "target": "arm26:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm20:L.bicep", 
+      "target": "arm27:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm20:L.forearm", 
+      "target": "arm27:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm24:L.armEndXfo", 
+      "target": "arm28:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm24:L.hand", 
+      "target": "arm28:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm42:L.bicep", 
+      "target": "arm29:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm42:L.forearm", 
+      "target": "arm29:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm32:L.bicep", 
+      "target": "arm30:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm32:L.forearm", 
+      "target": "arm30:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm43:L.bicep", 
+      "target": "arm31:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm43:L.forearm", 
+      "target": "arm31:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm41:L.bicep", 
+      "target": "arm32:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm41:L.forearm", 
+      "target": "arm32:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm39:L.bicep", 
+      "target": "arm33:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm39:L.forearm", 
+      "target": "arm33:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm47:L.bicep", 
+      "target": "arm34:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm47:L.forearm", 
+      "target": "arm34:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm49:L.bicep", 
+      "target": "arm35:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm49:L.forearm", 
+      "target": "arm35:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm38:L.forearm", 
+      "target": "arm36:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm38:L.bicep", 
+      "target": "arm36:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm35:L.bicep", 
+      "target": "arm37:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm35:L.forearm", 
+      "target": "arm37:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm34:L.bicep", 
+      "target": "arm38:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm34:L.forearm", 
+      "target": "arm38:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm29:L.bicep", 
+      "target": "arm39:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm29:L.forearm", 
+      "target": "arm39:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm44:L.forearm", 
+      "target": "arm40:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm44:L.bicep", 
+      "target": "arm40:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm36:L.bicep", 
+      "target": "arm41:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm36:L.forearm", 
+      "target": "arm41:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm28:L.bicep", 
+      "target": "arm42:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm28:L.forearm", 
+      "target": "arm42:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm46:L.bicep", 
+      "target": "arm43:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm46:L.forearm", 
+      "target": "arm43:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm33:L.bicep", 
+      "target": "arm44:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm33:L.forearm", 
+      "target": "arm44:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm55:L.bicep", 
+      "target": "arm45:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm55:L.forearm", 
+      "target": "arm45:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm07:L.armEndXfo", 
+      "target": "arm46:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm07:L.hand", 
+      "target": "arm46:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm31:L.bicep", 
+      "target": "arm47:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm31:L.forearm", 
+      "target": "arm47:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm30:L.bicep", 
+      "target": "arm48:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm30:L.forearm", 
+      "target": "arm48:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm54:L.bicep", 
+      "target": "arm49:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm54:L.forearm", 
+      "target": "arm49:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm37:L.bicep", 
+      "target": "arm50:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm37:L.forearm", 
+      "target": "arm50:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm45:L.forearm", 
+      "target": "arm51:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm45:L.bicep", 
+      "target": "arm51:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm50:L.forearm", 
+      "target": "arm52:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm50:L.bicep", 
+      "target": "arm52:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm40:L.bicep", 
+      "target": "arm53:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm40:L.forearm", 
+      "target": "arm53:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm53:L.bicep", 
+      "target": "arm54:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm53:L.forearm", 
+      "target": "arm54:L.clavicleEnd", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm48:L.bicep", 
+      "target": "arm55:L.globalSRT", 
+      "targetIndex": 0
+    }, 
+    {
+      "source": "arm48:L.forearm", 
+      "target": "arm55:L.clavicleEnd", 
+      "targetIndex": 0
+    }
+  ], 
+  "graphPositions": {
+    "arm17:L": {
+      "y": 263.0058898925781, 
+      "x": -15.041135787963867, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm44:L": {
+      "y": 295.85113525390625, 
+      "x": 2443.13134765625, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm01:L": {
+      "y": -64.0, 
+      "x": -329.0, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm06:L": {
+      "y": -70.28795623779297, 
+      "x": 441.9588623046875, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm02:L": {
+      "y": -63.0, 
+      "x": -188.0, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm38:L": {
+      "y": -79.30656433105469, 
+      "x": 2410.884521484375, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm16:L": {
+      "y": 285.0274353027344, 
+      "x": 1036.9588623046875, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm24:L": {
+      "y": 284.0274353027344, 
+      "x": 1513.9588623046875, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm05:L": {
+      "y": -124.0, 
+      "x": 294.0, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm25:L": {
+      "y": 246.00587463378906, 
+      "x": -448.0411376953125, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm23:L": {
+      "y": 277.0274353027344, 
+      "x": 881.9588623046875, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm45:L": {
+      "y": -57.28501510620117, 
+      "x": 3462.884521484375, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm46:L": {
+      "y": -27.306562423706055, 
+      "x": 1650.8843994140625, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm12:L": {
+      "y": -101.97845458984375, 
+      "x": 1346.0, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm14:L": {
+      "y": 247.71792602539062, 
+      "x": 459.917724609375, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm04:L": {
+      "y": -109.0, 
+      "x": 143.0, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm07:L": {
+      "y": -33.978450775146484, 
+      "x": 1496.0, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm03:L": {
+      "y": -55.0, 
+      "x": -33.0, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm41:L": {
+      "y": 21.249755859375, 
+      "x": 2719.213623046875, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm47:L": {
+      "y": -10.306562423706055, 
+      "x": 2083.884521484375, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm20:L": {
+      "y": 254.00587463378906, 
+      "x": -311.0411376953125, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm10:L": {
+      "y": -23.443681716918945, 
+      "x": 602.3291015625, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm08:L": {
+      "y": -41.978450775146484, 
+      "x": 723.0, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm11:L": {
+      "y": -40.978450775146484, 
+      "x": 864.0, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm40:L": {
+      "y": 292.411376953125, 
+      "x": 2576.80224609375, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm43:L": {
+      "y": -19.306562423706055, 
+      "x": 1787.8843994140625, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm15:L": {
+      "y": 276.0274353027344, 
+      "x": 740.9588623046875, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm35:L": {
+      "y": 329.72088623046875, 
+      "x": 3153.84326171875, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm42:L": {
+      "y": 298.6993103027344, 
+      "x": 1805.84326171875, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm39:L": {
+      "y": 307.6993408203125, 
+      "x": 2101.84326171875, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm18:L": {
+      "y": 225.8377685546875, 
+      "x": 1368.3189697265625, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm09:L": {
+      "y": -86.97845458984375, 
+      "x": 1195.0, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm53:L": {
+      "y": 339.2556457519531, 
+      "x": 2737.17236328125, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm34:L": {
+      "y": -64.30656433105469, 
+      "x": 2259.884521484375, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm13:L": {
+      "y": -32.978450775146484, 
+      "x": 1019.0, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm37:L": {
+      "y": 275.7208557128906, 
+      "x": 3329.84326171875, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm27:L": {
+      "y": 255.00587463378906, 
+      "x": -170.0411376953125, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm30:L": {
+      "y": 3.71498703956604, 
+      "x": 2980.884521484375, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm48:L": {
+      "y": 11.714986801147461, 
+      "x": 3135.884521484375, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm36:L": {
+      "y": -25.594518661499023, 
+      "x": 2558.84326171875, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm52:L": {
+      "y": 328.72088623046875, 
+      "x": 3630.84326171875, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm29:L": {
+      "y": 299.6993103027344, 
+      "x": 1946.84326171875, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm51:L": {
+      "y": 10.714986801147461, 
+      "x": 3612.884521484375, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm49:L": {
+      "y": 321.72088623046875, 
+      "x": 2998.84326171875, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm28:L": {
+      "y": 293.96942138671875, 
+      "x": 1655.7628173828125, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm31:L": {
+      "y": -18.306562423706055, 
+      "x": 1928.8843994140625, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm32:L": {
+      "y": 2.71498703956604, 
+      "x": 2839.884521484375, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm:L": {
+      "y": -72.0, 
+      "x": -466.0, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm22:L": {
+      "y": 231.0274200439453, 
+      "x": 1212.9588623046875, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm50:L": {
+      "y": 260.7208557128906, 
+      "x": 3480.84326171875, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm33:L": {
+      "y": 310.85113525390625, 
+      "x": 2292.13134765625, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm19:L": {
+      "y": 266.1576843261719, 
+      "x": 175.24681091308594, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm21:L": {
+      "y": 294.56219482421875, 
+      "x": 620.2879638671875, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm54:L": {
+      "y": 320.72088623046875, 
+      "x": 2857.84326171875, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm26:L": {
+      "y": 251.15768432617188, 
+      "x": 326.246826171875, 
+      "__mathObjectClass__": "Vec2"
+    }, 
+    "arm55:L": {
+      "y": -42.28501510620117, 
+      "x": 3311.884521484375, 
+      "__mathObjectClass__": "Vec2"
+    }
+  }, 
+  "name": "MyRig", 
+  "components": [
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": -72.0, 
+        "x": -466.0, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": -64.0, 
+        "x": -329.0, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm01", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": -63.0, 
+        "x": -188.0, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm02", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": -55.0, 
+        "x": -33.0, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm03", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": -109.0, 
+        "x": 143.0, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm04", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": -124.0, 
+        "x": 294.0, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm05", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": -70.28795623779297, 
+        "x": 441.9588623046875, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm06", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": -33.978450775146484, 
+        "x": 1496.0, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm07", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": -41.978450775146484, 
+        "x": 723.0, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm08", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": -86.97845458984375, 
+        "x": 1195.0, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm09", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": -23.443681716918945, 
+        "x": 602.3291015625, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm10", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": -40.978450775146484, 
+        "x": 864.0, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm11", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": -101.97845458984375, 
+        "x": 1346.0, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm12", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": -32.978450775146484, 
+        "x": 1019.0, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm13", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": 247.71792602539062, 
+        "x": 459.917724609375, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm14", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": 276.0274353027344, 
+        "x": 740.9588623046875, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm15", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": 285.0274353027344, 
+        "x": 1036.9588623046875, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm16", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": 263.0058898925781, 
+        "x": -15.041135787963867, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm17", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": 225.8377685546875, 
+        "x": 1368.3189697265625, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm18", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": 266.1576843261719, 
+        "x": 175.24681091308594, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm19", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": 254.00587463378906, 
+        "x": -311.0411376953125, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm20", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": 294.56219482421875, 
+        "x": 620.2879638671875, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm21", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": 231.0274200439453, 
+        "x": 1212.9588623046875, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm22", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": 277.0274353027344, 
+        "x": 881.9588623046875, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm23", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": 284.0274353027344, 
+        "x": 1513.9588623046875, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm24", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": 246.00587463378906, 
+        "x": -448.0411376953125, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm25", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": 251.15768432617188, 
+        "x": 326.246826171875, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm26", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": 255.00587463378906, 
+        "x": -170.0411376953125, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm27", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": 293.96942138671875, 
+        "x": 1655.7628173828125, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm28", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": 299.6993103027344, 
+        "x": 1946.84326171875, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm29", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": 3.71498703956604, 
+        "x": 2980.884521484375, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm30", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": -18.306562423706055, 
+        "x": 1928.8843994140625, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm31", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": 2.71498703956604, 
+        "x": 2839.884521484375, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm32", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": 310.85113525390625, 
+        "x": 2292.13134765625, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm33", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": -64.30656433105469, 
+        "x": 2259.884521484375, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm34", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": 329.72088623046875, 
+        "x": 3153.84326171875, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm35", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": -25.594518661499023, 
+        "x": 2558.84326171875, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm36", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": 275.7208557128906, 
+        "x": 3329.84326171875, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm37", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": -79.30656433105469, 
+        "x": 2410.884521484375, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm38", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": 307.6993408203125, 
+        "x": 2101.84326171875, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm39", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": 292.411376953125, 
+        "x": 2576.80224609375, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm40", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": 21.249755859375, 
+        "x": 2719.213623046875, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm41", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": 298.6993103027344, 
+        "x": 1805.84326171875, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm42", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": -19.306562423706055, 
+        "x": 1787.8843994140625, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm43", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": 295.85113525390625, 
+        "x": 2443.13134765625, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm44", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": -57.28501510620117, 
+        "x": 3462.884521484375, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm45", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": -27.306562423706055, 
+        "x": 1650.8843994140625, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm46", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": -10.306562423706055, 
+        "x": 2083.884521484375, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm47", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": 11.714986801147461, 
+        "x": 3135.884521484375, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm48", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": 321.72088623046875, 
+        "x": 2998.84326171875, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm49", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": 260.7208557128906, 
+        "x": 3480.84326171875, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm50", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": 10.714986801147461, 
+        "x": 3612.884521484375, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm51", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": 328.72088623046875, 
+        "x": 3630.84326171875, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm52", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": 339.2556457519531, 
+        "x": 2737.17236328125, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm53", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": 320.72088623046875, 
+        "x": 2857.84326171875, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm54", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }, 
+    {
+      "forearmFKCtrlSize": 1.5, 
+      "graphPos": {
+        "y": -42.28501510620117, 
+        "x": 3311.884521484375, 
+        "__mathObjectClass__": "Vec2"
+      }, 
+      "name": "arm55", 
+      "bicepXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 15.295000076293945, 
+          "x": 2.2699999809265137, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.753000020980835
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "forearmXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 13.5600004196167, 
+          "x": 5.039000034332275, 
+          "__mathObjectClass__": "Vec3", 
+          "z": -0.859000027179718
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "wristXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 1.0, 
+          "v": {
+            "y": 0.0, 
+            "x": 0.0, 
+            "__mathObjectClass__": "Vec3", 
+            "z": 0.0
+          }
+        }
+      }, 
+      "location": "L", 
+      "handXfo": {
+        "sc": {
+          "y": 1.0, 
+          "x": 1.0, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 1.0
+        }, 
+        "__mathObjectClass__": "Xfo", 
+        "tr": {
+          "y": 12.281900405883789, 
+          "x": 7.188600063323975, 
+          "__mathObjectClass__": "Vec3", 
+          "z": 0.49059998989105225
+        }, 
+        "ori": {
+          "__mathObjectClass__": "Quat", 
+          "w": 0.9330999851226807, 
+          "v": {
+            "y": -0.23010000586509705, 
+            "x": -0.08649999648332596, 
+            "__mathObjectClass__": "Vec3", 
+            "z": -0.2623000144958496
+          }
+        }
+      }, 
+      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "bicepFKCtrlSize": 1.75
+    }
+  ]
+}

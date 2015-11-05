@@ -5,7 +5,7 @@ import traceback
 from PySide import QtGui, QtCore
 
 from contextual_node_list import ContextualNodeList
-from graph_view.graph_view_widget import GraphViewWidget
+from pyflowgraph.graph_view_widget import GraphViewWidget
 from kgraph_view import KGraphView
 from kraken.ui.undoredo.undo_redo_manager import UndoRedoManager
 import graph_commands
@@ -55,7 +55,7 @@ class KGraphViewWidget(GraphViewWidget):
         redoShortcut = QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.CTRL + QtCore.Qt.Key_Y), self)
         redoShortcut.activated.connect(self.redo)
 
-        openContextualNodeListShortcut = QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.Key_QuoteLeft), self)
+        openContextualNodeListShortcut = QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.Key_Tab), self)
         openContextualNodeListShortcut.activated.connect(self.openContextualNodeList)
 
         self.newRigPreset()
@@ -345,9 +345,6 @@ class KGraphViewWidget(GraphViewWidget):
 
 
     def __onSelectionMoved(self, nodes, delta):
-        for node in nodes:
-            node.pushGraphPosToComponent()
-
         if not UndoRedoManager.getInstance().isUndoingOrRedoing():
             command = graph_commands.NodesMoveCommand(self.graphView, nodes, delta)
             UndoRedoManager.getInstance().addCommand(command)
