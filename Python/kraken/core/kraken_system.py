@@ -362,7 +362,8 @@ class KrakenSystem(object):
         if pathsVar is not None:
             pathsList = pathsVar.split(';')
             for path in pathsList:
-                __importDirRecursive(path)
+                if os.path.isdir(path):
+                    __importDirRecursive(path)
 
 
     @classmethod

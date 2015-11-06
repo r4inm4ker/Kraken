@@ -1,6 +1,8 @@
 #
 # Copyright 2010-2015
 #
+import sys
+import os
 
 import difflib
 
@@ -46,6 +48,12 @@ class ComponentTreeWidget(QtGui.QTreeWidget):
             treeItem = QtGui.QTreeWidgetItem(parentWidget)
             treeItem.setData(0, QtCore.Qt.UserRole, data['components'][item])
             treeItem.setText(0, item)
+            component = self.ks.registeredComponents[data['components'][item]]
+            module = sys.modules[component.__module__]
+            treeItem.setToolTip(0, module.__file__)
+
+            if parentWidget:
+                parentWidget.setToolTip(0, os.path.dirname(module.__file__))
 
         for item in data['subDirs'].keys():
 
