@@ -15,19 +15,13 @@ from kraken.core.kraken_system import ks
 class CanvasOperator(Operator):
     """Splice Operator representation."""
 
-    # TODO: Look in to expanding the Splice operator to be able to handle more
-    # than one extension / operator. Need to change extension to extensions and
-    # figure out how to differentiate the solver types per operator. Maybe have
-    # an attirbute array called 'klOperators' that contains sets of what we
-    # currently have setup.
-
     def __init__(self, name, canvasPresetPath):
         super(CanvasOperator, self).__init__(name)
 
         self.canvasPresetPath = canvasPresetPath
 
-        print "CanvasOperator:" + canvasPresetPath
-        # Load the Fabric Engine client and construct the RTVal for the Solver
+        # Note: this is a temporary solution to getting the descritption of a Canvas node.
+        # I beleive that the API does provide a method to retrieve the node desc, but I couldn't find it.
         def getPresetDesc(path):
             fileContents = open( ks.getCoreClient().DFG.host.getPresetImportPathname(path) ).read()
             fileContents = "".join(fileContents.split('\n'))
@@ -58,10 +52,10 @@ class CanvasOperator(Operator):
 
 
     def getPresetPath(self):
-        """Returns the solver type name for this operator.
+        """Returns the preset path within the Canvas library for the node used by this operator.
 
         Returns:
-            str: Name of the solver type this operator uses.
+            str: Path of the preset files used by this operator.
 
         """
 
@@ -69,10 +63,10 @@ class CanvasOperator(Operator):
 
 
     def getGraphDesc(self):
-        """Returns the args array defined by the KL Operator.
+        """Returns the json description of the node used by this operator
 
         Returns:
-            RTValArray: Args array defined by the KL Operator.
+            object: A json dict containing the description the operator.
 
         """
 
@@ -80,7 +74,7 @@ class CanvasOperator(Operator):
 
 
     def evaluate(self):
-        """invokes the Splice operator causing the output values to be computed.
+        """invokes the Canvas node causing the output values to be computed.
 
         Returns:
             bool: True if successful.
