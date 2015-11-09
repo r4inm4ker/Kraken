@@ -16,7 +16,8 @@ from kraken.core.objects.joint import Joint
 from kraken.core.objects.ctrlSpace import CtrlSpace
 from kraken.core.objects.control import Control
 
-from kraken.core.objects.operators.splice_operator import SpliceOperator
+from kraken.core.objects.operators.kl_operator import KLOperator
+from kraken.core.objects.operators.canvas_operator import CanvasOperator
 
 from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
@@ -249,35 +250,36 @@ class FabriceHeadRig(FabriceHead):
 
         # Add Aim Splice Op
         # =================
-        self.headAimSpliceOp = SpliceOperator('headAimSpliceOp', 'DirectionConstraintSolver', 'Kraken')
-        self.addOperator(self.headAimSpliceOp)
+        # self.headAimCanvasOp = KLOperator('headAimCanvasOp', 'DirectionConstraintSolver', 'Kraken')
+        self.headAimCanvasOp = CanvasOperator('headAimCanvasOp', 'Kraken.DirectionConstraintSolver')
+        self.addOperator(self.headAimCanvasOp)
 
         # Add Att Inputs
-        self.headAimSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
-        self.headAimSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
+        self.headAimCanvasOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.headAimCanvasOp.setInput('rigScale', self.rigScaleInputAttr)
 
         # Add Xfo Inputs
-        self.headAimSpliceOp.setInput('position', self.headBaseInputTgt)
-        self.headAimSpliceOp.setInput('upVector', self.headAimUpV)
-        self.headAimSpliceOp.setInput('atVector', self.headAimCtrl)
+        self.headAimCanvasOp.setInput('position', self.headBaseInputTgt)
+        self.headAimCanvasOp.setInput('upVector', self.headAimUpV)
+        self.headAimCanvasOp.setInput('atVector', self.headAimCtrl)
 
         # Add Xfo Outputs
-        self.headAimSpliceOp.setOutput('constrainee', self.headAim)
+        self.headAimCanvasOp.setOutput('constrainee', self.headAim)
 
         # Add Deformer Splice Op
         # ======================
-        self.deformersToOutputsSpliceOp = SpliceOperator('headDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken', alwaysEval=True)
-        self.addOperator(self.deformersToOutputsSpliceOp)
+        self.deformersToOutputsKLOp = KLOperator('headDeformerKLOp', 'MultiPoseConstraintSolver', 'Kraken')
+        self.addOperator(self.deformersToOutputsKLOp)
 
         # Add Att Inputs
-        self.deformersToOutputsSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
-        self.deformersToOutputsSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
+        self.deformersToOutputsKLOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.deformersToOutputsKLOp.setInput('rigScale', self.rigScaleInputAttr)
 
         # Add Xfo Outputs
-        self.deformersToOutputsSpliceOp.setInput('constrainers', [self.headOutputTgt, self.jawOutputTgt])
+        self.deformersToOutputsKLOp.setInput('constrainers', [self.headOutputTgt, self.jawOutputTgt])
 
         # Add Xfo Outputs
-        self.deformersToOutputsSpliceOp.setOutput('constrainees', [headDef, jawDef])
+        self.deformersToOutputsKLOp.setOutput('constrainees', [headDef, jawDef])
 
         Profiler.getInstance().pop()
 
@@ -327,8 +329,8 @@ class FabriceHeadRig(FabriceHead):
         # Evaluate Splice Ops
         # ====================
         # evaluate the constraint op so that all the joint transforms are updated.
-        self.headAimSpliceOp.evaluate()
-        self.deformersToOutputsSpliceOp.evaluate()
+        self.headAimCanvasOp.evaluate()
+        self.deformersToOutputsKLOp.evaluate()
 
         # evaluate the constraints to ensure the outputs are now in the correct location.
         self.headToAimConstraint.evaluate()

@@ -7,12 +7,12 @@ object BezierSpineSolver : KrakenSolver {
 // Return Arguments for Kraken
 function KrakenSolverArg[] BezierSpineSolver.getArguments(){
   KrakenSolverArg args[] = this.parent.getArguments();
-  args.push(KrakenSolverArg('length', 'in', 'Scalar'));
-  args.push(KrakenSolverArg('base', 'in', 'Mat44'));
-  args.push(KrakenSolverArg('baseHandle', 'in', 'Mat44'));
-  args.push(KrakenSolverArg('tipHandle', 'in', 'Mat44'));
-  args.push(KrakenSolverArg('tip', 'in', 'Mat44'));
-  args.push(KrakenSolverArg('outputs', 'out', 'Mat44[]'));
+  args.push(KrakenSolverArg('length', 'In', 'Scalar'));
+  args.push(KrakenSolverArg('base', 'In', 'Mat44'));
+  args.push(KrakenSolverArg('baseHandle', 'In', 'Mat44'));
+  args.push(KrakenSolverArg('tipHandle', 'In', 'Mat44'));
+  args.push(KrakenSolverArg('tip', 'In', 'Mat44'));
+  args.push(KrakenSolverArg('outputs', 'Out', 'Mat44[]'));
   return args;
 }
 

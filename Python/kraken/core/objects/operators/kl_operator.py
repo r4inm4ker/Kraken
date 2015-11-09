@@ -1,7 +1,7 @@
-"""Kraken - objects.operators.splice_operator module.
+"""Kraken - objects.operators.kl_operator module.
 
 Classes:
-SpliceOperator - Splice operator object.
+KLOperator - Splice operator object.
 
 """
 
@@ -12,7 +12,7 @@ from kraken.core.objects.attributes.attribute import Attribute
 from kraken.core.kraken_system import ks
 
 
-class SpliceOperator(Operator):
+class KLOperator(Operator):
     """Splice Operator representation."""
 
     # TODO: Look in to expanding the Splice operator to be able to handle more
@@ -21,12 +21,11 @@ class SpliceOperator(Operator):
     # an attirbute array called 'klOperators' that contains sets of what we
     # currently have setup.
 
-    def __init__(self, name, solverTypeName, extension, alwaysEval=False):
-        super(SpliceOperator, self).__init__(name)
+    def __init__(self, name, solverTypeName, extension):
+        super(KLOperator, self).__init__(name)
 
         self.solverTypeName = solverTypeName
         self.extension = extension
-        self.alwaysEval = alwaysEval # This is for Softimage only to force eval.
 
         # Load the Fabric Engine client and construct the RTVal for the Solver
         ks.loadCoreClient()
@@ -43,7 +42,7 @@ class SpliceOperator(Operator):
             argDataType = arg.dataType.getSimpleType()
             argConnectionType = arg.connectionType.getSimpleType()
 
-            if argConnectionType == 'in':
+            if argConnectionType == 'In':
                 if argDataType.endswith('[]'):
                     self.inputs[argName] = []
                 else:
@@ -75,18 +74,6 @@ class SpliceOperator(Operator):
         """
 
         return self.extension
-
-
-    def getAlwaysEval(self):
-        """Gets the value of the alwaysEval attribute.
-
-        Returns:
-            bool: Whether the operator is set to always evaluate.
-
-        """
-
-        return self.alwaysEval
-
 
 
     def getSolverArgs(self):
@@ -163,7 +150,7 @@ class SpliceOperator(Operator):
                 argVals.append(ks.constructRTVal(argDataType))
                 continue
 
-            if argConnectionType == 'in':
+            if argConnectionType == 'In':
                 if str(argDataType).endswith('[]'):
                     rtValArray = ks.rtVal(argDataType[:-2]+'Array')
                     rtValArray.resize(len(self.inputs[argName]))
@@ -197,7 +184,7 @@ class SpliceOperator(Operator):
             argDataType = arg.dataType.getSimpleType()
             argConnectionType = arg.connectionType.getSimpleType()
 
-            if argConnectionType != 'in':
+            if argConnectionType != 'In':
                 if argDataType.endswith('[]'):
                     for j in xrange(len(argVals[i])):
                         setRTVal(self.outputs[argName][j], argVals[i][j])

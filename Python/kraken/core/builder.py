@@ -423,11 +423,24 @@ class Builder(object):
     # =========================
     # Operator Builder Methods
     # =========================
-    def buildSpliceOperators(self, kOperator):
+    def buildKLOperator(self, kKLOperator):
         """Builds Splice Operators on the components.
 
         Args:
-            kOperator (object): kraken operator that represents a Splice operator.
+            kOperator (object): kraken operator that represents a KL operator.
+
+        Returns:
+            bool: True if successful.
+
+        """
+
+        return True
+
+    def buildCanvasOperator(self, kOperator):
+        """Builds Splice Operators on the components.
+
+        Args:
+            kOperator (object): kraken operator that represents a Canvas operator.
 
         Returns:
             bool: True if successful.
@@ -663,11 +676,12 @@ class Builder(object):
             for i in xrange(kObject.getNumOperators()):
                 operator = kObject.getOperatorByIndex(i)
 
-                if operator.isTypeOf('SpliceOperator'):
-                    self.buildSpliceOperators(operator)
-
+                if operator.isTypeOf('KLOperator'):
+                    self.buildKLOperator(operator)
+                elif operator.isTypeOf('CanvasOperator'):
+                    self.buildCanvasOperator(operator)
                 else:
-                    raise NotImplementedError(operator.getName() + ' has an unsupported type: ' + str(type(kObject)))
+                    raise NotImplementedError(operator.getName() + ' has an unsupported type: ' + str(type(operator)))
 
         # Build connections for children.
         for i in xrange(kObject.getNumChildren()):

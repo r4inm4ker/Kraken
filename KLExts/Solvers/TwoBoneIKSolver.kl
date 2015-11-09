@@ -20,25 +20,25 @@ function TwoBoneIKSolver(
 // Return Arguments for Kraken
 function KrakenSolverArg[] TwoBoneIKSolver.getArguments(){
   KrakenSolverArg args[] = this.parent.getArguments();
-  args.push(KrakenSolverArg('rightSide', 'in', 'Boolean'));
+  args.push(KrakenSolverArg('rightSide', 'In', 'Boolean'));
 
-  args.push(KrakenSolverArg('ikblend', 'in', 'Scalar'));
-  args.push(KrakenSolverArg('softIK', 'in', 'Boolean'));
-  args.push(KrakenSolverArg('softDist', 'in', 'Scalar'));
-  args.push(KrakenSolverArg('stretch', 'in', 'Boolean'));
-  args.push(KrakenSolverArg('stretchBlend', 'in', 'Scalar'));
+  args.push(KrakenSolverArg('ikblend', 'In', 'Scalar'));
+  args.push(KrakenSolverArg('softIK', 'In', 'Boolean'));
+  args.push(KrakenSolverArg('softDist', 'In', 'Scalar'));
+  args.push(KrakenSolverArg('stretch', 'In', 'Boolean'));
+  args.push(KrakenSolverArg('stretchBlend', 'In', 'Scalar'));
 
-  args.push(KrakenSolverArg('root', 'in', 'Mat44'));
-  args.push(KrakenSolverArg('bone0FK', 'in', 'Mat44'));
-  args.push(KrakenSolverArg('bone1FK', 'in', 'Mat44'));
-  args.push(KrakenSolverArg('ikHandle', 'in', 'Mat44'));
-  args.push(KrakenSolverArg('upV', 'in', 'Mat44'));
+  args.push(KrakenSolverArg('root', 'In', 'Mat44'));
+  args.push(KrakenSolverArg('bone0FK', 'In', 'Mat44'));
+  args.push(KrakenSolverArg('bone1FK', 'In', 'Mat44'));
+  args.push(KrakenSolverArg('ikHandle', 'In', 'Mat44'));
+  args.push(KrakenSolverArg('upV', 'In', 'Mat44'));
 
-  args.push(KrakenSolverArg('bone0Len', 'in', 'Scalar'));
-  args.push(KrakenSolverArg('bone1Len', 'in', 'Scalar'));
-  args.push(KrakenSolverArg('bone0Out', 'out', 'Mat44'));
-  args.push(KrakenSolverArg('bone1Out', 'out', 'Mat44'));
-  args.push(KrakenSolverArg('bone2Out', 'out', 'Mat44'));
+  args.push(KrakenSolverArg('bone0Len', 'In', 'Scalar'));
+  args.push(KrakenSolverArg('bone1Len', 'In', 'Scalar'));
+  args.push(KrakenSolverArg('bone0Out', 'Out', 'Mat44'));
+  args.push(KrakenSolverArg('bone1Out', 'Out', 'Mat44'));
+  args.push(KrakenSolverArg('bone2Out', 'Out', 'Mat44'));
   return args;
 }
 
