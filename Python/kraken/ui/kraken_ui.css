@@ -116,6 +116,15 @@ QMainWindow#KrakenMainWindow QMenu::item {
     color: #e1ffff;
 }
 
+
+QMainWindow#KrakenMainWindow QMenu::item:non-exclusive:checked {
+    padding-left: 20px;
+}
+
+QMainWindow#KrakenMainWindow QMenu::item:non-exclusive:unchecked {
+    padding-left: 20px;
+}
+
 QMainWindow#KrakenMainWindow QMenu::item:selected {
     background-color: #293b3d;
 }

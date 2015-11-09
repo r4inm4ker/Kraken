@@ -63,9 +63,9 @@ function NBoneIKSolver.solve!
     for(UInt32 i=0; i< fkcontrols.size; i++) {
       fkPose[i] = Xfo(fkcontrols[i]);
     }
-    this.initPose = fkPose;
     fkPose[fkcontrols.size] = fkPose[fkcontrols.size-1];
     fkPose[fkcontrols.size].tr = fkPose[fkcontrols.size-1].transformVector(Vec3(tipBoneLen, 0.0, 0.0));
+    this.initPose = fkPose;
   }
 
   Xfo xfoPose[];
@@ -112,10 +112,10 @@ function NBoneIKSolver.solve!
 
     Xfo ikPose[];
     if (useInitPose == 1) {
-      ikPose = solveNBoneIKWithUpVector(initPose, ikgoal.translation(), upVector.translation(), Vec3(0, 1, 0));
+      ikPose = solveNBoneIKWithUpVector(initPose, ikgoal.translation(), upVector.translation(), Vec3(0, 1, 0), rigScale);
     }
     else {
-      ikPose = solveNBoneIK(initPose, ikgoal.translation());
+      ikPose = solveNBoneIK(initPose, ikgoal.translation(), rigScale);
     }
 
     // Now blend the IK result with the FK result

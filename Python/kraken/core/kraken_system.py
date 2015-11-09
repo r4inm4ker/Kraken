@@ -380,6 +380,14 @@ class KrakenSystem(object):
         if pathsVar is not None:
             pathsList = pathsVar.split(';')
             for path in pathsList:
+
+                if path == '':
+                    continue
+
+                if not os.path.exists(path):
+                    print "Invalid Kraken Path: " + path
+                    continue
+
                 __importDirRecursive(path)
 
 
