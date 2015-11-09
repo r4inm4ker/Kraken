@@ -244,56 +244,6 @@ class Vec3(MathObject):
                                         ks.rtVal('Scalar', v))
 
 
-    # # Equals operator
-    # def Boolean == (Vec a, Vec b):
-
-    # # Not equals operator
-    # def Boolean != (Vec a, Vec b):
-
-    # # unary -
-    # def Vec -Vec():
-
-    # # Adds to vectors
-    # def Vec + (Vec a, Vec b):
-
-    # # Adds a vector to this one
-    # def  += (Vec other):
-
-    # # Subtracts two vectors
-    # def Vec - (Vec a, Vec b):
-
-    # # Subtracts a vector from this one
-    # def  -= (Vec other):
-
-    # # Multiplies a scalar and a vector
-    # def Vec * (Scalar a, Vec b):
-
-    # # Multiplies a vector and a scalar
-    # def Vec * (Vec a, Scalar b):
-
-    # # Multiplies two vectors
-    # def Vec * (Vec a, Vec b):
-
-
-    # # Multiplies this vector with a scalar
-    # def  *= (Scalar other):
-
-    # # Multiplies this vector with another one
-    # def  *= (Vec other):
-
-    # # Divides two vectors
-    # def Vec / (Vec a, Vec b):
-
-    # # Divides a vector by a scalar
-    # def Vec / (Vec a, Scalar b):
-
-    # # Divides this vector with a scalar
-    # def  /= (Scalar other):
-
-    # # Divides this vector with another one
-    # def  /= (Vec other):
-
-
     def add(self, other):
         """Overload method for the add operator.
 
