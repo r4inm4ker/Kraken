@@ -18,8 +18,8 @@ inline KrakenSolver() {
 // Return Arguments for Kraken
 function KrakenSolverArg[] KrakenSolver.getArguments(){
     KrakenSolverArg args[];
-    args.push(KrakenSolverArg('drawDebug', 'in', 'Boolean'));
-    args.push(KrakenSolverArg('rigScale', 'in', 'Scalar'));
+    args.push(KrakenSolverArg('drawDebug', 'In', 'Boolean'));
+    args.push(KrakenSolverArg('rigScale', 'In', 'Scalar'));
     return args;
 }
 

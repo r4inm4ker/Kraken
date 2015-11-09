@@ -28,6 +28,7 @@ class Component(Object3D):
     def __init__(self, name, parent=None, location='M'):
         self._location = location
         super(Component, self).__init__(name, parent)
+        self._color = (154, 205, 50, 255)
         self._inputs = []
         self._outputs = []
         self._operators = []
@@ -56,6 +57,38 @@ class Component(Object3D):
         # enables multiple components to have the same name as long as they
         # have different locations. e.g. Leg:R, and Leg:L
         return ":" + self.getLocation()
+
+
+    # ==============
+    # Color Methods
+    # ==============
+    def getComponentColor(self):
+        """Gets the color assigned to this component.
+
+        Returns:
+            tuple: R, G, B, A values.
+
+        """
+
+        return self._color
+
+    def setComponentColor(self, r, g, b, a):
+        """Sets the componetn color by the rgba values.
+
+        Args:
+            r (int): Red value.
+            g (int): Green value.
+            b (int): Blue value.
+            a (int): Alpha value.
+
+        Returns:
+            bool: True if successful.
+
+        """
+
+        self._color = (r, g, b, a)
+
+        return True
 
 
     # =============

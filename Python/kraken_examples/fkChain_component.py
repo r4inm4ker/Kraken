@@ -23,7 +23,7 @@ from kraken.core.objects.ctrlSpace import CtrlSpace
 from kraken.core.objects.layer import Layer
 from kraken.core.objects.control import Control
 
-from kraken.core.objects.operators.splice_operator import SpliceOperator
+from kraken.core.objects.operators.kl_operator import KLOperator
 
 from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
@@ -316,32 +316,32 @@ class FKChainComponentRig(FKChainComponent):
         # Add Splice Ops
         # ===============
         # Add Output Splice Op
-        self.outputsToControlsSpliceOp = SpliceOperator('fkChainOutputSpliceOp', 'MultiPoseConstraintSolver', 'Kraken')
-        self.addOperator(self.outputsToControlsSpliceOp)
+        self.outputsToControlsKLOp = KLOperator('fkChainOutputKLOp', 'MultiPoseConstraintSolver', 'Kraken')
+        self.addOperator(self.outputsToControlsKLOp)
 
         # Add Att Inputs
-        self.outputsToControlsSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
-        self.outputsToControlsSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
+        self.outputsToControlsKLOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.outputsToControlsKLOp.setInput('rigScale', self.rigScaleInputAttr)
 
         # Add Xfo Inputs
-        self.outputsToControlsSpliceOp.setInput('constrainers', self.fkCtrls)
+        self.outputsToControlsKLOp.setInput('constrainers', self.fkCtrls)
 
         # Add Xfo Outputs
-        self.outputsToControlsSpliceOp.setOutput('constrainees', self.boneOutputsTgt)
+        self.outputsToControlsKLOp.setOutput('constrainees', self.boneOutputsTgt)
 
         # Add Deformer Splice Op
-        self.deformersToOutputsSpliceOp = SpliceOperator('fkChainDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken')
-        self.addOperator(self.deformersToOutputsSpliceOp)
+        self.deformersToOutputsKLOp = KLOperator('fkChainDeformerKLOp', 'MultiPoseConstraintSolver', 'Kraken')
+        self.addOperator(self.deformersToOutputsKLOp)
 
         # Add Att Inputs
-        self.deformersToOutputsSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
-        self.deformersToOutputsSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
+        self.deformersToOutputsKLOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.deformersToOutputsKLOp.setInput('rigScale', self.rigScaleInputAttr)
 
         # Add Xfo Inputs
-        self.deformersToOutputsSpliceOp.setInput('constrainers', self.boneOutputsTgt)
+        self.deformersToOutputsKLOp.setInput('constrainers', self.boneOutputsTgt)
 
         # Add Xfo Outputs
-        self.deformersToOutputsSpliceOp.setOutput('constrainees', self.deformerJoints)
+        self.deformersToOutputsKLOp.setOutput('constrainees', self.deformerJoints)
 
         Profiler.getInstance().pop()
 
@@ -451,10 +451,10 @@ class FKChainComponentRig(FKChainComponent):
         # Evaluate Splice Ops
         # ====================
         # Eval Outputs to Controls Op to evaulate with new outputs and controls
-        self.outputsToControlsSpliceOp.evaluate()
+        self.outputsToControlsKLOp.evaluate()
 
         # evaluate the output splice op to evaluate with new outputs and deformers
-        self.deformersToOutputsSpliceOp.evaluate()
+        self.deformersToOutputsKLOp.evaluate()
 
 
 from kraken.core.kraken_system import KrakenSystem

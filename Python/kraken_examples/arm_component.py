@@ -18,7 +18,7 @@ from kraken.core.objects.joint import Joint
 from kraken.core.objects.ctrlSpace import CtrlSpace
 from kraken.core.objects.control import Control
 
-from kraken.core.objects.operators.splice_operator import SpliceOperator
+from kraken.core.objects.operators.kl_operator import KLOperator
 
 from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
@@ -336,7 +336,7 @@ class ArmComponentRig(ArmComponent):
         # Add Splice Ops
         # ===============
         # Add Splice Op
-        self.spliceOp = SpliceOperator('armSpliceOp', 'TwoBoneIKSolver', 'Kraken')
+        self.spliceOp = KLOperator('armKLOp', 'TwoBoneIKSolver', 'Kraken')
         self.addOperator(self.spliceOp)
 
         # Add Att Inputs
@@ -366,18 +366,18 @@ class ArmComponentRig(ArmComponent):
 
 
         # Add Deformer Splice Op
-        self.outputsToDeformersSpliceOp = SpliceOperator('armDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken')
-        self.addOperator(self.outputsToDeformersSpliceOp)
+        self.outputsToDeformersKLOp = KLOperator('armDeformerKLOp', 'MultiPoseConstraintSolver', 'Kraken')
+        self.addOperator(self.outputsToDeformersKLOp)
 
         # Add Att Inputs
-        self.outputsToDeformersSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
-        self.outputsToDeformersSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
+        self.outputsToDeformersKLOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.outputsToDeformersKLOp.setInput('rigScale', self.rigScaleInputAttr)
 
         # Add Xfo Inputs
-        self.outputsToDeformersSpliceOp.setInput('constrainers', [self.bicepOutputTgt, self.forearmOutputTgt, self.armEndXfoOutputTgt, self.handOutputTgt])
+        self.outputsToDeformersKLOp.setInput('constrainers', [self.bicepOutputTgt, self.forearmOutputTgt, self.armEndXfoOutputTgt, self.handOutputTgt])
 
         # Add Xfo Outputs
-        self.outputsToDeformersSpliceOp.setOutput('constrainees', [bicepDef, forearmDef, wristDef, handDef])
+        self.outputsToDeformersKLOp.setOutput('constrainees', [bicepDef, forearmDef, wristDef, handDef])
 
         Profiler.getInstance().pop()
 
@@ -443,7 +443,7 @@ class ArmComponentRig(ArmComponent):
 
         # Eval Operators
         self.spliceOp.evaluate()
-        self.outputsToDeformersSpliceOp.evaluate()
+        self.outputsToDeformersKLOp.evaluate()
 
 
 from kraken.core.kraken_system import KrakenSystem

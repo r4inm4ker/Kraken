@@ -144,8 +144,8 @@ class KrakenLoader(object):
         # ==========
         # Operators
         # ==========
-        elif "SpliceOperator" in jsonData['__typeHierarchy__']:
-            item = SpliceOperator(jsonData['name'])
+        elif "KLOperator" in jsonData['__typeHierarchy__']:
+            item = KLOperator(jsonData['name'])
 
         # ============
         # Scene Items

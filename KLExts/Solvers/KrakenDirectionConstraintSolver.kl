@@ -8,10 +8,10 @@ object DirectionConstraintSolver : KrakenSolver {
 // Return Arguments for Kraken
 function KrakenSolverArg[] DirectionConstraintSolver.getArguments(){
   KrakenSolverArg args[] = this.parent.getArguments();
-  args.push(KrakenSolverArg('position', 'in', 'Mat44'));
-  args.push(KrakenSolverArg('upVector', 'in', 'Mat44'));
-  args.push(KrakenSolverArg('atVector', 'in', 'Mat44'));
-  args.push(KrakenSolverArg('constrainee', 'out', 'Mat44'));
+  args.push(KrakenSolverArg('position', 'In', 'Mat44'));
+  args.push(KrakenSolverArg('upVector', 'In', 'Mat44'));
+  args.push(KrakenSolverArg('atVector', 'In', 'Mat44'));
+  args.push(KrakenSolverArg('constrainee', 'Out', 'Mat44'));
   return args;
 }
 

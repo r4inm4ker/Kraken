@@ -8,8 +8,8 @@ object PoseConstraintSolver : KrakenSolver {
 // Return Arguments for Kraken
 function KrakenSolverArg[] PoseConstraintSolver.getArguments(){
   KrakenSolverArg args[] = this.parent.getArguments();
-  args.push(KrakenSolverArg('constrainer', 'in', 'Mat44'));
-  args.push(KrakenSolverArg('constrainee', 'out', 'Mat44'));
+  args.push(KrakenSolverArg('constrainer', 'In', 'Mat44'));
+  args.push(KrakenSolverArg('constrainee', 'Out', 'Mat44'));
   return args;
 }
 

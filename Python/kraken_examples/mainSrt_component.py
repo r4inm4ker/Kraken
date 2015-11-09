@@ -15,7 +15,7 @@ from kraken.core.objects.joint import Joint
 from kraken.core.objects.ctrlSpace import CtrlSpace
 from kraken.core.objects.control import Control
 
-from kraken.core.objects.operators.splice_operator import SpliceOperator
+from kraken.core.objects.operators.kl_operator import KLOperator
 
 from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
@@ -210,17 +210,17 @@ class MainSrtComponentRig(MainSrtComponent):
         # Add Splice Ops
         # ===============
         #Add Rig Scale Splice Op
-        self.rigScaleSpliceOp = SpliceOperator('rigScaleSpliceOp', 'RigScaleSolver', 'Kraken')
-        self.addOperator(self.rigScaleSpliceOp)
+        self.rigScaleKLOp = KLOperator('rigScaleKLOp', 'RigScaleSolver', 'Kraken')
+        self.addOperator(self.rigScaleKLOp)
 
         # Add Att Inputs
-        self.rigScaleSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
-        self.rigScaleSpliceOp.setInput('rigScale', self.rigScaleOutputAttr)
+        self.rigScaleKLOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.rigScaleKLOp.setInput('rigScale', self.rigScaleOutputAttr)
 
         # Add Xfo Inputs
 
         # Add Xfo Outputs
-        self.rigScaleSpliceOp.setOutput('target', self.mainSRTCtrlSpace)
+        self.rigScaleKLOp.setOutput('target', self.mainSRTCtrlSpace)
 
 
         Profiler.getInstance().pop()

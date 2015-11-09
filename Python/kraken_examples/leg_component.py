@@ -18,7 +18,7 @@ from kraken.core.objects.joint import Joint
 from kraken.core.objects.ctrlSpace import CtrlSpace
 from kraken.core.objects.control import Control
 
-from kraken.core.objects.operators.splice_operator import SpliceOperator
+from kraken.core.objects.operators.kl_operator import KLOperator
 
 from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
@@ -345,76 +345,76 @@ class LegComponentRig(LegComponent):
         # Add Splice Ops
         # ===============
         # Add Leg Splice Op
-        self.legIKSpliceOp = SpliceOperator('legSpliceOp', 'TwoBoneIKSolver', 'Kraken')
-        self.addOperator(self.legIKSpliceOp)
+        self.legIKKLOp = KLOperator('legKLOp', 'TwoBoneIKSolver', 'Kraken')
+        self.addOperator(self.legIKKLOp)
 
         # Add Att Inputs
-        self.legIKSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
-        self.legIKSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
+        self.legIKKLOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.legIKKLOp.setInput('rigScale', self.rigScaleInputAttr)
 
-        self.legIKSpliceOp.setInput('bone0Len', self.legBone0LenInputAttr)
-        self.legIKSpliceOp.setInput('bone1Len', self.legBone1LenInputAttr)
-        self.legIKSpliceOp.setInput('ikblend', legIKBlendInputAttr)
-        self.legIKSpliceOp.setInput('softIK', legSoftIKInputAttr)
-        self.legIKSpliceOp.setInput('softDist', legSoftDistInputAttr)
-        self.legIKSpliceOp.setInput('stretch', legStretchInputAttr)
-        self.legIKSpliceOp.setInput('stretchBlend', legStretchBlendInputAttr)
-        self.legIKSpliceOp.setInput('rightSide', self.rightSideInputAttr)
+        self.legIKKLOp.setInput('bone0Len', self.legBone0LenInputAttr)
+        self.legIKKLOp.setInput('bone1Len', self.legBone1LenInputAttr)
+        self.legIKKLOp.setInput('ikblend', legIKBlendInputAttr)
+        self.legIKKLOp.setInput('softIK', legSoftIKInputAttr)
+        self.legIKKLOp.setInput('softDist', legSoftDistInputAttr)
+        self.legIKKLOp.setInput('stretch', legStretchInputAttr)
+        self.legIKKLOp.setInput('stretchBlend', legStretchBlendInputAttr)
+        self.legIKKLOp.setInput('rightSide', self.rightSideInputAttr)
 
         # Add Xfo Inputs
-        self.legIKSpliceOp.setInput('root', self.legPelvisInputTgt)
-        self.legIKSpliceOp.setInput('bone0FK', self.femurFKCtrl)
-        self.legIKSpliceOp.setInput('bone1FK', self.shinFKCtrl)
-        self.legIKSpliceOp.setInput('ikHandle', self.legIKCtrl)
-        self.legIKSpliceOp.setInput('upV', self.legUpVCtrl)
+        self.legIKKLOp.setInput('root', self.legPelvisInputTgt)
+        self.legIKKLOp.setInput('bone0FK', self.femurFKCtrl)
+        self.legIKKLOp.setInput('bone1FK', self.shinFKCtrl)
+        self.legIKKLOp.setInput('ikHandle', self.legIKCtrl)
+        self.legIKKLOp.setInput('upV', self.legUpVCtrl)
 
         # Add Xfo Outputs
-        self.legIKSpliceOp.setOutput('bone0Out', self.femurOutputTgt)
-        self.legIKSpliceOp.setOutput('bone1Out', self.shinOutputTgt)
-        self.legIKSpliceOp.setOutput('bone2Out', self.legEndXfoOutputTgt)
+        self.legIKKLOp.setOutput('bone0Out', self.femurOutputTgt)
+        self.legIKKLOp.setOutput('bone1Out', self.shinOutputTgt)
+        self.legIKKLOp.setOutput('bone2Out', self.legEndXfoOutputTgt)
 
 
         # Add Leg Deformer Splice Op
-        self.outputsToDeformersSpliceOp = SpliceOperator('legDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken')
-        self.addOperator(self.outputsToDeformersSpliceOp)
+        self.outputsToDeformersKLOp = KLOperator('legDeformerKLOp', 'MultiPoseConstraintSolver', 'Kraken')
+        self.addOperator(self.outputsToDeformersKLOp)
 
         # Add Att Inputs
-        self.outputsToDeformersSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
-        self.outputsToDeformersSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
+        self.outputsToDeformersKLOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.outputsToDeformersKLOp.setInput('rigScale', self.rigScaleInputAttr)
 
         # Add Xfo Inputs
-        self.outputsToDeformersSpliceOp.setInput('constrainers', [self.femurOutputTgt, self.shinOutputTgt, self.legEndXfoOutputTgt])
+        self.outputsToDeformersKLOp.setInput('constrainers', [self.femurOutputTgt, self.shinOutputTgt, self.legEndXfoOutputTgt])
 
         # Add Xfo Outputs
-        self.outputsToDeformersSpliceOp.setOutput('constrainees', [femurDef, shinDef, ankleDef])
+        self.outputsToDeformersKLOp.setOutput('constrainees', [femurDef, shinDef, ankleDef])
 
         # Add Foot Deformer Splice Op
-        self.footDefSpliceOp = SpliceOperator('footDeformerSpliceOp', 'PoseConstraintSolver', 'Kraken')
-        self.addOperator(self.footDefSpliceOp)
+        self.footDefKLOp = KLOperator('footDeformerKLOp', 'PoseConstraintSolver', 'Kraken')
+        self.addOperator(self.footDefKLOp)
 
         # Add Att Inputs
-        self.footDefSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
-        self.footDefSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
+        self.footDefKLOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.footDefKLOp.setInput('rigScale', self.rigScaleInputAttr)
 
         # Add Xfo Inputs)
-        self.footDefSpliceOp.setInput('constrainer', self.footOutputTgt)
+        self.footDefKLOp.setInput('constrainer', self.footOutputTgt)
 
         # Add Xfo Outputs
-        self.footDefSpliceOp.setOutput('constrainee', self.footDef)
+        self.footDefKLOp.setOutput('constrainee', self.footDef)
 
         # Add Toe Deformer Splice Op
-        self.toeDefSpliceOp = SpliceOperator('toeDeformerSpliceOp', 'PoseConstraintSolver', 'Kraken')
-        self.addOperator(self.toeDefSpliceOp)
+        self.toeDefKLOp = KLOperator('toeDeformerKLOp', 'PoseConstraintSolver', 'Kraken')
+        self.addOperator(self.toeDefKLOp)
 
         # Add Att Inputs
-        self.toeDefSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
-        self.toeDefSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
+        self.toeDefKLOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.toeDefKLOp.setInput('rigScale', self.rigScaleInputAttr)
 
         # Add Xfo Inputs
-        self.toeDefSpliceOp.setInput('constrainer', self.toeOutputTgt)
+        self.toeDefKLOp.setInput('constrainer', self.toeOutputTgt)
 
         # Add Xfo Outputs
-        self.toeDefSpliceOp.setOutput('constrainee', self.toeDef)
+        self.toeDefKLOp.setOutput('constrainee', self.toeDef)
 
         Profiler.getInstance().pop()
 
@@ -482,9 +482,9 @@ class LegComponentRig(LegComponent):
         self.toeOutputConstraint.evaluate()
 
         # Eval Operators
-        self.legIKSpliceOp.evaluate()
-        self.outputsToDeformersSpliceOp.evaluate()
-        self.footDefSpliceOp.evaluate()
+        self.legIKKLOp.evaluate()
+        self.outputsToDeformersKLOp.evaluate()
+        self.footDefKLOp.evaluate()
 
 
 from kraken.core.kraken_system import KrakenSystem

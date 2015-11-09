@@ -8,7 +8,8 @@ function Scalar sq(Scalar v) {
 
 function Xfo[] solveNBoneIK(
   in Xfo basePose[],
-  in Vec3 goalPosition
+  in Vec3 goalPosition,
+  in Scalar rigScale
 ) {
 
   Scalar boneLengths[];
@@ -22,12 +23,12 @@ function Xfo[] solveNBoneIK(
     ikpose[i] = basePose[i];
     // Note: Scaling of bones is currently not supported.
     boneVectors[i] = basePose[i].inverse().transformVector(basePose[i+1].tr);
-    boneLengths[i] = boneVectors[i].length();
+    boneLengths[i] = boneVectors[i].length() * rigScale;
     remainingChainLength += abs(boneLengths[i] /* basePose[i].sc.x*/);
   }
 
   Vec3 chainRootPos = basePose[0].tr;
-  Integer lastBoneIndex = basePose.size-1;
+  Integer lastBoneIndex = basePose.size()-1;
   Vec3 fkChainTip = basePose[lastBoneIndex].tr;
 
   // Apply the soft limit to the distance to the IK goal
@@ -152,7 +153,8 @@ function Xfo[] solveNBoneIKWithUpVector(
   in Xfo basePose[],
   in Vec3 goalPosition,
   in Vec3 upVPosition,
-  in Vec3 upVector
+  in Vec3 upVector,
+  in Scalar rigScale
 ) {
   Vec3 chainRootPos = basePose[0].tr;
   Integer lastBoneIndex = basePose.size-1;
@@ -180,19 +182,20 @@ function Xfo[] solveNBoneIKWithUpVector(
   Quat upVectorOffset;
   upVectorOffset.setFromAxisAndAngle(vecToIkGoal, angle);
   chainOffsetRotation = upVectorOffset * chainOffsetRotation;
-  
+
   // compute a new aligned chain that includes the re-orientation using the upvector.
   Xfo alignedPose[];
   alignedPose.resize(basePose.size);
   for (Integer i = 0; i < basePose.size(); i++) {
-    alignedPose[i] = chainOffsetRotation * basePose[i];
+    alignedPose[i] = basePose[i];
+    alignedPose[i].ori = chainOffsetRotation * basePose[i].ori;
     if(i==0)
       alignedPose[i].tr = chainRootPos;
     else
       alignedPose[i].tr = alignedPose[i-1].transformVector(basePose[i-1].inverse().transformVector(basePose[i].tr));
   }
 
-  // Now solve the chain like normal. 
-  return solveNBoneIK(alignedPose, goalPosition);
+  // Now solve the chain like normal.
+  return solveNBoneIK(alignedPose, goalPosition, rigScale);
 }
 
