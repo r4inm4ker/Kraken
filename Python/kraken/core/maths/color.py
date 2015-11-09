@@ -178,7 +178,7 @@ class Color(MathObject):
 
         Args:
             r (float): Value to set the r channel to.
-            g (float): Value to set the x channel to.
+            g (float): Value to set the g channel to.
             b (float): Value to set the b channel to.
             a (float): Value to set the a channel to.
 
@@ -187,7 +187,7 @@ class Color(MathObject):
 
         """
 
-        self._rtval.set('', ks.rtVal('Scalar', x), ks.rtVal('Scalar', g),
+        self._rtval.set('', ks.rtVal('Scalar', r), ks.rtVal('Scalar', g),
                         ks.rtVal('Scalar', b), ks.rtVal('Scalar', a))
 
         return True
