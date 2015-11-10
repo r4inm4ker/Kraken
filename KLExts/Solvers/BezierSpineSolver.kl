@@ -63,9 +63,10 @@ function BezierSpineSolver.solve!
 {
   Vec3 coeffs[4] = bezierCoeffs(base.translation(), baseHandle.translation(), tipHandle.translation(), tip.translation());
   // sample the curve 2x for every output joint
-  Scalar distances[] = measureBezierLength(coeffs, outputs.size*2);
-  Scalar curveLength = distances[distances.size-1];
-  Scalar segLength = (length * rigScale) / Scalar(outputs.size);
+  Scalar distances[] = measureBezierLength(coeffs, outputs.size() * 2);
+  Scalar curveLength = distances[distances.size() - 1];
+
+  Scalar jointLength = (length * rigScale) / Scalar(outputs.size());
   Scalar currIndex = 1;
   Xfo baseXfo(base);
   Xfo tipXfo(tip);
@@ -76,8 +77,10 @@ function BezierSpineSolver.solve!
   baseXfo.ori = baseXfo.ori * xAlignmentOffset;
   tipXfo.ori = tipXfo.ori * xAlignmentOffset;
 
+  Vec3 tipPositions[];
+  tipPositions.resize(outputs.size());
   Xfo preXfo;
-  for(UInt32 i=0; i<outputs.size; i++){
+  for(UInt32 i=0; i<outputs.size(); i++){
 
     Xfo outXfo;
     {
@@ -86,26 +89,27 @@ function BezierSpineSolver.solve!
         outXfo.tr = base.translation();
       else
         // transform the vector without applying scale.
-        outXfo.tr = preXfo.tr + preXfo.ori.rotateVector(Vec3(segLength, 0.0, 0.0));
+        outXfo.tr = preXfo.tr + preXfo.ori.rotateVector(Vec3(jointLength, 0.0, 0.0));
     }
 
     {
       // Compute the rotation by linear interpollating the base and tip controllers.
-      Scalar fractVal = Scalar(i+0.5) / Scalar(outputs.size);
+      Scalar fractVal = Scalar(i+0.5) / Scalar(outputs.size());
       outXfo.ori = baseXfo.ori.sphericalLinearInterpolate(tipXfo.ori, fractVal );
     }
     {
       // Determine the curve parameter for the tip of the joint
       // by walking the curve's distance values.
-      Scalar tipDist = segLength * (i+1);
+      Scalar tipDist = jointLength * (i+1);
       Scalar curveTipParam;
       if(tipDist < curveLength){
-        for(UInt32 j=currIndex; j<distances.size; j++) {
+        for(UInt32 j=currIndex; j<distances.size(); j++) {
           if(distances[j] > tipDist) {
             currIndex = j-1;
-            // curveTipParam = (Scalar(currIndex) / Scalar(distances.size)) + (((tipDist - distances[j-1]) / segLength) * (1.0 / Scalar(distances.size)));
-            Float32 ratio = (tipDist - distances[j-1]) / segLength;
-            curveTipParam = (Scalar(currIndex) / Scalar(distances.size()-1)) + ( ratio / Scalar(distances.size()-1));
+            // curveTipParam = (Scalar(currIndex) / Scalar(distances.size)) + (((tipDist - distances[j-1]) / jointLength) * (1.0 / Scalar(distances.size)));
+            Float32 ratio = (tipDist - distances[j - 1]) / (distances[j] - distances[j - 1]);
+            report(i + ': ' + ratio + '; currentIndex: ' + currIndex);
+            curveTipParam = (Scalar(currIndex) / Scalar(distances.size() - 1)) + ( ratio / Scalar(distances.size() - 1));
             break;
           }
         }
@@ -113,7 +117,7 @@ function BezierSpineSolver.solve!
       else
         {
         report("CURVE TOO SHORT!!");
-        curveTipParam = 1.0 + (((tipDist - curveLength) / segLength) * outputs.size);
+        curveTipParam = 1.0 + (((tipDist - curveLength) / jointLength) * outputs.size());
         }
 
       // Compute the postion on the curve of the tip of the spine.
@@ -125,8 +129,10 @@ function BezierSpineSolver.solve!
         {
           report("Projected off the end!!");
           // project a postiion off the end of the bezier curve
-          targ = tipXfo.tr + (tipXfo.tr - tipHandle.translation()).unit() * ((curveTipParam - 1.0) * segLength);
+          targ = tipXfo.tr + (tipXfo.tr - tipHandle.translation()).unit() * ((curveTipParam - 1.0) * jointLength);
         }
+
+      tipPositions[i] = targ;
 
       // Align the joint so it points at the target position computed.
       Quat alignment;
@@ -153,9 +159,12 @@ function BezierSpineSolver.solve!
     }
     drawLineStrip(this.handle.rootTransform, 'curve', positions, Color(1.0, 0.0, 0));
 
+    InlinePointsShape myShape = drawPoints(this.handle.rootTransform, 'tipPositions', tipPositions, Color(0.0, 1.0, 0), 2);
+    // myShape.setPointsSize(10);
+
     // Color boneColor(1.0, 1.0, 0);
     // for(UInt32 i=0; i<outputs.size; i++)
-    //   etDrawBone(this.handle.rootTransform, 'constraint'+i, outputs[i], segLength, segLength * 0.25, boneColor);
+    //   etDrawBone(this.handle.rootTransform, 'constraint'+i, outputs[i], jointLength, jointLength * 0.25, boneColor);
   }
 
 }
