@@ -73,7 +73,7 @@ function BezierSpineSolver.solve!
 
   // Adding an offset to align the output's x axis down the length of the spine.
   Quat xAlignmentOffset;
-  xAlignmentOffset.setFromAxisAndAngle(Vec3(0,1,0), HALF_PI);
+  xAlignmentOffset.setFromAxisAndAngle(Vec3(0, 1, 0), HALF_PI);
   baseXfo.ori = baseXfo.ori * xAlignmentOffset;
   tipXfo.ori = tipXfo.ori * xAlignmentOffset;
 
@@ -94,7 +94,7 @@ function BezierSpineSolver.solve!
 
     {
       // Compute the rotation by linear interpollating the base and tip controllers.
-      Scalar fractVal = Scalar(i+0.5) / Scalar(outputs.size());
+      Scalar fractVal = Scalar(i + 0.5) / Scalar(outputs.size());
       outXfo.ori = baseXfo.ori.sphericalLinearInterpolate(tipXfo.ori, fractVal );
     }
     {
@@ -102,24 +102,19 @@ function BezierSpineSolver.solve!
       // by walking the curve's distance values.
       Scalar tipDist = jointLength * (i+1);
       Scalar curveTipParam;
-      if(tipDist < curveLength){
-        for(UInt32 j=currIndex; j<distances.size(); j++) {
+      if(tipDist < curveLength) {
+        for(UInt32 j=currIndex; j < distances.size(); j++) {
           if(distances[j] > tipDist) {
             currIndex = j-1;
-            // curveTipParam = (Scalar(currIndex) / Scalar(distances.size)) + (((tipDist - distances[j-1]) / jointLength) * (1.0 / Scalar(distances.size)));
             Float32 ratio = (tipDist - distances[j - 1]) / (distances[j] - distances[j - 1]);
-            report(i + ': ' + ratio + '; currentIndex: ' + currIndex);
             curveTipParam = (Scalar(currIndex) / Scalar(distances.size() - 1)) + ( ratio / Scalar(distances.size() - 1));
             break;
           }
         }
       }
-      else
-        {
-        report("CURVE TOO SHORT!!");
+      else {
         curveTipParam = 1.0 + (((tipDist - curveLength) / jointLength));
-        report(curveTipParam);
-        }
+      }
 
       // Compute the postion on the curve of the tip of the spine.
       Vec3 targ;
@@ -128,7 +123,6 @@ function BezierSpineSolver.solve!
         targ = evalBezier(coeffs, curveTipParam);
       else
         {
-          report("Projected off the end!!");
           // project a postiion off the end of the bezier curve
           targ = tipXfo.tr + (tipXfo.tr - tipHandle.translation()).unit() * ((curveTipParam - 1.0) * jointLength);
         }
@@ -161,10 +155,9 @@ function BezierSpineSolver.solve!
     drawLineStrip(this.handle.rootTransform, 'curve', positions, Color(1.0, 0.0, 0));
 
     InlinePointsShape myShape = drawPoints(this.handle.rootTransform, 'tipPositions', tipPositions, Color(0.0, 1.0, 0), 2);
-    // myShape.setPointsSize(10);
 
     // Color boneColor(1.0, 1.0, 0);
-    // for(UInt32 i=0; i<outputs.size; i++)
+    // for(UInt32 i=0; i<outputs.size(); i++)
     //   etDrawBone(this.handle.rootTransform, 'constraint'+i, outputs[i], jointLength, jointLength * 0.25, boneColor);
   }
 
