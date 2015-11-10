@@ -207,9 +207,13 @@ class KrakenMenu(QtGui.QWidget):
 
 
     def writeSettings(self, settings):
+        krakenUIWidget = self.window().krakenUI
+        graphViewWidget = krakenUIWidget.graphViewWidget
+
         settings.beginGroup("KrakenMenu")
         settings.setValue("currentConfig", self.configsWidget.currentIndex())
-        settings.setValue("snapToGrid", self.snapToGridAction.isChecked())
+        settings.setValue("snapToGrid", graphViewWidget.graphView.getSnapToGrid())
+
         settings.endGroup()
 
 
@@ -223,7 +227,11 @@ class KrakenMenu(QtGui.QWidget):
             self.setCurrentConfig(currentConfig)
 
         if settings.contains('snapToGrid'):
-            snapToGrid = bool(settings.value('snapToGrid'))
+            if settings.value('snapToGrid') == 'true':
+                snapToGrid = True
+            else:
+                snapToGrid = False
+
             self.snapToGridAction.setChecked(snapToGrid)
             graphViewWidget.graphView.setSnapToGrid(snapToGrid)
 
