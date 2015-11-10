@@ -117,7 +117,8 @@ function BezierSpineSolver.solve!
       else
         {
         report("CURVE TOO SHORT!!");
-        curveTipParam = 1.0 + (((tipDist - curveLength) / jointLength) * outputs.size());
+        curveTipParam = 1.0 + (((tipDist - curveLength) / jointLength));
+        report(curveTipParam);
         }
 
       // Compute the postion on the curve of the tip of the spine.
