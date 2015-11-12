@@ -24,6 +24,34 @@ class Control(Curve):
         """
 
         super(Control, self).__init__(name, parent=parent)
+        self.shape = shape
+
+        self.setShape(shape)
+
+    # ==============
+    # Shape Methods
+    # ==============
+    def getShape(self):
+        """Returns the shape that the control was set to.
+
+        Returns:
+            str: Name of the shape that was set.
+
+        """
+
+        return self.shape
+
+
+    def setShape(self, shape):
+        """Sets the shape of the control to the one specified.
+
+        Args:
+            shape (str): the desired shape of the control.
+
+        Returns:
+            bool: True if successful.
+
+        """
 
         config = Config.getInstance()
         configShapes = config.getControlShapes()
@@ -31,6 +59,9 @@ class Control(Curve):
             raise KeyError("'" + shape + "' is not a valid shape in the loaded config.")
 
         self.setCurveData(configShapes[shape])
+
+        return True
+
 
 
     # ==============

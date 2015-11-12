@@ -7,8 +7,8 @@
 import json
 from PySide import QtGui, QtCore
 
-from graph_view.node import Node
-from graph_view.port import PortCircle, BasePort, PortLabel
+from pyflowgraph.node import Node
+from pyflowgraph.port import PortCircle, BasePort, PortLabel
 
 from kraken.core.maths import Vec2
 
@@ -71,7 +71,6 @@ class KNodePortCircle(PortCircle):
             return False
 
         return True
-
 
 
 class KNodeInputPort(BasePort):
@@ -137,11 +136,6 @@ class KNode(Node):
 
     def translate(self, x, y):
         super(KNode, self).translate(x, y)
-        graphPos = self.getGraphPos()
-        self.__component.setGraphPos( Vec2(graphPos.x(), graphPos.y()) )
-
-
-    def pushGraphPosToComponent(self):
         graphPos = self.getGraphPos()
         self.__component.setGraphPos( Vec2(graphPos.x(), graphPos.y()) )
 

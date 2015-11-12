@@ -13,14 +13,14 @@ object DynamicChainSolver : KrakenSolver {
 // Return Arguments for Kraken
 function KrakenSolverArg[] DynamicChainSolver.getArguments() {
   KrakenSolverArg args[] = this.parent.getArguments();
-  args.push(KrakenSolverArg('resetframe', 'in', 'Scalar'));
-  args.push(KrakenSolverArg('frame', 'in', 'Scalar'));
-  args.push(KrakenSolverArg('simBlendStart', 'in', 'Scalar'));
-  args.push(KrakenSolverArg('simBlendEnd', 'in', 'Scalar'));
-  args.push(KrakenSolverArg('dampening', 'in', 'Scalar'));
-  args.push(KrakenSolverArg('gravity', 'in', 'Scalar'));
-  args.push(KrakenSolverArg('fkPose', 'in', 'Mat44[]'));
-  args.push(KrakenSolverArg('animPose', 'out', 'Mat44[]'));
+  args.push(KrakenSolverArg('resetframe', 'In', 'Scalar'));
+  args.push(KrakenSolverArg('frame', 'In', 'Scalar'));
+  args.push(KrakenSolverArg('simBlendStart', 'In', 'Scalar'));
+  args.push(KrakenSolverArg('simBlendEnd', 'In', 'Scalar'));
+  args.push(KrakenSolverArg('dampening', 'In', 'Scalar'));
+  args.push(KrakenSolverArg('gravity', 'In', 'Scalar'));
+  args.push(KrakenSolverArg('fkPose', 'In', 'Mat44[]'));
+  args.push(KrakenSolverArg('animPose', 'Out', 'Mat44[]'));
   return args;
 }
 

@@ -6,8 +6,10 @@ from PySide import QtGui, QtCore
 
 import kraken.ui.kraken_ui
 reload(kraken.ui.kraken_ui)
+import kraken.ui.images_rc
 from kraken.ui.kraken_menu import KrakenMenu
 from kraken.ui.kraken_ui import KrakenUI
+from kraken import plugins
 
 
 class KrakenWindow(QtGui.QMainWindow):
@@ -17,30 +19,36 @@ class KrakenWindow(QtGui.QMainWindow):
         super(KrakenWindow, self).__init__(parent)
         self.setObjectName('KrakenMainWindow')
         self.setWindowTitle('Kraken Editor')
+        self.setWindowIcon(QtGui.QIcon(':/images/Kraken_Icon.png'))
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
+
+        # Set system output to write to output log object
+        self.outputLog = plugins.getLogger()
 
         QtCore.QCoreApplication.setOrganizationName("Kraken")
         QtCore.QCoreApplication.setApplicationName("Kraken Editor")
+        self.settings = QtCore.QSettings("Kraken", "Kraken Editor")
 
         cssPath = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                'kraken_ui.css')
 
+        styleData = ''
         with open(cssPath) as cssFile:
             styleData = cssFile.read()
 
         self.setStyleSheet(styleData)
-
-        uiDir = os.path.dirname(inspect.getfile(KrakenUI))
-        iconPath = os.path.join(uiDir, 'images', 'Kraken_Icon.png')
-        self.setWindowIcon(QtGui.QIcon(iconPath))
-
-        self.settings = QtCore.QSettings("Kraken", "Kraken Editor")
 
         self.createLayout()
         self.createConnections()
 
 
     def createLayout(self):
+
+        # Setup Status Bar
+        statusBar = self.statusBar()
+        self.outputLogButton = QtGui.QPushButton('Log', self)
+        self.outputLogButton.setObjectName('outputLog_button')
+        statusBar.insertPermanentWidget(0, self.outputLogButton)
 
         mainWidget = QtGui.QWidget()
 
@@ -68,8 +76,8 @@ class KrakenWindow(QtGui.QMainWindow):
 
 
     def createConnections(self):
+        self.outputLogButton.clicked.connect(self.showOutputLog)
         self.krakenMenu.newAction.triggered.connect(self.krakenUI.graphViewWidget.newRigPreset)
-
         self.krakenUI.graphViewWidget.rigNameChanged.connect(self.krakenMenu.updateRigNameLabel)
 
 
@@ -134,6 +142,51 @@ class KrakenWindow(QtGui.QMainWindow):
         self.writeSettings()
 
 
+    def showOutputLog(self):
+        outputDialog = OutputLogDialog(self)
+        outputDialog.show()
+        outputDialog.setText(self.outputLog.getLog())
+
+
+class OutputLogDialog(QtGui.QDialog):
+    """Output Dialog"""
+
+    def __init__(self, parent=None):
+        super(OutputLogDialog, self).__init__(parent)
+        self.setObjectName('outputLog')
+        self.resize(700, 300)
+        self.setWindowTitle('Kraken Output Log')
+
+        self.createLayout()
+        self.createConnections()
+
+
+    def createLayout(self):
+        """Sets up the layout for the dialog."""
+
+        self.textWidget = QtGui.QTextEdit()
+        self.textWidget.setLineWrapMode(QtGui.QTextEdit.NoWrap)
+        self.textWidget.setReadOnly(True)
+
+        self.outputLogLayout = QtGui.QVBoxLayout(self)
+        self.outputLogLayout.addWidget(self.textWidget)
+
+        self.setLayout(self.outputLogLayout)
+
+
+    def createConnections(self):
+        """Connects widgets to methods or other signals."""
+
+        pass
+
+
+    def setText(self, text):
+        """Sets the text of the text widget."""
+
+        self.textWidget.setText(text)
+
+
+
 def createSplash(app):
     """Creates a splash screen object to show while the Window is loading.
 
@@ -143,11 +196,9 @@ def createSplash(app):
     """
 
     uiDir = os.path.dirname(inspect.getfile(KrakenUI))
-    splashPixmap = QtGui.QPixmap()
-    splashImgPath = os.path.join(uiDir, 'images', 'KrakenUI_Splash.png')
-    splashPixmap.load(splashImgPath)
+    splashPixmap = QtGui.QPixmap(':/images/KrakenUI_Splash.png')
 
-    splash = QtGui.QSplashScreen(splashPixmap, QtCore.Qt.WindowStaysOnTopHint)
+    splash = QtGui.QSplashScreen(splashPixmap)
     splash.setMask(splashPixmap.mask())
     splash.showMessage("Loading Extensions...",
                        QtCore.Qt.AlignBottom | QtCore.Qt.AlignLeft,

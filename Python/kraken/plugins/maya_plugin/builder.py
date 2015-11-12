@@ -16,6 +16,8 @@ from kraken.plugins.maya_plugin.utils import *
 
 import FabricEngine.Core as core
 
+import maya.cmds as cmds
+
 
 class Builder(Builder):
     """Builder object for building Kraken objects in Maya."""
@@ -576,7 +578,7 @@ class Builder(Builder):
     # =========================
     # Operator Builder Methods
     # =========================
-    def buildSpliceOperators(self, kOperator):
+    def buildKLOperator(self, kOperator):
         """Builds Splice Operators on the components.
 
         Args:
@@ -591,48 +593,57 @@ class Builder(Builder):
             solverTypeName = kOperator.getSolverTypeName()
 
             # Create Splice Operator
-            spliceNode = pm.createNode('spliceMayaNode', name=kOperator.getName() + "_SpliceOp")
+            spliceNode = cmds.createNode('dfgMayaNode', name=kOperator.getName())
+            cmds.FabricCanvasSetExtDeps(mayaNode=spliceNode, execPath="", extDep=kOperator.extension)
 
-            # Add the private/non-mayaAttr port that stores the Solver object
-            cmds.fabricSplice("addIOPort", spliceNode, "{\"portName\":\"solver\", \"dataType\":\"" + solverTypeName + "\", \"extension\":\"" + kOperator.getExtension() + "\", \"addMayaAttr\": false}")
+            cmds.FabricCanvasAddFunc(mayaNode=spliceNode, execPath="", title=kOperator.getName(), code="dfgEntry {}", xPos="100", yPos="100")
+            cmds.FabricCanvasAddPort(mayaNode=spliceNode, execPath=kOperator.getName(), desiredPortName="solver", portType="IO", typeSpec=solverTypeName, connectToPortPath="", extDep=kOperator.extension)
+            cmds.FabricCanvasAddPort(mayaNode=spliceNode, execPath="", desiredPortName="solver", portType="IO", typeSpec=solverTypeName, connectToPortPath="", extDep=kOperator.extension )
+            cmds.FabricCanvasConnect(mayaNode=spliceNode, execPath="", srcPortPath="solver", dstPortPath=kOperator.getName()+".solver")
+            cmds.FabricCanvasConnect(mayaNode=spliceNode, execPath="", srcPortPath=kOperator.getName()+".solver", dstPortPath="solver")
 
             arraySizes = {}
             # connect the operator to the objects in the DCC
             args = kOperator.getSolverArgs()
             for i in xrange(len(args)):
                 arg = args[i]
-                if arg.dataType == 'EvalContext':
-                    cmds.fabricSplice("addInputPort", spliceNode, json.dumps({"portName": arg.name, "dataType": arg.dataType, "addMayaAttr": False }), "")
+                argName = arg.name.getSimpleType()
+                argDataType = arg.dataType.getSimpleType()
+                argConnectionType = arg.connectionType.getSimpleType()
+
+                if argConnectionType == 'In':
+                    cmds.FabricCanvasAddPort(mayaNode=spliceNode, execPath="", desiredPortName=argName, portType="In", typeSpec=argDataType, connectToPortPath="")
+                    cmds.FabricCanvasAddPort(mayaNode=spliceNode, execPath=kOperator.getName(), desiredPortName=argName, portType="In", typeSpec=argDataType, connectToPortPath="")
+                    cmds.FabricCanvasConnect(mayaNode=spliceNode, execPath="", srcPortPath=argName, dstPortPath=kOperator.getName()+"."+argName)
+                elif argConnectionType in ['IO', 'Out']:
+                    cmds.FabricCanvasAddPort(mayaNode=spliceNode, execPath="", desiredPortName=argName, portType="Out", typeSpec=argDataType, connectToPortPath="")
+                    cmds.FabricCanvasAddPort(mayaNode=spliceNode, execPath=kOperator.getName(), desiredPortName=argName, portType="Out", typeSpec=argDataType, connectToPortPath="")
+                    cmds.FabricCanvasConnect(mayaNode=spliceNode, execPath="", srcPortPath=kOperator.getName()+"."+argName, dstPortPath=argName)
+
+                if argDataType == 'EvalContext':
                     continue
-                if arg.name == 'time':
-                    cmds.fabricSplice("addInputPort", spliceNode, json.dumps({"portName": arg.name, "dataType": arg.dataType, "addMayaAttr": True }), "")
+                if argName == 'time':
                     cmds.expression( o=spliceNode + '.time', s=spliceNode + '.time = time;' )
                     continue
-                if arg.name == 'frame':
-                    cmds.fabricSplice("addInputPort", spliceNode, json.dumps({"portName": arg.name, "dataType": arg.dataType, "addMayaAttr": True }), "")
+                if argName == 'frame':
                     cmds.expression( o=spliceNode + '.frame', s=spliceNode + '.frame = frame;' )
                     continue
 
-                portArgs = {"portName": arg.name, "dataType": arg.dataType, "extension":"", "addMayaAttr": True }
-
                 # Get the argument's input from the DCC
-                # Note: this used to be a try/catch statement, which seemed quite strange to me.
-                # I've replaced with a proper test with an exception if the item is not found.
-                if arg.connectionType == 'in':
-                    connectedObjects = kOperator.getInput(arg.name)
-                elif arg.connectionType in ['io', 'out']:
-                    connectedObjects = kOperator.getOutput(arg.name)
+                if argConnectionType == 'In':
+                    connectedObjects = kOperator.getInput(argName)
+                elif argConnectionType in ['IO', 'Out']:
+                    connectedObjects = kOperator.getOutput(argName)
 
-                if arg.dataType.endswith('[]'):
-                    portArgs['arrayType'] = "Array (Multi)"
+                if argDataType.endswith('[]'):
 
                     # In SpliceMaya, output arrays are not resized by the system prior to calling into Splice, so we
                     # explicily resize the arrays in the generated operator stub code.
-                    if arg.connectionType in ['io', 'out']:
-                        arraySizes[arg.name] = len(connectedObjects)
+                    if argConnectionType in ['IO', 'Out']:
+                        arraySizes[argName] = len(connectedObjects)
 
                     if len(connectedObjects) == 0:
-                        raise Exception("Operator '"+kOperator.getName()+"' of type '"+solverTypeName+"' arg '"+arg.name+"' not connected.");
+                        raise Exception("Operator '"+kOperator.getName()+"' of type '"+solverTypeName+"' arg '"+argName+"' not connected.");
 
                     connectionTargets = []
                     for i in range(len(connectedObjects)):
@@ -640,23 +651,22 @@ class Builder(Builder):
                         dccSceneItem = self.getDCCSceneItem(opObject)
 
                         if dccSceneItem is None:
-                            raise Exception("Operator '"+kOperator.getName()+"' of type '"+solverTypeName+"' arg '"+arg.name+"' dcc item not found for item:" + opObject.getPath());
+                            raise Exception("Operator '"+kOperator.getName()+"' of type '"+solverTypeName+"' arg '"+argName+"' dcc item not found for item:" + opObject.getPath());
                         connectionTargets.append( { 'opObject': opObject, 'dccSceneItem': dccSceneItem} )
                 else:
                     if connectedObjects is None:
-                        raise Exception("Operator '"+kOperator.getName()+"' of type '"+solverTypeName+"' arg '"+arg.name+"' not connected.");
+                        raise Exception("Operator '"+kOperator.getName()+"' of type '"+solverTypeName+"' arg '"+argName+"' not connected.");
 
                     opObject = connectedObjects
                     dccSceneItem = self.getDCCSceneItem(opObject)
 
                     if dccSceneItem is None:
-                        raise Exception("Operator '"+kOperator.getName()+"' of type '"+solverTypeName+"' arg '"+arg.name+"' dcc item not found for item:" + connectedObjects.getPath());
+                        raise Exception("Operator '"+kOperator.getName()+"' of type '"+solverTypeName+"' arg '"+argName+"' dcc item not found for item:" + connectedObjects.getPath());
 
                     connectionTargets = { 'opObject': opObject, 'dccSceneItem': dccSceneItem }
 
                 # Add the splice Port for each arg.
-                if arg.connectionType == 'in':
-                    cmds.fabricSplice("addInputPort", spliceNode, json.dumps(portArgs), "")
+                if argConnectionType == 'In':
 
                     def connectInput(tgt, opObject, dccSceneItem):
                         if isinstance(opObject, Attribute):
@@ -666,14 +676,13 @@ class Builder(Builder):
                         else:
                             raise Exception(opObject.getPath() + " with type '" + opObject.getTypeName() + " is not implemented!")
 
-                    if arg.dataType.endswith('[]'):
+                    if argDataType.endswith('[]'):
                         for i in range(len(connectionTargets)):
-                            connectInput(str(spliceNode.attr(arg.name))+'['+str(i)+']', connectionTargets[i]['opObject'], connectionTargets[i]['dccSceneItem'])
+                            connectInput( spliceNode + "." + argName+'['+str(i)+']', connectionTargets[i]['opObject'], connectionTargets[i]['dccSceneItem'])
                     else:
-                        connectInput(str(spliceNode.attr(arg.name)), connectionTargets['opObject'], connectionTargets['dccSceneItem'])
+                        connectInput( spliceNode + "." + argName, connectionTargets['opObject'], connectionTargets['dccSceneItem'])
 
-                elif arg.connectionType in ['io', 'out']:
-                    cmds.fabricSplice("addOutputPort", spliceNode, json.dumps(portArgs), "")
+                elif argConnectionType in ['IO', 'Out']:
 
                     def connectOutput(src, opObject, dccSceneItem):
                         if isinstance(opObject, Attribute):
@@ -687,17 +696,139 @@ class Builder(Builder):
                             decomposeNode.attr("outputScale").connect(dccSceneItem.attr("scale"))
                             decomposeNode.attr("outputTranslate").connect(dccSceneItem.attr("translate"))
 
-
-                    if arg.dataType.endswith('[]'):
+                    if argDataType.endswith('[]'):
                         for i in range(len(connectionTargets)):
-                            connectOutput(str(spliceNode.attr(arg.name))+'['+str(i)+']', connectionTargets[i]['opObject'], connectionTargets[i]['dccSceneItem'])
+                            connectOutput(str(spliceNode + "." + argName)+'['+str(i)+']', connectionTargets[i]['opObject'], connectionTargets[i]['dccSceneItem'])
                     else:
-                        connectOutput(str(spliceNode.attr(arg.name)), connectionTargets['opObject'], connectionTargets['dccSceneItem'])
+                        connectOutput(str(spliceNode + "." + argName), connectionTargets['opObject'], connectionTargets['dccSceneItem'])
 
-            # Generate the operator source code.
+
             opSourceCode = kOperator.generateSourceCode(arraySizes=arraySizes)
+            cmds.FabricCanvasSetCode(mayaNode=spliceNode, execPath=kOperator.getName(), code=opSourceCode)
 
-            cmds.fabricSplice('addKLOperator', spliceNode, '{"opName": "' + kOperator.getName() + '"}', opSourceCode)
+        finally:
+            pass
+
+        return True
+
+
+    def buildCanvasOperator(self, kOperator):
+        """Builds Splice Operators on the components.
+
+        Args:
+            kOperator (Object): Kraken operator that represents a Splice operator.
+
+        Return:
+            bool: True if successful.
+
+        """
+
+        try:
+            graphDesc = kOperator.getGraphDesc()
+            graphNodeName = kOperator.getPresetPath().split('.')[-1]
+
+            # Create Splice Operator
+            spliceNode = cmds.createNode('dfgMayaNode', name=kOperator.getName())
+            cmds.FabricCanvasSetExtDeps(mayaNode=spliceNode, execPath="", extDep="Kraken" )
+            cmds.FabricCanvasInstPreset(mayaNode=spliceNode, execPath="", presetPath=kOperator.getPresetPath(), xPos="100", yPos="100")
+
+            arraySizes = {}
+            # connect the operator to the objects in the DCC
+            for port in graphDesc['ports']:
+                portName = port['name']
+                portConnectionType = port['execPortType']
+                portDataType = port['typeSpec']
+
+                if portConnectionType == 'In':
+                    cmds.FabricCanvasAddPort(mayaNode=spliceNode, execPath="", desiredPortName=portName, portType="In", typeSpec=portDataType, connectToPortPath="")
+                    cmds.FabricCanvasConnect(mayaNode=spliceNode, execPath="", srcPortPath=portName, dstPortPath=graphNodeName+"."+portName)
+                elif portConnectionType in ['IO', 'Out']:
+                    cmds.FabricCanvasAddPort(mayaNode=spliceNode, execPath="", desiredPortName=portName, portType="Out", typeSpec=portDataType, connectToPortPath="")
+                    cmds.FabricCanvasConnect(mayaNode=spliceNode, execPath="", srcPortPath=graphNodeName+"."+portName, dstPortPath=portName)
+                else:
+                    raise Exception("Invalid connection type:" + portConnectionType)
+
+                if portDataType == 'EvalContext':
+                    continue
+                if portName == 'time':
+                    cmds.expression( o=spliceNode + '.time', s=spliceNode + '.time = time;' )
+                    continue
+                if portName == 'frame':
+                    cmds.expression( o=spliceNode + '.frame', s=spliceNode + '.frame = frame;' )
+                    continue
+
+                # Get the portument's input from the DCC
+                if portConnectionType == 'In':
+                    connectedObjects = kOperator.getInput(portName)
+                elif portConnectionType in ['IO', 'Out']:
+                    connectedObjects = kOperator.getOutput(portName)
+
+                if portDataType.endswith('[]'):
+
+                    # In SpliceMaya, output arrays are not resized by the system prior to calling into Splice, so we
+                    # explicily resize the arrays in the generated operator stub code.
+                    if portConnectionType in ['IO', 'Out']:
+                        arraySizes[portName] = len(connectedObjects)
+
+                    if len(connectedObjects) == 0:
+                        raise Exception("Operator '"+kOperator.getName()+"' of type '"+kOperator.getPresetPath()+"' port '"+portName+"' not connected.");
+
+                    connectionTargets = []
+                    for i in range(len(connectedObjects)):
+                        opObject = connectedObjects[i]
+                        dccSceneItem = self.getDCCSceneItem(opObject)
+
+                        if dccSceneItem is None:
+                            raise Exception("Operator '"+kOperator.getName()+"' of type '"+kOperator.getPresetPath()+"' port '"+portName+"' dcc item not found for item:" + opObject.getPath());
+                        connectionTargets.append( { 'opObject': opObject, 'dccSceneItem': dccSceneItem} )
+                else:
+                    if connectedObjects is None:
+                        raise Exception("Operator '"+kOperator.getName()+"' of type '"+kOperator.getPresetPath()+"' port '"+portName+"' not connected.");
+
+                    opObject = connectedObjects
+                    dccSceneItem = self.getDCCSceneItem(opObject)
+
+                    if dccSceneItem is None:
+                        raise Exception("Operator '"+kOperator.getName()+"' of type '"+kOperator.getPresetPath()+"' port '"+portName+"' dcc item not found for item:" + connectedObjects.getPath());
+
+                    connectionTargets = { 'opObject': opObject, 'dccSceneItem': dccSceneItem }
+
+                # Add the splice Port for each port.
+                if portConnectionType == 'In':
+
+                    def connectInput(tgt, opObject, dccSceneItem):
+                        if isinstance(opObject, Attribute):
+                            cmds.connectAttr(str(dccSceneItem), tgt)
+                        elif isinstance(opObject, Object3D):
+                            cmds.connectAttr(str(dccSceneItem.attr('worldMatrix')), tgt)
+                        else:
+                            raise Exception(opObject.getPath() + " with type '" + opObject.getTypeName() + " is not implemented!")
+
+                    if portDataType.endswith('[]'):
+                        for i in range(len(connectionTargets)):
+                            connectInput( spliceNode + "." + portName+'['+str(i)+']', connectionTargets[i]['opObject'], connectionTargets[i]['dccSceneItem'])
+                    else:
+                        connectInput( spliceNode + "." + portName, connectionTargets['opObject'], connectionTargets['dccSceneItem'])
+
+                elif portConnectionType in ['IO', 'Out']:
+
+                    def connectOutput(src, opObject, dccSceneItem):
+                        if isinstance(opObject, Attribute):
+                            cmds.connectAttr(src, str(dccSceneItem))
+
+                        elif isinstance(opObject, Object3D):
+                            decomposeNode = pm.createNode('decomposeMatrix')
+                            cmds.connectAttr(src, str(decomposeNode.attr("inputMatrix")))
+
+                            decomposeNode.attr("outputRotate").connect(dccSceneItem.attr("rotate"))
+                            decomposeNode.attr("outputScale").connect(dccSceneItem.attr("scale"))
+                            decomposeNode.attr("outputTranslate").connect(dccSceneItem.attr("translate"))
+
+                    if portDataType.endswith('[]'):
+                        for i in range(len(connectionTargets)):
+                            connectOutput(str(spliceNode + "." + portName)+'['+str(i)+']', connectionTargets[i]['opObject'], connectionTargets[i]['dccSceneItem'])
+                    else:
+                        connectOutput(str(spliceNode + "." + portName), connectionTargets['opObject'], connectionTargets['dccSceneItem'])
 
         finally:
             pass

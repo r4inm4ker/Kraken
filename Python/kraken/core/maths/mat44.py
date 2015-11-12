@@ -69,7 +69,7 @@ class Mat44(MathObject):
 
         """
 
-        self._rtval.row0 = ks.rtVal('Scalar', value)
+        self._rtval.row0 = ks.rtVal('Vec4', value)
 
         return True
 
@@ -98,7 +98,7 @@ class Mat44(MathObject):
 
         """
 
-        self._rtval.row1 = ks.rtVal('Scalar', value)
+        self._rtval.row1 = ks.rtVal('Vec4', value)
 
         return True
 
@@ -127,7 +127,7 @@ class Mat44(MathObject):
 
         """
 
-        self._rtval.row2 = ks.rtVal('Scalar', value)
+        self._rtval.row2 = ks.rtVal('Vec4', value)
 
         return True
 
@@ -156,7 +156,7 @@ class Mat44(MathObject):
 
         """
 
-        self._rtval.row3 = ks.rtVal('Scalar', value)
+        self._rtval.row3 = ks.rtVal('Vec4', value)
 
         return True
 
@@ -288,7 +288,7 @@ class Mat44(MathObject):
 
         """
 
-        return self._rtval.equal('Boolean', ks.rtVal('Mat44', other))
+        return self._rtval.equal('Boolean', ks.rtVal('Mat44', other)).getSimpleType()
 
 
     def almostEqual(self, other, precision):
@@ -304,7 +304,7 @@ class Mat44(MathObject):
         """
 
         return self._rtval.almostEqual('Boolean', ks.rtVal('Mat44', other),
-                                       ks.rtVal('Scalar', precision))
+                                       ks.rtVal('Scalar', precision)).getSimpleType()
 
 
     def almostEqual(self, other):
@@ -319,52 +319,7 @@ class Mat44(MathObject):
 
         """
 
-        return self._rtval.almostEqual('Boolean', ks.rtVal('Mat44', other))
-
-
-    # # Equals operator
-    # def Boolean == (Mat44 a, Mat44 b):
-
-    # # Not equals operator
-    # def Boolean != (Mat44 a, Mat44 b):
-
-    # # Returns the addition of two matrices
-    # def Mat44 + (Mat44 a, Mat44 b):
-
-    # # Adds another matrix to this one
-    # def  += (Mat44 other):
-
-    # # Returns the subtraction of two matrices
-    # def Mat44 - (Mat44 a, Mat44 b):
-
-    # # Subtracts another matrix from this one
-    # def  -= (Mat44 other):
-
-    # # Returns the product of two matrices
-    # function Mat44 * (Mat44 left, Mat44 right):
-
-    # # Returns the product of a matrix and a Vec3
-    # def Vec3 * (Mat44 mat44, Vec3 vec3):
-
-    # # Returns the product of a matrix and a scalar
-    # def Mat44 * (Mat44 mat44, Scalar s) {
-    #   return Mat44( row0 self, * s, row1 self, * s, row2 self, * s );
-    # }
-
-    # # Returns the product of a scalar and a matrix
-    # def Mat44 * (Scalar s, Mat44 mat44):
-
-    # # Multiplies this matrix with another one
-    # def  *= (Mat44 other):
-
-    # # Multiplies this matrix with a scalar
-    # def  *= (Scalar other):
-
-    # # Returns the division of a matrix and a scalar
-    # def Mat44 / (Mat44 mat44, Scalar s):
-
-    # # Divides this matrix by a scalar
-    # def  /= (Scalar other):
+        return self._rtval.almostEqual('Boolean', ks.rtVal('Mat44', other)).getSimpleType()
 
 
     def add(self, other):
@@ -459,7 +414,7 @@ class Mat44(MathObject):
 
         """
 
-        return self._rtval.determinant('Scalar')
+        return self._rtval.determinant('Scalar').getSimpleType()
 
 
     def adjoint(self):

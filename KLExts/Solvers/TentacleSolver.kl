@@ -14,25 +14,25 @@ function TentacleSolver()
 // Return Arguments for Kraken
 function KrakenSolverArg[] TentacleSolver.getArguments(){
   KrakenSolverArg args[] = this.parent.getArguments();
-  args.push(KrakenSolverArg('time', 'in', 'Scalar'));
-  args.push(KrakenSolverArg('ikblend', 'in', 'Scalar'));
-  args.push(KrakenSolverArg('waveLength_Y', 'in', 'Scalar'));
-  args.push(KrakenSolverArg('waveAmplitude_Y', 'in', 'Scalar'));
-  args.push(KrakenSolverArg('waveFrequency_Y', 'in', 'Scalar'));
-  args.push(KrakenSolverArg('waveLength_Z', 'in', 'Scalar'));
-  args.push(KrakenSolverArg('waveAmplitude_Z', 'in', 'Scalar'));
-  args.push(KrakenSolverArg('waveFrequency_Z', 'in', 'Scalar'));
-  args.push(KrakenSolverArg('tipBias', 'in', 'Scalar'));
-  args.push(KrakenSolverArg('springStrength', 'in', 'Scalar'));
-  args.push(KrakenSolverArg('dampening', 'in', 'Scalar'));
-  args.push(KrakenSolverArg('simulationWeight', 'in', 'Scalar'));
-  args.push(KrakenSolverArg('softLimitBounds', 'in', 'Scalar'));
-  args.push(KrakenSolverArg('chainBase', 'in', 'Mat44'));
-  args.push(KrakenSolverArg('ikgoal', 'in', 'Mat44'));
-  args.push(KrakenSolverArg('fkcontrols', 'in', 'Mat44[]'));
-  args.push(KrakenSolverArg('tipBoneLen', 'in', 'Scalar'));
-  args.push(KrakenSolverArg('pose', 'out', 'Mat44[]'));
-  args.push(KrakenSolverArg('tentacleEnd', 'out', 'Mat44'));
+  args.push(KrakenSolverArg('time', 'In', 'Scalar'));
+  args.push(KrakenSolverArg('ikblend', 'In', 'Scalar'));
+  args.push(KrakenSolverArg('waveLength_Y', 'In', 'Scalar'));
+  args.push(KrakenSolverArg('waveAmplitude_Y', 'In', 'Scalar'));
+  args.push(KrakenSolverArg('waveFrequency_Y', 'In', 'Scalar'));
+  args.push(KrakenSolverArg('waveLength_Z', 'In', 'Scalar'));
+  args.push(KrakenSolverArg('waveAmplitude_Z', 'In', 'Scalar'));
+  args.push(KrakenSolverArg('waveFrequency_Z', 'In', 'Scalar'));
+  args.push(KrakenSolverArg('tipBias', 'In', 'Scalar'));
+  args.push(KrakenSolverArg('springStrength', 'In', 'Scalar'));
+  args.push(KrakenSolverArg('dampening', 'In', 'Scalar'));
+  args.push(KrakenSolverArg('simulationWeight', 'In', 'Scalar'));
+  args.push(KrakenSolverArg('softLimitBounds', 'In', 'Scalar'));
+  args.push(KrakenSolverArg('chainBase', 'In', 'Mat44'));
+  args.push(KrakenSolverArg('ikgoal', 'In', 'Mat44'));
+  args.push(KrakenSolverArg('fkcontrols', 'In', 'Mat44[]'));
+  args.push(KrakenSolverArg('tipBoneLen', 'In', 'Scalar'));
+  args.push(KrakenSolverArg('pose', 'Out', 'Mat44[]'));
+  args.push(KrakenSolverArg('tentacleEnd', 'Out', 'Mat44'));
   return args;
 }
 

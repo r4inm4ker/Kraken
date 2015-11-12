@@ -36,6 +36,10 @@ class KrakenMenu(QtGui.QWidget):
         self.saveAction.setShortcut('Ctrl+S')
         self.saveAction.setObjectName("saveAction")
 
+        self.saveAsAction = self.fileMenu.addAction('&Save As')
+        self.saveAsAction.setShortcut('Ctrl+Shift+S')
+        self.saveAsAction.setObjectName("saveAsAction")
+
         self.loadAction = self.fileMenu.addAction('&Load')
         self.loadAction.setShortcut('Ctrl+L')
         self.loadAction.setObjectName("loadAction")
@@ -76,6 +80,11 @@ class KrakenMenu(QtGui.QWidget):
         self.compLibAction = self.panelsMenu.addAction('Component &Library')
         self.compLibAction.setShortcut('Ctrl+Tab')
 
+        # View Menu
+        self.viewMenu = self.menuBar.addMenu('&View')
+        self.snapToGridAction = self.viewMenu.addAction('&Snap To Grid')
+        self.snapToGridAction.setCheckable(True)
+
         # Help Menu
         self.helpMenu = self.menuBar.addMenu('&Help')
         self.onlineHelpAction = self.helpMenu.addAction('Online &Help')
@@ -87,7 +96,7 @@ class KrakenMenu(QtGui.QWidget):
         logoWidget.setMinimumHeight(20)
         logoWidget.setMinimumWidth(110)
 
-        logoPixmap = QtGui.QPixmap(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'images', 'KrakenUI_Logo.png'))
+        logoPixmap = QtGui.QPixmap(':/images/KrakenUI_Logo.png')
         logoWidget.setPixmap(logoPixmap)
 
         # Config Widget
@@ -138,6 +147,7 @@ class KrakenMenu(QtGui.QWidget):
         self.newAction.triggered.connect(self.updateRigNameLabel)
 
         self.saveAction.triggered.connect(graphViewWidget.saveRigPreset)
+        self.saveAsAction.triggered.connect(graphViewWidget.saveAsRigPreset)
         self.loadAction.triggered.connect(graphViewWidget.loadRigPreset)
         self.loadAction.triggered.connect(self.updateRigNameLabel)
         self.closeAction.triggered.connect(self.window().close)
@@ -156,6 +166,9 @@ class KrakenMenu(QtGui.QWidget):
 
         # Panels Menu Connections
         self.compLibAction.triggered.connect(krakenUIWidget.resizeSplitter)
+
+        # View Menu Connections
+        self.snapToGridAction.triggered[bool].connect(graphViewWidget.graphView.setSnapToGrid)
 
         # Help Menu Connections
         self.onlineHelpAction.triggered.connect(self.openHelp)
@@ -196,16 +209,25 @@ class KrakenMenu(QtGui.QWidget):
     def writeSettings(self, settings):
         settings.beginGroup("KrakenMenu")
         settings.setValue("currentConfig", self.configsWidget.currentIndex())
+        settings.setValue("snapToGrid", self.snapToGridAction.isChecked())
         settings.endGroup()
 
 
     def readSettings(self, settings):
-        settings.beginGroup("KrakenMenu")
-        if settings.contains('currentConfig'):
-            currentConfig = int(settings.value("currentConfig", 0))
-            self.setCurrentConfig(currentConfig)
-        settings.endGroup()
+        krakenUIWidget = self.window().krakenUI
+        graphViewWidget = krakenUIWidget.graphViewWidget
 
+        settings.beginGroup('KrakenMenu')
+        if settings.contains('currentConfig'):
+            currentConfig = int(settings.value('currentConfig', 0))
+            self.setCurrentConfig(currentConfig)
+
+        if settings.contains('snapToGrid'):
+            snapToGrid = bool(settings.value('snapToGrid'))
+            self.snapToGridAction.setChecked(snapToGrid)
+            graphViewWidget.graphView.setSnapToGrid(snapToGrid)
+
+        settings.endGroup()
 
 
 class RigNameLabel(QtGui.QLabel):

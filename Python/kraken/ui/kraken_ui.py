@@ -12,6 +12,7 @@ from component_library import ComponentLibrary
 from GraphView.kgraph_view_widget import KGraphViewWidget
 
 from kraken.core.kraken_system import KrakenSystem
+import kraken.ui.images_rc
 
 
 class KrakenUI(QtGui.QWidget):
@@ -22,7 +23,7 @@ class KrakenUI(QtGui.QWidget):
         # constructors of base classes
         super(KrakenUI, self).__init__(parent)
         self.setObjectName('mainUI')
-        self.setWindowIcon(QtGui.QIcon(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'images', 'Kraken_Icon.png')))
+        self.setWindowIcon(QtGui.QIcon(':/images/Kraken_Icon.png'))
 
         self.setWindowTitle("Kraken Editor")
         self.setAcceptDrops(True)

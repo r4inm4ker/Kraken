@@ -22,7 +22,7 @@ from kraken.core.objects.ctrlSpace import CtrlSpace
 from kraken.core.objects.layer import Layer
 from kraken.core.objects.control import Control
 
-from kraken.core.objects.operators.splice_operator import SpliceOperator
+from kraken.core.objects.operators.kl_operator import KLOperator
 
 from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
@@ -351,53 +351,53 @@ class TentacleComponentRig(TentacleComponent):
         # Add Splice Ops
         # ===============
         # Add Splice Op
-        self.tentacleSolverSpliceOp = SpliceOperator('tentacleSpliceOp', 'TentacleSolver', 'Kraken')
-        self.addOperator(self.tentacleSolverSpliceOp)
+        self.tentacleSolverKLOp = KLOperator('tentacleKLOp', 'TentacleSolver', 'Kraken')
+        self.addOperator(self.tentacleSolverKLOp)
 
         # # Add Att Inputs
-        self.tentacleSolverSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
-        self.tentacleSolverSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
-        self.tentacleSolverSpliceOp.setInput('ikblend', fkikInputAttr)
-        self.tentacleSolverSpliceOp.setInput('waveLength_Y', waveLength_YInputAttr)
-        self.tentacleSolverSpliceOp.setInput('waveAmplitude_Y', waveAmplitude_YInputAttr)
-        self.tentacleSolverSpliceOp.setInput('waveFrequency_Y', waveFrequency_YInputAttr)
-        self.tentacleSolverSpliceOp.setInput('waveLength_Z', waveLength_ZInputAttr)
-        self.tentacleSolverSpliceOp.setInput('waveAmplitude_Z', waveAmplitude_ZInputAttr)
-        self.tentacleSolverSpliceOp.setInput('waveFrequency_Z', waveFrequency_ZInputAttr)
-        self.tentacleSolverSpliceOp.setInput('tipBias', tipBiasInputAttr)
+        self.tentacleSolverKLOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.tentacleSolverKLOp.setInput('rigScale', self.rigScaleInputAttr)
+        self.tentacleSolverKLOp.setInput('ikblend', fkikInputAttr)
+        self.tentacleSolverKLOp.setInput('waveLength_Y', waveLength_YInputAttr)
+        self.tentacleSolverKLOp.setInput('waveAmplitude_Y', waveAmplitude_YInputAttr)
+        self.tentacleSolverKLOp.setInput('waveFrequency_Y', waveFrequency_YInputAttr)
+        self.tentacleSolverKLOp.setInput('waveLength_Z', waveLength_ZInputAttr)
+        self.tentacleSolverKLOp.setInput('waveAmplitude_Z', waveAmplitude_ZInputAttr)
+        self.tentacleSolverKLOp.setInput('waveFrequency_Z', waveFrequency_ZInputAttr)
+        self.tentacleSolverKLOp.setInput('tipBias', tipBiasInputAttr)
 
-        self.tentacleSolverSpliceOp.setInput('springStrength', springStrengthInputAttr)
-        self.tentacleSolverSpliceOp.setInput('dampening', dampeningInputAttr)
-        self.tentacleSolverSpliceOp.setInput('simulationWeight', simulationWeightInputAttr)
-        self.tentacleSolverSpliceOp.setInput('softLimitBounds', softLimitBoundsInputAttr)
+        self.tentacleSolverKLOp.setInput('springStrength', springStrengthInputAttr)
+        self.tentacleSolverKLOp.setInput('dampening', dampeningInputAttr)
+        self.tentacleSolverKLOp.setInput('simulationWeight', simulationWeightInputAttr)
+        self.tentacleSolverKLOp.setInput('softLimitBounds', softLimitBoundsInputAttr)
 
-        self.tentacleSolverSpliceOp.setInput('tipBoneLen', self.tipBoneLenInputAttr)
+        self.tentacleSolverKLOp.setInput('tipBoneLen', self.tipBoneLenInputAttr)
 
         # Add Xfo Inputs
-        self.tentacleSolverSpliceOp.setInput('chainBase', self.chainBase)
-        self.tentacleSolverSpliceOp.setInput('ikgoal', self.tentacleIKCtrl)
+        self.tentacleSolverKLOp.setInput('chainBase', self.chainBase)
+        self.tentacleSolverKLOp.setInput('ikgoal', self.tentacleIKCtrl)
 
-        self.tentacleSolverSpliceOp.setInput('fkcontrols', self.fkCtrls)
+        self.tentacleSolverKLOp.setInput('fkcontrols', self.fkCtrls)
 
         # Add Xfo Outputs
-        self.tentacleSolverSpliceOp.setOutput('pose', self.boneOutputsTgt)
+        self.tentacleSolverKLOp.setOutput('pose', self.boneOutputsTgt)
 
-        self.tentacleSolverSpliceOp.setOutput('tentacleEnd', self.tentacleEndXfoOutputTgt)
+        self.tentacleSolverKLOp.setOutput('tentacleEnd', self.tentacleEndXfoOutputTgt)
 
 
         # Add Deformer Splice Op
-        self.outputsToDeformersSpliceOp = SpliceOperator('TentacleDeformerSpliceOp', 'MultiPoseConstraintSolver', 'Kraken', alwaysEval=True)
-        self.addOperator(self.outputsToDeformersSpliceOp)
+        self.outputsToDeformersKLOp = KLOperator('TentacleDeformerKLOp', 'MultiPoseConstraintSolver', 'Kraken')
+        self.addOperator(self.outputsToDeformersKLOp)
 
         # Add Att Inputs
-        self.outputsToDeformersSpliceOp.setInput('drawDebug', self.drawDebugInputAttr)
-        self.outputsToDeformersSpliceOp.setInput('rigScale', self.rigScaleInputAttr)
+        self.outputsToDeformersKLOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.outputsToDeformersKLOp.setInput('rigScale', self.rigScaleInputAttr)
 
         # Add Xfo Inputs
-        self.outputsToDeformersSpliceOp.setInput('constrainers', self.boneOutputsTgt)
+        self.outputsToDeformersKLOp.setInput('constrainers', self.boneOutputsTgt)
 
         # Add Xfo Outputs
-        self.outputsToDeformersSpliceOp.setOutput('constrainees', self.deformerJoints)
+        self.outputsToDeformersKLOp.setOutput('constrainees', self.deformerJoints)
 
         Profiler.getInstance().pop()
 
@@ -494,8 +494,8 @@ class TentacleComponentRig(TentacleComponent):
         # Evaluate Splice Ops
         # ====================
         # evaluate the nbone op so that all the output transforms are updated.
-        self.tentacleSolverSpliceOp.evaluate()
-        self.outputsToDeformersSpliceOp.evaluate()
+        self.tentacleSolverKLOp.evaluate()
+        self.outputsToDeformersKLOp.evaluate()
 
 
 from kraken.core.kraken_system import KrakenSystem

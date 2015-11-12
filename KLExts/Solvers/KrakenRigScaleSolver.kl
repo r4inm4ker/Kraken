@@ -9,7 +9,7 @@ object RigScaleSolver : KrakenSolver {
 // Return Arguments for Kraken
 function KrakenSolverArg[] RigScaleSolver.getArguments(){
   KrakenSolverArg args[] = this.parent.getArguments();
-  args.push(KrakenSolverArg('target', 'out', 'Mat44'));
+  args.push(KrakenSolverArg('target', 'Out', 'Mat44'));
   return args;
 }
 

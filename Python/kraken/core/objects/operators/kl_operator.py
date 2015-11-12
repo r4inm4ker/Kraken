@@ -1,7 +1,7 @@
-"""Kraken - objects.operators.splice_operator module.
+"""Kraken - objects.operators.kl_operator module.
 
 Classes:
-SpliceOperator - Splice operator object.
+KLOperator - Splice operator object.
 
 """
 
@@ -12,7 +12,7 @@ from kraken.core.objects.attributes.attribute import Attribute
 from kraken.core.kraken_system import ks
 
 
-class SpliceOperator(Operator):
+class KLOperator(Operator):
     """Splice Operator representation."""
 
     # TODO: Look in to expanding the Splice operator to be able to handle more
@@ -21,12 +21,11 @@ class SpliceOperator(Operator):
     # an attirbute array called 'klOperators' that contains sets of what we
     # currently have setup.
 
-    def __init__(self, name, solverTypeName, extension, alwaysEval=False):
-        super(SpliceOperator, self).__init__(name)
+    def __init__(self, name, solverTypeName, extension):
+        super(KLOperator, self).__init__(name)
 
         self.solverTypeName = solverTypeName
         self.extension = extension
-        self.alwaysEval = alwaysEval # This is for Softimage only to force eval.
 
         # Load the Fabric Engine client and construct the RTVal for the Solver
         ks.loadCoreClient()
@@ -39,16 +38,20 @@ class SpliceOperator(Operator):
         # Initialize the inputs and outputs based on the given args.
         for i in xrange(len(self.args)):
             arg = self.args[i]
-            if arg.connectionType == 'in':
-                if str(arg.dataType).endswith('[]'):
-                    self.inputs[arg.name] = []
+            argName = arg.name.getSimpleType()
+            argDataType = arg.dataType.getSimpleType()
+            argConnectionType = arg.connectionType.getSimpleType()
+
+            if argConnectionType == 'In':
+                if argDataType.endswith('[]'):
+                    self.inputs[argName] = []
                 else:
-                    self.inputs[arg.name] = None
+                    self.inputs[argName] = None
             else:
-                if str(arg.dataType).endswith('[]'):
-                    self.outputs[arg.name] = []
+                if argDataType.endswith('[]'):
+                    self.outputs[argName] = []
                 else:
-                    self.outputs[arg.name] = None
+                    self.outputs[argName] = None
 
 
     def getSolverTypeName(self):
@@ -73,18 +76,6 @@ class SpliceOperator(Operator):
         return self.extension
 
 
-    def getAlwaysEval(self):
-        """Gets the value of the alwaysEval attribute.
-
-        Returns:
-            bool: Whether the operator is set to always evaluate.
-
-        """
-
-        return self.alwaysEval
-
-
-
     def getSolverArgs(self):
         """Returns the args array defined by the KL Operator.
 
@@ -105,53 +96,24 @@ class SpliceOperator(Operator):
         """
 
         # Start constructing the source code.
-        opSourceCode = ""
-        opSourceCode += "require Kraken;\n"
-
-        if self.getExtension() != "Kraken":
-            opSourceCode += "require " + self.getExtension() + ";"
-
-        opSourceCode += "\n\n"
-
-        opSourceCode += "operator " + self.getName() + "(\n"
-
-        opSourceCode += "  io " + self.solverTypeName + " solver,\n"
+        opSourceCode = "dfgEntry {\n"
 
         # In SpliceMaya, output arrays are not resized by the system prior to calling into Splice, so we
         # explicily resize the arrays in the generated operator stub code.
-        arrayResizing = "";
         for argName, arraySize in arraySizes.iteritems():
-            arrayResizing += "  "+argName+".resize("+str(arraySize)+");\n"
+            opSourceCode += "  "+argName+".resize("+str(arraySize)+");\n"
 
-        functionCall = "  solver.solve("
+        opSourceCode += "  if(solver == null)\n"
+        opSourceCode += "    solver = " + self.solverTypeName + "();\n"
+        opSourceCode += "  solver.solve(\n"
         for i in xrange(len(self.args)):
-            arg = self.args[i]
-            # Connect the ports to the inputs/outputs in the rig.
-            if arg.connectionType == 'out':
-                outArgType = 'io'
-            else:
-                outArgType = arg.connectionType
-            suffix = ""
-            outDataType = arg.dataType
-            if outDataType.endswith('[]'):
-                outDataType = outDataType[:-2]
-                suffix = "[]"
-            opSourceCode += "  " + outArgType + " " + outDataType + " " + arg.name + suffix
+            argName = self.args[i].name.getSimpleType()
             if i == len(self.args) - 1:
-                opSourceCode += "\n"
+                opSourceCode += "    " + argName + "\n"
             else:
-                opSourceCode += ",\n"
+                opSourceCode += "    " + argName + ",\n"
 
-            if i == len(self.args) - 1:
-                functionCall += arg.name
-            else:
-                functionCall += arg.name + ", "
-        functionCall += ");\n"
-
-        opSourceCode += "  )\n"
-        opSourceCode += "{\n"
-        opSourceCode += arrayResizing
-        opSourceCode += functionCall
+        opSourceCode += "  );\n"
         opSourceCode += "}\n"
 
         return opSourceCode
@@ -174,34 +136,38 @@ class SpliceOperator(Operator):
         argVals = []
         for i in xrange(len(self.args)):
             arg = self.args[i]
-            if arg.dataType == 'EvalContext':
-                argVals.append(ks.constructRTVal(arg.dataType))
+            argName = arg.name.getSimpleType()
+            argDataType = arg.dataType.getSimpleType()
+            argConnectionType = arg.connectionType.getSimpleType()
+
+            if argDataType == 'EvalContext':
+                argVals.append(ks.constructRTVal(argDataType))
                 continue
-            if arg.name == 'time':
-                argVals.append(ks.constructRTVal(arg.dataType))
+            if argName == 'time':
+                argVals.append(ks.constructRTVal(argDataType))
                 continue
-            if arg.name == 'frame':
-                argVals.append(ks.constructRTVal(arg.dataType))
+            if argName == 'frame':
+                argVals.append(ks.constructRTVal(argDataType))
                 continue
 
-            if arg.connectionType == 'in':
-                if str(arg.dataType).endswith('[]'):
-                    rtValArray = ks.rtVal(arg.dataType[:-2]+'Array')
-                    rtValArray.resize(len(self.inputs[arg.name]))
-                    for j in xrange(len(self.inputs[arg.name])):
-                        rtValArray[j] = getRTVal(self.inputs[arg.name][j])
+            if argConnectionType == 'In':
+                if str(argDataType).endswith('[]'):
+                    rtValArray = ks.rtVal(argDataType[:-2]+'Array')
+                    rtValArray.resize(len(self.inputs[argName]))
+                    for j in xrange(len(self.inputs[argName])):
+                        rtValArray[j] = getRTVal(self.inputs[argName][j])
                     argVals.append(rtValArray)
                 else:
-                    argVals.append(getRTVal(self.inputs[arg.name]))
+                    argVals.append(getRTVal(self.inputs[argName]))
             else:
-                if str(arg.dataType).endswith('[]'):
-                    rtValArray = ks.rtVal(arg.dataType[:-2]+'Array')
-                    rtValArray.resize(len(self.outputs[arg.name]))
-                    for j in xrange(len(self.outputs[arg.name])):
-                        rtValArray[j] = getRTVal(self.outputs[arg.name][j])
+                if str(argDataType).endswith('[]'):
+                    rtValArray = ks.rtVal(argDataType[:-2]+'Array')
+                    rtValArray.resize(len(self.outputs[argName]))
+                    for j in xrange(len(self.outputs[argName])):
+                        rtValArray[j] = getRTVal(self.outputs[argName][j])
                     argVals.append(rtValArray)
                 else:
-                    argVals.append(getRTVal(self.outputs[arg.name]))
+                    argVals.append(getRTVal(self.outputs[argName]))
 
         self.solverRTVal.solve('', *argVals)
 
@@ -214,11 +180,15 @@ class SpliceOperator(Operator):
 
         for i in xrange(len(argVals)):
             arg = self.args[i]
-            if arg.connectionType != 'in':
-                if str(arg.dataType).endswith('[]'):
+            argName = arg.name.getSimpleType()
+            argDataType = arg.dataType.getSimpleType()
+            argConnectionType = arg.connectionType.getSimpleType()
+
+            if argConnectionType != 'In':
+                if argDataType.endswith('[]'):
                     for j in xrange(len(argVals[i])):
-                        setRTVal(self.outputs[arg.name][j], argVals[i][j])
+                        setRTVal(self.outputs[argName][j], argVals[i][j])
                 else:
-                    setRTVal(self.outputs[arg.name], argVals[i])
+                    setRTVal(self.outputs[argName], argVals[i])
 
         return True
