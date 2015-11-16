@@ -86,6 +86,16 @@ class KGraphViewWidget(GraphViewWidget):
 
 
     def saveRig(self, saveAs=False):
+        """Saves the current rig to disc.
+
+        Args:
+            saveAs (Boolean): Determines if this was a save as call or just a normal save.
+
+        Returns:
+            String: Path to the saved file.
+
+        """
+
 
         settings = self.window().getSettings()
         settings.beginGroup('Files')
@@ -111,9 +121,14 @@ class KGraphViewWidget(GraphViewWidget):
 
         self.reportMessage('Saved Rig file: ' + filePath, level='information')
 
+        return filePath
+
 
     def saveAsRigPreset(self):
-        self.saveRig(saveAs=True)
+        """Opens a dialogue window to save the current rig as a different file."""
+
+        filePath = self.saveRig(saveAs=True)
+        self.window().setWindowTitle('Kraken Editor - ' + filePath + '[*]')
 
 
     def saveRigPreset(self):
@@ -143,7 +158,7 @@ class KGraphViewWidget(GraphViewWidget):
 
             self.openedFile = filePath
 
-            self.window().setWindowTitle(filePath + '[*] - ' + self.window().windowTitle())
+            self.window().setWindowTitle('Kraken Editor - ' + filePath + '[*]')
 
             self.reportMessage('Loaded Rig file: ' + filePath, level='information')
 

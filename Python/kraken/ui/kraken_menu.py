@@ -17,6 +17,7 @@ class KrakenMenu(QtGui.QWidget):
         self.createLayout()
         self.createConnections()
 
+
     def createLayout(self):
 
         self.menuLayout = QtGui.QHBoxLayout()
