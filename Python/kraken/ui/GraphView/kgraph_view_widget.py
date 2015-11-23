@@ -4,6 +4,7 @@ import traceback
 
 from PySide import QtGui, QtCore
 
+from kbackdrop import KBackdrop
 from contextual_node_list import ContextualNodeList
 from pyflowgraph.graph_view_widget import GraphViewWidget
 from kgraph_view import KGraphView
@@ -61,6 +62,9 @@ class KGraphViewWidget(GraphViewWidget):
         self.newRigPreset()
 
 
+    # ============
+    # Rig Methods
+    # ============
     def editRigName(self):
         dialog = QtGui.QInputDialog(self)
         dialog.setObjectName('RigNameDialog')
@@ -204,9 +208,9 @@ class KGraphViewWidget(GraphViewWidget):
         except Exception as e:
             self.reportMessage('Error Building', level='error', exception=e)
 
-    # =========
+    # ==========
     # Shortcuts
-    # =========
+    # ==========
     def copy(self):
         graphView = self.getGraphView()
         pos = graphView.getSelectedNodesCentroid()
@@ -260,6 +264,15 @@ class KGraphViewWidget(GraphViewWidget):
         scenepos = self.graphView.mapToScene(pos)
         contextualNodeList.showAtPos(pos, scenepos, self.graphView)
 
+
+    # ==============
+    # Other Methods
+    # ==============
+    def addBackdrop(self):
+
+        graphView = self.getGraphView()
+        graphView.addNode(KBackdrop('backdrop'))
+        self.reportMessage('adding backdrop', level='information')
 
     # ==================
     # Message Reporting

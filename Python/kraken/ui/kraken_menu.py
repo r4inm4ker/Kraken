@@ -63,6 +63,8 @@ class KrakenMenu(QtGui.QWidget):
         self.pasteMirroredAction = self.editMenu.addAction('Paste Mirrored')
         self.pasteMirroredConnectedAction = self.editMenu.addAction('Paste Mirrored Connected')
         self.editMenu.addSeparator()
+        self.editAddBackdropAction = self.editMenu.addAction('Add &Backdrop')
+        self.editMenu.addSeparator()
         self.editRigNameAction = self.editMenu.addAction('&Rig Name')
         self.editRigNameAction.setObjectName("editRigNameAction")
 
@@ -160,6 +162,7 @@ class KrakenMenu(QtGui.QWidget):
         self.pasteMirroredAction.triggered.connect(graphViewWidget.pasteMirrored)
         self.pasteMirroredConnectedAction.triggered.connect(graphViewWidget.pasteMirroredConnected)
         self.editRigNameAction.triggered.connect(graphViewWidget.editRigName)
+        self.editAddBackdropAction.triggered.connect(graphViewWidget.addBackdrop)
 
         # Build Menu Connections
         self.buildGuideAction.triggered.connect(graphViewWidget.buildGuideRig)
