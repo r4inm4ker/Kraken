@@ -141,12 +141,12 @@ class KGraphViewWidget(GraphViewWidget):
             self.saveRig(saveAs=False)
 
 
-    def loadRigPreset(self):
+    def openRigPreset(self):
         settings = self.window().getSettings()
         settings.beginGroup('Files')
         lastFilePath = settings.value("lastFilePath", os.path.join(GetKrakenPath(), self.guideRig.getName() ))
         settings.endGroup()
-        (filePath, filter) = QtGui.QFileDialog.getOpenFileName(self, 'Load Rig Preset', os.path.dirname(os.path.abspath(lastFilePath)), 'Kraken Rig (*.krg)', options=QtGui.QFileDialog.DontUseNativeDialog)
+        (filePath, filter) = QtGui.QFileDialog.getOpenFileName(self, 'Open Rig Preset', os.path.dirname(os.path.abspath(lastFilePath)), 'Kraken Rig (*.krg)', options=QtGui.QFileDialog.DontUseNativeDialog)
         if len(filePath) > 0:
             self.guideRig = Rig()
             self.guideRig.loadRigDefinitionFile(filePath)
