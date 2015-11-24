@@ -52,7 +52,7 @@ class ComponentTreeWidget(QtGui.QTreeWidget):
             module = sys.modules[component.__module__]
             treeItem.setToolTip(0, module.__file__)
 
-            if parentWidget:
+            if parentWidget is not None:
                 parentWidget.setToolTip(0, os.path.dirname(module.__file__))
 
         for item in data['subDirs'].keys():
