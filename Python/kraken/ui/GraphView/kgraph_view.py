@@ -42,7 +42,10 @@ class KGraphView(GraphView):
         guideComponents = self.__rig.getChildrenByType('Component')
 
         for component in guideComponents:
-            self.addNode(KNode(self, component))
+            node = KNode(self, component)
+            nodeColor = component.getComponentColor()
+            node.setColor(QtGui.QColor(nodeColor[0], nodeColor[1], nodeColor[2], nodeColor[3]))
+            self.addNode(node)
 
         for component in guideComponents:
             for i in range(component.getNumInputs()):
