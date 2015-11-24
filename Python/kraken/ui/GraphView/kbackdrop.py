@@ -17,10 +17,10 @@ from kraken.ui.component_inspector import ComponentInspector
 
 class KBackdrop(Node):
 
-    def __init__(self, graph):
-        super(KBackdrop, self).__init__(graph, 'backdrop')
+    def __init__(self, graph, name):
+        super(KBackdrop, self).__init__(graph, name)
 
-        self.__inspectorWidget = None
+        # self.__inspectorWidget = None
 
         # self.setGraphPos( QtCore.QPointF( self.__component.getGraphPos().x, self.__component.getGraphPos().y ) )
         self.setColor(QtGui.QColor(65, 120, 122, 255))

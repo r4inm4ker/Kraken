@@ -1,5 +1,6 @@
 import json, difflib
 import os
+import re
 import traceback
 
 from PySide import QtGui, QtCore
@@ -271,8 +272,31 @@ class KGraphViewWidget(GraphViewWidget):
     def addBackdrop(self):
 
         graphView = self.getGraphView()
-        graphView.addNode(KBackdrop('backdrop'))
-        self.reportMessage('adding backdrop', level='information')
+
+        name = 'backdrop'
+        initName = name
+        suffix = 1
+        collision = True
+        while collision:
+
+            collision = graphView.hasNode(name)
+            if not collision:
+                break
+
+            result = re.split(r"(\d+)$", initName, 1)
+            if len(result) > 1:
+                initName = result[0]
+                suffix = int(result[1])
+
+            name = initName + str(suffix).zfill(2)
+            suffix += 1
+
+        backdropNode = KBackdrop(graphView, name)
+        graphView.addNode(backdropNode)
+
+        graphView.selectNode(backdropNode, clearSelection=True)
+        # backdropNode.setSelected()
+
 
     # ==================
     # Message Reporting
@@ -339,7 +363,9 @@ class KGraphViewWidget(GraphViewWidget):
 
 
     def __onNodeRemoved(self, node):
-        node.getComponent().detach()
+
+        if type(node).__name__ != 'KBackdrop':
+            node.getComponent().detach()
 
         if not UndoRedoManager.getInstance().isUndoingOrRedoing():
             command = graph_commands.RemoveNodeCommand(self.graphView, self.guideRig, node)
