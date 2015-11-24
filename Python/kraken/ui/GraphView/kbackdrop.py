@@ -106,6 +106,8 @@ class KBackdrop(QtGui.QGraphicsWidget):
         layout.setAlignment(self.__headerItem, QtCore.Qt.AlignCenter | QtCore.Qt.AlignTop)
         layout.addStretch(1)
 
+        self.setZValue(-10)
+
         self.__selected = False
         self.__dragging = False
         self.__resizing = False
