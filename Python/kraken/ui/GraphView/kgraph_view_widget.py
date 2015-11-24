@@ -128,7 +128,8 @@ class KGraphViewWidget(GraphViewWidget):
         """Opens a dialogue window to save the current rig as a different file."""
 
         filePath = self.saveRig(saveAs=True)
-        self.window().setWindowTitle('Kraken Editor - ' + filePath + '[*]')
+        if filePath is not False:
+            self.window().setWindowTitle('Kraken Editor - ' + filePath + '[*]')
 
 
     def saveRigPreset(self):
