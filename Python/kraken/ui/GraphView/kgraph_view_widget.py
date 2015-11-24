@@ -273,7 +273,7 @@ class KGraphViewWidget(GraphViewWidget):
 
         graphView = self.getGraphView()
 
-        name = 'backdrop'
+        name = 'Backdrop'
         initName = name
         suffix = 1
         collision = True
