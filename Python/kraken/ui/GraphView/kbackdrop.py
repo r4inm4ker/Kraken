@@ -190,10 +190,10 @@ class KBackdrop(QtGui.QGraphicsWidget):
 
         painter.setPen(QtGui.QPen(QtGui.QColor(0, 0, 0, 0), 0))
 
-        roundingY = 10
+        roundingY = 20 / (rect.height() / 80)
         roundingX = rect.height() / rect.width() * roundingY
 
-        painter.drawRoundRect(rect, roundingX, roundingY)
+        painter.drawRoundRect(rect, roundingX, roundingY, mode=QtCore.Qt.AbsoluteSize)
 
         # Title BG
         titleHeight = self.__headerItem.size().height() - 3
@@ -201,8 +201,8 @@ class KBackdrop(QtGui.QGraphicsWidget):
         darkerColor = self.__color.darker(125)
         darkerColor.setAlpha(255)
         painter.setBrush(darkerColor)
-        roundingY = rect.width() * roundingX / titleHeight
-        painter.drawRoundRect(0, 0, rect.width(), titleHeight, roundingX, roundingY)
+        roundingYHeader = rect.width() * roundingX / titleHeight
+        painter.drawRoundRect(0, 0, rect.width(), titleHeight, roundingX, roundingYHeader)
         painter.drawRect(0, titleHeight * 0.5 + 2, rect.width(), titleHeight * 0.5)
 
         painter.setBrush(QtGui.QColor(0, 0, 0, 0))
@@ -211,11 +211,9 @@ class KBackdrop(QtGui.QGraphicsWidget):
         else:
             painter.setPen(self.__unselectedPen)
 
-        roundingY = 10
-        roundingX = rect.height() / rect.width() * roundingY
+        painter.drawRoundRect(rect, roundingX, roundingY, mode=QtCore.Qt.AbsoluteSize)
 
-        painter.drawRoundRect(rect, roundingX, roundingY)
-
+        super(KBackdrop, self).paint(painter, option, widget)
 
     #########################
     ## Events
