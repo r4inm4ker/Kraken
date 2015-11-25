@@ -1,6 +1,6 @@
 require InlineDrawing;
 
-object NBoneIKSolver : KrakenSolver {
+object NBoneIKSolver : KrakenSolver, Persistable {
   Xfo initPose[];
 };
 
@@ -140,5 +140,50 @@ function NBoneIKSolver.solve!
       Scalar boneLength = boneVectors[i].length();
       etDrawBone(this.handle.rootTransform, 'bone'+i, pose[i], boneLength, boneLength * 0.15, boneColor);
     }
+  }
+}
+
+function JSONDictValue toJSON(Xfo value) {
+    JSONDictValue dict();
+    dict.setVec3("tr", value.tr);
+    dict.setVec3("sc", value.sc);
+    dict.setQuat("ori", value.ori);
+    return dict;
+}
+
+function Xfo fromJSON(JSONDictValue dict) {
+    Xfo value;
+    value.tr = dict.getVec3("tr");
+    value.sc = dict.getVec3("sc");
+    value.ori = dict.getQuat("ori");
+    return value;
+}
+
+
+function String NBoneIKSolver.saveDataToString(PersistenceContext context){
+  JSONDoc doc();
+
+  JSONArrayValue initPoseJson();
+  for(UInt32 i=0; i<this.initpose.size(); i++)
+      initPoseJson.add(toJSON(this.initpose[i]));
+
+  doc.root.set('initPose', initPoseJson);
+  String jsonStr = doc.write();
+  return jsonStr;
+}
+
+
+function NBoneIKSolver.loadDataFromString!(PersistenceContext context, String data){
+  JSONDoc doc();
+  if(doc.parse(data)){
+    if(doc.root.has('initPose')){
+      JSONArrayValue initPoseJson = data.get("initPose");
+      this.initPose.resize(0);
+      for (UInt32 i = 0; i < initPoseJson.size(); i++)
+          this.initPose.push(fromJSON(initPoseJson.get(i)));
+    }
+  }
+  else{
+      setError("ERROR Loading NBoneIKSolver. Saved JSON data is not valid");
   }
 }

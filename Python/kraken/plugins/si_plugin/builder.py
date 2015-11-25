@@ -513,12 +513,12 @@ class Builder(Builder):
             target = constraineeDCCSceneItem.FullName + ".kine.global"
             spliceOpPath = target + ".SpliceOp"
 
-            si.fabricSplice('newSplice', "{\"targets\":\"" + target + "\", \"portName\":\"constrainee\", \"portMode\":\"out\"}", "", "")
+            si.fabricSplice('newSplice', "{'targets':'" + target + "', 'portName':'constrainee', 'portMode':'out'}", "", "")
 
             # Add the private/non-mayaAttr port that stores the Solver object
-            si.fabricSplice("addInternalPort", spliceOpPath, "{\"portName\":\"solver\", \"dataType\":\"" + solverTypeName + "\", \"extension\":\"Kraken\", \"portMode\":\"io\"}", "")
-            si.fabricSplice("addInternalPort", spliceOpPath, "{\"portName\":\"debug\", \"dataType\":\"Boolean\", \"extension\":\"Kraken\", \"portMode\":\"io\"}", "")
-            si.fabricSplice("addInternalPort", spliceOpPath, "{\"portName\":\"rightSide\", \"dataType\":\"Boolean\", \"extension\":\"Kraken\", \"portMode\":\"io\"}", "")
+            si.fabricSplice("addInternalPort", spliceOpPath, "{'portName':'solver', 'dataType':'" + solverTypeName + "', 'extension':'Kraken', 'portMode':'io'}", "")
+            si.fabricSplice("addInternalPort", spliceOpPath, "{'portName':'debug', 'dataType':'Boolean', 'extension':'Kraken', 'portMode':'io'}", "")
+            si.fabricSplice("addInternalPort", spliceOpPath, "{'portName':'rightSide', 'dataType':'Boolean', 'extension':'Kraken', 'portMode':'io'}", "")
 
             connectionTargets = ""
             connectionSuffix = ".kine.global"
@@ -535,7 +535,7 @@ class Builder(Builder):
                 connectionTargets = dccSceneItem.FullName + connectionSuffix
                 break
 
-            si.fabricSplice("addInputPort", spliceOpPath, "{\"portName\":\"constrainer\", \"dataType\":\"Mat44\", \"extension\":\"\", \"targets\":\"" + connectionTargets + "\"}", "")
+            si.fabricSplice("addInputPort", spliceOpPath, "{'portName':'constrainer', 'dataType':'Mat44', 'extension':', 'targets':'" + connectionTargets + "'}", "")
 
             # Generate the operator source code.
             opSourceCode = ""
@@ -700,10 +700,11 @@ class Builder(Builder):
             spliceOpPath = operatorOwner.FullName + ".kine.global.SpliceOp"
 
             # Create Splice Operator
-            opPath = si.fabricSplice('newSplice', "{\"targets\":\"" + targets + "\", \"portName\":\"" + arg.name + "\", \"portMode\":\"out\"}", "", "")
+            opPath = si.fabricSplice('newSplice', "{'targets':'" + targets + "', 'portName':'" + arg.name + "', 'portMode':'out'}", "", "")
 
             # Add the private/non-mayaAttr port that stores the Solver object
-            si.fabricSplice("addInternalPort", spliceOpPath, "{\"portName\":\"solver\", \"dataType\":\"" + solverTypeName + "\", \"extension\":\"" + kOperator.getExtension() + "\", \"portMode\":\"io\"}", "")
+            si.fabricSplice("addInternalPort", spliceOpPath, "{'portName':'solver', 'dataType':'" + solverTypeName + "', 'extension':'" + kOperator.getExtension() + "', 'portMode':'io'}", "")
+            si.fabricSplice("setPortPersistence", spliceOpPath, "{'portName':'solver', 'persistence':true }", "")
 
             # connect the operator to the objects in the DCC
             for i in xrange(len(args)):
@@ -715,14 +716,14 @@ class Builder(Builder):
                     continue
 
                 if arg.dataType == 'EvalContext':
-                    si.fabricSplice("addInputPort", spliceOpPath, "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\" }", "")
+                    si.fabricSplice("addInputPort", spliceOpPath, "{'portName':'" + arg.name + "', 'dataType':'" + arg.dataType + "' }", "")
                     continue
                 if arg.name == 'time':
-                    si.fabricSplice("addParameter", spliceOpPath, "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\" }", "")
+                    si.fabricSplice("addParameter", spliceOpPath, "{'portName':'" + arg.name + "', 'dataType':'" + arg.dataType + "' }", "")
                     continue
 
                 if arg.name == 'frame':
-                    si.fabricSplice("addParameter", spliceOpPath, "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\" }", "")
+                    si.fabricSplice("addParameter", spliceOpPath, "{'portName':'" + arg.name + "', 'dataType':'" + arg.dataType + "' }", "")
                     continue
 
                 # Append the suffix based on the argument type, Softimage Only
@@ -769,7 +770,7 @@ class Builder(Builder):
 
                     connectionTargets = dccSceneItem.FullName + connectionSuffix
 
-                connectionArgs = "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\", \"extension\":\"\", \"targets\":\"" + connectionTargets + "\"}"
+                connectionArgs = "{'portName':'" + arg.name + "', 'dataType':'" + arg.dataType + "', 'extension':', 'targets':'" + connectionTargets + "'}"
 
                 # Add the splice Port for each arg.
                 if arg.connectionType == 'in':
