@@ -52,34 +52,34 @@ function NBoneIKSolver.solve!
   io Mat44 pose[],
   io Mat44 legEnd
 ) {
-  if(fkcontrols.size != pose.size)
+  if(fkcontrols.size() != pose.size())
     throw("Error in NBoneIKSolver. The number of FKControls does not match the number of joints");
 
-  if(this.initPose.size == 0) {
-    this.initPose.resize(pose.size);
+  if(this.initPose.size() == 0) {
+    this.initPose.resize(pose.size());
 
     Xfo fkPose[];
-    fkPose.resize(fkcontrols.size+1);
+    fkPose.resize(fkcontrols.size()+1);
     for(UInt32 i=0; i< fkcontrols.size; i++) {
       fkPose[i] = Xfo(fkcontrols[i]);
     }
-    fkPose[fkcontrols.size] = fkPose[fkcontrols.size-1];
-    fkPose[fkcontrols.size].tr = fkPose[fkcontrols.size-1].transformVector(Vec3(tipBoneLen, 0.0, 0.0));
+    fkPose[fkcontrols.size()] = fkPose[fkcontrols.size()-1];
+    fkPose[fkcontrols.size()].tr = fkPose[fkcontrols.size()-1].transformVector(Vec3(tipBoneLen, 0.0, 0.0));
     this.initPose = fkPose;
   }
 
   Xfo xfoPose[];
   Vec3 boneVectors[];
-  xfoPose.resize(fkcontrols.size+1);
+  xfoPose.resize(fkcontrols.size()+1);
   boneVectors.resize(fkcontrols.size);
   for(UInt32 i=0; i < fkcontrols.size; i++) {
     xfoPose[i] = Xfo(fkcontrols[i]);
     if(i>0)
       boneVectors[i-1] = xfoPose[i-1].inverse().transformVector(xfoPose[i].tr);
   }
-  boneVectors[boneVectors.size-1] = Vec3(tipBoneLen, 0.0, 0.0);
-  xfoPose[fkcontrols.size] = xfoPose[fkcontrols.size-1];
-  xfoPose[fkcontrols.size].tr = xfoPose[fkcontrols.size-1].transformVector(boneVectors[boneVectors.size-1]);
+  boneVectors[boneVectors.size()-1] = Vec3(tipBoneLen, 0.0, 0.0);
+  xfoPose[fkcontrols.size()] = xfoPose[fkcontrols.size()-1];
+  xfoPose[fkcontrols.size()].tr = xfoPose[fkcontrols.size()-1].transformVector(boneVectors[boneVectors.size()-1]);
 
   if(ikblend > 0.0) {
     UInt32 ikIndex = 0;
@@ -129,7 +129,7 @@ function NBoneIKSolver.solve!
   // Convert the Xfos back to Mat44s
   for(UInt32 i=0; i < pose.size; i++)
     pose[i] = xfoPose[i].toMat44();
-  legEnd = xfoPose[xfoPose.size-1].toMat44();
+  legEnd = xfoPose[xfoPose.size()-1].toMat44();
 
   // Set debugging visibility.
   this.setDebug(drawDebug);
@@ -143,19 +143,40 @@ function NBoneIKSolver.solve!
   }
 }
 
-function JSONDictValue toJSON(Xfo value) {
+
+require JSON;
+function Quat quatFromJSON(JSONDictValue dict){
+    Quat value;
+    value.v.x = dict.getScalar('x');
+    value.v.y = dict.getScalar('y');
+    value.v.z = dict.getScalar('z');
+    value.w = dict.getScalar('w');
+    return value;
+}
+
+/// constructor provided a Vec4 value
+function JSONDictValue quatToJSON(Quat value){
     JSONDictValue dict();
-    dict.setVec3("tr", value.tr);
-    dict.setVec3("sc", value.sc);
-    dict.setQuat("ori", value.ori);
+    dict.setScalar('x', value.v.x);
+    dict.setScalar('y', value.v.y);
+    dict.setScalar('z', value.v.z);
+    dict.setScalar('w', value.w);
     return dict;
 }
 
-function Xfo fromJSON(JSONDictValue dict) {
+function JSONDictValue xfoToJSON(Xfo value) {
+    JSONDictValue dict();
+    dict.setVec3("tr", value.tr);
+    dict.setVec3("sc", value.sc);
+    dict.set("ori", quatToJSON(value.ori));
+    return dict;
+}
+
+function Xfo xfoFromJSON(JSONDictValue dict) {
     Xfo value;
     value.tr = dict.getVec3("tr");
     value.sc = dict.getVec3("sc");
-    value.ori = dict.getQuat("ori");
+    value.ori = quatFromJSON(dict.get("ori"));
     return value;
 }
 
@@ -164,8 +185,8 @@ function String NBoneIKSolver.saveDataToString(PersistenceContext context){
   JSONDoc doc();
 
   JSONArrayValue initPoseJson();
-  for(UInt32 i=0; i<this.initpose.size(); i++)
-      initPoseJson.add(toJSON(this.initpose[i]));
+  for(UInt32 i=0; i<this.initPose.size(); i++)
+      initPoseJson.add(xfoToJSON(this.initPose[i]));
 
   doc.root.set('initPose', initPoseJson);
   String jsonStr = doc.write();
@@ -177,10 +198,10 @@ function NBoneIKSolver.loadDataFromString!(PersistenceContext context, String da
   JSONDoc doc();
   if(doc.parse(data)){
     if(doc.root.has('initPose')){
-      JSONArrayValue initPoseJson = data.get("initPose");
+      JSONArrayValue initPoseJson = doc.root.get("initPose");
       this.initPose.resize(0);
       for (UInt32 i = 0; i < initPoseJson.size(); i++)
-          this.initPose.push(fromJSON(initPoseJson.get(i)));
+          this.initPose.push(xfoFromJSON(initPoseJson.get(i)));
     }
   }
   else{
