@@ -190,7 +190,7 @@ class KBackdrop(QtGui.QGraphicsWidget):
 
         painter.setPen(QtGui.QPen(QtGui.QColor(0, 0, 0, 0), 0))
 
-        roundingY = 20 / (rect.height() / 80)
+        roundingY = 20.0 / (rect.height() / 80.0)
         roundingX = rect.height() / rect.width() * roundingY
 
         painter.drawRoundRect(rect, roundingX, roundingY, mode=QtCore.Qt.AbsoluteSize)
@@ -247,6 +247,9 @@ class KBackdrop(QtGui.QGraphicsWidget):
             self._lastDragPoint = self._mouseDownPoint
             self._lastResizePoint = self._mouseDownPoint
 
+            self._initWidth = self.boundingRect().width()
+            self._initHeight = self.boundingRect().height()
+
         else:
             super(KBackdrop, self).mousePressEvent(event)
 
@@ -280,6 +283,10 @@ class KBackdrop(QtGui.QGraphicsWidget):
             self._lastResizePoint = newPos
             self._resizedBackdrop = True
 
+            self.prepareGeometryChange()
+            self.resize(self._initWidth + delta.x(), self._initHeight + delta.y())
+            self.update()
+
         else:
             super(KBackdrop, self).mouseMoveEvent(event)
 
@@ -297,17 +304,6 @@ class KBackdrop(QtGui.QGraphicsWidget):
             self.__dragging = False
 
         elif self.__resizing:
-            if self._resizedBackdrop:
-
-                newPos = self.mapToScene(event.pos())
-                delta = newPos - self._mouseDownPoint
-
-                newWidth = self.boundingRect().width() + delta.x()
-                newHeight = self.boundingRect().height() + delta.y()
-
-                self.prepareGeometryChange()
-                self.resize(self.boundingRect().width() + delta.x(), self.boundingRect().height() + delta.y())
-                self.update()
 
             self.setCursor(QtCore.Qt.ArrowCursor)
             self.__resizing = False
