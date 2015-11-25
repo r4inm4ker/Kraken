@@ -101,39 +101,50 @@ class KGraphViewWidget(GraphViewWidget):
 
         """
 
+        try:
+            self.window().setCursor(QtCore.Qt.WaitCursor)
 
-        settings = self.window().getSettings()
-        settings.beginGroup('Files')
-        filePath = settings.value("lastFilePath", os.path.join(GetKrakenPath(), self.guideRig.getName() ))
-        settings.endGroup()
-
-        if saveAs is True:
-
-            (saveAsFilePath, filter) = QtGui.QFileDialog.getSaveFileName(self, 'Save Rig Preset', os.path.dirname(os.path.abspath(filePath)), 'Kraken Rig (*.krg)')
-            if len(saveAsFilePath) > 0:
-                filePath = saveAsFilePath
+            if self.openedFile is None:
+                filePath = GetKrakenPath()
             else:
-                return False
+                settings = self.window().getSettings()
+                settings.beginGroup('Files')
+                filePath = settings.value("lastFilePath", os.path.join(GetKrakenPath(), self.guideRig.getName() ))
+                settings.endGroup()
 
-        self.synchGuideRig()
-        self.guideRig.writeRigDefinitionFile(filePath)
+            if saveAs is True:
 
-        settings.beginGroup('Files')
-        lastFilePath = settings.setValue("lastFilePath", filePath)
-        settings.endGroup()
+                fileDialog = QtGui.QFileDialog()
+                fileDialog.setViewMode(QtGui.QFileDialog.Detail)
+                (saveAsFilePath, filter) = fileDialog.getSaveFileName(self, 'Save Rig Preset As', os.path.abspath(filePath), 'Kraken Rig (*.krg)', options=QtGui.QFileDialog.DontUseNativeDialog)
+                if len(saveAsFilePath) > 0:
+                    filePath = saveAsFilePath
+                else:
+                    return False
 
-        self.openedFile = filePath
+            self.synchGuideRig()
+            self.guideRig.writeRigDefinitionFile(filePath)
 
-        self.reportMessage('Saved Rig file: ' + filePath, level='information')
+            settings.beginGroup('Files')
+            lastFilePath = settings.setValue("lastFilePath", filePath)
+            settings.endGroup()
 
-        return filePath
+            self.openedFile = filePath
+
+            self.reportMessage('Saved Rig file: ' + filePath, level='information')
+
+            return filePath
+
+        finally:
+            self.window().setCursor(QtCore.Qt.ArrowCursor)
 
 
     def saveAsRigPreset(self):
         """Opens a dialogue window to save the current rig as a different file."""
 
         filePath = self.saveRig(saveAs=True)
-        self.window().setWindowTitle('Kraken Editor - ' + filePath + '[*]')
+        if filePath is not False:
+            self.window().setWindowTitle('Kraken Editor - ' + filePath + '[*]')
 
 
     def saveRigPreset(self):
@@ -145,27 +156,34 @@ class KGraphViewWidget(GraphViewWidget):
             self.saveRig(saveAs=False)
 
 
-    def loadRigPreset(self):
-        settings = self.window().getSettings()
-        settings.beginGroup('Files')
-        lastFilePath = settings.value("lastFilePath", os.path.join(GetKrakenPath(), self.guideRig.getName() ))
-        settings.endGroup()
-        (filePath, filter) = QtGui.QFileDialog.getOpenFileName(self, 'Load Rig Preset', os.path.dirname(os.path.abspath(lastFilePath)), 'Kraken Rig (*.krg)')
-        if len(filePath) > 0:
-            self.guideRig = Rig()
-            self.guideRig.loadRigDefinitionFile(filePath)
-            self.graphView.displayGraph( self.guideRig )
-            # self.nameWidget.setText( self.guideRig.getName() )
+    def openRigPreset(self):
 
+        try:
+            self.window().setCursor(QtCore.Qt.WaitCursor)
+
+            settings = self.window().getSettings()
             settings.beginGroup('Files')
-            lastFilePath = settings.setValue("lastFilePath", filePath)
+            lastFilePath = settings.value("lastFilePath", os.path.join(GetKrakenPath(), self.guideRig.getName() ))
             settings.endGroup()
+            (filePath, filter) = QtGui.QFileDialog.getOpenFileName(self, 'Open Rig Preset', os.path.dirname(os.path.abspath(lastFilePath)), 'Kraken Rig (*.krg)', options=QtGui.QFileDialog.DontUseNativeDialog)
+            if len(filePath) > 0:
+                self.guideRig = Rig()
+                self.guideRig.loadRigDefinitionFile(filePath)
+                self.graphView.displayGraph( self.guideRig )
+                # self.nameWidget.setText( self.guideRig.getName() )
 
-            self.openedFile = filePath
+                settings.beginGroup('Files')
+                lastFilePath = settings.setValue("lastFilePath", filePath)
+                settings.endGroup()
 
-            self.window().setWindowTitle('Kraken Editor - ' + filePath + '[*]')
+                self.openedFile = filePath
 
-            self.reportMessage('Loaded Rig file: ' + filePath, level='information')
+                self.window().setWindowTitle('Kraken Editor - ' + filePath + '[*]')
+
+                self.reportMessage('Loaded Rig file: ' + filePath, level='information')
+
+        finally:
+            self.window().setCursor(QtCore.Qt.ArrowCursor)
 
 
     def buildGuideRig(self):

@@ -151,7 +151,7 @@ class KrakenMenu(QtGui.QWidget):
 
         self.saveAction.triggered.connect(graphViewWidget.saveRigPreset)
         self.saveAsAction.triggered.connect(graphViewWidget.saveAsRigPreset)
-        self.openAction.triggered.connect(graphViewWidget.loadRigPreset)
+        self.openAction.triggered.connect(graphViewWidget.openRigPreset)
         self.openAction.triggered.connect(self.updateRigNameLabel)
         self.closeAction.triggered.connect(self.window().close)
 
