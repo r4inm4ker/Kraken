@@ -244,7 +244,7 @@ class KBackdrop(QtGui.QGraphicsWidget):
                     if not self.isSelected():
                         self.__graph.selectNode(self, clearSelection=True)
 
-                    if self.isOnHeader(event.pos()):
+                    if self.__headerItem.contains(event.pos()):
                         self.setCursor(QtCore.Qt.ClosedHandCursor)
                         self.__dragging = True
                         self._nodesMoved = False
@@ -252,13 +252,10 @@ class KBackdrop(QtGui.QGraphicsWidget):
             self._mouseDownPoint = self.mapToScene(event.pos())
             self._mouseDelta = self._mouseDownPoint - self.getGraphPos()
             self._lastDragPoint = self._mouseDownPoint
-            self._lastResizePoint = self._mouseDownPoint
 
-            self._initRectX = self.boundingRect().x()
-            self._initRectY = self.boundingRect().y()
-            self._initPos = self.boundingRect().topLeft()
-            self._initWidth = self.boundingRect().width()
-            self._initHeight = self.boundingRect().height()
+            self._initPos = self.pos()
+            self._initBoundingRect = self.boundingRect()
+            self._initSceneBoundingRect = self.sceneBoundingRect()
 
         else:
             super(KBackdrop, self).mousePressEvent(event)
@@ -290,27 +287,14 @@ class KBackdrop(QtGui.QGraphicsWidget):
 
             newPos = self.mapToScene(event.pos())
             delta = newPos - self._mouseDownPoint
-            self._lastResizePoint = newPos
             self._resizedBackdrop = True
-
-            self.prepareGeometryChange()
 
             if self.__resizeCorner == 0:
 
-                # print "resizing from top left"
-                # print "Delta X: " + str(delta.x() * -1.0)
-                # print "Delta Y: " + str(delta.y() * -1.0)
-
-                newPosX = self._initPos.x() - (delta.x() * -1.0)
-                newPosY = self._initPos.y() - (delta.y() * -1.0)
-                newWidth = self._initWidth + (delta.x() * -1.0)
-                newHeight = self._initHeight + (delta.y() * -1.0)
-
-                if newPosX >= self._initRectX:
-                    newPosX = self._initRectX
-
-                if newPosY >= self._initRectY:
-                    newPosY = self._initRectY
+                newPosX = self._initPos.x() + delta.x()
+                newPosY = self._initPos.y() + delta.y()
+                newWidth = self._initBoundingRect.width() + (delta.x() * -1.0)
+                newHeight = self._initBoundingRect.height() + (delta.y() * -1.0)
 
                 if newWidth <= self.minimumWidth():
                     newWidth = self.minimumWidth()
@@ -318,8 +302,8 @@ class KBackdrop(QtGui.QGraphicsWidget):
                 if newHeight <= self.minimumHeight():
                     newHeight = self.minimumHeight()
 
-                self.setGeometry(newPosX, newPosY, newWidth, newHeight)
-
+                self.setPos(newPosX, newPosY)
+                self.resize(newWidth, newHeight)
 
             elif self.__resizeCorner == 1:
                 print "resizing from top right"
@@ -328,9 +312,9 @@ class KBackdrop(QtGui.QGraphicsWidget):
                 print "resizing from bottom left"
 
             elif self.__resizeCorner == 3:
-                self.resize(self._initWidth + delta.x(), self._initHeight + delta.y())
+                self.resize(self._initBoundingRect.width() + delta.x(), self._initBoundingRect.height() + delta.y())
 
-            self.update()
+            self.prepareGeometryChange()
 
         else:
             super(KBackdrop, self).mouseMoveEvent(event)
@@ -382,7 +366,7 @@ class KBackdrop(QtGui.QGraphicsWidget):
         elif resizeCorner == 3:
             self.__setCustomCursor = True
             self.setCursor(QtCore.Qt.SizeFDiagCursor)
-        elif self.isOnHeader(event.pos()) is True:
+        elif self.__headerItem.contains(event.pos()) is True:
             self.__setCustomCursor = True
             self.setCursor(QtCore.Qt.OpenHandCursor)
         else:
@@ -394,15 +378,6 @@ class KBackdrop(QtGui.QGraphicsWidget):
 
     ################
     ## Misc Methods
-
-    def isOnHeader(self, pos):
-        titleHeight = self.__headerItem.size().height() - 3
-
-        topLeft = self.mapFromItem(self, self.boundingRect().topLeft())
-        bottomRight = self.mapFromItem(self, self.boundingRect().bottomRight())
-        rect = QtCore.QRectF(topLeft, bottomRight);
-
-        return (pos.y() - rect.top()) < titleHeight
 
     def getCorner(self, pos):
         topLeft = self.mapFromItem(self, self.boundingRect().topLeft())
