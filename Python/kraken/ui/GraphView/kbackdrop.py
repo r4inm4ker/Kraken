@@ -3,11 +3,12 @@
 # Copyright 2010-2015
 #
 
-
+import math
 import json
+
 from PySide import QtGui, QtCore
 
-from kraken.ui.component_inspector import ComponentInspector
+from kraken.ui.backdrop_inspector import BackdropInspector
 
 class KBackdropTitle(QtGui.QGraphicsWidget):
 
@@ -79,7 +80,7 @@ class KBackdrop(QtGui.QGraphicsWidget):
     __selectedPen =  QtGui.QPen(__defaultColor.lighter(175), 1.6)
     __linePen =  QtGui.QPen(QtGui.QColor(25, 25, 25, 255), 1.25)
 
-    __resizeDistance = 32.0
+    __resizeDistance = 16.0
     __setCustomCursor = False
 
     def __init__(self, graph, name):
@@ -90,6 +91,7 @@ class KBackdrop(QtGui.QGraphicsWidget):
         self.__graph = graph
         self.__color = self.__defaultColor
         self.__color.setAlpha(25)
+        self.__inspectorWidget = None
 
         self.setMinimumWidth(120)
         self.setMinimumHeight(80)
@@ -111,6 +113,7 @@ class KBackdrop(QtGui.QGraphicsWidget):
         self.__selected = False
         self.__dragging = False
         self.__resizing = False
+        self.__resizeCorner = -1
 
 
     def getName(self):
@@ -221,8 +224,10 @@ class KBackdrop(QtGui.QGraphicsWidget):
     def mousePressEvent(self, event):
         if event.button() is QtCore.Qt.MouseButton.LeftButton:
 
-            if self.getCorner(event.pos()) == 3:
+            resizeCorner = self.getCorner(event.pos())
+            if resizeCorner != -1:
                 self.__resizing = True
+                self.__resizeCorner = resizeCorner
                 self._resizedBackdrop = False
             else:
                 modifiers = event.modifiers()
@@ -239,20 +244,21 @@ class KBackdrop(QtGui.QGraphicsWidget):
                     if not self.isSelected():
                         self.__graph.selectNode(self, clearSelection=True)
 
-                    self.__dragging = True
-                    self._nodesMoved = False
+                    if self.isOnHeader(event.pos()):
+                        self.__dragging = True
+                        self._nodesMoved = False
 
             self._mouseDownPoint = self.mapToScene(event.pos())
             self._mouseDelta = self._mouseDownPoint - self.getGraphPos()
             self._lastDragPoint = self._mouseDownPoint
             self._lastResizePoint = self._mouseDownPoint
 
+            self._initPos = self.boundingRect().topLeft()
             self._initWidth = self.boundingRect().width()
             self._initHeight = self.boundingRect().height()
 
         else:
             super(KBackdrop, self).mousePressEvent(event)
-
 
     def mouseMoveEvent(self, event):
         if self.__dragging:
@@ -278,18 +284,45 @@ class KBackdrop(QtGui.QGraphicsWidget):
             self._nodesMoved = True
 
         elif self.__resizing:
+
             newPos = self.mapToScene(event.pos())
             delta = newPos - self._mouseDownPoint
             self._lastResizePoint = newPos
             self._resizedBackdrop = True
 
             self.prepareGeometryChange()
-            self.resize(self._initWidth + delta.x(), self._initHeight + delta.y())
+
+            if self.__resizeCorner == 0:
+
+                print "resizing from top left"
+                print "Delta X: " + str(delta.x() * -1.0)
+                print "Delta Y: " + str(delta.y() * -1.0)
+
+                newWidth = self._initWidth + (delta.x() * -1.0)
+                newHeight = self._initHeight + (delta.y() * -1.0)
+
+                if newWidth <= self.minimumWidth():
+                    newWidth = self.minimumWidth()
+
+                if newHeight <= self.minimumHeight():
+                    newHeight = self.minimumHeight()
+
+                self.setGeometry(self._initPos.x() - (delta.x() * -1.0), self._initPos.y() - (delta.y() * -1.0), newWidth, newHeight)
+
+
+            elif self.__resizeCorner == 1:
+                print "resizing from top right"
+
+            elif self.__resizeCorner == 2:
+                print "resizing from bottom left"
+
+            elif self.__resizeCorner == 3:
+                self.resize(self._initWidth + delta.x(), self._initHeight + delta.y())
+
             self.update()
 
         else:
             super(KBackdrop, self).mouseMoveEvent(event)
-
 
     def mouseReleaseEvent(self, event):
         if self.__dragging:
@@ -307,10 +340,55 @@ class KBackdrop(QtGui.QGraphicsWidget):
 
             self.setCursor(QtCore.Qt.ArrowCursor)
             self.__resizing = False
+            self.__resizeCorner = -1
 
         else:
             super(KBackdrop, self).mouseReleaseEvent(event)
 
+    def mouseDoubleClickEvent(self, event):
+        if self.__inspectorWidget is None:
+            parentWidget = self.getGraph().getGraphViewWidget()
+            self.__inspectorWidget = BackdropInspector(parent=parentWidget, nodeItem=self)
+            self.__inspectorWidget.show()
+        else:
+            self.__inspectorWidget.setFocus()
+
+        super(KNode, self).mouseDoubleClickEvent(event)
+
+
+    def hoverMoveEvent(self, event):
+
+        resizeCorner = self.getCorner(event.pos())
+        if resizeCorner == 0:
+            self.__setCustomCursor = True
+            self.setCursor(QtCore.Qt.SizeFDiagCursor)
+        elif resizeCorner == 1:
+            self.__setCustomCursor = True
+            self.setCursor(QtCore.Qt.SizeBDiagCursor)
+        elif resizeCorner == 2:
+            self.__setCustomCursor = True
+            self.setCursor(QtCore.Qt.SizeBDiagCursor)
+        elif resizeCorner == 3:
+            self.__setCustomCursor = True
+            self.setCursor(QtCore.Qt.SizeFDiagCursor)
+        else:
+            if self.__setCustomCursor is True:
+                self.setCursor(QtCore.Qt.ArrowCursor)
+
+    def hoverLeaveEvent(self, event):
+        self.setCursor(QtCore.Qt.ArrowCursor)
+
+    ################
+    ## Misc Methods
+
+    def isOnHeader(self, pos):
+        titleHeight = self.__headerItem.size().height() - 3
+
+        topLeft = self.mapFromItem(self, self.boundingRect().topLeft())
+        bottomRight = self.mapFromItem(self, self.boundingRect().bottomRight())
+        rect = QtCore.QRectF(topLeft, bottomRight);
+
+        return (pos.y() - rect.top()) < titleHeight
 
     def getCorner(self, pos):
         topLeft = self.mapFromItem(self, self.boundingRect().topLeft())
@@ -328,17 +406,9 @@ class KBackdrop(QtGui.QGraphicsWidget):
 
         return -1
 
-    def hoverMoveEvent(self, event):
 
-        if self.getCorner(event.pos()) == 3:
-            self.__setCustomCursor = True
-            self.setCursor(QtCore.Qt.SizeFDiagCursor)
-        else:
-            if self.__setCustomCursor is True:
-                self.setCursor(QtCore.Qt.ArrowCursor)
-
-    def hoverLeaveEvent(self, event):
-        self.setCursor(QtCore.Qt.ArrowCursor)
+    def inspectorClosed(self):
+        self.__inspectorWidget = None
 
 
     #########################
