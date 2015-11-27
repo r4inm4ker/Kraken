@@ -245,6 +245,7 @@ class KBackdrop(QtGui.QGraphicsWidget):
                         self.__graph.selectNode(self, clearSelection=True)
 
                     if self.isOnHeader(event.pos()):
+                        self.setCursor(QtCore.Qt.ClosedHandCursor)
                         self.__dragging = True
                         self._nodesMoved = False
 
@@ -253,6 +254,8 @@ class KBackdrop(QtGui.QGraphicsWidget):
             self._lastDragPoint = self._mouseDownPoint
             self._lastResizePoint = self._mouseDownPoint
 
+            self._initRectX = self.boundingRect().x()
+            self._initRectY = self.boundingRect().y()
             self._initPos = self.boundingRect().topLeft()
             self._initWidth = self.boundingRect().width()
             self._initHeight = self.boundingRect().height()
@@ -294,12 +297,20 @@ class KBackdrop(QtGui.QGraphicsWidget):
 
             if self.__resizeCorner == 0:
 
-                print "resizing from top left"
-                print "Delta X: " + str(delta.x() * -1.0)
-                print "Delta Y: " + str(delta.y() * -1.0)
+                # print "resizing from top left"
+                # print "Delta X: " + str(delta.x() * -1.0)
+                # print "Delta Y: " + str(delta.y() * -1.0)
 
+                newPosX = self._initPos.x() - (delta.x() * -1.0)
+                newPosY = self._initPos.y() - (delta.y() * -1.0)
                 newWidth = self._initWidth + (delta.x() * -1.0)
                 newHeight = self._initHeight + (delta.y() * -1.0)
+
+                if newPosX >= self._initRectX:
+                    newPosX = self._initRectX
+
+                if newPosY >= self._initRectY:
+                    newPosY = self._initRectY
 
                 if newWidth <= self.minimumWidth():
                     newWidth = self.minimumWidth()
@@ -307,7 +318,7 @@ class KBackdrop(QtGui.QGraphicsWidget):
                 if newHeight <= self.minimumHeight():
                     newHeight = self.minimumHeight()
 
-                self.setGeometry(self._initPos.x() - (delta.x() * -1.0), self._initPos.y() - (delta.y() * -1.0), newWidth, newHeight)
+                self.setGeometry(newPosX, newPosY, newWidth, newHeight)
 
 
             elif self.__resizeCorner == 1:
@@ -371,6 +382,9 @@ class KBackdrop(QtGui.QGraphicsWidget):
         elif resizeCorner == 3:
             self.__setCustomCursor = True
             self.setCursor(QtCore.Qt.SizeFDiagCursor)
+        elif self.isOnHeader(event.pos()) is True:
+            self.__setCustomCursor = True
+            self.setCursor(QtCore.Qt.OpenHandCursor)
         else:
             if self.__setCustomCursor is True:
                 self.setCursor(QtCore.Qt.ArrowCursor)
