@@ -324,7 +324,19 @@ class KBackdrop(QtGui.QGraphicsWidget):
 
 
             elif self.__resizeCorner == 2:
-                print "resizing from bottom left"
+
+                newWidth = self._initBoundingRect.width() + (delta.x() * -1.0)
+                newHeight = self._initBoundingRect.height() + delta.y()
+
+                if newWidth <= self.minimumWidth():
+                    newWidth = self.minimumWidth()
+                else:
+                    newPosX = self._initPos.x() + delta.x()
+
+                if newHeight <= self.minimumHeight():
+                    newHeight = self.minimumHeight()
+                else:
+                    newPosY = self._initPos.y()
 
             elif self.__resizeCorner == 3:
                 newPosX = self._initPos.x()
