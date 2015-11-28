@@ -95,7 +95,6 @@ class KBackdrop(QtGui.QGraphicsWidget):
 
         self.setMinimumWidth(120)
         self.setMinimumHeight(80)
-        # self.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding))
 
         layout = QtGui.QGraphicsLinearLayout()
         layout.setContentsMargins(5, 0, 5, 7)
@@ -225,7 +224,7 @@ class KBackdrop(QtGui.QGraphicsWidget):
         if event.button() is QtCore.Qt.MouseButton.LeftButton:
 
             resizeCorner = self.getCorner(event.pos())
-            if resizeCorner != -1:
+            if resizeCorner != -1 and self.isSelected():
                 self.__resizing = True
                 self.__resizeCorner = resizeCorner
                 self._resizedBackdrop = False
@@ -254,6 +253,7 @@ class KBackdrop(QtGui.QGraphicsWidget):
             self._lastDragPoint = self._mouseDownPoint
 
             self._initPos = self.pos()
+            self._initScenePos = self.mapToScene(self.pos())
             self._initBoundingRect = self.boundingRect()
             self._initSceneBoundingRect = self.sceneBoundingRect()
 
@@ -289,30 +289,51 @@ class KBackdrop(QtGui.QGraphicsWidget):
             delta = newPos - self._mouseDownPoint
             self._resizedBackdrop = True
 
+            newPosX = 0
+            newPosY = 0
+
             if self.__resizeCorner == 0:
 
-                newPosX = self._initPos.x() + delta.x()
-                newPosY = self._initPos.y() + delta.y()
                 newWidth = self._initBoundingRect.width() + (delta.x() * -1.0)
                 newHeight = self._initBoundingRect.height() + (delta.y() * -1.0)
 
                 if newWidth <= self.minimumWidth():
                     newWidth = self.minimumWidth()
+                else:
+                    newPosX = self._initPos.x() + delta.x()
 
                 if newHeight <= self.minimumHeight():
                     newHeight = self.minimumHeight()
-
-                self.setPos(newPosX, newPosY)
-                self.resize(newWidth, newHeight)
+                else:
+                    newPosY = self._initPos.y() + delta.y()
 
             elif self.__resizeCorner == 1:
-                print "resizing from top right"
+
+                newWidth = self._initBoundingRect.width() + delta.x()
+                newHeight = self._initBoundingRect.height() + (delta.y() * -1.0)
+
+                if newWidth <= self.minimumWidth():
+                    newWidth = self.minimumWidth()
+                else:
+                    newPosX = self._initPos.x()
+
+                if newHeight <= self.minimumHeight():
+                    newHeight = self.minimumHeight()
+                else:
+                    newPosY = self._initPos.y() + delta.y()
+
 
             elif self.__resizeCorner == 2:
                 print "resizing from bottom left"
 
             elif self.__resizeCorner == 3:
-                self.resize(self._initBoundingRect.width() + delta.x(), self._initBoundingRect.height() + delta.y())
+                newPosX = self._initPos.x()
+                newPosY = self._initPos.y()
+                newWidth = self._initBoundingRect.width() + delta.x()
+                newHeight = self._initBoundingRect.height() + delta.y()
+
+            self.setPos(newPosX, newPosY)
+            self.resize(newWidth, newHeight)
 
             self.prepareGeometryChange()
 
