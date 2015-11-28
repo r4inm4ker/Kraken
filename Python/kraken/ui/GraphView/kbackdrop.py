@@ -13,19 +13,17 @@ from kraken.ui.backdrop_inspector import BackdropInspector
 class KBackdropTitle(QtGui.QGraphicsWidget):
 
     __color = QtGui.QColor(255, 255, 255)
-    __font = QtGui.QFont('Decorative', 14)
-    __font.setLetterSpacing(QtGui.QFont.PercentageSpacing, 115)
-    __labelBottomSpacing = 12
+    __font = QtGui.QFont('Helvetica', 11)
+    __font.setLetterSpacing(QtGui.QFont.PercentageSpacing, 120)
+    __labelBottomSpacing = 4
 
     def __init__(self, text, parent=None):
         super(KBackdropTitle, self).__init__(parent)
 
-        # self.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed))
-
         self.__textItem = QtGui.QGraphicsTextItem(text, self)
         self.__textItem.setDefaultTextColor(self.__color)
         self.__textItem.setFont(self.__font)
-        self.__textItem.setPos(0, -2)
+        self.__textItem.setPos(0, 1)
         option = self.__textItem.document().defaultTextOption()
         option.setWrapMode(QtGui.QTextOption.NoWrap)
         self.__textItem.document().setDefaultTextOption(option)
@@ -38,23 +36,20 @@ class KBackdropTitle(QtGui.QGraphicsWidget):
         self.__textItem.adjustSize()
         self.setPreferredSize(self.textSize())
 
-    def textSize(self):
-        return QtCore.QSizeF(
-            self.__textItem.textWidth(),
-            self.__font.pointSizeF() + self.__labelBottomSpacing
-            )
-
     def setTextColor(self, color):
         self.__color = color
         self.update()
 
+    def textSize(self):
+        return QtCore.QSizeF(
+            self.__textItem.textWidth(),
+            self.__textItem.document().documentLayout().documentSize().height() + self.__labelBottomSpacing
+            )
 
 class KBackdropHeader(QtGui.QGraphicsWidget):
 
     def __init__(self, text, parent=None):
         super(KBackdropHeader, self).__init__(parent)
-
-        # self.setSizePolicy(QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed))
 
         layout = QtGui.QGraphicsLinearLayout()
         layout.setContentsMargins(0, 0, 0, 0)
@@ -66,6 +61,8 @@ class KBackdropHeader(QtGui.QGraphicsWidget):
         layout.addItem(self._titleWidget)
         layout.setAlignment(self._titleWidget, QtCore.Qt.AlignCenter | QtCore.Qt.AlignTop)
 
+    def getTitleWidget(self):
+        return self._titleWidget
 
     def setText(self, text):
         self._titleWidget.setText(text)
@@ -88,6 +85,8 @@ class KBackdrop(QtGui.QGraphicsWidget):
         self.setAcceptHoverEvents(True)
 
         self.__name = name
+        self.__comment = None
+
         self.__graph = graph
         self.__color = self.__defaultColor
         self.__color.setAlpha(25)
@@ -107,13 +106,15 @@ class KBackdrop(QtGui.QGraphicsWidget):
         layout.setAlignment(self.__headerItem, QtCore.Qt.AlignCenter | QtCore.Qt.AlignTop)
         layout.addStretch(1)
 
-        self.setZValue(-10)
+        self.setZValue(-100)
 
         self.__selected = False
         self.__dragging = False
         self.__resizing = False
         self.__resizeCorner = -1
 
+        # Initialize the comment with the name
+        self.setComment(name)
 
     def getName(self):
         return self.__name
@@ -123,7 +124,7 @@ class KBackdrop(QtGui.QGraphicsWidget):
         if name != self.__name:
             origName = self.__name
             self.__name = name
-            self.__headerItem.setText(self.__name)
+            # self.__headerItem.setText(self.__name)
 
             # Emit an event, so that the graph can update itsself.
             self.nameChanged.emit(origName, name)
@@ -131,6 +132,20 @@ class KBackdrop(QtGui.QGraphicsWidget):
             # Update the node so that the size is computed.
             self.adjustSize()
 
+    def getComment(self):
+        return self.__comment
+
+    def setComment(self, comment):
+        self.__comment = comment
+        self.__headerItem.setText(comment)
+
+        # Resize the width of the backdrop based on title width
+        titleWidget = self.__headerItem.getTitleWidget()
+        titleWidth = titleWidget.textSize().width()
+        self.resize(titleWidth, self.size().height())
+
+        # Update the node so that the size is computed.
+        self.adjustSize()
 
     def getColor(self):
         return self.__color
@@ -377,11 +392,11 @@ class KBackdrop(QtGui.QGraphicsWidget):
         if self.__inspectorWidget is None:
             parentWidget = self.getGraph().getGraphViewWidget()
             self.__inspectorWidget = BackdropInspector(parent=parentWidget, nodeItem=self)
-            self.__inspectorWidget.show()
+            result = self.__inspectorWidget.exec_()
         else:
             self.__inspectorWidget.setFocus()
 
-        super(KNode, self).mouseDoubleClickEvent(event)
+        super(KBackdrop, self).mouseDoubleClickEvent(event)
 
 
     def hoverMoveEvent(self, event):

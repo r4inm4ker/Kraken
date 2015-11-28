@@ -10,60 +10,7 @@ from DataTypeWidgets import AttributeWidget
 from kraken.core.kraken_system import KrakenSystem
 
 
-# class _NameAttributeProxy(object):
-
-#     def __init__(self, component, nodeItem):
-#         super(_NameAttributeProxy, self).__init__()
-#         self.component = component
-#         self.nodeItem = nodeItem
-
-#     def getName(self):
-#         return 'name'
-
-#     def setValue(self, value):
-#         # Store original node name
-#         origName = self.nodeItem.getName()
-#         self.component.setName(value)
-#         if origName != self.component.getDecoratedName():
-#             self.nodeItem.setName(self.component.getDecoratedName())
-
-#     def getValue(self):
-#         return self.component.getName()
-
-#     def getDataType(self):
-#         return 'String'
-
-# class _LocationAttributeProxy(object):
-
-#     def __init__(self, component, nodeItem, nameWidget):
-#         super(_LocationAttributeProxy, self).__init__()
-#         self.component = component
-#         self.nodeItem = nodeItem
-#         self.nameWidget = nameWidget
-
-#     def getName(self):
-#         return 'location'
-
-#     def setValue(self, value):
-#         # Store original node name
-#         origName = self.nodeItem.getName()
-#         self.component.setLocation(value)
-#         if origName != self.component.getDecoratedName():
-#             self.nodeItem.setName(self.component.getDecoratedName())
-
-#             # this is a hack to force the UI to update to reflect changes in the rig.
-#             # Ideally, we should be using an MVC pattern where the UI listens to changes
-#             # in the model, but we don't have an event system in KRaken. Instead we have to
-#             # push changes to the UI widgets. (an awkward and not-scalable solution.)
-#             self.nameWidget.setWidgetValue(self.component.getName())
-
-#     def getValue(self):
-#         return self.component.getLocation()
-
-#     def getDataType(self):
-#         return 'String'
-
-class BackdropInspector(QtGui.QWidget):
+class BackdropInspector(QtGui.QDialog):
     """A widget providing the ability to nest """
 
     def __init__(self, parent=None, nodeItem=None):
@@ -76,118 +23,38 @@ class BackdropInspector(QtGui.QWidget):
         self.nodeItem = nodeItem
 
         self.setWindowTitle( self.nodeItem.getName() )
-        self.setWindowFlags( QtCore.Qt.Window )
+        self.setWindowFlags( QtCore.Qt.Dialog )
         self.resize( 600, 300 )
 
         # layout
         self._mainLayout = QtGui.QVBoxLayout()
+        self._mainLayout.setContentsMargins(10, 10, 10, 10)
+
+        self._commentTextEdit = QtGui.QTextEdit(self)
+        self._commentTextEdit.setText(self.nodeItem.getComment())
+        self._commentTextEdit.setMinimumHeight(20)
+        self._commentTextEdit.setMaximumHeight(40)
+
+        # OK and Cancel buttons
+        buttons = QtGui.QDialogButtonBox(
+            QtGui.QDialogButtonBox.Ok | QtGui.QDialogButtonBox.Cancel,
+            QtCore.Qt.Horizontal, self)
+
+        buttons.accepted.connect(self.acceptClose)
+        buttons.rejected.connect(self.close)
+
+        self._mainLayout.addWidget(self._commentTextEdit)
+        self._mainLayout.addStretch(1)
+        self._mainLayout.addWidget(buttons)
+
         self.setLayout(self._mainLayout)
-        self._mainLayout.setContentsMargins(0, 0, 0, 0)
-
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-
-        self._paramsFrame = QtGui.QScrollArea(self)
-        self._paramsFrame.setWidgetResizable(True)
-        self._paramsFrame.setEnabled(True)
-        self._paramsFrame.setSizePolicy(sizePolicy)
-        self._paramsFrame.setFrameStyle(QtGui.QFrame.StyledPanel)
-
-        self._paramsGroup = QtGui.QWidget(self._paramsFrame)
-        self._paramsFrame.setWidget(self._paramsGroup)
-
-        self._paramsLayout = QtGui.QGridLayout()
-        self._paramsLayout.setAlignment(QtCore.Qt.AlignTop)
-
-        self._paramsGroup.setLayout(self._paramsLayout)
-
-        self._mainLayout.addWidget(self._paramsFrame)
-        self._paramWidgets = []
-        self._gridRow = 0
-
-        self.refresh()
-
-    def addAttrWidget(self, name, widget):
-
-        label = QtGui.QLabel(name, self._paramsGroup)
-        label.setContentsMargins(0, 5, 0, 0)
-
-        if widget is None:
-            self._paramsLayout.addWidget(label, self._gridRow, 0, QtCore.Qt.AlignRight | QtCore.Qt.AlignTop)
-            self._gridRow += 1
-        else:
-            rowSpan = widget.getRowSpan()
-            columnSpan = widget.getColumnSpan()
-            if columnSpan==1:
-                self._paramsLayout.addWidget(label, self._gridRow, 0, QtCore.Qt.AlignRight | QtCore.Qt.AlignTop)
-                self._paramsLayout.addWidget(widget, self._gridRow, 1)
-                self._gridRow += 1
-            else:
-                self._paramsLayout.addWidget(label, self._gridRow, 0, QtCore.Qt.AlignRight | QtCore.Qt.AlignTop)
-                self._paramsLayout.addWidget(widget, self._gridRow+1, 0, rowSpan, columnSpan)
-                self._gridRow += 2
-
-            self._paramWidgets.append(widget)
-
-    def addSeparator(self, name=None):
-
-        separatorWidget = QtGui.QFrame(self._paramsGroup)
-        separatorWidget.setFrameShape(QtGui.QFrame.HLine)
-        separatorWidget.setObjectName('separatorFrame')
-        if name is not None:
-            labelWidget = QtGui.QLabel(name, self._paramsGroup)
-            labelWidget.setObjectName('separatorLabel')
-
-            self._paramsLayout.addWidget(labelWidget, self._gridRow, 0)
-            self._paramsLayout.addWidget(separatorWidget, self._gridRow, 1, QtCore.Qt.AlignBottom)
-            self._gridRow += 1
-        else:
-            self._paramsLayout.addWidget(separatorWidget, self._gridRow, 0, 1, 2)
-            self._gridRow += 1
-
-    def addStretch(self, stretch):
-        self._paramsLayout.addWidget(QtGui.QWidget(self), self._gridRow, 0, 1, 2)
-        self._paramsLayout.setRowStretch(self._gridRow, stretch)
-        self._gridRow += 1
-
-    def refresh(self, data=None):
-        # self.clear()
-
-        # nameAttributeProxy = _NameAttributeProxy(component=self.component, nodeItem=self.nodeItem)
-        # nameWidget = AttributeWidget.constructAttributeWidget( nameAttributeProxy, parentWidget=self)
-        # self.addAttrWidget("name", nameWidget)
-
-        # locationAttributeProxy = _LocationAttributeProxy(component=self.component, nodeItem=self.nodeItem, nameWidget=nameWidget)
-        # locationWidget = AttributeWidget.constructAttributeWidget( locationAttributeProxy, parentWidget=self)
-        # self.addAttrWidget("location", locationWidget)
 
 
-        # def displayAttribute(attribute):
-        #     attributeWidget = AttributeWidget.constructAttributeWidget( attribute, parentWidget=self)
-        #     self.addAttrWidget(attribute.getName(), attributeWidget)
+    def acceptClose(self):
 
-        # for i in range(self.component.getNumAttributeGroups()):
-        #     grp  = self.component.getAttributeGroupByIndex(i)
-        #     self.addSeparator(grp.getName())
-        #     for j in range(grp.getNumAttributes()):
-        #         displayAttribute(grp.getAttributeByIndex(j))
-
-        # Add a stretch so that the widgets pack at the top.
-        self.addStretch(2)
-
-
-    def closeWidget(self, data):
+        self.nodeItem.setComment(self._commentTextEdit.toPlainText())
+        self.nodeItem.adjustSize()
         self.close()
-
-    def clear(self):
-        # for widget in self._paramWidgets:
-        #     widget.unregisterNotificationListener()
-        while self._paramsLayout.count():
-            self._paramsLayout.takeAt(0).widget().deleteLater()
-        self._paramWidgets = []
-        self._gridRow = 0
-
 
     ##############################
     ## Events
