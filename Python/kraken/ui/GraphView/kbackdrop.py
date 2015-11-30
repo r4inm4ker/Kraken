@@ -21,6 +21,8 @@ class KBackdropTitle(QtGui.QGraphicsWidget):
     def __init__(self, text, parent=None):
         super(KBackdropTitle, self).__init__(parent)
 
+        self.parentWidget = parent
+
         self.__textItem = QtGui.QGraphicsTextItem(text, self)
         self.__textItem.setDefaultTextColor(self.__color)
         self.__textItem.setFont(self.__font)
@@ -34,27 +36,38 @@ class KBackdropTitle(QtGui.QGraphicsWidget):
 
     def setText(self, text):
         self.__textItem.setPlainText(text)
-        self.__textItem.adjustSize()
-        self.setPreferredSize(self.textSize())
+        # self.__textItem.adjustSize()
+        self.nodeResized(self.parentWidget.parentWidget.size().width())
 
     def setTextColor(self, color):
         self.__color = color
         self.update()
 
     def textSize(self):
-        return QtCore.QSizeF(
-            self.__textItem.textWidth(),
-            self.__textItem.document().documentLayout().documentSize().height() + self.__labelBottomSpacing
-            )
+        return QtCore.QSizeF(self.__textItem.textWidth(), self.textHeight())
 
-    def printResize(self, width):
-        pass
-        # print self.__fontMetrics.width(self.__textItem.toPlainText())
+    def textHeight(self):
+        return self.__textItem.document().documentLayout().documentSize().height() + self.__labelBottomSpacing
+
+    def nodeResized(self, width=None):
+
+        fmWidth = self.__fontMetrics.width(self.__textItem.toPlainText())
+        newWidth = min(fmWidth, width)
+        if width > fmWidth:
+            newWidth = width
+
+        self.__textItem.setTextWidth(newWidth)
+        self.setPreferredSize(newWidth, self.textHeight())
+
+    def getBackdropWidget(self):
+        return self.parent().parent()
 
 class KBackdropHeader(QtGui.QGraphicsWidget):
 
     def __init__(self, text, parent=None):
         super(KBackdropHeader, self).__init__(parent)
+
+        self.parentWidget = parent
 
         layout = QtGui.QGraphicsLinearLayout()
         layout.setContentsMargins(0, 0, 0, 0)
@@ -131,7 +144,7 @@ class KBackdrop(QtGui.QGraphicsWidget):
 
     def createConnections(self):
 
-        self.sizeChanged.connect(self.__titleWidget.printResize)
+        self.sizeChanged.connect(self.__titleWidget.nodeResized)
 
 
     def getName(self):
@@ -357,7 +370,6 @@ class KBackdrop(QtGui.QGraphicsWidget):
                 else:
                     newPosY = self._initPos.y() + delta.y()
 
-
             elif self.__resizeCorner == 2:
 
                 newWidth = self._initBoundingRect.width() + (delta.x() * -1.0)
@@ -378,6 +390,12 @@ class KBackdrop(QtGui.QGraphicsWidget):
                 newPosY = self._initPos.y()
                 newWidth = self._initBoundingRect.width() + delta.x()
                 newHeight = self._initBoundingRect.height() + delta.y()
+
+                if newWidth <= self.minimumWidth():
+                    newWidth = self.minimumWidth()
+
+                if newHeight <= self.minimumHeight():
+                    newHeight = self.minimumHeight()
 
             self.setPos(newPosX, newPosY)
             self.resize(newWidth, newHeight)
