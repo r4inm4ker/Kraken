@@ -15,6 +15,7 @@ class KBackdropTitle(QtGui.QGraphicsWidget):
     __color = QtGui.QColor(255, 255, 255)
     __font = QtGui.QFont('Helvetica', 11)
     __font.setLetterSpacing(QtGui.QFont.PercentageSpacing, 120)
+    __fontMetrics = QtGui.QFontMetrics(__font)
     __labelBottomSpacing = 4
 
     def __init__(self, text, parent=None):
@@ -25,9 +26,9 @@ class KBackdropTitle(QtGui.QGraphicsWidget):
         self.__textItem.setFont(self.__font)
         self.__textItem.setPos(0, 1)
         option = self.__textItem.document().defaultTextOption()
-        option.setWrapMode(QtGui.QTextOption.NoWrap)
         self.__textItem.document().setDefaultTextOption(option)
         self.__textItem.adjustSize()
+        self.__textItem.setTextWidth(120)
 
         self.setPreferredSize(self.textSize())
 
@@ -45,6 +46,10 @@ class KBackdropTitle(QtGui.QGraphicsWidget):
             self.__textItem.textWidth(),
             self.__textItem.document().documentLayout().documentSize().height() + self.__labelBottomSpacing
             )
+
+    def printResize(self, width):
+        pass
+        # print self.__fontMetrics.width(self.__textItem.toPlainText())
 
 class KBackdropHeader(QtGui.QGraphicsWidget):
 
@@ -71,6 +76,7 @@ class KBackdropHeader(QtGui.QGraphicsWidget):
 class KBackdrop(QtGui.QGraphicsWidget):
 
     nameChanged = QtCore.Signal(str, str)
+    sizeChanged = QtCore.Signal(float)
 
     __defaultColor = QtGui.QColor(65, 120, 122, 255)
     __unselectedPen =  QtGui.QPen(__defaultColor.darker(125), 1.6)
@@ -94,6 +100,22 @@ class KBackdrop(QtGui.QGraphicsWidget):
 
         self.setMinimumWidth(120)
         self.setMinimumHeight(80)
+        self.setZValue(-100)
+
+        # Set defaults for interactions
+        self.__selected = False
+        self.__dragging = False
+        self.__resizing = False
+        self.__resizeCorner = -1
+
+        self.createLayout()
+        self.createConnections()
+
+        # Initialize the comment with the name
+        self.setComment(name)
+
+
+    def createLayout(self):
 
         layout = QtGui.QGraphicsLinearLayout()
         layout.setContentsMargins(5, 0, 5, 7)
@@ -102,19 +124,15 @@ class KBackdrop(QtGui.QGraphicsWidget):
         self.setLayout(layout)
 
         self.__headerItem = KBackdropHeader(self.__name, self)
+        self.__titleWidget = self.__headerItem.getTitleWidget()
         layout.addItem(self.__headerItem)
         layout.setAlignment(self.__headerItem, QtCore.Qt.AlignCenter | QtCore.Qt.AlignTop)
         layout.addStretch(1)
 
-        self.setZValue(-100)
+    def createConnections(self):
 
-        self.__selected = False
-        self.__dragging = False
-        self.__resizing = False
-        self.__resizeCorner = -1
+        self.sizeChanged.connect(self.__titleWidget.printResize)
 
-        # Initialize the comment with the name
-        self.setComment(name)
 
     def getName(self):
         return self.__name
@@ -306,6 +324,8 @@ class KBackdrop(QtGui.QGraphicsWidget):
 
             newPosX = 0
             newPosY = 0
+            newWidth = self._initBoundingRect.width()
+            newHeight = self._initBoundingRect.height()
 
             if self.__resizeCorner == 0:
 
@@ -361,6 +381,8 @@ class KBackdrop(QtGui.QGraphicsWidget):
 
             self.setPos(newPosX, newPosY)
             self.resize(newWidth, newHeight)
+
+            self.sizeChanged.emit(newWidth)
 
             self.prepareGeometryChange()
 
