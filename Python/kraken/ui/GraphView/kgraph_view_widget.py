@@ -125,6 +125,7 @@ class KGraphViewWidget(GraphViewWidget):
             self.synchGuideRig()
             self.guideRig.writeRigDefinitionFile(filePath)
 
+            settings = self.window().getSettings()
             settings.beginGroup('Files')
             lastFilePath = settings.setValue("lastFilePath", filePath)
             settings.endGroup()
