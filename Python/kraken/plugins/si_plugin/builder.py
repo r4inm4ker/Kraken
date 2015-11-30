@@ -704,6 +704,8 @@ class Builder(Builder):
 
             # Add the private/non-mayaAttr port that stores the Solver object
             si.fabricSplice("addInternalPort", spliceOpPath, "{\"portName\":\"solver\", \"dataType\":\"" + solverTypeName + "\", \"extension\":\"" + kOperator.getExtension() + "\", \"portMode\":\"io\"}", "")
+            si.fabricSplice("setPortPersistence", spliceOpPath, '{"portName":"solver", "persistence":true }', "")
+
 
             # connect the operator to the objects in the DCC
             for i in xrange(len(args)):
