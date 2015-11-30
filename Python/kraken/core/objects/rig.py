@@ -143,20 +143,6 @@ class Rig(Container):
         Profiler.getInstance().pop()
 
 
-    def _loadGraphPositions(self, graphPositions):
-        """Loads the graph positions of the components.
-
-        Args:
-            graphPositions (dict): Positions for the components.
-
-        """
-
-        for componentName, graphPos in graphPositions.iteritems():
-
-            component = self.getChildByDecoratedName(componentName)
-            component.setGraphPos( graphPos )
-
-
     def loadRigDefinition(self, jsonData):
         """Load a rig definition from a JSON structure.
 
@@ -182,8 +168,8 @@ class Rig(Container):
                 self._makeConnections(jsonData['connections'])
 
 
-        if 'graphPositions' in jsonData:
-            self._loadGraphPositions(jsonData['graphPositions'])
+        # if 'graphPositions' in jsonData:
+        #     self._loadGraphPositions(jsonData['graphPositions'])
 
         Profiler.getInstance().pop()
 
@@ -232,7 +218,6 @@ class Rig(Container):
         guideData['components'] = componentsJson
 
         connectionsJson = []
-        graphPositions = {}
         for component in guideComponents:
             for i in range(component.getNumInputs()):
                 componentInput = component.getInputByIndex(i)
@@ -245,11 +230,7 @@ class Rig(Container):
                     }
                     connectionsJson.append(connectionJson)
 
-            # Save the graph pos.
-            graphPositions[component.getDecoratedName()] = component.getGraphPos()
-
         guideData['connections'] = connectionsJson
-        guideData['graphPositions'] = graphPositions
 
         return guideData
 
@@ -273,7 +254,6 @@ class Rig(Container):
         guideData['components'] = componentsJson
 
         connectionsJson = []
-        graphPositions = {}
         for component in guideComponents:
             for i in range(component.getNumInputs()):
                 componentInput = component.getInputByIndex(i)
@@ -286,10 +266,6 @@ class Rig(Container):
                     }
                     connectionsJson.append(connectionJson)
 
-            # Save the graph pos.
-            graphPositions[component.getDecoratedName()] = component.getGraphPos()
-
         guideData['connections'] = connectionsJson
-        guideData['graphPositions'] = graphPositions
 
         return guideData
