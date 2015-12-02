@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Control &mdash; Kraken Rigging Framework 1.0 documentation</title>
+  <title>Control &mdash; Kraken Rigging Framework 1.0.0 documentation</title>
   
 
   
@@ -32,7 +32,7 @@
   
 
   
-    <link rel="top" title="Kraken Rigging Framework 1.0 documentation" href="../../../index.html"/>
+    <link rel="top" title="Kraken Rigging Framework 1.0.0 documentation" href="../../../index.html"/>
         <link rel="up" title="Objects" href="objects.html"/>
         <link rel="next" title="Control Space" href="ctrlSpace.html"/>
         <link rel="prev" title="Container" href="container.html"/> 
@@ -81,6 +81,14 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a><ul class="simple">
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html">Releases</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../releases/release_1.0.0.html">Release 1.0.0</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../integrations.html">Integrations</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../integrations/maya.html">Maya Integration</a><ul class="simple">
 </ul>
@@ -90,10 +98,9 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../../releases.html">Releases</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../releases/release_1.0.0.html">Release 1.0.0</a><ul class="simple">
 </ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_interface.html">User Interface</a><ul class="simple">
 </ul>
 </li>
 </ul>
@@ -226,78 +233,140 @@
 <h2><a class="toc-backref" href="#id1">Class Documentation</a><a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="kraken.core.objects.control.Control">
-<em class="property">class </em><code class="descclassname">kraken.core.objects.control.</code><code class="descname">Control</code><span class="sig-paren">(</span><em>name</em>, <em>parent=None</em>, <em>shape='null'</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.control.Control" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descname">Control</code><span class="sig-paren">(</span><em>name</em>, <em>parent=None</em>, <em>shape='null'</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.control.Control" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="curve.html#kraken.core.objects.curve.Curve" title="kraken.core.objects.curve.Curve"><code class="xref py py-class docutils literal"><span class="pre">kraken.core.objects.curve.Curve</span></code></a></p>
 <p>Base Control object.</p>
 <dl class="method">
 <dt id="kraken.core.objects.control.Control.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>name</em>, <em>parent=None</em>, <em>shape='null'</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.control.Control.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initializes control object.</p>
-<p>Arguments:
-name &#8211; String, Name of the constraint.
-parent &#8211; Object, parent object of this object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<em>str</em>) &#8211; Name of the constraint.</li>
+<li><strong>parent</strong> (<em>Object</em>) &#8211; Parent object of this object.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.control.Control.alignOnXAxis">
 <code class="descname">alignOnXAxis</code><span class="sig-paren">(</span><em>negative=False</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.control.Control.alignOnXAxis" title="Permalink to this definition">¶</a></dt>
 <dd><p>Aligns the control shape on the X axis.</p>
-<p>Arguments:
-negative &#8211; Boolean, whether to align the control on the negative X axis.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>negative</strong> (<em>bool</em>) &#8211; Whether to align the control on the negative X axis.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.control.Control.alignOnYAxis">
 <code class="descname">alignOnYAxis</code><span class="sig-paren">(</span><em>negative=False</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.control.Control.alignOnYAxis" title="Permalink to this definition">¶</a></dt>
 <dd><p>Aligns the control shape on the Y axis.</p>
-<p>Arguments:
-negative &#8211; Boolean, whether to align the control on the negative Y axis.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>negative</strong> (<em>bool</em>) &#8211; Whether to align the control on the negative Y axis.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.control.Control.alignOnZAxis">
 <code class="descname">alignOnZAxis</code><span class="sig-paren">(</span><em>negative=False</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.control.Control.alignOnZAxis" title="Permalink to this definition">¶</a></dt>
 <dd><p>Aligns the control shape on the Z axis.</p>
-<p>Arguments:
-negative &#8211; Boolean, whether to align the control on the negative Z axis.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>negative</strong> (<em>bool</em>) &#8211; Whether to align the control on the negative Z axis.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.control.Control.scalePoints">
 <code class="descname">scalePoints</code><span class="sig-paren">(</span><em>scaleVec</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.control.Control.scalePoints" title="Permalink to this definition">¶</a></dt>
 <dd><p>Scales the point positions from it&#8217;s center.</p>
-<p>Arguments:
-scaleVec &#8211; Vec3, scale value to apply to the points.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>scaleVec</strong> (<a class="reference internal" href="../maths/vec3.html#kraken.core.maths.vec3.Vec3" title="kraken.core.maths.vec3.Vec3"><em>Vec3</em></a>) &#8211; scale value to apply to the points.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.control.Control.rotatePoints">
 <code class="descname">rotatePoints</code><span class="sig-paren">(</span><em>xRot</em>, <em>yRot</em>, <em>zRot</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.control.Control.rotatePoints" title="Permalink to this definition">¶</a></dt>
 <dd><p>Rotates the points by the input values.</p>
-<p>Arguments:
-xRot &#8211; Float, euler x rotate value.
-yRot &#8211; Float, euler y rotate value.
-zRot &#8211; Float, euler z rotate value.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>xRot</strong> (<em>float</em>) &#8211; Euler x rotate value.</li>
+<li><strong>yRot</strong> (<em>float</em>) &#8211; Euler y rotate value.</li>
+<li><strong>zRot</strong> (<em>float</em>) &#8211; Euler z rotate value.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if successful.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bool</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.control.Control.translatePoints">
 <code class="descname">translatePoints</code><span class="sig-paren">(</span><em>translateVec</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.control.Control.translatePoints" title="Permalink to this definition">¶</a></dt>
 <dd><p>Translates the control points.</p>
-<p>Arguments:
-translateVec &#8211; Vec3, translation values to apply to the points.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>translateVec</strong> (<a class="reference internal" href="../maths/vec3.html#kraken.core.maths.vec3.Vec3" title="kraken.core.maths.vec3.Vec3"><em>Vec3</em></a>) &#8211; Translation values to apply to the points.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -359,7 +428,7 @@ True if successful.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'1.0',
+            VERSION:'1.0.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

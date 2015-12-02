@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Mat33 &mdash; Kraken Rigging Framework 1.0 documentation</title>
+  <title>Mat33 &mdash; Kraken Rigging Framework 1.0.0 documentation</title>
   
 
   
@@ -32,7 +32,7 @@
   
 
   
-    <link rel="top" title="Kraken Rigging Framework 1.0 documentation" href="../../../index.html"/>
+    <link rel="top" title="Kraken Rigging Framework 1.0.0 documentation" href="../../../index.html"/>
         <link rel="up" title="Maths" href="maths.html"/>
         <link rel="next" title="Mat44" href="mat44.html"/>
         <link rel="prev" title="Euler" href="euler.html"/> 
@@ -81,6 +81,14 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a><ul class="simple">
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html">Releases</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../releases/release_1.0.0.html">Release 1.0.0</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../integrations.html">Integrations</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../integrations/maya.html">Maya Integration</a><ul class="simple">
 </ul>
@@ -90,10 +98,9 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../../releases.html">Releases</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../releases/release_1.0.0.html">Release 1.0.0</a><ul class="simple">
 </ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_interface.html">User Interface</a><ul class="simple">
 </ul>
 </li>
 </ul>
@@ -226,7 +233,7 @@
 <h2><a class="toc-backref" href="#id1">Class Documentation</a><a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="kraken.core.maths.mat33.Mat33">
-<em class="property">class </em><code class="descclassname">kraken.core.maths.mat33.</code><code class="descname">Mat33</code><span class="sig-paren">(</span><em>row0=None</em>, <em>row1=None</em>, <em>row2=None</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.mat33.Mat33" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descname">Mat33</code><span class="sig-paren">(</span><em>row0=None</em>, <em>row1=None</em>, <em>row2=None</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.mat33.Mat33" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="math_object.html#kraken.core.maths.math_object.MathObject" title="kraken.core.maths.math_object.MathObject"><code class="xref py py-class docutils literal"><span class="pre">kraken.core.maths.math_object.MathObject</span></code></a></p>
 <p>3x3 Matrix object.</p>
 <dl class="method">
@@ -245,72 +252,146 @@
 <dt id="kraken.core.maths.mat33.Mat33.row0">
 <code class="descname">row0</code><a class="headerlink" href="#kraken.core.maths.mat33.Mat33.row0" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets row 0 of this matrix.</p>
-<p>Return:
-Vec3, row 0 vector.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Row 0 vector.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="vec3.html#kraken.core.maths.vec3.Vec3" title="kraken.core.maths.vec3.Vec3">Vec3</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="kraken.core.maths.mat33.Mat33.row1">
 <code class="descname">row1</code><a class="headerlink" href="#kraken.core.maths.mat33.Mat33.row1" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets row 1 of this matrix.</p>
-<p>Return:
-Vec3, row 1 vector.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">row 1 vector.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="vec3.html#kraken.core.maths.vec3.Vec3" title="kraken.core.maths.vec3.Vec3">Vec3</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="kraken.core.maths.mat33.Mat33.row2">
 <code class="descname">row2</code><a class="headerlink" href="#kraken.core.maths.mat33.Mat33.row2" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets row 2 of this matrix.</p>
-<p>Return:
-Vec3, row 2 vector.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">row 2 vector.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="vec3.html#kraken.core.maths.vec3.Vec3" title="kraken.core.maths.vec3.Vec3">Vec3</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.mat33.Mat33.clone">
 <code class="descname">clone</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.mat33.Mat33.clone" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a clone of the Mat33.</p>
-<p>Return:
-The cloned Mat33</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The cloned Mat33.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#kraken.core.maths.mat33.Mat33" title="kraken.core.maths.mat33.Mat33">Mat33</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.mat33.Mat33.setRows">
 <code class="descname">setRows</code><span class="sig-paren">(</span><em>row0</em>, <em>row1</em>, <em>row2</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.mat33.Mat33.setRows" title="Permalink to this definition">¶</a></dt>
 <dd><p>Setter from vectors, row-wise.</p>
-<p>Arguments:
-row0 &#8211; Vec3, vector to use to set row 0.
-row1 &#8211; Vec3, vector to use to set row 1.
-row2 &#8211; Vec3, vector to use to set row 2.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>row0</strong> (<a class="reference internal" href="vec3.html#kraken.core.maths.vec3.Vec3" title="kraken.core.maths.vec3.Vec3"><em>Vec3</em></a>) &#8211; Vector to use to set row 0.</li>
+<li><strong>row1</strong> (<a class="reference internal" href="vec3.html#kraken.core.maths.vec3.Vec3" title="kraken.core.maths.vec3.Vec3"><em>Vec3</em></a>) &#8211; Vector to use to set row 1.</li>
+<li><strong>row2</strong> (<a class="reference internal" href="vec3.html#kraken.core.maths.vec3.Vec3" title="kraken.core.maths.vec3.Vec3"><em>Vec3</em></a>) &#8211; Vector to use to set row 2.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if successful.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bool</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.mat33.Mat33.setColumns">
 <code class="descname">setColumns</code><span class="sig-paren">(</span><em>col0</em>, <em>col1</em>, <em>col2</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.mat33.Mat33.setColumns" title="Permalink to this definition">¶</a></dt>
 <dd><p>Setter from vectors, column-wise.</p>
-<p>Arguments:
-col0 &#8211; Vec3, vector to use to set column 0.
-col1 &#8211; Vec3, vector to use to set column 1.
-col2 &#8211; Vec3, vector to use to set column 2.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>col0</strong> (<a class="reference internal" href="vec3.html#kraken.core.maths.vec3.Vec3" title="kraken.core.maths.vec3.Vec3"><em>Vec3</em></a>) &#8211; Vector to use to set column 0.</li>
+<li><strong>col1</strong> (<a class="reference internal" href="vec3.html#kraken.core.maths.vec3.Vec3" title="kraken.core.maths.vec3.Vec3"><em>Vec3</em></a>) &#8211; Vector to use to set column 1.</li>
+<li><strong>col2</strong> (<a class="reference internal" href="vec3.html#kraken.core.maths.vec3.Vec3" title="kraken.core.maths.vec3.Vec3"><em>Vec3</em></a>) &#8211; Vector to use to set column 2.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if successful.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bool</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.mat33.Mat33.setNull">
 <code class="descname">setNull</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.mat33.Mat33.setNull" title="Permalink to this definition">¶</a></dt>
 <dd><p>Setting all components of the matrix to 0.0.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.mat33.Mat33.setIdentity">
 <code class="descname">setIdentity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.mat33.Mat33.setIdentity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets this matrix to the identity matrix.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -318,115 +399,216 @@ True if successful.</p>
 <code class="descname">setDiagonal</code><span class="sig-paren">(</span><em>v</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.mat33.Mat33.setDiagonal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the diagonal components of this matrix to the components of a
 vector.</p>
-<p>Arguments:
-v &#8211; Vec3, vector to set diagonals to.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>v</strong> (<a class="reference internal" href="vec3.html#kraken.core.maths.vec3.Vec3" title="kraken.core.maths.vec3.Vec3"><em>Vec3</em></a>) &#8211; Vector to set diagonals to.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.mat33.Mat33.equal">
 <code class="descname">equal</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.mat33.Mat33.equal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks equality of this Matrix33 with another.</p>
-<p>Arguments:
-other &#8211; Mat33, other matrix to check equality with.</p>
-<p>Return:
-True if equal.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>other</strong> (<a class="reference internal" href="#kraken.core.maths.mat33.Mat33" title="kraken.core.maths.mat33.Mat33"><em>Mat33</em></a>) &#8211; Other matrix to check equality with.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if equal.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.mat33.Mat33.almostEqual">
 <code class="descname">almostEqual</code><span class="sig-paren">(</span><em>other</em>, <em>precision=None</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.mat33.Mat33.almostEqual" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks almost equality of this Matrix33 with another.</p>
-<p>Arguments:
-other &#8211; Mat33, other matrix to check equality with.
-precision &#8211; Scalar, precision value.</p>
-<p>Return:
-True if almost equal.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>other</strong> (<a class="reference internal" href="#kraken.core.maths.mat33.Mat33" title="kraken.core.maths.mat33.Mat33"><em>Mat33</em></a>) &#8211; Other matrix to check equality with.</li>
+<li><strong>precision</strong> (<em>float</em>) &#8211; precision value.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if almost equal.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bool</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.mat33.Mat33.add">
 <code class="descname">add</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.mat33.Mat33.add" title="Permalink to this definition">¶</a></dt>
 <dd><p>Overload method for the add operator.</p>
-<p>Arguments:
-other &#8211; Mat33, other matrix to add to this one.</p>
-<p>Return:
-Mat33, new Mat33 of the sum of the two Mat33&#8217;s.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>other</strong> (<a class="reference internal" href="#kraken.core.maths.mat33.Mat33" title="kraken.core.maths.mat33.Mat33"><em>Mat33</em></a>) &#8211; Other matrix to add to this one.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">New Mat33 of the sum of the two Mat33&#8217;s.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#kraken.core.maths.mat33.Mat33" title="kraken.core.maths.mat33.Mat33">Mat33</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.mat33.Mat33.subtract">
 <code class="descname">subtract</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.mat33.Mat33.subtract" title="Permalink to this definition">¶</a></dt>
 <dd><p>Overload method for the subtract operator.</p>
-<p>Arguments:
-other &#8211; Mat33, other matrix to subtract from this one.</p>
-<p>Return:
-Mat33, new Mat33 of the difference of the two Mat33&#8217;s.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>other</strong> (<a class="reference internal" href="#kraken.core.maths.mat33.Mat33" title="kraken.core.maths.mat33.Mat33"><em>Mat33</em></a>) &#8211; Other matrix to subtract from this one.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">New Mat33 of the difference of the two Mat33&#8217;s.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#kraken.core.maths.mat33.Mat33" title="kraken.core.maths.mat33.Mat33">Mat33</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.mat33.Mat33.multiply">
 <code class="descname">multiply</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.mat33.Mat33.multiply" title="Permalink to this definition">¶</a></dt>
 <dd><p>Overload method for the multiply operator.</p>
-<p>Arguments:
-other &#8211; Mat33, other matrix to multiply from this one.</p>
-<p>Return:
-Mat33, new Mat33 of the product of the two Mat33&#8217;s.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>other</strong> (<a class="reference internal" href="#kraken.core.maths.mat33.Mat33" title="kraken.core.maths.mat33.Mat33"><em>Mat33</em></a>) &#8211; Other matrix to multiply from this one.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">New Mat33 of the product of the two Mat33&#8217;s.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#kraken.core.maths.mat33.Mat33" title="kraken.core.maths.mat33.Mat33">Mat33</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.mat33.Mat33.multiplyScalar">
 <code class="descname">multiplyScalar</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.mat33.Mat33.multiplyScalar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Product of this matrix and a scalar.</p>
-<p>Arguments:
-other &#8211; Scalar, scalar value to multiply this matrix by.</p>
-<p>Return:
-Mat33, product of the multiplication of the scalar and this matrix.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>other</strong> (<em>float</em>) &#8211; scalar value to multiply this matrix by.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Product of the multiplication of the scalar and this matrix.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#kraken.core.maths.mat33.Mat33" title="kraken.core.maths.mat33.Mat33">Mat33</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.mat33.Mat33.multiplyVector">
 <code class="descname">multiplyVector</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.mat33.Mat33.multiplyVector" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the product of this matrix and a vector.</p>
-<p>Arguments:
-other &#8211; Vec3, vector to multiply this matrix by.</p>
-<p>Return:
-Vec3, product of the multiplication of the Vec3 and this matrix.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>other</strong> (<a class="reference internal" href="vec3.html#kraken.core.maths.vec3.Vec3" title="kraken.core.maths.vec3.Vec3"><em>Vec3</em></a>) &#8211; Vector to multiply this matrix by.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">product of the multiplication of the Vec3 and this matrix.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="vec3.html#kraken.core.maths.vec3.Vec3" title="kraken.core.maths.vec3.Vec3">Vec3</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.mat33.Mat33.divideScalar">
 <code class="descname">divideScalar</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.mat33.Mat33.divideScalar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Divides this matrix and a scalar.</p>
-<p>Arguments:
-other &#8211; Scalar, value to divide this matrix by.</p>
-<p>Return:
-Mat33, quotient of the division of the matrix by the scalar.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>other</strong> (<em>float</em>) &#8211; value to divide this matrix by.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Quotient of the division of the matrix by the scalar.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#kraken.core.maths.mat33.Mat33" title="kraken.core.maths.mat33.Mat33">Mat33</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.mat33.Mat33.determinant">
 <code class="descname">determinant</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.mat33.Mat33.determinant" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the determinant of this matrix.</p>
-<p>Return:
-Scalar, determinant of this matrix.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Determinant of this matrix.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.mat33.Mat33.adjoint">
 <code class="descname">adjoint</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.mat33.Mat33.adjoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the adjoint matrix of this matrix.</p>
-<p>Return:
-Mat33, adjoint of this matrix.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Adjoint of this matrix.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#kraken.core.maths.mat33.Mat33" title="kraken.core.maths.mat33.Mat33">Mat33</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.mat33.Mat33.inverse">
 <code class="descname">inverse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.mat33.Mat33.inverse" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the inverse matrix of this matrix.</p>
-<p>Return:
-Mat33, inverse of this matrix.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Inverse of this matrix.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#kraken.core.maths.mat33.Mat33" title="kraken.core.maths.mat33.Mat33">Mat33</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -434,16 +616,32 @@ Mat33, inverse of this matrix.</p>
 <code class="descname">inverse_safe</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.mat33.Mat33.inverse_safe" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the inverse matrix of this matrix, always checking the
 determinant value.</p>
-<p>Return:
-Mat33, safe inverse of this matrix.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Safe inverse of this matrix.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#kraken.core.maths.mat33.Mat33" title="kraken.core.maths.mat33.Mat33">Mat33</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.mat33.Mat33.transpose">
 <code class="descname">transpose</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.mat33.Mat33.transpose" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the transposed matrix of this matrix.</p>
-<p>Return:
-Mat33, transpose of this matrix.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Transpose of this matrix.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#kraken.core.maths.mat33.Mat33" title="kraken.core.maths.mat33.Mat33">Mat33</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -505,7 +703,7 @@ Mat33, transpose of this matrix.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'1.0',
+            VERSION:'1.0.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

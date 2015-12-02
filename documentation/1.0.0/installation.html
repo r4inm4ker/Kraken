@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Installation &mdash; Kraken Rigging Framework 1.0 documentation</title>
+  <title>Installation &mdash; Kraken Rigging Framework 1.0.0 documentation</title>
   
 
   
@@ -32,7 +32,7 @@
   
 
   
-    <link rel="top" title="Kraken Rigging Framework 1.0 documentation" href="index.html"/>
+    <link rel="top" title="Kraken Rigging Framework 1.0.0 documentation" href="index.html"/>
         <link rel="next" title="Releases" href="releases.html"/>
         <link rel="prev" title="License" href="license.html"/> 
 
@@ -215,13 +215,21 @@
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
 <div class="contents local topic" id="contents">
 <ul class="simple">
-<li><a class="reference internal" href="#download" id="id1">Download</a></li>
-<li><a class="reference internal" href="#environment-variables" id="id2">Environment Variables</a></li>
-<li><a class="reference internal" href="#example-launcher-scripts" id="id3">Example Launcher Scripts</a><ul>
-<li><a class="reference internal" href="#windows-standalone" id="id4">Windows Standalone</a></li>
-<li><a class="reference internal" href="#windows-softimage-2015" id="id5">Windows Softimage 2015</a></li>
-<li><a class="reference internal" href="#windows-maya-2015" id="id6">Windows Maya 2015</a></li>
-<li><a class="reference internal" href="#indices-and-tables" id="id7">Indices and tables</a></li>
+<li><a class="reference internal" href="#pre-requisites" id="id1">Pre-Requisites</a></li>
+<li><a class="reference internal" href="#download" id="id2">Download</a></li>
+<li><a class="reference internal" href="#dcc-installation" id="id3">DCC Installation</a><ul>
+<li><a class="reference internal" href="#softimage-installation" id="id4">Softimage Installation</a></li>
+<li><a class="reference internal" href="#maya-installation" id="id5">Maya Installation</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#environment-variables" id="id6">Environment Variables</a></li>
+<li><a class="reference internal" href="#example-launcher-scripts" id="id7">Example Launcher Scripts</a><ul>
+<li><a class="reference internal" href="#windows-standalone" id="id8">Windows Standalone</a></li>
+<li><a class="reference internal" href="#softimage-2015" id="id9">Softimage 2015</a></li>
+<li><a class="reference internal" href="#maya-2015" id="id10">Maya 2015</a><ul>
+<li><a class="reference internal" href="#indices-and-tables" id="id11">Indices and tables</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -229,70 +237,123 @@
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
+<div class="section" id="pre-requisites">
+<h2><a class="toc-backref" href="#id1">Pre-Requisites</a><a class="headerlink" href="#pre-requisites" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Fabric Engine 1.15.3</li>
+<li>Python 2.7.x</li>
+<li>PyWin32 (Softimage requirement)</li>
+<li>PySide</li>
+<li>PyQtForSoftimage (PySide compatible version)</li>
+</ul>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
 <div class="section" id="download">
-<h2><a class="toc-backref" href="#id1">Download</a><a class="headerlink" href="#download" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id2">Download</a><a class="headerlink" href="#download" title="Permalink to this headline">¶</a></h2>
 <p>Get the latest version of Kraken here:
 <a class="reference external" href="http://fabric-engine.github.io/Kraken/#download">Kraken Downloads</a></p>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
 </div>
+<div class="section" id="dcc-installation">
+<h2><a class="toc-backref" href="#id3">DCC Installation</a><a class="headerlink" href="#dcc-installation" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="section" id="softimage-installation">
+<span id="installation-softimage"></span><h3><a class="toc-backref" href="#id4">Softimage Installation</a><a class="headerlink" href="#softimage-installation" title="Permalink to this headline">¶</a></h3>
+<p>Once the pre-requisites have been installed, you need to connect to a few workgroups.</p>
+<p><strong>The order of the workgroups should be:</strong></p>
+<ol class="arabic simple">
+<li>Fabric Engine</li>
+<li>PyQtForSoftimage</li>
+<li>Kraken</li>
+</ol>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<div class="section" id="maya-installation">
+<span id="installation-maya"></span><h3><a class="toc-backref" href="#id5">Maya Installation</a><a class="headerlink" href="#maya-installation" title="Permalink to this headline">¶</a></h3>
+<p>Once the pre-requisites have been installed, you need to add Fabric and Kraken to the MAYA_MODULE_PATH. See the example launcher script below or see teh Maya documentation on how to add paths to the MAYA_MODULE_PATH.</p>
+<p>Once added, you&#8217;ll have to activate the plug-ins by going to Window &gt; Settings / Preferences &gt; Plug-in Manager. There you should activate:</p>
+<ol class="arabic simple">
+<li>FabricSplice.mll</li>
+<li>kraken_maya.py</li>
+</ol>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+</div>
 <div class="section" id="environment-variables">
-<h2><a class="toc-backref" href="#id2">Environment Variables</a><a class="headerlink" href="#environment-variables" title="Permalink to this headline">¶</a></h2>
+<span id="installation-envvars"></span><h2><a class="toc-backref" href="#id6">Environment Variables</a><a class="headerlink" href="#environment-variables" title="Permalink to this headline">¶</a></h2>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
 <dl class="glossary docutils">
-<dt id="term-kraken-dir">KRAKEN_DIR</dt>
-<dd>Base directory where Kraken is installed</dd>
-<dt id="term-kraken-components">KRAKEN_COMPONENTS</dt>
-<dd>Root python paths to custom components</dd>
+<dt id="term-fabric-path">FABRIC_PATH</dt>
+<dd>Base directory of the Fabric Engine Splice directory.</dd>
+<dt id="term-kraken-path">KRAKEN_PATH</dt>
+<dd>Base directory where Kraken is installed.</dd>
+<dt id="term-kraken-paths">KRAKEN_PATHS</dt>
+<dd>Paths to custom components and configs.</dd>
+<dt id="term-kraken-load-menu">KRAKEN_LOAD_MENU</dt>
+<dd>If not set to True, it will not load the menu. However it will still load the command.</dd>
+<dt id="term-4">KRAKEN_LOAD_MENU</dt>
+<dd>If set to False, the Kraken Menu will not load in the DCC&#8217;s. However the commands will still be registered.</dd>
 </dl>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
 </div>
 <div class="section" id="example-launcher-scripts">
-<h2><a class="toc-backref" href="#id3">Example Launcher Scripts</a><a class="headerlink" href="#example-launcher-scripts" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id7">Example Launcher Scripts</a><a class="headerlink" href="#example-launcher-scripts" title="Permalink to this headline">¶</a></h2>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
 <div class="section" id="windows-standalone">
-<h3><a class="toc-backref" href="#id4">Windows Standalone</a><a class="headerlink" href="#windows-standalone" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id8">Windows Standalone</a><a class="headerlink" href="#windows-standalone" title="Permalink to this headline">¶</a></h3>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nb">set </span><span class="nv">FABRIC_DIR</span><span class="o">=</span>D:<span class="se">\f</span>abric<span class="se">\F</span>abricEngine-1.15.2-Windows-x86_64
+<div class="highlight-bash"><div class="highlight"><pre><span class="nb">set </span><span class="nv">FABRIC_PATH</span><span class="o">=</span>D:<span class="se">\f</span>abric<span class="se">\F</span>abricEngine-1.15.3-Windows-x86_64
 
-<span class="nb">set </span><span class="nv">KRAKEN_PATH</span><span class="o">=</span>D:<span class="se">\d</span>ev<span class="se">\k</span>raken
+<span class="nb">set </span><span class="nv">KRAKEN_PATH</span><span class="o">=</span>D:<span class="se">\d</span>ev<span class="se">\k</span>raken<span class="se">\</span>
 
-<span class="nb">set </span><span class="nv">PATH</span><span class="o">=</span>%FABRIC_DIR%<span class="se">\b</span>in<span class="p">;</span>%PATH%
+<span class="nb">set </span><span class="nv">KRAKEN_PATHS</span><span class="o">=</span>
 
-<span class="nb">set </span><span class="nv">FABRIC_EXTS_PATH</span><span class="o">=</span>%FABRIC_DIR%<span class="se">\E</span>xts<span class="p">;</span>%FABRIC_EXTS_PATH%<span class="p">;</span>%KRAKEN_PATH%<span class="se">\K</span>LExts<span class="p">;</span>
+<span class="nb">set </span><span class="nv">PATH</span><span class="o">=</span>%FABRIC_PATH%<span class="se">\b</span>in<span class="p">;</span>%PATH%
 
-<span class="nb">set </span><span class="nv">PYTHONPATH</span><span class="o">=</span>%PYTHONPATH%<span class="p">;</span>%FABRIC_DIR%<span class="se">\P</span>ython<span class="se">\2</span>.7<span class="p">;</span>%KRAKEN_PATH%<span class="se">\P</span>ython<span class="p">;</span>
+<span class="nb">set </span><span class="nv">FABRIC_EXTS_PATH</span><span class="o">=</span>%FABRIC_PATH%<span class="se">\E</span>xts<span class="p">;</span>%FABRIC_EXTS_PATH%<span class="p">;</span>%KRAKEN_PATH%<span class="se">\K</span>LExts<span class="p">;</span>
 
+<span class="nb">set </span><span class="nv">PYTHONPATH</span><span class="o">=</span>%PYTHONPATH%<span class="p">;</span>%FABRIC_PATH%<span class="se">\P</span>ython<span class="se">\2</span>.7<span class="p">;</span>%KRAKEN_PATH%<span class="se">\P</span>ython<span class="p">;</span>
 
-<span class="nb">cd</span> /d D:<span class="se">\d</span>ev<span class="se">\k</span>raken<span class="se">\P</span>ython<span class="se">\k</span>raken
+<span class="nb">cd </span>D:/dev/kraken/Python/kraken/ui
 
-call cmd
+call cmd /k <span class="s2">&quot;python kraken_window.py&quot;</span>
 </pre></div>
 </div>
 </div>
-<div class="section" id="windows-softimage-2015">
-<h3><a class="toc-backref" href="#id5">Windows Softimage 2015</a><a class="headerlink" href="#windows-softimage-2015" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="softimage-2015">
+<h3><a class="toc-backref" href="#id9">Softimage 2015</a><a class="headerlink" href="#softimage-2015" title="Permalink to this headline">¶</a></h3>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nb">set </span><span class="nv">FABRIC_DIR</span><span class="o">=</span>D:<span class="se">\f</span>abric<span class="se">\F</span>abricEngine-1.15.2-Windows-x86_64
+<div class="highlight-bash"><div class="highlight"><pre><span class="nb">set </span><span class="nv">FABRIC_PATH</span><span class="o">=</span>D:<span class="se">\f</span>abric<span class="se">\F</span>abricEngine-1.15.3-Windows-x86_64
 
-<span class="nb">set </span><span class="nv">KRAKEN_PATH</span><span class="o">=</span>D:<span class="se">\d</span>ev<span class="se">\k</span>raken
+<span class="nb">set </span><span class="nv">KRAKEN_PATH</span><span class="o">=</span>D:<span class="se">\d</span>ev<span class="se">\k</span>raken<span class="se">\</span>
 
-<span class="nb">set </span><span class="nv">PATH</span><span class="o">=</span>%FABRIC_DIR%<span class="se">\b</span>in<span class="p">;</span>%PATH%
+<span class="nb">set </span><span class="nv">KRAKEN_PATHS</span><span class="o">=</span>
 
-<span class="nb">set </span><span class="nv">FABRIC_EXTS_PATH</span><span class="o">=</span>%FABRIC_DIR%<span class="se">\E</span>xts<span class="p">;</span>%FABRIC_EXTS_PATH%<span class="p">;</span>%KRAKEN_PATH%<span class="se">\K</span>LExts<span class="p">;</span>
+<span class="nb">set </span><span class="nv">PATH</span><span class="o">=</span>%FABRIC_PATH%<span class="se">\b</span>in<span class="p">;</span>%PATH%
 
-<span class="nb">set </span><span class="nv">PYTHONPATH</span><span class="o">=</span>%PYTHONPATH%<span class="p">;</span>%FABRIC_DIR%<span class="se">\P</span>ython<span class="se">\2</span>.7<span class="p">;</span>%KRAKEN_PATH%<span class="se">\P</span>ython<span class="p">;</span>
+<span class="nb">set </span><span class="nv">FABRIC_EXTS_PATH</span><span class="o">=</span>%FABRIC_PATH%<span class="se">\E</span>xts<span class="p">;</span>%FABRIC_EXTS_PATH%<span class="p">;</span>%KRAKEN_PATH%<span class="se">\K</span>LExts<span class="p">;</span>
+
+<span class="nb">set </span><span class="nv">PYTHONPATH</span><span class="o">=</span>%PYTHONPATH%<span class="p">;</span>%FABRIC_PATH%<span class="se">\P</span>ython<span class="se">\2</span>.7<span class="p">;</span>%KRAKEN_PATH%<span class="se">\P</span>ython<span class="p">;</span>
 
 
 call <span class="s2">&quot;C:\Program Files\Autodesk\Softimage 2015 SP1\Application\bin\XSI.bat&quot;</span>
@@ -301,23 +362,25 @@ call <span class="s2">&quot;C:\Program Files\Autodesk\Softimage 2015 SP1\Applica
 </pre></div>
 </div>
 </div>
-<div class="section" id="windows-maya-2015">
-<h3><a class="toc-backref" href="#id6">Windows Maya 2015</a><a class="headerlink" href="#windows-maya-2015" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="maya-2015">
+<h3><a class="toc-backref" href="#id10">Maya 2015</a><a class="headerlink" href="#maya-2015" title="Permalink to this headline">¶</a></h3>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nb">set </span><span class="nv">FABRIC_DIR</span><span class="o">=</span>D:<span class="se">\f</span>abric<span class="se">\F</span>abricEngine-1.15.2-Windows-x86_64
+<div class="highlight-bash"><div class="highlight"><pre><span class="nb">set </span><span class="nv">FABRIC_PATH</span><span class="o">=</span>D:<span class="se">\f</span>abric<span class="se">\F</span>abricEngine-1.15.3-Windows-x86_64
 
-<span class="nb">set </span><span class="nv">KRAKEN_PATH</span><span class="o">=</span>D:<span class="se">\d</span>ev<span class="se">\k</span>raken
+<span class="nb">set </span><span class="nv">KRAKEN_PATH</span><span class="o">=</span>D:<span class="se">\d</span>ev<span class="se">\k</span>raken<span class="se">\</span>
 
-<span class="nb">set </span><span class="nv">PATH</span><span class="o">=</span>%FABRIC_DIR%<span class="se">\b</span>in<span class="p">;</span>%PATH%
+<span class="nb">set </span><span class="nv">KRAKEN_PATHS</span><span class="o">=</span>
 
-<span class="nb">set </span><span class="nv">FABRIC_EXTS_PATH</span><span class="o">=</span>%FABRIC_DIR%<span class="se">\E</span>xts<span class="p">;</span>%FABRIC_EXTS_PATH%<span class="p">;</span>%KRAKEN_PATH%<span class="se">\K</span>LExts<span class="p">;</span>
+<span class="nb">set </span><span class="nv">PATH</span><span class="o">=</span>%FABRIC_PATH%<span class="se">\b</span>in<span class="p">;</span>%PATH%
 
-<span class="nb">set </span><span class="nv">PYTHONPATH</span><span class="o">=</span>%PYTHONPATH%<span class="p">;</span>%FABRIC_DIR%<span class="se">\P</span>ython<span class="se">\2</span>.7<span class="p">;</span>%KRAKEN_PATH%<span class="se">\P</span>ython<span class="p">;</span>
+<span class="nb">set </span><span class="nv">FABRIC_EXTS_PATH</span><span class="o">=</span>%FABRIC_PATH%<span class="se">\E</span>xts<span class="p">;</span>%FABRIC_EXTS_PATH%<span class="p">;</span>%KRAKEN_PATH%<span class="se">\K</span>LExts<span class="p">;</span>
+
+<span class="nb">set </span><span class="nv">PYTHONPATH</span><span class="o">=</span>%PYTHONPATH%<span class="p">;</span>%FABRIC_PATH%<span class="se">\P</span>ython<span class="se">\2</span>.7<span class="p">;</span>%KRAKEN_PATH%<span class="se">\P</span>ython<span class="p">;</span>
 
 
-<span class="nb">set </span><span class="nv">MAYA_MODULE_PATH</span><span class="o">=</span>%FABRIC_DIR%<span class="se">\S</span>pliceIntegrations<span class="se">\F</span>abricSpliceMaya2015SP2<span class="p">;</span>%KRAKEN_PATH%<span class="se">\D</span>CCIntegrations<span class="se">\m</span>aya<span class="p">;</span>
+<span class="nb">set </span><span class="nv">MAYA_MODULE_PATH</span><span class="o">=</span>%KRAKEN_PATH%<span class="se">\S</span>pliceIntegrations<span class="se">\F</span>abricSpliceMaya2015SP2<span class="p">;</span>%KRAKEN_PATH%<span class="se">\D</span>CCIntegrations<span class="se">\m</span>aya<span class="p">;</span>
 
 start /d <span class="s2">&quot;C:\Program Files\Autodesk\Maya2015\bin&quot;</span> maya.exe
 </pre></div>
@@ -326,9 +389,8 @@ start /d <span class="s2">&quot;C:\Program Files\Autodesk\Maya2015\bin&quot;</sp
 <div class="line"><br /></div>
 <div class="line"><br /></div>
 </div>
-</div>
 <div class="section" id="indices-and-tables">
-<h3><a class="toc-backref" href="#id7">Indices and tables</a><a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h3>
+<h4><a class="toc-backref" href="#id11">Indices and tables</a><a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h4>
 <ul class="simple">
 <li><a class="reference internal" href="genindex.html"><span>Index</span></a></li>
 <li><a class="reference internal" href="py-modindex.html"><span>Module Index</span></a></li>
@@ -336,6 +398,7 @@ start /d <span class="s2">&quot;C:\Program Files\Autodesk\Maya2015\bin&quot;</sp
 </ul>
 <div class="line-block">
 <div class="line"><br /></div>
+</div>
 </div>
 </div>
 </div>
@@ -380,7 +443,7 @@ start /d <span class="s2">&quot;C:\Program Files\Autodesk\Maya2015\bin&quot;</sp
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'1.0',
+            VERSION:'1.0.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

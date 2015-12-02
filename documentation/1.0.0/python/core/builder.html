@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Builder &mdash; Kraken Rigging Framework 1.0 documentation</title>
+  <title>Builder &mdash; Kraken Rigging Framework 1.0.0 documentation</title>
   
 
   
@@ -32,7 +32,7 @@
   
 
   
-    <link rel="top" title="Kraken Rigging Framework 1.0 documentation" href="../../index.html"/>
+    <link rel="top" title="Kraken Rigging Framework 1.0.0 documentation" href="../../index.html"/>
         <link rel="up" title="Kraken Core" href="core.html"/>
         <link rel="next" title="Kraken System" href="kraken_system.html"/>
         <link rel="prev" title="Kraken Core" href="core.html"/> 
@@ -81,6 +81,14 @@
 <li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a><ul class="simple">
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html">Releases</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../releases/release_1.0.0.html">Release 1.0.0</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../integrations.html">Integrations</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../integrations/maya.html">Maya Integration</a><ul class="simple">
 </ul>
@@ -90,10 +98,9 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../releases.html">Releases</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../releases/release_1.0.0.html">Release 1.0.0</a><ul class="simple">
 </ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user_interface.html">User Interface</a><ul class="simple">
 </ul>
 </li>
 </ul>
@@ -220,13 +227,13 @@
 </div>
 <span class="target" id="module-kraken.core.builder"></span><dl class="class">
 <dt id="kraken.core.builder.Builder">
-<em class="property">class </em><code class="descclassname">kraken.core.builder.</code><code class="descname">Builder</code><a class="headerlink" href="#kraken.core.builder.Builder" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descname">Builder</code><span class="sig-paren">(</span><em>debugMode=False</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.builder.Builder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Builder object for building objects in DCC&#8217;s. Sub-class per DCC in a
 plugin.</p>
 <dl class="method">
 <dt id="kraken.core.builder.Builder.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.builder.Builder.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>debugMode=False</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.builder.Builder.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -234,270 +241,528 @@ plugin.</p>
 <code class="descname">_registerSceneItemPair</code><span class="sig-paren">(</span><em>kSceneItem</em>, <em>dccSceneItem</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.builder.Builder._registerSceneItemPair" title="Permalink to this definition">¶</a></dt>
 <dd><p>Registers a pairing between the kraken scene item and the dcc scene item
 for querying later.</p>
-<p>Arguments:
-kSceneItem &#8211; Object, kraken scene item that you want to pair.
-dccSceneItem &#8211; Object, dcc scene item that you want to pair.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>kSceneItem</strong> (<em>object</em>) &#8211; kraken scene item that you want to pair.</li>
+<li><strong>dccSceneItem</strong> (<em>object</em>) &#8211; dcc scene item that you want to pair.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if successful.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bool</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.builder.Builder.getDCCSceneItem">
 <code class="descname">getDCCSceneItem</code><span class="sig-paren">(</span><em>kSceneItem</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.builder.Builder.getDCCSceneItem" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given a kSceneItem, returns the built dcc scene item.</p>
-<p>Arguments:
-kSceneItem &#8211; Object, kSceneItem to base the search.</p>
-<p>Return:
-Object, the DCC Scene Item that corresponds to the given scene item</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>kSceneItem</strong> (<em>object</em>) &#8211; kSceneItem to base the search.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The DCC Scene Item that corresponds to the given scene item</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">object</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.builder.Builder.buildContainer">
 <code class="descname">buildContainer</code><span class="sig-paren">(</span><em>kSceneItem</em>, <em>buildName</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.builder.Builder.buildContainer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds a container / namespace object.</p>
-<p>Arguments:
-kSceneItem &#8211; Object, kSceneItem that represents a container to be built.
-buildName &#8211; String, The name to use on the built object.</p>
-<p>Return:
-DCC Scene Item that is created.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>kSceneItem</strong> (<em>object</em>) &#8211; kSceneItem that represents a container to be built.</li>
+<li><strong>buildName</strong> (<em>string</em>) &#8211; The name to use on the built object.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">DCC Scene Item that is created.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">object</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.builder.Builder.buildLayer">
 <code class="descname">buildLayer</code><span class="sig-paren">(</span><em>kSceneItem</em>, <em>buildName</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.builder.Builder.buildLayer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds a layer object.</p>
-<p>Arguments:
-kSceneItem &#8211; Object, kSceneItem that represents a layer to be built.
-buildName &#8211; String, The name to use on the built object.</p>
-<p>Return:
-DCC Scene Item that is created.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>kSceneItem</strong> (<em>object</em>) &#8211; kSceneItem that represents a layer to be built.</li>
+<li><strong>buildName</strong> (<em>string</em>) &#8211; The name to use on the built object.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">DCC Scene Item that is created.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">object</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.builder.Builder.buildHierarchyGroup">
 <code class="descname">buildHierarchyGroup</code><span class="sig-paren">(</span><em>kSceneItem</em>, <em>buildName</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.builder.Builder.buildHierarchyGroup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds a hierarchy group object.</p>
-<p>Arguments:
-kSceneItem &#8211; Object, kSceneItem that represents a group to be built.
-buildName &#8211; String, The name to use on the built object.</p>
-<p>Return:
-DCC Scene Item that is created.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>kSceneItem</strong> (<em>object</em>) &#8211; kSceneItem that represents a group to be built.</li>
+<li><strong>buildName</strong> (<em>string</em>) &#8211; The name to use on the built object.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">DCC Scene Item that is created.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">object</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.builder.Builder.buildGroup">
 <code class="descname">buildGroup</code><span class="sig-paren">(</span><em>kSceneItem</em>, <em>buildName</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.builder.Builder.buildGroup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds a group object.</p>
-<p>Arguments:
-kSceneItem &#8211; Object, kSceneItem that represents a group to be built.
-buildName &#8211; String, The name to use on the built object.</p>
-<p>Return:
-DCC Scene Item that is created.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>kSceneItem</strong> (<em>object</em>) &#8211; kSceneItem that represents a group to be built.</li>
+<li><strong>buildName</strong> (<em>string</em>) &#8211; The name to use on the built object.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">DCC Scene Item that is created.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">object</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.builder.Builder.buildJoint">
 <code class="descname">buildJoint</code><span class="sig-paren">(</span><em>kSceneItem</em>, <em>buildName</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.builder.Builder.buildJoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds a joint object.</p>
-<p>Arguments:
-kSceneItem &#8211; Object, kSceneItem that represents a joint to be built.
-buildName &#8211; String, The name to use on the built object.</p>
-<p>Return:
-DCC Scene Item that is created.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>kSceneItem</strong> (<em>object</em>) &#8211; kSceneItem that represents a joint to be built.</li>
+<li><strong>buildName</strong> (<em>string</em>) &#8211; The name to use on the built object.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">DCC Scene Item that is created.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">object</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.builder.Builder.buildLocator">
 <code class="descname">buildLocator</code><span class="sig-paren">(</span><em>kSceneItem</em>, <em>buildName</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.builder.Builder.buildLocator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds a locator / null object.</p>
-<p>Arguments:
-kSceneItem &#8211; Object, kSceneItem that represents a locator / null to be built.
-buildName &#8211; String, The name to use on the built object.</p>
-<p>Return:
-DCC Scene Item that is created.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>kSceneItem</strong> (<em>object</em>) &#8211; kSceneItem that represents a locator / null to be built.</li>
+<li><strong>buildName</strong> (<em>string</em>) &#8211; The name to use on the built object.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">DCC Scene Item that is created.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">object</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.builder.Builder.buildCurve">
 <code class="descname">buildCurve</code><span class="sig-paren">(</span><em>kSceneItem</em>, <em>buildName</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.builder.Builder.buildCurve" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds a Curve object.</p>
-<p>Arguments:
-kSceneItem &#8211; Object, kSceneItem that represents a curve to be built.
-buildName &#8211; String, The name to use on the built object.</p>
-<p>Return:
-DCC Scene Item that is created.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>kSceneItem</strong> (<em>object</em>) &#8211; kSceneItem that represents a curve to be built.</li>
+<li><strong>buildName</strong> (<em>string</em>) &#8211; The name to use on the built object.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">DCC Scene Item that is created.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">object</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.builder.Builder.buildControl">
 <code class="descname">buildControl</code><span class="sig-paren">(</span><em>kSceneItem</em>, <em>buildName</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.builder.Builder.buildControl" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds a Control object.</p>
-<p>Arguments:
-kSceneItem &#8211; Object, kSceneItem that represents a control to be built.
-buildName &#8211; String, The name to use on the built object.</p>
-<p>Return:
-DCC Scene Item that is created.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>kSceneItem</strong> (<em>object</em>) &#8211; kSceneItem that represents a control to be built.</li>
+<li><strong>buildName</strong> (<em>string</em>) &#8211; The name to use on the built object.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">DCC Scene Item that is created.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">object</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.builder.Builder.buildBoolAttribute">
 <code class="descname">buildBoolAttribute</code><span class="sig-paren">(</span><em>kAttribute</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.builder.Builder.buildBoolAttribute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds a Bool attribute.</p>
-<p>Arguments:
-kAttribute &#8211; Object, kAttribute that represents a string attribute to be built.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>kAttribute</strong> (<em>object</em>) &#8211; kAttribute that represents a string attribute to be built.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">object</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.builder.Builder.buildScalarAttribute">
 <code class="descname">buildScalarAttribute</code><span class="sig-paren">(</span><em>kAttribute</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.builder.Builder.buildScalarAttribute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds a Float attribute.</p>
-<p>Arguments:
-kAttribute &#8211; Object, kAttribute that represents a string attribute to be built.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>kAttribute</strong> (<em>object</em>) &#8211; kAttribute that represents a string attribute to be built.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.builder.Builder.buildIntegerAttribute">
 <code class="descname">buildIntegerAttribute</code><span class="sig-paren">(</span><em>kAttribute</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.builder.Builder.buildIntegerAttribute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds a Integer attribute.</p>
-<p>Arguments:
-kAttribute &#8211; Object, kAttribute that represents a string attribute to be built.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>kAttribute</strong> (<em>object</em>) &#8211; kAttribute that represents a string attribute to be built.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.builder.Builder.buildStringAttribute">
 <code class="descname">buildStringAttribute</code><span class="sig-paren">(</span><em>kAttribute</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.builder.Builder.buildStringAttribute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds a String attribute.</p>
-<p>Arguments:
-kAttribute &#8211; Object, kAttribute that represents a string attribute to be built.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>kAttribute</strong> (<em>object</em>) &#8211; kAttribute that represents a string attribute to be built.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.builder.Builder.buildAttributeGroup">
 <code class="descname">buildAttributeGroup</code><span class="sig-paren">(</span><em>kAttributeGroup</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.builder.Builder.buildAttributeGroup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds attribute groups on the DCC object.</p>
-<p>Arguments:
-kAttributeGroup &#8211; SceneItem, kraken object to build the attribute group on.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>kAttributeGroup</strong> (<em>SceneObject</em>) &#8211; kraken object to build the attribute group on.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.builder.Builder.connectAttribute">
 <code class="descname">connectAttribute</code><span class="sig-paren">(</span><em>kAttribute</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.builder.Builder.connectAttribute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Connects the driver attribute to this one.</p>
-<p>Arguments:
-kAttribute &#8211; Object, attribute to connect.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>kAttribute</strong> (<em>object</em>) &#8211; attribute to connect.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.builder.Builder.buildOrientationConstraint">
 <code class="descname">buildOrientationConstraint</code><span class="sig-paren">(</span><em>kConstraint</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.builder.Builder.buildOrientationConstraint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds an orientation constraint represented by the kConstraint.</p>
-<p>Arguments:
-kConstraint &#8211; Object, kraken constraint object to build.</p>
-<p>Return:
-dccSceneItem that was created.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>kConstraint</strong> (<em>object</em>) &#8211; kraken constraint object to build.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">DCC Scene Item that was created.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">object</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.builder.Builder.buildPoseConstraint">
 <code class="descname">buildPoseConstraint</code><span class="sig-paren">(</span><em>kConstraint</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.builder.Builder.buildPoseConstraint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds an pose constraint represented by the kConstraint.</p>
-<p>Arguments:
-kConstraint &#8211; Object, kraken constraint object to build.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>kConstraint</strong> (<em>object</em>) &#8211; kraken constraint object to build.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.builder.Builder.buildPositionConstraint">
 <code class="descname">buildPositionConstraint</code><span class="sig-paren">(</span><em>kConstraint</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.builder.Builder.buildPositionConstraint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds an position constraint represented by the kConstraint.</p>
-<p>Arguments:
-kConstraint &#8211; Object, kraken constraint object to build.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>kConstraint</strong> (<em>object</em>) &#8211; kraken constraint object to build.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.builder.Builder.buildScaleConstraint">
 <code class="descname">buildScaleConstraint</code><span class="sig-paren">(</span><em>kConstraint</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.builder.Builder.buildScaleConstraint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds an scale constraint represented by the kConstraint.</p>
-<p>Arguments:
-kConstraint &#8211; Object, kraken constraint object to build.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>kConstraint</strong> (<em>object</em>) &#8211; kraken constraint object to build.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.builder.Builder.buildXfoConnection">
 <code class="descname">buildXfoConnection</code><span class="sig-paren">(</span><em>componentInput</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.builder.Builder.buildXfoConnection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds the constraint between the target and connection target.</p>
-<p>Arguments:
-componentInput &#8211; Object, kraken component input to build connections for.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>componentInput</strong> (<em>object</em>) &#8211; kraken component input to build connections for.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.builder.Builder.buildAttributeConnection">
 <code class="descname">buildAttributeConnection</code><span class="sig-paren">(</span><em>componentInput</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.builder.Builder.buildAttributeConnection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds the link between the target and connection target.</p>
-<p>Arguments:
-componentInput &#8211; Object, kraken connection to build.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>componentInput</strong> (<em>object</em>) &#8211; kraken connection to build.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.builder.Builder.buildSpliceOperators">
 <code class="descname">buildSpliceOperators</code><span class="sig-paren">(</span><em>kOperator</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.builder.Builder.buildSpliceOperators" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds Splice Operators on the components.</p>
-<p>Arguments:
-kOperator &#8211; Object, kraken operator that represents a Splice operator.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>kOperator</strong> (<em>object</em>) &#8211; kraken operator that represents a Splice operator.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.builder.Builder.buildAttributes">
 <code class="descname">buildAttributes</code><span class="sig-paren">(</span><em>kObject</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.builder.Builder.buildAttributes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds attributes on the DCC object.</p>
-<p>Arguments:
-kObject &#8211; SceneItem, kraken object to build attributes for.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>kObject</strong> (<em>SceneObject</em>) &#8211; kraken object to build attributes for.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.builder.Builder.buildHierarchy">
 <code class="descname">buildHierarchy</code><span class="sig-paren">(</span><em>kObject</em>, <em>component=None</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.builder.Builder.buildHierarchy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds the hierarchy for the supplied kObject.</p>
-<p>Arguments:
-kObject &#8211; Object, kraken object to build.
-component &#8211; Component, component that this object belongs to.</p>
-<p>Return:
-DCC object that was created.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>kObject</strong> (<em>object</em>) &#8211; kraken object to build.</li>
+<li><strong>component</strong> (<a class="reference internal" href="objects/components/component.html#kraken.core.objects.components.component.Component" title="kraken.core.objects.components.component.Component"><em>Component</em></a>) &#8211; component that this object belongs to.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">DCC object that was created.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">object</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.builder.Builder.buildConstraints">
 <code class="descname">buildConstraints</code><span class="sig-paren">(</span><em>kObject</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.builder.Builder.buildConstraints" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds constraints for the supplied kObject.</p>
-<p>Arguments:
-kObject &#8211; Object, kraken object to create constraints for.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>kObject</strong> (<em>object</em>) &#8211; kraken object to create constraints for.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -507,10 +772,18 @@ True if successful.</p>
 component.</p>
 <p>Only input connections are built otherwise duplicate constraints / expressions
 would be created.</p>
-<p>Arguments:
-kObject &#8211; Object, kraken object to create connections for.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>kObject</strong> (<em>object</em>) &#8211; kraken object to create connections for.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -518,126 +791,230 @@ True if successful.</p>
 <code class="descname">buildAttrConnections</code><span class="sig-paren">(</span><em>kObject</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.builder.Builder.buildAttrConnections" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds the connections between the component inputs and outputs of each
 component.</p>
-<p>Arguments:
-kObject &#8211; Object, kraken object to create connections for.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>kObject</strong> (<em>object</em>) &#8211; kraken object to create connections for.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.builder.Builder.buildOperators">
 <code class="descname">buildOperators</code><span class="sig-paren">(</span><em>kObject</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.builder.Builder.buildOperators" title="Permalink to this definition">¶</a></dt>
 <dd><p>Build operators in the hierarchy.</p>
-<p>Arguments:
-kObject &#8211; Object, kraken object to create operators for.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>kObject</strong> (<em>object</em>) &#8211; kraken object to create operators for.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.builder.Builder.lockParameters">
 <code class="descname">lockParameters</code><span class="sig-paren">(</span><em>kSceneItem</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.builder.Builder.lockParameters" title="Permalink to this definition">¶</a></dt>
 <dd><p>Locks flagged SRT parameters.</p>
-<p>Arguments:
-kSceneItem &#8211; Object, kraken object to lock the SRT parameters on.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>kSceneItem</strong> (<em>object</em>) &#8211; kraken object to lock the SRT parameters on.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.builder.Builder.setVisibility">
 <code class="descname">setVisibility</code><span class="sig-paren">(</span><em>kSceneItem</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.builder.Builder.setVisibility" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the visibility of the object after its been created.</p>
-<p>Arguments:
-kSceneItem &#8211; Object, kraken object to set the visibility on.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>kSceneItem</strong> (<em>object</em>) &#8211; kraken object to set the visibility on.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.builder.Builder.getBuildColor">
 <code class="descname">getBuildColor</code><span class="sig-paren">(</span><em>kSceneItem</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.builder.Builder.getBuildColor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the build color for the object.</p>
-<p>Arguments:
-kSceneItem &#8211; Object, kraken object to get the color for.</p>
-<p>Return:
-String, color to set on the object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>kSceneItem</strong> (<em>object</em>) &#8211; kraken object to get the color for.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">color to set on the object.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.builder.Builder.setObjectColor">
 <code class="descname">setObjectColor</code><span class="sig-paren">(</span><em>kSceneItem</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.builder.Builder.setObjectColor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the color on the dccSceneItem.</p>
-<p>Arguments:
-kSceneItem &#8211; Object, kraken object to set the color on.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>kSceneItem</strong> (<em>object</em>) &#8211; kraken object to set the color on.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.builder.Builder.setTransform">
 <code class="descname">setTransform</code><span class="sig-paren">(</span><em>kSceneItem</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.builder.Builder.setTransform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Translates the transform to Softimage transform.</p>
-<p>Arguments:
-kSceneItem &#8211; Object: object to set the transform on.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>kSceneItem</strong> (<em>object</em>) &#8211; object to set the transform on.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.builder.Builder.getConfig">
 <code class="descname">getConfig</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.builder.Builder.getConfig" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the current config for the builder.</p>
-<p>Return:
-Object, config.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">config.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">object</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.builder.Builder.setConfig">
 <code class="descname">setConfig</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.builder.Builder.setConfig" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the builder&#8217;s config.</p>
-<p>Arguments:
-config &#8211; Config, the config to use for this builder.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config</strong> (<a class="reference internal" href="configs/config.html#kraken.core.configs.config.Config" title="kraken.core.configs.config.Config"><em>Config</em></a>) &#8211; the config to use for this builder.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.builder.Builder._preBuild">
 <code class="descname">_preBuild</code><span class="sig-paren">(</span><em>kSceneItem</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.builder.Builder._preBuild" title="Permalink to this definition">¶</a></dt>
 <dd><p>Protected Pre-Build method.</p>
-<p>Arguments:
-kSceneItem &#8211; Object, kraken kSceneItem object to build.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>kSceneItem</strong> (<em>object</em>) &#8211; kraken kSceneItem object to build.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.builder.Builder._build">
 <code class="descname">_build</code><span class="sig-paren">(</span><em>kSceneItem</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.builder.Builder._build" title="Permalink to this definition">¶</a></dt>
 <dd><p>Protected build method.</p>
-<p>Arguments:
-kSceneItem &#8211; Object, kraken kSceneItem object to build.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>kSceneItem</strong> (<em>object</em>) &#8211; kraken kSceneItem object to build.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.builder.Builder.build">
 <code class="descname">build</code><span class="sig-paren">(</span><em>kSceneItem</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.builder.Builder.build" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds the supplied kSceneItem into a DCC representation.</p>
-<p>Arguments:
-kSceneItem &#8211; Object, kraken kSceneItem object to build.</p>
-<p>Return:
-The DCC scene item of the kSceneItem that was passed to the builder.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>kSceneItem</strong> (<em>object</em>) &#8211; kraken kSceneItem object to build.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The DCC scene item of the kSceneItem that was passed to the builder.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">object</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.builder.Builder._postBuild">
 <code class="descname">_postBuild</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.builder.Builder._postBuild" title="Permalink to this definition">¶</a></dt>
 <dd><p>Protected Post-Build method.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -683,7 +1060,7 @@ True if successful.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'1.0',
+            VERSION:'1.0.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Constraint &mdash; Kraken Rigging Framework 1.0 documentation</title>
+  <title>Constraint &mdash; Kraken Rigging Framework 1.0.0 documentation</title>
   
 
   
@@ -32,7 +32,7 @@
   
 
   
-    <link rel="top" title="Kraken Rigging Framework 1.0 documentation" href="../../../../index.html"/>
+    <link rel="top" title="Kraken Rigging Framework 1.0.0 documentation" href="../../../../index.html"/>
         <link rel="up" title="Constraints" href="constraints.html"/>
         <link rel="next" title="Orientation Constraint" href="orientation_constraint.html"/>
         <link rel="prev" title="Constraints" href="constraints.html"/> 
@@ -81,6 +81,14 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a><ul class="simple">
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html">Releases</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../releases/release_1.0.0.html">Release 1.0.0</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../integrations.html">Integrations</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../../integrations/maya.html">Maya Integration</a><ul class="simple">
 </ul>
@@ -90,10 +98,9 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html">Releases</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../../releases/release_1.0.0.html">Release 1.0.0</a><ul class="simple">
 </ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../user_interface.html">User Interface</a><ul class="simple">
 </ul>
 </li>
 </ul>
@@ -228,7 +235,7 @@
 <h2><a class="toc-backref" href="#id1">Class Documentation</a><a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="kraken.core.objects.constraints.constraint.Constraint">
-<em class="property">class </em><code class="descclassname">kraken.core.objects.constraints.constraint.</code><code class="descname">Constraint</code><span class="sig-paren">(</span><em>name</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.constraints.constraint.Constraint" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descname">Constraint</code><span class="sig-paren">(</span><em>name</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.constraints.constraint.Constraint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="../scene_item.html#kraken.core.objects.scene_item.SceneItem" title="kraken.core.objects.scene_item.SceneItem"><code class="xref py py-class docutils literal"><span class="pre">kraken.core.objects.scene_item.SceneItem</span></code></a></p>
 <p>Constraint object.</p>
 <dl class="method">
@@ -241,92 +248,186 @@
 <code class="descname">getMaintainOffset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.constraints.constraint.Constraint.getMaintainOffset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the whether the constraint should maintain offset when it&#8217;s
 built or not.</p>
-<p>Return:
-Boolean, whether the constraint should maintain offset or not.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Whether the constraint should maintain offset or not.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.constraints.constraint.Constraint.setMaintainOffset">
 <code class="descname">setMaintainOffset</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.constraints.constraint.Constraint.setMaintainOffset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the constraint to maintain offset when creating the constraint.</p>
-<p>Arguments:
-value &#8211; Boolean, whether the constraint should maintain offset or not.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> (<em>bool</em>) &#8211; Whether the constraint should maintain offset or not.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.constraints.constraint.Constraint.setConstrainee">
 <code class="descname">setConstrainee</code><span class="sig-paren">(</span><em>constrainee</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.constraints.constraint.Constraint.setConstrainee" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the constrainee object for this constraint.</p>
-<p>Arguments:
-constrainee &#8211; Object, kSceneItem that will be constrained.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>constrainee</strong> (<em>Object</em>) &#8211; Object that will be constrained.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.constraints.constraint.Constraint.getConstrainee">
 <code class="descname">getConstrainee</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.constraints.constraint.Constraint.getConstrainee" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the constrainee object for this constraint.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.constraints.constraint.Constraint.addConstrainer">
 <code class="descname">addConstrainer</code><span class="sig-paren">(</span><em>kObject3D</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.constraints.constraint.Constraint.addConstrainer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a constrainer object to this constraint.</p>
-<p>Arguments:
-kObject3D &#8211; Object, kObject3D that will constrain the constrainee.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>kObject3D</strong> (<em>Object</em>) &#8211; kObject3D that will constrain the constrainee.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.constraints.constraint.Constraint.setConstrainer">
 <code class="descname">setConstrainer</code><span class="sig-paren">(</span><em>kObject3D</em>, <em>index=0</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.constraints.constraint.Constraint.setConstrainer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the constrainer at the specified index.</p>
-<p>Arguments:
-kObject3D &#8211; kObject3D, Kraken 3D object.
-index &#8211; Integer, index of the constraint to set.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>kObject3D</strong> (<em>object</em>) &#8211; Kraken 3D object.</li>
+<li><strong>index</strong> (<em>int</em>) &#8211; index of the constraint to set.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if successful.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bool</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.constraints.constraint.Constraint.removeConstrainerByIndex">
 <code class="descname">removeConstrainerByIndex</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.constraints.constraint.Constraint.removeConstrainerByIndex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Removes a constrainer object by its index.</p>
-<p>Arguments:
-index &#8211; Integer, index of the constrainer you want to remove.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> (<em>int</em>) &#8211; Index of the constrainer you want to remove.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.constraints.constraint.Constraint.getConstrainers">
 <code class="descname">getConstrainers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.constraints.constraint.Constraint.getConstrainers" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the constrainers of this constraint.</p>
-<p>Return:
-List, constrainer objects.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Constrainer objects.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.constraints.constraint.Constraint.jsonEncode">
 <code class="descname">jsonEncode</code><span class="sig-paren">(</span><em>saver</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.constraints.constraint.Constraint.jsonEncode" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the data for this object encoded as a JSON hierarchy.</p>
-<p>Arguments:</p>
-<p>Return:
-A JSON structure containing the data for this SceneItem.</p>
+<dd><p>Encodes the object to a JSON structure.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>saver</strong> (<em>Object</em>) &#8211; saver object.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A JSON structure containing the data for this SceneItem.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">Dict</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.constraints.constraint.Constraint.jsonDecode">
 <code class="descname">jsonDecode</code><span class="sig-paren">(</span><em>loader</em>, <em>jsonData</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.constraints.constraint.Constraint.jsonDecode" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the color of the object.</p>
-<p>Return:
-True if decoding was successful</p>
+<dd><p>Returns the color of the object..</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>loader</strong> (<em>Object</em>) &#8211; Loader object.</li>
+<li><strong>jsonData</strong> (<em>Dict</em>) &#8211; JSON object structure.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if successful.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bool</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -388,7 +489,7 @@ True if decoding was successful</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../../',
-            VERSION:'1.0',
+            VERSION:'1.0.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

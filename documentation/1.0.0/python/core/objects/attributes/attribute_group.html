@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Attribute Group &mdash; Kraken Rigging Framework 1.0 documentation</title>
+  <title>Attribute Group &mdash; Kraken Rigging Framework 1.0.0 documentation</title>
   
 
   
@@ -32,7 +32,7 @@
   
 
   
-    <link rel="top" title="Kraken Rigging Framework 1.0 documentation" href="../../../../index.html"/>
+    <link rel="top" title="Kraken Rigging Framework 1.0.0 documentation" href="../../../../index.html"/>
         <link rel="up" title="Attributes" href="attributes.html"/>
         <link rel="next" title="Boolean Attribute" href="bool_attribute.html"/>
         <link rel="prev" title="Attribute" href="attribute.html"/> 
@@ -81,6 +81,14 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a><ul class="simple">
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html">Releases</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../releases/release_1.0.0.html">Release 1.0.0</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../integrations.html">Integrations</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../../integrations/maya.html">Maya Integration</a><ul class="simple">
 </ul>
@@ -90,10 +98,9 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html">Releases</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../../releases/release_1.0.0.html">Release 1.0.0</a><ul class="simple">
 </ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../user_interface.html">User Interface</a><ul class="simple">
 </ul>
 </li>
 </ul>
@@ -228,7 +235,7 @@
 <h2><a class="toc-backref" href="#id1">Class Documentation</a><a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="kraken.core.objects.attributes.attribute_group.AttributeGroup">
-<em class="property">class </em><code class="descclassname">kraken.core.objects.attributes.attribute_group.</code><code class="descname">AttributeGroup</code><span class="sig-paren">(</span><em>name</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.attributes.attribute_group.AttributeGroup" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descname">AttributeGroup</code><span class="sig-paren">(</span><em>name</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.attributes.attribute_group.AttributeGroup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="../scene_item.html#kraken.core.objects.scene_item.SceneItem" title="kraken.core.objects.scene_item.SceneItem"><code class="xref py py-class docutils literal"><span class="pre">kraken.core.objects.scene_item.SceneItem</span></code></a></p>
 <p>Attribute Group that attributes belong to.</p>
 <dl class="method">
@@ -240,87 +247,166 @@
 <dt id="kraken.core.objects.attributes.attribute_group.AttributeGroup._checkAttributeIndex">
 <code class="descname">_checkAttributeIndex</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.attributes.attribute_group.AttributeGroup._checkAttributeIndex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks the supplied index is valid.</p>
-<p>Arguments:
-index &#8211; Integer, attribute index to check.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> (<em>int</em>) &#8211; attribute index to check.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if valid.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.attributes.attribute_group.AttributeGroup.addAttribute">
 <code class="descname">addAttribute</code><span class="sig-paren">(</span><em>attribute</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.attributes.attribute_group.AttributeGroup.addAttribute" title="Permalink to this definition">¶</a></dt>
-<dd><p>Adds an attribute to this object.</p>
-<p>Arguments:
-attribute &#8211; Object, attribute object to add to this object.</p>
-<p>Return:
-True if successful.</p>
+<dd><p>Adds an attribute to this object..</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attribute</strong> (<em>Object</em>) &#8211; attribute object to add to this object.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.attributes.attribute_group.AttributeGroup.removeAttributeByIndex">
 <code class="descname">removeAttributeByIndex</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.attributes.attribute_group.AttributeGroup.removeAttributeByIndex" title="Permalink to this definition">¶</a></dt>
-<dd><p>Removes attribute at specified index.</p>
-<p>Arguments:
-index &#8211; Integer, index of attribute to remove.</p>
-<p>Return:
-True if successful.</p>
+<dd><p>Removes attribute at specified index..</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> (<em>int</em>) &#8211; index of the attribute to remove.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.attributes.attribute_group.AttributeGroup.removeAttributeByName">
 <code class="descname">removeAttributeByName</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.attributes.attribute_group.AttributeGroup.removeAttributeByName" title="Permalink to this definition">¶</a></dt>
-<dd><p>Removes the attribute with the specified name.</p>
-<p>Arguments:
-name &#8211; String, name of the attribute to remove.</p>
-<p>Return:
-True if successful.</p>
+<dd><p>Removes the attribute with the specified name..</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<em>str</em>) &#8211; name of the attribute to remove.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.attributes.attribute_group.AttributeGroup.getNumAttributes">
 <code class="descname">getNumAttributes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.attributes.attribute_group.AttributeGroup.getNumAttributes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the number of attributes as an integer.</p>
-<p>Return:
-Integer of the number of attributes on this object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Number of attributes on this object.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.attributes.attribute_group.AttributeGroup.getAttributeByIndex">
 <code class="descname">getAttributeByIndex</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.attributes.attribute_group.AttributeGroup.getAttributeByIndex" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the attribute at the specified index.</p>
-<p>Arguments:
-index &#8211; Integer, index of the attribute to return.</p>
-<p>Return:
-Attribute at the specified index.
-False if not a valid index.</p>
+<dd><p>Returns the attribute at the specified index..</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> (<em>int</em>) &#8211; index of the attribute to return.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The attribute at the specified index.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="attribute.html#kraken.core.objects.attributes.attribute.Attribute" title="kraken.core.objects.attributes.attribute.Attribute">Attribute</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.attributes.attribute_group.AttributeGroup.getAttributeByName">
 <code class="descname">getAttributeByName</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.attributes.attribute_group.AttributeGroup.getAttributeByName" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the attribute with the specified name.</p>
-<p>Arguments:
-name &#8211; String, name of the attribute to return.</p>
-<p>Return:
-Attribute with the specified name.
-None if not found.</p>
+<dd><p>Return the attribute with the specified name..</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<em>str</em>) &#8211; Name of the attribute to return.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The attribute with the specified name.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="attribute.html#kraken.core.objects.attributes.attribute.Attribute" title="kraken.core.objects.attributes.attribute.Attribute">Attribute</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.attributes.attribute_group.AttributeGroup.jsonEncode">
 <code class="descname">jsonEncode</code><span class="sig-paren">(</span><em>saver</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.attributes.attribute_group.AttributeGroup.jsonEncode" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the data for this object encoded as a JSON hierarchy.</p>
-<p>Arguments:</p>
-<p>Return:
-A JSON structure containing the data for this SceneItem.</p>
+<dd><p>Encodes the object to a JSON structure.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>saver</strong> (<em>Object</em>) &#8211; saver object.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A JSON structure containing the data for this SceneItem.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">Dict</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.attributes.attribute_group.AttributeGroup.jsonDecode">
 <code class="descname">jsonDecode</code><span class="sig-paren">(</span><em>loader</em>, <em>jsonData</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.attributes.attribute_group.AttributeGroup.jsonDecode" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the color of the object.</p>
-<p>Return:
-the decoded object.</p>
+<dd><p>Returns the color of the object..</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>loader</strong> (<em>Object</em>) &#8211; Loader object.</li>
+<li><strong>jsonData</strong> (<em>Dict</em>) &#8211; JSON object structure.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if successful.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bool</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -382,7 +468,7 @@ the decoded object.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../../',
-            VERSION:'1.0',
+            VERSION:'1.0.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

@@ -2,6 +2,7 @@
 Releases
 ========
 
+Current Release: |release|
 
 *************
 Release Notes

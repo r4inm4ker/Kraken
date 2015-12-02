@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Kraken System &mdash; Kraken Rigging Framework 1.0 documentation</title>
+  <title>Kraken System &mdash; Kraken Rigging Framework 1.0.0 documentation</title>
   
 
   
@@ -32,7 +32,7 @@
   
 
   
-    <link rel="top" title="Kraken Rigging Framework 1.0 documentation" href="../../index.html"/>
+    <link rel="top" title="Kraken Rigging Framework 1.0.0 documentation" href="../../index.html"/>
         <link rel="up" title="Kraken Core" href="core.html"/>
         <link rel="next" title="Profiler" href="profiler.html"/>
         <link rel="prev" title="Builder" href="builder.html"/> 
@@ -81,6 +81,14 @@
 <li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a><ul class="simple">
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html">Releases</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../releases/release_1.0.0.html">Release 1.0.0</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../integrations.html">Integrations</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../integrations/maya.html">Maya Integration</a><ul class="simple">
 </ul>
@@ -90,10 +98,9 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../releases.html">Releases</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../releases/release_1.0.0.html">Release 1.0.0</a><ul class="simple">
 </ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user_interface.html">User Interface</a><ul class="simple">
 </ul>
 </li>
 </ul>
@@ -224,7 +231,7 @@
 KrakenSystem - Class for constructing the Fabric Engine Core client.</p>
 <dl class="class">
 <dt id="kraken.core.kraken_system.KrakenSystem">
-<em class="property">class </em><code class="descclassname">kraken.core.kraken_system.</code><code class="descname">KrakenSystem</code><a class="headerlink" href="#kraken.core.kraken_system.KrakenSystem" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descname">KrakenSystem</code><a class="headerlink" href="#kraken.core.kraken_system.KrakenSystem" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>The KrakenSystem is a singleton object used to provide an interface with
 the FabricEngine Core and RTVal system.</p>
@@ -238,113 +245,239 @@ the FabricEngine Core and RTVal system.</p>
 <dt id="kraken.core.kraken_system.KrakenSystem.loadCoreClient">
 <code class="descname">loadCoreClient</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.kraken_system.KrakenSystem.loadCoreClient" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads the Fabric Engine Core Client</p>
-<p>Return:
-None</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.kraken_system.KrakenSystem.getCoreClient">
 <code class="descname">getCoreClient</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.kraken_system.KrakenSystem.getCoreClient" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the Fabric Engine Core Client owned by the KrakenSystem</p>
-<p>Return:
-The Fabric Engine Core Client</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The Fabric Engine Core Client</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">object</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.kraken_system.KrakenSystem.loadExtension">
 <code class="descname">loadExtension</code><span class="sig-paren">(</span><em>extension</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.kraken_system.KrakenSystem.loadExtension" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads the given extension and updates the registeredTypes cache.</p>
-<p>Arguments:
-extension &#8211; string, The name of the extension to load.</p>
-<p>Return:
-None</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>extension</strong> (<em>str</em>) &#8211; The name of the extension to load.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.kraken_system.KrakenSystem.constructRTVal">
 <code class="descname">constructRTVal</code><span class="sig-paren">(</span><em>dataType</em>, <em>defaultValue=None</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.kraken_system.KrakenSystem.constructRTVal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constructs a new RTVal using the given name and optional devault value.</p>
-<p>Arguments:
-dataType &#8211; string, The name of the data type to construct.
-defaultValue &#8211; value, The default value to use to initialize the RTVal</p>
-<p>Return:
-The constructed RTval.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>dataType</strong> (<em>str</em>) &#8211; The name of the data type to construct.</li>
+<li><strong>defaultValue</strong> (<em>value</em>) &#8211; The default value to use to initialize the RTVal</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The constructed RTval.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">object</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.kraken_system.KrakenSystem.rtVal">
 <code class="descname">rtVal</code><span class="sig-paren">(</span><em>dataType</em>, <em>defaultValue=None</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.kraken_system.KrakenSystem.rtVal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constructs a new RTVal using the given name and optional devault value.</p>
-<p>Arguments:
-dataType &#8211; string, The name of the data type to construct.
-defaultValue &#8211; value, The default value to use to initialize the RTVal</p>
-<p>Return:
-The constructed RTval.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>dataType</strong> (<em>str</em>) &#8211; The name of the data type to construct.</li>
+<li><strong>defaultValue</strong> (<em>value</em>) &#8211; The default value to use to initialize the RTVal</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The constructed RTval.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">object</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.kraken_system.KrakenSystem.isRTVal">
 <code class="descname">isRTVal</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.kraken_system.KrakenSystem.isRTVal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns true if the given value is an RTVal.</p>
-<p>Arguments:
-value &#8211; value, value to test.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> (<em>value</em>) &#8211; value to test.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.kraken_system.KrakenSystem.getRTValTypeName">
 <code class="descname">getRTValTypeName</code><span class="sig-paren">(</span><em>rtval</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.kraken_system.KrakenSystem.getRTValTypeName" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the name of the type, handling extracting the name from KL RTVals.</p>
-<p>Arguments:
-rtval &#8211; rtval, the rtval to extract the name from.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>rtval</strong> (<em>rtval</em>) &#8211; The rtval to extract the name from.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.kraken_system.KrakenSystem.registerConfig">
+<code class="descname">registerConfig</code><span class="sig-paren">(</span><em>configClass</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.kraken_system.KrakenSystem.registerConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Registers a config Python class with the KrakenSystem so ti can be built by the rig builder.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>configClass</strong> (<em>str</em>) &#8211; The Python class of the config</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.kraken_system.KrakenSystem.getConfigClass">
+<code class="descname">getConfigClass</code><span class="sig-paren">(</span><em>className</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.kraken_system.KrakenSystem.getConfigClass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the registered Python config class with the given name</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>className</strong> (<em>str</em>) &#8211; The name of the Python config class</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The Python config class</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.kraken_system.KrakenSystem.getConfigClassNames">
+<code class="descname">getConfigClassNames</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.kraken_system.KrakenSystem.getConfigClassNames" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the names of the registered Python config classes</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The array of config class names.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.kraken_system.KrakenSystem.registerComponent">
 <code class="descname">registerComponent</code><span class="sig-paren">(</span><em>componentClass</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.kraken_system.KrakenSystem.registerComponent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Registers a component Python class with the KrakenSystem so ti can be built by the rig builder.</p>
-<p>Arguments:
-componentClass &#8211; string, the Python class of the component</p>
-<p>Return:
-None</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>componentClass</strong> (<em>str</em>) &#8211; The Python class of the component</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.kraken_system.KrakenSystem.getComponentClass">
 <code class="descname">getComponentClass</code><span class="sig-paren">(</span><em>className</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.kraken_system.KrakenSystem.getComponentClass" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the registered Python component class with the given name</p>
-<p>Arguments:
-className &#8211; string, The name of the Python component class</p>
-<p>Return:
-The Python component class</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>className</strong> (<em>str</em>) &#8211; The name of the Python component class</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The Python component class</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">object</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.kraken_system.KrakenSystem.getComponentClassNames">
 <code class="descname">getComponentClassNames</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.kraken_system.KrakenSystem.getComponentClassNames" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the names of the registered Python component classes</p>
-<p>Return:
-The array of component class names.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The array of component class names.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.kraken_system.KrakenSystem.loadComponentModules">
-<code class="descname">loadComponentModules</code><span class="sig-paren">(</span><em>iniFilePath=None</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.kraken_system.KrakenSystem.loadComponentModules" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loads all the component modules specified in the &#8216;KRAKEN_COMPONENT_PATHS&#8217; environment variable. 
-If the environment variable is not set, then the kraken_examples are loaded.</p>
-<p>Return:
-None</p>
+<code class="descname">loadComponentModules</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.kraken_system.KrakenSystem.loadComponentModules" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads all the component modules and configs specified in the &#8216;KRAKEN_PATHS&#8217; environment variable.</p>
+<p>The kraken_examples are loaded at all times.</p>
 </dd></dl>
 
 <dl class="classmethod">
 <dt id="kraken.core.kraken_system.KrakenSystem.getInstance">
 <em class="property">classmethod </em><code class="descname">getInstance</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.kraken_system.KrakenSystem.getInstance" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class method returns the singleton instance for the KrakenSystem</p>
-<p>Return:
-The singleton instance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The singleton instance.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">object</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -406,7 +539,7 @@ The singleton instance.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'1.0',
+            VERSION:'1.0.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Curve &mdash; Kraken Rigging Framework 1.0 documentation</title>
+  <title>Curve &mdash; Kraken Rigging Framework 1.0.0 documentation</title>
   
 
   
@@ -32,7 +32,7 @@
   
 
   
-    <link rel="top" title="Kraken Rigging Framework 1.0 documentation" href="../../../index.html"/>
+    <link rel="top" title="Kraken Rigging Framework 1.0.0 documentation" href="../../../index.html"/>
         <link rel="up" title="Objects" href="objects.html"/>
         <link rel="next" title="Hierarchy Group" href="hierarchy_group.html"/>
         <link rel="prev" title="Control Space" href="ctrlSpace.html"/> 
@@ -81,6 +81,14 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a><ul class="simple">
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html">Releases</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../releases/release_1.0.0.html">Release 1.0.0</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../integrations.html">Integrations</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../integrations/maya.html">Maya Integration</a><ul class="simple">
 </ul>
@@ -90,10 +98,9 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../../releases.html">Releases</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../releases/release_1.0.0.html">Release 1.0.0</a><ul class="simple">
 </ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_interface.html">User Interface</a><ul class="simple">
 </ul>
 </li>
 </ul>
@@ -226,7 +233,7 @@
 <h2><a class="toc-backref" href="#id1">Class Documentation</a><a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="kraken.core.objects.curve.Curve">
-<em class="property">class </em><code class="descclassname">kraken.core.objects.curve.</code><code class="descname">Curve</code><span class="sig-paren">(</span><em>name</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.curve.Curve" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descname">Curve</code><span class="sig-paren">(</span><em>name</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.curve.Curve" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="object_3d.html#kraken.core.objects.object_3d.Object3D" title="kraken.core.objects.object_3d.Object3D"><code class="xref py py-class docutils literal"><span class="pre">kraken.core.objects.object_3d.Object3D</span></code></a></p>
 <p>Curve object.</p>
 <dl class="method">
@@ -238,8 +245,16 @@
 <dt id="kraken.core.objects.curve.Curve.getCurveData">
 <code class="descname">getCurveData</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.curve.Curve.getCurveData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the data of the curve.</p>
-<p>Return:
-List, dictionaries defining each sub-curve of this curve.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Dictionaries defining each sub-curve of this curve.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -247,9 +262,17 @@ List, dictionaries defining each sub-curve of this curve.</p>
 <code class="descname">setCurveData</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.curve.Curve.setCurveData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the curve data.</p>
 <p>Arguments:
-data &#8211; List, dictionaries defining each sub-curve of this curve.</p>
-<p>Return:
-True if successful.</p>
+data (list): Dictionaries defining each sub-curve of this curve.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -257,67 +280,126 @@ True if successful.</p>
 <code class="descname">appendCurveData</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.curve.Curve.appendCurveData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Appends sub-curve data to this curve.</p>
 <p>Arguments:
-data &#8211; List, dictionaries defining each sub-curve being added to this
+data (list): Dictionaries defining each sub-curve being added to this
 curve.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.curve.Curve.checkSubCurveIndex">
 <code class="descname">checkSubCurveIndex</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.curve.Curve.checkSubCurveIndex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks the supplied index is valid.</p>
-<p>Arguments:
-index &#8211; Integer, sub-curve index to check.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> (<em>int</em>) &#8211; Sub-curve index to check.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.curve.Curve.getNumSubCurves">
 <code class="descname">getNumSubCurves</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.curve.Curve.getNumSubCurves" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the number of sub-curves on this object.</p>
-<p>Return:
-Integer, number of sub-curves in this object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Number of sub-curves in this object.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.curve.Curve.getSubCurveClosed">
 <code class="descname">getSubCurveClosed</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.curve.Curve.getSubCurveClosed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns whether the sub-curve is closed or not.</p>
-<p>Arguments:
-index &#8211; Integer, index of the sub-curve to query.</p>
-<p>Return:
-True or False if the sub-curve is closed.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> (<em>int</em>) &#8211; Index of the sub-curve to query.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the sub-curve is closed.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.curve.Curve.getSubCurveData">
 <code class="descname">getSubCurveData</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.curve.Curve.getSubCurveData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the sub-curve data by it&#8217;s index.</p>
-<p>Arguments:
-index &#8211; Integer, index of the sub-curve to get the data for.</p>
-<p>Return:
-Dict, data defining the sub-curve.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> (<em>int</em>) &#8211; Index of the sub-curve to get the data for.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Data defining the sub-curve.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.curve.Curve.setSubCurveData">
 <code class="descname">setSubCurveData</code><span class="sig-paren">(</span><em>index</em>, <em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.curve.Curve.setSubCurveData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the sub-curve data.</p>
-<p>Arguments:
-index &#8211; Integer, index of the sub-curve to get the data for.
-data &#8211; Dict, defining the sub-curve data.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>index</strong> (<em>int</em>) &#8211; Index of the sub-curve to get the data for.</li>
+<li><strong>data</strong> (<em>dict</em>) &#8211; Defining the sub-curve data.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if successful.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bool</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.curve.Curve.removeSubCurveByIndex">
 <code class="descname">removeSubCurveByIndex</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.curve.Curve.removeSubCurveByIndex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Removes a sub-curve by its index.</p>
-<p>Arguments:
-index &#8211; Integer, Index of the sub-curve to remove.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> (<em>int</em>) &#8211; Index of the sub-curve to remove.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -379,7 +461,7 @@ True if successful.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'1.0',
+            VERSION:'1.0.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

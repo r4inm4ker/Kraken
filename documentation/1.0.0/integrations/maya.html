@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Maya Integration &mdash; Kraken Rigging Framework 1.0 documentation</title>
+  <title>Maya Integration &mdash; Kraken Rigging Framework 1.0.0 documentation</title>
   
 
   
@@ -32,7 +32,7 @@
   
 
   
-    <link rel="top" title="Kraken Rigging Framework 1.0 documentation" href="../index.html"/>
+    <link rel="top" title="Kraken Rigging Framework 1.0.0 documentation" href="../index.html"/>
         <link rel="up" title="Integrations" href="../integrations.html"/>
         <link rel="next" title="Softimage Integration" href="softimage.html"/>
         <link rel="prev" title="Integrations" href="../integrations.html"/> 
@@ -74,13 +74,21 @@
         
           
           
-              <ul class="current">
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="../license.html">License</a><ul class="simple">
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a><ul class="simple">
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../releases.html">Releases</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../releases/release_1.0.0.html">Release 1.0.0</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../integrations.html">Integrations</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="">Maya Integration</a><ul class="simple">
 </ul>
@@ -90,10 +98,9 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../releases.html">Releases</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../releases/release_1.0.0.html">Release 1.0.0</a><ul class="simple">
 </ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_interface.html">User Interface</a><ul class="simple">
 </ul>
 </li>
 </ul>
@@ -210,26 +217,30 @@
   <div class="section" id="maya-integration">
 <h1>Maya Integration<a class="headerlink" href="#maya-integration" title="Permalink to this headline">¶</a></h1>
 <p>The Maya integration is composed of the Kraken plug-in for Maya but also the Maya plug-in that adds a menu entry for launching the Kraken UI.</p>
-<div class="section" id="sections">
-<h2>Sections<a class="headerlink" href="#sections" title="Permalink to this headline">¶</a></h2>
-<div class="contents local topic" id="usage-documentation">
-<p class="topic-title first">Usage Documentation</p>
+<div class="contents local topic" id="contents">
 <ul class="simple">
-<li><a class="reference internal" href="#maya-plug-in" id="id1">Maya Plug-in</a></li>
+<li><a class="reference internal" href="#maya-plug-in" id="id1">Maya Plug-in</a><ul>
+<li><a class="reference internal" href="#indices-and-tables" id="id2">Indices and tables</a></li>
+</ul>
+</li>
 </ul>
 </div>
 <div class="section" id="maya-plug-in">
-<h3><a class="toc-backref" href="#id1">Maya Plug-in</a><a class="headerlink" href="#maya-plug-in" title="Permalink to this headline">¶</a></h3>
-<p>To enable the Maya plug-in you simply need to add the following path to your :envvar: MAYA_MODULE_PATH variable.</p>
-<p><cite>*/kraken/DCCIntegrations/maya</cite></p>
+<h2><a class="toc-backref" href="#id1">Maya Plug-in</a><a class="headerlink" href="#maya-plug-in" title="Permalink to this headline">¶</a></h2>
+<p>To enable the Maya plug-in you simply need to add the following path to your MAYA_MODULE_PATH variable.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nb">set </span><span class="nv">MAYA_MODULE_PATH</span><span class="o">=</span>/kraken/DCCIntegrations/maya
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="../installation.html#installation-maya"><span>Maya Installation</span></a> for example Maya launcer scripts.</p>
+</div>
 <div class="line-block">
 <div class="line"><br /></div>
 <div class="line"><br /></div>
 </div>
-</div>
-</div>
 <div class="section" id="indices-and-tables">
-<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
+<h3><a class="toc-backref" href="#id2">Indices and tables</a><a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><a class="reference internal" href="../genindex.html"><span>Index</span></a></li>
 <li><a class="reference internal" href="../py-modindex.html"><span>Module Index</span></a></li>
@@ -237,6 +248,7 @@
 </ul>
 <div class="line-block">
 <div class="line"><br /></div>
+</div>
 </div>
 </div>
 </div>
@@ -280,7 +292,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'1.0',
+            VERSION:'1.0.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

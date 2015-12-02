@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Operator &mdash; Kraken Rigging Framework 1.0.0 documentation</title>
+  <title>Base Example Component &mdash; Kraken Rigging Framework 1.0.0 documentation</title>
   
 
   
@@ -33,9 +33,9 @@
 
   
     <link rel="top" title="Kraken Rigging Framework 1.0.0 documentation" href="../../../../index.html"/>
-        <link rel="up" title="Operators" href="operators.html"/>
-        <link rel="next" title="Splice Operator" href="splice_operator.html"/>
-        <link rel="prev" title="Operators" href="operators.html"/> 
+        <link rel="up" title="Components" href="components.html"/>
+        <link rel="next" title="Component Input" href="component_input.html"/>
+        <link rel="prev" title="Component" href="component.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -207,13 +207,13 @@
       
           <li><a href="../objects.html">Objects</a> &raquo;</li>
       
-          <li><a href="operators.html">Operators</a> &raquo;</li>
+          <li><a href="components.html">Components</a> &raquo;</li>
       
-    <li>Operator</li>
+    <li>Base Example Component</li>
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="../../../../_sources/python/core/objects/operators/operator.txt" rel="nofollow"> View page source</a>
+            <a href="../../../../_sources/python/core/objects/components/base_example_component.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -222,8 +222,8 @@
 </div>
           <div role="main" class="document">
             
-  <div class="section" id="operator">
-<h1>Operator<a class="headerlink" href="#operator" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="base-example-component">
+<h1>Base Example Component<a class="headerlink" href="#base-example-component" title="Permalink to this headline">¶</a></h1>
 <div class="contents local topic" id="usage-documentation">
 <p class="topic-title first">Usage Documentation</p>
 <ul class="simple">
@@ -234,142 +234,32 @@
 <div class="section" id="class-documentation">
 <h2><a class="toc-backref" href="#id1">Class Documentation</a><a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="kraken.core.objects.operators.operator.Operator">
-<em class="property">class </em><code class="descname">Operator</code><span class="sig-paren">(</span><em>name</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.operators.operator.Operator" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="../scene_item.html#kraken.core.objects.scene_item.SceneItem" title="kraken.core.objects.scene_item.SceneItem"><code class="xref py py-class docutils literal"><span class="pre">kraken.core.objects.scene_item.SceneItem</span></code></a></p>
-<p>Operator representation.</p>
+<dt id="kraken.core.objects.components.base_example_component.BaseExampleComponent">
+<em class="property">class </em><code class="descname">BaseExampleComponent</code><span class="sig-paren">(</span><em>name=''</em>, <em>parent=None</em>, <em>data=None</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.base_example_component.BaseExampleComponent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="component.html#kraken.core.objects.components.component.Component" title="kraken.core.objects.components.component.Component"><code class="xref py py-class docutils literal"><span class="pre">kraken.core.objects.components.component.Component</span></code></a></p>
+<p>Example Component Base</p>
 <dl class="method">
-<dt id="kraken.core.objects.operators.operator.Operator.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>name</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.operators.operator.Operator.__init__" title="Permalink to this definition">¶</a></dt>
+<dt id="kraken.core.objects.components.base_example_component.BaseExampleComponent.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>name=''</em>, <em>parent=None</em>, <em>data=None</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.base_example_component.BaseExampleComponent.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="kraken.core.objects.operators.operator.Operator.resizeInput">
-<code class="descname">resizeInput</code><span class="sig-paren">(</span><em>name</em>, <em>count</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.operators.operator.Operator.resizeInput" title="Permalink to this definition">¶</a></dt>
-<dd><p>Resizes and array output to a given size.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>name</strong> (<em>str</em>) &#8211; Name of the output.</li>
-<li><strong>count</strong> (<em>Object</em>) &#8211; Output object.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if successful.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bool</p>
-</td>
-</tr>
-</tbody>
-</table>
+<dt id="kraken.core.objects.components.base_example_component.BaseExampleComponent.detach">
+<code class="descname">detach</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.base_example_component.BaseExampleComponent.detach" title="Permalink to this definition">¶</a></dt>
+<dd><p>Detaches component from container. This method undoes the actions
+performed in the constructor. It removes all elements that were added
+to the rig. It is invoked by the UI when deleting components from a guide rig.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="kraken.core.objects.operators.operator.Operator.setInput">
-<code class="descname">setInput</code><span class="sig-paren">(</span><em>name</em>, <em>operatorInput</em>, <em>index=0</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.operators.operator.Operator.setInput" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets the input by the given name.</p>
+<dt id="kraken.core.objects.components.base_example_component.BaseExampleComponent.attach">
+<code class="descname">attach</code><span class="sig-paren">(</span><em>container</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.components.base_example_component.BaseExampleComponent.attach" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attaches component to container.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>name</strong> (<em>str</em>) &#8211; Name of the input.</li>
-<li><strong>operatorInput</strong> (<em>Object</em>) &#8211; Input object.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if successful.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bool</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="kraken.core.objects.operators.operator.Operator.getInput">
-<code class="descname">getInput</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.operators.operator.Operator.getInput" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the input with the specified name.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<em>str</em>) &#8211; Name of the input to get.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Input object.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">object</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="kraken.core.objects.operators.operator.Operator.resizeOutput">
-<code class="descname">resizeOutput</code><span class="sig-paren">(</span><em>name</em>, <em>count</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.operators.operator.Operator.resizeOutput" title="Permalink to this definition">¶</a></dt>
-<dd><p>Resizes and array output to a given size.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>name</strong> (<em>str</em>) &#8211; Name of the output.</li>
-<li><strong>count</strong> (<em>Object</em>) &#8211; Output object.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if successful.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bool</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="kraken.core.objects.operators.operator.Operator.setOutput">
-<code class="descname">setOutput</code><span class="sig-paren">(</span><em>name</em>, <em>operatorOutput</em>, <em>index=0</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.operators.operator.Operator.setOutput" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets the output by the given name.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>name</strong> (<em>str</em>) &#8211; Name of the output.</li>
-<li><strong>operatorOutput</strong> (<em>Object</em>) &#8211; Output object.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if successful.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bool</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="kraken.core.objects.operators.operator.Operator.getOutput">
-<code class="descname">getOutput</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.operators.operator.Operator.getOutput" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the output with the specified name.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<em>str</em>) &#8211; Name of the output to get.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Output object.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">Object</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>container</strong> (<em>object</em>) &#8211; container to attach to.</td>
 </tr>
 </tbody>
 </table>
@@ -401,10 +291,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="splice_operator.html" class="btn btn-neutral float-right" title="Splice Operator" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="component_input.html" class="btn btn-neutral float-right" title="Component Input" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="operators.html" class="btn btn-neutral" title="Operators" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="component.html" class="btn btn-neutral" title="Component" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

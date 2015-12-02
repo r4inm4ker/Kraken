@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Quat &mdash; Kraken Rigging Framework 1.0 documentation</title>
+  <title>Quat &mdash; Kraken Rigging Framework 1.0.0 documentation</title>
   
 
   
@@ -32,7 +32,7 @@
   
 
   
-    <link rel="top" title="Kraken Rigging Framework 1.0 documentation" href="../../../index.html"/>
+    <link rel="top" title="Kraken Rigging Framework 1.0.0 documentation" href="../../../index.html"/>
         <link rel="up" title="Maths" href="maths.html"/>
         <link rel="next" title="Rotation Order" href="rotation_order.html"/>
         <link rel="prev" title="Math Object" href="math_object.html"/> 
@@ -81,6 +81,14 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a><ul class="simple">
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html">Releases</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../releases/release_1.0.0.html">Release 1.0.0</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../integrations.html">Integrations</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../integrations/maya.html">Maya Integration</a><ul class="simple">
 </ul>
@@ -90,10 +98,9 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../../releases.html">Releases</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../releases/release_1.0.0.html">Release 1.0.0</a><ul class="simple">
 </ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_interface.html">User Interface</a><ul class="simple">
 </ul>
 </li>
 </ul>
@@ -226,7 +233,7 @@
 <h2><a class="toc-backref" href="#id1">Class Documentation</a><a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="kraken.core.maths.quat.Quat">
-<em class="property">class </em><code class="descclassname">kraken.core.maths.quat.</code><code class="descname">Quat</code><span class="sig-paren">(</span><em>v=None</em>, <em>w=None</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descname">Quat</code><span class="sig-paren">(</span><em>v=None</em>, <em>w=None</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="math_object.html#kraken.core.maths.math_object.MathObject" title="kraken.core.maths.math_object.MathObject"><code class="xref py py-class docutils literal"><span class="pre">kraken.core.maths.math_object.MathObject</span></code></a></p>
 <p>Quaternion Rotation object.</p>
 <dl class="method">
@@ -239,59 +246,122 @@
 <dt id="kraken.core.maths.quat.Quat.__str__">
 <code class="descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.__str__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return string version of the Quat object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">String representation of the Quat.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="kraken.core.maths.quat.Quat.v">
 <code class="descname">v</code><a class="headerlink" href="#kraken.core.maths.quat.Quat.v" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets vector of this quaternion.</p>
-<p>Return:
-Vec3, vector of the quaternion.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Vector of the quaternion.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="vec3.html#kraken.core.maths.vec3.Vec3" title="kraken.core.maths.vec3.Vec3">Vec3</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="kraken.core.maths.quat.Quat.w">
 <code class="descname">w</code><a class="headerlink" href="#kraken.core.maths.quat.Quat.w" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets scalar of this quaternion.</p>
-<p>Return:
-Scalar, scalar value of the quaternion.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Scalar value of the quaternion.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.quat.Quat.clone">
 <code class="descname">clone</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.clone" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a clone of the Quat.</p>
-<p>Return:
-The cloned Quat</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The cloned Quaternion.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#kraken.core.maths.quat.Quat" title="kraken.core.maths.quat.Quat">Quat</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.quat.Quat.set">
 <code class="descname">set</code><span class="sig-paren">(</span><em>v</em>, <em>w</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.set" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the quaternion from vector and scalar values.</p>
-<p>Arguments:
-v &#8211; Vec3, vector value.
-w &#8211; Scalar, scalar value.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>v</strong> (<a class="reference internal" href="vec3.html#kraken.core.maths.vec3.Vec3" title="kraken.core.maths.vec3.Vec3"><em>Vec3</em></a>) &#8211; vector value.</li>
+<li><strong>w</strong> (<em>float</em>) &#8211; scalar value.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if successful.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bool</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.quat.Quat.setIdentity">
 <code class="descname">setIdentity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.setIdentity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets this quaternion to the identity.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.quat.Quat.setFromEuler">
 <code class="descname">setFromEuler</code><span class="sig-paren">(</span><em>e</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.setFromEuler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the quaternion from a euler rotation.</p>
-<p>Arguments:
-e &#8211; Euler, euler rotation used to set the quaternion.</p>
-<p>Return:
-Quat, new quaternion set from the euler argument.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>e</strong> (<a class="reference internal" href="euler.html#kraken.core.maths.euler.Euler" title="kraken.core.maths.euler.Euler"><em>Euler</em></a>) &#8211; Euler rotation used to set the quaternion.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">New quaternion set from the euler argument.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#kraken.core.maths.quat.Quat" title="kraken.core.maths.quat.Quat">Quat</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -299,10 +369,18 @@ Quat, new quaternion set from the euler argument.</p>
 <code class="descname">setFromEulerAngles</code><span class="sig-paren">(</span><em>angles</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.setFromEulerAngles" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets this quat to a given angles vector (in radians) using
 the default XYZ rotation order.</p>
-<p>Arguments:
-angles &#8211; Vec3, angle vector.</p>
-<p>Return:
-Quat, new quaternion set from angles vector.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>angles</strong> (<a class="reference internal" href="vec3.html#kraken.core.maths.vec3.Vec3" title="kraken.core.maths.vec3.Vec3"><em>Vec3</em></a>) &#8211; angle vector.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">New quaternion set from angles vector.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#kraken.core.maths.quat.Quat" title="kraken.core.maths.quat.Quat">Quat</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -310,21 +388,42 @@ Quat, new quaternion set from angles vector.</p>
 <code class="descname">setFromAxisAndAngle</code><span class="sig-paren">(</span><em>axis</em>, <em>angle</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.setFromAxisAndAngle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set this quat to a rotation defined by an axis and an angle
 (in radians).</p>
-<p>Arguments:
-axis &#8211; Vec3, vector axis.
-angle &#8211; Scalar, angle value.</p>
-<p>Return:
-Quat, set from axis and angle values.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>axis</strong> (<a class="reference internal" href="vec3.html#kraken.core.maths.vec3.Vec3" title="kraken.core.maths.vec3.Vec3"><em>Vec3</em></a>) &#8211; vector axis.</li>
+<li><strong>angle</strong> (<em>float</em>) &#8211; angle value.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Set from axis and angle values.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#kraken.core.maths.quat.Quat" title="kraken.core.maths.quat.Quat">Quat</a></p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.quat.Quat.setFromMat33">
 <code class="descname">setFromMat33</code><span class="sig-paren">(</span><em>mat</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.setFromMat33" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set this quat to the rotation described by a 3x3 rotation matrix.</p>
-<p>Arguments:
-mat &#8211; Mat33, 3 x 3 matrix to set the quaternion from.</p>
-<p>Return:
-Quat, new quaternion set from input Mat33.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mat</strong> (<a class="reference internal" href="mat33.html#kraken.core.maths.mat33.Mat33" title="kraken.core.maths.mat33.Mat33"><em>Mat33</em></a>) &#8211; 3x3 matrix to set the quaternion from.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">New quaternion set from input Mat33.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#kraken.core.maths.quat.Quat" title="kraken.core.maths.quat.Quat">Quat</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -334,12 +433,25 @@ Quat, new quaternion set from input Mat33.</p>
 vector to the destination vector.</p>
 <p>Function taken from the &#8216;Game Programming Gems&#8217; article
 &#8216;The Shortest Arc Quat&#8217; by Stan Melax, both vectors must be units.</p>
-<p>Arguments:
-sourceDirVec &#8211; Vec3, source vector.
-destDirVec &#8211; Vec3, destination vector.
-arbitraryIfAmbiguous &#8211; Bool, arbitrary if ambiguous.</p>
-<p>Return:
-Quat, new quaternion set from 2 vectors.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>sourceDirVec</strong> (<a class="reference internal" href="vec3.html#kraken.core.maths.vec3.Vec3" title="kraken.core.maths.vec3.Vec3"><em>Vec3</em></a>) &#8211; Source vector.</li>
+<li><strong>destDirVec</strong> (<a class="reference internal" href="vec3.html#kraken.core.maths.vec3.Vec3" title="kraken.core.maths.vec3.Vec3"><em>Vec3</em></a>) &#8211; Destination vector.</li>
+<li><strong>arbitraryIfAmbiguous</strong> (<em>bool</em>) &#8211; Arbitrary if ambiguous.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">New quaternion set from 2 vectors.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#kraken.core.maths.quat.Quat" title="kraken.core.maths.quat.Quat">Quat</a></p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -347,21 +459,42 @@ Quat, new quaternion set from 2 vectors.</p>
 <code class="descname">setFromDirectionAndUpvector</code><span class="sig-paren">(</span><em>direction</em>, <em>upvector</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.setFromDirectionAndUpvector" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the quat to represent the direction as the Z axis and the
 upvector pointing along the XY plane.</p>
-<p>Arguments:
-direction &#8211; Vec3, direction vector.
-upvector &#8211; Vec3, up direction vector.</p>
-<p>Return:
-Quat, new quaternion set from direction and up vector.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>direction</strong> (<a class="reference internal" href="vec3.html#kraken.core.maths.vec3.Vec3" title="kraken.core.maths.vec3.Vec3"><em>Vec3</em></a>) &#8211; Direction vector.</li>
+<li><strong>upvector</strong> (<a class="reference internal" href="vec3.html#kraken.core.maths.vec3.Vec3" title="kraken.core.maths.vec3.Vec3"><em>Vec3</em></a>) &#8211; Up direction vector.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">New quaternion set from direction and up vector.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#kraken.core.maths.quat.Quat" title="kraken.core.maths.quat.Quat">Quat</a></p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.quat.Quat.equal">
 <code class="descname">equal</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.equal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks equality of this Quat with another.</p>
-<p>Arguments:
-other &#8211; Mat33, other matrix to check equality with.</p>
-<p>Return:
-True if equal.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>other</strong> (<a class="reference internal" href="mat33.html#kraken.core.maths.mat33.Mat33" title="kraken.core.maths.mat33.Mat33"><em>Mat33</em></a>) &#8211; other matrix to check equality with.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if equal.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -369,70 +502,126 @@ True if equal.</p>
 <code class="descname">almostEqual</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.almostEqual" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks almost equality of this Quat with another
 (using a default precision).</p>
-<p>Arguments:
-other &#8211; Mat33, other matrix to check equality with.</p>
-<p>Return:
-True if almost equal.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>other</strong> (<a class="reference internal" href="mat33.html#kraken.core.maths.mat33.Mat33" title="kraken.core.maths.mat33.Mat33"><em>Mat33</em></a>) &#8211; other matrix to check equality with.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if almost equal.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.quat.Quat.add">
 <code class="descname">add</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.add" title="Permalink to this definition">¶</a></dt>
 <dd><p>Overload method for the add operator.</p>
-<p>Arguments:
-other &#8211; Quat, other quaternion to add to this one.</p>
-<p>Return:
-Quat, new Quat of the sum of the two Quat&#8217;s.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>other</strong> (<a class="reference internal" href="#kraken.core.maths.quat.Quat" title="kraken.core.maths.quat.Quat"><em>Quat</em></a>) &#8211; Other quaternion to add to this one.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">New Quat of the sum of the two Quat&#8217;s.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#kraken.core.maths.quat.Quat" title="kraken.core.maths.quat.Quat">Quat</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.quat.Quat.subtract">
 <code class="descname">subtract</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.subtract" title="Permalink to this definition">¶</a></dt>
 <dd><p>Overload method for the subtract operator.</p>
-<p>Arguments:
-other &#8211; Quat, other quaternion to subtract from this one.</p>
-<p>Return:
-Quat, new Quat of the difference of the two Quat&#8217;s.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>other</strong> (<a class="reference internal" href="#kraken.core.maths.quat.Quat" title="kraken.core.maths.quat.Quat"><em>Quat</em></a>) &#8211; Other quaternion to subtract from this one.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">New Quat of the difference of the two Quat&#8217;s.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#kraken.core.maths.quat.Quat" title="kraken.core.maths.quat.Quat">Quat</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.quat.Quat.multiply">
 <code class="descname">multiply</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.multiply" title="Permalink to this definition">¶</a></dt>
 <dd><p>Overload method for the multiply operator.</p>
-<p>Arguments:
-other &#8211; Quat, other quaternion to multiply this one by.</p>
-<p>Return:
-Quat, new Quat of the product of the two Quat&#8217;s.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>other</strong> (<a class="reference internal" href="#kraken.core.maths.quat.Quat" title="kraken.core.maths.quat.Quat"><em>Quat</em></a>) &#8211; Other quaternion to multiply this one by.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">New Quat of the product of the two Quat&#8217;s.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#kraken.core.maths.quat.Quat" title="kraken.core.maths.quat.Quat">Quat</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.quat.Quat.divide">
 <code class="descname">divide</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.divide" title="Permalink to this definition">¶</a></dt>
 <dd><p>Divides this quaternion by another.</p>
-<p>Arguments:
-other &#8211; Quat, quaternion to divide this quaternion by.</p>
-<p>Return:
-Quat, quotient of the division of the quaternion by the other quaternion.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>other</strong> (<a class="reference internal" href="#kraken.core.maths.quat.Quat" title="kraken.core.maths.quat.Quat"><em>Quat</em></a>) &#8211; Quaternion to divide this quaternion by.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Quotient of the division of the quaternion by the other quaternion.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#kraken.core.maths.quat.Quat" title="kraken.core.maths.quat.Quat">Quat</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.quat.Quat.multiplyScalar">
 <code class="descname">multiplyScalar</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.multiplyScalar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Product of this quaternion and a scalar.</p>
-<p>Arguments:
-other &#8211; Scalar, scalar value to multiply this quaternion by.</p>
-<p>Return:
-Quat, product of the multiplication of the scalar and this quaternion.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>other</strong> (<em>float</em>) &#8211; scalar value to multiply this quaternion by.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Product of the multiplication of the scalar and this quaternion.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#kraken.core.maths.quat.Quat" title="kraken.core.maths.quat.Quat">Quat</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.quat.Quat.divideScalar">
 <code class="descname">divideScalar</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.divideScalar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Divides this quaternion and a scalar.</p>
-<p>Arguments:
-other &#8211; Scalar, value to divide this quaternion by.</p>
-<p>Return:
-Quat, quotient of the division of the quaternion by the scalar.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>other</strong> (<em>float</em>) &#8211; value to divide this quaternion by.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Quotient of the division of the quaternion by the scalar.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#kraken.core.maths.quat.Quat" title="kraken.core.maths.quat.Quat">Quat</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -441,52 +630,100 @@ Quat, quotient of the division of the quaternion by the scalar.</p>
 <dd><p>Rotates a vector by this quaterion.
 Don&#8217;t forget to normalize the quaternion unless you want axial
 translation as well as rotation..</p>
-<p>Arguments:
-v &#8211; Vec3, vector to rotate.</p>
-<p>Return:
-Vec3, new vector rotated by this quaternion.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>v</strong> (<a class="reference internal" href="vec3.html#kraken.core.maths.vec3.Vec3" title="kraken.core.maths.vec3.Vec3"><em>Vec3</em></a>) &#8211; vector to rotate.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">New vector rotated by this quaternion.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="vec3.html#kraken.core.maths.vec3.Vec3" title="kraken.core.maths.vec3.Vec3">Vec3</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.quat.Quat.dot">
 <code class="descname">dot</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.dot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the dot product of this quaternion and another.</p>
-<p>Arguments:
-other &#8211; Quat, other quaternion.</p>
-<p>Return:
-Scalar, dot product.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>other</strong> (<a class="reference internal" href="#kraken.core.maths.quat.Quat" title="kraken.core.maths.quat.Quat"><em>Quat</em></a>) &#8211; Other quaternion.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Dot product.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.quat.Quat.conjugate">
 <code class="descname">conjugate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.conjugate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the conjugate of this quaternion.</p>
-<p>Return:
-Quat, conjugate of this quaternion.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Conjugate of this quaternion.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#kraken.core.maths.quat.Quat" title="kraken.core.maths.quat.Quat">Quat</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.quat.Quat.lengthSquared">
 <code class="descname">lengthSquared</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.lengthSquared" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the squared lenght of this quaternion.</p>
-<p>Return:
-Scalar, squared length oft his quaternion.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Squared length oft his quaternion.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.quat.Quat.length">
 <code class="descname">length</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.length" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the length of this quaternion.</p>
-<p>Return:
-Scalar, length of this quaternion.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Length of this quaternion.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.quat.Quat.unit">
 <code class="descname">unit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.unit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets a unit quaternion of this one.</p>
-<p>Return:
-Quat, new unit quaternion from this one.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">New unit quaternion from this one.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#kraken.core.maths.quat.Quat" title="kraken.core.maths.quat.Quat">Quat</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -494,8 +731,16 @@ Quat, new unit quaternion from this one.</p>
 <code class="descname">unit_safe</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.unit_safe" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets a unit quaternion of this one, no error reported if cannot be
 made unit.</p>
-<p>Return:
-Quat, new unit quaternion.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">New unit quaternion.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#kraken.core.maths.quat.Quat" title="kraken.core.maths.quat.Quat">Quat</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -503,16 +748,32 @@ Quat, new unit quaternion.</p>
 <code class="descname">setUnit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.setUnit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets this quaternion to a unit quaternion and returns the previous
 length.</p>
-<p>Return:
-Quat, this quaternion.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">This quaternion.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#kraken.core.maths.quat.Quat" title="kraken.core.maths.quat.Quat">Quat</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.quat.Quat.inverse">
 <code class="descname">inverse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.inverse" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets an inverse quaternion of this one.</p>
-<p>Return:
-Quat, inverse quaternion to this one.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Inverse quaternion to this one.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#kraken.core.maths.quat.Quat" title="kraken.core.maths.quat.Quat">Quat</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -520,79 +781,150 @@ Quat, inverse quaternion to this one.</p>
 <code class="descname">alignWith</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.alignWith" title="Permalink to this definition">¶</a></dt>
 <dd><p>Aligns this quaternion with another one ensuring that the delta
 between the Quat values is the shortest path over the hypersphere.</p>
-<p>Arguments:
-other &#8211; Quat, quaternion to align this one with.</p>
-<p>Return:
-Quat, new quaternion aligned to the other.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>other</strong> (<a class="reference internal" href="#kraken.core.maths.quat.Quat" title="kraken.core.maths.quat.Quat"><em>Quat</em></a>) &#8211; Quaternion to align this one with.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">New quaternion aligned to the other.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#kraken.core.maths.quat.Quat" title="kraken.core.maths.quat.Quat">Quat</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.quat.Quat.getAngle">
 <code class="descname">getAngle</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.getAngle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the angle of this quaternion (in radians).</p>
-<p>Return:
-Scalar, angle of this quaternion (in radians).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Angle of this quaternion (in radians).</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.quat.Quat.getXaxis">
 <code class="descname">getXaxis</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.getXaxis" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the X axis of this quaternion.</p>
-<p>Return:
-Vec3, x axis of this quaternion.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">X axis of this quaternion.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="vec3.html#kraken.core.maths.vec3.Vec3" title="kraken.core.maths.vec3.Vec3">Vec3</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.quat.Quat.getYaxis">
 <code class="descname">getYaxis</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.getYaxis" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the Y axis of this quaternion.</p>
-<p>Return:
-Vec3, y axis of this quaternion.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Y axis of this quaternion.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="vec3.html#kraken.core.maths.vec3.Vec3" title="kraken.core.maths.vec3.Vec3">Vec3</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.quat.Quat.getZaxis">
 <code class="descname">getZaxis</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.getZaxis" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the Z axis of this quaternion.</p>
-<p>Return:
-Vec3, z axis of this quaternion.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Z axis of this quaternion.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="vec3.html#kraken.core.maths.vec3.Vec3" title="kraken.core.maths.vec3.Vec3">Vec3</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.quat.Quat.mirror">
 <code class="descname">mirror</code><span class="sig-paren">(</span><em>axisIndex</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.mirror" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reflects this Quaternion according to the axis provided.</p>
-<p>Arguments:
-axisIndex &#8211; Integer, 0 for the X axis, 1 for the Y axis, and 2 for the Z axis.</p>
-<p>Return:
-Quat, mirrored quaternion.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>axisIndex</strong> (<em>int</em>) &#8211; 0 for the X axis, 1 for the Y axis, and 2 for the Z axis.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Mirrored quaternion.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#kraken.core.maths.quat.Quat" title="kraken.core.maths.quat.Quat">Quat</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.quat.Quat.toMat33">
 <code class="descname">toMat33</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.toMat33" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets this quaternion as a 3x3 matrix.</p>
-<p>Return:
-Mat33, matrix derived from this quaternion.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Matrix derived from this quaternion.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="mat33.html#kraken.core.maths.mat33.Mat33" title="kraken.core.maths.mat33.Mat33">Mat33</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.quat.Quat.toEuler">
 <code class="descname">toEuler</code><span class="sig-paren">(</span><em>rotationOrder</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.toEuler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns this quaternion as a Euler rotation giving a rotation order.</p>
-<p>Arguments:
-rotationOrder &#8211; RotationOrder, rotation order to use to derive the
-euler by.</p>
-<p>Return:
-Euler, euler rotation derived from this quaternion.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>rotationOrder</strong> (<a class="reference internal" href="rotation_order.html#kraken.core.maths.rotation_order.RotationOrder" title="kraken.core.maths.rotation_order.RotationOrder"><em>RotationOrder</em></a>) &#8211; rotation order to use to derive the euler by.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Euler rotation derived from this quaternion.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="euler.html#kraken.core.maths.euler.Euler" title="kraken.core.maths.euler.Euler">Euler</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.maths.quat.Quat.toEulerAngles">
 <code class="descname">toEulerAngles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.maths.quat.Quat.toEulerAngles" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets this quaternion as a Euler angles using the rotationorder XYZ.</p>
-<p>Return:
-Vec3, euler angles derived from this quaternion.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Euler angles derived from this quaternion.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="vec3.html#kraken.core.maths.vec3.Vec3" title="kraken.core.maths.vec3.Vec3">Vec3</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -601,11 +933,24 @@ Vec3, euler angles derived from this quaternion.</p>
 <dd><p>Interpolates two quaternions spherically (slerp) given a scalar blend
 value (0.0 to 1.0).</p>
 <p>Note: This and q2 should be unit Quaternions.</p>
-<p>Arguments:
-q2 &#8211; Quat, quaternion to blend to.
-t &#8211; Scalar, blend value.</p>
-<p>Return:
-Quat, new quaternion blended between this and the input quaternion.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>q2</strong> (<a class="reference internal" href="#kraken.core.maths.quat.Quat" title="kraken.core.maths.quat.Quat"><em>Quat</em></a>) &#8211; Quaternion to blend to.</li>
+<li><strong>t</strong> (<em>float</em>) &#8211; blend value.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">New quaternion blended between this and the input quaternion.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#kraken.core.maths.quat.Quat" title="kraken.core.maths.quat.Quat">Quat</a></p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -616,11 +961,24 @@ Quat, new quaternion blended between this and the input quaternion.</p>
 <p>Note: The interpolation of the 2 quaternions will result acceleration
 and deceleration. Use <cite>sphericalLinearInterpolate</cite> for an
 interpolation that does not introduce acceleration..</p>
-<p>Arguments:
-other &#8211; Quat, quaternion to blend to.
-t &#8211; Scalar, blend value.</p>
-<p>Return:
-Quat, new quaternion blended between this and the input quaternion.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>other</strong> (<a class="reference internal" href="#kraken.core.maths.quat.Quat" title="kraken.core.maths.quat.Quat"><em>Quat</em></a>) &#8211; Quaternion to blend to.</li>
+<li><strong>t</strong> (<em>float</em>) &#8211; blend value.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">New quaternion blended between this and the input quaternion.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#kraken.core.maths.quat.Quat" title="kraken.core.maths.quat.Quat">Quat</a></p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -682,7 +1040,7 @@ Quat, new quaternion blended between this and the input quaternion.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'1.0',
+            VERSION:'1.0.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

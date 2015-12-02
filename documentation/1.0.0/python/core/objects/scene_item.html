@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Scene Item &mdash; Kraken Rigging Framework 1.0 documentation</title>
+  <title>Scene Item &mdash; Kraken Rigging Framework 1.0.0 documentation</title>
   
 
   
@@ -32,7 +32,7 @@
   
 
   
-    <link rel="top" title="Kraken Rigging Framework 1.0 documentation" href="../../../index.html"/>
+    <link rel="top" title="Kraken Rigging Framework 1.0.0 documentation" href="../../../index.html"/>
         <link rel="up" title="Objects" href="objects.html"/>
         <link rel="next" title="Helpers" href="../../helpers/helpers.html"/>
         <link rel="prev" title="Rig" href="rig.html"/> 
@@ -81,6 +81,14 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a><ul class="simple">
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html">Releases</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../releases/release_1.0.0.html">Release 1.0.0</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../integrations.html">Integrations</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../integrations/maya.html">Maya Integration</a><ul class="simple">
 </ul>
@@ -90,10 +98,9 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../../releases.html">Releases</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../releases/release_1.0.0.html">Release 1.0.0</a><ul class="simple">
 </ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_interface.html">User Interface</a><ul class="simple">
 </ul>
 </li>
 </ul>
@@ -226,7 +233,7 @@
 <h2><a class="toc-backref" href="#id1">Class Documentation</a><a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="kraken.core.objects.scene_item.SceneItem">
-<em class="property">class </em><code class="descclassname">kraken.core.objects.scene_item.</code><code class="descname">SceneItem</code><span class="sig-paren">(</span><em>name</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.scene_item.SceneItem" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descname">SceneItem</code><span class="sig-paren">(</span><em>name</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.scene_item.SceneItem" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Kraken base object type for any 3D object.</p>
 <dl class="method">
@@ -238,82 +245,162 @@
 <dt id="kraken.core.objects.scene_item.SceneItem.getTypeName">
 <code class="descname">getTypeName</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.scene_item.SceneItem.getTypeName" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the class name of this object.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.scene_item.SceneItem.getTypeHierarchyNames">
 <code class="descname">getTypeHierarchyNames</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.scene_item.SceneItem.getTypeHierarchyNames" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the class name of this object.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.scene_item.SceneItem.isTypeOf">
 <code class="descname">isTypeOf</code><span class="sig-paren">(</span><em>typeName</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.scene_item.SceneItem.isTypeOf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the class name of this object.</p>
-<p>Return:
-True if the scene item is of the given type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the scene item is of the given type.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.scene_item.SceneItem.getName">
 <code class="descname">getName</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.scene_item.SceneItem.getName" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the name of the object as a string.</p>
-<p>Return:
-String of the object&#8217;s name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Object&#8217;s name.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.scene_item.SceneItem.setName">
 <code class="descname">setName</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.scene_item.SceneItem.setName" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the name of the object with a string.</p>
-<p>Arguments:
-name &#8211; String, the new name for the item.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<em>str</em>) &#8211; The new name for the item.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.scene_item.SceneItem.getPath">
 <code class="descname">getPath</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.scene_item.SceneItem.getPath" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the full hierarchical path to this object.</p>
-<p>Return:
-String, full name of the object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Full name of the object.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.scene_item.SceneItem.getNameDecoration">
 <code class="descname">getNameDecoration</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.scene_item.SceneItem.getNameDecoration" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the decorated name of the object.</p>
-<p>Return:
-String, decorated name of the object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Decorated name of the object.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.scene_item.SceneItem.getDecoratedName">
 <code class="descname">getDecoratedName</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.scene_item.SceneItem.getDecoratedName" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the decorated name of the object.</p>
-<p>Return:
-String, decorated name of the object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Decorated name of the object.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.scene_item.SceneItem.getDecoratedPath">
 <code class="descname">getDecoratedPath</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.scene_item.SceneItem.getDecoratedPath" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the decorated path of the object.</p>
-<p>Return:
-String, decorated path  of the object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Decorated path  of the object.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.objects.scene_item.SceneItem.getParent">
 <code class="descname">getParent</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.scene_item.SceneItem.getParent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the parent of the object as an object.</p>
-<p>Return:
-Parent of this object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Parent of this object.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Object</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -321,9 +408,17 @@ Parent of this object.</p>
 <code class="descname">setParent</code><span class="sig-paren">(</span><em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.objects.scene_item.SceneItem.setParent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the parent attribute of this object.</p>
 <p>Arguments:
-parent &#8211; Object, object that is the parent of this one.</p>
-<p>Return:
-True if successful.</p>
+parent (Object): Object that is the parent of this one.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -385,7 +480,7 @@ True if successful.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'1.0',
+            VERSION:'1.0.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

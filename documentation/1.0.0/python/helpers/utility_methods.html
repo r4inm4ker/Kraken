@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Utility Methods &mdash; Kraken Rigging Framework 1.0 documentation</title>
+  <title>Utility Methods &mdash; Kraken Rigging Framework 1.0.0 documentation</title>
   
 
   
@@ -32,7 +32,7 @@
   
 
   
-    <link rel="top" title="Kraken Rigging Framework 1.0 documentation" href="../../index.html"/>
+    <link rel="top" title="Kraken Rigging Framework 1.0.0 documentation" href="../../index.html"/>
         <link rel="up" title="Helpers" href="helpers.html"/>
         <link rel="next" title="Plugins" href="../plugins/plugins.html"/>
         <link rel="prev" title="Helpers" href="helpers.html"/> 
@@ -81,6 +81,14 @@
 <li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a><ul class="simple">
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html">Releases</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../releases/release_1.0.0.html">Release 1.0.0</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../integrations.html">Integrations</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../integrations/maya.html">Maya Integration</a><ul class="simple">
 </ul>
@@ -90,10 +98,9 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../releases.html">Releases</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../releases/release_1.0.0.html">Release 1.0.0</a><ul class="simple">
 </ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user_interface.html">User Interface</a><ul class="simple">
 </ul>
 </li>
 </ul>
@@ -215,55 +222,85 @@
 <h1>Utility Methods<a class="headerlink" href="#utility-methods" title="Permalink to this headline">¶</a></h1>
 <span class="target" id="module-kraken.helpers.utility_methods"></span><dl class="function">
 <dt id="kraken.helpers.utility_methods.logHierarchy">
-<code class="descclassname">kraken.helpers.utility_methods.</code><code class="descname">logHierarchy</code><span class="sig-paren">(</span><em>kObject</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.helpers.utility_methods.logHierarchy" title="Permalink to this definition">¶</a></dt>
+<code class="descname">logHierarchy</code><span class="sig-paren">(</span><em>kObject</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.helpers.utility_methods.logHierarchy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Traverses the given Kraken hierarchy and logs the names of all the objects.</p>
-<p>Return:
-None</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>Object</strong> &#8211; The object to start logging on.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="kraken.helpers.utility_methods.__convertFromJSON">
-<code class="descclassname">kraken.helpers.utility_methods.</code><code class="descname">__convertFromJSON</code><span class="sig-paren">(</span><em>jsonData</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.helpers.utility_methods.__convertFromJSON" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__convertFromJSON</code><span class="sig-paren">(</span><em>jsonData</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.helpers.utility_methods.__convertFromJSON" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
 <dt id="kraken.helpers.utility_methods.prepareToLoad">
-<code class="descclassname">kraken.helpers.utility_methods.</code><code class="descname">prepareToLoad</code><span class="sig-paren">(</span><em>jsonData</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.helpers.utility_methods.prepareToLoad" title="Permalink to this definition">¶</a></dt>
+<code class="descname">prepareToLoad</code><span class="sig-paren">(</span><em>jsonData</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.helpers.utility_methods.prepareToLoad" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prepares the json data for loading into kraken.</p>
-<p>Arguments:
-jsonData &#8211; dict, the JSON data to be prepared.</p>
-<p>Return:
-dict, the prepared JSON hierarchy.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>jsonData</strong> (<em>dict</em>) &#8211; The JSON data to be prepared.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The prepared JSON hierarchy.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="kraken.helpers.utility_methods.__convertToJSON">
-<code class="descclassname">kraken.helpers.utility_methods.</code><code class="descname">__convertToJSON</code><span class="sig-paren">(</span><em>jsonData</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.helpers.utility_methods.__convertToJSON" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__convertToJSON</code><span class="sig-paren">(</span><em>jsonData</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.helpers.utility_methods.__convertToJSON" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
 <dt id="kraken.helpers.utility_methods.prepareToSave">
-<code class="descclassname">kraken.helpers.utility_methods.</code><code class="descname">prepareToSave</code><span class="sig-paren">(</span><em>jsonData</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.helpers.utility_methods.prepareToSave" title="Permalink to this definition">¶</a></dt>
+<code class="descname">prepareToSave</code><span class="sig-paren">(</span><em>jsonData</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.helpers.utility_methods.prepareToSave" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prepares the json data for serialization.</p>
-<p>Arguments:
-jsonData &#8211; dict, the JSON data to be prepared.</p>
-<p>Return:
-dict, the prepared JSON hierarchy.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>jsonData</strong> (<em>dict</em>) &#8211; The JSON data to be prepared.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The prepared JSON hierarchy.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="kraken.helpers.utility_methods.__mirrorData">
-<code class="descclassname">kraken.helpers.utility_methods.</code><code class="descname">__mirrorData</code><span class="sig-paren">(</span><em>jsonData</em>, <em>plane</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.helpers.utility_methods.__mirrorData" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__mirrorData</code><span class="sig-paren">(</span><em>jsonData</em>, <em>plane</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.helpers.utility_methods.__mirrorData" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
 <dt id="kraken.helpers.utility_methods.mirrorData">
-<code class="descclassname">kraken.helpers.utility_methods.</code><code class="descname">mirrorData</code><span class="sig-paren">(</span><em>jsonData</em>, <em>plane</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.helpers.utility_methods.mirrorData" title="Permalink to this definition">¶</a></dt>
+<code class="descname">mirrorData</code><span class="sig-paren">(</span><em>jsonData</em>, <em>plane</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.helpers.utility_methods.mirrorData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prepares the json data for serialization.</p>
-<p>Arguments:
-jsonData &#8211; dict, the JSON data to be prepared.</p>
-<p>Return:
-dict, the prepared JSON hierarchy.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>jsonData</strong> (<em>dict</em>) &#8211; The JSON data to be prepared.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The prepared JSON hierarchy.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -307,7 +344,7 @@ dict, the prepared JSON hierarchy.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'1.0',
+            VERSION:'1.0.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Kraken Loader &mdash; Kraken Rigging Framework 1.0 documentation</title>
+  <title>Kraken Loader &mdash; Kraken Rigging Framework 1.0.0 documentation</title>
   
 
   
@@ -32,7 +32,7 @@
   
 
   
-    <link rel="top" title="Kraken Rigging Framework 1.0 documentation" href="../../../index.html"/>
+    <link rel="top" title="Kraken Rigging Framework 1.0.0 documentation" href="../../../index.html"/>
         <link rel="up" title="IO" href="io.html"/>
         <link rel="next" title="Kraken Saver" href="kraken_saver.html"/>
         <link rel="prev" title="IO" href="io.html"/> 
@@ -81,6 +81,14 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a><ul class="simple">
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html">Releases</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../releases/release_1.0.0.html">Release 1.0.0</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../integrations.html">Integrations</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../integrations/maya.html">Maya Integration</a><ul class="simple">
 </ul>
@@ -90,10 +98,9 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../../releases.html">Releases</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../releases/release_1.0.0.html">Release 1.0.0</a><ul class="simple">
 </ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_interface.html">User Interface</a><ul class="simple">
 </ul>
 </li>
 </ul>
@@ -226,7 +233,7 @@
 <h2><a class="toc-backref" href="#id1">Class Documentation</a><a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="kraken.core.io.kraken_loader.KrakenLoader">
-<em class="property">class </em><code class="descclassname">kraken.core.io.kraken_loader.</code><code class="descname">KrakenLoader</code><a class="headerlink" href="#kraken.core.io.kraken_loader.KrakenLoader" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descname">KrakenLoader</code><a class="headerlink" href="#kraken.core.io.kraken_loader.KrakenLoader" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Kraken base object type for any 3D object.</p>
 <dl class="method">
@@ -238,28 +245,52 @@
 <dt id="kraken.core.io.kraken_loader.KrakenLoader.getParentItem">
 <code class="descname">getParentItem</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.io.kraken_loader.KrakenLoader.getParentItem" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the item that was constructed prior to the current item.</p>
-<p>Return:
-The stored parent item.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The stored parent item.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">object</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.io.kraken_loader.KrakenLoader.resolveSceneItem">
 <code class="descname">resolveSceneItem</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.io.kraken_loader.KrakenLoader.resolveSceneItem" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a constructed scene item based on the provided name.</p>
-<p>Arguments:
-name &#8211; String, name of the scene item to find.</p>
-<p>Return:
-The resolved scene item.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<em>str</em>) &#8211; name of the scene item to find.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The resolved scene item.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">object</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.io.kraken_loader.KrakenLoader.construct">
 <code class="descname">construct</code><span class="sig-paren">(</span><em>jsonData</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.io.kraken_loader.KrakenLoader.construct" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a constructed scene item based on the provided json data.</p>
-<p>Arguments:
-jsondata &#8211; dict, the JSON data to use to decode into a Math value.</p>
-<p>Return:
-The constructed scene item.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>jsondata</strong> (<em>dict</em>) &#8211; the JSON data to use to decode into a Math value.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The constructed scene item.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">object</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -268,10 +299,14 @@ The constructed scene item.</p>
 <dd><p>Register an item to the loader. If an item is constructed
 automatically, then it can be registered so the loader can provide it
 during resolveSceneItem.</p>
-<p>Arguments:
-item &#8211; object, an object constructed during the loading process.</p>
-<p>Return:
-None</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>item</strong> (<em>object</em>) &#8211; an object constructed during the loading process.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -279,8 +314,6 @@ None</p>
 <code class="descname">registerConstructionCallback</code><span class="sig-paren">(</span><em>name</em>, <em>callback</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.io.kraken_loader.KrakenLoader.registerConstructionCallback" title="Permalink to this definition">¶</a></dt>
 <dd><p>Register a callback to be invoked when the requested item is
 constructed.</p>
-<p>Return:
-None</p>
 </dd></dl>
 
 </dd></dl>
@@ -342,7 +375,7 @@ None</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'1.0',
+            VERSION:'1.0.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

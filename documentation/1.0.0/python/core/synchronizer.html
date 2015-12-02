@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Synchronizer &mdash; Kraken Rigging Framework 1.0 documentation</title>
+  <title>Synchronizer &mdash; Kraken Rigging Framework 1.0.0 documentation</title>
   
 
   
@@ -32,7 +32,7 @@
   
 
   
-    <link rel="top" title="Kraken Rigging Framework 1.0 documentation" href="../../index.html"/>
+    <link rel="top" title="Kraken Rigging Framework 1.0.0 documentation" href="../../index.html"/>
         <link rel="up" title="Kraken Core" href="core.html"/>
         <link rel="next" title="Configs" href="configs/config.html"/>
         <link rel="prev" title="Profiler" href="profiler.html"/> 
@@ -81,6 +81,14 @@
 <li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a><ul class="simple">
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html">Releases</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../releases/release_1.0.0.html">Release 1.0.0</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../integrations.html">Integrations</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../integrations/maya.html">Maya Integration</a><ul class="simple">
 </ul>
@@ -90,10 +98,9 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../releases.html">Releases</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../releases/release_1.0.0.html">Release 1.0.0</a><ul class="simple">
 </ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user_interface.html">User Interface</a><ul class="simple">
 </ul>
 </li>
 </ul>
@@ -220,7 +227,7 @@
 </div>
 <span class="target" id="module-kraken.core.synchronizer"></span><dl class="class">
 <dt id="kraken.core.synchronizer.Synchronizer">
-<em class="property">class </em><code class="descclassname">kraken.core.synchronizer.</code><code class="descname">Synchronizer</code><span class="sig-paren">(</span><em>target=None</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.synchronizer.Synchronizer" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descname">Synchronizer</code><span class="sig-paren">(</span><em>target=None</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.synchronizer.Synchronizer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>The Synchronizer is a singleton object used to synchronize data between
 Kraken objects and the DCC objects.</p>
@@ -229,34 +236,64 @@ Kraken objects and the DCC objects.</p>
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>target=None</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.synchronizer.Synchronizer.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initializes Synchronizer.</p>
 <p>The target object&#8217;s hierarchy will be traversed and synchronized.</p>
-<p>Arguments:
-target &#8211; Object, top Kraken object to synchronize.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>target</strong> (<em>object</em>) &#8211; top Kraken object to synchronize.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.synchronizer.Synchronizer.getTarget">
 <code class="descname">getTarget</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.synchronizer.Synchronizer.getTarget" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the target object of the synchronizer.</p>
-<p>Return:
-Object, the object that is the target of synchronization.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The object that is the target of synchronization.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">object</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.synchronizer.Synchronizer.setTarget">
 <code class="descname">setTarget</code><span class="sig-paren">(</span><em>target</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.synchronizer.Synchronizer.setTarget" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the target for synchronization.</p>
-<p>Arguments:
-target &#8211; Object, top Kraken object to synchronize.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>target</strong> (<em>object</em>) &#8211; top Kraken object to synchronize.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.synchronizer.Synchronizer.getHierarchyMap">
 <code class="descname">getHierarchyMap</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.synchronizer.Synchronizer.getHierarchyMap" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the hierarchy map from the Inspector.</p>
-<p>Return:
-Dict, the hierarhcy map. None if it hasn&#8217;t been created.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The hierarhcy map. None if it hasn&#8217;t been created.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -268,16 +305,32 @@ Dict, the hierarhcy map. None if it hasn&#8217;t been created.</p>
 <dt id="kraken.core.synchronizer.Synchronizer.clearHierarchyMap">
 <code class="descname">clearHierarchyMap</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.synchronizer.Synchronizer.clearHierarchyMap" title="Permalink to this definition">¶</a></dt>
 <dd><p>Clears the hierarhcy map data.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.synchronizer.Synchronizer.sync">
 <code class="descname">sync</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.synchronizer.Synchronizer.sync" title="Permalink to this definition">¶</a></dt>
 <dd><p>Synchronizes the target hierarchy with the matching objects in the DCC.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -285,10 +338,18 @@ True if successful.</p>
 <code class="descname">synchronize</code><span class="sig-paren">(</span><em>kObject</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.synchronizer.Synchronizer.synchronize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Iteration method that traverses the hierarchy and syncs the different
 object types.</p>
-<p>Arguments:
-kObject &#8211; Object, object to synchronize.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>kObject</strong> (<em>object</em>) &#8211; object to synchronize.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -297,34 +358,78 @@ True if successful.</p>
 <dd><p>Gets the DCC Item from the full decorated path.</p>
 <p><strong>This should be re-implemented in the sub-classed synchronizer for each
 plugin.</strong></p>
-<p>Arguments:
-kObject &#8211; object, the Kraken Python object that we must find the corresponding DCC item.</p>
-<p>Return:
-DCC Object, None if it isn&#8217;t found.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>kObject</strong> (<em>object</em>) &#8211; The Kraken Python object that we must find the corresponding DCC item.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None if it isn&#8217;t found.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">object</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.synchronizer.Synchronizer.syncXfo">
 <code class="descname">syncXfo</code><span class="sig-paren">(</span><em>kObject</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.synchronizer.Synchronizer.syncXfo" title="Permalink to this definition">¶</a></dt>
-<dd><p>Syncs the xfo from the DCC objec to the Kraken object.</p>
+<dd><p>Syncs the xfo from the DCC object to the Kraken object.</p>
 <p><strong>This should be re-implemented in the sub-classed synchronizer for each
 plugin.</strong></p>
-<p>Arguments:
-kObject &#8211; Object, object to sync the xfo for.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>kObject</strong> (<em>object</em>) &#8211; object to sync the xfo for.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="kraken.core.synchronizer.Synchronizer.syncAttribute">
 <code class="descname">syncAttribute</code><span class="sig-paren">(</span><em>kObject</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.synchronizer.Synchronizer.syncAttribute" title="Permalink to this definition">¶</a></dt>
-<dd><p>Syncs the attribute value from the DCC objec to the Kraken object.</p>
+<dd><p>Syncs the attribute value from the DCC object to the Kraken object.</p>
 <p><strong>This should be re-implemented in the sub-classed synchronizer for each
 plugin.</strong></p>
-<p>Arguments:
-kObject &#8211; Object, object to sync the attribute value for.</p>
-<p>Return:
-True if successful.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>kObject</strong> (<em>object</em>) &#8211; object to sync the attribute value for.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="kraken.core.synchronizer.Synchronizer.syncCurveData">
+<code class="descname">syncCurveData</code><span class="sig-paren">(</span><em>kObject</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.core.synchronizer.Synchronizer.syncCurveData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Syncs the curve data from the DCC object to the Kraken object.</p>
+<p><strong>This should be re-implemented in the sub-classed synchronizer for each
+plugin.</strong></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>kObject</strong> (<em>object</em>) &#8211; object to sync the curve data for.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -370,7 +475,7 @@ True if successful.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'1.0',
+            VERSION:'1.0.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true
