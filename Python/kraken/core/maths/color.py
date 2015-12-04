@@ -352,7 +352,7 @@ class Color(MathObject):
 
         """
 
-        return Color(self._rtval.linearInterpolate('Color', ks.rtVal('Scalar', t)))
+        return Color(self._rtval.linearInterpolate('Color', ks.rtVal('Color', other), ks.rtVal('Scalar', t)))
 
 
     @classmethod
