@@ -94,10 +94,12 @@ class KBackdrop(QtGui.QGraphicsWidget):
     __defaultColor = QtGui.QColor(65, 120, 122, 255)
     __unselectedPen =  QtGui.QPen(__defaultColor.darker(125), 1.6)
     __selectedPen =  QtGui.QPen(__defaultColor.lighter(175), 1.6)
+    __hoveredPen =  QtGui.QPen(__defaultColor.lighter(110), 1.6)
     __linePen =  QtGui.QPen(QtGui.QColor(25, 25, 25, 255), 1.25)
 
     __resizeDistance = 16.0
     __setCustomCursor = False
+    __hoveredOver = False
 
     def __init__(self, graph, name):
         super(KBackdrop, self).__init__()
@@ -150,7 +152,6 @@ class KBackdrop(QtGui.QGraphicsWidget):
     def getName(self):
         return self.__name
 
-
     def setName(self, name):
         if name != self.__name:
             origName = self.__name
@@ -162,6 +163,7 @@ class KBackdrop(QtGui.QGraphicsWidget):
 
             # Update the node so that the size is computed.
             self.adjustSize()
+
 
     def getComment(self):
         return self.__comment
@@ -178,9 +180,9 @@ class KBackdrop(QtGui.QGraphicsWidget):
         # Update the node so that the size is computed.
         self.adjustSize()
 
+
     def getColor(self):
         return self.__color
-
 
     def setColor(self, color):
         self.__color = color
@@ -190,7 +192,6 @@ class KBackdrop(QtGui.QGraphicsWidget):
 
     def getGraph(self):
         return self.__graph
-
 
     def getHeader(self):
         return self.__headerItem
@@ -215,12 +216,10 @@ class KBackdrop(QtGui.QGraphicsWidget):
         size = self.size()
         return QtCore.QPointF(transform.dx()+(size.width()*0.5), transform.dy()+(size.height()*0.5))
 
-
     def setGraphPos(self, graphPos):
         self.prepareConnectionGeometryChange()
         size = self.size()
         self.setTransform(QtGui.QTransform.fromTranslate(graphPos.x()-(size.width()*0.5), graphPos.y()-(size.height()*0.5)), False)
-
 
     def translate(self, x, y):
         self.prepareConnectionGeometryChange()
@@ -256,6 +255,8 @@ class KBackdrop(QtGui.QGraphicsWidget):
         painter.setBrush(QtGui.QColor(0, 0, 0, 0))
         if self.__selected:
             painter.setPen(self.__selectedPen)
+        elif self.__hoveredOver:
+            painter.setPen(self.__hoveredPen)
         else:
             painter.setPen(self.__unselectedPen)
 
@@ -438,6 +439,9 @@ class KBackdrop(QtGui.QGraphicsWidget):
 
         super(KBackdrop, self).mouseDoubleClickEvent(event)
 
+    def hoverEnterEvent(self, event):
+        self.__hoveredOver = True
+        self.update()
 
     def hoverMoveEvent(self, event):
 
@@ -463,6 +467,8 @@ class KBackdrop(QtGui.QGraphicsWidget):
 
     def hoverLeaveEvent(self, event):
         self.setCursor(QtCore.Qt.ArrowCursor)
+        self.__hoveredOver = False
+        self.update()
 
     ################
     ## Misc Methods
