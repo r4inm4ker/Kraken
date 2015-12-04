@@ -53,7 +53,7 @@ class Color(MathObject):
 
         """
 
-        return self._rtval.r
+        return self._rtval.r.getSimpleType()
 
 
     @r.setter
@@ -82,7 +82,7 @@ class Color(MathObject):
 
         """
 
-        return self._rtval.g
+        return self._rtval.g.getSimpleType()
 
 
     @g.setter
@@ -111,7 +111,7 @@ class Color(MathObject):
 
         """
 
-        return self._rtval.b
+        return self._rtval.b.getSimpleType()
 
 
     @g.setter
@@ -140,7 +140,7 @@ class Color(MathObject):
 
         """
 
-        return self._rtval.a
+        return self._rtval.a.getSimpleType()
 
 
     @g.setter
@@ -204,7 +204,7 @@ class Color(MathObject):
 
         """
 
-        return self._rtval.set('Boolean', other._rtval)
+        return self._rtval.set('Boolean', other._rtval).getSimpleType()
 
 
 
@@ -221,7 +221,7 @@ class Color(MathObject):
         """
 
         return self._rtval.almostEqual('Boolean', other._rtval,
-                                       ks.rtVal('Scalar', precision))
+                                       ks.rtVal('Scalar', precision)).getSimpleType()
 
 
     def component(self, i ):
@@ -235,7 +235,7 @@ class Color(MathObject):
 
         """
 
-        return self._rtval.component('Scalar', ks.rtVal('Size', i))
+        return self._rtval.component('Scalar', ks.rtVal('Size', i)).getSimpleType()
 
 
     def setComponent(self, i, v ):
