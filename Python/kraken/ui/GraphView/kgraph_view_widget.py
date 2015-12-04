@@ -1,9 +1,11 @@
 import json, difflib
 import os
+import re
 import traceback
 
 from PySide import QtGui, QtCore
 
+from kbackdrop import KBackdrop
 from contextual_node_list import ContextualNodeList
 from pyflowgraph.graph_view_widget import GraphViewWidget
 from kgraph_view import KGraphView
@@ -61,6 +63,9 @@ class KGraphViewWidget(GraphViewWidget):
         self.newRigPreset()
 
 
+    # ============
+    # Rig Methods
+    # ============
     def editRigName(self):
         dialog = QtGui.QInputDialog(self)
         dialog.setObjectName('RigNameDialog')
@@ -120,6 +125,7 @@ class KGraphViewWidget(GraphViewWidget):
             self.synchGuideRig()
             self.guideRig.writeRigDefinitionFile(filePath)
 
+            settings = self.window().getSettings()
             settings.beginGroup('Files')
             lastFilePath = settings.setValue("lastFilePath", filePath)
             settings.endGroup()
@@ -222,9 +228,9 @@ class KGraphViewWidget(GraphViewWidget):
         except Exception as e:
             self.reportMessage('Error Building', level='error', exception=e)
 
-    # =========
+    # ==========
     # Shortcuts
-    # =========
+    # ==========
     def copy(self):
         graphView = self.getGraphView()
         pos = graphView.getSelectedNodesCentroid()
@@ -277,6 +283,38 @@ class KGraphViewWidget(GraphViewWidget):
 
         scenepos = self.graphView.mapToScene(pos)
         contextualNodeList.showAtPos(pos, scenepos, self.graphView)
+
+
+    # ==============
+    # Other Methods
+    # ==============
+    def addBackdrop(self):
+
+        graphView = self.getGraphView()
+
+        name = 'Backdrop'
+        initName = name
+        suffix = 1
+        collision = True
+        while collision:
+
+            collision = graphView.hasNode(name)
+            if not collision:
+                break
+
+            result = re.split(r"(\d+)$", initName, 1)
+            if len(result) > 1:
+                initName = result[0]
+                suffix = int(result[1])
+
+            name = initName + str(suffix).zfill(2)
+            suffix += 1
+
+        backdropNode = KBackdrop(graphView, name)
+        graphView.addNode(backdropNode)
+
+        graphView.selectNode(backdropNode, clearSelection=True)
+        # backdropNode.setSelected()
 
 
     # ==================
@@ -344,7 +382,9 @@ class KGraphViewWidget(GraphViewWidget):
 
 
     def __onNodeRemoved(self, node):
-        node.getComponent().detach()
+
+        if type(node).__name__ != 'KBackdrop':
+            node.getComponent().detach()
 
         if not UndoRedoManager.getInstance().isUndoingOrRedoing():
             command = graph_commands.RemoveNodeCommand(self.graphView, self.guideRig, node)
