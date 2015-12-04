@@ -1,9 +1,4 @@
-color:Color(<RTVal:+1.0>,<RTVal:+0.0>,<RTVal:+0.0>,<RTVal:+0.0>)
-color:Color(<RTVal:+1.0>,<RTVal:+0.0>,<RTVal:+0.0>,<RTVal:+0.0>)
-Traceback (most recent call last):
-  File "MathTests\color.py", line 11, in <module>
-    print "lerp:" + str(color0.linearInterpolate(color1, 0.5))
-  File "..\Python\kraken\core\maths\color.py", line 355, in linearInterpolate
-    return Color(self._rtval.linearInterpolate('Color', ks.rtVal('Scalar', t)))
-AttributeError: KL compile failed: no resolution for method Color.linearInterpolate(io Float32)
-
+color0:Color(1.0,0.0,0.0,0.0)
+color1:Color(1.0,0.0,0.0,0.0)
+lerp:Color(1.0,0.0,0.0,0.0)
+rand:Color(0.914059340954,0.909663498402,0.909663498402,0.909663498402)
