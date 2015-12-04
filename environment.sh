@@ -1,6 +1,4 @@
 
-source "D:/temp/FabricEngine-2.0.0-Windows-x86_64/environment.sh"
-
 KRAKEN_PATH=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 export KRAKEN_PATH
 echo "  Set KRAKEN_PATH=\"$KRAKEN_PATH\""
