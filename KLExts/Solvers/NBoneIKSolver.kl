@@ -1,6 +1,7 @@
 require InlineDrawing;
+require JSON;
 
-object NBoneIKSolver : KrakenSolver {
+object NBoneIKSolver : KrakenSolver, Persistable {
   Xfo initPose[];
 };
 
@@ -52,34 +53,34 @@ function NBoneIKSolver.solve!
   io Mat44 pose[],
   io Mat44 legEnd
 ) {
-  if(fkcontrols.size != pose.size)
+  if(fkcontrols.size() != pose.size())
     throw("Error in NBoneIKSolver. The number of FKControls does not match the number of joints");
 
-  if(this.initPose.size == 0) {
-    this.initPose.resize(pose.size);
+  if(this.initPose.size() == 0) {
+    this.initPose.resize(pose.size());
 
     Xfo fkPose[];
-    fkPose.resize(fkcontrols.size+1);
+    fkPose.resize(fkcontrols.size()+1);
     for(UInt32 i=0; i< fkcontrols.size; i++) {
       fkPose[i] = Xfo(fkcontrols[i]);
     }
-    fkPose[fkcontrols.size] = fkPose[fkcontrols.size-1];
-    fkPose[fkcontrols.size].tr = fkPose[fkcontrols.size-1].transformVector(Vec3(tipBoneLen, 0.0, 0.0));
+    fkPose[fkcontrols.size()] = fkPose[fkcontrols.size()-1];
+    fkPose[fkcontrols.size()].tr = fkPose[fkcontrols.size()-1].transformVector(Vec3(tipBoneLen, 0.0, 0.0));
     this.initPose = fkPose;
   }
 
   Xfo xfoPose[];
   Vec3 boneVectors[];
-  xfoPose.resize(fkcontrols.size+1);
+  xfoPose.resize(fkcontrols.size()+1);
   boneVectors.resize(fkcontrols.size);
   for(UInt32 i=0; i < fkcontrols.size; i++) {
     xfoPose[i] = Xfo(fkcontrols[i]);
     if(i>0)
       boneVectors[i-1] = xfoPose[i-1].inverse().transformVector(xfoPose[i].tr);
   }
-  boneVectors[boneVectors.size-1] = Vec3(tipBoneLen, 0.0, 0.0);
-  xfoPose[fkcontrols.size] = xfoPose[fkcontrols.size-1];
-  xfoPose[fkcontrols.size].tr = xfoPose[fkcontrols.size-1].transformVector(boneVectors[boneVectors.size-1]);
+  boneVectors[boneVectors.size()-1] = Vec3(tipBoneLen, 0.0, 0.0);
+  xfoPose[fkcontrols.size()] = xfoPose[fkcontrols.size()-1];
+  xfoPose[fkcontrols.size()].tr = xfoPose[fkcontrols.size()-1].transformVector(boneVectors[boneVectors.size()-1]);
 
   if(ikblend > 0.0) {
     UInt32 ikIndex = 0;
@@ -129,7 +130,7 @@ function NBoneIKSolver.solve!
   // Convert the Xfos back to Mat44s
   for(UInt32 i=0; i < pose.size; i++)
     pose[i] = xfoPose[i].toMat44();
-  legEnd = xfoPose[xfoPose.size-1].toMat44();
+  legEnd = xfoPose[xfoPose.size()-1].toMat44();
 
   // Set debugging visibility.
   this.setDebug(drawDebug);
@@ -140,5 +141,34 @@ function NBoneIKSolver.solve!
       Scalar boneLength = boneVectors[i].length();
       etDrawBone(this.handle.rootTransform, 'bone'+i, pose[i], boneLength, boneLength * 0.15, boneColor);
     }
+  }
+}
+
+
+function String NBoneIKSolver.saveDataToString(PersistenceContext context){
+  JSONDoc doc();
+
+  JSONArrayValue initPoseJson();
+  for(UInt32 i=0; i<this.initPose.size(); i++)
+      initPoseJson.add(xfoToJSON(this.initPose[i]));
+
+  doc.root.set('initPose', initPoseJson);
+  String jsonStr = doc.write();
+  return jsonStr;
+}
+
+
+function NBoneIKSolver.loadDataFromString!(PersistenceContext context, String data){
+  JSONDoc doc();
+  if(doc.parse(data)){
+    if(doc.root.has('initPose')){
+      JSONArrayValue initPoseJson = doc.root.get("initPose");
+      this.initPose.resize(0);
+      for (UInt32 i = 0; i < initPoseJson.size(); i++)
+          this.initPose.push(xfoFromJSON(initPoseJson.get(i)));
+    }
+  }
+  else{
+      setError("ERROR Loading NBoneIKSolver. Saved JSON data is not valid");
   }
 }
