@@ -17,6 +17,7 @@ class KrakenMenu(QtGui.QWidget):
         self.createLayout()
         self.createConnections()
 
+
     def createLayout(self):
 
         self.menuLayout = QtGui.QHBoxLayout()
@@ -32,6 +33,10 @@ class KrakenMenu(QtGui.QWidget):
         self.newAction.setShortcut('Ctrl+N')
         self.newAction.setObjectName("newAction")
 
+        self.openAction = self.fileMenu.addAction('&Open')
+        self.openAction.setShortcut('Ctrl+O')
+        self.openAction.setObjectName("openAction")
+
         self.saveAction = self.fileMenu.addAction('&Save')
         self.saveAction.setShortcut('Ctrl+S')
         self.saveAction.setObjectName("saveAction")
@@ -39,10 +44,6 @@ class KrakenMenu(QtGui.QWidget):
         self.saveAsAction = self.fileMenu.addAction('&Save As')
         self.saveAsAction.setShortcut('Ctrl+Shift+S')
         self.saveAsAction.setObjectName("saveAsAction")
-
-        self.loadAction = self.fileMenu.addAction('&Load')
-        self.loadAction.setShortcut('Ctrl+L')
-        self.loadAction.setObjectName("loadAction")
 
         self.fileMenu.addSeparator()
 
@@ -148,8 +149,8 @@ class KrakenMenu(QtGui.QWidget):
 
         self.saveAction.triggered.connect(graphViewWidget.saveRigPreset)
         self.saveAsAction.triggered.connect(graphViewWidget.saveAsRigPreset)
-        self.loadAction.triggered.connect(graphViewWidget.loadRigPreset)
-        self.loadAction.triggered.connect(self.updateRigNameLabel)
+        self.openAction.triggered.connect(graphViewWidget.openRigPreset)
+        self.openAction.triggered.connect(self.updateRigNameLabel)
         self.closeAction.triggered.connect(self.window().close)
 
         # Edit Menu Connections
@@ -207,9 +208,13 @@ class KrakenMenu(QtGui.QWidget):
 
 
     def writeSettings(self, settings):
+        krakenUIWidget = self.window().krakenUI
+        graphViewWidget = krakenUIWidget.graphViewWidget
+
         settings.beginGroup("KrakenMenu")
         settings.setValue("currentConfig", self.configsWidget.currentIndex())
-        settings.setValue("snapToGrid", self.snapToGridAction.isChecked())
+        settings.setValue("snapToGrid", graphViewWidget.graphView.getSnapToGrid())
+
         settings.endGroup()
 
 
@@ -223,7 +228,11 @@ class KrakenMenu(QtGui.QWidget):
             self.setCurrentConfig(currentConfig)
 
         if settings.contains('snapToGrid'):
-            snapToGrid = bool(settings.value('snapToGrid'))
+            if settings.value('snapToGrid') == 'true':
+                snapToGrid = True
+            else:
+                snapToGrid = False
+
             self.snapToGridAction.setChecked(snapToGrid)
             graphViewWidget.graphView.setSnapToGrid(snapToGrid)
 

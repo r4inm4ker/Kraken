@@ -12,6 +12,7 @@
     "Solvers/TwoBoneIKSolver.kl",
     "Solvers/NBoneIKSolver.kl",
     "Solvers/TentacleSolver.kl",
-    "Solvers/DynamicChainSolver.kl"
+    "Solvers/DynamicChainSolver.kl",
+    "PersistenceHelpers.kl"
   ]
 }

@@ -111,12 +111,12 @@ class Vec4(MathObject):
         return self._rtval.z.getSimpleType()
 
 
-    @y.setter
+    @z.setter
     def z(self, value):
-        """Sets y value from the input value.
+        """Sets z value from the input value.
 
         Args:
-            value (float): Value to set the y property as.
+            value (float): Value to set the z property as.
 
         Returns:
             bool: True if successful.
@@ -140,7 +140,7 @@ class Vec4(MathObject):
         return self._rtval.t.getSimpleType()
 
 
-    @y.setter
+    @t.setter
     def t(self, value):
         """Sets t value from the input value.
 
@@ -167,6 +167,7 @@ class Vec4(MathObject):
         vec4.x = self.x;
         vec4.y = self.y;
         vec4.z = self.z;
+        vec4.t = self.t;
         return vec4
 
 
@@ -175,7 +176,7 @@ class Vec4(MathObject):
 
         Args:
             x (float): Value to set the x property as.
-            y (float): Value to set the x property as.
+            y (float): Value to set the y property as.
             z (float): Value to set the z property as.
             t (float): Value to set the t property as.
 
@@ -191,7 +192,7 @@ class Vec4(MathObject):
 
 
     def setNull():
-        """Setting all components of the vec3 to 0.0.
+        """Setting all components of the vec4 to 0.0.
 
         Returns:
             bool: True if successful.
@@ -204,7 +205,7 @@ class Vec4(MathObject):
 
 
     def equal(self, other):
-        """Checks equality of this vec3 with another.
+        """Checks equality of this vec4 with another.
 
         Args:
             other (Vec4): other vector to check equality with.
@@ -221,7 +222,7 @@ class Vec4(MathObject):
         """Checks almost equality of this Vec4 with another.
 
         Args:
-            other (Vec4): other matrix to check equality with.
+            other (Vec4): other value to check equality with.
             precision (float): Precision value.
 
         Returns:

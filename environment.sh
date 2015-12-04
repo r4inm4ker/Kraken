@@ -99,5 +99,6 @@ echo "  Set KRAKEN_PATHS=\"$KRAKEN_PATHS\""
 prepend_env_var PYTHONPATH "$KRAKEN_PATH/Python"
 echo "  Set PYTHONPATH=\"$PYTHONPATH\""
 
+
 prepend_env_var FABRIC_DFG_PATH "$KRAKEN_PATH/CanvasPresets"
 echo "  Set FABRIC_DFG_PATH=\"$FABRIC_DFG_PATH\""
