@@ -78,13 +78,14 @@ class KrakenMenu(QtGui.QWidget):
         self.buildRigAction.setShortcut('Ctrl+B')
         self.buildRigAction.setObjectName("buildRigAction")
 
-        # Panel Menu
-        self.panelsMenu = self.menuBar.addMenu('&Panels')
-        self.compLibAction = self.panelsMenu.addAction('Component &Library')
-        self.compLibAction.setShortcut('Ctrl+Tab')
+        # Tools Menu
+        self.toolsMenu = self.menuBar.addMenu('&Tools')
+        self.reloadComponentsAction = self.toolsMenu.addAction('Reload Component Modules')
 
         # View Menu
         self.viewMenu = self.menuBar.addMenu('&View')
+        self.compLibAction = self.viewMenu.addAction('Component &Library')
+        self.compLibAction.setShortcut('Ctrl+Tab')
         self.snapToGridAction = self.viewMenu.addAction('&Snap To Grid')
         self.snapToGridAction.setCheckable(True)
 
@@ -168,10 +169,11 @@ class KrakenMenu(QtGui.QWidget):
         self.buildGuideAction.triggered.connect(graphViewWidget.buildGuideRig)
         self.buildRigAction.triggered.connect(graphViewWidget.buildRig)
 
-        # Panels Menu Connections
-        self.compLibAction.triggered.connect(krakenUIWidget.resizeSplitter)
+        # Tools Menu Connections
+        self.reloadComponentsAction.triggered.connect(self.reloadAllComponents)
 
         # View Menu Connections
+        self.compLibAction.triggered.connect(krakenUIWidget.resizeSplitter)
         self.snapToGridAction.triggered[bool].connect(graphViewWidget.graphView.setSnapToGrid)
 
         # Help Menu Connections
@@ -208,6 +210,22 @@ class KrakenMenu(QtGui.QWidget):
             configs = ks.getConfigClassNames()
             configClass = ks.getConfigClass(configs[index-1])
             configClass.makeCurrent()
+
+    def reloadAllComponents(self):
+        krakenUIWidget = self.window().krakenUI
+        graphViewWidget = krakenUIWidget.graphViewWidget
+
+        # Sync and Store Graph Data
+        graphViewWidget.synchGuideRig()
+        rigData = graphViewWidget.guideRig.getData()
+
+        # Create New Rig And Reload All Components.
+        graphViewWidget.newRigPreset()
+        KrakenSystem.getInstance().reloadAllComponents()
+
+        # Load Saved Data And Update Widget
+        graphViewWidget.guideRig.loadRigDefinition(rigData)
+        graphViewWidget.graphView.displayGraph(graphViewWidget.guideRig)
 
 
     def writeSettings(self, settings):
