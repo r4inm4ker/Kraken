@@ -9,7 +9,6 @@ import os
 import sys
 import json
 import imp
-import sys
 import inspect
 import importlib
 from collections import OrderedDict
@@ -18,6 +17,7 @@ import FabricEngine.Core
 
 import kraken
 from kraken.core.profiler import Profiler
+from module_import_manager import ModuleImportManager
 
 class KrakenSystem(object):
     """The KrakenSystem is a singleton object used to provide an interface with
@@ -37,6 +37,7 @@ class KrakenSystem(object):
 
         self.registeredConfigs = OrderedDict()
         self.registeredComponents = OrderedDict()
+        self.moduleImportManager = ModuleImportManager()
 
 
     def loadCoreClient(self):
@@ -300,55 +301,8 @@ class KrakenSystem(object):
         True if successful.
 
         """
-        print "reloadAllComponents"
-        modules = {}
-        for name, componentClass in self.registeredComponents.iteritems():
-            componentModulePath = componentClass.__module__
-            module = sys.modules[componentModulePath]
-            if module.__file__ not in modules:
-                modules[module.__file__] = module
-
         self.registeredComponents = {}
-
-        orderedModules = []
-        def collectModuleHierarchy(module):
-            print "collectModuleHierarchy:" + str(module.__name__)
-
-            if str(module.__name__) == 'KrakenSystem':
-                return
-
-            if str(module.__name__) not in ('SceneItem', 'MathObject'):
-                for name, cls in inspect.getmembers(module):
-                    # print name
-                    if inspect.isclass(cls):
-                        baseClasses = inspect.getmro(cls)
-                        print baseClasses
-                        # for i in xrange(0, len(list(baseClasses))):
-                        for baseClass in list(baseClasses):
-                            # print i
-                            # baseClass = baseClasses[i]
-                            baseModulePath = baseClass.__module__
-
-                            print str(baseModulePath)
-                            if str(baseModulePath) in ('__builtin__', '__builtins__', '__doc__', '__file__'):
-                                break
-
-                            baseModule = sys.modules[baseModulePath]
-                            print str(baseModule)
-                            # importModule(baseModule)
-                            if baseModule not in orderedModules:
-                                orderedModules.append(baseModule)
-
-            # if module.__file__ not in orderedModules:
-            #     orderedModules.append(module)
-
-        for path, module in modules.iteritems():
-            collectModuleHierarchy(module)
-
-        for module in reversed(orderedModules):
-            print "reload:" + str(module)
-            reload(module)
-
+        self.moduleImportManager.reload()
         return True
 
 
@@ -445,7 +399,6 @@ class KrakenSystem(object):
 
         if cls.__instance is None:
             cls.__instance = KrakenSystem()
-            # cls.__instance.loadComponentModules()
 
         return cls.__instance
 
