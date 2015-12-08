@@ -78,7 +78,7 @@ class KrakenMenu(QtGui.QWidget):
         self.buildRigAction.setShortcut('Ctrl+B')
         self.buildRigAction.setObjectName("buildRigAction")
 
-        # Panel Menu
+        # Tools Menu
         self.toolsMenu = self.menuBar.addMenu('&Tools')
         self.reloadComponentsAction = self.toolsMenu.addAction('Reload Component Modules')
 
@@ -214,8 +214,18 @@ class KrakenMenu(QtGui.QWidget):
     def reloadAllComponents(self):
         krakenUIWidget = self.window().krakenUI
         graphViewWidget = krakenUIWidget.graphViewWidget
+
+        # Sync and Store Graph Data
+        graphViewWidget.synchGuideRig()
+        rigData = graphViewWidget.guideRig.getData()
+
+        # Create New Rig And Reload All Components.
         graphViewWidget.newRigPreset()
         KrakenSystem.getInstance().reloadAllComponents()
+
+        # Load Saved Data And Update Widget
+        graphViewWidget.guideRig.loadRigDefinition(rigData)
+        graphViewWidget.graphView.displayGraph(graphViewWidget.guideRig)
 
 
     def writeSettings(self, settings):
