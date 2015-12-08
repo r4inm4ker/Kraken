@@ -45,7 +45,6 @@ class ModuleImportManager:
         self.newModules = {}
 
         for modname in reloadedModules:
-            print "load:" + modname
             try:
                 importlib.import_module(modname)
             except Exception as e:
