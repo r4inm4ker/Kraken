@@ -208,8 +208,6 @@ class KGraphView(GraphView):
             component = componentClass(parent=self.getRig())
             component.setGraphPos(Vec2(dropPosition.x(), dropPosition.y()))
             node = KNode(self, component)
-            nodeColor = component.getComponentColor()
-            node.setColor(QtGui.QColor(nodeColor[0], nodeColor[1], nodeColor[2], nodeColor[3]))
             self.addNode(node)
 
             event.acceptProposedAction()
