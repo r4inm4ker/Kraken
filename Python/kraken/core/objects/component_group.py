@@ -20,3 +20,39 @@ class ComponentGroup(Object3D):
         self.lockRotation(True, True, True)
         self.lockScale(True, True, True)
         self.lockTranslation(True, True, True)
+
+
+    # =============
+    # Name Methods
+    # =============
+    def getName(self):
+        """Gets the decorated name of the object.
+
+        Returns:
+            str: Decorated name of the object.
+
+        """
+
+
+        # During construction of the base class, the name is tested before
+        # the component is assigned.
+        if self.getComponent() is not None:
+            # The ComponentGroup's name should always match the component's name.
+            return self.getComponent().getName()
+        else:
+            return super(ComponentGroup, self).getName()
+
+
+    def getNameDecoration(self):
+        """Gets the decorated name of the object.
+
+        Returns:
+            str: Decorated name of the object.
+
+        """
+
+        if self.getComponent() is not None:
+            # The ComponentGroup's name should always match the component's name.
+            return self.getComponent().getNameDecoration()
+        else:
+            return super(ComponentGroup, self).getNameDecoration()

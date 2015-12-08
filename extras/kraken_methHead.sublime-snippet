@@ -1,0 +1,9 @@
+<snippet>
+    <content><![CDATA[
+# ${1/./=/g}=
+# ${1:Section Methods}
+# ${1/./=/g}=
+]]></content>
+    <tabTrigger>methHead</tabTrigger>
+    <scope>source.python</scope>
+</snippet>

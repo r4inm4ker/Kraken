@@ -1,17 +1,17 @@
 """Kraken Core."""
 
-VERSION_MAJOR = 0
+VERSION_MAJOR = 1
 VERSION_MINOR = 0
-VERSION_BUILD = 1
-VERSION_SUFFIX = "alpha"
+VERSION_BUILD = 0
+VERSION_SUFFIX = ""
 
 
 def getVersion():
     """Contatenates the version globals and returns the current version of
     Kraken.
 
-    Return:
-    String, current version of Kraken.
+    Returns:
+        str: Current version of Kraken.
 
     """
 

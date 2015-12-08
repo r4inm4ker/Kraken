@@ -21,11 +21,12 @@ class SpliceOperator(Operator):
     # an attirbute array called 'klOperators' that contains sets of what we
     # currently have setup.
 
-    def __init__(self, name, solverTypeName, extension):
+    def __init__(self, name, solverTypeName, extension, alwaysEval=False):
         super(SpliceOperator, self).__init__(name)
 
         self.solverTypeName = solverTypeName
         self.extension = extension
+        self.alwaysEval = alwaysEval # This is for Softimage only to force eval.
 
         # Load the Fabric Engine client and construct the RTVal for the Solver
         ks.loadCoreClient()
@@ -53,8 +54,8 @@ class SpliceOperator(Operator):
     def getSolverTypeName(self):
         """Returns the solver type name for this operator.
 
-        Return:
-        String, name of the solver type this operator uses.
+        Returns:
+            str: Name of the solver type this operator uses.
 
         """
 
@@ -64,19 +65,31 @@ class SpliceOperator(Operator):
     def getExtension(self):
         """Returns the extention this operator uses.
 
-        Return:
-        String, name of the extension this solver uses.
+        Returns:
+            str: Name of the extension this solver uses.
 
         """
 
         return self.extension
 
 
+    def getAlwaysEval(self):
+        """Gets the value of the alwaysEval attribute.
+
+        Returns:
+            bool: Whether the operator is set to always evaluate.
+
+        """
+
+        return self.alwaysEval
+
+
+
     def getSolverArgs(self):
         """Returns the args array defined by the KL Operator.
 
-        Return:
-        RTValArray, args array defined by the KL Operator.
+        Returns:
+            RTValArray: Args array defined by the KL Operator.
 
         """
 
@@ -86,26 +99,31 @@ class SpliceOperator(Operator):
     def generateSourceCode(self, arraySizes={}):
         """Returns the source code for a stub operator that will invoke the KL operator
 
-        Return:
-        String, The source code for the stub operator.
+        Returns:
+            str: The source code for the stub operator.
 
         """
 
         # Start constructing the source code.
         opSourceCode = ""
         opSourceCode += "require Kraken;\n"
-        opSourceCode += "require " + self.getExtension() + ";\n\n"
+
+        if self.getExtension() != "Kraken":
+            opSourceCode += "require " + self.getExtension() + ";"
+
+        opSourceCode += "\n\n"
+
         opSourceCode += "operator " + self.getName() + "(\n"
 
-        opSourceCode += "    io " + self.solverTypeName + " solver,\n"
+        opSourceCode += "  io " + self.solverTypeName + " solver,\n"
 
         # In SpliceMaya, output arrays are not resized by the system prior to calling into Splice, so we
         # explicily resize the arrays in the generated operator stub code.
         arrayResizing = "";
         for argName, arraySize in arraySizes.iteritems():
-            arrayResizing += "    "+argName+".resize("+str(arraySize)+");\n"
+            arrayResizing += "  "+argName+".resize("+str(arraySize)+");\n"
 
-        functionCall = "    solver.solve("
+        functionCall = "  solver.solve("
         for i in xrange(len(self.args)):
             arg = self.args[i]
             # Connect the ports to the inputs/outputs in the rig.
@@ -118,7 +136,7 @@ class SpliceOperator(Operator):
             if outDataType.endswith('[]'):
                 outDataType = outDataType[:-2]
                 suffix = "[]"
-            opSourceCode += "    " + outArgType + " " + outDataType + " " + arg.name + suffix
+            opSourceCode += "  " + outArgType + " " + outDataType + " " + arg.name + suffix
             if i == len(self.args) - 1:
                 opSourceCode += "\n"
             else:
@@ -130,7 +148,7 @@ class SpliceOperator(Operator):
                 functionCall += arg.name + ", "
         functionCall += ");\n"
 
-        opSourceCode += "    )\n"
+        opSourceCode += "  )\n"
         opSourceCode += "{\n"
         opSourceCode += arrayResizing
         opSourceCode += functionCall
@@ -140,10 +158,10 @@ class SpliceOperator(Operator):
 
 
     def evaluate(self):
-        """Returns the source code for a stub operator that will invoke the KL operator
+        """invokes the Splice operator causing the output values to be computed.
 
-        Return:
-        String, The source code for the stub operator.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -156,6 +174,16 @@ class SpliceOperator(Operator):
         argVals = []
         for i in xrange(len(self.args)):
             arg = self.args[i]
+            if arg.dataType == 'EvalContext':
+                argVals.append(ks.constructRTVal(arg.dataType))
+                continue
+            if arg.name == 'time':
+                argVals.append(ks.constructRTVal(arg.dataType))
+                continue
+            if arg.name == 'frame':
+                argVals.append(ks.constructRTVal(arg.dataType))
+                continue
+
             if arg.connectionType == 'in':
                 if str(arg.dataType).endswith('[]'):
                     rtValArray = ks.rtVal(arg.dataType[:-2]+'Array')
@@ -192,3 +220,5 @@ class SpliceOperator(Operator):
                         setRTVal(self.outputs[arg.name][j], argVals[i][j])
                 else:
                     setRTVal(self.outputs[arg.name], argVals[i])
+
+        return True

@@ -5,7 +5,7 @@ from kraken.core.io.kraken_saver import KrakenSaver
 from kraken.core.io.kraken_loader import KrakenLoader
 from kraken.helpers.utility_methods import logHierarchy
 
-from kraken.examples.bob_rig import BobRig
+from kraken_examples.bob_rig import BobRig
 
 
 bob = BobRig("Bob")

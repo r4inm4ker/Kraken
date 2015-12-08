@@ -1,0 +1,121 @@
+Failed to find DCC builder. Falling back to Python builder.
+building:tentacle as:Ltentacle
+building:tentacle.controls as:controls
+building:tentacle.controls.tentacle as:tentacle_L_cmp
+building:tentacle.controls.tentacle.inputs as:tentacle_L_inputs_hrc
+building:tentacle.controls.tentacle.inputs.rootInput as:tentacle_L_rootInput_cmpIn
+building:tentacle.controls.tentacle.outputs as:tentacle_L_outputs_hrc
+building:tentacle.controls.tentacle.outputs.tentacleEndXfoOutput as:tentacle_L_tentacleEndXfoOutput_cmpOut
+building:tentacle.controls.tentacle.outputs.bone01 as:tentacle_L_bone01_cmpOut
+building:tentacle.controls.tentacle.outputs.bone02 as:tentacle_L_bone02_cmpOut
+building:tentacle.controls.tentacle.outputs.bone03 as:tentacle_L_bone03_cmpOut
+building:tentacle.controls.tentacle.outputs.bone04 as:tentacle_L_bone04_cmpOut
+building:tentacle.controls.tentacle.outputs.bone05 as:tentacle_L_bone05_cmpOut
+building:tentacle.controls.tentacle.outputs.bone06 as:tentacle_L_bone06_cmpOut
+building:tentacle.controls.tentacle.outputs.bone07 as:tentacle_L_bone07_cmpOut
+building:tentacle.controls.tentacle.outputs.bone08 as:tentacle_L_bone08_cmpOut
+building:tentacle.controls.tentacle.outputs.bone09 as:tentacle_L_bone09_cmpOut
+building:tentacle.controls.tentacle.outputs.bone10 as:tentacle_L_bone10_cmpOut
+building:tentacle.controls.tentacle.outputs.bone11 as:tentacle_L_bone11_cmpOut
+building:tentacle.controls.tentacle.outputs.bone12 as:tentacle_L_bone12_cmpOut
+building:tentacle.controls.tentacle.ChainBase as:tentacle_L_ChainBase_loc
+building:tentacle.controls.tentacle.bone01FK as:tentacle_L_bone01FK_ctrlSpace
+building:tentacle.controls.tentacle.bone01FK.bone01FK as:tentacle_L_bone01FK_ctrl
+building:tentacle.controls.tentacle.bone01FK.bone01FK.bone02FK as:tentacle_L_bone02FK_ctrlSpace
+building:tentacle.controls.tentacle.bone01FK.bone01FK.bone02FK.bone02FK as:tentacle_L_bone02FK_ctrl
+building:tentacle.controls.tentacle.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK as:tentacle_L_bone03FK_ctrlSpace
+building:tentacle.controls.tentacle.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK as:tentacle_L_bone03FK_ctrl
+building:tentacle.controls.tentacle.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK.bone04FK as:tentacle_L_bone04FK_ctrlSpace
+building:tentacle.controls.tentacle.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK.bone04FK.bone04FK as:tentacle_L_bone04FK_ctrl
+building:tentacle.controls.tentacle.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK.bone04FK.bone04FK.bone05FK as:tentacle_L_bone05FK_ctrlSpace
+building:tentacle.controls.tentacle.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK.bone04FK.bone04FK.bone05FK.bone05FK as:tentacle_L_bone05FK_ctrl
+building:tentacle.controls.tentacle.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK.bone04FK.bone04FK.bone05FK.bone05FK.bone06FK as:tentacle_L_bone06FK_ctrlSpace
+building:tentacle.controls.tentacle.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK.bone04FK.bone04FK.bone05FK.bone05FK.bone06FK.bone06FK as:tentacle_L_bone06FK_ctrl
+building:tentacle.controls.tentacle.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK.bone04FK.bone04FK.bone05FK.bone05FK.bone06FK.bone06FK.bone07FK as:tentacle_L_bone07FK_ctrlSpace
+building:tentacle.controls.tentacle.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK.bone04FK.bone04FK.bone05FK.bone05FK.bone06FK.bone06FK.bone07FK.bone07FK as:tentacle_L_bone07FK_ctrl
+building:tentacle.controls.tentacle.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK.bone04FK.bone04FK.bone05FK.bone05FK.bone06FK.bone06FK.bone07FK.bone07FK.bone08FK as:tentacle_L_bone08FK_ctrlSpace
+building:tentacle.controls.tentacle.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK.bone04FK.bone04FK.bone05FK.bone05FK.bone06FK.bone06FK.bone07FK.bone07FK.bone08FK.bone08FK as:tentacle_L_bone08FK_ctrl
+building:tentacle.controls.tentacle.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK.bone04FK.bone04FK.bone05FK.bone05FK.bone06FK.bone06FK.bone07FK.bone07FK.bone08FK.bone08FK.bone09FK as:tentacle_L_bone09FK_ctrlSpace
+building:tentacle.controls.tentacle.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK.bone04FK.bone04FK.bone05FK.bone05FK.bone06FK.bone06FK.bone07FK.bone07FK.bone08FK.bone08FK.bone09FK.bone09FK as:tentacle_L_bone09FK_ctrl
+building:tentacle.controls.tentacle.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK.bone04FK.bone04FK.bone05FK.bone05FK.bone06FK.bone06FK.bone07FK.bone07FK.bone08FK.bone08FK.bone09FK.bone09FK.bone10FK as:tentacle_L_bone10FK_ctrlSpace
+building:tentacle.controls.tentacle.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK.bone04FK.bone04FK.bone05FK.bone05FK.bone06FK.bone06FK.bone07FK.bone07FK.bone08FK.bone08FK.bone09FK.bone09FK.bone10FK.bone10FK as:tentacle_L_bone10FK_ctrl
+building:tentacle.controls.tentacle.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK.bone04FK.bone04FK.bone05FK.bone05FK.bone06FK.bone06FK.bone07FK.bone07FK.bone08FK.bone08FK.bone09FK.bone09FK.bone10FK.bone10FK.bone11FK as:tentacle_L_bone11FK_ctrlSpace
+building:tentacle.controls.tentacle.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK.bone04FK.bone04FK.bone05FK.bone05FK.bone06FK.bone06FK.bone07FK.bone07FK.bone08FK.bone08FK.bone09FK.bone09FK.bone10FK.bone10FK.bone11FK.bone11FK as:tentacle_L_bone11FK_ctrl
+building:tentacle.controls.tentacle.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK.bone04FK.bone04FK.bone05FK.bone05FK.bone06FK.bone06FK.bone07FK.bone07FK.bone08FK.bone08FK.bone09FK.bone09FK.bone10FK.bone10FK.bone11FK.bone11FK.bone12FK as:tentacle_L_bone12FK_ctrlSpace
+building:tentacle.controls.tentacle.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK.bone04FK.bone04FK.bone05FK.bone05FK.bone06FK.bone06FK.bone07FK.bone07FK.bone08FK.bone08FK.bone09FK.bone09FK.bone10FK.bone10FK.bone11FK.bone11FK.bone12FK.bone12FK as:tentacle_L_bone12FK_ctrl
+building:tentacle.controls.tentacle.IK as:tentacle_L_IK_ctrlSpace
+building:tentacle.controls.tentacle.IK.IK as:tentacle_L_IK_ctrl
+building:tentacle.deformers as:deformers
+building:tentacle.deformers.tentacle as:tentacle_L_cmp
+building:tentacle.deformers.tentacle.bone01 as:tentacle_L_bone01_def
+building:tentacle.deformers.tentacle.bone02 as:tentacle_L_bone02_def
+building:tentacle.deformers.tentacle.bone03 as:tentacle_L_bone03_def
+building:tentacle.deformers.tentacle.bone04 as:tentacle_L_bone04_def
+building:tentacle.deformers.tentacle.bone05 as:tentacle_L_bone05_def
+building:tentacle.deformers.tentacle.bone06 as:tentacle_L_bone06_def
+building:tentacle.deformers.tentacle.bone07 as:tentacle_L_bone07_def
+building:tentacle.deformers.tentacle.bone08 as:tentacle_L_bone08_def
+building:tentacle.deformers.tentacle.bone09 as:tentacle_L_bone09_def
+building:tentacle.deformers.tentacle.bone10 as:tentacle_L_bone10_def
+building:tentacle.deformers.tentacle.bone11 as:tentacle_L_bone11_def
+building:tentacle.deformers.tentacle.bone12 as:tentacle_L_bone12_def
+tentacle:L
+tentacle:L.controls
+tentacle:L.controls.tentacle:L
+tentacle:L.controls.tentacle:L.inputs
+tentacle:L.controls.tentacle:L.inputs.rootInput
+tentacle:L.controls.tentacle:L.outputs
+tentacle:L.controls.tentacle:L.outputs.tentacleEndXfoOutput
+tentacle:L.controls.tentacle:L.outputs.bone01
+tentacle:L.controls.tentacle:L.outputs.bone02
+tentacle:L.controls.tentacle:L.outputs.bone03
+tentacle:L.controls.tentacle:L.outputs.bone04
+tentacle:L.controls.tentacle:L.outputs.bone05
+tentacle:L.controls.tentacle:L.outputs.bone06
+tentacle:L.controls.tentacle:L.outputs.bone07
+tentacle:L.controls.tentacle:L.outputs.bone08
+tentacle:L.controls.tentacle:L.outputs.bone09
+tentacle:L.controls.tentacle:L.outputs.bone10
+tentacle:L.controls.tentacle:L.outputs.bone11
+tentacle:L.controls.tentacle:L.outputs.bone12
+tentacle:L.controls.tentacle:L.ChainBase
+tentacle:L.controls.tentacle:L.bone01FK
+tentacle:L.controls.tentacle:L.bone01FK.bone01FK
+tentacle:L.controls.tentacle:L.bone01FK.bone01FK.bone02FK
+tentacle:L.controls.tentacle:L.bone01FK.bone01FK.bone02FK.bone02FK
+tentacle:L.controls.tentacle:L.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK
+tentacle:L.controls.tentacle:L.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK
+tentacle:L.controls.tentacle:L.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK.bone04FK
+tentacle:L.controls.tentacle:L.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK.bone04FK.bone04FK
+tentacle:L.controls.tentacle:L.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK.bone04FK.bone04FK.bone05FK
+tentacle:L.controls.tentacle:L.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK.bone04FK.bone04FK.bone05FK.bone05FK
+tentacle:L.controls.tentacle:L.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK.bone04FK.bone04FK.bone05FK.bone05FK.bone06FK
+tentacle:L.controls.tentacle:L.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK.bone04FK.bone04FK.bone05FK.bone05FK.bone06FK.bone06FK
+tentacle:L.controls.tentacle:L.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK.bone04FK.bone04FK.bone05FK.bone05FK.bone06FK.bone06FK.bone07FK
+tentacle:L.controls.tentacle:L.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK.bone04FK.bone04FK.bone05FK.bone05FK.bone06FK.bone06FK.bone07FK.bone07FK
+tentacle:L.controls.tentacle:L.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK.bone04FK.bone04FK.bone05FK.bone05FK.bone06FK.bone06FK.bone07FK.bone07FK.bone08FK
+tentacle:L.controls.tentacle:L.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK.bone04FK.bone04FK.bone05FK.bone05FK.bone06FK.bone06FK.bone07FK.bone07FK.bone08FK.bone08FK
+tentacle:L.controls.tentacle:L.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK.bone04FK.bone04FK.bone05FK.bone05FK.bone06FK.bone06FK.bone07FK.bone07FK.bone08FK.bone08FK.bone09FK
+tentacle:L.controls.tentacle:L.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK.bone04FK.bone04FK.bone05FK.bone05FK.bone06FK.bone06FK.bone07FK.bone07FK.bone08FK.bone08FK.bone09FK.bone09FK
+tentacle:L.controls.tentacle:L.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK.bone04FK.bone04FK.bone05FK.bone05FK.bone06FK.bone06FK.bone07FK.bone07FK.bone08FK.bone08FK.bone09FK.bone09FK.bone10FK
+tentacle:L.controls.tentacle:L.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK.bone04FK.bone04FK.bone05FK.bone05FK.bone06FK.bone06FK.bone07FK.bone07FK.bone08FK.bone08FK.bone09FK.bone09FK.bone10FK.bone10FK
+tentacle:L.controls.tentacle:L.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK.bone04FK.bone04FK.bone05FK.bone05FK.bone06FK.bone06FK.bone07FK.bone07FK.bone08FK.bone08FK.bone09FK.bone09FK.bone10FK.bone10FK.bone11FK
+tentacle:L.controls.tentacle:L.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK.bone04FK.bone04FK.bone05FK.bone05FK.bone06FK.bone06FK.bone07FK.bone07FK.bone08FK.bone08FK.bone09FK.bone09FK.bone10FK.bone10FK.bone11FK.bone11FK
+tentacle:L.controls.tentacle:L.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK.bone04FK.bone04FK.bone05FK.bone05FK.bone06FK.bone06FK.bone07FK.bone07FK.bone08FK.bone08FK.bone09FK.bone09FK.bone10FK.bone10FK.bone11FK.bone11FK.bone12FK
+tentacle:L.controls.tentacle:L.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK.bone04FK.bone04FK.bone05FK.bone05FK.bone06FK.bone06FK.bone07FK.bone07FK.bone08FK.bone08FK.bone09FK.bone09FK.bone10FK.bone10FK.bone11FK.bone11FK.bone12FK.bone12FK
+tentacle:L.controls.tentacle:L.IK
+tentacle:L.controls.tentacle:L.IK.IK
+tentacle:L.deformers
+tentacle:L.deformers.tentacle:L
+tentacle:L.deformers.tentacle:L.bone01
+tentacle:L.deformers.tentacle:L.bone02
+tentacle:L.deformers.tentacle:L.bone03
+tentacle:L.deformers.tentacle:L.bone04
+tentacle:L.deformers.tentacle:L.bone05
+tentacle:L.deformers.tentacle:L.bone06
+tentacle:L.deformers.tentacle:L.bone07
+tentacle:L.deformers.tentacle:L.bone08
+tentacle:L.deformers.tentacle:L.bone09
+tentacle:L.deformers.tentacle:L.bone10
+tentacle:L.deformers.tentacle:L.bone11
+tentacle:L.deformers.tentacle:L.bone12

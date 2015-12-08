@@ -1,14 +1,27 @@
 Failed to find DCC builder. Falling back to Python builder.
-L_Clavicle
-L_Clavicle.controls
-L_Clavicle.controls.Clavicle
-L_Clavicle.controls.Clavicle.inputs
-L_Clavicle.controls.Clavicle.inputs.spineEnd
-L_Clavicle.controls.Clavicle.outputs
-L_Clavicle.controls.Clavicle.outputs.clavicleEnd
-L_Clavicle.controls.Clavicle.outputs.clavicle
-L_Clavicle.controls.Clavicle.clavicle
-L_Clavicle.controls.Clavicle.clavicle.clavicle
-L_Clavicle.deformers
-L_Clavicle.deformers.Clavicle
-L_Clavicle.deformers.Clavicle.clavicle
+building:Clavicle as:LClavicle
+building:Clavicle.controls as:controls
+building:Clavicle.controls.Clavicle as:Clavicle_L_cmp
+building:Clavicle.controls.Clavicle.inputs as:Clavicle_L_inputs_hrc
+building:Clavicle.controls.Clavicle.inputs.spineEnd as:Clavicle_L_spineEnd_cmpIn
+building:Clavicle.controls.Clavicle.outputs as:Clavicle_L_outputs_hrc
+building:Clavicle.controls.Clavicle.outputs.clavicle as:Clavicle_L_clavicle_cmpOut
+building:Clavicle.controls.Clavicle.outputs.clavicleEnd as:Clavicle_L_clavicleEnd_cmpOut
+building:Clavicle.controls.Clavicle.clavicle as:Clavicle_L_clavicle_ctrlSpace
+building:Clavicle.controls.Clavicle.clavicle.clavicle as:Clavicle_L_clavicle_ctrl
+building:Clavicle.deformers as:deformers
+building:Clavicle.deformers.Clavicle as:Clavicle_L_cmp
+building:Clavicle.deformers.Clavicle.clavicle as:Clavicle_L_clavicle_def
+Clavicle:L
+Clavicle:L.controls
+Clavicle:L.controls.Clavicle:L
+Clavicle:L.controls.Clavicle:L.inputs
+Clavicle:L.controls.Clavicle:L.inputs.spineEnd
+Clavicle:L.controls.Clavicle:L.outputs
+Clavicle:L.controls.Clavicle:L.outputs.clavicle
+Clavicle:L.controls.Clavicle:L.outputs.clavicleEnd
+Clavicle:L.controls.Clavicle:L.clavicle
+Clavicle:L.controls.Clavicle:L.clavicle.clavicle
+Clavicle:L.deformers
+Clavicle:L.deformers.Clavicle:L
+Clavicle:L.deformers.Clavicle:L.clavicle

@@ -8,11 +8,11 @@ from maya import cmds
 def lockObjXfo(dccSceneItem):
     """Locks the dccSceneItem's transform parameters.
 
-    Arguments:
-    dccSceneItem -- Object, DCC object to lock transform parameters on.
+    Args:
+        dccSceneItem (Object): DCC object to lock transform parameters on.
 
-    Return:
-    True if successful.
+    Returns:
+        bool: True if successful.
 
     """
 

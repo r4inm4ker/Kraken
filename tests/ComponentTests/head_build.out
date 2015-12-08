@@ -1,25 +1,49 @@
 Failed to find DCC builder. Falling back to Python builder.
-Head
-Head.controls
-Head.controls.Head
-Head.controls.Head.inputs
-Head.controls.Head.inputs.headBase
-Head.controls.Head.outputs
-Head.controls.Head.outputs.head
-Head.controls.Head.outputs.jaw
-Head.controls.Head.outputs.eyeL
-Head.controls.Head.outputs.eyeR
-Head.controls.Head.head
-Head.controls.Head.head.head
-Head.controls.Head.head.head.eyeLeft
-Head.controls.Head.head.head.eyeLeft.eyeLeft
-Head.controls.Head.head.head.eyeRight
-Head.controls.Head.head.head.eyeRight.eyeRight
-Head.controls.Head.head.head.jawCtrlSpace
-Head.controls.Head.head.head.jawCtrlSpace.jaw
-Head.deformers
-Head.deformers.Head
-Head.deformers.Head.head
-Head.deformers.Head.jaw
-Head.deformers.Head.eyeLeft
-Head.deformers.Head.eyeRight
+building:Head as:MHead
+building:Head.controls as:controls
+building:Head.controls.Head as:Head_M_cmp
+building:Head.controls.Head.inputs as:Head_M_inputs_hrc
+building:Head.controls.Head.inputs.headBase as:Head_M_headBase_cmpIn
+building:Head.controls.Head.outputs as:Head_M_outputs_hrc
+building:Head.controls.Head.outputs.head as:Head_M_head_cmpOut
+building:Head.controls.Head.outputs.jaw as:Head_M_jaw_cmpOut
+building:Head.controls.Head.outputs.eyeL as:Head_M_eyeL_cmpOut
+building:Head.controls.Head.outputs.eyeR as:Head_M_eyeR_cmpOut
+building:Head.controls.Head.head as:Head_M_head_ctrlSpace
+building:Head.controls.Head.head.head as:Head_M_head_ctrl
+building:Head.controls.Head.head.head.eyeLeft as:Head_M_eyeLeft_ctrlSpace
+building:Head.controls.Head.head.head.eyeLeft.eyeLeft as:Head_M_eyeLeft_ctrl
+building:Head.controls.Head.head.head.eyeRight as:Head_M_eyeRight_ctrlSpace
+building:Head.controls.Head.head.head.eyeRight.eyeRight as:Head_M_eyeRight_ctrl
+building:Head.controls.Head.head.head.jawCtrlSpace as:Head_M_jawCtrlSpace_ctrlSpace
+building:Head.controls.Head.head.head.jawCtrlSpace.jaw as:Head_M_jaw_ctrl
+building:Head.deformers as:deformers
+building:Head.deformers.Head as:Head_M_cmp
+building:Head.deformers.Head.head as:Head_M_head_def
+building:Head.deformers.Head.jaw as:Head_M_jaw_def
+building:Head.deformers.Head.eyeLeft as:Head_M_eyeLeft_def
+building:Head.deformers.Head.eyeRight as:Head_M_eyeRight_def
+Head:M
+Head:M.controls
+Head:M.controls.Head:M
+Head:M.controls.Head:M.inputs
+Head:M.controls.Head:M.inputs.headBase
+Head:M.controls.Head:M.outputs
+Head:M.controls.Head:M.outputs.head
+Head:M.controls.Head:M.outputs.jaw
+Head:M.controls.Head:M.outputs.eyeL
+Head:M.controls.Head:M.outputs.eyeR
+Head:M.controls.Head:M.head
+Head:M.controls.Head:M.head.head
+Head:M.controls.Head:M.head.head.eyeLeft
+Head:M.controls.Head:M.head.head.eyeLeft.eyeLeft
+Head:M.controls.Head:M.head.head.eyeRight
+Head:M.controls.Head:M.head.head.eyeRight.eyeRight
+Head:M.controls.Head:M.head.head.jawCtrlSpace
+Head:M.controls.Head:M.head.head.jawCtrlSpace.jaw
+Head:M.deformers
+Head:M.deformers.Head:M
+Head:M.deformers.Head:M.head
+Head:M.deformers.Head:M.jaw
+Head:M.deformers.Head:M.eyeLeft
+Head:M.deformers.Head:M.eyeRight

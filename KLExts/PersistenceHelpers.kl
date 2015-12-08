@@ -1,0 +1,36 @@
+require JSON;
+
+function Quat quatFromJSON(JSONDictValue dict){
+    Quat value;
+    value.v.x = dict.getScalar('x');
+    value.v.y = dict.getScalar('y');
+    value.v.z = dict.getScalar('z');
+    value.w = dict.getScalar('w');
+    return value;
+}
+
+/// constructor provided a Vec4 value
+function JSONDictValue quatToJSON(Quat value){
+    JSONDictValue dict();
+    dict.setScalar('x', value.v.x);
+    dict.setScalar('y', value.v.y);
+    dict.setScalar('z', value.v.z);
+    dict.setScalar('w', value.w);
+    return dict;
+}
+
+function JSONDictValue xfoToJSON(Xfo value) {
+    JSONDictValue dict();
+    dict.setVec3("tr", value.tr);
+    dict.setVec3("sc", value.sc);
+    dict.set("ori", quatToJSON(value.ori));
+    return dict;
+}
+
+function Xfo xfoFromJSON(JSONDictValue dict) {
+    Xfo value;
+    value.tr = dict.getVec3("tr");
+    value.sc = dict.getVec3("sc");
+    value.ori = quatFromJSON(dict.get("ori"));
+    return value;
+}

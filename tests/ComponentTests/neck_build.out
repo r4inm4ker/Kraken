@@ -1,14 +1,27 @@
 Failed to find DCC builder. Falling back to Python builder.
-Neck
-Neck.controls
-Neck.controls.Neck
-Neck.controls.Neck.inputs
-Neck.controls.Neck.inputs.neckBase
-Neck.controls.Neck.outputs
-Neck.controls.Neck.outputs.neckEnd
-Neck.controls.Neck.outputs.neck
-Neck.controls.Neck.neck
-Neck.controls.Neck.neck.neck
-Neck.deformers
-Neck.deformers.Neck
-Neck.deformers.Neck.neck
+building:Neck as:LNeck
+building:Neck.controls as:controls
+building:Neck.controls.Neck as:Neck_L_cmp
+building:Neck.controls.Neck.inputs as:Neck_L_inputs_hrc
+building:Neck.controls.Neck.inputs.neckBase as:Neck_L_neckBase_cmpIn
+building:Neck.controls.Neck.outputs as:Neck_L_outputs_hrc
+building:Neck.controls.Neck.outputs.neck as:Neck_L_neck_cmpOut
+building:Neck.controls.Neck.outputs.neckEnd as:Neck_L_neckEnd_cmpOut
+building:Neck.controls.Neck.neck as:Neck_L_neck_ctrlSpace
+building:Neck.controls.Neck.neck.neck as:Neck_L_neck_ctrl
+building:Neck.deformers as:deformers
+building:Neck.deformers.Neck as:Neck_L_cmp
+building:Neck.deformers.Neck.neck as:Neck_L_neck_def
+Neck:L
+Neck:L.controls
+Neck:L.controls.Neck:L
+Neck:L.controls.Neck:L.inputs
+Neck:L.controls.Neck:L.inputs.neckBase
+Neck:L.controls.Neck:L.outputs
+Neck:L.controls.Neck:L.outputs.neck
+Neck:L.controls.Neck:L.outputs.neckEnd
+Neck:L.controls.Neck:L.neck
+Neck:L.controls.Neck:L.neck.neck
+Neck:L.deformers
+Neck:L.deformers.Neck:L
+Neck:L.deformers.Neck:L.neck

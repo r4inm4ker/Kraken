@@ -1,0 +1,16 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+    <file>images/treeWidget-branch-more.png</file>
+    <file>images/treeWidget-branch-open.png</file>
+    <file>images/treeWidget-vline.png</file>
+    <file>images/Kraken_Icon.png</file>
+    <file>images/KrakenUI_Logo.png</file>
+    <file>images/KrakenUI_Splash.png</file>
+    <file>images/scroll-down-arrow.png</file>
+    <file>images/scroll-left-arrow.png</file>
+    <file>images/scroll-right-arrow.png</file>
+    <file>images/scroll-up-arrow.png</file>
+    <file>images/treeWidget-branch-closed.png</file>
+    <file>images/treeWidget-branch-end.png</file>
+</qresource>
+</RCC>

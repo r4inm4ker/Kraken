@@ -1,24 +1,65 @@
 Failed to find DCC builder. Falling back to Python builder.
-L_Leg
-L_Leg.controls
-L_Leg.controls.Leg
-L_Leg.controls.Leg.inputs
-L_Leg.controls.Leg.inputs.pelvisInput
-L_Leg.controls.Leg.outputs
-L_Leg.controls.Leg.outputs.femur
-L_Leg.controls.Leg.outputs.shin
-L_Leg.controls.Leg.outputs.legEndXfo
-L_Leg.controls.Leg.outputs.legEndPos
-L_Leg.controls.Leg.femurFK
-L_Leg.controls.Leg.femurFK.femurFK
-L_Leg.controls.Leg.femurFK.femurFK.shinFK
-L_Leg.controls.Leg.femurFK.femurFK.shinFK.shinFK
-L_Leg.controls.Leg.IK
-L_Leg.controls.Leg.IK.IK
-L_Leg.controls.Leg.UpV
-L_Leg.controls.Leg.UpV.UpV
-L_Leg.deformers
-L_Leg.deformers.Leg
-L_Leg.deformers.Leg.femur
-L_Leg.deformers.Leg.shin
-L_Leg.deformers.Leg.ankle
+building:Leg as:LLeg
+building:Leg.controls as:controls
+building:Leg.controls.Leg as:Leg_L_cmp
+building:Leg.controls.Leg.inputs as:Leg_L_inputs_hrc
+building:Leg.controls.Leg.inputs.globalSRT as:Leg_L_globalSRT_cmpIn
+building:Leg.controls.Leg.inputs.pelvisInput as:Leg_L_pelvisInput_cmpIn
+building:Leg.controls.Leg.outputs as:Leg_L_outputs_hrc
+building:Leg.controls.Leg.outputs.femur as:Leg_L_femur_cmpOut
+building:Leg.controls.Leg.outputs.shin as:Leg_L_shin_cmpOut
+building:Leg.controls.Leg.outputs.legEndXfo as:Leg_L_legEndXfo_cmpOut
+building:Leg.controls.Leg.outputs.foot as:Leg_L_foot_cmpOut
+building:Leg.controls.Leg.outputs.toe as:Leg_L_toe_cmpOut
+building:Leg.controls.Leg.femurFK as:Leg_L_femurFK_ctrlSpace
+building:Leg.controls.Leg.femurFK.femurFK as:Leg_L_femurFK_ctrl
+building:Leg.controls.Leg.femurFK.femurFK.shinFK as:Leg_L_shinFK_ctrlSpace
+building:Leg.controls.Leg.femurFK.femurFK.shinFK.shinFK as:Leg_L_shinFK_ctrl
+building:Leg.controls.Leg.IK as:Leg_L_IK_ctrlSpace
+building:Leg.controls.Leg.IK.IK as:Leg_L_IK_ctrl
+building:Leg.controls.Leg.foot as:Leg_L_foot_ctrlSpace
+building:Leg.controls.Leg.foot.foot as:Leg_L_foot_ctrl
+building:Leg.controls.Leg.foot.foot.toe as:Leg_L_toe_ctrlSpace
+building:Leg.controls.Leg.foot.foot.toe.toe as:Leg_L_toe_ctrl
+building:Leg.controls.Leg.footRef as:Leg_L_footRef_loc
+building:Leg.controls.Leg.UpV as:Leg_L_UpV_ctrlSpace
+building:Leg.controls.Leg.UpV.UpV as:Leg_L_UpV_ctrl
+building:Leg.deformers as:deformers
+building:Leg.deformers.Leg as:Leg_L_cmp
+building:Leg.deformers.Leg.femur as:Leg_L_femur_def
+building:Leg.deformers.Leg.shin as:Leg_L_shin_def
+building:Leg.deformers.Leg.ankle as:Leg_L_ankle_def
+building:Leg.deformers.Leg.foot as:Leg_L_foot_def
+building:Leg.deformers.Leg.toe as:Leg_L_toe_def
+Leg:L
+Leg:L.controls
+Leg:L.controls.Leg:L
+Leg:L.controls.Leg:L.inputs
+Leg:L.controls.Leg:L.inputs.globalSRT
+Leg:L.controls.Leg:L.inputs.pelvisInput
+Leg:L.controls.Leg:L.outputs
+Leg:L.controls.Leg:L.outputs.femur
+Leg:L.controls.Leg:L.outputs.shin
+Leg:L.controls.Leg:L.outputs.legEndXfo
+Leg:L.controls.Leg:L.outputs.foot
+Leg:L.controls.Leg:L.outputs.toe
+Leg:L.controls.Leg:L.femurFK
+Leg:L.controls.Leg:L.femurFK.femurFK
+Leg:L.controls.Leg:L.femurFK.femurFK.shinFK
+Leg:L.controls.Leg:L.femurFK.femurFK.shinFK.shinFK
+Leg:L.controls.Leg:L.IK
+Leg:L.controls.Leg:L.IK.IK
+Leg:L.controls.Leg:L.foot
+Leg:L.controls.Leg:L.foot.foot
+Leg:L.controls.Leg:L.foot.foot.toe
+Leg:L.controls.Leg:L.foot.foot.toe.toe
+Leg:L.controls.Leg:L.footRef
+Leg:L.controls.Leg:L.UpV
+Leg:L.controls.Leg:L.UpV.UpV
+Leg:L.deformers
+Leg:L.deformers.Leg:L
+Leg:L.deformers.Leg:L.femur
+Leg:L.deformers.Leg:L.shin
+Leg:L.deformers.Leg:L.ankle
+Leg:L.deformers.Leg:L.foot
+Leg:L.deformers.Leg:L.toe

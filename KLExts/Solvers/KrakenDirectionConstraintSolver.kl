@@ -1,0 +1,53 @@
+require InlineDrawing;
+require Geometry;
+
+object DirectionConstraintSolver : KrakenSolver {
+};
+
+
+// Return Arguments for Kraken
+function KrakenSolverArg[] DirectionConstraintSolver.getArguments(){
+  KrakenSolverArg args[] = this.parent.getArguments();
+  args.push(KrakenSolverArg('position', 'in', 'Mat44'));
+  args.push(KrakenSolverArg('upVector', 'in', 'Mat44'));
+  args.push(KrakenSolverArg('atVector', 'in', 'Mat44'));
+  args.push(KrakenSolverArg('constrainee', 'out', 'Mat44'));
+  return args;
+}
+
+
+// Solve
+function DirectionConstraintSolver.solve!
+(
+  in Boolean drawDebug,
+  in Scalar rigScale,
+  in Mat44 position,
+  in Mat44 upVector,
+  in Mat44 atVector,
+  io Mat44 constrainee
+  )
+{
+  Vec3 toAtVector = atVector.translation().subtract(position.translation()).unit();
+  Vec3 toUpVector = upVector.translation().subtract(position.translation()).unit();
+  Vec3 normal = toAtVector.cross(toUpVector).unit();
+  Vec3 yAxis = normal.cross(toAtVector).unit();
+
+  Mat33 outAlignment;
+  outAlignment.setColumns(toAtVector, yAxis, normal);
+
+  Quat rotation;
+  rotation.setFromMat33(outAlignment);
+
+  Xfo outXfo;
+  outXfo.tr = position.translation();
+  outXfo.ori = rotation;
+
+  constrainee = outXfo.toMat44();
+
+  // Set debugging visibility.
+  this.setDebug(this.drawDebug);
+  if(this.drawDebug){
+    Color boneColor = Color(0.0, 0.0, 1.0);
+    etDrawBone(this.handle.rootTransform, 'singleBone', constrainee, 1.0, 0.25, boneColor);
+  }
+}

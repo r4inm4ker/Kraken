@@ -51,7 +51,8 @@ function Scalar[] measureBezierLength(Vec3 coeffs[4], UInt32 numSamples){
 // Solve
 function BezierSpineSolver.solve!
 (
-  Boolean debug,
+  Boolean drawDebug,
+  Scalar rigScale,
   Scalar length,
   Mat44 base,
   Mat44 baseHandle,
@@ -62,44 +63,58 @@ function BezierSpineSolver.solve!
 {
   Vec3 coeffs[4] = bezierCoeffs(base.translation(), baseHandle.translation(), tipHandle.translation(), tip.translation());
   // sample the curve 2x for every output joint
-  Scalar distances[] = measureBezierLength(coeffs, outputs.size*2);
-  Scalar chainLength = distances[distances.size-1];
-  Scalar segLength = length / Scalar(outputs.size);
+  Scalar distances[] = measureBezierLength(coeffs, outputs.size() * 2);
+  Scalar curveLength = distances[distances.size() - 1];
+
+  Scalar jointLength = (length * rigScale) / Scalar(outputs.size());
   Scalar currIndex = 1;
   Xfo baseXfo(base);
   Xfo tipXfo(tip);
-  for(UInt32 i=0; i<outputs.size; i++){
-    
+
+  // Adding an offset to align the output's x axis down the length of the spine.
+  Quat xAlignmentOffset;
+  xAlignmentOffset.setFromAxisAndAngle(Vec3(0, 1, 0), HALF_PI);
+  baseXfo.ori = baseXfo.ori * xAlignmentOffset;
+  tipXfo.ori = tipXfo.ori * xAlignmentOffset;
+
+  Vec3 tipPositions[];
+  tipPositions.resize(outputs.size());
+  Xfo preXfo;
+  for(UInt32 i=0; i<outputs.size(); i++){
+
     Xfo outXfo;
     {
       // Compute the translation by projecting the local vector by the parent matrix.
       if(i==0)
         outXfo.tr = base.translation();
       else
-        outXfo.tr = outputs[i-1] * Vec3(0.0, segLength, 0.0);
+        // transform the vector without applying scale.
+        outXfo.tr = preXfo.tr + preXfo.ori.rotateVector(Vec3(jointLength, 0.0, 0.0));
     }
 
     {
       // Compute the rotation by linear interpollating the base and tip controllers.
-      Scalar fractVal = Scalar(i+0.5) / Scalar(outputs.size);
+      Scalar fractVal = Scalar(i + 0.5) / Scalar(outputs.size());
       outXfo.ori = baseXfo.ori.sphericalLinearInterpolate(tipXfo.ori, fractVal );
     }
     {
-      // Determin the curve parameter for the tip of the joint
+      // Determine the curve parameter for the tip of the joint
       // by walking the curve's distance values.
-      Scalar tipDist = segLength * (i+1);
+      Scalar tipDist = jointLength * (i+1);
       Scalar curveTipParam;
-      if(tipDist < chainLength){
-        for(UInt32 j=currIndex; j<distances.size; j++){
-          if(distances[j] > tipDist){
+      if(tipDist < curveLength) {
+        for(UInt32 j=currIndex; j < distances.size(); j++) {
+          if(distances[j] > tipDist) {
             currIndex = j-1;
-            curveTipParam = (Scalar(currIndex) / Scalar(distances.size)) + (((tipDist - distances[j-1]) / segLength) * (1.0 / Scalar(distances.size)));
+            Float32 ratio = (tipDist - distances[j - 1]) / (distances[j] - distances[j - 1]);
+            curveTipParam = (Scalar(currIndex) / Scalar(distances.size() - 1)) + ( ratio / Scalar(distances.size() - 1));
             break;
           }
         }
       }
-      else
-        curveTipParam = 1.0 + (((tipDist - chainLength) / segLength) * outputs.size);
+      else {
+        curveTipParam = 1.0 + (((tipDist - curveLength) / jointLength));
+      }
 
       // Compute the postion on the curve of the tip of the spine.
       Vec3 targ;
@@ -107,32 +122,43 @@ function BezierSpineSolver.solve!
         // Measure the exact position on the curve using the computed parameter.
         targ = evalBezier(coeffs, curveTipParam);
       else
-        // project a postiion off the end of the bezier curve
-        targ = tipXfo.tr + (tipXfo.tr - tipHandle.translation()).unit() * ((curveTipParam - 1.0) * segLength);
+        {
+          // project a postiion off the end of the bezier curve
+          targ = tipXfo.tr + (tipXfo.tr - tipHandle.translation()).unit() * ((curveTipParam - 1.0) * jointLength);
+        }
+
+      tipPositions[i] = targ;
 
       // Align the joint so it points at the target position computed.
       Quat alignment;
-      alignment.setFrom2Vectors(outXfo.ori.getYaxis(), (targ - outXfo.tr).unit());
+      alignment.setFrom2Vectors(outXfo.ori.getXaxis(), (targ - outXfo.tr).unit());
       outXfo.ori = alignment * outXfo.ori;
     }
-    
+
+    // Set scaling
+    Vec3 outScaling = Vec3(rigScale, rigScale, rigScale);
+    outXfo.sc = outScaling;
+
+    preXfo = outXfo;
     outputs[i] = outXfo.toMat44();
   }
-/*
+
 
   // Set debugging visibility.
-  this.setDebug(debug);
-  if(this.debug){
+  this.setDebug(drawDebug);
+  if(this.drawDebug){
 
     Vec3 positions[];
-    for(UInt32 i=0; i<20; i++){
+    for(UInt32 i=0; i<=20; i++){
       positions.push(evalBezier(coeffs, Scalar(i)/Scalar(20)));
     }
     drawLineStrip(this.handle.rootTransform, 'curve', positions, Color(1.0, 0.0, 0));
 
-    Color boneColor(1.0, 1.0, 0);
-    for(UInt32 i=0; i<outputs.size; i++)
-      etDrawBone(this.handle.rootTransform, 'constraint'+i, outputs[i], segLength, segLength * 0.25, boneColor);
+    InlinePointsShape myShape = drawPoints(this.handle.rootTransform, 'tipPositions', tipPositions, Color(0.0, 1.0, 0), 2);
+
+    // Color boneColor(1.0, 1.0, 0);
+    // for(UInt32 i=0; i<outputs.size(); i++)
+    //   etDrawBone(this.handle.rootTransform, 'constraint'+i, outputs[i], jointLength, jointLength * 0.25, boneColor);
   }
-  */
+
 }

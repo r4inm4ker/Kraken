@@ -17,13 +17,41 @@ class Control(Curve):
     def __init__(self, name, parent=None, shape="null"):
         """Initializes control object.
 
-        Arguments:
-        name -- String, Name of the constraint.
-        parent -- Object, parent object of this object.
+        Args:
+            name (str): Name of the constraint.
+            parent (Object): Parent object of this object.
 
         """
 
         super(Control, self).__init__(name, parent=parent)
+        self.shape = shape
+
+        self.setShape(shape)
+
+    # ==============
+    # Shape Methods
+    # ==============
+    def getShape(self):
+        """Returns the shape that the control was set to.
+
+        Returns:
+            str: Name of the shape that was set.
+
+        """
+
+        return self.shape
+
+
+    def setShape(self, shape):
+        """Sets the shape of the control to the one specified.
+
+        Args:
+            shape (str): the desired shape of the control.
+
+        Returns:
+            bool: True if successful.
+
+        """
 
         config = Config.getInstance()
         configShapes = config.getControlShapes()
@@ -32,6 +60,9 @@ class Control(Curve):
 
         self.setCurveData(configShapes[shape])
 
+        return True
+
+
 
     # ==============
     # Align Methods
@@ -39,11 +70,11 @@ class Control(Curve):
     def alignOnXAxis(self, negative=False):
         """Aligns the control shape on the X axis.
 
-        Arguments:
-        negative -- Boolean, whether to align the control on the negative X axis.
+        Args:
+            negative (bool): Whether to align the control on the negative X axis.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -79,11 +110,11 @@ class Control(Curve):
     def alignOnYAxis(self, negative=False):
         """Aligns the control shape on the Y axis.
 
-        Arguments:
-        negative -- Boolean, whether to align the control on the negative Y axis.
+        Args:
+            negative (bool): Whether to align the control on the negative Y axis.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -118,11 +149,11 @@ class Control(Curve):
     def alignOnZAxis(self, negative=False):
         """Aligns the control shape on the Z axis.
 
-        Arguments:
-        negative -- Boolean, whether to align the control on the negative Z axis.
+        Args:
+            negative (bool): Whether to align the control on the negative Z axis.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -160,11 +191,11 @@ class Control(Curve):
     def scalePoints(self, scaleVec):
         """Scales the point positions from it's center.
 
-        Arguments:
-        scaleVec -- Vec3, scale value to apply to the points.
+        Args:
+            scaleVec (Vec3): scale value to apply to the points.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -187,13 +218,13 @@ class Control(Curve):
     def rotatePoints(self, xRot, yRot, zRot):
         """Rotates the points by the input values.
 
-        Arguments:
-        xRot -- Float, euler x rotate value.
-        yRot -- Float, euler y rotate value.
-        zRot -- Float, euler z rotate value.
+        Args:
+            xRot (float): Euler x rotate value.
+            yRot (float): Euler y rotate value.
+            zRot (float): Euler z rotate value.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -224,11 +255,11 @@ class Control(Curve):
     def translatePoints(self, translateVec):
         """Translates the control points.
 
-        Arguments:
-        translateVec -- Vec3, translation values to apply to the points.
+        Args:
+            translateVec (Vec3): Translation values to apply to the points.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 

@@ -25,8 +25,8 @@ class Curve(Object3D):
     def getCurveData(self):
         """Returns the data of the curve.
 
-        Return:
-        List, dictionaries defining each sub-curve of this curve.
+        Returns:
+            list: Dictionaries defining each sub-curve of this curve.
 
         """
 
@@ -37,10 +37,10 @@ class Curve(Object3D):
         """Sets the curve data.
 
         Arguments:
-        data -- List, dictionaries defining each sub-curve of this curve.
+        data (list): Dictionaries defining each sub-curve of this curve.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -53,11 +53,11 @@ class Curve(Object3D):
         """Appends sub-curve data to this curve.
 
         Arguments:
-        data -- List, dictionaries defining each sub-curve being added to this
+        data (list): Dictionaries defining each sub-curve being added to this
         curve.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -72,12 +72,12 @@ class Curve(Object3D):
     def checkSubCurveIndex(self, index):
         """Checks the supplied index is valid.
 
-        Arguments:
-        index -- Integer, sub-curve index to check.
+        Args:
+            index (int): Sub-curve index to check.
 
         """
 
-        if index > len(self._data):
+        if index > len(self.getCurveData()):
             raise IndexError("'" + str(index) + "' is out of the range of the 'data' array.")
 
         return True
@@ -86,22 +86,22 @@ class Curve(Object3D):
     def getNumSubCurves(self):
         """Returns the number of sub-curves on this object.
 
-        Return:
-        Integer, number of sub-curves in this object.
+        Returns:
+            int: Number of sub-curves in this object.
 
         """
 
-        return len(self._data)
+        return len(self.getCurveData())
 
 
     def getSubCurveClosed(self, index):
         """Returns whether the sub-curve is closed or not.
 
-        Arguments:
-        index -- Integer, index of the sub-curve to query.
+        Args:
+            index (int): Index of the sub-curve to query.
 
-        Return:
-        True or False if the sub-curve is closed.
+        Returns:
+            bool: True if the sub-curve is closed.
 
         """
 
@@ -115,10 +115,10 @@ class Curve(Object3D):
         """Get the sub-curve data by it's index.
 
         Arguments:
-        index -- Integer, index of the sub-curve to get the data for.
+            index (int): Index of the sub-curve to get the data for.
 
-        Return:
-        Dict, data defining the sub-curve.
+        Returns:
+            dict: Data defining the sub-curve.
 
         """
 
@@ -132,11 +132,11 @@ class Curve(Object3D):
         """Sets the sub-curve data.
 
         Arguments:
-        index -- Integer, index of the sub-curve to get the data for.
-        data -- Dict, defining the sub-curve data.
+            index (int): Index of the sub-curve to get the data for.
+            data (dict): Defining the sub-curve data.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -151,11 +151,11 @@ class Curve(Object3D):
     def removeSubCurveByIndex(self, index):
         """Removes a sub-curve by its index.
 
-        Arguments:
-        index -- Integer, Index of the sub-curve to remove.
+        Args:
+            index (int): Index of the sub-curve to remove.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 

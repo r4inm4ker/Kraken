@@ -2,7 +2,7 @@
 from kraken import plugins
 from kraken.core.maths import Xfo, Vec3, Quat
 from kraken.core.profiler import Profiler
-from kraken.examples.clavicle_component import ClavicleComponentGuide, ClavicleComponent
+from kraken_examples.clavicle_component import ClavicleComponentGuide, ClavicleComponentRig
 from kraken.helpers.utility_methods import logHierarchy
 import json
 
@@ -11,7 +11,7 @@ Profiler.getInstance().push("clavicle_build")
 
 clavicleGuide = ClavicleComponentGuide("clavicle")
 clavicleGuide.loadData({
-        "name": "L_Clavicle",
+        "name": "Clavicle",
         "location": "L",
         "clavicleXfo": Xfo(Vec3(0.1322, 15.403, -0.5723)),
         "clavicleUpVXfo": Xfo(Vec3(0.0, 1.0, 0.0)),
@@ -21,9 +21,9 @@ clavicleGuide.loadData({
 # Save the clavicle guid data for persistence.
 saveData = clavicleGuide.saveData()
 
-clavicleGuideData = clavicleGuide.getGuideData()
+clavicleGuideData = clavicleGuide.getRigBuildData()
 
-clavicle = ClavicleComponent()
+clavicle = ClavicleComponentRig()
 clavicle.loadData(clavicleGuideData)
 
 builder = plugins.getBuilder()

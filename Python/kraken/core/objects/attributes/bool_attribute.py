@@ -12,19 +12,19 @@ from kraken.core.kraken_system import ks
 class BoolAttribute(Attribute):
     """Boolean Attribute. Implemented value type checking and limiting."""
 
-    def __init__(self, name, value=False):
-        super(BoolAttribute, self).__init__(name, value)
+    def __init__(self, name, value=False, parent=None):
+        super(BoolAttribute, self).__init__(name, value=value, parent=parent)
         assert type(value) is bool, "Value is not of type 'bool'."
 
 
     def setValue(self, value):
-        """Sets the value of the attribute.
+        """Sets the value of the attribute..
 
-        Arguments:
-        value -- Value to set the attribute to.
+        Args:
+            value (bool): Value to set the attribute to.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -39,9 +39,23 @@ class BoolAttribute(Attribute):
     def getRTVal(self):
         """Returns and RTVal object for this attribute.
 
-        Return:
-        RTVal
+        Returns:
+            RTVal: RTVal object of the attribute.
 
         """
 
-        return ks.rtVal('Boolean', self.value)
+        return ks.rtVal('Boolean', self._value)
+
+
+    def getDataType(self):
+        """Returns the name of the data type for this attribute.
+
+        Note:
+            This is a localized method specific to the Boolean Attribute.
+
+        Returns:
+            str: String name of the attribute type.
+
+        """
+
+        return 'Boolean'

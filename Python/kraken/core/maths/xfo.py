@@ -24,7 +24,7 @@ class Xfo(MathObject):
         else:
             self._rtval = ks.rtVal('Xfo')
             if isinstance(tr, Xfo):
-                self.set(tr=tr.tr, y=tr.ori, z=tr.sc)
+                self.set(tr=tr.tr, ori=tr.ori, sc=tr.sc)
             else:
                 if tr is not None:
                     self.tr = tr
@@ -35,7 +35,12 @@ class Xfo(MathObject):
 
 
     def __str__(self):
-        """String representation of Transform."""
+        """String representation of Transform.
+
+        Returns:
+            str: String representation of Transform.
+
+        """
 
         stringRep = "Xfo(ori=" + str(self.ori)
         stringRep += ", tr=" + str(self.tr)
@@ -48,8 +53,8 @@ class Xfo(MathObject):
     def tr(self):
         """Gets translation property of this transform.
 
-        Return:
-        Scalar, translation property of this transform.
+        Returns:
+            float: Translation property of this transform.
 
         """
 
@@ -60,11 +65,11 @@ class Xfo(MathObject):
     def tr(self, value):
         """Sets translation of this transform.
 
-        Arguments:
-        value -- Vec3, vector to set the translation by.
+        Args:
+            value (Vec3): Vector to set the translation by.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -77,8 +82,8 @@ class Xfo(MathObject):
     def ori(self):
         """Gets orientation property of this transform.
 
-        Return:
-        Scalar, orientation property of this transform.
+        Returns:
+            float: Orientation property of this transform.
 
         """
 
@@ -89,11 +94,11 @@ class Xfo(MathObject):
     def ori(self, value):
         """Sets orientation of this transform.
 
-        Arguments:
-        value -- Quat, quaternion to set the orientation by.
+        Args:
+            value (Quat): Quaternion to set the orientation by.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -106,8 +111,8 @@ class Xfo(MathObject):
     def sc(self):
         """Gets scaling property of this transform.
 
-        Return:
-        Scalar, scaling property of this transform.
+        Returns:
+            float: Scaling property of this transform.
 
         """
 
@@ -118,11 +123,11 @@ class Xfo(MathObject):
     def sc(self, value):
         """Sets scaling of this transform.
 
-        Arguments:
-        value -- Vec3, quaternion to set the scaling by.
+        Args:
+            value (Vec3): Quaternion to set the scaling by.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -134,8 +139,8 @@ class Xfo(MathObject):
     def clone(self):
         """Returns a clone of the Xfo.
 
-        Return:
-        The cloned Xfo
+        Returns:
+            The cloned Xfo
 
         """
 
@@ -150,13 +155,13 @@ class Xfo(MathObject):
     def set(self, tr, ori, sc):
         """Setter from the translation, rotation and scaling.
 
-        Arguments:
-        tr -- Vec3, vector to set the translation by.
-        ori -- Quat, quaternion to set the orientation by.
-        sc -- Vec3, vector to set the scaling by.
+        Args:
+            tr (Vec3): Vector to set the translation by.
+            ori (Quat): Quaternion to set the orientation by.
+            sc (Vec3): Vector to set the scaling by.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -169,8 +174,8 @@ class Xfo(MathObject):
     def setIdentity(self):
         """Sets this transform to the identity.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -182,11 +187,11 @@ class Xfo(MathObject):
     def setFromMat44(self, m):
         """Sets this transform from the supplied matrix.
 
-        Arguments:
-        m -- Mat44, 4x4 matrix to set the transform from.
+        Args:
+            m (Mat44): 4x4 matrix to set the transform from.
 
-        Return:
-        Xfo, new transform set from input Mat44.
+        Returns:
+            Xfo: New transform set from input Mat44.
 
         """
 
@@ -196,8 +201,8 @@ class Xfo(MathObject):
     def toMat44(self):
         """Gets a Mat44 from this xfo.
 
-        Return:
-        Mat44, matrix from this transform.
+        Returns:
+            Mat44: Matrix from this transform.
 
         """
 
@@ -223,11 +228,11 @@ class Xfo(MathObject):
     def multiply(self, xfo):
         """Overload method for the multiply operator.
 
-        Arguments:
-        xfo -- Xfo, other transform to multiply this one by.
+        Args:
+            xfo (Xfo): Other transform to multiply this one by.
 
-        Return:
-        Xfo, new Xfo of the product of the two Xfo's.
+        Returns:
+            Xfo: New Xfo of the product of the two Xfo's.
 
         """
 
@@ -237,11 +242,11 @@ class Xfo(MathObject):
     def transformVector(self, v):
         """Transforms a vector by this transform.
 
-        Arguments:
-        v -- Vec3, vector to transform.
+        Args:
+            v (Vec3): Vector to transform.
 
-        Return:
-        Vec3, new vector transformed by this transform.
+        Returns:
+            Vec3: New vector transformed by this transform.
 
         """
 
@@ -251,11 +256,11 @@ class Xfo(MathObject):
     def transformRay(self, ray):
         """Transforms a ray vector by this transform.
 
-        Arguments:
-        ray -- Vec3, ray vector to transform.
+        Args:
+            ray (Vec3): Ray vector to transform.
 
-        Return:
-        Ray, new ray vector transformed by this transform.
+        Returns:
+            Ray: New ray vector transformed by this transform.
 
         """
 
@@ -265,8 +270,8 @@ class Xfo(MathObject):
     def inverse(self):
         """Get the inverse transform of this transform.
 
-        Return:
-        Xfo, inverse of this transform.
+        Returns:
+            Xfo: Inverse of this transform.
 
         """
 
@@ -279,11 +284,11 @@ class Xfo(MathObject):
         Note: We have 'inverseTransformVector' because Xfos with non-uniform
         scaling cannot be inverted as Xfos.
 
-        Arguments:
-        vec -- Vec3, vector to be inversely transformed.
+        Args:
+            vec (Vec3): Vector to be inversely transformed.
 
-        Return:
-        Vec3, inversely transformed vector.
+        Returns:
+            Vec3: Inversely transformed vector.
 
         """
 
@@ -294,12 +299,12 @@ class Xfo(MathObject):
         """Linearly interpolates this transform with another one based on a
         scalar blend value (0.0 to 1.0).
 
-        Arguments:
-        other -- Xfo, transform to blend to.
-        t -- Scalar, blend value.
+        Args:
+            other (Xfo): Transform to blend to.
+            t (float): Blend value.
 
-        Return:
-        Xfo, new transform blended between this and the input transform.
+        Returns:
+            Xfo: New transform blended between this and the input transform.
 
         """
 
@@ -310,14 +315,14 @@ class Xfo(MathObject):
     def setFromVectors(self, inVec1, inVec2, inVec3, translation):
         """Set Xfo values from 3 axis vectors and a translation vector.
 
-        Arguments:
-        inVec1 -- Vec3, x axis vector.
-        inVec2 -- Vec3, y axis vector.
-        inVec3 -- Vec3, z axis vector.
-        translation -- Vec3, translation vector.
+        Args:
+            inVec1 (Vec3): X axis vector.
+            inVec2 (Vec3): Y axis vector.
+            inVec3 (Vec3): Z axis vector.
+            translation (Vec3): Translation vector.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -336,13 +341,13 @@ def xfoFromDirAndUpV(base, target, upV):
     """Creates a transform for base object pointing to target with an upvector
     upV.
 
-    Arguments:
-    base -- Vec3, base vec3 to use in calculation.
-    target -- Vec3, target vec3 to use in calculation.
-    upV -- Vec3, upV vec3 to use in calculation.
+    Args:
+        base (Vec3): Base vec3 to use in calculation.
+        target (Vec3): Target vec3 to use in calculation.
+        upV (Vec3): UpV vec3 to use in calculation.
 
-    Return:
-    Xfo, output xfo.
+    Returns:
+        Xfo: Output xfo.
 
     """
 

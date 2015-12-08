@@ -27,7 +27,12 @@ class Vec3(MathObject):
 
 
     def __str__(self):
-        """String representation of the Vec3 object."""
+        """String representation of the Vec3 object.
+
+        Returns:
+            str: String representation of the Vec3 object.
+
+        """
 
         return "Vec3(" + str(self.x) + "," + str(self.y) + "," + str(self.z) + ")"
 
@@ -36,8 +41,8 @@ class Vec3(MathObject):
     def x(self):
         """Gets x value of this vector.
 
-        Return:
-        Scalar, x value of this vector.
+        Returns:
+            float: X value of this vector.
 
         """
 
@@ -48,11 +53,11 @@ class Vec3(MathObject):
     def x(self, value):
         """Sets x value from the input value.
 
-        Arguments:
-        value -- Scalar, value to set the x property as.
+        Args:
+            value (float): Value to set the x property as.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -65,8 +70,8 @@ class Vec3(MathObject):
     def y(self):
         """Gets y value of this vector.
 
-        Return:
-        Scalar, y value of this vector.
+        Returns:
+            float: Y value of this vector.
 
         """
 
@@ -77,11 +82,11 @@ class Vec3(MathObject):
     def y(self, value):
         """Sets y value from the input value.
 
-        Arguments:
-        value -- Scalar, value to set the y property as.
+        Args:
+            value (float): Value to set the y property as.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -92,8 +97,8 @@ class Vec3(MathObject):
     def z(self):
         """Gets z value of this vector.
 
-        Return:
-        Scalar, z value of this vector.
+        Returns:
+            float: Z value of this vector.
 
         """
 
@@ -104,11 +109,11 @@ class Vec3(MathObject):
     def z(self, value):
         """Sets y value from the input value.
 
-        Arguments:
-        value -- Scalar, value to set the y property as.
+        Args:
+            value (float): Value to set the y property as.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -120,8 +125,8 @@ class Vec3(MathObject):
     def clone(self):
         """Returns a clone of the Vec3.
 
-        Return:
-        The cloned Vec3
+        Returns:
+            Vec3: The cloned Vec3
 
         """
 
@@ -136,13 +141,13 @@ class Vec3(MathObject):
     def set(self, x, y, z):
         """Sets the x, y, and z value from the input values.
 
-        Arguments:
-        x -- Scalar, value to set the x property as.
-        y -- Scalar, value to set the x property as.
-        z -- Scalar, value to set the z property as.
+        Args:
+            x (float): Value to set the x property as.
+            y (float): Value to set the x property as.
+            z (float): Value to set the z property as.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -154,8 +159,8 @@ class Vec3(MathObject):
     def setNull():
         """Setting all components of the vec3 to 0.0.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -167,11 +172,11 @@ class Vec3(MathObject):
     def equal(self, other):
         """Checks equality of this vec3 with another.
 
-        Arguments:
-        other -- Vec3, other vector to check equality with.
+        Args:
+            other (Vec3): other vector to check equality with.
 
-        Return:
-        True if equal.
+        Returns:
+            bool: True if equal.
 
         """
 
@@ -181,12 +186,12 @@ class Vec3(MathObject):
     def almostEqual(self, other, precision):
         """Checks almost equality of this Vec3 with another.
 
-        Arguments:
-        other -- Vec3, other matrix to check equality with.
-        precision -- Scalar, precision value.
+        Args:
+            other (Vec3): other matrix to check equality with.
+            precision (float): Precision value.
 
-        Return:
-        True if almost equal.
+        Returns:
+            bool: True if almost equal.
 
         """
 
@@ -197,11 +202,11 @@ class Vec3(MathObject):
         """Checks almost equality of this Vec3 with another
         (using a default precision).
 
-        Arguments:
-        other -- Vec3, other vector to check equality with.
+        Args:
+            other (Vec3): other vector to check equality with.
 
-        Return:
-        True if almost equal.
+        Returns:
+            bool: True if almost equal.
 
         """
 
@@ -211,11 +216,11 @@ class Vec3(MathObject):
     def component(self, i):
         """Gets the component of this Vec3 by index.
 
-        Arguments:
-        i -- Integer, index of the component to return.
+        Args:
+            i (int): index of the component to return.
 
-        Return:
-        Scalar, component of this Vec3.
+        Returns:
+            float: Component of this Vec3.
 
         """
 
@@ -226,12 +231,12 @@ class Vec3(MathObject):
     def setComponent(self, i, v):
         """Sets the component of this Vec3 by index.
 
-        Arguments:
-        i -- Integer, index of the component to set.
-        v -- Scalar, value to set component as.
+        Args:
+            i (int): index of the component to set.
+            v (float): Value to set component as.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -239,64 +244,14 @@ class Vec3(MathObject):
                                         ks.rtVal('Scalar', v))
 
 
-    # # Equals operator
-    # def Boolean == (Vec a, Vec b):
-
-    # # Not equals operator
-    # def Boolean != (Vec a, Vec b):
-
-    # # unary -
-    # def Vec -Vec():
-
-    # # Adds to vectors
-    # def Vec + (Vec a, Vec b):
-
-    # # Adds a vector to this one
-    # def  += (Vec other):
-
-    # # Subtracts two vectors
-    # def Vec - (Vec a, Vec b):
-
-    # # Subtracts a vector from this one
-    # def  -= (Vec other):
-
-    # # Multiplies a scalar and a vector
-    # def Vec * (Scalar a, Vec b):
-
-    # # Multiplies a vector and a scalar
-    # def Vec * (Vec a, Scalar b):
-
-    # # Multiplies two vectors
-    # def Vec * (Vec a, Vec b):
-
-
-    # # Multiplies this vector with a scalar
-    # def  *= (Scalar other):
-
-    # # Multiplies this vector with another one
-    # def  *= (Vec other):
-
-    # # Divides two vectors
-    # def Vec / (Vec a, Vec b):
-
-    # # Divides a vector by a scalar
-    # def Vec / (Vec a, Scalar b):
-
-    # # Divides this vector with a scalar
-    # def  /= (Scalar other):
-
-    # # Divides this vector with another one
-    # def  /= (Vec other):
-
-
     def add(self, other):
         """Overload method for the add operator.
 
-        Arguments:
-        other -- Vec3, other vector to add to this one.
+        Args:
+            other (Vec3): other vector to add to this one.
 
-        Return:
-        Vec3, new Vec3 of the sum of the two Vec3's.
+        Returns:
+            Vec3: New Vec3 of the sum of the two Vec3's.
 
         """
 
@@ -306,11 +261,11 @@ class Vec3(MathObject):
     def subtract(self, other):
         """Overload method for the subtract operator.
 
-        Arguments:
-        other -- Vec3, other vector to subtract from this one.
+        Args:
+            other (Vec3): other vector to subtract from this one.
 
-        Return:
-        Vec3, new Vec3 of the difference of the two Vec3's.
+        Returns:
+            Vec3: New Vec3 of the difference of the two Vec3's.
 
         """
 
@@ -320,11 +275,11 @@ class Vec3(MathObject):
     def multiply(self, other):
         """Overload method for the multiply operator.
 
-        Arguments:
-        other -- Vec3, other vector to multiply from this one.
+        Args:
+            other (Vec3): other vector to multiply from this one.
 
-        Return:
-        Vec3, new Vec3 of the product of the two Vec3's.
+        Returns:
+            Vec3: New Vec3 of the product of the two Vec3's.
 
         """
 
@@ -334,11 +289,11 @@ class Vec3(MathObject):
     def divide(self, other):
         """Divides this vector and an other.
 
-        Arguments:
-        other -- Vec3, other vector to divide by.
+        Args:
+            other (Vec3): other vector to divide by.
 
-        Return:
-        Vec3, quotient of the division of this vector by the other.
+        Returns:
+            Vec3: Quotient of the division of this vector by the other.
 
         """
 
@@ -348,11 +303,11 @@ class Vec3(MathObject):
     def multiplyScalar(self, other):
         """Product of this vector and a scalar.
 
-        Arguments:
-        other -- Scalar, scalar value to multiply this vector by.
+        Args:
+            other (float): Scalar value to multiply this vector by.
 
-        Return:
-        Vec3, product of the multiplication of the scalar and this vector.
+        Returns:
+            Vec3: Product of the multiplication of the scalar and this vector.
 
         """
 
@@ -362,11 +317,11 @@ class Vec3(MathObject):
     def divideScalar(self, other):
         """Divides this vector and a scalar.
 
-        Arguments:
-        other -- Scalar, value to divide this vector by.
+        Args:
+            other (float): Value to divide this vector by.
 
-        Return:
-        Vec3, quotient of the division of the vector by the scalar.
+        Returns:
+            Vec3: Quotient of the division of the vector by the scalar.
 
         """
 
@@ -376,8 +331,8 @@ class Vec3(MathObject):
     def negate(self):
         """Gets the negated version of this vector.
 
-        Return:
-        Vec3, negation of this vector.
+        Returns:
+            Vec3: Negation of this vector.
 
         """
 
@@ -387,8 +342,8 @@ class Vec3(MathObject):
     def inverse(self):
         """Get the inverse vector of this vector.
 
-        Return:
-        Vec3, inverse of this vector.
+        Returns:
+            Vec3: Inverse of this vector.
 
         """
 
@@ -398,11 +353,11 @@ class Vec3(MathObject):
     def dot(self, other):
         """Gets the dot product of this vector and another.
 
-        Arguments:
-        other -- Vec3, other vector.
+        Args:
+            other (Vec3): Other vector.
 
-        Return:
-        Scalar, dot product.
+        Returns:
+            float: Dot product.
 
         """
 
@@ -412,11 +367,11 @@ class Vec3(MathObject):
     def cross(self, other):
         """Gets the cross product of this vector and another.
 
-        Arguments:
-        other -- Vec3, other vector.
+        Args:
+            other (Vec3): Other vector.
 
-        Return:
-        Vec3, dot product.
+        Returns:
+            Vec3: Dot product.
 
         """
 
@@ -426,8 +381,8 @@ class Vec3(MathObject):
     def lengthSquared(self):
         """Get the squared length of this vector.
 
-        Return:
-        Scalar, squared length oft his vector.
+        Returns:
+            float: Squared length oft his vector.
 
         """
 
@@ -437,8 +392,8 @@ class Vec3(MathObject):
     def length(self):
         """Gets the length of this vector.
 
-        Return:
-        Scalar, length of this vector.
+        Returns:
+            float: Length of this vector.
 
         """
 
@@ -448,8 +403,8 @@ class Vec3(MathObject):
     def unit(self):
         """Gets a unit vector of this one.
 
-        Return:
-        Vec3, new unit vector from this one.
+        Returns:
+            Vec3: New unit vector from this one.
 
         """
 
@@ -460,8 +415,8 @@ class Vec3(MathObject):
         """Gets a unit vector of this one, no error reported if cannot be
         made unit.
 
-        Return:
-        Vec3, new unit vector.
+        Returns:
+            Vec3: New unit vector.
 
         """
 
@@ -472,8 +427,8 @@ class Vec3(MathObject):
         """Sets this vector to a unit vector and returns the previous
         length.
 
-        Return:
-        Scalar, this vector.
+        Returns:
+            float: This vector.
 
         """
 
@@ -483,8 +438,8 @@ class Vec3(MathObject):
     def normalize(self):
         """Gets a normalized vector from this vector.
 
-        Return:
-        Scalar, previous length.
+        Returns:
+            float: Previous length.
 
         """
 
@@ -494,12 +449,12 @@ class Vec3(MathObject):
     def clamp(self, min, max):
         """Clamps this vector per component by a min and max vector.
 
-        Arguments:
-        min -- Scalar, minimum value.
-        max -- Scalar, maximum value.
+        Args:
+            min (float): Minimum value.
+            max (float): Maximum value.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -510,11 +465,11 @@ class Vec3(MathObject):
         """Gets the angle (self, in radians) of this vector to another one
         note expects both vectors to be units (else use angleTo)
 
-        Arguments:
-        other -- Vec3, other vector to get angle to.
+        Args:
+            other (Vec3): other vector to get angle to.
 
-        Return:
-        Scalar, angle.
+        Returns:
+            float: Angle.
 
         """
 
@@ -524,11 +479,11 @@ class Vec3(MathObject):
     def angleTo(self, other):
         """Gets the angle (self, in radians) of this vector to another one.
 
-        Arguments:
-        other -- Vec3, other vector to get angle to.
+        Args:
+            other (Vec3): other vector to get angle to.
 
-        Return:
-        Scalar, angle.
+        Returns:
+            float: Angle.
 
         """
 
@@ -539,11 +494,11 @@ class Vec3(MathObject):
     def distanceTo(self, other):
         """Doc String.
 
-        Arguments:
-        other -- Vec3, the other vector to measure the distance to.
+        Args:
+            other (Vec3): the other vector to measure the distance to.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -554,12 +509,12 @@ class Vec3(MathObject):
         """Linearly interpolates this vector with another one based on a scalar
         blend value (0.0 to 1.0).
 
-        Arguments:
-        other -- Vec3, vector to blend to.
-        t -- Scalar, blend value.
+        Args:
+            other (Vec3): vector to blend to.
+            t (float): Blend value.
 
-        Return:
-        Vec3, new vector blended between this and the input vector.
+        Returns:
+            Vec3: New vector blended between this and the input vector.
 
         """
 
@@ -570,12 +525,12 @@ class Vec3(MathObject):
         """Returns the distance of this vector to a line defined by two points
         on the line.
 
-        Arguments:
-        lineP0 -- Vec3, point 1 of the line.
-        lineP1 -- Vec3, point 2 of the line.
+        Args:
+            lineP0 (Vec3): point 1 of the line.
+            lineP1 (Vec3): point 2 of the line.
 
-        Return:
-        Scalar, distance to the line.
+        Returns:
+            float: Distance to the line.
 
         """
 
@@ -586,12 +541,12 @@ class Vec3(MathObject):
         """Returns the distance of this vector to a line segment defined by the
         start and end points of the line segment
 
-        Arguments:
-        segmentP0 -- Vec3, point 1 of the segment.
-        segmentP1 -- Vec3, point 2 of the segment.
+        Args:
+            segmentP0 (Vec3): point 1 of the segment.
+            segmentP1 (Vec3): point 2 of the segment.
 
-        Return:
-        Scalar, distance to the segment.
+        Returns:
+            float: Distance to the segment.
 
         """
 

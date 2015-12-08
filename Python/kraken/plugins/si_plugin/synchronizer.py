@@ -2,6 +2,7 @@ from kraken.core.maths import Xfo, Vec3, Quat
 
 from kraken.core.synchronizer import Synchronizer
 from kraken.plugins.si_plugin.utils import *
+from kraken.plugins.si_plugin.utils.curves import curveToKraken
 
 
 class Synchronizer(Synchronizer):
@@ -15,45 +16,70 @@ class Synchronizer(Synchronizer):
     # ============
     # DCC Methods
     # ============
-    def getDCCItem(self, decoratedPath):
+    def getDCCItem(self, kObject):
         """Gets the DCC Item from the full decorated path.
 
-        Arguments:
-        decoratedPath -- String, full decorated path for the object.
+        Args:
+            kObject (object): The Kraken Python object that we must find the corresponding DCC item.
 
-        Return:
-        DCC Object, None if it isn't found.
+        Returns:
+            object: DCC Object.
 
         """
 
-        # Softimage matches the Kraken path so we remove decorators.
-        path = decoratedPath.translate(None, ':#')
+        pathObj = kObject
+        softPath = ''
 
-        findItem = si.Dictionary.GetObject(path, False)
+        traverse = True
+        while traverse is True:
+
+            if pathObj is None:
+                raise Exception("Parent not specified for object, so a full path cannot be resolved to a Softimage object: " + kObject.getPath())
+
+            if pathObj.isTypeOf('AttributeGroup'):
+                softPath = '.' + pathObj.getName() + softPath
+
+            elif pathObj.isTypeOf('Attribute'):
+                softPath = '.' + pathObj.getName()
+
+            else:
+                if pathObj.isTypeOf('Layer') or pathObj.isTypeOf('Container'):
+                    softPath = pathObj.getBuildName() + softPath
+                    traverse = False
+                else:
+                    softPath = '.' + pathObj.getBuildName() + softPath
+
+            pathObj = pathObj.getParent()
+
+        findItem = si.Dictionary.GetObject(softPath, False)
         if findItem is None:
             return None
 
         return findItem
 
 
-    def syncXfo(self, obj):
-        """Syncs the xfo from the DCC objec to the Kraken object.
+    def syncXfo(self, kObject):
+        """Syncs the xfo from the DCC object to the Kraken object.
 
-        Arguments:
-        obj -- Object, object to sync the xfo for.
+        Args:
+            kObject (object): object to sync the xfo for.
 
-        Return:
-        True if successful.
+        Returns:
+            object: True if successful.
 
         """
 
         hrcMap = self.getHierarchyMap()
 
-        if obj not in hrcMap.keys():
-            print "Warning! 3D Object '" + obj.getName() + "' was not found in the mapping!"
+        if kObject not in hrcMap.keys():
+            log("Warning! 3D Object '" + kObject.getName() + "' was not found in the mapping!", 8)
             return False
 
-        dccItem = hrcMap[obj]['dccItem']
+        dccItem = hrcMap[kObject]['dccItem']
+
+        if dccItem is None:
+            log("Warning Syncing. No DCC Item for :" + kObject.getPath(), 8)
+            return
 
         dccXfo = dccItem.Kinematics.Global.GetTransform2(None)
         dccPos = dccXfo.Translation.Get2()
@@ -66,30 +92,64 @@ class Synchronizer(Synchronizer):
 
         newXfo = Xfo(tr=pos, ori=quat, sc=scl)
 
-        obj.xfo = newXfo
+        kObject.xfo = newXfo
 
         return True
 
 
-    def syncAttribute(self, obj):
-        """Syncs the attribute value from the DCC objec to the Kraken object.
+    def syncAttribute(self, kObject):
+        """Syncs the attribute value from the DCC object to the Kraken object.
 
-        Arguments:
-        obj -- Object, object to sync the attribute value for.
+        Args:
+            kObject (object): object to sync the attribute value for.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
         hrcMap = self.getHierarchyMap()
 
-        if obj not in hrcMap.keys():
-            print "Warning! Attribute '" + obj.getName() + "' was not found in the mapping!"
+        if kObject not in hrcMap.keys():
+            log("Warning! Attribute '" + kObject.getName() + "' was not found in the mapping!", 8)
             return False
 
-        dccItem = hrcMap[obj]['dccItem']
+        dccItem = hrcMap[kObject]['dccItem']
 
-        obj.setValue(dccItem.Value)
+        if dccItem is None:
+            log("Warning Syncing. No DCC Item for :" + kObject.getPath(), 8)
+            return
+
+        kObject.setValue(dccItem.Value)
+
+        return True
+
+
+    def syncCurveData(self, kObject):
+        """Syncs the curve data from the DCC object to the Kraken object.
+
+        Args:
+            kObject (object): object to sync the curve data for.
+
+        Returns:
+            bool: True if successful.
+
+        """
+
+        hrcMap = self.getHierarchyMap()
+
+        if kObject not in hrcMap.keys():
+            log("Warning! 3D Object '" + kObject.getName() + "' was not found in the mapping!", 8)
+            return False
+
+        dccItem = hrcMap[kObject]['dccItem']
+
+        if dccItem is None:
+            log("Warning Syncing. No DCC Item for :" + kObject.getPath(), 8)
+            return
+
+        # Get Curve Data from Softimage Curve
+        data = curveToKraken(dccItem)
+        kObject.setCurveData(data)
 
         return True

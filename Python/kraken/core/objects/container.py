@@ -6,7 +6,7 @@ Container -- Component container representation.
 """
 
 from kraken.core.objects.object_3d import Object3D
-from kraken.core.objects.components.component import Component
+from kraken.core.objects.components.base_example_component import BaseExampleComponent
 
 
 class Container(Object3D):

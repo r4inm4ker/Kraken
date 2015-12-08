@@ -9,6 +9,7 @@ import math
 from kraken.core.kraken_system import ks
 from kraken.core.maths.math_object import MathObject
 from kraken.core.maths.mat33 import Mat33
+from kraken.core.maths.rotation_order import RotationOrder
 
 
 rotationOrderStrToIntMapping = {
@@ -60,12 +61,9 @@ class Euler(MathObject):
                 raise TypeError("Euler: Invalid type for 'z' argument. Must be \
                                 an int or float.")
 
-            if ro is not None and not isinstance(ro, (int)):
-                if isinstance(ro, basestring):
-                    ro = rotationOrderStrToIntMapping[ro]
-                else:
-                    raise TypeError("Euler: Invalid type for 'ro' argument. \
-                                    Must be an int or a string.")
+            if ro is not None:
+                if isinstance(ro, basestring) or isinstance(ro, (int)):
+                    ro = RotationOrder(order=ro)
 
             self._rtval = ks.rtVal('Euler')
             if isinstance(x, Euler):
@@ -85,10 +83,10 @@ class Euler(MathObject):
 
     @property
     def x(self):
-        """Doc String.
+        """X parameter property.
 
-        Return:
-        True if successful.
+        Returns:
+            float: Value of the X property.
 
         """
 
@@ -97,13 +95,10 @@ class Euler(MathObject):
 
     @x.setter
     def x(self, value):
-        """Doc String.
+        """X parameter setter.
 
-        Arguments:
-        value -- number, x value of the Euler Angles.
-
-        Return:
-        True if successful.
+        Args:
+            value (float): X value of the Euler Angles.
 
         """
 
@@ -112,10 +107,10 @@ class Euler(MathObject):
 
     @property
     def y(self):
-        """Doc String.
+        """Y parameter property.
 
-        Return:
-        True if successful.
+        Returns:
+            float: Value of the Y property.
 
         """
 
@@ -124,13 +119,10 @@ class Euler(MathObject):
 
     @y.setter
     def y(self, value):
-        """Doc String.
+        """Y parameter setter.
 
-        Arguments:
-        value -- number, y value of the Euler Angles.
-
-        Return:
-        True if successful.
+        Args:
+            value (float): Y value of the Euler Angles.
 
         """
 
@@ -139,10 +131,10 @@ class Euler(MathObject):
 
     @property
     def z(self):
-        """Doc String.
+        """Z parameter property.
 
-        Return:
-        True if successful.
+        Returns:
+            float: Value of the Z property.
 
         """
 
@@ -151,13 +143,10 @@ class Euler(MathObject):
 
     @z.setter
     def z(self, value):
-        """Doc String.
+        """Z parameter setter.
 
-        Arguments:
-        value -- number, z value of the Euler Angles.
-
-        Return:
-        True if successful.
+        Args:
+            value (float): Z value of the Euler Angles.
 
         """
 
@@ -166,36 +155,33 @@ class Euler(MathObject):
 
     @property
     def ro(self):
-        """Doc String.
+        """Rotation Order parameter property.
 
-        Return:
-        True if successful.
+        Returns:
+            object: Rotation Order of this Euler.
 
         """
 
-        return rotationOrderIntToStrMapping[self._rtval.ro.order]
+        return RotationOrder(self._rtval.ro)
 
 
     @ro.setter
     def ro(self, value):
-        """Doc String.
+        """Rotation Order setter.
 
-        Arguments:
-        value -- number, rotation order(ro) value of the Euler Angles.
-
-        Return:
-        True if successful.
+        Args:
+            value (int): Rotation Order(ro) value of the Euler Angles.
 
         """
 
-        self._rtval.ro.order = ks.rtVal('Integer', value)
+        self._rtval.ro = ks.rtVal('RotationOrder', value)
 
 
     def clone(self):
         """Returns a clone of the Euler.
 
-        Return:
-        The cloned Euler
+        Returns:
+            Euler: The cloned Euler
 
         """
 
@@ -210,35 +196,35 @@ class Euler(MathObject):
 
     # Setter from scalar components
     def set(self, x, y, z, ro=None):
-        """Doc String.
+        """Scalar component setter.
 
-        Arguments:
-        x -- Scalar, x angle in radians.
-        y -- Scalar, y angle in radians.
-        z -- Scalar, z angle in radians.
-        ro -- Integer, the rotation order to use in the euler angles.
+        Args:
+            x (float): x angle in radians.
+            y (float): y angle in radians.
+            z (float): z angle in radians.
+            ro (int): the rotation order to use in the euler angles.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
-        self._rtval.set('', ks.rtVal('Scalar', x), ks.rtVal('Scalar', y), ks.rtVal('Scalar', z))
+        if ro is None:
+            self._rtval.set('', ks.rtVal('Scalar', x), ks.rtVal('Scalar', y), ks.rtVal('Scalar', z))
+        else:
+            self._rtval.set('', ks.rtVal('Scalar', x), ks.rtVal('Scalar', y), ks.rtVal('Scalar', z), ks.rtVal('RotationOrder', ro))
 
-        if ro is not None:
-            if isinstance(ro, basestring):
-                ro = rotationOrderStrToIntMapping[ro]
-            self._rtval.ro.order = ks.rtVal('Integer', ro)
+        return True
 
 
     def equal(self, other):
         """Checks equality of this Euler with another.
 
-        Arguments:
-        other -- Euler, other value to check equality with.
+        Args:
+            other (Euler): Other value to check equality with.
 
-        Return:
-        True if equal.
+        Returns:
+            bool: True if equal.
 
         """
 
@@ -248,12 +234,12 @@ class Euler(MathObject):
     def almostEqual(self, other, precision):
         """Checks almost equality of this Euler with another.
 
-        Arguments:
-        other -- Euler, other value to check equality with.
-        precision -- Scalar, precision value.
+        Args:
+            other (Euler): Other value to check equality with.
+            precision (float): precision value.
 
-        Return:
-        True if almost equal.
+        Returns:
+            bool: True if almost equal.
 
         """
 
@@ -263,8 +249,8 @@ class Euler(MathObject):
     def toMat33(self):
         """Converts the Euler angles value to a Mat33.
 
-        Return:
-        The Mat33 value
+        Returns:
+            Mat33: The Mat33 object representing this Euler.
 
         """
 

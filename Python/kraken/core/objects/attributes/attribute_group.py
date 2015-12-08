@@ -7,105 +7,97 @@ AttributeGroup - Attribute Group.
 
 from kraken.core.objects.scene_item import SceneItem
 
-
+# TODO: Attribute group has children in the form of attributes, but doesn's support the object 3d interface
+# that provides the getChild* methods. We should clean this up so AttributeGroup supports all the child methods
+# A current bug is that an attribute group can have multiple children with the same name.
 class AttributeGroup(SceneItem):
     """Attribute Group that attributes belong to."""
 
     def __init__(self, name, parent=None):
-        super(AttributeGroup, self).__init__(name, parent)
-        self.attributes = []
+        super(AttributeGroup, self).__init__(name)
+        self._attributes = []
 
+        if parent is not None:
+            if 'Object3D' not in parent.getTypeHierarchyNames():
+                raise ValueError("Parent: " + parent.getName() +
+                    " is not of type 'Object3D'!")
 
-    # =============
-    # Name Methods
-    # =============
-    def getDecoratedPath(self):
-        """Gets the decorated path of the object.
-
-        Return:
-        String, decorated path  of the object.
-
-        """
-
-        if self.parent is not None and not self.parent.isTypeOf('Component'):
-            return self.parent.getDecoratedPath() + '.' + ':' + self.getName()
-
-        return self.getName()
+            parent.addAttributeGroup(self)
 
 
     # ==================
     # Attribute Methods
     # ==================
-    def checkAttributeIndex(self, index):
+    def _checkAttributeIndex(self, index):
         """Checks the supplied index is valid.
 
-        Arguments:
-        index -- Integer, attribute index to check.
+        Args:
+            index (int): attribute index to check.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if valid.
 
         """
 
-        if index > len(self.attributes):
+        if index > len(self._attributes):
             raise IndexError("'" + str(index) + "' is out of the range of 'attributes' array.")
 
         return True
 
 
     def addAttribute(self, attribute):
-        """Adds an attribute to this object.
+        """Adds an attribute to this object..
 
-        Arguments:
-        attribute -- Object, attribute object to add to this object.
+        Args:
+            attribute (Object): attribute object to add to this object.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
-        if attribute.getName() in [x.getName() for x in self.attributes]:
+        if attribute.getName() in [x.getName() for x in self._attributes]:
             raise IndexError("Child with " + attribute.getName() + " already exists as a attribute.")
 
-        self.attributes.append(attribute)
+        self._attributes.append(attribute)
         attribute.setParent(self)
 
         return True
 
 
     def removeAttributeByIndex(self, index):
-        """Removes attribute at specified index.
+        """Removes attribute at specified index..
 
-        Arguments:
-        index -- Integer, index of attribute to remove.
+        Args:
+            index (int): index of the attribute to remove.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
-        if self.checkAttributeIndex(index) is not True:
+        if self._checkAttributeIndex(index) is not True:
             return False
 
-        del self.attributes[index]
+        del self._attributes[index]
 
         return True
 
 
     def removeAttributeByName(self, name):
-        """Removes the attribute with the specified name.
+        """Removes the attribute with the specified name..
 
-        Arguments:
-        name -- String, name of the attribute to remove.
+        Args:
+            name (str): name of the attribute to remove.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
         removeIndex = None
 
-        for i, eachAttribute in enumerate(self.attributes):
+        for i, eachAttribute in enumerate(self._attributes):
             if eachAttribute.getName() == name:
                 removeIndex = i
 
@@ -120,45 +112,43 @@ class AttributeGroup(SceneItem):
     def getNumAttributes(self):
         """Returns the number of attributes as an integer.
 
-        Return:
-        Integer of the number of attributes on this object.
+        Returns:
+            int: Number of attributes on this object.
 
         """
 
-        return len(self.attributes)
+        return len(self._attributes)
 
 
     def getAttributeByIndex(self, index):
-        """Returns the attribute at the specified index.
+        """Returns the attribute at the specified index..
 
-        Arguments:
-        index -- Integer, index of the attribute to return.
+        Args:
+            index (int): index of the attribute to return.
 
-        Return:
-        Attribute at the specified index.
-        False if not a valid index.
+        Returns:
+            Attribute: The attribute at the specified index.
 
         """
 
-        if self.checkAttributeIndex(index) is not True:
+        if self._checkAttributeIndex(index) is not True:
             return False
 
-        return self.attributes[index]
+        return self._attributes[index]
 
 
     def getAttributeByName(self, name):
-        """Return the attribute with the specified name.
+        """Return the attribute with the specified name..
 
-        Arguments:
-        name -- String, name of the attribute to return.
+        Args:
+            name (str): Name of the attribute to return.
 
-        Return:
-        Attribute with the specified name.
-        None if not found.
+        Returns:
+            Attribute: The attribute with the specified name.
 
         """
 
-        for eachAttribute in self.attributes:
+        for eachAttribute in self._attributes:
             if eachAttribute.getName() == name:
                 return eachAttribute
 
@@ -169,12 +159,13 @@ class AttributeGroup(SceneItem):
     # Persistence Methods
     # ====================
     def jsonEncode(self, saver):
-        """Returns the data for this object encoded as a JSON hierarchy.
+        """Encodes the object to a JSON structure.
 
-        Arguments:
+        Args:
+            saver (Object): saver object.
 
-        Return:
-        A JSON structure containing the data for this SceneItem.
+        Returns:
+            Dict: A JSON structure containing the data for this SceneItem.
 
         """
 
@@ -187,20 +178,24 @@ class AttributeGroup(SceneItem):
         jsonData = {
             '__typeHierarchy__': classHierarchy,
             'name': self.name,
-            'parent': self.parent.getName(),
+            'parent': self.getParent().getName(),
             'attributes': []
         }
-        for attr in self.attributes:
+        for attr in self._attributes:
             jsonData['attributes'].append(attr.jsonEncode(saver))
 
         return jsonData
 
 
     def jsonDecode(self, loader, jsonData):
-        """Returns the color of the object.
+        """Returns the color of the object..
 
-        Return:
-        the decoded object.
+        Args:
+            loader (Object): Loader object.
+            jsonData (Dict): JSON object structure.
+
+        Returns:
+            bool: True if successful.
 
         """
 

@@ -5,12 +5,15 @@ Rig -- Rig representation.
 
 """
 
+import importlib
+import json
+import os
+
 from container import Container
 from kraken.core.kraken_system import KrakenSystem
 from kraken.core.profiler import Profiler
 from kraken.core.objects.layer import Layer
-import importlib
-import json
+from kraken.helpers.utility_methods import prepareToSave, prepareToLoad
 
 
 class Rig(Container):
@@ -19,15 +22,38 @@ class Rig(Container):
     def __init__(self, name='rig'):
         super(Rig, self).__init__(name)
 
+    def writeRigDefinitionFile(self, filepath):
+        """Load a rig definition from a file on disk.
+
+        Args:
+            filepath (str): The file path of the rig definition file.
+
+        Returns:
+            bool: True if successful.
+
+        """
+
+        Profiler.getInstance().push("writeRigDefinitionFile:" + filepath)
+
+        jsonData = self.getData()
+
+        # now preprocess the data ready for saving to disk.
+        pureJSON = prepareToSave(jsonData)
+
+        with open(filepath,'w') as rigFile:
+            rigFile.write(json.dumps(pureJSON, indent=2))
+
+        Profiler.getInstance().pop()
+
 
     def loadRigDefinitionFile(self, filepath):
         """Load a rig definition from a file on disk.
 
-        Arguments:
-        filepath -- string, the file path of the rig definition file.
+        Args:
+            filepath (str): The file path of the rig definition file.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -36,22 +62,95 @@ class Rig(Container):
         if not os.path.exists(filepath):
             raise Exception("File not found:" + filepath)
 
-        with open(referencefile) as rigDef:
-            jsonData = json.load(rigDef)
+        with open(filepath) as rigFile:
+            jsonData = json.load(rigFile)
 
-        # jsonData = json.load(str(open(referencefile).read()))
+        # now preprocess the data ready for loading.
+        jsonData = prepareToLoad(jsonData)
+
         self.loadRigDefinition(jsonData)
+        Profiler.getInstance().pop()
+
+
+    def _loadComponents(self, componentsJson):
+        """Loads components from a JSON dict.
+
+        Args:
+            componentsJson (dict): Dictionary of components to load.
+
+        """
+
+
+        Profiler.getInstance().push("__loadComponents")
+
+        krakenSystem = KrakenSystem.getInstance()
+
+        for componentData in componentsJson:
+            # trim off the class name to get the module path.
+            modulePath = '.'.join(componentData['class'].split('.')[:-1])
+            if modulePath is not "":
+                importlib.import_module(modulePath)
+
+            componentClass = krakenSystem.getComponentClass(componentData['class'])
+            if 'name' in componentData:
+                component = componentClass(name=componentData['name'], parent=self)
+            else:
+                component = componentClass(parent=self)
+            component.loadData(componentData)
+
+        Profiler.getInstance().pop()
+
+
+    def _makeConnections(self, connectionsJson):
+        """Makes connections based on JSON dict.
+
+        Args:
+            connectionsJson (dict): Dictionary of connections to make.
+
+        """
+
+
+        Profiler.getInstance().push("__makeConnections")
+
+        for connectionData in connectionsJson:
+
+            sourceComponentDecoratedName, outputName = connectionData['source'].split('.')
+            targetComponentDecoratedName, inputName = connectionData['target'].split('.')
+
+            sourceComponent = self.getChildByDecoratedName(sourceComponentDecoratedName)
+            if sourceComponent is None:
+                raise Exception("Error making connection:" + connectionData['source'] + " -> " + \
+                    connectionData['target']+". Source component not found:" + sourceComponentDecoratedName)
+
+            targetComponent = self.getChildByDecoratedName(targetComponentDecoratedName)
+            if targetComponent is None:
+                raise Exception("Error making connection:" + connectionData['source'] + " -> " + \
+                    connectionData['target']+". Target component not found:" + targetComponentDecoratedName)
+
+            outputPort = sourceComponent.getOutputByName(outputName)
+            if outputPort is None:
+                raise Exception("Error making connection:" + connectionData['source'] + " -> " + \
+                    connectionData['target']+". Output '" + outputName + "' not found on Component:" + sourceComponent.getPath())
+
+            inputPort = targetComponent.getInputByName(inputName)
+            if inputPort is None:
+                raise Exception("Error making connection:" + connectionData['source'] + " -> " + \
+                    connectionData['target']+". Input '" + inputName + "' not found on Component:" + targetComponent.getPath())
+
+            inputPort.setConnection(outputPort)
+            inputPort.setIndex(connectionData.get('targetIndex', 0))
+
         Profiler.getInstance().pop()
 
 
     def loadRigDefinition(self, jsonData):
         """Load a rig definition from a JSON structure.
 
-        Arguments:
-        jsonData -- dict, the JSON data containing the rig definition.
+        Args:
+            jsonData (dict): JSON data containing the rig definition.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -62,77 +161,61 @@ class Rig(Container):
         if 'name' in jsonData:
             self.setName(jsonData['name'])
 
-
-        def __loadComponents(componentsJson):
-            Profiler.getInstance().push("__loadComponents")
-
-            for componentData in componentsJson:
-
-                # trim off the class name to get the module path.
-                modulePath = '.'.join(componentData['class'].split('.')[:-1])
-                if modulePath is not "":
-                    importlib.import_module(modulePath)
-
-                componentClass = krakenSystem.getComponentClass(componentData['class'])
-                if 'name' in componentData:
-                    component = componentClass(name=componentData['name'], parent=self)
-                else:
-                    component = componentClass(parent=self)
-                component.loadData(componentData)
-
-            Profiler.getInstance().pop()
-
-
-        def __makeConnections(connectionsJson):
-
-            Profiler.getInstance().push("__makeConnections")
-
-            for connectionData in connectionsJson:
-                sourceComponentName, outputName = connectionData['source'].split('.')
-                targetComponentName, inputName = connectionData['target'].split('.')
-
-                sourceComponent = self.getChildByName(sourceComponentName)
-                if sourceComponent is None:
-                    raise Exception("Error making connection:" + connectionData['source'] + " -> " + connectionData['target']+". Source component not found:" + sourceComponentName)
-                targetComponent = self.getChildByName(targetComponentName)
-                if targetComponent is None:
-                    raise Exception("Error making connection:" + connectionData['source'] + " -> " + connectionData['target']+". Target component not found:" + targetComponentName)
-                outputPort = sourceComponent.getOutputByName(outputName)
-                if outputPort is None:
-                    raise Exception("Error making connection:" + connectionData['source'] + " -> " + connectionData['target']+". Output '" + outputName + "' not found on Component:" + sourceComponent.getName())
-                inputPort = targetComponent.getInputByName(inputName)
-                if inputPort is None:
-                    raise Exception("Error making connection:" + connectionData['source'] + " -> " + connectionData['target']+". Input '" + inputName + "' not found on Component:" + targetComponent.getName())
-                inputPort.setConnection(outputPort)
-
-            Profiler.getInstance().pop()
-
-
         if 'components' in jsonData:
-            __loadComponents(jsonData['components'])
+            self._loadComponents(jsonData['components'])
 
             if 'connections' in jsonData:
-                __makeConnections(jsonData['connections'])
+                self._makeConnections(jsonData['connections'])
+
+
+        # if 'graphPositions' in jsonData:
+        #     self._loadGraphPositions(jsonData['graphPositions'])
 
         Profiler.getInstance().pop()
 
-    def getGuideData(self):
-        """Get the graph definition of the guide for biulding the final rig.
 
-        Return:
-        The JSON data struture of the guide rig data
+
+    def writeGuideDefinitionFile(self, filepath):
+        """Writes a rig definition to a file on disk.
+
+        Args:
+            filepath (str): The file path of the rig definition file.
+
+        Returns:
+            bool: True if successful.
 
         """
 
-        jsonData = {
+        Profiler.getInstance().push("WriteGuideDefinitionFile:" + filepath)
+
+        guideData = self.getRigBuildData()
+
+        # now preprocess the data ready for saving to disk.
+        pureJSON = prepareToSave(guideData)
+
+        with open(filepath,'w') as rigDef:
+            rigDef.write(json.dumps(pureJSON, indent=2))
+
+        Profiler.getInstance().pop()
+
+
+    def getData(self):
+        """Get the graph definition of the rig. This method is used to save the state of the guide itself.
+
+        Returns:
+            dict: The JSON data struture of the rig data
+
+        """
+
+        guideData = {
             'name': self.getName()
         }
 
         componentsJson = []
         guideComponents = self.getChildrenByType('Component')
         for component in guideComponents:
-            componentsJson.append(component.getGuideData())
-        jsonData['components'] = componentsJson
+            componentsJson.append(component.saveData())
+        guideData['components'] = componentsJson
 
         connectionsJson = []
         for component in guideComponents:
@@ -141,11 +224,48 @@ class Rig(Container):
                 if componentInput.isConnected():
                     componentOutput = componentInput.getConnection()
                     connectionJson = {
-                        'source': componentOutput.getParent().getName() + '.' + componentOutput.getName(),
-                        'target': component.getName() + '.' + componentInput.getName()
+                        'source': componentOutput.getParent().getDecoratedName() + '.' + componentOutput.getName(),
+                        'target': component.getDecoratedName() + '.' + componentInput.getName(),
+                        'targetIndex': componentInput.getIndex()
                     }
                     connectionsJson.append(connectionJson)
 
-        jsonData['connections'] = connectionsJson
+        guideData['connections'] = connectionsJson
 
-        return jsonData
+        return guideData
+
+
+    def getRigBuildData(self):
+        """Get the graph definition of the guide for building the final rig.
+
+        Returns:
+            dict: The JSON data struture of the guide rig data
+
+        """
+
+        guideData = {
+            'name': self.getName()
+        }
+
+        componentsJson = []
+        guideComponents = self.getChildrenByType('Component')
+        for component in guideComponents:
+            componentsJson.append(component.getRigBuildData())
+        guideData['components'] = componentsJson
+
+        connectionsJson = []
+        for component in guideComponents:
+            for i in range(component.getNumInputs()):
+                componentInput = component.getInputByIndex(i)
+                if componentInput.isConnected():
+                    componentOutput = componentInput.getConnection()
+                    connectionJson = {
+                        'source': componentOutput.getParent().getDecoratedName() + '.' + componentOutput.getName(),
+                        'target': component.getDecoratedName() + '.' + componentInput.getName(),
+                        'targetIndex': componentInput.getIndex()
+                    }
+                    connectionsJson.append(connectionJson)
+
+        guideData['connections'] = connectionsJson
+
+        return guideData

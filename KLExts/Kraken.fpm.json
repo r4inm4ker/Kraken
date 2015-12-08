@@ -1,11 +1,18 @@
 {
   "code": [
     "Drawing/DrawingUtils.kl",
+    "Solvers/Math.kl",
     "Solvers/KrakenSolverArg.kl",
     "Solvers/KrakenSolver.kl",
+    "Solvers/KrakenRigScaleSolver.kl",
+    "Solvers/KrakenDirectionConstraintSolver.kl",
     "Solvers/KrakenPoseConstraintSolver.kl",
     "Solvers/KrakenMultiPoseConstraintSolver.kl"
     "Solvers/BezierSpineSolver.kl",
-    "Solvers/NBoneIKSolver.kl"
+    "Solvers/TwoBoneIKSolver.kl",
+    "Solvers/NBoneIKSolver.kl",
+    "Solvers/TentacleSolver.kl",
+    "Solvers/DynamicChainSolver.kl",
+    "PersistenceHelpers.kl"
   ]
 }

@@ -33,8 +33,8 @@ class Config(object):
     def initColors(self):
         """Initializes the color values.
 
-        Return:
-        Dict, color definitions.
+        Returns:
+            dict: color definitions.
 
         """
 
@@ -84,8 +84,8 @@ class Config(object):
     def getColors(self):
         """Gets the colors defined in the config.
 
-        Return:
-        Dict, colors.
+        Returns:
+            dict: colors.
 
         """
 
@@ -98,8 +98,8 @@ class Config(object):
     def initColorMap(self):
         """Initializes the color values.
 
-        Return:
-        Dict, color definitions.
+        Returns:
+            dict: color definitions.
 
         """
 
@@ -118,8 +118,8 @@ class Config(object):
     def getColorMap(self):
         """Gets the color map defined in the config.
 
-        Return:
-        Dict, color map.
+        Returns:
+            dict: color map.
 
         """
 
@@ -132,8 +132,8 @@ class Config(object):
     def initNameTemplate(self):
         """Initializes the name template.
 
-        Return:
-        Dict, name template.
+        Returns:
+            dict: name template.
 
         """
 
@@ -163,8 +163,8 @@ class Config(object):
                         "formats":
                                   {
                                    "Container": ["name"],
-                                   "Layer": ["name"],
-                                   "ComponentGroup": ["container", "name", "sep", "location", "sep", "type"],
+                                   "Layer": ["container", "sep", "name"],
+                                   "ComponentGroup": ["name", "sep", "location", "sep", "type"],
                                    "default": ["component", "sep", "location", "sep", "name", "sep", "type"],
                                   }
                        }
@@ -175,8 +175,8 @@ class Config(object):
     def getNameTemplate(self):
         """Returns the naming template for this configuration.
 
-        Return:
-        Dict, naming template.
+        Returns:
+            dict: naming template.
 
         """
 
@@ -189,12 +189,21 @@ class Config(object):
     def initControlShapes(self):
         """Initializes the control shapes.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
         controlShapes = {
+                         "point": [
+                                   {
+                                    "points": [
+                                               [0.0, 0.0, 0.0],
+                                              ],
+                                    "degree": 1,
+                                    "closed": False
+                                   }
+                                  ],
                          "arrow": [
                                    {
                                     "points": [
@@ -409,7 +418,7 @@ class Config(object):
                                                 [-0.5, 0.0, -0.5]
                                                ],
                                      "degree": 1,
-                                     "closed": False
+                                     "closed": True
                                     }
                                    ],
                          "triangle": [
@@ -422,6 +431,56 @@ class Config(object):
                                        "degree": 1,
                                        "closed": True
                                       }
+                                     ],
+                         "fkCircle": [
+                                      {
+                                       "points": [
+                                                  [0.0, 0.35, -0.35],
+                                                  [0.0, 0.46, -0.09],
+                                                  [0.0, 0.55, 0.0],
+                                                  [0.0, 0.46, 0.09],
+                                                  [0.0, 0.35, 0.35],
+                                                  [0.0, 0.09, 0.46],
+                                                  [0.0, 0.0, 0.55],
+                                                  [-0.0, -0.09, 0.46],
+                                                  [-0.0, -0.35, 0.35],
+                                                  [-0.0, -0.5, 0.0],
+                                                  [-0.0, -0.35, -0.35],
+                                                  [0.0, 0.0, -0.5]
+                                                 ],
+                                        "degree": 1,
+                                        "closed": True
+                                       },
+                                       {
+                                        "points": [
+                                                   [0.0, 0.0, 0.0],
+                                                   [1.0, 0.0, 0.0]
+                                                  ],
+                                        "degree": 1,
+                                        "closed": False
+                                       }
+                                     ],
+                         "vertebra": [
+                                      {
+                                       "points": [
+                                                  [-0.5, -0.0, -0.5],
+                                                  [0.5, 0.0, -0.5],
+                                                  [0.25, 0.0, 0.5],
+                                                  [-0.25, -0.0, 0.5]
+                                                 ],
+                                       "closed": True,
+                                       "degree": 1
+                                      },
+                                      {
+                                       "points": [
+                                                  [0.0, 0.0, -0.5],
+                                                  [0.0, 0.5, -0.5],
+                                                  [0.0, 0.25, 0.5],
+                                                  [0.0, 0.0, 0.5]
+                                                 ],
+                                       "closed": True,
+                                       "degree": 1
+                                      }
                                      ]
                         }
 
@@ -431,8 +490,8 @@ class Config(object):
     def getControlShapes(self):
         """Returns the control shapes for this configuration.
 
-        Return:
-        Dict, control shapes.
+        Returns:
+            dict: control shapes.
 
         """
 
@@ -445,8 +504,8 @@ class Config(object):
     def getExplicitNaming(self):
         """Returns the value of the explicit naming attribute.
 
-        Return:
-        Boolean, current value.
+        Returns:
+            bool: current value.
 
         """
 
@@ -456,11 +515,11 @@ class Config(object):
     def setExplicitNaming(self, value):
         """Set the config to use explicit naming.
 
-        Arguments:
-        value -- Boolean, whether to use explicit naming or not.
+        Args:
+            value (bool): whether to use explicit naming or not.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -476,8 +535,8 @@ class Config(object):
     def getInstance(cls):
         """This class method returns the singleton instance for the Config.
 
-        Return:
-        The singleton instance.
+        Returns:
+            object: The singleton config instance.
 
         """
 
@@ -491,14 +550,28 @@ class Config(object):
 
 
     @classmethod
+    def makeCurrent(cls):
+        """Sets this class t be the singleton instance Config.
+
+        Returns:
+            object: The singleton config instance.
+
+        """
+
+        Config.__instance = None
+        Config.__instance = cls()
+
+
+    @classmethod
     def clearInstance(cls):
         """Clears the instance variable of the config.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
         Config.__instance = None
 
         return True
+

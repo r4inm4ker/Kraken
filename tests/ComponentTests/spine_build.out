@@ -1,32 +1,75 @@
 Failed to find DCC builder. Falling back to Python builder.
-Spine
-Spine.controls
-Spine.controls.Spine
-Spine.controls.Spine.inputs
-Spine.controls.Spine.outputs
-Spine.controls.Spine.outputs.spine01
-Spine.controls.Spine.outputs.spine02
-Spine.controls.Spine.outputs.spine03
-Spine.controls.Spine.outputs.spine04
-Spine.controls.Spine.outputs.spine05
-Spine.controls.Spine.outputs.spine06
-Spine.controls.Spine.outputs.spineBase
-Spine.controls.Spine.outputs.spineEnd
-Spine.controls.Spine.cog
-Spine.controls.Spine.cog.cog
-Spine.controls.Spine.cog.cog.spine01
-Spine.controls.Spine.cog.cog.spine01.spine01
-Spine.controls.Spine.cog.cog.spine01.spine01.spine02
-Spine.controls.Spine.cog.cog.spine01.spine01.spine02.spine02
-Spine.controls.Spine.cog.cog.spine01.spine01.spine02.spine02.spine03
-Spine.controls.Spine.cog.cog.spine01.spine01.spine02.spine02.spine03.spine03
-Spine.controls.Spine.cog.cog.spine04
-Spine.controls.Spine.cog.cog.spine04.spine04
-Spine.deformers
-Spine.deformers.Spine
-Spine.deformers.Spine.spine01
-Spine.deformers.Spine.spine02
-Spine.deformers.Spine.spine03
-Spine.deformers.Spine.spine04
-Spine.deformers.Spine.spine05
-Spine.deformers.Spine.spine06
+building:spine as:Mspine
+building:spine.controls as:controls
+building:spine.controls.spine as:spine_M_cmp
+building:spine.controls.spine.inputs as:spine_M_inputs_hrc
+building:spine.controls.spine.inputs.mainSrt as:spine_M_mainSrt_cmpIn
+building:spine.controls.spine.outputs as:spine_M_outputs_hrc
+building:spine.controls.spine.outputs.cog as:spine_M_cog_cmpOut
+building:spine.controls.spine.outputs.spineBase as:spine_M_spineBase_cmpOut
+building:spine.controls.spine.outputs.pelvis as:spine_M_pelvis_cmpOut
+building:spine.controls.spine.outputs.spineEnd as:spine_M_spineEnd_cmpOut
+building:spine.controls.spine.outputs.spine01 as:spine_M_spine01_cmpOut
+building:spine.controls.spine.outputs.spine02 as:spine_M_spine02_cmpOut
+building:spine.controls.spine.outputs.spine03 as:spine_M_spine03_cmpOut
+building:spine.controls.spine.outputs.spine04 as:spine_M_spine04_cmpOut
+building:spine.controls.spine.outputs.spine05 as:spine_M_spine05_cmpOut
+building:spine.controls.spine.outputs.spine06 as:spine_M_spine06_cmpOut
+building:spine.controls.spine.cog as:spine_M_cog_ctrlSpace
+building:spine.controls.spine.cog.cog as:spine_M_cog_ctrl
+building:spine.controls.spine.cog.cog.spine01 as:spine_M_spine01_ctrlSpace
+building:spine.controls.spine.cog.cog.spine01.spine01 as:spine_M_spine01_ctrl
+building:spine.controls.spine.cog.cog.spine01.spine01.spine02 as:spine_M_spine02_ctrlSpace
+building:spine.controls.spine.cog.cog.spine01.spine01.spine02.spine02 as:spine_M_spine02_ctrl
+building:spine.controls.spine.cog.cog.spine01.spine01.spine02.spine02.spine03 as:spine_M_spine03_ctrlSpace
+building:spine.controls.spine.cog.cog.spine01.spine01.spine02.spine02.spine03.spine03 as:spine_M_spine03_ctrl
+building:spine.controls.spine.cog.cog.spine04 as:spine_M_spine04_ctrlSpace
+building:spine.controls.spine.cog.cog.spine04.spine04 as:spine_M_spine04_ctrl
+building:spine.controls.spine.cog.cog.pelvis as:spine_M_pelvis_ctrlSpace
+building:spine.controls.spine.cog.cog.pelvis.pelvis as:spine_M_pelvis_ctrl
+building:spine.deformers as:deformers
+building:spine.deformers.spine as:spine_M_cmp
+building:spine.deformers.spine.spine01 as:spine_M_spine01_def
+building:spine.deformers.spine.pelvis as:spine_M_pelvis_def
+building:spine.deformers.spine.spine02 as:spine_M_spine02_def
+building:spine.deformers.spine.spine03 as:spine_M_spine03_def
+building:spine.deformers.spine.spine04 as:spine_M_spine04_def
+building:spine.deformers.spine.spine05 as:spine_M_spine05_def
+building:spine.deformers.spine.spine06 as:spine_M_spine06_def
+spine:M
+spine:M.controls
+spine:M.controls.spine:M
+spine:M.controls.spine:M.inputs
+spine:M.controls.spine:M.inputs.mainSrt
+spine:M.controls.spine:M.outputs
+spine:M.controls.spine:M.outputs.cog
+spine:M.controls.spine:M.outputs.spineBase
+spine:M.controls.spine:M.outputs.pelvis
+spine:M.controls.spine:M.outputs.spineEnd
+spine:M.controls.spine:M.outputs.spine01
+spine:M.controls.spine:M.outputs.spine02
+spine:M.controls.spine:M.outputs.spine03
+spine:M.controls.spine:M.outputs.spine04
+spine:M.controls.spine:M.outputs.spine05
+spine:M.controls.spine:M.outputs.spine06
+spine:M.controls.spine:M.cog
+spine:M.controls.spine:M.cog.cog
+spine:M.controls.spine:M.cog.cog.spine01
+spine:M.controls.spine:M.cog.cog.spine01.spine01
+spine:M.controls.spine:M.cog.cog.spine01.spine01.spine02
+spine:M.controls.spine:M.cog.cog.spine01.spine01.spine02.spine02
+spine:M.controls.spine:M.cog.cog.spine01.spine01.spine02.spine02.spine03
+spine:M.controls.spine:M.cog.cog.spine01.spine01.spine02.spine02.spine03.spine03
+spine:M.controls.spine:M.cog.cog.spine04
+spine:M.controls.spine:M.cog.cog.spine04.spine04
+spine:M.controls.spine:M.cog.cog.pelvis
+spine:M.controls.spine:M.cog.cog.pelvis.pelvis
+spine:M.deformers
+spine:M.deformers.spine:M
+spine:M.deformers.spine:M.spine01
+spine:M.deformers.spine:M.pelvis
+spine:M.deformers.spine:M.spine02
+spine:M.deformers.spine:M.spine03
+spine:M.deformers.spine:M.spine04
+spine:M.deformers.spine:M.spine05
+spine:M.deformers.spine:M.spine06

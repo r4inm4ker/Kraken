@@ -1,6 +1,6 @@
 from kraken import plugins
 from kraken.core.maths import Vec3
-from kraken.examples.insectleg_component import InsectLegComponentGuide, InsectLegComponent
+from kraken_examples.insectleg_component import InsectLegComponentGuide, InsectLegComponentRig
 
 from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
@@ -13,6 +13,7 @@ insectLegGuide.loadData(
                         {
                          "name": "insectLeg",
                          "location": "L",
+                         "numJoints": 4,
                          "jointPositions": [
                                             Vec3(0.9811, 9.769, -1.237),
                                             Vec3(5.4488, 8.4418, -1.237),
@@ -25,9 +26,9 @@ insectLegGuide.loadData(
 # Save the hand guide data for persistence.
 saveData = insectLegGuide.saveData()
 
-insectLegGuideData = insectLegGuide.getGuideData()
+insectLegGuideData = insectLegGuide.getRigBuildData()
 
-leg = InsectLegComponent()
+leg = InsectLegComponentRig()
 leg.loadData(insectLegGuideData)
 
 builder = plugins.getBuilder()

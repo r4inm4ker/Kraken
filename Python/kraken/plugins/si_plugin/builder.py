@@ -26,12 +26,12 @@ class Builder(Builder):
     def buildContainer(self, kSceneItem, buildName):
         """Builds a container / namespace object.
 
-        Arguments:
-        kSceneItem -- Object, kSceneItem that represents a container to be built.
-        buildName -- String, The name to use on the built object.
+        Args:
+            kSceneItem (object): kSceneItem that represents a container to be built.
+            buildName (str): The name to use on the built object.
 
-        Return:
-        Node that is created..
+        Returns:
+            object: Node that is created.
 
         """
 
@@ -51,12 +51,12 @@ class Builder(Builder):
     def buildLayer(self, kSceneItem, buildName):
         """Builds a layer object.
 
-        Arguments:
-        kSceneItem -- Object, kSceneItem that represents a layer to be built.
-        buildName -- String, The name to use on the built object.
+        Args:
+            kSceneItem (object): kSceneItem that represents a layer to be built.
+            buildName (str): The name to use on the built object.
 
-        Return:
-        Node that is created..
+        Returns:
+            object: Node that is created.
 
         """
 
@@ -75,12 +75,12 @@ class Builder(Builder):
     def buildHierarchyGroup(self, kSceneItem, buildName):
         """Builds a hierarchy group object.
 
-        Arguments:
-        kSceneItem -- Object, kSceneItem that represents a group to be built.
-        buildName -- String, The name to use on the built object.
+        Args:
+            kSceneItem (object): kSceneItem that represents a group to be built.
+            buildName (str): The name to use on the built object.
 
-        Return:
-        DCC Scene Item that is created.
+        Returns:
+            object: DCC Scene Item that is created.
 
         """
 
@@ -102,12 +102,12 @@ class Builder(Builder):
     def buildGroup(self, kSceneItem, buildName):
         """Builds a locator / null object.
 
-        Arguments:
-        kSceneItem -- Object, kSceneItem that represents a group to be built.
-        buildName -- String, The name to use on the built object.
+        Args:
+            kSceneItem (object): kSceneItem that represents a group to be built.
+            buildName (str): The name to use on the built object.
 
-        Return:
-        Node that is created.
+        Returns:
+            object: Node that is created.
 
         """
 
@@ -126,12 +126,12 @@ class Builder(Builder):
     def buildJoint(self, kSceneItem, buildName):
         """Builds a joint object.
 
-        Arguments:
-        kSceneItem -- Object, kSceneItem that represents a joint to be built.
-        buildName -- String, The name to use on the built object.
+        Args:
+            kSceneItem (object): kSceneItem that represents a joint to be built.
+            buildName (str): The name to use on the built object.
 
-        Return:
-        DCC Scene Item that is created.
+        Returns:
+            object: DCC Scene Item that is created.
 
         """
 
@@ -141,6 +141,8 @@ class Builder(Builder):
             parentDCCSceneItem = si.ActiveProject3.ActiveScene.Root
 
         dccSceneItem = parentDCCSceneItem.AddNull()
+        dccSceneItem.Parameters('primary_icon').Value = 2
+        dccSceneItem.Parameters('size').Value = 0.125
         dccSceneItem.Name = buildName
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
@@ -150,12 +152,12 @@ class Builder(Builder):
     def buildLocator(self, kSceneItem, buildName):
         """Builds a locator / null object.
 
-        Arguments:
-        kSceneItem -- Object, kSceneItem that represents a locator / null to be built.
-        buildName -- String, The name to use on the built object.
+        Args:
+            kSceneItem (object): kSceneItem that represents a locator / null to be built.
+            buildName (str): The name to use on the built object.
 
-        Return:
-        Node that is created.
+        Returns:
+            object: Node that is created.
 
         """
 
@@ -174,12 +176,12 @@ class Builder(Builder):
     def buildCurve(self, kSceneItem, buildName):
         """Builds a Curve object.
 
-        Arguments:
-        kSceneItem -- Object, kSceneItem that represents a curve to be built.
-        buildName -- String, The name to use on the built object.
+        Args:
+            kSceneItem (object): kSceneItem that represents a curve to be built.
+            buildName (str): The name to use on the built object.
 
-        Return:
-        Node that is created.
+        Returns:
+            object: Node that is created.
 
         """
 
@@ -233,12 +235,12 @@ class Builder(Builder):
     def buildControl(self, kSceneItem, buildName):
         """Builds a Control object.
 
-        Arguments:
-        kSceneItem -- Object, kSceneItem that represents a control to be built.
-        buildName -- String, The name to use on the built object.
+        Args:
+            kSceneItem (object): kSceneItem that represents a control to be built.
+            buildName (str): The name to use on the built object.
 
-        Return:
-        Node that is created.
+        Returns:
+            object: Node that is created.
 
         """
 
@@ -295,35 +297,36 @@ class Builder(Builder):
     def buildBoolAttribute(self, kAttribute):
         """Builds a Bool attribute.
 
-        Arguments:
-        kAttribute -- Object, kAttribute that represents a boolean attribute to be built.
+        Args:
+            kAttribute (object): kAttribute that represents a boolean attribute to be built.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
         parentDCCSceneItem = Dispatch(self.getDCCSceneItem(kAttribute.getParent()))
         dccSceneItem = parentDCCSceneItem.AddParameter2(kAttribute.getName(), constants.siBool, kAttribute.getValue(), "", "", "", "", constants.siClassifUnknown, 2053, kAttribute.getName())
-
+        dccSceneItem.Animatable = kAttribute.getAnimatable()
+        dccSceneItem.Keyable = kAttribute.getKeyable()
         self._registerSceneItemPair(kAttribute, dccSceneItem)
 
         return True
 
 
-    def buildFloatAttribute(self, kAttribute):
+    def buildScalarAttribute(self, kAttribute):
         """Builds a Float attribute.
 
-        Arguments:
-        kAttribute -- Object, kAttribute that represents a float attribute to be built.
+        Args:
+            kAttribute (object): kAttribute that represents a float attribute to be built.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
         parentDCCSceneItem = Dispatch(self.getDCCSceneItem(kAttribute.getParent()))
-        dccSceneItem = parentDCCSceneItem.AddParameter2(kAttribute.getName(), constants.siDouble, kAttribute.getValue(), kAttribute.getMin(), kAttribute.getMax(), kAttribute.getMin(), kAttribute.getMax(), constants.siClassifUnknown, 2053, kAttribute.getName())
+        dccSceneItem = parentDCCSceneItem.AddParameter2(kAttribute.getName(), constants.siDouble, kAttribute.getValue(), kAttribute.getMin(), kAttribute.getMax(), kAttribute.getUIMin(), kAttribute.getUIMax(), constants.siClassifUnknown, 2053, kAttribute.getName())
 
         self._registerSceneItemPair(kAttribute, dccSceneItem)
 
@@ -333,16 +336,16 @@ class Builder(Builder):
     def buildIntegerAttribute(self, kAttribute):
         """Builds a Integer attribute.
 
-        Arguments:
-        kAttribute -- Object, kAttribute that represents a integer attribute to be built.
+        Args:
+            kAttribute (object): kAttribute that represents a integer attribute to be built.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
         parentDCCSceneItem = Dispatch(self.getDCCSceneItem(kAttribute.getParent()))
-        dccSceneItem = parentDCCSceneItem.AddParameter2(kAttribute.getName(), constants.siInt4, kAttribute.getValue(), kAttribute.min, kAttribute.max, kAttribute.min, kAttribute.max, constants.siClassifUnknown, 2053, kAttribute.getName())
+        dccSceneItem = parentDCCSceneItem.AddParameter2(kAttribute.getName(), constants.siInt4, kAttribute.getValue(), kAttribute.getMin(), kAttribute.getMax(), kAttribute.getUIMin(), kAttribute.getUIMax(), constants.siClassifUnknown, 2053, kAttribute.getName())
 
         self._registerSceneItemPair(kAttribute, dccSceneItem)
 
@@ -352,11 +355,11 @@ class Builder(Builder):
     def buildStringAttribute(self, kAttribute):
         """Builds a String attribute.
 
-        Arguments:
-        kAttribute -- Object, kAttribute that represents a string attribute to be built.
+        Args:
+            kAttribute (object): kAttribute that represents a string attribute to be built.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -371,11 +374,11 @@ class Builder(Builder):
     def buildAttributeGroup(self, kAttributeGroup):
         """Builds attribute groups on the DCC object.
 
-        Arguments:
-        kAttributeGroup -- SceneItem, kraken object to build the attribute group on.
+        Args:
+            kAttributeGroup (object): Kraken object to build the attribute group on.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -392,8 +395,8 @@ class Builder(Builder):
             if kAttribute.isTypeOf("BoolAttribute"):
                 self.buildBoolAttribute(kAttribute)
 
-            elif kAttribute.isTypeOf("FloatAttribute"):
-                self.buildFloatAttribute(kAttribute)
+            elif kAttribute.isTypeOf("ScalarAttribute"):
+                self.buildScalarAttribute(kAttribute)
 
             elif kAttribute.isTypeOf("IntegerAttribute"):
                 self.buildIntegerAttribute(kAttribute)
@@ -410,11 +413,11 @@ class Builder(Builder):
     def connectAttribute(self, kAttribute):
         """Connects the driver attribute to this one.
 
-        Arguments:
-        kAttribute -- Object, attribute to connect.
+        Args:
+            kAttribute (object): Attribute to connect.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -432,11 +435,11 @@ class Builder(Builder):
     def buildOrientationConstraint(self, kConstraint):
         """Builds an orientation constraint represented by the kConstraint.
 
-        Arguments:
-        kConstraint -- Object, kraken constraint object to build.
+        Args:
+            kConstraint (object): Kraken constraint object to build.
 
-        Return:
-        dccSceneItem that was created.
+        Returns:
+            object: dccSceneItem that was created.
 
         """
 
@@ -455,11 +458,11 @@ class Builder(Builder):
     def buildPoseConstraint(self, kConstraint):
         """Builds an pose constraint represented by the kConstraint.
 
-        Arguments:
-        kConstraint -- Object, kraken constraint object to build.
+        Args:
+            kConstraint (object): kraken constraint object to build.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -506,12 +509,12 @@ class Builder(Builder):
             for eachConstrainer in kConstraint.getConstrainers():
 
                 if eachConstrainer is None:
-                    raise Exception("Constraint '"+kConstraint.getFullName()+"' has invalid connection.");
+                    raise Exception("Constraint '"+kConstraint.getPath()+"' has invalid connection.");
 
                 dccSceneItem = self.getDCCSceneItem(eachConstrainer)
 
                 if dccSceneItem is None:
-                    raise Exception("Constraint '"+kConstraint.getFullName()+"' of type '"+solverTypeName+"' is connected to object without corresponding SceneItem:" + eachConstrainer.getFullName());
+                    raise Exception("Constraint '"+kConstraint.getPath()+"' of type '"+solverTypeName+"' is connected to object without corresponding SceneItem:" + eachConstrainer.getPath());
 
                 connectionTargets = dccSceneItem.FullName + connectionSuffix
                 break
@@ -540,11 +543,11 @@ class Builder(Builder):
     def buildPositionConstraint(self, kConstraint):
         """Builds an position constraint represented by the kConstraint.
 
-        Arguments:
-        kConstraint -- Object, kraken constraint object to build.
+        Args:
+            kConstraint (object): kraken constraint object to build.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -563,11 +566,11 @@ class Builder(Builder):
     def buildScaleConstraint(self, kConstraint):
         """Builds an scale constraint represented by the kConstraint.
 
-        Arguments:
-        kConstraint -- Object, kraken constraint object to build.
+        Args:
+            kConstraint (object): kraken constraint object to build.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -586,30 +589,32 @@ class Builder(Builder):
     # ========================
     # Component Build Methods
     # ========================
-    def buildAttributeConnection(self, componentIO):
+    def buildAttributeConnection(self, connectionInput):
         """Builds the link between the target and connection target.
 
-        Arguments:
-        componentIO -- Object, kraken connection to build.
+        Args:
+            connectionInput (object): kraken component input to build connections for.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
-        connection = componentIO.getConnection()
+        if connectionInput.isConnected() is False:
+            return False
+
+        connection = connectionInput.getConnection()
         connectionTarget = connection.getTarget()
-        target = componentIO.getTarget()
+        inputTarget = connectionInput.getTarget()
 
-        if componentIO.getDataType().endswith('[]'):
-            # TODO: Implement array handling.
-            pass
+        if connection.getDataType().endswith('[]'):
+            connectionTarget = connection.getTarget()[connectionInput.getIndex()]
         else:
+            connectionTarget = connection.getTarget()
 
-            connectionTargetDCCSceneItem = self.getDCCSceneItem(connectionTarget)
-            targetDCCSceneItem = self.getDCCSceneItem(target)
-
-            targetDCCSceneItem.AddExpression(connectionTargetDCCSceneItem.FullName)
+        connectionTargetDCCSceneItem = self.getDCCSceneItem(connectionTarget)
+        targetDCCSceneItem = self.getDCCSceneItem(inputTarget)
+        targetDCCSceneItem.AddExpression(connectionTargetDCCSceneItem.FullName)
 
         return True
 
@@ -620,11 +625,11 @@ class Builder(Builder):
     def buildSpliceOperators(self, kOperator):
         """Builds Splice Operators on the components.
 
-        Arguments:
-        kOperator -- Object, kraken operator that represents a Splice operator.
+        Args:
+            kOperator (object): kraken operator that represents a Splice operator.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
         try:
@@ -643,12 +648,12 @@ class Builder(Builder):
 
                         target = kOperator.getOutput(arg.name)
                         if target is None:
-                            raise Exception("Solver '" + kOperator.getFullName() + "' output :'" + arg.name + "' not connected.")
+                            raise Exception("Solver '" + kOperator.getPath() + "' output :'" + arg.name + "' not connected.")
 
                         operatorOwner = self.getDCCSceneItem(target)
 
                         if operatorOwner is None:
-                            raise Exception("Solver '" + kOperator.getFullName() + "' output :'" + arg.name + "' dcc item not found for item:" + target.getFullName())
+                            raise Exception("Solver '" + kOperator.getPath() + "' output :'" + arg.name + "' dcc item not found for item:" + target.getPath())
 
                         targets = operatorOwner.FullName + ".kine.global"
                         operatorOwnerArg = arg.name
@@ -658,12 +663,12 @@ class Builder(Builder):
                         for target in kOperator.getOutput(arg.name):
 
                             if target is None:
-                                raise Exception("Solver '" + kOperator.getFullName() + "' output :'" + arg.name + "' not connected.")
+                                raise Exception("Solver '" + kOperator.getPath() + "' output :'" + arg.name + "' not connected.")
 
                             dccSceneItem = self.getDCCSceneItem(target)
 
                             if dccSceneItem is None:
-                                raise Exception("Solver '" + kOperator.getFullName() + "' output :'" + arg.name + "' dcc item not found for item:" + target.getFullName())
+                                raise Exception("Solver '" + kOperator.getPath() + "' output :'" + arg.name + "' dcc item not found for item:" + target.getPath())
 
                             if targets == "":
                                 operatorOwner = dccSceneItem
@@ -679,17 +684,31 @@ class Builder(Builder):
             spliceOpPath = operatorOwner.FullName + ".kine.global.SpliceOp"
 
             # Create Splice Operator
-            si.fabricSplice('newSplice', "{\"targets\":\"" + targets + "\", \"portName\":\"" + arg.name + "\", \"portMode\":\"out\"}", "", "")
+            opPath = si.fabricSplice('newSplice', "{\"targets\":\"" + targets + "\", \"portName\":\"" + arg.name + "\", \"portMode\":\"out\"}", "", "")
 
             # Add the private/non-mayaAttr port that stores the Solver object
             si.fabricSplice("addInternalPort", spliceOpPath, "{\"portName\":\"solver\", \"dataType\":\"" + solverTypeName + "\", \"extension\":\"" + kOperator.getExtension() + "\", \"portMode\":\"io\"}", "")
+            si.fabricSplice("setPortPersistence", spliceOpPath, '{"portName":"solver", "persistence":true }', "")
+
 
             # connect the operator to the objects in the DCC
             for i in xrange(len(args)):
                 arg = args[i]
 
+
                 # Skip arg if it's the target arg
                 if arg.name == operatorOwnerArg:
+                    continue
+
+                if arg.dataType == 'EvalContext':
+                    si.fabricSplice("addInputPort", spliceOpPath, "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\" }", "")
+                    continue
+                if arg.name == 'time':
+                    si.fabricSplice("addParameter", spliceOpPath, "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\" }", "")
+                    continue
+
+                if arg.name == 'frame':
+                    si.fabricSplice("addParameter", spliceOpPath, "{\"portName\":\"" + arg.name + "\", \"dataType\":\"" + arg.dataType + "\" }", "")
                     continue
 
                 # Append the suffix based on the argument type, Softimage Only
@@ -719,7 +738,7 @@ class Builder(Builder):
                         dccSceneItem = self.getDCCSceneItem(connectedObjects[i])
 
                         if dccSceneItem is None:
-                            raise Exception("Operator '"+kOperator.getName()+"' of type '"+solverTypeName+"' arg '"+arg.name+"' dcc item not found for item:" + connectedObjects[i].getFullName());
+                            raise Exception("Operator '"+kOperator.getName()+"' of type '"+solverTypeName+"' arg '"+arg.name+"' dcc item not found for item:" + connectedObjects[i].getPath());
 
                         if i==0:
                             connectionTargets = dccSceneItem.FullName + connectionSuffix
@@ -732,7 +751,7 @@ class Builder(Builder):
                     dccSceneItem = self.getDCCSceneItem(connectedObjects)
 
                     if dccSceneItem is None:
-                        raise Exception("Operator '"+kOperator.getName()+"' of type '"+solverTypeName+"' arg '"+arg.name+"' dcc item not found for item:" + connectedObjects.getFullName());
+                        raise Exception("Operator '"+kOperator.getName()+"' of type '"+solverTypeName+"' arg '"+arg.name+"' dcc item not found for item:" + connectedObjects.getPath());
 
                     connectionTargets = dccSceneItem.FullName + connectionSuffix
 
@@ -745,10 +764,27 @@ class Builder(Builder):
                 elif arg.connectionType in ['io', 'out']:
                     si.fabricSplice("addOutputPort", spliceOpPath, connectionArgs, "")
 
+
+
             # Generate the operator source code.
             opSourceCode = kOperator.generateSourceCode()
 
             si.fabricSplice('addKLOperator', spliceOpPath, '{"opName": "' + kOperator.getName() + '"}', opSourceCode)
+
+            # Check for Time and Frame arguments and set expressions
+            spliceOp = si.Dictionary.GetObject(spliceOpPath, False)
+            timeParameter = spliceOp.Parameters("time")
+            if timeParameter is not None:
+                timeParameter.AddExpression("T")
+
+            spliceOp = si.Dictionary.GetObject(spliceOpPath, False)
+            frameParameter = spliceOp.Parameters("frame")
+            if frameParameter is not None:
+                frameParameter.AddExpression("Fc")
+
+            alwaysEval = kOperator.getAlwaysEval()
+            if alwaysEval is True:
+                spliceOp.Parameters("alwaysevaluate").Value = True
 
         finally:
             pass
@@ -762,11 +798,11 @@ class Builder(Builder):
     def lockParameters(self, kSceneItem):
         """Locks flagged SRT parameters.
 
-        Arguments:
-        kSceneItem -- Object, kraken object to lock the SRT parameters on.
+        Args:
+            kSceneItem (object): kraken object to lock the SRT parameters on.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -820,11 +856,11 @@ class Builder(Builder):
     def setVisibility(self, kSceneItem):
         """Sets the visibility of the object after its been created.
 
-        Arguments:
-        kSceneItem -- Object, kraken object to set the visibility on.
+        Args:
+            kSceneItem (object): kraken object to set the visibility on.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -842,11 +878,11 @@ class Builder(Builder):
     def setObjectColor(self, kSceneItem):
         """Sets the color on the dccSceneItem.
 
-        Arguments:
-        kSceneItem -- Object, kraken object to set the color on.
+        Args:
+            kSceneItem (object): kraken object to set the color on.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -869,11 +905,11 @@ class Builder(Builder):
     def setTransform(self, kSceneItem):
         """Translates the transform to Softimage transform.
 
-        Arguments:
-        kSceneItem -- Object: object to set the transform on.
+        Args:
+            kSceneItem (object): object to set the transform on.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -891,6 +927,8 @@ class Builder(Builder):
 
         dccSceneItem.Kinematics.Global.PutTransform2(None, xfo)
 
+        dccSceneItem.Kinematics.Local.Parameters('rotorder').Value = kSceneItem.ro.order
+
         return True
 
 
@@ -900,16 +938,15 @@ class Builder(Builder):
     def _preBuild(self, kSceneItem):
         """Pre-Build commands.
 
-        Arguments:
-        kSceneItem -- Object, kraken kSceneItem object to build.
+        Args:
+            kSceneItem (object): kraken kSceneItem object to build.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
         si.SetValue("preferences.scripting.cmdlog", False, "")
-        si.BeginUndo("Kraken SI Build: " + kSceneItem.name)
 
         return True
 
@@ -917,11 +954,9 @@ class Builder(Builder):
     def _postBuild(self):
         """Post-Build commands.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
-
-        si.EndUndo()
 
         return True

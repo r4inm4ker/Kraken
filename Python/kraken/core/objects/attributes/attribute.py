@@ -12,23 +12,21 @@ class Attribute(SceneItem):
     """Attribute object."""
 
     def __init__(self, name, value, parent=None):
-        super(Attribute, self).__init__(name, parent)
-        self.value = value
-        self.connection = None
+        super(Attribute, self).__init__(name)
+        self._value = value
+        self._connection = None
+        self._keyable = True
+        self._lock = False
+        self._animatable = True
+        self._callback = None
 
+        if parent is not None:
+            if parent.getTypeName() != 'AttributeGroup':
+                raise ValueError("Parent: " + parent.getName() +
+                    " is not an Attribute Group!")
 
-    # =============
-    # Name Methods
-    # =============
-    def getDecoratedPath(self):
-        """Gets the decorated path of the object.
+            parent.addAttribute(self)
 
-        Return:
-        String, decorated path  of the object.
-
-        """
-
-        return self.parent.getDecoratedPath() + '.' + '#' + self.getName()
 
 
     # ==============
@@ -37,53 +35,177 @@ class Attribute(SceneItem):
     def getValue(self):
         """Returns the value of the attribute.
 
-        Return:
-        Value of the attribute.
+        Returns: Attribute Value.
 
         """
 
-        return self.value
+        return self._value
 
 
     def setValue(self, value):
-        """Sets the value of the attribute.
+        """Sets attribute value.
 
-        Arguments:
-        value -- Value to set the attribute to.
+        Args:
+            value: Value to set the attribute to.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
-        self.value = value
+        self._value = value
+
+        if self._callback is not None:
+            self._callback(value)
 
         return True
+
+
+    def setValueChangeCallback(self, callback):
+        """Sets the value of the attribute.
+
+
+        Args:
+            callback: Value to set the attribute to.
+
+        Returns:
+            bool: True if successful.
+
+        """
+
+        self._callback = callback
+
+        return True
+
+
+    def getKeyable(self):
+        """Returns the keyable state of the attribute.
+
+        Args:
+            argument (Type): description.
+
+        Returns:
+            bool: Keyable state of the attribute.
+
+        """
+
+        return self._keyable
+
+
+    def setKeyable(self, value):
+        """Sets the keyable state of the attribute.
+
+        Args:
+            value (bool): keyable state.
+
+        Returns:
+            bool: True if successful.
+
+        """
+
+        if type(value) is not bool:
+            raise TypeError("Value is not of type 'bool'.")
+
+        self._keyable = value
+
+        return True
+
+
+    def getLock(self):
+        """Returns the Lock state of the attribute.
+
+        Returns:
+            bool: Lock state of the attribute.
+
+        """
+
+        return self._lock
+
+
+    def setLock(self, value):
+        """Sets the lock state of the attribute..
+
+        Args:
+            value (bool): lock state.
+
+        Returns:
+            bool: True if successful.
+
+        """
+
+        if type(value) is not bool:
+            raise TypeError("Value is not of type 'bool'.")
+
+        self._lock = value
+
+        return True
+
+
+    def setAnimatable(self, value):
+        """Sets the animatable state of the attribute..
+
+        Args:
+            value (bool): animatable state.
+
+        Returns:
+            bool: True if successful.
+
+        """
+
+        if type(value) is not bool:
+            raise TypeError("Value is not of type 'bool'.")
+
+        self._animatable = value
+
+        return True
+
+
+    def getAnimatable(self):
+        """Returns the animatable state of the attribute..
+
+        Returns:
+            bool: True if Animatable state of the attribute.
+
+        """
+
+        return self._animatable
 
 
     def getRTVal(self):
         """Returns and RTVal object for this attribute.
 
-        Return:
-        RTVal
+        Note:
+            This method should be re-implemented in concrete attribute classes.
+
+        Returns:
+            RTVal: RTVal object for this attribute.
+
+        Raises:
+            NotImplemented: Must be implemented by concrete attribute classes.
 
         """
 
-        raise Exception("getRTVal must be implemented by concrete attribute classes")
+        raise NotImplemented("This method should be re-implemented in concrete attribute classes.")
 
 
     def validateValue(self, value):
         """Validates the incoming value is the correct type.
 
-        Arguments:
-        value -- Type, value to check the type of.
+        Note:
+            This method should be re-implemented in concrete attribute classes.
 
-        Return:
-        True if successful.
+        Args:
+            value: value to check the type of.
+
+        Returns:
+            bool: True if valid.
+
+        Raises:
+            NotImplemented: This method should be re-implemented in concrete attribute classes.
 
         """
 
-        return True
+        raise NotImplemented("This method should be re-implemented in concrete attribute classes.")
 
 
     # ===================
@@ -92,53 +214,53 @@ class Attribute(SceneItem):
     def isConnected(self):
         """Returns whether the attribute is connected or not.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if is connected.
 
         """
 
-        if self.connection is None:
+        if self._connection is None:
             return False
 
         return True
 
 
     def getConnection(self):
-        """Returns the connected attribute.
+        """Returns the connected attribute..
 
-        Return:
-        Object, attribute driving this attribute.
+        Returns:
+            Object: attribute driving this attribute.
 
         """
 
-        return self.connection
+        return self._connection
 
 
     def connect(self, attribute):
-        """Connects this attribute with another.
+        """Connects this attribute with another..
 
-        Arguments:
-        attribute -- Object, attribute that will drive this one.
+        Args:
+            attribute (Object): attribute that will drive this one.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
-        self.connection = attribute
+        self._connection = attribute
 
         return True
 
 
     def disconnect(self):
-        """Clears the connection of this attribute.
+        """Clears the connection of this attribute..
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
-        self.connection = None
+        self._connection = None
 
         return True
 
@@ -146,12 +268,13 @@ class Attribute(SceneItem):
     # Persistence Methods
     # ====================
     def jsonEncode(self, saver):
-        """Sets the color of this object.
+        """Encodes the object to a JSON structure.
 
-        Arguments:
+        Args:
+            saver (Object): saver object.
 
-        Return:
-        A JSON structure containing the data for this SceneItem.
+        Returns:
+            Dict: A JSON structure containing the data for this SceneItem.
 
         """
 
@@ -164,24 +287,29 @@ class Attribute(SceneItem):
         jsonData = {
             '__typeHierarchy__': classHierarchy,
             'name': self.name,
-            'value': saver.encodeValue(self.value),
+            'value': saver.encodeValue(self._value),
             'parent': None
         }
 
-        if self.parent is not None:
-            jsonData['parent'] = self.parent.getName()
+        if self.getParent() is not None:
+            jsonData['parent'] = self.getParent().getName()
 
         return jsonData
 
 
     def jsonDecode(self, loader, jsonData):
-        """Returns the color of the object.
+        """Returns the color of the object..
 
-        Return:
-        True if decoding was successful
+        Args:
+            loader (Object): Loader object.
+            jsonData (Dict): JSON object structure.
+
+        Returns:
+            bool: True if successful.
 
         """
+
         self.name =  jsonData['name']
-        self.value =  loader.decodeValue(jsonData['value'])
+        self._value =  loader.decodeValue(jsonData['value'])
 
         return True

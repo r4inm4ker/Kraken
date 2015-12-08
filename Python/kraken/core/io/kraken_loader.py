@@ -7,6 +7,7 @@ KrakenLoader - Factory for building SceneItems.
 
 from kraken.core.maths import Vec2, Vec3, Vec4, Euler, Quat, Xfo, Mat33, Mat44
 
+from kraken.core.objects.scene_item import SceneItem
 from kraken.core.objects.object_3d import Object3D
 from kraken.core.objects.container import Container
 from kraken.core.objects.curve import Curve
@@ -18,7 +19,7 @@ from kraken.core.objects.control import Control
 
 from kraken.core.objects.attributes.attribute_group import AttributeGroup
 from kraken.core.objects.attributes.bool_attribute import BoolAttribute
-from kraken.core.objects.attributes.float_attribute import FloatAttribute
+from kraken.core.objects.attributes.scalar_attribute import ScalarAttribute
 from kraken.core.objects.attributes.integer_attribute import IntegerAttribute
 from kraken.core.objects.attributes.string_attribute import StringAttribute
 
@@ -44,58 +45,11 @@ class KrakenLoader(object):
         self.callbacks = {}
 
 
-    def decodeValue(self, jsonData):
-        """Returns a constructed math value based on the provided json data.
-
-        Arguments:
-        jsondata -- dict, the JSON data to use to decode into a Math value.
-
-        Return:
-        The constructed math value
-
-        """
-
-        if type(jsonData) is not dict:
-            return jsonData
-
-        if '__class__' not in jsonData:
-            raise Exception("Invalid JSON data for constructing value:" + str(jsonData));
-
-        if jsonData['__class__'] == 'Vec2':
-            val = Vec2()
-            val.jsonDecode(jsonData, self)
-        elif jsonData['__class__'] == 'Vec3':
-            val = Vec3()
-            val.jsonDecode(jsonData, self)
-        elif jsonData['__class__'] == 'Vec4':
-            val = Vec4()
-            val.jsonDecode(jsonData, self)
-        elif jsonData['__class__'] == 'Euler':
-            val = Euler()
-            val.jsonDecode(jsonData, self)
-        elif jsonData['__class__'] == 'Quat':
-            val = Quat()
-            val.jsonDecode(jsonData, self)
-        elif jsonData['__class__'] == 'Xfo':
-            val = Xfo()
-            val.jsonDecode(jsonData, self)
-        elif jsonData['__class__'] == 'Mat33':
-            val = Mat33()
-            val.jsonDecode(jsonData, self)
-        elif jsonData['__class__'] == 'Mat44':
-            val = Mat44()
-            val.jsonDecode(jsonData, self)
-        else:
-            raise Exception("Unsupported Math type:" + jsonData['__class__'])
-
-        return val
-
-
     def getParentItem(self):
         """Returns the item that was constructed prior to the current item.
 
-        Return:
-        The stored parent item.
+        Returns:
+            object: The stored parent item.
 
         """
 
@@ -108,11 +62,11 @@ class KrakenLoader(object):
     def resolveSceneItem(self, name):
         """Returns a constructed scene item based on the provided name.
 
-        Arguments:
-        name -- String, name of the scene item to find.
+        Args:
+            name (str): name of the scene item to find.
 
-        Return:
-        The resolved scene item.
+        Returns:
+            object: The resolved scene item.
 
         """
 
@@ -127,11 +81,11 @@ class KrakenLoader(object):
     def construct(self, jsonData):
         """Returns a constructed scene item based on the provided json data.
 
-        Arguments:
-        jsondata -- dict, the JSON data to use to decode into a Math value.
+        Args:
+            jsondata (dict): the JSON data to use to decode into a Math value.
 
-        Return:
-        The constructed scene item.
+        Returns:
+            object: The constructed scene item.
 
         """
 
@@ -153,8 +107,8 @@ class KrakenLoader(object):
         elif "BoolAttribute" in jsonData['__typeHierarchy__']:
             item = BoolAttribute(jsonData['name'])
 
-        elif "FloatAttribute" in jsonData['__typeHierarchy__']:
-            item = FloatAttribute(jsonData['name'])
+        elif "ScalarAttribute" in jsonData['__typeHierarchy__']:
+            item = ScalarAttribute(jsonData['name'])
 
         elif "IntegerAttribute" in jsonData['__typeHierarchy__']:
             item = IntegerAttribute(jsonData['name'])
@@ -255,37 +209,29 @@ class KrakenLoader(object):
         automatically, then it can be registered so the loader can provide it
         during resolveSceneItem.
 
-        Arguments:
-        item -- object, an object constructed during the loading process.
-
-        Return:
-        None
+        Args:
+            item (object): an object constructed during the loading process.
 
         """
 
-        if item.getFullName() in self.builtItems:
+        if item.getPath() in self.builtItems:
             # TODO: resolve using a path, instead of the name.
             # This will require that all items have a parent specified
-            print "Warning. Non unique names used in Kraken:" + item.getFullName()
+            print "Warning. Non unique names used in Kraken:" + item.getPath()
 
-        self.builtItems[item.getFullName()] = item
+        self.builtItems[item.getPath()] = item
 
         # Fire any registered callbacks for this item.
         # This enables the loading of objects already created,
         # but dependent on this object to be completed.
-        if item.getFullName() in self.callbacks:
-            for callback in self.callbacks[item.getFullName()]:
+        if item.getPath() in self.callbacks:
+            for callback in self.callbacks[item.getPath()]:
                 callback(item)
 
 
     def registerConstructionCallback(self, name, callback):
         """Register a callback to be invoked when the requested item is
-        constructed.
-
-        Return:
-        None
-
-        """
+        constructed."""
 
         if name in self.builtItems:
             callback(self.builtItems[name])

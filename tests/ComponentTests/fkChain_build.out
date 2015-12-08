@@ -1,0 +1,53 @@
+Failed to find DCC builder. Falling back to Python builder.
+building:fkChain as:LfkChain
+building:fkChain.controls as:controls
+building:fkChain.controls.fkChain as:fkChain_L_cmp
+building:fkChain.controls.fkChain.inputs as:fkChain_L_inputs_hrc
+building:fkChain.controls.fkChain.inputs.rootInput as:fkChain_L_rootInput_cmpIn
+building:fkChain.controls.fkChain.outputs as:fkChain_L_outputs_hrc
+building:fkChain.controls.fkChain.outputs.chainEndXfoOutput as:fkChain_L_chainEndXfoOutput_cmpOut
+building:fkChain.controls.fkChain.outputs.chainEndPosOutput as:fkChain_L_chainEndPosOutput_cmpOut
+building:fkChain.controls.fkChain.outputs.bone01 as:fkChain_L_bone01_cmpOut
+building:fkChain.controls.fkChain.outputs.bone02 as:fkChain_L_bone02_cmpOut
+building:fkChain.controls.fkChain.outputs.bone03 as:fkChain_L_bone03_cmpOut
+building:fkChain.controls.fkChain.outputs.bone04 as:fkChain_L_bone04_cmpOut
+building:fkChain.controls.fkChain.bone01FK as:fkChain_L_bone01FK_ctrlSpace
+building:fkChain.controls.fkChain.bone01FK.bone01FK as:fkChain_L_bone01FK_ctrl
+building:fkChain.controls.fkChain.bone01FK.bone01FK.bone02FK as:fkChain_L_bone02FK_ctrlSpace
+building:fkChain.controls.fkChain.bone01FK.bone01FK.bone02FK.bone02FK as:fkChain_L_bone02FK_ctrl
+building:fkChain.controls.fkChain.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK as:fkChain_L_bone03FK_ctrlSpace
+building:fkChain.controls.fkChain.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK as:fkChain_L_bone03FK_ctrl
+building:fkChain.controls.fkChain.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK.bone04FK as:fkChain_L_bone04FK_ctrlSpace
+building:fkChain.controls.fkChain.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK.bone04FK.bone04FK as:fkChain_L_bone04FK_ctrl
+building:fkChain.deformers as:deformers
+building:fkChain.deformers.fkChain as:fkChain_L_cmp
+building:fkChain.deformers.fkChain.bone01 as:fkChain_L_bone01_def
+building:fkChain.deformers.fkChain.bone02 as:fkChain_L_bone02_def
+building:fkChain.deformers.fkChain.bone03 as:fkChain_L_bone03_def
+building:fkChain.deformers.fkChain.bone04 as:fkChain_L_bone04_def
+fkChain:L
+fkChain:L.controls
+fkChain:L.controls.fkChain:L
+fkChain:L.controls.fkChain:L.inputs
+fkChain:L.controls.fkChain:L.inputs.rootInput
+fkChain:L.controls.fkChain:L.outputs
+fkChain:L.controls.fkChain:L.outputs.chainEndXfoOutput
+fkChain:L.controls.fkChain:L.outputs.chainEndPosOutput
+fkChain:L.controls.fkChain:L.outputs.bone01
+fkChain:L.controls.fkChain:L.outputs.bone02
+fkChain:L.controls.fkChain:L.outputs.bone03
+fkChain:L.controls.fkChain:L.outputs.bone04
+fkChain:L.controls.fkChain:L.bone01FK
+fkChain:L.controls.fkChain:L.bone01FK.bone01FK
+fkChain:L.controls.fkChain:L.bone01FK.bone01FK.bone02FK
+fkChain:L.controls.fkChain:L.bone01FK.bone01FK.bone02FK.bone02FK
+fkChain:L.controls.fkChain:L.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK
+fkChain:L.controls.fkChain:L.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK
+fkChain:L.controls.fkChain:L.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK.bone04FK
+fkChain:L.controls.fkChain:L.bone01FK.bone01FK.bone02FK.bone02FK.bone03FK.bone03FK.bone04FK.bone04FK
+fkChain:L.deformers
+fkChain:L.deformers.fkChain:L
+fkChain:L.deformers.fkChain:L.bone01
+fkChain:L.deformers.fkChain:L.bone02
+fkChain:L.deformers.fkChain:L.bone03
+fkChain:L.deformers.fkChain:L.bone04

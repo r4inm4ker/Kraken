@@ -5,25 +5,26 @@ interface IKrakenSolver {
 };
 
 object KrakenSolver : IKrakenSolver {
-    Boolean debug;
+    Boolean drawDebug;
     DrawingHandle handle;
 };
 
 // Default Constructor
 inline KrakenSolver() {
-  this.debug = false;
+  this.drawDebug = false;
   this.handle = DrawingHandle();
 }
 
 // Return Arguments for Kraken
 function KrakenSolverArg[] KrakenSolver.getArguments(){
     KrakenSolverArg args[];
-    args.push(KrakenSolverArg('debug', 'in', 'Boolean'));
+    args.push(KrakenSolverArg('drawDebug', 'in', 'Boolean'));
+    args.push(KrakenSolverArg('rigScale', 'in', 'Scalar'));
     return args;
 }
 
 function KrakenSolver.setDebug!(in Boolean active) {
-    this.debug = active;
+    this.drawDebug = active;
     this.handle.setActive(active);
 }
 

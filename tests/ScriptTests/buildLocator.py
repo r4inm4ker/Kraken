@@ -3,15 +3,13 @@ from kraken.core.objects.locator import Locator
 from kraken.helpers.utility_methods import logHierarchy
 
 
-if __name__ == '__main__':
+myLoc = Locator("myLocator")
 
-    myLoc = Locator("myLocator")
+builder = plugins.getBuilder()
 
-    builder = plugins.getBuilder()
+config = builder.getConfig()
+config.setExplicitNaming(True)
 
-    config = builder.getConfig()
-    config.setExplicitNaming(True)
+builder.build(myLoc)
 
-    builder.build(myLoc)
-
-    logHierarchy(myLoc)
+logHierarchy(myLoc)

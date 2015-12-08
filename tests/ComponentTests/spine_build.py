@@ -1,7 +1,7 @@
 from kraken import plugins
 from kraken.core.maths import Vec3
 
-from kraken.examples.spine_component import SpineComponentGuide, SpineComponent
+from kraken_examples.spine_component import SpineComponentGuide, SpineComponentRig
 
 from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
@@ -24,9 +24,9 @@ spineGuide.loadData({
 # Save the hand guide data for persistence.
 saveData = spineGuide.saveData()
 
-spineGuideData = spineGuide.getGuideData()
+spineGuideData = spineGuide.getRigBuildData()
 
-spine = SpineComponent()
+spine = SpineComponentRig()
 spine.loadData(spineGuideData)
 
 builder = plugins.getBuilder()

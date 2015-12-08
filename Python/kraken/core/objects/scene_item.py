@@ -11,8 +11,8 @@ class SceneItem(object):
 
     def __init__(self, name, parent=None):
         super(SceneItem, self).__init__()
-        self.name = name
-        self.parent = parent
+        self._parent = parent
+        self._name = name
 
 
     # ==============
@@ -21,8 +21,8 @@ class SceneItem(object):
     def getTypeName(self):
         """Returns the class name of this object.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -32,8 +32,8 @@ class SceneItem(object):
     def getTypeHierarchyNames(self):
         """Returns the class name of this object.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
@@ -49,8 +49,8 @@ class SceneItem(object):
     def isTypeOf(self, typeName):
         """Returns the class name of this object.
 
-        Return:
-        True if the scene item is of the given type.
+        Returns:
+            bool: True if the scene item is of the given type.
 
         """
 
@@ -67,50 +67,79 @@ class SceneItem(object):
     def getName(self):
         """Returns the name of the object as a string.
 
-        Return:
-        String of the object's name.
+        Returns:
+            str: Object's name.
 
         """
 
-        return self.name
+        return self._name
 
 
     def setName(self, name):
         """Sets the name of the object with a string.
 
         Arguments:
-        name -- String, the new name for the item.
+            name (str): The new name for the item.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
-        # # Check for existing objects with that name and type.
-        # parent = self.getParent()
-        # if parent is not None:
-        #     foundChild = parent.findChild(name, childType=self.getTypeName())
-        #     if foundChild is not None:
-        #         raise Exception("Child with the same name already exists: '" +
-        #                         name + "'")
-
-        self.name = name
+        self._name = name
 
         return True
 
 
-    def getFullName(self):
+    def getPath(self):
         """Returns the full hierarchical path to this object.
 
-        Return:
-        String, full name of the object.
+        Returns:
+            str: Full name of the object.
 
         """
 
-        if self.parent is not None:
-            return self.parent.getFullName() + '.' + self.getName()
+        if self.getParent() is not None:
+            return self.getParent().getPath() + '.' + self.getName()
 
         return self.getName()
+
+
+    def getNameDecoration(self):
+        """Gets the decorated name of the object.
+
+        Returns:
+            str: Decorated name of the object.
+
+        """
+
+        return ""
+
+
+    def getDecoratedName(self):
+        """Gets the decorated name of the object.
+
+        Returns:
+            str: Decorated name of the object.
+
+        """
+
+        return self.getName() + self.getNameDecoration()
+
+
+    def getDecoratedPath(self):
+        """Gets the decorated path of the object.
+
+        Returns:
+            str: Decorated path  of the object.
+
+        """
+
+
+        if self.getParent() is not None:
+            return self.getParent().getDecoratedPath() + '.' + self.getDecoratedName()
+
+        return self.getDecoratedName()
 
 
     # ===============
@@ -119,25 +148,25 @@ class SceneItem(object):
     def getParent(self):
         """Returns the parent of the object as an object.
 
-        Return:
-        Parent of this object.
+        Returns:
+            Object: Parent of this object.
 
         """
 
-        return self.parent
+        return self._parent
 
 
     def setParent(self, parent):
         """Sets the parent attribute of this object.
 
         Arguments:
-        parent -- Object, object that is the parent of this one.
+        parent (Object): Object that is the parent of this one.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
-        self.parent = parent
+        self._parent = parent
 
         return True
