@@ -123,6 +123,11 @@ class KGraphViewWidget(GraphViewWidget):
                     return False
 
             self.synchGuideRig()
+
+            graphView = self.getGraphView()
+            backdropNodes = graphView.getNodesOfType('KBackdrop')
+
+
             self.guideRig.writeRigDefinitionFile(filePath)
 
             settings = self.window().getSettings()
@@ -314,7 +319,6 @@ class KGraphViewWidget(GraphViewWidget):
         graphView.addNode(backdropNode)
 
         graphView.selectNode(backdropNode, clearSelection=True)
-        # backdropNode.setSelected()
 
 
     # ==================

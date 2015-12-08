@@ -72,6 +72,25 @@ class KGraphView(GraphView):
 
         return connection
 
+
+    ################################################
+    ## Nodes
+
+    def getNodesOfType(self, nodeType):
+        """Gets all the nodes of the specified type.
+
+        Arguments:
+        nodeType -- String, class name to search nodes for.
+
+        Return:
+        list, nodes that are of the specified type.
+
+        """
+
+        graphNodes = self.getNodes()
+
+        return [graphNodes[x] for x in graphNodes if type(graphNodes[x]).__name__ == nodeType]
+
     ################################################
     ## Events
     def mousePressEvent(self, event):
