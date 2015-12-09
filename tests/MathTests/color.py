@@ -10,5 +10,6 @@ color1 = Color(1.0, 0.0, 0.74, 0.5);
 print "color1:" + str(color1)
 print "lerp:" + str(color0.linearInterpolate(color1, 0.5))
 
-print "rand:" + str(Color.randomColor(0.5))
+# Random color will never pass
+# print "rand:" + str(Color.randomColor(0.5))
 

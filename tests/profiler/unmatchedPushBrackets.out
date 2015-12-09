@@ -1,5 +1,5 @@
 Traceback (most recent call last):
-  File "D:\Projects\Hybride\Kraken\tests\profiler\unmatchedPushBrackets.py", line 15, in <module>
+  File "tests\profiler\unmatchedPushBrackets.py", line 15, in <module>
     profiler.pop()
   File "Python\kraken\core\profiler.py", line 75, in pop
     """times than push.""")
