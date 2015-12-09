@@ -70,6 +70,7 @@ def checkTestOutput(filepath, output, update, printoutput=False):
 def runPytonTest(filepath, update, printoutput):
 
     def format_exception(e):
+        krakenPath = os.environ['KRAKEN_PATH']
         stack = traceback.format_tb(sys.exc_info()[2])
         newStack = []
         for line in stack:
@@ -77,8 +78,10 @@ def runPytonTest(filepath, update, printoutput):
                 continue;
             lineParts = line.split('"')
             if len(lineParts) >= 3:
-                lineParts[1] = os.path.relpath(os.path.normpath(lineParts[1]), os.path.join(__file__, '..'))
-                line = '"'.join(lineParts)
+                modulePath = os.path.normpath(lineParts[1])
+                if modulePath.startswith(krakenPath):
+                    lineParts[1] = os.path.relpath(modulePath, krakenPath)
+                    line = '"'.join(lineParts)
             newStack.append(line)
         exception_list = []
         exception_list.extend(newStack)

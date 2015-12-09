@@ -1,4 +1,3 @@
-
 from kraken.core.maths.math_object import MathObject
 from kraken.core.maths.vec3 import Vec3
 from kraken.core.maths.xfo import Xfo
@@ -130,3 +129,4 @@ def mirrorData(jsonData, plane):
     """
 
     return __mirrorData(jsonData, plane)
+
