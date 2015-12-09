@@ -90,7 +90,7 @@ set_env_var KRAKEN_PATH "$KRAKEN_PATH"
 echo "  Set KRAKEN_PATH=\"$KRAKEN_PATH\""
 
 
-prepend_env_var FABRIC_EXTS_PATH "$KRAKEN_PATH/KLExts"
+prepend_env_var FABRIC_EXTS_PATH "$KRAKEN_PATH/Exts"
 echo "  Set FABRIC_EXTS_PATH=\"$FABRIC_EXTS_PATH\""
 
 friendly_export KRAKEN_PATHS "$KRAKEN_PATH/extraComponents"
@@ -100,5 +100,5 @@ prepend_env_var PYTHONPATH "$KRAKEN_PATH/Python"
 echo "  Set PYTHONPATH=\"$PYTHONPATH\""
 
 
-prepend_env_var FABRIC_DFG_PATH "$KRAKEN_PATH/CanvasPresets"
+prepend_env_var FABRIC_DFG_PATH "$KRAKEN_PATH/Presets/DFG"
 echo "  Set FABRIC_DFG_PATH=\"$FABRIC_DFG_PATH\""
