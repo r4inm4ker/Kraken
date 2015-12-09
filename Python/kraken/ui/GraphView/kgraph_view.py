@@ -93,11 +93,11 @@ class KGraphView(GraphView):
 
             if graphicItem is None:
 
-                if self.getClipboardData() is not None:
+                contextMenu = QtGui.QMenu(self.getGraphViewWidget())
+                contextMenu.setObjectName('rightClickContextMenu')
+                contextMenu.setMinimumWidth(150)
 
-                    contextMenu = QtGui.QMenu(self.getGraphViewWidget())
-                    contextMenu.setObjectName('rightClickContextMenu')
-                    contextMenu.setMinimumWidth(150)
+                if self.getClipboardData() is not None:
 
                     def pasteSettings():
                         self.pasteSettings(pos)
@@ -107,8 +107,11 @@ class KGraphView(GraphView):
 
                     contextMenu.addAction("Paste").triggered.connect(pasteSettings)
                     contextMenu.addAction("Paste Mirrored").triggered.connect(pasteSettingsMirrored)
-                    contextMenu.popup(event.globalPos())
+                    contextMenu.addSeparator()
 
+                graphViewWidget = self.getGraphViewWidget()
+                contextMenu.addAction("Add Backdrop").triggered.connect(graphViewWidget.addBackdrop)
+                contextMenu.popup(event.globalPos())
 
             if isinstance(graphicItem, KNode) and graphicItem.isSelected():
                 contextMenu = QtGui.QMenu(self.getGraphViewWidget())

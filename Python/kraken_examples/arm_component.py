@@ -52,11 +52,11 @@ class ArmComponent(BaseExampleComponent):
         self.debugOutputAttr = self.createOutput('drawDebug', dataType='Boolean', parent=self.cmpOutputAttrGrp).getTarget()
 
 
+
 class ArmComponentGuide(ArmComponent):
     """Arm Component Guide"""
 
     def __init__(self, name='arm', parent=None):
-
         Profiler.getInstance().push("Construct Arm Guide Component:" + name)
         super(ArmComponentGuide, self).__init__(name, parent)
 

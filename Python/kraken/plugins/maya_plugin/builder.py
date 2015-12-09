@@ -49,8 +49,6 @@ class Builder(Builder):
 
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
-        pm.refresh()
-
         return dccSceneItem
 
 
@@ -73,8 +71,6 @@ class Builder(Builder):
         pm.rename(dccSceneItem, buildName)
 
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
-
-        pm.refresh()
 
         return dccSceneItem
 
@@ -99,8 +95,6 @@ class Builder(Builder):
 
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
-        pm.refresh()
-
         return dccSceneItem
 
 
@@ -123,8 +117,6 @@ class Builder(Builder):
         pm.rename(dccSceneItem, buildName)
 
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
-
-        pm.refresh()
 
         return dccSceneItem
 
@@ -149,8 +141,6 @@ class Builder(Builder):
 
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
-        pm.refresh()
-
         return dccSceneItem
 
 
@@ -173,8 +163,6 @@ class Builder(Builder):
         pm.rename(dccSceneItem, buildName)
 
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
-
-        pm.refresh()
 
         return dccSceneItem
 
@@ -225,8 +213,6 @@ class Builder(Builder):
 
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
-        pm.refresh()
-
         return dccSceneItem
 
 
@@ -275,8 +261,6 @@ class Builder(Builder):
         pm.rename(dccSceneItem, buildName)
 
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
-
-        pm.refresh()
 
         return dccSceneItem
 

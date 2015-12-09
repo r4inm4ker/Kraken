@@ -24,6 +24,19 @@ QLineEdit:hover {
     background-color: #3b3b3b;
 }
 
+QTextEdit {
+    border: 0px;
+    border-radius: 3px;
+    padding: 3px;
+
+    color: #e1ffff;
+    background-color: #3b3b3b;
+}
+
+QTextEdit:hover {
+    background-color: #3F3F3F;
+}
+
 QSplitter::handle:horizontal {
     background: #222;
     width: 13px;

@@ -45,8 +45,6 @@ class Builder(Builder):
 
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
-        si.Refresh()
-
         return dccSceneItem
 
 
@@ -70,8 +68,6 @@ class Builder(Builder):
         dccSceneItem = parentDCCSceneItem.AddModel(None, buildName)
         dccSceneItem.Name = buildName
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
-
-        si.Refresh()
 
         return dccSceneItem
 
@@ -100,8 +96,6 @@ class Builder(Builder):
 
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
-        si.Refresh()
-
         return dccSceneItem
 
 
@@ -125,8 +119,6 @@ class Builder(Builder):
         dccSceneItem = parentDCCSceneItem.AddNull()
         dccSceneItem.Name = buildName
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
-
-        si.Refresh()
 
         return dccSceneItem
 
@@ -154,8 +146,6 @@ class Builder(Builder):
         dccSceneItem.Name = buildName
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
-        si.Refresh()
-
         return dccSceneItem
 
 
@@ -179,8 +169,6 @@ class Builder(Builder):
         dccSceneItem = parentDCCSceneItem.AddNull()
         dccSceneItem.Name = buildName
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
-
-        si.Refresh()
 
         return dccSceneItem
 
@@ -241,8 +229,6 @@ class Builder(Builder):
 
         dccSceneItem.Name = buildName
 
-        si.Refresh()
-
         return dccSceneItem
 
 
@@ -301,8 +287,6 @@ class Builder(Builder):
                 dccSceneItem.ActivePrimitive.Geometry.AddCurve(eachSubCurve, knots, closedSubCurve, 1, constants.siNonUniformParameterization)
 
         dccSceneItem.Name = buildName
-
-        si.Refresh()
 
         return dccSceneItem
 
@@ -736,6 +720,12 @@ class Builder(Builder):
                             return
                         else:
                             parameter.AddExpression(dccSceneItem.FullName)
+
+            # Add the private/non-mayaAttr port that stores the Solver object
+            # Note: persistence will have to be re-setup for 2.0. the interface has changed,
+            # and I don't think we need a command to enable it anymore.
+            # si.fabricSplice("addInternalPort", spliceOpPath, "{\"portName\":\"solver\", \"dataType\":\"" + solverTypeName + "\", \"extension\":\"" + kOperator.getExtension() + "\", \"portMode\":\"io\"}", "")
+            # si.fabricSplice("setPortPersistence", spliceOpPath, '{"portName":"solver", "persistence":true }', "")
 
 
             arraySizes = {}

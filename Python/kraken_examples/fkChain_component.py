@@ -12,6 +12,7 @@ from kraken.core.objects.attributes.integer_attribute import IntegerAttribute
 from kraken.core.objects.attributes.bool_attribute import BoolAttribute
 from kraken.core.objects.attributes.string_attribute import StringAttribute
 
+from kraken.core.objects.constraints.position_constraint import PositionConstraint
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
 from kraken.core.objects.component_group import ComponentGroup
@@ -306,10 +307,10 @@ class FKChainComponentRig(FKChainComponent):
         # Constrain I/O
         # ==============
         # Constraint inputs
-        rootInputConstraint = PoseConstraint('_'.join([self.fkCtrlSpaces[0].getName(), 'To', self.rootInputTgt.getName()]))
-        rootInputConstraint.setMaintainOffset(True)
-        rootInputConstraint.addConstrainer(self.rootInputTgt)
-        self.fkCtrlSpaces[0].addConstraint(rootInputConstraint)
+        self.rootInputConstraint = PoseConstraint('_'.join([self.fkCtrlSpaces[0].getName(), 'To', self.rootInputTgt.getName()]))
+        self.rootInputConstraint.setMaintainOffset(True)
+        self.rootInputConstraint.addConstrainer(self.rootInputTgt)
+        self.fkCtrlSpaces[0].addConstraint(self.rootInputConstraint)
 
 
         # ===============
@@ -432,6 +433,23 @@ class FKChainComponentRig(FKChainComponent):
             self.fkCtrls[i].xfo = boneXfos[i]
             self.fkCtrls[i].scalePoints(Vec3(boneLengths[i], boneLengths[i] * 0.45, boneLengths[i] * 0.45))
 
+        # ==========================
+        # Create Output Constraints
+        # ==========================
+        # This needs to be done here since the 'numJoints' attribute resizes the
+        # number of controls and outputs
+
+        self.chainEndXfoOutputConstraint = PoseConstraint('_'.join([self.chainEndXfoOutputTgt.getName(), 'To', self.boneOutputsTgt[-1].getName()]))
+        self.chainEndXfoOutputConstraint.setMaintainOffset(True)
+        self.chainEndXfoOutputConstraint.addConstrainer(self.boneOutputsTgt[-1])
+        self.chainEndXfoOutputTgt.addConstraint(self.chainEndXfoOutputConstraint)
+
+        self.chainEndPosOutputConstraint = PositionConstraint('_'.join([self.chainEndPosOutputTgt.getName(), 'To', self.boneOutputsTgt[-1].getName()]))
+        self.chainEndPosOutputConstraint.setMaintainOffset(True)
+        self.chainEndPosOutputConstraint.addConstrainer(self.boneOutputsTgt[-1])
+        self.chainEndPosOutputTgt.addConstraint(self.chainEndPosOutputConstraint)
+
+
         # ============
         # Set IO Xfos
         # ============
@@ -455,6 +473,10 @@ class FKChainComponentRig(FKChainComponent):
 
         # evaluate the output splice op to evaluate with new outputs and deformers
         self.deformersToOutputsKLOp.evaluate()
+
+        # evaluate the constraints to ensure the outputs are now in the correct location.
+        self.rootInputConstraint.evaluate()
+        self.chainEndXfoOutputConstraint.evaluate()
 
 
 from kraken.core.kraken_system import KrakenSystem

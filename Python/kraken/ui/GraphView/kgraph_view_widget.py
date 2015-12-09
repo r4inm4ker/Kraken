@@ -1,9 +1,11 @@
 import json, difflib
 import os
+import re
 import traceback
 
 from PySide import QtGui, QtCore
 
+from kbackdrop import KBackdrop
 from contextual_node_list import ContextualNodeList
 from pyflowgraph.graph_view_widget import GraphViewWidget
 from kgraph_view import KGraphView
@@ -61,6 +63,9 @@ class KGraphViewWidget(GraphViewWidget):
         self.newRigPreset()
 
 
+    # ============
+    # Rig Methods
+    # ============
     def editRigName(self):
         dialog = QtGui.QInputDialog(self)
         dialog.setObjectName('RigNameDialog')
@@ -86,34 +91,61 @@ class KGraphViewWidget(GraphViewWidget):
 
 
     def saveRig(self, saveAs=False):
+        """Saves the current rig to disc.
 
-        settings = self.window().getSettings()
-        settings.beginGroup('Files')
-        filePath = settings.value("lastFilePath", os.path.join(GetKrakenPath(), self.guideRig.getName() ))
-        settings.endGroup()
+        Args:
+            saveAs (Boolean): Determines if this was a save as call or just a normal save.
 
-        if saveAs is True:
+        Returns:
+            String: Path to the saved file.
 
-            (saveAsFilePath, filter) = QtGui.QFileDialog.getSaveFileName(self, 'Save Rig Preset', os.path.dirname(os.path.abspath(filePath)), 'Kraken Rig (*.krg)')
-            if len(saveAsFilePath) > 0:
-                filePath = saveAsFilePath
+        """
+
+        try:
+            self.window().setCursor(QtCore.Qt.WaitCursor)
+
+            if self.openedFile is None:
+                filePath = GetKrakenPath()
             else:
-                return False
+                settings = self.window().getSettings()
+                settings.beginGroup('Files')
+                filePath = settings.value("lastFilePath", os.path.join(GetKrakenPath(), self.guideRig.getName() ))
+                settings.endGroup()
 
-        self.synchGuideRig()
-        self.guideRig.writeRigDefinitionFile(filePath)
+            if saveAs is True:
 
-        settings.beginGroup('Files')
-        lastFilePath = settings.setValue("lastFilePath", filePath)
-        settings.endGroup()
+                fileDialog = QtGui.QFileDialog()
+                fileDialog.setViewMode(QtGui.QFileDialog.Detail)
+                (saveAsFilePath, filter) = fileDialog.getSaveFileName(self, 'Save Rig Preset As', os.path.abspath(filePath), 'Kraken Rig (*.krg)', options=QtGui.QFileDialog.DontUseNativeDialog)
+                if len(saveAsFilePath) > 0:
+                    filePath = saveAsFilePath
+                else:
+                    return False
 
-        self.openedFile = filePath
+            self.synchGuideRig()
+            self.guideRig.writeRigDefinitionFile(filePath)
 
-        self.reportMessage('Saved Rig file: ' + filePath, level='information')
+            settings = self.window().getSettings()
+            settings.beginGroup('Files')
+            lastFilePath = settings.setValue("lastFilePath", filePath)
+            settings.endGroup()
+
+            self.openedFile = filePath
+
+            self.reportMessage('Saved Rig file: ' + filePath, level='information')
+
+            return filePath
+
+        finally:
+            self.window().setCursor(QtCore.Qt.ArrowCursor)
 
 
     def saveAsRigPreset(self):
-        self.saveRig(saveAs=True)
+        """Opens a dialogue window to save the current rig as a different file."""
+
+        filePath = self.saveRig(saveAs=True)
+        if filePath is not False:
+            self.window().setWindowTitle('Kraken Editor - ' + filePath + '[*]')
 
 
     def saveRigPreset(self):
@@ -125,27 +157,34 @@ class KGraphViewWidget(GraphViewWidget):
             self.saveRig(saveAs=False)
 
 
-    def loadRigPreset(self):
-        settings = self.window().getSettings()
-        settings.beginGroup('Files')
-        lastFilePath = settings.value("lastFilePath", os.path.join(GetKrakenPath(), self.guideRig.getName() ))
-        settings.endGroup()
-        (filePath, filter) = QtGui.QFileDialog.getOpenFileName(self, 'Load Rig Preset', os.path.dirname(os.path.abspath(lastFilePath)), 'Kraken Rig (*.krg)')
-        if len(filePath) > 0:
-            self.guideRig = Rig()
-            self.guideRig.loadRigDefinitionFile(filePath)
-            self.graphView.displayGraph( self.guideRig )
-            # self.nameWidget.setText( self.guideRig.getName() )
+    def openRigPreset(self):
 
+        try:
+            self.window().setCursor(QtCore.Qt.WaitCursor)
+
+            settings = self.window().getSettings()
             settings.beginGroup('Files')
-            lastFilePath = settings.setValue("lastFilePath", filePath)
+            lastFilePath = settings.value("lastFilePath", os.path.join(GetKrakenPath(), self.guideRig.getName() ))
             settings.endGroup()
+            (filePath, filter) = QtGui.QFileDialog.getOpenFileName(self, 'Open Rig Preset', os.path.dirname(os.path.abspath(lastFilePath)), 'Kraken Rig (*.krg)', options=QtGui.QFileDialog.DontUseNativeDialog)
+            if len(filePath) > 0:
+                self.guideRig = Rig()
+                self.guideRig.loadRigDefinitionFile(filePath)
+                self.graphView.displayGraph( self.guideRig )
+                # self.nameWidget.setText( self.guideRig.getName() )
 
-            self.openedFile = filePath
+                settings.beginGroup('Files')
+                lastFilePath = settings.setValue("lastFilePath", filePath)
+                settings.endGroup()
 
-            self.window().setWindowTitle(filePath + '[*] - ' + self.window().windowTitle())
+                self.openedFile = filePath
 
-            self.reportMessage('Loaded Rig file: ' + filePath, level='information')
+                self.window().setWindowTitle('Kraken Editor - ' + filePath + '[*]')
+
+                self.reportMessage('Loaded Rig file: ' + filePath, level='information')
+
+        finally:
+            self.window().setCursor(QtCore.Qt.ArrowCursor)
 
 
     def buildGuideRig(self):
@@ -195,9 +234,9 @@ class KGraphViewWidget(GraphViewWidget):
             print callstack
             self.reportMessage('Error Building', level='error', exception=e)
 
-    # =========
+    # ==========
     # Shortcuts
-    # =========
+    # ==========
     def copy(self):
         graphView = self.getGraphView()
         pos = graphView.getSelectedNodesCentroid()
@@ -250,6 +289,38 @@ class KGraphViewWidget(GraphViewWidget):
 
         scenepos = self.graphView.mapToScene(pos)
         contextualNodeList.showAtPos(pos, scenepos, self.graphView)
+
+
+    # ==============
+    # Other Methods
+    # ==============
+    def addBackdrop(self):
+
+        graphView = self.getGraphView()
+
+        name = 'Backdrop'
+        initName = name
+        suffix = 1
+        collision = True
+        while collision:
+
+            collision = graphView.hasNode(name)
+            if not collision:
+                break
+
+            result = re.split(r"(\d+)$", initName, 1)
+            if len(result) > 1:
+                initName = result[0]
+                suffix = int(result[1])
+
+            name = initName + str(suffix).zfill(2)
+            suffix += 1
+
+        backdropNode = KBackdrop(graphView, name)
+        graphView.addNode(backdropNode)
+
+        graphView.selectNode(backdropNode, clearSelection=True)
+        # backdropNode.setSelected()
 
 
     # ==================
@@ -317,7 +388,9 @@ class KGraphViewWidget(GraphViewWidget):
 
 
     def __onNodeRemoved(self, node):
-        node.getComponent().detach()
+
+        if type(node).__name__ != 'KBackdrop':
+            node.getComponent().detach()
 
         if not UndoRedoManager.getInstance().isUndoingOrRedoing():
             command = graph_commands.RemoveNodeCommand(self.graphView, self.guideRig, node)
