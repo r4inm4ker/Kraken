@@ -13,6 +13,7 @@ class KrakenMenu(QtGui.QWidget):
     def __init__(self, parent=None):
         super(KrakenMenu, self).__init__(parent)
         self.setObjectName('menuWidget')
+        self.recentFiles = []
 
         self.createLayout()
         self.createConnections()
@@ -44,6 +45,9 @@ class KrakenMenu(QtGui.QWidget):
         self.saveAsAction = self.fileMenu.addAction('&Save As')
         self.saveAsAction.setShortcut('Ctrl+Shift+S')
         self.saveAsAction.setObjectName("saveAsAction")
+
+        self.fileMenu.addSeparator()
+        self.recentFilesMenu = self.fileMenu.addMenu('&Recent Files')
 
         self.fileMenu.addSeparator()
 
@@ -235,6 +239,7 @@ class KrakenMenu(QtGui.QWidget):
         settings.beginGroup("KrakenMenu")
         settings.setValue("currentConfig", self.configsWidget.currentIndex())
         settings.setValue("snapToGrid", graphViewWidget.graphView.getSnapToGrid())
+        settings.setValue("recentFiles", ';'.join(self.recentFiles))
 
         settings.endGroup()
 
@@ -257,8 +262,26 @@ class KrakenMenu(QtGui.QWidget):
             self.snapToGridAction.setChecked(snapToGrid)
             graphViewWidget.graphView.setSnapToGrid(snapToGrid)
 
+        if settings.contains('recentFiles'):
+            recentFiles = settings.value('recentFiles', None)
+
+            if recentFiles is not None:
+                fileSplit = recentFiles.split(';')
+                for eachFile in fileSplit[:4]:
+                    if os.path.exists(eachFile):
+                        self.recentFiles.append(eachFile)
+
         settings.endGroup()
 
+        for recentFile in self.recentFiles:
+
+            action = self.recentFilesMenu.addAction(recentFile)
+            action.triggered.connect(self.openFile)
+
+    def openFile(self):
+        krakenUIWidget = self.window().krakenUI
+        graphViewWidget = krakenUIWidget.graphViewWidget
+        graphViewWidget.loadRigPreset(self.sender().text())
 
 class RigNameLabel(QtGui.QLabel):
 
