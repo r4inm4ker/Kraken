@@ -243,7 +243,6 @@ class KrakenMenu(QtGui.QWidget):
 
         settings.endGroup()
 
-
     def readSettings(self, settings):
         krakenUIWidget = self.window().krakenUI
         graphViewWidget = krakenUIWidget.graphViewWidget
@@ -273,15 +272,30 @@ class KrakenMenu(QtGui.QWidget):
 
         settings.endGroup()
 
+        self.buildRecentFilesMenu()
+
+
+    def buildRecentFilesMenu(self, newFilePath=None):
+        self.recentFilesMenu.clear()
+
+        self.recentFiles = self.recentFiles[:4]
+        if newFilePath is not None:
+            for i, eachFile in enumerate(list(self.recentFiles)):
+                if eachFile == newFilePath:
+                    self.recentFiles.pop(i)
+
+            self.recentFiles = [newFilePath] + self.recentFiles
+
         for recentFile in self.recentFiles:
 
             action = self.recentFilesMenu.addAction(recentFile)
-            action.triggered.connect(self.openFile)
+            action.triggered.connect(self.openRecentFile)
 
-    def openFile(self):
+    def openRecentFile(self):
         krakenUIWidget = self.window().krakenUI
         graphViewWidget = krakenUIWidget.graphViewWidget
         graphViewWidget.loadRigPreset(self.sender().text())
+
 
 class RigNameLabel(QtGui.QLabel):
 

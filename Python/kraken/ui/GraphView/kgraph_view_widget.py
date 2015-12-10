@@ -25,6 +25,7 @@ def GetKrakenPath():
 class KGraphViewWidget(GraphViewWidget):
 
     rigNameChanged = QtCore.Signal()
+    rigLoaded = QtCore.Signal(object)
 
     def __init__(self, parent=None):
 
@@ -187,15 +188,7 @@ class KGraphViewWidget(GraphViewWidget):
         self.window().setWindowTitle('Kraken Editor - ' + filePath + '[*]')
         self.reportMessage('Loaded Rig file: ' + filePath, level='information')
 
-        recentFiles = self.window().krakenMenu.recentFiles
-        if len(recentFiles) > 4:
-            recentFiles = recentFiles[:4]
-
-        for i, eachFile in enumerate(recentFiles):
-            if eachFile == filePath:
-                recentFiles.pop(i)
-
-        self.window().krakenMenu.recentFiles = [filePath] + self.window().krakenMenu.recentFiles
+        self.rigLoaded.emit(filePath)
 
     def buildGuideRig(self):
 
