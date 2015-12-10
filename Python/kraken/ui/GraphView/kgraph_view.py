@@ -76,6 +76,8 @@ class KGraphView(GraphView):
     ## Events
     def mousePressEvent(self, event):
 
+        modifiers = QtGui.QApplication.keyboardModifiers()
+
         if event.button() == QtCore.Qt.MouseButton.RightButton:
 
             def graphItemAt(item):
@@ -154,8 +156,21 @@ class KGraphView(GraphView):
                         contextMenu.popup(globalPos)
 
 
+        elif event.button() is QtCore.Qt.MouseButton.LeftButton and self.itemAt(event.pos()) is None:
+            self.beginNodeSelection.emit()
+            self._manipulationMode = 1
+            self._mouseDownSelection = copy.copy(self.getSelectedNodes())
+            self.clearSelection(emitSignal=False)
+            self._selectionRect = SelectionRect(graph=self, mouseDownPos=self.mapToScene(event.pos()))
+
+        elif event.button() is QtCore.Qt.MouseButton.MiddleButton and modifiers == QtCore.Qt.AltModifier:
+
+            self.setCursor(QtCore.Qt.OpenHandCursor)
+            self._manipulationMode = 2
+            self._lastPanPoint = self.mapToScene(event.pos())
+
         else:
-            super(KGraphView, self).mousePressEvent(event)
+            super(GraphView, self).mousePressEvent(event)
 
 
     def dragEnterEvent(self, event):
