@@ -2,10 +2,13 @@
 # Copyright 2010-2015
 #
 
+import copy
+
 from PySide import QtGui, QtCore
 
 from pyflowgraph.graph_view import GraphView
 from pyflowgraph.connection import Connection
+from pyflowgraph.selection_rect import SelectionRect
 from knode import KNode
 from edit_index_widget import EditIndexWidget
 from kraken.core.maths import Vec2
@@ -32,8 +35,9 @@ class KGraphView(GraphView):
     def getRig(self):
         return self.__rig
 
-    #######################
-    ## Graph
+    # ======
+    # Graph
+    # ======
     def displayGraph(self, rig):
         self.reset()
 
@@ -72,8 +76,9 @@ class KGraphView(GraphView):
 
         return connection
 
-    ################################################
-    ## Events
+    # =======
+    # Events
+    # =======
     def mousePressEvent(self, event):
 
         modifiers = QtGui.QApplication.keyboardModifiers()
@@ -207,11 +212,15 @@ class KGraphView(GraphView):
         else:
             super(GraphView, self).dropEvent(event)
 
+    def wheelEvent(self, event):
 
+        zoom_mouse_scroll = self.window().preferences.getPreferenceValue('zoom_mouse_scroll')
+        if zoom_mouse_scroll is True:
+            super(KGraphView, self).wheelEvent(event)
 
-    #######################
-    ## Copy/Paste
-
+    # =============
+    # Copy / Paste
+    # =============
     def getClipboardData(self):
         return self.__class__._clipboardData
 
@@ -247,7 +256,6 @@ class KGraphView(GraphView):
 
         self.__class__._clipboardData = clipboardData
 
-
     def pasteSettings(self, pos, mirrored=False, createConnectionsToExistingNodes=True):
 
         clipboardData = self.__class__._clipboardData
@@ -271,9 +279,9 @@ class KGraphView(GraphView):
                 component.pasteData(componentData, setLocation=False)
             else:
                 component.pasteData(componentData, setLocation=True)
-            graphPos = component.getGraphPos( )
+            graphPos = component.getGraphPos()
             component.setGraphPos(Vec2(graphPos.x + delta.x(), graphPos.y + delta.y()))
-            node = KNode(self,component)
+            node = KNode(self, component)
             self.addNode(node)
             self.selectNode(node, False)
 
@@ -294,7 +302,7 @@ class KGraphView(GraphView):
                 sourceComponent = pastedComponents[nameMapping[sourceComponentDecoratedName]]
             else:
                 if not createConnectionsToExistingNodes:
-                    continue;
+                    continue
 
                 # When we support copying/pasting between rigs, then we may not find the source
                 # node in the target rig.
@@ -311,7 +319,6 @@ class KGraphView(GraphView):
 
             inputPort.setConnection(outputPort)
             self.connectPorts(
-                srcNode = sourceComponent.getDecoratedName(), outputName = outputPort.getName(),
-                tgtNode = targetComponent.getDecoratedName(), inputName=inputPort.getName()
+                srcNode=sourceComponent.getDecoratedName(), outputName=outputPort.getName(),
+                tgtNode=targetComponent.getDecoratedName(), inputName=inputPort.getName()
             )
-

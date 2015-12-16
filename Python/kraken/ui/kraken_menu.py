@@ -201,7 +201,7 @@ class KrakenMenu(QtGui.QWidget):
         self.rigNameLabel.setText('Rig Name: ' + newRigName)
 
 
-    def setCurrentConfig(self, index = None):
+    def setCurrentConfig(self, index=None):
         if index is None:
             index = self.configsWidget.currentIndex()
         else:

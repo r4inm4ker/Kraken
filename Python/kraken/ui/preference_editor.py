@@ -6,14 +6,14 @@
 from PySide import QtGui, QtCore
 
 
-class BackdropInspector(QtGui.QDialog):
+class PreferenceEditor(QtGui.QDialog):
     """A widget providing the ability to nest """
 
     def __init__(self, parent=None, nodeItem=None):
 
         # constructors of base classes
-        super(BackdropInspector, self).__init__(parent)
-        self.setObjectName('BackdropInspector')
+        super(PreferenceEditor, self).__init__(parent)
+        self.setObjectName('PreferenceEditor')
 
         self.parent = parent
         self.nodeItem = nodeItem
@@ -26,10 +26,12 @@ class BackdropInspector(QtGui.QDialog):
         self._mainLayout = QtGui.QVBoxLayout()
         self._mainLayout.setContentsMargins(10, 10, 10, 10)
 
-        self._commentTextEdit = QtGui.QTextEdit(self)
-        self._commentTextEdit.setText(self.nodeItem.getComment())
-        self._commentTextEdit.setMinimumHeight(20)
-        self._commentTextEdit.setMaximumHeight(40)
+        # self._commentTextEdit = QtGui.QTextEdit(self)
+        # self._commentTextEdit.setText(self.nodeItem.getComment())
+        # self._commentTextEdit.setMinimumHeight(20)
+        # self._commentTextEdit.setMaximumHeight(40)
+
+        # Add widgets based on type here
 
         # OK and Cancel buttons
         buttons = QtGui.QDialogButtonBox(
