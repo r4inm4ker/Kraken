@@ -5,8 +5,6 @@
 
 from PySide import QtGui, QtCore
 
-from kraken.ui.DataTypeWidgets.BooleanWidgetImpl import BooleanWidget
-
 
 class PreferenceEditor(QtGui.QDialog):
     """A widget providing the ability to nest """
@@ -21,12 +19,18 @@ class PreferenceEditor(QtGui.QDialog):
         self.setWindowFlags(QtCore.Qt.Dialog)
         self.resize(600, 300)
 
+        self.prefValueWidgets = []
+
         # layout
         self._mainLayout = QtGui.QVBoxLayout()
         self._mainLayout.setContentsMargins(10, 10, 10, 10)
 
         self._preferenceLayout = QtGui.QGridLayout()
         self._preferenceLayout.setContentsMargins(10, 10, 10, 10)
+        self._preferenceLayout.setSpacing(3)
+        self._preferenceLayout.setColumnMinimumWidth(0, 200)
+        self._preferenceLayout.setColumnStretch(0, 1)
+        self._preferenceLayout.setColumnStretch(1, 2)
 
         # Add widgets based on type here
         preferences = self.parentWidget().window().preferences.getPreferences()
@@ -35,13 +39,17 @@ class PreferenceEditor(QtGui.QDialog):
             prefLabel = QtGui.QLabel(v['nice_name'], self)
             prefLabel.setProperty('labelClass', 'preferenceLabel')
             prefLabel.setObjectName(k + "_label")
-            self._preferenceLayout.addWidget(prefLabel, i, 0, 1, 0)
+            prefLabel.setSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Fixed)
+            prefLabel.setMinimumWidth(200)
+            self._preferenceLayout.addWidget(prefLabel, i, 0)
 
             if v['type'] == 'bool':
                 valueWidget = QtGui.QCheckBox(self)
                 valueWidget.setObjectName(k + "_valueWidget")
+                valueWidget.setChecked(v['value'])
 
             self._preferenceLayout.addWidget(valueWidget, i, 1, 1, 1)
+            self.prefValueWidgets.append(valueWidget)
 
             i += 1
 
@@ -58,3 +66,20 @@ class PreferenceEditor(QtGui.QDialog):
         self._mainLayout.addWidget(buttons)
 
         self.setLayout(self._mainLayout)
+
+    # =======
+    # Events
+    # =======
+    def accept(self):
+
+        preferences = self.parentWidget().window().preferences
+
+        for widget in self.prefValueWidgets:
+            if type(widget) == QtGui.QCheckBox:
+                prefName = widget.objectName().rsplit('_', 1)[0]
+                preferences.setPreference(prefName, widget.isChecked())
+
+        super(PreferenceEditor, self).accept()
+
+    def closeEvent(self, event):
+        pass

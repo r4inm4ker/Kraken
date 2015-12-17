@@ -8,7 +8,7 @@ class Preferences(object):
         'type': 'bool',
         'nice_name': 'Pan with Alt+MMB',
         'default_value': True,
-        'stored_value': True
+        'value': True
     }
 
     """

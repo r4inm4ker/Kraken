@@ -735,7 +735,7 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
 /* Preference Editor */
 /* ================= */
 QDialog#PreferenceEditor QLabel[labelClass="preferenceLabel"] {
-    border-top: 0px;
-    border-bottom: 1px solid #222;
+    background-color: #3F3F3F;
     padding: 6px;
+    border-left: 3px solid #438f99;
 }
