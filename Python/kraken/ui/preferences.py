@@ -1,15 +1,35 @@
 
 
 class Preferences(object):
-    """Object that manages the Kraken Preferences"""
+    """Object that manages the Kraken Preferences.
+
+    Preference format is the following:
+    'pan_with_alt': {
+        'type': 'bool',
+        'nice_name': 'Pan with Alt+MMB',
+        'default_value': True,
+        'stored_value': True
+    }
+
+    """
 
     def __init__(self):
         super(Preferences, self).__init__()
         self._preferences = {}
 
         defaultPrefs = {
-            'interaction_model': ['str', 'kraken', 'kraken'],
-            'zoom_mouse_scroll': ['bool', True, True]
+            'pan_with_alt': {
+                'type': 'bool',
+                'nice_name': 'Pan with Alt+MMB',
+                'default_value': True,
+                'value': True
+            },
+            'zoom_mouse_scroll': {
+                'type': 'bool',
+                'nice_name': 'Zoom with Scroll Wheel',
+                'default_value': True,
+                'value': True
+            }
         }
 
         self.loadPreferences(defaultPrefs)
@@ -38,7 +58,7 @@ class Preferences(object):
 
         """
 
-        return self._preferences.get(name)[2]
+        return self._preferences.get(name)['value']
 
     def setPreference(self, name, value):
         """Sets a value of a preference.
@@ -52,7 +72,7 @@ class Preferences(object):
 
         """
 
-        self._preferences[name] = value
+        self._preferences[name]['value'] = value
 
 
     def loadPreferences(self, preferences):
