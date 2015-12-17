@@ -389,7 +389,6 @@ class KrakenSystem(object):
                         if item.endswith(".py") and item != "__init__.py":
                             module = modulePath+"."+item[:-3]
                             try:
-                                print "importlib.import_module(:" + str(module)
                                 importlib.import_module(module)
 
                             except ImportError, e:

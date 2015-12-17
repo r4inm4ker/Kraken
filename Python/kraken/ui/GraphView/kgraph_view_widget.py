@@ -25,6 +25,7 @@ def GetKrakenPath():
 class KGraphViewWidget(GraphViewWidget):
 
     rigNameChanged = QtCore.Signal()
+    rigLoaded = QtCore.Signal(object)
 
     def __init__(self, parent=None):
 
@@ -168,24 +169,26 @@ class KGraphViewWidget(GraphViewWidget):
             settings.endGroup()
             (filePath, filter) = QtGui.QFileDialog.getOpenFileName(self, 'Open Rig Preset', os.path.dirname(os.path.abspath(lastFilePath)), 'Kraken Rig (*.krg)', options=QtGui.QFileDialog.DontUseNativeDialog)
             if len(filePath) > 0:
-                self.guideRig = Rig()
-                self.guideRig.loadRigDefinitionFile(filePath)
-                self.graphView.displayGraph( self.guideRig )
-                # self.nameWidget.setText( self.guideRig.getName() )
-
-                settings.beginGroup('Files')
-                lastFilePath = settings.setValue("lastFilePath", filePath)
-                settings.endGroup()
-
-                self.openedFile = filePath
-
-                self.window().setWindowTitle('Kraken Editor - ' + filePath + '[*]')
-
-                self.reportMessage('Loaded Rig file: ' + filePath, level='information')
+                self.loadRigPreset(filePath)
 
         finally:
             self.window().setCursor(QtCore.Qt.ArrowCursor)
 
+    def loadRigPreset(self, filePath):
+        self.guideRig = Rig()
+        self.guideRig.loadRigDefinitionFile(filePath)
+        self.graphView.displayGraph( self.guideRig )
+
+        settings = self.window().getSettings()
+        settings.beginGroup('Files')
+        lastFilePath = settings.setValue("lastFilePath", filePath)
+        settings.endGroup()
+
+        self.openedFile = filePath
+        self.window().setWindowTitle('Kraken Editor - ' + filePath + '[*]')
+        self.reportMessage('Loaded Rig file: ' + filePath, level='information')
+
+        self.rigLoaded.emit(filePath)
 
     def buildGuideRig(self):
 
