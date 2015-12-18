@@ -278,9 +278,7 @@ class KrakenMenu(QtGui.QWidget):
 
 
     def buildRecentFilesMenu(self, newFilePath=None):
-
-        if not self.recentFilesMenu.isEmpty():
-            self.recentFilesMenu.clear()
+        self.recentFilesMenu.clear()
 
         self.recentFiles = self.recentFiles[:4]
         if newFilePath is not None:
