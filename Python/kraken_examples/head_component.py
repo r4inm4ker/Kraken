@@ -259,45 +259,19 @@ class HeadComponentRig(HeadComponent):
         self.eyeROutputTgt.addConstraint(eyeROutputConstraint)
 
 
-        # ==================
-        # Add Component I/O
-        # ==================
-        # Add Xfo I/O's
-        # self.addInput(self.headBaseInputTgt)
-
-        # self.addOutput(self.headOutputTgt)
-        # self.addOutput(self.jawOutputTgt)
-        # self.addOutput(self.eyeLOutputTgt)
-        # self.addOutput(self.eyeROutputTgt)
-
-        # Add Attribute I/O's
-        # self.addInput(self.drawDebugInputAttr)
-
-
-        # ===============
-        # Add Splice Ops
-        # ===============
-        # Add Deformer Splice Op
-        # spliceOp = KLOperator('headDeformerKLOp', 'HeadConstraintSolver', 'KrakenHeadConstraintSolver')
-        # self.addOperator(spliceOp)
-
-        # # Add Att Inputs
-        # spliceOp.setInput('drawDebug', self.drawDebugInputAttr)
-        # spliceOp.setInput('rigScale', self.rigScaleInputAttr)
-
-        # # Add Xfo Inputstrl)
-        # spliceOp.setInput('headConstrainer', self.headOutputTgt)
-        # spliceOp.setInput('jawConstrainer', self.jawOutputTgt)
-        # spliceOp.setInput('eyeLeftConstrainer', self.eyeLOutputTgt)
-        # spliceOp.setInput('eyeRightConstrainer', self.eyeROutputTgt)
-
-        # # Add Xfo Outputs
-        # spliceOp.setOutput('headDeformer', headDef)
-        # spliceOp.setOutput('jawDeformer', jawDef)
-        # spliceOp.setOutput('eyeLeftDeformer', eyeLeftDef)
-        # spliceOp.setOutput('eyeRightDeformer', eyeRightDef)
+        # Add Deformer Joints Splice Op
+        self.outputsToDeformersKLOp = KLOperator('headDeformerKLOp', 'MultiPoseConstraintSolver', 'Kraken')
+        self.addOperator(self.outputsToDeformersKLOp)
+        # Add Att Inputs
+        self.outputsToDeformersKLOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.outputsToDeformersKLOp.setInput('rigScale', self.rigScaleInputAttr)
+        # Add Xfo Inputs
+        self.outputsToDeformersKLOp.setInput('constrainers', [self.headOutputTgt, self.jawOutputTgt, self.eyeROutputTgt, self.eyeLOutputTgt])
+        # Add Xfo Outputs
+        self.outputsToDeformersKLOp.setOutput('constrainees', [headDef, jawDef, eyeLeftDef, eyeRightDef])
 
         Profiler.getInstance().pop()
+
 
 
     def loadData(self, data=None):
