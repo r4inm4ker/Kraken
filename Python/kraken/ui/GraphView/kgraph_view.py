@@ -168,7 +168,11 @@ class KGraphView(GraphView):
             self.clearSelection(emitSignal=False)
             self._selectionRect = SelectionRect(graph=self, mouseDownPos=self.mapToScene(event.pos()))
 
-        elif event.button() is QtCore.Qt.MouseButton.MiddleButton and modifiers == QtCore.Qt.AltModifier:
+        elif event.button() is QtCore.Qt.MouseButton.MiddleButton:
+
+            pan_with_alt = self.window().preferences.getPreferenceValue('pan_with_alt')
+            if pan_with_alt is True and modifiers != QtCore.Qt.AltModifier:
+                return
 
             self.setCursor(QtCore.Qt.OpenHandCursor)
             self._manipulationMode = 2
