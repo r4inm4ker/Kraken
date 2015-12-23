@@ -7,6 +7,7 @@ class Preferences(object):
     'pan_with_alt': {
         'type': 'bool',
         'nice_name': 'Pan with Alt+MMB',
+        'description': 'Allows users to only pan the graph view while holding down the ALT key.',
         'default_value': True,
         'value': True
     }
@@ -15,24 +16,23 @@ class Preferences(object):
 
     def __init__(self):
         super(Preferences, self).__init__()
-        self._preferences = {}
-
-        defaultPrefs = {
+        self._preferences = {
             'pan_with_alt': {
                 'type': 'bool',
                 'nice_name': 'Pan with Alt+MMB',
+                'description': 'Allows users to only pan the graph view while holding down the ALT key.',
                 'default_value': True,
                 'value': True
             },
             'zoom_mouse_scroll': {
                 'type': 'bool',
                 'nice_name': 'Zoom with Scroll Wheel',
+                'description': 'Allows users to zoom with the mouse wheel.',
                 'default_value': True,
                 'value': True
             }
         }
 
-        self.loadPreferences(defaultPrefs)
 
     def getPreference(self, name):
         """Gets the value of a preference setting.
@@ -95,7 +95,13 @@ class Preferences(object):
 
         """
 
-        self._preferences.update(preferences)
+        for k, v in preferences.iteritems():
+            if k not in self._preferences:
+                self._preferences[k] = {}
+
+            self._preferences[k]['type'] = v['type']
+            self._preferences[k]['default_value'] = v['default_value']
+            self._preferences[k]['value'] = v['value']
 
     def getPreferences(self):
         """Get the preferences as a dictionary.
