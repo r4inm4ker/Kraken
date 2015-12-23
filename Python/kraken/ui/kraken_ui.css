@@ -734,8 +734,15 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
 /* ================= */
 /* Preference Editor */
 /* ================= */
-QDialog#PreferenceEditor QLabel[labelClass="preferenceLabel"] {
+QFrame#prefLabelWidgetFrame {
     background-color: #3F3F3F;
-    padding: 6px;
     border-left: 3px solid #438f99;
+}
+
+QFrame#prefValueWidgetFrame {
+    background-color: #3F3F3F;
+}
+
+GraphViewWidget#graphViewWidget QDialog#PreferenceEditor {
+    background-color: #151515;
 }
