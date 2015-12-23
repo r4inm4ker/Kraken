@@ -13,14 +13,17 @@ from widget_factory import EditorFactory
 class BaseInspector(QtGui.QWidget):
     """A widget providing the ability to nest """
 
-    def __init__(self, parent=None):
+    def __init__(self, objectname='inspector', parent=None):
 
         # constructors of base classes
         super(BaseInspector, self).__init__(parent)
-        self.setObjectName('inspector')
+
+        # Note: we must set the object name before constructing the layout.
+        self.setObjectName(objectname)
 
         # layout
         self.mainLayout = QtGui.QVBoxLayout(self)
+        self.setLayout(self.mainLayout)
         self.mainLayout.setContentsMargins(0, 0, 0, 0)
 
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding)
@@ -31,7 +34,8 @@ class BaseInspector(QtGui.QWidget):
         self.paramsFrame.setWidgetResizable(True)
         self.paramsFrame.setEnabled(True)
         self.paramsFrame.setSizePolicy(sizePolicy)
-        self.paramsFrame.setFrameStyle(QtGui.QFrame.NoFrame)
+        # self.paramsFrame.setFrameStyle(QtGui.QFrame.NoFrame)
+        self.paramsFrame.setFrameStyle(QtGui.QFrame.StyledPanel)
 
         self.paramsGroup = QtGui.QWidget(self.paramsFrame)
         self.paramsFrame.setWidget(self.paramsGroup)

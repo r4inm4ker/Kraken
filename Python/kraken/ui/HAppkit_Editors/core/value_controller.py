@@ -4,7 +4,7 @@
 #
 
 
-from PySide import QtGui, QtCore
+from PySide import QtCore
 
 from undo_redo_manager import UndoRedoManager, Command
 

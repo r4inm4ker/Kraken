@@ -12,11 +12,11 @@ from PySide import QtGui, QtCore
 moduleDir = os.path.normpath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..'))
 sys.path.append(os.path.normpath(os.path.join(moduleDir, '..')))
 
-from HEditorWidgets.fe import FE
-from HEditorWidgets.base_inspector import BaseInspector
-from HEditorWidgets.core.pyval_controller import PyValController
-from HEditorWidgets.core.rtval_controller import RTValController
-from HEditorWidgets.core.undo_redo_manager import UndoRedoManager
+from HAppkit_Editors.fe import FE
+from HAppkit_Editors.base_inspector import BaseInspector
+from HAppkit_Editors.core.pyval_controller import PyValController
+from HAppkit_Editors.core.rtval_controller import RTValController
+from HAppkit_Editors.core.undo_redo_manager import UndoRedoManager
 
 app = QtGui.QApplication(sys.argv)
 widget = BaseInspector()

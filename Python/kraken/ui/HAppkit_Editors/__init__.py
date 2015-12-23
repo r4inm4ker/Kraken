@@ -1,10 +1,12 @@
 
-# Generic widget that inspects classes, and generates a layout for editing the class values.
+#
+# Copyright 2015 Horde Software Inc. All rights reserved.
+#
 
-
-import base_inspector
-import core.pyval_controller
-import core.rtval_controller
-import core.undo_redo_manager
+from base_inspector import BaseInspector
+from widget_factory import EditorFactory
+from core.value_controller import MemberController, ElementController, GetterSetterController
+from core.rtval_controller import RTValController, RTValGetterSetterController
+from core.undo_redo_manager import UndoRedoManager
 
 import editor_widgets
