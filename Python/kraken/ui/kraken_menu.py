@@ -202,11 +202,7 @@ class KrakenMenu(QtGui.QWidget):
         graphViewWidget = krakenUIWidget.graphViewWidget
 
         preferenceEditor = PreferenceEditor(parent=graphViewWidget)
-        result = preferenceEditor.exec_()
-
-        if result is 1:
-            # Save Preferences
-            pass
+        preferenceEditor.exec_()
 
     # =======
     # Events
