@@ -709,12 +709,12 @@ class Builder(Builder):
 
         try:
             graphDesc = kOperator.getGraphDesc()
-            graphNodeName = kOperator.getPresetPath().split('.')[-1]
+            graphNodePreset = kOperator.getPresetPath().split('.')[-1]
 
             # Create Splice Operator
             spliceNode = cmds.createNode('dfgMayaNode', name=kOperator.getName())
             cmds.FabricCanvasSetExtDeps(mayaNode=spliceNode, execPath="", extDep="Kraken" )
-            cmds.FabricCanvasInstPreset(mayaNode=spliceNode, execPath="", presetPath=kOperator.getPresetPath(), xPos="100", yPos="100")
+            graphNodeName = cmds.FabricCanvasInstPreset(mayaNode=spliceNode, execPath="", presetPath=kOperator.getPresetPath(), xPos="100", yPos="100")
 
             arraySizes = {}
             # connect the operator to the objects in the DCC

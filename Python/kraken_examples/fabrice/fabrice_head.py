@@ -251,7 +251,7 @@ class FabriceHeadRig(FabriceHead):
         # Add Aim Splice Op
         # =================
         # self.headAimCanvasOp = KLOperator('headAimCanvasOp', 'DirectionConstraintSolver', 'Kraken')
-        self.headAimCanvasOp = CanvasOperator('headAimCanvasOp', 'Kraken.DirectionConstraintSolver')
+        self.headAimCanvasOp = CanvasOperator('headAimCanvasOp', 'Kraken.Solvers.DirectionConstraintSolver')
         self.addOperator(self.headAimCanvasOp)
 
         # Add Att Inputs

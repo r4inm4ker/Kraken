@@ -249,8 +249,10 @@ class KrakenMenu(QtGui.QWidget):
 
         settings.beginGroup('KrakenMenu')
         if settings.contains('currentConfig'):
+            #TODO: Should be storing the name of the config, not an index
             currentConfig = int(settings.value('currentConfig', 0))
-            self.setCurrentConfig(currentConfig)
+            if currentConfig < self.configsWidget.count():
+                self.setCurrentConfig(currentConfig)
 
         if settings.contains('snapToGrid'):
             if settings.value('snapToGrid') == 'true':

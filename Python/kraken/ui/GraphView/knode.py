@@ -127,6 +127,9 @@ class KNode(Node):
 
         self.setGraphPos( QtCore.QPointF( self.__component.getGraphPos().x, self.__component.getGraphPos().y ) )
 
+        nodeColor = component.getComponentColor()
+        self.setColor(QtGui.QColor(nodeColor[0], nodeColor[1], nodeColor[2], nodeColor[3]))
+
 
     def getName(self):
         return self.__component.getDecoratedName()
