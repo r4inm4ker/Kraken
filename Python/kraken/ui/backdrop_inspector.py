@@ -6,7 +6,6 @@
 #pylint: disable-msg=W0613,R0201
 import sys
 from PySide import QtGui, QtCore
-from DataTypeWidgets import AttributeWidget
 from kraken.core.kraken_system import KrakenSystem
 
 
