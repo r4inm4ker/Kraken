@@ -1,11 +1,9 @@
 import os
 import sys
-import inspect
 
 from PySide import QtGui, QtCore
 
 import kraken.ui.kraken_ui
-reload(kraken.ui.kraken_ui)
 import kraken.ui.images_rc
 from kraken.ui.kraken_menu import KrakenMenu
 from kraken.ui.kraken_ui import KrakenUI
@@ -169,6 +167,7 @@ class OutputLogDialog(QtGui.QDialog):
         self.textWidget = QtGui.QTextEdit()
         self.textWidget.setLineWrapMode(QtGui.QTextEdit.NoWrap)
         self.textWidget.setReadOnly(True)
+        self.textWidget.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
 
         self.outputLogLayout = QtGui.QVBoxLayout(self)
         self.outputLogLayout.addWidget(self.textWidget)
@@ -179,13 +178,41 @@ class OutputLogDialog(QtGui.QDialog):
     def createConnections(self):
         """Connects widgets to methods or other signals."""
 
-        pass
+        self.textWidget.customContextMenuRequested.connect(self.createContextMenu)
 
 
     def setText(self, text):
         """Sets the text of the text widget."""
 
         self.textWidget.setText(text)
+
+
+    # =============
+    # Context Menu
+    # =============
+    def createContextMenu(self):
+        self.contextMenu = QtGui.QMenu(self)
+        selectAllAction = self.contextMenu.addAction("Select All")
+        copyAction = self.contextMenu.addAction("Copy")
+        self.contextMenu.addSeparator()
+        clearAction = self.contextMenu.addAction("Clear")
+
+        selectAllAction.triggered.connect(self.contextSelectAll)
+        copyAction.triggered.connect(self.contextCopy)
+        clearAction.triggered.connect(self.contextClear)
+
+        self.contextMenu.exec_(QtGui.QCursor.pos())
+
+    def contextSelectAll(self):
+        self.textWidget.selectAll()
+
+    def contextCopy(self):
+        self.textWidget.copy()
+
+    def contextClear(self):
+        outputLog = self.parent().outputLog
+        outputLog.clear()
+        self.textWidget.clear()
 
 
 
@@ -197,7 +224,6 @@ def createSplash(app):
 
     """
 
-    uiDir = os.path.dirname(inspect.getfile(KrakenUI))
     splashPixmap = QtGui.QPixmap(':/images/KrakenUI_Splash.png')
 
     splash = QtGui.QSplashScreen(splashPixmap)
