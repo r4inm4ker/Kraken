@@ -101,12 +101,12 @@ class Node(QtGui.QGraphicsWidget):
     nameChanged = QtCore.Signal(str, str)
 
     __defaultColor = QtGui.QColor(154, 205, 50, 255)
-    __unselectedColor = QtGui.QColor(25, 25, 25)
-    __selectedColor = QtGui.QColor(255, 255, 255, 255)
+    __defaultUnselectedColor = QtGui.QColor(25, 25, 25)
+    __defaultSelectedColor = QtGui.QColor(255, 255, 255, 255)
 
-    __unselectedPen = QtGui.QPen(__unselectedColor, 1.6)
-    __selectedPen = QtGui.QPen(__selectedColor, 1.6)
-    __linePen = QtGui.QPen(QtGui.QColor(25, 25, 25, 255), 1.25)
+    __defaultUnselectedPen = QtGui.QPen(__defaultUnselectedColor, 1.6)
+    __defaultSelectedPen = QtGui.QPen(__defaultSelectedColor, 1.6)
+    __defaultLinePen = QtGui.QPen(QtGui.QColor(25, 25, 25, 255), 1.25)
 
     def __init__(self, graph, name):
         super(Node, self).__init__()
@@ -114,6 +114,12 @@ class Node(QtGui.QGraphicsWidget):
         self.__name = name
         self.__graph = graph
         self.__color = self.__defaultColor
+        self.__unselectedColor = self.__defaultUnselectedColor
+        self.__selectedColor = self.__defaultSelectedColor
+
+        self.__unselectedPen = QtGui.QPen(self.__defaultUnselectedPen)
+        self.__selectedPen = QtGui.QPen(self.__defaultSelectedPen)
+        self.__linePen = QtGui.QPen(self.__defaultLinePen)
 
         self.setMinimumWidth(60)
         self.setMinimumHeight(20)
