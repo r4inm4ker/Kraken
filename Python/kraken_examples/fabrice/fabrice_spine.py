@@ -33,6 +33,8 @@ class FabriceSpine(BaseExampleComponent):
     def __init__(self, name="spineBase", parent=None):
         super(FabriceSpine, self).__init__(name, parent)
 
+        self.setComponentColor(0, 185, 155, 255)
+
         # ===========
         # Declare IO
         # ===========

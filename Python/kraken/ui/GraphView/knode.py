@@ -111,9 +111,6 @@ class KNode(Node):
     def __init__(self, graph, component):
         super(KNode, self).__init__(graph, component.getDecoratedName())
 
-        self.setUnselectedColor(self.getColor().darker(125))
-        self.setSelectedColor(self.getColor().lighter(175))
-
         self.__component = component
         self.__inspectorWidget = None
 
@@ -129,6 +126,8 @@ class KNode(Node):
 
         nodeColor = component.getComponentColor()
         self.setColor(QtGui.QColor(nodeColor[0], nodeColor[1], nodeColor[2], nodeColor[3]))
+        self.setUnselectedColor(self.getColor().darker(125))
+        self.setSelectedColor(self.getColor().lighter(175))
 
 
     def getName(self):

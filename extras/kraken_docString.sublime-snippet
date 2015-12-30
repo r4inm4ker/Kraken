@@ -2,11 +2,11 @@
     <content><![CDATA[
 """${1:Doc String}.
 
-Arguments:
-${2:Arguments} -- ${3:Type}, ${4:information}.
+Args:
+    ${2:Arguments} (${3:Type}): ${4:information}.
 
-Return:
-${5:True if successful}.
+Returns:
+    ${5:Type}: ${6:True if successful}.
 
 """
 

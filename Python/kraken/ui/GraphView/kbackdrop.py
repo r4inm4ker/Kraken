@@ -4,11 +4,11 @@
 #
 
 import math
-import json
 
 from PySide import QtGui, QtCore
 
 from kraken.ui.backdrop_inspector import BackdropInspector
+
 
 class KBackdropTitle(QtGui.QGraphicsWidget):
 
@@ -62,6 +62,7 @@ class KBackdropTitle(QtGui.QGraphicsWidget):
     def getBackdropWidget(self):
         return self.parent().parent()
 
+
 class KBackdropHeader(QtGui.QGraphicsWidget):
 
     def __init__(self, text, parent=None):
@@ -92,10 +93,10 @@ class KBackdrop(QtGui.QGraphicsWidget):
     sizeChanged = QtCore.Signal(float)
 
     __defaultColor = QtGui.QColor(65, 120, 122, 255)
-    __unselectedPen =  QtGui.QPen(__defaultColor.darker(125), 1.6)
-    __selectedPen =  QtGui.QPen(__defaultColor.lighter(175), 1.6)
-    __hoveredPen =  QtGui.QPen(__defaultColor.lighter(110), 1.6)
-    __linePen =  QtGui.QPen(QtGui.QColor(25, 25, 25, 255), 1.25)
+    __unselectedPen = QtGui.QPen(__defaultColor.darker(125), 1.6)
+    __selectedPen = QtGui.QPen(__defaultColor.lighter(175), 1.6)
+    __hoveredPen = QtGui.QPen(__defaultColor.lighter(110), 1.6)
+    __linePen = QtGui.QPen(QtGui.QColor(25, 25, 25, 255), 1.25)
 
     __resizeDistance = 16.0
     __setCustomCursor = False
@@ -197,9 +198,9 @@ class KBackdrop(QtGui.QGraphicsWidget):
         return self.__headerItem
 
 
-    #########################
-    ## Selection
-
+    # ==========
+    # Selection
+    # ==========
     def isSelected(self):
         return self.__selected
 
@@ -208,9 +209,9 @@ class KBackdrop(QtGui.QGraphicsWidget):
         self.update()
 
 
-    #########################
-    ## Graph Pos
-
+    # ==========
+    # Graph Pos
+    # ==========
     def getGraphPos(self):
         transform = self.transform()
         size = self.size()
@@ -264,9 +265,9 @@ class KBackdrop(QtGui.QGraphicsWidget):
 
         super(KBackdrop, self).paint(painter, option, widget)
 
-    #########################
-    ## Events
-
+    # =======
+    # Events
+    # =======
     def mousePressEvent(self, event):
         if event.button() is QtCore.Qt.MouseButton.LeftButton:
 
@@ -470,13 +471,13 @@ class KBackdrop(QtGui.QGraphicsWidget):
         self.__hoveredOver = False
         self.update()
 
-    ################
-    ## Misc Methods
-
+    # =============
+    # Misc Methods
+    # =============
     def getCorner(self, pos):
         topLeft = self.mapFromItem(self, self.boundingRect().topLeft())
         bottomRight = self.mapFromItem(self, self.boundingRect().bottomRight())
-        rect = QtCore.QRectF(topLeft, bottomRight);
+        rect = QtCore.QRectF(topLeft, bottomRight)
 
         if (rect.topLeft() - pos).manhattanLength() < self.__resizeDistance:
             return 0
@@ -489,13 +490,12 @@ class KBackdrop(QtGui.QGraphicsWidget):
 
         return -1
 
-
     def inspectorClosed(self):
         self.__inspectorWidget = None
 
 
-    #########################
-    ## shut down
-
+    # ==========
+    # Shut Down
+    # ==========
     def disconnectAllPorts(self):
         pass

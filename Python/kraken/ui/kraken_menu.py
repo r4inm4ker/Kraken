@@ -3,6 +3,7 @@ import sys
 import webbrowser
 
 from PySide import QtGui, QtCore
+from kraken.ui.preference_editor import PreferenceEditor
 from kraken.core.kraken_system import KrakenSystem
 from kraken.core.configs.config import Config
 
@@ -34,7 +35,7 @@ class KrakenMenu(QtGui.QWidget):
         self.newAction.setShortcut('Ctrl+N')
         self.newAction.setObjectName("newAction")
 
-        self.openAction = self.fileMenu.addAction('&Open')
+        self.openAction = self.fileMenu.addAction('&Open...')
         self.openAction.setShortcut('Ctrl+O')
         self.openAction.setObjectName("openAction")
 
@@ -42,7 +43,7 @@ class KrakenMenu(QtGui.QWidget):
         self.saveAction.setShortcut('Ctrl+S')
         self.saveAction.setObjectName("saveAction")
 
-        self.saveAsAction = self.fileMenu.addAction('&Save As')
+        self.saveAsAction = self.fileMenu.addAction('&Save As...')
         self.saveAsAction.setShortcut('Ctrl+Shift+S')
         self.saveAsAction.setObjectName("saveAsAction")
 
@@ -71,6 +72,9 @@ class KrakenMenu(QtGui.QWidget):
         self.editMenu.addSeparator()
         self.editRigNameAction = self.editMenu.addAction('&Rig Name')
         self.editRigNameAction.setObjectName("editRigNameAction")
+        self.editMenu.addSeparator()
+        self.editPreferencesAction = self.editMenu.addAction('&Preferences...')
+        self.editPreferencesAction.setObjectName("editPreferencesAction")
 
         # Build Menu
         self.buildMenu = self.menuBar.addMenu('&Build')
@@ -166,8 +170,9 @@ class KrakenMenu(QtGui.QWidget):
         self.pasteConnectedAction.triggered.connect(graphViewWidget.paste)
         self.pasteMirroredAction.triggered.connect(graphViewWidget.pasteMirrored)
         self.pasteMirroredConnectedAction.triggered.connect(graphViewWidget.pasteMirroredConnected)
-        self.editRigNameAction.triggered.connect(graphViewWidget.editRigName)
         self.editAddBackdropAction.triggered.connect(graphViewWidget.addBackdrop)
+        self.editRigNameAction.triggered.connect(graphViewWidget.editRigName)
+        self.editPreferencesAction.triggered.connect(self.editPreferences)
 
         # Build Menu Connections
         self.buildGuideAction.triggered.connect(graphViewWidget.buildGuideRig)
@@ -189,6 +194,16 @@ class KrakenMenu(QtGui.QWidget):
         self.rigNameLabel.clicked.connect(graphViewWidget.editRigName)
 
 
+    # ============
+    # Preferences
+    # ============
+    def editPreferences(self):
+        krakenUIWidget = self.window().getKrakenUI()
+        graphViewWidget = krakenUIWidget.graphViewWidget
+
+        preferenceEditor = PreferenceEditor(parent=graphViewWidget)
+        preferenceEditor.exec_()
+
     # =======
     # Events
     # =======
@@ -201,7 +216,7 @@ class KrakenMenu(QtGui.QWidget):
         self.rigNameLabel.setText('Rig Name: ' + newRigName)
 
 
-    def setCurrentConfig(self, index = None):
+    def setCurrentConfig(self, index=None):
         if index is None:
             index = self.configsWidget.currentIndex()
         else:

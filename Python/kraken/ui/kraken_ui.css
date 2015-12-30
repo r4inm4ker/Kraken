@@ -730,3 +730,19 @@ QScrollBar::right-arrow:horizontal {
 QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
     background: none;
 }
+
+/* ================= */
+/* Preference Editor */
+/* ================= */
+QFrame#prefLabelWidgetFrame {
+    background-color: #3F3F3F;
+    border-left: 3px solid #438f99;
+}
+
+QFrame#prefValueWidgetFrame {
+    background-color: #3F3F3F;
+}
+
+GraphViewWidget#graphViewWidget QDialog#PreferenceEditor {
+    background-color: #151515;
+}
