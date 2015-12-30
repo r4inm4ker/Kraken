@@ -3,7 +3,7 @@
 # Copyright 2010-2014 Fabric Technologies Inc. All rights reserved.
 #
 
-#pylint: disable-msg=W0613,R0201
+
 import sys
 from PySide import QtGui, QtCore
 from HAppkit_Editors import EditorFactory, GetterSetterController, BaseInspector
@@ -20,9 +20,9 @@ class ComponentInspector(BaseInspector):
         self.component = component
         self.nodeItem = nodeItem
 
-        self.setWindowTitle( self.component.getName() + ":" + self.component.getTypeName() )
-        self.setWindowFlags( QtCore.Qt.Dialog )
-        self.resize( 300, 300 )
+        self.setWindowTitle(self.component.getName() + ":" + self.component.getTypeName())
+        self.setWindowFlags(QtCore.Qt.Dialog)
+        self.resize(300, 300)
 
         self.refresh()
 
@@ -39,8 +39,9 @@ class ComponentInspector(BaseInspector):
 
         def getName():
             return self.component.getName()
-        nameController = GetterSetterController('name', 'String', getter=getName, setter=setName )
-        nameWidget = EditorFactory.constructEditor( nameController, parent=self)
+
+        nameController = GetterSetterController('name', 'String', getter=getName, setter=setName)
+        nameWidget = EditorFactory.constructEditor(nameController, parent=self)
         self.addEditor("name", nameWidget)
 
         def setLocation(value):
@@ -58,23 +59,28 @@ class ComponentInspector(BaseInspector):
 
         def getLocation():
             return self.component.getLocation()
-        locationController = GetterSetterController('location', 'String', getter=getLocation, setter=setLocation )
 
-        locationWidget = EditorFactory.constructEditor( locationController, parent=self)
+        locationController = GetterSetterController('location', 'String', getter=getLocation, setter=setLocation)
+        locationWidget = EditorFactory.constructEditor(locationController, parent=self)
         self.addEditor("location", locationWidget)
 
-
         def displayAttribute(attribute):
+
             def setValue(value):
                 attribute.setValue(value)
+
             def getValue():
                 return attribute.getValue()
-            attributeController = GetterSetterController('location', 'String', getter=getLocation, setter=setLocation )
-            attributeWidget = EditorFactory.constructEditor( attributeController, parent=self)
+
+            attributeController = GetterSetterController(attribute.getName(), attribute.getDataType(), getter=getValue, setter=setValue)
+            if attribute.getDataType() in ('Integer', 'Scalar'):
+                attributeController.setOption('range', {'min': attribute.getMin(), 'max': attribute.getMax()})
+
+            attributeWidget = EditorFactory.constructEditor(attributeController, parent=self)
             self.addEditor(attribute.getName(), attributeWidget)
 
         for i in range(self.component.getNumAttributeGroups()):
-            grp  = self.component.getAttributeGroupByIndex(i)
+            grp = self.component.getAttributeGroupByIndex(i)
             self.addSeparator(grp.getName())
             for j in range(grp.getNumAttributes()):
                 displayAttribute(grp.getAttributeByIndex(j))
@@ -82,9 +88,9 @@ class ComponentInspector(BaseInspector):
         # Add a stretch so that the widgets pack at the top.
         self.addStretch(2)
 
-    ##############################
-    ## Events
-
+    # =======
+    # Events
+    # =======
     def closeEvent(self, event):
         if self.nodeItem is not None:
             self.nodeItem.inspectorClosed()
@@ -93,10 +99,9 @@ class ComponentInspector(BaseInspector):
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
 
-    from kraken_examples.arm_component import ArmComponentGuide, ArmComponentRig
+    from kraken_examples.arm_component import ArmComponentGuide
     armGuide = ArmComponentGuide("arm")
 
     widget = ComponentInspector(component=armGuide)
     widget.show()
     sys.exit(app.exec_())
-
