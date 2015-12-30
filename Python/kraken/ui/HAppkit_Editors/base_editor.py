@@ -51,8 +51,6 @@ class BaseValueEditor(QtGui.QWidget):
     def _onValueChange(self, value):
         """This method is fired when the port has changed and the widget needs to be updated to display the new value"""
 
-        print "_onValueChange:" + str(value)
-
         # TODO: some widgets may want to override the updated value, but this behavior makes editing string widgets really annoying
         # as it re-focusses the widget after every change. I made '_onValueChange' protected so that derived widgets can override it.
         if not self.__interactionInProgress and not self._firingSetter:
