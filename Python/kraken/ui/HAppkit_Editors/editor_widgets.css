@@ -1,0 +1,276 @@
+
+ColorTable {
+    backgroundColor: rgb(0, 35, 40);
+    lighterBackgroundColor: rgb(0, 35, 45);
+    darkerColor: rgb(126, 102, 0);
+    lighterColor: rgb(255, 204, 0);
+    lightBorderColor: #333;
+}
+
+
+QWidget
+{
+    background-color: ColorTable.backgroundColor;
+    color: ColorTable.lighterColor;
+}
+
+
+QMenuBar::item
+{
+    background: transparent;
+    padding: 6px 8px;
+}
+
+QMenuBar::item:selected
+{
+    background: transparent;
+    border-radius: 3px;
+    border: 1px solid ColorTable.darkerColor;
+}
+
+
+/* The menu itself */
+QMenu
+{
+    border: 0px solid ColorTable.darkerColor;
+}
+
+
+QMenu::item
+{
+    padding: 6px 8px; /* spaced out menu items with lots of room between */
+    border: 0px solid ColorTable.darkerColor;
+}
+
+QMenu::item:selected
+{
+    background: transparent;
+    border-radius: 3px;
+    border: 1px solid ColorTable.darkerColor;
+    border-style: outset;
+}
+
+
+QPushButton {
+    border: 1px ColorTable.lightBorderColor;
+    border-radius: 3px;
+    border-style: outset;
+    padding: 6px 8px;
+}
+
+
+QLineEdit {
+    border: 1px ColorTable.lightBorderColor;
+    border-radius: 3px;
+    border-style: outset;
+    padding: 1px;
+    height: 24px;
+}
+
+
+QComboBox {
+    border: 1px ColorTable.lightBorderColor;
+    border-radius: 3px;
+    border-style: outset;
+    padding: 3px;
+    height: 24px;
+}
+
+/* the frame that holds the drop down items. */
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+
+    border-left-width: 1px;
+    border-left-color: darkgray;
+    border-left-style: solid; /* just a single line */
+    border-top-right-radius: 3px; /* same radius as the QComboBox */
+    border-bottom-right-radius: 3px;
+}
+
+
+QCheckBox {
+    spacing: 5px;
+}
+
+QCheckBox::indicator {
+    color: ColorTable.lighterColor;
+    width: 13px;
+    height: 13px;
+}
+
+QCheckBox::indicator::unchecked {
+    image: url(:/Font-Awesome/white/png/16/square-o.png);
+}
+QCheckBox::indicator::checked {
+    image: url(:/Font-Awesome/white/png/16/check-square-o.png);
+}
+
+QSpinBox {
+    border: 1px ColorTable.lightBorderColor;
+    border-radius: 3px;
+    border-style: outset;
+    padding: 3px;
+    height: 24px;
+}
+
+QSlider::groove:horizontal {
+    background-color: #3b3b3b;
+    height: 8px;
+}
+
+QSlider::handle:horizontal {
+    border: 1px ColorTable.darkerColor;
+    border-style: outset;
+    margin: -2px 0;
+    width: 18px;
+
+    background-color: ColorTable.lighterColor;
+}
+
+
+QScrollBar:vertical
+{
+      background: ColorTable.lighterBackgroundColor;
+      width: 14px;
+      margin: 16px 0 16px 0;
+      border: 1px solid ColorTable.backgroundColor;
+}
+
+QScrollBar::handle:vertical
+{
+      background: ColorTable.darkerColor;
+      min-height: 30px;
+      border: 1px solid ColorTable.backgroundColor;
+      border-radius: 2px;
+}
+
+
+/*********************************************/
+/* Tree Widgets                              */
+QHeaderView::section
+{
+    background-color: ColorTable.backgroundColor;
+    color: white;
+    padding-left: 4px;
+    border: 1px solid ColorTable.lightBorderColor;
+}
+
+QTreeWidget
+{
+    background-color: ColorTable.backgroundColor;
+}
+
+QTreeView
+{
+    background-color: ColorTable.backgroundColor;
+}
+
+
+QTreeView::branch:has-children:!has-siblings:closed,
+QTreeView::branch:closed:has-children:has-siblings  {
+        border-image: none;
+        image: url(:/Font-Awesome/white/png/16/plus-square-o.png:ColorTable.lighterColor);
+}
+
+QTreeView::branch:open:has-children:!has-siblings,
+QTreeView::branch:open:has-children:has-siblings   {
+        border-image: none;
+        image: url(:/Font-Awesome/white/png/16/minus-square-o.png:ColorTable.lighterColor);
+}
+
+
+QTabBar {
+
+}
+
+QTabBar::tab {
+    color: ColorTable.lighterColor;
+    border: 1px solid ColorTable.lightBorderColor;
+    border-bottom-style: outset;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 3px;
+    padding-bottom: 2px;
+    margin-right: 3px;
+}
+
+QTabBar::tab:first:!selected
+{
+    margin-left: 0px; /* the last selected tab has nothing to overlap with on the right */
+    border-top-left-radius: 3px;
+}
+
+QTabBar::tab:!selected
+{
+    color: #b1b1b1;
+    border-bottom-style: solid;
+    margin-top: 3px; /* Push the unselected tabs down a bit*/
+    background-color: ColorTable.backgroundColor;
+}
+
+QTabBar::tab:selected
+{
+    background-color: ColorTable.lighterBackgroundColor;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    margin-bottom: 0px;
+}
+
+
+/*********************************************/
+/* Specific widget styling                   */
+
+/* the frame that holds the drop down items. */
+QComboBox::drop-down#playMode {
+    width: 20px;
+}
+
+
+QWidget#timeline {
+    qproperty-timelinebackgroundcolor: ColorTable.backgroundColor;
+    qproperty-tickcolor: ColorTable.darkerColor;
+    qproperty-tickwidth: 1;
+    qproperty-timebarcolor: ColorTable.lighterColor;
+    qproperty-timebarwidth: 3;
+    qproperty-timelineheight: 20;
+}
+
+
+QPushButton#play {
+    image: url(:/Font-Awesome/white/png/32/play.png:ColorTable.lighterColor);
+    height: 32px;
+    width: 60px;
+}
+
+QPushButton#play:pressed {
+    image: url(:/Font-Awesome/white/png/32/pause.png:ColorTable.lighterColor);
+}
+
+
+QPushButton#stepL {
+    image: url(:/Font-Awesome/white/png/32/step-backward.png:ColorTable.lighterColor);
+    height: 32px;
+}
+
+QPushButton#stepR {
+    image: url(:/Font-Awesome/white/png/32/step-forward.png:ColorTable.lighterColor);
+    height: 32px;
+}
+
+
+QPushButton#begin {
+    image: url(:/Font-Awesome/white/png/32/fast-backward.png:ColorTable.lighterColor);
+    height: 32px;
+}
+
+QPushButton#end {
+    image: url(:/Font-Awesome/white/png/32/fast-forward.png:ColorTable.lighterColor);
+    height: 32px;
+}
+
+
+QPushButton#options {
+    image: url(:/Font-Awesome/white/png/32/bars.png:ColorTable.lighterColor);
+    height: 32px;
+}

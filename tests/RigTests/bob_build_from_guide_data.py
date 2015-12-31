@@ -1,5 +1,3 @@
-import json
-
 from kraken import plugins
 from kraken.core.objects.rig import Rig
 from kraken_examples.bob_guide_data import bob_guide_data

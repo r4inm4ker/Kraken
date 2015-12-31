@@ -1,14 +1,13 @@
 import os
 import sys
-import inspect
+import json
 
 from PySide import QtGui, QtCore
 
-import kraken.ui.kraken_ui
-reload(kraken.ui.kraken_ui)
-import kraken.ui.images_rc
+from kraken.ui import images_rc
 from kraken.ui.kraken_menu import KrakenMenu
 from kraken.ui.kraken_ui import KrakenUI
+from kraken.ui.preferences import Preferences
 from kraken.plugins.logger import OutputLog
 
 
@@ -29,6 +28,7 @@ class KrakenWindow(QtGui.QMainWindow):
         QtCore.QCoreApplication.setOrganizationName("Kraken")
         QtCore.QCoreApplication.setApplicationName("Kraken Editor")
         self.settings = QtCore.QSettings("Kraken", "Kraken Editor")
+        self.preferences = Preferences()
 
         cssPath = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                'kraken_ui.css')
@@ -79,6 +79,7 @@ class KrakenWindow(QtGui.QMainWindow):
     def createConnections(self):
         self.outputLogButton.clicked.connect(self.showOutputLog)
         self.krakenMenu.newAction.triggered.connect(self.krakenUI.graphViewWidget.newRigPreset)
+        self.krakenUI.graphViewWidget.rigLoaded.connect(self.krakenMenu.buildRecentFilesMenu)
         self.krakenUI.graphViewWidget.rigNameChanged.connect(self.krakenMenu.updateRigNameLabel)
 
 
@@ -100,21 +101,23 @@ class KrakenWindow(QtGui.QMainWindow):
         return self.settings
 
     def writeSettings(self):
-        self.settings.beginGroup("MainWindow")
-        self.settings.setValue("size", self.size())
-        self.settings.setValue("pos", self.pos())
+        self.settings.beginGroup('MainWindow')
+        self.settings.setValue('size', self.size())
+        self.settings.setValue('pos', self.pos())
+        self.settings.setValue('preferences', json.dumps(self.preferences.getPreferences()))
         self.settings.endGroup()
         self.krakenMenu.writeSettings(self.settings)
         self.krakenUI.writeSettings(self.settings)
 
     def readSettings(self):
-        self.settings.beginGroup("MainWindow")
-        self.resize(self.settings.value("size", self.size()))
-        self.move(self.settings.value("pos", self.pos()))
+        self.settings.beginGroup('MainWindow')
+        self.resize(self.settings.value('size', self.size()))
+        self.move(self.settings.value('pos', self.pos()))
+        self.preferences.loadPreferences(json.loads(self.settings.value('preferences', '{}')))
         self.settings.endGroup()
+
         self.krakenMenu.readSettings(self.settings)
         self.krakenUI.readSettings(self.settings)
-
 
     # =======
     # Events
@@ -142,7 +145,6 @@ class KrakenWindow(QtGui.QMainWindow):
 
         self.writeSettings()
 
-
     def showOutputLog(self):
         outputDialog = OutputLogDialog(self)
         outputDialog.show()
@@ -168,6 +170,7 @@ class OutputLogDialog(QtGui.QDialog):
         self.textWidget = QtGui.QTextEdit()
         self.textWidget.setLineWrapMode(QtGui.QTextEdit.NoWrap)
         self.textWidget.setReadOnly(True)
+        self.textWidget.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
 
         self.outputLogLayout = QtGui.QVBoxLayout(self)
         self.outputLogLayout.addWidget(self.textWidget)
@@ -178,13 +181,41 @@ class OutputLogDialog(QtGui.QDialog):
     def createConnections(self):
         """Connects widgets to methods or other signals."""
 
-        pass
+        self.textWidget.customContextMenuRequested.connect(self.createContextMenu)
 
 
     def setText(self, text):
         """Sets the text of the text widget."""
 
         self.textWidget.setText(text)
+
+
+    # =============
+    # Context Menu
+    # =============
+    def createContextMenu(self):
+        self.contextMenu = QtGui.QMenu(self)
+        selectAllAction = self.contextMenu.addAction("Select All")
+        copyAction = self.contextMenu.addAction("Copy")
+        self.contextMenu.addSeparator()
+        clearAction = self.contextMenu.addAction("Clear")
+
+        selectAllAction.triggered.connect(self.contextSelectAll)
+        copyAction.triggered.connect(self.contextCopy)
+        clearAction.triggered.connect(self.contextClear)
+
+        self.contextMenu.exec_(QtGui.QCursor.pos())
+
+    def contextSelectAll(self):
+        self.textWidget.selectAll()
+
+    def contextCopy(self):
+        self.textWidget.copy()
+
+    def contextClear(self):
+        outputLog = self.parent().outputLog
+        outputLog.clear()
+        self.textWidget.clear()
 
 
 
@@ -196,7 +227,6 @@ def createSplash(app):
 
     """
 
-    uiDir = os.path.dirname(inspect.getfile(KrakenUI))
     splashPixmap = QtGui.QPixmap(':/images/KrakenUI_Splash.png')
 
     splash = QtGui.QSplashScreen(splashPixmap)

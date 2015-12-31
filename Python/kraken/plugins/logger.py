@@ -26,3 +26,8 @@ class OutputLog(object):
         """
 
         return self._outputLog
+
+    def clear(self):
+        """Clears the output log."""
+
+        self._outputLog = ""

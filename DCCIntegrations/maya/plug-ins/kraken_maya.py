@@ -104,6 +104,10 @@ def setupKrakenMenu():
 
 # Initialize the script plug-in
 def initializePlugin(mobject):
+
+    pm.loadPlugin("matrixNodes", quiet=True)
+    pm.pluginInfo('matrixNodes', edit=True, autoload=True)
+
     mplugin = OpenMayaMPx.MFnPlugin(mobject)
 
     try:

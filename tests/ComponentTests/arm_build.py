@@ -6,7 +6,6 @@ from kraken_examples.arm_component import ArmComponentGuide, ArmComponentRig
 from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
 
-
 Profiler.getInstance().push("arm_build")
 
 armGuide = ArmComponentGuide("arm")

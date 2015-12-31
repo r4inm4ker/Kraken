@@ -3,6 +3,7 @@
 import win32com.client
 from win32com.client import constants
 import os
+import sys
 import inspect
 
 from win32com.client import constants
@@ -18,17 +19,8 @@ from Qt.QtGui import QWidget
 from PySide import QtWebKit
 from PySide import QtGui, QtCore
 
-from kraken.core.objects.rig import Rig
-from kraken import plugins
-
-import kraken.ui.kraken_window
-reload(kraken.ui.kraken_window)
-from kraken.ui.kraken_window import KrakenWindow
-from kraken.ui.kraken_window import createSplash
-
 si = Application
 log = si.LogMessage
-
 
 def XSILoadPlugin(in_reg):
     in_reg.Author = 'Eric Thivierge & Phil Taylor'
@@ -36,11 +28,18 @@ def XSILoadPlugin(in_reg):
     in_reg.Major = 1
     in_reg.Minor = 0
 
+
     pluginPath = in_reg.OriginPath
     krakenDir = os.path.normpath(XSIUtils.BuildPath(pluginPath, "..", "..", "..", ".."))
     os.environ['KRAKEN_PATH']  = krakenDir
 
+    # Add the path to the module search paths so we can import the module.
+    sys.path.append( os.path.join(krakenDir, 'Python' ) )
+
     krakenExtsDir = os.path.join(krakenDir, 'KLExts')
+    if 'FABRIC_EXTS_PATH' not in os.environ:
+        LogMessage('Unable to Load Kraken becase Fabric Engine has not be loaded.')
+        return
     if krakenExtsDir not in  os.environ['FABRIC_EXTS_PATH']:
         os.environ['FABRIC_EXTS_PATH'] = krakenExtsDir + ';' + os.environ['FABRIC_EXTS_PATH']
 
@@ -84,6 +83,13 @@ def OpenKrakenEditor_Init(in_ctxt):
 
 def OpenKrakenEditor_Execute():
 
+    # Deffered importing: We can only import the kraken modules after the
+    # plugin has loaded, as it configures the python import paths on load.
+    import kraken.ui.kraken_window
+    reload(kraken.ui.kraken_window)
+    from kraken.ui.kraken_window import KrakenWindow
+    from kraken.ui.kraken_window import createSplash
+
     sianchor = Application.getQtSoftimageAnchor()
     sianchor = Qt.wrapinstance(long(sianchor), QWidget)
 
@@ -120,6 +126,11 @@ def BuildKrakenGuide_Init(in_ctxt):
 
 
 def BuildKrakenGuide_Execute(rigFilePath):
+
+    # Deffered importing: We can only import the kraken modules after the
+    # plugin has loaded, as it configures the python import paths on load.
+    from kraken.core.objects.rig import Rig
+    from kraken import plugins
 
     if rigFilePath == "" and si.Interactive is True:
 
@@ -174,6 +185,11 @@ def BuildKrakenRig_Init(in_ctxt):
 
 
 def BuildKrakenRig_Execute(rigFilePath):
+
+    # Deffered importing: We can only import the kraken modules after the
+    # plugin has loaded, as it configures the python import paths on load.
+    from kraken.core.objects.rig import Rig
+    from kraken import plugins
 
     if rigFilePath == "" and si.Interactive is True:
 

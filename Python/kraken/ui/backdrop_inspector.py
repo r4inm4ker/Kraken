@@ -3,11 +3,7 @@
 # Copyright 2010-2014 Fabric Technologies Inc. All rights reserved.
 #
 
-#pylint: disable-msg=W0613,R0201
-import sys
 from PySide import QtGui, QtCore
-from DataTypeWidgets import AttributeWidget
-from kraken.core.kraken_system import KrakenSystem
 
 
 class BackdropInspector(QtGui.QDialog):
@@ -22,9 +18,9 @@ class BackdropInspector(QtGui.QDialog):
         self.parent = parent
         self.nodeItem = nodeItem
 
-        self.setWindowTitle( self.nodeItem.getName() )
-        self.setWindowFlags( QtCore.Qt.Dialog )
-        self.resize( 600, 300 )
+        self.setWindowTitle(self.nodeItem.getName())
+        self.setWindowFlags(QtCore.Qt.Dialog)
+        self.resize(600, 300)
 
         # layout
         self._mainLayout = QtGui.QVBoxLayout()
@@ -56,21 +52,9 @@ class BackdropInspector(QtGui.QDialog):
         self.nodeItem.adjustSize()
         self.close()
 
-    ##############################
-    ## Events
-
+    # =======
+    # Events
+    # =======
     def closeEvent(self, event):
         if self.nodeItem is not None:
             self.nodeItem.inspectorClosed()
-
-
-if __name__ == "__main__":
-    app = QtGui.QApplication(sys.argv)
-
-    from kraken_examples.arm_component import ArmComponentGuide, ArmComponentRig
-    armGuide = ArmComponentGuide("arm")
-
-    widget = BackdropInspector(component=armGuide)
-    widget.show()
-    sys.exit(app.exec_())
-

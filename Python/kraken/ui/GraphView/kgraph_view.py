@@ -2,10 +2,13 @@
 # Copyright 2010-2015
 #
 
+import copy
+
 from PySide import QtGui, QtCore
 
 from pyflowgraph.graph_view import GraphView
 from pyflowgraph.connection import Connection
+from pyflowgraph.selection_rect import SelectionRect
 from knode import KNode
 from edit_index_widget import EditIndexWidget
 from kraken.core.maths import Vec2
@@ -32,8 +35,9 @@ class KGraphView(GraphView):
     def getRig(self):
         return self.__rig
 
-    #######################
-    ## Graph
+    # ======
+    # Graph
+    # ======
     def displayGraph(self, rig):
         self.reset()
 
@@ -73,9 +77,6 @@ class KGraphView(GraphView):
         return connection
 
 
-    ################################################
-    ## Nodes
-
     def getNodesOfType(self, nodeType):
         """Gets all the nodes of the specified type.
 
@@ -91,9 +92,12 @@ class KGraphView(GraphView):
 
         return [graphNodes[x] for x in graphNodes if type(graphNodes[x]).__name__ == nodeType]
 
-    ################################################
-    ## Events
+    # =======
+    # Events
+    # =======
     def mousePressEvent(self, event):
+
+        modifiers = QtGui.QApplication.keyboardModifiers()
 
         if event.button() == QtCore.Qt.MouseButton.RightButton:
 
@@ -173,8 +177,25 @@ class KGraphView(GraphView):
                         contextMenu.popup(globalPos)
 
 
+        elif event.button() is QtCore.Qt.MouseButton.LeftButton and self.itemAt(event.pos()) is None:
+            self.beginNodeSelection.emit()
+            self._manipulationMode = 1
+            self._mouseDownSelection = copy.copy(self.getSelectedNodes())
+            self.clearSelection(emitSignal=False)
+            self._selectionRect = SelectionRect(graph=self, mouseDownPos=self.mapToScene(event.pos()))
+
+        elif event.button() is QtCore.Qt.MouseButton.MiddleButton:
+
+            pan_with_alt = self.window().preferences.getPreferenceValue('pan_with_alt')
+            if pan_with_alt is True and modifiers != QtCore.Qt.AltModifier:
+                return
+
+            self.setCursor(QtCore.Qt.OpenHandCursor)
+            self._manipulationMode = 2
+            self._lastPanPoint = self.mapToScene(event.pos())
+
         else:
-            super(KGraphView, self).mousePressEvent(event)
+            super(GraphView, self).mousePressEvent(event)
 
 
     def dragEnterEvent(self, event):
@@ -203,19 +224,21 @@ class KGraphView(GraphView):
             component = componentClass(parent=self.getRig())
             component.setGraphPos(Vec2(dropPosition.x(), dropPosition.y()))
             node = KNode(self, component)
-            nodeColor = component.getComponentColor()
-            node.setColor(QtGui.QColor(nodeColor[0], nodeColor[1], nodeColor[2], nodeColor[3]))
             self.addNode(node)
 
             event.acceptProposedAction()
         else:
             super(GraphView, self).dropEvent(event)
 
+    def wheelEvent(self, event):
 
+        zoom_mouse_scroll = self.window().preferences.getPreferenceValue('zoom_mouse_scroll')
+        if zoom_mouse_scroll is True:
+            super(KGraphView, self).wheelEvent(event)
 
-    #######################
-    ## Copy/Paste
-
+    # =============
+    # Copy / Paste
+    # =============
     def getClipboardData(self):
         return self.__class__._clipboardData
 
@@ -251,7 +274,6 @@ class KGraphView(GraphView):
 
         self.__class__._clipboardData = clipboardData
 
-
     def pasteSettings(self, pos, mirrored=False, createConnectionsToExistingNodes=True):
 
         clipboardData = self.__class__._clipboardData
@@ -275,9 +297,9 @@ class KGraphView(GraphView):
                 component.pasteData(componentData, setLocation=False)
             else:
                 component.pasteData(componentData, setLocation=True)
-            graphPos = component.getGraphPos( )
+            graphPos = component.getGraphPos()
             component.setGraphPos(Vec2(graphPos.x + delta.x(), graphPos.y + delta.y()))
-            node = KNode(self,component)
+            node = KNode(self, component)
             self.addNode(node)
             self.selectNode(node, False)
 
@@ -298,7 +320,7 @@ class KGraphView(GraphView):
                 sourceComponent = pastedComponents[nameMapping[sourceComponentDecoratedName]]
             else:
                 if not createConnectionsToExistingNodes:
-                    continue;
+                    continue
 
                 # When we support copying/pasting between rigs, then we may not find the source
                 # node in the target rig.
@@ -315,7 +337,6 @@ class KGraphView(GraphView):
 
             inputPort.setConnection(outputPort)
             self.connectPorts(
-                srcNode = sourceComponent.getDecoratedName(), outputName = outputPort.getName(),
-                tgtNode = targetComponent.getDecoratedName(), inputName=inputPort.getName()
+                srcNode=sourceComponent.getDecoratedName(), outputName=outputPort.getName(),
+                tgtNode=targetComponent.getDecoratedName(), inputName=inputPort.getName()
             )
-

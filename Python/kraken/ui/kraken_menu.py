@@ -3,6 +3,7 @@ import sys
 import webbrowser
 
 from PySide import QtGui, QtCore
+from kraken.ui.preference_editor import PreferenceEditor
 from kraken.core.kraken_system import KrakenSystem
 from kraken.core.configs.config import Config
 
@@ -13,6 +14,7 @@ class KrakenMenu(QtGui.QWidget):
     def __init__(self, parent=None):
         super(KrakenMenu, self).__init__(parent)
         self.setObjectName('menuWidget')
+        self.recentFiles = []
 
         self.createLayout()
         self.createConnections()
@@ -33,7 +35,7 @@ class KrakenMenu(QtGui.QWidget):
         self.newAction.setShortcut('Ctrl+N')
         self.newAction.setObjectName("newAction")
 
-        self.openAction = self.fileMenu.addAction('&Open')
+        self.openAction = self.fileMenu.addAction('&Open...')
         self.openAction.setShortcut('Ctrl+O')
         self.openAction.setObjectName("openAction")
 
@@ -41,9 +43,12 @@ class KrakenMenu(QtGui.QWidget):
         self.saveAction.setShortcut('Ctrl+S')
         self.saveAction.setObjectName("saveAction")
 
-        self.saveAsAction = self.fileMenu.addAction('&Save As')
+        self.saveAsAction = self.fileMenu.addAction('&Save As...')
         self.saveAsAction.setShortcut('Ctrl+Shift+S')
         self.saveAsAction.setObjectName("saveAsAction")
+
+        self.fileMenu.addSeparator()
+        self.recentFilesMenu = self.fileMenu.addMenu('&Recent Files')
 
         self.fileMenu.addSeparator()
 
@@ -67,6 +72,9 @@ class KrakenMenu(QtGui.QWidget):
         self.editMenu.addSeparator()
         self.editRigNameAction = self.editMenu.addAction('&Rig Name')
         self.editRigNameAction.setObjectName("editRigNameAction")
+        self.editMenu.addSeparator()
+        self.editPreferencesAction = self.editMenu.addAction('&Preferences...')
+        self.editPreferencesAction.setObjectName("editPreferencesAction")
 
         # Build Menu
         self.buildMenu = self.menuBar.addMenu('&Build')
@@ -78,13 +86,14 @@ class KrakenMenu(QtGui.QWidget):
         self.buildRigAction.setShortcut('Ctrl+B')
         self.buildRigAction.setObjectName("buildRigAction")
 
-        # Panel Menu
-        self.panelsMenu = self.menuBar.addMenu('&Panels')
-        self.compLibAction = self.panelsMenu.addAction('Component &Library')
-        self.compLibAction.setShortcut('Ctrl+Tab')
+        # Tools Menu
+        self.toolsMenu = self.menuBar.addMenu('&Tools')
+        self.reloadComponentsAction = self.toolsMenu.addAction('Reload Component Modules')
 
         # View Menu
         self.viewMenu = self.menuBar.addMenu('&View')
+        self.compLibAction = self.viewMenu.addAction('Component &Library')
+        self.compLibAction.setShortcut('Ctrl+Tab')
         self.snapToGridAction = self.viewMenu.addAction('&Snap To Grid')
         self.snapToGridAction.setCheckable(True)
 
@@ -161,17 +170,19 @@ class KrakenMenu(QtGui.QWidget):
         self.pasteConnectedAction.triggered.connect(graphViewWidget.paste)
         self.pasteMirroredAction.triggered.connect(graphViewWidget.pasteMirrored)
         self.pasteMirroredConnectedAction.triggered.connect(graphViewWidget.pasteMirroredConnected)
-        self.editRigNameAction.triggered.connect(graphViewWidget.editRigName)
         self.editAddBackdropAction.triggered.connect(graphViewWidget.addBackdrop)
+        self.editRigNameAction.triggered.connect(graphViewWidget.editRigName)
+        self.editPreferencesAction.triggered.connect(self.editPreferences)
 
         # Build Menu Connections
         self.buildGuideAction.triggered.connect(graphViewWidget.buildGuideRig)
         self.buildRigAction.triggered.connect(graphViewWidget.buildRig)
 
-        # Panels Menu Connections
-        self.compLibAction.triggered.connect(krakenUIWidget.resizeSplitter)
+        # Tools Menu Connections
+        self.reloadComponentsAction.triggered.connect(self.reloadAllComponents)
 
         # View Menu Connections
+        self.compLibAction.triggered.connect(krakenUIWidget.resizeSplitter)
         self.snapToGridAction.triggered[bool].connect(graphViewWidget.graphView.setSnapToGrid)
 
         # Help Menu Connections
@@ -182,6 +193,16 @@ class KrakenMenu(QtGui.QWidget):
         # Rig Name Label
         self.rigNameLabel.clicked.connect(graphViewWidget.editRigName)
 
+
+    # ============
+    # Preferences
+    # ============
+    def editPreferences(self):
+        krakenUIWidget = self.window().getKrakenUI()
+        graphViewWidget = krakenUIWidget.graphViewWidget
+
+        preferenceEditor = PreferenceEditor(parent=graphViewWidget)
+        preferenceEditor.exec_()
 
     # =======
     # Events
@@ -195,7 +216,7 @@ class KrakenMenu(QtGui.QWidget):
         self.rigNameLabel.setText('Rig Name: ' + newRigName)
 
 
-    def setCurrentConfig(self, index = None):
+    def setCurrentConfig(self, index=None):
         if index is None:
             index = self.configsWidget.currentIndex()
         else:
@@ -209,6 +230,22 @@ class KrakenMenu(QtGui.QWidget):
             configClass = ks.getConfigClass(configs[index-1])
             configClass.makeCurrent()
 
+    def reloadAllComponents(self):
+        krakenUIWidget = self.window().krakenUI
+        graphViewWidget = krakenUIWidget.graphViewWidget
+
+        # Sync and Store Graph Data
+        graphViewWidget.synchGuideRig()
+        rigData = graphViewWidget.guideRig.getData()
+
+        # Create New Rig And Reload All Components.
+        graphViewWidget.newRigPreset()
+        KrakenSystem.getInstance().reloadAllComponents()
+
+        # Load Saved Data And Update Widget
+        graphViewWidget.guideRig.loadRigDefinition(rigData)
+        graphViewWidget.graphView.displayGraph(graphViewWidget.guideRig)
+
 
     def writeSettings(self, settings):
         krakenUIWidget = self.window().krakenUI
@@ -217,9 +254,9 @@ class KrakenMenu(QtGui.QWidget):
         settings.beginGroup("KrakenMenu")
         settings.setValue("currentConfig", self.configsWidget.currentIndex())
         settings.setValue("snapToGrid", graphViewWidget.graphView.getSnapToGrid())
+        settings.setValue("recentFiles", ';'.join(self.recentFiles))
 
         settings.endGroup()
-
 
     def readSettings(self, settings):
         krakenUIWidget = self.window().krakenUI
@@ -239,7 +276,40 @@ class KrakenMenu(QtGui.QWidget):
             self.snapToGridAction.setChecked(snapToGrid)
             graphViewWidget.graphView.setSnapToGrid(snapToGrid)
 
+        if settings.contains('recentFiles'):
+            recentFiles = settings.value('recentFiles', None)
+
+            if recentFiles is not None:
+                fileSplit = recentFiles.split(';')
+                for eachFile in fileSplit[:4]:
+                    if os.path.exists(eachFile):
+                        self.recentFiles.append(eachFile)
+
         settings.endGroup()
+
+        self.buildRecentFilesMenu()
+
+
+    def buildRecentFilesMenu(self, newFilePath=None):
+        self.recentFilesMenu.clear()
+
+        self.recentFiles = self.recentFiles[:4]
+        if newFilePath is not None:
+            for i, eachFile in enumerate(list(self.recentFiles)):
+                if eachFile == newFilePath:
+                    self.recentFiles.pop(i)
+
+            self.recentFiles = [newFilePath] + self.recentFiles
+
+        for recentFile in self.recentFiles:
+
+            action = self.recentFilesMenu.addAction(recentFile)
+            action.triggered.connect(self.openRecentFile)
+
+    def openRecentFile(self):
+        krakenUIWidget = self.window().krakenUI
+        graphViewWidget = krakenUIWidget.graphViewWidget
+        graphViewWidget.loadRigPreset(self.sender().text())
 
 
 class RigNameLabel(QtGui.QLabel):

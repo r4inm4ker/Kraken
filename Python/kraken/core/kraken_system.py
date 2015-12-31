@@ -9,8 +9,10 @@ import os
 import sys
 import json
 import imp
+import inspect
 import importlib
 from collections import OrderedDict
+import traceback
 
 import FabricEngine.Core
 
@@ -35,6 +37,7 @@ class KrakenSystem(object):
 
         self.registeredConfigs = OrderedDict()
         self.registeredComponents = OrderedDict()
+        # self.moduleImportManager = ModuleImportManager()
 
 
     def loadCoreClient(self):
@@ -264,14 +267,13 @@ class KrakenSystem(object):
             componentClass (str): The Python class of the component
 
         """
-
-        componentModulePath = componentClass.__module__ + "." + componentClass.__name__
-        if componentModulePath in self.registeredComponents:
+        componentClassPath = componentClass.__module__ + "." + componentClass.__name__
+        if componentClassPath in self.registeredComponents:
             # we allow reregistring of components because as a component's class is edited
             # it will be re-imported by python(in Maya), and the classes reregistered.
             pass
 
-        self.registeredComponents[componentModulePath] = componentClass
+        self.registeredComponents[componentClassPath] = componentClass
 
 
     def getComponentClass(self, className):
@@ -289,6 +291,41 @@ class KrakenSystem(object):
             raise Exception("Component with that class not registered:" + className)
 
         return self.registeredComponents[className]
+
+
+    def reloadAllComponents(self):
+        """Force the reload of all registered component modules
+
+        Return:
+        True if successful.
+
+        """
+
+        for componentClassPath in self.registeredComponents:
+            componentModulePath = self.registeredComponents[componentClassPath].__module__
+            if componentModulePath in sys.modules:
+                del(sys.modules[componentModulePath])
+
+        prevRegsteredComponents = self.registeredComponents.copy()
+        self.registeredComponents = {}
+
+        for componentClassPath in prevRegsteredComponents:
+            componentModulePath = prevRegsteredComponents[componentClassPath].__module__
+            try:
+                importlib.import_module(componentModulePath)
+            except Exception as e:
+                stack = traceback.format_tb(sys.exc_info()[2])
+                exception_list = []
+                exception_list.extend(stack)
+                exception_list.extend(traceback.format_exception_only(sys.exc_info()[0], sys.exc_info()[1]))
+
+                exception_str = "Traceback (most recent call last):\n"
+                exception_str += "".join(exception_list)
+                # Removing the last \n
+                exception_str = exception_str[:-1]
+                print(exception_str)
+
+        return True
 
 
     def getComponentClassNames(self):
@@ -384,9 +421,9 @@ class KrakenSystem(object):
 
         if cls.__instance is None:
             cls.__instance = KrakenSystem()
-            # cls.__instance.loadComponentModules()
 
         return cls.__instance
+
 
 
 
