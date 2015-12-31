@@ -149,8 +149,6 @@ class GraphView(QtGui.QGraphicsView):
             return self.__nodes[name]
         return None
 
-    def getNodes(self):
-        return self.__nodes
 
     def _onNodeNameChanged(self, origName, newName ):
         if newName in self.__nodes and self.__nodes[origName] != self.__nodes[newName]:
