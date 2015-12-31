@@ -10,6 +10,7 @@ from pyflowgraph.graph_view import GraphView
 from pyflowgraph.connection import Connection
 from pyflowgraph.selection_rect import SelectionRect
 from knode import KNode
+from kbackdrop import KBackdrop
 from edit_index_widget import EditIndexWidget
 from kraken.core.maths import Vec2
 from kraken.core.kraken_system import KrakenSystem
@@ -58,6 +59,14 @@ class KGraphView(GraphView):
                         srcNode = componentOutput.getParent().getDecoratedName(), outputName = componentOutput.getName(),
                         tgtNode = component.getDecoratedName(), inputName=componentInput.getName()
                     )
+
+        # Get backdrops from meta data
+        metaData = self.__rig.getMetaData()
+        if 'backdrops' in metaData:
+            for backdrop in metaData['backdrops']:
+                backdropNode = KBackdrop(self, backdrop.get('name', 'Backdrop'))
+                self.addNode(backdropNode)
+                backdropNode.setData(backdrop)
 
         self.frameAllNodes()
 

@@ -201,11 +201,6 @@ class KGraphViewWidget(GraphViewWidget):
         self.guideRig = Rig()
         self.guideRig.loadRigDefinitionFile(filePath)
 
-        # Get backdrops from meta data
-        metaData = self.guideRig.getMetaData()
-        if 'backdrops' in metaData:
-            print metaData['backdrops']
-
         self.graphView.displayGraph(self.guideRig)
 
         settings = self.window().getSettings()
@@ -320,11 +315,19 @@ class KGraphViewWidget(GraphViewWidget):
     # ==============
     # Other Methods
     # ==============
-    def addBackdrop(self):
+    def addBackdrop(self, name='Backdrop'):
+        """Adds a backdrop node to the graph.
+
+        Args:
+            name (str): Name of the backdrop node.
+
+        Returns:
+            Node: Backdrop node that was created.
+
+        """
 
         graphView = self.getGraphView()
 
-        name = 'Backdrop'
         initName = name
         suffix = 1
         collision = True
@@ -347,6 +350,7 @@ class KGraphViewWidget(GraphViewWidget):
 
         graphView.selectNode(backdropNode, clearSelection=True)
 
+        return backdropNode
 
     # ==================
     # Message Reporting

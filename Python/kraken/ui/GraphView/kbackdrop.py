@@ -528,18 +528,15 @@ class KBackdrop(QtGui.QGraphicsWidget):
 
         """
 
-        self.setName(data.get('name', 'backdrop'))
         self.setComment(data.get('comment', ''))
 
-        position = data.get('graphPos', (0, 0))
-        self.setGraphPos(QtGui.QPointF(position[0], position[1]))
-
-        size = data.get('size', (self.setMinimumWidth(), self.setMinimumHeight()))
+        size = data.get('size', (self.minimumWidth(), self.minimumHeight()))
         self.resize(size[0], size[1])
+
+        position = data.get('graphPos', (0, 0))
+        self.setGraphPos(QtCore.QPointF(position[0], position[1]))
 
         color = data.get('color', self.__defaultColor.toTuple())
         self.setColor(color = QtGui.QColor(color[0], color[1], color[2], color[3]))
-
-        self.update()
 
         return True
