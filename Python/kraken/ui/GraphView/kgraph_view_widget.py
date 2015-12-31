@@ -130,10 +130,15 @@ class KGraphViewWidget(GraphViewWidget):
 
             self.synchGuideRig()
 
+            # Backdrop Meta Data
             graphView = self.getGraphView()
             backdropNodes = graphView.getNodesOfType('KBackdrop')
+            backdropData = [x.getData() for x in backdropNodes]
 
+            # Add Meta Data to rig
+            self.guideRig.setMetaData('backdrops', backdropData)
 
+            # Write rig file
             self.guideRig.writeRigDefinitionFile(filePath)
 
             settings = self.window().getSettings()
@@ -195,6 +200,12 @@ class KGraphViewWidget(GraphViewWidget):
     def loadRigPreset(self, filePath):
         self.guideRig = Rig()
         self.guideRig.loadRigDefinitionFile(filePath)
+
+        # Get backdrops from meta data
+        metaData = self.guideRig.getMetaData()
+        if 'backdrops' in metaData:
+            print metaData['backdrops']
+
         self.graphView.displayGraph(self.guideRig)
 
         settings = self.window().getSettings()

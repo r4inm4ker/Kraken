@@ -218,19 +218,14 @@ class KBackdrop(QtGui.QGraphicsWidget):
         return QtCore.QPointF(transform.dx()+(size.width()*0.5), transform.dy()+(size.height()*0.5))
 
     def setGraphPos(self, graphPos):
-        self.prepareConnectionGeometryChange()
         size = self.size()
         self.setTransform(QtGui.QTransform.fromTranslate(graphPos.x()-(size.width()*0.5), graphPos.y()-(size.height()*0.5)), False)
 
+    def getSize(self):
+        return
+
     def translate(self, x, y):
-        self.prepareConnectionGeometryChange()
         super(KBackdrop, self).translate(x, y)
-
-
-    # Prior to moving the node, we need to tell the connections to prepare for a geometry change.
-    # This method must be called preior to moving a node.
-    def prepareConnectionGeometryChange(self):
-        pass
 
     def paint(self, painter, option, widget):
         rect = self.windowFrameRect()
@@ -499,3 +494,52 @@ class KBackdrop(QtGui.QGraphicsWidget):
     # ==========
     def disconnectAllPorts(self):
         pass
+
+
+    # =============
+    # Data Methods
+    # =============
+    def getData(self):
+        """Gets the essential data of the backdrop for saving.
+
+        Returns:
+            dict: Data for saving.
+
+        """
+
+        data = {
+            'name': self.getName(),
+            'comment': self.getComment(),
+            'graphPos': self.getGraphPos().toTuple(),
+            'size': self.size().toTuple(),
+            'color': self.getColor().toTuple()
+        }
+
+        return data
+
+    def setData(self, data):
+        """Sets the data on a backdrop after loading.
+
+        Args:
+            data (dict): Name, comment, graph pos, size, and color.
+
+        Returns:
+            bool: True if successful.
+
+        """
+
+        self.setName(data.get('name', 'backdrop'))
+        self.setComment(data.get('comment', ''))
+
+        position = data.get('graphPos', (0, 0))
+        self.setGraphPos(QtGui.QPointF(position[0], position[1]))
+
+        size = data.get('size', (self.setMinimumWidth(), self.setMinimumHeight()))
+        self.resize(size[0], size[1])
+
+        color = data.get('color', self.__defaultColor.toTuple())
+        self.setColor(color = QtGui.QColor(color[0], color[1], color[2], color[3]))
+
+        self.update()
+
+        return True
