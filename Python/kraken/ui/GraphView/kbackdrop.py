@@ -183,7 +183,9 @@ class KBackdrop(QtGui.QGraphicsWidget):
 
 
     def getColor(self):
-        return self.__color
+        color = QtGui.QColor(self.__color)
+        color.setAlpha(255)
+        return color
 
     def setColor(self, color):
         self.__color = color

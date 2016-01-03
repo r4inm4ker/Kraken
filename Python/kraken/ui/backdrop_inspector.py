@@ -5,6 +5,8 @@
 
 from PySide import QtGui, QtCore
 
+from kraken.ui.color_widget import KColorWidget
+
 
 class BackdropInspector(QtGui.QDialog):
     """A widget providing the ability to nest """
@@ -38,9 +40,9 @@ class BackdropInspector(QtGui.QDialog):
         self._settingsLayout = QtGui.QGridLayout()
         self._settingsLayout.setContentsMargins(10, 10, 10, 10)
         self._settingsLayout.setSpacing(3)
-        # self._settingsLayout.setColumnMinimumWidth(0, 75)
-        self._settingsLayout.setColumnStretch(0, 1)
-        self._settingsLayout.setColumnStretch(1, 2)
+        self._settingsLayout.setColumnMinimumWidth(0, 75)
+        self._settingsLayout.setColumnStretch(0, 0)
+        self._settingsLayout.setColumnStretch(1, 1)
 
         # Settings widgets
         self._colorLabel = QtGui.QLabel('Color', self)
@@ -68,10 +70,7 @@ class BackdropInspector(QtGui.QDialog):
         self.buttons.accepted.connect(self.acceptClose)
         self.buttons.rejected.connect(self.close)
 
-        self._colorWidget.clicked.connect(self.openColorDialog)
-
-    def openColorDialog(self):
-        print "open dialog"
+        self._colorWidget.colorChanged.connect(self.setNodeColor)
 
     def acceptClose(self):
 
@@ -79,48 +78,13 @@ class BackdropInspector(QtGui.QDialog):
         self.nodeItem.adjustSize()
         self.close()
 
+
+    def setNodeColor(self, color):
+        self.nodeItem.setColor(color)
+
     # =======
     # Events
     # =======
     def closeEvent(self, event):
         if self.nodeItem is not None:
             self.nodeItem.inspectorClosed()
-
-
-class KColorWidget(QtGui.QLabel):
-    """Custom Label widget to display color settings."""
-
-    clicked = QtCore.Signal(bool)
-
-    def __init__(self, parent, color):
-        super(KColorWidget, self).__init__(parent)
-        self.installEventFilter(self)
-        self.__hoveredOver = False
-
-        self.pixmap = QtGui.QPixmap(12, 12)
-        self.pixmap.fill(QtGui.QColor(color))
-
-        self.setProperty('colorLabel', True)
-        self.setFixedSize(24, 24)
-        self.setScaledContents(True)
-        self.setPixmap(self.pixmap)
-
-    def eventFilter(self, object, event):
-        if event.type()== QtCore.QEvent.Enter:
-            self.setCursor(QtCore.Qt.PointingHandCursor)
-            return True
-
-        if event.type()== QtCore.QEvent.Leave:
-            self.setCursor(QtCore.Qt.ArrowCursor)
-            return True
-
-        if event.type()== QtCore.QEvent.MouseButtonPress:
-            self.setCursor(QtCore.Qt.ClosedHandCursor)
-            return True
-
-        if event.type()== QtCore.QEvent.MouseButtonRelease:
-            self.setCursor(QtCore.Qt.PointingHandCursor)
-            self.clicked.emit(True)
-            return True
-
-        return False
