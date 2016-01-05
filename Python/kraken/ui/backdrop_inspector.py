@@ -5,6 +5,8 @@
 
 from PySide import QtGui, QtCore
 
+from kraken.ui.color_widget import KColorWidget
+
 
 class BackdropInspector(QtGui.QDialog):
     """A widget providing the ability to nest """
@@ -22,7 +24,11 @@ class BackdropInspector(QtGui.QDialog):
         self.setWindowFlags(QtCore.Qt.Dialog)
         self.resize(600, 300)
 
-        # layout
+        self.createLayout()
+        self.createConnections()
+
+
+    def createLayout(self):
         self._mainLayout = QtGui.QVBoxLayout()
         self._mainLayout.setContentsMargins(10, 10, 10, 10)
 
@@ -31,26 +37,50 @@ class BackdropInspector(QtGui.QDialog):
         self._commentTextEdit.setMinimumHeight(20)
         self._commentTextEdit.setMaximumHeight(40)
 
+        self._settingsLayout = QtGui.QGridLayout()
+        self._settingsLayout.setContentsMargins(10, 10, 10, 10)
+        self._settingsLayout.setSpacing(3)
+        self._settingsLayout.setColumnMinimumWidth(0, 75)
+        self._settingsLayout.setColumnStretch(0, 0)
+        self._settingsLayout.setColumnStretch(1, 1)
+
+        # Settings widgets
+        self._colorLabel = QtGui.QLabel('Color', self)
+        self._colorLabel.setObjectName('color_label')
+        self._colorLabel.setSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.Fixed)
+        self._colorLabel.setMinimumWidth(75)
+        self._colorWidget = KColorWidget(self, self.nodeItem.getColor())
+
+        self._settingsLayout.addWidget(self._colorLabel, 0, 0, 1, 1, alignment=QtCore.Qt.AlignLeft)
+        self._settingsLayout.addWidget(self._colorWidget, 0, 1, 1, 1, alignment=QtCore.Qt.AlignLeft)
+
         # OK and Cancel buttons
-        buttons = QtGui.QDialogButtonBox(
+        self.buttons = QtGui.QDialogButtonBox(
             QtGui.QDialogButtonBox.Ok | QtGui.QDialogButtonBox.Cancel,
             QtCore.Qt.Horizontal, self)
 
-        buttons.accepted.connect(self.acceptClose)
-        buttons.rejected.connect(self.close)
-
         self._mainLayout.addWidget(self._commentTextEdit)
+        self._mainLayout.addLayout(self._settingsLayout)
         self._mainLayout.addStretch(1)
-        self._mainLayout.addWidget(buttons)
+        self._mainLayout.addWidget(self.buttons)
 
         self.setLayout(self._mainLayout)
 
+    def createConnections(self):
+        self.buttons.accepted.connect(self.acceptClose)
+        self.buttons.rejected.connect(self.close)
+
+        self._colorWidget.colorChanged.connect(self.setNodeColor)
 
     def acceptClose(self):
 
         self.nodeItem.setComment(self._commentTextEdit.toPlainText())
         self.nodeItem.adjustSize()
         self.close()
+
+
+    def setNodeColor(self, color):
+        self.nodeItem.setColor(color)
 
     # =======
     # Events

@@ -6,6 +6,17 @@ QLabel {
     color: #e1ffff;
 }
 
+QLabel[colorLabel="true"] {
+    padding-right: 0px;
+    border: 1px solid #151515;
+    border-radius: 3px;
+}
+
+QLabel:hover[colorLabel="true"] {
+    padding-right: 0px;
+    border: 1px solid #438f99;
+}
+
 QToolBar::separator {
     padding: 0 10px;
     width: 1px;
