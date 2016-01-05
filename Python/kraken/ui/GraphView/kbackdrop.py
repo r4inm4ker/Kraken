@@ -223,9 +223,6 @@ class KBackdrop(QtGui.QGraphicsWidget):
         size = self.size()
         self.setTransform(QtGui.QTransform.fromTranslate(graphPos.x()-(size.width()*0.5), graphPos.y()-(size.height()*0.5)), False)
 
-    def getSize(self):
-        return
-
     def translate(self, x, y):
         super(KBackdrop, self).translate(x, y)
 
