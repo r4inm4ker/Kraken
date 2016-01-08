@@ -129,6 +129,16 @@ class KGraphViewWidget(GraphViewWidget):
                     return False
 
             self.synchGuideRig()
+
+            # Backdrop Meta Data
+            graphView = self.getGraphView()
+            backdropNodes = graphView.getNodesOfType('KBackdrop')
+            backdropData = [x.getData() for x in backdropNodes]
+
+            # Add Meta Data to rig
+            self.guideRig.setMetaData('backdrops', backdropData)
+
+            # Write rig file
             self.guideRig.writeRigDefinitionFile(filePath)
 
             settings = self.window().getSettings()
@@ -190,6 +200,7 @@ class KGraphViewWidget(GraphViewWidget):
     def loadRigPreset(self, filePath):
         self.guideRig = Rig()
         self.guideRig.loadRigDefinitionFile(filePath)
+
         self.graphView.displayGraph(self.guideRig)
 
         settings = self.window().getSettings()
@@ -310,11 +321,19 @@ class KGraphViewWidget(GraphViewWidget):
     # ==============
     # Other Methods
     # ==============
-    def addBackdrop(self):
+    def addBackdrop(self, name='Backdrop'):
+        """Adds a backdrop node to the graph.
+
+        Args:
+            name (str): Name of the backdrop node.
+
+        Returns:
+            Node: Backdrop node that was created.
+
+        """
 
         graphView = self.getGraphView()
 
-        name = 'Backdrop'
         initName = name
         suffix = 1
         collision = True
@@ -336,8 +355,8 @@ class KGraphViewWidget(GraphViewWidget):
         graphView.addNode(backdropNode)
 
         graphView.selectNode(backdropNode, clearSelection=True)
-        # backdropNode.setSelected()
 
+        return backdropNode
 
     # ==================
     # Message Reporting

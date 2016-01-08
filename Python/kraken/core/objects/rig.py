@@ -21,6 +21,7 @@ class Rig(Container):
 
     def __init__(self, name='rig'):
         super(Rig, self).__init__(name)
+        self._metaData = {}
 
     def writeRigDefinitionFile(self, filepath):
         """Load a rig definition from a file on disk.
@@ -167,9 +168,10 @@ class Rig(Container):
             if 'connections' in jsonData:
                 self._makeConnections(jsonData['connections'])
 
+        if 'metaData' in jsonData:
 
-        # if 'graphPositions' in jsonData:
-        #     self._loadGraphPositions(jsonData['graphPositions'])
+            for k, v in jsonData['metaData'].iteritems():
+                self.setMetaData(k, v)
 
         Profiler.getInstance().pop()
 
@@ -231,6 +233,7 @@ class Rig(Container):
                     connectionsJson.append(connectionJson)
 
         guideData['connections'] = connectionsJson
+        guideData['metaData'] = self._metaData
 
         return guideData
 
@@ -269,3 +272,31 @@ class Rig(Container):
         guideData['connections'] = connectionsJson
 
         return guideData
+
+    # ==========
+    # Meta Data
+    # ==========
+    def getMetaData(self):
+        """Gets the meta data from the rig.
+
+        Returns:
+            dict: Extra data stored on the rig.
+
+        """
+
+        return self._metaData
+
+    def setMetaData(self, name, data):
+        """Sets meta data on the rig.
+
+        Args:
+            data (dict): Extra data needed to persist the rig / graph.
+
+        Returns:
+            bool: True if successful.
+
+        """
+
+        self._metaData[name] = data
+
+        return True
