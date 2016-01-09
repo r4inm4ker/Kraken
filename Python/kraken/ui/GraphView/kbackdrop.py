@@ -576,6 +576,9 @@ class KBackdrop(QtGui.QGraphicsWidget):
         self.setGraphPos(QtCore.QPointF(position[0], position[1]))
 
         color = data.get('color', self.__defaultColor.toTuple())
-        self.setColor(color = QtGui.QColor(color[0], color[1], color[2], color[3]))
+        self.setColor(color=QtGui.QColor(color[0], color[1], color[2], color[3]))
+        self.setUnselectedColor(self.getColor().darker(125))
+        self.setSelectedColor(self.getColor().lighter(175))
+        self.setHoveredColor(self.getColor().lighter(110))
 
         return True
