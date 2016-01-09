@@ -74,13 +74,18 @@ class BackdropInspector(QtGui.QDialog):
 
     def acceptClose(self):
 
-        self.nodeItem.setComment(self._commentTextEdit.toPlainText())
-        self.nodeItem.adjustSize()
+        if self.nodeItem.getComment() != self._commentTextEdit.toPlainText():
+            self.nodeItem.setComment(self._commentTextEdit.toPlainText())
+            self.nodeItem.adjustSize()
+
         self.close()
 
 
     def setNodeColor(self, color):
-        self.nodeItem.setColor(color)
+        self.nodeItem.setColor(QtGui.QColor(color))
+        self.nodeItem.setUnselectedColor(self.nodeItem.getColor().darker(125))
+        self.nodeItem.setSelectedColor(self.nodeItem.getColor().lighter(175))
+        self.nodeItem.setHoveredColor(self.nodeItem.getColor().lighter(110))
 
     # =======
     # Events

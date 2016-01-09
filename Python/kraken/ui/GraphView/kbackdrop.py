@@ -93,10 +93,14 @@ class KBackdrop(QtGui.QGraphicsWidget):
     sizeChanged = QtCore.Signal(float)
 
     __defaultColor = QtGui.QColor(65, 120, 122, 255)
-    __unselectedPen = QtGui.QPen(__defaultColor.darker(125), 1.6)
-    __selectedPen = QtGui.QPen(__defaultColor.lighter(175), 1.6)
-    __hoveredPen = QtGui.QPen(__defaultColor.lighter(110), 1.6)
-    __linePen = QtGui.QPen(QtGui.QColor(25, 25, 25, 255), 1.25)
+    __defaultUnselectedColor = QtGui.QColor(__defaultColor.darker(125))
+    __defaultSelectedColor = QtGui.QColor(__defaultColor.lighter(175))
+    __defaultHoverColor = QtGui.QColor(__defaultColor.lighter(110))
+
+    __defaultUnselectedPen = QtGui.QPen(__defaultUnselectedColor, 1.6)
+    __defaultSelectedPen = QtGui.QPen(__defaultSelectedColor, 1.6)
+    __defaultHoveredPen = QtGui.QPen(__defaultHoverColor, 1.6)
+    __defaultLinePen = QtGui.QPen(QtGui.QColor(25, 25, 25, 255), 1.25)
 
     __resizeDistance = 16.0
     __setCustomCursor = False
@@ -112,6 +116,15 @@ class KBackdrop(QtGui.QGraphicsWidget):
         self.__graph = graph
         self.__color = self.__defaultColor
         self.__color.setAlpha(25)
+        self.__unselectedColor = self.__defaultUnselectedColor
+        self.__selectedColor = self.__defaultSelectedColor
+        self.__hoverColor = self.__defaultHoverColor
+
+        self.__unselectedPen = QtGui.QPen(self.__defaultUnselectedPen)
+        self.__selectedPen = QtGui.QPen(self.__defaultSelectedPen)
+        self.__hoveredPen = QtGui.QPen(self.__defaultHoveredPen)
+        self.__linePen = QtGui.QPen(self.__defaultLinePen)
+
         self.__inspectorWidget = None
 
         self.setMinimumWidth(120)
@@ -190,6 +203,33 @@ class KBackdrop(QtGui.QGraphicsWidget):
     def setColor(self, color):
         self.__color = color
         self.__color.setAlpha(25)
+        self.update()
+
+
+    def getUnselectedColor(self):
+        return self.__unselectedColor
+
+    def setUnselectedColor(self, color):
+        self.__unselectedColor = color
+        self.__unselectedPen.setColor(self.__unselectedColor)
+        self.update()
+
+
+    def getSelectedColor(self):
+        return self.__selectedColor
+
+    def setSelectedColor(self, color):
+        self.__selectedColor = color
+        self.__selectedPen.setColor(self.__selectedColor)
+        self.update()
+
+
+    def getHoveredColor(self):
+        return self.__hoverColor
+
+    def setHoveredColor(self, color):
+        self.__hoverColor = color
+        self.__hoveredPen.setColor(self.__hoverColor)
         self.update()
 
 
@@ -536,6 +576,9 @@ class KBackdrop(QtGui.QGraphicsWidget):
         self.setGraphPos(QtCore.QPointF(position[0], position[1]))
 
         color = data.get('color', self.__defaultColor.toTuple())
-        self.setColor(color = QtGui.QColor(color[0], color[1], color[2], color[3]))
+        self.setColor(color=QtGui.QColor(color[0], color[1], color[2], color[3]))
+        self.setUnselectedColor(self.getColor().darker(125))
+        self.setSelectedColor(self.getColor().lighter(175))
+        self.setHoveredColor(self.getColor().lighter(110))
 
         return True
