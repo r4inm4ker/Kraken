@@ -85,8 +85,8 @@ class Synchronizer(Synchronizer):
             print "Warning Syncing. No DCC Item for :" + kObject.getPath()
             return
 
-        dccPos = dccItem.getTranslation()
-        dccQuat = dccItem.getRotation(quaternion=True).get()
+        dccPos = dccItem.getTranslation(space='world')
+        dccQuat = dccItem.getRotation(space='world', quaternion=True).get()
         dccScl = dccItem.getScale()
 
         pos = Vec3(x=dccPos[0], y=dccPos[1], z=dccPos[2])
