@@ -136,6 +136,7 @@ class KBackdrop(QtGui.QGraphicsWidget):
         self.__dragging = False
         self.__resizing = False
         self.__resizeCorner = -1
+        self.__resizeEdge = -1
 
         self.createLayout()
         self.createConnections()
@@ -306,9 +307,14 @@ class KBackdrop(QtGui.QGraphicsWidget):
         if event.button() is QtCore.Qt.MouseButton.LeftButton:
 
             resizeCorner = self.getCorner(event.pos())
+            resizeEdge = self.getEdge(event.pos())
             if resizeCorner != -1 and self.isSelected():
                 self.__resizing = True
                 self.__resizeCorner = resizeCorner
+                self._resizedBackdrop = False
+            elif resizeEdge != -1 and self.isSelected():
+                self.__resizing = True
+                self.__resizeEdge = resizeEdge
                 self._resizedBackdrop = False
             else:
                 modifiers = event.modifiers()
@@ -433,6 +439,42 @@ class KBackdrop(QtGui.QGraphicsWidget):
                 if newHeight <= self.minimumHeight():
                     newHeight = self.minimumHeight()
 
+            elif self.__resizeEdge == 0:
+                pass
+
+            elif self.__resizeEdge == 1:
+                newWidth = self._initBoundingRect.width() + delta.x()
+                newHeight = self._initBoundingRect.height()
+
+                newPosY = self._initPos.y()
+
+                if newWidth <= self.minimumWidth():
+                    newWidth = self.minimumWidth()
+                else:
+                    newPosX = self._initPos.x()
+
+            elif self.__resizeEdge == 2:
+                newWidth = self._initBoundingRect.width()
+                newHeight = self._initBoundingRect.height() + delta.y()
+
+                newPosX = self._initPos.x()
+
+                if newHeight <= self.minimumHeight():
+                    newHeight = self.minimumHeight()
+                else:
+                    newPosY = self._initPos.y()
+
+            elif self.__resizeEdge == 3:
+                newWidth = self._initBoundingRect.width() + (delta.x() * -1.0)
+                newHeight = self._initBoundingRect.height()
+
+                newPosY = self._initPos.y()
+
+                if newWidth <= self.minimumWidth():
+                    newWidth = self.minimumWidth()
+                else:
+                    newPosX = self._initPos.x() + delta.x()
+
             self.setPos(newPosX, newPosY)
             self.resize(newWidth, newHeight)
 
@@ -481,6 +523,7 @@ class KBackdrop(QtGui.QGraphicsWidget):
     def hoverMoveEvent(self, event):
 
         resizeCorner = self.getCorner(event.pos())
+        resizeEdge = self.getEdge(event.pos())
         if resizeCorner == 0:
             self.__setCustomCursor = True
             self.setCursor(QtCore.Qt.SizeFDiagCursor)
@@ -493,6 +536,18 @@ class KBackdrop(QtGui.QGraphicsWidget):
         elif resizeCorner == 3:
             self.__setCustomCursor = True
             self.setCursor(QtCore.Qt.SizeFDiagCursor)
+        elif resizeEdge == 0:
+            self.__setCustomCursor = True
+            self.setCursor(QtCore.Qt.SizeVerCursor)
+        elif resizeEdge == 1:
+            self.__setCustomCursor = True
+            self.setCursor(QtCore.Qt.SizeHorCursor)
+        elif resizeEdge == 2:
+            self.__setCustomCursor = True
+            self.setCursor(QtCore.Qt.SizeVerCursor)
+        elif resizeEdge == 3:
+            self.__setCustomCursor = True
+            self.setCursor(QtCore.Qt.SizeHorCursor)
         elif self.__headerItem.contains(event.pos()) is True:
             self.__setCustomCursor = True
             self.setCursor(QtCore.Qt.OpenHandCursor)
@@ -520,6 +575,34 @@ class KBackdrop(QtGui.QGraphicsWidget):
         elif (rect.bottomLeft() - pos).manhattanLength() < self.__resizeDistance:
             return 2
         elif (rect.bottomRight() - pos).manhattanLength() < self.__resizeDistance:
+            return 3
+
+        return -1
+
+    def getEdge(self, pos):
+        topRectUpperLeft = self.mapFromItem(self, self.boundingRect().topLeft())
+        topRectLowerRight = self.mapFromItem(self, self.boundingRect().right(), self.__resizeDistance * 0.25)
+        topRect = QtCore.QRectF(topRectUpperLeft, topRectLowerRight)
+
+        rightRectUpperLeft = self.mapFromItem(self, self.boundingRect().right() - self.__resizeDistance * 0.25, 0)
+        rightRectLowerRight = self.mapFromItem(self, self.boundingRect().bottomRight())
+        rightRect = QtCore.QRectF(rightRectUpperLeft, rightRectLowerRight)
+
+        bottomRectUpperLeft = self.mapFromItem(self, 0, self.boundingRect().bottom() - self.__resizeDistance * 0.25)
+        bottomRectLowerRight = self.mapFromItem(self, self.boundingRect().bottomRight())
+        bottomRect = QtCore.QRectF(bottomRectUpperLeft, bottomRectLowerRight)
+
+        leftRectUpperLeft = self.mapFromItem(self, self.boundingRect().topLeft())
+        leftRectLowerRight = self.mapFromItem(self, self.boundingRect().left() + self.__resizeDistance * 0.25, self.boundingRect().bottom())
+        leftRect = QtCore.QRectF(leftRectUpperLeft, leftRectLowerRight)
+
+        if topRect.contains(pos):
+            return -1  # Disabling the top resize by default.
+        elif rightRect.contains(pos):
+            return 1
+        elif bottomRect.contains(pos):
+            return 2
+        elif leftRect.contains(pos):
             return 3
 
         return -1
