@@ -219,12 +219,16 @@ class KGraphViewWidget(GraphViewWidget):
         try:
             self.window().statusBar().showMessage('Building Guide')
 
+            initConfigIndex = self.window().krakenMenu.configsWidget.currentIndex()
+
             builder = plugins.getBuilder()
 
             if self.guideRig.getName().endswith('_guide') is False:
                 self.guideRig.setName(self.guideRig.getName() + '_guide')
 
             builder.build(self.guideRig)
+
+            self.window().krakenMenu.setCurrentConfig(initConfigIndex)
 
         except Exception as e:
             self.reportMessage('Error Building', level='error', exception=e)
