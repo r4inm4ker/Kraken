@@ -8,5 +8,5 @@ setup(name='Kraken',
       author='Eric Thivierge, Phil Taylor',
       author_email='ethivierge@gmail.com',
       url='http://fabric-engine.github.io/Kraken//',
-      package_dir = {'': 'Python/kraken'}
+      package_dir = {'': 'Python'}
      )
