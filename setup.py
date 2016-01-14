@@ -4,9 +4,7 @@ from distutils.core import setup
 
 
 # Requirements.
-setup_requires = [
-    'PySide == 1.2.2'
-    ]
+setup_requires = []
 
 install_requires = []
 
