@@ -219,12 +219,16 @@ class KGraphViewWidget(GraphViewWidget):
         try:
             self.window().statusBar().showMessage('Building Guide')
 
+            initConfigIndex = self.window().krakenMenu.configsWidget.currentIndex()
+
             builder = plugins.getBuilder()
 
             if self.guideRig.getName().endswith('_guide') is False:
                 self.guideRig.setName(self.guideRig.getName() + '_guide')
 
             builder.build(self.guideRig)
+
+            self.window().krakenMenu.setCurrentConfig(initConfigIndex)
 
         except Exception as e:
             # Add the callstak to the log
@@ -244,6 +248,8 @@ class KGraphViewWidget(GraphViewWidget):
         try:
             self.window().statusBar().showMessage('Building Rig')
 
+            initConfigIndex = self.window().krakenMenu.configsWidget.currentIndex()
+
             self.synchGuideRig()
 
             rigBuildData = self.guideRig.getRigBuildData()
@@ -254,6 +260,8 @@ class KGraphViewWidget(GraphViewWidget):
 
             builder = plugins.getBuilder()
             builder.build(rig)
+
+            self.window().krakenMenu.setCurrentConfig(initConfigIndex)
 
         except Exception as e:
             # Add the callstak to the log

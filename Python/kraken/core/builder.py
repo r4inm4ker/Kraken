@@ -899,9 +899,7 @@ class Builder(object):
             self._postBuild()
 
             # Clear Config when finished.
-            # TT Commented out the following line.  This resets a custom config to default after each build in ui.
-            # Why is this line needed?
-            #self.config.clearInstance()
+            self.config.clearInstance()
 
         Profiler.getInstance().pop()
 
