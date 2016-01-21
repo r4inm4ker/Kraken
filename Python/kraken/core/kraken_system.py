@@ -23,7 +23,7 @@ krakenSystemModuleDir = os.path.join(os.path.dirname(os.path.realpath(__file__))
 krakenDir=os.path.abspath(os.path.join(krakenSystemModuleDir, '..', '..', '..'))
 os.environ['KRAKEN_PATH']  = krakenDir
 
-krakenExtsDir = os.path.join(krakenDir, 'KLExts')
+krakenExtsDir = os.path.join(krakenDir, 'Exts')
 if krakenExtsDir not in os.environ['FABRIC_EXTS_PATH']:
     os.environ['FABRIC_EXTS_PATH'] = krakenExtsDir + ';' + os.environ['FABRIC_EXTS_PATH']
 
