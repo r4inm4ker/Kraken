@@ -49,7 +49,7 @@ class NeckComponent(BaseExampleComponent):
 class NeckComponentGuide(NeckComponent):
     """Neck Component Guide"""
 
-    def __init__(self, name='neck', parent=None, data=None):
+    def __init__(self, name='neck', parent=None):
 
         Profiler.getInstance().push("Construct Neck Component:" + name)
         super(NeckComponentGuide, self).__init__(name, parent)
@@ -64,13 +64,12 @@ class NeckComponentGuide(NeckComponent):
         self.neckCtrl = Control('neck', parent=self.ctrlCmpGrp, shape="sphere")
         self.neckEndCtrl = Control('neckEnd', parent=self.ctrlCmpGrp, shape="sphere")
 
-        if data is None:
-            data = {
-                    "name": name,
-                    "location": "M",
-                    "neckPosition": Vec3(0.0, 16.5572, -0.6915),
-                    "neckEndPosition": Vec3(0.0, 17.4756, -0.421)
-                   }
+        data = {
+                "name": name,
+                "location": "M",
+                "neckPosition": Vec3(0.0, 16.5572, -0.6915),
+                "neckEndPosition": Vec3(0.0, 17.4756, -0.421)
+               }
 
         self.loadData(data)
 

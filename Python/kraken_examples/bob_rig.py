@@ -36,14 +36,15 @@ class BobRig(Container):
             'numDeformers': 4
         })
 
-        neckComponentGuide = NeckComponentGuide(data={
+        neckComponentGuide = NeckComponentGuide("neck")
+        neckComponentGuide.loadData({
             "location": "M",
             "neckPosition": Vec3(0.0, 16.5572, -0.6915),
             "neckEndPosition": Vec3(0.0, 17.4756, -0.421)
         })
 
         neckComponent = NeckComponentRig("neck", self)
-        neckComponent.loadData(data=neckComponentGuide.getRigBuildData())
+        neckComponent.loadData(neckComponentGuide.getRigBuildData())
 
         headComponent = HeadComponentRig("head", self)
         headComponent.loadData(data={
@@ -54,7 +55,8 @@ class BobRig(Container):
             "jawPosition": Vec3(0.0, 17.613, -0.2731)
         })
 
-        clavicleLeftComponentGuide = ClavicleComponentGuide("clavicle", data={
+        clavicleLeftComponentGuide = ClavicleComponentGuide("clavicle")
+        clavicleLeftComponentGuide.loadData({
             "location": "L",
             "clavicleXfo": Xfo(Vec3(0.1322, 15.403, -0.5723)),
             "clavicleUpVXfo": Xfo(Vec3(0.0, 1.0, 0.0)),
@@ -64,7 +66,8 @@ class BobRig(Container):
         clavicleLeftComponent = ClavicleComponentRig("clavicle", self)
         clavicleLeftComponent.loadData(data=clavicleLeftComponentGuide.getRigBuildData())
 
-        clavicleRightComponentGuide = ClavicleComponentGuide("clavicle", data={
+        clavicleRightComponentGuide = ClavicleComponentGuide("clavicle")
+        clavicleRightComponentGuide.loadData({
             "location": "R",
             "clavicleXfo": Xfo(Vec3(-0.1322, 15.403, -0.5723)),
             "clavicleUpVXfo": Xfo(Vec3(0.0, 1.0, 0.0)),

@@ -27,7 +27,7 @@ from kraken.helpers.utility_methods import logHierarchy
 class ClavicleComponent(BaseExampleComponent):
     """Clavicle Component Base"""
 
-    def __init__(self, name='clavicle', parent=None, data=None):
+    def __init__(self, name='clavicle', parent=None):
         super(ClavicleComponent, self).__init__(name, parent)
 
         # ===========
@@ -52,7 +52,7 @@ class ClavicleComponent(BaseExampleComponent):
 class ClavicleComponentGuide(ClavicleComponent):
     """Clavicle Component Guide"""
 
-    def __init__(self, name='clavicle', parent=None, data=None):
+    def __init__(self, name='clavicle', parent=None):
 
         Profiler.getInstance().push("Construct Clavicle Guide Component:" + name)
         super(ClavicleComponentGuide, self).__init__(name, parent)
@@ -69,14 +69,13 @@ class ClavicleComponentGuide(ClavicleComponent):
         self.clavicleUpVCtrl.setColor('red')
         self.clavicleEndCtrl = Control('clavicleEnd', parent=self.ctrlCmpGrp, shape="sphere")
 
-        if data is None:
-            data = {
-                    "name": name,
-                    "location": "L",
-                    "clavicleXfo": Xfo(Vec3(0.1322, 15.403, -0.5723)),
-                    "clavicleUpVXfo": Xfo(Vec3(0.0, 1.0, 0.0)),
-                    "clavicleEndXfo": Xfo(Vec3(2.27, 15.295, -0.753))
-                   }
+        data = {
+                "name": name,
+                "location": "L",
+                "clavicleXfo": Xfo(Vec3(0.1322, 15.403, -0.5723)),
+                "clavicleUpVXfo": Xfo(Vec3(0.0, 1.0, 0.0)),
+                "clavicleEndXfo": Xfo(Vec3(2.27, 15.295, -0.753))
+               }
 
         self.loadData(data)
 

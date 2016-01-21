@@ -27,7 +27,7 @@ from kraken.helpers.utility_methods import logHierarchy
 class ArmComponent(BaseExampleComponent):
     """Arm Component Base"""
 
-    def __init__(self, name='arm', parent=None, data=None):
+    def __init__(self, name='arm', parent=None):
         super(ArmComponent, self).__init__(name, parent)
 
         # ===========

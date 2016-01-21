@@ -25,7 +25,7 @@ from kraken.helpers.utility_methods import logHierarchy
 class HeadComponent(BaseExampleComponent):
     """Head Component Base"""
 
-    def __init__(self, name='headBase', parent=None, data=None):
+    def __init__(self, name='headBase', parent=None):
         super(HeadComponent, self).__init__(name, parent)
 
         # ===========
@@ -50,7 +50,7 @@ class HeadComponent(BaseExampleComponent):
 class HeadComponentGuide(HeadComponent):
     """Head Component Guide"""
 
-    def __init__(self, name='head', parent=None, data=None):
+    def __init__(self, name='head', parent=None):
 
         Profiler.getInstance().push("Construct Head Guide Component:" + name)
         super(HeadComponentGuide, self).__init__(name, parent)
@@ -67,16 +67,15 @@ class HeadComponentGuide(HeadComponent):
         self.eyeRightCtrl = Control('eyeRight', parent=self.ctrlCmpGrp, shape="sphere")
         self.jawCtrl = Control('jaw', parent=self.ctrlCmpGrp, shape="cube")
 
-        if data is None:
-            data = {
-                    "name": name,
-                    "location": "M",
-                    "headPosition": Vec3(0.0, 17.4756, -0.421),
-                    "headEndPosition": Vec3(0.0, 19.5, -0.421),
-                    "eyeLeftPosition": Vec3(0.3497, 18.0878, 0.6088),
-                    "eyeRightPosition": Vec3(-0.3497, 18.0878, 0.6088),
-                    "jawPosition": Vec3(0.0, 17.613, -0.2731)
-                   }
+        data = {
+                "name": name,
+                "location": "M",
+                "headPosition": Vec3(0.0, 17.4756, -0.421),
+                "headEndPosition": Vec3(0.0, 19.5, -0.421),
+                "eyeLeftPosition": Vec3(0.3497, 18.0878, 0.6088),
+                "eyeRightPosition": Vec3(-0.3497, 18.0878, 0.6088),
+                "jawPosition": Vec3(0.0, 17.613, -0.2731)
+               }
 
         self.loadData(data)
 

@@ -24,7 +24,7 @@ from kraken.helpers.utility_methods import logHierarchy
 class MainSrtComponent(BaseExampleComponent):
     """MainSrt Component Base"""
 
-    def __init__(self, name='mainSrtBase', parent=None, data=None):
+    def __init__(self, name='mainSrtBase', parent=None):
         super(MainSrtComponent, self).__init__(name, parent)
 
 
@@ -47,7 +47,7 @@ class MainSrtComponent(BaseExampleComponent):
 class MainSrtComponentGuide(MainSrtComponent):
     """MainSrt Component Guide"""
 
-    def __init__(self, name='mainSrt', parent=None, data=None):
+    def __init__(self, name='mainSrt', parent=None):
 
         Profiler.getInstance().push("Construct MainSrt Guide Component:" + name)
         super(MainSrtComponentGuide, self).__init__(name, parent)
@@ -67,12 +67,11 @@ class MainSrtComponentGuide(MainSrtComponent):
         # Guide Controls
         self.mainSrtCtrl = Control('mainSrt', parent=self.ctrlCmpGrp, shape="circle")
 
-        if data is None:
-            data = {
-                    "location": 'M',
-                    "mainSrtSize": self.mainSrtSizeInputAttr.getValue(),
-                    "mainSrtXfo": Xfo(tr=Vec3(0.0, 0.0, 0.0))
-                   }
+        data = {
+                "location": 'M',
+                "mainSrtSize": self.mainSrtSizeInputAttr.getValue(),
+                "mainSrtXfo": Xfo(tr=Vec3(0.0, 0.0, 0.0))
+               }
 
         self.loadData(data)
 

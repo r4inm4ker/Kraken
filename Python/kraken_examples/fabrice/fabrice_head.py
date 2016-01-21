@@ -26,7 +26,7 @@ from kraken.helpers.utility_methods import logHierarchy
 class FabriceHead(BaseExampleComponent):
     """Fabrice Head Component Base"""
 
-    def __init__(self, name='fabriceHeadBase', parent=None, data=None):
+    def __init__(self, name='fabriceHeadBase', parent=None):
         super(FabriceHead, self).__init__(name, parent)
 
         # ===========
@@ -49,7 +49,7 @@ class FabriceHead(BaseExampleComponent):
 class FabriceHeadGuide(FabriceHead):
     """Fabrice Head Component Guide"""
 
-    def __init__(self, name='head', parent=None, data=None):
+    def __init__(self, name='head', parent=None):
 
         Profiler.getInstance().push("Construct Head Guide Component:" + name)
         super(FabriceHeadGuide, self).__init__(name, parent)
@@ -70,15 +70,14 @@ class FabriceHeadGuide(FabriceHead):
         self.jawCtrl.alignOnYAxis(negative=True)
         self.jawCtrl.setColor('orange')
 
-        if data is None:
-            data = {
-                    "name": name,
-                    "location": "M",
-                    "headXfo": Xfo(Vec3(0.0, 1.67, 1.75)),
-                    "headCtrlCrvData": self.headCtrl.getCurveData(),
-                    "jawPosition": Vec3(0.0, 1.2787, 2.0078),
-                    "jawCtrlCrvData": self.jawCtrl.getCurveData(),
-                   }
+        data = {
+                "name": name,
+                "location": "M",
+                "headXfo": Xfo(Vec3(0.0, 1.67, 1.75)),
+                "headCtrlCrvData": self.headCtrl.getCurveData(),
+                "jawPosition": Vec3(0.0, 1.2787, 2.0078),
+                "jawCtrlCrvData": self.jawCtrl.getCurveData(),
+               }
 
         self.loadData(data)
 
