@@ -114,7 +114,7 @@ class FabriceTailGuide(FabriceTail):
         self.bezierSpineSpliceOp.setInput('tipHandle', self.tailEndHandleCtrl)
         self.bezierSpineSpliceOp.setInput('tip', self.tailEndCtrl)
 
-        self.loadData({
+        data = {
             'name': name,
             'location': 'M',
             'tailBasePos': Vec3(0.0, 0.65, -3.1),
@@ -125,7 +125,9 @@ class FabriceTailGuide(FabriceTail):
             'tailEndPos': Vec3(0.0, -0.22, -7.42),
             'tailEndCtrlCrvData': self.tailEndCtrl.getCurveData(),
             'numDeformers': 6
-        })
+        }
+
+        self.loadData(data)
 
         Profiler.getInstance().pop()
 

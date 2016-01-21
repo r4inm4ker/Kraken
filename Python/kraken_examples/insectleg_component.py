@@ -59,7 +59,7 @@ class InsectLegComponent(BaseExampleComponent):
 class InsectLegComponentGuide(InsectLegComponent):
     """InsectLeg Component Guide"""
 
-    def __init__(self, name='InsectLeg', parent=None, data=None):
+    def __init__(self, name='InsectLeg', parent=None):
 
         Profiler.getInstance().push("Construct InsectLeg Guide Component:" + name)
         super(InsectLegComponentGuide, self).__init__(name, parent)
@@ -72,18 +72,18 @@ class InsectLegComponentGuide(InsectLegComponent):
         self.numJoints.setValueChangeCallback(self.updateNumLegControls)
 
         self.jointCtrls = []
-        if data is None:
-            numJoints = self.numJoints.getValue()
-            jointPositions = self.generateGuidePositions(numJoints)
 
-            for i in xrange(numJoints):
-                self.jointCtrls.append(Control('leg' + str(i + 1).zfill(2), parent=self.ctrlCmpGrp, shape="sphere"))
+        numJoints = self.numJoints.getValue()
+        jointPositions = self.generateGuidePositions(numJoints)
 
-            data = {
-               "location": "L",
-               "jointPositions": jointPositions,
-               "numJoints": self.numJoints.getValue()
-              }
+        for i in xrange(numJoints):
+            self.jointCtrls.append(Control('leg' + str(i + 1).zfill(2), parent=self.ctrlCmpGrp, shape="sphere"))
+
+        data = {
+           "location": "L",
+           "jointPositions": jointPositions,
+           "numJoints": self.numJoints.getValue()
+          }
 
         self.loadData(data)
 

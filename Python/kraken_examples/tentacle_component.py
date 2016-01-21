@@ -57,7 +57,7 @@ class TentacleComponent(BaseExampleComponent):
 class TentacleComponentGuide(TentacleComponent):
     """Tentacle Component Guide"""
 
-    def __init__(self, name='Tentacle', parent=None, data=None):
+    def __init__(self, name='Tentacle', parent=None):
 
         Profiler.getInstance().push("Construct Tentacle Guide Component:" + name)
         super(TentacleComponentGuide, self).__init__(name, parent)
@@ -71,21 +71,21 @@ class TentacleComponentGuide(TentacleComponent):
 
         self.jointCtrls = []
         self.tentacleOutputs = []
-        if data is None:
-            numJoints = self.numJoints.getValue()
-            jointPositions = self.generateGuidePositions(numJoints)
 
-            for i in xrange(numJoints):
-                self.jointCtrls.append(Control('tentacle' + str(i + 1).zfill(2), parent=self.ctrlCmpGrp, shape="sphere"))
-                self.tentacleOutputs.append(ComponentOutput('tentacle' + str(i + 1).zfill(2), parent=self.outputHrcGrp))
+        numJoints = self.numJoints.getValue()
+        jointPositions = self.generateGuidePositions(numJoints)
 
-            self.boneOutputs.setTarget(self.tentacleOutputs)
+        for i in xrange(numJoints):
+            self.jointCtrls.append(Control('tentacle' + str(i + 1).zfill(2), parent=self.ctrlCmpGrp, shape="sphere"))
+            self.tentacleOutputs.append(ComponentOutput('tentacle' + str(i + 1).zfill(2), parent=self.outputHrcGrp))
 
-            data = {
-               "location": "L",
-               "jointPositions": jointPositions,
-               "numJoints": self.numJoints.getValue()
-              }
+        self.boneOutputs.setTarget(self.tentacleOutputs)
+
+        data = {
+           "location": "L",
+           "jointPositions": jointPositions,
+           "numJoints": self.numJoints.getValue()
+          }
 
         self.loadData(data)
 

@@ -29,13 +29,13 @@ class SpineClavRig(Container):
             'numDeformers': 4
         })
 
-        clavicleLeftComponentGuide = ClavicleComponentGuide("clavicleGuide",
-            data={
-                  "location": "L",
-                  "clavicleXfo": Xfo(Vec3(0.1322, 15.403, -0.5723)),
-                  "clavicleUpVXfo": Xfo(Vec3(0.0, 1.0, 0.0)),
-                  "clavicleEndXfo": Xfo(Vec3(2.27, 15.295, -0.753))
-                 })
+        clavicleLeftComponentGuide = ClavicleComponentGuide("clavicleGuide")
+        clavicleLeftComponentGuide.loadData({
+            "location": "L",
+            "clavicleXfo": Xfo(Vec3(0.1322, 15.403, -0.5723)),
+            "clavicleUpVXfo": Xfo(Vec3(0.0, 1.0, 0.0)),
+            "clavicleEndXfo": Xfo(Vec3(2.27, 15.295, -0.753))
+        })
 
         clavicleLeftComponent = ClavicleComponentRig("clavicle", self)
         clavicleLeftComponent.loadData(data=clavicleLeftComponentGuide.getRigBuildData())

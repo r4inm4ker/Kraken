@@ -59,7 +59,7 @@ class FKChainComponent(BaseExampleComponent):
 class FKChainComponentGuide(FKChainComponent):
     """FKChain Component Guide"""
 
-    def __init__(self, name='FKChain', parent=None, data=None):
+    def __init__(self, name='FKChain', parent=None):
 
         Profiler.getInstance().push("Construct FKCHain Guide Component:" + name)
         super(FKChainComponentGuide, self).__init__(name, parent)
@@ -72,25 +72,25 @@ class FKChainComponentGuide(FKChainComponent):
         self.numJoints.setValueChangeCallback(self.updateNumJointControls)
 
         self.jointCtrls = []
-        if data is None:
-            numJoints = self.numJoints.getValue()
-            jointPositions = self.generateGuidePositions(numJoints)
 
-            for i in xrange(numJoints + 1):
-                if i == 0:
-                    ctrlParent = self.ctrlCmpGrp
-                else:
-                    ctrlParent = self.jointCtrls[i - 1]
+        numJoints = self.numJoints.getValue()
+        jointPositions = self.generateGuidePositions(numJoints)
 
-                newCtrl = Control('chain' + str(i + 1).zfill(2), parent=ctrlParent, shape="sphere")
-                newCtrl.scalePoints(Vec3(0.25, 0.25, 0.25))
-                self.jointCtrls.append(newCtrl)
+        for i in xrange(numJoints + 1):
+            if i == 0:
+                ctrlParent = self.ctrlCmpGrp
+            else:
+                ctrlParent = self.jointCtrls[i - 1]
 
-            data = {
-               "location": "L",
-               "jointPositions": jointPositions,
-               "numJoints": self.numJoints.getValue()
-              }
+            newCtrl = Control('chain' + str(i + 1).zfill(2), parent=ctrlParent, shape="sphere")
+            newCtrl.scalePoints(Vec3(0.25, 0.25, 0.25))
+            self.jointCtrls.append(newCtrl)
+
+        data = {
+           "location": "L",
+           "jointPositions": jointPositions,
+           "numJoints": self.numJoints.getValue()
+          }
 
         self.loadData(data)
 

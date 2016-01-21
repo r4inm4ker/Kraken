@@ -115,7 +115,7 @@ class FabriceSpineGuide(FabriceSpine):
         # Add Xfo Outputs
         self.bezierSpineSpliceOp.setOutput('outputs', self.spineVertebraeOutput.getTarget())
 
-        self.loadData({
+        data = {
             'name': name,
             'location': 'M',
             'cogPos': Vec3(0.0, 1.65, 0.75),
@@ -129,7 +129,9 @@ class FabriceSpineGuide(FabriceSpine):
             'spineEndPos': Vec3(0.0, 0.65, -3.1),
             'spineEndCtrlCrvData': self.spineEndCtrl.getCurveData(),
             'numDeformers': 6
-        })
+        }
+
+        self.loadData(data)
 
         Profiler.getInstance().pop()
 

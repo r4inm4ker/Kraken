@@ -57,7 +57,7 @@ class LegComponent(BaseExampleComponent):
 class LegComponentGuide(LegComponent):
     """Leg Component Guide"""
 
-    def __init__(self, name='leg', parent=None, data=None):
+    def __init__(self, name='leg', parent=None):
 
         Profiler.getInstance().push("Construct Leg Guide Component:" + name)
         super(LegComponentGuide, self).__init__(name, parent)
@@ -76,16 +76,15 @@ class LegComponentGuide(LegComponent):
         self.toeCtrl = Control('toe', parent=self.ctrlCmpGrp, shape="sphere")
         self.toeTipCtrl = Control('toeTip', parent=self.ctrlCmpGrp, shape="sphere")
 
-        if data is None:
-            data = {
-                    "name": name,
-                    "location": "L",
-                    "femurXfo": Xfo(Vec3(0.9811, 9.769, -0.4572)),
-                    "kneeXfo": Xfo(Vec3(1.4488, 5.4418, -0.5348)),
-                    "ankleXfo": Xfo(Vec3(1.841, 1.1516, -1.237)),
-                    "toeXfo": Xfo(Vec3(1.85, 0.4, 0.25)),
-                    "toeTipXfo": Xfo(Vec3(1.85, 0.4, 1.5))
-                   }
+        data = {
+                "name": name,
+                "location": "L",
+                "femurXfo": Xfo(Vec3(0.9811, 9.769, -0.4572)),
+                "kneeXfo": Xfo(Vec3(1.4488, 5.4418, -0.5348)),
+                "ankleXfo": Xfo(Vec3(1.841, 1.1516, -1.237)),
+                "toeXfo": Xfo(Vec3(1.85, 0.4, 0.25)),
+                "toeTipXfo": Xfo(Vec3(1.85, 0.4, 1.5))
+               }
 
         self.loadData(data)
 
