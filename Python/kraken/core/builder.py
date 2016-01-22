@@ -514,6 +514,9 @@ class Builder(object):
         elif kObject.isTypeOf("CtrlSpace"):
             dccSceneItem = self.buildGroup(kObject, buildName)
 
+        elif kObject.isTypeOf("Transform"):
+            dccSceneItem = self.buildGroup(kObject, buildName)
+
         elif kObject.isTypeOf("Locator"):
             dccSceneItem = self.buildLocator(kObject, buildName)
 
