@@ -163,11 +163,11 @@ class Vec4(MathObject):
 
         """
 
-        vec4 = Vec4();
-        vec4.x = self.x;
-        vec4.y = self.y;
-        vec4.z = self.z;
-        vec4.t = self.t;
+        vec4 = Vec4()
+        vec4.x = self.x
+        vec4.y = self.y
+        vec4.z = self.z
+        vec4.t = self.t
         return vec4
 
 

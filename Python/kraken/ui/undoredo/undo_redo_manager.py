@@ -120,7 +120,7 @@ class UndoRedoManager(object):
         if not self.__enabled:
             if invokeRedoOnAdd:
                 command.redo()
-            return;
+            return
 
         if self.__isUndoingOrRedoing:
             raise Exception("Adding command when undoing or redoing existing commands.")

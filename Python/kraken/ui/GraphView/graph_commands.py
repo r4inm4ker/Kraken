@@ -13,15 +13,15 @@ class SelectionChangeCommand(Command):
         self.desc = "Deselected: ["
         for i in range(len(self.deselectedNodes)):
             if i == 0:
-                self.desc = self.desc + self.deselectedNodes[i].getName();
+                self.desc = self.desc + self.deselectedNodes[i].getName()
             else:
-                self.desc = self.desc +", " + self.deselectedNodes[i].getName();
+                self.desc = self.desc +", " + self.deselectedNodes[i].getName()
         self.desc = self.desc + "], Selected: ["
         for i in range(len(self.selectedNodes)):
             if i == 0:
-                self.desc = self.desc + self.selectedNodes[i].getName();
+                self.desc = self.desc + self.selectedNodes[i].getName()
             else:
-                self.desc = self.desc +", " + self.selectedNodes[i].getName();
+                self.desc = self.desc +", " + self.selectedNodes[i].getName()
         self.desc = self.desc + "]"
 
     def shortDesc(self):
@@ -94,7 +94,7 @@ class NodesMoveCommand(Command):
         self.delta = delta
         self.desc = "Moved: "
         for node in self.nodes:
-            self.desc = self.desc +", " + node.getName();
+            self.desc = self.desc +", " + node.getName()
 
 
     def shortDesc(self):

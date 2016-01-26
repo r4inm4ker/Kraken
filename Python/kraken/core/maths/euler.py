@@ -184,11 +184,11 @@ class Euler(MathObject):
 
         """
 
-        euler = Euler();
-        euler.x = self.x;
-        euler.y = self.y;
-        euler.z = self.z;
-        euler.ro = self.ro;
+        euler = Euler()
+        euler.x = self.x
+        euler.y = self.y
+        euler.z = self.z
+        euler.ro = self.ro
 
         return euler
 

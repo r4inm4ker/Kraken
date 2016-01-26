@@ -358,8 +358,8 @@ class KBackdrop(QtGui.QGraphicsWidget):
 
                 newNodePos = newPos - self._mouseDelta
 
-                snapPosX = math.floor(newNodePos.x() / gridSize) * gridSize;
-                snapPosY = math.floor(newNodePos.y() / gridSize) * gridSize;
+                snapPosX = math.floor(newNodePos.x() / gridSize) * gridSize
+                snapPosY = math.floor(newNodePos.y() / gridSize) * gridSize
                 snapPos = QtCore.QPointF(snapPosX, snapPosY)
 
                 newPosOffset = snapPos - newNodePos

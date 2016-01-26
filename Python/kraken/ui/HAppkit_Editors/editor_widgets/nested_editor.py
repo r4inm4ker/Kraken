@@ -61,7 +61,7 @@ class NestedEditor(BaseValueEditor):
         # memberController = self._valueController.getMemberController(memberName)
         widget = EditorFactory.constructEditor(memberController, parent=self)
         if widget is None:
-            return;
+            return
         self.addValueEditor(memberName, widget)
 
 

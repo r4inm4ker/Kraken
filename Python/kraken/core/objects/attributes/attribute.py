@@ -281,7 +281,7 @@ class Attribute(SceneItem):
         classHierarchy = []
         for cls in type.mro(type(self)):
             if cls == object:
-                break;
+                break
             classHierarchy.append(cls.__name__)
 
         jsonData = {
