@@ -24,7 +24,7 @@ class ScaleConstraint(Constraint):
         """
 
         if self.getMaintainOffset() is False:
-            newSc = Vec3();
+            newSc = Vec3()
             for constrainer in self.getConstrainers():
                 newSc = newSc.add(constrainer.xfo.tr)
 

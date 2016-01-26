@@ -166,10 +166,10 @@ class Color(MathObject):
 
         """
 
-        color = Color();
-        color.r = self.r;
-        color.g = self.g;
-        color.b = self.b;
+        color = Color()
+        color.r = self.r
+        color.g = self.g
+        color.b = self.b
         return color
 
 
@@ -361,13 +361,13 @@ class Color(MathObject):
             Example:
 
                 # Generate a regular random color
-                color = randomColor(seed);
+                color = randomColor(seed)
 
                 # Generate a light random color
-                color = randomColor(seed, 0.5);
+                color = randomColor(seed, 0.5)
 
                 # Generate a dark random color
-                color = randomColor(seed, -0.5);
+                color = randomColor(seed, -0.5)
 
         Args:
             gammaAdjustment (float): A gamma adjustment to offset the range of the generated color.
@@ -377,7 +377,7 @@ class Color(MathObject):
 
         """
         def lerp( val1, val2, t):
-            return val1 + ((val2 - val1) * t);
+            return val1 + ((val2 - val1) * t)
 
         if(gammaAdjustment > 0.0001):
             # Generate a light color with values between gammaAdjustment and 1.0

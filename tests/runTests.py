@@ -75,7 +75,7 @@ def runPytonTest(filepath, update, printoutput):
         newStack = []
         for line in stack:
             if 'runTests.py' in line:
-                continue;
+                continue
             lineParts = line.split('"')
             if len(lineParts) >= 3:
                 modulePath = os.path.normpath(lineParts[1])

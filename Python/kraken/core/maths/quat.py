@@ -116,9 +116,9 @@ class Quat(MathObject):
 
         """
 
-        quat = Quat();
-        quat.w = self.w;
-        quat.v = self.v.clone();
+        quat = Quat()
+        quat.w = self.w
+        quat.v = self.v.clone()
 
         return quat
 

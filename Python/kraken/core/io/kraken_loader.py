@@ -90,7 +90,7 @@ class KrakenLoader(object):
         """
 
         if '__typeHierarchy__' not in jsonData or 'name' not in jsonData:
-            raise Exception("Invalid JSON data for constructing scene item:" + str(jsonData));
+            raise Exception("Invalid JSON data for constructing scene item:" + str(jsonData))
 
         # =========
         # Controls

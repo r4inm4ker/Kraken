@@ -64,12 +64,12 @@ def XSIUnloadPlugin(in_reg):
 
 def Kraken_Init( in_ctxt ):
 
-    menu = in_ctxt.source;
+    menu = in_ctxt.source
     menu.AddCommandItem( "Open UI", "OpenKrakenEditor")
-    menu.AddSeparatorItem();
+    menu.AddSeparatorItem()
     menu.AddCommandItem("Build Guide", "BuildKrakenGuide")
     menu.AddCommandItem("Build Rig", "BuildKrakenRig")
-    menu.AddSeparatorItem();
+    menu.AddSeparatorItem()
     menu.AddCallbackItem( "Help", "OpenKrakenHelp" )
 
 

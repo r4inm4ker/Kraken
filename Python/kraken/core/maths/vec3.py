@@ -130,10 +130,10 @@ class Vec3(MathObject):
 
         """
 
-        vec3 = Vec3();
-        vec3.x = self.x;
-        vec3.y = self.y;
-        vec3.z = self.z;
+        vec3 = Vec3()
+        vec3.x = self.x
+        vec3.y = self.y
+        vec3.z = self.z
 
         return vec3
 
