@@ -16,12 +16,12 @@ print krakenDir
 
 fabricEngineDir=os.path.normpath("D:/temp/FabricEngine-pablo-Windows-x86_64-20150909-105847/")
 
-os.environ['PATH'] = os.path.join(fabricEngineDir, 'bin') + ';' + os.environ['PATH']
+os.environ['PATH'] = os.path.join(fabricEngineDir, 'bin') + os.pathsep + os.environ['PATH']
 
 PYTHON_VERSION = sys.version[:3]
 sys.path.append( os.path.join(fabricEngineDir, 'Python', PYTHON_VERSION ) )
 
-os.environ['FABRIC_EXTS_PATH'] = os.path.join(fabricEngineDir, 'Exts') + ';' + os.path.join(krakenDir, 'KLExts') + ';' + os.environ['FABRIC_EXTS_PATH']
+os.environ['FABRIC_EXTS_PATH'] = os.path.join(fabricEngineDir, 'Exts') + os.pathsep + os.path.join(krakenDir, 'KLExts') + ';' + os.environ['FABRIC_EXTS_PATH']
 
 
 
