@@ -63,7 +63,7 @@ class GraphView(QtGui.QGraphicsView):
 
         # Explicitly set the scene rect. This ensures all view parameters will be explicitly controlled
         # in the event handlers of this class.
-        size = QtCore.QSize(600, 400);
+        size = QtCore.QSize(600, 400)
         self.resize(size)
         self.setSceneRect(-size.width() * 0.5, -size.height() * 0.5, size.width(), size.height())
 

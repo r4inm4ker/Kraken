@@ -169,11 +169,11 @@ class Mat44(MathObject):
 
         """
 
-        mat44 = Mat44();
-        mat44.row0 = self.row0.clone();
-        mat44.row1 = self.row1.clone();
-        mat44.row2 = self.row2.clone();
-        mat44.row3 = self.row3.clone();
+        mat44 = Mat44()
+        mat44.row0 = self.row0.clone()
+        mat44.row1 = self.row1.clone()
+        mat44.row2 = self.row2.clone()
+        mat44.row3 = self.row3.clone()
 
         return mat44
 

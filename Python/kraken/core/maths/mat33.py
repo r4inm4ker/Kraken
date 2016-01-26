@@ -128,10 +128,10 @@ class Mat33(MathObject):
 
         """
 
-        mat33 = Mat33();
-        mat33.row0 = self.row0.clone();
-        mat33.row1 = self.row1.clone();
-        mat33.row2 = self.row2.clone();
+        mat33 = Mat33()
+        mat33.row0 = self.row0.clone()
+        mat33.row1 = self.row1.clone()
+        mat33.row2 = self.row2.clone()
 
         return mat33
 

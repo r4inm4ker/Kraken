@@ -61,7 +61,7 @@ def decodeValue(jsonData):
         return jsonData
 
     if '__mathObjectClass__' not in jsonData:
-        raise Exception("Invalid JSON data for constructing value:" + str(jsonData));
+        raise Exception("Invalid JSON data for constructing value:" + str(jsonData))
 
     if jsonData['__mathObjectClass__'] == 'Vec2':
         val = Vec2()

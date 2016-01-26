@@ -508,12 +508,12 @@ class Builder(Builder):
             for eachConstrainer in kConstraint.getConstrainers():
 
                 if eachConstrainer is None:
-                    raise Exception("Constraint '"+kConstraint.getPath()+"' has invalid connection.");
+                    raise Exception("Constraint '"+kConstraint.getPath()+"' has invalid connection.")
 
                 dccSceneItem = self.getDCCSceneItem(eachConstrainer)
 
                 if dccSceneItem is None:
-                    raise Exception("Constraint '"+kConstraint.getPath()+"' of type '"+solverTypeName+"' is connected to object without corresponding SceneItem:" + eachConstrainer.getPath());
+                    raise Exception("Constraint '"+kConstraint.getPath()+"' of type '"+solverTypeName+"' is connected to object without corresponding SceneItem:" + eachConstrainer.getPath())
 
                 connectionTargets = dccSceneItem.FullName + connectionSuffix
                 break
@@ -790,7 +790,7 @@ class Builder(Builder):
 
                     dccSceneItem = self.getDCCSceneItem(connectedObject)
                     if dccSceneItem is None:
-                        raise Exception("Operator:'"+kOperator.getName()+"' of type:'"+solverTypeName+"' arg:'"+argName+"' dcc item not found for item:" + connectedObject.getPath());
+                        raise Exception("Operator:'"+kOperator.getName()+"' of type:'"+solverTypeName+"' arg:'"+argName+"' dcc item not found for item:" + connectedObject.getPath())
                     addCanvasPorts(canvasOpPath, argName, kOperator.getName()+"."+argName, argDataType, argConnectionType, dccSceneItem)
 
                 canvasOpPath = canvasOpPath2[:-1]
@@ -959,7 +959,7 @@ class Builder(Builder):
 
                     dccSceneItem = self.getDCCSceneItem(connectedObject)
                     if dccSceneItem is None:
-                        raise Exception("Operator:'"+kOperator.getName()+"' of type:'"+kOperator.getPresetPath()+"' port:'"+portName+"' dcc item not found for item:" + connectedObject.getPath());
+                        raise Exception("Operator:'"+kOperator.getName()+"' of type:'"+kOperator.getPresetPath()+"' port:'"+portName+"' dcc item not found for item:" + connectedObject.getPath())
                     addCanvasPorts(canvasOpPath, portName, graphNodeName+"."+portName, portDataType, portConnectionType, dccSceneItem)
 
                 canvasOpPath = canvasOpPath2[:-1]

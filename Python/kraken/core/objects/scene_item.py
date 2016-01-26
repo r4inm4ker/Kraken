@@ -40,7 +40,7 @@ class SceneItem(object):
         khierarchy = []
         for cls in type.mro(type(self)):
             if cls == object:
-                break;
+                break
             khierarchy.append(cls.__name__)
 
         return khierarchy
