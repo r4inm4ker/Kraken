@@ -36,7 +36,7 @@ def XSILoadPlugin(in_reg):
     # Add the path to the module search paths so we can import the module.
     sys.path.append( os.path.join(krakenDir, 'Python' ) )
 
-    krakenExtsDir = os.path.join(krakenDir, 'KLExts')
+    krakenExtsDir = os.path.join(krakenDir, 'Exts')
     if 'FABRIC_EXTS_PATH' not in os.environ:
         LogMessage('Unable to Load Kraken becase Fabric Engine has not be loaded.')
         return
