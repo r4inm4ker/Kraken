@@ -33,6 +33,7 @@ class FootComponent(BaseExampleComponent):
         # ===========
         # Declare Inputs Xfos
         self.globalSRTInputTgt = self.createInput('globalSRT', dataType='Xfo', parent=self.inputHrcGrp).getTarget()
+        self.ikHandleInputTgt = self.createInput('ikHandle', dataType='Xfo', parent=self.inputHrcGrp).getTarget()
         self.legEndInputTgt = self.createInput('legEnd', dataType='Xfo', parent=self.inputHrcGrp).getTarget()
 
         # Declare Output Xfos
@@ -62,10 +63,10 @@ class FootComponentGuide(FootComponent):
         guideSettingsAttrGrp = AttributeGroup("GuideSettings", parent=self)
 
         # Guide Controls
-        self.footCtrl = Control('foot', parent=self.ctrlCmpGrp, shape="circle")
-        self.footCtrl.lockTranslation(True, True, True)
-        self.footCtrl.lockRotation(True, True, True)
-        self.footCtrl.lockScale(True, True, True)
+        # self.footCtrl = Control('foot', parent=self.ctrlCmpGrp, shape="circle")
+        # self.footCtrl.lockTranslation(True, True, True)
+        # self.footCtrl.lockRotation(True, True, True)
+        # self.footCtrl.lockScale(True, True, True)
 
         self.ankleCtrl = Control('ankle', parent=self.ctrlCmpGrp, shape="pin")
         self.toeCtrl = Control('toe', parent=self.ctrlCmpGrp, shape="pin")
@@ -74,14 +75,14 @@ class FootComponentGuide(FootComponent):
         # TODO: Add pivot controls (spheres) to mark offsets from foot control
         # for where the foot rock and banking should happen
 
-        self.footCtrlConstraint = PositionConstraint('_'.join([self.footCtrl.getName(), 'To', self.ankleCtrl.getName()]))
-        self.footCtrlConstraint.addConstrainer(self.ankleCtrl)
-        self.footCtrl.addConstraint(self.footCtrlConstraint)
+        # self.footCtrlConstraint = PositionConstraint('_'.join([self.footCtrl.getName(), 'To', self.ankleCtrl.getName()]))
+        # self.footCtrlConstraint.addConstrainer(self.ankleCtrl)
+        # self.footCtrl.addConstraint(self.footCtrlConstraint)
 
         data = {
             'name': name,
             'location': 'M',
-            'footCtrlCrvData': self.footCtrl.getCurveData(),
+            # 'footCtrlCrvData': self.footCtrl.getCurveData(),
             'ankleXfo': Xfo(Vec3(1.841, 1.1516, -1.237)),
             'toeXfo': Xfo(Vec3(1.85, 0.4, 0.25)),
             'toeTipXfo': Xfo(Vec3(1.85, 0.4, 1.5))
@@ -105,7 +106,7 @@ class FootComponentGuide(FootComponent):
 
         data = super(FootComponentGuide, self).saveData()
 
-        data['footCtrlCrvData'] = self.footCtrl.getCurveData()
+        # data['footCtrlCrvData'] = self.footCtrl.getCurveData()
         data['ankleXfo'] = self.ankleCtrl.xfo
         data['toeXfo'] = self.toeCtrl.xfo
         data['toeTipXfo'] = self.toeTipCtrl.xfo
@@ -126,13 +127,13 @@ class FootComponentGuide(FootComponent):
 
         super(FootComponentGuide, self).loadData(data)
 
-        self.footCtrl.setCurveData(data['footCtrlCrvData'])
-        self.footCtrl.xfo = data['ankleXfo']
+        # self.footCtrl.setCurveData(data['footCtrlCrvData'])
+        # self.footCtrl.xfo = data['ankleXfo']
         self.ankleCtrl.xfo = data['ankleXfo']
         self.toeCtrl.xfo = data['toeXfo']
         self.toeTipCtrl.xfo = data['toeTipXfo']
 
-        self.footCtrlConstraint.evaluate()
+        # self.footCtrlConstraint.evaluate()
 
         return True
 
@@ -148,18 +149,18 @@ class FootComponentGuide(FootComponent):
         data = super(FootComponentGuide, self).getRigBuildData()
 
         # values
-        footPos = self.footCtrl.xfo.tr
+        # footPos = self.footCtrl.xfo.tr
         anklePos = self.ankleCtrl.xfo.tr
         toePos = self.toeCtrl.xfo.tr
         toeTipPos = self.toeTipCtrl.xfo.tr
 
         # Calculate Foot Xfo
-        tempToeTipVec = toeTipPos.clone()
-        tempToeTipVec.y = footPos.y
-        dirVec = tempToeTipVec.subtract(footPos).unit()
-        footQuat = Quat()
-        footQuat.setFromDirectionAndUpvector(dirVec, Vec3(0.0, 1.0, 0.0))
-        footXfo = Xfo(tr=footPos, ori=footQuat)
+        # tempToeTipVec = toeTipPos.clone()
+        # tempToeTipVec.y = footPos.y
+        # dirVec = tempToeTipVec.subtract(footPos).unit()
+        # footQuat = Quat()
+        # footQuat.setFromDirectionAndUpvector(dirVec, Vec3(0.0, 1.0, 0.0))
+        # footXfo = Xfo(tr=footPos, ori=footQuat)
 
         # Calculate Ankle Xfo
         rootToEnd = toePos.subtract(anklePos).unit()
@@ -180,12 +181,12 @@ class FootComponentGuide(FootComponent):
         toeXfo.setFromVectors(rootToEnd, normal, zAxis, toePos)
 
         # Rotate points via the different in ori between footCtrl and footXfo
-        quatDiff = self.footCtrl.xfo.ori.multiply(footXfo.ori.inverse())
-        eulerDiff = quatDiff.toEuler(RotationOrder())
-        self.footCtrl.rotatePoints(Math_radToDeg(eulerDiff.x), Math_radToDeg(eulerDiff.y), Math_radToDeg(eulerDiff.z))
+        # quatDiff = self.footCtrl.xfo.ori.multiply(footXfo.ori.inverse())
+        # eulerDiff = quatDiff.toEuler(RotationOrder())
+        # self.footCtrl.rotatePoints(Math_radToDeg(eulerDiff.x), Math_radToDeg(eulerDiff.y), Math_radToDeg(eulerDiff.z))
 
-        data['footXfo'] = footXfo
-        data['footCtrlCrvData'] = self.footCtrl.getCurveData()
+        data['footXfo'] = self.ankleCtrl.xfo
+        # data['footCtrlCrvData'] = self.footCtrl.getCurveData()
         data['ankleXfo'] = ankleXfo
         data['ankleLen'] = anklePos.subtract(toePos).length()
         data['toeXfo'] = toeXfo
@@ -234,18 +235,18 @@ class FootComponentRig(FootComponent):
         # Controls
         # =========
         # Neck
-        self.footOffsetCtrlSpace = CtrlSpace('footOffset', parent=self.ctrlCmpGrp)
-        self.footCtrlSpace = CtrlSpace('foot', parent=self.footOffsetCtrlSpace)
-        self.footCtrl = Control('foot', parent=self.footCtrlSpace, shape="circle")
-        self.footCtrl.lockScale(True, True, True)
+        # self.footOffsetCtrlSpace = CtrlSpace('footOffset', parent=self.ctrlCmpGrp)
+        # self.footCtrlSpace = CtrlSpace('foot', parent=self.footOffsetCtrlSpace)
+        # self.footCtrl = Control('foot', parent=self.footCtrlSpace, shape="circle")
+        # self.footCtrl.lockScale(True, True, True)
 
-        self.ankleCtrlSpace = CtrlSpace('ankle', parent=self.footCtrl)
+        self.ankleCtrlSpace = CtrlSpace('ankle', parent=self.ctrlCmpGrp)
         self.ankleCtrl = Control('ankle', parent=self.ankleCtrlSpace, shape="square")
         self.ankleCtrl.alignOnXAxis(negative=True)
         self.ankleCtrl.lockTranslation(True, True, True)
         self.ankleCtrl.lockScale(True, True, True)
 
-        self.toeCtrlSpace = CtrlSpace('toe', parent=self.footCtrl)
+        self.toeCtrlSpace = CtrlSpace('toe', parent=self.ctrlCmpGrp)
         self.toeCtrl = Control('toe', parent=self.toeCtrlSpace, shape="square")
         self.toeCtrl.alignOnXAxis()
         self.toeCtrl.lockTranslation(True, True, True)
@@ -274,10 +275,10 @@ class FootComponentRig(FootComponent):
         # Constrain I/O
         # ==============
         # Constraint inputs
-        self.footOffsetInputConstraint = PoseConstraint('_'.join([self.footOffsetCtrlSpace.getName(), 'To', self.globalSRTInputTgt.getName()]))
-        self.footOffsetInputConstraint.setMaintainOffset(True)
-        self.footOffsetInputConstraint.addConstrainer(self.globalSRTInputTgt)
-        self.footOffsetCtrlSpace.addConstraint(self.footOffsetInputConstraint)
+        # self.footOffsetInputConstraint = PoseConstraint('_'.join([self.footOffsetCtrlSpace.getName(), 'To', self.globalSRTInputTgt.getName()]))
+        # self.footOffsetInputConstraint.setMaintainOffset(True)
+        # self.footOffsetInputConstraint.addConstrainer(self.globalSRTInputTgt)
+        # self.footOffsetCtrlSpace.addConstraint(self.footOffsetInputConstraint)
 
         # Constraint outputs
         self.ikTargetOutputConstraint = PoseConstraint('_'.join([self.ikTargetOutputTgt.getName(), 'To', self.ankleCtrl.getName()]))
@@ -334,15 +335,15 @@ class FootComponentRig(FootComponent):
         super(FootComponentRig, self).loadData( data )
 
         footXfo = data['footXfo']
-        footCtrlCrvData = data['footCtrlCrvData']
+        # footCtrlCrvData = data['footCtrlCrvData']
         ankleXfo = data['ankleXfo']
         toeXfo = data['toeXfo']
         ankleLen = data['ankleLen']
         toeLen = data['toeLen']
 
-        self.footOffsetCtrlSpace.xfo = footXfo
-        self.footCtrl.xfo = footXfo
-        self.footCtrl.setCurveData(footCtrlCrvData)
+        # self.footOffsetCtrlSpace.xfo = footXfo
+        # self.footCtrl.xfo = footXfo
+        # self.footCtrl.setCurveData(footCtrlCrvData)
         self.ankleCtrlSpace.xfo = ankleXfo
         self.ankleCtrl.xfo = ankleXfo
         self.toeCtrlSpace.xfo = toeXfo
@@ -362,7 +363,7 @@ class FootComponentRig(FootComponent):
         self.toeOutputTgt.xfo = toeXfo
 
         # Eval Constraints
-        self.footOffsetInputConstraint.evaluate()
+        # self.footOffsetInputConstraint.evaluate()
         self.ikTargetOutputConstraint.evaluate()
 
 
