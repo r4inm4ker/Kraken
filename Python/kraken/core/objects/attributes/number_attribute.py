@@ -134,16 +134,22 @@ class NumberAttribute(Attribute):
 
         """
 
-        if self.isTypeOf('IntegerAttribute'):
-            if type(minimum) is not int or minimum is not None:
-                raise TypeError("UiMin value is not of type 'int' or None.")
+        errorStr = "Cannot set a UI minimum on attribute \""+self.getName()+"\"."
 
-        if self.isTypeOf('ScalarAttribute'):
-            if type(minimum) not in (int, float) or minimum is not None:
-                raise TypeError("UiMin value is not of type 'int', 'float' or None.")
+        if minimum is not None:
 
-        if minimum is not None and minimum < self._min:
-            raise ValueError('UiMin value is less than attribute minimum')
+            if self.isTypeOf('IntegerAttribute'):
+                if type(minimum) is not int:
+                    raise TypeError(errorStr+"UiMin arg value is not of type 'int' or None.")
+
+            elif self.isTypeOf('ScalarAttribute'):
+                if type(minimum) not in (int, float):
+                    raise TypeError(errorStr+"UiMin arg value is not of type 'int','float', or None.")
+            else:
+                raise ValueError(errorStr+" It is of type "+self.__class__.__name__+".  Valid clases are: IntegerAttribute or ScalarAttribute")
+
+            if minimum < self._min:
+                raise ValueError(errorStr+" UiMin value ["+minimum+"] is less than attribute minimum ["+self._min+"]")
 
         self._uiMin = minimum
 
@@ -175,16 +181,22 @@ class NumberAttribute(Attribute):
 
         """
 
-        if self.isTypeOf('IntegerAttribute'):
-            if type(maximum) is not int or maximum is not None:
-                raise TypeError("UiMax value is not of type 'int' or None.")
+        errorStr = "Cannot set a UI maximum on attribute \""+self.getName()+"\"."
 
-        if self.isTypeOf('ScalarAttribute'):
-            if type(maximum) not in (int, float) or maximum is not None:
-                raise TypeError("UiMax value is not of type 'int','float', or None.")
+        if maximum is not None:
 
-        if maximum is not None and maximum > self._max:
-            raise ValueError('UiMax value is greater than attribute maximum')
+            if self.isTypeOf('IntegerAttribute'):
+                if type(maximum) is not int:
+                    raise TypeError(errorStr+"UiMax arg value is not of type 'int' or None.")
+
+            elif self.isTypeOf('ScalarAttribute'):
+                if type(maximum) not in (int, float):
+                    raise TypeError(errorStr+"UiMax arg value is not of type 'int','float', or None.")
+            else:
+                raise ValueError(errorStr+" It is of type "+self.__class__.__name__+".  Valid clases are: IntegerAttribute or ScalarAttribute")
+
+            if maximum > self._max:
+                raise ValueError(errorStr+" UiMax value ["+maximum+"] is greater than attribute maximum ["+self._max+"]")
 
         self._uiMax = maximum
 
