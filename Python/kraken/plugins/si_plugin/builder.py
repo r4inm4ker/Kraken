@@ -1187,6 +1187,30 @@ class Builder(Builder):
 
         return True
 
+    def setMat44Attr(self, dccSceneItemName, attr, mat44):
+        """Sets a matrix attribute directly with values from a fabric mat44
+
+        Args:
+            dccSceneItemName -- str: name of dccSceneItem
+            attr -- str: name of matrix attribute to set
+            mat44 -- mat44 with matrix value
+
+        Return:
+            bool: True if successful.
+
+        Note: Fabric and Maya's matrix row orders are reversed, so we transpose the matrix first
+
+        """
+
+        tmat44 = mat44.transpose()
+        matrix = []
+        rows = [tmat44.row0, tmat44.row1, tmat44.row2, tmat44.row3]
+        for row in rows:
+            matrix.extend([row.x, row.y, row.z, row.t])
+
+        raise Exception("setMat44Attr() needs Softimage implementation to set matrix!")
+
+        return True
 
     # ==============
     # Build Methods
