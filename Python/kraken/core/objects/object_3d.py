@@ -747,7 +747,63 @@ class Object3D(SceneItem):
         return True
 
 
-    def addConstraint(self, constraint):
+    def insertCtrlSpace(self, name=None):
+        """Adds a CtrlSpace object above this object
+
+        Args:
+            name (string) optional name for this CtrlSpace, default is same as this object
+
+        Returns:
+            string: New CtrlSpace object
+
+        """
+        if not name:
+            name = self.getName()
+
+        exec("from kraken.core.objects.ctrlSpace import CtrlSpace")
+        exec("newCtrlSpace = CtrlSpace(\""+name+"\", parent=self.getParent())")
+        if self.getParent() is not None:
+            self.getParent().removeChild(self) #Not sure why this does not happen in setParent()
+        self.setParent(newCtrlSpace)
+        newCtrlSpace.addChild(self) #Not sure why this does not happen in setParent()
+        newCtrlSpace.xfo = Xfo(self.xfo)
+
+        return newCtrlSpace
+
+
+    def constrainTo(self, constrainers, type="Pose", maintainOffset=False, name=None, addToConstraintList=True):
+        """Adds an constraint to this object.
+
+        Args:
+            constrainers (Object or Object list): Constraint object to add to this object or objects.
+
+        Returns:
+            string: Constraint object
+
+        """
+
+        exec("from kraken.core.objects.constraints.pose_constraint import "+type+"Constraint")
+        exec("constraint = "+type+"Constraint('')")
+
+        # function overloading to accept a single object or a list of objects
+        if not hasattr(constrainers, '__iter__'):
+            constrainers = [constrainers]
+
+        for constrainer in constrainers:
+            constraint.addConstrainer(constrainer)
+
+        constraint.setMaintainOffset(maintainOffset)
+
+        if name is None:
+            name = ('_'.join([self.getName(), 'To', constrainer.getName(), type+'Constraint']))
+
+        constraint.setName(name)
+        self.addConstraint(constraint, addToConstraintList=addToConstraintList)
+
+        return constraint
+
+
+    def addConstraint(self, constraint, addToConstraintList=True):
         """Adds an constraint to this object.
 
         Args:
@@ -758,10 +814,12 @@ class Object3D(SceneItem):
 
         """
 
-        if constraint.getName() in [x.getName() for x in self._constraints]:
-            raise IndexError("Constraint with name '" + constraint.getName() + "'' already exists as a constraint.")
+        if addToConstraintList:
+            if constraint.getName() in [x.getName() for x in self._constraints]:
+                raise IndexError("Constraint with name '" + constraint.getName() + "'' already exists as a constraint.")
 
-        self._constraints.append(constraint)
+            self._constraints.append(constraint)
+
         constraint.setParent(self)
         constraint.setConstrainee(self)
 
