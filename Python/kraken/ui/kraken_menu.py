@@ -246,7 +246,7 @@ class KrakenMenu(QtGui.QWidget):
         if krakenUIWidget.nodeLibrary.componentTreeWidget.generateData():
             graphViewWidget.reportMessage('Success Reloading Modules', level='information')
         else:
-            graphViewWidget.reportMessage('Error Reloading Modules', level='error')
+            graphViewWidget.reportMessage('Error Reloading Modules', level='error', timeOut=0) #Keep this message!
 
         krakenUIWidget.nodeLibrary.componentTreeWidget.buildWidgets()
 

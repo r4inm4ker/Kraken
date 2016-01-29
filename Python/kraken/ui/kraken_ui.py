@@ -49,8 +49,9 @@ class KrakenUI(QtGui.QWidget):
 
         # Need to wait until window is shown before we update the statusBar with messages
         if hasattr(self, "error_loading_startup"):
+
             if self.error_loading_startup:
-                self.graphViewWidget.reportMessage('Error Loading Modules', level='error')
+                self.graphViewWidget.reportMessage('Error Loading Modules', level='error', timeOut=0) #Keep this message!
             else:
                 self.graphViewWidget.reportMessage('Success Loading Modules', level='information')
 
