@@ -59,7 +59,7 @@ class Operator(SceneItem):
         """
 
         if name not in self.inputs:
-            raise Exception("Input with name '" + name + "' was not found in operator: " + self.getName() + ".")
+            raise Exception("Input with name '" + name + "' was not found in operator: " + self.getName() + ".\nValid inputs are:\n"+"\n".join(self.inputs.keys()))
 
         if isinstance(self.inputs[name], list):
             # Set the entire output array
