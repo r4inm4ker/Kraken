@@ -48,7 +48,10 @@ class KrakenMenu(QtGui.QWidget):
         self.saveAsAction.setObjectName("saveAsAction")
 
         self.fileMenu.addSeparator()
-        self.recentFilesMenu = self.fileMenu.addMenu('&Recent Files')
+        #self.recentFilesMenu = self.fileMenu.addMenu('&Recent Files') #Doesn't work for OSS causes error
+        self.recentFilesMenu = QtGui.QMenu(title='&Recent Files', parent=self.fileMenu)
+        self.fileMenu.addMenu(self.recentFilesMenu)
+
 
         self.fileMenu.addSeparator()
 
@@ -293,6 +296,7 @@ class KrakenMenu(QtGui.QWidget):
 
 
     def buildRecentFilesMenu(self, newFilePath=None):
+
         self.recentFilesMenu.clear()
 
         self.recentFiles = self.recentFiles[:4]
