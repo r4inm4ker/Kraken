@@ -224,6 +224,34 @@ class Component(Object3D):
         return True
 
 
+    def getAllHierarchyNodes(self, classType, inheritedClass=False):
+        """
+        Returns a nodeList with all children in component hierarchy that matches classType
+        If inheritedType is True, match any node that is subclass of type
+        """
+
+        # Currently does not work.  Does component not have children???
+
+        def getHierarchyNodes(kObject, classType, nodeList, inheritedClass):
+            for i in xrange(kObject.getNumChildren()):
+                child = kObject.getChildByIndex(i)
+                if inheritedClass and issubclass(child.__class__.__name__, classType):
+                    nodeList.append(child)
+                elif isinstance(child, classType):
+                    nodeList.append(child)
+
+                getHierarchyNodes(child, classType=classType, nodeList=nodeList, inheritedClass=inheritedClass)
+
+
+        container = self.getContainer()
+        nodeList = []
+        for i in xrange(container.getNumChildren()):
+            child = container.getChildByIndex(i)
+            getHierarchyNodes(child, classType=classType, nodeList=nodeList, inheritedClass=inheritedClass)
+
+        nodeList = [x for x in nodeList if x.getComponent() is self]
+        return nodeList
+
     # ==============
     # Input Methods
     # ==============
@@ -559,6 +587,25 @@ class Component(Object3D):
     # =================
     # Operator Methods
     # =================
+
+
+    def evalOperators(self):
+        """Evaluates all component operators
+
+        Args:
+            None
+
+        Returns:
+            bool: True if the index is valid.
+
+        """
+
+        for op in self._operators:
+            op.evaluate()
+
+        return True
+
+
     def checkOperatorIndex(self, index):
         """Checks the supplied index is valid.
 
