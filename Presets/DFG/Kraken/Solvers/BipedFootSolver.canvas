@@ -3,9 +3,9 @@
   "metadata" : {
     "uiTextColor" : "{\n  \"r\" : 20,\n  \"g\" : 20,\n  \"b\" : 20\n  }",
     "uiNodeColor" : "{\n  \"r\" : 0,\n  \"g\" : 160,\n  \"b\" : 160\n  }",
-    "uiGraphZoom" : "{\n  \"value\" : 0.4113281667232513\n  }",
+    "uiGraphZoom" : "{\n  \"value\" : 0.6184852123260498\n  }",
     "uiTooltip" : "Kraken Biped Foot Solver",
-    "uiGraphPan" : "{\n  \"x\" : -172.7302551269531,\n  \"y\" : 43.79109191894531\n  }"
+    "uiGraphPan" : "{\n  \"x\" : 786.3150024414063,\n  \"y\" : 83.30006408691406\n  }"
     },
   "title" : "BipedFootSolver",
   "ports" : [
@@ -72,7 +72,7 @@
       }
     ],
   "extDeps" : {},
-  "presetGUID" : "50F344E4741057708B876C904B55428F",
+  "presetGUID" : "29508258F32E7E65D2A0FB88FE7AA767",
   "nodes" : [
     {
       "objectType" : "Inst",
@@ -1156,7 +1156,8 @@
       "TransformVector_1.this"
       ],
     "Decompose_1.translation" : [
-      "ComposeXfo_1.tr"
+      "ComposeXfo_1.tr",
+      "Sub_1.rhs"
       ],
     "SetFromDirectionAndUpvector_1.result" : [
       "Mul_1.lhs"
@@ -1268,7 +1269,6 @@
       "TransformVector_1.v"
       ],
     "Decompose_4.translation" : [
-      "Sub_1.rhs",
       "Sub_2.rhs"
       ],
     "Cache_8.value" : [
@@ -1284,9 +1284,9 @@
       "metadata" : {
         "uiTextColor" : "{\n  \"r\" : 20,\n  \"g\" : 20,\n  \"b\" : 20\n  }",
         "uiNodeColor" : "{\n  \"r\" : 0,\n  \"g\" : 160,\n  \"b\" : 160\n  }",
-        "uiGraphZoom" : "{\n  \"value\" : 0.4113281667232513\n  }",
+        "uiGraphZoom" : "{\n  \"value\" : 0.6184852123260498\n  }",
         "uiTooltip" : "Kraken Biped Foot Solver",
-        "uiGraphPan" : "{\n  \"x\" : -172.7302551269531,\n  \"y\" : 43.79109191894531\n  }"
+        "uiGraphPan" : "{\n  \"x\" : 786.3150024414063,\n  \"y\" : 83.30006408691406\n  }"
         },
       "title" : "BipedFootSolver",
       "ports" : [
@@ -1353,7 +1353,7 @@
           }
         ],
       "extDeps" : {},
-      "presetGUID" : "50F344E4741057708B876C904B55428F",
+      "presetGUID" : "29508258F32E7E65D2A0FB88FE7AA767",
       "nodes" : [
         {
           "objectType" : "Inst",
@@ -2437,7 +2437,8 @@
           "TransformVector_1.this"
           ],
         "Decompose_1.translation" : [
-          "ComposeXfo_1.tr"
+          "ComposeXfo_1.tr",
+          "Sub_1.rhs"
           ],
         "SetFromDirectionAndUpvector_1.result" : [
           "Mul_1.lhs"
@@ -2549,7 +2550,6 @@
           "TransformVector_1.v"
           ],
         "Decompose_4.translation" : [
-          "Sub_1.rhs",
           "Sub_2.rhs"
           ],
         "Cache_8.value" : [
