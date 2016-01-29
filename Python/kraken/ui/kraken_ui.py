@@ -24,8 +24,8 @@ class KrakenUI(QtGui.QWidget):
         self.setWindowTitle("Kraken Editor")
         self.setAcceptDrops(True)
 
-        self.nodeLibrary = ComponentLibrary(parent=self)
         self.graphViewWidget = KGraphViewWidget(parent=self)
+        self.nodeLibrary = ComponentLibrary(parent=self)
 
         self.horizontalSplitter = QtGui.QSplitter(QtCore.Qt.Horizontal, parent=self)
         self.horizontalSplitter.addWidget(self.nodeLibrary)
@@ -46,6 +46,15 @@ class KrakenUI(QtGui.QWidget):
         krakenSystem = KrakenSystem.getInstance()
         krakenSystem.loadCoreClient()
         krakenSystem.loadExtension('Kraken')
+
+        # Need to wait until window is shown before we update the statusBar with messages
+        if hasattr(self, "error_loading_startup"):
+            if self.error_loading_startup:
+                self.graphViewWidget.reportMessage('Error Loading Modules', level='error')
+            else:
+                self.graphViewWidget.reportMessage('Success Loading Modules', level='information')
+
+            delattr(self, "error_loading_startup")
 
 
     def resizeSplitter(self):
