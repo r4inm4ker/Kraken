@@ -91,6 +91,7 @@ class KrakenMenu(QtGui.QWidget):
         # Tools Menu
         self.toolsMenu = self.menuBar.addMenu('&Tools')
         self.reloadComponentsAction = self.toolsMenu.addAction('Reload Component Modules')
+        self.reloadComponentsAction.setShortcut('Ctrl+R')
 
         # View Menu
         self.viewMenu = self.menuBar.addMenu('&View')
