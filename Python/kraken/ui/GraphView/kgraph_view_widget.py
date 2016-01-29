@@ -73,10 +73,15 @@ class KGraphViewWidget(GraphViewWidget):
         text, ok = dialog.getText(self, 'Edit Rig Name', 'New Rig Name', text=self.guideRig.getName())
 
         if ok is True:
-            self.setRigName(text)
+            self.setGuideRigName(text)
 
 
-    def setRigName(self, text):
+    def setGuideRigName(self, text):
+
+
+        if text.endswith('_guide') is True:
+            text = text.replace('_guide', '')
+
         self.guideRig.setName(text)
         self.rigNameChanged.emit()
 
@@ -84,7 +89,7 @@ class KGraphViewWidget(GraphViewWidget):
     def newRigPreset(self):
         self.guideRig = Rig()
         self.getGraphView().displayGraph(self.guideRig)
-        self.setRigName('MyRig')
+        self.setGuideRigName('MyRig')
 
         self.openedFile = None
 
@@ -225,6 +230,7 @@ class KGraphViewWidget(GraphViewWidget):
 
             builder = plugins.getBuilder()
 
+            #Append "_guide" to rig name when building guide
             if self.guideRig.getName().endswith('_guide') is False:
                 self.guideRig.setName(self.guideRig.getName() + '_guide')
 
@@ -245,6 +251,9 @@ class KGraphViewWidget(GraphViewWidget):
 
     def synchGuideRig(self):
         synchronizer = plugins.getSynchronizer()
+        #Guide is always  built with "_guide" need this so synchronizer not confused with real Rig nodes
+        if self.guideRig.getName().endswith('_guide') is False:
+            self.guideRig.setName(self.guideRig.getName() + '_guide')
         synchronizer.setTarget(self.guideRig)
         synchronizer.sync()
 

@@ -59,7 +59,7 @@ class KrakenWindow(QtGui.QMainWindow):
 
         self.krakenUI = KrakenUI(self)
         self.krakenMenu = KrakenMenu(self)
-        self.krakenUI.graphViewWidget.setRigName('MyRig')
+        self.krakenUI.graphViewWidget.setGuideRigName('MyRig')
         self.krakenMenu.updateRigNameLabel()
 
         self.mainLayout.addWidget(self.krakenMenu)
