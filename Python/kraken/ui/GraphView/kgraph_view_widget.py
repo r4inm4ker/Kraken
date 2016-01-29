@@ -217,6 +217,8 @@ class KGraphViewWidget(GraphViewWidget):
     def buildGuideRig(self):
 
         try:
+            self.window().setCursor(QtCore.Qt.WaitCursor)
+
             self.window().statusBar().showMessage('Building Guide')
 
             initConfigIndex = self.window().krakenMenu.configsWidget.currentIndex()
@@ -236,6 +238,8 @@ class KGraphViewWidget(GraphViewWidget):
             print callstack
             self.reportMessage('Error Building', level='error', exception=e)
 
+        finally:
+            self.window().setCursor(QtCore.Qt.ArrowCursor)
 
     def synchGuideRig(self):
         synchronizer = plugins.getSynchronizer()
@@ -246,6 +250,8 @@ class KGraphViewWidget(GraphViewWidget):
     def buildRig(self):
 
         try:
+            self.window().setCursor(QtCore.Qt.WaitCursor)
+
             self.window().statusBar().showMessage('Building Rig')
 
             initConfigIndex = self.window().krakenMenu.configsWidget.currentIndex()
@@ -268,6 +274,9 @@ class KGraphViewWidget(GraphViewWidget):
             callstack = traceback.format_exc()
             print callstack
             self.reportMessage('Error Building', level='error', exception=e)
+
+        finally:
+            self.window().setCursor(QtCore.Qt.ArrowCursor)
 
     # ==========
     # Shortcuts
