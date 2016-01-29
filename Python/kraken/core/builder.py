@@ -393,10 +393,9 @@ class Builder(object):
         else:
             connectionTarget = connection.getTarget()
 
-        constraint = PoseConstraint('_'.join([inputTarget.getName(), 'To', connectionTarget.getName()]))
-        constraint.setMaintainOffset(True)
-        constraint.setConstrainee(inputTarget)
-        constraint.addConstrainer(connectionTarget)
+        # There should be no offset between an output xfo from one component and the connected input of another
+        # If connected, they should be exactly the same.
+        constraint = inputTarget.constrainTo(connectionTarget, maintainOffset=False, addToConstraintList=False)
 
         dccSceneItem = self.buildPoseConstraint(constraint)
         self._registerSceneItemPair(componentInput, dccSceneItem)
