@@ -118,28 +118,35 @@ class Rig(Container):
             sourceComponentDecoratedName, outputName = connectionData['source'].split('.')
             targetComponentDecoratedName, inputName = connectionData['target'].split('.')
 
+            fail = False
+
             sourceComponent = self.getChildByDecoratedName(sourceComponentDecoratedName)
             if sourceComponent is None:
-                raise Exception("Error making connection:" + connectionData['source'] + " -> " + \
+                print("Warning: Error making connection:" + connectionData['source'] + " -> " + \
                     connectionData['target']+". Source component not found:" + sourceComponentDecoratedName)
+                fail = True
 
             targetComponent = self.getChildByDecoratedName(targetComponentDecoratedName)
             if targetComponent is None:
-                raise Exception("Error making connection:" + connectionData['source'] + " -> " + \
+                print("Warning: Error making connection:" + connectionData['source'] + " -> " + \
                     connectionData['target']+". Target component not found:" + targetComponentDecoratedName)
+                fail = True
 
             outputPort = sourceComponent.getOutputByName(outputName)
             if outputPort is None:
-                raise Exception("Error making connection:" + connectionData['source'] + " -> " + \
+                print("Warning: Error making connection:" + connectionData['source'] + " -> " + \
                     connectionData['target']+". Output '" + outputName + "' not found on Component:" + sourceComponent.getPath())
+                fail = True
 
             inputPort = targetComponent.getInputByName(inputName)
             if inputPort is None:
-                raise Exception("Error making connection:" + connectionData['source'] + " -> " + \
+                print("Warning: Error making connection:" + connectionData['source'] + " -> " + \
                     connectionData['target']+". Input '" + inputName + "' not found on Component:" + targetComponent.getPath())
+                fail = True
 
-            inputPort.setConnection(outputPort)
-            inputPort.setIndex(connectionData.get('targetIndex', 0))
+            if not fail:
+                inputPort.setConnection(outputPort)
+                inputPort.setIndex(connectionData.get('targetIndex', 0))
 
         Profiler.getInstance().pop()
 
