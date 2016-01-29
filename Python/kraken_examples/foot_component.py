@@ -4,14 +4,13 @@ from kraken.core.objects.components.base_example_component import BaseExampleCom
 
 from kraken.core.objects.attributes.attribute_group import AttributeGroup
 from kraken.core.objects.attributes.bool_attribute import BoolAttribute
-from kraken.core.objects.attributes.string_attribute import StringAttribute
+from kraken.core.objects.attributes.scalar_attribute import ScalarAttribute
 
 from kraken.core.objects.constraints.position_constraint import PositionConstraint
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
 from kraken.core.objects.component_group import ComponentGroup
 from kraken.core.objects.hierarchy_group import HierarchyGroup
-from kraken.core.objects.locator import Locator
 from kraken.core.objects.joint import Joint
 from kraken.core.objects.ctrlSpace import CtrlSpace
 from kraken.core.objects.control  import Control
@@ -79,7 +78,7 @@ class FootComponentGuide(FootComponent):
         # self.footCtrlConstraint.addConstrainer(self.ankleCtrl)
         # self.footCtrl.addConstraint(self.footCtrlConstraint)
 
-        data = {
+        self.default_data = {
             'name': name,
             'location': 'M',
             # 'footCtrlCrvData': self.footCtrl.getCurveData(),
@@ -88,7 +87,7 @@ class FootComponentGuide(FootComponent):
             'toeTipXfo': Xfo(Vec3(1.85, 0.4, 1.5))
         }
 
-        self.loadData(data)
+        self.loadData(self.default_data)
 
         Profiler.getInstance().pop()
 
@@ -129,9 +128,11 @@ class FootComponentGuide(FootComponent):
 
         # self.footCtrl.setCurveData(data['footCtrlCrvData'])
         # self.footCtrl.xfo = data['ankleXfo']
-        self.ankleCtrl.xfo = data['ankleXfo']
-        self.toeCtrl.xfo = data['toeXfo']
-        self.toeTipCtrl.xfo = data['toeTipXfo']
+        self.ankleCtrl.xfo = data.get('ankleXfo', self.default_data['ankleXfo'])
+        self.toeCtrl.xfo = data.get('toeXfo', self.default_data['toeXfo'])
+        self.toeTipCtrl.xfo = data.get('toeTipXfo', self.default_data['toeTipXfo'])
+        # self.ankleLengthInputAttr.setValue(data.get('ankleLen', self.default_data['ankleLen']))
+        # self.toeLengthInputAttr.setValue(data.get('toeLen', self.default_data['toeLen']))
 
         # self.footCtrlConstraint.evaluate()
 
@@ -234,11 +235,14 @@ class FootComponentRig(FootComponent):
         # =========
         # Controls
         # =========
-        # Neck
+        # Foot
         # self.footOffsetCtrlSpace = CtrlSpace('footOffset', parent=self.ctrlCmpGrp)
         # self.footCtrlSpace = CtrlSpace('foot', parent=self.footOffsetCtrlSpace)
         # self.footCtrl = Control('foot', parent=self.footCtrlSpace, shape="circle")
         # self.footCtrl.lockScale(True, True, True)
+
+        self.ankleLenInputAttr = ScalarAttribute('ankleLen', 1.0, maxValue=1.0, parent=self.cmpInputAttrGrp)
+        self.toeLenInputAttr = ScalarAttribute('toeLen', 1.0, maxValue=1.0, parent=self.cmpInputAttrGrp)
 
         self.ankleCtrlSpace = CtrlSpace('ankle', parent=self.ctrlCmpGrp)
         self.ankleCtrl = Control('ankle', parent=self.ankleCtrlSpace, shape="square")
@@ -351,6 +355,12 @@ class FootComponentRig(FootComponent):
 
         self.ankleCtrl.scalePoints(Vec3(ankleLen, 1.0, 1.5))
         self.toeCtrl.scalePoints(Vec3(toeLen, 1.0, 1.5))
+
+        # Set Attribute Values
+        self.ankleLenInputAttr.setValue(ankleLen)
+        self.ankleLenInputAttr.setMax(ankleLen * 3.0)
+        self.toeLenInputAttr.setValue(toeLen)
+        self.toeLenInputAttr.setMax(toeLen * 3.0)
 
         # Set IO Xfos
         self.legEndInputTgt.xfo.tr = footXfo.tr
