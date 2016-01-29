@@ -55,7 +55,6 @@ class ContextualNodeList(QtGui.QWidget):
         self.nodesList = NodeList(self)
 
         self.ks = KrakenSystem.getInstance()
-        self.ks.loadComponentModules()
 
         self.componentClassNames = []
         for componentClassName in sorted(self.ks.getComponentClassNames()):
