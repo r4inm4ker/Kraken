@@ -157,10 +157,14 @@ class Synchronizer(object):
 
             # Sync Xfo if it's not a Component
             if kObject.isTypeOf('Component') is False:
+
+                if kObject.isTypeOf('Rig') and self.getDCCItem(kObject) is None:
+                    return False  #Bail out now if the top-level rig DCC node does not exist, don't need a warning
+
                 self.syncXfo(kObject)
 
             # Sync Curves / Controls
-            if kObject.isTypeOf('Curve') is True:
+            elif kObject.isTypeOf('Curve') is True:
                 self.syncCurveData(kObject)
 
         elif kObject.isTypeOf('Attribute'):
