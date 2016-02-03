@@ -10,6 +10,7 @@ import json
 from kraken.core.kraken_system import ks
 from kraken.core.builder import Builder
 from kraken.core.objects.object_3d import Object3D
+from kraken.core.objects.control import Control
 from kraken.core.maths.xfo import Xfo
 from kraken.core.objects.attributes.attribute import Attribute
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
@@ -998,7 +999,20 @@ class Builder(Builder):
         dccSceneItem.setTranslation(dt.Vector(kSceneItem.xfo.tr.x, kSceneItem.xfo.tr.y, kSceneItem.xfo.tr.z), "world")
         dccSceneItem.setRotation(quat, "world")
 
-        dccSceneItem.setRotationOrder(kSceneItem.ro.order + 1, False)
+        # Maya's rotation order enums:
+        #0 XYZ
+        #1 YZX
+        #2 ZXY
+        #3 XZY
+        #4 YXZ <-- 5 in Fabric
+        #5 ZYX <-- 4 in Fabric
+        order = kSceneItem.ro.order
+        if order == 4:
+            order = 5
+        elif order == 5:
+            order = 4
+
+        dccSceneItem.setRotationOrder(order + 1, False) #  Maya api is one off from Maya's own node enum pyMel uses API
 
         pm.select(clear=True)
 
