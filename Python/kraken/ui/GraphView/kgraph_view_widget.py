@@ -170,14 +170,16 @@ class KGraphViewWidget(GraphViewWidget):
         if filePath is not False:
             self.window().setWindowTitle('Kraken Editor - ' + filePath + '[*]')
 
+        self.rigLoaded.emit(self.openedFile)
 
     def saveRigPreset(self):
 
         if self.openedFile is None or not os.path.exists(self.openedFile):
-            self.saveRig(saveAs=True)
+            self.saveAsRigPreset()
 
         else:
             self.saveRig(saveAs=False)
+            self.rigLoaded.emit(self.openedFile)
 
 
     def openRigPreset(self):
