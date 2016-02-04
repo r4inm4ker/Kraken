@@ -331,9 +331,9 @@ class FootComponentRig(FootComponent):
         # Add Att Inputs
         self.footPivotCanvasOp.setInput('drawDebug', self.drawDebugInputAttr)
         self.footPivotCanvasOp.setInput('rigScale', self.rigScaleInputAttr)
-        # self.footPivotCanvasOp.setInput('rightSide', self.rightSideInputAttr)
-        # self.footPivotCanvasOp.setInput('footRock', self.footRockInputAttr)
-        # self.footPivotCanvasOp.setInput('footBank', self.footBankInputAttr)
+        self.footPivotCanvasOp.setInput('rightSide', self.rightSideInputAttr)
+        self.footPivotCanvasOp.setInput('footRock', self.footRockInputAttr)
+        self.footPivotCanvasOp.setInput('footBank', self.footBankInputAttr)
 
         # Add Xfo Inputs
         self.footPivotCanvasOp.setInput('pivotAll', self.pivotAll)
