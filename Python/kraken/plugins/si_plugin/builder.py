@@ -823,9 +823,10 @@ class Builder(Builder):
 
             def findPortOfType(dataTypes, connectionTypes):
                 for port in graphDesc['ports']:
-                    portName = port['name']
-                    portConnectionType = port['execPortType']
-                    portDataType = port['typeSpec']
+
+                    portName = port.get('name')
+                    portConnectionType = port.get('execPortType')
+                    portDataType = port.get('typeSpec')
 
                     if portDataType in dataTypes and portConnectionType in connectionTypes:
                         return port
@@ -902,15 +903,14 @@ class Builder(Builder):
             arraySizes = {}
             # connect the operator to the objects in the DCC
             for port in graphDesc['ports']:
-                portName = port['name']
-                portConnectionType = port['execPortType']
-                portDataType = port['typeSpec']
+                portName = port.get('name')
+                portConnectionType = port.get('execPortType')
+                portDataType = port.get('typeSpec')
 
                 if portConnectionType not in ['In', 'IO', 'Out']:
                     raise Exception("Invalid connection type:" + portConnectionType)
 
                 canvasOpPath2 = str(canvasOpPath) + ":"
-                print "CanvasOpPath2: " + str(canvasOpPath2)
 
                 if portDataType.endswith('[]'):
                     elementDataType = portDataType[:-2]
