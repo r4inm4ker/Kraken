@@ -262,19 +262,19 @@ class FootComponentRig(FootComponent):
         self.footAll = Locator('footAll', parent=self.ctrlCmpGrp)
         self.footAll.setShapeVisibility(False)
 
-        self.ankleCtrlSpace = CtrlSpace('ankle', parent=self.footAll)
-        self.ankleCtrl = Control('ankle', parent=self.ankleCtrlSpace, shape="square")
-        self.ankleCtrl.alignOnXAxis(negative=True)
-        self.ankleCtrl.lockTranslation(True, True, True)
-        self.ankleCtrl.lockScale(True, True, True)
+        self.ankleIKCtrlSpace = CtrlSpace('ankleIK', parent=self.footAll)
+        self.ankleIKCtrl = Control('ankleIK', parent=self.ankleIKCtrlSpace, shape="square")
+        self.ankleIKCtrl.alignOnXAxis(negative=True)
+        self.ankleIKCtrl.lockTranslation(True, True, True)
+        self.ankleIKCtrl.lockScale(True, True, True)
 
-        self.toeCtrlSpace = CtrlSpace('toe', parent=self.footAll)
-        self.toeCtrl = Control('toe', parent=self.toeCtrlSpace, shape="square")
-        self.toeCtrl.alignOnXAxis()
-        self.toeCtrl.lockTranslation(True, True, True)
-        self.toeCtrl.lockScale(True, True, True)
+        self.toeIKCtrlSpace = CtrlSpace('toeIK', parent=self.footAll)
+        self.toeIKCtrl = Control('toeIK', parent=self.toeIKCtrlSpace, shape="square")
+        self.toeIKCtrl.alignOnXAxis()
+        self.toeIKCtrl.lockTranslation(True, True, True)
+        self.toeIKCtrl.lockScale(True, True, True)
 
-        self.footSettingsAttrGrp = AttributeGroup("DisplayInfo_FootSettings", parent=self.ankleCtrl)
+        self.footSettingsAttrGrp = AttributeGroup("DisplayInfo_FootSettings", parent=self.ankleIKCtrl)
         self.footDebugInputAttr = BoolAttribute('drawDebug', value=False, parent=self.footSettingsAttrGrp)
         self.footRockInputAttr = ScalarAttribute('footRock', value=0.0, minValue=-1.0, maxValue=1.0, parent=self.footSettingsAttrGrp)
         self.footBankInputAttr = ScalarAttribute('footBank', value=0.0, minValue=-1.0, maxValue=1.0, parent=self.footSettingsAttrGrp)
@@ -316,15 +316,15 @@ class FootComponentRig(FootComponent):
         self.pivotAll.addConstraint(self.pivotAllInputConstraint)
 
         # Constraint outputs
-        self.ikTargetOutputConstraint = PoseConstraint('_'.join([self.ikTargetOutputTgt.getName(), 'To', self.ankleCtrl.getName()]))
+        self.ikTargetOutputConstraint = PoseConstraint('_'.join([self.ikTargetOutputTgt.getName(), 'To', self.ankleIKCtrl.getName()]))
         self.ikTargetOutputConstraint.setMaintainOffset(True)
-        self.ikTargetOutputConstraint.addConstrainer(self.ankleCtrl)
+        self.ikTargetOutputConstraint.addConstrainer(self.ankleIKCtrl)
         self.ikTargetOutputTgt.addConstraint(self.ikTargetOutputConstraint)
 
 
-        # ===============
-        # Add Aim Canvas Op
-        # =================
+        # =========================
+        # Add Foot Pivot Canvas Op
+        # =========================
         self.footPivotCanvasOp = CanvasOperator('footPivotCanvasOp', 'Kraken.Solvers.BipedFootPivotSolver')
         self.addOperator(self.footPivotCanvasOp)
 
@@ -344,6 +344,30 @@ class FootComponentRig(FootComponent):
 
         # Add Xfo Outputs
         self.footPivotCanvasOp.setOutput('result', self.footAll)
+
+
+        # =========================
+        # Add Foot Solver Canvas Op
+        # =========================
+        self.footSolverCanvasOp = CanvasOperator('footSolverCanvasOp', 'Kraken.Solvers.BipedFootSolver')
+        self.addOperator(self.footSolverCanvasOp)
+
+        # Add Att Inputs
+        self.footSolverCanvasOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.footSolverCanvasOp.setInput('rigScale', self.rigScaleInputAttr)
+        self.footSolverCanvasOp.setInput('ankleLen', self.ankleLenInputAttr)
+        self.footSolverCanvasOp.setInput('toeLen', self.toeLenInputAttr)
+
+        # Add Xfo Inputs
+        self.footSolverCanvasOp.setInput('ikHandle', self.ikHandleInputTgt)
+        self.footSolverCanvasOp.setInput('legEnd', self.legEndInputTgt)
+        self.footSolverCanvasOp.setInput('ankleIK', self.ankleIKCtrl)
+        self.footSolverCanvasOp.setInput('toeIK', self.toeIKCtrl)
+
+        # Add Xfo Outputs
+        self.footSolverCanvasOp.setOutput('ankle_result', self.ankleOutputTgt)
+        self.footSolverCanvasOp.setOutput('toe_result', self.toeOutputTgt)
+
 
         # ===================
         # Add Deformer KL Op
@@ -389,10 +413,10 @@ class FootComponentRig(FootComponent):
         rightSide = data['rightSide']
 
         self.footAll.xfo = footXfo
-        self.ankleCtrlSpace.xfo = ankleXfo
-        self.ankleCtrl.xfo = ankleXfo
-        self.toeCtrlSpace.xfo = toeXfo
-        self.toeCtrl.xfo = toeXfo
+        self.ankleIKCtrlSpace.xfo = ankleXfo
+        self.ankleIKCtrl.xfo = ankleXfo
+        self.toeIKCtrlSpace.xfo = toeXfo
+        self.toeIKCtrl.xfo = toeXfo
 
         self.pivotAll.xfo = footXfo
         self.backPivotCtrl.xfo = backPivotXfo
@@ -400,8 +424,8 @@ class FootComponentRig(FootComponent):
         self.outerPivotCtrl.xfo = outerPivotXfo
         self.innerPivotCtrl.xfo = innerPivotXfo
 
-        self.ankleCtrl.scalePoints(Vec3(ankleLen, 1.0, 1.5))
-        self.toeCtrl.scalePoints(Vec3(toeLen, 1.0, 1.5))
+        self.ankleIKCtrl.scalePoints(Vec3(ankleLen, 1.0, 1.5))
+        self.toeIKCtrl.scalePoints(Vec3(toeLen, 1.0, 1.5))
 
         # Set Attribute Values
         self.rightSideInputAttr.setValue(rightSide)

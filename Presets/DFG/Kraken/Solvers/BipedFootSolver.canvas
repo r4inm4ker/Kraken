@@ -3,39 +3,83 @@
   "metadata" : {
     "uiTextColor" : "{\n  \"r\" : 20,\n  \"g\" : 20,\n  \"b\" : 20\n  }",
     "uiNodeColor" : "{\n  \"r\" : 0,\n  \"g\" : 160,\n  \"b\" : 160\n  }",
-    "uiGraphZoom" : "{\n  \"value\" : 0.6184852123260498\n  }",
+    "uiGraphZoom" : "{\n  \"value\" : 0.161776527762413\n  }",
     "uiTooltip" : "Kraken Biped Foot Solver",
-    "uiGraphPan" : "{\n  \"x\" : 786.3150024414063,\n  \"y\" : 83.30006408691406\n  }"
+    "uiGraphPan" : "{\n  \"x\" : 428.8193359375,\n  \"y\" : 107.9459075927734\n  }"
     },
   "title" : "BipedFootSolver",
   "ports" : [
     {
       "objectType" : "Port",
-      "nodePortType" : "In",
-      "name" : "ankleOut",
-      "execPortType" : "Out"
-      },
-    {
-      "objectType" : "Port",
-      "nodePortType" : "In",
-      "name" : "toeOut",
-      "execPortType" : "Out"
+      "nodePortType" : "Out",
+      "defaultValues" : {
+        "Boolean" : false
+        },
+      "name" : "drawDebug",
+      "execPortType" : "In",
+      "typeSpec" : "Boolean"
       },
     {
       "objectType" : "Port",
       "nodePortType" : "Out",
+      "defaultValues" : {
+        "Scalar" : 0
+        },
       "name" : "rigScale",
-      "execPortType" : "In"
+      "execPortType" : "In",
+      "typeSpec" : "Scalar"
       },
     {
       "objectType" : "Port",
       "nodePortType" : "Out",
-      "name" : "debug",
-      "execPortType" : "In"
+      "defaultValues" : {
+        "Scalar" : 0
+        },
+      "name" : "ankleLen",
+      "execPortType" : "In",
+      "typeSpec" : "Scalar"
       },
     {
       "objectType" : "Port",
       "nodePortType" : "Out",
+      "defaultValues" : {
+        "Scalar" : 0
+        },
+      "name" : "toeLen",
+      "execPortType" : "In",
+      "typeSpec" : "Scalar"
+      },
+    {
+      "objectType" : "Port",
+      "nodePortType" : "Out",
+      "defaultValues" : {
+        "Mat44" : {
+          "row0" : {
+            "x" : 1,
+            "y" : 0,
+            "z" : 0,
+            "t" : 0
+            },
+          "row1" : {
+            "x" : 0,
+            "y" : 1,
+            "z" : 0,
+            "t" : 0
+            },
+          "row2" : {
+            "x" : 0,
+            "y" : 0,
+            "z" : 1,
+            "t" : 0
+            },
+          "row3" : {
+            "x" : 0,
+            "y" : 0,
+            "z" : 0,
+            "t" : 1
+            }
+          }
+        },
       "name" : "ikHandle",
       "execPortType" : "In",
       "typeSpec" : "Mat44"
@@ -43,36 +87,181 @@
     {
       "objectType" : "Port",
       "nodePortType" : "Out",
+      "defaultValues" : {
+        "Mat44" : {
+          "row0" : {
+            "x" : 1,
+            "y" : 0,
+            "z" : 0,
+            "t" : 0
+            },
+          "row1" : {
+            "x" : 0,
+            "y" : 1,
+            "z" : 0,
+            "t" : 0
+            },
+          "row2" : {
+            "x" : 0,
+            "y" : 0,
+            "z" : 1,
+            "t" : 0
+            },
+          "row3" : {
+            "x" : 0,
+            "y" : 0,
+            "z" : 0,
+            "t" : 1
+            }
+          }
+        },
       "name" : "legEnd",
-      "execPortType" : "In"
+      "execPortType" : "In",
+      "typeSpec" : "Mat44"
       },
     {
       "objectType" : "Port",
       "nodePortType" : "Out",
+      "defaultValues" : {
+        "Mat44" : {
+          "row0" : {
+            "x" : 1,
+            "y" : 0,
+            "z" : 0,
+            "t" : 0
+            },
+          "row1" : {
+            "x" : 0,
+            "y" : 1,
+            "z" : 0,
+            "t" : 0
+            },
+          "row2" : {
+            "x" : 0,
+            "y" : 0,
+            "z" : 1,
+            "t" : 0
+            },
+          "row3" : {
+            "x" : 0,
+            "y" : 0,
+            "z" : 0,
+            "t" : 1
+            }
+          }
+        },
       "name" : "ankleIK",
-      "execPortType" : "In"
+      "execPortType" : "In",
+      "typeSpec" : "Mat44"
       },
     {
       "objectType" : "Port",
       "nodePortType" : "Out",
+      "defaultValues" : {
+        "Mat44" : {
+          "row0" : {
+            "x" : 1,
+            "y" : 0,
+            "z" : 0,
+            "t" : 0
+            },
+          "row1" : {
+            "x" : 0,
+            "y" : 1,
+            "z" : 0,
+            "t" : 0
+            },
+          "row2" : {
+            "x" : 0,
+            "y" : 0,
+            "z" : 1,
+            "t" : 0
+            },
+          "row3" : {
+            "x" : 0,
+            "y" : 0,
+            "z" : 0,
+            "t" : 1
+            }
+          }
+        },
       "name" : "toeIK",
-      "execPortType" : "In"
+      "execPortType" : "In",
+      "typeSpec" : "Mat44"
       },
     {
       "objectType" : "Port",
-      "nodePortType" : "Out",
-      "name" : "ankleLen",
-      "execPortType" : "In"
+      "nodePortType" : "In",
+      "defaultValues" : {
+        "Mat44" : {
+          "row0" : {
+            "x" : 1,
+            "y" : 0,
+            "z" : 0,
+            "t" : 0
+            },
+          "row1" : {
+            "x" : 0,
+            "y" : 1,
+            "z" : 0,
+            "t" : 0
+            },
+          "row2" : {
+            "x" : 0,
+            "y" : 0,
+            "z" : 1,
+            "t" : 0
+            },
+          "row3" : {
+            "x" : 0,
+            "y" : 0,
+            "z" : 0,
+            "t" : 1
+            }
+          }
+        },
+      "name" : "ankle_result",
+      "execPortType" : "Out",
+      "typeSpec" : "Mat44"
       },
     {
       "objectType" : "Port",
-      "nodePortType" : "Out",
-      "name" : "toeLen",
-      "execPortType" : "In"
+      "nodePortType" : "In",
+      "defaultValues" : {
+        "Mat44" : {
+          "row0" : {
+            "x" : 1,
+            "y" : 0,
+            "z" : 0,
+            "t" : 0
+            },
+          "row1" : {
+            "x" : 0,
+            "y" : 1,
+            "z" : 0,
+            "t" : 0
+            },
+          "row2" : {
+            "x" : 0,
+            "y" : 0,
+            "z" : 1,
+            "t" : 0
+            },
+          "row3" : {
+            "x" : 0,
+            "y" : 0,
+            "z" : 0,
+            "t" : 1
+            }
+          }
+        },
+      "name" : "toe_result",
+      "execPortType" : "Out",
+      "typeSpec" : "Mat44"
       }
     ],
   "extDeps" : {},
-  "presetGUID" : "29508258F32E7E65D2A0FB88FE7AA767",
+  "presetGUID" : "C3248B93636825053EE1339734E526A3",
   "nodes" : [
     {
       "objectType" : "Inst",
@@ -1127,11 +1316,17 @@
       }
     ],
   "connections" : {
+    "drawDebug" : [
+      "Cache_5.value"
+      ],
     "rigScale" : [
       "Cache_4.value"
       ],
-    "debug" : [
-      "Cache_5.value"
+    "ankleLen" : [
+      "Cache_2.value"
+      ],
+    "toeLen" : [
+      "Cache_3.value"
       ],
     "ikHandle" : [
       "Cache_8.value"
@@ -1144,12 +1339,6 @@
       ],
     "toeIK" : [
       "Cache_1.value"
-      ],
-    "ankleLen" : [
-      "Cache_2.value"
-      ],
-    "toeLen" : [
-      "Cache_3.value"
       ],
     "ComposeXfo_1.result" : [
       "ToMat44_1.this",
@@ -1182,7 +1371,7 @@
       "Sub_3.lhs"
       ],
     "ToMat44_1.result" : [
-      "ankleOut"
+      "ankle_result"
       ],
     "Unit_2.result" : [
       "SetFromDirectionAndUpvector_1.upvector"
@@ -1263,7 +1452,7 @@
       "ToMat44_2.this"
       ],
     "ToMat44_2.result" : [
-      "toeOut"
+      "toe_result"
       ],
     "Vec3_2.result" : [
       "TransformVector_1.v"
@@ -1284,39 +1473,83 @@
       "metadata" : {
         "uiTextColor" : "{\n  \"r\" : 20,\n  \"g\" : 20,\n  \"b\" : 20\n  }",
         "uiNodeColor" : "{\n  \"r\" : 0,\n  \"g\" : 160,\n  \"b\" : 160\n  }",
-        "uiGraphZoom" : "{\n  \"value\" : 0.6184852123260498\n  }",
+        "uiGraphZoom" : "{\n  \"value\" : 0.161776527762413\n  }",
         "uiTooltip" : "Kraken Biped Foot Solver",
-        "uiGraphPan" : "{\n  \"x\" : 786.3150024414063,\n  \"y\" : 83.30006408691406\n  }"
+        "uiGraphPan" : "{\n  \"x\" : 428.8193359375,\n  \"y\" : 107.9459075927734\n  }"
         },
       "title" : "BipedFootSolver",
       "ports" : [
         {
           "objectType" : "Port",
-          "nodePortType" : "In",
-          "name" : "ankleOut",
-          "execPortType" : "Out"
-          },
-        {
-          "objectType" : "Port",
-          "nodePortType" : "In",
-          "name" : "toeOut",
-          "execPortType" : "Out"
+          "nodePortType" : "Out",
+          "defaultValues" : {
+            "Boolean" : false
+            },
+          "name" : "drawDebug",
+          "execPortType" : "In",
+          "typeSpec" : "Boolean"
           },
         {
           "objectType" : "Port",
           "nodePortType" : "Out",
+          "defaultValues" : {
+            "Scalar" : 0
+            },
           "name" : "rigScale",
-          "execPortType" : "In"
+          "execPortType" : "In",
+          "typeSpec" : "Scalar"
           },
         {
           "objectType" : "Port",
           "nodePortType" : "Out",
-          "name" : "debug",
-          "execPortType" : "In"
+          "defaultValues" : {
+            "Scalar" : 0
+            },
+          "name" : "ankleLen",
+          "execPortType" : "In",
+          "typeSpec" : "Scalar"
           },
         {
           "objectType" : "Port",
           "nodePortType" : "Out",
+          "defaultValues" : {
+            "Scalar" : 0
+            },
+          "name" : "toeLen",
+          "execPortType" : "In",
+          "typeSpec" : "Scalar"
+          },
+        {
+          "objectType" : "Port",
+          "nodePortType" : "Out",
+          "defaultValues" : {
+            "Mat44" : {
+              "row0" : {
+                "x" : 1,
+                "y" : 0,
+                "z" : 0,
+                "t" : 0
+                },
+              "row1" : {
+                "x" : 0,
+                "y" : 1,
+                "z" : 0,
+                "t" : 0
+                },
+              "row2" : {
+                "x" : 0,
+                "y" : 0,
+                "z" : 1,
+                "t" : 0
+                },
+              "row3" : {
+                "x" : 0,
+                "y" : 0,
+                "z" : 0,
+                "t" : 1
+                }
+              }
+            },
           "name" : "ikHandle",
           "execPortType" : "In",
           "typeSpec" : "Mat44"
@@ -1324,36 +1557,181 @@
         {
           "objectType" : "Port",
           "nodePortType" : "Out",
+          "defaultValues" : {
+            "Mat44" : {
+              "row0" : {
+                "x" : 1,
+                "y" : 0,
+                "z" : 0,
+                "t" : 0
+                },
+              "row1" : {
+                "x" : 0,
+                "y" : 1,
+                "z" : 0,
+                "t" : 0
+                },
+              "row2" : {
+                "x" : 0,
+                "y" : 0,
+                "z" : 1,
+                "t" : 0
+                },
+              "row3" : {
+                "x" : 0,
+                "y" : 0,
+                "z" : 0,
+                "t" : 1
+                }
+              }
+            },
           "name" : "legEnd",
-          "execPortType" : "In"
+          "execPortType" : "In",
+          "typeSpec" : "Mat44"
           },
         {
           "objectType" : "Port",
           "nodePortType" : "Out",
+          "defaultValues" : {
+            "Mat44" : {
+              "row0" : {
+                "x" : 1,
+                "y" : 0,
+                "z" : 0,
+                "t" : 0
+                },
+              "row1" : {
+                "x" : 0,
+                "y" : 1,
+                "z" : 0,
+                "t" : 0
+                },
+              "row2" : {
+                "x" : 0,
+                "y" : 0,
+                "z" : 1,
+                "t" : 0
+                },
+              "row3" : {
+                "x" : 0,
+                "y" : 0,
+                "z" : 0,
+                "t" : 1
+                }
+              }
+            },
           "name" : "ankleIK",
-          "execPortType" : "In"
+          "execPortType" : "In",
+          "typeSpec" : "Mat44"
           },
         {
           "objectType" : "Port",
           "nodePortType" : "Out",
+          "defaultValues" : {
+            "Mat44" : {
+              "row0" : {
+                "x" : 1,
+                "y" : 0,
+                "z" : 0,
+                "t" : 0
+                },
+              "row1" : {
+                "x" : 0,
+                "y" : 1,
+                "z" : 0,
+                "t" : 0
+                },
+              "row2" : {
+                "x" : 0,
+                "y" : 0,
+                "z" : 1,
+                "t" : 0
+                },
+              "row3" : {
+                "x" : 0,
+                "y" : 0,
+                "z" : 0,
+                "t" : 1
+                }
+              }
+            },
           "name" : "toeIK",
-          "execPortType" : "In"
+          "execPortType" : "In",
+          "typeSpec" : "Mat44"
           },
         {
           "objectType" : "Port",
-          "nodePortType" : "Out",
-          "name" : "ankleLen",
-          "execPortType" : "In"
+          "nodePortType" : "In",
+          "defaultValues" : {
+            "Mat44" : {
+              "row0" : {
+                "x" : 1,
+                "y" : 0,
+                "z" : 0,
+                "t" : 0
+                },
+              "row1" : {
+                "x" : 0,
+                "y" : 1,
+                "z" : 0,
+                "t" : 0
+                },
+              "row2" : {
+                "x" : 0,
+                "y" : 0,
+                "z" : 1,
+                "t" : 0
+                },
+              "row3" : {
+                "x" : 0,
+                "y" : 0,
+                "z" : 0,
+                "t" : 1
+                }
+              }
+            },
+          "name" : "ankle_result",
+          "execPortType" : "Out",
+          "typeSpec" : "Mat44"
           },
         {
           "objectType" : "Port",
-          "nodePortType" : "Out",
-          "name" : "toeLen",
-          "execPortType" : "In"
+          "nodePortType" : "In",
+          "defaultValues" : {
+            "Mat44" : {
+              "row0" : {
+                "x" : 1,
+                "y" : 0,
+                "z" : 0,
+                "t" : 0
+                },
+              "row1" : {
+                "x" : 0,
+                "y" : 1,
+                "z" : 0,
+                "t" : 0
+                },
+              "row2" : {
+                "x" : 0,
+                "y" : 0,
+                "z" : 1,
+                "t" : 0
+                },
+              "row3" : {
+                "x" : 0,
+                "y" : 0,
+                "z" : 0,
+                "t" : 1
+                }
+              }
+            },
+          "name" : "toe_result",
+          "execPortType" : "Out",
+          "typeSpec" : "Mat44"
           }
         ],
       "extDeps" : {},
-      "presetGUID" : "29508258F32E7E65D2A0FB88FE7AA767",
+      "presetGUID" : "C3248B93636825053EE1339734E526A3",
       "nodes" : [
         {
           "objectType" : "Inst",
@@ -2408,11 +2786,17 @@
           }
         ],
       "connections" : {
+        "drawDebug" : [
+          "Cache_5.value"
+          ],
         "rigScale" : [
           "Cache_4.value"
           ],
-        "debug" : [
-          "Cache_5.value"
+        "ankleLen" : [
+          "Cache_2.value"
+          ],
+        "toeLen" : [
+          "Cache_3.value"
           ],
         "ikHandle" : [
           "Cache_8.value"
@@ -2425,12 +2809,6 @@
           ],
         "toeIK" : [
           "Cache_1.value"
-          ],
-        "ankleLen" : [
-          "Cache_2.value"
-          ],
-        "toeLen" : [
-          "Cache_3.value"
           ],
         "ComposeXfo_1.result" : [
           "ToMat44_1.this",
@@ -2463,7 +2841,7 @@
           "Sub_3.lhs"
           ],
         "ToMat44_1.result" : [
-          "ankleOut"
+          "ankle_result"
           ],
         "Unit_2.result" : [
           "SetFromDirectionAndUpvector_1.upvector"
@@ -2544,7 +2922,7 @@
           "ToMat44_2.this"
           ],
         "ToMat44_2.result" : [
-          "toeOut"
+          "toe_result"
           ],
         "Vec3_2.result" : [
           "TransformVector_1.v"
