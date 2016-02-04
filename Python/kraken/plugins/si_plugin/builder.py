@@ -853,8 +853,7 @@ class Builder(Builder):
             canvasOp = si.Dictionary.GetObject(canvasOpPath, False)
 
             si.FabricCanvasSetExtDeps(canvasOpPath, "", "Kraken" )
-            si.FabricCanvasInstPreset(canvasOpPath, "", kOperator.getPresetPath(), "400", "0")
-
+            uniqueNodeName = si.FabricCanvasInstPreset(canvasOpPath, "", kOperator.getPresetPath(), "400", "0")
 
             def addCanvasPorts(canvasOpPath, portName, canvasGraphPort, portDataType, argConnectionType, dccSceneItem):
 
@@ -911,6 +910,7 @@ class Builder(Builder):
                     raise Exception("Invalid connection type:" + portConnectionType)
 
                 canvasOpPath2 = str(canvasOpPath) + ":"
+                print "CanvasOpPath2: " + str(canvasOpPath2)
 
                 if portDataType.endswith('[]'):
                     elementDataType = portDataType[:-2]
@@ -960,7 +960,8 @@ class Builder(Builder):
                     dccSceneItem = self.getDCCSceneItem(connectedObject)
                     if dccSceneItem is None:
                         raise Exception("Operator:'"+kOperator.getName()+"' of type:'"+kOperator.getPresetPath()+"' port:'"+portName+"' dcc item not found for item:" + connectedObject.getPath())
-                    addCanvasPorts(canvasOpPath, portName, graphNodeName+"."+portName, portDataType, portConnectionType, dccSceneItem)
+
+                    addCanvasPorts(canvasOpPath, portName, uniqueNodeName+"."+portName, portDataType, portConnectionType, dccSceneItem)
 
                 canvasOpPath = canvasOpPath2[:-1]
 
