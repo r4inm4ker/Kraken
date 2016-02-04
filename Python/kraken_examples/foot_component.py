@@ -13,8 +13,10 @@ from kraken.core.objects.component_group import ComponentGroup
 from kraken.core.objects.hierarchy_group import HierarchyGroup
 from kraken.core.objects.joint import Joint
 from kraken.core.objects.ctrlSpace import CtrlSpace
-from kraken.core.objects.control  import Control
+from kraken.core.objects.control import Control
+from kraken.core.objects.locator import Locator
 
+from kraken.core.objects.operators.canvas_operator import CanvasOperator
 from kraken.core.objects.operators.kl_operator import KLOperator
 
 from kraken.core.profiler import Profiler
@@ -36,8 +38,8 @@ class FootComponent(BaseExampleComponent):
         self.legEndInputTgt = self.createInput('legEnd', dataType='Xfo', parent=self.inputHrcGrp).getTarget()
 
         # Declare Output Xfos
-        self.ikTargetOutputTgt = self.createOutput('ikTarget', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
         self.ankleOutputTgt = self.createOutput('ankle', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
+        self.ikTargetOutputTgt = self.createOutput('ikTarget', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
         self.toeOutputTgt = self.createOutput('toe', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
 
         # Declare Input Attrs
@@ -58,33 +60,34 @@ class FootComponentGuide(FootComponent):
         # =========
         # Controls
         # ========
-
         guideSettingsAttrGrp = AttributeGroup("GuideSettings", parent=self)
+        self.rightSide = BoolAttribute('rightSide', value=False, parent=guideSettingsAttrGrp)
+        self.rightSide.setValueChangeCallback(self.updateLocation)
 
         # Guide Controls
-        # self.footCtrl = Control('foot', parent=self.ctrlCmpGrp, shape="circle")
-        # self.footCtrl.lockTranslation(True, True, True)
-        # self.footCtrl.lockRotation(True, True, True)
-        # self.footCtrl.lockScale(True, True, True)
-
         self.ankleCtrl = Control('ankle', parent=self.ctrlCmpGrp, shape="pin")
         self.toeCtrl = Control('toe', parent=self.ctrlCmpGrp, shape="pin")
         self.toeTipCtrl = Control('toeTip', parent=self.ctrlCmpGrp, shape="pin")
 
-        # TODO: Add pivot controls (spheres) to mark offsets from foot control
-        # for where the foot rock and banking should happen
-
-        # self.footCtrlConstraint = PositionConstraint('_'.join([self.footCtrl.getName(), 'To', self.ankleCtrl.getName()]))
-        # self.footCtrlConstraint.addConstrainer(self.ankleCtrl)
-        # self.footCtrl.addConstraint(self.footCtrlConstraint)
+        self.backPivotCtrl = Control('backPivot', parent=self.ctrlCmpGrp, shape="axesHalfTarget")
+        self.frontPivotCtrl = Control('frontPivot', parent=self.ctrlCmpGrp, shape="axesHalfTarget")
+        self.frontPivotCtrl.rotatePoints(0.0, 180.0, 0.0)
+        self.outerPivotCtrl = Control('outerPivot', parent=self.ctrlCmpGrp, shape="axesHalfTarget")
+        self.outerPivotCtrl.rotatePoints(0.0, -90.0, 0.0)
+        self.innerPivotCtrl = Control('innerPivot', parent=self.ctrlCmpGrp, shape="axesHalfTarget")
+        self.innerPivotCtrl.rotatePoints(0.0, 90.0, 0.0)
 
         self.default_data = {
             'name': name,
-            'location': 'M',
-            # 'footCtrlCrvData': self.footCtrl.getCurveData(),
-            'ankleXfo': Xfo(Vec3(1.841, 1.1516, -1.237)),
-            'toeXfo': Xfo(Vec3(1.85, 0.4, 0.25)),
-            'toeTipXfo': Xfo(Vec3(1.85, 0.4, 1.5))
+            'location': 'L',
+            'ankleXfo': Xfo(Vec3(1.75, 1.15, -1.25)),
+            'toeXfo': Xfo(Vec3(1.75, 0.4, 0.25)),
+            'toeTipXfo': Xfo(Vec3(1.75, 0.4, 1.5)),
+            'backPivotXfo': Xfo(Vec3(1.75, 0.0, -2.5)),
+            'frontPivotXfo': Xfo(Vec3(1.75, 0.0, 2.0)),
+            'outerPivotXfo': Xfo(Vec3(2.5, 0.0, -1.25)),
+            'innerPivotXfo': Xfo(Vec3(1.0, 0.0, -1.25)),
+            'rightSide': False
         }
 
         self.loadData(self.default_data)
@@ -109,6 +112,11 @@ class FootComponentGuide(FootComponent):
         data['ankleXfo'] = self.ankleCtrl.xfo
         data['toeXfo'] = self.toeCtrl.xfo
         data['toeTipXfo'] = self.toeTipCtrl.xfo
+        data['backPivotXfo'] = self.backPivotCtrl.xfo
+        data['frontPivotXfo'] = self.frontPivotCtrl.xfo
+        data['outerPivotXfo'] = self.outerPivotCtrl.xfo
+        data['innerPivotXfo'] = self.innerPivotCtrl.xfo
+        data['rightSide'] = self.rightSide.getValue()
 
         return data
 
@@ -126,17 +134,34 @@ class FootComponentGuide(FootComponent):
 
         super(FootComponentGuide, self).loadData(data)
 
-        # self.footCtrl.setCurveData(data['footCtrlCrvData'])
-        # self.footCtrl.xfo = data['ankleXfo']
         self.ankleCtrl.xfo = data.get('ankleXfo', self.default_data['ankleXfo'])
         self.toeCtrl.xfo = data.get('toeXfo', self.default_data['toeXfo'])
         self.toeTipCtrl.xfo = data.get('toeTipXfo', self.default_data['toeTipXfo'])
-        # self.ankleLengthInputAttr.setValue(data.get('ankleLen', self.default_data['ankleLen']))
-        # self.toeLengthInputAttr.setValue(data.get('toeLen', self.default_data['toeLen']))
-
-        # self.footCtrlConstraint.evaluate()
+        self.backPivotCtrl.xfo = data.get('backPivotXfo', self.default_data['backPivotXfo'])
+        self.frontPivotCtrl.xfo = data.get('frontPivotXfo', self.default_data['frontPivotXfo'])
+        self.outerPivotCtrl.xfo = data.get('outerPivotXfo', self.default_data['outerPivotXfo'])
+        self.innerPivotCtrl.xfo = data.get('innerPivotXfo', self.default_data['innerPivotXfo'])
+        self.rightSide.setValue(data.get('rightSide', self.default_data['rightSide']))
 
         return True
+
+    # ==========
+    # Callbacks
+    # ==========
+    def updateLocation(self, rightSide):
+
+        if rightSide is True:
+            self.outerPivotCtrl.rotatePoints(0, 180, 0)
+            self.outerPivotCtrl.xfo = self.default_data['innerPivotXfo']
+
+            self.innerPivotCtrl.rotatePoints(0, 180, 0)
+            self.innerPivotCtrl.xfo = self.default_data['outerPivotXfo']
+        else:
+            self.outerPivotCtrl.rotatePoints(0, 180, 0)
+            self.outerPivotCtrl.xfo = self.default_data['outerPivotXfo']
+
+            self.innerPivotCtrl.rotatePoints(0, 180, 0)
+            self.innerPivotCtrl.xfo = self.default_data['innerPivotXfo']
 
 
     def getRigBuildData(self):
@@ -149,19 +174,15 @@ class FootComponentGuide(FootComponent):
 
         data = super(FootComponentGuide, self).getRigBuildData()
 
-        # values
-        # footPos = self.footCtrl.xfo.tr
+        # Values
         anklePos = self.ankleCtrl.xfo.tr
         toePos = self.toeCtrl.xfo.tr
         toeTipPos = self.toeTipCtrl.xfo.tr
-
-        # Calculate Foot Xfo
-        # tempToeTipVec = toeTipPos.clone()
-        # tempToeTipVec.y = footPos.y
-        # dirVec = tempToeTipVec.subtract(footPos).unit()
-        # footQuat = Quat()
-        # footQuat.setFromDirectionAndUpvector(dirVec, Vec3(0.0, 1.0, 0.0))
-        # footXfo = Xfo(tr=footPos, ori=footQuat)
+        backPivotXfo = self.backPivotCtrl.xfo
+        frontPivotXfo = self.frontPivotCtrl.xfo
+        outerPivotXfo = self.outerPivotCtrl.xfo
+        innerPivotXfo = self.innerPivotCtrl.xfo
+        rightSide = self.rightSide.getValue()
 
         # Calculate Ankle Xfo
         rootToEnd = toePos.subtract(anklePos).unit()
@@ -181,17 +202,16 @@ class FootComponentGuide(FootComponent):
         toeXfo = Xfo()
         toeXfo.setFromVectors(rootToEnd, normal, zAxis, toePos)
 
-        # Rotate points via the different in ori between footCtrl and footXfo
-        # quatDiff = self.footCtrl.xfo.ori.multiply(footXfo.ori.inverse())
-        # eulerDiff = quatDiff.toEuler(RotationOrder())
-        # self.footCtrl.rotatePoints(Math_radToDeg(eulerDiff.x), Math_radToDeg(eulerDiff.y), Math_radToDeg(eulerDiff.z))
-
         data['footXfo'] = self.ankleCtrl.xfo
-        # data['footCtrlCrvData'] = self.footCtrl.getCurveData()
         data['ankleXfo'] = ankleXfo
         data['ankleLen'] = anklePos.subtract(toePos).length()
         data['toeXfo'] = toeXfo
         data['toeLen'] = toePos.subtract(toeTipPos).length()
+        data['backPivotXfo'] = backPivotXfo
+        data['frontPivotXfo'] = frontPivotXfo
+        data['outerPivotXfo'] = outerPivotXfo
+        data['innerPivotXfo'] = innerPivotXfo
+        data['rightSide'] = rightSide
 
         return data
 
@@ -235,31 +255,42 @@ class FootComponentRig(FootComponent):
         # =========
         # Controls
         # =========
-        # Foot
-        # self.footOffsetCtrlSpace = CtrlSpace('footOffset', parent=self.ctrlCmpGrp)
-        # self.footCtrlSpace = CtrlSpace('foot', parent=self.footOffsetCtrlSpace)
-        # self.footCtrl = Control('foot', parent=self.footCtrlSpace, shape="circle")
-        # self.footCtrl.lockScale(True, True, True)
-
         self.ankleLenInputAttr = ScalarAttribute('ankleLen', 1.0, maxValue=1.0, parent=self.cmpInputAttrGrp)
         self.toeLenInputAttr = ScalarAttribute('toeLen', 1.0, maxValue=1.0, parent=self.cmpInputAttrGrp)
+        self.rightSideInputAttr = BoolAttribute('rightSide', False, parent=self.cmpInputAttrGrp)
 
-        self.ankleCtrlSpace = CtrlSpace('ankle', parent=self.ctrlCmpGrp)
+        self.footAll = Locator('footAll', parent=self.ctrlCmpGrp)
+        self.footAll.setShapeVisibility(False)
+
+        self.ankleCtrlSpace = CtrlSpace('ankle', parent=self.footAll)
         self.ankleCtrl = Control('ankle', parent=self.ankleCtrlSpace, shape="square")
         self.ankleCtrl.alignOnXAxis(negative=True)
         self.ankleCtrl.lockTranslation(True, True, True)
         self.ankleCtrl.lockScale(True, True, True)
 
-        self.toeCtrlSpace = CtrlSpace('toe', parent=self.ctrlCmpGrp)
+        self.toeCtrlSpace = CtrlSpace('toe', parent=self.footAll)
         self.toeCtrl = Control('toe', parent=self.toeCtrlSpace, shape="square")
         self.toeCtrl.alignOnXAxis()
         self.toeCtrl.lockTranslation(True, True, True)
         self.toeCtrl.lockScale(True, True, True)
 
-        # self.neckCtrl.scalePoints(Vec3(1.25, 1.25, 1.25))
-        # self.neckCtrl.translatePoints(Vec3(0, 0, -0.5))
-        # self.neckCtrl.rotatePoints(90, 0, 90)
-        # self.neckCtrl.setColor("orange")
+        self.footSettingsAttrGrp = AttributeGroup("DisplayInfo_FootSettings", parent=self.ankleCtrl)
+        self.footDebugInputAttr = BoolAttribute('drawDebug', value=False, parent=self.footSettingsAttrGrp)
+        self.footRockInputAttr = ScalarAttribute('footRock', value=0.0, minValue=-1.0, maxValue=1.0, parent=self.footSettingsAttrGrp)
+        self.footBankInputAttr = ScalarAttribute('footBank', value=0.0, minValue=-1.0, maxValue=1.0, parent=self.footSettingsAttrGrp)
+
+        self.drawDebugInputAttr.connect(self.footDebugInputAttr)
+
+        self.pivotAll = Locator('pivotAll', parent=self.ctrlCmpGrp)
+        self.pivotAll.setShapeVisibility(False)
+
+        self.backPivotCtrl = Control('backPivot', parent=self.pivotAll, shape="axesHalfTarget")
+        self.frontPivotCtrl = Control('frontPivot', parent=self.pivotAll, shape="axesHalfTarget")
+        self.frontPivotCtrl.rotatePoints(0.0, 180.0, 0.0)
+        self.outerPivotCtrl = Control('outerPivot', parent=self.pivotAll, shape="axesHalfTarget")
+        self.outerPivotCtrl.rotatePoints(0.0, -90.0, 0.0)
+        self.innerPivotCtrl = Control('innerPivot', parent=self.pivotAll, shape="axesHalfTarget")
+        self.innerPivotCtrl.rotatePoints(0.0, 90.0, 0.0)
 
 
         # ==========
@@ -279,10 +310,10 @@ class FootComponentRig(FootComponent):
         # Constrain I/O
         # ==============
         # Constraint inputs
-        # self.footOffsetInputConstraint = PoseConstraint('_'.join([self.footOffsetCtrlSpace.getName(), 'To', self.globalSRTInputTgt.getName()]))
-        # self.footOffsetInputConstraint.setMaintainOffset(True)
-        # self.footOffsetInputConstraint.addConstrainer(self.globalSRTInputTgt)
-        # self.footOffsetCtrlSpace.addConstraint(self.footOffsetInputConstraint)
+        self.pivotAllInputConstraint = PoseConstraint('_'.join([self.pivotAll.getName(), 'To', self.ikHandleInputTgt.getName()]))
+        self.pivotAllInputConstraint.setMaintainOffset(True)
+        self.pivotAllInputConstraint.addConstrainer(self.ikHandleInputTgt)
+        self.pivotAll.addConstraint(self.pivotAllInputConstraint)
 
         # Constraint outputs
         self.ikTargetOutputConstraint = PoseConstraint('_'.join([self.ikTargetOutputTgt.getName(), 'To', self.ankleCtrl.getName()]))
@@ -292,23 +323,31 @@ class FootComponentRig(FootComponent):
 
 
         # ===============
-        # Add Splice Ops
-        # ===============
-        # Add Deformer Splice Op
-        # spliceOp = KLOperator('neckDeformerKLOp', 'PoseConstraintSolver', 'Kraken')
-        # self.addOperator(spliceOp)
+        # Add Aim Canvas Op
+        # =================
+        self.footPivotCanvasOp = CanvasOperator('footPivotCanvasOp', 'Kraken.Solvers.BipedFootPivotSolver')
+        self.addOperator(self.footPivotCanvasOp)
 
         # Add Att Inputs
-        # spliceOp.setInput('drawDebug', self.drawDebugInputAttr)
-        # spliceOp.setInput('rigScale', self.rigScaleInputAttr)
+        self.footPivotCanvasOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.footPivotCanvasOp.setInput('rigScale', self.rigScaleInputAttr)
+        # self.footPivotCanvasOp.setInput('rightSide', self.rightSideInputAttr)
+        # self.footPivotCanvasOp.setInput('footRock', self.footRockInputAttr)
+        # self.footPivotCanvasOp.setInput('footBank', self.footBankInputAttr)
 
-        # Add Xfo Inputstrl)
-        # spliceOp.setInput('constrainer', self.neckEndOutputTgt)
+        # Add Xfo Inputs
+        self.footPivotCanvasOp.setInput('pivotAll', self.pivotAll)
+        self.footPivotCanvasOp.setInput('backPivot', self.backPivotCtrl)
+        self.footPivotCanvasOp.setInput('frontPivot', self.frontPivotCtrl)
+        self.footPivotCanvasOp.setInput('outerPivot', self.outerPivotCtrl)
+        self.footPivotCanvasOp.setInput('innerPivot', self.innerPivotCtrl)
 
         # Add Xfo Outputs
-        # spliceOp.setOutput('constrainee', neckDef)
+        self.footPivotCanvasOp.setOutput('result', self.footAll)
 
-        # Add Deformer Splice Op
+        # ===================
+        # Add Deformer KL Op
+        # ===================
         self.outputsToDeformersKLOp = KLOperator('foot' + self.getLocation() + 'DeformerKLOp', 'MultiPoseConstraintSolver', 'Kraken')
         self.addOperator(self.outputsToDeformersKLOp)
 
@@ -339,30 +378,40 @@ class FootComponentRig(FootComponent):
         super(FootComponentRig, self).loadData( data )
 
         footXfo = data['footXfo']
-        # footCtrlCrvData = data['footCtrlCrvData']
         ankleXfo = data['ankleXfo']
         toeXfo = data['toeXfo']
         ankleLen = data['ankleLen']
         toeLen = data['toeLen']
+        backPivotXfo = data['backPivotXfo']
+        frontPivotXfo = data['frontPivotXfo']
+        outerPivotXfo = data['outerPivotXfo']
+        innerPivotXfo = data['innerPivotXfo']
+        rightSide = data['rightSide']
 
-        # self.footOffsetCtrlSpace.xfo = footXfo
-        # self.footCtrl.xfo = footXfo
-        # self.footCtrl.setCurveData(footCtrlCrvData)
+        self.footAll.xfo = footXfo
         self.ankleCtrlSpace.xfo = ankleXfo
         self.ankleCtrl.xfo = ankleXfo
         self.toeCtrlSpace.xfo = toeXfo
         self.toeCtrl.xfo = toeXfo
 
+        self.pivotAll.xfo = footXfo
+        self.backPivotCtrl.xfo = backPivotXfo
+        self.frontPivotCtrl.xfo = frontPivotXfo
+        self.outerPivotCtrl.xfo = outerPivotXfo
+        self.innerPivotCtrl.xfo = innerPivotXfo
+
         self.ankleCtrl.scalePoints(Vec3(ankleLen, 1.0, 1.5))
         self.toeCtrl.scalePoints(Vec3(toeLen, 1.0, 1.5))
 
         # Set Attribute Values
+        self.rightSideInputAttr.setValue(rightSide)
         self.ankleLenInputAttr.setValue(ankleLen)
         self.ankleLenInputAttr.setMax(ankleLen * 3.0)
         self.toeLenInputAttr.setValue(toeLen)
         self.toeLenInputAttr.setMax(toeLen * 3.0)
 
         # Set IO Xfos
+        self.ikHandleInputTgt.xfo = footXfo
         self.legEndInputTgt.xfo.tr = footXfo.tr
         self.legEndInputTgt.xfo.ori = ankleXfo.ori
 
