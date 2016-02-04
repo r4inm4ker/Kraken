@@ -13,7 +13,8 @@
         "Boolean" : false
         },
       "name" : "drawDebug",
-      "execPortType" : "In"
+      "execPortType" : "In",
+      "typeSpec" : "Boolean"
       },
     {
       "objectType" : "Port",
@@ -22,7 +23,8 @@
         "Scalar" : 0
         },
       "name" : "rigScale",
-      "execPortType" : "In"
+      "execPortType" : "In",
+      "typeSpec" : "Scalar"
       },
     {
       "objectType" : "Port",
@@ -41,7 +43,8 @@
         "Scalar" : 0
         },
       "name" : "footRock",
-      "execPortType" : "In"
+      "execPortType" : "In",
+      "typeSpec" : "Scalar"
       },
     {
       "objectType" : "Port",
@@ -50,7 +53,8 @@
         "Scalar" : 0
         },
       "name" : "footBank",
-      "execPortType" : "In"
+      "execPortType" : "In",
+      "typeSpec" : "Scalar"
       },
     {
       "objectType" : "Port",
@@ -84,7 +88,8 @@
           }
         },
       "name" : "pivotAll",
-      "execPortType" : "In"
+      "execPortType" : "In",
+      "typeSpec" : "Mat44"
       },
     {
       "objectType" : "Port",
@@ -118,7 +123,8 @@
           }
         },
       "name" : "backPivot",
-      "execPortType" : "In"
+      "execPortType" : "In",
+      "typeSpec" : "Mat44"
       },
     {
       "objectType" : "Port",
@@ -152,7 +158,8 @@
           }
         },
       "name" : "frontPivot",
-      "execPortType" : "In"
+      "execPortType" : "In",
+      "typeSpec" : "Mat44"
       },
     {
       "objectType" : "Port",
@@ -186,7 +193,8 @@
           }
         },
       "name" : "outerPivot",
-      "execPortType" : "In"
+      "execPortType" : "In",
+      "typeSpec" : "Mat44"
       },
     {
       "objectType" : "Port",
@@ -220,7 +228,8 @@
           }
         },
       "name" : "innerPivot",
-      "execPortType" : "In"
+      "execPortType" : "In",
+      "typeSpec" : "Mat44"
       },
     {
       "objectType" : "Port",
