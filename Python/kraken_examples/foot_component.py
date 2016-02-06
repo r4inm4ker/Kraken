@@ -36,6 +36,7 @@ class FootComponent(BaseExampleComponent):
         self.globalSRTInputTgt = self.createInput('globalSRT', dataType='Xfo', parent=self.inputHrcGrp).getTarget()
         self.ikHandleInputTgt = self.createInput('ikHandle', dataType='Xfo', parent=self.inputHrcGrp).getTarget()
         self.legEndInputTgt = self.createInput('legEnd', dataType='Xfo', parent=self.inputHrcGrp).getTarget()
+        self.legEndFKInputTgt = self.createInput('legEndFK', dataType='Xfo', parent=self.inputHrcGrp).getTarget()
 
         # Declare Output Xfos
         self.ankleOutputTgt = self.createOutput('ankle', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
@@ -274,6 +275,18 @@ class FootComponentRig(FootComponent):
         self.toeIKCtrl.lockTranslation(True, True, True)
         self.toeIKCtrl.lockScale(True, True, True)
 
+        self.ankleFKCtrlSpace = CtrlSpace('ankleFK', parent=self.ctrlCmpGrp)
+        self.ankleFKCtrl = Control('ankleFK', parent=self.ankleFKCtrlSpace, shape="cube")
+        self.ankleFKCtrl.alignOnXAxis()
+        self.ankleFKCtrl.lockTranslation(True, True, True)
+        self.ankleFKCtrl.lockScale(True, True, True)
+
+        self.toeFKCtrlSpace = CtrlSpace('toeFK', parent=self.ankleFKCtrl)
+        self.toeFKCtrl = Control('toeFK', parent=self.toeFKCtrlSpace, shape="cube")
+        self.toeFKCtrl.alignOnXAxis()
+        self.toeFKCtrl.lockTranslation(True, True, True)
+        self.toeFKCtrl.lockScale(True, True, True)
+
         self.footSettingsAttrGrp = AttributeGroup("DisplayInfo_FootSettings", parent=self.ankleIKCtrl)
         self.footDebugInputAttr = BoolAttribute('drawDebug', value=False, parent=self.footSettingsAttrGrp)
         self.footRockInputAttr = ScalarAttribute('footRock', value=0.0, minValue=-1.0, maxValue=1.0, parent=self.footSettingsAttrGrp)
@@ -309,11 +322,16 @@ class FootComponentRig(FootComponent):
         # ==============
         # Constrain I/O
         # ==============
-        # Constraint inputs
+        # Constraint to inputs
         self.pivotAllInputConstraint = PoseConstraint('_'.join([self.pivotAll.getName(), 'To', self.ikHandleInputTgt.getName()]))
         self.pivotAllInputConstraint.setMaintainOffset(True)
         self.pivotAllInputConstraint.addConstrainer(self.ikHandleInputTgt)
         self.pivotAll.addConstraint(self.pivotAllInputConstraint)
+
+        self.ankleFKInputConstraint = PoseConstraint('_'.join([self.ankleFKCtrlSpace.getName(), 'To', self.legEndFKInputTgt.getName()]))
+        self.ankleFKInputConstraint.setMaintainOffset(True)
+        self.ankleFKInputConstraint.addConstrainer(self.ikHandleInputTgt)
+        self.ankleFKCtrlSpace.addConstraint(self.ankleFKInputConstraint)
 
         # Constraint outputs
         self.ikTargetOutputConstraint = PoseConstraint('_'.join([self.ikTargetOutputTgt.getName(), 'To', self.ankleIKCtrl.getName()]))
@@ -401,22 +419,32 @@ class FootComponentRig(FootComponent):
 
         super(FootComponentRig, self).loadData( data )
 
-        footXfo = data['footXfo']
-        ankleXfo = data['ankleXfo']
-        toeXfo = data['toeXfo']
-        ankleLen = data['ankleLen']
-        toeLen = data['toeLen']
-        backPivotXfo = data['backPivotXfo']
-        frontPivotXfo = data['frontPivotXfo']
-        outerPivotXfo = data['outerPivotXfo']
-        innerPivotXfo = data['innerPivotXfo']
-        rightSide = data['rightSide']
+        footXfo = data.get('footXfo')
+        ankleXfo = data.get('ankleXfo')
+        toeXfo = data.get('toeXfo')
+        ankleLen = data.get('ankleLen')
+        toeLen = data.get('toeLen')
+        backPivotXfo = data.get('backPivotXfo')
+        frontPivotXfo = data.get('frontPivotXfo')
+        outerPivotXfo = data.get('outerPivotXfo')
+        innerPivotXfo = data.get('innerPivotXfo')
+        rightSide = data.get('rightSide')
 
         self.footAll.xfo = footXfo
         self.ankleIKCtrlSpace.xfo = ankleXfo
         self.ankleIKCtrl.xfo = ankleXfo
         self.toeIKCtrlSpace.xfo = toeXfo
         self.toeIKCtrl.xfo = toeXfo
+
+        self.ankleFKCtrl.scalePoints(Vec3(ankleLen, 1.0, 1.0))
+        self.toeFKCtrl.scalePoints(Vec3(toeLen, 1.0, 1.0))
+
+        self.ankleFKCtrlSpace.xfo.tr = footXfo.tr
+        self.ankleFKCtrlSpace.xfo.ori = ankleXfo.ori
+        self.ankleFKCtrl.xfo.tr = footXfo.tr
+        self.ankleFKCtrl.xfo.ori = ankleXfo.ori
+        self.toeFKCtrlSpace.xfo = toeXfo
+        self.toeFKCtrl.xfo = toeXfo
 
         self.pivotAll.xfo = footXfo
         self.backPivotCtrl.xfo = backPivotXfo
@@ -438,16 +466,19 @@ class FootComponentRig(FootComponent):
         self.ikHandleInputTgt.xfo = footXfo
         self.legEndInputTgt.xfo.tr = footXfo.tr
         self.legEndInputTgt.xfo.ori = ankleXfo.ori
+        self.legEndFKInputTgt.xfo.tr = footXfo.tr
+        self.legEndFKInputTgt.xfo.ori = ankleXfo.ori
 
         self.ikTargetOutputTgt.xfo.tr = footXfo.tr
         self.ikTargetOutputTgt.xfo.ori = ankleXfo.ori
-        self.ankleOutputTgt.xfo.tr = footXfo.tr
-        self.ankleOutputTgt.xfo.ori = ankleXfo.ori
-        self.toeOutputTgt.xfo = toeXfo
+
+        # Eval Canvas Ops
+        self.footPivotCanvasOp.evaluate()
+        self.footSolverCanvasOp.evaluate()
 
         # Eval Constraints
-        # self.footOffsetInputConstraint.evaluate()
         self.ikTargetOutputConstraint.evaluate()
+        self.ankleFKInputConstraint.evaluate()
 
 
 from kraken.core.kraken_system import KrakenSystem
