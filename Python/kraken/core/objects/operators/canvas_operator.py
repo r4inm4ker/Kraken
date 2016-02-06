@@ -20,29 +20,28 @@ class CanvasOperator(Operator):
 
         self.canvasPresetPath = canvasPresetPath
 
-        # Note: this is a temporary solution to getting the descritption of a Canvas node.
-        # I beleive that the API does provide a method to retrieve the node desc, but I couldn't find it.
-        def getPresetDesc(path):
+        host = ks.getCoreClient().DFG.host
+        self.binding = host.createBindingToPreset(self.canvasPresetPath)
+        self.node = self.binding.getExec()
 
-            fileContents = ""
-            with open(ks.getCoreClient().DFG.host.getPresetImportPathname(path), 'r') as presetFile:
-                fileContents = presetFile.read()
-                fileContents = "".join(fileContents.split('\n'))
-                fileContents = "".join(fileContents.split('\r'))
-                fileContents = "  ".join(fileContents.split('\t'))
+        portTypeMap = {
+            0: 'In',
+            1: 'IO',
+            2: 'Out'
+        }
 
-            return json.loads(fileContents)
-
-        self.graphDesc = getPresetDesc(self.canvasPresetPath)
+        ownerOutPortData = {
+            'name': None,
+            'typeSpec': None,
+            'execPortType': None
+        }
 
         # Initialize the inputs and outputs based on the given args.
-        for port in self.graphDesc['ports']:
-            portName = port['name']
-            portConnectionType = port['execPortType']
-            if 'typeSpec' in port:
-                portDataType = port['typeSpec']
-            else:
-                portDataType = '$TYPE$'
+        for i in xrange(self.node.getExecPortCount()):
+            portName = self.node.getExecPortName(i)
+            portConnectionType = portTypeMap[self.node.getExecPortType(i)]
+            rtVal = self.binding.getArgValue(portName)
+            portDataType = rtVal.getTypeName().getSimpleType()
 
             if portConnectionType == 'In':
                 if portDataType.endswith('[]'):
@@ -92,23 +91,23 @@ class CanvasOperator(Operator):
             elif isinstance(obj, Attribute):
                 return obj.getRTVal()
 
-        portVals = []
-        for port in self.graphDesc['ports']:
-            portName = port['name']
-            portConnectionType = port['execPortType']
-            portDataType = port['typeSpec']
+        portTypeMap = {
+            0: 'In',
+            1: 'IO',
+            2: 'Out'
+        }
+
+        for i in xrange(self.node.getExecPortCount()):
+            portName = self.node.getExecPortName(i)
+            portConnectionType = portTypeMap[self.node.getExecPortType(i)]
+            rtVal = self.binding.getArgValue(portName)
+            portDataType = rtVal.getTypeName().getSimpleType()
 
             if portDataType == '$TYPE$':
                 return
 
-            if portDataType == 'EvalContext':
-                portVals.append(ks.constructRTVal(portDataType))
-                continue
-            if portName == 'time':
-                portVals.append(ks.constructRTVal(portDataType))
-                continue
-            if portName == 'frame':
-                portVals.append(ks.constructRTVal(portDataType))
+            if portDataType in ('EvalContext', 'time', 'frame'):
+                self.binding.setArgValue(portName, ks.constructRTVal(portDataType), False)
                 continue
 
             if portConnectionType == 'In':
@@ -117,23 +116,22 @@ class CanvasOperator(Operator):
                     rtValArray.resize(len(self.inputs[portName]))
                     for j in xrange(len(self.inputs[portName])):
                         rtValArray[j] = getRTVal(self.inputs[portName][j])
-                    portVals.append(rtValArray)
+
+                    self.binding.setArgValue(portName, rtValArray, False)
                 else:
-                    portVals.append(getRTVal(self.inputs[portName]))
+                    self.binding.setArgValue(portName, getRTVal(self.inputs[portName]), False)
             else:
                 if str(portDataType).endswith('[]'):
                     rtValArray = ks.rtVal(portDataType[:-2]+'Array')
                     rtValArray.resize(len(self.outputs[portName]))
                     for j in xrange(len(self.outputs[portName])):
                         rtValArray[j] = getRTVal(self.outputs[portName][j])
-                    portVals.append(rtValArray)
+
+                    self.binding.setArgValue(portName, rtValArray, False)
                 else:
-                    portVals.append(getRTVal(self.outputs[portName]))
+                    self.binding.setArgValue(portName, getRTVal(self.outputs[portName]), False)
 
-
-        host = ks.getCoreClient().DFG.host
-        binding = host.createBindingToPreset(self.canvasPresetPath, portVals)
-        binding.execute()
+        self.binding.execute()
 
         # Now put the computed values out to the connected output objects.
         def setRTVal(obj, rtval):
@@ -142,13 +140,14 @@ class CanvasOperator(Operator):
             elif isinstance(obj, Attribute):
                 obj.setValue(rtval)
 
-        for port in self.graphDesc['ports']:
-            portName = port['name']
-            portConnectionType = port['execPortType']
-            portDataType = '$TYPE$'
+        for i in xrange(self.node.getExecPortCount()):
+            portName = self.node.getExecPortName(i)
+            portConnectionType = portTypeMap[self.node.getExecPortType(i)]
+            rtVal = self.binding.getArgValue(portName)
+            portDataType = rtVal.getTypeName().getSimpleType()
 
             if portConnectionType != 'In':
-                outVal = binding.getArgValue(portName)
+                outVal = self.binding.getArgValue(portName)
                 if portDataType.endswith('[]'):
                     for j in xrange(len(outVal)):
                         setRTVal(self.outputs[portName][j], outVal[j])
