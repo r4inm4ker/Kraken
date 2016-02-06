@@ -816,31 +816,45 @@ class Builder(Builder):
             bool: True if successful.
 
         """
+
         try:
-            graphDesc = kOperator.getGraphDesc()
             graphNodeName = kOperator.getPresetPath().split('.')[-1]
 
+            host = ks.getCoreClient().DFG.host
+            opBinding = host.createBindingToPreset(kOperator.getPresetPath())
+            node = opBinding.getExec()
 
-            def findPortOfType(dataTypes, connectionTypes):
-                for port in graphDesc['ports']:
+            portTypeMap = {
+                0: 'In',
+                1: 'IO',
+                2: 'Out'
+            }
 
-                    portName = port.get('name')
-                    portConnectionType = port.get('execPortType')
-                    portDataType = port.get('typeSpec')
+            ownerOutPortData = {
+                'name': None,
+                'typeSpec': None,
+                'execPortType': None
+            }
 
-                    if portDataType in dataTypes and portConnectionType in connectionTypes:
-                        return port
+            for i in xrange(node.getExecPortCount()):
+                portName = node.getExecPortName(i)
+                portType = node.getExecPortType(i)
+                rtVal = opBinding.getArgValue(portName)
+                typeSpec = rtVal.getTypeName().getSimpleType()
 
-                return None
+                if typeSpec in ['Mat44', 'Mat44[]'] and portTypeMap[portType] in ['Out', 'IO']:
+                    ownerOutPortData['name'] = portName
+                    ownerOutPortData['typeSpec'] = typeSpec
+                    ownerOutPortData['execPortType'] = portTypeMap[portType]
+                    break
 
             # Find operatorOwner to attach Splice Operator to.
-            ownerOutPort = findPortOfType(['Mat44', 'Mat44[]'], ['Out', 'IO'])
-            if ownerOutPort is None:
+            if ownerOutPortData['name'] is None:
                 raise Exception("Graph '" + graphNodeName + "' has no Mat44 outputs!")
 
-            ownerOutPortName = ownerOutPort['name']
-            ownerOutPortDataType = ownerOutPort['typeSpec']
-            ownerOutPortConnectionType = ownerOutPort['execPortType']
+            ownerOutPortName = ownerOutPortData['name']
+            ownerOutPortDataType = ownerOutPortData['typeSpec']
+            ownerOutPortConnectionType = ownerOutPortData['execPortType']
 
             if ownerOutPortDataType == 'Mat44[]':
                 operatorOwner = self.getDCCSceneItem( kOperator.getOutput(ownerOutPortName)[0] )
@@ -902,10 +916,11 @@ class Builder(Builder):
 
             arraySizes = {}
             # connect the operator to the objects in the DCC
-            for port in graphDesc['ports']:
-                portName = port.get('name')
-                portConnectionType = port.get('execPortType')
-                portDataType = port.get('typeSpec')
+            for i in xrange(node.getExecPortCount()):
+                portName = node.getExecPortName(i)
+                portConnectionType = portTypeMap[node.getExecPortType(i)]
+                rtVal = opBinding.getArgValue(portName)
+                portDataType = rtVal.getTypeName().getSimpleType()
 
                 if portConnectionType not in ['In', 'IO', 'Out']:
                     raise Exception("Invalid connection type:" + portConnectionType)
@@ -923,6 +938,7 @@ class Builder(Builder):
                         for j in range(len(connectedObjects)):
                             si.FabricCanvasAddPort(canvasOpPath, arrayNode, "value"+str(j), "In", elementDataType, "", "")
                             arrayNodeCode += "  array["+str(j)+"] = value"+str(j)+";\n"
+
                         arrayNodeCode += "}"
                         si.FabricCanvasSetCode(canvasOpPath, arrayNode, arrayNodeCode)
 
@@ -937,6 +953,7 @@ class Builder(Builder):
                         for j in range(len(connectedObjects)):
                             si.FabricCanvasAddPort(canvasOpPath, arrayNode, "value"+str(j), "Out", elementDataType, "", "")
                             arrayNodeCode += "  value"+str(j)+" = array["+str(j)+"];\n"
+
                         arrayNodeCode += "}"
                         si.FabricCanvasSetCode(canvasOpPath, arrayNode, arrayNodeCode)
 
@@ -949,6 +966,7 @@ class Builder(Builder):
                         dccSceneItem = self.getDCCSceneItem(connectedObjects[j])
                         if dccSceneItem is None:
                             raise Exception("Operator:'"+kOperator.getName()+"' of type:'"+kOperator.getPresetPath()+"' port:'"+portName+"' dcc item not found for item:" + connectedObjects[j].getPath())
+
                         addCanvasPorts(canvasOpPath, portName+str(j), arrayNode+".value"+str(j), elementDataType, portConnectionType, dccSceneItem)
 
                 else:
