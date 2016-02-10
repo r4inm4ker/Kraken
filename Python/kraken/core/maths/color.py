@@ -143,6 +143,25 @@ class Color(MathObject):
         return self._rtval.a.getSimpleType()
 
 
+    def __eq__(self, other):
+        return self.equal(other)
+
+    def __ne__(self, other):
+        return not self.equal(other)
+
+    def __add__(self, other):
+        return self.add(other)
+
+    def __sub__(self, other):
+        return self.subtract(other)
+
+    def __mul__(self, other):
+        return self.multiply(other)
+
+    def __div__(self, other):
+        return self.divide(other)
+
+
     @g.setter
     def a(self, value):
         """Sets a channel from the input channel.
@@ -204,8 +223,7 @@ class Color(MathObject):
 
         """
 
-        return self._rtval.set('Boolean', other._rtval).getSimpleType()
-
+        return self._rtval.equal('Boolean', other._rtval).getSimpleType()
 
 
     def almostEqual(self, other, precision):

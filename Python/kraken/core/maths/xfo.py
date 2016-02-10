@@ -136,6 +136,16 @@ class Xfo(MathObject):
         return True
 
 
+    def __eq__(self, other):
+        return self.ori.equal(other.ori) and self.tr.equal(other.tr) and self.sc.equal(other.sc)
+
+    def __ne__(self, other):
+        return not self.ori.equal(other.ori) or not self.tr.equal(other.tr) or not self.sc.equal(other.sc)
+
+    def __mul__(self, other):
+        return self.multiply(other)
+
+
     def clone(self):
         """Returns a clone of the Xfo.
 

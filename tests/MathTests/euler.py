@@ -13,3 +13,7 @@ print "clone:" + str(euler.clone())
 
 euler = Euler(1.0, 0.0, 2.0, RotationOrder())
 print "euler:" + str(euler)
+
+euler2 = Euler(1.0, 0.0, 3.0, RotationOrder())
+print "equal:" + str(euler == euler2)
+print "not equal:" + str(euler != euler2)
