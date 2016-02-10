@@ -37,21 +37,22 @@ class LegComponent(BaseExampleComponent):
         # Declare Inputs Xfos
         self.globalSRTInputTgt = self.createInput('globalSRT', dataType='Xfo', parent=self.inputHrcGrp).getTarget()
         self.legPelvisInputTgt = self.createInput('pelvisInput', dataType='Xfo', parent=self.inputHrcGrp).getTarget()
+        self.legIKTargetInputTgt = self.createInput('ikTarget', dataType='Xfo', parent=self.inputHrcGrp).getTarget()
 
         # Declare Output Xfos
         self.femurOutputTgt = self.createOutput('femur', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
         self.shinOutputTgt = self.createOutput('shin', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
-        self.legEndXfoOutputTgt = self.createOutput('legEndXfo', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
-        self.footOutputTgt = self.createOutput('foot', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
-        self.toeOutputTgt = self.createOutput('toe', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
+        self.ikHandleOutputTgt = self.createOutput('ikHandle', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
+        self.legEndOutputTgt = self.createOutput('legEnd', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
+        self.legEndFKOutputTgt = self.createOutput('legEndFK', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
 
         # Declare Input Attrs
         self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=False, parent=self.cmpInputAttrGrp).getTarget()
         self.rigScaleInputAttr = self.createInput('rigScale', value=1.0, dataType='Float', parent=self.cmpInputAttrGrp).getTarget()
-        self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', value=False, parent=self.cmpInputAttrGrp).getTarget()
 
         # Declare Output Attrs
         self.drawDebugOutputAttr = self.createOutput('drawDebug', dataType='Boolean', value=False, parent=self.cmpOutputAttrGrp).getTarget()
+        self.ikBlendOutputAttr = self.createOutput('ikBlend', dataType='Float', value=0.0, parent=self.cmpOutputAttrGrp).getTarget()
 
 
 class LegComponentGuide(LegComponent):
@@ -66,27 +67,25 @@ class LegComponentGuide(LegComponent):
         # =========
         # Controls
         # ========
-
         guideSettingsAttrGrp = AttributeGroup("GuideSettings", parent=self)
 
         # Guide Controls
         self.femurCtrl = Control('femur', parent=self.ctrlCmpGrp, shape="sphere")
         self.kneeCtrl = Control('knee', parent=self.ctrlCmpGrp, shape="sphere")
         self.ankleCtrl = Control('ankle', parent=self.ctrlCmpGrp, shape="sphere")
-        self.toeCtrl = Control('toe', parent=self.ctrlCmpGrp, shape="sphere")
-        self.toeTipCtrl = Control('toeTip', parent=self.ctrlCmpGrp, shape="sphere")
 
-        data = {
+        self.default_data = {
                 "name": name,
                 "location": "L",
+                "createIKHandle": False,
                 "femurXfo": Xfo(Vec3(0.9811, 9.769, -0.4572)),
-                "kneeXfo": Xfo(Vec3(1.4488, 5.4418, -0.5348)),
-                "ankleXfo": Xfo(Vec3(1.841, 1.1516, -1.237)),
+                "kneeXfo": Xfo(Vec3(1.408, 5.4371, -0.5043)),
+                "ankleXfo": Xfo(Vec3(1.75, 1.15, -1.25)),
                 "toeXfo": Xfo(Vec3(1.85, 0.4, 0.25)),
                 "toeTipXfo": Xfo(Vec3(1.85, 0.4, 1.5))
                }
 
-        self.loadData(data)
+        self.loadData(self.default_data)
 
         Profiler.getInstance().pop()
 
@@ -108,8 +107,6 @@ class LegComponentGuide(LegComponent):
         data['femurXfo'] = self.femurCtrl.xfo
         data['kneeXfo'] = self.kneeCtrl.xfo
         data['ankleXfo'] = self.ankleCtrl.xfo
-        data['toeXfo'] = self.toeCtrl.xfo
-        data['toeTipXfo'] = self.toeTipCtrl.xfo
 
         return data
 
@@ -127,11 +124,9 @@ class LegComponentGuide(LegComponent):
 
         super(LegComponentGuide, self).loadData( data )
 
-        self.femurCtrl.xfo = data['femurXfo']
-        self.kneeCtrl.xfo = data['kneeXfo']
-        self.ankleCtrl.xfo = data['ankleXfo']
-        self.toeCtrl.xfo = data['toeXfo']
-        self.toeTipCtrl.xfo = data['toeTipXfo']
+        self.femurCtrl.xfo = data.get('femurXfo')
+        self.kneeCtrl.xfo = data.get('kneeXfo')
+        self.ankleCtrl.xfo = data.get('ankleXfo')
 
         return True
 
@@ -150,8 +145,6 @@ class LegComponentGuide(LegComponent):
         femurPosition = self.femurCtrl.xfo.tr
         kneePosition = self.kneeCtrl.xfo.tr
         anklePosition = self.ankleCtrl.xfo.tr
-        toePosition = self.toeCtrl.xfo.tr
-        toeTipPosition = self.toeTipCtrl.xfo.tr
 
         # Calculate Bicep Xfo
         rootToWrist = anklePosition.subtract(femurPosition).unit()
@@ -178,14 +171,6 @@ class LegComponentGuide(LegComponent):
         handleXfo = Xfo()
         handleXfo.tr = anklePosition
 
-        ankleXfo = Xfo()
-        ankleXfo.tr = anklePosition
-        # ankleXfo.ori = kneeXfo.ori
-
-        toeXfo = Xfo()
-        toeXfo.tr = toePosition
-        # toeXfo.ori = kneeXfo.ori
-
         upVXfo = xfoFromDirAndUpV(femurPosition, anklePosition, kneePosition)
         upVXfo.tr = kneePosition
         upVXfo.tr = upVXfo.transformVector(Vec3(0, 0, 5))
@@ -193,8 +178,6 @@ class LegComponentGuide(LegComponent):
         data['femurXfo'] = femurXfo
         data['kneeXfo'] = kneeXfo
         data['handleXfo'] = handleXfo
-        data['ankleXfo'] = ankleXfo
-        data['toeXfo'] = toeXfo
         data['upVXfo'] = upVXfo
         data['femurLen'] = femurLen
         data['shinLen'] = shinLen
@@ -249,30 +232,14 @@ class LegComponentRig(LegComponent):
         self.shinFKCtrl = Control('shinFK', parent=self.shinFKCtrlSpace, shape="cube")
         self.shinFKCtrl.alignOnXAxis()
 
-        # Ankle
+        # IK Handle
         self.legIKCtrlSpace = CtrlSpace('IK', parent=self.ctrlCmpGrp)
         self.legIKCtrl = Control('IK', parent=self.legIKCtrlSpace, shape="pin")
-
-        # FK Foot
-        self.footCtrlSpace = CtrlSpace('foot', parent=self.ctrlCmpGrp)
-        self.footCtrl = Control('foot', parent=self.footCtrlSpace, shape="cube")
-        self.footCtrl.alignOnXAxis()
-
-        # FK Toe
-        self.toeCtrlSpace = CtrlSpace('toe', parent=self.footCtrl)
-        self.toeCtrl = Control('toe', parent=self.toeCtrlSpace, shape="cube")
-        self.toeCtrl.alignOnXAxis()
-
-        # Rig Ref objects
-        self.footRefSrt = Locator('footRef', parent=self.ctrlCmpGrp)
-
-        # Add Component Params to IK control
-        footSettingsAttrGrp = AttributeGroup("DisplayInfo_FootSettings", parent=self.footCtrl)
-        footLinkToWorldInputAttr = ScalarAttribute('linkToWorld', 1.0, maxValue=1.0, parent=footSettingsAttrGrp)
 
         # Add Component Params to IK control
         legSettingsAttrGrp = AttributeGroup("DisplayInfo_LegSettings", parent=self.legIKCtrl)
         legDrawDebugInputAttr = BoolAttribute('drawDebug', value=False, parent=legSettingsAttrGrp)
+        self.legRightSideInputAttr = BoolAttribute('rightSide', value=False, parent=legSettingsAttrGrp)
         self.legBone0LenInputAttr = ScalarAttribute('bone0Len', value=1.0, parent=legSettingsAttrGrp)
         self.legBone1LenInputAttr = ScalarAttribute('bone1Len', value=1.0, parent=legSettingsAttrGrp)
         legIKBlendInputAttr = ScalarAttribute('ikblend', value=1.0, minValue=0.0, maxValue=1.0, parent=legSettingsAttrGrp)
@@ -281,7 +248,12 @@ class LegComponentRig(LegComponent):
         legStretchInputAttr = BoolAttribute('stretch', value=True, parent=legSettingsAttrGrp)
         legStretchBlendInputAttr = ScalarAttribute('stretchBlend', value=0.0, minValue=0.0, maxValue=1.0, parent=legSettingsAttrGrp)
 
+        # Connect Input Attrs
         self.drawDebugInputAttr.connect(legDrawDebugInputAttr)
+
+        # Connect Output Attrs
+        self.drawDebugOutputAttr.connect(legDrawDebugInputAttr)
+        self.ikBlendOutputAttr.connect(legIKBlendInputAttr)
 
         # UpV
         self.legUpVCtrlSpace = CtrlSpace('UpV', parent=self.ctrlCmpGrp)
@@ -301,16 +273,6 @@ class LegComponentRig(LegComponent):
         shinDef = Joint('shin', parent=self.defCmpGrp)
         shinDef.setComponent(self)
 
-        ankleDef = Joint('ankle', parent=self.defCmpGrp)
-        ankleDef.setComponent(self)
-
-        self.footDef = Joint('foot', parent=self.defCmpGrp)
-        self.footDef.setComponent(self)
-
-        self.toeDef = Joint('toe', parent=self.defCmpGrp)
-        self.toeDef.setComponent(self)
-
-
         # ==============
         # Constrain I/O
         # ==============
@@ -325,24 +287,21 @@ class LegComponentRig(LegComponent):
         self.legUpVCtrlSpaceInputConstraint.addConstrainer(self.globalSRTInputTgt)
         self.legUpVCtrlSpace.addConstraint(self.legUpVCtrlSpaceInputConstraint)
 
-        self.legRootInputConstraint = PoseConstraint('_'.join([self.legIKCtrl.getName(), 'To', self.legPelvisInputTgt.getName()]))
+        self.legRootInputConstraint = PoseConstraint('_'.join([self.femurFKCtrlSpace.getName(), 'To', self.legPelvisInputTgt.getName()]))
         self.legRootInputConstraint.setMaintainOffset(True)
         self.legRootInputConstraint.addConstrainer(self.legPelvisInputTgt)
         self.femurFKCtrlSpace.addConstraint(self.legRootInputConstraint)
 
         # Constraint outputs
-        self.footOutputConstraint = PoseConstraint('_'.join([self.footOutputTgt.getName(), 'To', self.footCtrl.getName()]))
-        self.footOutputConstraint.addConstrainer(self.footCtrl)
-        self.footOutputTgt.addConstraint(self.footOutputConstraint)
+        self.legEndFKOutputConstraint = PoseConstraint('_'.join([self.legEndFKOutputTgt.getName(), 'To', self.shinFKCtrl.getName()]))
+        self.legEndFKOutputConstraint.setMaintainOffset(True)
+        self.legEndFKOutputConstraint.addConstrainer(self.shinFKCtrl)
+        self.legEndFKOutputTgt.addConstraint(self.legEndFKOutputConstraint)
 
-        self.footCtrlSpaceConstraint = PoseConstraint('_'.join([self.footCtrlSpace.getName(), 'To', self.legEndXfoOutputTgt.getName()]))
-        self.footCtrlSpaceConstraint.setMaintainOffset(True)
-        self.footCtrlSpaceConstraint.addConstrainer(self.legEndXfoOutputTgt)
-        self.footCtrlSpace.addConstraint(self.footCtrlSpaceConstraint)
-
-        self.toeOutputConstraint = PoseConstraint('_'.join([self.toeOutputTgt.getName(), 'To', self.toeCtrl.getName()]))
-        self.toeOutputConstraint.addConstrainer(self.toeCtrl)
-        self.toeOutputTgt.addConstraint(self.toeOutputConstraint)
+        self.ikHandleOutputConstraint = PoseConstraint('_'.join([self.ikHandleOutputTgt.getName(), 'To', self.legIKCtrl.getName()]))
+        self.ikHandleOutputConstraint.setMaintainOffset(True)
+        self.ikHandleOutputConstraint.addConstrainer(self.legIKCtrl)
+        self.ikHandleOutputTgt.addConstraint(self.ikHandleOutputConstraint)
 
 
         # ===============
@@ -363,19 +322,19 @@ class LegComponentRig(LegComponent):
         self.legIKKLOp.setInput('softDist', legSoftDistInputAttr)
         self.legIKKLOp.setInput('stretch', legStretchInputAttr)
         self.legIKKLOp.setInput('stretchBlend', legStretchBlendInputAttr)
-        self.legIKKLOp.setInput('rightSide', self.rightSideInputAttr)
+        self.legIKKLOp.setInput('rightSide', self.legRightSideInputAttr)
 
         # Add Xfo Inputs
         self.legIKKLOp.setInput('root', self.legPelvisInputTgt)
         self.legIKKLOp.setInput('bone0FK', self.femurFKCtrl)
         self.legIKKLOp.setInput('bone1FK', self.shinFKCtrl)
-        self.legIKKLOp.setInput('ikHandle', self.legIKCtrl)
+        self.legIKKLOp.setInput('ikHandle', self.legIKTargetInputTgt)
         self.legIKKLOp.setInput('upV', self.legUpVCtrl)
 
         # Add Xfo Outputs
         self.legIKKLOp.setOutput('bone0Out', self.femurOutputTgt)
         self.legIKKLOp.setOutput('bone1Out', self.shinOutputTgt)
-        self.legIKKLOp.setOutput('bone2Out', self.legEndXfoOutputTgt)
+        self.legIKKLOp.setOutput('bone2Out', self.legEndOutputTgt)
 
 
         # Add Leg Deformer Splice Op
@@ -387,38 +346,38 @@ class LegComponentRig(LegComponent):
         self.outputsToDeformersKLOp.setInput('rigScale', self.rigScaleInputAttr)
 
         # Add Xfo Inputs
-        self.outputsToDeformersKLOp.setInput('constrainers', [self.femurOutputTgt, self.shinOutputTgt, self.legEndXfoOutputTgt])
+        self.outputsToDeformersKLOp.setInput('constrainers', [self.femurOutputTgt, self.shinOutputTgt])
 
         # Add Xfo Outputs
-        self.outputsToDeformersKLOp.setOutput('constrainees', [femurDef, shinDef, ankleDef])
+        self.outputsToDeformersKLOp.setOutput('constrainees', [femurDef, shinDef])
 
         # Add Foot Deformer Splice Op
-        self.footDefKLOp = KLOperator('footDeformerKLOp', 'PoseConstraintSolver', 'Kraken')
-        self.addOperator(self.footDefKLOp)
+        # self.footDefKLOp = KLOperator('footDeformerKLOp', 'PoseConstraintSolver', 'Kraken')
+        # self.addOperator(self.footDefKLOp)
 
-        # Add Att Inputs
-        self.footDefKLOp.setInput('drawDebug', self.drawDebugInputAttr)
-        self.footDefKLOp.setInput('rigScale', self.rigScaleInputAttr)
+        # # Add Att Inputs
+        # self.footDefKLOp.setInput('drawDebug', self.drawDebugInputAttr)
+        # self.footDefKLOp.setInput('rigScale', self.rigScaleInputAttr)
 
-        # Add Xfo Inputs)
-        self.footDefKLOp.setInput('constrainer', self.footOutputTgt)
+        # # Add Xfo Inputs)
+        # self.footDefKLOp.setInput('constrainer', self.footOutputTgt)
 
-        # Add Xfo Outputs
-        self.footDefKLOp.setOutput('constrainee', self.footDef)
+        # # Add Xfo Outputs
+        # self.footDefKLOp.setOutput('constrainee', self.footDef)
 
         # Add Toe Deformer Splice Op
-        self.toeDefKLOp = KLOperator('toeDeformerKLOp', 'PoseConstraintSolver', 'Kraken')
-        self.addOperator(self.toeDefKLOp)
+        # self.toeDefKLOp = KLOperator('toeDeformerKLOp', 'PoseConstraintSolver', 'Kraken')
+        # self.addOperator(self.toeDefKLOp)
 
-        # Add Att Inputs
-        self.toeDefKLOp.setInput('drawDebug', self.drawDebugInputAttr)
-        self.toeDefKLOp.setInput('rigScale', self.rigScaleInputAttr)
+        # # Add Att Inputs
+        # self.toeDefKLOp.setInput('drawDebug', self.drawDebugInputAttr)
+        # self.toeDefKLOp.setInput('rigScale', self.rigScaleInputAttr)
 
-        # Add Xfo Inputs
-        self.toeDefKLOp.setInput('constrainer', self.toeOutputTgt)
+        # # Add Xfo Inputs
+        # self.toeDefKLOp.setInput('constrainer', self.toeOutputTgt)
 
-        # Add Xfo Outputs
-        self.toeDefKLOp.setOutput('constrainee', self.toeDef)
+        # # Add Xfo Outputs
+        # self.toeDefKLOp.setOutput('constrainee', self.toeDef)
 
         Profiler.getInstance().pop()
 
@@ -438,57 +397,72 @@ class LegComponentRig(LegComponent):
 
         super(LegComponentRig, self).loadData( data )
 
-        self.femurFKCtrlSpace.xfo = data['femurXfo']
-        self.femurFKCtrl.xfo = data['femurXfo']
-        self.femurFKCtrl.scalePoints(Vec3(data['femurLen'], 1.75, 1.75))
+        createIKHandle = data.get('createIKHandle')
+        femurXfo = data.get('femurXfo')
+        kneeXfo = data.get('kneeXfo')
+        handleXfo = data.get('handleXfo')
+        upVXfo = data.get('upVXfo')
+        femurLen = data.get('femurLen')
+        shinLen = data.get('shinLen')
 
-        self.femurOutputTgt.xfo = data['femurXfo']
-        self.shinOutputTgt.xfo = data['kneeXfo']
+        self.femurFKCtrlSpace.xfo = femurXfo
+        self.femurFKCtrl.xfo = femurXfo
+        self.femurFKCtrl.scalePoints(Vec3(femurLen, 1.75, 1.75))
 
-        self.shinFKCtrlSpace.xfo = data['kneeXfo']
-        self.shinFKCtrl.xfo = data['kneeXfo']
-        self.shinFKCtrl.scalePoints(Vec3(data['shinLen'], 1.5, 1.5))
+        self.femurOutputTgt.xfo = femurXfo
+        self.shinOutputTgt.xfo = kneeXfo
 
-        self.footCtrlSpace.xfo.tr = data['ankleXfo'].tr
-        self.footCtrl.xfo.tr = data['ankleXfo'].tr
+        self.shinFKCtrlSpace.xfo = kneeXfo
+        self.shinFKCtrl.xfo = kneeXfo
+        self.shinFKCtrl.scalePoints(Vec3(shinLen, 1.5, 1.5))
 
-        self.toeCtrlSpace.xfo = data['toeXfo']
-        self.toeCtrl.xfo = data['toeXfo']
+        self.legEndFKOutputTgt.xfo.tr = handleXfo.tr
+        self.legEndFKOutputTgt.xfo.ori = kneeXfo.ori
 
-        self.legIKCtrlSpace.xfo.tr = data['ankleXfo'].tr
-        self.legIKCtrl.xfo.tr = data['ankleXfo'].tr
+        self.legIKCtrlSpace.xfo = handleXfo
+        self.legIKCtrl.xfo = handleXfo
 
-        if self.getLocation() == "R":
+        if self.getLocation() == 'R':
             self.legIKCtrl.rotatePoints(0, 90, 0)
             self.legIKCtrl.translatePoints(Vec3(-1.0, 0.0, 0.0))
         else:
             self.legIKCtrl.rotatePoints(0, -90, 0)
             self.legIKCtrl.translatePoints(Vec3(1.0, 0.0, 0.0))
 
-        self.legUpVCtrlSpace.xfo = data['upVXfo']
-        self.legUpVCtrl.xfo = data['upVXfo']
+        self.legUpVCtrlSpace.xfo = upVXfo
+        self.legUpVCtrl.xfo = upVXfo
 
-        self.rightSideInputAttr.setValue(self.getLocation() is 'R')
+        self.legRightSideInputAttr.setValue(self.getLocation() is 'R')
         self.legBone0LenInputAttr.setMin(0.0)
-        self.legBone0LenInputAttr.setMax(data['femurLen'] * 3.0)
-        self.legBone0LenInputAttr.setValue(data['femurLen'])
+        self.legBone0LenInputAttr.setMax(femurLen * 3.0)
+        self.legBone0LenInputAttr.setValue(femurLen)
         self.legBone1LenInputAttr.setMin(0.0)
-        self.legBone1LenInputAttr.setMax(data['shinLen'] * 3.0)
-        self.legBone1LenInputAttr.setValue(data['shinLen'])
+        self.legBone1LenInputAttr.setMax(shinLen * 3.0)
+        self.legBone1LenInputAttr.setValue(shinLen)
 
-        self.legPelvisInputTgt.xfo = data['femurXfo']
+        self.legPelvisInputTgt.xfo = femurXfo
+        self.legIKTargetInputTgt.xfo = handleXfo
 
-        # Eval Constraints
+        # TODO: We need the Rig class to be modified to handle the ability to
+        # query if the ports are connected during loadData. Currently just a
+        # place holder until that happens.
+
+        # If IK Target input is not connected, switch to legIKCtrl
+        # ikTargetInput = self.getInputByName('ikTarget')
+        # if not ikTargetInput.isConnected():
+            # self.legIKKLOp.setInput('ikHandle', self.legIKCtrl)
+
+        # Eval Input Constraints
         self.legIKCtrlSpaceInputConstraint.evaluate()
         self.legUpVCtrlSpaceInputConstraint.evaluate()
         self.legRootInputConstraint.evaluate()
-        self.footOutputConstraint.evaluate()
-        self.toeOutputConstraint.evaluate()
 
         # Eval Operators
         self.legIKKLOp.evaluate()
         self.outputsToDeformersKLOp.evaluate()
-        self.footDefKLOp.evaluate()
+
+        # Eval Output Constraints
+        self.legEndFKOutputConstraint.evaluate()
 
 
 from kraken.core.kraken_system import KrakenSystem

@@ -120,7 +120,7 @@ class ComponentInputPort(SceneItem):
     # Target Methods
     # ===============
     def setTarget(self, target):
-        """Sets the taret for this input.
+        """Sets the target for this input.
 
         Args:
             target (Object): Kraken object that is the target of this input.
