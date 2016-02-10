@@ -155,6 +155,13 @@ class Vec4(MathObject):
         self._rtval.t = ks.rtVal('Scalar', value)
 
 
+    def __eq__(self, other):
+        return self.equal(other)
+
+    def __ne__(self, other):
+        return not self.equal(other)
+
+
     def clone(self):
         """Returns a clone of the Vec4.
 
@@ -215,7 +222,7 @@ class Vec4(MathObject):
 
         """
 
-        return self._rtval.set('Boolean', other._rtval).getSimpleType()
+        return self._rtval.equal('Boolean', other._rtval).getSimpleType()
 
 
     def almostEqual(self, other, precision):
@@ -277,6 +284,7 @@ class Vec4(MathObject):
 
         self._rtval.setComponent('', ks.rtVal('Size', i),
                                         ks.rtVal('Scalar', v))
+
 
     def add(self, other):
         """Overload method for the add operator.
