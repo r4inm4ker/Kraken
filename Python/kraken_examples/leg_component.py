@@ -68,22 +68,19 @@ class LegComponentGuide(LegComponent):
         # Controls
         # ========
         guideSettingsAttrGrp = AttributeGroup("GuideSettings", parent=self)
-        self.createIKHandleSetting = BoolAttribute('createIKHandle', value=False, parent=guideSettingsAttrGrp)
 
         # Guide Controls
         self.femurCtrl = Control('femur', parent=self.ctrlCmpGrp, shape="sphere")
         self.kneeCtrl = Control('knee', parent=self.ctrlCmpGrp, shape="sphere")
         self.ankleCtrl = Control('ankle', parent=self.ctrlCmpGrp, shape="sphere")
-        self.toeCtrl = Control('toe', parent=self.ctrlCmpGrp, shape="sphere")
-        self.toeTipCtrl = Control('toeTip', parent=self.ctrlCmpGrp, shape="sphere")
 
         self.default_data = {
                 "name": name,
                 "location": "L",
                 "createIKHandle": False,
                 "femurXfo": Xfo(Vec3(0.9811, 9.769, -0.4572)),
-                "kneeXfo": Xfo(Vec3(1.4488, 5.4418, -0.5348)),
-                "ankleXfo": Xfo(Vec3(1.841, 1.1516, -1.237)),
+                "kneeXfo": Xfo(Vec3(1.408, 5.4371, -0.5043)),
+                "ankleXfo": Xfo(Vec3(1.75, 1.15, -1.25)),
                 "toeXfo": Xfo(Vec3(1.85, 0.4, 0.25)),
                 "toeTipXfo": Xfo(Vec3(1.85, 0.4, 1.5))
                }
@@ -107,12 +104,9 @@ class LegComponentGuide(LegComponent):
 
         data = super(LegComponentGuide, self).saveData()
 
-        data['createIKHandle'] = self.createIKHandleSetting.getValue()
         data['femurXfo'] = self.femurCtrl.xfo
         data['kneeXfo'] = self.kneeCtrl.xfo
         data['ankleXfo'] = self.ankleCtrl.xfo
-        data['toeXfo'] = self.toeCtrl.xfo
-        data['toeTipXfo'] = self.toeTipCtrl.xfo
 
         return data
 
@@ -130,12 +124,9 @@ class LegComponentGuide(LegComponent):
 
         super(LegComponentGuide, self).loadData( data )
 
-        self.createIKHandleSetting.setValue(data.get('createIKHandle'))
         self.femurCtrl.xfo = data.get('femurXfo')
         self.kneeCtrl.xfo = data.get('kneeXfo')
         self.ankleCtrl.xfo = data.get('ankleXfo')
-        self.toeCtrl.xfo = data.get('toeXfo')
-        self.toeTipCtrl.xfo = data.get('toeTipXfo')
 
         return True
 
@@ -154,8 +145,6 @@ class LegComponentGuide(LegComponent):
         femurPosition = self.femurCtrl.xfo.tr
         kneePosition = self.kneeCtrl.xfo.tr
         anklePosition = self.ankleCtrl.xfo.tr
-        toePosition = self.toeCtrl.xfo.tr
-        toeTipPosition = self.toeTipCtrl.xfo.tr
 
         # Calculate Bicep Xfo
         rootToWrist = anklePosition.subtract(femurPosition).unit()
@@ -186,7 +175,6 @@ class LegComponentGuide(LegComponent):
         upVXfo.tr = kneePosition
         upVXfo.tr = upVXfo.transformVector(Vec3(0, 0, 5))
 
-        data['createIKHandle'] = self.createIKHandleSetting.getValue()
         data['femurXfo'] = femurXfo
         data['kneeXfo'] = kneeXfo
         data['handleXfo'] = handleXfo
@@ -434,8 +422,7 @@ class LegComponentRig(LegComponent):
         self.legIKCtrlSpace.xfo = handleXfo
         self.legIKCtrl.xfo = handleXfo
 
-
-        if self.getLocation() == "R":
+        if self.getLocation() == 'R':
             self.legIKCtrl.rotatePoints(0, 90, 0)
             self.legIKCtrl.translatePoints(Vec3(-1.0, 0.0, 0.0))
         else:
