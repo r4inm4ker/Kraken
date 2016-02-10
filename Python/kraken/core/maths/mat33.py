@@ -120,6 +120,13 @@ class Mat33(MathObject):
         return True
 
 
+    def __eq__(self, other):
+        return self.equal(other)
+
+    def __ne__(self, other):
+        return not self.equal(other)
+
+
     def clone(self):
         """Returns a clone of the Mat33.
 

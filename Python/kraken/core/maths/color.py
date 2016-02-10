@@ -143,6 +143,13 @@ class Color(MathObject):
         return self._rtval.a.getSimpleType()
 
 
+    def __eq__(self, other):
+        return self.equal(other)
+
+    def __ne__(self, other):
+        return not self.equal(other)
+
+
     @g.setter
     def a(self, value):
         """Sets a channel from the input channel.
@@ -204,8 +211,7 @@ class Color(MathObject):
 
         """
 
-        return self._rtval.set('Boolean', other._rtval).getSimpleType()
-
+        return self._rtval.equal('Boolean', other._rtval).getSimpleType()
 
 
     def almostEqual(self, other, precision):

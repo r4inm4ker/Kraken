@@ -68,6 +68,13 @@ class RotationOrder(MathObject):
         return True
 
 
+    def __eq__(self, other):
+        return self.order == other.order
+
+    def __ne__(self, other):
+        return not self.order == other.order
+
+
     def clone(self):
         """Returns a clone of the RotationOrder.
 
