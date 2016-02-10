@@ -149,6 +149,18 @@ class Color(MathObject):
     def __ne__(self, other):
         return not self.equal(other)
 
+    def __add__(self, other):
+        return self.add(other)
+
+    def __sub__(self, other):
+        return self.subtract(other)
+
+    def __mul__(self, other):
+        return self.multiply(other)
+
+    def __div__(self, other):
+        return self.divide(other)
+
 
     @g.setter
     def a(self, value):

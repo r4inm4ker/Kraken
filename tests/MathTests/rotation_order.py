@@ -91,3 +91,6 @@ print ""
 print "RotationOrder: " + str(utilOrder)
 utilOrder.setYXZ()
 print "Order is YXZ: " + str(utilOrder.isYXZ())
+
+print "equal:" + str(xyzRotationOrder == yzxRotationOrder)
+print "not equal:" + str(xyzRotationOrder != yzxRotationOrder)
