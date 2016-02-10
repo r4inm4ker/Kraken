@@ -180,7 +180,7 @@ class Vec3(MathObject):
 
         """
 
-        return self._rtval.set('Boolean', other._rtval).getSimpleType()
+        return self._rtval.equal('Boolean', other._rtval).getSimpleType()
 
 
     def almostEqual(self, other, precision):
