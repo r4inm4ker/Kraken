@@ -3,3 +3,9 @@ length:2.0
 vec2:Vec2(1.0,2.0)
 length:2.23606801033
 clone:Vec2(1.0,2.0)
+equal:False
+not equal:True
+add:Vec2(0.0,1.0)
+subtract:Vec2(0.0,-1.0)
+multiply:Vec2(0.0,0.0)
+divide:Vec2(nan,0.0)

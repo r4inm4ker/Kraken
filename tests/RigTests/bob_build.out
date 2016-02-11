@@ -117,46 +117,38 @@ building:char_bob.controls.Leg as:Leg_L_cmp
 building:char_bob.controls.Leg.inputs as:Leg_L_inputs_hrc
 building:char_bob.controls.Leg.inputs.globalSRT as:Leg_L_globalSRT_cmpIn
 building:char_bob.controls.Leg.inputs.pelvisInput as:Leg_L_pelvisInput_cmpIn
+building:char_bob.controls.Leg.inputs.ikTarget as:Leg_L_ikTarget_cmpIn
 building:char_bob.controls.Leg.outputs as:Leg_L_outputs_hrc
 building:char_bob.controls.Leg.outputs.femur as:Leg_L_femur_cmpOut
 building:char_bob.controls.Leg.outputs.shin as:Leg_L_shin_cmpOut
-building:char_bob.controls.Leg.outputs.legEndXfo as:Leg_L_legEndXfo_cmpOut
-building:char_bob.controls.Leg.outputs.foot as:Leg_L_foot_cmpOut
-building:char_bob.controls.Leg.outputs.toe as:Leg_L_toe_cmpOut
+building:char_bob.controls.Leg.outputs.ikHandle as:Leg_L_ikHandle_cmpOut
+building:char_bob.controls.Leg.outputs.legEnd as:Leg_L_legEnd_cmpOut
+building:char_bob.controls.Leg.outputs.legEndFK as:Leg_L_legEndFK_cmpOut
 building:char_bob.controls.Leg.femurFK as:Leg_L_femurFK_ctrlSpace
 building:char_bob.controls.Leg.femurFK.femurFK as:Leg_L_femurFK_ctrl
 building:char_bob.controls.Leg.femurFK.femurFK.shinFK as:Leg_L_shinFK_ctrlSpace
 building:char_bob.controls.Leg.femurFK.femurFK.shinFK.shinFK as:Leg_L_shinFK_ctrl
 building:char_bob.controls.Leg.IK as:Leg_L_IK_ctrlSpace
 building:char_bob.controls.Leg.IK.IK as:Leg_L_IK_ctrl
-building:char_bob.controls.Leg.foot as:Leg_L_foot_ctrlSpace
-building:char_bob.controls.Leg.foot.foot as:Leg_L_foot_ctrl
-building:char_bob.controls.Leg.foot.foot.toe as:Leg_L_toe_ctrlSpace
-building:char_bob.controls.Leg.foot.foot.toe.toe as:Leg_L_toe_ctrl
-building:char_bob.controls.Leg.footRef as:Leg_L_footRef_loc
 building:char_bob.controls.Leg.UpV as:Leg_L_UpV_ctrlSpace
 building:char_bob.controls.Leg.UpV.UpV as:Leg_L_UpV_ctrl
 building:char_bob.controls.Leg as:Leg_R_cmp
 building:char_bob.controls.Leg.inputs as:Leg_R_inputs_hrc
 building:char_bob.controls.Leg.inputs.globalSRT as:Leg_R_globalSRT_cmpIn
 building:char_bob.controls.Leg.inputs.pelvisInput as:Leg_R_pelvisInput_cmpIn
+building:char_bob.controls.Leg.inputs.ikTarget as:Leg_R_ikTarget_cmpIn
 building:char_bob.controls.Leg.outputs as:Leg_R_outputs_hrc
 building:char_bob.controls.Leg.outputs.femur as:Leg_R_femur_cmpOut
 building:char_bob.controls.Leg.outputs.shin as:Leg_R_shin_cmpOut
-building:char_bob.controls.Leg.outputs.legEndXfo as:Leg_R_legEndXfo_cmpOut
-building:char_bob.controls.Leg.outputs.foot as:Leg_R_foot_cmpOut
-building:char_bob.controls.Leg.outputs.toe as:Leg_R_toe_cmpOut
+building:char_bob.controls.Leg.outputs.ikHandle as:Leg_R_ikHandle_cmpOut
+building:char_bob.controls.Leg.outputs.legEnd as:Leg_R_legEnd_cmpOut
+building:char_bob.controls.Leg.outputs.legEndFK as:Leg_R_legEndFK_cmpOut
 building:char_bob.controls.Leg.femurFK as:Leg_R_femurFK_ctrlSpace
 building:char_bob.controls.Leg.femurFK.femurFK as:Leg_R_femurFK_ctrl
 building:char_bob.controls.Leg.femurFK.femurFK.shinFK as:Leg_R_shinFK_ctrlSpace
 building:char_bob.controls.Leg.femurFK.femurFK.shinFK.shinFK as:Leg_R_shinFK_ctrl
 building:char_bob.controls.Leg.IK as:Leg_R_IK_ctrlSpace
 building:char_bob.controls.Leg.IK.IK as:Leg_R_IK_ctrl
-building:char_bob.controls.Leg.foot as:Leg_R_foot_ctrlSpace
-building:char_bob.controls.Leg.foot.foot as:Leg_R_foot_ctrl
-building:char_bob.controls.Leg.foot.foot.toe as:Leg_R_toe_ctrlSpace
-building:char_bob.controls.Leg.foot.foot.toe.toe as:Leg_R_toe_ctrl
-building:char_bob.controls.Leg.footRef as:Leg_R_footRef_loc
 building:char_bob.controls.Leg.UpV as:Leg_R_UpV_ctrlSpace
 building:char_bob.controls.Leg.UpV.UpV as:Leg_R_UpV_ctrl
 building:char_bob.spine as:Mspine
@@ -191,15 +183,9 @@ building:char_bob.deformers.arm.hand as:arm_R_hand_def
 building:char_bob.deformers.Leg as:Leg_L_cmp
 building:char_bob.deformers.Leg.femur as:Leg_L_femur_def
 building:char_bob.deformers.Leg.shin as:Leg_L_shin_def
-building:char_bob.deformers.Leg.ankle as:Leg_L_ankle_def
-building:char_bob.deformers.Leg.foot as:Leg_L_foot_def
-building:char_bob.deformers.Leg.toe as:Leg_L_toe_def
 building:char_bob.deformers.Leg as:Leg_R_cmp
 building:char_bob.deformers.Leg.femur as:Leg_R_femur_def
 building:char_bob.deformers.Leg.shin as:Leg_R_shin_def
-building:char_bob.deformers.Leg.ankle as:Leg_R_ankle_def
-building:char_bob.deformers.Leg.foot as:Leg_R_foot_def
-building:char_bob.deformers.Leg.toe as:Leg_R_toe_def
 building:char_bob.neck as:Mneck
 building:char_bob.head as:Mhead
 building:char_bob.clavicle as:Lclavicle
@@ -344,46 +330,38 @@ char_bob.controls.Leg:L
 char_bob.controls.Leg:L.inputs
 char_bob.controls.Leg:L.inputs.globalSRT
 char_bob.controls.Leg:L.inputs.pelvisInput
+char_bob.controls.Leg:L.inputs.ikTarget
 char_bob.controls.Leg:L.outputs
 char_bob.controls.Leg:L.outputs.femur
 char_bob.controls.Leg:L.outputs.shin
-char_bob.controls.Leg:L.outputs.legEndXfo
-char_bob.controls.Leg:L.outputs.foot
-char_bob.controls.Leg:L.outputs.toe
+char_bob.controls.Leg:L.outputs.ikHandle
+char_bob.controls.Leg:L.outputs.legEnd
+char_bob.controls.Leg:L.outputs.legEndFK
 char_bob.controls.Leg:L.femurFK
 char_bob.controls.Leg:L.femurFK.femurFK
 char_bob.controls.Leg:L.femurFK.femurFK.shinFK
 char_bob.controls.Leg:L.femurFK.femurFK.shinFK.shinFK
 char_bob.controls.Leg:L.IK
 char_bob.controls.Leg:L.IK.IK
-char_bob.controls.Leg:L.foot
-char_bob.controls.Leg:L.foot.foot
-char_bob.controls.Leg:L.foot.foot.toe
-char_bob.controls.Leg:L.foot.foot.toe.toe
-char_bob.controls.Leg:L.footRef
 char_bob.controls.Leg:L.UpV
 char_bob.controls.Leg:L.UpV.UpV
 char_bob.controls.Leg:R
 char_bob.controls.Leg:R.inputs
 char_bob.controls.Leg:R.inputs.globalSRT
 char_bob.controls.Leg:R.inputs.pelvisInput
+char_bob.controls.Leg:R.inputs.ikTarget
 char_bob.controls.Leg:R.outputs
 char_bob.controls.Leg:R.outputs.femur
 char_bob.controls.Leg:R.outputs.shin
-char_bob.controls.Leg:R.outputs.legEndXfo
-char_bob.controls.Leg:R.outputs.foot
-char_bob.controls.Leg:R.outputs.toe
+char_bob.controls.Leg:R.outputs.ikHandle
+char_bob.controls.Leg:R.outputs.legEnd
+char_bob.controls.Leg:R.outputs.legEndFK
 char_bob.controls.Leg:R.femurFK
 char_bob.controls.Leg:R.femurFK.femurFK
 char_bob.controls.Leg:R.femurFK.femurFK.shinFK
 char_bob.controls.Leg:R.femurFK.femurFK.shinFK.shinFK
 char_bob.controls.Leg:R.IK
 char_bob.controls.Leg:R.IK.IK
-char_bob.controls.Leg:R.foot
-char_bob.controls.Leg:R.foot.foot
-char_bob.controls.Leg:R.foot.foot.toe
-char_bob.controls.Leg:R.foot.foot.toe.toe
-char_bob.controls.Leg:R.footRef
 char_bob.controls.Leg:R.UpV
 char_bob.controls.Leg:R.UpV.UpV
 char_bob.spine:M
@@ -418,15 +396,9 @@ char_bob.deformers.arm:R.hand
 char_bob.deformers.Leg:L
 char_bob.deformers.Leg:L.femur
 char_bob.deformers.Leg:L.shin
-char_bob.deformers.Leg:L.ankle
-char_bob.deformers.Leg:L.foot
-char_bob.deformers.Leg:L.toe
 char_bob.deformers.Leg:R
 char_bob.deformers.Leg:R.femur
 char_bob.deformers.Leg:R.shin
-char_bob.deformers.Leg:R.ankle
-char_bob.deformers.Leg:R.foot
-char_bob.deformers.Leg:R.toe
 char_bob.neck:M
 char_bob.head:M
 char_bob.clavicle:L

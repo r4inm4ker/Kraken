@@ -1,0 +1,11 @@
+vec4:Vec4(3.0,0.0,0.0,0.0)
+length:3.0
+vec4:Vec4(1.0,0.0,2.0,0.0)
+length:2.23606801033
+clone:Vec4(1.0,0.0,2.0,0.0)
+equal:False
+not equal:True
+add:Vec4(0.0,3.0,0.0,0.0)
+subtract:Vec4(0.0,1.0,0.0,0.0)
+multiply:Vec4(0.0,2.0,0.0,0.0)
+divide:Vec4(nan,2.0,nan,nan)
