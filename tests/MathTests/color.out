@@ -1,3 +1,9 @@
 color0:Color(1.0,0.0,0.0,0.0)
 color1:Color(1.0,0.0,0.0,0.0)
 lerp:Color(1.0,0.0,0.0,0.0)
+equal:False
+not equal:True
+add:Color(2.0,0.0,0.0,0.0)
+subtract:Color(0.0,0.0,0.0,0.0)
+multiply:Color(1.0,0.0,0.0,0.0)
+divide:Color(1.0,nan,nan,nan)

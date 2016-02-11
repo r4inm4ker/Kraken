@@ -60,3 +60,5 @@ Order is ZYX: True
 
 RotationOrder: RotationOrder(order='4')
 Order is YXZ: True
+equal:False
+not equal:True

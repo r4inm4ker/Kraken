@@ -84,32 +84,30 @@ building:char_bob_guide.controls.leg as:leg_L_cmp
 building:char_bob_guide.controls.leg.inputs as:leg_L_inputs_hrc
 building:char_bob_guide.controls.leg.inputs.globalSRT as:leg_L_globalSRT_cmpIn
 building:char_bob_guide.controls.leg.inputs.pelvisInput as:leg_L_pelvisInput_cmpIn
+building:char_bob_guide.controls.leg.inputs.ikTarget as:leg_L_ikTarget_cmpIn
 building:char_bob_guide.controls.leg.outputs as:leg_L_outputs_hrc
 building:char_bob_guide.controls.leg.outputs.femur as:leg_L_femur_cmpOut
 building:char_bob_guide.controls.leg.outputs.shin as:leg_L_shin_cmpOut
-building:char_bob_guide.controls.leg.outputs.legEndXfo as:leg_L_legEndXfo_cmpOut
-building:char_bob_guide.controls.leg.outputs.foot as:leg_L_foot_cmpOut
-building:char_bob_guide.controls.leg.outputs.toe as:leg_L_toe_cmpOut
+building:char_bob_guide.controls.leg.outputs.ikHandle as:leg_L_ikHandle_cmpOut
+building:char_bob_guide.controls.leg.outputs.legEnd as:leg_L_legEnd_cmpOut
+building:char_bob_guide.controls.leg.outputs.legEndFK as:leg_L_legEndFK_cmpOut
 building:char_bob_guide.controls.leg.femur as:leg_L_femur_ctrl
 building:char_bob_guide.controls.leg.knee as:leg_L_knee_ctrl
 building:char_bob_guide.controls.leg.ankle as:leg_L_ankle_ctrl
-building:char_bob_guide.controls.leg.toe as:leg_L_toe_ctrl
-building:char_bob_guide.controls.leg.toeTip as:leg_L_toeTip_ctrl
 building:char_bob_guide.controls.leg01 as:leg01_R_cmp
 building:char_bob_guide.controls.leg01.inputs as:leg01_R_inputs_hrc
 building:char_bob_guide.controls.leg01.inputs.globalSRT as:leg01_R_globalSRT_cmpIn
 building:char_bob_guide.controls.leg01.inputs.pelvisInput as:leg01_R_pelvisInput_cmpIn
+building:char_bob_guide.controls.leg01.inputs.ikTarget as:leg01_R_ikTarget_cmpIn
 building:char_bob_guide.controls.leg01.outputs as:leg01_R_outputs_hrc
 building:char_bob_guide.controls.leg01.outputs.femur as:leg01_R_femur_cmpOut
 building:char_bob_guide.controls.leg01.outputs.shin as:leg01_R_shin_cmpOut
-building:char_bob_guide.controls.leg01.outputs.legEndXfo as:leg01_R_legEndXfo_cmpOut
-building:char_bob_guide.controls.leg01.outputs.foot as:leg01_R_foot_cmpOut
-building:char_bob_guide.controls.leg01.outputs.toe as:leg01_R_toe_cmpOut
+building:char_bob_guide.controls.leg01.outputs.ikHandle as:leg01_R_ikHandle_cmpOut
+building:char_bob_guide.controls.leg01.outputs.legEnd as:leg01_R_legEnd_cmpOut
+building:char_bob_guide.controls.leg01.outputs.legEndFK as:leg01_R_legEndFK_cmpOut
 building:char_bob_guide.controls.leg01.femur as:leg01_R_femur_ctrl
 building:char_bob_guide.controls.leg01.knee as:leg01_R_knee_ctrl
 building:char_bob_guide.controls.leg01.ankle as:leg01_R_ankle_ctrl
-building:char_bob_guide.controls.leg01.toe as:leg01_R_toe_ctrl
-building:char_bob_guide.controls.leg01.toeTip as:leg01_R_toeTip_ctrl
 building:char_bob_guide.neck as:Mneck
 building:char_bob_guide.head as:Mhead
 building:char_bob_guide.clavicle as:Lclavicle
@@ -203,32 +201,30 @@ char_bob_guide.controls.leg:L
 char_bob_guide.controls.leg:L.inputs
 char_bob_guide.controls.leg:L.inputs.globalSRT
 char_bob_guide.controls.leg:L.inputs.pelvisInput
+char_bob_guide.controls.leg:L.inputs.ikTarget
 char_bob_guide.controls.leg:L.outputs
 char_bob_guide.controls.leg:L.outputs.femur
 char_bob_guide.controls.leg:L.outputs.shin
-char_bob_guide.controls.leg:L.outputs.legEndXfo
-char_bob_guide.controls.leg:L.outputs.foot
-char_bob_guide.controls.leg:L.outputs.toe
+char_bob_guide.controls.leg:L.outputs.ikHandle
+char_bob_guide.controls.leg:L.outputs.legEnd
+char_bob_guide.controls.leg:L.outputs.legEndFK
 char_bob_guide.controls.leg:L.femur
 char_bob_guide.controls.leg:L.knee
 char_bob_guide.controls.leg:L.ankle
-char_bob_guide.controls.leg:L.toe
-char_bob_guide.controls.leg:L.toeTip
 char_bob_guide.controls.leg01:R
 char_bob_guide.controls.leg01:R.inputs
 char_bob_guide.controls.leg01:R.inputs.globalSRT
 char_bob_guide.controls.leg01:R.inputs.pelvisInput
+char_bob_guide.controls.leg01:R.inputs.ikTarget
 char_bob_guide.controls.leg01:R.outputs
 char_bob_guide.controls.leg01:R.outputs.femur
 char_bob_guide.controls.leg01:R.outputs.shin
-char_bob_guide.controls.leg01:R.outputs.legEndXfo
-char_bob_guide.controls.leg01:R.outputs.foot
-char_bob_guide.controls.leg01:R.outputs.toe
+char_bob_guide.controls.leg01:R.outputs.ikHandle
+char_bob_guide.controls.leg01:R.outputs.legEnd
+char_bob_guide.controls.leg01:R.outputs.legEndFK
 char_bob_guide.controls.leg01:R.femur
 char_bob_guide.controls.leg01:R.knee
 char_bob_guide.controls.leg01:R.ankle
-char_bob_guide.controls.leg01:R.toe
-char_bob_guide.controls.leg01:R.toeTip
 char_bob_guide.neck:M
 char_bob_guide.head:M
 char_bob_guide.clavicle:L
