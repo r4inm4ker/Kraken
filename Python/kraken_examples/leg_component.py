@@ -80,9 +80,7 @@ class LegComponentGuide(LegComponent):
                 "createIKHandle": False,
                 "femurXfo": Xfo(Vec3(0.9811, 9.769, -0.4572)),
                 "kneeXfo": Xfo(Vec3(1.408, 5.4371, -0.5043)),
-                "ankleXfo": Xfo(Vec3(1.75, 1.15, -1.25)),
-                "toeXfo": Xfo(Vec3(1.85, 0.4, 0.25)),
-                "toeTipXfo": Xfo(Vec3(1.85, 0.4, 1.5))
+                "ankleXfo": Xfo(Vec3(1.75, 1.15, -1.25))
                }
 
         self.loadData(self.default_data)
