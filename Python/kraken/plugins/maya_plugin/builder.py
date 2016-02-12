@@ -398,6 +398,9 @@ class Builder(Builder):
         parentDCCSceneItem = self.getDCCSceneItem(kAttributeGroup.getParent())
 
         groupName = kAttributeGroup.getName()
+        if groupName == "implicitAttrGrp":
+            return False
+
         parentDCCSceneItem.addAttr(groupName, niceName=groupName, attributeType="enum", enumName="-----", keyable=True)
         dccSceneItem = parentDCCSceneItem.attr(groupName)
         pm.setAttr(parentDCCSceneItem + "." + groupName, lock=True)
@@ -439,8 +442,31 @@ class Builder(Builder):
 
         if kAttribute.isConnected() is True:
 
-            driver = self.getDCCSceneItem(kAttribute.getConnection())
-            driven = self.getDCCSceneItem(kAttribute)
+            # Detect if driver is visibility attribute and map to correct DCC attribute
+            driverAttr = kAttribute.getConnection()
+            if driverAttr.getName() == 'visibility' and driverAttr.getParent().getName() == 'implicitAttrGrp':
+                dccItem = self.getDCCSceneItem(driverAttr.getParent().getParent())
+                driver = dccItem.attr('visibility')
+
+            elif driverAttr.getName() == 'shapeVisibility' and driverAttr.getParent().getName() == 'implicitAttrGrp':
+                dccItem = self.getDCCSceneItem(driverAttr.getParent().getParent())
+                shape = dccItem.getShape()
+                driver = shape.attr('visibility')
+
+            else:
+                driver = self.getDCCSceneItem(kAttribute.getConnection())
+
+            # Detect if the driven attribute is a visibility attribute and map to correct DCC attribute
+            if kAttribute.getName() == 'visibility' and kAttribute.getParent().getName() == 'implicitAttrGrp':
+                dccItem = self.getDCCSceneItem(kAttribute.getParent().getParent())
+                driven = dccItem.attr('visibility')
+
+            elif kAttribute.getName() == 'shapeVisibility' and kAttribute.getParent().getName() == 'implicitAttrGrp':
+                dccItem = self.getDCCSceneItem(kAttribute.getParent().getParent())
+                shape = dccItem.getShape()
+                driven = shape.attr('visibility')
+            else:
+                driven = self.getDCCSceneItem(kAttribute)
 
             pm.connectAttr(driver, driven, force=True)
 
@@ -527,7 +553,6 @@ class Builder(Builder):
     # ========================
     # Component Build Methods
     # ========================
-
     def buildAttributeConnection(self, connectionInput):
         """Builds the connection between the attribute and the connection.
 
@@ -893,8 +918,14 @@ class Builder(Builder):
 
         dccSceneItem = self.getDCCSceneItem(kSceneItem)
 
-        if kSceneItem.getShapeVisibility() is False:
+        # Set Visibility
+        visAttr = kSceneItem.getVisibilityAttr()
+        if visAttr.isConnected() is False and kSceneItem.getVisibility() is False:
+            dccSceneItem.visibility.set(False)
 
+        # Set Shape Visibility
+        shapeVisAttr = kSceneItem.getShapeVisibilityAttr()
+        if shapeVisAttr.isConnected() is False and kSceneItem.getShapeVisibility() is False:
             # Get shape node, if it exists, hide it.
             shape = dccSceneItem.getShape()
             if shape is not None:

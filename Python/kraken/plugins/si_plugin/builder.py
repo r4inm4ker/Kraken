@@ -385,6 +385,9 @@ class Builder(Builder):
         parentDCCSceneItem = self.getDCCSceneItem(kAttributeGroup.getParent())
 
         groupName = kAttributeGroup.getName()
+        if groupName == "implicitAttrGrp":
+            return False
+
         dccSceneItem = parentDCCSceneItem.AddProperty("CustomParameterSet", False, groupName)
         self._registerSceneItemPair(kAttributeGroup, dccSceneItem)
 
@@ -422,8 +425,32 @@ class Builder(Builder):
         """
 
         if kAttribute.isConnected() is True:
-            driver = self.getDCCSceneItem(kAttribute.getConnection())
-            driven = self.getDCCSceneItem(kAttribute)
+
+            # Detect if driver is visibility attribute and map to correct DCC attribute
+            driverAttr = kAttribute.getConnection()
+            if driverAttr.getName() == 'visibility' and driverAttr.getParent().getName() == 'implicitAttrGrp':
+                dccItem = self.getDCCSceneItem(driverAttr.getParent().getParent())
+                driver = dccItem.Properties("Visibility").Parameters("viewvis")
+
+            elif driverAttr.getName() == 'shapeVisibility' and driverAttr.getParent().getName() == 'implicitAttrGrp':
+                dccItem = self.getDCCSceneItem(driverAttr.getParent().getParent())
+                driver = dccItem.Properties("Visibility").Parameters("viewvis")
+
+            else:
+                driver = self.getDCCSceneItem(kAttribute.getConnection())
+
+            # Detect if the driven attribute is a visibility attribute and map to correct DCC attribute
+            if kAttribute.getName() == 'visibility' and kAttribute.getParent().getName() == 'implicitAttrGrp':
+                dccItem = self.getDCCSceneItem(kAttribute.getParent().getParent())
+                driven = dccItem.Properties("Visibility").Parameters("viewvis")
+
+            elif kAttribute.getName() == 'shapeVisibility' and kAttribute.getParent().getName() == 'implicitAttrGrp':
+                dccItem = self.getDCCSceneItem(kAttribute.getParent().getParent())
+                driven = dccItem.Properties("Visibility").Parameters("viewvis")
+            else:
+                driven = self.getDCCSceneItem(kAttribute)
+
+
             driven.AddExpression(driver.FullName)
 
         return True
@@ -1062,7 +1089,14 @@ class Builder(Builder):
 
         dccSceneItem = self.getDCCSceneItem(kSceneItem)
 
-        if kSceneItem.getShapeVisibility() is False:
+        # Set Visibility
+        visAttr = kSceneItem.getVisibilityAttr()
+        if visAttr.isConnected() is False and kSceneItem.getVisibility() is False:
+            dccSceneItem.Properties("Visibility").Parameters("viewvis").Value = False
+
+        # Set Shape Visibility
+        shapeVisAttr = kSceneItem.getShapeVisibilityAttr()
+        if shapeVisAttr.isConnected() is False and kSceneItem.getShapeVisibility() is False:
             dccSceneItem.Properties("Visibility").Parameters("viewvis").Value = False
 
         return True
