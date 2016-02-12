@@ -1,8 +1,4 @@
 
-#
-# Copyright 2010-2015
-#
-
 import os
 import sys
 
