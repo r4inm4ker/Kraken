@@ -64,14 +64,22 @@ class KrakenUI(QtGui.QWidget):
 
     def writeSettings(self, settings):
         settings.beginGroup("KrakenUI")
-        settings.setValue("horizontalSplitterSizes", self.nodeLibraryExpandedSize)
+        settings.setValue('horizontalSplitterSizes', self.nodeLibraryExpandedSize)
+        settings.setValue('componentLibCollapsed', self.horizontalSplitter.sizes()[0] == 0)
         settings.endGroup()
 
 
     def readSettings(self, settings):
         settings.beginGroup("KrakenUI")
         if settings.contains('horizontalSplitterSizes'):
-            self.nodeLibraryExpandedSize = settings.value("horizontalSplitterSizes", 175)
+            self.nodeLibraryExpandedSize = settings.value('horizontalSplitterSizes', 175)
+        if settings.contains('componentLibCollapsed'):
+            if settings.value('componentLibCollapsed') == 'false':
+                splitter = self.horizontalSplitter
+                sizes = splitter.sizes()
+
+                self.horizontalSplitter.setSizes([self.nodeLibraryExpandedSize, sizes[1]])
+
         settings.endGroup()
 
 
