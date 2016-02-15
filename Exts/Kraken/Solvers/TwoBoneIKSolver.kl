@@ -116,7 +116,8 @@ function TwoBoneIKSolver.solve!
   Xfo bone1FkXfo = Xfo(bone1FK);
   Xfo bone0Xfo = bone0FkXfo;
   Xfo bone1Xfo = bone1FkXfo;
-  Xfo bone2Xfo;
+  Xfo bone2Xfo = bone1Xfo;
+  bone2Xfo.tr = bone1Xfo.transformVector(Vec3(bone1Len, 0.0, 0.0));
 
   Scalar scaledBone0Len = bone0Len * rigScale;
   Scalar scaledBone1Len = bone1Len * rigScale;
