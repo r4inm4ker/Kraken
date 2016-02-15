@@ -79,10 +79,14 @@ class ComponentInspector(BaseInspector):
             attributeWidget = EditorFactory.constructEditor(attributeController, parent=self)
             self.addEditor(attribute.getName(), attributeWidget)
 
-        for i in range(self.component.getNumAttributeGroups()):
+        for i in xrange(self.component.getNumAttributeGroups()):
+            attrGrp = self.component.getAttributeGroupByIndex(i)
+            if attrGrp.getName() == "implicitAttrGrp":
+                continue
+
             grp = self.component.getAttributeGroupByIndex(i)
             self.addSeparator(grp.getName())
-            for j in range(grp.getNumAttributes()):
+            for j in xrange(grp.getNumAttributes()):
                 displayAttribute(grp.getAttributeByIndex(j))
 
         # Add a stretch so that the widgets pack at the top.
