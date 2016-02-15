@@ -728,7 +728,7 @@ class Builder(Builder):
                     canvasOp = si.Dictionary.GetObject(canvasOpPath, False)
                     si.FabricCanvasOpConnectPort(canvasOpPath, portName, dccSceneItem.FullName+".kine.global")
 
-                elif portDataType in ['Scalar', 'Boolean']:
+                elif portDataType in ['Scalar', 'Boolean', 'Integer']:
 
                     portmapDefinition = portName+"|XSI Parameter"
 
@@ -920,7 +920,7 @@ class Builder(Builder):
                     canvasOp = si.Dictionary.GetObject(canvasOpPath, False)
                     si.FabricCanvasOpConnectPort(canvasOpPath, portName, dccSceneItem.FullName+".kine.global")
 
-                elif portDataType in ['Scalar', 'Boolean']:
+                elif portDataType in ['Scalar', 'Boolean', 'Integer']:
 
                     portmapDefinition = portName+"|XSI Parameter"
 
