@@ -32,7 +32,7 @@ from kraken.helpers.utility_methods import logHierarchy
 class mjEyelidComponent(BaseExampleComponent):
     """Eyelid Component Base"""
 
-    def __init__(self, name='mjEyelid', parent=None, data=None):
+    def __init__(self, name='mjEyelid', parent=None):
         super(mjEyelidComponent, self).__init__(name, parent)
 
         # ===========
@@ -63,7 +63,7 @@ class mjEyelidComponent(BaseExampleComponent):
 class mjEyelidComponentGuide(mjEyelidComponent):
     """Eyelid Component Guide"""
 
-    def __init__(self, name='mjEyelid', parent=None, data=None):
+    def __init__(self, name='mjEyelid', parent=None):
 
         Profiler.getInstance().push("Construct Eyelid Guide Component:" + name)
         super(mjEyelidComponentGuide, self).__init__(name, parent)
@@ -82,11 +82,11 @@ class mjEyelidComponentGuide(mjEyelidComponent):
         self.lowMedialFactorAttr = ScalarAttribute('Medial Blink Factor', value=0.25, minValue=0, maxValue=1, parent=guideLowSettingsAttrGrp)
         self.lowLateralFactorAttr = ScalarAttribute('Lateral Blink Factor', value=0.65, minValue=0, maxValue=1, parent=guideLowSettingsAttrGrp)
 
-        self.numUpDeformersAttr.setValueChangeCallback(self.updateNumUpDeformers) 
+        self.numUpDeformersAttr.setValueChangeCallback(self.updateNumUpDeformers)
         self.numLowDeformersAttr.setValueChangeCallback(self.updateNumLowDeformers)
 
         # =========
-        # Controls // Create the Guide Controls, Name them, give them a shape, a color and scale it. 
+        # Controls // Create the Guide Controls, Name them, give them a shape, a color and scale it.
         # =========
         self.eyeballCtrl = Control('eyeball', parent=self.ctrlCmpGrp, shape="sphere")
         self.eyeballCtrl.scalePoints(Vec3(0.35, 0.35, 0.35))
@@ -130,73 +130,80 @@ class mjEyelidComponentGuide(mjEyelidComponent):
         # ===============
         # Add Debug Splice Ops
         # ===============
-        # Add Lid Up Splice Op
-        self.debugLidUpSpliceOp = CanvasOperator('Debug_Canvas_Eyelid_Up_Op', 'MJCG.Solvers.mjEyelidDebugSolver')
-        self.addOperator(self.debugLidUpSpliceOp)
+        # Add Lid Up Canvas Op
+        self.debugLidUpCanvasOp = CanvasOperator('Debug_Canvas_Eyelid_Up_Op', 'MJCG.Solvers.mjEyelidDebugSolver')
+        self.addOperator(self.debugLidUpCanvasOp)
+
         # Add Attributes Inputs
-        self.debugLidUpSpliceOp.setInput('DrawDebug', self.drawDebugInputAttr)
-        self.debugLidUpSpliceOp.setInput('Deformer_Count', self.numUpDeformersInputAttr)
+        self.debugLidUpCanvasOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.debugLidUpCanvasOp.setInput('rigScale', self.rigScaleInputAttr)
+        self.debugLidUpCanvasOp.setInput('Deformer_Count', self.numUpDeformersInputAttr)
+
         # Add Xfo Inputs
-        self.debugLidUpSpliceOp.setInput('Eye_Center', self.eyeballCtrl)
-        self.debugLidUpSpliceOp.setInput('Lid_Medial', self.lidMedialCtrl)
-        self.debugLidUpSpliceOp.setInput('Lid_MedialCen', self.lidUpMedialCtrl)
-        self.debugLidUpSpliceOp.setInput('Lid_Center_Ref', self.lidUpCtrl)
-        self.debugLidUpSpliceOp.setInput('Lid_Center_Ctrl', self.lidUpCtrl)
-        self.debugLidUpSpliceOp.setInput('Lid_LateralCen', self.lidUpLateralCtrl)
-        self.debugLidUpSpliceOp.setInput('Lid_Lateral', self.lidLateralCtrl)
+        self.debugLidUpCanvasOp.setInput('Eye_Center', self.eyeballCtrl)
+        self.debugLidUpCanvasOp.setInput('Lid_Medial', self.lidMedialCtrl)
+        self.debugLidUpCanvasOp.setInput('Lid_MedialCen', self.lidUpMedialCtrl)
+        self.debugLidUpCanvasOp.setInput('Lid_Center_Ref', self.lidUpCtrl)
+        self.debugLidUpCanvasOp.setInput('Lid_Center_Ctrl', self.lidUpCtrl)
+        self.debugLidUpCanvasOp.setInput('Lid_LateralCen', self.lidUpLateralCtrl)
+        self.debugLidUpCanvasOp.setInput('Lid_Lateral', self.lidLateralCtrl)
+
         # Add Xfo Outputs
-        self.debugLidUpSpliceOp.setOutput('Result', self.eyelidUpOutput.getTarget())
+        self.debugLidUpCanvasOp.setOutput('result', self.eyelidUpOutput.getTarget())
 
 
-        # Add Lid Low Splice Op
-        self.debugLidLowSpliceOp = CanvasOperator('Debug_Canvas_Eyelid_Low_Op', 'MJCG.Solvers.mjEyelidDebugSolver')
-        self.addOperator(self.debugLidLowSpliceOp)
+        # Add Lid Low Canvas Op
+        self.debugLidLowCanvasOp = CanvasOperator('Debug_Canvas_Eyelid_Low_Op', 'MJCG.Solvers.mjEyelidDebugSolver')
+        self.addOperator(self.debugLidLowCanvasOp)
+
         # Add Attributes Inputs
-        self.debugLidLowSpliceOp.setInput('DrawDebug', self.drawDebugInputAttr)
-        self.debugLidLowSpliceOp.setInput('Deformer_Count', self.numLowDeformersInputAttr)
+        self.debugLidLowCanvasOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.debugLidLowCanvasOp.setInput('rigScale', self.rigScaleInputAttr)
+        self.debugLidLowCanvasOp.setInput('Deformer_Count', self.numLowDeformersInputAttr)
+
         # Add Xfo Inputs
-        self.debugLidLowSpliceOp.setInput('Eye_Center', self.eyeballCtrl)
-        self.debugLidLowSpliceOp.setInput('Lid_Medial', self.lidMedialCtrl)
-        self.debugLidLowSpliceOp.setInput('Lid_MedialCen', self.lidLowMedialCtrl)
-        self.debugLidLowSpliceOp.setInput('Lid_Center_Ref', self.lidLowCtrl)
-        self.debugLidLowSpliceOp.setInput('Lid_Center_Ctrl', self.lidLowCtrl)
-        self.debugLidLowSpliceOp.setInput('Lid_LateralCen', self.lidLowLateralCtrl)
-        self.debugLidLowSpliceOp.setInput('Lid_Lateral', self.lidLateralCtrl)
+        self.debugLidLowCanvasOp.setInput('Eye_Center', self.eyeballCtrl)
+        self.debugLidLowCanvasOp.setInput('Lid_Medial', self.lidMedialCtrl)
+        self.debugLidLowCanvasOp.setInput('Lid_MedialCen', self.lidLowMedialCtrl)
+        self.debugLidLowCanvasOp.setInput('Lid_Center_Ref', self.lidLowCtrl)
+        self.debugLidLowCanvasOp.setInput('Lid_Center_Ctrl', self.lidLowCtrl)
+        self.debugLidLowCanvasOp.setInput('Lid_LateralCen', self.lidLowLateralCtrl)
+        self.debugLidLowCanvasOp.setInput('Lid_Lateral', self.lidLateralCtrl)
+
         # Add Xfo Outputs
-        self.debugLidLowSpliceOp.setOutput('Result', self.eyelidLowOutput.getTarget())
+        self.debugLidLowCanvasOp.setOutput('result', self.eyelidLowOutput.getTarget())
 
 
         # =========
-        # Position Data // Get the Guide Controls Position data, else set them at their initial position. 
+        # Position Data // Get the Guide Controls Position data, else set them at their initial position.
         # =========
-        if data is None:
-            data = {
-                    "name": name,
-                    "location": "L",
+        self.default_data = {
+            "name": name,
+            "location": "L",
 
-                    "eyeballXfo": Xfo(Vec3(0.322, 15.500, 0.390)),
-                    "lidMedialXfo": Xfo(Vec3(0.168, 15.445, 0.520)),
-                    "lidLateralXfo": Xfo(Vec3(0.465, 15.47, 0.465)),
+            "eyeballXfo": Xfo(Vec3(0.322, 15.500, 0.390)),
+            "lidMedialXfo": Xfo(Vec3(0.168, 15.445, 0.520)),
+            "lidLateralXfo": Xfo(Vec3(0.465, 15.47, 0.465)),
 
-                    "lidUpXfo": Xfo(Vec3(0.322, 15.585, 0.605)),
-                    "lidUpMedialXfo": Xfo(Vec3(0.203, 15.515, 0.525)),
-                    "lidUpLateralXfo": Xfo(Vec3(0.432, 15.55, 0.538)),
+            "lidUpXfo": Xfo(Vec3(0.322, 15.585, 0.605)),
+            "lidUpMedialXfo": Xfo(Vec3(0.203, 15.515, 0.525)),
+            "lidUpLateralXfo": Xfo(Vec3(0.432, 15.55, 0.538)),
 
-                    "lidLowXfo": Xfo(Vec3(0.322, 15.434, 0.6)),
-                    "lidLowMedialXfo": Xfo(Vec3(0.24, 15.45, 0.513)),
-                    "lidLowLateralXfo": Xfo(Vec3(0.413, 15.44, 0.525)),
+            "lidLowXfo": Xfo(Vec3(0.322, 15.434, 0.6)),
+            "lidLowMedialXfo": Xfo(Vec3(0.24, 15.45, 0.513)),
+            "lidLowLateralXfo": Xfo(Vec3(0.413, 15.44, 0.525)),
 
-                    "lidUpMedialBlink": 0.25,
-                    "lidUpLateralBlink": 0.65,
+            "lidUpMedialBlink": self.upMedialFactorAttr.getValue(),
+            "lidUpLateralBlink": self.upLateralFactorAttr.getValue(),
 
-                    "lidLowMedialBlink": 0.25,
-                    "lidLowLateralBlink": 0.65,
+            "lidLowMedialBlink": self.lowMedialFactorAttr.getValue(),
+            "lidLowLateralBlink": self.lowLateralFactorAttr.getValue(),
 
-                    "numUpDeformers": self.numUpDeformersAttr.getValue(),
-                    "numLowDeformers": self.numLowDeformersAttr.getValue(),
-                   }
+            "numUpDeformers": self.numUpDeformersAttr.getValue(),
+            "numLowDeformers": self.numLowDeformersAttr.getValue(),
+        }
 
-        self.loadData(data)
+        self.loadData(self.default_data)
 
         Profiler.getInstance().pop()
 
@@ -257,7 +264,7 @@ class mjEyelidComponentGuide(mjEyelidComponent):
     def saveData(self):
 
         data = super(mjEyelidComponentGuide, self).saveData()
- 
+
         data['eyeballXfo'] = self.eyeballCtrl.xfo
 
         data['lidMedialXfo'] = self.lidMedialCtrl.xfo
@@ -306,14 +313,15 @@ class mjEyelidComponentGuide(mjEyelidComponent):
         self.numUpDeformersInputAttr.setValue(data["numUpDeformers"])
         self.numLowDeformersInputAttr.setValue(data["numLowDeformers"])
 
-        self.upMedialFactorInputAttr.setValue(self.upMedialFactorAttr.getValue())
-        self.upLateralFactorInputAttr.setValue(self.upLateralFactorAttr.getValue())
+        self.upMedialFactorInputAttr.setValue(data['lidUpMedialBlink'])
+        self.upLateralFactorInputAttr.setValue(data['lidUpLateralBlink'])
 
-        self.lowMedialFactorInputAttr.setValue(self.lowMedialFactorAttr.getValue())
-        self.lowLateralFactorInputAttr.setValue(self.lowLateralFactorAttr.getValue())
+        self.lowMedialFactorInputAttr.setValue(data['lidLowMedialBlink'])
+        self.lowLateralFactorInputAttr.setValue(data['lidLowLateralBlink'])
 
+        self.debugLidUpCanvasOp.evaluate()
+        self.debugLidLowCanvasOp.evaluate()
 
-        
         return True
 
 
@@ -381,11 +389,11 @@ class mjEyelidComponentRig(mjEyelidComponent):
         Profiler.getInstance().push("Construct Eyelid Rig Component:" + name)
         super(mjEyelidComponentRig, self).__init__(name, parent)
 
-       # =========
-       # Controls // Get the Guide Xfos data and create the final controllers, offset them if needed.
-       # =========
+        # =========
+        # Controls // Get the Guide Xfos data and create the final controllers, offset them if needed.
+        # =========
 
-       # Inputs
+        # Inputs
         self.eyelidCtrlSpace = CtrlSpace('eyelid', parent=self.ctrlCmpGrp)
 
         self.eyeballLocator = Locator('eyeball', parent=self.ctrlCmpGrp)
@@ -394,14 +402,14 @@ class mjEyelidComponentRig(mjEyelidComponent):
         self.eyelidUpVLocator = Locator('eyelid_Upv', parent=self.eyelidCtrlSpace)
         self.eyelidUpVLocator.setShapeVisibility(False)
 
-       # Lid Sides
+        # Lid Sides
         self.lidMedialLocator = Locator('lid_Medial', parent=self.eyelidCtrlSpace)
         self.lidMedialLocator.setShapeVisibility(False)
 
         self.lidLateralLocator = Locator('lid_Lateral', parent=self.eyelidCtrlSpace)
         self.lidLateralLocator.setShapeVisibility(False)
 
-       # Lid Upper
+        # Lid Upper
         self.lidUpCtrlSpace = CtrlSpace('lid_Up', parent=self.eyelidCtrlSpace)
         self.lidUpCtrl = Control('lid_Up', parent=self.lidUpCtrlSpace, shape="cube")
         self.lidUpCtrl.scalePoints(Vec3(0.05, 0.05, 0.05))
@@ -413,7 +421,7 @@ class mjEyelidComponentRig(mjEyelidComponent):
         self.lipUpLateralLocator = Locator('lid_Up_Lateral', parent=self.eyelidCtrlSpace)
         self.lipUpLateralLocator.setShapeVisibility(False)
 
-       # Lid Lower
+        # Lid Lower
         self.lidLowCtrlSpace = CtrlSpace('lid_Low', parent=self.eyelidCtrlSpace)
         self.lidLowCtrl = Control('lid_Low', parent=self.lidLowCtrlSpace, shape="cube")
         self.lidLowCtrl.scalePoints(Vec3(0.05, 0.05, 0.05))
@@ -502,60 +510,67 @@ class mjEyelidComponentRig(mjEyelidComponent):
         self.outputsToDeformersKLOp.setInput('drawDebug', self.drawDebugInputAttr)
         self.outputsToDeformersKLOp.setInput('rigScale', self.rigScaleInputAttr)
         # Add Xfo Inputs
-        self.outputsToDeformersKLOp.setInput('constrainers', [self.lidMedialLocator, 
-                                                              self.lidLateralLocator, 
+        self.outputsToDeformersKLOp.setInput('constrainers', [self.lidMedialLocator,
+                                                              self.lidLateralLocator,
                                                               ])
         # Add Xfo Outputs
-        self.outputsToDeformersKLOp.setOutput('constrainees', [lidMedialDef, 
-                                                               lidLateralDef, 
+        self.outputsToDeformersKLOp.setOutput('constrainees', [lidMedialDef,
+                                                               lidLateralDef,
                                                                ])
 
-        # Add Lid Up Splice Op
-        self.lidUpSpliceOp = CanvasOperator('Canvas_Eyelid_Up_Op', 'MJCG.Solvers.mjEyelidConstraintSolver')
-        self.addOperator(self.lidUpSpliceOp)
+        # Add Lid Up Canvas Op
+        self.lidUpCanvasOp = CanvasOperator('Canvas_Eyelid_Up_Op', 'MJCG.Solvers.mjEyelidConstraintSolver')
+        self.addOperator(self.lidUpCanvasOp)
+
         # Add Attributes Inputs
-        self.lidUpSpliceOp.setInput('DrawDebug', self.lidUp_DebugInputAttr)
-        self.lidUpSpliceOp.setInput('Eyeball_Offset', self.lidUp_OffsetInputAttr)
-        self.lidUpSpliceOp.setInput('Eyeball_Follow_Factor', self.lidUp_FollowFactorInputAttr)
-        self.lidUpSpliceOp.setInput('Medial_Blink_Factor', self.lidUp_MedialBlinkInputAttr)
-        self.lidUpSpliceOp.setInput('Lateral_Blink_Factor', self.lidUp_LateralBlinkInputAttr)  
-        self.lidUpSpliceOp.setInput('Deformer_Count', self.lidUp_DefCountInputAttr)
+        self.lidUpCanvasOp.setInput('drawDebug', self.lidUp_DebugInputAttr)
+        self.lidUpCanvasOp.setInput('rigScale', self.rigScaleInputAttr)
+        self.lidUpCanvasOp.setInput('Eyeball_Offset', self.lidUp_OffsetInputAttr)
+        self.lidUpCanvasOp.setInput('Eyeball_Follow_Factor', self.lidUp_FollowFactorInputAttr)
+        self.lidUpCanvasOp.setInput('Medial_Blink_Factor', self.lidUp_MedialBlinkInputAttr)
+        self.lidUpCanvasOp.setInput('Lateral_Blink_Factor', self.lidUp_LateralBlinkInputAttr)
+        self.lidUpCanvasOp.setInput('Deformer_Count', self.lidUp_DefCountInputAttr)
+
         # Add Xfo Inputs
-        self.lidUpSpliceOp.setInput('Eye_Center', self.eyeballLocator)
-        self.lidUpSpliceOp.setInput('Lid_Global', self.eyelidCtrlSpace)
-        self.lidUpSpliceOp.setInput('Lid_UpV', self.eyelidUpVLocator)
-        self.lidUpSpliceOp.setInput('Lid_Medial', self.lidMedialLocator)
-        self.lidUpSpliceOp.setInput('Lid_MedialCen', self.lipUpMedialLocator)
-        self.lidUpSpliceOp.setInput('Lid_Center_Ref', self.lidUpCtrlSpace)
-        self.lidUpSpliceOp.setInput('Lid_Center_Ctrl', self.lidUpCtrl)
-        self.lidUpSpliceOp.setInput('Lid_LateralCen', self.lipUpLateralLocator)
-        self.lidUpSpliceOp.setInput('Lid_Lateral', self.lidLateralLocator)
+        self.lidUpCanvasOp.setInput('Eye_Center', self.eyeballLocator)
+        self.lidUpCanvasOp.setInput('Lid_Global', self.eyelidCtrlSpace)
+        self.lidUpCanvasOp.setInput('Lid_UpV', self.eyelidUpVLocator)
+        self.lidUpCanvasOp.setInput('Lid_Medial', self.lidMedialLocator)
+        self.lidUpCanvasOp.setInput('Lid_MedialCen', self.lipUpMedialLocator)
+        self.lidUpCanvasOp.setInput('Lid_Center_Ref', self.lidUpCtrlSpace)
+        self.lidUpCanvasOp.setInput('Lid_Center_Ctrl', self.lidUpCtrl)
+        self.lidUpCanvasOp.setInput('Lid_LateralCen', self.lipUpLateralLocator)
+        self.lidUpCanvasOp.setInput('Lid_Lateral', self.lidLateralLocator)
         #Add Xfo Outputs
-        self.lidUpSpliceOp.setOutput('Result', self.eyelidUpDef)
+        self.lidUpCanvasOp.setOutput('result', self.eyelidUpDef)
 
 
-        # Add Lid Low Splice Op
-        self.lidLowSpliceOp = CanvasOperator('Canvas_Eyelid_Low_Op', 'MJCG.Solvers.mjEyelidConstraintSolver')
-        self.addOperator(self.lidLowSpliceOp)
+        # Add Lid Low Canvas Op
+        self.lidLowCanvasOp = CanvasOperator('Canvas_Eyelid_Low_Op', 'MJCG.Solvers.mjEyelidConstraintSolver')
+        self.addOperator(self.lidLowCanvasOp)
+
         # Add Attributes Inputs
-        self.lidLowSpliceOp.setInput('DrawDebug', self.lidLow_DebugInputAttr)
-        self.lidLowSpliceOp.setInput('Eyeball_Offset', self.lidLow_OffsetInputAttr)
-        self.lidLowSpliceOp.setInput('Eyeball_Follow_Factor', self.lidLow_FollowFactorInputAttr)
-        self.lidLowSpliceOp.setInput('Medial_Blink_Factor', self.lidLow_MedialBlinkInputAttr)
-        self.lidLowSpliceOp.setInput('Lateral_Blink_Factor', self.lidLow_LateralBlinkInputAttr)  
-        self.lidLowSpliceOp.setInput('Deformer_Count', self.lidLow_DefCountInputAttr)
+        self.lidLowCanvasOp.setInput('drawDebug', self.lidLow_DebugInputAttr)
+        self.lidLowCanvasOp.setInput('rigScale', self.rigScaleInputAttr)
+        self.lidLowCanvasOp.setInput('Eyeball_Offset', self.lidLow_OffsetInputAttr)
+        self.lidLowCanvasOp.setInput('Eyeball_Follow_Factor', self.lidLow_FollowFactorInputAttr)
+        self.lidLowCanvasOp.setInput('Medial_Blink_Factor', self.lidLow_MedialBlinkInputAttr)
+        self.lidLowCanvasOp.setInput('Lateral_Blink_Factor', self.lidLow_LateralBlinkInputAttr)
+        self.lidLowCanvasOp.setInput('Deformer_Count', self.lidLow_DefCountInputAttr)
+
         # Add Xfo Inputs
-        self.lidLowSpliceOp.setInput('Eye_Center', self.eyeballLocator)
-        self.lidLowSpliceOp.setInput('Lid_Global', self.eyelidCtrlSpace)
-        self.lidLowSpliceOp.setInput('Lid_UpV', self.eyelidUpVLocator)
-        self.lidLowSpliceOp.setInput('Lid_Medial', self.lidMedialLocator)
-        self.lidLowSpliceOp.setInput('Lid_MedialCen', self.lidLowMedialLocator)
-        self.lidLowSpliceOp.setInput('Lid_Center_Ref', self.lidLowCtrlSpace)
-        self.lidLowSpliceOp.setInput('Lid_Center_Ctrl', self.lidLowCtrl)
-        self.lidLowSpliceOp.setInput('Lid_LateralCen', self.lidLowLateralLocator)
-        self.lidLowSpliceOp.setInput('Lid_Lateral', self.lidLateralLocator)
+        self.lidLowCanvasOp.setInput('Eye_Center', self.eyeballLocator)
+        self.lidLowCanvasOp.setInput('Lid_Global', self.eyelidCtrlSpace)
+        self.lidLowCanvasOp.setInput('Lid_UpV', self.eyelidUpVLocator)
+        self.lidLowCanvasOp.setInput('Lid_Medial', self.lidMedialLocator)
+        self.lidLowCanvasOp.setInput('Lid_MedialCen', self.lidLowMedialLocator)
+        self.lidLowCanvasOp.setInput('Lid_Center_Ref', self.lidLowCtrlSpace)
+        self.lidLowCanvasOp.setInput('Lid_Center_Ctrl', self.lidLowCtrl)
+        self.lidLowCanvasOp.setInput('Lid_LateralCen', self.lidLowLateralLocator)
+        self.lidLowCanvasOp.setInput('Lid_Lateral', self.lidLateralLocator)
+
         #Add Xfo Outputs
-        self.lidLowSpliceOp.setOutput('Result', self.eyelidLowDef)
+        self.lidLowCanvasOp.setOutput('result', self.eyelidLowDef)
 
 
         Profiler.getInstance().pop()
@@ -624,11 +639,11 @@ class mjEyelidComponentRig(mjEyelidComponent):
         # Set Attributes
         self.upMedialFactorInputAttr.setValue(data['lidUpMedialBlink'])
         self.upLateralFactorInputAttr.setValue(data['lidUpLateralBlink'])
-        self.numUpDeformersInputAttr .setValue(data['numUpDeformers'])
+        self.numUpDeformersInputAttr.setValue(data['numUpDeformers'])
 
         self.lowMedialFactorInputAttr.setValue(data['lidLowMedialBlink'])
         self.lowLateralFactorInputAttr.setValue(data['lidLowLateralBlink'])
-        self.numLowDeformersInputAttr .setValue(data['numLowDeformers'])
+        self.numLowDeformersInputAttr.setValue(data['numLowDeformers'])
 
         self.lidUp_MedialBlinkInputAttr.setValue(data['lidUpMedialBlink'])
         self.lidUp_LateralBlinkInputAttr.setValue(data['lidUpLateralBlink'])
@@ -644,11 +659,11 @@ class mjEyelidComponentRig(mjEyelidComponent):
 
         # Evaluate Constraints
         self.headInputConstraint.evaluate()
-        self.eyeballInputConstraint.evaluate() 
+        self.eyeballInputConstraint.evaluate()
 
-        # Evaluate Splice Ops
-        self.lidUpSpliceOp.evaluate()
-        self.lidLowSpliceOp.evaluate()
+        # Evaluate Operators
+        self.lidUpCanvasOp.evaluate()
+        self.lidLowCanvasOp.evaluate()
         self.outputsToDeformersKLOp.evaluate()
 
 

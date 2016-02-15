@@ -3,20 +3,39 @@
   "metadata" : {
     "uiTextColor" : "{\n  \"r\" : 20,\n  \"g\" : 20,\n  \"b\" : 20\n  }",
     "uiNodeColor" : "{\n  \"r\" : 121,\n  \"g\" : 134,\n  \"b\" : 143\n  }",
-    "uiGraphZoom" : "{\n  \"value\" : 0.5099915862083435\n  }",
-    "uiGraphPan" : "{\n  \"x\" : 577.2254565826734,\n  \"y\" : 370.5267337906641\n  }"
+    "uiGraphZoom" : "{\n  \"value\" : 0.4350758492946625\n  }",
+    "uiGraphPan" : "{\n  \"x\" : 601.5132446289063,\n  \"y\" : 490.891357421875\n  }"
     },
   "title" : "mjEyelidDebugSolver",
   "ports" : [
+    {
+      "objectType" : "Port",
+      "nodePortType" : "In",
+      "defaultValues" : {
+        "Mat44[]" : []
+        },
+      "name" : "result",
+      "execPortType" : "Out",
+      "typeSpec" : "Mat44[]"
+      },
     {
       "objectType" : "Port",
       "nodePortType" : "Out",
       "defaultValues" : {
         "Boolean" : false
         },
-      "name" : "DrawDebug",
+      "name" : "drawDebug",
       "execPortType" : "In",
       "typeSpec" : "Boolean"
+      },
+    {
+      "objectType" : "Port",
+      "nodePortType" : "Out",
+      "defaultValues" : {
+        "Scalar" : 0
+        },
+      "name" : "rigScale",
+      "execPortType" : "In"
       },
     {
       "objectType" : "Port",
@@ -272,20 +291,10 @@
       "name" : "Lid_Lateral",
       "execPortType" : "In",
       "typeSpec" : "Mat44"
-      },
-    {
-      "objectType" : "Port",
-      "nodePortType" : "In",
-      "defaultValues" : {
-        "Mat44[]" : []
-        },
-      "name" : "Result",
-      "execPortType" : "Out",
-      "typeSpec" : "Mat44[]"
       }
     ],
   "extDeps" : {},
-  "presetGUID" : "B3487C81BDB73074979BADE0D29A7A26",
+  "presetGUID" : "3A53F2F2B9317DA50483632426B6CA25",
   "nodes" : [
     {
       "objectType" : "Inst",
@@ -2486,8 +2495,8 @@
     {
       "objectType" : "Inst",
       "metadata" : {
-        "uiComment" : "DrawDebug",
-        "uiGraphPos" : "{\"x\":-553.6580810546875,\"y\":-592.1752319335938}",
+        "uiComment" : "drawDebug",
+        "uiGraphPos" : "{\"x\":-643.298,\"y\":-693.307}",
         "uiCommentExpanded" : "true"
         },
       "name" : "Boolean_4",
@@ -2609,11 +2618,46 @@
         ],
       "executable" : "Fabric.Core.Math.Convert",
       "presetGUID" : "EDD7FFDA6D856BB47F953A1ACA8E77B6"
+      },
+    {
+      "objectType" : "Inst",
+      "metadata" : {
+        "uiGraphPos" : "{\"x\":-638.558,\"y\":-606.475}"
+        },
+      "name" : "Cache_2",
+      "ports" : [
+        {
+          "objectType" : "InstPort",
+          "nodePortType" : "In",
+          "name" : "value"
+          }
+        ],
+      "executable" : "Fabric.Core.Data.Cache",
+      "presetGUID" : "D903AFD981FE9214C69943F542D5FD60"
+      },
+    {
+      "objectType" : "Inst",
+      "metadata" : {
+        "uiGraphPos" : "{\"x\":-519.557,\"y\":-606.475}"
+        },
+      "name" : "Scalar_1",
+      "ports" : [
+        {
+          "objectType" : "InstPort",
+          "nodePortType" : "In",
+          "name" : "value"
+          }
+        ],
+      "executable" : "Fabric.Core.Constants.Scalar",
+      "presetGUID" : "E0E96C6E234F70063BC98887B83327DC"
       }
     ],
   "connections" : {
-    "DrawDebug" : [
+    "drawDebug" : [
       "Boolean_4.value"
+      ],
+    "rigScale" : [
+      "Cache_2.value"
       ],
     "Deformer_Count" : [
       "Integer_2.value"
@@ -2871,7 +2915,7 @@
       ],
     "Cache_1.value" : [
       "SetFromMat44Array_1.m",
-      "Result"
+      "result"
       ],
     "Integer_1.value" : [
       "Convert_1.val"
@@ -2949,28 +2993,50 @@
       ],
     "Convert_1.result" : [
       "FillInterpolated_2.count"
+      ],
+    "Cache_2.value" : [
+      "Scalar_1.value"
       ]
     },
   "requiredPresets" : {
-    "MJ.Kraken.Debug.mjEyelidDebugSolver" : {
+    "MJCG.Solvers.mjEyelidDebugSolver" : {
       "objectType" : "Graph",
       "metadata" : {
         "uiTextColor" : "{\n  \"r\" : 20,\n  \"g\" : 20,\n  \"b\" : 20\n  }",
         "uiNodeColor" : "{\n  \"r\" : 121,\n  \"g\" : 134,\n  \"b\" : 143\n  }",
-        "uiGraphZoom" : "{\n  \"value\" : 0.5099915862083435\n  }",
-        "uiGraphPan" : "{\n  \"x\" : 577.2254565826734,\n  \"y\" : 370.5267337906641\n  }"
+        "uiGraphZoom" : "{\n  \"value\" : 0.4350758492946625\n  }",
+        "uiGraphPan" : "{\n  \"x\" : 601.5132446289063,\n  \"y\" : 490.891357421875\n  }"
         },
       "title" : "mjEyelidDebugSolver",
       "ports" : [
+        {
+          "objectType" : "Port",
+          "nodePortType" : "In",
+          "defaultValues" : {
+            "Mat44[]" : []
+            },
+          "name" : "result",
+          "execPortType" : "Out",
+          "typeSpec" : "Mat44[]"
+          },
         {
           "objectType" : "Port",
           "nodePortType" : "Out",
           "defaultValues" : {
             "Boolean" : false
             },
-          "name" : "DrawDebug",
+          "name" : "drawDebug",
           "execPortType" : "In",
           "typeSpec" : "Boolean"
+          },
+        {
+          "objectType" : "Port",
+          "nodePortType" : "Out",
+          "defaultValues" : {
+            "Scalar" : 0
+            },
+          "name" : "rigScale",
+          "execPortType" : "In"
           },
         {
           "objectType" : "Port",
@@ -3226,20 +3292,10 @@
           "name" : "Lid_Lateral",
           "execPortType" : "In",
           "typeSpec" : "Mat44"
-          },
-        {
-          "objectType" : "Port",
-          "nodePortType" : "In",
-          "defaultValues" : {
-            "Mat44[]" : []
-            },
-          "name" : "Result",
-          "execPortType" : "Out",
-          "typeSpec" : "Mat44[]"
           }
         ],
       "extDeps" : {},
-      "presetGUID" : "B3487C81BDB73074979BADE0D29A7A26",
+      "presetGUID" : "3A53F2F2B9317DA50483632426B6CA25",
       "nodes" : [
         {
           "objectType" : "Inst",
@@ -5440,8 +5496,8 @@
         {
           "objectType" : "Inst",
           "metadata" : {
-            "uiComment" : "DrawDebug",
-            "uiGraphPos" : "{\"x\":-553.6580810546875,\"y\":-592.1752319335938}",
+            "uiComment" : "drawDebug",
+            "uiGraphPos" : "{\"x\":-643.298,\"y\":-693.307}",
             "uiCommentExpanded" : "true"
             },
           "name" : "Boolean_4",
@@ -5563,11 +5619,46 @@
             ],
           "executable" : "Fabric.Core.Math.Convert",
           "presetGUID" : "EDD7FFDA6D856BB47F953A1ACA8E77B6"
+          },
+        {
+          "objectType" : "Inst",
+          "metadata" : {
+            "uiGraphPos" : "{\"x\":-638.558,\"y\":-606.475}"
+            },
+          "name" : "Cache_2",
+          "ports" : [
+            {
+              "objectType" : "InstPort",
+              "nodePortType" : "In",
+              "name" : "value"
+              }
+            ],
+          "executable" : "Fabric.Core.Data.Cache",
+          "presetGUID" : "D903AFD981FE9214C69943F542D5FD60"
+          },
+        {
+          "objectType" : "Inst",
+          "metadata" : {
+            "uiGraphPos" : "{\"x\":-519.557,\"y\":-606.475}"
+            },
+          "name" : "Scalar_1",
+          "ports" : [
+            {
+              "objectType" : "InstPort",
+              "nodePortType" : "In",
+              "name" : "value"
+              }
+            ],
+          "executable" : "Fabric.Core.Constants.Scalar",
+          "presetGUID" : "E0E96C6E234F70063BC98887B83327DC"
           }
         ],
       "connections" : {
-        "DrawDebug" : [
+        "drawDebug" : [
           "Boolean_4.value"
+          ],
+        "rigScale" : [
+          "Cache_2.value"
           ],
         "Deformer_Count" : [
           "Integer_2.value"
@@ -5825,7 +5916,7 @@
           ],
         "Cache_1.value" : [
           "SetFromMat44Array_1.m",
-          "Result"
+          "result"
           ],
         "Integer_1.value" : [
           "Convert_1.val"
@@ -5903,6 +5994,9 @@
           ],
         "Convert_1.result" : [
           "FillInterpolated_2.count"
+          ],
+        "Cache_2.value" : [
+          "Scalar_1.value"
           ]
         }
       },
@@ -8018,6 +8112,27 @@ dfgEntry {
       "code" : "
 dfgEntry {
 	result = val;
+}
+"
+      },
+    "Fabric.Core.Constants.Scalar" : {
+      "objectType" : "Func",
+      "metadata" : {
+        "uiAlwaysShowDaisyChainPorts" : "true"
+        },
+      "title" : "Scalar",
+      "ports" : [
+        {
+          "objectType" : "Port",
+          "nodePortType" : "Out",
+          "name" : "value",
+          "execPortType" : "In",
+          "typeSpec" : "Scalar"
+          }
+        ],
+      "extDeps" : {},
+      "presetGUID" : "E0E96C6E234F70063BC98887B83327DC",
+      "code" : "dfgEntry {
 }
 "
       }
