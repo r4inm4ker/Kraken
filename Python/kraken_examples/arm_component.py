@@ -73,28 +73,24 @@ class ArmComponentGuide(ArmComponent):
         # Controls
         # =========
         # Guide Controls
-        self.bicepCtrl = Control('bicepFK', parent=self.ctrlCmpGrp, shape="sphere")
+        self.bicepCtrl = Control('bicep', parent=self.ctrlCmpGrp, shape="sphere")
         self.bicepCtrl.setColor('blue')
-        self.forearmCtrl = Control('forearmFK', parent=self.ctrlCmpGrp, shape="sphere")
+        self.forearmCtrl = Control('forearm', parent=self.ctrlCmpGrp, shape="sphere")
         self.forearmCtrl.setColor('blue')
-        self.wristCtrl = Control('wristFK', parent=self.ctrlCmpGrp, shape="sphere")
+        self.wristCtrl = Control('wrist', parent=self.ctrlCmpGrp, shape="sphere")
         self.wristCtrl.setColor('blue')
-        self.handCtrl = Control('hand', parent=self.ctrlCmpGrp, shape="cube")
-        self.handCtrl.setColor('blue')
 
-        data = {
+        self.default_data = {
             "name": name,
             "location": "L",
             "bicepXfo": Xfo(Vec3(2.27, 15.295, -0.753)),
             "forearmXfo": Xfo(Vec3(5.039, 13.56, -0.859)),
             "wristXfo": Xfo(Vec3(7.1886, 12.2819, 0.4906)),
-            "handXfo": Xfo(tr=Vec3(7.1886, 12.2819, 0.4906),
-                           ori=Quat(Vec3(-0.0865, -0.2301, -0.2623), 0.9331)),
-            "bicepFKCtrlSize": 1.75,
-            "forearmFKCtrlSize": 1.5
+            "bicepFKCtrlSize": self.bicepFKCtrlSizeInputAttr.getValue(),
+            "forearmFKCtrlSize": self.forearmFKCtrlSizeInputAttr.getValue()
         }
 
-        self.loadData(data)
+        self.loadData(self.default_data)
 
         Profiler.getInstance().pop()
 
@@ -116,7 +112,6 @@ class ArmComponentGuide(ArmComponent):
         data['bicepXfo'] = self.bicepCtrl.xfo
         data['forearmXfo'] = self.forearmCtrl.xfo
         data['wristXfo'] = self.wristCtrl.xfo
-        data['handXfo'] = self.handCtrl.xfo
 
         return data
 
@@ -137,7 +132,6 @@ class ArmComponentGuide(ArmComponent):
         self.bicepCtrl.xfo = data['bicepXfo']
         self.forearmCtrl.xfo = data['forearmXfo']
         self.wristCtrl.xfo = data['wristXfo']
-        self.handCtrl.xfo = data['handXfo']
 
         return True
 
@@ -176,8 +170,8 @@ class ArmComponentGuide(ArmComponent):
         forearmXfo.setFromVectors(elbowToWrist, bone2Normal, bone2ZAxis, forearmPosition)
 
         handXfo = Xfo()
-        handXfo.tr = self.handCtrl.xfo.tr
-        handXfo.ori = self.handCtrl.xfo.ori
+        handXfo.tr = self.wristCtrl.xfo.tr
+        handXfo.ori = forearmXfo.ori
 
         bicepLen = bicepPosition.subtract(forearmPosition).length()
         forearmLen = forearmPosition.subtract(wristPosition).length()
@@ -264,7 +258,6 @@ class ArmComponentRig(ArmComponent):
         armDebugInputAttr = BoolAttribute('drawDebug', value=False, parent=armSettingsAttrGrp)
         self.armBone0LenInputAttr = ScalarAttribute('bone1Len', value=0.0, parent=armSettingsAttrGrp)
         self.armBone1LenInputAttr = ScalarAttribute('bone2Len', value=0.0, parent=armSettingsAttrGrp)
-        armIKBlendInputAttr = ScalarAttribute('fkik', value=0.0, minValue=0.0, maxValue=1.0, parent=armSettingsAttrGrp)
         armSoftIKInputAttr = BoolAttribute('softIK', value=True, parent=armSettingsAttrGrp)
         armSoftDistInputAttr = ScalarAttribute('softDist', value=0.0, minValue=0.0, parent=armSettingsAttrGrp)
         armStretchInputAttr = BoolAttribute('stretch', value=True, parent=armSettingsAttrGrp)
@@ -322,9 +315,9 @@ class ArmComponentRig(ArmComponent):
         self.bicepFKCtrlSpace.addConstraint(self.armRootInputConstraint)
 
         # Constraint outputs
-        self.handConstraint = PoseConstraint('_'.join([self.handOutputTgt.getName(), 'To', self.handCtrl.getName()]))
-        self.handConstraint.addConstrainer(self.handCtrl)
-        self.handOutputTgt.addConstraint(self.handConstraint)
+        self.handOutputConstraint = PoseConstraint('_'.join([self.handOutputTgt.getName(), 'To', self.handCtrl.getName()]))
+        self.handOutputConstraint.addConstrainer(self.handCtrl)
+        self.handOutputTgt.addConstraint(self.handOutputConstraint)
 
         self.handCtrlSpaceConstraint = PoseConstraint('_'.join([self.handCtrlSpace.getName(), 'To', self.armEndXfoOutputTgt.getName()]))
         self.handCtrlSpaceConstraint.setMaintainOffset(True)
@@ -336,33 +329,33 @@ class ArmComponentRig(ArmComponent):
         # Add Splice Ops
         # ===============
         # Add Splice Op
-        self.spliceOp = KLOperator('armKLOp', 'TwoBoneIKSolver', 'Kraken')
-        self.addOperator(self.spliceOp)
+        self.armSolverKLOperator = KLOperator('armKLOp', 'TwoBoneIKSolver', 'Kraken')
+        self.addOperator(self.armSolverKLOperator)
 
         # Add Att Inputs
-        self.spliceOp.setInput('drawDebug', self.drawDebugInputAttr)
-        self.spliceOp.setInput('rigScale', self.rigScaleInputAttr)
+        self.armSolverKLOperator.setInput('drawDebug', self.drawDebugInputAttr)
+        self.armSolverKLOperator.setInput('rigScale', self.rigScaleInputAttr)
 
-        self.spliceOp.setInput('bone0Len', self.armBone0LenInputAttr)
-        self.spliceOp.setInput('bone1Len', self.armBone1LenInputAttr)
-        self.spliceOp.setInput('ikblend', armIKBlendInputAttr)
-        self.spliceOp.setInput('softIK', armSoftIKInputAttr)
-        self.spliceOp.setInput('softDist', armSoftDistInputAttr)
-        self.spliceOp.setInput('stretch', armStretchInputAttr)
-        self.spliceOp.setInput('stretchBlend', armStretchBlendInputAttr)
-        self.spliceOp.setInput('rightSide', self.rightSideInputAttr)
+        self.armSolverKLOperator.setInput('bone0Len', self.armBone0LenInputAttr)
+        self.armSolverKLOperator.setInput('bone1Len', self.armBone1LenInputAttr)
+        self.armSolverKLOperator.setInput('ikblend', armIKBlendInputAttr)
+        self.armSolverKLOperator.setInput('softIK', armSoftIKInputAttr)
+        self.armSolverKLOperator.setInput('softDist', armSoftDistInputAttr)
+        self.armSolverKLOperator.setInput('stretch', armStretchInputAttr)
+        self.armSolverKLOperator.setInput('stretchBlend', armStretchBlendInputAttr)
+        self.armSolverKLOperator.setInput('rightSide', self.rightSideInputAttr)
 
         # Add Xfo Inputs
-        self.spliceOp.setInput('root', self.clavicleEndInputTgt)
-        self.spliceOp.setInput('bone0FK', self.bicepFKCtrl)
-        self.spliceOp.setInput('bone1FK', self.forearmFKCtrl)
-        self.spliceOp.setInput('ikHandle', self.armIKCtrl)
-        self.spliceOp.setInput('upV', self.armUpVCtrl)
+        self.armSolverKLOperator.setInput('root', self.clavicleEndInputTgt)
+        self.armSolverKLOperator.setInput('bone0FK', self.bicepFKCtrl)
+        self.armSolverKLOperator.setInput('bone1FK', self.forearmFKCtrl)
+        self.armSolverKLOperator.setInput('ikHandle', self.armIKCtrl)
+        self.armSolverKLOperator.setInput('upV', self.armUpVCtrl)
 
         # Add Xfo Outputs
-        self.spliceOp.setOutput('bone0Out', self.bicepOutputTgt)
-        self.spliceOp.setOutput('bone1Out', self.forearmOutputTgt)
-        self.spliceOp.setOutput('bone2Out', self.armEndXfoOutputTgt)
+        self.armSolverKLOperator.setOutput('bone0Out', self.bicepOutputTgt)
+        self.armSolverKLOperator.setOutput('bone1Out', self.forearmOutputTgt)
+        self.armSolverKLOperator.setOutput('bone2Out', self.armEndXfoOutputTgt)
 
 
         # Add Deformer Splice Op
@@ -401,9 +394,6 @@ class ArmComponentRig(ArmComponent):
         self.bicepFKCtrl.xfo = data['bicepXfo']
         self.bicepFKCtrl.scalePoints(Vec3(data['bicepLen'], data['bicepFKCtrlSize'], data['bicepFKCtrlSize']))
 
-        self.bicepOutputTgt.xfo = data['bicepXfo']
-        self.forearmOutputTgt.xfo = data['forearmXfo']
-
         self.forearmFKCtrlSpace.xfo = data['forearmXfo']
         self.forearmFKCtrl.xfo = data['forearmXfo']
         self.forearmFKCtrl.scalePoints(Vec3(data['forearmLen'], data['forearmFKCtrlSize'], data['forearmFKCtrlSize']))
@@ -431,6 +421,9 @@ class ArmComponentRig(ArmComponent):
         self.armBone1LenInputAttr.setValue(data['forearmLen'])
 
         # Outputs
+        self.bicepOutputTgt.xfo = data['bicepXfo']
+        self.forearmOutputTgt.xfo = data['forearmXfo']
+        self.armEndXfoOutputTgt.xfo = data['handXfo']
         self.handOutputTgt.xfo = data['handXfo']
 
         # Eval Constraints
@@ -438,11 +431,11 @@ class ArmComponentRig(ArmComponent):
         self.armUpVCtrlSpaceInputConstraint.evaluate()
         self.armRootInputConstraint.evaluate()
         self.armRootInputConstraint.evaluate()
-        self.handConstraint.evaluate()
+        self.handOutputConstraint.evaluate()
         self.handCtrlSpaceConstraint.evaluate()
 
         # Eval Operators
-        self.spliceOp.evaluate()
+        self.armSolverKLOperator.evaluate()
         self.outputsToDeformersKLOp.evaluate()
 
 
