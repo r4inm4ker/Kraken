@@ -117,7 +117,7 @@ function Xfo[] solveTentacleIK(
   }
 
   Vec3 chainRootPos = basePose[0].tr;
-  Integer lastBoneIndex = basePose.size-1;
+  Integer lastBoneIndex = basePose.size()-1;
   Vec3 fkChainTip = basePose[lastBoneIndex].tr;
 
   // Apply the soft limit to the distance to the IK goal
@@ -203,14 +203,14 @@ function TentacleSolver.solve!
   io Mat44 pose[],
   io Mat44 tentacleEnd
 ) {
-  if(fkcontrols.size != pose.size)
+  if(fkcontrols.size() != pose.size())
     throw("Error in TentacleSolver. The number of FKControls does not match the number of joints");
 
   Xfo xfoPose[];
   Vec3 boneVectors[];
-  xfoPose.resize(fkcontrols.size+1);
-  boneVectors.resize(fkcontrols.size);
-  for(UInt32 i=0; i < fkcontrols.size; i++) {
+  xfoPose.resize(fkcontrols.size()+1);
+  boneVectors.resize(fkcontrols.size());
+  for(UInt32 i=0; i < fkcontrols.size(); i++) {
     Xfo xfo(fkcontrols[i]);
     Xfo localXfo = xfo;
     if(i>0){
@@ -219,7 +219,7 @@ function TentacleSolver.solve!
       boneVectors[i-1] = localXfo.tr;
     }
 
-    Scalar fraction = Scalar(i) / Scalar(fkcontrols.size);
+    Scalar fraction = Scalar(i) / Scalar(fkcontrols.size());
     Scalar bias = 1.0 - (((cos(fraction * PI) * 0.5) + 0.5) * tipBias);
 
     Quat wave;
@@ -236,9 +236,9 @@ function TentacleSolver.solve!
     else
       xfoPose[i] = localXfo;
   }
-  boneVectors[boneVectors.size-1] = Vec3(tipBoneLen, 0.0, 0.0);
-  xfoPose[fkcontrols.size] = xfoPose[fkcontrols.size-1];
-  xfoPose[fkcontrols.size].tr = xfoPose[fkcontrols.size-1].transformVector(boneVectors[boneVectors.size-1]);
+  boneVectors[boneVectors.size()-1] = Vec3(tipBoneLen, 0.0, 0.0);
+  xfoPose[fkcontrols.size()] = xfoPose[fkcontrols.size()-1];
+  xfoPose[fkcontrols.size()].tr = xfoPose[fkcontrols.size()-1].transformVector(boneVectors[boneVectors.size()-1]);
 
   if(ikblend > 0.0) {
     Vec3 goalPosition = ikgoal.translation();
@@ -248,7 +248,7 @@ function TentacleSolver.solve!
 
 
     // Now blend the IK result with the FK result
-    for(UInt32 i=0; i < xfoPose.size; i++) {
+    for(UInt32 i=0; i < xfoPose.size(); i++) {
       xfoPose[i].ori = xfoPose[i].ori.sphericalLinearInterpolate(ikPose[i].ori, ikblend);
       if(i>0)
         xfoPose[i].tr = xfoPose[i-1].transformVector(boneVectors[i-1]);
@@ -256,16 +256,16 @@ function TentacleSolver.solve!
   }
 
   // Convert the Xfos back to Mat44s
-  for(UInt32 i=0; i < pose.size; i++)
+  for(UInt32 i=0; i < pose.size(); i++)
     pose[i] = xfoPose[i].toMat44();
-  tentacleEnd = xfoPose[xfoPose.size-1].toMat44();
+  tentacleEnd = xfoPose[xfoPose.size()-1].toMat44();
 
   // Set debugging visibility.
   this.setDebug(drawDebug);
   if(this.drawDebug) {
 
     Color boneColor(1.0, 1.0, 0);
-    for(UInt32 i=0; i<pose.size; i++){
+    for(UInt32 i=0; i<pose.size(); i++){
       Scalar boneLength = boneVectors[i].length();
       etDrawBone(this.handle.rootTransform, 'bone'+i, pose[i], boneLength, boneLength * 0.15, boneColor);
     }

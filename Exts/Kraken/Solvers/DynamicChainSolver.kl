@@ -36,7 +36,7 @@ function DynamicChainSolver.reset!(
   this.trPrev.resize(0);
   this.trCurr.resize(0);
 
-  for (Integer i=0; i<animPose.size; i++) {
+  for (Integer i=0; i<animPose.size(); i++) {
     animPose[i] = fkPose[i];
   }
 }

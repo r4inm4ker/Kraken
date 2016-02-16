@@ -67,8 +67,8 @@ class HandComponentGuide(HandComponent):
         self.digitNamesAttr = StringAttribute('digitNames', value="thumb,index,middle,ring,pinky", parent=self.guideSettingsAttrGrp)
         self.digitNamesAttr.setValueChangeCallback(self.updateFingers)
 
-        self.numJoints = IntegerAttribute('numJoints', value=4, minValue=2, maxValue=20, parent=self.guideSettingsAttrGrp)
-        self.numJoints.setValueChangeCallback(self.resizeDigits)
+        self.numJointsAttr = IntegerAttribute('numJoints', value=4, minValue=2, maxValue=20, parent=self.guideSettingsAttrGrp)
+        self.numJointsAttr.setValueChangeCallback(self.resizeDigits)
 
         self.fingers = OrderedDict()
 
@@ -103,7 +103,13 @@ class HandComponentGuide(HandComponent):
 
         data['handXfo'] = self.handCtrl.xfo
         data['digitNames'] = self.digitNamesAttr.getValue()
-        data['fingers'] = self.fingers
+        data['numJoints'] = self.numJointsAttr.getValue()
+
+        fingerXfos = {}
+        for finger in self.fingers.keys():
+            fingerXfos[finger] = [x.xfo for x in self.fingers[finger]]
+
+        data['fingersGuideXfos'] = fingerXfos
 
         return data
 
@@ -121,9 +127,15 @@ class HandComponentGuide(HandComponent):
 
         super(HandComponentGuide, self).loadData( data )
 
-        self.handCtrl.xfo = data['handXfo']
-        self.digitNamesAttr.setValue(data['digitNames'])
-        # self.fingers = data['fingers']
+        self.handCtrl.xfo = data.get('handXfo')
+        self.digitNamesAttr.setValue(data.get('digitNames'))
+
+        fingersGuideXfos = data.get('fingersGuideXfos')
+        if fingersGuideXfos is not None:
+
+            for finger in self.fingers.keys():
+                for i in xrange(len(self.fingers[finger])):
+                    self.fingers[finger][i].xfo = fingersGuideXfos[finger][i]
 
         return True
 
@@ -173,8 +185,7 @@ class HandComponentGuide(HandComponent):
         self.fingers[name].append(firstDigitCtrl)
 
         parent = firstDigitCtrl
-        for i in xrange(2, self.numJoints.getValue() + 2):
-            print i
+        for i in xrange(2, self.numJointsAttr.getValue() + 2):
             digitCtrl = Control(name + str(i).zfill(2), parent=parent, shape='sphere')
             digitCtrl.setColor('orange')
             digitCtrl.scalePoints(Vec3(0.5, 0.5, 0.5))
@@ -198,7 +209,7 @@ class HandComponentGuide(HandComponent):
 
         for i, finger in enumerate(self.fingers.keys()):
 
-            for y in xrange(self.numJoints.getValue() + 1):
+            for y in xrange(self.numJointsAttr.getValue() + 1):
                 fingerPos = self.handCtrl.xfo.transformVector(Vec3(y * 1.0, 0, startOffset - (i * spacing)))
                 fingerXfo = Xfo(tr=fingerPos, ori=self.handCtrl.xfo.ori)
 

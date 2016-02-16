@@ -61,7 +61,7 @@ function NBoneIKSolver.solve!
 
     Xfo fkPose[];
     fkPose.resize(fkcontrols.size()+1);
-    for(UInt32 i=0; i< fkcontrols.size; i++) {
+    for(UInt32 i=0; i< fkcontrols.size(); i++) {
       fkPose[i] = Xfo(fkcontrols[i]);
     }
     fkPose[fkcontrols.size()] = fkPose[fkcontrols.size()-1];
@@ -72,8 +72,8 @@ function NBoneIKSolver.solve!
   Xfo xfoPose[];
   Vec3 boneVectors[];
   xfoPose.resize(fkcontrols.size()+1);
-  boneVectors.resize(fkcontrols.size);
-  for(UInt32 i=0; i < fkcontrols.size; i++) {
+  boneVectors.resize(fkcontrols.size());
+  for(UInt32 i=0; i < fkcontrols.size(); i++) {
     xfoPose[i] = Xfo(fkcontrols[i]);
     if(i>0)
       boneVectors[i-1] = xfoPose[i-1].inverse().transformVector(xfoPose[i].tr);
@@ -84,27 +84,27 @@ function NBoneIKSolver.solve!
 
   if(ikblend > 0.0) {
     UInt32 ikIndex = 0;
-    if (rootIndex > this.initPose.size - 3) {
+    if (rootIndex > this.initPose.size() - 3) {
       report('rootIndex has to leave at least 2 joints at the end of the chain!');
-      ikIndex = this.initPose.size - 3;
+      ikIndex = this.initPose.size() - 3;
     }
     else {
       ikIndex = rootIndex;
     }
 
     Xfo offsetInitPose[];
-    offsetInitPose.resize(this.initPose.size);
+    offsetInitPose.resize(this.initPose.size());
     if (useInitPose == 1) {
       // Calculate the initpose offset by the chain base input
-      for (Integer i=0; i < this.initPose.size; i++) {
+      for (Integer i=0; i < this.initPose.size(); i++) {
         offsetInitPose[i] = chainBase * (this.initPose[0].inverse() * this.initPose[i]);
       }
     }
 
     // Now blend the IK result with the FK result
     Xfo initPose[];
-    initPose.resize(this.initPose.size - ikIndex);
-    for(UInt32 i=ikIndex; i < xfoPose.size; i++) {
+    initPose.resize(this.initPose.size() - ikIndex);
+    for(UInt32 i=ikIndex; i < xfoPose.size(); i++) {
       if (useInitPose == 1)
         initPose[i - ikIndex] = offsetInitPose[i];
       else
@@ -120,7 +120,7 @@ function NBoneIKSolver.solve!
     }
 
     // Now blend the IK result with the FK result
-    for(UInt32 i=ikIndex; i < xfoPose.size; i++) {
+    for(UInt32 i=ikIndex; i < xfoPose.size(); i++) {
       xfoPose[i].ori = xfoPose[i ].ori.sphericalLinearInterpolate(ikPose[i- ikIndex].ori, ikblend);
       if(i>0)
         xfoPose[i].tr = xfoPose[i-1].transformVector(boneVectors[i-1]);
@@ -128,7 +128,7 @@ function NBoneIKSolver.solve!
   }
 
   // Convert the Xfos back to Mat44s
-  for(UInt32 i=0; i < pose.size; i++)
+  for(UInt32 i=0; i < pose.size(); i++)
     pose[i] = xfoPose[i].toMat44();
   legEnd = xfoPose[xfoPose.size()-1].toMat44();
 
@@ -137,7 +137,7 @@ function NBoneIKSolver.solve!
   if(this.drawDebug) {
 
     Color boneColor(1.0, 1.0, 0);
-    for(UInt32 i=0; i<pose.size; i++){
+    for(UInt32 i=0; i<pose.size(); i++){
       Scalar boneLength = boneVectors[i].length();
       etDrawBone(this.handle.rootTransform, 'bone'+i, pose[i], boneLength, boneLength * 0.15, boneColor);
     }
