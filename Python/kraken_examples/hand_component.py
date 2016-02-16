@@ -1,3 +1,5 @@
+from collections import OrderedDict
+
 from kraken.core.maths import Vec3
 from kraken.core.maths.xfo import Xfo
 
@@ -68,19 +70,17 @@ class HandComponentGuide(HandComponent):
         self.numJoints = IntegerAttribute('numJoints', value=4, minValue=2, maxValue=20, parent=self.guideSettingsAttrGrp)
         self.numJoints.setValueChangeCallback(self.resizeDigits)
 
-        self.fingers = {}
+        self.fingers = OrderedDict()
 
         self.handCtrl = Control('hand', parent=self.ctrlCmpGrp, shape="sphere")
         self.handCtrl.setColor('yellow')
-        self.handEndCtrl = Control('handEnd', parent=self.ctrlCmpGrp, shape="sphere")
-        self.handEndCtrl.setColor('yellow')
 
         self.default_data = {
             "name": name,
             "location": "L",
             "handXfo": Xfo(Vec3(7.1886, 12.2819, 0.4906)),
-            "handEndXfo": Xfo(Vec3(7.945, 11.8321, 0.9655)),
-            "digitNames": self.digitNamesAttr.getValue()
+            "digitNames": self.digitNamesAttr.getValue(),
+            "fingers": self.fingers
         }
 
         self.loadData(self.default_data)
@@ -102,8 +102,8 @@ class HandComponentGuide(HandComponent):
         data = super(HandComponentGuide, self).saveData()
 
         data['handXfo'] = self.handCtrl.xfo
-        data['handEndXfo'] = self.handEndCtrl.xfo
         data['digitNames'] = self.digitNamesAttr.getValue()
+        data['fingers'] = self.fingers
 
         return data
 
@@ -122,8 +122,8 @@ class HandComponentGuide(HandComponent):
         super(HandComponentGuide, self).loadData( data )
 
         self.handCtrl.xfo = data['handXfo']
-        self.handEndCtrl.xfo = data['handEndXfo']
         self.digitNamesAttr.setValue(data['digitNames'])
+        # self.fingers = data['fingers']
 
         return True
 
@@ -167,23 +167,42 @@ class HandComponentGuide(HandComponent):
     def addFinger(self, name):
         firstDigitCtrl = Control(name + "01", parent=self.ctrlCmpGrp, shape='sphere')
         firstDigitCtrl.setColor('orange')
+        firstDigitCtrl.scalePoints(Vec3(0.5, 0.5, 0.5))
 
         self.fingers[name] = []
         self.fingers[name].append(firstDigitCtrl)
 
         parent = firstDigitCtrl
-        for i in xrange(2, self.numJoints.getValue() + 1):
+        for i in xrange(2, self.numJoints.getValue() + 2):
+            print i
             digitCtrl = Control(name + str(i).zfill(2), parent=parent, shape='sphere')
             digitCtrl.setColor('orange')
+            digitCtrl.scalePoints(Vec3(0.5, 0.5, 0.5))
 
             self.fingers[name].append(digitCtrl)
 
             parent = digitCtrl
 
+        return firstDigitCtrl
 
     def removeFinger(self, name):
         del self.fingers[name]
         self.ctrlCmpGrp.removeChild(extraCtrl)
+
+    def placeFingers(self):
+
+        spacing = 0.75
+        length = spacing * (len(self.fingers.keys()) - 1)
+        mid = length / 2.0
+        startOffset = length - mid
+
+        for i, finger in enumerate(self.fingers.keys()):
+
+            for y in xrange(self.numJoints.getValue() + 1):
+                fingerPos = self.handCtrl.xfo.transformVector(Vec3(y * 1.0, 0, startOffset - (i * spacing)))
+                fingerXfo = Xfo(tr=fingerPos, ori=self.handCtrl.xfo.ori)
+
+                self.fingers[finger][y].xfo = fingerXfo
 
     def updateFingers(self, fingers):
 
@@ -194,8 +213,13 @@ class HandComponentGuide(HandComponent):
             self.removeFinger(finger)
 
         # Add Fingers
-        for finger in list(set(fingerNames) - set(self.fingers.keys())):
-            self.addFinger(finger)
+        for finger in fingerNames:
+            if finger in self.fingers.keys():
+                continue
+
+            newFinger = self.addFinger(finger)
+
+        self.placeFingers()
 
     def resizeDigits(self, numJoints):
 
@@ -205,8 +229,10 @@ class HandComponentGuide(HandComponent):
 
             elif numJoints + 1 > len(self.fingers[finger]):
                 for i in xrange(len(self.fingers[finger]), numJoints + 1):
-                    digitCtrl = Control(finger + str(i).zfill(2), parent=self.fingers[finger][i-1], shape='sphere')
+                    prevDigit = self.fingers[finger][i - 1]
+                    digitCtrl = Control(finger + str(i + 1).zfill(2), parent=prevDigit, shape='sphere')
                     digitCtrl.setColor('orange')
+                    digitCtrl.scalePoints(Vec3(0.5, 0.5, 0.5))
                     self.fingers[finger].append(digitCtrl)
 
             elif numJoints + 1 < len(self.fingers[finger]):
@@ -215,6 +241,7 @@ class HandComponentGuide(HandComponent):
                     removedJoint = self.fingers[finger].pop()
                     removedJoint.getParent().removeChild(removedJoint)
 
+        self.placeFingers()
 
     # ==============
     # Class Methods
