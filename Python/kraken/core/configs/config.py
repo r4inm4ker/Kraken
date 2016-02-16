@@ -685,7 +685,7 @@ class Config(object):
     # =========================
     # MetaData Methods
     # =========================
-    def getMetaData(self, key, value = None):
+    def getMetaData(self, key, value=None):
         """Returns the value of a metaData flag.
 
         Returns:
