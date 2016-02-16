@@ -157,7 +157,7 @@ function Xfo[] solveNBoneIKWithUpVector(
   in Scalar rigScale
 ) {
   Vec3 chainRootPos = basePose[0].tr;
-  Integer lastBoneIndex = basePose.size-1;
+  Integer lastBoneIndex = basePose.size()-1;
   Vec3 fkChainTip = basePose[lastBoneIndex].tr;
   Vec3 vecToFkChainTip = (fkChainTip - chainRootPos).unit();
   Vec3 vecToIkGoal = (goalPosition - chainRootPos).unit();
@@ -185,7 +185,7 @@ function Xfo[] solveNBoneIKWithUpVector(
 
   // compute a new aligned chain that includes the re-orientation using the upvector.
   Xfo alignedPose[];
-  alignedPose.resize(basePose.size);
+  alignedPose.resize(basePose.size());
   for (Integer i = 0; i < basePose.size(); i++) {
     alignedPose[i] = basePose[i];
     alignedPose[i].ori = chainOffsetRotation * basePose[i].ori;
