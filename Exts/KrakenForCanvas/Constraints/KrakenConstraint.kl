@@ -1,0 +1,6 @@
+require Kraken;
+
+struct KrakenConstraint {
+  Boolean maintainOffset;
+};
+

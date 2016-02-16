@@ -1,0 +1,6 @@
+require Kraken;
+
+struct KrakenOrientationConstraint : KrakenConstraint {
+  Euler offset;
+};
+

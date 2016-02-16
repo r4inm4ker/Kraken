@@ -1,0 +1,5 @@
+require Kraken;
+
+struct KrakenLayer : KrakenObject3D {
+};
+

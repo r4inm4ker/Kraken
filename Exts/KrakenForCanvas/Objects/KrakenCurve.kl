@@ -1,0 +1,7 @@
+require Kraken;
+
+struct KrakenCurve : KrakenObject3D {
+  UInt32 indices[];
+  Vec3 positions[];
+};
+

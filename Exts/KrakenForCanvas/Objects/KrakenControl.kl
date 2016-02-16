@@ -1,0 +1,5 @@
+require Kraken;
+
+struct KrakenControl : KrakenCurve {
+};
+

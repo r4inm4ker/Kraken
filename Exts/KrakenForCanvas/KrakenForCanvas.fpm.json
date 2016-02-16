@@ -1,0 +1,21 @@
+{
+  "code": [
+    "Objects/KrakenObject3D.kl",
+    "Objects/KrakenCtrlSpace.kl",
+    "Objects/KrakenComponentGroup.kl",
+    "Objects/KrakenContainer.kl"
+    "Objects/KrakenJoint.kl",
+    "Objects/KrakenLayer.kl",
+    "Objects/KrakenLocator.kl",
+    "Objects/KrakenTransform.kl",
+    "Objects/KrakenCurve.kl",
+    "Objects/KrakenControl.kl",
+    "Objects/KrakenRig.kl",
+
+    "Constraints/KrakenConstraint.kl",
+    "Constraints/KrakenPoseConstraint.kl",
+    "Constraints/KrakenPositionConstraint.kl",
+    "Constraints/KrakenOrientationConstraint.kl",
+    "Constraints/KrakenScaleConstraint.kl"
+  ]
+}

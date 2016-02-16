@@ -1,0 +1,6 @@
+require Kraken;
+
+struct KrakenPositionConstraint : KrakenConstraint {
+  Vec3 offset;
+};
+

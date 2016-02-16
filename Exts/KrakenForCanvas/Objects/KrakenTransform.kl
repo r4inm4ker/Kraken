@@ -1,0 +1,5 @@
+require Kraken;
+
+struct KrakenTransform : KrakenObject3D {
+};
+

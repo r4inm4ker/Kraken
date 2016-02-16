@@ -1,0 +1,6 @@
+require Kraken;
+
+struct KrakenPoseConstraint : KrakenConstraint {
+  Xfo offset;
+};
+
