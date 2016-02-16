@@ -39,7 +39,7 @@ class HandComponent(BaseExampleComponent):
         self.armEndInputTgt = self.createInput('armEnd', dataType='Xfo', parent=self.inputHrcGrp).getTarget()
 
         # Declare Output Xfos
-        self.clavicleOutputTgt = self.createOutput('hand', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
+        self.handOutputTgt = self.createOutput('hand', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
 
         # Declare Input Attrs
         self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=False, parent=self.cmpInputAttrGrp).getTarget()
@@ -80,6 +80,7 @@ class HandComponentGuide(HandComponent):
             "location": "L",
             "handXfo": Xfo(Vec3(7.1886, 12.2819, 0.4906)),
             "digitNames": self.digitNamesAttr.getValue(),
+            "numJoints": self.numJointsAttr.getValue(),
             "fingers": self.fingers
         }
 
@@ -129,6 +130,7 @@ class HandComponentGuide(HandComponent):
 
         self.handCtrl.xfo = data.get('handXfo')
         self.digitNamesAttr.setValue(data.get('digitNames'))
+        self.numJointsAttr.setValue(data.get('numJoints'))
 
         fingersGuideXfos = data.get('fingersGuideXfos')
         if fingersGuideXfos is not None:
@@ -150,25 +152,33 @@ class HandComponentGuide(HandComponent):
 
         data = super(HandComponentGuide, self).getRigBuildData()
 
+        data['handXfo'] = self.handCtrl.xfo
 
-        # Values
-        claviclePosition = self.clavicleCtrl.xfo.tr
-        clavicleUpV = self.clavicleUpVCtrl.xfo.tr
-        clavicleEndPosition = self.clavicleEndCtrl.xfo.tr
+        fingerData = {}
+        for finger in self.fingers.keys():
 
-        # Calculate Hand Xfo
-        rootToEnd = clavicleEndPosition.subtract(claviclePosition).unit()
-        rootToUpV = clavicleUpV.subtract(claviclePosition).unit()
-        bone1ZAxis = rootToUpV.cross(rootToEnd).unit()
-        bone1Normal = bone1ZAxis.cross(rootToEnd).unit()
+            utilXfo = Xfo()
 
-        clavicleXfo = Xfo()
-        clavicleXfo.setFromVectors(rootToEnd, bone1Normal, bone1ZAxis, claviclePosition)
+            fingerData[finger] = []
+            for i, joint in enumerate(self.fingers[finger]):
+                if i == len(self.fingers[finger]) - 1:
+                    continue
 
-        clavicleLen = claviclePosition.subtract(clavicleEndPosition).length()
+                # Calculate Xfo
+                boneVec = self.fingers[finger][i].xfo.tr - self.fingers[finger][i+1].xfo.tr
+                bone1Normal = self.fingers[finger][i].xfo.ori.getZaxis().cross(boneVec).unit()
+                bone1ZAxis = boneVec.cross(bone1Normal).unit()
 
-        data['clavicleXfo'] = clavicleXfo
-        data['clavicleLen'] = clavicleLen
+                utilXfo.setFromVectors(boneVec.unit(), bone1Normal, bone1ZAxis, self.fingers[finger][i].xfo.tr)
+
+                jointData = {
+                    'length': self.fingers[finger][i].xfo.tr.distanceTo(self.fingers[finger][i+1].xfo.tr),
+                    'xfo': utilXfo
+                }
+
+                fingerData[finger].append(jointData)
+
+        data['fingerData'] = fingerData
 
         return data
 
@@ -177,18 +187,23 @@ class HandComponentGuide(HandComponent):
     # Callbacks
     # ==========
     def addFinger(self, name):
-        firstDigitCtrl = Control(name + "01", parent=self.ctrlCmpGrp, shape='sphere')
+        firstDigitCtrl = Control(name + "01", parent=self.handCtrl, shape='sphere')
         firstDigitCtrl.setColor('orange')
-        firstDigitCtrl.scalePoints(Vec3(0.5, 0.5, 0.5))
+        firstDigitCtrl.scalePoints(Vec3(0.25, 0.25, 0.25))
+        firstDigitCtrl.lockScale(True, True, True)
 
         self.fingers[name] = []
         self.fingers[name].append(firstDigitCtrl)
 
         parent = firstDigitCtrl
-        for i in xrange(2, self.numJointsAttr.getValue() + 2):
+        numJoints = self.numJointsAttr.getValue()
+        if name == "thumb":
+            numJoints = 3
+        for i in xrange(2, numJoints + 2):
             digitCtrl = Control(name + str(i).zfill(2), parent=parent, shape='sphere')
             digitCtrl.setColor('orange')
-            digitCtrl.scalePoints(Vec3(0.5, 0.5, 0.5))
+            digitCtrl.scalePoints(Vec3(0.25, 0.25, 0.25))
+            digitCtrl.lockScale(True, True, True)
 
             self.fingers[name].append(digitCtrl)
 
@@ -197,25 +212,44 @@ class HandComponentGuide(HandComponent):
         return firstDigitCtrl
 
     def removeFinger(self, name):
+        self.handCtrl.removeChild(self.fingers[name][0])
         del self.fingers[name]
-        self.ctrlCmpGrp.removeChild(extraCtrl)
 
     def placeFingers(self):
 
-        spacing = 0.75
+        spacing = 0.5
         length = spacing * (len(self.fingers.keys()) - 1)
         mid = length / 2.0
         startOffset = length - mid
 
         for i, finger in enumerate(self.fingers.keys()):
 
-            for y in xrange(self.numJointsAttr.getValue() + 1):
-                fingerPos = self.handCtrl.xfo.transformVector(Vec3(y * 1.0, 0, startOffset - (i * spacing)))
+            parentCtrl = self.handCtrl
+            numJoints = self.numJointsAttr.getValue()
+            if finger == "thumb":
+                numJoints = 3
+            for y in xrange(numJoints + 1):
+                if y == 1:
+                    xOffset = 2
+                else:
+                    xOffset = 0.5
+
+                if y == 0:
+                    offsetVec = Vec3(xOffset, 0, startOffset - (i * spacing))
+                else:
+                    offsetVec = Vec3(xOffset, 0, 0)
+
+                fingerPos = parentCtrl.xfo.transformVector(offsetVec)
                 fingerXfo = Xfo(tr=fingerPos, ori=self.handCtrl.xfo.ori)
 
                 self.fingers[finger][y].xfo = fingerXfo
+                parentCtrl = self.fingers[finger][y]
 
     def updateFingers(self, fingers):
+
+        if " " in fingers:
+            self.digitNamesAttr.setValue(fingers.replace(" ", ""))
+            return
 
         fingerNames = fingers.split(',')
 
@@ -243,7 +277,9 @@ class HandComponentGuide(HandComponent):
                     prevDigit = self.fingers[finger][i - 1]
                     digitCtrl = Control(finger + str(i + 1).zfill(2), parent=prevDigit, shape='sphere')
                     digitCtrl.setColor('orange')
-                    digitCtrl.scalePoints(Vec3(0.5, 0.5, 0.5))
+                    digitCtrl.scalePoints(Vec3(0.25, 0.25, 0.25))
+                    digitCtrl.lockScale(True, True, True)
+
                     self.fingers[finger].append(digitCtrl)
 
             elif numJoints + 1 < len(self.fingers[finger]):
@@ -253,6 +289,7 @@ class HandComponentGuide(HandComponent):
                     removedJoint.getParent().removeChild(removedJoint)
 
         self.placeFingers()
+
 
     # ==============
     # Class Methods
@@ -293,9 +330,9 @@ class HandComponentRig(HandComponent):
         # Controls
         # =========
         # Hand
-        self.clavicleCtrlSpace = CtrlSpace('clavicle', parent=self.ctrlCmpGrp)
-        self.clavicleCtrl = Control('clavicle', parent=self.clavicleCtrlSpace, shape="cube")
-        self.clavicleCtrl.alignOnXAxis()
+        self.handCtrlSpace = CtrlSpace('hand', parent=self.ctrlCmpGrp)
+        self.handCtrl = Control('hand', parent=self.handCtrlSpace, shape="cube")
+        self.handCtrl.alignOnXAxis()
 
 
         # ==========
@@ -305,47 +342,34 @@ class HandComponentRig(HandComponent):
         defCmpGrp = ComponentGroup(self.getName(), self, parent=deformersLayer)
         self.ctrlCmpGrp.setComponent(self)
 
-        self.clavicleDef = Joint('clavicle', parent=defCmpGrp)
-        self.clavicleDef.setComponent(self)
+        self.handDef = Joint('hand', parent=defCmpGrp)
+        self.handDef.setComponent(self)
 
 
         # ==============
         # Constrain I/O
         # ==============
         # Constraint inputs
-        clavicleInputConstraint = PoseConstraint('_'.join([self.clavicleCtrl.getName(), 'To', self.armEndInputTgt.getName()]))
-        clavicleInputConstraint.setMaintainOffset(True)
-        clavicleInputConstraint.addConstrainer(self.armEndInputTgt)
-        self.clavicleCtrlSpace.addConstraint(clavicleInputConstraint)
+        self.armEndInputConstraint = PoseConstraint('_'.join([self.handCtrlSpace.getName(), 'To', self.armEndInputTgt.getName()]))
+        self.armEndInputConstraint.setMaintainOffset(True)
+        self.armEndInputConstraint.addConstrainer(self.armEndInputTgt)
+        self.handCtrlSpace.addConstraint(self.armEndInputConstraint)
 
         # Constraint outputs
-        clavicleConstraint = PoseConstraint('_'.join([self.clavicleOutputTgt.getName(), 'To', self.clavicleCtrl.getName()]))
-        clavicleConstraint.addConstrainer(self.clavicleCtrl)
-        self.clavicleOutputTgt.addConstraint(clavicleConstraint)
+        self.handOutputConstraint = PoseConstraint('_'.join([self.handOutputTgt.getName(), 'To', self.handCtrl.getName()]))
+        self.handOutputConstraint.addConstrainer(self.handCtrl)
+        self.handOutputTgt.addConstraint(self.handOutputConstraint)
 
-        clavicleEndConstraint = PoseConstraint('_'.join([self.clavicleEndOutputTgt.getName(), 'To', self.clavicleCtrl.getName()]))
-        clavicleEndConstraint.addConstrainer(self.clavicleCtrl)
-        self.clavicleEndOutputTgt.addConstraint(clavicleEndConstraint)
-
-
-        # ===============
-        # Add Splice Ops
-        # ===============
-        # Add Deformer Splice Op
-        spliceOp = KLOperator('clavicleDeformerKLOp', 'PoseConstraintSolver', 'Kraken')
-        self.addOperator(spliceOp)
-
-        # Add Att Inputs
-        spliceOp.setInput('drawDebug', self.drawDebugInputAttr)
-        spliceOp.setInput('rigScale', self.rigScaleInputAttr)
-
-        # Add Xfo Inputs
-        spliceOp.setInput('constrainer', self.clavicleOutputTgt)
-
-        # Add Xfo Outputs
-        spliceOp.setOutput('constrainee', self.clavicleDef)
+        # Constraint deformers
+        self.handDefConstraint = PoseConstraint('_'.join([self.handDef.getName(), 'To', self.handCtrl.getName()]))
+        self.handDefConstraint.addConstrainer(self.handCtrl)
+        self.handDef.addConstraint(self.handDefConstraint)
 
         Profiler.getInstance().pop()
+
+
+    def addFinger(self, fingerData):
+        pass
 
 
     def loadData(self, data=None):
@@ -361,21 +385,30 @@ class HandComponentRig(HandComponent):
 
         super(HandComponentRig, self).loadData( data )
 
-        self.clavicleCtrlSpace.xfo = data['clavicleXfo']
-        self.clavicleCtrl.xfo = data['clavicleXfo']
-        self.clavicleCtrl.scalePoints(Vec3(data['clavicleLen'], 0.75, 0.75))
+        fingerData = data.get('fingerData')
 
-        if data['location'] == "R":
-            self.clavicleCtrl.translatePoints(Vec3(0.0, 0.0, -1.0))
-        else:
-            self.clavicleCtrl.translatePoints(Vec3(0.0, 0.0, 1.0))
+        # TODO: Implement procedural addition of fingers including controls,
+        # deformers, and multi-pose constraint KL ops.
+
+        handXfo = data.get('handXfo', Xfo())
+
+        self.armEndInputTgt.xfo = handXfo
+
+        self.handCtrlSpace.xfo = handXfo
+        self.handCtrl.xfo = handXfo
+        # self.handCtrl.scalePoints(Vec3(data['clavicleLen'], 0.75, 0.75))
 
         # ============
         # Set IO Xfos
         # ============
-        self.armEndInputTgt.xfo = data['clavicleXfo']
-        self.clavicleEndOutputTgt.xfo = data['clavicleXfo']
-        self.clavicleOutputTgt.xfo = data['clavicleXfo']
+        # self.armEndInputTgt.xfo = data['clavicleXfo']
+        # self.clavicleEndOutputTgt.xfo = data['clavicleXfo']
+        # self.handOutputTgt.xfo = data['clavicleXfo']
+
+        # Eval Constraints
+        self.armEndInputConstraint.evaluate()
+        self.handOutputConstraint.evaluate()
+        self.handDefConstraint.evaluate()
 
 
 from kraken.core.kraken_system import KrakenSystem
