@@ -29,6 +29,7 @@ class PositionConstraint(Constraint):
             for constrainer in self.getConstrainers():
                 newTr = newTr.add(constrainer.xfo.tr)
 
+            newTr.multiplyScalar(1.0 / len(self.getConstrainers()))
             self.getConstrainee().xfo.tr = newTr
 
         return True
