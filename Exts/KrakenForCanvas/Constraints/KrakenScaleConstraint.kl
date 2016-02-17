@@ -1,6 +1,34 @@
 require Kraken;
 
-struct KrakenPositionConstraint : KrakenConstraint {
-  Vec3 offset;
+struct KrakenScaleConstraint : KrakenConstraint {
 };
 
+/// \dfgPresetFolder Constraints
+function KrakenScaleConstraint(
+  Xfo offset,
+) {
+  this.offset = offset;
+}
+
+/// \dfgPresetFolder Constraints
+function KrakenScaleConstraint.addConstrainer!(
+  Xfo constrainer
+) {
+  this.constrainers.push(constrainer);
+}
+
+/// \dfgPresetFolder Constraints
+function Xfo KrakenScaleConstraint.compute?(
+  Xfo xfo
+) {
+  Xfo result = xfo;
+  result.sc = Vec3();
+
+  for(Size i=0;i<this.constrainers.size();i++) {
+    result.sc = result.sc.add(this.constrainers[i].sc);
+  }
+
+  result.sc *= 1.0 / Float32(this.constrainers.size());
+
+  return result * this.offset;
+}

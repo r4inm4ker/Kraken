@@ -3,14 +3,22 @@ require Containers;
 require Kraken;
 
 struct KrakenObject3D {
-  Xfo xfo;
   String name;
   String buildName;
+  String path;
   String layer;
   String component;
-  Boolean visible;
+  Xfo xfo;
+  Boolean visibility;
   Color color;
   String flags[String];
-  GenericValueContainer attributeGroups[String];
 };
 
+/// \dfgPresetFolder Constraints
+function Xfo KrakenObject3D.transform?(Xfo child) {
+  return this.xfo * child;
+}
+
+function Xfo(KrakenObject3D k) {
+  this = k.xfo;
+}

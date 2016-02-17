@@ -10,12 +10,24 @@
     "Objects/KrakenTransform.kl",
     "Objects/KrakenCurve.kl",
     "Objects/KrakenControl.kl",
+    "Objects/KrakenComponentInput.kl",
+    "Objects/KrakenComponentOutput.kl",
+    "Objects/KrakenHierarchyGroup.kl",
     "Objects/KrakenRig.kl",
+    
+    "Attributes/KrakenAttribute.kl",
+    "Attributes/KrakenBoolAttribute.kl",
+    "Attributes/KrakenColorAttribute.kl",
+    "Attributes/KrakenIntegerAttribute.kl",
+    "Attributes/KrakenScalarAttribute.kl",
+    "Attributes/KrakenStringAttribute.kl",
 
     "Constraints/KrakenConstraint.kl",
     "Constraints/KrakenPoseConstraint.kl",
     "Constraints/KrakenPositionConstraint.kl",
     "Constraints/KrakenOrientationConstraint.kl",
-    "Constraints/KrakenScaleConstraint.kl"
+    "Constraints/KrakenScaleConstraint.kl",
+
+    "Shapes/KrakenCurveDict.kl"
   ]
 }

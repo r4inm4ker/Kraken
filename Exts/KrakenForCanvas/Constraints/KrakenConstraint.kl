@@ -1,6 +1,7 @@
 require Kraken;
 
 struct KrakenConstraint {
-  Boolean maintainOffset;
+  Xfo constrainers[];
+  Xfo offset;
 };
 

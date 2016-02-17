@@ -1,7 +1,28 @@
 require Kraken;
 
 struct KrakenCurve : KrakenObject3D {
-  UInt32 indices[];
-  Vec3 positions[];
+  String shapeHash;
 };
 
+/// \dfgPresetFolder Constructors
+function KrakenCurve(
+  String name,
+  String buildName,
+  String path,
+  String layer,
+  String component,
+  Xfo xfo,
+  Boolean visibility,
+  Color color,
+  String shapeHash
+) {
+  this.name = name;
+  this.buildName = buildName;
+  this.path = path;
+  this.layer = layer;
+  this.component = component;
+  this.xfo = xfo;
+  this.visibility = visibility;
+  this.color = color;
+  this.shapeHash = shapeHash;
+}

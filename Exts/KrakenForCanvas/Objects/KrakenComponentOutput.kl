@@ -1,10 +1,10 @@
 require Kraken;
 
-struct KrakenRig : KrakenContainer {
+struct KrakenComponentOutput : KrakenObject3D {
 };
 
 /// \dfgPresetFolder Constructors
-function KrakenRig(
+function KrakenComponentOutput(
   String name,
   String buildName,
   String path,
