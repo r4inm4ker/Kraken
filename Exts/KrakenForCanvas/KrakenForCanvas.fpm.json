@@ -10,8 +10,6 @@
     "Objects/KrakenTransform.kl",
     "Objects/KrakenCurve.kl",
     "Objects/KrakenControl.kl",
-    "Objects/KrakenComponentInput.kl",
-    "Objects/KrakenComponentOutput.kl",
     "Objects/KrakenHierarchyGroup.kl",
     "Objects/KrakenRig.kl",
     

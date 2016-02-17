@@ -32,3 +32,15 @@ function Xfo KrakenOrientationConstraint.compute?(
 
   return result * this.offset;
 }
+
+/// \dfgPresetOmit
+function Xfo KrakenOrientationConstraint.computeOffset?(
+  Xfo constrainee
+) {
+
+  KrakenOrientationConstraint tmpConstraint(Xfo());
+  tmpConstraint.constrainers = this.constrainers;
+
+  Xfo global = tmpConstraint.compute(constrainee);
+  return global.inverse() * constrainee;
+}

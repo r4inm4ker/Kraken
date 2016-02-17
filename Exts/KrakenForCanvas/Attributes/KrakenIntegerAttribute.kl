@@ -22,6 +22,10 @@ function KrakenIntegerAttribute(
   this.animatable = animatable;
   this.min = min;
   this.max = max;
-  this.value = value < min ? min : (value > max ? max : value);
+  this.value = min >= max ? value : (value < min ? min : (value > max ? max : value));
 }
 
+
+function Integer(KrakenIntegerAttribute attr) {
+  this = attr.value;
+}

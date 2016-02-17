@@ -19,3 +19,6 @@ function KrakenBoolAttribute(
   this.value = value;
 }
 
+function Boolean(KrakenBoolAttribute attr) {
+  this = attr.value;
+}

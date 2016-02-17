@@ -2,6 +2,7 @@
 {
   "objectType" : "Func",
   "metadata" : {
+    "uiNodeColor" : "{\n  \"r\" : 99,\n  \"g\" : 129,\n  \"b\" : 92\n  }",
     "uiTooltip" : "Supported types:\n  this: KrakenPoseConstraint, KrakenPositionConstraint, KrakenOrientationConstraint, KrakenScaleConstraint\n  xfo: Xfo\n  result: Xfo\n"
     },
   "title" : "Compute",

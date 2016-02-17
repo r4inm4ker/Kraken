@@ -9,14 +9,11 @@ from kraken import plugins
 from kraken.core.objects.locator import Locator
 from kraken.core.objects.rig import Rig
 
-print 'loading %s rig' % args[0]
 guideRig = Rig()
 guideRig.loadRigDefinitionFile(args[0])
 
 rig = Rig()
 rig.loadRigDefinition(guideRig.getRigBuildData())
-# myLoc = Locator("myLocator")
-# myLoc.setColor('red')
 
 builder = plugins.getBuilder()
 builder.setOutputFilePath(args[1])

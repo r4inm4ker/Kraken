@@ -18,4 +18,3 @@ function KrakenStringAttribute(
   this.animatable = animatable;
   this.value = value;
 }
-

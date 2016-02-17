@@ -24,12 +24,14 @@ class Builder(Builder):
     __outputFilePath = None
     __dfgBinding = None
     __dfgTopLevelGraph = None
-    __dfgNodes = None
+    __dfgNodes = None # todo: to be replaced by _registerSceneItemPair, getDCCSceneItem
     __dfgConstructors = None
     __dfgCurves = None
     __dfgLastCurveNode = None
     __dfgAttributes = None
     __dfgConstraints = None
+    __dfgComponentPortMap = None
+    __dfgTransforms = None
 
     def __init__(self):
         super(Builder, self).__init__()
@@ -57,7 +59,15 @@ class Builder(Builder):
         new_o = copy.deepcopy(o)
         for k, v in new_o.items():
             new_o[k] = self.makeHash(v)
-        return hash(tuple(frozenset(sorted(new_o.items()))))        
+        return hash(tuple(frozenset(sorted(new_o.items()))))  
+
+    def getAttributeNodeAndPort(self, kAttribute):
+      path = kAttribute.getPath()
+      if self.__dfgAttributes.has_key(path):
+        return (self.__dfgAttributes[path], 'value')
+
+      objPath = path.rpartition('.')[0].rpartition('.')[0]
+      return (self.__dfgNodes[objPath], kAttribute.getName())
 
     # ========================
     # IO Methods
@@ -71,6 +81,10 @@ class Builder(Builder):
 
     def setPortDefaultValue(self, kObj, port, value):
         path = kObj.getPath()
+
+        if self.__dfgComponentPortMap.has_key(path):
+          return True
+
         if not self.__dfgNodes.has_key(path):
             self.reportError('No DFG node has been created for path '+path)
             return False
@@ -95,10 +109,18 @@ class Builder(Builder):
 
     def buildCanvasNodeFromSceneItem(self, kSceneItem, buildName):
         cls = kSceneItem.__class__.__name__
+        if cls in [
+          'ComponentInput',
+          'ComponentOutput'
+        ]:
+          cls = 'Transform'
+          # todo: we need to filter these out,
+          # and somehow relay connections to them
+          # self.__dfgComponentPortMap[kSceneItem.getPath()] = None
+          # return kSceneItem
+
         if not cls in [
             'ComponentGroup',
-            'ComponentInput',
-            'ComponentOutput',
             'Container',
             'CtrlSpace',
             'Curve',
@@ -118,6 +140,7 @@ class Builder(Builder):
         nodePath = self.__dfgTopLevelGraph.addInstFromPreset(preset)
         self.__dfgNodes[path] = nodePath
         self.__dfgConstructors[path] = nodePath
+        self.__dfgTransforms[path] = (nodePath, 'xfo')
 
         # set the defaults
         self.setPortDefaultValue(kSceneItem, "name", kSceneItem.getName())
@@ -149,6 +172,19 @@ class Builder(Builder):
             shapeHash = self.buildCanvasCurveShape(curveData)
             self.setPortDefaultValue(kSceneItem, "shapeHash", shapeHash)
 
+        if hasattr(kSceneItem, 'getParent'):
+            parent = kSceneItem.getParent()
+            if not parent is None:
+              parentPath = parent.getPath()
+              if self.__dfgTransforms.has_key(parentPath):
+                (parentNode, parentPort) = self.__dfgTransforms[parentPath]
+                (childNode, childPort) = self.__dfgTransforms[path]
+                preset = "Fabric.Core.Math.Mul"
+                transformNode = self.__dfgTopLevelGraph.addInstFromPreset(preset)
+                self.__dfgTopLevelGraph.connectTo(parentNode+'.'+parentPort, transformNode+'.lhs')
+                self.__dfgTopLevelGraph.connectTo(childNode+'.'+childPort, transformNode+'.rhs')
+                self.__dfgTransforms[path] = (transformNode, 'result')
+
         return True
 
     def buildCanvasNodeFromAttribute(self, kAttribute):
@@ -175,6 +211,11 @@ class Builder(Builder):
         self.setPortDefaultValue(kAttribute, "keyable", kAttribute.getKeyable())
         self.setPortDefaultValue(kAttribute, "animatable", kAttribute.getAnimatable())
         self.setPortDefaultValue(kAttribute, "value", kAttribute.getValue())
+        for propName in ['min', 'max']:
+          methodName = 'get' + propName.capitalize()
+          if not hasattr(kAttribute, methodName):
+            continue
+          self.setPortDefaultValue(kAttribute, propName, getattr(kAttribute, methodName)())
 
         return True
 
@@ -197,6 +238,8 @@ class Builder(Builder):
         lastNode = constructNode
         lastPort = "result"
 
+        # todo: compute the offset if the constraint is set to maintain offset!
+
         constrainers = kConstraint.getConstrainers()
         for constrainer in constrainers:
           preset = "Kraken.Constraints.AddConstrainer"
@@ -204,18 +247,22 @@ class Builder(Builder):
 
           self.__dfgTopLevelGraph.connectTo(lastNode+"."+lastPort, addNode+'.this')
 
+          constrainerPath = constrainer.getPath()
+          (constrainerNode, constrainerPort) = self.__dfgTransforms[constrainerPath]
+          self.__dfgTopLevelGraph.connectTo(constrainerNode+"."+constrainerPort, addNode+'.constrainer')
+
           lastNode = addNode
           lastPort = 'this'
 
-        # # set the defaults
-        # self.setPortDefaultValue(kConstraint, "name", kConstraint.getName())
-        # self.setPortDefaultValue(kConstraint, "path", kConstraint.getPath())
-        # self.setPortDefaultValue(kConstraint, "keyable", kConstraint.getKeyable())
-        # self.setPortDefaultValue(kConstraint, "animatable", kConstraint.getAnimatable())
-        # self.setPortDefaultValue(kConstraint, "value", kConstraint.getValue())
+        constraineePath = kConstraint.getConstrainee().getPath()
+        (constraineeNode, constraineePort) = self.__dfgTransforms[constraineePath]
 
-        self.__dfgNodes[path] = nodes
-        self.__dfgAttributes[path] = nodes
+        preset = "Kraken.Constraints.Compute"
+        computeNode = self.__dfgTopLevelGraph.addInstFromPreset(preset)
+        self.__dfgTopLevelGraph.connectTo(lastNode+"."+lastPort, computeNode+'.this')
+        self.__dfgTopLevelGraph.connectTo(constraineeNode+"."+constraineePort, computeNode+'.xfo')
+
+        self.__dfgTransforms[constraineePath] = (computeNode, 'result')
 
         return None
 
@@ -414,6 +461,10 @@ class Builder(Builder):
             bool: True if successful.
 
         """
+
+        if kAttribute.getName() in ['visibility', 'shapeVisibility']:
+          return True
+
         return self.buildCanvasNodeFromAttribute(kAttribute)
 
     def buildScalarAttribute(self, kAttribute):
@@ -497,12 +548,12 @@ class Builder(Builder):
 
         connection = kAttribute.getConnection()
 
-        nodeA = self.__dfgAttributes.get(connection.getPath(), None)
-        nodeB = self.__dfgAttributes.get(kAttribute.getPath(), None)
+        (nodeA, portA) = self.getAttributeNodeAndPort(connection)
+        (nodeB, portB) = self.getAttributeNodeAndPort(kAttribute)
         if nodeA is None or nodeB is None:
           return False
 
-        self.__dfgTopLevelGraph.connectTo(nodeA+".value", nodeB+'.value')
+        self.__dfgTopLevelGraph.connectTo(nodeA+"."+portA, nodeB+'.'+portB)
         return True
 
 
@@ -691,6 +742,8 @@ class Builder(Builder):
             self.__dfgConstructors = {}
             self.__dfgAttributes = {}
             self.__dfgConstraints = {}
+            self.__dfgComponentPortMap = {}
+            self.__dfgTransforms = {}
 
         except Exception as e:
             self.reportError(e)

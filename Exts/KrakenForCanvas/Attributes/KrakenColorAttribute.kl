@@ -19,3 +19,6 @@ function KrakenColorAttribute(
   this.value = value;
 }
 
+function Color(KrakenColorAttribute attr) {
+  this = attr.value;
+}

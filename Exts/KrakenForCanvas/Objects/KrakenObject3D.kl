@@ -14,11 +14,6 @@ struct KrakenObject3D {
   String flags[String];
 };
 
-/// \dfgPresetFolder Constraints
-function Xfo KrakenObject3D.transform?(Xfo child) {
-  return this.xfo * child;
-}
-
 function Xfo(KrakenObject3D k) {
   this = k.xfo;
 }

@@ -22,6 +22,9 @@ function KrakenScalarAttribute(
   this.animatable = animatable;
   this.min = min;
   this.max = max;
-  this.value = value < min ? min : (value > max ? max : value);
+  this.value = min >= max ? value : (value < min ? min : (value > max ? max : value));
 }
 
+function Scalar(KrakenScalarAttribute attr) {
+  this = attr.value;
+}

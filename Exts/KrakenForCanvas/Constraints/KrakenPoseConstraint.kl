@@ -1,5 +1,6 @@
 require Kraken;
 
+/// \dfgPresetColor Color(99, 129, 92)
 struct KrakenPoseConstraint : KrakenConstraint {
 };
 
@@ -34,4 +35,16 @@ function Xfo KrakenPoseConstraint.compute?(
   result.tr *= 1.0 / Float32(this.constrainers.size());
   
   return result * this.offset;
+}
+
+/// \dfgPresetOmit
+function Xfo KrakenPoseConstraint.computeOffset?(
+  Xfo constrainee
+) {
+
+  KrakenPoseConstraint tmpConstraint(Xfo());
+  tmpConstraint.constrainers = this.constrainers;
+
+  Xfo global = tmpConstraint.compute(constrainee);
+  return global.inverse() * constrainee;
 }
