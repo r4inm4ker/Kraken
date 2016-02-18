@@ -28,6 +28,8 @@ function PoseConstraintSolver.solve!
   // Set debugging visibility.
   this.setDebug(this.drawDebug);
   if(this.drawDebug){
+    if(!this.handle)
+      this.handle = DrawingHandle();
     Color boneColor = Color(0.0, 0.0, 1.0);
     etDrawBone(this.handle.rootTransform, 'singleBone', constrainer, 1.0, 0.25, boneColor);
   }

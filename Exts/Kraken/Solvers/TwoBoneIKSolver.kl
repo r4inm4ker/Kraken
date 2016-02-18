@@ -154,7 +154,8 @@ function TwoBoneIKSolver.solve!
   // Set debugging visibility.
   this.setDebug(drawDebug);
   if(this.drawDebug){
-
+    if(!this.handle)
+      this.handle = DrawingHandle();
     Color boneColor(1.0, 1.0, 0);
     etDrawBone(this.handle.rootTransform, 'bone0', bone0Xfo, scaledBone0Len, scaledBone0Len * 0.15, boneColor);
     etDrawBone(this.handle.rootTransform, 'bone1', bone1Xfo, scaledBone1Len, scaledBone1Len * 0.15, boneColor);

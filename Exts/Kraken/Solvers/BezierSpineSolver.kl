@@ -147,6 +147,8 @@ function BezierSpineSolver.solve!
   // Set debugging visibility.
   this.setDebug(drawDebug);
   if(this.drawDebug){
+    if(!this.handle)
+      this.handle = DrawingHandle();
 
     Vec3 positions[];
     for(UInt32 i=0; i<=20; i++){
