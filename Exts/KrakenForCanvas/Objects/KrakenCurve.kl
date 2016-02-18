@@ -34,5 +34,4 @@ function Xfo KrakenCurve.getXfo() {
 
 /// \dfgPresetFolder DebugDrawing
 function KrakenCurve.drawIntoLinesObject(Xfo xfo, io Lines lines) {
-  KrakenObject3D_DrawIntoLinesObject(this, xfo, this.visibility, lines);
 }

@@ -31,5 +31,4 @@ function Xfo KrakenLocator.getXfo() {
 
 /// \dfgPresetFolder DebugDrawing
 function KrakenLocator.drawIntoLinesObject(Xfo xfo, io Lines lines) {
-  KrakenObject3D_DrawIntoLinesObject(this, xfo, this.visibility, lines);
 }

@@ -31,5 +31,4 @@ function Xfo KrakenHierarchyGroup.getXfo() {
 
 /// \dfgPresetFolder DebugDrawing
 function KrakenHierarchyGroup.drawIntoLinesObject(Xfo xfo, io Lines lines) {
-  KrakenObject3D_DrawIntoLinesObject(this, xfo, this.visibility, lines);
 }

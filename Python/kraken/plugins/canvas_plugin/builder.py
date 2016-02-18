@@ -113,7 +113,7 @@ class Builder(Builder):
             prevConnections = self.getConnections(prevNode, prevPort)
 
         self.__dfgTransforms[kSceneItem.getPath()] = (node, port)
-        self.report('%s is now driven by %s.%s' % (kSceneItem.getPath(), node, port))
+        # self.report('%s is now driven by %s.%s' % (kSceneItem.getPath(), node, port))
 
         for c in prevConnections:
             if c[0] == node:
@@ -202,7 +202,7 @@ class Builder(Builder):
                 self.reportError('Cannot connect - incompatible type specs %s and %s.' % (typeA, typeB))
 
         result = self.__dfgTopLevelGraph.connectTo(nodeA+'.'+portA, nodeB+'.'+portB)
-        self.report('Connected %s.%s to %s.%s' % (nodeA, portA, nodeB, portB))
+        # self.report('Connected %s.%s to %s.%s' % (nodeA, portA, nodeB, portB))
 
         if not self.__dfgConnections.has_key(nodeA):
           self.__dfgConnections[nodeA] = {}
@@ -218,10 +218,10 @@ class Builder(Builder):
     def connectCanvasArg(self, argA, argB, argC, argIsInput = True):
         if argIsInput:
             self.__dfgTopLevelGraph.connectTo(argA, argB+'.'+argC)
-            self.report('Connected %s to %s.%s' % (argA, argB, argC))
+            # self.report('Connected %s to %s.%s' % (argA, argB, argC))
         else:
             self.__dfgTopLevelGraph.connectTo(argA+'.'+argB, argC)
-            self.report('Connected %s.%s to %s' % (argA, argB, argC))
+            # self.report('Connected %s.%s to %s' % (argA, argB, argC))
 
     def removeConnection(self, node, port):
         result = False
@@ -316,7 +316,7 @@ class Builder(Builder):
         if errors and len(errors) > 0:
             raise Exception(str(errors))
 
-        self.report(prefix+"Computing intermediate value "+port)
+        # self.report(prefix+"Computing intermediate value "+port)
         self.__dfgBinding.execute()
 
         value = self.__dfgBinding.getArgValue(intermediatePort)
@@ -432,17 +432,21 @@ class Builder(Builder):
                 linesNode = self.createCanvasNodeFromPreset(preset)
                 self.__dfgLastLinesNode = (linesNode, 'lines')
 
-            (prevNode, prevPort) = self.__dfgLastLinesNode
-            preset = "Kraken.DebugDrawing.DrawIntoLinesObject"
-            if isinstance(kSceneItem, Control):
-              preset = "Kraken.DebugDrawing.DrawIntoLinesObjectForControl"
-            drawNode = self.createCanvasNodeFromPreset(preset)
-            self.connectCanvasNodes(nodePath, 'result', drawNode, 'this')
-            self.connectCanvasNodes(xfoNode, 'result', drawNode, 'xfo')
-            if isinstance(kSceneItem, Control):
-              self.connectCanvasNodes(self.__dfgLastCurveNode, 'this', drawNode, 'shapes')
-            self.connectCanvasNodes(prevNode, prevPort, drawNode, 'lines')
-            self.__dfgLastLinesNode = (drawNode, 'lines')
+            if cls in [
+                'Control',
+                'Joint'
+            ]:
+              (prevNode, prevPort) = self.__dfgLastLinesNode
+              preset = "Kraken.DebugDrawing.DrawIntoLinesObject"
+              if isinstance(kSceneItem, Control):
+                preset = "Kraken.DebugDrawing.DrawIntoLinesObjectForControl"
+              drawNode = self.createCanvasNodeFromPreset(preset)
+              self.connectCanvasNodes(nodePath, 'result', drawNode, 'this')
+              self.connectCanvasNodes(xfoNode, 'result', drawNode, 'xfo')
+              if isinstance(kSceneItem, Control):
+                self.connectCanvasNodes(self.__dfgLastCurveNode, 'this', drawNode, 'shapes')
+              self.connectCanvasNodes(prevNode, prevPort, drawNode, 'lines')
+              self.__dfgLastLinesNode = (drawNode, 'lines')
 
         if hasattr(kSceneItem, 'getParent'):
             parent = kSceneItem.getParent()
@@ -974,6 +978,7 @@ class Builder(Builder):
             bool: True if successful.
 
         """
+        # todo
         self.reportError("buildAttributeConnection not yet implemented.")
         return False
 
@@ -1187,7 +1192,6 @@ class Builder(Builder):
 
         (node, port) = self.getSceneItemNodeAndPort(kSceneItem, asInput = True)
         if node != self.__dfgNodes[kSceneItem.getPath()]:
-          self.report('Setting global transform on '+kSceneItem.getPath())
           self.setPortDefaultValue(kSceneItem, "xfo", Xfo())
           parentXfo = Xfo(self.getIntermediateValue(node, port, kSceneItem.getPath()))
           invXfo = parentXfo.inverse()

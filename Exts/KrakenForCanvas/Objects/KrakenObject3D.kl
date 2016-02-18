@@ -34,5 +34,4 @@ function KrakenObject3D_DrawIntoLinesObject(KrakenObject3D obj, Xfo xfo, Boolean
 
 /// \dfgPresetFolder DebugDrawing
 function KrakenObject3D.drawIntoLinesObject(Xfo xfo, io Lines lines) {
-  KrakenObject3D_DrawIntoLinesObject(this, xfo, this.visibility, lines);
 }
