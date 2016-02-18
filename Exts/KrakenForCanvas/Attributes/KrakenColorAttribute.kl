@@ -19,6 +19,7 @@ function KrakenColorAttribute(
   this.value = value;
 }
 
-function Color(KrakenColorAttribute attr) {
-  this = attr.value;
+/// \dfgPresetFolder Attributes
+function Color KrakenColorAttribute.getColorValue() {
+  return this.value;
 }

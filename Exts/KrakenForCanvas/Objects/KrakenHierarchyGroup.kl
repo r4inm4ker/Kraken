@@ -24,6 +24,11 @@ function KrakenHierarchyGroup(
   this.color = color;
 }
 
+/// \dfgPresetFolder Objects
+function Xfo KrakenHierarchyGroup.getXfo() {
+  return this.xfo;
+}
+
 /// \dfgPresetFolder DebugDrawing
 function KrakenHierarchyGroup.drawIntoLinesObject(Xfo xfo, io Lines lines) {
   KrakenObject3D_DrawIntoLinesObject(this, xfo, this.visibility, lines);

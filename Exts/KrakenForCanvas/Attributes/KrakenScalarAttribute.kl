@@ -28,6 +28,7 @@ function KrakenScalarAttribute(
   this.value = min >= max ? value : (this.value < min ? min : (this.value > max ? max : this.value));
 }
 
-function Scalar(KrakenScalarAttribute attr) {
-  this = attr.value;
+/// \dfgPresetFolder Attributes
+function Scalar KrakenScalarAttribute.getScalarValue() {
+  return this.value;
 }

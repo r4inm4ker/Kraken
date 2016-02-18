@@ -27,6 +27,11 @@ function KrakenCurve(
   this.shapeHash = shapeHash;
 }
 
+/// \dfgPresetFolder Objects
+function Xfo KrakenCurve.getXfo() {
+  return this.xfo;
+}
+
 /// \dfgPresetFolder DebugDrawing
 function KrakenCurve.drawIntoLinesObject(Xfo xfo, io Lines lines) {
   KrakenObject3D_DrawIntoLinesObject(this, xfo, this.visibility, lines);

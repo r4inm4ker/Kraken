@@ -72,7 +72,8 @@ class KrakenSystem(object):
                     host = 'Python'
 
             if host == "Python":
-                self.client = FabricEngine.Core.createClient({'optimizeSynchronously': True, 'guarded': True})
+                # self.client = FabricEngine.Core.createClient({'optimizeSynchronously': True, 'guarded': True})
+                self.client = FabricEngine.Core.createClient({'guarded': True})
 
             elif host == "Maya":
                 contextID = cmds.fabricSplice('getClientContextID')

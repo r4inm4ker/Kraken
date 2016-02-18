@@ -54,15 +54,18 @@ function KrakenControl(
   }
 }
 
+/// \dfgPresetFolder Objects
+function Xfo KrakenControl.getXfo() {
+  return this.xfo;
+}
+
 /// \dfgPresetFolder DebugDrawing
 function KrakenControl.drawIntoLinesObjectForControl(Xfo xfo, KrakenCurveDict shapes, io Lines lines) {
   if(!this.visibility)
     return;
   KrakenCurveData curve = shapes.curves.get(this.shapeHash, KrakenCurveData());
-  if(curve.indices.size() == 0) {
-    report(this.shapeHash);
+  if(curve.indices.size() == 0)
     return;
-  }
 
   Size firstIndex = lines.pointCount();
   Size iidx = lines.indices.size();

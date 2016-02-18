@@ -24,6 +24,11 @@ function KrakenTransform(
   this.color = color;
 }
 
+/// \dfgPresetFolder Objects
+function Xfo KrakenTransform.getXfo() {
+  return this.xfo;
+}
+
 /// \dfgPresetFolder DebugDrawing
 function KrakenTransform.drawIntoLinesObject(Xfo xfo, io Lines lines) {
   KrakenObject3D_DrawIntoLinesObject(this, xfo, this.visibility, lines);

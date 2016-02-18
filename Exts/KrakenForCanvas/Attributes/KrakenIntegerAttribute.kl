@@ -25,7 +25,7 @@ function KrakenIntegerAttribute(
   this.value = min >= max ? value : (value < min ? min : (value > max ? max : value));
 }
 
-
-function Integer(KrakenIntegerAttribute attr) {
-  this = attr.value;
+/// \dfgPresetFolder Attributes
+function Integer KrakenIntegerAttribute.getIntegerValue() {
+  return this.value;
 }

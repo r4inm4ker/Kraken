@@ -24,6 +24,11 @@ function KrakenRig(
   this.color = color;
 }
 
+/// \dfgPresetFolder Objects
+function Xfo KrakenRig.getXfo() {
+  return this.xfo;
+}
+
 /// \dfgPresetFolder DebugDrawing
 function KrakenRig.drawIntoLinesObject(Xfo xfo, io Lines lines) {
   if(!this.visibility)

@@ -19,6 +19,7 @@ function KrakenBoolAttribute(
   this.value = value;
 }
 
-function Boolean(KrakenBoolAttribute attr) {
-  this = attr.value;
+/// \dfgPresetFolder Attributes
+function Boolean KrakenBoolAttribute.getBoolValue() {
+  return this.value;
 }

@@ -24,6 +24,11 @@ function KrakenCtrlSpace(
   this.color = color;
 }
 
+/// \dfgPresetFolder Objects
+function Xfo KrakenCtrlSpace.getXfo() {
+  return this.xfo;
+}
+
 /// \dfgPresetFolder DebugDrawing
 function KrakenCtrlSpace.drawIntoLinesObject(Xfo xfo, io Lines lines) {
   KrakenObject3D_DrawIntoLinesObject(this, xfo, this.visibility, lines);

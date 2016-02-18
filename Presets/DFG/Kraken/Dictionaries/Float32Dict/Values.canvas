@@ -1,0 +1,15 @@
+{
+	"objectType": "Function",
+	"title": "Values",
+	"ports": [
+    {"name": "dict", "title": "dict", "portType": "In", "dataType": "Float32[String]"},
+		{"name": "values", "title": "values", "portType": "Out", "dataType": "Float32[]"},
+	],
+	"presetGUID" : "7D28B3909EDB1FC2C67D8F6DBECF4FBB",
+	"code": "
+dfgEntry {
+  for(key in dict)
+    values.push(dict[key]);
+}
+"
+}

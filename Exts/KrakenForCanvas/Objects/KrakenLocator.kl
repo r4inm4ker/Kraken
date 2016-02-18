@@ -24,6 +24,11 @@ function KrakenLocator(
   this.color = color;
 }
 
+/// \dfgPresetFolder Objects
+function Xfo KrakenLocator.getXfo() {
+  return this.xfo;
+}
+
 /// \dfgPresetFolder DebugDrawing
 function KrakenLocator.drawIntoLinesObject(Xfo xfo, io Lines lines) {
   KrakenObject3D_DrawIntoLinesObject(this, xfo, this.visibility, lines);

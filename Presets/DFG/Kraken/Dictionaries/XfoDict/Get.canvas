@@ -1,0 +1,16 @@
+{
+	"objectType": "Function",
+	"title": "Get",
+	"ports": [
+    {"name": "dict", "title": "dict", "portType": "In", "dataType": "Xfo[String]"},
+    {"name": "key", "title": "key", "portType": "In", "dataType": "String"},
+    {"name": "deflt", "title": "deflt", "portType": "In", "dataType": "Xfo"},
+		{"name": "result", "title": "result", "portType": "Out", "dataType": "Xfo"},
+	],
+	"presetGUID" : "6435B01EAEB9B2A0E5208E2688E87FB9",
+	"code": "
+dfgEntry {
+	result = dict.get(key, dflt);
+}
+"
+}

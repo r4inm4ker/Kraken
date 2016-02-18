@@ -18,3 +18,8 @@ function KrakenStringAttribute(
   this.animatable = animatable;
   this.value = value;
 }
+
+/// \dfgPresetFolder Attributes
+function String KrakenStringAttribute.getStringValue() {
+  return this.value;
+}
