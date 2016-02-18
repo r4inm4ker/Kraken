@@ -4,6 +4,11 @@ Kraken
 ======
 Kraken provides a flexible, customizable and extendable framework that leverages Fabric Engine’s Splice & Canvas API's. Kraken deploys across 3D applications and because of its use of Fabric Engine's Splice & Canvas API's, maintains functionality no matter what DCC is used to build a rig.
 
+Web Page & Documentation
+------------------------
+[Kraken Github Page](http://fabric-engine.github.io/Kraken)
+[Kraken Documentation](http://kraken-rigging-framework.readthedocs.org/en/1.1.0/)
+
 Development Guidelines
 ----------------------
 Developers wishing to contribute to Kraken should read the guidelines located

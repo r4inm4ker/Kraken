@@ -9,6 +9,9 @@ Kraken uses 4 spaces for tabs and developers should adjust their IDE / Editors t
 All methods need to have doc strings. **ALL**. Doc strings are to be formatted using the Google Python Style.
 [Google Python Style](http://google.github.io/styleguide/pyguide.html "Google Python Style")
 
+The Kraken documentation is built by [Sphinx](http://www.sphinx-doc.org/en/stable/) and uses the Napolean plug-in to create well formatted
+doc strings within the generated doc strings.
+
 ## Sublime Settings & Snippets
 Developers should adjust Sublime using the following preferences to ensure that the code is as clean as possible.
 
