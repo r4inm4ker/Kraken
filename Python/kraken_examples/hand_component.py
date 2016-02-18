@@ -129,8 +129,8 @@ class HandComponentGuide(HandComponent):
         super(HandComponentGuide, self).loadData( data )
 
         self.handCtrl.xfo = data.get('handXfo')
-        self.digitNamesAttr.setValue(data.get('digitNames'))
         self.numJointsAttr.setValue(data.get('numJoints'))
+        self.digitNamesAttr.setValue(data.get('digitNames'))
 
         fingersGuideXfos = data.get('fingersGuideXfos')
         if fingersGuideXfos is not None:
