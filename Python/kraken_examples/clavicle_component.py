@@ -201,11 +201,11 @@ class ClavicleComponentRig(ClavicleComponent):
         # ==========
         # Deformers
         # ==========
-        deformersLayer = self.getOrCreateLayer('deformers')
-        defCmpGrp = ComponentGroup(self.getName(), self, parent=deformersLayer)
-        self.ctrlCmpGrp.setComponent(self)
+        self.deformersLayer = self.getOrCreateLayer('deformers')
+        self.defCmpGrp = ComponentGroup(self.getName(), self, parent=self.deformersLayer)
+        self.defCmpGrp.setComponent(self)
 
-        self.clavicleDef = Joint('clavicle', parent=defCmpGrp)
+        self.clavicleDef = Joint('clavicle', parent=self.defCmpGrp)
         self.clavicleDef.setComponent(self)
 
 

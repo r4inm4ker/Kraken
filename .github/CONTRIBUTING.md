@@ -1,0 +1,12 @@
+# Kraken Development Guidelines
+
+
+## Sublime Settings
+
+```json
+"translate_tabs_to_spaces": true,
+"trim_trailing_white_space_on_save": true
+```
+
+
+## Testing

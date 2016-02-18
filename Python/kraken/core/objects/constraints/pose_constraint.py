@@ -33,6 +33,7 @@ class PoseConstraint(Constraint):
                 newXfo.tr = newXfo.tr.add(constrainer.xfo.tr)
                 newXfo.ori = newXfo.ori.add(constrainer.xfo.ori)
 
+            newXfo.tr.multiplyScalar(1.0 / len(self.getConstrainers()))
             newXfo.ori.setUnit()
             self.getConstrainee().xfo = newXfo
 
