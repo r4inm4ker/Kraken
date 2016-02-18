@@ -20,6 +20,7 @@ builder.setOutputFilePath(args[1])
 
 config = builder.getConfig()
 config.setExplicitNaming(True)
+config.setMetaData('DebugDrawingSupport', True)
 
 builder.build(rig)
 

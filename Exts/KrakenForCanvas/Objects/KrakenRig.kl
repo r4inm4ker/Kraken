@@ -3,7 +3,7 @@ require Kraken;
 struct KrakenRig : KrakenContainer {
 };
 
-/// \dfgPresetFolder Constructors
+/// \dfgPresetFolder Objects
 function KrakenRig(
   String name,
   String buildName,
@@ -22,4 +22,13 @@ function KrakenRig(
   this.xfo = xfo;
   this.visibility = visibility;
   this.color = color;
+}
+
+/// \dfgPresetFolder DebugDrawing
+function KrakenRig.drawIntoLinesObject(Xfo xfo, io Lines lines) {
+  if(!this.visibility)
+    return;
+  Size firstIndex = lines.pointCount();
+  lines.addRectangle(xfo, 10.0, 10.0);
+  KrakenObject3D_DrawIntoLines_VertexColors(this, firstIndex, lines);
 }

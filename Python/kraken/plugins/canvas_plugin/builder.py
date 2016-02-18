@@ -38,6 +38,7 @@ class Builder(Builder):
     __dfgComponentPortMap = None
     __dfgTransforms = None
     __dfgConnections = None
+    __dfgLastLinesNode = None
     __layoutG = None
     __layoutFunc = None
 
@@ -406,6 +407,25 @@ class Builder(Builder):
             curveData = kSceneItem.getCurveData()
             shapeHash = self.buildCanvasCurveShape(curveData)
             self.setPortDefaultValue(kSceneItem, "shapeHash", shapeHash)
+
+        if self.getConfig().getMetaData('DebugDrawingSupport', False):
+            if not self.__dfgLastLinesNode:
+                preset = "Fabric.Exts.Geometry.Lines.EmptyLines"
+                linesNode = self.createCanvasNodeFromPreset(preset)
+                self.__dfgLastLinesNode = (linesNode, 'lines')
+
+            (prevNode, prevPort) = self.__dfgLastLinesNode
+            preset = "Kraken.DebugDrawing.DrawIntoLinesObject"
+            if isinstance(kSceneItem, Control):
+              preset = "Kraken.DebugDrawing.DrawIntoLinesObjectForControl"
+            drawNode = self.createCanvasNodeFromPreset(preset)
+            self.connectCanvasNodes(nodePath, 'result', drawNode, 'this')
+            self.connectCanvasNodes(nodePath, 'xfo', drawNode, 'xfo')
+            if isinstance(kSceneItem, Control):
+              shapeNode = self.__dfgLastCurveNode
+              self.connectCanvasNodes(shapeNode, 'this', drawNode, 'shapes')
+            self.connectCanvasNodes(prevNode, prevPort, drawNode, 'lines')
+            self.__dfgLastLinesNode = (drawNode, 'lines')
 
         if hasattr(kSceneItem, 'getParent'):
             parent = kSceneItem.getParent()
@@ -1129,6 +1149,7 @@ class Builder(Builder):
             self.__dfgComponentPortMap = {}
             self.__dfgTransforms = {}
             self.__dfgConnections = {}
+            self.__dfgLastLinesNode = None
             self.__layoutG = SpringLayout()
 
             self.createTopLevelArguments()
@@ -1151,8 +1172,21 @@ class Builder(Builder):
         if self.__dfgArguments.has_key('joints'):
             self.collectResultPorts('joints', Joint, 'Xfo')
 
+        if self.getConfig().getMetaData('DebugDrawingSupport', False):
+            client = ks.getCoreClient()
+            self.__dfgArguments['handle'] = self.__dfgTopLevelGraph.addExecPort("handle", client.DFG.PortTypes.Out)
+            if self.__dfgLastLinesNode:
+                preset = "Fabric.Exts.InlineDrawing.DrawingHandle.EmptyDrawingHandle"
+                handleNode = self.createCanvasNodeFromPreset(preset)
+                preset = "Fabric.Exts.InlineDrawing.DrawingHandle.DrawLines"
+                drawNode = self.createCanvasNodeFromPreset(preset)
+                self.connectCanvasNodes(handleNode, 'handle', drawNode, "this")
+                self.connectCanvasArg(drawNode, "this", 'handle', argIsInput = False)
+                (linesNode, linesPort) = self.__dfgLastLinesNode
+                self.connectCanvasNodes(linesNode, linesPort, drawNode, "lines")
+
         if not self.__layoutG is None:
-            layout = self.__layoutG.compute(scale = 2000)
+            layout = self.__layoutG.compute()
             for key in layout:
                 pos = layout[key]
                 posStr = '{"x": %f, "y": %f}' % (pos[0], pos[1])

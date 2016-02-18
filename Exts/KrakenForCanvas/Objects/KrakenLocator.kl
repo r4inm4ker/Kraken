@@ -3,7 +3,7 @@ require Kraken;
 struct KrakenLocator : KrakenObject3D {
 };
 
-/// \dfgPresetFolder Constructors
+/// \dfgPresetFolder Objects
 function KrakenLocator(
   String name,
   String buildName,
@@ -22,4 +22,9 @@ function KrakenLocator(
   this.xfo = xfo;
   this.visibility = visibility;
   this.color = color;
+}
+
+/// \dfgPresetFolder DebugDrawing
+function KrakenLocator.drawIntoLinesObject(Xfo xfo, io Lines lines) {
+  KrakenObject3D_DrawIntoLinesObject(this, xfo, this.visibility, lines);
 }

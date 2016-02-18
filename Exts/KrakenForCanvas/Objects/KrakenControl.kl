@@ -3,7 +3,7 @@ require Kraken;
 struct KrakenControl : KrakenCurve {
 };
 
-/// \dfgPresetFolder Constructors
+/// \dfgPresetFolder Objects
 function KrakenControl(
   String name,
   String buildName,
@@ -52,4 +52,34 @@ function KrakenControl(
     angles.z = floatAnimation.get(this.path+'.rot.z', angles.z);
     this.xfo.ori.setFromEulerAngles(angles);
   }
+}
+
+/// \dfgPresetFolder DebugDrawing
+function KrakenControl.drawIntoLinesObjectForControl(Xfo xfo, KrakenCurveDict shapes, io Lines lines) {
+  if(!this.visibility)
+    return;
+  KrakenCurveData curve = shapes.curves.get(this.shapeHash, KrakenCurveData());
+  if(curve.indices.size() == 0) {
+    report(this.shapeHash);
+    return;
+  }
+
+  Size firstIndex = lines.pointCount();
+  Size iidx = lines.indices.size();
+  Size vidx = firstIndex;
+
+  lines.indices.resize(iidx + curve.indices.size());
+  for(Size i=0;i<curve.indices.size();i++)
+    lines.indices[iidx++] = curve.indices[i] + firstIndex;
+
+  lines.addPoints(curve.positions.size());
+  GeometryAttributes attributes = lines.getAttributes();
+  Vec3Attribute positions = attributes.getAttribute('positions');
+  for(Size i=0;i<curve.positions.size();i++)
+    positions.values[vidx++] = xfo.transformVector(curve.positions[i]);
+
+  positions.incrementVersion();
+  lines.incrementVersion();
+
+  KrakenObject3D_DrawIntoLines_VertexColors(this, firstIndex, lines);
 }

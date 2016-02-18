@@ -30,7 +30,7 @@ class SpringLayout(object):
             raise Exception("key '%s' does not exist." % keyB)
         self.__edges.append([keyA, keyB])
 
-    def compute(self, iterations = 50, scale = 1000):
+    def compute(self, iterations = 50):
 
         connections = {}
         for edge in self.__edges:
@@ -56,9 +56,7 @@ class SpringLayout(object):
                       if degree[key] > maxDegree:
                           maxDegree = degree[key]
 
-        step = 1
-        if maxDegree > 0:
-            step = scale / float(maxDegree)
+        step = 250
 
         pos = {}
         for key in self.__keys:

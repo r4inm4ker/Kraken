@@ -4,7 +4,7 @@ struct KrakenCurve : KrakenObject3D {
   String shapeHash;
 };
 
-/// \dfgPresetFolder Constructors
+/// \dfgPresetFolder Objects
 function KrakenCurve(
   String name,
   String buildName,
@@ -25,4 +25,9 @@ function KrakenCurve(
   this.visibility = visibility;
   this.color = color;
   this.shapeHash = shapeHash;
+}
+
+/// \dfgPresetFolder DebugDrawing
+function KrakenCurve.drawIntoLinesObject(Xfo xfo, io Lines lines) {
+  KrakenObject3D_DrawIntoLinesObject(this, xfo, this.visibility, lines);
 }
