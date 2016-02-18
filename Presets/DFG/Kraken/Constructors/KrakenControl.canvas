@@ -2,7 +2,7 @@
 {
   "objectType" : "Func",
   "metadata" : {
-    "uiTooltip" : "Supported types:\n  name: String\n  buildName: String\n  path: String\n  layer: String\n  component: String\n  xfo: Xfo\n  visibility: Boolean\n  color: Color\n  shapeHash: String\n  result: KrakenControl\n"
+    "uiTooltip" : "Supported types:\n  name: String\n  buildName: String\n  path: String\n  layer: String\n  component: String\n  xfo: Xfo\n  visibility: Boolean\n  color: Color\n  shapeHash: String\n  xfoAnimation: Xfo[String]\n  floatAnimation: Float32[String]\n  result: KrakenControl\n"
     },
   "title" : "KrakenControl",
   "ports" : [
@@ -77,6 +77,23 @@
       },
     {
       "objectType" : "Port",
+      "metadata" : {
+        "uiColor" : "{\n  \"r\" : 249,\n  \"g\" : 157,\n  \"b\" : 28\n  }"
+        },
+      "nodePortType" : "Out",
+      "name" : "xfoAnimation",
+      "execPortType" : "In",
+      "typeSpec" : "Xfo[String]"
+      },
+    {
+      "objectType" : "Port",
+      "nodePortType" : "Out",
+      "name" : "floatAnimation",
+      "execPortType" : "In",
+      "typeSpec" : "Float32[String]"
+      },
+    {
+      "objectType" : "Port",
       "nodePortType" : "In",
       "name" : "result",
       "execPortType" : "Out",
@@ -86,11 +103,11 @@
   "extDeps" : {
     "KrakenForCanvas" : "*"
     },
-  "presetGUID" : "8C4A9B7C54230804589F670FAF61BC72",
+  "presetGUID" : "169FAC59F7F2D5B53ADC4470A4A0270F",
   "code" : "require KrakenForCanvas;
 
 dfgEntry {
-  result = KrakenControl(name, buildName, path, layer, component, xfo, visibility, color, shapeHash);
+  result = KrakenControl(name, buildName, path, layer, component, xfo, visibility, color, shapeHash, xfoAnimation, floatAnimation);
 }
 "
   }

@@ -11,6 +11,8 @@ import copy
 from kraken.core.kraken_system import ks
 from kraken.core.builder import Builder
 from kraken.core.objects.object_3d import Object3D
+from kraken.core.objects.control import Control
+from kraken.core.objects.joint import Joint
 from kraken.core.objects.attributes.attribute import Attribute
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 from kraken.core.maths.vec3 import Vec3
@@ -24,8 +26,9 @@ class Builder(Builder):
 
     __outputFilePath = None
     __dfgBinding = None
+    __dfgArguments = None
     __dfgTopLevelGraph = None
-    __dfgNodes = None # todo: to be replaced by _registerSceneItemPair, getDCCSceneItem
+    __dfgNodes = None
     __dfgConstructors = None
     __dfgCurves = None
     __dfgLastCurveNode = None
@@ -33,6 +36,7 @@ class Builder(Builder):
     __dfgConstraints = None
     __dfgComponentPortMap = None
     __dfgTransforms = None
+    __dfgConnections = None
     __layoutG = None
     __layoutFunc = None
 
@@ -66,6 +70,16 @@ class Builder(Builder):
             new_o[k] = self.makeHash(v)
         return hash(tuple(frozenset(sorted(new_o.items()))))  
 
+    # ========================
+    # IO Methods
+    # ========================
+    def setOutputFilePath(self, filePath):
+        self.__outputFilePath = filePath
+
+    # ========================
+    # Canvas Preset Methods
+    # ========================
+
     def getAttributeNodeAndPort(self, kAttribute):
         path = kAttribute.getPath()
         if self.__dfgAttributes.has_key(path):
@@ -81,15 +95,39 @@ class Builder(Builder):
         path = kSceneItem.getPath()
         return self.__dfgTransforms[path]
 
-    # ========================
-    # IO Methods
-    # ========================
-    def setOutputFilePath(self, filePath):
-        self.__outputFilePath = filePath
+    def setSceneItemTransformPort(self, kSceneItem, node, port):
 
-    # ========================
-    # Canvas Preset Methods
-    # ========================
+        # we might want to replace connections!
+        prevConnections = []
+        prevNode = None
+        prevPort = None
+        if self.__dfgTransforms.has_key(kSceneItem.getPath()):
+            (prevNode, prevPort) = self.__dfgTransforms[kSceneItem.getPath()]
+            prevConnections = self.getConnections(prevNode, prevPort)
+
+        self.__dfgTransforms[kSceneItem.getPath()] = (node, port)
+        self.report('%s is now driven by %s.%s' % (kSceneItem.getPath(), node, port))
+
+        for c in prevConnections:
+            if c[0] == node:
+              continue
+            self.removeConnection(c[0], c[1])
+            self.connectCanvasNodes(node, port, c[0], c[1])
+
+    def createTopLevelArguments(self):
+        # todo: we might want to add options here
+        client = ks.getCoreClient()
+        self.__dfgArguments['time'] = self.__dfgTopLevelGraph.addExecPort("time", client.DFG.PortTypes.In)
+        self.__dfgBinding.setArgValue(self.__dfgArguments['time'], ks.constructRTVal('Float32', 0.0))
+        self.__dfgArguments['frame'] = self.__dfgTopLevelGraph.addExecPort("frame", client.DFG.PortTypes.In)
+        self.__dfgBinding.setArgValue(self.__dfgArguments['frame'], ks.constructRTVal('Float32', 0.0))
+
+        self.__dfgArguments['controlXfos'] = self.__dfgTopLevelGraph.addExecPort("controlXfos", client.DFG.PortTypes.In)
+        self.__dfgBinding.setArgValue(self.__dfgArguments['controlXfos'], ks.constructRTVal('Xfo[String]'))
+        self.__dfgArguments['all'] = self.__dfgTopLevelGraph.addExecPort("all", client.DFG.PortTypes.Out)
+        self.__dfgBinding.setArgValue(self.__dfgArguments['all'], ks.constructRTVal('Xfo[String]'))
+        self.__dfgArguments['joints'] = self.__dfgTopLevelGraph.addExecPort("joints", client.DFG.PortTypes.Out)
+        self.__dfgBinding.setArgValue(self.__dfgArguments['joints'], ks.constructRTVal('Xfo[String]'))
 
     def decorateCanvasNode(self, node, metaData):
         for key in metaData:
@@ -102,7 +140,7 @@ class Builder(Builder):
         if not self.__layoutG is None and addToLayout:
             self.__layoutG.addNode(path)
         self.decorateCanvasNode(path, metaData)
-        self.report('Created Canvas Node '+path)
+        self.report('Created node '+path)
         return path
 
     def createCanvasNodeFromFunction(self, name, addToLayout = True, **metaData):
@@ -110,11 +148,23 @@ class Builder(Builder):
         if not self.__layoutG is None and addToLayout:
             self.__layoutG.addNode(path)
         self.decorateCanvasNode(path, metaData)
-        self.report('Created Canvas KL Function '+path)
+        self.report('Created KL function '+path)
         return path
 
-    def deleteCanvasNode(self, node):
+    def removeCanvasNode(self, node):
         self.__dfgTopLevelGraph.removeNode(node)
+        if self.__dfgConnections.has_key(node):
+            del self.__dfgConnections[node]
+        for nodeName in self.__dfgConnections:
+            ports = self.__dfgConnections[nodeName]
+            for portName in ports:
+                connections = ports[portName]
+                newConnections = []
+                for c in connections:
+                    if c[0] == node:
+                      continue
+                    newConnections += [c]
+                self.__dfgConnections[nodeName][portName] = newConnections
 
     def connectCanvasNodes(self, nodeA, portA, nodeB, portB, addToLayout = True):
 
@@ -138,9 +188,57 @@ class Builder(Builder):
                 self.reportError('Cannot connect - incompatible type specs %s and %s.' % (typeA, typeB))
 
         result = self.__dfgTopLevelGraph.connectTo(nodeA+'.'+portA, nodeB+'.'+portB)
+        self.report('Connected %s.%s to %s.%s' % (nodeA, portA, nodeB, portB))
+
+        if not self.__dfgConnections.has_key(nodeA):
+          self.__dfgConnections[nodeA] = {}
+        if not self.__dfgConnections[nodeA].has_key(portA):
+          self.__dfgConnections[nodeA][portA] = []
+        self.__dfgConnections[nodeA][portA].append((nodeB, portB))
+
         if not self.__layoutG is None and addToLayout:
             self.__layoutG.addEdge(nodeA, nodeB)
 
+        return result
+
+    def connectCanvasArg(self, argA, argB, argC, argIsInput = True):
+        if argIsInput:
+            self.__dfgTopLevelGraph.connectTo(argA, argB+'.'+argC)
+        else:
+            self.__dfgTopLevelGraph.connectTo(argA+'.'+argB, argC)
+
+    def removeConnection(self, node, port):
+        result = False
+        for nodeName in self.__dfgConnections:
+            ports = self.__dfgConnections[nodeName]
+            for portName in ports:
+                connections = ports[portName]
+                newConnections = []
+                for i in range(len(connections)):
+                    if '.'.join(connections[i]) == node+'.'+port:
+                        self.__dfgTopLevelGraph.disconnectFrom(nodeName+'.'+portName, node+'.'+port)
+                        result = True
+                    else:
+                        newConnections += [connections[i]]
+                self.__dfgConnections[nodeName][portName] = newConnections
+        return result
+
+    def getConnections(self, node, port, targets = True):
+        result = []
+        if targets:
+            for nodeName in self.__dfgConnections:
+                ports = self.__dfgConnections[nodeName]
+                for portName in ports:
+                    connections = ports[portName]
+                    if targets:
+                        if node+'.'+port == nodeName+'.'+portName:
+                            result += connections
+                        else:
+                            continue
+                    else:
+                        for c in connections:
+                            if '.'.join(c) == node+'.'+port:
+                                result += [(nodeName, portName)]
         return result
 
     def connectCanvasOperatorPort(self, node, port, dataType, portType, connectedObjects, arraySizes):
@@ -150,7 +248,7 @@ class Builder(Builder):
 
                 pushNodes = []
                 for c in connectedObjects:
-                    pushNode = self.createCanvasNodeFromPreset("Fabric.Core.Array.Push", comment = c.getName())
+                    pushNode = self.createCanvasNodeFromPreset("Fabric.Core.Array.Push", comment = c.getPath())
                     if len(pushNodes) > 0:
                         self.connectCanvasNodes(pushNodes[-1], "array", pushNode, "array")
                     pushNodes.append(pushNode)
@@ -168,7 +266,7 @@ class Builder(Builder):
                 getNodes = []
                 for i in range(len(connectedObjects)):
                     c = connectedObjects[i]
-                    getNode = self.createCanvasNodeFromPreset("Fabric.Core.Array.Get", comment = c.getName())
+                    getNode = self.createCanvasNodeFromPreset("Fabric.Core.Array.Get", comment = c.getPath())
                     self.connectCanvasNodes(node, port, getNode, 'array')
                     indexVal = ks.constructRTVal("UInt32", i)
                     self.__dfgTopLevelGraph.setPortDefaultValue(getNode+'.index', indexVal)
@@ -180,7 +278,7 @@ class Builder(Builder):
                     if isinstance(c, Attribute):
                       self.connectCanvasNodes(getNodes[i], 'element', connNode, connPort)
                     else:
-                      self.__dfgTransforms[c.getPath()] = (getNodes[i], 'element')
+                      self.setSceneItemTransformPort(c, getNodes[i], 'element')
 
         else:
 
@@ -191,12 +289,12 @@ class Builder(Builder):
                 (connNode, connPort) = self.getSceneItemNodeAndPort(connectedObjects)
                 self.connectCanvasNodes(node, port, connNode, connPort)
             else:
-                self.__dfgTransforms[connectedObjects.getPath()] = (node, port)
+                self.setSceneItemTransformPort(connectedObjects, node, port)
 
     def getIntermediateValue(self, node, port, prefix = ""):
         client = ks.getCoreClient()
         intermediatePort = self.__dfgTopLevelGraph.addExecPort("intermediateValue", client.DFG.PortTypes.Out)
-        self.__dfgTopLevelGraph.connectTo(node+'.'+port, intermediatePort)
+        self.connectCanvasArg(node, port, intermediatePort, argIsInput = False)
 
         errors = json.loads(self.__dfgBinding.getErrors(True))
         if errors and len(errors) > 0:
@@ -238,6 +336,7 @@ class Builder(Builder):
         return True
 
     def buildCanvasNodeFromSceneItem(self, kSceneItem, buildName):
+
         cls = kSceneItem.__class__.__name__
         if cls in [
             'ComponentInput',
@@ -263,10 +362,11 @@ class Builder(Builder):
 
         path = kSceneItem.getPath()
         preset = "Kraken.Constructors.Kraken%s" % cls
-        nodePath = self.createCanvasNodeFromPreset(preset, comment = kSceneItem.getName())
+        nodePath = self.createCanvasNodeFromPreset(preset, comment = kSceneItem.getPath())
         self.__dfgNodes[path] = nodePath
+        self._registerSceneItemPair(kSceneItem, nodePath)
         self.__dfgConstructors[path] = nodePath
-        self.__dfgTransforms[path] = (nodePath, 'xfo')
+        self.setSceneItemTransformPort(kSceneItem, nodePath, 'xfo')
 
         # set the defaults
         self.setPortDefaultValue(kSceneItem, "name", kSceneItem.getName())
@@ -293,6 +393,12 @@ class Builder(Builder):
                 continue
             self.setPortDefaultValue(kSceneItem, propName, getattr(kSceneItem, propName))
 
+        if isinstance(kSceneItem, Control):
+            if self.__dfgArguments.has_key('controlXfos'):
+                self.connectCanvasArg('controlXfos', nodePath, 'xfoAnimation')
+            if self.__dfgArguments.has_key('controlFloats'):
+                self.connectCanvasArg('controlFloats', nodePath, 'floatAnimation')
+
         if hasattr(kSceneItem, 'getCurveData'):
             curveData = kSceneItem.getCurveData()
             shapeHash = self.buildCanvasCurveShape(curveData)
@@ -301,15 +407,13 @@ class Builder(Builder):
         if hasattr(kSceneItem, 'getParent'):
             parent = kSceneItem.getParent()
             if not parent is None:
-                parentPath = parent.getPath()
-                if self.__dfgTransforms.has_key(parentPath):
-                    (parentNode, parentPort) = self.__dfgTransforms[parentPath]
-                    (childNode, childPort) = self.__dfgTransforms[path]
-                    preset = "Fabric.Core.Math.Mul"
-                    transformNode = self.createCanvasNodeFromPreset(preset, comment = path.rpartition('.')[2])
-                    self.connectCanvasNodes(parentNode, parentPort, transformNode, 'lhs')
-                    self.connectCanvasNodes(childNode, childPort, transformNode, 'rhs')
-                    self.__dfgTransforms[path] = (transformNode, 'result')
+                (parentNode, parentPort) = self.getSceneItemNodeAndPort(parent)
+                (childNode, childPort) = self.getSceneItemNodeAndPort(kSceneItem)
+                preset = "Fabric.Core.Math.Mul"
+                transformNode = self.createCanvasNodeFromPreset(preset, comment = kSceneItem.getPath())
+                self.connectCanvasNodes(parentNode, parentPort, transformNode, 'lhs')
+                self.connectCanvasNodes(childNode, childPort, transformNode, 'rhs')
+                self.setSceneItemTransformPort(kSceneItem, transformNode, 'result')
 
         return True
 
@@ -327,8 +431,9 @@ class Builder(Builder):
 
         path = kAttribute.getPath()
         preset = "Kraken.Attributes.Kraken%s" % cls
-        nodePath = self.createCanvasNodeFromPreset(preset, comment = kAttribute.getName())
+        nodePath = self.createCanvasNodeFromPreset(preset, comment = kAttribute.getPath())
         self.__dfgNodes[path] = nodePath
+        self._registerSceneItemPair(kAttribute, nodePath)
         self.__dfgAttributes[path] = nodePath
 
         # set the defaults
@@ -367,19 +472,18 @@ class Builder(Builder):
         constrainers = kConstraint.getConstrainers()
         for constrainer in constrainers:
             preset = "Kraken.Constraints.AddConstrainer"
-            addNode = self.createCanvasNodeFromPreset(preset, comment = constrainer.getName())
+            addNode = self.createCanvasNodeFromPreset(preset, comment = constrainer.getPath())
 
             self.connectCanvasNodes(lastNode, lastPort, addNode, 'this')
 
-            constrainerPath = constrainer.getPath()
-            (constrainerNode, constrainerPort) = self.__dfgTransforms[constrainerPath]
+            (constrainerNode, constrainerPort) = self.getSceneItemNodeAndPort(constrainer)
             self.connectCanvasNodes(constrainerNode, constrainerPort, addNode, 'constrainer')
 
             lastNode = addNode
             lastPort = 'this'
 
-        constraineePath = kConstraint.getConstrainee().getPath()
-        (constraineeNode, constraineePort) = self.__dfgTransforms[constraineePath]
+        constrainee = kConstraint.getConstrainee()
+        (constraineeNode, constraineePort) = self.getSceneItemNodeAndPort(constrainee)
 
         if kConstraint.getMaintainOffset():
             preset = "Kraken.Constraints.ComputeOffset"
@@ -387,17 +491,19 @@ class Builder(Builder):
             self.connectCanvasNodes(lastNode, lastPort, computeOffsetNode, 'this', addToLayout = False)
             self.connectCanvasNodes(constraineeNode, constraineePort, computeOffsetNode, 'constrainee', addToLayout = False)
             offset = self.getIntermediateValue(computeOffsetNode, 'result', prefix = str(cls)+": ")
-            self.deleteCanvasNode(computeOffsetNode)
+            self.removeCanvasNode(computeOffsetNode)
             self.__dfgTopLevelGraph.setPortDefaultValue(constructNode+".offset", offset)
 
         preset = "Kraken.Constraints.Compute"
-        computeNode = self.createCanvasNodeFromPreset(preset)
+        computeNode = self.createCanvasNodeFromPreset(preset, comment = kConstraint.getConstrainee().getPath())
         self.connectCanvasNodes(lastNode, lastPort, computeNode, 'this')
         self.connectCanvasNodes(constraineeNode, constraineePort, computeNode, 'xfo')
 
-        self.__dfgTransforms[constraineePath] = (computeNode, 'result')
+        self.setSceneItemTransformPort(constrainee, computeNode, 'result')
 
-        return None
+        self._registerSceneItemPair(kConstraint, computeNode)
+
+        return True
 
     def buildCanvasCurveShape(self, curveData):
 
@@ -454,6 +560,52 @@ class Builder(Builder):
             self.__dfgLastCurveNode = curveNode
 
         return shapeHash
+
+    def collectResultPorts(self, arg, cls, dataType = 'Xfo'):
+
+        drivers = []
+        driversHit = {}
+        pairs = self.getDCCSceneItemPairs()
+        for pair in pairs:
+            driver = pair['src']
+            if driversHit.has_key(driver.getPath()):
+              continue
+            if not isinstance(driver, cls):
+                continue
+            drivers.append(driver)
+            driversHit[driver.getPath()] = driver
+
+        if len(drivers) == 0:
+            return None          
+
+        client = ks.getCoreClient()
+        collectNode = self.createCanvasNodeFromFunction('collect'+arg.capitalize())
+        subExec = self.__dfgTopLevelGraph.getSubExec(collectNode)
+
+        resultPort = subExec.addExecPort('result', client.DFG.PortTypes.Out)
+        subExec.setExecPortTypeSpec(resultPort, '%s[String]' % dataType)
+
+        driverMap = {}
+        code = []
+        for driver in drivers:
+            driverName = str(driver.getName())
+            driverPort = subExec.addExecPort(driverName, client.DFG.PortTypes.In)
+            driverMap[driver.getPath()] = driverPort
+
+            (node, port) = self.getSceneItemNodeAndPort(driver)
+            resolvedType = self.__dfgTopLevelGraph.getNodePortResolvedType(node+'.'+port)
+            if resolvedType:
+                subExec.setExecPortTypeSpec(driverPort, resolvedType)
+
+            code += ['  %s["%s"] = %s;' % (resultPort, driver.getPath(), driverPort)]
+
+        subExec.setCode('dfgEntry {\n%s}\n' % '\n'.join(code))
+
+        for driver in drivers:
+            (node, port) = self.getSceneItemNodeAndPort(driver)
+            self.connectCanvasNodes(node, port, collectNode, driverMap[driver.getPath()])
+
+        self.connectCanvasArg(collectNode, 'result', arg, argIsInput = False)
 
     # ========================
     # Object3D Build Methods
@@ -776,6 +928,7 @@ class Builder(Builder):
         path = kOperator.getPath()
         node = self.createCanvasNodeFromFunction(solverTypeName)
         self.__dfgNodes[path] = node
+        self._registerSceneItemPair(kOperator, node)
 
         # set dependencies
         self.__dfgTopLevelGraph.addExtDep(kOperator.getExtension())
@@ -805,13 +958,11 @@ class Builder(Builder):
 
             if argDataType == 'EvalContext':
                 continue
-            if argName == 'time':
-                # todo
-                # cmds.expression( o=spliceNode + '.time', s=spliceNode + '.time = time;' )
+            if argName == 'time' and argConnectionType == 'In':
+                self.connectCanvasArg("time", node, argPort)
                 continue
-            if argName == 'frame':
-                # todo
-                # cmds.expression( o=spliceNode + '.frame', s=spliceNode + '.frame = frame;' )
+            if argName == 'frame'and argConnectionType == 'In':
+                self.connectCanvasArg("frame", node, argPort)
                 continue
 
             # Get the argument's input from the DCC
@@ -842,6 +993,7 @@ class Builder(Builder):
         """
         node = self.createCanvasNodeFromPreset(kOperator.getPresetPath())
         self.__dfgNodes[kOperator.getPath()] = node
+        self._registerSceneItemPair(kOperator, node)
         subExec = self.__dfgTopLevelGraph.getSubExec(node)
 
         portTypeMap = {
@@ -859,13 +1011,13 @@ class Builder(Builder):
 
             if portDataType == 'EvalContext':
                 continue
-            if portName == 'time':
-                # todo
-                # cmds.expression( o=canvasNode + '.time', s=canvasNode + '.time = time;' )
+            if argDataType == 'EvalContext':
                 continue
-            if portName == 'frame':
-                # todo
-                # cmds.expression( o=canvasNode + '.frame', s=canvasNode + '.frame = frame;' )
+            if portName == 'time' and portConnectionType == 'In':
+                self.connectCanvasArg("time", node, portName)
+                continue
+            if portName == 'frame'and portConnectionType == 'In':
+                self.connectCanvasArg("frame", node, portName)
                 continue
 
             # Get the port's input from the DCC
@@ -962,6 +1114,7 @@ class Builder(Builder):
             host = client.getDFGHost()
 
             self.__dfgBinding = host.createBindingToNewGraph()
+            self.__dfgArguments = {}
             self.__dfgTopLevelGraph = self.__dfgBinding.getExec()
             self.__dfgNodes = {}
             self.__dfgConstructors = {}
@@ -969,7 +1122,10 @@ class Builder(Builder):
             self.__dfgConstraints = {}
             self.__dfgComponentPortMap = {}
             self.__dfgTransforms = {}
+            self.__dfgConnections = {}
             self.__layoutG = SpringLayout()
+
+            self.createTopLevelArguments()
 
         except BaseException as e:
             self.reportError(e)
@@ -984,8 +1140,12 @@ class Builder(Builder):
             bool: True if successful.
 
         """
-        if not self.__layoutG is None:
+        if self.__dfgArguments.has_key('all'):
+            self.collectResultPorts('all', Object3D, 'Xfo')
+        if self.__dfgArguments.has_key('joints'):
+            self.collectResultPorts('joints', Joint, 'Xfo')
 
+        if not self.__layoutG is None:
             layout = self.__layoutG.compute(scale = 2000)
             for key in layout:
                 pos = layout[key]

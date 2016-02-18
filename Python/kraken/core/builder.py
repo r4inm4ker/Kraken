@@ -72,6 +72,16 @@ class Builder(object):
         return None
 
 
+    def getDCCSceneItemPairs(self):
+        """Returns all of the built dcc scene item pairs.
+
+        Returns:
+            array: An array of dicts with 'src' and 'tgt' key value pairs
+
+        """
+        return self._buildElements
+
+
     # ========================
     # SceneItem Build Methods
     # ========================
@@ -889,9 +899,6 @@ class Builder(object):
         """
 
         Profiler.getInstance().push("build:" + kSceneItem.getName())
-
-        self._preBuild(kSceneItem)
-        self._build(kSceneItem)
 
         try:
             self._preBuild(kSceneItem)

@@ -13,7 +13,9 @@ function KrakenControl(
   Xfo xfo,
   Boolean visibility,
   Color color,
-  String shapeHash
+  String shapeHash,
+  Xfo xfoAnimation[String],
+  Float32 floatAnimation[String]
 ) {
   this.name = name;
   this.buildName = buildName;
@@ -24,4 +26,30 @@ function KrakenControl(
   this.visibility = visibility;
   this.color = color;
   this.shapeHash = shapeHash;
+
+  // xfo animation
+  this.xfo = xfoAnimation.get(this.path, this.xfo);
+
+  // component wise float animation
+  this.xfo.tr.x = floatAnimation.get(this.path+'.tr.x', this.xfo.tr.x);
+  this.xfo.tr.y = floatAnimation.get(this.path+'.tr.y', this.xfo.tr.y);
+  this.xfo.tr.z = floatAnimation.get(this.path+'.tr.z', this.xfo.tr.z);
+  this.xfo.ori.v.x = floatAnimation.get(this.path+'.ori.v.x', this.xfo.ori.v.x);
+  this.xfo.ori.v.y = floatAnimation.get(this.path+'.ori.v.y', this.xfo.ori.v.y);
+  this.xfo.ori.v.z = floatAnimation.get(this.path+'.ori.v.z', this.xfo.ori.v.z);
+  this.xfo.ori.w = floatAnimation.get(this.path+'.ori.w', this.xfo.ori.w);
+  this.xfo.sc.x = floatAnimation.get(this.path+'.sc.x', this.xfo.sc.x);
+  this.xfo.sc.y = floatAnimation.get(this.path+'.sc.y', this.xfo.sc.y);
+  this.xfo.sc.z = floatAnimation.get(this.path+'.sc.z', this.xfo.sc.z);
+
+  // also do euler values, just in case
+  if(floatAnimation.has(this.path+'.rot.x') || 
+    floatAnimation.has(this.path+'.rot.y') || 
+    floatAnimation.has(this.path+'.rot.z')) {
+    Vec3 angles = this.xfo.ori.toEulerAngles();
+    angles.x = floatAnimation.get(this.path+'.rot.x', angles.x);
+    angles.y = floatAnimation.get(this.path+'.rot.y', angles.y);
+    angles.z = floatAnimation.get(this.path+'.rot.z', angles.z);
+    this.xfo.ori.setFromEulerAngles(angles);
+  }
 }

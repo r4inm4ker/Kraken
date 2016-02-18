@@ -56,7 +56,9 @@ class SpringLayout(object):
                       if degree[key] > maxDegree:
                           maxDegree = degree[key]
 
-        step = scale / float(maxDegree)
+        step = 1
+        if maxDegree > 0:
+            step = scale / float(maxDegree)
 
         pos = {}
         for key in self.__keys:
