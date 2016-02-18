@@ -25,9 +25,9 @@ class SpringLayout(object):
 
     def addEdge(self, keyA, keyB):
         if not self.__nodes.has_key(keyA):
-            raise Exception("key '%s' does not exist." % keyA)
+            return
         if not self.__nodes.has_key(keyB):
-            raise Exception("key '%s' does not exist." % keyB)
+            return
         self.__edges.append([keyA, keyB])
 
     def compute(self, iterations = 50):

@@ -61,7 +61,7 @@ class Builder(Builder):
         if isinstance(o, (set, tuple, list)):
           new_o = copy.deepcopy(o)
           for i in range(len(new_o)):
-              new_o[i] = self.makeHash(i)
+              new_o[i] = self.makeHash(new_o[i])
           return hash(tuple(frozenset(sorted(new_o))))        
 
         elif not isinstance(o, dict):
@@ -409,6 +409,13 @@ class Builder(Builder):
             self.setPortDefaultValue(kSceneItem, "shapeHash", shapeHash)
 
         if self.getConfig().getMetaData('DebugDrawingSupport', False):
+            # shapeNode = self.__dfgLastCurveNode
+            # if shapeNode and not shapeNode.startswith('Cache'):
+            #   preset = "Fabric.Core.Data.Cache"
+            #   cacheNode = self.createCanvasNodeFromPreset(preset)
+            #   self.connectCanvasNodes(shapeNode, 'this', cacheNode, 'value')
+            #   self.__dfgLastCurveNode = cacheNode
+
             if not self.__dfgLastLinesNode:
                 preset = "Fabric.Exts.Geometry.Lines.EmptyLines"
                 linesNode = self.createCanvasNodeFromPreset(preset)
@@ -422,8 +429,7 @@ class Builder(Builder):
             self.connectCanvasNodes(nodePath, 'result', drawNode, 'this')
             self.connectCanvasNodes(nodePath, 'xfo', drawNode, 'xfo')
             if isinstance(kSceneItem, Control):
-              shapeNode = self.__dfgLastCurveNode
-              self.connectCanvasNodes(shapeNode, 'this', drawNode, 'shapes')
+              self.connectCanvasNodes(self.__dfgLastCurveNode, 'this', drawNode, 'shapes')
             self.connectCanvasNodes(prevNode, prevPort, drawNode, 'lines')
             self.__dfgLastLinesNode = (drawNode, 'lines')
 
@@ -540,7 +546,16 @@ class Builder(Builder):
             self.__dfgLastCurveNode = self.createCanvasNodeFromPreset(preset)
             self.__dfgCurves = {}
 
-        shapeHash = str(self.makeHash(curveData))
+        numVertices = 0
+        for subCurve in curveData:
+            points = subCurve['points']
+            numVertices = numVertices + len(points)
+
+        hashSource = [curveData]
+        hashSource += [len(curveData)]
+        hashSource += [numVertices]
+
+        shapeHash = str(self.makeHash(hashSource))
         if not self.__dfgCurves.has_key(shapeHash):
             positions = []
             indices = []
@@ -954,6 +969,18 @@ class Builder(Builder):
         # create the node
         solverTypeName = kOperator.getSolverTypeName()
         path = kOperator.getPath()
+
+        client = ks.getCoreClient()
+
+        constructNode = self.createCanvasNodeFromFunction(solverTypeName)
+        subExec = self.__dfgTopLevelGraph.getSubExec(constructNode)
+        solverPort = subExec.addExecPort("solver", client.DFG.PortTypes.Out)
+        subExec.setExecPortTypeSpec(solverPort, solverTypeName)
+        subExec.setCode('dfgEntry { solver = %s(); }' % solverTypeName)
+
+        varNode = self.__dfgTopLevelGraph.addVar('solver', solverTypeName, kOperator.getExtension())
+        self.connectCanvasNodes(constructNode, 'solver', varNode, "value")
+
         node = self.createCanvasNodeFromFunction(solverTypeName)
         self.__dfgNodes[path] = node
         self._registerSceneItemPair(kOperator, node)
@@ -962,9 +989,9 @@ class Builder(Builder):
         self.__dfgTopLevelGraph.addExtDep(kOperator.getExtension())
         subExec = self.__dfgTopLevelGraph.getSubExec(node)
 
-        client = ks.getCoreClient()
         solverPort = subExec.addExecPort("solver", client.DFG.PortTypes.IO)
         subExec.setExecPortTypeSpec(solverPort, solverTypeName)
+        self.connectCanvasNodes(varNode, 'value', node, solverPort)
 
         argPorts = {}
         arraySizes = {}
@@ -1178,7 +1205,7 @@ class Builder(Builder):
             if self.__dfgLastLinesNode:
                 preset = "Fabric.Exts.InlineDrawing.DrawingHandle.EmptyDrawingHandle"
                 handleNode = self.createCanvasNodeFromPreset(preset)
-                preset = "Fabric.Exts.InlineDrawing.DrawingHandle.DrawLines"
+                preset = "Fabric.Exts.InlineDrawing.DrawingHandle.DrawColoredLines"
                 drawNode = self.createCanvasNodeFromPreset(preset)
                 self.connectCanvasNodes(handleNode, 'handle', drawNode, "this")
                 self.connectCanvasArg(drawNode, "this", 'handle', argIsInput = False)
