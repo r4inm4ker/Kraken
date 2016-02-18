@@ -2,7 +2,7 @@
 {
   "objectType" : "Func",
   "metadata" : {
-    "uiTooltip" : "Supported types:\n  name: String\n  path: String\n  keyable: Boolean\n  animatable: Boolean\n  min: Scalar\n  max: Scalar\n  value: Scalar\n  result: KrakenScalarAttribute\n"
+    "uiTooltip" : "Supported types:\n  name: String\n  path: String\n  keyable: Boolean\n  animatable: Boolean\n  min: Scalar\n  max: Scalar\n  value: Scalar\n  floatAnimation: Float32[String]\n  result: KrakenScalarAttribute\n"
     },
   "title" : "KrakenScalarAttribute",
   "ports" : [
@@ -57,6 +57,13 @@
       },
     {
       "objectType" : "Port",
+      "nodePortType" : "Out",
+      "name" : "floatAnimation",
+      "execPortType" : "In",
+      "typeSpec" : "Float32[String]"
+      },
+    {
+      "objectType" : "Port",
       "nodePortType" : "In",
       "name" : "result",
       "execPortType" : "Out",
@@ -66,11 +73,11 @@
   "extDeps" : {
     "KrakenForCanvas" : "*"
     },
-  "presetGUID" : "12AFF0325E848D5330D3D2426A617A4C",
+  "presetGUID" : "59D916C5F3F26B8C6A3C6CA98A837DE1",
   "code" : "require KrakenForCanvas;
 
 dfgEntry {
-  result = KrakenScalarAttribute(name, path, keyable, animatable, min, max, value);
+  result = KrakenScalarAttribute(name, path, keyable, animatable, min, max, value, floatAnimation);
 }
 "
   }

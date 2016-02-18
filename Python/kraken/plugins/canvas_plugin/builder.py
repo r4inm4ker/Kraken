@@ -14,6 +14,7 @@ from kraken.core.objects.object_3d import Object3D
 from kraken.core.objects.control import Control
 from kraken.core.objects.joint import Joint
 from kraken.core.objects.attributes.attribute import Attribute
+from kraken.core.objects.attributes.scalar_attribute import ScalarAttribute
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 from kraken.core.maths.vec3 import Vec3
 from kraken.core.maths.color import Color
@@ -122,8 +123,10 @@ class Builder(Builder):
         self.__dfgArguments['frame'] = self.__dfgTopLevelGraph.addExecPort("frame", client.DFG.PortTypes.In)
         self.__dfgBinding.setArgValue(self.__dfgArguments['frame'], ks.constructRTVal('Float32', 0.0))
 
-        self.__dfgArguments['controlXfos'] = self.__dfgTopLevelGraph.addExecPort("controlXfos", client.DFG.PortTypes.In)
-        self.__dfgBinding.setArgValue(self.__dfgArguments['controlXfos'], ks.constructRTVal('Xfo[String]'))
+        self.__dfgArguments['controls'] = self.__dfgTopLevelGraph.addExecPort("controls", client.DFG.PortTypes.In)
+        self.__dfgBinding.setArgValue(self.__dfgArguments['controls'], ks.constructRTVal('Xfo[String]'))
+        self.__dfgArguments['floats'] = self.__dfgTopLevelGraph.addExecPort("floats", client.DFG.PortTypes.In)
+        self.__dfgBinding.setArgValue(self.__dfgArguments['floats'], ks.constructRTVal('Float32[String]'))
         self.__dfgArguments['all'] = self.__dfgTopLevelGraph.addExecPort("all", client.DFG.PortTypes.Out)
         self.__dfgBinding.setArgValue(self.__dfgArguments['all'], ks.constructRTVal('Xfo[String]'))
         self.__dfgArguments['joints'] = self.__dfgTopLevelGraph.addExecPort("joints", client.DFG.PortTypes.Out)
@@ -394,10 +397,10 @@ class Builder(Builder):
             self.setPortDefaultValue(kSceneItem, propName, getattr(kSceneItem, propName))
 
         if isinstance(kSceneItem, Control):
-            if self.__dfgArguments.has_key('controlXfos'):
-                self.connectCanvasArg('controlXfos', nodePath, 'xfoAnimation')
-            if self.__dfgArguments.has_key('controlFloats'):
-                self.connectCanvasArg('controlFloats', nodePath, 'floatAnimation')
+            if self.__dfgArguments.has_key('controls'):
+                self.connectCanvasArg('controls', nodePath, 'xfoAnimation')
+            if self.__dfgArguments.has_key('floats'):
+                self.connectCanvasArg('floats', nodePath, 'floatAnimation')
 
         if hasattr(kSceneItem, 'getCurveData'):
             curveData = kSceneItem.getCurveData()
@@ -447,6 +450,11 @@ class Builder(Builder):
             if not hasattr(kAttribute, methodName):
                 continue
             self.setPortDefaultValue(kAttribute, propName, getattr(kAttribute, methodName)())
+
+        if isinstance(kAttribute.getParent().getParent(), Control):
+            if isinstance(kAttribute, ScalarAttribute):
+                if self.__dfgArguments.has_key('floats'):
+                    self.connectCanvasArg('floats', nodePath, 'floatAnimation')
 
         return True
 
@@ -1010,8 +1018,6 @@ class Builder(Builder):
             portDataType = self.__dfgTopLevelGraph.getNodePortResolvedType(node+'.'+portName)
 
             if portDataType == 'EvalContext':
-                continue
-            if argDataType == 'EvalContext':
                 continue
             if portName == 'time' and portConnectionType == 'In':
                 self.connectCanvasArg("time", node, portName)

@@ -14,7 +14,8 @@ function KrakenScalarAttribute(
   Boolean animatable,
   Scalar min,
   Scalar max,
-  Scalar value
+  Scalar value,
+  Float32 floatAnimation[String]
 ) {
   this.name = name;
   this.path = path;
@@ -22,7 +23,9 @@ function KrakenScalarAttribute(
   this.animatable = animatable;
   this.min = min;
   this.max = max;
-  this.value = min >= max ? value : (value < min ? min : (value > max ? max : value));
+  
+  this.value = floatAnimation.get(this.path, value);
+  this.value = min >= max ? value : (this.value < min ? min : (this.value > max ? max : this.value));
 }
 
 function Scalar(KrakenScalarAttribute attr) {
