@@ -157,23 +157,22 @@ class HandComponentGuide(HandComponent):
         fingerData = {}
         for finger in self.fingers.keys():
 
-            utilXfo = Xfo()
-
             fingerData[finger] = []
             for i, joint in enumerate(self.fingers[finger]):
                 if i == len(self.fingers[finger]) - 1:
                     continue
 
                 # Calculate Xfo
-                boneVec = self.fingers[finger][i].xfo.tr - self.fingers[finger][i+1].xfo.tr
+                boneVec = self.fingers[finger][i+1].xfo.tr - self.fingers[finger][i].xfo.tr
                 bone1Normal = self.fingers[finger][i].xfo.ori.getZaxis().cross(boneVec).unit()
                 bone1ZAxis = boneVec.cross(bone1Normal).unit()
 
-                utilXfo.setFromVectors(boneVec.unit(), bone1Normal, bone1ZAxis, self.fingers[finger][i].xfo.tr)
+                jointXfo = Xfo()
+                jointXfo.setFromVectors(boneVec.unit(), bone1Normal, bone1ZAxis, self.fingers[finger][i].xfo.tr)
 
                 jointData = {
                     'length': self.fingers[finger][i].xfo.tr.distanceTo(self.fingers[finger][i+1].xfo.tr),
-                    'xfo': utilXfo
+                    'xfo': jointXfo
                 }
 
                 fingerData[finger].append(jointData)
@@ -268,7 +267,14 @@ class HandComponentGuide(HandComponent):
 
     def resizeDigits(self, numJoints):
 
+        initNumJoints = numJoints
         for finger in self.fingers.keys():
+
+            if finger == "thumb":
+                numJoints = 3
+            else:
+                numJoints = initNumJoints
+
             if numJoints + 1 == len(self.fingers[finger]):
                 continue
 
@@ -338,11 +344,11 @@ class HandComponentRig(HandComponent):
         # ==========
         # Deformers
         # ==========
-        deformersLayer = self.getOrCreateLayer('deformers')
-        defCmpGrp = ComponentGroup(self.getName(), self, parent=deformersLayer)
-        self.ctrlCmpGrp.setComponent(self)
+        self.deformersLayer = self.getOrCreateLayer('deformers')
+        self.defCmpGrp = ComponentGroup(self.getName(), self, parent=self.deformersLayer)
+        self.defCmpGrp.setComponent(self)
 
-        self.handDef = Joint('hand', parent=defCmpGrp)
+        self.handDef = Joint('hand', parent=self.defCmpGrp)
         self.handDef.setComponent(self)
 
 
@@ -368,8 +374,74 @@ class HandComponentRig(HandComponent):
         Profiler.getInstance().pop()
 
 
-    def addFinger(self, fingerData):
-        pass
+    def addFinger(self, name, data):
+
+        fingerCtrls = []
+        fingerJoints = []
+
+        parentCtrl = self.handCtrl
+        for i, joint in enumerate(data):
+            if i ==0:
+                jointName = name + 'Meta'
+            else:
+                jointName = name + str(i).zfill(2)
+
+            jointXfo = joint.get('xfo', Xfo())
+            jointLen = joint.get('length', 1.0)
+
+            # Create Controls
+            if i == 0:
+                ctrlShape = "square"
+            else:
+                ctrlShape = "circle"
+
+            newJointCtrlSpace = CtrlSpace(jointName, parent=parentCtrl)
+            newJointCtrl = Control(jointName, parent=newJointCtrlSpace, shape=ctrlShape)
+
+            scaleVec = Vec3(0.3, 0.3, 0.3)
+            if i == 0:
+                newJointCtrl.alignOnXAxis()
+                newJointCtrl.scalePoints(Vec3(jointLen * 0.8, 0.2, 0.2))
+                newJointCtrl.translatePoints(Vec3(0.0, 0.35, 0.0))
+            elif i == 1:
+                newJointCtrl.scalePoints(Vec3(0.2, 0.2, 0.2))
+                newJointCtrl.translatePoints(Vec3(0.0, 0.35, 0.0))
+            elif i > 1:
+                newJointCtrl.rotatePoints(0.0, 0.0, 90)
+
+            fingerCtrls.append(newJointCtrl)
+
+            # Create Deformers
+            jointDef = Joint(jointName, parent=self.defCmpGrp)
+            fingerJoints.append(jointDef)
+
+            # Create Constraints
+
+            # Set Xfos
+            newJointCtrlSpace.xfo = jointXfo
+            newJointCtrl.xfo = jointXfo
+
+            parentCtrl = newJointCtrl
+
+
+        # =================
+        # Create Operators
+        # =================
+        # Add Deformer KL Op
+        deformersToCtrlsKLOp = KLOperator(name + 'DeformerKLOp', 'MultiPoseConstraintSolver', 'Kraken')
+        self.addOperator(deformersToCtrlsKLOp)
+
+        # Add Att Inputs
+        deformersToCtrlsKLOp.setInput('drawDebug', self.drawDebugInputAttr)
+        deformersToCtrlsKLOp.setInput('rigScale', self.rigScaleInputAttr)
+
+        # Add Xfo Inputs
+        deformersToCtrlsKLOp.setInput('constrainers', fingerCtrls)
+
+        # Add Xfo Outputs
+        deformersToCtrlsKLOp.setOutput('constrainees', fingerJoints)
+
+        return deformersToCtrlsKLOp
 
 
     def loadData(self, data=None):
@@ -385,30 +457,33 @@ class HandComponentRig(HandComponent):
 
         super(HandComponentRig, self).loadData( data )
 
+        # Data
         fingerData = data.get('fingerData')
-
-        # TODO: Implement procedural addition of fingers including controls,
-        # deformers, and multi-pose constraint KL ops.
-
         handXfo = data.get('handXfo', Xfo())
-
-        self.armEndInputTgt.xfo = handXfo
 
         self.handCtrlSpace.xfo = handXfo
         self.handCtrl.xfo = handXfo
         # self.handCtrl.scalePoints(Vec3(data['clavicleLen'], 0.75, 0.75))
 
+        fingerOps = []
+        for finger in fingerData.keys():
+            fingerOp = self.addFinger(finger, fingerData[finger])
+            fingerOps.append(fingerOp)
+
         # ============
         # Set IO Xfos
         # ============
-        # self.armEndInputTgt.xfo = data['clavicleXfo']
-        # self.clavicleEndOutputTgt.xfo = data['clavicleXfo']
-        # self.handOutputTgt.xfo = data['clavicleXfo']
+        self.armEndInputTgt.xfo = handXfo
+        self.handOutputTgt.xfo = handXfo
 
         # Eval Constraints
         self.armEndInputConstraint.evaluate()
         self.handOutputConstraint.evaluate()
         self.handDefConstraint.evaluate()
+
+        # Eval Operators
+        for op in fingerOps:
+            op.evaluate()
 
 
 from kraken.core.kraken_system import KrakenSystem
