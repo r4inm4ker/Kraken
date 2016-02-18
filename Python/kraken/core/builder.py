@@ -890,6 +890,9 @@ class Builder(object):
 
         Profiler.getInstance().push("build:" + kSceneItem.getName())
 
+        self._preBuild(kSceneItem)
+        self._build(kSceneItem)
+
         try:
             self._preBuild(kSceneItem)
             self._build(kSceneItem)

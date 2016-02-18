@@ -33,7 +33,7 @@ function Xfo KrakenScaleConstraint.compute?(
   return result * this.offset;
 }
 
-/// \dfgPresetOmit
+/// \dfgPresetFolder Constraints
 function Xfo KrakenScaleConstraint.computeOffset?(
   Xfo constrainee
 ) {
