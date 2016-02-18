@@ -23,9 +23,23 @@ Additionally Kraken ships with 2 snippets that are found in the Kraken\extras di
 
   This snippet automatically adds a properly formatted doc string when you type docString and press enter. You will be able to tab through the different sections as needed to change the information. Additional arguments will need to be added by hand by duplicating the first line that is added for you.
 
+  The doc string looks like this:
+
+  ```python
+  """Doc String.
+
+        Args:
+            Arguments (Type): information.
+
+        Returns:
+            Type: True if successful.
+
+  """
+  ```
+
 * kraken_methHead
 
-  This creates a comment "header" which looks like
+  This creates a comment "header" which looks like this:
 
   ```python
   # ==========
