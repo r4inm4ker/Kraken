@@ -12,7 +12,7 @@ object KrakenSolver : IKrakenSolver {
 // Default Constructor
 inline KrakenSolver() {
   this.drawDebug = false;
-  this.handle = DrawingHandle();
+  this.handle = null;
 }
 
 // Return Arguments for Kraken
@@ -25,6 +25,7 @@ function KrakenSolverArg[] KrakenSolver.getArguments(){
 
 function KrakenSolver.setDebug!(in Boolean active) {
     this.drawDebug = active;
-    this.handle.setActive(active);
+    if(this.handle)
+      this.handle.setActive(active);
 }
 

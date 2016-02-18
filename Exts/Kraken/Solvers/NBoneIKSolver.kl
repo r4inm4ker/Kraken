@@ -135,6 +135,8 @@ function NBoneIKSolver.solve!
   // Set debugging visibility.
   this.setDebug(drawDebug);
   if(this.drawDebug) {
+    if(!this.handle)
+      this.handle = DrawingHandle();
 
     Color boneColor(1.0, 1.0, 0);
     for(UInt32 i=0; i<pose.size(); i++){
