@@ -67,19 +67,19 @@ class Builder(Builder):
         return hash(tuple(frozenset(sorted(new_o.items()))))  
 
     def getAttributeNodeAndPort(self, kAttribute):
-      path = kAttribute.getPath()
-      if self.__dfgAttributes.has_key(path):
-        return (self.__dfgAttributes[path], 'value')
+        path = kAttribute.getPath()
+        if self.__dfgAttributes.has_key(path):
+            return (self.__dfgAttributes[path], 'value')
 
-      objPath = path.rpartition('.')[0].rpartition('.')[0]
-      return (self.__dfgNodes[objPath], kAttribute.getName())
+        objPath = path.rpartition('.')[0].rpartition('.')[0]
+        return (self.__dfgNodes[objPath], kAttribute.getName())
 
     def getSceneItemNodeAndPort(self, kSceneItem):
-      if isinstance(kSceneItem, Attribute):
-        return self.getAttributeNodeAndPort(kSceneItem)
+        if isinstance(kSceneItem, Attribute):
+            return self.getAttributeNodeAndPort(kSceneItem)
 
-      path = kSceneItem.getPath()
-      return self.__dfgTransforms[path]
+        path = kSceneItem.getPath()
+        return self.__dfgTransforms[path]
 
     # ========================
     # IO Methods
@@ -93,9 +93,9 @@ class Builder(Builder):
 
     def decorateCanvasNode(self, node, metaData):
         for key in metaData:
-          self.__dfgTopLevelGraph.setNodeMetadata(node, 'ui'+key.capitalize(), str(metaData[key]))
-          if key == 'comment':
-            self.__dfgTopLevelGraph.setNodeMetadata(node, 'uiCommentExpanded', 'true')
+            self.__dfgTopLevelGraph.setNodeMetadata(node, 'ui'+key.capitalize(), str(metaData[key]))
+            if key == 'comment':
+                self.__dfgTopLevelGraph.setNodeMetadata(node, 'uiCommentExpanded', 'true')
 
     def createCanvasNodeFromPreset(self, preset, addToLayout = True, **metaData):
         path = self.__dfgTopLevelGraph.addInstFromPreset(preset)
@@ -122,20 +122,20 @@ class Builder(Builder):
         typeB = self.__dfgTopLevelGraph.getNodePortResolvedType("%s.%s" % (nodeB, portB))
 
         if typeA != typeB and typeA != None and typeB != None:
-          if typeA == 'Xfo' and typeB == 'Mat44':
-            preset = "Fabric.Exts.Math.Xfo.ToMat44"
-            convertNode = self.createCanvasNodeFromPreset(preset)
-            self.connectCanvasNodes(nodeA, portA, convertNode, "this")
-            nodeA = convertNode
-            portA = "result"
-          elif typeA == 'Mat44' and typeB == 'Xfo':
-            preset = "Fabric.Exts.Math.Xfo.SetFromMat44"
-            convertNode = self.createCanvasNodeFromPreset(preset)
-            self.connectCanvasNodes(nodeA, portA, convertNode, "m")
-            nodeA = convertNode
-            portA = "this"
-          else:
-            self.reportError('Cannot connect - incompatible type specs %s and %s.' % (typeA, typeB))
+            if typeA == 'Xfo' and typeB == 'Mat44':
+                preset = "Fabric.Exts.Math.Xfo.ToMat44"
+                convertNode = self.createCanvasNodeFromPreset(preset)
+                self.connectCanvasNodes(nodeA, portA, convertNode, "this")
+                nodeA = convertNode
+                portA = "result"
+            elif typeA == 'Mat44' and typeB == 'Xfo':
+                preset = "Fabric.Exts.Math.Xfo.SetFromMat44"
+                convertNode = self.createCanvasNodeFromPreset(preset)
+                self.connectCanvasNodes(nodeA, portA, convertNode, "m")
+                nodeA = convertNode
+                portA = "this"
+            else:
+                self.reportError('Cannot connect - incompatible type specs %s and %s.' % (typeA, typeB))
 
         result = self.__dfgTopLevelGraph.connectTo(nodeA+'.'+portA, nodeB+'.'+portB)
         if not self.__layoutG is None and addToLayout:
@@ -184,14 +184,14 @@ class Builder(Builder):
 
         else:
 
-          if portType == 'In':
-            (connNode, connPort) = self.getSceneItemNodeAndPort(connectedObjects)
-            self.connectCanvasNodes(connNode, connPort, node, port)
-          elif isinstance(connectedObjects, Attribute):
-            (connNode, connPort) = self.getSceneItemNodeAndPort(connectedObjects)
-            self.connectCanvasNodes(node, port, connNode, connPort)
-          else:
-            self.__dfgTransforms[connectedObjects.getPath()] = (node, port)
+            if portType == 'In':
+                (connNode, connPort) = self.getSceneItemNodeAndPort(connectedObjects)
+                self.connectCanvasNodes(connNode, connPort, node, port)
+            elif isinstance(connectedObjects, Attribute):
+                (connNode, connPort) = self.getSceneItemNodeAndPort(connectedObjects)
+                self.connectCanvasNodes(node, port, connNode, connPort)
+            else:
+                self.__dfgTransforms[connectedObjects.getPath()] = (node, port)
 
     def getIntermediateValue(self, node, port, prefix = ""):
         client = ks.getCoreClient()
@@ -200,7 +200,7 @@ class Builder(Builder):
 
         errors = json.loads(self.__dfgBinding.getErrors(True))
         if errors and len(errors) > 0:
-          raise Exception(str(errors))
+            raise Exception(str(errors))
 
         self.report(prefix+"Computing intermediate value "+port)
         self.__dfgBinding.execute()
@@ -240,10 +240,10 @@ class Builder(Builder):
     def buildCanvasNodeFromSceneItem(self, kSceneItem, buildName):
         cls = kSceneItem.__class__.__name__
         if cls in [
-          'ComponentInput',
-          'ComponentOutput'
+            'ComponentInput',
+            'ComponentOutput'
         ]:
-          cls = 'Transform'
+            cls = 'Transform'
 
         if not cls in [
             'ComponentGroup',
@@ -382,13 +382,13 @@ class Builder(Builder):
         (constraineeNode, constraineePort) = self.__dfgTransforms[constraineePath]
 
         if kConstraint.getMaintainOffset():
-          preset = "Kraken.Constraints.ComputeOffset"
-          computeOffsetNode = self.createCanvasNodeFromPreset(preset, addToLayout = False)
-          self.connectCanvasNodes(lastNode, lastPort, computeOffsetNode, 'this', addToLayout = False)
-          self.connectCanvasNodes(constraineeNode, constraineePort, computeOffsetNode, 'constrainee', addToLayout = False)
-          offset = self.getIntermediateValue(computeOffsetNode, 'result', prefix = str(cls)+": ")
-          self.deleteCanvasNode(computeOffsetNode)
-          self.__dfgTopLevelGraph.setPortDefaultValue(constructNode+".offset", offset)
+            preset = "Kraken.Constraints.ComputeOffset"
+            computeOffsetNode = self.createCanvasNodeFromPreset(preset, addToLayout = False)
+            self.connectCanvasNodes(lastNode, lastPort, computeOffsetNode, 'this', addToLayout = False)
+            self.connectCanvasNodes(constraineeNode, constraineePort, computeOffsetNode, 'constrainee', addToLayout = False)
+            offset = self.getIntermediateValue(computeOffsetNode, 'result', prefix = str(cls)+": ")
+            self.deleteCanvasNode(computeOffsetNode)
+            self.__dfgTopLevelGraph.setPortDefaultValue(constructNode+".offset", offset)
 
         preset = "Kraken.Constraints.Compute"
         computeNode = self.createCanvasNodeFromPreset(preset)
@@ -797,9 +797,9 @@ class Builder(Builder):
 
             argPort = None
             if argConnectionType == 'In':
-              argPort = subExec.addExecPort(argName, client.DFG.PortTypes.In)
+                argPort = subExec.addExecPort(argName, client.DFG.PortTypes.In)
             else:
-              argPort = subExec.addExecPort(argName, client.DFG.PortTypes.Out)
+                argPort = subExec.addExecPort(argName, client.DFG.PortTypes.Out)
             argPorts[argName] = argPort
             subExec.setExecPortTypeSpec(argPort, argDataType)
 
@@ -988,9 +988,9 @@ class Builder(Builder):
 
             layout = self.__layoutG.compute(scale = 2000)
             for key in layout:
-              pos = layout[key]
-              posStr = '{"x": %f, "y": %f}' % (pos[0], pos[1])
-              self.__dfgTopLevelGraph.setNodeMetadata(key, "uiGraphPos", posStr)
+                pos = layout[key]
+                posStr = '{"x": %f, "y": %f}' % (pos[0], pos[1])
+                self.__dfgTopLevelGraph.setNodeMetadata(key, "uiGraphPos", posStr)
 
         if self.__outputFilePath:
             content = self.__dfgBinding.exportJSON()

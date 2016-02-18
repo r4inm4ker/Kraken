@@ -50,7 +50,7 @@ class SpringLayout(object):
               for c in connections[key]:
                   if degree.has_key(c):
                       if degree[key] > degree[c]:
-                        continue
+                          continue
                       degree[key] = degree[c] + 1
                       degreeIncreased = True
                       if degree[key] > maxDegree:
@@ -60,6 +60,6 @@ class SpringLayout(object):
 
         pos = {}
         for key in self.__keys:
-          pos[key] = [float(degree[key]) * step, 0]
+            pos[key] = [float(degree[key]) * step, 0]
 
         return pos
