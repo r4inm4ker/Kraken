@@ -34,6 +34,14 @@ function Xfo KrakenPositionConstraint.compute?(
 }
 
 /// \dfgPresetFolder Constraints
+function Xfo KrakenPositionConstraint.computeSimple!(Xfo offset, Xfo constrainer, Xfo constrainee) {
+  this.offset = offset;
+  this.constrainers.resize(1);
+  this.constrainers[0] = constrainer;
+  return this.compute(constrainee);
+}
+
+/// \dfgPresetFolder Constraints
 function Xfo KrakenPositionConstraint.computeOffset?(
   Xfo constrainee
 ) {

@@ -84,13 +84,17 @@ class Builder(Builder):
     # Canvas Preset Methods
     # ========================
 
+    def hasSceneItemNode(self, kSceneItem):
+        return self.__dfgNodes.has_key(kSceneItem.getPath())
+
     def getAttributeNodeAndPort(self, kAttribute, asInput = True):
         path = kAttribute.getPath()
         if self.__dfgAttributes.has_key(path):
-            if asInput:
-                return (self.__dfgAttributes[path][0], 'value')
+            (constructNode, valueNode) = self.__dfgAttributes[path]
+            if asInput or valueNode is None:
+                return (constructNode, 'value')
             else:
-                return (self.__dfgAttributes[path][1], 'result')
+                return (valueNode, 'result')
 
         objPath = path.rpartition('.')[0].rpartition('.')[0]
         return (self.__dfgNodes[objPath], kAttribute.getName())
@@ -136,8 +140,8 @@ class Builder(Builder):
         self.__dfgBinding.setArgValue(self.__dfgArguments['controls'], ks.rtVal('Xfo[String]'))
         self.__dfgArguments['floats'] = self.__dfgTopLevelGraph.addExecPort("floats", client.DFG.PortTypes.In)
         self.__dfgBinding.setArgValue(self.__dfgArguments['floats'], ks.rtVal('Float32[String]'))
-        self.__dfgArguments['all'] = self.__dfgTopLevelGraph.addExecPort("all", client.DFG.PortTypes.Out)
-        self.__dfgBinding.setArgValue(self.__dfgArguments['all'], ks.rtVal('Xfo[String]'))
+        # self.__dfgArguments['all'] = self.__dfgTopLevelGraph.addExecPort("all", client.DFG.PortTypes.Out)
+        # self.__dfgBinding.setArgValue(self.__dfgArguments['all'], ks.rtVal('Xfo[String]'))
         self.__dfgArguments['joints'] = self.__dfgTopLevelGraph.addExecPort("joints", client.DFG.PortTypes.Out)
         self.__dfgBinding.setArgValue(self.__dfgArguments['joints'], ks.rtVal('Xfo[String]'))
 
@@ -365,6 +369,12 @@ class Builder(Builder):
         # then expose all of hte attributes below the created ComponentInput
         # then expose all of hte attributes below the created ComponentOutput
 
+        if cls in [
+            'Layer',
+            'Rig'
+        ]:
+            return True
+
         if not cls in [
             'ComponentGroup',
             'Container',
@@ -373,9 +383,7 @@ class Builder(Builder):
             'Control',
             'HierarchyGroup',
             'Joint',
-            'Layer',
             'Locator',
-            'Rig',
             'Transform'
         ]:
             self.reportError("buildCanvasNodeFromSceneItem: Unexpected class " + cls)
@@ -388,10 +396,14 @@ class Builder(Builder):
         self._registerSceneItemPair(kSceneItem, nodePath)
         self.__dfgConstructors[path] = nodePath
 
-        preset = "Kraken.Constructors.GetXfo"
-        xfoNode = self.createCanvasNodeFromPreset(preset, comment = kSceneItem.getPath())
-        self.connectCanvasNodes(nodePath, 'result', xfoNode, 'this')
-        self.setSceneItemTransformPort(kSceneItem, xfoNode, 'result')
+        # only the types which support animation
+        if isinstance(kSceneItem, Control):
+            preset = "Kraken.Constructors.GetXfo"
+            xfoNode = self.createCanvasNodeFromPreset(preset, comment = kSceneItem.getPath())
+            self.connectCanvasNodes(nodePath, 'result', xfoNode, 'this')
+            self.setSceneItemTransformPort(kSceneItem, xfoNode, 'result')
+        else:
+            self.setSceneItemTransformPort(kSceneItem, nodePath, 'xfo')
 
         # set the defaults
         self.setPortDefaultValue(kSceneItem, "name", kSceneItem.getName())
@@ -442,7 +454,8 @@ class Builder(Builder):
                 preset = "Kraken.DebugDrawing.DrawIntoLinesObjectForControl"
               drawNode = self.createCanvasNodeFromPreset(preset)
               self.connectCanvasNodes(nodePath, 'result', drawNode, 'this')
-              self.connectCanvasNodes(xfoNode, 'result', drawNode, 'xfo')
+              (xfoNode, xfoPort) = self.getSceneItemNodeAndPort(kSceneItem)
+              self.connectCanvasNodes(xfoNode, xfoPort, drawNode, 'xfo')
               if isinstance(kSceneItem, Control):
                 self.connectCanvasNodes(self.__dfgLastCurveNode, 'this', drawNode, 'shapes')
               self.connectCanvasNodes(prevNode, prevPort, drawNode, 'lines')
@@ -450,7 +463,7 @@ class Builder(Builder):
 
         if hasattr(kSceneItem, 'getParent'):
             parent = kSceneItem.getParent()
-            if not parent is None:
+            if not parent is None and self.hasSceneItemNode(parent):
                 (parentNode, parentPort) = self.getSceneItemNodeAndPort(parent, asInput = False)
                 (childNode, childPort) = self.getSceneItemNodeAndPort(kSceneItem, asInput = False)
                 preset = "Fabric.Core.Math.Mul"
@@ -479,9 +492,13 @@ class Builder(Builder):
         path = kAttribute.getPath()
         preset = "Kraken.Attributes.Kraken%s" % cls
         nodePath = self.createCanvasNodeFromPreset(preset, comment = kAttribute.getPath())
-        preset = "Kraken.Attributes.Get%sValue" % cls[:-9]
-        valueNode = self.createCanvasNodeFromPreset(preset, comment = kAttribute.getPath())
-        self.connectCanvasNodes(nodePath, 'result', valueNode, 'this')
+
+        # only the types which support animation
+        valueNode = None
+        if isinstance(kAttribute, ScalarAttribute):
+            preset = "Kraken.Attributes.Get%sValue" % cls[:-9]
+            valueNode = self.createCanvasNodeFromPreset(preset, comment = kAttribute.getPath())
+            self.connectCanvasNodes(nodePath, 'result', valueNode, 'this')
 
         self.__dfgNodes[path] = nodePath
         self._registerSceneItemPair(kAttribute, nodePath)
@@ -524,6 +541,9 @@ class Builder(Builder):
         constructNode = self.createCanvasNodeFromPreset(preset)
         lastNode = constructNode
         lastPort = "result"
+
+        # todo: move this to use compute simple instead
+        # we also need a compute offset simple
 
         constrainers = kConstraint.getConstrainers()
         for constrainer in constrainers:
@@ -1142,6 +1162,9 @@ class Builder(Builder):
             bool: True if successful.
 
         """
+        if not self.hasSceneItemNode(kSceneItem):
+            return True
+
         self.setPortDefaultValue(kSceneItem, "visibility", kSceneItem.getVisibility())
         return True
 
@@ -1158,6 +1181,9 @@ class Builder(Builder):
             bool: True if successful.
 
         """
+        if not self.hasSceneItemNode(kSceneItem):
+            return True
+
         self.setPortDefaultValue(kSceneItem, "color", kSceneItem.getColor())
         return True
 
@@ -1174,32 +1200,20 @@ class Builder(Builder):
             bool: True if successful.
 
         """
-        def roundXfo(xfo):
-            # the generation of the json file has issues with
-            # too high precision
-            xfo = xfo.clone()
-            xfo.tr.x = float("{0:.3f}".format(xfo.tr.x))
-            xfo.tr.y = float("{0:.3f}".format(xfo.tr.y))
-            xfo.tr.z = float("{0:.3f}".format(xfo.tr.z))
-            xfo.ori.v.x = float("{0:.3f}".format(xfo.ori.v.x))
-            xfo.ori.v.y = float("{0:.3f}".format(xfo.ori.v.y))
-            xfo.ori.v.z = float("{0:.3f}".format(xfo.ori.v.z))
-            xfo.ori.w = float("{0:.3f}".format(xfo.ori.w))
-            xfo.sc.x = float("{0:.3f}".format(xfo.sc.x))
-            xfo.sc.y = float("{0:.3f}".format(xfo.sc.y))
-            xfo.sc.z = float("{0:.3f}".format(xfo.sc.z))
-            return xfo
+
+        if not self.hasSceneItemNode(kSceneItem):
+            return True
 
         (node, port) = self.getSceneItemNodeAndPort(kSceneItem, asInput = True)
         if node != self.__dfgNodes[kSceneItem.getPath()]:
-          self.setPortDefaultValue(kSceneItem, "xfo", Xfo())
-          parentXfo = Xfo(self.getIntermediateValue(node, port, kSceneItem.getPath()))
-          invXfo = parentXfo.inverse()
-          localXfo = invXfo.multiply(kSceneItem.xfo)
-          self.setPortDefaultValue(kSceneItem, "xfo", roundXfo(localXfo))
-        else:
-          self.setPortDefaultValue(kSceneItem, "xfo", roundXfo(kSceneItem.xfo))
-
+            self.setPortDefaultValue(kSceneItem, "xfo", Xfo())
+            parentXfo = Xfo(self.getIntermediateValue(node, port, kSceneItem.getPath()))
+            invXfo = parentXfo.inverse()
+            localXfo = invXfo.multiply(kSceneItem.xfo)
+            self.setPortDefaultValue(kSceneItem, "xfo", localXfo)
+            return True
+  
+        self.setPortDefaultValue(kSceneItem, "xfo", kSceneItem.xfo)
         return True
 
     # ==============
