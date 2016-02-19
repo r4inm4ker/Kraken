@@ -537,43 +537,67 @@ class Builder(Builder):
         path = kConstraint.getPath()
         
         nodes = []
-        preset = "Kraken.Constraints.Kraken%s" % cls
-        constructNode = self.createCanvasNodeFromPreset(preset)
-        lastNode = constructNode
-        lastPort = "result"
-
-        # todo: move this to use compute simple instead
-        # we also need a compute offset simple
 
         constrainers = kConstraint.getConstrainers()
-        for constrainer in constrainers:
-            preset = "Kraken.Constraints.AddConstrainer"
-            addNode = self.createCanvasNodeFromPreset(preset, comment = constrainer.getPath())
-
-            self.connectCanvasNodes(lastNode, lastPort, addNode, 'this')
-
-            (constrainerNode, constrainerPort) = self.getSceneItemNodeAndPort(constrainer, asInput = False)
-            self.connectCanvasNodes(constrainerNode, constrainerPort, addNode, 'constrainer')
-
-            lastNode = addNode
-            lastPort = 'this'
-
         constrainee = kConstraint.getConstrainee()
         (constraineeNode, constraineePort) = self.getSceneItemNodeAndPort(constrainee, asInput = True)
 
-        if kConstraint.getMaintainOffset():
-            preset = "Kraken.Constraints.ComputeOffset"
-            computeOffsetNode = self.createCanvasNodeFromPreset(preset, addToLayout = False)
-            self.connectCanvasNodes(lastNode, lastPort, computeOffsetNode, 'this', addToLayout = False)
-            self.connectCanvasNodes(constraineeNode, constraineePort, computeOffsetNode, 'constrainee', addToLayout = False)
-            offset = self.getIntermediateValue(computeOffsetNode, 'result', prefix = str(cls)+": ")
-            self.removeCanvasNode(computeOffsetNode)
-            self.__dfgTopLevelGraph.setPortDefaultValue(constructNode+".offset", offset)
+        computeNode = None
 
-        preset = "Kraken.Constraints.Compute"
-        computeNode = self.createCanvasNodeFromPreset(preset, comment = kConstraint.getConstrainee().getPath())
-        self.connectCanvasNodes(lastNode, lastPort, computeNode, 'this')
-        self.connectCanvasNodes(constraineeNode, constraineePort, computeNode, 'xfo')
+        if len(constrainers) == 1:
+
+            (constrainerNode, constrainerPort) = self.getSceneItemNodeAndPort(constrainers[0], asInput = False)
+
+            preset = "Kraken.Constraints.ComputeKraken%s" % cls
+            computeNode = self.createCanvasNodeFromPreset(preset, comment = kConstraint.getConstrainee().getPath())
+            self.connectCanvasNodes(constrainerNode, constrainerPort, computeNode, 'constrainer', addToLayout = False)
+            self.connectCanvasNodes(constraineeNode, constraineePort, computeNode, 'constrainee', addToLayout = False)
+
+            if kConstraint.getMaintainOffset():
+                preset = "Kraken.Constraints.Kraken%s" % cls
+                constructNode = self.createCanvasNodeFromPreset(preset, addToLayout = False)
+                preset = "Kraken.Constraints.ComputeOffsetSimple"
+                computeOffsetNode = self.createCanvasNodeFromPreset(preset, addToLayout = False)
+                self.connectCanvasNodes(constructNode, 'result', computeOffsetNode, 'this', addToLayout = False)
+                self.connectCanvasNodes(constrainerNode, constrainerPort, computeOffsetNode, 'constrainer', addToLayout = False)
+                self.connectCanvasNodes(constraineeNode, constraineePort, computeOffsetNode, 'constrainee', addToLayout = False)
+                offset = self.getIntermediateValue(computeOffsetNode, 'result', prefix = str(cls)+": ")
+                self.removeCanvasNode(computeOffsetNode)
+                self.removeCanvasNode(constructNode)
+                self.__dfgTopLevelGraph.setPortDefaultValue(computeNode+".offset", offset)
+
+        else:
+
+            preset = "Kraken.Constraints.Kraken%s" % cls
+            constructNode = self.createCanvasNodeFromPreset(preset)
+            lastNode = constructNode
+            lastPort = "result"
+
+            for constrainer in constrainers:
+                preset = "Kraken.Constraints.AddConstrainer"
+                addNode = self.createCanvasNodeFromPreset(preset, comment = constrainer.getPath())
+
+                self.connectCanvasNodes(lastNode, lastPort, addNode, 'this')
+
+                (constrainerNode, constrainerPort) = self.getSceneItemNodeAndPort(constrainer, asInput = False)
+                self.connectCanvasNodes(constrainerNode, constrainerPort, addNode, 'constrainer')
+
+                lastNode = addNode
+                lastPort = 'this'
+
+            preset = "Kraken.Constraints.Compute"
+            computeNode = self.createCanvasNodeFromPreset(preset, comment = kConstraint.getConstrainee().getPath())
+            self.connectCanvasNodes(lastNode, lastPort, computeNode, 'this')
+            self.connectCanvasNodes(constraineeNode, constraineePort, computeNode, 'xfo')
+
+            if kConstraint.getMaintainOffset():
+                preset = "Kraken.Constraints.ComputeOffset"
+                computeOffsetNode = self.createCanvasNodeFromPreset(preset, addToLayout = False)
+                self.connectCanvasNodes(lastNode, lastPort, computeOffsetNode, 'this', addToLayout = False)
+                self.connectCanvasNodes(constraineeNode, constraineePort, computeOffsetNode, 'constrainee', addToLayout = False)
+                offset = self.getIntermediateValue(computeOffsetNode, 'result', prefix = str(cls)+": ")
+                self.removeCanvasNode(computeOffsetNode)
+                self.__dfgTopLevelGraph.setPortDefaultValue(constructNode+".offset", offset)
 
         self.setSceneItemTransformPort(constrainee, computeNode, 'result')
 

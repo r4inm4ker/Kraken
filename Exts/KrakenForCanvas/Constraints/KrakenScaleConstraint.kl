@@ -34,11 +34,10 @@ function Xfo KrakenScaleConstraint.compute?(
 }
 
 /// \dfgPresetFolder Constraints
-function Xfo KrakenScaleConstraint.computeSimple!(Xfo offset, Xfo constrainer, Xfo constrainee) {
-  this.offset = offset;
-  this.constrainers.resize(1);
-  this.constrainers[0] = constrainer;
-  return this.compute(constrainee);
+function Xfo computeKrakenScaleConstraint(Xfo offset, Xfo constrainer, Xfo constrainee) {
+  KrakenScaleConstraint constraint(offset);
+  constraint.addConstrainer(constrainer);
+  return constraint.compute(constrainee);
 }
 
 /// \dfgPresetFolder Constraints
@@ -51,4 +50,12 @@ function Xfo KrakenScaleConstraint.computeOffset?(
 
   Xfo global = tmpConstraint.compute(constrainee);
   return global.inverse() * constrainee;
+}
+
+/// \dfgPresetFolder Constraints
+function Xfo KrakenScaleConstraint.computeOffsetSimple!(Xfo constrainee, Xfo constrainer) {
+  this.offset = Xfo();
+  this.constrainers.resize(1);
+  this.constrainers[0] = constrainer;
+  return this.computeOffset(constrainee);
 }
