@@ -20,7 +20,10 @@ builder.setOutputFilePath(args[1])
 
 config = builder.getConfig()
 config.setExplicitNaming(True)
-config.setMetaData('DebugDrawingSupport', True)
+
+config.setMetaData('SetupDebugDrawing', True)
+config.setMetaData('CollapseComponents', False)
+config.setMetaData('AddCollectJointsNode', True)
 
 builder.build(rig)
 
