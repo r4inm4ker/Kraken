@@ -11,23 +11,6 @@ from quat import Quat
 from mat33 import Mat33
 from mat44 import Mat44
 
-axisStrToTupleMapping = {
-    'POSX': (1, 0, 0),
-    'POSY': (0, 1, 0),
-    'POSZ': (0, 0, 1),
-    'NEGX': (-1, 0, 0),
-    'NEGY': (0, -1, 0),
-    'NEGZ': (0, 0, -1)
-}
-
-axisStrToIntMapping = {
-    'POSX': 0,
-    'POSY': 1,
-    'POSZ': 2,
-    'NEGX': 3,
-    'NEGY': 4,
-    'NEGZ': 5
-}
 
 class Xfo(MathObject):
     """Transform object."""
