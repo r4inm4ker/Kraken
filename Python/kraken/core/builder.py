@@ -395,7 +395,7 @@ class Builder(object):
 
         # There should be no offset between an output xfo from one component and the connected input of another
         # If connected, they should be exactly the same.
-        constraint = inputTarget.constrainTo(connectionTarget, maintainOffset=False, addToConstraintList=False)
+        constraint = inputTarget.constrainTo(connectionTarget, maintainOffset=False)
 
         dccSceneItem = self.buildPoseConstraint(constraint)
         self._registerSceneItemPair(componentInput, dccSceneItem)
