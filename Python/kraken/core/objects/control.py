@@ -9,6 +9,7 @@ from kraken.core.configs.config import Config
 from kraken.core.maths import Euler, Quat, Vec3, Xfo
 from kraken.core.maths import Math_degToRad
 from kraken.core.objects.curve import Curve
+from kraken.core.objects.ctrlSpace import CtrlSpace
 
 
 class Control(Curve):
@@ -41,7 +42,6 @@ class Control(Curve):
 
         return self.shape
 
-
     def setShape(self, shape):
         """Sets the shape of the control to the one specified.
 
@@ -61,7 +61,6 @@ class Control(Curve):
         self.setCurveData(configShapes[shape])
 
         return True
-
 
 
     # ==============
@@ -106,7 +105,6 @@ class Control(Curve):
 
         return True
 
-
     def alignOnYAxis(self, negative=False):
         """Aligns the control shape on the Y axis.
 
@@ -144,7 +142,6 @@ class Control(Curve):
         self.setCurveData(curveData)
 
         return True
-
 
     def alignOnZAxis(self, negative=False):
         """Aligns the control shape on the Z axis.
@@ -274,3 +271,32 @@ class Control(Curve):
         self.setCurveData(curveData)
 
         return True
+
+
+    # ===============
+    # Helper Methods
+    # ===============
+    def insertCtrlSpace(self, name=None):
+        """Adds a CtrlSpace object above this object
+
+        Args:
+            name (string): optional name for this CtrlSpace, default is same as this object
+
+        Returns:
+            object: New CtrlSpace object
+
+        """
+
+        if name is None:
+            name = self.getName()
+
+        newCtrlSpace = CtrlSpace(name, parent=self.getParent())
+        if self.getParent() is not None:
+            self.getParent().removeChild(self)
+
+        self.setParent(newCtrlSpace)
+        newCtrlSpace.addChild(self)
+
+        newCtrlSpace.xfo = Xfo(self.xfo)
+
+        return newCtrlSpace
