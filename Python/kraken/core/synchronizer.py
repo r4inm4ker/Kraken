@@ -158,8 +158,10 @@ class Synchronizer(object):
             # Sync Xfo if it's not a Component
             if kObject.isTypeOf('Component') is False:
 
+                # If the top-level rig DCC node does not exist, don't proceed
+                # through the hierarchy.
                 if kObject.isTypeOf('Rig') and self.getDCCItem(kObject) is None:
-                    return False  #Bail out now if the top-level rig DCC node does not exist, don't need a warning
+                    return False
 
                 self.syncXfo(kObject)
 
