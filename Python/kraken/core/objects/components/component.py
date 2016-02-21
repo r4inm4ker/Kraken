@@ -161,11 +161,13 @@ class Component(Object3D):
     # Layer methods
     # =============
     def getLayer(self, name):
-        """Retrieves a layer from the owning container, or generates a layer
-        (and warning message).
+        """Retrieves a layer from the owning container.
+
+        Args:
+            name (str): Name of the layer to find.
 
         Returns:
-            Layer: The layer from the container, or generated layer.
+            Layer: The layer from the container.
 
         """
 
@@ -175,7 +177,10 @@ class Component(Object3D):
 
         layer = container.getChildByName(name)
         if layer is None or not layer.isTypeOf('Layer'):
-            raise KeyError("Layer '" + + "' was not found!")
+            raise KeyError("Layer '" + name + "' was not found!")
+
+        # TODO: We should be returning None instead of raising an error and users
+        # will be required to test if None.
 
         return layer
 
@@ -225,12 +230,17 @@ class Component(Object3D):
 
 
     def getAllHierarchyNodes(self, classType, inheritedClass=False):
-        """
-        Returns a nodeList with all children in component hierarchy that matches classType
-        If inheritedType is True, match any node that is subclass of type
-        """
+        """Returns a nodeList with all children in component hierarchy that
+        matches classType.
 
-        # Currently does not work.  Does component not have children???
+        Args:
+            classType (type): Class type to match.
+            inheritedClass (bool): Match nodes that is a sub-class of type.
+
+        Returns:
+            list: Nodes that match the class type.
+
+        """
 
         def getHierarchyNodes(kObject, classType, nodeList, inheritedClass):
             for i in xrange(kObject.getNumChildren()):
@@ -242,7 +252,6 @@ class Component(Object3D):
 
                 getHierarchyNodes(child, classType=classType, nodeList=nodeList, inheritedClass=inheritedClass)
 
-
         container = self.getContainer()
         nodeList = []
         for i in xrange(container.getNumChildren()):
@@ -250,6 +259,7 @@ class Component(Object3D):
             getHierarchyNodes(child, classType=classType, nodeList=nodeList, inheritedClass=inheritedClass)
 
         nodeList = [x for x in nodeList if x.getComponent() is self]
+
         return nodeList
 
     # ==============
@@ -587,16 +597,11 @@ class Component(Object3D):
     # =================
     # Operator Methods
     # =================
-
-
     def evalOperators(self):
-        """Evaluates all component operators
-
-        Args:
-            None
+        """Evaluates all component operators in order they were created.
 
         Returns:
-            bool: True if the index is valid.
+            bool: True if no errors during evaluation.
 
         """
 
