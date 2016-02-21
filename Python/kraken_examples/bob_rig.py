@@ -180,10 +180,10 @@ class BobRig(Container):
 
         # Arm To Clavicle Connections
         clavicleLeftEndOutput = clavicleLeftComponent.getOutputByName('clavicleEnd')
-        armLeftClavicleEndInput = armLeftComponent.getInputByName('clavicleEnd')
+        armLeftClavicleEndInput = armLeftComponent.getInputByName('root')
         armLeftClavicleEndInput.setConnection(clavicleLeftEndOutput)
         clavicleRightEndOutput = clavicleRightComponent.getOutputByName('clavicleEnd')
-        armRightClavicleEndInput = armRightComponent.getInputByName('clavicleEnd')
+        armRightClavicleEndInput = armRightComponent.getInputByName('root')
         armRightClavicleEndInput.setConnection(clavicleRightEndOutput)
 
         # Leg to Global SRT

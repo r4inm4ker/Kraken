@@ -57,29 +57,25 @@ building:char_bob.controls.Clavicle.clavicleEnd as:Clavicle_R_clavicleEnd_ctrl
 building:char_bob.controls.Arm as:Arm_L_cmp
 building:char_bob.controls.Arm.inputs as:Arm_L_inputs_hrc
 building:char_bob.controls.Arm.inputs.globalSRT as:Arm_L_globalSRT_cmpIn
-building:char_bob.controls.Arm.inputs.clavicleEnd as:Arm_L_clavicleEnd_cmpIn
+building:char_bob.controls.Arm.inputs.root as:Arm_L_root_cmpIn
 building:char_bob.controls.Arm.outputs as:Arm_L_outputs_hrc
 building:char_bob.controls.Arm.outputs.bicep as:Arm_L_bicep_cmpOut
 building:char_bob.controls.Arm.outputs.forearm as:Arm_L_forearm_cmpOut
-building:char_bob.controls.Arm.outputs.armEndXfo as:Arm_L_armEndXfo_cmpOut
-building:char_bob.controls.Arm.outputs.hand as:Arm_L_hand_cmpOut
-building:char_bob.controls.Arm.bicepFK as:Arm_L_bicepFK_ctrl
-building:char_bob.controls.Arm.forearmFK as:Arm_L_forearmFK_ctrl
-building:char_bob.controls.Arm.wristFK as:Arm_L_wristFK_ctrl
-building:char_bob.controls.Arm.hand as:Arm_L_hand_ctrl
+building:char_bob.controls.Arm.outputs.wrist as:Arm_L_wrist_cmpOut
+building:char_bob.controls.Arm.bicep as:Arm_L_bicep_ctrl
+building:char_bob.controls.Arm.forearm as:Arm_L_forearm_ctrl
+building:char_bob.controls.Arm.wrist as:Arm_L_wrist_ctrl
 building:char_bob.controls.Arm as:Arm_R_cmp
 building:char_bob.controls.Arm.inputs as:Arm_R_inputs_hrc
 building:char_bob.controls.Arm.inputs.globalSRT as:Arm_R_globalSRT_cmpIn
-building:char_bob.controls.Arm.inputs.clavicleEnd as:Arm_R_clavicleEnd_cmpIn
+building:char_bob.controls.Arm.inputs.root as:Arm_R_root_cmpIn
 building:char_bob.controls.Arm.outputs as:Arm_R_outputs_hrc
 building:char_bob.controls.Arm.outputs.bicep as:Arm_R_bicep_cmpOut
 building:char_bob.controls.Arm.outputs.forearm as:Arm_R_forearm_cmpOut
-building:char_bob.controls.Arm.outputs.armEndXfo as:Arm_R_armEndXfo_cmpOut
-building:char_bob.controls.Arm.outputs.hand as:Arm_R_hand_cmpOut
-building:char_bob.controls.Arm.bicepFK as:Arm_R_bicepFK_ctrl
-building:char_bob.controls.Arm.forearmFK as:Arm_R_forearmFK_ctrl
-building:char_bob.controls.Arm.wristFK as:Arm_R_wristFK_ctrl
-building:char_bob.controls.Arm.hand as:Arm_R_hand_ctrl
+building:char_bob.controls.Arm.outputs.wrist as:Arm_R_wrist_cmpOut
+building:char_bob.controls.Arm.bicep as:Arm_R_bicep_ctrl
+building:char_bob.controls.Arm.forearm as:Arm_R_forearm_ctrl
+building:char_bob.controls.Arm.wrist as:Arm_R_wrist_ctrl
 building:char_bob.controls.Leg as:Leg_L_cmp
 building:char_bob.controls.Leg.inputs as:Leg_L_inputs_hrc
 building:char_bob.controls.Leg.inputs.globalSRT as:Leg_L_globalSRT_cmpIn
@@ -120,8 +116,8 @@ buildConnection:neckBase
 buildConnection:headBase
 buildConnection:spineEnd
 buildConnection:spineEnd
-buildConnection:clavicleEnd
-buildConnection:clavicleEnd
+buildConnection:root
+buildConnection:root
 buildConnection:pelvisInput
 buildConnection:pelvisInput
 char_bob
@@ -182,29 +178,25 @@ char_bob.controls.Clavicle:R.clavicleEnd
 char_bob.controls.Arm:L
 char_bob.controls.Arm:L.inputs
 char_bob.controls.Arm:L.inputs.globalSRT
-char_bob.controls.Arm:L.inputs.clavicleEnd
+char_bob.controls.Arm:L.inputs.root
 char_bob.controls.Arm:L.outputs
 char_bob.controls.Arm:L.outputs.bicep
 char_bob.controls.Arm:L.outputs.forearm
-char_bob.controls.Arm:L.outputs.armEndXfo
-char_bob.controls.Arm:L.outputs.hand
-char_bob.controls.Arm:L.bicepFK
-char_bob.controls.Arm:L.forearmFK
-char_bob.controls.Arm:L.wristFK
-char_bob.controls.Arm:L.hand
+char_bob.controls.Arm:L.outputs.wrist
+char_bob.controls.Arm:L.bicep
+char_bob.controls.Arm:L.forearm
+char_bob.controls.Arm:L.wrist
 char_bob.controls.Arm:R
 char_bob.controls.Arm:R.inputs
 char_bob.controls.Arm:R.inputs.globalSRT
-char_bob.controls.Arm:R.inputs.clavicleEnd
+char_bob.controls.Arm:R.inputs.root
 char_bob.controls.Arm:R.outputs
 char_bob.controls.Arm:R.outputs.bicep
 char_bob.controls.Arm:R.outputs.forearm
-char_bob.controls.Arm:R.outputs.armEndXfo
-char_bob.controls.Arm:R.outputs.hand
-char_bob.controls.Arm:R.bicepFK
-char_bob.controls.Arm:R.forearmFK
-char_bob.controls.Arm:R.wristFK
-char_bob.controls.Arm:R.hand
+char_bob.controls.Arm:R.outputs.wrist
+char_bob.controls.Arm:R.bicep
+char_bob.controls.Arm:R.forearm
+char_bob.controls.Arm:R.wrist
 char_bob.controls.Leg:L
 char_bob.controls.Leg:L.inputs
 char_bob.controls.Leg:L.inputs.globalSRT
