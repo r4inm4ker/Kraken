@@ -456,7 +456,6 @@ class Object3D(SceneItem):
         return True
 
 
-
     def getChildren(self):
         """Gets the children of this object.
 
@@ -769,9 +768,9 @@ class Object3D(SceneItem):
         if name is None:
             constraintName = ""
             if hasattr(constrainers, '__iter__'):
-                constraintName = '_'.join(self.getName(), 'To', constrainers[0].getName(), constraintType + 'Constraint')
+                constraintName = '_'.join([self.getName(), 'To', constrainers[0].getName(), constraintType + 'Constraint'])
             else:
-                constraintName = '_'.join(self.getName(), 'To', constrainers.getName(), constraintType + 'Constraint')
+                constraintName = '_'.join([self.getName(), 'To', constrainers.getName(), constraintType + 'Constraint'])
         else:
             constraintName = name
 
