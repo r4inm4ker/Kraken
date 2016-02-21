@@ -43,7 +43,7 @@ def XSILoadPlugin(in_reg):
     if krakenExtsDir not in  os.environ['FABRIC_EXTS_PATH']:
         os.environ['FABRIC_EXTS_PATH'] = krakenExtsDir + os.pathsep + os.environ['FABRIC_EXTS_PATH']
 
-    canvasPresetsDir = os.path.join(krakenDir, 'CanvasPresets')
+    canvasPresetsDir = os.path.join(krakenDir, 'Presets')
     if canvasPresetsDir not in os.environ['FABRIC_DFG_PATH']:
         os.environ['FABRIC_DFG_PATH'] = canvasPresetsDir + os.pathsep + os.environ['FABRIC_DFG_PATH']
 

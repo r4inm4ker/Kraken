@@ -27,7 +27,7 @@ krakenExtsDir = os.path.join(krakenDir, 'Exts')
 if krakenExtsDir not in os.environ['FABRIC_EXTS_PATH']:
     os.environ['FABRIC_EXTS_PATH'] = krakenExtsDir + os.pathsep + os.environ['FABRIC_EXTS_PATH']
 
-canvasPresetsDir = os.path.join(krakenDir, 'CanvasPresets')
+canvasPresetsDir = os.path.join(krakenDir, 'Presets')
 if 'FABRIC_DFG_PATH' in os.environ:
     if canvasPresetsDir not in os.environ['FABRIC_DFG_PATH']:
         os.environ['FABRIC_DFG_PATH'] = canvasPresetsDir + os.pathsep + os.environ['FABRIC_DFG_PATH']
@@ -95,9 +95,6 @@ class KrakenSystem(object):
                 self.client = FabricEngine.Core.createClient({"contextID": contextID})
 
             self.loadExtension('Math')
-
-            # krakenDir = os.environ['KRAKEN_PATH']
-            # self.client.DFG.host.addPresetDir('', 'Kraken', os.path.join(krakenDir, 'CanvasPresets'))
 
             Profiler.getInstance().pop()
 
