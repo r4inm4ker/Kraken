@@ -6,8 +6,7 @@ Control - Base Control.
 """
 
 from kraken.core.configs.config import Config
-from kraken.core.maths import Euler, Quat, Vec3, Xfo
-from kraken.core.maths.xfo import axisStrToTupleMapping
+from kraken.core.maths import AXIS_NAME_TO_TUPLE_MAP, Euler, Quat, Vec3, Xfo
 from kraken.core.maths import Math_degToRad
 from kraken.core.objects.curve import Curve
 from kraken.core.objects.ctrlSpace import CtrlSpace
@@ -57,7 +56,7 @@ class Control(Curve):
         config = Config.getInstance()
         configShapes = config.getControlShapes()
         if shape not in configShapes.keys():
-            raise KeyError("'" + shape + "' is not a valid shape in the loaded config of class ["+config.__class__.__name__+"]")
+            raise KeyError("'" + shape + "' is not a valid shape in the loaded config of class [" + config.__class__.__name__ + "]")
 
         self.setCurveData(configShapes[shape])
 
@@ -199,11 +198,14 @@ class Control(Curve):
         """
 
         # would be great if vec3 was iterable
-        axis = axisStrToTupleMapping[scaleAxis]
+        axis = AXIS_NAME_TO_TUPLE_MAP.get(scaleAxis)
+
+        if axis is None:
+            raise KeyError("'" + scaleAxis + "' is not a valid axis. Valid axes are: " + ','.join(AXIS_NAME_TO_TUPLE_MAP.keys()))
 
         scaleList = [1.0, 1.0, 1.0]
         for i, x in enumerate(axis):
-            if x:
+            if x > 0:
                 scaleList[i] = scale * axis[i]
 
         return self.scalePoints(Vec3(scaleList[0], scaleList[1], scaleList[2]))
