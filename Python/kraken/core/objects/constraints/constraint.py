@@ -6,7 +6,7 @@ Constraint - Base Constraint.
 """
 
 from kraken.core.objects.scene_item import SceneItem
-from kraken.core.objects.object_3d import Object3D
+# from kraken.core.objects.object_3d import Object3D
 
 
 class Constraint(SceneItem):
@@ -105,7 +105,7 @@ class Constraint(SceneItem):
 
         """
 
-        if not isinstance(kObject3D, Object3D):
+        if 'Object3D' not in kObject3D.getTypeHierarchyNames():
             raise Exception("'kObject3D' argument is not a valid instance type. '"
                              + kObject3D.getName() + "': " + str(type(kObject3D)) +
                              ". Must be an instance of 'Object3D'.")
