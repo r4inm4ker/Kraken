@@ -344,88 +344,7 @@ class Xfo(MathObject):
 
         return True
 
-    def aimAt(self, aimPos=None, aimVector=None, aimAxis=(1, 0, 0), upPos=None, upVector=None, upAxis=(0, 1, 0)):
-        """
-        Point the xfo's aimAxis at the aimPos (or aimVector),
-            while attempting to keep the xfo's upAxis pointing at the upPos (or upVector)
-        Must provide
-        1. aimPos or aimVector
-        2. upPos or upVector
 
-        The aim direction takes precendence over the up direction when the two are not orthoganal as input.
-
-        Args:
-            aimPos (Vec3): Aim the aimAxis of the Xform at this larget location
-            upPos (Vec3):  Aim the upAxis of the xform at this location (if upVector not provided)
-            upVector (Vec3): Aim the upAxis of the xform in this direction (if upPos not provided)
-            aimAxis (List): Use this axis of the xform to point at aimPos (NOTE: want to make this Vec3)
-            upAxis (List): Use this axis of the xform to point at upPos (or point in direction of upVector)
-
-        Returns:
-            None
-
-        """
-
-
-        if aimPos:
-            aimVector = aimPos.subtract(self.tr).unit()
-        elif not aimVector:
-            raise ValueError("Must provide either aimPos or aimVector argument")
-
-        if upPos:
-            upVector = upPos.subtract(self.tr).unit()
-        elif not upVector:
-            raise ValueError("Must provide either upPos or upVector argument")
-
-
-        aimAxisVector = aimVector #same as input arg always
-        normalAxisVector = upVector.cross(aimAxisVector).unit()  # perpendiculuar to aim, but could be one of two directions
-        upAxisVector = normalAxisVector.cross(aimAxisVector).unit() # perpendicular to aim and normal, but could be one of two directions
-
-        # Measure the upAxisVector against the original upVector to see if it is less that 90, if not, we want the opposite side, so negate
-        angle = upVector.dot(upAxisVector)
-        if angle < 0:  # more than 90 degrees from the ideal upvector
-            upAxisVector = upAxisVector.negate()
-
-        #Simply negate the directions of aimAxis and upAxis if needed depending on sign of arguments
-        if -1 in upAxis:
-            upAxisVector = upAxisVector.negate()
-
-        if -1 in aimAxis:
-            aimAxisVector = aimAxisVector.negate()
-
-        # Sort out which vectors are which axis
-        argVectors = [None, None, None]
-
-        for i, x in enumerate(aimAxis):
-            if x:
-                argVectors[i] = aimAxisVector
-
-        for i, x in enumerate(upAxis):
-            if x:
-                argVectors[i] = upAxisVector
-
-        # Now, that we have a definite aimAxisVector and upAxisVector,
-        # let's find the "real" normalAxisVectortor with the guaranteed correct side.
-        # Given the arguments, we know what axis the aim and up are supposed to be
-        # That leaves us with a third to solve for
-        # Based on the right-hand rule universe, we know the order to cross product the two known vectors
-
-        if not aimAxis[0] and not upAxis[0]: # X is normal axis, so do Y cross Z (in that order) to get it
-            normalAxisVector = argVectors[1].cross(argVectors[2]).unit()
-
-        elif not aimAxis[1] and not upAxis[1]: # Y is normal axis, so do Z cross X (in that order) to get it
-            normalAxisVector = argVectors[2].cross(argVectors[0]).unit()
-
-        elif not aimAxis[2] and not upAxis[2]: # Z is normal axis, so do X cross Y (in that order) to get it
-            normalAxisVector = argVectors[0].cross(argVectors[1]).unit()
-
-        # add the normalAxisVector to the remaining axis
-        for i, x in enumerate(argVectors):
-            if x is None:
-                argVectors[i] = normalAxisVector
-
-        self.setFromVectors(argVectors[0], argVectors[1], argVectors[2], self.tr)
 # ===============
 # Helper Methods
 # ===============
@@ -451,3 +370,86 @@ def xfoFromDirAndUpV(base, target, upV):
     outXfo.setFromVectors(rootToTarget, normal, zAxis, base)
 
     return outXfo
+
+
+def aimAt(targetXfo, aimPos=None, aimVector=None, aimAxis=(1, 0, 0), upPos=None, upVector=None, upAxis=(0, 1, 0)):
+    """
+    Point the xfo's aimAxis at the aimPos (or aimVector),
+        while attempting to keep the xfo's upAxis pointing at the upPos (or upVector)
+    Must provide
+    1. aimPos or aimVector
+    2. upPos or upVector
+
+    The aim direction takes precendence over the up direction when the two are not orthoganal as input.
+
+    Args:
+        aimPos (Vec3): Aim the aimAxis of the Xform at this larget location
+        upPos (Vec3):  Aim the upAxis of the xform at this location (if upVector not provided)
+        upVector (Vec3): Aim the upAxis of the xform in this direction (if upPos not provided)
+        aimAxis (List): Use this axis of the xform to point at aimPos (NOTE: want to make this Vec3)
+        upAxis (List): Use this axis of the xform to point at upPos (or point in direction of upVector)
+
+    Returns:
+        None
+
+    """
+
+    if aimPos:
+        aimVector = aimPos.subtract(targetXfo.tr).unit()
+    elif not aimVector:
+        raise ValueError("Must provide either aimPos or aimVector argument")
+
+    if upPos:
+        upVector = upPos.subtract(targetXfo.tr).unit()
+    elif not upVector:
+        raise ValueError("Must provide either upPos or upVector argument")
+
+
+    aimAxisVector = aimVector #same as input arg always
+    normalAxisVector = upVector.cross(aimAxisVector).unit()  # perpendiculuar to aim, but could be one of two directions
+    upAxisVector = normalAxisVector.cross(aimAxisVector).unit() # perpendicular to aim and normal, but could be one of two directions
+
+    # Measure the upAxisVector against the original upVector to see if it is less that 90, if not, we want the opposite side, so negate
+    angle = upVector.dot(upAxisVector)
+    if angle < 0:  # more than 90 degrees from the ideal upvector
+        upAxisVector = upAxisVector.negate()
+
+    #Simply negate the directions of aimAxis and upAxis if needed depending on sign of arguments
+    if -1 in upAxis:
+        upAxisVector = upAxisVector.negate()
+
+    if -1 in aimAxis:
+        aimAxisVector = aimAxisVector.negate()
+
+    # Sort out which vectors are which axis
+    argVectors = [None, None, None]
+
+    for i, x in enumerate(aimAxis):
+        if x:
+            argVectors[i] = aimAxisVector
+
+    for i, x in enumerate(upAxis):
+        if x:
+            argVectors[i] = upAxisVector
+
+    # Now, that we have a definite aimAxisVector and upAxisVector,
+    # let's find the "real" normalAxisVectortor with the guaranteed correct side.
+    # Given the arguments, we know what axis the aim and up are supposed to be
+    # That leaves us with a third to solve for
+    # Based on the right-hand rule universe, we know the order to cross product the two known vectors
+
+    if not aimAxis[0] and not upAxis[0]: # X is normal axis, so do Y cross Z (in that order) to get it
+        normalAxisVector = argVectors[1].cross(argVectors[2]).unit()
+
+    elif not aimAxis[1] and not upAxis[1]: # Y is normal axis, so do Z cross X (in that order) to get it
+        normalAxisVector = argVectors[2].cross(argVectors[0]).unit()
+
+    elif not aimAxis[2] and not upAxis[2]: # Z is normal axis, so do X cross Y (in that order) to get it
+        normalAxisVector = argVectors[0].cross(argVectors[1]).unit()
+
+    # add the normalAxisVector to the remaining axis
+    for i, x in enumerate(argVectors):
+        if x is None:
+            argVectors[i] = normalAxisVector
+
+    targetXfo.setFromVectors(argVectors[0], argVectors[1], argVectors[2], targetXfo.tr)
