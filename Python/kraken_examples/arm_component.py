@@ -13,7 +13,7 @@ from kraken.core.objects.attributes.string_attribute import StringAttribute
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
 from kraken.core.objects.component_group import ComponentGroup
-from kraken.core.objects.locator import Locator
+from kraken.core.objects.transform import Transform
 from kraken.core.objects.joint import Joint
 from kraken.core.objects.ctrlSpace import CtrlSpace
 from kraken.core.objects.control import Control
@@ -48,7 +48,8 @@ class ArmComponent(BaseExampleComponent):
         self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', parent=self.cmpInputAttrGrp).getTarget()
 
         # Declare Output Attrs
-        self.debugOutputAttr = self.createOutput('drawDebug', dataType='Boolean', parent=self.cmpOutputAttrGrp).getTarget()
+        self.drawDebugOutputAttr = self.createOutput('drawDebug', dataType='Boolean', value=False, parent=self.cmpOutputAttrGrp).getTarget()
+        self.ikBlendOutputAttr = self.createOutput('ikBlend', dataType='Float', value=0.0, parent=self.cmpOutputAttrGrp).getTarget()
 
 
 
@@ -246,7 +247,7 @@ class ArmComponentRig(ArmComponent):
 
         # Add Params to IK control
         armSettingsAttrGrp = AttributeGroup("DisplayInfo_ArmSettings", parent=self.armIKCtrl)
-        armDebugInputAttr = BoolAttribute('drawDebug', value=False, parent=armSettingsAttrGrp)
+        self.armDebugInputAttr = BoolAttribute('drawDebug', value=False, parent=armSettingsAttrGrp)
         self.armBone0LenInputAttr = ScalarAttribute('bone1Len', value=0.0, parent=armSettingsAttrGrp)
         self.armBone1LenInputAttr = ScalarAttribute('bone2Len', value=0.0, parent=armSettingsAttrGrp)
         self.armIKBlendInputAttr = ScalarAttribute('fkik', value=0.0, minValue=0.0, maxValue=1.0, parent=armSettingsAttrGrp)
@@ -255,7 +256,15 @@ class ArmComponentRig(ArmComponent):
         self.armStretchInputAttr = BoolAttribute('stretch', value=True, parent=armSettingsAttrGrp)
         self.armStretchBlendInputAttr = ScalarAttribute('stretchBlend', value=0.0, minValue=0.0, maxValue=1.0, parent=armSettingsAttrGrp)
 
-        self.drawDebugInputAttr.connect(armDebugInputAttr)
+        # Util Objects
+        self.ikRootPosition = Transform("ikPosition", parent=self.ctrlCmpGrp)
+
+        # Connect Input Attrs
+        self.drawDebugInputAttr.connect(self.armDebugInputAttr)
+
+        # Connect Output Attrs
+        self.drawDebugOutputAttr.connect(self.armDebugInputAttr)
+        self.ikBlendOutputAttr.connect(self.armIKBlendInputAttr)
 
         # UpV
         self.armUpVCtrlSpace = CtrlSpace('UpV', parent=self.ctrlCmpGrp)
@@ -300,6 +309,11 @@ class ArmComponentRig(ArmComponent):
         self.armRootInputConstraint.addConstrainer(self.rootInputTgt)
         self.bicepFKCtrlSpace.addConstraint(self.armRootInputConstraint)
 
+        self.ikPosInputConstraint = PoseConstraint('_'.join([self.ikRootPosition.getName(), 'To', self.rootInputTgt.getName()]))
+        self.ikPosInputConstraint.setMaintainOffset(True)
+        self.ikPosInputConstraint.addConstrainer(self.rootInputTgt)
+        self.ikRootPosition.addConstraint(self.ikPosInputConstraint)
+
         # Constraint outputs
 
 
@@ -324,7 +338,7 @@ class ArmComponentRig(ArmComponent):
         self.armSolverKLOperator.setInput('rightSide', self.rightSideInputAttr)
 
         # Add Xfo Inputs
-        self.armSolverKLOperator.setInput('root', self.rootInputTgt)
+        self.armSolverKLOperator.setInput('root', self.ikRootPosition)
         self.armSolverKLOperator.setInput('bone0FK', self.bicepFKCtrl)
         self.armSolverKLOperator.setInput('bone1FK', self.forearmFKCtrl)
         self.armSolverKLOperator.setInput('ikHandle', self.armIKCtrl)
@@ -366,41 +380,54 @@ class ArmComponentRig(ArmComponent):
 
         super(ArmComponentRig, self).loadData( data )
 
-        self.rootInputTgt.xfo.tr = data['bicepXfo'].tr
+        bicepXfo = data.get('bicepXfo')
+        forearmXfo = data.get('forearmXfo')
+        wristXfo = data.get('wristXfo')
+        upVXfo = data.get('upVXfo')
+        bicepLen = data.get('bicepLen')
+        forearmLen = data.get('forearmLen')
+        bicepFKCtrlSize = data.get('bicepFKCtrlSize')
+        forearmFKCtrlSize = data.get('forearmFKCtrlSize')
 
-        self.bicepFKCtrlSpace.xfo = data['bicepXfo']
-        self.bicepFKCtrl.xfo = data['bicepXfo']
-        self.bicepFKCtrl.scalePoints(Vec3(data['bicepLen'], data['bicepFKCtrlSize'], data['bicepFKCtrlSize']))
 
-        self.forearmFKCtrlSpace.xfo = data['forearmXfo']
-        self.forearmFKCtrl.xfo = data['forearmXfo']
-        self.forearmFKCtrl.scalePoints(Vec3(data['forearmLen'], data['forearmFKCtrlSize'], data['forearmFKCtrlSize']))
+        self.rootInputTgt.xfo.tr = bicepXfo.tr
 
-        self.armIKCtrlSpace.xfo.tr = data['wristXfo'].tr
-        self.armIKCtrl.xfo.tr = data['wristXfo'].tr
+        self.bicepFKCtrlSpace.xfo = bicepXfo
+        self.bicepFKCtrl.xfo = bicepXfo
+        self.bicepFKCtrl.scalePoints(Vec3(bicepLen, bicepFKCtrlSize, bicepFKCtrlSize))
+
+        self.forearmFKCtrlSpace.xfo = forearmXfo
+        self.forearmFKCtrl.xfo = forearmXfo
+        self.forearmFKCtrl.scalePoints(Vec3(forearmLen, forearmFKCtrlSize, forearmFKCtrlSize))
+
+        self.ikRootPosition.xfo = bicepXfo
+
+        self.armIKCtrlSpace.xfo.tr = wristXfo.tr
+        self.armIKCtrl.xfo.tr = wristXfo.tr
 
         if self.getLocation() == "R":
             self.armIKCtrl.rotatePoints(0, 90, 0)
         else:
             self.armIKCtrl.rotatePoints(0, -90, 0)
 
-        self.armUpVCtrlSpace.xfo.tr = data['upVXfo'].tr
-        self.armUpVCtrl.xfo.tr = data['upVXfo'].tr
+        self.armUpVCtrlSpace.xfo.tr = upVXfo.tr
+        self.armUpVCtrl.xfo.tr = upVXfo.tr
 
         self.rightSideInputAttr.setValue(self.getLocation() is 'R')
         self.armBone0LenInputAttr.setMin(0.0)
-        self.armBone0LenInputAttr.setMax(data['bicepLen'] * 3.0)
-        self.armBone0LenInputAttr.setValue(data['bicepLen'])
+        self.armBone0LenInputAttr.setMax(bicepLen * 3.0)
+        self.armBone0LenInputAttr.setValue(bicepLen)
         self.armBone1LenInputAttr.setMin(0.0)
-        self.armBone1LenInputAttr.setMax(data['forearmLen'] * 3.0)
-        self.armBone1LenInputAttr.setValue(data['forearmLen'])
+        self.armBone1LenInputAttr.setMax(forearmLen * 3.0)
+        self.armBone1LenInputAttr.setValue(forearmLen)
 
         # Outputs
-        self.bicepOutputTgt.xfo = data['bicepXfo']
-        self.forearmOutputTgt.xfo = data['forearmXfo']
-        self.wristOutputTgt.xfo = data['wristXfo']
+        self.bicepOutputTgt.xfo = bicepXfo
+        self.forearmOutputTgt.xfo = forearmXfo
+        self.wristOutputTgt.xfo = wristXfo
 
         # Eval Constraints
+        self.ikPosInputConstraint.evaluate()
         self.armIKCtrlSpaceInputConstraint.evaluate()
         self.armUpVCtrlSpaceInputConstraint.evaluate()
         self.armRootInputConstraint.evaluate()

@@ -246,6 +246,9 @@ class LegComponentRig(LegComponent):
         legStretchInputAttr = BoolAttribute('stretch', value=True, parent=legSettingsAttrGrp)
         legStretchBlendInputAttr = ScalarAttribute('stretchBlend', value=0.0, minValue=0.0, maxValue=1.0, parent=legSettingsAttrGrp)
 
+        # Util Objects
+        self.ikRootPosition = Locator("ikRootPosition", parent=self.ctrlCmpGrp)
+
         # Connect Input Attrs
         self.drawDebugInputAttr.connect(legDrawDebugInputAttr)
 
@@ -290,6 +293,11 @@ class LegComponentRig(LegComponent):
         self.legRootInputConstraint.addConstrainer(self.legPelvisInputTgt)
         self.femurFKCtrlSpace.addConstraint(self.legRootInputConstraint)
 
+        self.ikRootPosInputConstraint = PoseConstraint('_'.join([self.ikRootPosition.getName(), 'To', self.legPelvisInputTgt.getName()]))
+        self.ikRootPosInputConstraint.setMaintainOffset(True)
+        self.ikRootPosInputConstraint.addConstrainer(self.legPelvisInputTgt)
+        self.ikRootPosition.addConstraint(self.ikRootPosInputConstraint)
+
         # Constraint outputs
         self.legEndFKOutputConstraint = PoseConstraint('_'.join([self.legEndFKOutputTgt.getName(), 'To', self.shinFKCtrl.getName()]))
         self.legEndFKOutputConstraint.setMaintainOffset(True)
@@ -323,7 +331,7 @@ class LegComponentRig(LegComponent):
         self.legIKKLOp.setInput('rightSide', self.legRightSideInputAttr)
 
         # Add Xfo Inputs
-        self.legIKKLOp.setInput('root', self.legPelvisInputTgt)
+        self.legIKKLOp.setInput('root', self.ikRootPosition)
         self.legIKKLOp.setInput('bone0FK', self.femurFKCtrl)
         self.legIKKLOp.setInput('bone1FK', self.shinFKCtrl)
         self.legIKKLOp.setInput('ikHandle', self.legIKTargetInputTgt)
@@ -348,34 +356,6 @@ class LegComponentRig(LegComponent):
 
         # Add Xfo Outputs
         self.outputsToDeformersKLOp.setOutput('constrainees', [femurDef, shinDef])
-
-        # Add Foot Deformer Splice Op
-        # self.footDefKLOp = KLOperator('footDeformerKLOp', 'PoseConstraintSolver', 'Kraken')
-        # self.addOperator(self.footDefKLOp)
-
-        # # Add Att Inputs
-        # self.footDefKLOp.setInput('drawDebug', self.drawDebugInputAttr)
-        # self.footDefKLOp.setInput('rigScale', self.rigScaleInputAttr)
-
-        # # Add Xfo Inputs)
-        # self.footDefKLOp.setInput('constrainer', self.footOutputTgt)
-
-        # # Add Xfo Outputs
-        # self.footDefKLOp.setOutput('constrainee', self.footDef)
-
-        # Add Toe Deformer Splice Op
-        # self.toeDefKLOp = KLOperator('toeDeformerKLOp', 'PoseConstraintSolver', 'Kraken')
-        # self.addOperator(self.toeDefKLOp)
-
-        # # Add Att Inputs
-        # self.toeDefKLOp.setInput('drawDebug', self.drawDebugInputAttr)
-        # self.toeDefKLOp.setInput('rigScale', self.rigScaleInputAttr)
-
-        # # Add Xfo Inputs
-        # self.toeDefKLOp.setInput('constrainer', self.toeOutputTgt)
-
-        # # Add Xfo Outputs
-        # self.toeDefKLOp.setOutput('constrainee', self.toeDef)
 
         Profiler.getInstance().pop()
 
@@ -403,6 +383,7 @@ class LegComponentRig(LegComponent):
         femurLen = data.get('femurLen')
         shinLen = data.get('shinLen')
 
+
         self.femurFKCtrlSpace.xfo = femurXfo
         self.femurFKCtrl.xfo = femurXfo
         self.femurFKCtrl.scalePoints(Vec3(femurLen, 1.75, 1.75))
@@ -416,6 +397,8 @@ class LegComponentRig(LegComponent):
 
         self.legEndFKOutputTgt.xfo.tr = handleXfo.tr
         self.legEndFKOutputTgt.xfo.ori = kneeXfo.ori
+
+        self.ikRootPosition.xfo = femurXfo
 
         self.legIKCtrlSpace.xfo = handleXfo
         self.legIKCtrl.xfo = handleXfo
@@ -451,6 +434,7 @@ class LegComponentRig(LegComponent):
             # self.legIKKLOp.setInput('ikHandle', self.legIKCtrl)
 
         # Eval Input Constraints
+        self.ikRootPosInputConstraint.evaluate()
         self.legIKCtrlSpaceInputConstraint.evaluate()
         self.legUpVCtrlSpaceInputConstraint.evaluate()
         self.legRootInputConstraint.evaluate()
