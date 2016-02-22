@@ -5,6 +5,8 @@ Builder -- Component representation.
 
 """
 
+import json
+
 from kraken.core.kraken_system import ks
 from kraken.core.builder import Builder
 from kraken.core.objects.object_3d import Object3D
@@ -163,11 +165,11 @@ class Builder(Builder):
 
         cls = kSceneItem.__class__.__name__
 
-        # if cls in [
-        #     'Layer',
-        #     'Rig'
-        # ]:
-        #     return True
+        if cls in [
+            'Layer',
+            'Rig'
+        ]:
+            return True
 
         cls = kSceneItem.__class__.__name__
         if cls in [
@@ -192,8 +194,7 @@ class Builder(Builder):
             self.reportError("buildNodeSI: Unexpected class " + cls)
             return False
 
-        self.report(kSceneItem.getPath())
-
+        self.report('Item '+kSceneItem.getPath())
         self.setCurrentGroupSI(kSceneItem)
 
         path = kSceneItem.getPath()
@@ -283,8 +284,6 @@ class Builder(Builder):
                     self.graph.connectNodes(parentNode, parentPort, transformNode, 'lhs')
                     self.graph.connectNodes(childNode, childPort, transformNode, 'rhs')
                     self.setTransformPortSI(kSceneItem, transformNode, 'result')
-                else:
-                    raise Exception("Not expected!")
 
         return True
 
@@ -335,6 +334,8 @@ class Builder(Builder):
         return True
 
     def buildNodesFromConstraint(self, kConstraint):
+        return False # todo
+
         cls = kConstraint.__class__.__name__
         if not cls in [
             'OrientationConstraint',
@@ -345,6 +346,7 @@ class Builder(Builder):
             self.reportError("buildNodesFromConstraint: Unexpected class " + cls)
             return False
 
+        self.report('Constraint '+kConstraint.getPath())
         self.setCurrentGroupSI(kConstraint)
 
         path = kConstraint.getPath()
@@ -374,7 +376,7 @@ class Builder(Builder):
                 self.graph.connectNodes(constructNode, 'result', computeOffsetNode, 'this')
                 self.graph.connectNodes(constrainerNode, constrainerPort, computeOffsetNode, 'constrainer')
                 self.graph.connectNodes(constraineeNode, constraineePort, computeOffsetNode, 'constrainee')
-                offset = self.graph.computeCurrentPortValue(computeOffsetNode, 'result')
+                offset = Xfo(self.graph.computeCurrentPortValue(computeOffsetNode, 'result'))
                 self.graph.removeNodeSI(kConstraint, title='computeOffset')
                 self.graph.removeNodeSI(kConstraint, title='constructor')
                 self.graph.setPortDefaultValue(computeNode, "offset", offset)
@@ -828,6 +830,7 @@ class Builder(Builder):
     # ========================
     # Component Build Methods
     # ========================
+
     def buildAttributeConnection(self, connectionInput):
         """Builds the connection between the attribute and the connection.
 
@@ -838,8 +841,24 @@ class Builder(Builder):
             bool: True if successful.
 
         """
-        # todo
-        self.reportError("buildAttributeConnection not yet implemented.")
+        if not connectionInput.isConnected():
+            return True
+
+        connection = connectionInput.getConnection()
+        connectionTarget = connection.getTarget()
+        inputTarget = connectionInput.getTarget()
+
+        if connection.getDataType().endswith('[]'):
+            connectionTarget = connection.getTarget()[connectionInput.getIndex()]
+        else:
+            connectionTarget = connection.getTarget()
+
+        (nodeA, portA) = self.graph.getNodeAndPortSI(inputTarget, asInput=False)
+        (nodeB, portB) = self.graph.getNodeAndPortSI(connectionTarget, asInput=True)
+        if nodeA is None or nodeB is None:
+            return False
+
+        self.graph.connectNodes(nodeA, portA, nodeB, portB)
         return False
 
     # =========================
@@ -857,6 +876,7 @@ class Builder(Builder):
         """
 
         # create the node
+        self.report('KLOp '+kOperator.getPath())
         self.setCurrentGroupSI(kOperator)
 
         solverTypeName = kOperator.getSolverTypeName()
@@ -937,6 +957,7 @@ class Builder(Builder):
             bool: True if successful.
 
         """
+        self.report('CanvasOp '+kOperator.getPath())
         self.setCurrentGroupSI(kOperator)
 
         node = self.graph.createNodeFromPresetSI(kOperator, kOperator.getPresetPath(), title='constructor')
@@ -1131,47 +1152,91 @@ class Builder(Builder):
                 self.graph.connectNodes(linesNode, linesPort, ifNode, "if_true")
                 self.graph.connectArg('debugDraw', ifNode, 'cond')
 
-        # todo
-        # if self.hasOption('CollapseComponentsing'):
-        #     for component in self.__dfgComponentNames:
-        #         componentName = component.rpartition('.')[2]
-        #         nodes = self.__dfgComponents[component]
-        #         self.report('Collapsing component %s' % componentName)
-        #         filteredNodes = []
-        #         for node in nodes:
-        #             try:
-        #                 nodeType = self.__dfgTopLevelGraph.getNodeType(node)
-        #             except:
-        #                 self.reportError('Node %s was imploded by the wrong component!' % node)
-        #                 continue
-        #             filteredNodes += [node]
+        # perform layout based on reingold tilford
+        nodes = self.graph.getAllNodeNames()
+        nodeConnections = self.graph.getAllNodeConnections()
 
-        #         implodedName = self.__dfgTopLevelGraph.implodeNodes(componentName, filteredNodes)
+        depth = {}
+        height = {}
+        for n in nodes:
+            depth[n] = 0
 
-        #         # rename the ports based on their source metadata
-        #         subExec = self.__dfgTopLevelGraph.getSubExec(implodedName)
-        #         for i in range(subExec.getExecPortCount()):
-        #             if subExec.getExecPortType(i) == client.DFG.PortTypes.In:
-        #                 continue
-        #             arg = subExec.getExecPortName(i)
-        #             shouldBreak = False
-        #             for j in range(subExec.getNodeCount()):
-        #                 if shouldBreak:
-        #                     break
-        #                 node = subExec.getNodeName(j)
-        #                 if subExec.getNodeType(node) > 1:
-        #                     continue
-        #                 nodeExec = subExec.getSubExec(node)
-        #                 for k in range(nodeExec.getExecPortCount()):
-        #                     port = nodeExec.getExecPortName(k)
-        #                     if subExec.isConnectedTo(node+'.'+port, arg):
-        #                         metaData = subExec.getNodeMetadata(node, 'uiComment')
-        #                         if not metaData:
-        #                             continue
-        #                         name = metaData.rpartition('.')[2]
-        #                         subExec.renameExecPort(arg, name)
-        #                         shouldBreak = True
-        #                         break
+        changed = True
+        while changed:
+            changed = False
+
+            # forward
+            for n in nodes:
+                connections = nodeConnections.get(n, [])
+                for c in connections:
+                    if depth[c] <= depth[n]:
+                        depth[c] = depth[n] + 1
+                        changed = True
+
+            # backward
+            for n in nodes:
+                connections = nodeConnections.get(n, [])
+                minDiff = 0
+                for c in connections:
+                    diff = depth[c] - depth[n]
+                    if diff < minDiff or minDiff == 0:
+                        minDiff = diff
+                if minDiff > 1:
+                    depth[n] = depth[n] + minDiff - 1
+
+        rows = []
+        maxPortsPerRow = []
+        for n in depth:
+            while len(rows) <= depth[n]:
+                rows += [[]]
+                maxPortsPerRow += [0]
+            rows[depth[n]] += [n]
+            if self.graph.getNumPorts(n) > maxPortsPerRow[depth[n]]:
+                maxPortsPerRow[depth[n]] = self.graph.getNumPorts(n)
+
+        for j in range(len(rows)-1, -1, -1):
+
+            row = rows[j]
+            rowHeights = {}
+            for i in range(len(row)):
+                n = row[i]
+                if j == len(rows)-1:
+                    height[n] = i
+                    continue
+
+                connectedNodes = self.graph.getNodeConnections(n)
+                offset = maxPortsPerRow[j+1]
+                height[n] = len(rows[j+1]) *  + i
+                for connectedNode in connectedNodes:
+                    h = height[connectedNode] * maxPortsPerRow[j+1]
+                    h = h + self.graph.getMinConnectionPortIndex(n, connectedNode)
+                    if h < height[n]:
+                        height[n] = h
+
+                h = height[n]
+                while rowHeights.has_key(h):
+                  h = h + 1
+                height[n] = h
+                rowHeights[height[n]] = True
+
+            # normalize the heights
+            sortedHeights = sorted(rowHeights.keys())
+            if len(sortedHeights) > 0:
+                heightLookup = {}
+                for i in range(len(sortedHeights)):
+                    heightLookup[sortedHeights[i]] = i
+                for i in range(len(row)):
+                    n = row[i]
+                    height[n] = heightLookup[height[n]]
+
+        for n in nodes:
+            x = float(depth[n]) * 300.0
+            y = float(height[n]) * 120.0
+            self.graph.setNodeMetaData(n, 'uiGraphPos', json.dumps({"x": x, "y": y}))
+            self.graph.setNodeMetaData(n, 'uiCollapsedState', "1")
+
+        if self.hasOption('CollapseComponents'):
+            self.graph.implodeNodesByGroup()
 
         if self.__outputFilePath:
             self.graph.saveToFile(self.__outputFilePath)

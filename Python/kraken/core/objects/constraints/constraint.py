@@ -175,9 +175,9 @@ class Constraint(SceneItem):
         """
 
         if self._constrainee is None:
-            return None
+            return Xfo()
         if len(self._constrainers) == 0:
-            return None
+            return Xfo()
 
         cls = self.__class__.__name__
         ks.loadExtension('KrakenForCanvas')
@@ -197,8 +197,10 @@ class Constraint(SceneItem):
             bool: True if successful.
 
         """
-        # if self.getMaintainOffset() is False:
-        #     self.getConstrainee().xfo = self.computeOffset()
+        if self.getMaintainOffset() is False:
+            def getGlobalXfoFunc(c):
+                return c.xfo
+            self.getConstrainee().xfo = self.computeOffset(getGlobalXfoFunc=getGlobalXfoFunc)
 
         return False        
 

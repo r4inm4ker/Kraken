@@ -13,6 +13,7 @@ import FabricEngine.Core as core
 class GraphManager(object):
     """Manager object for taking care of all low level Canvas tasks"""
 
+    __dfgHost = None
     __dfgBinding = None
     __dfgArgs = None
     __dfgExec = None
@@ -29,9 +30,8 @@ class GraphManager(object):
         client = ks.getCoreClient()
         ks.loadExtension('KrakenForCanvas')
 
-        host = client.getDFGHost()
-
-        self.__dfgBinding = host.createBindingToNewGraph()
+        self.__dfgHost = client.getDFGHost()
+        self.__dfgBinding = self.__dfgHost.createBindingToNewGraph()
         self.__dfgExec = self.__dfgBinding.getExec()
         self.__dfgArgs = {}
         self.__dfgNodes = {}
@@ -41,9 +41,17 @@ class GraphManager(object):
         self.__dfgGroupNames = []
         self.__dfgCurrentGroup = None
 
+        self.__blockHost()
+
     # ========================
     # Canvas Methods
     # ========================
+
+    def __blockHost(self):
+        self.__dfgHost.blockComps()
+
+    def __unblockHost(self):
+        self.__dfgHost.unblockComps()
 
     def setTitle(self, title):
         self.__dfgExec.setTitle(title)
@@ -230,8 +238,8 @@ class GraphManager(object):
 
         self.removeConnection(nodeB, portB)
 
-        typeA = self.__dfgExec.getNodePortResolvedType("%s.%s" % (nodeA, portA))
-        typeB = self.__dfgExec.getNodePortResolvedType("%s.%s" % (nodeB, portB))
+        typeA = self.getNodePortResolvedType(nodeA, portA)
+        typeB = self.getNodePortResolvedType(nodeB, portB)
 
         if typeA != typeB and typeA != None and typeB != None:
             if typeA == 'Xfo' and typeB == 'Mat44':
@@ -290,27 +298,29 @@ class GraphManager(object):
                     if '.'.join(connections[i]) == node+'.'+port:
                         self.__dfgExec.disconnectFrom(nodeName+'.'+portName, node+'.'+port)
                         result = True
+                        break
                     else:
                         newConnections += [connections[i]]
                 self.__dfgConnections[nodeName][portName] = newConnections
+                if result:
+                    return result
         return result
 
     def getConnections(self, node, port, targets=True):
         result = []
-        if targets:
-            for nodeName in self.__dfgConnections:
-                ports = self.__dfgConnections[nodeName]
-                for portName in ports:
-                    connections = ports[portName]
-                    if targets:
-                        if node+'.'+port == nodeName+'.'+portName:
-                            result += connections
-                        else:
-                            continue
+        for nodeName in self.__dfgConnections:
+            ports = self.__dfgConnections[nodeName]
+            for portName in ports:
+                connections = ports[portName]
+                if targets:
+                    if node+'.'+port == nodeName+'.'+portName:
+                        result += connections
                     else:
-                        for c in connections:
-                            if '.'.join(c) == node+'.'+port:
-                                result += [(nodeName, portName)]
+                        continue
+                else:
+                    for c in connections:
+                        if '.'.join(c) == node+'.'+port:
+                            result += [(nodeName, portName)]
         return result
 
     def getNodeMetaData(self, path, key, defaultValue=None, title=None):
@@ -327,11 +337,11 @@ class GraphManager(object):
 
     def setNodeMetaData(self, path, key, value, title=None):
         lookup = path
+        node = path
         if not title is None:
             lookup = "%s|%s" % (path, title)
-        if not self.__dfgNodes.has_key(lookup):
-            return False
-        node = self.__dfgNodes[lookup]
+        if self.__dfgNodes.has_key(lookup):
+            node = self.__dfgNodes[lookup]
         self.__dfgExec.setNodeMetadata(node, key, str(value))
         if key == 'uiComment':
             self.__dfgExec.setNodeMetadata(node, 'uiCommentExpanded', 'true')
@@ -349,6 +359,8 @@ class GraphManager(object):
         tempPort = self.getOrCreateArgument("temp", portType="Out")
         self.connectArg(node, port, tempPort)
 
+        self.__unblockHost()
+
         errors = json.loads(self.__dfgBinding.getErrors(True))
         if errors and len(errors) > 0:
             raise Exception(str(errors))
@@ -356,6 +368,8 @@ class GraphManager(object):
         self.__dfgBinding.execute()
 
         value = self.__dfgBinding.getArgValue(tempPort)
+        self.__blockHost()
+
         self.removeArgument(tempPort)
 
         return value
@@ -381,10 +395,19 @@ class GraphManager(object):
         return True
 
     def getNodePortResolvedType(self, node, port):
-        return self.__dfgExec.getNodePortResolvedType(node+'.'+port)
+        self.__unblockHost()
+        result = self.__dfgExec.getNodePortResolvedType(node+'.'+port)
+        self.__blockHost()
+        return result
 
     def getCurrentGroup(self):
         return self.__dfgCurrentGroup
+
+    def getAllGroupNames(self):
+        return self.__dfgGroupNames + []
+
+    def getNodesInGroup(self, group):
+        return self.__dfgGroups.get(group, []) + []
 
     def setCurrentGroup(self, group):
 
@@ -406,6 +429,150 @@ class GraphManager(object):
             return
         self.__dfgGroups[self.__dfgCurrentGroup].append(node)
 
+    def getAllNodeNames(self):
+        return self.__dfgNodes.values()
+
+    def getNodeConnections(self, nodeName):
+        keys = {}
+        result = []
+        node = self.__dfgConnections.get(nodeName, {})
+        for portName in node:
+            port = node[portName]
+            for (otherNode, otherPort) in port:
+                key = '%s - %s' % (nodeName, otherNode)
+                if keys.has_key(key):
+                    continue
+                keys[key] = True
+                result += [otherNode]
+        return result
+
+    def getAllNodeConnections(self):
+        keys = {}
+        result = {}
+        for nodeName in self.__dfgConnections:
+            node = self.__dfgConnections[nodeName]
+            for portName in node:
+                port = node[portName]
+                for (otherNode, otherPort) in port:
+                    key = '%s - %s' % (nodeName, otherNode)
+                    if keys.has_key(key):
+                        continue
+                    keys[key] = True
+                    if not result.has_key(nodeName):
+                        result[nodeName] = []
+                    result[nodeName] += [otherNode]
+        return result
+
+    def getNumPorts(self, node):
+        nodeType = self.__dfgExec.getNodeType(node)
+        if nodeType == 3: # var
+            return 1
+        elif nodeType == 0: # inst
+            subExec = self.getSubExec(node)
+            return subExec.getExecPortCount()
+        return 0
+
+    def hasInputConnections(self, node):
+        for nodeName in self.__dfgConnections:
+            ports = self.__dfgConnections[nodeName]
+            for portName in ports:
+                connections = ports[portName]
+                for c in connections:
+                    if c[0] == node:
+                        return True
+        return False
+
+    def hasOutputConnections(self, node):
+        ports = self.__dfgConnections.get(node, {})
+        for port in ports:
+            if len(ports) > 0:
+                return True
+        return False
+
+    def getPortIndex(self, node, port):
+        nodeType = self.__dfgExec.getNodeType(node)
+        if nodeType == 3: # var
+            return 0
+        elif nodeType == 0: # inst
+            subExec = self.getSubExec(node)
+            for i in range(subExec.getExecPortCount()):
+                portName = subExec.getExecPortName(i)
+                if portName == port:
+                    return i
+        return 0
+
+    def getMinConnectionPortIndex(self, sourceNode, targetNode):
+        minIndex = 10000
+        node = self.__dfgConnections.get(sourceNode, {})
+        for portName in node:
+            port = node[portName]
+            for (otherNode, otherPort) in port:
+                if not otherNode == targetNode:
+                    continue
+                index = self.getPortIndex(otherNode, otherPort)
+                if index < minIndex:
+                    minIndex = index
+
+        if minIndex == 10000:
+            return 0
+        return minIndex
+
+    def getAllNodePortIndices(self):
+        result = {}
+        nodes = self.getAllNodeNames()
+        for n in nodes:
+            result[n] = {}
+            nodeType = self.__dfgExec.getNodeType(n)
+            if nodeType == 3: # var
+                result[n]['value'] = 0
+            elif nodeType == 0: # inst
+                subExec = self.getSubExec(n)
+                for i in range(subExec.getExecPortCount()):
+                    port = subExec.getExecPortName(i)
+                    result[n][port] = i
+        return result
+
+    def getAllInputConnections(self):
+        nodes = self.getAllNodeNames()
+        connections = {}
+        for n in nodes:
+            connections[n] = []
+
+    def implodeNodesByGroup(self):
+        for group in self.__dfgGroupNames:
+            nodes = self.__dfgGroups[group]
+
+            implodedName = self.__dfgExec.implodeNodes(group, nodes)
+            break # todo... right now this doesn't work properly
+
+            # todo
+            # # rename the ports based on their source metadata
+            # subExec = self.__dfgTopLevelGraph.getSubExec(implodedName)
+            # for i in range(subExec.getExecPortCount()):
+            #     if subExec.getExecPortType(i) == client.DFG.PortTypes.In:
+            #         continue
+            #     arg = subExec.getExecPortName(i)
+            #     shouldBreak = False
+            #     for j in range(subExec.getNodeCount()):
+            #         if shouldBreak:
+            #             break
+            #         node = subExec.getNodeName(j)
+            #         if subExec.getNodeType(node) > 1:
+            #             continue
+            #         nodeExec = subExec.getSubExec(node)
+            #         for k in range(nodeExec.getExecPortCount()):
+            #             port = nodeExec.getExecPortName(k)
+            #             if subExec.isConnectedTo(node+'.'+port, arg):
+            #                 metaData = subExec.getNodeMetadata(node, 'uiComment')
+            #                 if not metaData:
+            #                     continue
+            #                 name = metaData.rpartition('.')[2]
+            #                 subExec.renameExecPort(arg, name)
+            #                 shouldBreak = True
+            #                 break
+
     def saveToFile(self, filePath):
+        self.__unblockHost()
         content = self.__dfgBinding.exportJSON()
         open(filePath, "w").write(content)
+        self.__blockHost()
