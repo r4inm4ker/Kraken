@@ -4,8 +4,6 @@ from kraken.core.synchronizer import Synchronizer
 from kraken.plugins.maya_plugin.utils import *
 from kraken.plugins.maya_plugin.utils.curves import curveToKraken
 
-from kraken.core.objects.components.component import Component
-from kraken.core.objects.attributes.attribute_group import AttributeGroup
 
 class Synchronizer(Synchronizer):
     """The Synchronizer is a singleton object used to synchronize data between
@@ -113,8 +111,8 @@ class Synchronizer(Synchronizer):
 
         """
 
-        if kObject.getParent() is not None and kObject.getParent().__class__ is AttributeGroup:
-            if issubclass(kObject.getParent().getParent().__class__, Component):
+        if kObject.getParent() is not None and kObject.isTypeOf('AttributeGroup'):
+            if kObject.getParent().getParent().isTypeOf('Component'):
                 if kObject.getParent().getParent().getComponentType() == "Guide":
                     return False
 
