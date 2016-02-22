@@ -230,7 +230,7 @@ class KGraphViewWidget(GraphViewWidget):
 
             builder = plugins.getBuilder()
 
-            #Append "_guide" to rig name when building guide
+            # Append "_guide" to rig name when building guide
             if self.guideRig.getName().endswith('_guide') is False:
                 self.guideRig.setName(self.guideRig.getName() + '_guide')
 
@@ -251,9 +251,11 @@ class KGraphViewWidget(GraphViewWidget):
 
     def synchGuideRig(self):
         synchronizer = plugins.getSynchronizer()
-        #Guide is always  built with "_guide" need this so synchronizer not confused with real Rig nodes
+
+        # Guide is always  built with "_guide" need this so synchronizer not confused with real Rig nodes
         if self.guideRig.getName().endswith('_guide') is False:
             self.guideRig.setName(self.guideRig.getName() + '_guide')
+
         synchronizer.setTarget(self.guideRig)
         synchronizer.sync()
 
