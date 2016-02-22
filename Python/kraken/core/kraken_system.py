@@ -325,7 +325,7 @@ class KrakenSystem(object):
         The kraken_examples are loaded at all times.
 
         Returns:
-            True if all components loaded, else False
+            bool: True if all components loaded, else False.
 
         """
 
@@ -336,7 +336,7 @@ class KrakenSystem(object):
 
         self.registeredComponents = {}
 
-        print ("\nLoading component modules...") #Important feedback
+        print "\nLoading component modules..."
 
         def __importDirRecursive(path, parentModulePath=''):
             isSuccessful = True
@@ -358,16 +358,22 @@ class KrakenSystem(object):
 
 
             if moduleFilefound:
-                print(" "+path+":")
-                for item in contents:
+                print(" " + path + ":")
+                for i, item in enumerate(contents):
                     if os.path.isfile(os.path.join(path, item)):
-                        # parse all the files of given path and import python modules
-                        # The files in these folders really should be limited to components, otherwise we are loading more than modules
-                        # and that is not clear.  Or, we could have a requirement that components end with _component.py and _config.py?
+
+                        # Parse all the files of given path and import python
+                        # modules. The files in these folders really should be
+                        # limited to components, otherwise we are loading more
+                        # than modules and that is not clear.
+
+                        # TODO: Figure out a way to limit imports to just rig
+                        # component modules.
+
                         if item.endswith(".py") and item != "__init__.py":
-                            module = modulePath+"."+item[:-3]
+                            module = modulePath + "." + item[:-3]
                             try:
-                                print ("  "+module), #Important feedback
+                                print "  " + module
                                 importlib.import_module(module)
 
                             except ImportError, e:
@@ -382,7 +388,8 @@ class KrakenSystem(object):
                                 print "Failed..."
                                 for arg in e.args:
                                     print arg
-                            print "\n", #newline
+
+                print "\n"
 
 
             for item in contents:
@@ -398,7 +405,7 @@ class KrakenSystem(object):
 
 
         # find the kraken examples module in the same folder as the kraken module.
-        examplePaths = os.path.join(os.path.dirname(os.path.dirname(kraken.__file__)), 'kraken_examples')
+        examplePaths = os.path.normpath(os.path.join(os.environ.get('KRAKEN_PATH'), 'Python', 'kraken_examples'))
         isSuccessful = __importDirRecursive(examplePaths)
 
         pathsVar = os.getenv('KRAKEN_PATHS')
