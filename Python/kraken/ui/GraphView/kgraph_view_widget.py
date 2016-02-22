@@ -32,6 +32,8 @@ class KGraphViewWidget(GraphViewWidget):
         # constructors of base classes
         super(KGraphViewWidget, self).__init__(parent)
 
+        self._builder = None
+        self._guideBuilder = None
 
         graphView = KGraphView(parent=self)
         graphView.nodeAdded.connect(self.__onNodeAdded)
@@ -234,7 +236,12 @@ class KGraphViewWidget(GraphViewWidget):
             if self.guideRig.getName().endswith('_guide') is False:
                 self.guideRig.setName(self.guideRig.getName() + '_guide')
 
-            builder.build(self.guideRig)
+            if self.window().preferences.getPreferenceValue('delete_existing_rigs'):
+                if self._guideBuilder:
+                    self._guideBuilder.deleteBuildElements()
+
+            self._guideBuilder = plugins.getBuilder()
+            self._guideBuilder.build(self.guideRig)
 
             self.reportMessage('Guide Rig Build Success', level='information', timeOut=6000)
 
@@ -277,8 +284,13 @@ class KGraphViewWidget(GraphViewWidget):
 
             rig.setName(rig.getName().replace('_guide', ''))
 
-            builder = plugins.getBuilder()
-            builder.build(rig)
+            if self.window().preferences.getPreferenceValue('delete_existing_rigs'):
+                if self._builder:
+                    self._builder.deleteBuildElements()
+
+            self._builder = plugins.getBuilder()
+            self._builder.build(rig)
+
             self.reportMessage('Rig Build Success', level='information', timeOut=6000)
 
             self.window().krakenMenu.setCurrentConfig(initConfigIndex)

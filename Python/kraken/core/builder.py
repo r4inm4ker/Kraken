@@ -53,6 +53,11 @@ class Builder(object):
 
         return True
 
+    def deleteBuildElements(self):
+        """Clear out all dcc built elements from the scene if exist."""
+
+        return None
+
 
     def getDCCSceneItem(self, kSceneItem):
         """Given a kSceneItem, returns the built dcc scene item.
