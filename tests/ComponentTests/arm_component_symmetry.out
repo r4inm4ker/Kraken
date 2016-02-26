@@ -41,6 +41,7 @@ building:Arm.controls.Arm.bicepFK.bicepFK.forearmFK as:Arm_L_forearmFK_ctrlSpace
 building:Arm.controls.Arm.bicepFK.bicepFK.forearmFK.forearmFK as:Arm_L_forearmFK_ctrl
 building:Arm.controls.Arm.IK as:Arm_L_IK_ctrlSpace
 building:Arm.controls.Arm.IK.IK as:Arm_L_IK_ctrl
+building:Arm.controls.Arm.ikPosition as:Arm_L_ikPosition_null
 building:Arm.controls.Arm.UpV as:Arm_L_UpV_ctrlSpace
 building:Arm.controls.Arm.UpV.UpV as:Arm_L_UpV_ctrl
 building:Arm.deformers as:deformers
@@ -64,6 +65,7 @@ building:Arm.controls.Arm.bicepFK.bicepFK.forearmFK as:Arm_R_forearmFK_ctrlSpace
 building:Arm.controls.Arm.bicepFK.bicepFK.forearmFK.forearmFK as:Arm_R_forearmFK_ctrl
 building:Arm.controls.Arm.IK as:Arm_R_IK_ctrlSpace
 building:Arm.controls.Arm.IK.IK as:Arm_R_IK_ctrl
+building:Arm.controls.Arm.ikPosition as:Arm_R_ikPosition_null
 building:Arm.controls.Arm.UpV as:Arm_R_UpV_ctrlSpace
 building:Arm.controls.Arm.UpV.UpV as:Arm_R_UpV_ctrl
 building:Arm.deformers as:deformers
@@ -88,6 +90,7 @@ Arm:L.controls.Arm:L.bicepFK.bicepFK.forearmFK
 Arm:L.controls.Arm:L.bicepFK.bicepFK.forearmFK.forearmFK
 Arm:L.controls.Arm:L.IK
 Arm:L.controls.Arm:L.IK.IK
+Arm:L.controls.Arm:L.ikPosition
 Arm:L.controls.Arm:L.UpV
 Arm:L.controls.Arm:L.UpV.UpV
 Arm:L.deformers
@@ -112,6 +115,7 @@ Arm:R.controls.Arm:R.bicepFK.bicepFK.forearmFK
 Arm:R.controls.Arm:R.bicepFK.bicepFK.forearmFK.forearmFK
 Arm:R.controls.Arm:R.IK
 Arm:R.controls.Arm:R.IK.IK
+Arm:R.controls.Arm:R.ikPosition
 Arm:R.controls.Arm:R.UpV
 Arm:R.controls.Arm:R.UpV.UpV
 Arm:R.deformers

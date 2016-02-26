@@ -82,6 +82,7 @@ building:char_bob.controls.Arm.bicepFK.bicepFK.forearmFK as:Arm_L_forearmFK_ctrl
 building:char_bob.controls.Arm.bicepFK.bicepFK.forearmFK.forearmFK as:Arm_L_forearmFK_ctrl
 building:char_bob.controls.Arm.IK as:Arm_L_IK_ctrlSpace
 building:char_bob.controls.Arm.IK.IK as:Arm_L_IK_ctrl
+building:char_bob.controls.Arm.ikPosition as:Arm_L_ikPosition_null
 building:char_bob.controls.Arm.UpV as:Arm_L_UpV_ctrlSpace
 building:char_bob.controls.Arm.UpV.UpV as:Arm_L_UpV_ctrl
 building:char_bob.controls.Arm as:Arm_R_cmp
@@ -98,6 +99,7 @@ building:char_bob.controls.Arm.bicepFK.bicepFK.forearmFK as:Arm_R_forearmFK_ctrl
 building:char_bob.controls.Arm.bicepFK.bicepFK.forearmFK.forearmFK as:Arm_R_forearmFK_ctrl
 building:char_bob.controls.Arm.IK as:Arm_R_IK_ctrlSpace
 building:char_bob.controls.Arm.IK.IK as:Arm_R_IK_ctrl
+building:char_bob.controls.Arm.ikPosition as:Arm_R_ikPosition_null
 building:char_bob.controls.Arm.UpV as:Arm_R_UpV_ctrlSpace
 building:char_bob.controls.Arm.UpV.UpV as:Arm_R_UpV_ctrl
 building:char_bob.controls.Leg as:Leg_L_cmp
@@ -117,6 +119,7 @@ building:char_bob.controls.Leg.femurFK.femurFK.shinFK as:Leg_L_shinFK_ctrlSpace
 building:char_bob.controls.Leg.femurFK.femurFK.shinFK.shinFK as:Leg_L_shinFK_ctrl
 building:char_bob.controls.Leg.IK as:Leg_L_IK_ctrlSpace
 building:char_bob.controls.Leg.IK.IK as:Leg_L_IK_ctrl
+building:char_bob.controls.Leg.ikRootPosition as:Leg_L_ikRootPosition_loc
 building:char_bob.controls.Leg.UpV as:Leg_L_UpV_ctrlSpace
 building:char_bob.controls.Leg.UpV.UpV as:Leg_L_UpV_ctrl
 building:char_bob.controls.Leg as:Leg_R_cmp
@@ -136,6 +139,7 @@ building:char_bob.controls.Leg.femurFK.femurFK.shinFK as:Leg_R_shinFK_ctrlSpace
 building:char_bob.controls.Leg.femurFK.femurFK.shinFK.shinFK as:Leg_R_shinFK_ctrl
 building:char_bob.controls.Leg.IK as:Leg_R_IK_ctrlSpace
 building:char_bob.controls.Leg.IK.IK as:Leg_R_IK_ctrl
+building:char_bob.controls.Leg.ikRootPosition as:Leg_R_ikRootPosition_loc
 building:char_bob.controls.Leg.UpV as:Leg_R_UpV_ctrlSpace
 building:char_bob.controls.Leg.UpV.UpV as:Leg_R_UpV_ctrl
 building:char_bob.deformers as:char_bob_deformers
@@ -271,6 +275,7 @@ char_bob.controls.Arm:L.bicepFK.bicepFK.forearmFK
 char_bob.controls.Arm:L.bicepFK.bicepFK.forearmFK.forearmFK
 char_bob.controls.Arm:L.IK
 char_bob.controls.Arm:L.IK.IK
+char_bob.controls.Arm:L.ikPosition
 char_bob.controls.Arm:L.UpV
 char_bob.controls.Arm:L.UpV.UpV
 char_bob.controls.Arm:R
@@ -287,6 +292,7 @@ char_bob.controls.Arm:R.bicepFK.bicepFK.forearmFK
 char_bob.controls.Arm:R.bicepFK.bicepFK.forearmFK.forearmFK
 char_bob.controls.Arm:R.IK
 char_bob.controls.Arm:R.IK.IK
+char_bob.controls.Arm:R.ikPosition
 char_bob.controls.Arm:R.UpV
 char_bob.controls.Arm:R.UpV.UpV
 char_bob.controls.Leg:L
@@ -306,6 +312,7 @@ char_bob.controls.Leg:L.femurFK.femurFK.shinFK
 char_bob.controls.Leg:L.femurFK.femurFK.shinFK.shinFK
 char_bob.controls.Leg:L.IK
 char_bob.controls.Leg:L.IK.IK
+char_bob.controls.Leg:L.ikRootPosition
 char_bob.controls.Leg:L.UpV
 char_bob.controls.Leg:L.UpV.UpV
 char_bob.controls.Leg:R
@@ -325,6 +332,7 @@ char_bob.controls.Leg:R.femurFK.femurFK.shinFK
 char_bob.controls.Leg:R.femurFK.femurFK.shinFK.shinFK
 char_bob.controls.Leg:R.IK
 char_bob.controls.Leg:R.IK.IK
+char_bob.controls.Leg:R.ikRootPosition
 char_bob.controls.Leg:R.UpV
 char_bob.controls.Leg:R.UpV.UpV
 char_bob.deformers
