@@ -346,7 +346,7 @@ class Builder(Builder):
                 combo = combo.replace(']', ')')
 
                 dfgExec.setExecPortMetadata('key', 'uiCombo', combo)
-                
+
         self._registerSceneItemPair(kAttribute, node)
 
         # set the defaults
@@ -1155,8 +1155,15 @@ class Builder(Builder):
 
         if self.hasOption('SetupDebugDrawing'):
             self.rigGraph.getOrCreateArgument('debugDraw', dataType='Boolean', portType='In', defaultValue=False)
+
         self.rigGraph.getOrCreateArgument('time', dataType='Float32', portType='In', defaultValue=0.0)
+        timeNode = self.rigGraph.createNodeFromPreset('time', 'Fabric.Core.Constants.Float32')
+        self.rigGraph.connectArg('time', timeNode, 'value')
+
         self.rigGraph.getOrCreateArgument('frame', dataType='Float32', portType='In', defaultValue=0.0)
+        frameNode = self.rigGraph.createNodeFromPreset('frame', 'Fabric.Core.Constants.Float32')
+        self.rigGraph.connectArg('frame', frameNode, 'value')
+
         self.rigGraph.getOrCreateArgument('controls', dataType='Xfo[String]', portType='In')
         self.rigGraph.getOrCreateArgument('floats', dataType='Float32[String]', portType='In')
 
@@ -1180,6 +1187,8 @@ class Builder(Builder):
         self.attributeGraph.getOrCreateArgument('dict', dataType='Xfo[String]', portType="IO")
         self.attributeGraph.getOrCreateArgument('key', dataType='String', portType="In")
         self.attributeGraph.getOrCreateArgument('value', dataType='Xfo', portType="In")
+        dfgExec = self.attributeGraph.getExec()
+        dfgExec.setExecPortMetadata('value', 'uiRange', '(0.0, 1.0)')
         preset = 'Kraken.Dictionaries.Float32Dict.Set'
         node = self.attributeGraph.createNodeFromPreset('dict', preset)
         self.attributeGraph.connectArg('dict', node, 'dict')
