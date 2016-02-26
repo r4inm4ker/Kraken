@@ -5,7 +5,9 @@ KLOperator - Splice operator object.
 
 """
 
-from kraken.core.maths import Mat44
+import pprint
+
+from kraken.core.maths import Mat44, Xfo
 from kraken.core.objects.object_3d import Object3D
 from kraken.core.objects.operators.operator import Operator
 from kraken.core.objects.attributes.attribute import Attribute
@@ -130,10 +132,15 @@ class KLOperator(Operator):
         def getRTVal(obj):
             if isinstance(obj, Object3D):
                 return obj.xfo.getRTVal().toMat44('Mat44')
+            elif isinstance(obj, Xfo):
+                return obj.getRTVal().toMat44('Mat44')
             elif isinstance(obj, Attribute):
                 return obj.getRTVal()
+            elif type(obj) in (int, float, bool, str):
+                return obj
 
         argVals = []
+        debug = []
         for i in xrange(len(self.args)):
             arg = self.args[i]
             argName = arg.name.getSimpleType()
@@ -152,7 +159,7 @@ class KLOperator(Operator):
 
             if argConnectionType == 'In':
                 if str(argDataType).endswith('[]'):
-                    rtValArray = ks.rtVal(argDataType[:-2]+'Array')
+                    rtValArray = ks.rtVal(argDataType)
                     rtValArray.resize(len(self.inputs[argName]))
                     for j in xrange(len(self.inputs[argName])):
                         rtValArray[j] = getRTVal(self.inputs[argName][j])
@@ -161,7 +168,7 @@ class KLOperator(Operator):
                     argVals.append(getRTVal(self.inputs[argName]))
             else:
                 if str(argDataType).endswith('[]'):
-                    rtValArray = ks.rtVal(argDataType[:-2]+'Array')
+                    rtValArray = ks.rtVal(argDataType)
                     rtValArray.resize(len(self.outputs[argName]))
                     for j in xrange(len(self.outputs[argName])):
                         rtValArray[j] = getRTVal(self.outputs[argName][j])
@@ -169,14 +176,28 @@ class KLOperator(Operator):
                 else:
                     argVals.append(getRTVal(self.outputs[argName]))
 
-        self.solverRTVal.solve('', *argVals)
+
+            debug.append({argName : [{"dataType": argDataType, "connectionType": argConnectionType}, argVals[-1]]})
+
+        try:
+            self.solverRTVal.solve('', *argVals)
+        except:
+            errorMsg = "Possible problem with KL operator '" + self.getName() + "' arguments:"
+            print errorMsg
+            pprint.pprint(debug, width=800)
+
+            raise Exception(errorMsg)
 
         # Now put the computed values out to the connected output objects.
         def setRTVal(obj, rtval):
             if isinstance(obj, Object3D):
                 obj.xfo.setFromMat44(Mat44(rtval))
+            elif isinstance(obj, Xfo):
+                obj.setFromMat44(Mat44(rtval))
             elif isinstance(obj, Attribute):
                 obj.setValue(rtval)
+            else:
+                print "Warning: Not setting rtval " + str(rtval) + " for object " + str(obj)
 
         for i in xrange(len(argVals)):
             arg = self.args[i]
