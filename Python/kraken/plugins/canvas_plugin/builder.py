@@ -5,6 +5,7 @@ Builder -- Component representation.
 
 """
 
+import os
 import json
 
 from kraken.core.kraken_system import ks
@@ -31,11 +32,14 @@ import FabricEngine.Core as core
 class Builder(Builder):
     """Builder object for building Kraken objects in Canvas."""
 
-    __outputFilePath = None
-    __graph = None
+    __outputFolder = None
+    __rigGraph = None
+    __controlGraph = None
+    __attributeGraph = None
     __dfgCurves = None
     __dfgLastCurveNode = None
     __dfgLastLinesNode = None
+    __rigTitle = None
 
     def __init__(self):
         super(Builder, self).__init__()
@@ -50,14 +54,22 @@ class Builder(Builder):
         return self.getConfig().getMetaData(option, False)
 
     @property
-    def graph(self):
-        return self.__graph
+    def rigGraph(self):
+        return self.__rigGraph
+
+    @property
+    def controlGraph(self):
+        return self.__controlGraph
+
+    @property
+    def attributeGraph(self):
+        return self.__attributeGraph
 
     # ========================
     # IO Methods
     # ========================
-    def setOutputFilePath(self, filePath):
-        self.__outputFilePath = filePath
+    def setOutputFolder(self, folder):
+        self.__outputFolder = folder
 
     # ========================
     # Canvas related Methods
@@ -66,15 +78,15 @@ class Builder(Builder):
     def setTransformPortSI(self, kSceneItem, node, port):
         prevNode = None
         prevPort = None
-        prevNodeAndPort = self.graph.getNodeAndPortSI(kSceneItem, asInput=False)
+        prevNodeAndPort = self.rigGraph.getNodeAndPortSI(kSceneItem, asInput=False)
         if prevNodeAndPort:
             (prevNode, prevPort) = prevNodeAndPort
 
-        self.graph.setNodeAndPortSI(kSceneItem, node, port, asInput=False)
-        self.graph.setNodeMetaData(node, 'uiComment', kSceneItem.getPath())
+        self.rigGraph.setNodeAndPortSI(kSceneItem, node, port, asInput=False)
+        self.rigGraph.setNodeMetaData(node, 'uiComment', kSceneItem.getPath())
 
         if prevNode:
-          self.graph.replaceConnections(prevNode, prevPort, node, port)
+          self.rigGraph.replaceConnections(prevNode, prevPort, node, port)
 
     def connectCanvasOperatorPort(self, kSceneItem, node, port, dataType, portType, connectedObjects, arraySizes):
         if dataType.endswith('[]'):
@@ -85,17 +97,17 @@ class Builder(Builder):
                 for i in range(len(connectedObjects)):
                     title = 'Push_%d' % i
                     c = connectedObjects[i]
-                    pushNode = self.graph.createNodeFromPresetSI(kSceneItem, "Fabric.Core.Array.Push", title=title)
+                    pushNode = self.rigGraph.createNodeFromPresetSI(kSceneItem, "Fabric.Core.Array.Push", title=title)
                     if len(pushNodes) > 0:
-                        self.graph.connectNodes(pushNodes[-1], "array", pushNode, "array")
+                        self.rigGraph.connectNodes(pushNodes[-1], "array", pushNode, "array")
                     pushNodes.append(pushNode)
 
-                self.graph.connectNodes(pushNode, 'array', node, port)
+                self.rigGraph.connectNodes(pushNode, 'array', node, port)
 
                 for i in range(len(connectedObjects)):
                     c = connectedObjects[i]
-                    (connNode, connPort) = self.graph.getNodeAndPortSI(c, asInput=False)
-                    self.graph.connectNodes(connNode, connPort, pushNodes[i], 'element')
+                    (connNode, connPort) = self.rigGraph.getNodeAndPortSI(c, asInput=False)
+                    self.rigGraph.connectNodes(connNode, connPort, pushNodes[i], 'element')
 
             else:
 
@@ -103,24 +115,24 @@ class Builder(Builder):
                 for i in range(len(connectedObjects)):
                     title = 'Get_%d' % i
                     c = connectedObjects[i]
-                    getNode = self.graph.createNodeFromPresetSI(kSceneItem, "Fabric.Core.Array.Get", title=title)
-                    self.graph.connectNodes(node, port, getNode, 'array')
-                    self.graph.setPortDefaultValue(getNode, 'index', i)
+                    getNode = self.rigGraph.createNodeFromPresetSI(kSceneItem, "Fabric.Core.Array.Get", title=title)
+                    self.rigGraph.connectNodes(node, port, getNode, 'array')
+                    self.rigGraph.setPortDefaultValue(getNode, 'index', i)
 
                     if isinstance(c, Attribute):
-                      (connNode, connPort) = self.graph.getNodeAndPortSI(c, asInput=True)
-                      self.graph.connectNodes(getNode, 'element', connNode, connPort)
+                      (connNode, connPort) = self.rigGraph.getNodeAndPortSI(c, asInput=True)
+                      self.rigGraph.connectNodes(getNode, 'element', connNode, connPort)
                     else:
                       self.setTransformPortSI(c, getNode, 'element')
 
         else:
 
             if portType == 'In':
-                (connNode, connPort) = self.graph.getNodeAndPortSI(connectedObjects, asInput=False)
-                self.graph.connectNodes(connNode, connPort, node, port)
+                (connNode, connPort) = self.rigGraph.getNodeAndPortSI(connectedObjects, asInput=False)
+                self.rigGraph.connectNodes(connNode, connPort, node, port)
             elif isinstance(connectedObjects, Attribute):
-                (connNode, connPort) = self.graph.getNodeAndPortSI(connectedObjects, asInput=True)
-                self.graph.connectNodes(node, port, connNode, connPort)
+                (connNode, connPort) = self.rigGraph.getNodeAndPortSI(connectedObjects, asInput=True)
+                self.rigGraph.connectNodes(node, port, connNode, connPort)
             else:
                 self.setTransformPortSI(connectedObjects, node, port)
 
@@ -156,12 +168,14 @@ class Builder(Builder):
             else:
                 return self.setCurrentGroupSI(parent)
 
-        return self.graph.setCurrentGroup(groupName)
+        return self.rigGraph.setCurrentGroup(groupName)
 
     def buildNodeSI(self, kSceneItem, buildName):
 
         if isinstance(kSceneItem, Rig):
-            self.graph.setTitle(kSceneItem.getName())
+            self.rigGraph.setTitle(kSceneItem.getName())
+            self.controlGraph.setTitle(kSceneItem.getName()+'Ctrl')
+            self.attributeGraph.setTitle(kSceneItem.getName()+'Attr')
 
         cls = kSceneItem.__class__.__name__
 
@@ -199,22 +213,22 @@ class Builder(Builder):
 
         path = kSceneItem.getPath()
         preset = "Kraken.Constructors.Kraken%s" % cls
-        node = self.graph.createNodeFromPresetSI(kSceneItem, preset, title='constructor')
+        node = self.rigGraph.createNodeFromPresetSI(kSceneItem, preset, title='constructor')
         self._registerSceneItemPair(kSceneItem, node)
 
         # only the types which support animation
         if isinstance(kSceneItem, Control):
             preset = "Kraken.Constructors.GetXfo"
-            xfoNode = self.graph.createNodeFromPresetSI(kSceneItem, preset, title='getXfo')
-            self.graph.connectNodes(node, 'result', xfoNode, 'this')
+            xfoNode = self.rigGraph.createNodeFromPresetSI(kSceneItem, preset, title='getXfo')
+            self.rigGraph.connectNodes(node, 'result', xfoNode, 'this')
             self.setTransformPortSI(kSceneItem, xfoNode, 'result')
         else:
             self.setTransformPortSI(kSceneItem, node, 'xfo')
 
         # set the defaults
-        self.graph.setPortDefaultValue(node, "name", kSceneItem.getName())
-        self.graph.setPortDefaultValue(node, "buildName", kSceneItem.getBuildName())
-        self.graph.setPortDefaultValue(node, "path", kSceneItem.getPath())
+        self.rigGraph.setPortDefaultValue(node, "name", kSceneItem.getName())
+        self.rigGraph.setPortDefaultValue(node, "buildName", kSceneItem.getBuildName())
+        self.rigGraph.setPortDefaultValue(node, "path", kSceneItem.getPath())
 
         for parentName in ['layer', 'component']:
             getMethod = 'get%s' % parentName.capitalize()
@@ -223,34 +237,34 @@ class Builder(Builder):
             parent = getattr(kSceneItem, getMethod)()
             if not parent:
                 continue
-            self.graph.setPortDefaultValue(node, parentName, parent.getName())
+            self.rigGraph.setPortDefaultValue(node, parentName, parent.getName())
 
         if isinstance(kSceneItem, Control):
-            if self.graph.hasArgument('controls'):
-                self.graph.connectArg('controls', node, 'xfoAnimation')
-            if self.graph.hasArgument('floats'):
-                self.graph.connectArg('floats', node, 'floatAnimation')
+            if self.rigGraph.hasArgument('controls'):
+                self.rigGraph.connectArg('controls', node, 'xfoAnimation')
+            if self.rigGraph.hasArgument('floats'):
+                self.rigGraph.connectArg('floats', node, 'floatAnimation')
 
         if self.hasOption('SetupDebugDrawing'):
             if hasattr(kSceneItem, 'getCurveData'):
                 curveData = kSceneItem.getCurveData()
-                self.graph.setCurrentGroup('DebugCurves')
+                self.rigGraph.setCurrentGroup('DebugCurves')
                 shapeHash = self.buildCanvasCurveShape(curveData)
                 self.setCurrentGroupSI(kSceneItem)
-                self.graph.setPortDefaultValue(node, "shapeHash", shapeHash)
+                self.rigGraph.setPortDefaultValue(node, "shapeHash", shapeHash)
 
         if self.hasOption('SetupDebugDrawing'):
             # shapeNode = self.__dfgLastCurveNode
             # if shapeNode and not shapeNode.startswith('Cache'):
             #   preset = "Fabric.Core.Data.Cache"
-            #   cacheNode = self.graph.createNodeFromPreset(preset)
-            #   self.graph.connectNodes(shapeNode, 'this', cacheNode, 'value')
+            #   cacheNode = self.rigGraph.createNodeFromPreset(preset)
+            #   self.rigGraph.connectNodes(shapeNode, 'this', cacheNode, 'value')
             #   self.__dfgLastCurveNode = cacheNode
 
             if not self.__dfgLastLinesNode:
-                self.graph.setCurrentGroup('DebugCurves')
+                self.rigGraph.setCurrentGroup('DebugCurves')
                 preset = "Fabric.Exts.Geometry.Lines.EmptyLines"
-                linesNode = self.graph.createNodeFromPreset('DebugLines', preset, title='constructor')
+                linesNode = self.rigGraph.createNodeFromPreset('DebugLines', preset, title='constructor')
                 self.__dfgLastLinesNode = (linesNode, 'lines')
                 self.setCurrentGroupSI(kSceneItem)
 
@@ -262,27 +276,27 @@ class Builder(Builder):
               preset = "Kraken.DebugDrawing.DrawIntoLinesObject"
               if isinstance(kSceneItem, Control):
                 preset = "Kraken.DebugDrawing.DrawIntoLinesObjectForControl"
-              drawNode = self.graph.createNodeFromPresetSI(kSceneItem, preset, title='drawIntoLines')
-              self.graph.connectNodes(node, 'result', drawNode, 'this')
-              (xfoNode, xfoPort) = self.graph.getNodeAndPortSI(kSceneItem, asInput=False)
-              self.graph.connectNodes(xfoNode, xfoPort, drawNode, 'xfo')
+              drawNode = self.rigGraph.createNodeFromPresetSI(kSceneItem, preset, title='drawIntoLines')
+              self.rigGraph.connectNodes(node, 'result', drawNode, 'this')
+              (xfoNode, xfoPort) = self.rigGraph.getNodeAndPortSI(kSceneItem, asInput=False)
+              self.rigGraph.connectNodes(xfoNode, xfoPort, drawNode, 'xfo')
               if isinstance(kSceneItem, Control):
-                self.graph.connectNodes(self.__dfgLastCurveNode, 'this', drawNode, 'shapes')
-              self.graph.connectNodes(prevNode, prevPort, drawNode, 'lines')
+                self.rigGraph.connectNodes(self.__dfgLastCurveNode, 'this', drawNode, 'shapes')
+              self.rigGraph.connectNodes(prevNode, prevPort, drawNode, 'lines')
               self.__dfgLastLinesNode = (drawNode, 'lines')
 
         if hasattr(kSceneItem, 'getParent'):
             parent = kSceneItem.getParent()
             if not parent is None:
-                parentNodeAndPort = self.graph.getNodeAndPortSI(parent, asInput=False)
+                parentNodeAndPort = self.rigGraph.getNodeAndPortSI(parent, asInput=False)
                 if parentNodeAndPort:
                     (parentNode, parentPort) = parentNodeAndPort
-                    (childNode, childPort) = self.graph.getNodeAndPortSI(kSceneItem, asInput=False)
+                    (childNode, childPort) = self.rigGraph.getNodeAndPortSI(kSceneItem, asInput=False)
                     preset = "Fabric.Core.Math.Mul"
                     title = kSceneItem.getPath()+' x '+parent.getPath()
-                    transformNode = self.graph.createNodeFromPresetSI(kSceneItem, preset, title=title)
-                    self.graph.connectNodes(parentNode, parentPort, transformNode, 'lhs')
-                    self.graph.connectNodes(childNode, childPort, transformNode, 'rhs')
+                    transformNode = self.rigGraph.createNodeFromPresetSI(kSceneItem, preset, title=title)
+                    self.rigGraph.connectNodes(parentNode, parentPort, transformNode, 'lhs')
+                    self.rigGraph.connectNodes(childNode, childPort, transformNode, 'rhs')
                     self.setTransformPortSI(kSceneItem, transformNode, 'result')
 
         return True
@@ -303,33 +317,49 @@ class Builder(Builder):
 
         path = kAttribute.getPath()
         preset = "Kraken.Attributes.Kraken%s" % cls
-        node = self.graph.createNodeFromPresetSI(kAttribute, preset, title='constructor')
-        self.graph.setNodeAndPortSI(kAttribute, node, 'value')
+        node = self.rigGraph.createNodeFromPresetSI(kAttribute, preset, title='constructor')
+        self.rigGraph.setNodeAndPortSI(kAttribute, node, 'value')
 
         # only the types which support animation
         valueNode = None
         if isinstance(kAttribute.getParent().getParent(), Control):
             if isinstance(kAttribute, ScalarAttribute):
-                if self.graph.hasArgument('floats'):
-                    self.graph.connectArg('floats', node, 'floatAnimation')
+                if self.rigGraph.hasArgument('floats'):
+                    self.rigGraph.connectArg('floats', node, 'floatAnimation')
                 preset = "Kraken.Attributes.Get%sValue" % cls[:-9]
-                valueNode = self.graph.createNodeFromPresetSI(kAttribute, preset, title="getValue")
-                self.graph.connectNodes(node, 'result', valueNode, 'this')
-                self.graph.setNodeAndPortSI(kAttribute, valueNode, 'result', asInput=False)
+                valueNode = self.rigGraph.createNodeFromPresetSI(kAttribute, preset, title="getValue")
+                self.rigGraph.connectNodes(node, 'result', valueNode, 'this')
+                self.rigGraph.setNodeAndPortSI(kAttribute, valueNode, 'result', asInput=False)
 
+                dfgExec = self.attributeGraph.getExec()
+                combo = dfgExec.getExecPortMetadata('key', 'uiCombo')
+                combo = combo.replace('(', '[')
+                combo = combo.replace(')', ']')
+
+                d = []
+                if combo:
+                    d = json.loads(combo)
+                d += [kAttribute.getPath()]
+
+                combo = json.dumps(d)
+                combo = combo.replace('[', '(')
+                combo = combo.replace(']', ')')
+
+                dfgExec.setExecPortMetadata('key', 'uiCombo', combo)
+                
         self._registerSceneItemPair(kAttribute, node)
 
         # set the defaults
-        self.graph.setPortDefaultValue(node, "name", kAttribute.getName())
-        self.graph.setPortDefaultValue(node, "path", kAttribute.getPath())
-        self.graph.setPortDefaultValue(node, "keyable", kAttribute.getKeyable())
-        self.graph.setPortDefaultValue(node, "animatable", kAttribute.getAnimatable())
-        self.graph.setPortDefaultValue(node, "value", kAttribute.getValue())
+        self.rigGraph.setPortDefaultValue(node, "name", kAttribute.getName())
+        self.rigGraph.setPortDefaultValue(node, "path", kAttribute.getPath())
+        self.rigGraph.setPortDefaultValue(node, "keyable", kAttribute.getKeyable())
+        self.rigGraph.setPortDefaultValue(node, "animatable", kAttribute.getAnimatable())
+        self.rigGraph.setPortDefaultValue(node, "value", kAttribute.getValue())
         for propName in ['min', 'max']:
             methodName = 'get' + propName.capitalize()
             if not hasattr(kAttribute, methodName):
                 continue
-            self.graph.setPortDefaultValue(node, propName, getattr(kAttribute, methodName)())
+            self.rigGraph.setPortDefaultValue(node, propName, getattr(kAttribute, methodName)())
 
         return True
 
@@ -355,65 +385,65 @@ class Builder(Builder):
 
         constrainers = kConstraint.getConstrainers()
         constrainee = kConstraint.getConstrainee()
-        (constraineeNode, constraineePort) = self.graph.getNodeAndPortSI(constrainee, asInput=False)
+        (constraineeNode, constraineePort) = self.rigGraph.getNodeAndPortSI(constrainee, asInput=False)
 
         computeNode = None
 
         if len(constrainers) == 1:
 
-            (constrainerNode, constrainerPort) = self.graph.getNodeAndPortSI(constrainers[0], asInput=False)
+            (constrainerNode, constrainerPort) = self.rigGraph.getNodeAndPortSI(constrainers[0], asInput=False)
 
             preset = "Kraken.Constraints.ComputeKraken%s" % cls
-            computeNode = self.graph.createNodeFromPresetSI(kConstraint, preset, title='compute')
-            self.graph.connectNodes(constrainerNode, constrainerPort, computeNode, 'constrainer')
-            self.graph.connectNodes(constraineeNode, constraineePort, computeNode, 'constrainee')
+            computeNode = self.rigGraph.createNodeFromPresetSI(kConstraint, preset, title='compute')
+            self.rigGraph.connectNodes(constrainerNode, constrainerPort, computeNode, 'constrainer')
+            self.rigGraph.connectNodes(constraineeNode, constraineePort, computeNode, 'constrainee')
 
             if kConstraint.getMaintainOffset():
                 preset = "Kraken.Constraints.Kraken%s" % cls
-                constructNode = self.graph.createNodeFromPresetSI(kConstraint, preset, title='constructor')
+                constructNode = self.rigGraph.createNodeFromPresetSI(kConstraint, preset, title='constructor')
                 preset = "Kraken.Constraints.ComputeOffsetSimple"
-                computeOffsetNode = self.graph.createNodeFromPresetSI(kConstraint, preset, title='computeOffset')
-                self.graph.connectNodes(constructNode, 'result', computeOffsetNode, 'this')
-                self.graph.connectNodes(constrainerNode, constrainerPort, computeOffsetNode, 'constrainer')
-                self.graph.connectNodes(constraineeNode, constraineePort, computeOffsetNode, 'constrainee')
-                offset = Xfo(self.graph.computeCurrentPortValue(computeOffsetNode, 'result'))
-                self.graph.removeNodeSI(kConstraint, title='computeOffset')
-                self.graph.removeNodeSI(kConstraint, title='constructor')
-                self.graph.setPortDefaultValue(computeNode, "offset", offset)
+                computeOffsetNode = self.rigGraph.createNodeFromPresetSI(kConstraint, preset, title='computeOffset')
+                self.rigGraph.connectNodes(constructNode, 'result', computeOffsetNode, 'this')
+                self.rigGraph.connectNodes(constrainerNode, constrainerPort, computeOffsetNode, 'constrainer')
+                self.rigGraph.connectNodes(constraineeNode, constraineePort, computeOffsetNode, 'constrainee')
+                offset = Xfo(self.rigGraph.computeCurrentPortValue(computeOffsetNode, 'result'))
+                self.rigGraph.removeNodeSI(kConstraint, title='computeOffset')
+                self.rigGraph.removeNodeSI(kConstraint, title='constructor')
+                self.rigGraph.setPortDefaultValue(computeNode, "offset", offset)
 
         else:
 
             preset = "Kraken.Constraints.Kraken%s" % cls
-            constructNode = self.graph.createNodeFromPresetSI(kConstraint, preset, title='constructor')
+            constructNode = self.rigGraph.createNodeFromPresetSI(kConstraint, preset, title='constructor')
             lastNode = constructNode
             lastPort = "result"
 
             for constrainer in constrainers:
                 preset = "Kraken.Constraints.AddConstrainer"
                 title = 'addConstrainer_' + constrainer.getPath()
-                addNode = self.graph.createNodeFromPresetSI(kConstraint, preset, title=title)
+                addNode = self.rigGraph.createNodeFromPresetSI(kConstraint, preset, title=title)
 
-                self.graph.connectNodes(lastNode, lastPort, addNode, 'this')
+                self.rigGraph.connectNodes(lastNode, lastPort, addNode, 'this')
 
-                (constrainerNode, constrainerPort) = self.graph.getNodeAndPortSI(constrainer, asInput=False)
-                self.graph.connectNodes(constrainerNode, constrainerPort, addNode, 'constrainer')
+                (constrainerNode, constrainerPort) = self.rigGraph.getNodeAndPortSI(constrainer, asInput=False)
+                self.rigGraph.connectNodes(constrainerNode, constrainerPort, addNode, 'constrainer')
 
                 lastNode = addNode
                 lastPort = 'this'
 
             preset = "Kraken.Constraints.Compute"
-            computeNode = self.graph.createNodeFromPresetSI(kConstraint, preset, title='compute')
-            self.graph.connectNodes(lastNode, lastPort, computeNode, 'this')
-            self.graph.connectNodes(constraineeNode, constraineePort, computeNode, 'xfo')
+            computeNode = self.rigGraph.createNodeFromPresetSI(kConstraint, preset, title='compute')
+            self.rigGraph.connectNodes(lastNode, lastPort, computeNode, 'this')
+            self.rigGraph.connectNodes(constraineeNode, constraineePort, computeNode, 'xfo')
 
             if kConstraint.getMaintainOffset():
                 preset = "Kraken.Constraints.ComputeOffset"
-                computeOffsetNode = self.graph.createNodeFromPresetSI(kConstraint, preset, title='computeOffset')
-                self.graph.connectNodes(lastNode, lastPort, computeOffsetNode, 'this')
-                self.graph.connectNodes(constraineeNode, constraineePort, computeOffsetNode, 'constrainee')
-                offset = self.graph.computeCurrentPortValue(computeOffsetNode, 'result')
-                self.graph.removeNodeSI(kConstraint, title='computeOffset')
-                self.graph.setPortDefaultValue(constructNode, "offset", offset)
+                computeOffsetNode = self.rigGraph.createNodeFromPresetSI(kConstraint, preset, title='computeOffset')
+                self.rigGraph.connectNodes(lastNode, lastPort, computeOffsetNode, 'this')
+                self.rigGraph.connectNodes(constraineeNode, constraineePort, computeOffsetNode, 'constrainee')
+                offset = self.rigGraph.computeCurrentPortValue(computeOffsetNode, 'result')
+                self.rigGraph.removeNodeSI(kConstraint, title='computeOffset')
+                self.rigGraph.setPortDefaultValue(constructNode, "offset", offset)
 
         self.setTransformPortSI(constrainee, computeNode, 'result')
 
@@ -425,7 +455,7 @@ class Builder(Builder):
 
         if self.__dfgCurves is None:
             preset = "Kraken.DebugDrawing.KrakenCurveDict"
-            self.__dfgLastCurveNode = self.graph.createNodeFromPreset('drawing', preset, title='curveDict')
+            self.__dfgLastCurveNode = self.rigGraph.createNodeFromPreset('drawing', preset, title='curveDict')
             self.__dfgCurves = {}
 
         numVertices = 0
@@ -468,20 +498,20 @@ class Builder(Builder):
                 indicesRTVal[i] = ks.rtVal('UInt32', indices[i])
 
             preset = "Kraken.DebugDrawing.DefineCurve"
-            curveNode = self.graph.createNodeFromPreset('drawing', preset, title=shapeHash)
+            curveNode = self.rigGraph.createNodeFromPreset('drawing', preset, title=shapeHash)
 
-            self.graph.setPortDefaultValue(curveNode, 'shapeHash', shapeHashVal)
-            self.graph.setPortDefaultValue(curveNode, 'positions', positionsRTVal)
-            self.graph.setPortDefaultValue(curveNode, 'indices', indicesRTVal)
+            self.rigGraph.setPortDefaultValue(curveNode, 'shapeHash', shapeHashVal)
+            self.rigGraph.setPortDefaultValue(curveNode, 'positions', positionsRTVal)
+            self.rigGraph.setPortDefaultValue(curveNode, 'indices', indicesRTVal)
 
             # connec the new nodes with the first port
-            subExec = self.graph.getSubExec(self.__dfgLastCurveNode)
+            subExec = self.rigGraph.getSubExec(self.__dfgLastCurveNode)
             outPort = subExec.getExecPortName(0)
-            subExec = self.graph.getSubExec(curveNode)
+            subExec = self.rigGraph.getSubExec(curveNode)
             inPort = subExec.getExecPortName(0)
-            self.graph.connectNodes(self.__dfgLastCurveNode, outPort, curveNode, inPort)
+            self.rigGraph.connectNodes(self.__dfgLastCurveNode, outPort, curveNode, inPort)
 
-            self.graph.replaceConnections(self.__dfgLastCurveNode, outPort, curveNode, 'this')
+            self.rigGraph.replaceConnections(self.__dfgLastCurveNode, outPort, curveNode, 'this')
 
             self.__dfgCurves[shapeHash] = curveNode
             self.__dfgLastCurveNode = curveNode
@@ -506,8 +536,8 @@ class Builder(Builder):
             return None          
 
         client = ks.getCoreClient()
-        collectNode = self.graph.createFunctionNode('collectors', title='collect'+arg.capitalize())
-        subExec = self.graph.getSubExec(collectNode)
+        collectNode = self.rigGraph.createFunctionNode('collectors', title='collect'+arg.capitalize())
+        subExec = self.rigGraph.getSubExec(collectNode)
 
         resultPort = subExec.addExecPort('result', client.DFG.PortTypes.Out)
         subExec.setExecPortTypeSpec(resultPort, '%s[String]' % dataType)
@@ -519,8 +549,8 @@ class Builder(Builder):
             driverPort = subExec.addExecPort(driverName, client.DFG.PortTypes.In)
             driverMap[driver.getPath()] = driverPort
 
-            (node, port) = self.graph.getNodeAndPortSI(driver, asInput=False)
-            resolvedType = self.graph.getNodePortResolvedType(node, port)
+            (node, port) = self.rigGraph.getNodeAndPortSI(driver, asInput=False)
+            resolvedType = self.rigGraph.getNodePortResolvedType(node, port)
             if resolvedType:
                 subExec.setExecPortTypeSpec(driverPort, resolvedType)
 
@@ -529,10 +559,10 @@ class Builder(Builder):
         subExec.setCode('dfgEntry {\n%s}\n' % '\n'.join(code))
 
         for driver in drivers:
-            (node, port) = self.graph.getNodeAndPortSI(driver, asInput=False)
-            self.graph.connectNodes(node, port, collectNode, driverMap[driver.getPath()])
+            (node, port) = self.rigGraph.getNodeAndPortSI(driver, asInput=False)
+            self.rigGraph.connectNodes(node, port, collectNode, driverMap[driver.getPath()])
 
-        self.graph.connectArg(collectNode, 'result', arg)
+        self.rigGraph.connectArg(collectNode, 'result', arg)
 
     # ========================
     # Object3D Build Methods
@@ -656,9 +686,25 @@ class Builder(Builder):
             object: Node that is created.
 
         """
-        if self.buildNodeSI(kSceneItem, buildName):
-            return kSceneItem
-        return None
+        if not self.buildNodeSI(kSceneItem, buildName):
+            return None
+
+        dfgExec = self.controlGraph.getExec()
+        combo = dfgExec.getExecPortMetadata('key', 'uiCombo')
+        combo = combo.replace('(', '[')
+        combo = combo.replace(')', ']')
+
+        d = []
+        if combo:
+            d = json.loads(combo)
+        d += [kSceneItem.getPath()]
+
+        combo = json.dumps(d)
+        combo = combo.replace('[', '(')
+        combo = combo.replace(']', ')')
+
+        dfgExec.setExecPortMetadata('key', 'uiCombo', combo)
+        return kSceneItem
 
     # ========================
     # Attribute Build Methods
@@ -681,8 +727,8 @@ class Builder(Builder):
 
         if self.hasOption('SetupDebugDrawing'):
             if kAttribute.getName().lower().find('debug') > -1:
-                (node, port) = self.graph.getNodeAndPortSI(kAttribute, asInput=True)
-                self.graph.connectArg('debugDraw', node, port)
+                (node, port) = self.rigGraph.getNodeAndPortSI(kAttribute, asInput=True)
+                self.rigGraph.connectArg('debugDraw', node, port)
 
         return result
 
@@ -767,12 +813,12 @@ class Builder(Builder):
 
         connection = kAttribute.getConnection()
 
-        (nodeA, portA) = self.graph.getNodeAndPortSI(connection, asInput=False)
-        (nodeB, portB) = self.graph.getNodeAndPortSI(kAttribute, asInput=True)
+        (nodeA, portA) = self.rigGraph.getNodeAndPortSI(connection, asInput=False)
+        (nodeB, portB) = self.rigGraph.getNodeAndPortSI(kAttribute, asInput=True)
         if nodeA is None or nodeB is None:
             return False
 
-        self.graph.connectNodes(nodeA, portA, nodeB, portB)
+        self.rigGraph.connectNodes(nodeA, portA, nodeB, portB)
         return True
 
 
@@ -853,12 +899,12 @@ class Builder(Builder):
         else:
             connectionTarget = connection.getTarget()
 
-        (nodeA, portA) = self.graph.getNodeAndPortSI(inputTarget, asInput=False)
-        (nodeB, portB) = self.graph.getNodeAndPortSI(connectionTarget, asInput=True)
+        (nodeA, portA) = self.rigGraph.getNodeAndPortSI(inputTarget, asInput=False)
+        (nodeB, portB) = self.rigGraph.getNodeAndPortSI(connectionTarget, asInput=True)
         if nodeA is None or nodeB is None:
             return False
 
-        self.graph.connectNodes(nodeA, portA, nodeB, portB)
+        self.rigGraph.connectNodes(nodeA, portA, nodeB, portB)
         return False
 
     # =========================
@@ -884,25 +930,25 @@ class Builder(Builder):
 
         client = ks.getCoreClient()
 
-        constructNode = self.graph.createFunctionNodeSI(kOperator, solverTypeName+'Constructor')
-        subExec = self.graph.getSubExec(constructNode)
+        constructNode = self.rigGraph.createFunctionNodeSI(kOperator, solverTypeName+'Constructor')
+        subExec = self.rigGraph.getSubExec(constructNode)
         solverPort = subExec.addExecPort("solver", client.DFG.PortTypes.Out)
         subExec.setExecPortTypeSpec(solverPort, solverTypeName)
         subExec.setCode('dfgEntry { solver = %s(); }' % solverTypeName)
 
-        varNode = self.graph.createVariableNodeSI(kOperator, 'solver', solverTypeName, extension=kOperator.getExtension())
-        self.graph.connectNodes(constructNode, 'solver', varNode, "value")
+        varNode = self.rigGraph.createVariableNodeSI(kOperator, 'solver', solverTypeName, extension=kOperator.getExtension())
+        self.rigGraph.connectNodes(constructNode, 'solver', varNode, "value")
 
-        node = self.graph.createFunctionNodeSI(kOperator, solverTypeName)
+        node = self.rigGraph.createFunctionNodeSI(kOperator, solverTypeName)
         self._registerSceneItemPair(kOperator, node)
 
         # set dependencies
-        self.graph.addExtDep(kOperator.getExtension())
-        subExec = self.graph.getSubExec(node)
+        self.rigGraph.addExtDep(kOperator.getExtension())
+        subExec = self.rigGraph.getSubExec(node)
 
         solverPort = subExec.addExecPort("solver", client.DFG.PortTypes.IO)
         subExec.setExecPortTypeSpec(solverPort, solverTypeName)
-        self.graph.connectNodes(varNode, 'value', node, solverPort)
+        self.rigGraph.connectNodes(varNode, 'value', node, solverPort)
 
         argPorts = {}
         arraySizes = {}
@@ -941,7 +987,7 @@ class Builder(Builder):
 
         opSourceCode = kOperator.generateSourceCode(arraySizes=arraySizes)
 
-        funcExec = self.graph.getSubExec(node)
+        funcExec = self.rigGraph.getSubExec(node)
         funcExec.setCode(opSourceCode)
 
         return False
@@ -960,9 +1006,9 @@ class Builder(Builder):
         self.report('CanvasOp '+kOperator.getPath())
         self.setCurrentGroupSI(kOperator)
 
-        node = self.graph.createNodeFromPresetSI(kOperator, kOperator.getPresetPath(), title='constructor')
+        node = self.rigGraph.createNodeFromPresetSI(kOperator, kOperator.getPresetPath(), title='constructor')
         self._registerSceneItemPair(kOperator, node)
-        subExec = self.graph.getSubExec(node)
+        subExec = self.rigGraph.getSubExec(node)
 
         portTypeMap = {
             0: 'In',
@@ -975,7 +1021,7 @@ class Builder(Builder):
         for i in xrange(subExec.getExecPortCount()):
             portName = subExec.getExecPortName(i)
             portConnectionType = portTypeMap[subExec.getExecPortType(i)]
-            portDataType = self.graph.getNodePortResolvedType(node, portName)
+            portDataType = self.rigGraph.getNodePortResolvedType(node, portName)
 
             if portDataType == 'EvalContext':
                 continue
@@ -1025,9 +1071,9 @@ class Builder(Builder):
             bool: True if successful.
 
         """
-        constructorNode = self.graph.getNodeSI(kSceneItem, title='constructor')
+        constructorNode = self.rigGraph.getNodeSI(kSceneItem, title='constructor')
         if constructorNode:
-          self.graph.setPortDefaultValue(constructorNode, "visibility", kSceneItem.getVisibility())
+          self.rigGraph.setPortDefaultValue(constructorNode, "visibility", kSceneItem.getVisibility())
         return True
 
     # ================
@@ -1044,7 +1090,7 @@ class Builder(Builder):
 
         """
 
-        constructorNode = self.graph.getNodeSI(kSceneItem, title='constructor')
+        constructorNode = self.rigGraph.getNodeSI(kSceneItem, title='constructor')
         if not constructorNode:
           return False
 
@@ -1056,7 +1102,7 @@ class Builder(Builder):
             c = colors[value]
             value = Color(r=c[1][0], g=c[1][1], b=c[1][2], a=1.0)
 
-        self.graph.setPortDefaultValue(constructorNode, "color", value)
+        self.rigGraph.setPortDefaultValue(constructorNode, "color", value)
         return True
 
     # ==================
@@ -1073,21 +1119,21 @@ class Builder(Builder):
 
         """
 
-        nodeAndPort = self.graph.getNodeAndPortSI(kSceneItem, asInput=False)
+        nodeAndPort = self.rigGraph.getNodeAndPortSI(kSceneItem, asInput=False)
         if not nodeAndPort:
             return False
 
         (node, port) = nodeAndPort
-        constructorNode = self.graph.getNodeSI(kSceneItem, title='constructor')
+        constructorNode = self.rigGraph.getNodeSI(kSceneItem, title='constructor')
         if node != constructorNode:
-            self.graph.setPortDefaultValue(constructorNode, "xfo", Xfo())
-            parentXfo = Xfo(self.graph.computeCurrentPortValue(node, port))
+            self.rigGraph.setPortDefaultValue(constructorNode, "xfo", Xfo())
+            parentXfo = Xfo(self.rigGraph.computeCurrentPortValue(node, port))
             invXfo = parentXfo.inverse()
             localXfo = invXfo.multiply(kSceneItem.xfo)
-            self.graph.setPortDefaultValue(constructorNode, "xfo", localXfo)
+            self.rigGraph.setPortDefaultValue(constructorNode, "xfo", localXfo)
             return True
   
-        self.graph.setPortDefaultValue(constructorNode, "xfo", kSceneItem.xfo)
+        self.rigGraph.setPortDefaultValue(constructorNode, "xfo", kSceneItem.xfo)
         return True
 
     # ==============
@@ -1103,17 +1149,43 @@ class Builder(Builder):
             bool: True if successful.
 
         """
-        self.__graph = GraphManager()
+        self.__rigTitle = self.getConfig().getMetaData('RigTitle', 'Rig')
+        self.__rigGraph = GraphManager()
+        self.rigGraph.setTitle('Rig')
 
         if self.hasOption('SetupDebugDrawing'):
-            self.graph.getOrCreateArgument('debugDraw', dataType='Boolean', portType='In', defaultValue=False)
-        self.graph.getOrCreateArgument('time', dataType='Float32', portType='In', defaultValue=0.0)
-        self.graph.getOrCreateArgument('frame', dataType='Float32', portType='In', defaultValue=0.0)
-        self.graph.getOrCreateArgument('controls', dataType='Xfo[String]', portType='In')
-        self.graph.getOrCreateArgument('floats', dataType='Float32[String]', portType='In')
+            self.rigGraph.getOrCreateArgument('debugDraw', dataType='Boolean', portType='In', defaultValue=False)
+        self.rigGraph.getOrCreateArgument('time', dataType='Float32', portType='In', defaultValue=0.0)
+        self.rigGraph.getOrCreateArgument('frame', dataType='Float32', portType='In', defaultValue=0.0)
+        self.rigGraph.getOrCreateArgument('controls', dataType='Xfo[String]', portType='In')
+        self.rigGraph.getOrCreateArgument('floats', dataType='Float32[String]', portType='In')
 
         if self.hasOption('AddCollectJointsNode'):
-            self.graph.getOrCreateArgument('joints', dataType='Xfo[String]', portType='Out')
+            self.rigGraph.getOrCreateArgument('joints', dataType='Xfo[String]', portType='Out')
+
+        self.__controlGraph = GraphManager()
+        self.controlGraph.setTitle('Ctrl')
+        self.controlGraph.getOrCreateArgument('dict', dataType='Xfo[String]', portType="IO")
+        self.controlGraph.getOrCreateArgument('key', dataType='String', portType="In")
+        self.controlGraph.getOrCreateArgument('value', dataType='Xfo', portType="In")
+        preset = 'Kraken.Dictionaries.XfoDict.Set'
+        node = self.controlGraph.createNodeFromPreset('dict', preset)
+        self.controlGraph.connectArg('dict', node, 'dict')
+        self.controlGraph.connectArg('key', node, 'key')
+        self.controlGraph.connectArg('value', node, 'value')
+        self.controlGraph.connectArg(node, 'dict', 'dict')
+
+        self.__attributeGraph = GraphManager()
+        self.controlGraph.setTitle('Attr')
+        self.attributeGraph.getOrCreateArgument('dict', dataType='Xfo[String]', portType="IO")
+        self.attributeGraph.getOrCreateArgument('key', dataType='String', portType="In")
+        self.attributeGraph.getOrCreateArgument('value', dataType='Xfo', portType="In")
+        preset = 'Kraken.Dictionaries.Float32Dict.Set'
+        node = self.attributeGraph.createNodeFromPreset('dict', preset)
+        self.attributeGraph.connectArg('dict', node, 'dict')
+        self.attributeGraph.connectArg('key', node, 'key')
+        self.attributeGraph.connectArg('value', node, 'value')
+        self.attributeGraph.connectArg(node, 'dict', 'dict')
 
         return True
 
@@ -1126,35 +1198,35 @@ class Builder(Builder):
 
         """
         client = ks.getCoreClient()
-        self.graph.setCurrentGroup(None)
+        self.rigGraph.setCurrentGroup(None)
 
-        if self.graph.hasArgument('all'):
+        if self.rigGraph.hasArgument('all'):
             self.collectResultPorts('all', Object3D, 'Xfo')
-        if self.graph.hasArgument('joints'):
+        if self.rigGraph.hasArgument('joints'):
             self.collectResultPorts('joints', Joint, 'Xfo')
 
         if self.hasOption('SetupDebugDrawing'):
             client = ks.getCoreClient()
-            handleArg = self.graph.getOrCreateArgument('handle', dataType='DrawingHandle', portType='Out')
+            handleArg = self.rigGraph.getOrCreateArgument('handle', dataType='DrawingHandle', portType='Out')
 
             # draw the lines
             if self.__dfgLastLinesNode:
                 preset = "Fabric.Exts.InlineDrawing.DrawingHandle.EmptyDrawingHandle"
-                handleNode = self.graph.createNodeFromPreset('drawing', preset, title='handle')
+                handleNode = self.rigGraph.createNodeFromPreset('drawing', preset, title='handle')
                 preset = "Fabric.Exts.InlineDrawing.DrawingHandle.DrawColoredLines"
-                drawNode = self.graph.createNodeFromPreset('drawing', preset, title='drawLines')
+                drawNode = self.rigGraph.createNodeFromPreset('drawing', preset, title='drawLines')
                 preset = "Fabric.Core.Control.If"
-                ifNode = self.graph.createNodeFromPreset('drawing', preset, title='if')
-                self.graph.connectNodes(handleNode, 'handle', drawNode, "this")
-                self.graph.connectNodes(ifNode, 'result', drawNode, "lines")
-                self.graph.connectArg(drawNode, "this", handleArg)
+                ifNode = self.rigGraph.createNodeFromPreset('drawing', preset, title='if')
+                self.rigGraph.connectNodes(handleNode, 'handle', drawNode, "this")
+                self.rigGraph.connectNodes(ifNode, 'result', drawNode, "lines")
+                self.rigGraph.connectArg(drawNode, "this", handleArg)
                 (linesNode, linesPort) = self.__dfgLastLinesNode
-                self.graph.connectNodes(linesNode, linesPort, ifNode, "if_true")
-                self.graph.connectArg('debugDraw', ifNode, 'cond')
+                self.rigGraph.connectNodes(linesNode, linesPort, ifNode, "if_true")
+                self.rigGraph.connectArg('debugDraw', ifNode, 'cond')
 
         # perform layout based on reingold tilford
-        nodes = self.graph.getAllNodeNames()
-        nodeConnections = self.graph.getAllNodeConnections()
+        nodes = self.rigGraph.getAllNodeNames()
+        nodeConnections = self.rigGraph.getAllNodeConnections()
 
         depth = {}
         height = {}
@@ -1191,8 +1263,8 @@ class Builder(Builder):
                 rows += [[]]
                 maxPortsPerRow += [0]
             rows[depth[n]] += [n]
-            if self.graph.getNumPorts(n) > maxPortsPerRow[depth[n]]:
-                maxPortsPerRow[depth[n]] = self.graph.getNumPorts(n)
+            if self.rigGraph.getNumPorts(n) > maxPortsPerRow[depth[n]]:
+                maxPortsPerRow[depth[n]] = self.rigGraph.getNumPorts(n)
 
         for j in range(len(rows)-1, -1, -1):
 
@@ -1204,12 +1276,12 @@ class Builder(Builder):
                     height[n] = i
                     continue
 
-                connectedNodes = self.graph.getNodeConnections(n)
+                connectedNodes = self.rigGraph.getNodeConnections(n)
                 offset = maxPortsPerRow[j+1]
                 height[n] = len(rows[j+1]) *  + i
                 for connectedNode in connectedNodes:
                     h = height[connectedNode] * maxPortsPerRow[j+1]
-                    h = h + self.graph.getMinConnectionPortIndex(n, connectedNode)
+                    h = h + self.rigGraph.getMinConnectionPortIndex(n, connectedNode)
                     if h < height[n]:
                         height[n] = h
 
@@ -1232,14 +1304,18 @@ class Builder(Builder):
         for n in nodes:
             x = float(depth[n]) * 300.0
             y = float(height[n]) * 120.0
-            self.graph.setNodeMetaData(n, 'uiGraphPos', json.dumps({"x": x, "y": y}))
-            self.graph.setNodeMetaData(n, 'uiCollapsedState', "1")
+            self.rigGraph.setNodeMetaData(n, 'uiGraphPos', json.dumps({"x": x, "y": y}))
+            self.rigGraph.setNodeMetaData(n, 'uiCollapsedState', "1")
 
         if self.hasOption('CollapseComponents'):
-            self.graph.implodeNodesByGroup()
+            self.rigGraph.implodeNodesByGroup()
 
-        if self.__outputFilePath:
-            self.graph.saveToFile(self.__outputFilePath)
-            self.report('Saved filed %s' % self.__outputFilePath)
+        if self.__outputFolder:
+            folder = os.path.join(self.__outputFolder, self.__rigTitle)
+            if not os.path.exists(folder):
+                os.makedirs(folder)
+            self.rigGraph.saveToFile(os.path.join(folder, 'Rig.canvas'))
+            self.controlGraph.saveToFile(os.path.join(folder, 'Control.canvas'))
+            self.attributeGraph.saveToFile(os.path.join(folder, 'Attribute.canvas'))
 
         return True

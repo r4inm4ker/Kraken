@@ -41,17 +41,9 @@ class GraphManager(object):
         self.__dfgGroupNames = []
         self.__dfgCurrentGroup = None
 
-        self.__blockHost()
-
     # ========================
     # Canvas Methods
     # ========================
-
-    def __blockHost(self):
-        self.__dfgHost.blockComps()
-
-    def __unblockHost(self):
-        self.__dfgHost.unblockComps()
 
     def setTitle(self, title):
         self.__dfgExec.setTitle(title)
@@ -111,6 +103,9 @@ class GraphManager(object):
 
     def setNodeAndPortSI(self, kSceneItem, node, port, asInput=False):
         self.setNodeAndPort(kSceneItem.getPath(), node, port, asInput=asInput)
+
+    def getExec(self):
+        return self.__dfgExec
 
     def getSubExec(self, node):
         return self.__dfgExec.getSubExec(node)
@@ -359,8 +354,6 @@ class GraphManager(object):
         tempPort = self.getOrCreateArgument("temp", portType="Out")
         self.connectArg(node, port, tempPort)
 
-        self.__unblockHost()
-
         errors = json.loads(self.__dfgBinding.getErrors(True))
         if errors and len(errors) > 0:
             raise Exception(str(errors))
@@ -368,7 +361,6 @@ class GraphManager(object):
         self.__dfgBinding.execute()
 
         value = self.__dfgBinding.getArgValue(tempPort)
-        self.__blockHost()
 
         self.removeArgument(tempPort)
 
@@ -395,9 +387,7 @@ class GraphManager(object):
         return True
 
     def getNodePortResolvedType(self, node, port):
-        self.__unblockHost()
         result = self.__dfgExec.getNodePortResolvedType(node+'.'+port)
-        self.__blockHost()
         return result
 
     def getCurrentGroup(self):
@@ -572,7 +562,6 @@ class GraphManager(object):
             #                 break
 
     def saveToFile(self, filePath):
-        self.__unblockHost()
         content = self.__dfgBinding.exportJSON()
         open(filePath, "w").write(content)
-        self.__blockHost()
+        print 'Canvas Builder: Saved file '+str(filePath)
