@@ -1022,13 +1022,13 @@ class Builder(Builder):
 
         """
 
-        tmat44 = mat44.transpose()
+        mat44 = mat44.transpose()
         matrix = []
-        rows = [tmat44.row0, tmat44.row1, tmat44.row2, tmat44.row3]
+        rows = [mat44.row0, mat44.row1, mat44.row2, mat44.row3]
         for row in rows:
             matrix.extend([row.x, row.y, row.z, row.t])
 
-        cmds.setAttr(dccSceneItemName+"."+attr,  matrix, type="matrix")
+        cmds.setAttr(dccSceneItemName + "." + attr, matrix, type="matrix")
 
         return True
 

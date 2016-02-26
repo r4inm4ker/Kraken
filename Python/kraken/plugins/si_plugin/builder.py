@@ -1203,14 +1203,17 @@ class Builder(Builder):
 
         """
 
-        tmat44 = mat44.transpose()
+        xfo = XSIMath.CreateTransform()
+
+        mat44 = mat44.transpose()
         matrix = []
-        rows = [tmat44.row0, tmat44.row1, tmat44.row2, tmat44.row3]
+        rows = [mat44.row0, mat44.row1, mat44.row2, mat44.row3]
         for row in rows:
             matrix.extend([row.x, row.y, row.z, row.t])
 
-        raise NotImplementedError("setMat44Attr() needs Softimage implementation \
-            to set matrix!")
+        xfo.SetMatrix4(matrix)
+
+        dccSceneItem.Kinematics.Global.PutTransform2(None, xfo)
 
         return True
 
