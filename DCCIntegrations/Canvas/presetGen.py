@@ -1,6 +1,8 @@
 import os
 import sys
 
+os.environ['KRAKEN_DCC'] = 'Canvas'
+
 args = sys.argv[1:]
 if len(args) != 2:
     print "\nPlease provide the rig file to convert and the target folder as command line arguments."

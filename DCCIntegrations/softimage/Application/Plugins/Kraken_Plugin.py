@@ -32,6 +32,7 @@ def XSILoadPlugin(in_reg):
     pluginPath = in_reg.OriginPath
     krakenDir = os.path.normpath(XSIUtils.BuildPath(pluginPath, "..", "..", "..", ".."))
     os.environ['KRAKEN_PATH']  = krakenDir
+    os.environ['KRAKEN_DCC']  = 'Softimage'
 
     # Add the path to the module search paths so we can import the module.
     sys.path.append( os.path.join(krakenDir, 'Python' ) )
