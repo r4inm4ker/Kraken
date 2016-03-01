@@ -1,0 +1,15 @@
+{
+	"objectType": "Function",
+	"title": "Set",
+	"ports": [
+    {"name": "dict", "title": "dict", "portType": "IO", "dataType": "Float32[String]"},
+    {"name": "key", "title": "key", "portType": "In", "dataType": "String"},
+    {"name": "value", "title": "value", "portType": "In", "dataType": "Float32"},
+	],
+	"presetGUID" : "4F997A8AB6B85994977EF0F18E18CDC1",
+	"code": "
+dfgEntry {
+	dict[key] = value;
+}
+"
+}

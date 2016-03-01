@@ -1,0 +1,62 @@
+// Created by kl2dfg (processFunction)
+{
+  "objectType" : "Func",
+  "metadata" : {
+    "uiTooltip" : "Supported types:\n  name: String\n  path: String\n  keyable: Boolean\n  animatable: Boolean\n  value: Boolean\n  result: KrakenBoolAttribute\n"
+    },
+  "title" : "KrakenBoolAttribute",
+  "ports" : [
+    {
+      "objectType" : "Port",
+      "nodePortType" : "Out",
+      "name" : "name",
+      "execPortType" : "In",
+      "typeSpec" : "String"
+      },
+    {
+      "objectType" : "Port",
+      "nodePortType" : "Out",
+      "name" : "path",
+      "execPortType" : "In",
+      "typeSpec" : "String"
+      },
+    {
+      "objectType" : "Port",
+      "nodePortType" : "Out",
+      "name" : "keyable",
+      "execPortType" : "In",
+      "typeSpec" : "Boolean"
+      },
+    {
+      "objectType" : "Port",
+      "nodePortType" : "Out",
+      "name" : "animatable",
+      "execPortType" : "In",
+      "typeSpec" : "Boolean"
+      },
+    {
+      "objectType" : "Port",
+      "nodePortType" : "Out",
+      "name" : "value",
+      "execPortType" : "In",
+      "typeSpec" : "Boolean"
+      },
+    {
+      "objectType" : "Port",
+      "nodePortType" : "In",
+      "name" : "result",
+      "execPortType" : "Out",
+      "typeSpec" : "KrakenBoolAttribute"
+      }
+    ],
+  "extDeps" : {
+    "KrakenForCanvas" : "*"
+    },
+  "presetGUID" : "5ABD2967D361E9291D73A642E9082D49",
+  "code" : "require KrakenForCanvas;
+
+dfgEntry {
+  result = KrakenBoolAttribute(name, path, keyable, animatable, value);
+}
+"
+  }

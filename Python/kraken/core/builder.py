@@ -72,6 +72,16 @@ class Builder(object):
         return None
 
 
+    def getDCCSceneItemPairs(self):
+        """Returns all of the built dcc scene item pairs.
+
+        Returns:
+            array: An array of dicts with 'src' and 'tgt' key value pairs
+
+        """
+        return self._buildElements
+
+
     # ========================
     # SceneItem Build Methods
     # ========================

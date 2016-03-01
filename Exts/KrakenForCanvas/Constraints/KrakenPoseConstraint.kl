@@ -1,0 +1,65 @@
+require Kraken;
+
+/// \dfgPresetColor Color(99, 129, 92)
+struct KrakenPoseConstraint : KrakenConstraint {
+};
+
+/// \dfgPresetFolder Constraints
+function KrakenPoseConstraint(
+  Xfo offset,
+) {
+  this.offset = offset;
+}
+
+/// \dfgPresetFolder Constraints
+function KrakenPoseConstraint.addConstrainer!(
+  Xfo constrainer
+) {
+  this.constrainers.push(constrainer);
+}
+
+/// \dfgPresetFolder Constraints
+function Xfo KrakenPoseConstraint.compute?(
+  Xfo xfo
+) {
+  Xfo result = xfo;
+  result.tr = Vec3();
+  result.ori = Quat(Vec3(0.0, 0.0, 0.0), 0.0);
+
+  for(Size i=0;i<this.constrainers.size();i++) {
+    result.tr = result.tr.add(this.constrainers[i].tr);
+    result.ori = result.ori.add(this.constrainers[i].ori);
+  }
+
+  result.ori.setUnit();
+  result.tr *= 1.0 / Float32(this.constrainers.size());
+  
+  return result * this.offset;
+}
+
+/// \dfgPresetFolder Constraints
+function Xfo computeKrakenPoseConstraint(Xfo offset, Xfo constrainer, Xfo constrainee) {
+  KrakenPoseConstraint constraint(offset);
+  constraint.addConstrainer(constrainer);
+  return constraint.compute(constrainee);
+}
+
+/// \dfgPresetFolder Constraints
+function Xfo KrakenPoseConstraint.computeOffset?(
+  Xfo constrainee
+) {
+
+  KrakenPoseConstraint tmpConstraint(Xfo());
+  tmpConstraint.constrainers = this.constrainers;
+
+  Xfo global = tmpConstraint.compute(constrainee);
+  return global.inverse() * constrainee;
+}
+
+/// \dfgPresetFolder Constraints
+function Xfo KrakenPoseConstraint.computeOffsetSimple!(Xfo constrainee, Xfo constrainer) {
+  this.offset = Xfo();
+  this.constrainers.resize(1);
+  this.constrainers[0] = constrainer;
+  return this.computeOffset(constrainee);
+}

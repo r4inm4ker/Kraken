@@ -1,0 +1,47 @@
+// Created by kl2dfg (processFunction)
+{
+  "objectType" : "Func",
+  "metadata" : {
+    "uiTooltip" : "Supported types:\n  this: KrakenObject3D, KrakenCtrlSpace, KrakenComponentGroup, KrakenContainer, KrakenJoint, KrakenLayer, KrakenLocator, KrakenTransform, KrakenCurve, KrakenHierarchyGroup, KrakenRig\n  xfo: Xfo\n  lines: Lines\n"
+    },
+  "title" : "DrawIntoLinesObject",
+  "ports" : [
+    {
+      "objectType" : "Port",
+      "nodePortType" : "Out",
+      "name" : "this",
+      "execPortType" : "In",
+      "typeSpec" : "$TYPE$"
+      },
+    {
+      "objectType" : "Port",
+      "metadata" : {
+        "uiColor" : "{\n  \"r\" : 249,\n  \"g\" : 157,\n  \"b\" : 28\n  }"
+        },
+      "nodePortType" : "Out",
+      "name" : "xfo",
+      "execPortType" : "In",
+      "typeSpec" : "Xfo"
+      },
+    {
+      "objectType" : "Port",
+      "metadata" : {
+        "uiColor" : "{\n  \"r\" : 51,\n  \"g\" : 1,\n  \"b\" : 106\n  }"
+        },
+      "nodePortType" : "IO",
+      "name" : "lines",
+      "execPortType" : "IO",
+      "typeSpec" : "Lines"
+      }
+    ],
+  "extDeps" : {
+    "KrakenForCanvas" : "*"
+    },
+  "presetGUID" : "AE9ED40D1EACF5E6310BE667C5ED171A",
+  "code" : "require KrakenForCanvas;
+
+dfgEntry {
+  this.drawIntoLinesObject(xfo, lines);
+}
+"
+  }

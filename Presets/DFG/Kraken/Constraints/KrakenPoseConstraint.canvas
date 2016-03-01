@@ -1,0 +1,38 @@
+// Created by kl2dfg (processFunction)
+{
+  "objectType" : "Func",
+  "metadata" : {
+    "uiNodeColor" : "{\n  \"r\" : 99,\n  \"g\" : 129,\n  \"b\" : 92\n  }",
+    "uiTooltip" : "Supported types:\n  offset: Xfo\n  result: KrakenPoseConstraint\n"
+    },
+  "title" : "KrakenPoseConstraint",
+  "ports" : [
+    {
+      "objectType" : "Port",
+      "metadata" : {
+        "uiColor" : "{\n  \"r\" : 249,\n  \"g\" : 157,\n  \"b\" : 28\n  }"
+        },
+      "nodePortType" : "Out",
+      "name" : "offset",
+      "execPortType" : "In",
+      "typeSpec" : "Xfo"
+      },
+    {
+      "objectType" : "Port",
+      "nodePortType" : "In",
+      "name" : "result",
+      "execPortType" : "Out",
+      "typeSpec" : "KrakenPoseConstraint"
+      }
+    ],
+  "extDeps" : {
+    "KrakenForCanvas" : "*"
+    },
+  "presetGUID" : "9AE1D3D74A2600FA7CEDAAA5FF684622",
+  "code" : "require KrakenForCanvas;
+
+dfgEntry {
+  result = KrakenPoseConstraint(offset);
+}
+"
+  }

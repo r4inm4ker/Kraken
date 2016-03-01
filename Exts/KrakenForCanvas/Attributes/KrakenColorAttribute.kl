@@ -1,0 +1,25 @@
+require Math;
+
+struct KrakenColorAttribute : KrakenAttribute {
+  Color value;
+};
+
+/// \dfgPresetFolder Attributes
+function KrakenColorAttribute(
+  String name,
+  String path,
+  Boolean keyable,
+  Boolean animatable,
+  Color value
+) {
+  this.name = name;
+  this.path = path;
+  this.keyable = keyable;
+  this.animatable = animatable;
+  this.value = value;
+}
+
+/// \dfgPresetFolder Attributes
+function Color KrakenColorAttribute.getColorValue() {
+  return this.value;
+}

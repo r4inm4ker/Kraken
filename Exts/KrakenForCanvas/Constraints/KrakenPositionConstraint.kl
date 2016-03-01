@@ -1,0 +1,61 @@
+require Kraken;
+
+struct KrakenPositionConstraint : KrakenConstraint {
+};
+
+/// \dfgPresetFolder Constraints
+function KrakenPositionConstraint(
+  Xfo offset,
+) {
+  this.offset = offset;
+}
+
+/// \dfgPresetFolder Constraints
+function KrakenPositionConstraint.addConstrainer!(
+  Xfo constrainer
+) {
+  this.constrainers.push(constrainer);
+}
+
+/// \dfgPresetFolder Constraints
+function Xfo KrakenPositionConstraint.compute?(
+  Xfo xfo
+) {
+  Xfo result = xfo;
+  result.tr = Vec3();
+
+  for(Size i=0;i<this.constrainers.size();i++) {
+    result.tr = result.tr.add(this.constrainers[i].tr);
+  }
+
+  result.tr *= 1.0 / Float32(this.constrainers.size());
+
+  return result * this.offset;
+}
+
+/// \dfgPresetFolder Constraints
+function Xfo computeKrakenPositionConstraint(Xfo offset, Xfo constrainer, Xfo constrainee) {
+  KrakenPositionConstraint constraint(offset);
+  constraint.addConstrainer(constrainer);
+  return constraint.compute(constrainee);
+}
+
+/// \dfgPresetFolder Constraints
+function Xfo KrakenPositionConstraint.computeOffset?(
+  Xfo constrainee
+) {
+
+  KrakenPositionConstraint tmpConstraint(Xfo());
+  tmpConstraint.constrainers = this.constrainers;
+
+  Xfo global = tmpConstraint.compute(constrainee);
+  return global.inverse() * constrainee;
+}
+
+/// \dfgPresetFolder Constraints
+function Xfo KrakenPositionConstraint.computeOffsetSimple!(Xfo constrainee, Xfo constrainer) {
+  this.offset = Xfo();
+  this.constrainers.resize(1);
+  this.constrainers[0] = constrainer;
+  return this.computeOffset(constrainee);
+}

@@ -1,11 +1,11 @@
 """Kraken Maya Plug-in."""
 
+import os
 
 def dccTest():
-    try:
-        from maya import cmds
 
+    krakenDCC = os.environ.get('KRAKEN_DCC')
+    if krakenDCC == "Maya":
         return True
-
-    except:
+    else:
         return False

@@ -1,0 +1,37 @@
+require Math;
+require Containers;
+require Geometry;
+require Kraken;
+
+struct KrakenObject3D {
+  String name;
+  String buildName;
+  String path;
+  String layer;
+  String component;
+  Xfo xfo;
+  Boolean visibility;
+  Color color;
+  String flags[String];
+};
+
+function KrakenObject3D_DrawIntoLines_VertexColors(KrakenObject3D obj, Index firstIndex, io Lines lines) {
+  GeometryAttributes attributes = lines.getAttributes();
+  ColorAttribute vertexColors = attributes.getOrCreateColorAttribute('vertexColors');
+  for(Size i=firstIndex;i<vertexColors.values.size();i++) {
+    vertexColors.values[i] = obj.color;
+  }
+  vertexColors.incrementVersion();
+}
+
+function KrakenObject3D_DrawIntoLinesObject(KrakenObject3D obj, Xfo xfo, Boolean visibility, io Lines lines) {
+  if(!visibility)
+    return;
+  Size firstIndex = lines.pointCount();
+  lines.addAxes(xfo, 1.0);
+  KrakenObject3D_DrawIntoLines_VertexColors(obj, firstIndex, lines);
+}
+
+/// \dfgPresetFolder DebugDrawing
+function KrakenObject3D.drawIntoLinesObject(Xfo xfo, io Lines lines) {
+}

@@ -1,0 +1,51 @@
+// Created by kl2dfg (processFunction)
+{
+  "objectType" : "Func",
+  "metadata" : {
+    "uiTooltip" : "Supported types:\n  this: KrakenCurveDict\n  shapeHash: String\n  indices: UInt32[]\n  positions: Vec3[]\n"
+    },
+  "title" : "DefineCurve",
+  "ports" : [
+    {
+      "objectType" : "Port",
+      "nodePortType" : "IO",
+      "name" : "this",
+      "execPortType" : "IO",
+      "typeSpec" : "KrakenCurveDict"
+      },
+    {
+      "objectType" : "Port",
+      "nodePortType" : "Out",
+      "name" : "shapeHash",
+      "execPortType" : "In",
+      "typeSpec" : "String"
+      },
+    {
+      "objectType" : "Port",
+      "nodePortType" : "Out",
+      "name" : "indices",
+      "execPortType" : "In",
+      "typeSpec" : "UInt32[]"
+      },
+    {
+      "objectType" : "Port",
+      "metadata" : {
+        "uiColor" : "{\n  \"r\" : 255,\n  \"g\" : 242,\n  \"b\" : 0\n  }"
+        },
+      "nodePortType" : "Out",
+      "name" : "positions",
+      "execPortType" : "In",
+      "typeSpec" : "Vec3[]"
+      }
+    ],
+  "extDeps" : {
+    "KrakenForCanvas" : "*"
+    },
+  "presetGUID" : "2C8447662DD26D43148320E36317DD60",
+  "code" : "require KrakenForCanvas;
+
+dfgEntry {
+  this.defineCurve(shapeHash, indices, positions);
+}
+"
+  }

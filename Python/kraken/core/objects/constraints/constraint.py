@@ -5,9 +5,10 @@ Constraint - Base Constraint.
 
 """
 
+from kraken.core.kraken_system import ks
 from kraken.core.objects.scene_item import SceneItem
 from kraken.core.objects.object_3d import Object3D
-
+from kraken.core.maths.xfo import Xfo
 
 class Constraint(SceneItem):
     """Constraint object."""
@@ -142,6 +143,66 @@ class Constraint(SceneItem):
 
         return self._constrainers
 
+    def compute(self, getGlobalXfoFunc):
+        """invokes the constraint and returns the resulting transform
+
+        Returns:
+            xfo: The result of the constraint in global space.
+
+        """
+
+        if self._constrainee is None:
+            return None
+        if len(self._constrainers) == 0:
+            return None
+
+        cls = self.__class__.__name__
+        ks.loadExtension('KrakenForCanvas')
+        rtVal = ks.rtVal('Kraken%s' % cls)
+
+        rtVal.offset = ks.rtVal('Xfo', self._constrainee.xfo)
+        for c in self._constrainers:
+            rtVal.addConstrainer('', ks.rtVal('Xfo', getGlobalXfoFunc(c)))
+
+        return Xfo(rtVal.compute("Xfo", ks.rtVal('Xfo', getGlobalXfoFunc(self._constrainee))))
+
+    def computeOffset(self, getGlobalXfoFunc):
+        """invokes the constraint and computes the offset
+
+        Returns:
+            xfo: The offset to be used for the constraint.
+
+        """
+
+        if self._constrainee is None:
+            return Xfo()
+        if len(self._constrainers) == 0:
+            return Xfo()
+
+        cls = self.__class__.__name__
+        ks.loadExtension('KrakenForCanvas')
+        rtVal = ks.rtVal('Kraken%s' % cls)
+
+        rtVal.offset = ks.rtVal('Xfo', Xfo())
+        for c in self._constrainers:
+            rtVal.addConstrainer('', ks.rtVal('Xfo', getGlobalXfoFunc(c)))
+
+        return Xfo(rtVal.computeOffset("Xfo", ks.rtVal('Xfo', getGlobalXfoFunc(self._constrainee))))
+
+
+    def evaluate(self):
+        """invokes the constraint causing the output value to be computed.
+
+        Returns:
+            bool: True if successful.
+
+        """
+        if self.getMaintainOffset() is False:
+            def getGlobalXfoFunc(c):
+                return c.xfo
+            self.getConstrainee().xfo = self.computeOffset(getGlobalXfoFunc=getGlobalXfoFunc)
+
+        return False        
 
     # ================
     # Persistence Methods

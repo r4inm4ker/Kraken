@@ -1,0 +1,31 @@
+require Math;
+
+struct KrakenIntegerAttribute : KrakenAttribute {
+  Integer min;
+  Integer max;
+  Integer value;
+};
+
+/// \dfgPresetFolder Attributes
+function KrakenIntegerAttribute(
+  String name,
+  String path,
+  Boolean keyable,
+  Boolean animatable,
+  Integer min,
+  Integer max,
+  Integer value
+) {
+  this.name = name;
+  this.path = path;
+  this.keyable = keyable;
+  this.animatable = animatable;
+  this.min = min;
+  this.max = max;
+  this.value = min >= max ? value : (value < min ? min : (value > max ? max : value));
+}
+
+/// \dfgPresetFolder Attributes
+function Integer KrakenIntegerAttribute.getIntegerValue() {
+  return this.value;
+}

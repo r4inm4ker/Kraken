@@ -1,0 +1,54 @@
+// Created by kl2dfg (processFunction)
+{
+  "objectType" : "Func",
+  "metadata" : {
+    "uiTooltip" : "Supported types:\n  this: KrakenControl\n  xfo: Xfo\n  shapes: KrakenCurveDict\n  lines: Lines\n"
+    },
+  "title" : "DrawIntoLinesObjectForControl",
+  "ports" : [
+    {
+      "objectType" : "Port",
+      "nodePortType" : "Out",
+      "name" : "this",
+      "execPortType" : "In",
+      "typeSpec" : "KrakenControl"
+      },
+    {
+      "objectType" : "Port",
+      "metadata" : {
+        "uiColor" : "{\n  \"r\" : 249,\n  \"g\" : 157,\n  \"b\" : 28\n  }"
+        },
+      "nodePortType" : "Out",
+      "name" : "xfo",
+      "execPortType" : "In",
+      "typeSpec" : "Xfo"
+      },
+    {
+      "objectType" : "Port",
+      "nodePortType" : "Out",
+      "name" : "shapes",
+      "execPortType" : "In",
+      "typeSpec" : "KrakenCurveDict"
+      },
+    {
+      "objectType" : "Port",
+      "metadata" : {
+        "uiColor" : "{\n  \"r\" : 51,\n  \"g\" : 1,\n  \"b\" : 106\n  }"
+        },
+      "nodePortType" : "IO",
+      "name" : "lines",
+      "execPortType" : "IO",
+      "typeSpec" : "Lines"
+      }
+    ],
+  "extDeps" : {
+    "KrakenForCanvas" : "*"
+    },
+  "presetGUID" : "59E42F0184CA0433FD7C622ACBE7E342",
+  "code" : "require KrakenForCanvas;
+
+dfgEntry {
+  this.drawIntoLinesObjectForControl(xfo, shapes, lines);
+}
+"
+  }

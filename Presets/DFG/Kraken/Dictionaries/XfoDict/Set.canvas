@@ -1,0 +1,15 @@
+{
+	"objectType": "Function",
+	"title": "Set",
+	"ports": [
+    {"name": "dict", "title": "dict", "portType": "IO", "dataType": "Xfo[String]"},
+    {"name": "key", "title": "key", "portType": "In", "dataType": "String"},
+    {"name": "value", "title": "value", "portType": "In", "dataType": "Xfo"},
+	],
+	"presetGUID" : "F8D1126EC1BF6E8228F5B8AC140286AB",
+	"code": "
+dfgEntry {
+	dict[key] = value;
+}
+"
+}
