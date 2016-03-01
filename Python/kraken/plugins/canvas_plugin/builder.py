@@ -380,7 +380,7 @@ class Builder(Builder):
         self.setCurrentGroupSI(kConstraint)
 
         path = kConstraint.getPath()
-        
+
         nodes = []
 
         constrainers = kConstraint.getConstrainers()
@@ -533,7 +533,7 @@ class Builder(Builder):
             driversHit[driver.getPath()] = driver
 
         if len(drivers) == 0:
-            return None          
+            return None
 
         client = ks.getCoreClient()
         collectNode = self.rigGraph.createFunctionNode('collectors', title='collect'+arg.capitalize())
@@ -578,8 +578,10 @@ class Builder(Builder):
             object: Node that is created.
 
         """
+
         if self.buildNodeSI(kSceneItem, buildName):
             return kSceneItem
+
         return None
 
 
@@ -594,8 +596,10 @@ class Builder(Builder):
             object: Node that is created.
 
         """
+
         if self.buildNodeSI(kSceneItem, buildName):
             return kSceneItem
+
         return None
 
 
@@ -610,8 +614,10 @@ class Builder(Builder):
             object: DCC Scene Item that is created.
 
         """
+
         if self.buildNodeSI(kSceneItem, buildName):
             return kSceneItem
+
         return None
 
 
@@ -626,8 +632,10 @@ class Builder(Builder):
             object: Node that is created.
 
         """
+
         if self.buildNodeSI(kSceneItem, buildName):
             return kSceneItem
+
         return None
 
     def buildJoint(self, kSceneItem, buildName):
@@ -641,8 +649,10 @@ class Builder(Builder):
             object: DCC Scene Item that is created.
 
         """
+
         if self.buildNodeSI(kSceneItem, buildName):
             return kSceneItem
+
         return None
 
     def buildLocator(self, kSceneItem, buildName):
@@ -658,6 +668,7 @@ class Builder(Builder):
         """
         if self.buildNodeSI(kSceneItem, buildName):
             return kSceneItem
+
         return None
 
     def buildCurve(self, kSceneItem, buildName):
@@ -673,6 +684,7 @@ class Builder(Builder):
         """
         if self.buildNodeSI(kSceneItem, buildName):
             return kSceneItem
+
         return None
 
     def buildControl(self, kSceneItem, buildName):
@@ -704,6 +716,7 @@ class Builder(Builder):
         combo = combo.replace(']', ')')
 
         dfgExec.setExecPortMetadata('key', 'uiCombo', combo)
+
         return kSceneItem
 
     # ========================
@@ -742,6 +755,7 @@ class Builder(Builder):
             bool: True if successful.
 
         """
+
         return self.buildNodeAttribute(kAttribute)
 
     def buildIntegerAttribute(self, kAttribute):
@@ -754,6 +768,7 @@ class Builder(Builder):
             bool: True if successful.
 
         """
+
         return self.buildNodeAttribute(kAttribute)
 
     def buildStringAttribute(self, kAttribute):
@@ -766,6 +781,7 @@ class Builder(Builder):
             bool: True if successful.
 
         """
+
         return self.buildNodeAttribute(kAttribute)
 
     def buildAttributeGroup(self, kAttributeGroup):
@@ -778,6 +794,7 @@ class Builder(Builder):
             bool: True if successful.
 
         """
+
         for i in xrange(kAttributeGroup.getNumAttributes()):
             kAttribute = kAttributeGroup.getAttributeByIndex(i)
 
@@ -819,6 +836,7 @@ class Builder(Builder):
             return False
 
         self.rigGraph.connectNodes(nodeA, portA, nodeB, portB)
+
         return True
 
 
@@ -835,6 +853,7 @@ class Builder(Builder):
             object: dccSceneItem that was created.
 
         """
+
         return self.buildNodesFromConstraint(kConstraint)
 
     def buildPoseConstraint(self, kConstraint):
@@ -847,6 +866,7 @@ class Builder(Builder):
             object: dccSceneItem that was created.
 
         """
+
         return self.buildNodesFromConstraint(kConstraint)
 
     def buildPositionConstraint(self, kConstraint):
@@ -859,6 +879,7 @@ class Builder(Builder):
             object: dccSceneItem that was created.
 
         """
+
         return self.buildNodesFromConstraint(kConstraint)
 
     def buildScaleConstraint(self, kConstraint):
@@ -871,6 +892,7 @@ class Builder(Builder):
             object: dccSceneItem that was created.
 
         """
+
         return self.buildNodesFromConstraint(kConstraint)
 
     # ========================
@@ -887,6 +909,7 @@ class Builder(Builder):
             bool: True if successful.
 
         """
+
         if not connectionInput.isConnected():
             return True
 
@@ -905,6 +928,7 @@ class Builder(Builder):
             return False
 
         self.rigGraph.connectNodes(nodeA, portA, nodeB, portB)
+
         return False
 
     # =========================
@@ -952,7 +976,7 @@ class Builder(Builder):
 
         argPorts = {}
         arraySizes = {}
-        
+
         args = kOperator.getSolverArgs()
         for i in xrange(len(args)):
             arg = args[i]
@@ -1003,6 +1027,7 @@ class Builder(Builder):
             bool: True if successful.
 
         """
+
         self.report('CanvasOp '+kOperator.getPath())
         self.setCurrentGroupSI(kOperator)
 
@@ -1040,7 +1065,6 @@ class Builder(Builder):
 
             self.connectCanvasOperatorPort(kOperator, node, portName, portDataType, portConnectionType, connectedObjects, arraySizes)
 
-
         return True
 
     # ==================
@@ -1056,6 +1080,7 @@ class Builder(Builder):
             bool: True if successful.
 
         """
+
         return True
 
     # ===================
@@ -1071,9 +1096,11 @@ class Builder(Builder):
             bool: True if successful.
 
         """
+
         constructorNode = self.rigGraph.getNodeSI(kSceneItem, title='constructor')
         if constructorNode:
-          self.rigGraph.setPortDefaultValue(constructorNode, "visibility", kSceneItem.getVisibility())
+            self.rigGraph.setPortDefaultValue(constructorNode, "visibility", kSceneItem.getVisibility())
+
         return True
 
     # ================
@@ -1103,6 +1130,7 @@ class Builder(Builder):
             value = Color(r=c[1][0], g=c[1][1], b=c[1][2], a=1.0)
 
         self.rigGraph.setPortDefaultValue(constructorNode, "color", value)
+
         return True
 
     # ==================
@@ -1131,9 +1159,11 @@ class Builder(Builder):
             invXfo = parentXfo.inverse()
             localXfo = invXfo.multiply(kSceneItem.xfo)
             self.rigGraph.setPortDefaultValue(constructorNode, "xfo", localXfo)
+
             return True
-  
+
         self.rigGraph.setPortDefaultValue(constructorNode, "xfo", kSceneItem.xfo)
+
         return True
 
     # ==============
@@ -1149,6 +1179,7 @@ class Builder(Builder):
             bool: True if successful.
 
         """
+
         self.__rigTitle = self.getConfig().getMetaData('RigTitle', 'Rig')
         self.__rigGraph = GraphManager()
         self.rigGraph.setTitle('Rig')
@@ -1206,6 +1237,7 @@ class Builder(Builder):
             bool: True if successful.
 
         """
+
         client = ks.getCoreClient()
         self.rigGraph.setCurrentGroup(None)
 

@@ -24,7 +24,9 @@ class Synchronizer(Synchronizer):
         """
 
         path = kObject.getPath()
+
         return None
+
 
     def syncXfo(self, kObject):
         """Syncs the xfo from the DCC object to the Kraken object.
@@ -36,6 +38,7 @@ class Synchronizer(Synchronizer):
             bool: True if successful.
 
         """
+
         return False
 
 
@@ -49,6 +52,7 @@ class Synchronizer(Synchronizer):
             bool: True if successful.
 
         """
+
         return False
 
     def syncCurveData(self, kObject):
@@ -61,4 +65,5 @@ class Synchronizer(Synchronizer):
             bool: True if successful.
 
         """
+
         return False

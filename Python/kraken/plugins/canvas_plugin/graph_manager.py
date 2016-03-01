@@ -41,10 +41,10 @@ class GraphManager(object):
         self.__dfgGroupNames = []
         self.__dfgCurrentGroup = None
 
-    # ========================
-    # Canvas Methods
-    # ========================
 
+    # ===============
+    # Canvas Methods
+    # ===============
     def setTitle(self, title):
         self.__dfgExec.setTitle(title)
 
@@ -56,6 +56,7 @@ class GraphManager(object):
             titleSuffix = titleSuffix + 1
             uniqueTitle = '%s_%d' % (title, titleSuffix)
             lookup = '%s|%s' % (path, uniqueTitle)
+
         return uniqueTitle
 
     def addExtDep(self, extDep):
@@ -65,6 +66,7 @@ class GraphManager(object):
         lookup = path
         if not title is None:
             lookup = "%s|%s" % (path, title)
+
         return self.__dfgNodes.has_key(lookup)
 
     def hasNodeSI(self, kSceneItem, title=None):
@@ -74,6 +76,7 @@ class GraphManager(object):
         lookup = path
         if not title is None:
             lookup = "%s|%s" % (path, title)
+
         return self.__dfgNodes.get(lookup, None)
 
     def getNodeSI(self, kSceneItem, title=None):
@@ -86,6 +89,7 @@ class GraphManager(object):
         nodeAndPort = self.__dfgNodeAndPortMap[path]
         if asInput:
             return nodeAndPort[0]
+
         return nodeAndPort[1]
 
     def getNodeAndPortSI(self, kSceneItem, asInput=True):
@@ -135,6 +139,7 @@ class GraphManager(object):
             return False
         self.__dfgExec.removeExecPort(self.__dfgArgs[name])
         del self.__dfgArgs[name]
+
         return True
 
     def createNodeFromPreset(self, path, preset, title=None, **metaData):
@@ -155,6 +160,7 @@ class GraphManager(object):
     def createNodeFromPresetSI(self, kSceneItem, preset, title=None, **metaData):
         node = self.createNodeFromPreset(kSceneItem.getPath(), preset, title=title, **metaData)
         self.setNodeMetaDataSI(kSceneItem, 'uiComment', kSceneItem.getPath(), title=title)
+
         return node
 
     def createFunctionNode(self, path, title, **metaData):
@@ -169,6 +175,7 @@ class GraphManager(object):
         self.__dfgNodes[lookup] = node
         self.setNodeMetaDataFromDict(lookup, metaData)
         self.__addNodeToGroup(node)
+
         return node
 
     def createFunctionNodeSI(self, kSceneItem, title, **metaData):
@@ -186,6 +193,7 @@ class GraphManager(object):
         self.__dfgNodes[lookup] = node
         self.setNodeMetaDataFromDict(lookup, metaData)
         self.__addNodeToGroup(node)
+
         return node
 
     def createVariableNodeSI(self, kSceneItem, title, dataType, extension="", **metaData):
@@ -271,6 +279,7 @@ class GraphManager(object):
         elif self.__dfgArgs.has_key(argC):
             self.__dfgExec.connectTo(argA+'.'+argB, argC)
             return True
+
         return False
 
     def replaceConnections(self, oldNode, oldPort, newNode, newPort):
@@ -299,6 +308,7 @@ class GraphManager(object):
                 self.__dfgConnections[nodeName][portName] = newConnections
                 if result:
                     return result
+
         return result
 
     def getConnections(self, node, port, targets=True):
@@ -316,6 +326,7 @@ class GraphManager(object):
                     for c in connections:
                         if '.'.join(c) == node+'.'+port:
                             result += [(nodeName, portName)]
+
         return result
 
     def getNodeMetaData(self, path, key, defaultValue=None, title=None):
@@ -325,6 +336,7 @@ class GraphManager(object):
         if not self.__dfgNodes.has_key(lookup):
             return defaultValue
         node = self.__dfgNodes[lookup]
+
         return self.__dfgExec.getNodeMetadata(node, key)
 
     def getNodeMetaDataSI(self, kSceneItem, key, defaultValue=None, title=None):
@@ -340,6 +352,7 @@ class GraphManager(object):
         self.__dfgExec.setNodeMetadata(node, key, str(value))
         if key == 'uiComment':
             self.__dfgExec.setNodeMetadata(node, 'uiCommentExpanded', 'true')
+
         return True
 
     def setNodeMetaDataSI(self, kSceneItem, key, value, title=None):
@@ -371,6 +384,7 @@ class GraphManager(object):
         if not nodeAndPort:
             return None
         (node, port) = nodeAndPort
+
         return self.computeCurrentPortValue(node, port)
 
     def setPortDefaultValue(self, node, port, value):
@@ -384,6 +398,7 @@ class GraphManager(object):
           rtVal = ks.rtVal(dataType, value)
 
         self.__dfgExec.setPortDefaultValue(portPath, rtVal)
+
         return True
 
     def getNodePortResolvedType(self, node, port):
@@ -434,6 +449,7 @@ class GraphManager(object):
                     continue
                 keys[key] = True
                 result += [otherNode]
+
         return result
 
     def getAllNodeConnections(self):
@@ -451,6 +467,7 @@ class GraphManager(object):
                     if not result.has_key(nodeName):
                         result[nodeName] = []
                     result[nodeName] += [otherNode]
+
         return result
 
     def getNumPorts(self, node):
@@ -460,6 +477,7 @@ class GraphManager(object):
         elif nodeType == 0: # inst
             subExec = self.getSubExec(node)
             return subExec.getExecPortCount()
+
         return 0
 
     def hasInputConnections(self, node):
@@ -470,6 +488,7 @@ class GraphManager(object):
                 for c in connections:
                     if c[0] == node:
                         return True
+
         return False
 
     def hasOutputConnections(self, node):
@@ -477,6 +496,7 @@ class GraphManager(object):
         for port in ports:
             if len(ports) > 0:
                 return True
+
         return False
 
     def getPortIndex(self, node, port):
@@ -489,6 +509,7 @@ class GraphManager(object):
                 portName = subExec.getExecPortName(i)
                 if portName == port:
                     return i
+
         return 0
 
     def getMinConnectionPortIndex(self, sourceNode, targetNode):
@@ -505,6 +526,7 @@ class GraphManager(object):
 
         if minIndex == 10000:
             return 0
+
         return minIndex
 
     def getAllNodePortIndices(self):
@@ -520,6 +542,7 @@ class GraphManager(object):
                 for i in range(subExec.getExecPortCount()):
                     port = subExec.getExecPortName(i)
                     result[n][port] = i
+
         return result
 
     def getAllInputConnections(self):
