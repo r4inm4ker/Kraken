@@ -162,16 +162,67 @@ class KLOperator(Operator):
                     rtValArray = ks.rtVal(argDataType)
                     rtValArray.resize(len(self.inputs[argName]))
                     for j in xrange(len(self.inputs[argName])):
-                        rtValArray[j] = getRTVal(self.inputs[argName][j])
+                        rtVal = getRTVal(self.inputs[argName][j])
+
+                        # Validate types when passing a built in Python type
+                        if type(rtVal) in (bool, str, int, float):
+                            if argDataType in ('Scalar[]', 'Float32[]', 'UInt32[]'):
+                                if type(rtVal) not in (float, int):
+                                    raise TypeError("KL Operator evaluate(): Invalid Value: " + str(rtVal) + " (" + type(rtVal).__name__ + "), is not valid for " + argName + " (" + argDataType + ")")
+
+                            elif argDataType == 'Boolean[]':
+                                if type(rtVal) != bool:
+                                    raise TypeError("KL Operator evaluate(): Invalid Value: " + str(rtVal) + " (" + type(rtVal).__name__ + "), is not valid for " + argName + " (" + argDataType + ")")
+
+                            elif argDataType == 'String[]':
+                                if type(rtVal) != str:
+                                    raise TypeError("KL Operator evaluate(): Invalid Value: " + str(rtVal) + " (" + type(rtVal).__name__ + "), is not valid for " + argName + " (" + argDataType + ")")
+
+                        rtValArray[j] = rtVal
+
                     argVals.append(rtValArray)
+
                 else:
-                    argVals.append(getRTVal(self.inputs[argName]))
+                    rtVal = getRTVal(self.inputs[argName])
+
+                    # Validate types when passing a built in Python type
+                    if type(rtVal) in (bool, str, int, float):
+                        if argDataType in ('Scalar', 'Float32', 'UInt32'):
+                            if type(rtVal) not in (float, int):
+                                raise TypeError("KL Operator evaluate(): Invalid Value: " + str(rtVal) + " (" + type(rtVal).__name__ + "), is not valid for " + argName + " (" + argDataType + ")")
+
+                        elif argDataType == 'Boolean':
+                            if type(rtVal) != bool:
+                                raise TypeError("KL Operator evaluate(): Invalid Value: " + str(rtVal) + " (" + type(rtVal).__name__ + "), is not valid for " + argName + " (" + argDataType + ")")
+
+                        elif argDataType == 'String':
+                            if type(rtVal) != str:
+                                raise TypeError("KL Operator evaluate(): Invalid Value: " + str(rtVal) + " (" + type(rtVal).__name__ + "), is not valid for " + argName + " (" + argDataType + ")")
+
+                    argVals.append(rtVal)
             else:
                 if str(argDataType).endswith('[]'):
                     rtValArray = ks.rtVal(argDataType)
                     rtValArray.resize(len(self.outputs[argName]))
                     for j in xrange(len(self.outputs[argName])):
-                        rtValArray[j] = getRTVal(self.outputs[argName][j])
+                        rtVal = getRTVal(self.outputs[argName][j])
+
+                        # Validate types when passing a built in Python type
+                        if type(rtVal) in (bool, str, int, float):
+                            if argDataType in ('Scalar[]', 'Float32[]', 'UInt32[]'):
+                                if type(rtVal) not in (float, int):
+                                    raise TypeError("KL Operator evaluate(): Invalid Value: " + str(rtVal) + " (" + type(rtVal).__name__ + "), is not valid for " + argName + " (" + argDataType + ")")
+
+                            elif argDataType == 'Boolean[]':
+                                if type(rtVal) != bool:
+                                    raise TypeError("KL Operator evaluate(): Invalid Value: " + str(rtVal) + " (" + type(rtVal).__name__ + "), is not valid for " + argName + " (" + argDataType + ")")
+
+                            elif argDataType == 'String[]':
+                                if type(rtVal) != str:
+                                    raise TypeError("KL Operator evaluate(): Invalid Value: " + str(rtVal) + " (" + type(rtVal).__name__ + "), is not valid for " + argName + " (" + argDataType + ")")
+
+                        rtValArray[j] = rtVal
+
                     argVals.append(rtValArray)
                 else:
                     argVals.append(getRTVal(self.outputs[argName]))
