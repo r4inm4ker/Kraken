@@ -173,7 +173,7 @@ class FabriceHeadGuide(FabriceHead):
 class FabriceHeadRig(FabriceHead):
     """Fabrice Head Component Rig"""
 
-    def __init__(self, name='h  ead', parent=None):
+    def __init__(self, name='head', parent=None):
 
         Profiler.getInstance().push("Construct Head Rig Component:" + name)
         super(FabriceHeadRig, self).__init__(name, parent)
@@ -243,13 +243,12 @@ class FabriceHeadRig(FabriceHead):
         self.jawOutputConstraint.addConstrainer(self.jawCtrl)
         self.jawOutputTgt.addConstraint(self.jawOutputConstraint)
 
-        # ===============
-        # Add Splice Ops
-        # ===============
+        # ==============
+        # Add Operators
+        # ==============
 
-        # Add Aim Splice Op
+        # Add Aim Canvas Op
         # =================
-        # self.headAimCanvasOp = KLOperator('headAimCanvasOp', 'DirectionConstraintSolver', 'Kraken')
         self.headAimCanvasOp = CanvasOperator('headAimCanvasOp', 'Kraken.Solvers.DirectionConstraintSolver')
         self.addOperator(self.headAimCanvasOp)
 
@@ -265,8 +264,8 @@ class FabriceHeadRig(FabriceHead):
         # Add Xfo Outputs
         self.headAimCanvasOp.setOutput('constrainee', self.headAim)
 
-        # Add Deformer Splice Op
-        # ======================
+        # Add Deformer KL Op
+        # ==================
         self.deformersToOutputsKLOp = KLOperator('headDeformerKLOp', 'MultiPoseConstraintSolver', 'Kraken')
         self.addOperator(self.deformersToOutputsKLOp)
 
