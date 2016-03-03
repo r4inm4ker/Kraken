@@ -100,6 +100,31 @@ class CanvasOperator(Operator):
             elif type(obj) in (int, float, bool, str):
                 return obj
 
+        def validateArg(rtVal, portName, portDataType):
+            """Validate argument types when passing built in Python types.
+
+            Args:
+                rtVal (RTVal): rtValue object.
+                portName (str): Name of the argument being validated.
+                portDataType (str): Type of the argument being validated.
+
+            """
+
+            # Validate types when passing a built in Python type
+            if type(rtVal) in (bool, str, int, float):
+                if portDataType in ('Scalar', 'Float32', 'UInt32'):
+                    if type(rtVal) not in (float, int):
+                        raise TypeError(self.getName() + ".evaluate(): Invalid Argument Value: " + str(rtVal) + " (" + type(rtVal).__name__ + "), for Argument: " + portName + " (" + portDataType + ")")
+
+                elif portDataType == 'Boolean':
+                    if type(rtVal) != bool:
+                        raise TypeError(self.getName() + ".evaluate(): Invalid Argument Value: " + str(rtVal) + " (" + type(rtVal).__name__ + "), for Argument: " + portName + " (" + portDataType + ")")
+
+                elif portDataType == 'String':
+                    if type(rtVal) != str:
+                        raise TypeError(self.getName() + ".evaluate(): Invalid Argument Value: " + str(rtVal) + " (" + type(rtVal).__name__ + "), for Argument: " + portName + " (" + portDataType + ")")
+
+
         portTypeMap = {
             0: 'In',
             1: 'IO',
@@ -127,24 +152,39 @@ class CanvasOperator(Operator):
                     rtValArray = ks.rtVal(portDataType[:-2]+'Array')
                     rtValArray.resize(len(self.inputs[portName]))
                     for j in xrange(len(self.inputs[portName])):
-                        rtValArray[j] = getRTVal(self.inputs[portName][j])
+                        rtVal = getRTVal(self.inputs[portName][j])
+
+                        validateArg(rtVal, portName, portDataType[:-2])
+
+                        rtValArray[j] = rtVal
 
                     portVal = rtValArray
                     self.binding.setArgValue(portName, portVal, False)
                 else:
-                    self.binding.setArgValue(portName, getRTVal(self.inputs[portName]), False)
+                    rtVal = getRTVal(self.inputs[portName])
+
+                    validateArg(rtVal, portName, portDataType)
+
+                    self.binding.setArgValue(portName, rtVal, False)
             else:
                 if str(portDataType).endswith('[]'):
                     rtValArray = ks.rtVal(portDataType[:-2]+'Array')
                     rtValArray.resize(len(self.outputs[portName]))
                     for j in xrange(len(self.outputs[portName])):
-                        rtValArray[j] = getRTVal(self.outputs[portName][j])
+                        rtVal = getRTVal(self.outputs[portName][j])
+
+                        validateArg(rtVal, portName, portDataType[:-2])
+
+                        rtValArray[j] = rtVal
 
                     portVal = rtValArray
                     self.binding.setArgValue(portName, portVal, False)
                 else:
-                    portVal = getRTVal(self.outputs[portName])
-                    self.binding.setArgValue(portName, portVal, False)
+                    rtVal = getRTVal(self.outputs[portName])
+
+                    validateArg(rtVal, portName, portDataType)
+
+                    self.binding.setArgValue(portName, rtVal, False)
 
             portDebug = {
                 portName: [

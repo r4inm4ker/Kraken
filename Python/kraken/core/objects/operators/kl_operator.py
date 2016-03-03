@@ -139,6 +139,31 @@ class KLOperator(Operator):
             elif type(obj) in (int, float, bool, str):
                 return obj
 
+        def validateArg(rtVal, argName, argDataType):
+            """Validate argument types when passing built in Python types.
+
+            Args:
+                rtVal (RTVal): rtValue object.
+                argName (str): Name of the argument being validated.
+                argDataType (str): Type of the argument being validated.
+
+            """
+
+            # Validate types when passing a built in Python type
+            if type(rtVal) in (bool, str, int, float):
+                if argDataType in ('Scalar', 'Float32', 'UInt32'):
+                    if type(rtVal) not in (float, int):
+                        raise TypeError(self.getName() + ".evaluate(): Invalid Argument Value: " + str(rtVal) + " (" + type(rtVal).__name__ + "), for Argument: " + argName + " (" + argDataType + ")")
+
+                elif argDataType == 'Boolean':
+                    if type(rtVal) != bool:
+                        raise TypeError(self.getName() + ".evaluate(): Invalid Argument Value: " + str(rtVal) + " (" + type(rtVal).__name__ + "), for Argument: " + argName + " (" + argDataType + ")")
+
+                elif argDataType == 'String':
+                    if type(rtVal) != str:
+                        raise TypeError(self.getName() + ".evaluate(): Invalid Argument Value: " + str(rtVal) + " (" + type(rtVal).__name__ + "), for Argument: " + argName + " (" + argDataType + ")")
+
+
         argVals = []
         debug = []
         for i in xrange(len(self.args)):
@@ -164,40 +189,15 @@ class KLOperator(Operator):
                     for j in xrange(len(self.inputs[argName])):
                         rtVal = getRTVal(self.inputs[argName][j])
 
-                        # Validate types when passing a built in Python type
-                        if type(rtVal) in (bool, str, int, float):
-                            if argDataType in ('Scalar[]', 'Float32[]', 'UInt32[]'):
-                                if type(rtVal) not in (float, int):
-                                    raise TypeError("KL Operator evaluate(): Invalid Value: " + str(rtVal) + " (" + type(rtVal).__name__ + "), is not valid for " + argName + " (" + argDataType + ")")
-
-                            elif argDataType == 'Boolean[]':
-                                if type(rtVal) != bool:
-                                    raise TypeError("KL Operator evaluate(): Invalid Value: " + str(rtVal) + " (" + type(rtVal).__name__ + "), is not valid for " + argName + " (" + argDataType + ")")
-
-                            elif argDataType == 'String[]':
-                                if type(rtVal) != str:
-                                    raise TypeError("KL Operator evaluate(): Invalid Value: " + str(rtVal) + " (" + type(rtVal).__name__ + "), is not valid for " + argName + " (" + argDataType + ")")
+                        validateArg(rtVal, argName, argDataType[:-2])
 
                         rtValArray[j] = rtVal
 
                     argVals.append(rtValArray)
-
                 else:
                     rtVal = getRTVal(self.inputs[argName])
 
-                    # Validate types when passing a built in Python type
-                    if type(rtVal) in (bool, str, int, float):
-                        if argDataType in ('Scalar', 'Float32', 'UInt32'):
-                            if type(rtVal) not in (float, int):
-                                raise TypeError("KL Operator evaluate(): Invalid Value: " + str(rtVal) + " (" + type(rtVal).__name__ + "), is not valid for " + argName + " (" + argDataType + ")")
-
-                        elif argDataType == 'Boolean':
-                            if type(rtVal) != bool:
-                                raise TypeError("KL Operator evaluate(): Invalid Value: " + str(rtVal) + " (" + type(rtVal).__name__ + "), is not valid for " + argName + " (" + argDataType + ")")
-
-                        elif argDataType == 'String':
-                            if type(rtVal) != str:
-                                raise TypeError("KL Operator evaluate(): Invalid Value: " + str(rtVal) + " (" + type(rtVal).__name__ + "), is not valid for " + argName + " (" + argDataType + ")")
+                    validateArg(rtVal, argName, argDataType)
 
                     argVals.append(rtVal)
             else:
@@ -207,26 +207,17 @@ class KLOperator(Operator):
                     for j in xrange(len(self.outputs[argName])):
                         rtVal = getRTVal(self.outputs[argName][j])
 
-                        # Validate types when passing a built in Python type
-                        if type(rtVal) in (bool, str, int, float):
-                            if argDataType in ('Scalar[]', 'Float32[]', 'UInt32[]'):
-                                if type(rtVal) not in (float, int):
-                                    raise TypeError("KL Operator evaluate(): Invalid Value: " + str(rtVal) + " (" + type(rtVal).__name__ + "), is not valid for " + argName + " (" + argDataType + ")")
-
-                            elif argDataType == 'Boolean[]':
-                                if type(rtVal) != bool:
-                                    raise TypeError("KL Operator evaluate(): Invalid Value: " + str(rtVal) + " (" + type(rtVal).__name__ + "), is not valid for " + argName + " (" + argDataType + ")")
-
-                            elif argDataType == 'String[]':
-                                if type(rtVal) != str:
-                                    raise TypeError("KL Operator evaluate(): Invalid Value: " + str(rtVal) + " (" + type(rtVal).__name__ + "), is not valid for " + argName + " (" + argDataType + ")")
+                        validateArg(rtVal, argName, argDataType[:-2])
 
                         rtValArray[j] = rtVal
 
                     argVals.append(rtValArray)
                 else:
-                    argVals.append(getRTVal(self.outputs[argName]))
+                    rtVal = getRTVal(self.outputs[argName])
 
+                    validateArg(rtVal, argName, argDataType)
+
+                    argVals.append(rtVal)
 
             debug.append({argName : [{"dataType": argDataType, "connectionType": argConnectionType}, argVals[-1]]})
 
@@ -245,6 +236,8 @@ class KLOperator(Operator):
                 obj.xfo.setFromMat44(Mat44(rtval))
             elif isinstance(obj, Xfo):
                 obj.setFromMat44(Mat44(rtval))
+            elif isinstance(obj, Mat44):
+                obj.setFromMat44(rtval)
             elif isinstance(obj, Attribute):
                 obj.setValue(rtval)
             else:
