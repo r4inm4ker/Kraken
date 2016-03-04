@@ -628,7 +628,7 @@ class Builder(Builder):
 
             # Validate types when passing a built in Python type
             if type(rtVal) in (bool, str, int, float):
-                if argDataType in ('Scalar', 'Float32', 'UInt32'):
+                if argDataType in ('Scalar', 'Float32', 'UInt32', 'Integer'):
                     if type(rtVal) not in (float, int):
                         raise TypeError(self.getName() + ".evaluate(): Invalid Argument Value: " + str(rtVal) + " (" + type(rtVal).__name__ + "), for Argument: " + argName + " (" + argDataType + ")")
 
