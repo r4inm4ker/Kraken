@@ -1,11 +1,11 @@
 """Kraken Softimage Plug-in."""
 
+import os
 
 def dccTest():
-    try:
-        import sipyutils
 
+    krakenDCC = os.environ.get('KRAKEN_DCC')
+    if krakenDCC == "Softimage":
         return True
-
-    except:
+    else:
         return False

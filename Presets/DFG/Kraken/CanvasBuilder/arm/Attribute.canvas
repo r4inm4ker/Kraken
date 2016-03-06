@@ -1,0 +1,141 @@
+{
+  "objectType" : "Graph",
+  "title" : "MyRigAttr",
+  "ports" : [
+    {
+      "objectType" : "Port",
+      "nodePortType" : "IO",
+      "name" : "dict",
+      "execPortType" : "IO"
+      },
+    {
+      "objectType" : "Port",
+      "metadata" : {
+        "uiCombo" : "(\"MyRig.controls.arm.IK.IK.DisplayInfo_ArmSettings.bone1Len\", \"MyRig.controls.arm.IK.IK.DisplayInfo_ArmSettings.bone2Len\", \"MyRig.controls.arm.IK.IK.DisplayInfo_ArmSettings.fkik\", \"MyRig.controls.arm.IK.IK.DisplayInfo_ArmSettings.softDist\", \"MyRig.controls.arm.IK.IK.DisplayInfo_ArmSettings.stretchBlend\")"
+        },
+      "nodePortType" : "Out",
+      "name" : "key",
+      "execPortType" : "In"
+      },
+    {
+      "objectType" : "Port",
+      "metadata" : {
+        "uiRange" : "(0.0, 1.0)"
+        },
+      "nodePortType" : "Out",
+      "name" : "value",
+      "execPortType" : "In"
+      }
+    ],
+  "extDeps" : {},
+  "nodes" : [
+    {
+      "objectType" : "Inst",
+      "name" : "Set",
+      "ports" : [
+        {
+          "objectType" : "InstPort",
+          "nodePortType" : "IO",
+          "name" : "dict"
+          },
+        {
+          "objectType" : "InstPort",
+          "nodePortType" : "In",
+          "name" : "key"
+          },
+        {
+          "objectType" : "InstPort",
+          "nodePortType" : "In",
+          "name" : "value"
+          }
+        ],
+      "executable" : "Kraken.Dictionaries.Float32Dict.Set",
+      "presetGUID" : "4F997A8AB6B85994977EF0F18E18CDC1"
+      }
+    ],
+  "connections" : {
+    "dict" : [
+      "Set.dict"
+      ],
+    "key" : [
+      "Set.key"
+      ],
+    "value" : [
+      "Set.value"
+      ],
+    "Set.dict" : [
+      "dict"
+      ]
+    },
+  "requiredPresets" : {
+    "Kraken.Dictionaries.Float32Dict.Set" : {
+      "objectType" : "Func",
+      "title" : "Set",
+      "ports" : [
+        {
+          "objectType" : "Port",
+          "nodePortType" : "IO",
+          "name" : "dict",
+          "execPortType" : "IO",
+          "typeSpec" : "Float32[String]"
+          },
+        {
+          "objectType" : "Port",
+          "nodePortType" : "Out",
+          "name" : "key",
+          "execPortType" : "In",
+          "typeSpec" : "String"
+          },
+        {
+          "objectType" : "Port",
+          "nodePortType" : "Out",
+          "name" : "value",
+          "execPortType" : "In",
+          "typeSpec" : "Float32"
+          }
+        ],
+      "extDeps" : {},
+      "presetGUID" : "4F997A8AB6B85994977EF0F18E18CDC1",
+      "code" : "
+dfgEntry {
+	dict[key] = value;
+}
+"
+      }
+    },
+  "args" : [
+    {
+      "type" : "Xfo[String]",
+      "value" : null,
+      "ext" : "Math"
+      },
+    {
+      "type" : "String",
+      "value" : ""
+      },
+    {
+      "type" : "Xfo",
+      "value" : {
+        "ori" : {
+          "v" : {
+            "x" : 0,
+            "y" : 0,
+            "z" : 0
+            },
+          "w" : 1
+          },
+        "tr" : {
+          "x" : 0,
+          "y" : 0,
+          "z" : 0
+          },
+        "sc" : {
+          "x" : 1,
+          "y" : 1,
+          "z" : 1
+          }
+        },
+      "ext" : "Math"
+      }
+    ]
+  }

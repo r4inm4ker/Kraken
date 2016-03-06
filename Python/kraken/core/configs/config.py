@@ -25,6 +25,7 @@ class Config(object):
         self._colorMap = self.initColorMap()
         self._nameTemplate = self.initNameTemplate()
         self._controlShapes = self.initControlShapes()
+        self._metaData = {}
 
 
     # ==============
@@ -926,6 +927,36 @@ class Config(object):
         """
 
         self._explicitNaming = value
+
+        return True
+
+
+    # =========================
+    # MetaData Methods
+    # =========================
+    def getMetaData(self, key, value=None):
+        """Returns the value of a metaData flag.
+
+        Returns:
+            str: current value or None for default value
+
+        """
+        return self._metaData.get(key, value)
+
+
+    def setMetaData(self, key, value):
+        """Set the config to contain a metaData flag.
+
+        Args:
+            key (str): the key under which to store the value
+            value (any): the value to store for a given key
+
+        Returns:
+            bool: True if successful.
+
+        """
+
+        self._metaData[key] = value
 
         return True
 

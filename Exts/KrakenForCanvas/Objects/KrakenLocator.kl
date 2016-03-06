@@ -1,0 +1,34 @@
+require Kraken;
+
+struct KrakenLocator : KrakenObject3D {
+};
+
+/// \dfgPresetFolder Objects
+function KrakenLocator(
+  String name,
+  String buildName,
+  String path,
+  String layer,
+  String component,
+  Xfo xfo,
+  Boolean visibility,
+  Color color
+) {
+  this.name = name;
+  this.buildName = buildName;
+  this.path = path;
+  this.layer = layer;
+  this.component = component;
+  this.xfo = xfo;
+  this.visibility = visibility;
+  this.color = color;
+}
+
+/// \dfgPresetFolder Objects
+function Xfo KrakenLocator.getXfo() {
+  return this.xfo;
+}
+
+/// \dfgPresetFolder DebugDrawing
+function KrakenLocator.drawIntoLinesObject(Xfo xfo, io Lines lines) {
+}

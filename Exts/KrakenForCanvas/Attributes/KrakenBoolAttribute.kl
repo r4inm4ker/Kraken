@@ -1,0 +1,25 @@
+require Math;
+
+struct KrakenBoolAttribute : KrakenAttribute {
+  Boolean value;
+};
+
+/// \dfgPresetFolder Attributes
+function KrakenBoolAttribute(
+  String name,
+  String path,
+  Boolean keyable,
+  Boolean animatable,
+  Boolean value
+) {
+  this.name = name;
+  this.path = path;
+  this.keyable = keyable;
+  this.animatable = animatable;
+  this.value = value;
+}
+
+/// \dfgPresetFolder Attributes
+function Boolean KrakenBoolAttribute.getBoolValue() {
+  return this.value;
+}

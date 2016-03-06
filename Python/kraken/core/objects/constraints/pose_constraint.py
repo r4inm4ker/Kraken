@@ -17,25 +17,3 @@ class PoseConstraint(Constraint):
     def __init__(self, name):
         super(PoseConstraint, self).__init__(name)
 
-
-    def evaluate(self):
-        """invokes the constraint causing the output value to be computed.
-
-        Returns:
-            bool: True if successful.
-
-        """
-
-        if self.getMaintainOffset() is False:
-            newXfo = Xfo()
-            newXfo.ori.set(Vec3(), 0.0)
-            for constrainer in self.getConstrainers():
-                newXfo.tr = newXfo.tr.add(constrainer.xfo.tr)
-                newXfo.ori = newXfo.ori.add(constrainer.xfo.ori)
-
-            newXfo.tr.multiplyScalar(1.0 / len(self.getConstrainers()))
-            newXfo.ori.setUnit()
-            self.getConstrainee().xfo = newXfo
-
-        return True
-

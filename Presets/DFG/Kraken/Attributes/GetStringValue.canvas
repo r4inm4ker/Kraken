@@ -1,0 +1,34 @@
+// Created by kl2dfg (processFunction)
+{
+  "objectType" : "Func",
+  "metadata" : {
+    "uiTooltip" : "Supported types:\n  this: KrakenStringAttribute\n  result: String\n"
+    },
+  "title" : "GetStringValue",
+  "ports" : [
+    {
+      "objectType" : "Port",
+      "nodePortType" : "Out",
+      "name" : "this",
+      "execPortType" : "In",
+      "typeSpec" : "KrakenStringAttribute"
+      },
+    {
+      "objectType" : "Port",
+      "nodePortType" : "In",
+      "name" : "result",
+      "execPortType" : "Out",
+      "typeSpec" : "String"
+      }
+    ],
+  "extDeps" : {
+    "KrakenForCanvas" : "*"
+    },
+  "presetGUID" : "96FFDB061EF536A59FB3D2104E895411",
+  "code" : "require KrakenForCanvas;
+
+dfgEntry {
+  result = this.getStringValue();
+}
+"
+  }

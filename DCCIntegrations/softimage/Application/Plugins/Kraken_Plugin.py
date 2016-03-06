@@ -32,6 +32,7 @@ def XSILoadPlugin(in_reg):
     pluginPath = in_reg.OriginPath
     krakenDir = os.path.normpath(XSIUtils.BuildPath(pluginPath, "..", "..", "..", ".."))
     os.environ['KRAKEN_PATH']  = krakenDir
+    os.environ['KRAKEN_DCC']  = 'Softimage'
 
     # Add the path to the module search paths so we can import the module.
     sys.path.append( os.path.join(krakenDir, 'Python' ) )
@@ -43,9 +44,11 @@ def XSILoadPlugin(in_reg):
     if krakenExtsDir not in  os.environ['FABRIC_EXTS_PATH']:
         os.environ['FABRIC_EXTS_PATH'] = krakenExtsDir + os.pathsep + os.environ['FABRIC_EXTS_PATH']
 
-    canvasPresetsDir = os.path.join(krakenDir, 'Presets')
-    if canvasPresetsDir not in os.environ['FABRIC_DFG_PATH']:
+    canvasPresetsDir = os.path.join(krakenDir, 'Presets', 'DFG')
+    if 'FABRIC_DFG_PATH' in os.environ and canvasPresetsDir not in os.environ['FABRIC_DFG_PATH']:
         os.environ['FABRIC_DFG_PATH'] = canvasPresetsDir + os.pathsep + os.environ['FABRIC_DFG_PATH']
+    else:
+        os.environ['FABRIC_DFG_PATH'] = canvasPresetsDir
 
     krakenLoadMenu = os.getenv('KRAKEN_LOAD_MENU', 'True')
     if krakenLoadMenu == 'True':

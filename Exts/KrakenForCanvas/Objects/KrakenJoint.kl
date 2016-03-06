@@ -1,0 +1,39 @@
+require Kraken;
+
+struct KrakenJoint : KrakenObject3D {
+};
+
+/// \dfgPresetFolder Objects
+function KrakenJoint(
+  String name,
+  String buildName,
+  String path,
+  String layer,
+  String component,
+  Xfo xfo,
+  Boolean visibility,
+  Color color
+) {
+  this.name = name;
+  this.buildName = buildName;
+  this.path = path;
+  this.layer = layer;
+  this.component = component;
+  this.xfo = xfo;
+  this.visibility = visibility;
+  this.color = color;
+}
+
+/// \dfgPresetFolder Objects
+function Xfo KrakenJoint.getXfo() {
+  return this.xfo;
+}
+
+/// \dfgPresetFolder DebugDrawing
+function KrakenJoint.drawIntoLinesObject(Xfo xfo, io Lines lines) {
+  if(!this.visibility)
+    return;
+  Size firstIndex = lines.pointCount();
+  lines.addSphere(xfo, 0.5, 12);
+  KrakenObject3D_DrawIntoLines_VertexColors(this, firstIndex, lines);
+}

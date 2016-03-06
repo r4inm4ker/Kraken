@@ -92,6 +92,17 @@ class Operator(SceneItem):
         return self.inputs[name]
 
 
+    def getInputNames(self):
+        """Returns the names of all inputs.
+
+        Returns:
+            list: Names of all inputs.
+
+        """
+
+        return self.inputs.keys()
+
+
     # ==============
     # Output Methods
     # ==============
@@ -163,3 +174,15 @@ class Operator(SceneItem):
             raise Exception("Output with name '" + name + "' was not found in operator: " + self.getName() + ".")
 
         return self.outputs[name]
+
+
+    def getOutputNames(self):
+        """Returns the names of all outputs.
+
+        Returns:
+            list: Names of all outputs.
+
+        """
+
+        return self.outputs.keys()
+

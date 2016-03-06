@@ -1,0 +1,23 @@
+require Kraken;
+
+/// \dfgPresetOmit
+struct KrakenCurveData {
+  UInt32 indices[];
+  Vec3 positions[];
+};
+
+struct KrakenCurveDict {
+  KrakenCurveData curves[String];
+};
+
+/// \dfgPresetFolder DebugDrawing
+function KrakenCurveDict() {
+}
+
+/// \dfgPresetFolder DebugDrawing
+function KrakenCurveDict.defineCurve!(String shapeHash, UInt32 indices[], Vec3 positions[]) {
+  KrakenCurveData curve;
+  curve.indices = indices;
+  curve.positions = positions;
+  this.curves[shapeHash] = curve;
+}

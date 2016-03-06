@@ -1,0 +1,27 @@
+// Created by kl2dfg (processFunction)
+{
+  "objectType" : "Func",
+  "metadata" : {
+    "uiTooltip" : "Supported types:\n  result: KrakenCurveDict\n"
+    },
+  "title" : "KrakenCurveDict",
+  "ports" : [
+    {
+      "objectType" : "Port",
+      "nodePortType" : "In",
+      "name" : "result",
+      "execPortType" : "Out",
+      "typeSpec" : "KrakenCurveDict"
+      }
+    ],
+  "extDeps" : {
+    "KrakenForCanvas" : "*"
+    },
+  "presetGUID" : "A983756A1C04DDB57EC947700505B8B7",
+  "code" : "require KrakenForCanvas;
+
+dfgEntry {
+  result = KrakenCurveDict();
+}
+"
+  }

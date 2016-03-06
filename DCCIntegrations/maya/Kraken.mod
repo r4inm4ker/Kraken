@@ -2,5 +2,5 @@
 KRAKEN_PATH +:= ../../
 PYTHONPATH +:= ../../Python/
 FABRIC_EXTS_PATH +:= ../../Exts
-FABRIC_DFG_PATH +:= ../../Presets
+FABRIC_DFG_PATH +:= ../../Presets/DFG
 PATH +:= plug-ins

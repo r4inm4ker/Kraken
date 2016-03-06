@@ -105,6 +105,8 @@ def setupKrakenMenu():
 # Initialize the script plug-in
 def initializePlugin(mobject):
 
+    os.environ['KRAKEN_DCC']  = 'Maya'
+
     pm.loadPlugin("matrixNodes", quiet=True)
     pm.pluginInfo('matrixNodes', edit=True, autoload=True)
 
@@ -128,6 +130,7 @@ def initializePlugin(mobject):
 
 # Uninitialize the script plug-in
 def uninitializePlugin(mobject):
+
     mplugin = OpenMayaMPx.MFnPlugin(mobject)
 
     # unloadMenu()

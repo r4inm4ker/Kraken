@@ -1,0 +1,16 @@
+{
+	"objectType": "Function",
+	"title": "Get",
+	"ports": [
+    {"name": "dict", "title": "dict", "portType": "In", "dataType": "Float32[String]"},
+    {"name": "key", "title": "key", "portType": "In", "dataType": "String"},
+    {"name": "deflt", "title": "deflt", "portType": "In", "dataType": "Float32"},
+		{"name": "result", "title": "result", "portType": "Out", "dataType": "Float32"},
+	],
+	"presetGUID" : "535CCC81680704B8FD8E9D20169B20DF",
+	"code": "
+dfgEntry {
+	result = dict.get(key, dflt);
+}
+"
+}

@@ -1,0 +1,34 @@
+require Kraken;
+
+struct KrakenComponentGroup : KrakenObject3D {
+};
+
+/// \dfgPresetFolder Objects
+function KrakenComponentGroup(
+  String name,
+  String buildName,
+  String path,
+  String layer,
+  String component,
+  Xfo xfo,
+  Boolean visibility,
+  Color color
+) {
+  this.name = name;
+  this.buildName = buildName;
+  this.path = path;
+  this.layer = layer;
+  this.component = component;
+  this.xfo = xfo;
+  this.visibility = visibility;
+  this.color = color;
+}
+
+/// \dfgPresetFolder Objects
+function Xfo KrakenComponentGroup.getXfo() {
+  return this.xfo;
+}
+
+/// \dfgPresetFolder DebugDrawing
+function KrakenComponentGroup.drawIntoLinesObject(Xfo xfo, io Lines lines) {
+}
