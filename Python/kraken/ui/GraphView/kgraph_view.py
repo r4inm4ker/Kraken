@@ -191,7 +191,6 @@ class KGraphView(GraphView):
             self.beginNodeSelection.emit()
             self._manipulationMode = 1
             self._mouseDownSelection = copy.copy(self.getSelectedNodes())
-            self.clearSelection(emitSignal=False)
             self._selectionRect = SelectionRect(graph=self, mouseDownPos=self.mapToScene(event.pos()))
 
         elif event.button() is QtCore.Qt.MouseButton.MiddleButton:
@@ -235,6 +234,8 @@ class KGraphView(GraphView):
             component.setGraphPos(Vec2(dropPosition.x(), dropPosition.y()))
             node = KNode(self, component)
             self.addNode(node)
+
+            self.selectNode(node, clearSelection=True, emitSignal=False)
 
             event.acceptProposedAction()
         else:
