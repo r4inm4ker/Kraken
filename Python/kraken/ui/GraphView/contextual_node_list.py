@@ -97,7 +97,9 @@ class ContextualNodeList(QtGui.QWidget):
             componentClass = self.ks.getComponentClass(componentClassName)
             component = componentClass(parent=self.graph.getRig())
             component.setGraphPos(Vec2(self.graphpos.x(), self.graphpos.y()))
-            self.graph.addNode(KNode(self.graph, component))
+            node = KNode(self.graph, component)
+            self.graph.addNode(node)
+            self.graph.selectNode(node, clearSelection=True, emitSignal=False)
 
             if self.isVisible():
                 self.close()
