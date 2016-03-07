@@ -399,7 +399,6 @@ class GraphView(QtGui.QGraphicsView):
             self.beginNodeSelection.emit()
             self._manipulationMode = 1
             self._mouseDownSelection = copy.copy(self.getSelectedNodes())
-            self.clearSelection(emitSignal=False)
             self._selectionRect = SelectionRect(graph=self, mouseDownPos=self.mapToScene(event.pos()))
 
         elif event.button() is QtCore.Qt.MouseButton.MiddleButton:
@@ -412,12 +411,45 @@ class GraphView(QtGui.QGraphicsView):
             super(GraphView, self).mousePressEvent(event)
 
     def mouseMoveEvent(self, event):
+        modifiers = QtGui.QApplication.keyboardModifiers()
+
         if self._manipulationMode == 1:
             dragPoint = self.mapToScene(event.pos())
             self._selectionRect.setDragPoint(dragPoint)
-            for name, node in self.__nodes.iteritems():
-                if not node.isSelected() and self._selectionRect.collidesWithItem(node):
-                    self.selectNode(node, emitSignal=False)
+
+            # This logic allows users to use ctrl and shift with rectangle
+            # select to add / remove nodes.
+            if modifiers == QtCore.Qt.ControlModifier:
+                for name, node in self.__nodes.iteritems():
+
+                    if node in self._mouseDownSelection:
+                        if node.isSelected() and self._selectionRect.collidesWithItem(node):
+                            self.deselectNode(node, emitSignal=False)
+                        elif not node.isSelected() and not self._selectionRect.collidesWithItem(node):
+                            self.selectNode(node, emitSignal=False)
+                    else:
+                        if not node.isSelected() and self._selectionRect.collidesWithItem(node):
+                            self.selectNode(node, emitSignal=False)
+                        elif node.isSelected() and not self._selectionRect.collidesWithItem(node):
+                            if node not in self._mouseDownSelection:
+                                self.deselectNode(node, emitSignal=False)
+
+            elif modifiers == QtCore.Qt.ShiftModifier:
+                for name, node in self.__nodes.iteritems():
+                    if not node.isSelected() and self._selectionRect.collidesWithItem(node):
+                        self.selectNode(node, emitSignal=False)
+                    elif node.isSelected() and not self._selectionRect.collidesWithItem(node):
+                        if node not in self._mouseDownSelection:
+                            self.deselectNode(node, emitSignal=False)
+
+            else:
+                self.clearSelection(emitSignal=False)
+
+                for name, node in self.__nodes.iteritems():
+                    if not node.isSelected() and self._selectionRect.collidesWithItem(node):
+                        self.selectNode(node, emitSignal=False)
+                    elif node.isSelected() and not self._selectionRect.collidesWithItem(node):
+                        self.deselectNode(node, emitSignal=False)
 
         elif self._manipulationMode == 2:
             delta = self.mapToScene(event.pos()) - self._lastPanPoint
@@ -445,6 +477,11 @@ class GraphView(QtGui.QGraphicsView):
 
     def mouseReleaseEvent(self, event):
         if self._manipulationMode == 1:
+
+            # If users simply clicks in the empty space, clear selection.
+            if self.mapToScene(event.pos()) == self._selectionRect.pos():
+                self.clearSelection(emitSignal=False)
+
             self._selectionRect.destroy()
             self._selectionRect = None
             self._manipulationMode = 0
