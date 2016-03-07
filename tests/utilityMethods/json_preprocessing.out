@@ -18,12 +18,12 @@
     {
       "source": "Clavicle:L.clavicleEnd", 
       "_comment": "LArm to LClavicle", 
-      "target": "Arm:L.clavicleEnd"
+      "target": "Arm:L.root"
     }, 
     {
       "source": "Clavicle:R.clavicleEnd", 
       "_comment": "RArm to RClavicle", 
-      "target": "Arm:R.clavicleEnd"
+      "target": "Arm:R.root"
     }, 
     {
       "source": "spine:M.spineEnd", 

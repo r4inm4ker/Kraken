@@ -11,17 +11,17 @@ import os
 import sys
 
 
-krakenDir=os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..'))
-print krakenDir
+# krakenDir=os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..'))
+# print krakenDir
 
-fabricEngineDir=os.path.normpath("D:/temp/FabricEngine-pablo-Windows-x86_64-20150909-105847/")
+# fabricEngineDir=os.path.normpath("D:/temp/FabricEngine-pablo-Windows-x86_64-20150909-105847/")
 
-os.environ['PATH'] = os.path.join(fabricEngineDir, 'bin') + os.pathsep + os.environ['PATH']
+# os.environ['PATH'] = os.path.join(fabricEngineDir, 'bin') + os.pathsep + os.environ['PATH']
 
-PYTHON_VERSION = sys.version[:3]
-sys.path.append( os.path.join(fabricEngineDir, 'Python', PYTHON_VERSION ) )
+# PYTHON_VERSION = sys.version[:3]
+# sys.path.append( os.path.join(fabricEngineDir, 'Python', PYTHON_VERSION ) )
 
-os.environ['FABRIC_EXTS_PATH'] = os.path.join(fabricEngineDir, 'Exts') + os.pathsep + os.path.join(krakenDir, 'Exts') + ';' + os.environ['FABRIC_EXTS_PATH']
+# os.environ['FABRIC_EXTS_PATH'] = os.path.join(fabricEngineDir, 'Exts') + os.pathsep + os.path.join(krakenDir, 'Exts') + ';' + os.environ['FABRIC_EXTS_PATH']
 
 
 
@@ -133,9 +133,10 @@ def runKLTest(filepath, update, printoutput=False):
     while True:
         line = proc.stdout.readline()
         if line != '':
-            output += line.rstrip()
+            output += line.rstrip().replace("[FABRIC:MT] Ignored extension directory 'D:\\fabric\\FabricEngine-pablo-Windows-x86_64-20160216-102505\\Tests\\Exts': unable to open directory 'D:\\fabric\\FabricEngine-pablo-Windows-x86_64-20160216-102505\\Tests\\Exts': The system cannot find the path specified. (code 3 [0x3])", "")
         else:
             break
+
     checkTestOutput(filepath, output, update, printoutput=printoutput)
 
 

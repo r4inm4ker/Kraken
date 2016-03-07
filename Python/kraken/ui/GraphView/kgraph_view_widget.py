@@ -32,6 +32,8 @@ class KGraphViewWidget(GraphViewWidget):
         # constructors of base classes
         super(KGraphViewWidget, self).__init__(parent)
 
+        self._builder = None
+        self._guideBuilder = None
 
         graphView = KGraphView(parent=self)
         graphView.nodeAdded.connect(self.__onNodeAdded)
@@ -73,10 +75,15 @@ class KGraphViewWidget(GraphViewWidget):
         text, ok = dialog.getText(self, 'Edit Rig Name', 'New Rig Name', text=self.guideRig.getName())
 
         if ok is True:
-            self.setRigName(text)
+            self.setGuideRigName(text)
 
 
-    def setRigName(self, text):
+    def setGuideRigName(self, text):
+
+
+        if text.endswith('_guide') is True:
+            text = text.replace('_guide', '')
+
         self.guideRig.setName(text)
         self.rigNameChanged.emit()
 
@@ -84,7 +91,7 @@ class KGraphViewWidget(GraphViewWidget):
     def newRigPreset(self):
         self.guideRig = Rig()
         self.getGraphView().displayGraph(self.guideRig)
-        self.setRigName('MyRig')
+        self.setGuideRigName('MyRig')
 
         self.openedFile = None
 
@@ -163,14 +170,16 @@ class KGraphViewWidget(GraphViewWidget):
         if filePath is not False:
             self.window().setWindowTitle('Kraken Editor - ' + filePath + '[*]')
 
+        self.rigLoaded.emit(self.openedFile)
 
     def saveRigPreset(self):
 
         if self.openedFile is None or not os.path.exists(self.openedFile):
-            self.saveRig(saveAs=True)
+            self.saveAsRigPreset()
 
         else:
             self.saveRig(saveAs=False)
+            self.rigLoaded.emit(self.openedFile)
 
 
     def openRigPreset(self):
@@ -200,7 +209,7 @@ class KGraphViewWidget(GraphViewWidget):
     def loadRigPreset(self, filePath):
         self.guideRig = Rig()
         self.guideRig.loadRigDefinitionFile(filePath)
-
+        self.setGuideRigName(self.guideRig.getName()) # Remove "_guide" from end of name
         self.graphView.displayGraph(self.guideRig)
 
         settings = self.window().getSettings()
@@ -217,16 +226,26 @@ class KGraphViewWidget(GraphViewWidget):
     def buildGuideRig(self):
 
         try:
+            self.window().setCursor(QtCore.Qt.WaitCursor)
+
             self.window().statusBar().showMessage('Building Guide')
 
             initConfigIndex = self.window().krakenMenu.configsWidget.currentIndex()
 
             builder = plugins.getBuilder()
 
+            # Append "_guide" to rig name when building guide
             if self.guideRig.getName().endswith('_guide') is False:
                 self.guideRig.setName(self.guideRig.getName() + '_guide')
 
-            builder.build(self.guideRig)
+            if self.window().preferences.getPreferenceValue('delete_existing_rigs'):
+                if self._guideBuilder:
+                    self._guideBuilder.deleteBuildElements()
+
+            self._guideBuilder = plugins.getBuilder()
+            self._guideBuilder.build(self.guideRig)
+
+            self.reportMessage('Guide Rig Build Success', level='information', timeOut=6000)
 
             self.window().krakenMenu.setCurrentConfig(initConfigIndex)
 
@@ -234,11 +253,18 @@ class KGraphViewWidget(GraphViewWidget):
             # Add the callstak to the log
             callstack = traceback.format_exc()
             print callstack
-            self.reportMessage('Error Building', level='error', exception=e)
+            self.reportMessage('Error Building', level='error', exception=e, timeOut=0) #Keep this message!
 
+        finally:
+            self.window().setCursor(QtCore.Qt.ArrowCursor)
 
     def synchGuideRig(self):
         synchronizer = plugins.getSynchronizer()
+
+        # Guide is always  built with "_guide" need this so synchronizer not confused with real Rig nodes
+        if self.guideRig.getName().endswith('_guide') is False:
+            self.guideRig.setName(self.guideRig.getName() + '_guide')
+
         synchronizer.setTarget(self.guideRig)
         synchronizer.sync()
 
@@ -246,6 +272,8 @@ class KGraphViewWidget(GraphViewWidget):
     def buildRig(self):
 
         try:
+            self.window().setCursor(QtCore.Qt.WaitCursor)
+
             self.window().statusBar().showMessage('Building Rig')
 
             initConfigIndex = self.window().krakenMenu.configsWidget.currentIndex()
@@ -258,8 +286,14 @@ class KGraphViewWidget(GraphViewWidget):
 
             rig.setName(rig.getName().replace('_guide', ''))
 
-            builder = plugins.getBuilder()
-            builder.build(rig)
+            if self.window().preferences.getPreferenceValue('delete_existing_rigs'):
+                if self._builder:
+                    self._builder.deleteBuildElements()
+
+            self._builder = plugins.getBuilder()
+            self._builder.build(rig)
+
+            self.reportMessage('Rig Build Success', level='information', timeOut=6000)
 
             self.window().krakenMenu.setCurrentConfig(initConfigIndex)
 
@@ -267,7 +301,10 @@ class KGraphViewWidget(GraphViewWidget):
             # Add the callstak to the log
             callstack = traceback.format_exc()
             print callstack
-            self.reportMessage('Error Building', level='error', exception=e)
+            self.reportMessage('Error Building', level='error', exception=e, timeOut=0)
+
+        finally:
+            self.window().setCursor(QtCore.Qt.ArrowCursor)
 
     # ==========
     # Shortcuts
@@ -369,7 +406,7 @@ class KGraphViewWidget(GraphViewWidget):
     # ==================
     # Message Reporting
     # ==================
-    def reportMessage(self, message, level='error', exception=None):
+    def reportMessage(self, message, level='error', exception=None, timeOut=3500):
         """Shows an error message in the status bar.
 
         Args:
@@ -378,6 +415,10 @@ class KGraphViewWidget(GraphViewWidget):
         """
 
         statusBar = self.window().statusBar()
+
+        currentLables = statusBar.findChildren(QtGui.QLabel)
+        for label in currentLables:
+            statusBar.removeWidget(label)
 
         if exception is not None:
             fullMessage = level[0].upper() + level[1:] + ": " + message + '; ' + ', '.join([x for x in exception.args])
@@ -400,23 +441,23 @@ class KGraphViewWidget(GraphViewWidget):
         messageLabel.setStyleSheet("QLabel { border-radius: 3px; background-color: " + messageColors[level] + "}")
 
         def addMessage():
-            self.window().statusBar().clearMessage()
-
+            statusBar.clearMessage()
+            statusBar.currentMessage = messageLabel
             statusBar.addWidget(messageLabel, 1)
             statusBar.repaint()
-
-            timer.start()
+            if timeOut > 0.0:
+                timer.start()
 
         def endMessage():
             timer.stop()
             statusBar.removeWidget(messageLabel)
             statusBar.repaint()
+            statusBar.showMessage('Ready', 2000)
 
-            self.window().statusBar().showMessage('Ready', 2000)
-
-        timer = QtCore.QTimer()
-        timer.setInterval(3500)
-        timer.timeout.connect(endMessage)
+        if timeOut > 0.0:
+            timer = QtCore.QTimer()
+            timer.setInterval(timeOut)
+            timer.timeout.connect(endMessage)
 
         addMessage()
 

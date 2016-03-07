@@ -213,19 +213,20 @@ class ClavicleComponentRig(ClavicleComponent):
         # Constrain I/O
         # ==============
         # Constraint inputs
-        clavicleInputConstraint = PoseConstraint('_'.join([self.clavicleCtrl.getName(), 'To', self.spineEndInputTgt.getName()]))
-        clavicleInputConstraint.setMaintainOffset(True)
-        clavicleInputConstraint.addConstrainer(self.spineEndInputTgt)
-        self.clavicleCtrlSpace.addConstraint(clavicleInputConstraint)
+        self.clavicleInputConstraint = PoseConstraint('_'.join([self.clavicleCtrl.getName(), 'To', self.spineEndInputTgt.getName()]))
+        self.clavicleInputConstraint.setMaintainOffset(True)
+        self.clavicleInputConstraint.addConstrainer(self.spineEndInputTgt)
+        self.clavicleCtrlSpace.addConstraint(self.clavicleInputConstraint)
 
         # Constraint outputs
-        clavicleConstraint = PoseConstraint('_'.join([self.clavicleOutputTgt.getName(), 'To', self.clavicleCtrl.getName()]))
-        clavicleConstraint.addConstrainer(self.clavicleCtrl)
-        self.clavicleOutputTgt.addConstraint(clavicleConstraint)
+        self.clavicleConstraint = PoseConstraint('_'.join([self.clavicleOutputTgt.getName(), 'To', self.clavicleCtrl.getName()]))
+        self.clavicleConstraint.addConstrainer(self.clavicleCtrl)
+        self.clavicleOutputTgt.addConstraint(self.clavicleConstraint)
 
-        clavicleEndConstraint = PoseConstraint('_'.join([self.clavicleEndOutputTgt.getName(), 'To', self.clavicleCtrl.getName()]))
-        clavicleEndConstraint.addConstrainer(self.clavicleCtrl)
-        self.clavicleEndOutputTgt.addConstraint(clavicleEndConstraint)
+        self.clavicleEndConstraint = PoseConstraint('_'.join([self.clavicleEndOutputTgt.getName(), 'To', self.clavicleCtrl.getName()]))
+        self.clavicleEndConstraint.setMaintainOffset(True)
+        self.clavicleEndConstraint.addConstrainer(self.clavicleCtrl)
+        self.clavicleEndOutputTgt.addConstraint(self.clavicleEndConstraint)
 
 
         # ===============
@@ -261,21 +262,31 @@ class ClavicleComponentRig(ClavicleComponent):
 
         super(ClavicleComponentRig, self).loadData( data )
 
-        self.clavicleCtrlSpace.xfo = data['clavicleXfo']
-        self.clavicleCtrl.xfo = data['clavicleXfo']
-        self.clavicleCtrl.scalePoints(Vec3(data['clavicleLen'], 0.75, 0.75))
+        clavicleXfo = data.get('clavicleXfo')
+        clavicleLen = data.get('clavicleLen')
+
+        clavicleLenVec = Vec3(clavicleLen, 0.75, 0.75)
+
+        self.clavicleCtrlSpace.xfo = clavicleXfo
+        self.clavicleCtrl.xfo = clavicleXfo
+        self.clavicleCtrl.scalePoints(clavicleLenVec)
 
         if data['location'] == "R":
             self.clavicleCtrl.translatePoints(Vec3(0.0, 0.0, -1.0))
         else:
             self.clavicleCtrl.translatePoints(Vec3(0.0, 0.0, 1.0))
 
-        # ============
+
         # Set IO Xfos
-        # ============
-        self.spineEndInputTgt.xfo = data['clavicleXfo']
-        self.clavicleEndOutputTgt.xfo = data['clavicleXfo']
-        self.clavicleOutputTgt.xfo = data['clavicleXfo']
+        self.spineEndInputTgt.xfo = clavicleXfo
+        self.clavicleEndOutputTgt.xfo = clavicleXfo
+        self.clavicleEndOutputTgt.xfo.tr = clavicleXfo.transformVector(Vec3(clavicleLen, 0.0, 0.0))
+        self.clavicleOutputTgt.xfo = clavicleXfo
+
+        # Eval Constraints
+        self.clavicleInputConstraint.evaluate()
+        self.clavicleConstraint.evaluate()
+        self.clavicleEndConstraint.evaluate()
 
 
 from kraken.core.kraken_system import KrakenSystem

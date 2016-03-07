@@ -16,6 +16,24 @@ PI = 3.141592653589793
 DEG_TO_RAD = 0.017453292519943295
 RAD_TO_DEG = 57.29577951308232
 
+AXIS_NAME_TO_TUPLE_MAP = {
+    'POSX': (1, 0, 0),
+    'POSY': (0, 1, 0),
+    'POSZ': (0, 0, 1),
+    'NEGX': (-1, 0, 0),
+    'NEGY': (0, -1, 0),
+    'NEGZ': (0, 0, -1)
+}
+
+AXIS_NAME_TO_INT_MAP = {
+    'POSX': 0,
+    'POSY': 1,
+    'POSZ': 2,
+    'NEGX': 3,
+    'NEGY': 4,
+    'NEGZ': 5
+}
+
 
 def Math_radToDeg(val):
     """Converts radians to degrees.
@@ -30,7 +48,6 @@ def Math_radToDeg(val):
 
     return val * RAD_TO_DEG
 
-
 def Math_degToRad(val):
     """Converts degrees to radians.
 
@@ -43,7 +60,6 @@ def Math_degToRad(val):
     """
 
     return val * DEG_TO_RAD
-
 
 
 def decodeValue(jsonData):

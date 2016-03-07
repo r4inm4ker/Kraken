@@ -48,16 +48,14 @@ building:char_bob_guide.controls.clavicle.clavicleEnd as:clavicle_L_clavicleEnd_
 building:char_bob_guide.controls.arm as:arm_L_cmp
 building:char_bob_guide.controls.arm.inputs as:arm_L_inputs_hrc
 building:char_bob_guide.controls.arm.inputs.globalSRT as:arm_L_globalSRT_cmpIn
-building:char_bob_guide.controls.arm.inputs.clavicleEnd as:arm_L_clavicleEnd_cmpIn
+building:char_bob_guide.controls.arm.inputs.root as:arm_L_root_cmpIn
 building:char_bob_guide.controls.arm.outputs as:arm_L_outputs_hrc
 building:char_bob_guide.controls.arm.outputs.bicep as:arm_L_bicep_cmpOut
 building:char_bob_guide.controls.arm.outputs.forearm as:arm_L_forearm_cmpOut
-building:char_bob_guide.controls.arm.outputs.armEndXfo as:arm_L_armEndXfo_cmpOut
-building:char_bob_guide.controls.arm.outputs.hand as:arm_L_hand_cmpOut
-building:char_bob_guide.controls.arm.bicepFK as:arm_L_bicepFK_ctrl
-building:char_bob_guide.controls.arm.forearmFK as:arm_L_forearmFK_ctrl
-building:char_bob_guide.controls.arm.wristFK as:arm_L_wristFK_ctrl
-building:char_bob_guide.controls.arm.hand as:arm_L_hand_ctrl
+building:char_bob_guide.controls.arm.outputs.wrist as:arm_L_wrist_cmpOut
+building:char_bob_guide.controls.arm.bicep as:arm_L_bicep_ctrl
+building:char_bob_guide.controls.arm.forearm as:arm_L_forearm_ctrl
+building:char_bob_guide.controls.arm.wrist as:arm_L_wrist_ctrl
 building:char_bob_guide.controls.clavicle01 as:clavicle01_R_cmp
 building:char_bob_guide.controls.clavicle01.inputs as:clavicle01_R_inputs_hrc
 building:char_bob_guide.controls.clavicle01.inputs.spineEnd as:clavicle01_R_spineEnd_cmpIn
@@ -70,16 +68,14 @@ building:char_bob_guide.controls.clavicle01.clavicleEnd as:clavicle01_R_clavicle
 building:char_bob_guide.controls.arm01 as:arm01_R_cmp
 building:char_bob_guide.controls.arm01.inputs as:arm01_R_inputs_hrc
 building:char_bob_guide.controls.arm01.inputs.globalSRT as:arm01_R_globalSRT_cmpIn
-building:char_bob_guide.controls.arm01.inputs.clavicleEnd as:arm01_R_clavicleEnd_cmpIn
+building:char_bob_guide.controls.arm01.inputs.root as:arm01_R_root_cmpIn
 building:char_bob_guide.controls.arm01.outputs as:arm01_R_outputs_hrc
 building:char_bob_guide.controls.arm01.outputs.bicep as:arm01_R_bicep_cmpOut
 building:char_bob_guide.controls.arm01.outputs.forearm as:arm01_R_forearm_cmpOut
-building:char_bob_guide.controls.arm01.outputs.armEndXfo as:arm01_R_armEndXfo_cmpOut
-building:char_bob_guide.controls.arm01.outputs.hand as:arm01_R_hand_cmpOut
-building:char_bob_guide.controls.arm01.bicepFK as:arm01_R_bicepFK_ctrl
-building:char_bob_guide.controls.arm01.forearmFK as:arm01_R_forearmFK_ctrl
-building:char_bob_guide.controls.arm01.wristFK as:arm01_R_wristFK_ctrl
-building:char_bob_guide.controls.arm01.hand as:arm01_R_hand_ctrl
+building:char_bob_guide.controls.arm01.outputs.wrist as:arm01_R_wrist_cmpOut
+building:char_bob_guide.controls.arm01.bicep as:arm01_R_bicep_ctrl
+building:char_bob_guide.controls.arm01.forearm as:arm01_R_forearm_ctrl
+building:char_bob_guide.controls.arm01.wrist as:arm01_R_wrist_ctrl
 building:char_bob_guide.controls.leg as:leg_L_cmp
 building:char_bob_guide.controls.leg.inputs as:leg_L_inputs_hrc
 building:char_bob_guide.controls.leg.inputs.globalSRT as:leg_L_globalSRT_cmpIn
@@ -165,16 +161,14 @@ char_bob_guide.controls.clavicle:L.clavicleEnd
 char_bob_guide.controls.arm:L
 char_bob_guide.controls.arm:L.inputs
 char_bob_guide.controls.arm:L.inputs.globalSRT
-char_bob_guide.controls.arm:L.inputs.clavicleEnd
+char_bob_guide.controls.arm:L.inputs.root
 char_bob_guide.controls.arm:L.outputs
 char_bob_guide.controls.arm:L.outputs.bicep
 char_bob_guide.controls.arm:L.outputs.forearm
-char_bob_guide.controls.arm:L.outputs.armEndXfo
-char_bob_guide.controls.arm:L.outputs.hand
-char_bob_guide.controls.arm:L.bicepFK
-char_bob_guide.controls.arm:L.forearmFK
-char_bob_guide.controls.arm:L.wristFK
-char_bob_guide.controls.arm:L.hand
+char_bob_guide.controls.arm:L.outputs.wrist
+char_bob_guide.controls.arm:L.bicep
+char_bob_guide.controls.arm:L.forearm
+char_bob_guide.controls.arm:L.wrist
 char_bob_guide.controls.clavicle01:R
 char_bob_guide.controls.clavicle01:R.inputs
 char_bob_guide.controls.clavicle01:R.inputs.spineEnd
@@ -187,16 +181,14 @@ char_bob_guide.controls.clavicle01:R.clavicleEnd
 char_bob_guide.controls.arm01:R
 char_bob_guide.controls.arm01:R.inputs
 char_bob_guide.controls.arm01:R.inputs.globalSRT
-char_bob_guide.controls.arm01:R.inputs.clavicleEnd
+char_bob_guide.controls.arm01:R.inputs.root
 char_bob_guide.controls.arm01:R.outputs
 char_bob_guide.controls.arm01:R.outputs.bicep
 char_bob_guide.controls.arm01:R.outputs.forearm
-char_bob_guide.controls.arm01:R.outputs.armEndXfo
-char_bob_guide.controls.arm01:R.outputs.hand
-char_bob_guide.controls.arm01:R.bicepFK
-char_bob_guide.controls.arm01:R.forearmFK
-char_bob_guide.controls.arm01:R.wristFK
-char_bob_guide.controls.arm01:R.hand
+char_bob_guide.controls.arm01:R.outputs.wrist
+char_bob_guide.controls.arm01:R.bicep
+char_bob_guide.controls.arm01:R.forearm
+char_bob_guide.controls.arm01:R.wrist
 char_bob_guide.controls.leg:L
 char_bob_guide.controls.leg:L.inputs
 char_bob_guide.controls.leg:L.inputs.globalSRT

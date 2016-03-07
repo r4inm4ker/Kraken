@@ -18,6 +18,7 @@ building:Leg.controls.Leg.femurFK.femurFK.shinFK as:Leg_L_shinFK_ctrlSpace
 building:Leg.controls.Leg.femurFK.femurFK.shinFK.shinFK as:Leg_L_shinFK_ctrl
 building:Leg.controls.Leg.IK as:Leg_L_IK_ctrlSpace
 building:Leg.controls.Leg.IK.IK as:Leg_L_IK_ctrl
+building:Leg.controls.Leg.ikRootPosition as:Leg_L_ikRootPosition_loc
 building:Leg.controls.Leg.UpV as:Leg_L_UpV_ctrlSpace
 building:Leg.controls.Leg.UpV.UpV as:Leg_L_UpV_ctrl
 building:Leg.deformers as:deformers
@@ -43,6 +44,7 @@ Leg:L.controls.Leg:L.femurFK.femurFK.shinFK
 Leg:L.controls.Leg:L.femurFK.femurFK.shinFK.shinFK
 Leg:L.controls.Leg:L.IK
 Leg:L.controls.Leg:L.IK.IK
+Leg:L.controls.Leg:L.ikRootPosition
 Leg:L.controls.Leg:L.UpV
 Leg:L.controls.Leg:L.UpV.UpV
 Leg:L.deformers

@@ -48,7 +48,9 @@ class KrakenMenu(QtGui.QWidget):
         self.saveAsAction.setObjectName("saveAsAction")
 
         self.fileMenu.addSeparator()
-        self.recentFilesMenu = self.fileMenu.addMenu('&Recent Files')
+        self.recentFilesMenu = QtGui.QMenu(title='&Recent Files', parent=self.fileMenu)
+        self.fileMenu.addMenu(self.recentFilesMenu)
+
 
         self.fileMenu.addSeparator()
 
@@ -89,6 +91,7 @@ class KrakenMenu(QtGui.QWidget):
         # Tools Menu
         self.toolsMenu = self.menuBar.addMenu('&Tools')
         self.reloadComponentsAction = self.toolsMenu.addAction('Reload Component Modules')
+        self.reloadComponentsAction.setShortcut('Ctrl+Shift+R')
 
         # View Menu
         self.viewMenu = self.menuBar.addMenu('&View')
@@ -240,7 +243,12 @@ class KrakenMenu(QtGui.QWidget):
 
         # Create New Rig And Reload All Components.
         graphViewWidget.newRigPreset()
-        KrakenSystem.getInstance().reloadAllComponents()
+        if krakenUIWidget.nodeLibrary.componentTreeWidget.generateData():
+            graphViewWidget.reportMessage('Success Reloading Modules', level='information')
+        else:
+            graphViewWidget.reportMessage('Error Reloading Modules', level='error', timeOut=0) #Keep this message!
+
+        krakenUIWidget.nodeLibrary.componentTreeWidget.buildWidgets()
 
         # Load Saved Data And Update Widget
         graphViewWidget.guideRig.loadRigDefinition(rigData)
@@ -293,6 +301,7 @@ class KrakenMenu(QtGui.QWidget):
 
 
     def buildRecentFilesMenu(self, newFilePath=None):
+
         self.recentFilesMenu.clear()
 
         self.recentFiles = self.recentFiles[:4]

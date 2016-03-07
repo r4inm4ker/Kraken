@@ -21,7 +21,14 @@ class ComponentTreeWidget(QtGui.QTreeWidget):
         self.setDragEnabled(True)
         self.setDragDropMode(QtGui.QTreeWidget.DragOnly)
 
-        self._data = self.generateData()
+        krakenUIWidget = self.parent().parent()
+        graphViewWidget = krakenUIWidget.graphViewWidget
+
+        krakenUIWidget.error_loading_startup = False
+        if not self.generateData():
+            krakenUIWidget.error_loading_startup = True
+            # Wait until right after the window is displayed for the first time to call reportMessage
+
 
         self.buildWidgets()
 
@@ -42,6 +49,11 @@ class ComponentTreeWidget(QtGui.QTreeWidget):
         """
 
         for item in data['components']:
+            if data['components'][item] not in self.ks.registeredComponents.keys():
+                print ("Warning: Component module "+data['components'][item]+" not found in registered components:")
+                for component in self.ks.registeredComponents:
+                    print "  "+component
+                continue
 
             treeItem = QtGui.QTreeWidgetItem(parentWidget)
             treeItem.setData(0, QtCore.Qt.UserRole, data['components'][item])
@@ -66,12 +78,12 @@ class ComponentTreeWidget(QtGui.QTreeWidget):
         """Generates a dictionary with a tree structure of the component paths.
 
         Returns:
-            dict: Component tree structure.
+            True if successful
 
         """
 
         self.ks = KrakenSystem.getInstance()
-        self.ks.loadComponentModules()
+        isSuccessful = self.ks.loadComponentModules()
 
         componentClassNames = []
         for componentClassName in sorted(self.ks.getComponentClassNames()):
@@ -82,7 +94,8 @@ class ComponentTreeWidget(QtGui.QTreeWidget):
             componentClassNames.append(componentClassName)
 
 
-        data = {'subDirs': {}, 'components': {}}
+        self._data  = {'subDirs': {}, 'components': {}}
+
         for classItem in componentClassNames:
 
             nameSplit = classItem.rsplit('.', 1)
@@ -95,10 +108,10 @@ class ComponentTreeWidget(QtGui.QTreeWidget):
             for i, part in enumerate(path):
 
                 if i == 0:
-                    if part not in data['subDirs'].keys():
-                        data['subDirs'][part] = {'subDirs': {}, 'components': {}}
+                    if part not in self._data['subDirs'].keys():
+                        self._data['subDirs'][part] = {'subDirs': {}, 'components': {}}
 
-                    parent = data['subDirs'][part]
+                    parent = self._data['subDirs'][part]
 
                     continue
 
@@ -111,7 +124,8 @@ class ComponentTreeWidget(QtGui.QTreeWidget):
 
             parent['components'][className] = classItem
 
-        return data
+        return isSuccessful
+
 
     def mouseMoveEvent(self, event):
         self.dragObject()

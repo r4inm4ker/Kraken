@@ -14,6 +14,11 @@ from kraken.core.maths.rotation_order import RotationOrder
 from kraken.core.objects.attributes.attribute_group import AttributeGroup
 from kraken.core.objects.attributes.bool_attribute import BoolAttribute
 
+from kraken.core.objects.constraints.orientation_constraint import OrientationConstraint
+from kraken.core.objects.constraints.pose_constraint import PoseConstraint
+from kraken.core.objects.constraints.position_constraint import PositionConstraint
+from kraken.core.objects.constraints.scale_constraint import ScaleConstraint
+
 
 class Object3D(SceneItem):
     """Kraken base object type for any 3D object."""
@@ -451,7 +456,6 @@ class Object3D(SceneItem):
         return True
 
 
-
     def getChildren(self):
         """Gets the children of this object.
 
@@ -747,6 +751,58 @@ class Object3D(SceneItem):
         return True
 
 
+    def constrainTo(self, constrainers, constraintType="Pose", maintainOffset=False, name=None):
+        """Adds an constraint to this object.
+
+        Args:
+            constrainers (Object or Object list): Constraint object to add to this object or objects.
+            constraintType (str): String name of the constraint type.
+            maintainOffset (bool): Sets the constraint to maintain offset when creating the constraint.
+            name (str): Name of the constraint. If set to None, a name is automatically generated.
+
+        Returns:
+            string: Constraint object
+
+        """
+
+        if name is None:
+            constraintName = ""
+            if hasattr(constrainers, '__iter__'):
+                constraintName = '_'.join([self.getName(), 'To', constrainers[0].getName(), constraintType + 'Constraint'])
+            else:
+                constraintName = '_'.join([self.getName(), 'To', constrainers.getName(), constraintType + 'Constraint'])
+        else:
+            constraintName = name
+
+        constraint = None
+        if constraintType == "Orientation":
+            constraint = OrientationConstraint(constraintName)
+        elif constraintType == "Pose":
+            constraint = PoseConstraint(constraintName)
+        elif constraintType == "Position":
+            constraint = PositionConstraint(constraintName)
+        elif constraintType == "Scale":
+            constraint = ScaleConstraint(constraintName)
+        else:
+            raise ValueError("'" + constraintType + "' is not a valid constraint \
+                type. Valid types are Orientation, Pose, Position, or Scale")
+
+        # Accept a single object or a list of objects
+        if hasattr(constrainers, '__iter__'):
+            pass
+        else:
+            constrainers = [constrainers]
+
+        for constrainer in constrainers:
+            constraint.addConstrainer(constrainer)
+
+        constraint.setMaintainOffset(maintainOffset)
+
+        self.addConstraint(constraint)
+
+        return constraint
+
+
     def addConstraint(self, constraint):
         """Adds an constraint to this object.
 
@@ -762,6 +818,7 @@ class Object3D(SceneItem):
             raise IndexError("Constraint with name '" + constraint.getName() + "'' already exists as a constraint.")
 
         self._constraints.append(constraint)
+
         constraint.setParent(self)
         constraint.setConstrainee(self)
 

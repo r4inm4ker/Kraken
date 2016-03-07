@@ -4,20 +4,18 @@ building:Arm.controls as:controls
 building:Arm.controls.Arm as:Arm_L_cmp
 building:Arm.controls.Arm.inputs as:Arm_L_inputs_hrc
 building:Arm.controls.Arm.inputs.globalSRT as:Arm_L_globalSRT_cmpIn
-building:Arm.controls.Arm.inputs.clavicleEnd as:Arm_L_clavicleEnd_cmpIn
+building:Arm.controls.Arm.inputs.root as:Arm_L_root_cmpIn
 building:Arm.controls.Arm.outputs as:Arm_L_outputs_hrc
 building:Arm.controls.Arm.outputs.bicep as:Arm_L_bicep_cmpOut
 building:Arm.controls.Arm.outputs.forearm as:Arm_L_forearm_cmpOut
-building:Arm.controls.Arm.outputs.armEndXfo as:Arm_L_armEndXfo_cmpOut
-building:Arm.controls.Arm.outputs.hand as:Arm_L_hand_cmpOut
+building:Arm.controls.Arm.outputs.wrist as:Arm_L_wrist_cmpOut
 building:Arm.controls.Arm.bicepFK as:Arm_L_bicepFK_ctrlSpace
 building:Arm.controls.Arm.bicepFK.bicepFK as:Arm_L_bicepFK_ctrl
 building:Arm.controls.Arm.bicepFK.bicepFK.forearmFK as:Arm_L_forearmFK_ctrlSpace
 building:Arm.controls.Arm.bicepFK.bicepFK.forearmFK.forearmFK as:Arm_L_forearmFK_ctrl
-building:Arm.controls.Arm.hand as:Arm_L_hand_ctrlSpace
-building:Arm.controls.Arm.hand.hand as:Arm_L_hand_ctrl
 building:Arm.controls.Arm.IK as:Arm_L_IK_ctrlSpace
 building:Arm.controls.Arm.IK.IK as:Arm_L_IK_ctrl
+building:Arm.controls.Arm.ikPosition as:Arm_L_ikPosition_null
 building:Arm.controls.Arm.UpV as:Arm_L_UpV_ctrlSpace
 building:Arm.controls.Arm.UpV.UpV as:Arm_L_UpV_ctrl
 building:Arm.deformers as:deformers
@@ -25,26 +23,23 @@ building:Arm.deformers.Arm as:Arm_L_cmp
 building:Arm.deformers.Arm.bicep as:Arm_L_bicep_def
 building:Arm.deformers.Arm.forearm as:Arm_L_forearm_def
 building:Arm.deformers.Arm.wrist as:Arm_L_wrist_def
-building:Arm.deformers.Arm.hand as:Arm_L_hand_def
 Arm:L
 Arm:L.controls
 Arm:L.controls.Arm:L
 Arm:L.controls.Arm:L.inputs
 Arm:L.controls.Arm:L.inputs.globalSRT
-Arm:L.controls.Arm:L.inputs.clavicleEnd
+Arm:L.controls.Arm:L.inputs.root
 Arm:L.controls.Arm:L.outputs
 Arm:L.controls.Arm:L.outputs.bicep
 Arm:L.controls.Arm:L.outputs.forearm
-Arm:L.controls.Arm:L.outputs.armEndXfo
-Arm:L.controls.Arm:L.outputs.hand
+Arm:L.controls.Arm:L.outputs.wrist
 Arm:L.controls.Arm:L.bicepFK
 Arm:L.controls.Arm:L.bicepFK.bicepFK
 Arm:L.controls.Arm:L.bicepFK.bicepFK.forearmFK
 Arm:L.controls.Arm:L.bicepFK.bicepFK.forearmFK.forearmFK
-Arm:L.controls.Arm:L.hand
-Arm:L.controls.Arm:L.hand.hand
 Arm:L.controls.Arm:L.IK
 Arm:L.controls.Arm:L.IK.IK
+Arm:L.controls.Arm:L.ikPosition
 Arm:L.controls.Arm:L.UpV
 Arm:L.controls.Arm:L.UpV.UpV
 Arm:L.deformers
@@ -52,4 +47,3 @@ Arm:L.deformers.Arm:L
 Arm:L.deformers.Arm:L.bicep
 Arm:L.deformers.Arm:L.forearm
 Arm:L.deformers.Arm:L.wrist
-Arm:L.deformers.Arm:L.hand

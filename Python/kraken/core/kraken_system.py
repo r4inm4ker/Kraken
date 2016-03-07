@@ -27,7 +27,7 @@ krakenExtsDir = os.path.join(krakenDir, 'Exts')
 if krakenExtsDir not in os.environ['FABRIC_EXTS_PATH']:
     os.environ['FABRIC_EXTS_PATH'] = krakenExtsDir + os.pathsep + os.environ['FABRIC_EXTS_PATH']
 
-canvasPresetsDir = os.path.join(krakenDir, 'CanvasPresets')
+canvasPresetsDir = os.path.join(krakenDir, 'Presets')
 if 'FABRIC_DFG_PATH' in os.environ:
     if canvasPresetsDir not in os.environ['FABRIC_DFG_PATH']:
         os.environ['FABRIC_DFG_PATH'] = canvasPresetsDir + os.pathsep + os.environ['FABRIC_DFG_PATH']
@@ -96,9 +96,6 @@ class KrakenSystem(object):
                 self.client = FabricEngine.Core.createClient({"contextID": contextID})
 
             self.loadExtension('Math')
-
-            # krakenDir = os.environ['KRAKEN_PATH']
-            # self.client.DFG.host.addPresetDir('', 'Kraken', os.path.join(krakenDir, 'CanvasPresets'))
 
             Profiler.getInstance().pop()
 
@@ -312,41 +309,6 @@ class KrakenSystem(object):
         return self.registeredComponents[className]
 
 
-    def reloadAllComponents(self):
-        """Force the reload of all registered component modules
-
-        Return:
-        True if successful.
-
-        """
-
-        for componentClassPath in self.registeredComponents:
-            componentModulePath = self.registeredComponents[componentClassPath].__module__
-            if componentModulePath in sys.modules:
-                del(sys.modules[componentModulePath])
-
-        prevRegsteredComponents = self.registeredComponents.copy()
-        self.registeredComponents = {}
-
-        for componentClassPath in prevRegsteredComponents:
-            componentModulePath = prevRegsteredComponents[componentClassPath].__module__
-            try:
-                importlib.import_module(componentModulePath)
-            except Exception as e:
-                stack = traceback.format_tb(sys.exc_info()[2])
-                exception_list = []
-                exception_list.extend(stack)
-                exception_list.extend(traceback.format_exception_only(sys.exc_info()[0], sys.exc_info()[1]))
-
-                exception_str = "Traceback (most recent call last):\n"
-                exception_str += "".join(exception_list)
-                # Removing the last \n
-                exception_str = exception_str[:-1]
-                print(exception_str)
-
-        return True
-
-
     def getComponentClassNames(self):
         """Returns the names of the registered Python component classes
 
@@ -363,10 +325,23 @@ class KrakenSystem(object):
 
         The kraken_examples are loaded at all times.
 
+        Returns:
+            bool: True if all components loaded, else False.
+
         """
 
+        for componentClassPath in self.registeredComponents:
+            componentModulePath = self.registeredComponents[componentClassPath].__module__
+            if componentModulePath in sys.modules:
+                del(sys.modules[componentModulePath])
+
+        self.registeredComponents = {}
+
+        print "\nLoading component modules..."
 
         def __importDirRecursive(path, parentModulePath=''):
+            isSuccessful = True
+
             contents = os.listdir(path)
             moduleFilefound = False
             for item in contents:
@@ -384,35 +359,55 @@ class KrakenSystem(object):
 
 
             if moduleFilefound:
-                for item in contents:
+                print(" " + path + ":")
+                for i, item in enumerate(contents):
                     if os.path.isfile(os.path.join(path, item)):
-                        # parse all the files of given path and import python modules
+
+                        # Parse all the files of given path and import python
+                        # modules. The files in these folders really should be
+                        # limited to components, otherwise we are loading more
+                        # than modules and that is not clear.
+
+                        # TODO: Figure out a way to limit imports to just rig
+                        # component modules.
+
                         if item.endswith(".py") and item != "__init__.py":
-                            module = modulePath+"."+item[:-3]
+                            module = modulePath + "." + item[:-3]
                             try:
+                                print "  " + module
                                 importlib.import_module(module)
 
                             except ImportError, e:
+                                isSuccessful = False
+                                print " Failed..."
                                 print e
                                 for arg in e.args:
                                     print arg
 
                             except Exception, e:
+                                isSuccessful = False
+                                print "Failed..."
                                 for arg in e.args:
                                     print arg
+
+                print "\n"
 
 
             for item in contents:
                 if os.path.isdir(os.path.join(path, item)):
                     if moduleFilefound:
-                        __importDirRecursive(os.path.join(path, item), modulePath)
+                        if not __importDirRecursive(os.path.join(path, item), modulePath):
+                            isSuccessful = False
                     else:
-                        __importDirRecursive(os.path.join(path, item))
+                        if not __importDirRecursive(os.path.join(path, item)):
+                            isSuccessful = False
+
+            return isSuccessful
 
 
         # find the kraken examples module in the same folder as the kraken module.
-        examplePaths = os.path.join(os.path.dirname(os.path.dirname(kraken.__file__)), 'kraken_examples')
-        __importDirRecursive(examplePaths)
+        examplePaths = os.path.normpath(os.path.join(os.environ.get('KRAKEN_PATH'), 'Python', 'kraken_examples'))
+        isSuccessful = __importDirRecursive(examplePaths)
 
         pathsVar = os.getenv('KRAKEN_PATHS')
         if pathsVar is not None:
@@ -426,7 +421,10 @@ class KrakenSystem(object):
                     print "Invalid Kraken Path: " + path
                     continue
 
-                __importDirRecursive(path)
+                if not __importDirRecursive(path):
+                    isSuccessful = False
+
+        return isSuccessful
 
 
     @classmethod

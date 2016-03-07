@@ -30,7 +30,15 @@ class Preferences(object):
                 'description': 'Allows users to zoom with the mouse wheel.',
                 'default_value': True,
                 'value': True
+            },
+            'delete_existing_rigs': {
+                'type': 'bool',
+                'nice_name': 'Delete Existing Rigs before Build',
+                'description': 'Delete Existing Rigs before Build',
+                'default_value': True,
+                'value': True
             }
+
         }
 
 

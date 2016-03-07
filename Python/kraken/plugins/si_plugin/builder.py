@@ -9,7 +9,7 @@ from kraken.core.kraken_system import ks
 from kraken.core.builder import Builder
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 from kraken.plugins.si_plugin.utils import *
-
+from kraken.core.maths.xfo import Xfo
 import FabricEngine.Core as core
 
 
@@ -19,6 +19,23 @@ class Builder(Builder):
     def __init__(self):
         super(Builder, self).__init__()
 
+
+    def deleteBuildElements(self):
+        """Clear out all dcc built elements from the scene if exist."""
+
+        deleteItems = getCollection()
+        for builtElement in self._buildElements:
+            if builtElement['src'].isTypeOf('Attribute'):
+                continue
+
+            node = builtElement['tgt']
+            if node is not None:
+                deleteItems.Add(node)
+
+        si.DeleteObj(deleteItems.GetAsText())
+        self._buildElements = []
+
+        return
 
     # ========================
     # SceneItem Build Methods
@@ -696,6 +713,8 @@ class Builder(Builder):
             # Create Splice Operator
             canvasOpPath = si.FabricCanvasOpApply(operatorOwner.FullName, "", True, "", "")
             canvasOp = si.Dictionary.GetObject(canvasOpPath, False)
+            self._registerSceneItemPair(kOperator, canvasOp)
+
             si.FabricCanvasSetExtDeps(canvasOpPath, "", "Kraken" )
 
             si.FabricCanvasAddFunc(canvasOpPath, "", kOperator.getName(), "dfgEntry {}", "400", "0")
@@ -893,6 +912,7 @@ class Builder(Builder):
             # Create Splice Operator
             canvasOpPath = si.FabricCanvasOpApply(operatorOwner.FullName, "", True, "", "")
             canvasOp = si.Dictionary.GetObject(canvasOpPath, False)
+            self._registerSceneItemPair(kOperator, canvasOp)
 
             si.FabricCanvasSetExtDeps(canvasOpPath, "", "Kraken" )
             uniqueNodeName = si.FabricCanvasInstPreset(canvasOpPath, "", kOperator.getPresetPath(), "400", "0")
@@ -1164,6 +1184,36 @@ class Builder(Builder):
         dccSceneItem.Kinematics.Global.PutTransform2(None, xfo)
 
         dccSceneItem.Kinematics.Local.Parameters('rotorder').Value = kSceneItem.ro.order
+
+        return True
+
+    def setMat44Attr(self, dccSceneItemName, attr, mat44):
+        """Sets a matrix attribute directly with values from a fabric Mat44.
+
+        Note: Fabric and Softimage's matrix row orders are reversed, so we
+        transpose the matrix first.
+
+        Args:
+            dccSceneItemName (str): name of dccSceneItem.
+            attr (str): name of matrix attribute to set.
+            mat44 (Mat44): matrix value.
+
+        Return:
+            bool: True if successful.
+
+        """
+
+        xfo = XSIMath.CreateTransform()
+
+        mat44 = mat44.transpose()
+        matrix = []
+        rows = [mat44.row0, mat44.row1, mat44.row2, mat44.row3]
+        for row in rows:
+            matrix.extend([row.x, row.y, row.z, row.t])
+
+        xfo.SetMatrix4(matrix)
+
+        dccSceneItem.Kinematics.Global.PutTransform2(None, xfo)
 
         return True
 

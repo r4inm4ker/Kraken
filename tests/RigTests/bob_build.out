@@ -78,39 +78,35 @@ building:char_bob.controls.clavicle.clavicle.clavicle as:clavicle_R_clavicle_ctr
 building:char_bob.controls.arm as:arm_L_cmp
 building:char_bob.controls.arm.inputs as:arm_L_inputs_hrc
 building:char_bob.controls.arm.inputs.globalSRT as:arm_L_globalSRT_cmpIn
-building:char_bob.controls.arm.inputs.clavicleEnd as:arm_L_clavicleEnd_cmpIn
+building:char_bob.controls.arm.inputs.root as:arm_L_root_cmpIn
 building:char_bob.controls.arm.outputs as:arm_L_outputs_hrc
 building:char_bob.controls.arm.outputs.bicep as:arm_L_bicep_cmpOut
 building:char_bob.controls.arm.outputs.forearm as:arm_L_forearm_cmpOut
-building:char_bob.controls.arm.outputs.armEndXfo as:arm_L_armEndXfo_cmpOut
-building:char_bob.controls.arm.outputs.hand as:arm_L_hand_cmpOut
+building:char_bob.controls.arm.outputs.wrist as:arm_L_wrist_cmpOut
 building:char_bob.controls.arm.bicepFK as:arm_L_bicepFK_ctrlSpace
 building:char_bob.controls.arm.bicepFK.bicepFK as:arm_L_bicepFK_ctrl
 building:char_bob.controls.arm.bicepFK.bicepFK.forearmFK as:arm_L_forearmFK_ctrlSpace
 building:char_bob.controls.arm.bicepFK.bicepFK.forearmFK.forearmFK as:arm_L_forearmFK_ctrl
-building:char_bob.controls.arm.hand as:arm_L_hand_ctrlSpace
-building:char_bob.controls.arm.hand.hand as:arm_L_hand_ctrl
 building:char_bob.controls.arm.IK as:arm_L_IK_ctrlSpace
 building:char_bob.controls.arm.IK.IK as:arm_L_IK_ctrl
+building:char_bob.controls.arm.ikPosition as:arm_L_ikPosition_null
 building:char_bob.controls.arm.UpV as:arm_L_UpV_ctrlSpace
 building:char_bob.controls.arm.UpV.UpV as:arm_L_UpV_ctrl
 building:char_bob.controls.arm as:arm_R_cmp
 building:char_bob.controls.arm.inputs as:arm_R_inputs_hrc
 building:char_bob.controls.arm.inputs.globalSRT as:arm_R_globalSRT_cmpIn
-building:char_bob.controls.arm.inputs.clavicleEnd as:arm_R_clavicleEnd_cmpIn
+building:char_bob.controls.arm.inputs.root as:arm_R_root_cmpIn
 building:char_bob.controls.arm.outputs as:arm_R_outputs_hrc
 building:char_bob.controls.arm.outputs.bicep as:arm_R_bicep_cmpOut
 building:char_bob.controls.arm.outputs.forearm as:arm_R_forearm_cmpOut
-building:char_bob.controls.arm.outputs.armEndXfo as:arm_R_armEndXfo_cmpOut
-building:char_bob.controls.arm.outputs.hand as:arm_R_hand_cmpOut
+building:char_bob.controls.arm.outputs.wrist as:arm_R_wrist_cmpOut
 building:char_bob.controls.arm.bicepFK as:arm_R_bicepFK_ctrlSpace
 building:char_bob.controls.arm.bicepFK.bicepFK as:arm_R_bicepFK_ctrl
 building:char_bob.controls.arm.bicepFK.bicepFK.forearmFK as:arm_R_forearmFK_ctrlSpace
 building:char_bob.controls.arm.bicepFK.bicepFK.forearmFK.forearmFK as:arm_R_forearmFK_ctrl
-building:char_bob.controls.arm.hand as:arm_R_hand_ctrlSpace
-building:char_bob.controls.arm.hand.hand as:arm_R_hand_ctrl
 building:char_bob.controls.arm.IK as:arm_R_IK_ctrlSpace
 building:char_bob.controls.arm.IK.IK as:arm_R_IK_ctrl
+building:char_bob.controls.arm.ikPosition as:arm_R_ikPosition_null
 building:char_bob.controls.arm.UpV as:arm_R_UpV_ctrlSpace
 building:char_bob.controls.arm.UpV.UpV as:arm_R_UpV_ctrl
 building:char_bob.controls.Leg as:Leg_L_cmp
@@ -130,6 +126,7 @@ building:char_bob.controls.Leg.femurFK.femurFK.shinFK as:Leg_L_shinFK_ctrlSpace
 building:char_bob.controls.Leg.femurFK.femurFK.shinFK.shinFK as:Leg_L_shinFK_ctrl
 building:char_bob.controls.Leg.IK as:Leg_L_IK_ctrlSpace
 building:char_bob.controls.Leg.IK.IK as:Leg_L_IK_ctrl
+building:char_bob.controls.Leg.ikRootPosition as:Leg_L_ikRootPosition_loc
 building:char_bob.controls.Leg.UpV as:Leg_L_UpV_ctrlSpace
 building:char_bob.controls.Leg.UpV.UpV as:Leg_L_UpV_ctrl
 building:char_bob.controls.Leg as:Leg_R_cmp
@@ -149,6 +146,7 @@ building:char_bob.controls.Leg.femurFK.femurFK.shinFK as:Leg_R_shinFK_ctrlSpace
 building:char_bob.controls.Leg.femurFK.femurFK.shinFK.shinFK as:Leg_R_shinFK_ctrl
 building:char_bob.controls.Leg.IK as:Leg_R_IK_ctrlSpace
 building:char_bob.controls.Leg.IK.IK as:Leg_R_IK_ctrl
+building:char_bob.controls.Leg.ikRootPosition as:Leg_R_ikRootPosition_loc
 building:char_bob.controls.Leg.UpV as:Leg_R_UpV_ctrlSpace
 building:char_bob.controls.Leg.UpV.UpV as:Leg_R_UpV_ctrl
 building:char_bob.spine as:Mspine
@@ -174,12 +172,10 @@ building:char_bob.deformers.arm as:arm_L_cmp
 building:char_bob.deformers.arm.bicep as:arm_L_bicep_def
 building:char_bob.deformers.arm.forearm as:arm_L_forearm_def
 building:char_bob.deformers.arm.wrist as:arm_L_wrist_def
-building:char_bob.deformers.arm.hand as:arm_L_hand_def
 building:char_bob.deformers.arm as:arm_R_cmp
 building:char_bob.deformers.arm.bicep as:arm_R_bicep_def
 building:char_bob.deformers.arm.forearm as:arm_R_forearm_def
 building:char_bob.deformers.arm.wrist as:arm_R_wrist_def
-building:char_bob.deformers.arm.hand as:arm_R_hand_def
 building:char_bob.deformers.Leg as:Leg_L_cmp
 building:char_bob.deformers.Leg.femur as:Leg_L_femur_def
 building:char_bob.deformers.Leg.shin as:Leg_L_shin_def
@@ -201,10 +197,10 @@ buildConnection:headBase
 buildConnection:spineEnd
 buildConnection:spineEnd
 buildConnection:globalSRT
-buildConnection:clavicleEnd
+buildConnection:root
 buildConnection:rigScale
 buildConnection:globalSRT
-buildConnection:clavicleEnd
+buildConnection:root
 buildConnection:rigScale
 buildConnection:globalSRT
 buildConnection:pelvisInput
@@ -291,39 +287,35 @@ char_bob.controls.clavicle:R.clavicle.clavicle
 char_bob.controls.arm:L
 char_bob.controls.arm:L.inputs
 char_bob.controls.arm:L.inputs.globalSRT
-char_bob.controls.arm:L.inputs.clavicleEnd
+char_bob.controls.arm:L.inputs.root
 char_bob.controls.arm:L.outputs
 char_bob.controls.arm:L.outputs.bicep
 char_bob.controls.arm:L.outputs.forearm
-char_bob.controls.arm:L.outputs.armEndXfo
-char_bob.controls.arm:L.outputs.hand
+char_bob.controls.arm:L.outputs.wrist
 char_bob.controls.arm:L.bicepFK
 char_bob.controls.arm:L.bicepFK.bicepFK
 char_bob.controls.arm:L.bicepFK.bicepFK.forearmFK
 char_bob.controls.arm:L.bicepFK.bicepFK.forearmFK.forearmFK
-char_bob.controls.arm:L.hand
-char_bob.controls.arm:L.hand.hand
 char_bob.controls.arm:L.IK
 char_bob.controls.arm:L.IK.IK
+char_bob.controls.arm:L.ikPosition
 char_bob.controls.arm:L.UpV
 char_bob.controls.arm:L.UpV.UpV
 char_bob.controls.arm:R
 char_bob.controls.arm:R.inputs
 char_bob.controls.arm:R.inputs.globalSRT
-char_bob.controls.arm:R.inputs.clavicleEnd
+char_bob.controls.arm:R.inputs.root
 char_bob.controls.arm:R.outputs
 char_bob.controls.arm:R.outputs.bicep
 char_bob.controls.arm:R.outputs.forearm
-char_bob.controls.arm:R.outputs.armEndXfo
-char_bob.controls.arm:R.outputs.hand
+char_bob.controls.arm:R.outputs.wrist
 char_bob.controls.arm:R.bicepFK
 char_bob.controls.arm:R.bicepFK.bicepFK
 char_bob.controls.arm:R.bicepFK.bicepFK.forearmFK
 char_bob.controls.arm:R.bicepFK.bicepFK.forearmFK.forearmFK
-char_bob.controls.arm:R.hand
-char_bob.controls.arm:R.hand.hand
 char_bob.controls.arm:R.IK
 char_bob.controls.arm:R.IK.IK
+char_bob.controls.arm:R.ikPosition
 char_bob.controls.arm:R.UpV
 char_bob.controls.arm:R.UpV.UpV
 char_bob.controls.Leg:L
@@ -343,6 +335,7 @@ char_bob.controls.Leg:L.femurFK.femurFK.shinFK
 char_bob.controls.Leg:L.femurFK.femurFK.shinFK.shinFK
 char_bob.controls.Leg:L.IK
 char_bob.controls.Leg:L.IK.IK
+char_bob.controls.Leg:L.ikRootPosition
 char_bob.controls.Leg:L.UpV
 char_bob.controls.Leg:L.UpV.UpV
 char_bob.controls.Leg:R
@@ -362,6 +355,7 @@ char_bob.controls.Leg:R.femurFK.femurFK.shinFK
 char_bob.controls.Leg:R.femurFK.femurFK.shinFK.shinFK
 char_bob.controls.Leg:R.IK
 char_bob.controls.Leg:R.IK.IK
+char_bob.controls.Leg:R.ikRootPosition
 char_bob.controls.Leg:R.UpV
 char_bob.controls.Leg:R.UpV.UpV
 char_bob.spine:M
@@ -387,12 +381,10 @@ char_bob.deformers.arm:L
 char_bob.deformers.arm:L.bicep
 char_bob.deformers.arm:L.forearm
 char_bob.deformers.arm:L.wrist
-char_bob.deformers.arm:L.hand
 char_bob.deformers.arm:R
 char_bob.deformers.arm:R.bicep
 char_bob.deformers.arm:R.forearm
 char_bob.deformers.arm:R.wrist
-char_bob.deformers.arm:R.hand
 char_bob.deformers.Leg:L
 char_bob.deformers.Leg:L.femur
 char_bob.deformers.Leg:L.shin

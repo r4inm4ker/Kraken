@@ -79,7 +79,7 @@ class Synchronizer(Synchronizer):
 
         if dccItem is None:
             log("Warning Syncing. No DCC Item for :" + kObject.getPath(), 8)
-            return
+            return False
 
         dccXfo = dccItem.Kinematics.Global.GetTransform2(None)
         dccPos = dccXfo.Translation.Get2()
@@ -88,7 +88,7 @@ class Synchronizer(Synchronizer):
 
         pos = Vec3(x=dccPos[0], y=dccPos[1], z=dccPos[2])
         quat = Quat(v=Vec3(dccQuat[1], dccQuat[2], dccQuat[3]), w=dccQuat[0])
-        scl = Vec3(x=dccScl[0], y=dccScl[1], z=dccScl[2])
+        scl = Vec3(x=1.0, y=1.0, z=1.0) # we don't want scale recorded
 
         newXfo = Xfo(tr=pos, ori=quat, sc=scl)
 
@@ -107,6 +107,11 @@ class Synchronizer(Synchronizer):
             bool: True if successful.
 
         """
+
+        if kObject.getParent() is not None and kObject.isTypeOf('AttributeGroup'):
+            if kObject.getParent().getParent().isTypeOf('Component'):
+                if kObject.getParent().getParent().getComponentType() == "Guide":
+                    return False
 
         hrcMap = self.getHierarchyMap()
 

@@ -205,10 +205,10 @@ class NeckComponentRig(NeckComponent):
         # Constrain I/O
         # ==============
         # Constraint inputs
-        clavicleInputConstraint = PoseConstraint('_'.join([self.neckCtrlSpace.getName(), 'To', self.neckBaseInputTgt.getName()]))
-        clavicleInputConstraint.setMaintainOffset(True)
-        clavicleInputConstraint.addConstrainer(self.neckBaseInputTgt)
-        self.neckCtrlSpace.addConstraint(clavicleInputConstraint)
+        neckInputConstraint = PoseConstraint('_'.join([self.neckCtrlSpace.getName(), 'To', self.neckBaseInputTgt.getName()]))
+        neckInputConstraint.setMaintainOffset(True)
+        neckInputConstraint.addConstrainer(self.neckBaseInputTgt)
+        self.neckCtrlSpace.addConstraint(neckInputConstraint)
 
         # Constraint outputs
         neckOutputConstraint = PoseConstraint('_'.join([self.neckOutputTgt.getName(), 'To', self.neckCtrl.getName()]))

@@ -106,12 +106,12 @@ bob_guide_data = {
         {
             "_comment": "LArm to LClavicle",
             "source": "Clavicle:L.clavicleEnd",
-            "target": "Arm:L.clavicleEnd"
+            "target": "Arm:L.root"
         },
         {
             "_comment": "RArm to RClavicle",
             "source": "Clavicle:R.clavicleEnd",
-            "target": "Arm:R.clavicleEnd"
+            "target": "Arm:R.root"
         },
         {
             "_comment": "RClavicle to Spine",

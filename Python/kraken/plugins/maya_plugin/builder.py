@@ -10,6 +10,8 @@ import json
 from kraken.core.kraken_system import ks
 from kraken.core.builder import Builder
 from kraken.core.objects.object_3d import Object3D
+from kraken.core.objects.control import Control
+from kraken.core.maths.xfo import Xfo
 from kraken.core.objects.attributes.attribute import Attribute
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 from kraken.plugins.maya_plugin.utils import *
@@ -24,6 +26,22 @@ class Builder(Builder):
 
     def __init__(self):
         super(Builder, self).__init__()
+
+
+    def deleteBuildElements(self):
+        """Clear out all dcc built elements from the scene if exist."""
+
+        for builtElement in self._buildElements:
+            if builtElement['src'].isTypeOf('Attribute'):
+                continue
+
+            node = builtElement['tgt']
+            if node.exists():
+                pm.delete(node)
+
+        self._buildElements = []
+
+        return
 
 
     # ========================
@@ -598,18 +616,43 @@ class Builder(Builder):
 
         """
 
+        def validateArg(rtVal, argName, argDataType):
+            """Validate argument types when passing built in Python types.
+
+            Args:
+                rtVal (RTVal): rtValue object.
+                argName (str): Name of the argument being validated.
+                argDataType (str): Type of the argument being validated.
+
+            """
+
+            # Validate types when passing a built in Python type
+            if type(rtVal) in (bool, str, int, float):
+                if argDataType in ('Scalar', 'Float32', 'UInt32', 'Integer'):
+                    if type(rtVal) not in (float, int):
+                        raise TypeError(self.getName() + ".evaluate(): Invalid Argument Value: " + str(rtVal) + " (" + type(rtVal).__name__ + "), for Argument: " + argName + " (" + argDataType + ")")
+
+                elif argDataType == 'Boolean':
+                    if type(rtVal) != bool:
+                        raise TypeError(self.getName() + ".evaluate(): Invalid Argument Value: " + str(rtVal) + " (" + type(rtVal).__name__ + "), for Argument: " + argName + " (" + argDataType + ")")
+
+                elif argDataType == 'String':
+                    if type(rtVal) != str:
+                        raise TypeError(self.getName() + ".evaluate(): Invalid Argument Value: " + str(rtVal) + " (" + type(rtVal).__name__ + "), for Argument: " + argName + " (" + argDataType + ")")
+
         try:
             solverTypeName = kOperator.getSolverTypeName()
 
             # Create Splice Operator
-            spliceNode = cmds.createNode('dfgMayaNode', name=kOperator.getName())
-            cmds.FabricCanvasSetExtDeps(mayaNode=spliceNode, execPath="", extDep=kOperator.getExtension())
+            spliceNode = pm.createNode('dfgMayaNode', name=kOperator.getName())
+            self._registerSceneItemPair(kOperator, pm.PyNode(spliceNode))
+            pm.FabricCanvasSetExtDeps(mayaNode=spliceNode, execPath="", extDep=kOperator.getExtension())
 
-            cmds.FabricCanvasAddFunc(mayaNode=spliceNode, execPath="", title=kOperator.getName(), code="dfgEntry {}", xPos="100", yPos="100")
-            cmds.FabricCanvasAddPort(mayaNode=spliceNode, execPath=kOperator.getName(), desiredPortName="solver", portType="IO", typeSpec=solverTypeName, connectToPortPath="", extDep=kOperator.getExtension())
-            cmds.FabricCanvasAddPort(mayaNode=spliceNode, execPath="", desiredPortName="solver", portType="IO", typeSpec=solverTypeName, connectToPortPath="", extDep=kOperator.getExtension() )
-            cmds.FabricCanvasConnect(mayaNode=spliceNode, execPath="", srcPortPath="solver", dstPortPath=kOperator.getName()+".solver")
-            cmds.FabricCanvasConnect(mayaNode=spliceNode, execPath="", srcPortPath=kOperator.getName()+".solver", dstPortPath="solver")
+            pm.FabricCanvasAddFunc(mayaNode=spliceNode, execPath="", title=kOperator.getName(), code="dfgEntry {}", xPos="100", yPos="100")
+            pm.FabricCanvasAddPort(mayaNode=spliceNode, execPath=kOperator.getName(), desiredPortName="solver", portType="IO", typeSpec=solverTypeName, connectToPortPath="", extDep=kOperator.getExtension())
+            pm.FabricCanvasAddPort(mayaNode=spliceNode, execPath="", desiredPortName="solver", portType="IO", typeSpec=solverTypeName, connectToPortPath="", extDep=kOperator.getExtension())
+            pm.FabricCanvasConnect(mayaNode=spliceNode, execPath="", srcPortPath="solver", dstPortPath=kOperator.getName()+".solver")
+            pm.FabricCanvasConnect(mayaNode=spliceNode, execPath="", srcPortPath=kOperator.getName()+".solver", dstPortPath="solver")
 
             arraySizes = {}
             # connect the operator to the objects in the DCC
@@ -621,21 +664,21 @@ class Builder(Builder):
                 argConnectionType = arg.connectionType.getSimpleType()
 
                 if argConnectionType == 'In':
-                    cmds.FabricCanvasAddPort(mayaNode=spliceNode, execPath="", desiredPortName=argName, portType="In", typeSpec=argDataType, connectToPortPath="")
-                    cmds.FabricCanvasAddPort(mayaNode=spliceNode, execPath=kOperator.getName(), desiredPortName=argName, portType="In", typeSpec=argDataType, connectToPortPath="")
-                    cmds.FabricCanvasConnect(mayaNode=spliceNode, execPath="", srcPortPath=argName, dstPortPath=kOperator.getName()+"."+argName)
+                    pm.FabricCanvasAddPort(mayaNode=spliceNode, execPath="", desiredPortName=argName, portType="In", typeSpec=argDataType, connectToPortPath="")
+                    pm.FabricCanvasAddPort(mayaNode=spliceNode, execPath=kOperator.getName(), desiredPortName=argName, portType="In", typeSpec=argDataType, connectToPortPath="")
+                    pm.FabricCanvasConnect(mayaNode=spliceNode, execPath="", srcPortPath=argName, dstPortPath=kOperator.getName()+"."+argName)
                 elif argConnectionType in ['IO', 'Out']:
-                    cmds.FabricCanvasAddPort(mayaNode=spliceNode, execPath="", desiredPortName=argName, portType="Out", typeSpec=argDataType, connectToPortPath="")
-                    cmds.FabricCanvasAddPort(mayaNode=spliceNode, execPath=kOperator.getName(), desiredPortName=argName, portType="Out", typeSpec=argDataType, connectToPortPath="")
-                    cmds.FabricCanvasConnect(mayaNode=spliceNode, execPath="", srcPortPath=kOperator.getName()+"."+argName, dstPortPath=argName)
+                    pm.FabricCanvasAddPort(mayaNode=spliceNode, execPath="", desiredPortName=argName, portType="Out", typeSpec=argDataType, connectToPortPath="")
+                    pm.FabricCanvasAddPort(mayaNode=spliceNode, execPath=kOperator.getName(), desiredPortName=argName, portType="Out", typeSpec=argDataType, connectToPortPath="")
+                    pm.FabricCanvasConnect(mayaNode=spliceNode, execPath="", srcPortPath=kOperator.getName()+"."+argName, dstPortPath=argName)
 
                 if argDataType == 'EvalContext':
                     continue
                 if argName == 'time':
-                    cmds.expression( o=spliceNode + '.time', s=spliceNode + '.time = time;' )
+                    pm.expression(o=spliceNode + '.time', s=spliceNode + '.time = time;')
                     continue
                 if argName == 'frame':
-                    cmds.expression( o=spliceNode + '.frame', s=spliceNode + '.frame = frame;' )
+                    pm.expression(o=spliceNode + '.frame', s=spliceNode + '.frame = frame;')
                     continue
 
                 # Get the argument's input from the DCC
@@ -651,16 +694,11 @@ class Builder(Builder):
                     if argConnectionType in ['IO', 'Out']:
                         arraySizes[argName] = len(connectedObjects)
 
-                    if len(connectedObjects) == 0:
-                        raise Exception("Operator '"+kOperator.getName()+"' of type '"+solverTypeName+"' arg '"+argName+"' not connected.")
-
                     connectionTargets = []
-                    for i in range(len(connectedObjects)):
+                    for i in xrange(len(connectedObjects)):
                         opObject = connectedObjects[i]
                         dccSceneItem = self.getDCCSceneItem(opObject)
 
-                        if dccSceneItem is None:
-                            raise Exception("Operator '"+kOperator.getName()+"' of type '"+solverTypeName+"' arg '"+argName+"' dcc item not found for item:" + opObject.getPath())
                         connectionTargets.append( { 'opObject': opObject, 'dccSceneItem': dccSceneItem} )
                 else:
                     if connectedObjects is None:
@@ -669,50 +707,57 @@ class Builder(Builder):
                     opObject = connectedObjects
                     dccSceneItem = self.getDCCSceneItem(opObject)
 
-                    if dccSceneItem is None:
-                        raise Exception("Operator '"+kOperator.getName()+"' of type '"+solverTypeName+"' arg '"+argName+"' dcc item not found for item:" + connectedObjects.getPath())
-
                     connectionTargets = { 'opObject': opObject, 'dccSceneItem': dccSceneItem }
 
-                # Add the splice Port for each arg.
+                # Add the Port for each arg.
                 if argConnectionType == 'In':
 
                     def connectInput(tgt, opObject, dccSceneItem):
+
                         if isinstance(opObject, Attribute):
-                            cmds.connectAttr(str(dccSceneItem), tgt)
+                            pm.connectAttr(dccSceneItem, tgt)
                         elif isinstance(opObject, Object3D):
-                            cmds.connectAttr(str(dccSceneItem.attr('worldMatrix')), tgt)
+                            pm.connectAttr(dccSceneItem.attr('worldMatrix'), tgt)
+                        elif isinstance(opObject, Xfo):
+                            self.setMat44Attr(tgt.partition(".")[0], tgt.partition(".")[2], opObject.toMat44())
                         else:
-                            raise Exception(opObject.getPath() + " with type '" + opObject.getTypeName() + " is not implemented!")
+                            validateArg(opObject, argName, argDataType)
+
+                            pm.setAttr(tgt, opObject)
 
                     if argDataType.endswith('[]'):
-                        for i in range(len(connectionTargets)):
-                            connectInput( spliceNode + "." + argName+'['+str(i)+']', connectionTargets[i]['opObject'], connectionTargets[i]['dccSceneItem'])
+                        for i in xrange(len(connectionTargets)):
+                            connectInput(spliceNode + "." + argName+'['+str(i)+']', connectionTargets[i]['opObject'], connectionTargets[i]['dccSceneItem'])
                     else:
-                        connectInput( spliceNode + "." + argName, connectionTargets['opObject'], connectionTargets['dccSceneItem'])
+                        connectInput(spliceNode + "." + argName, connectionTargets['opObject'], connectionTargets['dccSceneItem'])
 
                 elif argConnectionType in ['IO', 'Out']:
 
                     def connectOutput(src, opObject, dccSceneItem):
                         if isinstance(opObject, Attribute):
-                            cmds.connectAttr(src, str(dccSceneItem))
-
+                            pm.connectAttr(src, dccSceneItem, force=True)
                         elif isinstance(opObject, Object3D):
                             decomposeNode = pm.createNode('decomposeMatrix')
-                            cmds.connectAttr(src, str(decomposeNode.attr("inputMatrix")))
+                            pm.connectAttr(src, decomposeNode.attr("inputMatrix"), force=True)
 
                             decomposeNode.attr("outputRotate").connect(dccSceneItem.attr("rotate"))
                             decomposeNode.attr("outputScale").connect(dccSceneItem.attr("scale"))
                             decomposeNode.attr("outputTranslate").connect(dccSceneItem.attr("translate"))
+                        elif isinstance(opObject, Xfo):
+                            raise NotImplementedError("Kraken KL Operator cannot set Xfo outputs types directly!")
+                        elif isinstance(opObject, Mat44):
+                            raise NotImplementedError("Kraken KL Operator cannot set Mat44 outputs types directly!")
+                        else:
+                            raise NotImplementedError("Kraken KL Operator cannot set outputs with Python built-in types directly!")
 
                     if argDataType.endswith('[]'):
-                        for i in range(len(connectionTargets)):
+                        for i in xrange(len(connectionTargets)):
                             connectOutput(str(spliceNode + "." + argName)+'['+str(i)+']', connectionTargets[i]['opObject'], connectionTargets[i]['dccSceneItem'])
                     else:
                         connectOutput(str(spliceNode + "." + argName), connectionTargets['opObject'], connectionTargets['dccSceneItem'])
 
             opSourceCode = kOperator.generateSourceCode(arraySizes=arraySizes)
-            cmds.FabricCanvasSetCode(mayaNode=spliceNode, execPath=kOperator.getName(), code=opSourceCode)
+            pm.FabricCanvasSetCode(mayaNode=spliceNode, execPath=kOperator.getName(), code=opSourceCode)
 
         finally:
             pass
@@ -731,6 +776,30 @@ class Builder(Builder):
 
         """
 
+        def validateArg(rtVal, portName, portDataType):
+            """Validate argument types when passing built in Python types.
+
+            Args:
+                rtVal (RTVal): rtValue object.
+                portName (str): Name of the argument being validated.
+                portDataType (str): Type of the argument being validated.
+
+            """
+
+            # Validate types when passing a built in Python type
+            if type(rtVal) in (bool, str, int, float):
+                if portDataType in ('Scalar', 'Float32', 'UInt32'):
+                    if type(rtVal) not in (float, int):
+                        raise TypeError(self.getName() + ".evaluate(): Invalid Argument Value: " + str(rtVal) + " (" + type(rtVal).__name__ + "), for Argument: " + portName + " (" + portDataType + ")")
+
+                elif portDataType == 'Boolean':
+                    if type(rtVal) != bool:
+                        raise TypeError(self.getName() + ".evaluate(): Invalid Argument Value: " + str(rtVal) + " (" + type(rtVal).__name__ + "), for Argument: " + portName + " (" + portDataType + ")")
+
+                elif portDataType == 'String':
+                    if type(rtVal) != str:
+                        raise TypeError(self.getName() + ".evaluate(): Invalid Argument Value: " + str(rtVal) + " (" + type(rtVal).__name__ + "), for Argument: " + portName + " (" + portDataType + ")")
+
         try:
             host = ks.getCoreClient().DFG.host
             opBinding = host.createBindingToPreset(kOperator.getPresetPath())
@@ -743,9 +812,11 @@ class Builder(Builder):
             }
 
             # Create Canvas Operator
-            canvasNode = cmds.createNode('dfgMayaNode', name=kOperator.getName())
-            cmds.FabricCanvasSetExtDeps(mayaNode=canvasNode, execPath="", extDep="Kraken" )
-            graphNodeName = cmds.FabricCanvasInstPreset(mayaNode=canvasNode, execPath="", presetPath=kOperator.getPresetPath(), xPos="100", yPos="100")
+            canvasNode = pm.createNode('dfgMayaNode', name=kOperator.getName())
+            self._registerSceneItemPair(kOperator, pm.PyNode(canvasNode))
+
+            pm.FabricCanvasSetExtDeps(mayaNode=canvasNode, execPath="", extDep="Kraken")
+            graphNodeName = pm.FabricCanvasInstPreset(mayaNode=canvasNode, execPath="", presetPath=kOperator.getPresetPath(), xPos="100", yPos="100")
 
             arraySizes = {}
             for i in xrange(node.getExecPortCount()):
@@ -755,21 +826,21 @@ class Builder(Builder):
                 portDataType = rtVal.getTypeName().getSimpleType()
 
                 if portConnectionType == 'In':
-                    cmds.FabricCanvasAddPort(mayaNode=canvasNode, execPath="", desiredPortName=portName, portType="In", typeSpec=portDataType, connectToPortPath="")
-                    cmds.FabricCanvasConnect(mayaNode=canvasNode, execPath="", srcPortPath=portName, dstPortPath=graphNodeName+"."+portName)
+                    pm.FabricCanvasAddPort(mayaNode=canvasNode, execPath="", desiredPortName=portName, portType="In", typeSpec=portDataType, connectToPortPath="")
+                    pm.FabricCanvasConnect(mayaNode=canvasNode, execPath="", srcPortPath=portName, dstPortPath=graphNodeName+"."+portName)
                 elif portConnectionType in ['IO', 'Out']:
-                    cmds.FabricCanvasAddPort(mayaNode=canvasNode, execPath="", desiredPortName=portName, portType="Out", typeSpec=portDataType, connectToPortPath="")
-                    cmds.FabricCanvasConnect(mayaNode=canvasNode, execPath="", srcPortPath=graphNodeName+"."+portName, dstPortPath=portName)
+                    pm.FabricCanvasAddPort(mayaNode=canvasNode, execPath="", desiredPortName=portName, portType="Out", typeSpec=portDataType, connectToPortPath="")
+                    pm.FabricCanvasConnect(mayaNode=canvasNode, execPath="", srcPortPath=graphNodeName+"."+portName, dstPortPath=portName)
                 else:
                     raise Exception("Invalid connection type:" + portConnectionType)
 
                 if portDataType == 'EvalContext':
                     continue
                 if portName == 'time':
-                    cmds.expression( o=canvasNode + '.time', s=canvasNode + '.time = time;' )
+                    pm.expression(o=canvasNode + '.time', s=canvasNode + '.time = time;')
                     continue
                 if portName == 'frame':
-                    cmds.expression( o=canvasNode + '.frame', s=canvasNode + '.frame = frame;' )
+                    pm.expression(o=canvasNode + '.frame', s=canvasNode + '.frame = frame;')
                     continue
 
                 # Get the port's input from the DCC
@@ -780,21 +851,17 @@ class Builder(Builder):
 
                 if portDataType.endswith('[]'):
 
-                    # In CanvasMaya, output arrays are not resized by the system prior to calling into Canvas, so we
-                    # explicily resize the arrays in the generated operator stub code.
+                    # In CanvasMaya, output arrays are not resized by the system
+                    # prior to calling into Canvas, so we explicily resize the
+                    # arrays in the generated operator stub code.
                     if portConnectionType in ['IO', 'Out']:
                         arraySizes[portName] = len(connectedObjects)
-
-                    if len(connectedObjects) == 0:
-                        raise Exception("Operator '"+kOperator.getName()+"' of type '"+kOperator.getPresetPath()+"' port '"+portName+"' not connected.")
 
                     connectionTargets = []
                     for i in xrange(len(connectedObjects)):
                         opObject = connectedObjects[i]
                         dccSceneItem = self.getDCCSceneItem(opObject)
 
-                        if dccSceneItem is None:
-                            raise Exception("Operator '"+kOperator.getName()+"' of type '"+kOperator.getPresetPath()+"' port '"+portName+"' dcc item not found for item:" + opObject.getPath())
                         connectionTargets.append( { 'opObject': opObject, 'dccSceneItem': dccSceneItem} )
                 else:
                     if connectedObjects is None:
@@ -803,9 +870,6 @@ class Builder(Builder):
                     opObject = connectedObjects
                     dccSceneItem = self.getDCCSceneItem(opObject)
 
-                    if dccSceneItem is None:
-                        raise Exception("Operator '"+kOperator.getName()+"' of type '"+kOperator.getPresetPath()+"' port '"+portName+"' dcc item not found for item:" + connectedObjects.getPath())
-
                     connectionTargets = { 'opObject': opObject, 'dccSceneItem': dccSceneItem }
 
                 # Add the Canvas Port for each port.
@@ -813,34 +877,45 @@ class Builder(Builder):
 
                     def connectInput(tgt, opObject, dccSceneItem):
                         if isinstance(opObject, Attribute):
-                            cmds.connectAttr(str(dccSceneItem), tgt)
+                            pm.connectAttr(dccSceneItem, tgt)
                         elif isinstance(opObject, Object3D):
-                            cmds.connectAttr(str(dccSceneItem.attr('worldMatrix')), tgt)
+                            pm.connectAttr(dccSceneItem.attr('worldMatrix'), tgt)
+                        elif isinstance(opObject, Xfo):
+                            self.setMat44Attr(tgt.partition(".")[0], tgt.partition(".")[2], opObject.toMat44())
+                        elif isinstance(obj, Mat44):
+                            self.setMat44Attr(tgt.partition(".")[0], tgt.partition(".")[2], opObject)
                         else:
-                            raise Exception(opObject.getPath() + " with type '" + opObject.getTypeName() + " is not implemented!")
+                            validateArg(opObject, portName, portDataType)
+
+                            pm.setAttr(tgt, opObject)
 
                     if portDataType.endswith('[]'):
-                        for i in range(len(connectionTargets)):
-                            connectInput( canvasNode + "." + portName+'['+str(i)+']', connectionTargets[i]['opObject'], connectionTargets[i]['dccSceneItem'])
+                        for i in xrange(len(connectionTargets)):
+                            connectInput(canvasNode + "." + portName+'['+str(i)+']', connectionTargets[i]['opObject'], connectionTargets[i]['dccSceneItem'])
                     else:
-                        connectInput( canvasNode + "." + portName, connectionTargets['opObject'], connectionTargets['dccSceneItem'])
+                        connectInput(canvasNode + "." + portName, connectionTargets['opObject'], connectionTargets['dccSceneItem'])
 
                 elif portConnectionType in ['IO', 'Out']:
 
                     def connectOutput(src, opObject, dccSceneItem):
                         if isinstance(opObject, Attribute):
-                            cmds.connectAttr(src, str(dccSceneItem))
-
+                            pm.connectAttr(src, dccSceneItem)
                         elif isinstance(opObject, Object3D):
                             decomposeNode = pm.createNode('decomposeMatrix')
-                            cmds.connectAttr(src, str(decomposeNode.attr("inputMatrix")))
+                            pm.connectAttr(src, decomposeNode.attr("inputMatrix"))
 
                             decomposeNode.attr("outputRotate").connect(dccSceneItem.attr("rotate"))
                             decomposeNode.attr("outputScale").connect(dccSceneItem.attr("scale"))
                             decomposeNode.attr("outputTranslate").connect(dccSceneItem.attr("translate"))
+                        elif isinstance(opObject, Xfo):
+                            raise NotImplementedError("Kraken Canvas Operator cannot set Xfo outputs types directly!")
+                        elif isinstance(opObject, Mat44):
+                            raise NotImplementedError("Kraken Canvas Operator cannot set Mat44 outputs types directly!")
+                        else:
+                            raise NotImplementedError("Kraken Canvas Operator cannot set outputs with Python built-in types directly!")
 
                     if portDataType.endswith('[]'):
-                        for i in range(len(connectionTargets)):
+                        for i in xrange(len(connectionTargets)):
                             connectOutput(str(canvasNode + "." + portName)+'['+str(i)+']', connectionTargets[i]['opObject'], connectionTargets[i]['dccSceneItem'])
                     else:
                         connectOutput(str(canvasNode + "." + portName), connectionTargets['opObject'], connectionTargets['dccSceneItem'])
@@ -980,9 +1055,49 @@ class Builder(Builder):
         dccSceneItem.setTranslation(dt.Vector(kSceneItem.xfo.tr.x, kSceneItem.xfo.tr.y, kSceneItem.xfo.tr.z), "world")
         dccSceneItem.setRotation(quat, "world")
 
-        dccSceneItem.setRotationOrder(kSceneItem.ro.order + 1, False)
+        # Maya's rotation order enums:
+        #0 XYZ
+        #1 YZX
+        #2 ZXY
+        #3 XZY
+        #4 YXZ <-- 5 in Fabric
+        #5 ZYX <-- 4 in Fabric
+        order = kSceneItem.ro.order
+        if order == 4:
+            order = 5
+        elif order == 5:
+            order = 4
+
+        dccSceneItem.setRotationOrder(order + 1, False) #  Maya api is one off from Maya's own node enum pyMel uses API
 
         pm.select(clear=True)
+
+        return True
+
+
+    def setMat44Attr(self, dccSceneItemName, attr, mat44):
+        """Sets a matrix attribute directly with values from a fabric Mat44.
+
+        Note: Fabric and Maya's matrix row orders are reversed, so we transpose
+        the matrix first.
+
+        Args:
+            dccSceneItemName (str): name of dccSceneItem.
+            attr (str): name of matrix attribute to set.
+            mat44 (Mat44): matrix value.
+
+        Return:
+            bool: True if successful.
+
+        """
+
+        mat44 = mat44.transpose()
+        matrix = []
+        rows = [mat44.row0, mat44.row1, mat44.row2, mat44.row3]
+        for row in rows:
+            matrix.extend([row.x, row.y, row.z, row.t])
+
+        cmds.setAttr(dccSceneItemName + "." + attr, matrix, type="matrix")
 
         return True
 

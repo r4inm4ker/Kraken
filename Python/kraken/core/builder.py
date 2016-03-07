@@ -53,6 +53,11 @@ class Builder(object):
 
         return True
 
+    def deleteBuildElements(self):
+        """Clear out all dcc built elements from the scene if exist."""
+
+        return None
+
 
     def getDCCSceneItem(self, kSceneItem):
         """Given a kSceneItem, returns the built dcc scene item.
@@ -403,10 +408,9 @@ class Builder(object):
         else:
             connectionTarget = connection.getTarget()
 
-        constraint = PoseConstraint('_'.join([inputTarget.getName(), 'To', connectionTarget.getName()]))
-        constraint.setMaintainOffset(True)
-        constraint.setConstrainee(inputTarget)
-        constraint.addConstrainer(connectionTarget)
+        # There should be no offset between an output xfo from one component and the connected input of another
+        # If connected, they should be exactly the same.
+        constraint = inputTarget.constrainTo(connectionTarget, maintainOffset=False)
 
         dccSceneItem = self.buildPoseConstraint(constraint)
         self._registerSceneItemPair(componentInput, dccSceneItem)
