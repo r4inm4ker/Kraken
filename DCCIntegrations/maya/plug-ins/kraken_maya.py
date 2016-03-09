@@ -115,6 +115,9 @@ def removeKrakenMenu():
 # Initialize the script plug-in
 def initializePlugin(mobject):
 
+    pm.loadPlugin("FabricMaya", quiet=True)
+    pm.pluginInfo('FabricMaya', edit=True, autoload=True)
+
     pm.loadPlugin("matrixNodes", quiet=True)
     pm.pluginInfo('matrixNodes', edit=True, autoload=True)
 
