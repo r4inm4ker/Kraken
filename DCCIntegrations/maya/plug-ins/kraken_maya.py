@@ -26,6 +26,8 @@ except:
     # Maya 2014 and higher
     import shiboken
 
+os.environ['KRAKEN_DCC'] = 'Maya'
+
 
 def getMayaWindow():
     ptr = OpenMayaUI.MQtUtil.mainWindow()
@@ -102,10 +104,16 @@ def setupKrakenMenu():
     pm.menuItem(parent=krakenMenu, label="Help", c="import webbrowser; webbrowser.open_new_tab('http://fabric-engine.github.io/Kraken')")
 
 
+def removeKrakenMenu():
+
+    mainWindow = maya.mel.eval('$tmpVar=$gMainWindow')
+    menus = pm.window(mainWindow, q=True, ma=True)
+    if 'Kraken' in menus:
+        menuParent = pm.menu('Kraken', query=True, parent=True)
+        pm.deleteUI('|'.join([menuParent, 'Kraken']))
+
 # Initialize the script plug-in
 def initializePlugin(mobject):
-
-    os.environ['KRAKEN_DCC']  = 'Maya'
 
     pm.loadPlugin("matrixNodes", quiet=True)
     pm.pluginInfo('matrixNodes', edit=True, autoload=True)
@@ -133,7 +141,7 @@ def uninitializePlugin(mobject):
 
     mplugin = OpenMayaMPx.MFnPlugin(mobject)
 
-    # unloadMenu()
+    removeKrakenMenu()
 
     try:
         mplugin.deregisterCommand('openKrakenEditor')
