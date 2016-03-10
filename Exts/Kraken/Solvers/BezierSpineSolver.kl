@@ -73,7 +73,7 @@ function BezierSpineSolver.solve!
 
   // Adding an offset to align the output's x axis down the length of the spine.
   Quat xAlignmentOffset;
-  xAlignmentOffset.setFromAxisAndAngle(Vec3(0, 1, 0), HALF_PI);
+  xAlignmentOffset.setFromAxisAndAngle(Vec3(0, 0, 1), HALF_PI);
   baseXfo.ori = baseXfo.ori * xAlignmentOffset;
   tipXfo.ori = tipXfo.ori * xAlignmentOffset;
 
@@ -122,10 +122,10 @@ function BezierSpineSolver.solve!
         // Measure the exact position on the curve using the computed parameter.
         targ = evalBezier(coeffs, curveTipParam);
       else
-        {
+      {
           // project a postiion off the end of the bezier curve
           targ = tipXfo.tr + (tipXfo.tr - tipHandle.translation()).unit() * ((curveTipParam - 1.0) * jointLength);
-        }
+      }
 
       tipPositions[i] = targ;
 
