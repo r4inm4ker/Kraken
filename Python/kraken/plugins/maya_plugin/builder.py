@@ -644,7 +644,7 @@ class Builder(Builder):
             solverTypeName = kOperator.getSolverTypeName()
 
             # Create Splice Operator
-            spliceNode = pm.createNode('dfgMayaNode', name=kOperator.getName())
+            spliceNode = pm.createNode('canvasNode', name=kOperator.getName())
             self._registerSceneItemPair(kOperator, pm.PyNode(spliceNode))
             pm.FabricCanvasSetExtDeps(mayaNode=spliceNode, execPath="", extDep=kOperator.getExtension())
 
@@ -812,7 +812,7 @@ class Builder(Builder):
             }
 
             # Create Canvas Operator
-            canvasNode = pm.createNode('dfgMayaNode', name=kOperator.getName())
+            canvasNode = pm.createNode('canvasNode', name=kOperator.getName())
             self._registerSceneItemPair(kOperator, pm.PyNode(canvasNode))
 
             pm.FabricCanvasSetExtDeps(mayaNode=canvasNode, execPath="", extDep="Kraken")
