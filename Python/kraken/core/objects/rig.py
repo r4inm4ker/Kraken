@@ -260,11 +260,12 @@ class Rig(Container):
         guideComponents = self.getChildrenByType('Component')
         for component in guideComponents:
             componentsJson.append(component.getRigBuildData())
+
         guideData['components'] = componentsJson
 
         connectionsJson = []
         for component in guideComponents:
-            for i in range(component.getNumInputs()):
+            for i in xrange(component.getNumInputs()):
                 componentInput = component.getInputByIndex(i)
                 if componentInput.isConnected():
                     componentOutput = componentInput.getConnection()

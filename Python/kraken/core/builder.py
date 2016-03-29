@@ -5,6 +5,7 @@ Builder -- Base builder object to build objects in DCC.
 
 """
 
+from collections import deque
 
 from kraken.core.kraken_system import KrakenSystem
 from kraken.core.configs.config import Config
@@ -90,6 +91,70 @@ class Builder(object):
     # ========================
     # SceneItem Build Methods
     # ========================
+    def buildRig(self, kSceneItem, buildName):
+        """Builds a rig object.
+
+        We have to re-order component children by walking the graph to ensure
+        that inputs objects are in place for the dependent components.
+
+        Args:
+            kSceneItem (object): kSceneItem that represents a container to be built.
+            buildName (string): The name to use on the built object.
+
+        Returns:
+            object: DCC Scene Item that is created.
+
+        """
+
+        resolvedComps = []
+        components = kSceneItem.getChildrenByType('Component')
+        compDeque = deque(components)
+        numComps = len(components)
+
+        i = 0
+        while len(resolvedComps) < numComps and i < 10 * numComps:
+            if i != 0:
+                compDeque.rotate(1)
+
+            comp = compDeque[0]
+            # print "Current Comp: " + comp.getName()
+
+            connectedInputs = [x for x in comp.getInputs() if x.isConnected() is True]
+            # print "\tConnected Inputs: " + ','.join([x.getName() for x in connectedInputs])
+            if len(connectedInputs) == 0:
+                resolvedComp = compDeque.popleft()
+                resolvedComps.append(resolvedComp)
+                i += 1
+                continue
+
+            connectedComps = [x.getConnection().getParent() for x in connectedInputs]
+            # print "\tConnected Comps: " + ','.join([x.getName() for x in set(connectedComps)])
+            if set(connectedComps) <= set(resolvedComps):
+                resolvedComp = compDeque.popleft()
+                resolvedComps.append(resolvedComp)
+
+            i += 1
+
+        if len(resolvedComps) < len(components):
+            circularComps = list(set(components) - set(resolvedComps))
+            print "Warning: Circular Dependencies detected!"
+            print "\t" + ",".join([x.getName() for x in circularComps])
+
+            resolvedComps = resolvedComps + circularComps
+
+        curChildren = []
+        for y in xrange(kSceneItem.getNumChildren()):
+            curChildren.append(kSceneItem.getChildByIndex(y))
+
+        for each in curChildren:
+            kSceneItem.removeChild(each)
+
+        for resComp in resolvedComps:
+            kSceneItem.addChild(resComp)
+
+        return self.buildContainer(kSceneItem, buildName)
+
+
     def buildContainer(self, kSceneItem, buildName):
         """Builds a container / namespace object.
 
@@ -506,7 +571,10 @@ class Builder(object):
             print "building:" + kObject.getPath() + " as:" + buildName
 
         # Build Object
-        if kObject.isTypeOf("Container"):
+        if kObject.isTypeOf("Rig"):
+            dccSceneItem = self.buildRig(kObject, buildName)
+
+        elif kObject.isTypeOf("Container"):
             dccSceneItem = self.buildContainer(kObject, buildName)
 
         elif kObject.isTypeOf("Layer"):

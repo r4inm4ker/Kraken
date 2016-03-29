@@ -265,6 +265,17 @@ class Component(Object3D):
     # ==============
     # Input Methods
     # ==============
+    def getInputs(self):
+        """Returns all inputs for this component.
+
+        Returns:
+            list: Inputs for this component.
+
+        """
+
+        return list(self._inputs)
+
+
     def checkInputIndex(self, index):
         """Checks the supplied index is valid.
 
