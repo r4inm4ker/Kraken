@@ -9,8 +9,8 @@ from kraken.core.objects.hierarchy_group import HierarchyGroup
 class BaseExampleComponent(Component):
     """Example Component Base"""
 
-    def __init__(self, name='', parent=None, data=None):
-        super(BaseExampleComponent, self).__init__(name, parent)
+    def __init__(self, name='', container=None, data=None):
+        super(BaseExampleComponent, self).__init__(name, container=container)
 
         # ================
         # Setup Hierarchy

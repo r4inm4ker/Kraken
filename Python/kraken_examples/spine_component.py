@@ -28,8 +28,8 @@ from kraken.helpers.utility_methods import logHierarchy
 class SpineComponent(BaseExampleComponent):
     """Spine Component"""
 
-    def __init__(self, name="spineBase", parent=None):
-        super(SpineComponent, self).__init__(name, parent)
+    def __init__(self, name="spineBase", container=None):
+        super(SpineComponent, self).__init__(name, container=container)
 
         # ===========
         # Declare IO

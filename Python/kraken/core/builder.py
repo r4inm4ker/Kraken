@@ -797,7 +797,8 @@ class Builder(object):
 
         """
 
-        buildName = kRig.getBuildName()
+        #  Note: are rig names ever modified by 'getBuildName'?
+        buildName = kRig.getName()
         dccSceneItem = self.buildContainer(kRig, buildName)
 
         def dep_walk(comp, visited, unseen):
@@ -829,7 +830,8 @@ class Builder(object):
         # We start with the leaf components and walk up the graph to ensure that
         # proper build order is generated.
         leafComps = []
-        components = kRig.getChildrenByType('Component')
+        components = kRig.getComponents()
+        print components
         for comp in components:
             connectedOutputs = [x for x in comp.getOutputs() if x.isConnected() is True]
             if len(connectedOutputs) == 0:
