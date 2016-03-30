@@ -5,13 +5,12 @@ from kraken_examples.bob_guide import BobGuide
 from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
 
-
 Profiler.getInstance().push("bob_guide_build")
 
 bobGuide = BobGuide("char_bob_guide")
 
 builder = plugins.getBuilder()
-builder.build(bobGuide)
+builder.buildRig(bobGuide)
 
 Profiler.getInstance().pop()
 

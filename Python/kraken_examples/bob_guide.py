@@ -1,6 +1,6 @@
 from kraken.core.maths import Vec3, Quat, Xfo
 
-from kraken.core.objects.container import Container
+from kraken.core.objects.rig import Rig
 from kraken.core.objects.layer import Layer
 
 from kraken_examples.head_component import HeadComponentGuide
@@ -14,7 +14,7 @@ from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
 
 
-class BobGuide(Container):
+class BobGuide(Rig):
     """Bobe Guide Rig"""
 
     def __init__(self, name):

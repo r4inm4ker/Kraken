@@ -17,13 +17,18 @@ class BaseExampleComponent(Component):
         # ================
         self.controlsLayer = self.getOrCreateLayer('controls')
         self.ctrlCmpGrp = ComponentGroup(self.getName(), self, parent=self.controlsLayer)
+        self.addItem('ctrlCmpGrp', self.ctrlCmpGrp)
 
         # IO Hierarchies
         self.inputHrcGrp = HierarchyGroup('inputs', parent=self.ctrlCmpGrp)
         self.cmpInputAttrGrp = AttributeGroup('inputs', parent=self.inputHrcGrp)
+        self.addItem('inputHrcGrp', self.inputHrcGrp)
+        # self.addItem('cmpInputAttrGrp', self.cmpInputAttrGrp)
 
         self.outputHrcGrp = HierarchyGroup('outputs', parent=self.ctrlCmpGrp)
         self.cmpOutputAttrGrp = AttributeGroup('outputs', parent=self.outputHrcGrp)
+        self.addItem('outputHrcGrp', self.outputHrcGrp)
+        self.addItem('cmpOutputAttrGrp', self.cmpOutputAttrGrp)
 
 
     def detach(self):

@@ -22,6 +22,9 @@ from kraken.core.objects.components.component_output_port import ComponentOutput
 from kraken.core.objects.components.component_output import ComponentOutput
 
 
+# Note: does a Component need to inherit off 'Object3D'?
+# These items exist only to structure a rig as a graph. 
+# The never get built.
 class Component(Object3D):
     """Kraken Component object."""
 
@@ -32,6 +35,7 @@ class Component(Object3D):
         self._inputs = []
         self._outputs = []
         self._operators = []
+        self._items = {}
 
         self.setShapeVisibility(False)
 
@@ -196,16 +200,56 @@ class Component(Object3D):
 
         """
 
+        # Note: layer objects are added to the generated rig, but without a rig, they are 
+        # simply root items in the scene. This is because components are never built
         container = self.getContainer()
-        if container is None:
-            container = self
 
-        layer = container.getChildByName(name)
+        layer = None
+        if container is not None:
+            layer = container.getChildByName(name)
         if layer is None or not layer.isTypeOf('Layer'):
             layer = Layer(name, parent=container)
 
+        if container is not None:
+            container.addItem(name, layer)
+        else:
+            self.addItem(name, layer)
+
         return layer
 
+
+    # ==============
+    # Item Methods
+    # ==============
+    def addItem(self, name, item):
+        """Adds a child to the component and sets the object's component attribute.
+
+        Args:
+            child (Object): Object to add as a child.
+
+        Returns:
+            bool: True if successful.
+
+        """
+
+
+
+        # Assign the child self as the component.
+        item.setComponent(self)
+
+        self._items[name] = item
+
+        return True
+
+    def getItems(self):
+        """Returns all items for this component.
+
+        Returns:
+            list: Items for this component.
+
+        """
+
+        return dict(self._items)
 
     # ==============
     # Child Methods
@@ -220,6 +264,8 @@ class Component(Object3D):
             bool: True if successful.
 
         """
+
+        raise Exception("We should not be here. This mehtod is to be deprecated")
 
         super(Component, self).addChild(child)
 
@@ -241,6 +287,8 @@ class Component(Object3D):
             list: Nodes that match the class type.
 
         """
+
+        raise Exception("We should not be here. This mehtod is to be deprecated")
 
         def getHierarchyNodes(kObject, classType, nodeList, inheritedClass):
             for i in xrange(kObject.getNumChildren()):
@@ -814,6 +862,15 @@ class Component(Object3D):
 
         return True
 
+    def getOperators(self):
+        """Returns all operators for this component.
+
+        Returns:
+            list: Outputs for this component.
+
+        """
+
+        return list(self._operators)
 
     # =============
     # Data Methods
