@@ -23,6 +23,29 @@ class Rig(Container):
         super(Rig, self).__init__(name)
         self._metaData = {}
 
+    # ==============
+    # Child Methods
+    # ==============
+    def setComponentChildren(self, children):
+        """Sets the children of the component from a list of components.
+
+        Args:
+            children (list): List of components to set.
+
+        Returns:
+            Type: True if successful.
+
+        """
+
+        if type(children) is not list:
+            raise TypeError("'children' argument is not of type list!")
+
+        self._children = children
+
+
+    # ====================
+    # Load / Save Methods
+    # ====================
     def writeRigDefinitionFile(self, filepath):
         """Load a rig definition from a file on disk.
 

@@ -142,15 +142,17 @@ class Builder(object):
 
             resolvedComps = resolvedComps + circularComps
 
-        curChildren = []
-        for y in xrange(kSceneItem.getNumChildren()):
-            curChildren.append(kSceneItem.getChildByIndex(y))
+        # curChildren = []
+        # for y in xrange(kSceneItem.getNumChildren()):
+        #     curChildren.append(kSceneItem.getChildByIndex(y))
 
-        for each in curChildren:
-            kSceneItem.removeChild(each)
+        # for each in curChildren:
+        #     kSceneItem.removeChild(each)
 
-        for resComp in resolvedComps:
-            kSceneItem.addChild(resComp)
+        # for resComp in resolvedComps:
+            # kSceneItem.addChild(resComp)
+
+        kSceneItem.setComponentChildren(resolvedComps)
 
         return self.buildContainer(kSceneItem, buildName)
 
