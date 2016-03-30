@@ -721,23 +721,30 @@ class Builder(object):
 
         """
 
-        def dep_walk(comp, visited):
+        def dep_walk(comp, visited, unseen):
             """Recursively walks the input connections for the specified
             component while adding visited components to the visited list.
 
             Args:
                 comp (Component): the component to walk.
                 visited (list): list that holds the visited components.
+                unseen (list): list that holds the unseen components.
 
             """
+
+            unseen.append(comp)
 
             connectedInputs = [x for x in comp.getInputs() if x.isConnected() is True]
             connectedComps = [x.getConnection().getParent() for x in connectedInputs]
             for connComp in connectedComps:
                 if connComp not in visited:
-                    dep_walk(connComp, visited)
+                    if connComp in unseen:
+                        raise Exception("Circular Dependency " + comp.getName() + " <-> " + connComp.getName())
+
+                    dep_walk(connComp, visited, unseen)
 
             visited.append(comp)
+            unseen.remove(comp)
 
         # Get the components with no output connections.
         # We start with the leaf components and walk up the graph to ensure that
@@ -749,9 +756,29 @@ class Builder(object):
             if len(connectedOutputs) == 0:
                 leafComps.append(comp)
 
+        unseen = []
         orderedComponents = []
         for comp in leafComps:
-            dep_walk(comp, orderedComponents)
+            dep_walk(comp, orderedComponents, unseen)
+
+        cyclicMessages = []
+        cyclicComponents = list(set(components) - set(orderedComponents))
+        for comp in cyclicComponents:
+            connectedInputs = [x for x in comp.getInputs() if x.isConnected() is True]
+            connInputComps = [x.getConnection().getParent() for x in connectedInputs]
+
+            connCyclicComps = []
+            connectedOutputs = [x for x in comp.getOutputs() if x.isConnected() is True]
+            for connOutput in connectedOutputs:
+                for i in xrange(connOutput.getNumConnections()):
+                    connComp = connOutput.getConnection(i).getParent()
+                    if connComp in connInputComps:
+                        if connComp not in connCyclicComps:
+                            connCyclicComps.append(connComp)
+                            cyclicMessages.append("\n > Circular Dependency " + comp.getName() + " <-> " + connComp.getName())
+
+        if len(cyclicMessages) > 0:
+            raise Exception("Circular Dependencies Detected:" + "".join([x for x in cyclicMessages]))
 
         # Build Components in the correct order
         for each in orderedComponents:
