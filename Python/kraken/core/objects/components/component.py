@@ -462,6 +462,17 @@ class Component(Object3D):
     # ===============
     # Output Methods
     # ===============
+    def getOutputs(self):
+        """Returns all outputs for this component.
+
+        Returns:
+            list: Outputs for this component.
+
+        """
+
+        return list(self._outputs)
+
+
     def checkOutputIndex(self, index):
         """Checks the supplied index is valid.
 
