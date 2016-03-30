@@ -721,26 +721,43 @@ class Builder(object):
 
         """
 
-        def dep_resolve(comp, resolved):
+        def dep_walk(comp, visited):
+            """Recursively walks the input connections for the specified
+            component while adding visited components to the visited list.
+
+            Args:
+                comp (Component): the component to walk.
+                visited (list): list that holds the visited components.
+
+            """
+
             connectedInputs = [x for x in comp.getInputs() if x.isConnected() is True]
             connectedComps = [x.getConnection().getParent() for x in connectedInputs]
             for connComp in connectedComps:
-                if connComp not in resolved:
-                    dep_resolve(connComp, resolved)
+                if connComp not in visited:
+                    dep_walk(connComp, visited)
 
-            resolved.append(comp)
+            visited.append(comp)
 
+        # Get the components with no output connections.
+        # We start with the leaf components and walk up the graph to ensure that
+        # proper build order is generated.
         leafComps = []
+        components = kSceneItem.getChildrenByType('Component')
         for comp in components:
             connectedOutputs = [x for x in comp.getOutputs() if x.isConnected() is True]
             if len(connectedOutputs) == 0:
                 leafComps.append(comp)
 
-        resolved = []
+        orderedComponents = []
         for comp in leafComps:
-            dep_resolve(comp, resolved)
+            dep_walk(comp, orderedComponents)
 
-        print ','.join([x.getName() for x in resolved])
+        # Build Components in the correct order
+        for each in orderedComponents:
+            print each.getName()
+
+            # TODO: Do build stuff here.
 
         return
 
