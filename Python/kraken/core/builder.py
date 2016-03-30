@@ -111,6 +111,9 @@ class Builder(object):
         compDeque = deque(components)
         numComps = len(components)
 
+        for eachComp in components:
+            kSceneItem.removeChildByName(eachComp.getName())
+
         i = 0
         while len(resolvedComps) < numComps and i < 10 * numComps:
             if i != 0:
@@ -142,17 +145,8 @@ class Builder(object):
 
             resolvedComps = resolvedComps + circularComps
 
-        # curChildren = []
-        # for y in xrange(kSceneItem.getNumChildren()):
-        #     curChildren.append(kSceneItem.getChildByIndex(y))
-
-        # for each in curChildren:
-        #     kSceneItem.removeChild(each)
-
-        # for resComp in resolvedComps:
-            # kSceneItem.addChild(resComp)
-
-        kSceneItem.setComponentChildren(resolvedComps)
+        for eachComp in resolvedComps:
+            kSceneItem.addChild(eachComp)
 
         return self.buildContainer(kSceneItem, buildName)
 
@@ -168,6 +162,8 @@ class Builder(object):
             object: DCC Scene Item that is created.
 
         """
+
+
 
         return None
 
