@@ -421,7 +421,7 @@ class KGraphViewWidget(GraphViewWidget):
             statusBar.removeWidget(label)
 
         if exception is not None:
-            fullMessage = level[0].upper() + level[1:] + ": " + message + '; ' + ', '.join([x for x in exception.args])
+            fullMessage = level[0].upper() + level[1:] + ": " + message + '; ' + ', '.join([str(x) for x in exception.args])
         else:
             fullMessage = level[0].upper() + level[1:] + ": " + message
 

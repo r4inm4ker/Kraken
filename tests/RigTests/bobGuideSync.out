@@ -1,6 +1,5 @@
 Failed to find DCC builder. Falling back to Python builder.
 building:char_bob as:char_bob
-building:char_bob.spine as:Mspine
 building:char_bob.controls as:char_bob_controls
 building:char_bob.controls.spine as:spine_M_cmp
 building:char_bob.controls.spine.inputs as:spine_M_inputs_hrc
@@ -104,24 +103,24 @@ building:char_bob.controls.Leg.outputs.legEndFK as:Leg_R_legEndFK_cmpOut
 building:char_bob.controls.Leg.femur as:Leg_R_femur_ctrl
 building:char_bob.controls.Leg.knee as:Leg_R_knee_ctrl
 building:char_bob.controls.Leg.ankle as:Leg_R_ankle_ctrl
-building:char_bob.neck as:Mneck
-building:char_bob.head as:Mhead
-building:char_bob.Clavicle as:LClavicle
-building:char_bob.Clavicle as:RClavicle
-building:char_bob.Arm as:LArm
-building:char_bob.Arm as:RArm
-building:char_bob.Leg as:LLeg
+building:char_bob.spine as:Mspine
 building:char_bob.Leg as:RLeg
+building:char_bob.Leg as:LLeg
+building:char_bob.Clavicle as:RClavicle
+building:char_bob.Clavicle as:LClavicle
+building:char_bob.neck as:Mneck
+building:char_bob.Arm as:RArm
+building:char_bob.Arm as:LArm
+building:char_bob.head as:Mhead
+buildConnection:pelvisInput
+buildConnection:pelvisInput
+buildConnection:spineEnd
+buildConnection:spineEnd
 buildConnection:neckBase
+buildConnection:root
+buildConnection:root
 buildConnection:headBase
-buildConnection:spineEnd
-buildConnection:spineEnd
-buildConnection:root
-buildConnection:root
-buildConnection:pelvisInput
-buildConnection:pelvisInput
 char_bob
-char_bob.spine:M
 char_bob.controls
 char_bob.controls.spine:M
 char_bob.controls.spine:M.inputs
@@ -225,11 +224,12 @@ char_bob.controls.Leg:R.outputs.legEndFK
 char_bob.controls.Leg:R.femur
 char_bob.controls.Leg:R.knee
 char_bob.controls.Leg:R.ankle
-char_bob.neck:M
-char_bob.head:M
-char_bob.Clavicle:L
-char_bob.Clavicle:R
-char_bob.Arm:L
-char_bob.Arm:R
-char_bob.Leg:L
+char_bob.spine:M
 char_bob.Leg:R
+char_bob.Leg:L
+char_bob.Clavicle:R
+char_bob.Clavicle:L
+char_bob.neck:M
+char_bob.Arm:R
+char_bob.Arm:L
+char_bob.head:M

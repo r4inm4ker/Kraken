@@ -205,8 +205,8 @@ class Constraint(SceneItem):
 
             self.getConstrainee().xfo = self.computeOffset(getGlobalXfoFunc=getGlobalXfoFunc)
 
-            print "Constraint: " + self.getName() + " evaluate()"
-            print "\tOffset: " + str(self.getConstrainee().xfo)
+            # print "Constraint: " + self.getName() + " evaluate()"
+            # print "\tOffset: " + str(self.getConstrainee().xfo)
 
         return False
 

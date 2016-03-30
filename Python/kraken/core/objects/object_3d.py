@@ -445,7 +445,7 @@ class Object3D(SceneItem):
             names = []
             for c in self._children:
                 names.append(c.getName())
-            raise Exception("Object '"+self.getPath() + "' does not have child:"+child.getPath() + ". it does have:" + str(names))
+            raise Exception("Object '" + self.getPath() + "' does not have child:" + child.getPath() + ". it does have:" + str(names))
 
         child.setParent(None)
 

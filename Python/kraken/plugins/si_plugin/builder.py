@@ -23,6 +23,8 @@ class Builder(Builder):
     def deleteBuildElements(self):
         """Clear out all dcc built elements from the scene if exist."""
 
+        si.SetValue("preferences.scripting.cmdlog", False, "")
+
         deleteItems = getCollection()
         for builtElement in self._buildElements:
             if builtElement['src'].isTypeOf('Attribute'):
@@ -31,9 +33,12 @@ class Builder(Builder):
             node = builtElement['tgt']
             if node is not None:
                 deleteItems.Add(node)
+                print node.getName()
+                si.DeleteObj("B:" + node.FullName)
 
-        si.DeleteObj(deleteItems.GetAsText())
         self._buildElements = []
+
+        si.SetValue("preferences.scripting.cmdlog", True, "")
 
         return
 
