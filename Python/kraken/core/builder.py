@@ -108,12 +108,12 @@ class Builder(object):
 
         # Build any items(and thier subtrees) owned by this item.
         items = kContainer.getItems()
-        for key, item in items.iteritems():
+        for key, kObject in items.iteritems():
 
             if kObject.isTypeOf("AttributeGroup") or kObject.isTypeOf("Attribute"):
                 continue
 
-            self.buildHierarchy(item)
+            self.buildHierarchy(kObject)
 
         return None
 
