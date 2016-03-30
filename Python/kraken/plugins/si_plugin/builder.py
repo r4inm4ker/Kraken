@@ -25,16 +25,17 @@ class Builder(Builder):
 
         si.SetValue("preferences.scripting.cmdlog", False, "")
 
-        deleteItems = getCollection()
         for builtElement in self._buildElements:
             if builtElement['src'].isTypeOf('Attribute'):
                 continue
 
             node = builtElement['tgt']
             if node is not None:
-                deleteItems.Add(node)
-                print node.getName()
-                si.DeleteObj("B:" + node.FullName)
+                try:
+                    si.DeleteObj("B:" + node.FullName)
+                    si.Desktop.RedrawUI()
+                except:
+                    continue
 
         self._buildElements = []
 
