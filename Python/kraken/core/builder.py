@@ -748,40 +748,6 @@ class Builder(object):
         return True
 
 
-    # def buildOperators(self, kObject):
-    #     """Build operators in the hierarchy.
-
-    #     Args:
-    #         kObject (object): kraken object to create operators for.
-
-    #     Returns:
-    #         bool: True if successful.
-
-    #     """
-
-    #     if kObject.isTypeOf('Component'):
-
-    #         # Build operators
-    #         for i in xrange(kObject.getNumOperators()):
-    #             operator = kObject.getOperatorByIndex(i)
-
-    #             if operator.isTypeOf('KLOperator'):
-    #                 self.buildKLOperator(operator)
-    #             elif operator.isTypeOf('CanvasOperator'):
-    #                 self.buildCanvasOperator(operator)
-    #             else:
-    #                 raise NotImplementedError(operator.getName() + ' has an unsupported type: ' + str(type(operator)))
-    #     else:
-    #         raise Exception("Only Components have operators.");
-
-    #     # # Build connections for children.
-    #     # for i in xrange(kObject.getNumChildren()):
-    #     #     child = kObject.getChildByIndex(i)
-    #     #     self.buildOperators(child)
-
-    #     return True
-
-
     def buildRig(self, kRig):
         """Builds a rig object.
 
@@ -879,7 +845,7 @@ class Builder(object):
 
         # Build Components in the correct order
         for component in orderedComponents:
-            self.buildComponent(component, dccSceneItem)
+            self.buildComponent(component)
 
         # Create the connections now that all the components are built.
         for component in orderedComponents:
@@ -904,7 +870,7 @@ class Builder(object):
         return
 
 
-    def buildComponent(self, kComponent, dccRigItem=None):
+    def buildComponent(self, kComponent):
         """Protected build method.
 
         Args:
@@ -930,6 +896,7 @@ class Builder(object):
 
 
         return True
+
 
     # ==================
     # Parameter Methods
@@ -1112,7 +1079,6 @@ class Builder(object):
         self.buildHierarchy(kSceneItem, component=None)
         self.buildAttrConnections(kSceneItem)
         self.buildInputConnections(kSceneItem)
-        # self.buildOperators(kSceneItem)
         self.buildConstraints(kSceneItem)
 
         return True
