@@ -8,7 +8,6 @@ Component -- Component representation.
 from kraken.core.configs.config import Config
 from kraken.helpers.utility_methods import mirrorData
 from kraken.core.maths import *
-from kraken.core.objects.container import Container
 from kraken.core.objects.object_3d import Object3D
 from kraken.core.objects.layer import Layer
 from kraken.core.objects.locator import Locator
@@ -26,23 +25,23 @@ from kraken.core.objects.components.component_output import ComponentOutput
 # Note: does a Component need to inherit off 'Object3D'?
 # These items exist only to structure a rig as a graph. 
 # The never get built.
-class Component(Container):
+class Component(Object3D):
     """Kraken Component object."""
 
-    def __init__(self, name, container=None, location='M'):
+    def __init__(self, name, parent=None, location='M'):
         self._location = location
-        super(Component, self).__init__(name, container)
+        super(Component, self).__init__(name, parent)
         self._color = (154, 205, 50, 255)
         self._inputs = []
         self._outputs = []
         self._operators = []
-        # self._items = {}
+        self._items = {}
 
-        # self.setShapeVisibility(False)
+        self.setShapeVisibility(False)
 
-        # self.lockRotation(x=True, y=True, z=True)
-        # self.lockScale(x=True, y=True, z=True)
-        # self.lockTranslation(x=True, y=True, z=True)
+        self.lockRotation(x=True, y=True, z=True)
+        self.lockScale(x=True, y=True, z=True)
+        self.lockTranslation(x=True, y=True, z=True)
 
         self._graphPos = Vec2()
 
@@ -219,38 +218,38 @@ class Component(Container):
         return layer
 
 
-    # # ==============
-    # # Item Methods
-    # # ==============
-    # def addItem(self, name, item):
-    #     """Adds a child to the component and sets the object's component attribute.
+    # ==============
+    # Item Methods
+    # ==============
+    def addItem(self, name, item):
+        """Adds a child to the component and sets the object's component attribute.
 
-    #     Args:
-    #         child (Object): Object to add as a child.
+        Args:
+            child (Object): Object to add as a child.
 
-    #     Returns:
-    #         bool: True if successful.
+        Returns:
+            bool: True if successful.
 
-    #     """
+        """
 
 
 
-    #     # Assign the child self as the component.
-    #     item.setComponent(self)
+        # Assign the child self as the component.
+        item.setComponent(self)
 
-    #     self._items[name] = item
+        self._items[name] = item
 
-    #     return True
+        return True
 
-    # def getItems(self):
-    #     """Returns all items for this component.
+    def getItems(self):
+        """Returns all items for this component.
 
-    #     Returns:
-    #         list: Items for this component.
+        Returns:
+            list: Items for this component.
 
-    #     """
+        """
 
-    #     return dict(self._items)
+        return dict(self._items)
 
     # ==============
     # Child Methods

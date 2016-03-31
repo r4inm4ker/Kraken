@@ -22,54 +22,7 @@ class Rig(Container):
     def __init__(self, name='rig'):
         super(Rig, self).__init__(name)
         self._metaData = {}
-        self._components = {}
 
-    # ==============
-    # Component Methods
-    # ==============
-    def addComponent(self, name, component):
-        """Adds a child to the component and sets the object's component attribute.
-
-        Args:
-            child (Object): Object to add as a child.
-
-        Returns:
-            bool: True if successful.
-
-        """
-
-
-
-        # Assign the child self as the component.
-        component.setComponent(self)
-
-        self._components[name] = component
-
-        return True
-
-    def getComponent(self, name):
-        """Returns all components for this component.
-
-        Returns:
-            list: components for this component.
-
-        """
-
-        return self._components[name]
-
-        
-
-    def getComponents(self):
-        """Returns all components for this component.
-
-        Returns:
-            list: components for this component.
-
-        """
-
-        return dict(self._components)
-
-        
 
     # ====================
     # Load / Save Methods
@@ -149,7 +102,6 @@ class Rig(Container):
             else:
                 component = componentClass(parent=self)
             component.loadData(componentData)
-            self.addComponent(component.getDecoratedName(), component)
 
         Profiler.getInstance().pop()
 
@@ -172,13 +124,13 @@ class Rig(Container):
 
             connectionFailure = False
 
-            sourceComponent = self.getComponent(sourceComponentDecoratedName)
+            sourceComponent = self.getChildByDecoratedName(sourceComponentDecoratedName)
             if sourceComponent is None:
                 print("Warning: Error making connection:" + connectionData['source'] + " -> " + \
                     connectionData['target']+". Source component not found:" + sourceComponentDecoratedName)
                 connectionFailure = True
 
-            targetComponent = self.getComponent(targetComponentDecoratedName)
+            targetComponent = self.getChildByDecoratedName(targetComponentDecoratedName)
             if targetComponent is None:
                 print("Warning: Error making connection:" + connectionData['source'] + " -> " + \
                     connectionData['target']+". Target component not found:" + targetComponentDecoratedName)

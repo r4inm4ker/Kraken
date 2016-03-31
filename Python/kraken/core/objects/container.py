@@ -6,64 +6,24 @@ Container -- Component container representation.
 """
 
 from kraken.core.objects.object_3d import Object3D
-# from kraken.core.objects.components.base_example_component import BaseExampleComponent
+from kraken.core.objects.components.base_example_component import BaseExampleComponent
 
 # Note: does a container need to inherit off 'Object3D'?
 # These items exist only to structure a rig as a graph. 
 # The never get built.
-class Container(object):
+class Container(Object3D):
     """Container object."""
 
-    def __init__(self, name, container=None):
-        super(Container, self).__init__()
+    def __init__(self, name):
+        super(Container, self).__init__(name, None)
 
-        self._name = name
+        self.setShapeVisibility(False)
+        self.lockRotation(x=True, y=True, z=True)
+        self.lockScale(x=True, y=True, z=True)
+        self.lockTranslation(x=True, y=True, z=True)
+
         self._items = {}
-        self._containter = container
         
-    # =============
-    # Name methods
-    # =============
-    def getName(self):
-        """Returns the name of the object as a string.
-
-        Returns:
-            str: Object's name.
-
-        """
-
-        return self._name
-
-
-    def setName(self, name):
-        """Sets the name of the object with a string.
-
-        Arguments:
-            name (str): The new name for the item.
-
-        Returns:
-            bool: True if successful.
-
-        """
-
-        self._name = name
-
-        return True
-
-
-    def getPath(self):
-        """Returns the full hierarchical path to this object.
-
-        Returns:
-            str: Full name of the object.
-
-        """
-
-        if self._containter is not None:
-            return self._containter.getPath() + '.' + self.getName()
-
-        return self.getName()
-
     # ==============
     # Item Methods
     # ==============
@@ -96,21 +56,3 @@ class Container(object):
         """
 
         return dict(self._items)
-
-
-    # ==================
-    # Hierarchy Methods
-    # ==================
-    def getContainer(self):
-        """Returns the Container the object belongs to.
-
-        Returns:
-            Object: Container.
-
-        """
-
-        parent = self.getParent()
-        while (parent is not None and 'Container' not in parent.getTypeHierarchyNames()):
-            parent = parent.getParent()
-
-        return parent
