@@ -187,7 +187,7 @@ class Builder(object):
 
         if self._debugMode:
             print "buildJoint:" + kSceneItem.getPath() + " as:" + buildName
-            
+
         return None
 
 
@@ -224,7 +224,7 @@ class Builder(object):
 
         if self._debugMode:
             print "buildCurve:" + kSceneItem.getPath() + " as:" + buildName
-            
+
 
         return None
 
@@ -278,7 +278,7 @@ class Builder(object):
 
         """
 
-        
+
         if self._debugMode:
             print "buildScalarAttribute:" + kAttribute.getPath()
 
@@ -296,7 +296,7 @@ class Builder(object):
 
         """
 
-        
+
         if self._debugMode:
             print "buildIntegerAttribute:" + kAttribute.getPath()
 
@@ -313,10 +313,10 @@ class Builder(object):
             bool: True if successful.
 
         """
-        
+
         if self._debugMode:
-            print "buildStringAttribute:" + kAttribute.getPath() 
-            
+            print "buildStringAttribute:" + kAttribute.getPath()
+
         return True
 
 
@@ -330,10 +330,10 @@ class Builder(object):
             bool: True if successful.
 
         """
-        
+
         if self._debugMode:
             print "buildAttributeGroup:" + kAttributeGroup.getPath()
-            
+
         return True
 
 
@@ -348,10 +348,10 @@ class Builder(object):
 
         """
 
-        
+
         if self._debugMode:
             print "connectAttribute:" + kAttribute.getPath()
-            
+
         return True
 
 
@@ -368,10 +368,9 @@ class Builder(object):
             object: DCC Scene Item that was created.
 
         """
-        
+
         if self._debugMode:
             print "buildOrientationConstraint:" + kConstraint.getPath() + " to:" + kConstraint.getConstrainee().getPath()
-            
 
         constraineeDCCSceneItem = self.getDCCSceneItem(kConstraint.getConstrainee())
         dccSceneItem = None # Add constraint object here.
@@ -800,6 +799,11 @@ class Builder(object):
         buildName = kRig.getBuildName()
         dccSceneItem = self.buildContainer(kRig, buildName)
 
+        for layer in kRig.getChildrenByType('Layer'):
+            buildName = layer.getBuildName()
+            self.buildLayer(layer, buildName)
+
+
         def dep_walk(comp, visited, unseen):
             """Recursively walks the input connections for the specified
             component while adding visited components to the visited list.
@@ -861,7 +865,6 @@ class Builder(object):
 
         # Build Components in the correct order
         for component in orderedComponents:
-            print component.getDecoratedName()
             self.buildComponent(component, dccSceneItem)
 
         # Create the connections now that all the components are built.
@@ -883,6 +886,11 @@ class Builder(object):
 
         """
 
+        def buildHierarchy(obj):
+            for i in xrange(obj.getNumChildren()):
+                child = obj.getChildByIndex(i)
+                buildHierarchy(child)
+
         items = kComponent.getItems()
         for key, kObject in items.iteritems():
 
@@ -890,6 +898,7 @@ class Builder(object):
                 continue
 
             self.buildHierarchy(kObject)
+            self.buildConstraints(kObject)
 
         operators = kComponent.getOperators()
         for operator in operators:
@@ -900,7 +909,6 @@ class Builder(object):
                 self.buildCanvasOperator(operator)
             else:
                 raise NotImplementedError(operator.getName() + ' has an unsupported type: ' + str(type(operator)))
-        self.buildConstraints(kComponent)
 
         return True
 

@@ -22,19 +22,16 @@ class BaseExampleComponent(Component):
         # IO Hierarchies
         self.inputHrcGrp = HierarchyGroup('inputs', parent=self.ctrlCmpGrp)
         self.cmpInputAttrGrp = AttributeGroup('inputs', parent=self.inputHrcGrp)
-        self.addItem('inputHrcGrp', self.inputHrcGrp)
-        # self.addItem('cmpInputAttrGrp', self.cmpInputAttrGrp)
 
         self.outputHrcGrp = HierarchyGroup('outputs', parent=self.ctrlCmpGrp)
         self.cmpOutputAttrGrp = AttributeGroup('outputs', parent=self.outputHrcGrp)
-        self.addItem('outputHrcGrp', self.outputHrcGrp)
-        self.addItem('cmpOutputAttrGrp', self.cmpOutputAttrGrp)
 
 
     def detach(self):
         """Detaches component from container. This method undoes the actions
-           performed in the constructor. It removes all elements that were added
-           to the rig. It is invoked by the UI when deleting components from a guide rig.
+        performed in the constructor. It removes all elements that were added
+        to the rig. It is invoked by the UI when deleting components from a
+        guide rig.
         """
 
         self.controlsLayer.removeChild(self.ctrlCmpGrp)

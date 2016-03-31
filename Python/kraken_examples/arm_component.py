@@ -68,8 +68,6 @@ class ArmComponentGuide(ArmComponent):
 
         self.bicepFKCtrlSizeInputAttr = ScalarAttribute('bicepFKCtrlSize', value=1.75, minValue=0.0,   maxValue=10.0, parent=guideSettingsAttrGrp)
         self.forearmFKCtrlSizeInputAttr = ScalarAttribute('forearmFKCtrlSize', value=1.5, minValue=0.0,   maxValue=10.0, parent=guideSettingsAttrGrp)
-        self.addItem('bicepFKCtrlSize', self.bicepFKCtrlSizeInputAttr)
-        self.addItem('forearmFKCtrlSize', self.forearmFKCtrlSizeInputAttr)
 
         # =========
         # Controls
@@ -81,10 +79,6 @@ class ArmComponentGuide(ArmComponent):
         self.forearmCtrl.setColor('blue')
         self.wristCtrl = Control('wrist', parent=self.ctrlCmpGrp, shape="sphere")
         self.wristCtrl.setColor('blue')
-
-        self.addItem('bicepCtrl', self.bicepCtrl)
-        self.addItem('forearmCtrl', self.forearmCtrl)
-        self.addItem('wristCtrl', self.wristCtrl)
 
 
         self.default_data = {
@@ -286,6 +280,7 @@ class ArmComponentRig(ArmComponent):
         self.deformersLayer = self.getOrCreateLayer('deformers')
         self.defCmpGrp = ComponentGroup(self.getName(), self, parent=self.deformersLayer)
         self.defCmpGrp.setComponent(self)
+        self.addItem('defCmpGrp', self.defCmpGrp)
 
         self.bicepDef = Joint('bicep', parent=self.defCmpGrp)
         self.bicepDef.setComponent(self)

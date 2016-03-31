@@ -5,11 +5,13 @@ Container -- Component container representation.
 
 """
 
+from collections import OrderedDict
+
 from kraken.core.objects.object_3d import Object3D
 from kraken.core.objects.components.base_example_component import BaseExampleComponent
 
 # Note: does a container need to inherit off 'Object3D'?
-# These items exist only to structure a rig as a graph. 
+# These items exist only to structure a rig as a graph.
 # The never get built.
 class Container(Object3D):
     """Container object."""
@@ -22,8 +24,8 @@ class Container(Object3D):
         self.lockScale(x=True, y=True, z=True)
         self.lockTranslation(x=True, y=True, z=True)
 
-        self._items = {}
-        
+        self._items = OrderedDict()
+
     # ==============
     # Item Methods
     # ==============
