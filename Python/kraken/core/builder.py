@@ -829,39 +829,53 @@ class Builder(object):
             visited.append(comp)
             unseen.remove(comp)
 
-        # Get the components with no output connections.
-        # We start with the leaf components and walk up the graph to ensure that
-        # proper build order is generated.
-        leafComps = []
-        components = kRig.getChildrenByType('Component')
-        for comp in components:
-            connectedOutputs = [x for x in comp.getOutputs() if x.isConnected() is True]
-            if len(connectedOutputs) == 0:
-                leafComps.append(comp)
+        def getBuildOrder():
+            """Returns the build order for the components.
 
-        unseen = []
-        orderedComponents = []
-        for comp in leafComps:
-            dep_walk(comp, orderedComponents, unseen)
+            This also checks the components for cycles and raises an exception if any are found.
 
-        cyclicMessages = []
-        cyclicComponents = list(set(components) - set(orderedComponents))
-        for comp in cyclicComponents:
-            connectedInputs = [x for x in comp.getInputs() if x.isConnected() is True]
-            connInputComps = [x.getConnection().getParent() for x in connectedInputs]
+            Returns:
+                list: List of components in build order.
 
-            connCyclicComps = []
-            connectedOutputs = [x for x in comp.getOutputs() if x.isConnected() is True]
-            for connOutput in connectedOutputs:
-                for i in xrange(connOutput.getNumConnections()):
-                    connComp = connOutput.getConnection(i).getParent()
-                    if connComp in connInputComps:
-                        if connComp not in connCyclicComps:
-                            connCyclicComps.append(connComp)
-                            cyclicMessages.append("\n > Circular Dependency " + comp.getName() + " <-> " + connComp.getName())
+            """
 
-        if len(cyclicMessages) > 0:
-            raise Exception("Circular Dependencies Detected:" + "".join([x for x in cyclicMessages]))
+            # Get the components with no output connections.
+            # We start with the leaf components and walk up the graph to ensure that
+            # proper build order is generated.
+            leafComps = []
+            components = kRig.getChildrenByType('Component')
+            for comp in components:
+                connectedOutputs = [x for x in comp.getOutputs() if x.isConnected() is True]
+                if len(connectedOutputs) == 0:
+                    leafComps.append(comp)
+
+            unseen = []
+            orderedComponents = []
+            for comp in leafComps:
+                dep_walk(comp, orderedComponents, unseen)
+
+            cyclicMessages = []
+            cyclicComponents = list(set(components) - set(orderedComponents))
+            for comp in cyclicComponents:
+                connectedInputs = [x for x in comp.getInputs() if x.isConnected() is True]
+                connInputComps = [x.getConnection().getParent() for x in connectedInputs]
+
+                connCyclicComps = []
+                connectedOutputs = [x for x in comp.getOutputs() if x.isConnected() is True]
+                for connOutput in connectedOutputs:
+                    for i in xrange(connOutput.getNumConnections()):
+                        connComp = connOutput.getConnection(i).getParent()
+                        if connComp in connInputComps:
+                            if connComp not in connCyclicComps:
+                                connCyclicComps.append(connComp)
+                                cyclicMessages.append("\n > Circular Dependency " + comp.getName() + " <-> " + connComp.getName())
+
+            if len(cyclicMessages) > 0:
+                raise Exception("Circular Dependencies Detected:" + "".join([x for x in cyclicMessages]))
+
+            return orderedComponents
+
+        orderedComponents = getBuildOrder()
 
         # Build Components in the correct order
         for component in orderedComponents:
@@ -871,6 +885,21 @@ class Builder(object):
         for component in orderedComponents:
             self.buildAttrConnections(component)
             self.buildInputConnections(component)
+
+        for component in orderedComponents:
+            operators = component.getOperators()
+            for operator in operators:
+                # Build operators
+                if operator.isTypeOf('KLOperator'):
+                    self.buildKLOperator(operator)
+                elif operator.isTypeOf('CanvasOperator'):
+                    self.buildCanvasOperator(operator)
+                else:
+                    raise NotImplementedError(operator.getName() + ' has an unsupported type: ' + str(type(operator)))
+
+            items = component.getItems()
+            for key, kObject in items.iteritems():
+                self.buildConstraints(kObject)
 
         return
 
@@ -898,17 +927,7 @@ class Builder(object):
                 continue
 
             self.buildHierarchy(kObject)
-            self.buildConstraints(kObject)
 
-        operators = kComponent.getOperators()
-        for operator in operators:
-            # Build operators
-            if operator.isTypeOf('KLOperator'):
-                self.buildKLOperator(operator)
-            elif operator.isTypeOf('CanvasOperator'):
-                self.buildCanvasOperator(operator)
-            else:
-                raise NotImplementedError(operator.getName() + ' has an unsupported type: ' + str(type(operator)))
 
         return True
 
