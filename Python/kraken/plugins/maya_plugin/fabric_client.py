@@ -1,12 +1,12 @@
 import FabricEngine.Core
 
+from kraken.plugins.maya_plugin.utils import *
+
 
 def getClient():
-    si = Dispatch("XSI.Application").Application
-    contextID = si.fabricSplice('getClientContextID')
+    contextID = cmds.fabricSplice('getClientContextID')
     if contextID == '':
-        si.fabricSplice('constructClient')
-        contextID = si.fabricSplice('getClientContextID')
+        cmds.fabricSplice('constructClient')
+        contextID = cmds.fabricSplice('getClientContextID')
 
-    # Pull out the Splice client.
     return FabricEngine.Core.createClient({"contextID": contextID})

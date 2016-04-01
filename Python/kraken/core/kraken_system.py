@@ -18,7 +18,7 @@ import FabricEngine.Core
 
 import kraken
 from kraken.core.profiler import Profiler
-from kraken.plugins.fabric_client import getFabricClient
+from kraken.plugins import getFabricClient
 
 
 krakenSystemModuleDir = os.path.join(os.path.dirname(os.path.realpath(__file__)))
@@ -64,31 +64,11 @@ class KrakenSystem(object):
         if self.client == None:
             Profiler.getInstance().push("loadCoreClient")
 
-            try:
-                imp.find_module('cmds')
-                host = 'Maya'
-            except ImportError:
-                try:
-                    imp.find_module('sipyutils')
-                    host = 'Softimage'
-                except ImportError:
-                    host = 'Python'
+            client = getFabricClient()
+            if client is None:
+                client = FabricEngine.Core.createClient({'guarded': True})
 
-            if host == "Python":
-                # self.client = FabricEngine.Core.createClient({'optimizeSynchronously': True, 'guarded': True})
-                self.client = FabricEngine.Core.createClient({'guarded': True})
-
-            elif host == "Maya":
-                contextID = cmds.fabricSplice('getClientContextID')
-                if contextID == '':
-                    cmds.fabricSplice('constructClient')
-                    contextID = cmds.fabricSplice('getClientContextID')
-
-                # Pull out the Splice client.
-                self.client = FabricEngine.Core.createClient({"contextID": contextID})
-
-            elif host == "Softimage":
-
+            self.client = client
 
             self.loadExtension('Math')
 
