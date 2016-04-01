@@ -67,7 +67,7 @@ def getSynchronizer():
 
 
 def getLogger():
-    """Returns the appropriate log fn module for the DCC.
+    """Returns the appropriate logging module for the DCC.
 
     Return:
     Function, function pointer for the DCC
@@ -94,3 +94,32 @@ def getLogger():
         logger = OutputLog()
 
     return logger
+
+
+def getFabricClient():
+    """Returns the appropriate Fabric client for the DCC.
+
+    Args:
+        Arguments (Type): information.
+
+    Returns:
+        Type: True if successful.
+
+    """
+
+    client = None
+
+    for eachPlugin in __all__:
+        mod = __import__("kraken.plugins." + eachPlugin, fromlist=['dccTest'])
+        reload(mod)
+
+        if mod.dccTest() is True:
+            loaded_mod = __import__("kraken.plugins." + eachPlugin + ".fabric_client", fromlist=['getClient'])
+            reload(loaded_mod)
+
+            client = loaded_mod.getClient()
+
+    if client is None:
+        print "Failed to find DCC client. Falling back to Python client."
+
+    return client
