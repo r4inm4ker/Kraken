@@ -18,9 +18,11 @@ import FabricEngine.Core
 
 import kraken
 from kraken.core.profiler import Profiler
+from kraken.plugins.fabric_client import getFabricClient
+
 
 krakenSystemModuleDir = os.path.join(os.path.dirname(os.path.realpath(__file__)))
-krakenDir=os.path.abspath(os.path.join(krakenSystemModuleDir, '..', '..', '..'))
+krakenDir = os.path.abspath(os.path.join(krakenSystemModuleDir, '..', '..', '..'))
 os.environ['KRAKEN_PATH']  = krakenDir
 
 krakenExtsDir = os.path.join(krakenDir, 'Exts')
@@ -33,6 +35,7 @@ if 'FABRIC_DFG_PATH' in os.environ:
         os.environ['FABRIC_DFG_PATH'] = canvasPresetsDir + os.pathsep + os.environ['FABRIC_DFG_PATH']
 else:
     os.environ['FABRIC_DFG_PATH'] = canvasPresetsDir
+
 
 class KrakenSystem(object):
     """The KrakenSystem is a singleton object used to provide an interface with
@@ -85,15 +88,7 @@ class KrakenSystem(object):
                 self.client = FabricEngine.Core.createClient({"contextID": contextID})
 
             elif host == "Softimage":
-                from win32com.client.dynamic import Dispatch
-                si = Dispatch("XSI.Application").Application
-                contextID = si.fabricSplice('getClientContextID')
-                if contextID == '':
-                    si.fabricSplice('constructClient')
-                    contextID = si.fabricSplice('getClientContextID')
 
-                # Pull out the Splice client.
-                self.client = FabricEngine.Core.createClient({"contextID": contextID})
 
             self.loadExtension('Math')
 
