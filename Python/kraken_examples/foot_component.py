@@ -351,7 +351,9 @@ class FootComponentRig(FootComponent):
         # =========================
         # Add Foot Pivot Canvas Op
         # =========================
-        self.footPivotCanvasOp = CanvasOperator('footPivotCanvasOp', 'Kraken.Solvers.BipedFootPivotSolver')
+        # self.footPivotCanvasOp = CanvasOperator('footPivotCanvasOp', 'Kraken.Solvers.BipedFootPivotSolver')
+        self.footPivotCanvasOp = KLOperator('footPivotKLOp', 'BipedFootPivotSolver', 'Kraken')
+
         self.addOperator(self.footPivotCanvasOp)
 
         # Add Att Inputs

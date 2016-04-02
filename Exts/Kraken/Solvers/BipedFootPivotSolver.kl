@@ -1,0 +1,115 @@
+require InlineDrawing;
+require Geometry;
+
+
+object BipedFootPivotSolver : KrakenSolver {
+};
+
+
+// Default Constructor
+function BipedFootPivotSolver()
+{
+
+}
+
+
+// Return Arguments for Kraken
+function KrakenSolverArg[] BipedFootPivotSolver.getArguments(){
+  KrakenSolverArg args[] = this.parent.getArguments();
+  args.push(KrakenSolverArg('rightSide', 'In', 'Boolean'));
+  args.push(KrakenSolverArg('footRock', 'In', 'Scalar'));
+  args.push(KrakenSolverArg('footBank', 'In', 'Scalar'));
+  args.push(KrakenSolverArg('pivotAll', 'In', 'Mat44'));
+  args.push(KrakenSolverArg('backPivot', 'In', 'Mat44'));
+  args.push(KrakenSolverArg('frontPivot', 'In', 'Mat44'));
+  args.push(KrakenSolverArg('outerPivot', 'In', 'Mat44'));
+  args.push(KrakenSolverArg('innerPivot', 'In', 'Mat44'));
+
+  args.push(KrakenSolverArg('result', 'Out', 'Mat44'));
+
+  return args;
+}
+
+
+function Scalar rescale
+(
+  Scalar value,
+  Scalar inMin,
+  Scalar inMax,
+  Scalar outMin,
+  Scalar outMax
+)
+{
+  return outMin + (outMax - outMin) * (value - inMin) / (inMax - inMin);
+}
+
+// Solve
+function BipedFootPivotSolver.solve!
+(
+  in Boolean drawDebug,
+  in Scalar rigScale,
+
+  Boolean rightSide,
+  Scalar footRock,
+  Scalar footBank,
+  Mat44 pivotAll,
+  Mat44 backPivot,
+  Mat44 frontPivot,
+  Mat44 outerPivot,
+  Mat44 innerPivot,
+
+  io Mat44 result
+)
+{
+  Xfo pivotOut;
+  Xfo pivotAllXfo = Xfo(pivotAll);
+  Xfo backPivotXfo = Xfo(backPivot);
+  Xfo frontPivotXfo = Xfo(frontPivot);
+  Xfo outerPivotXfo = Xfo(outerPivot);
+  Xfo innerPivotXfo = Xfo(innerPivot);
+
+  Xfo frontDeltaXfo = backPivotXfo.inverse() * frontPivotXfo;
+  Xfo leftDeltaXfo = frontPivotXfo.inverse() * outerPivotXfo;
+  Xfo rightDeltaXfo = outerPivotXfo.inverse() * innerPivotXfo;
+  Xfo footAllDeltaXfo = innerPivotXfo.inverse() * pivotAllXfo;
+
+  // Back Rock
+  Xfo backPivotOutXfo = Xfo(backPivot);
+  Quat backPivotOutOri;
+  Scalar backPivotRockAngle = Math_degToRad(rescale(footRock, -1.0, 0.0, 1.0, 0.0).clamp(0.0, 1.0) * -90);
+  backPivotOutOri.setFromAxisAndAngle(Vec3(1, 0, 0), backPivotRockAngle);
+  backPivotOutXfo.ori = backPivotXfo.ori * backPivotOutOri;
+
+  // Front Rock
+  Xfo frontPivotOutXfo = backPivotOutXfo * frontDeltaXfo;
+  Quat frontPivotOutOri;
+  Scalar frontPivotRockAngle = Math_degToRad(rescale(footRock, 0.0, 1.0, 0.0, 1.0).clamp(0.0, 1.0) * 90);
+  frontPivotOutOri.setFromAxisAndAngle(Vec3(1, 0, 0), frontPivotRockAngle);
+  frontPivotOutXfo.ori = frontPivotOutXfo.ori * frontPivotOutOri;
+
+  // Left Bank
+  Scalar leftBankAngleMult = -1.0;
+  if (rightSide) {
+    leftBankAngleMult = 1.0;
+  }
+
+  Xfo leftBankOutXfo = Xfo(leftDeltaXfo);
+  Quat leftBankOutOri;
+  Scalar leftBankAngle = Math_degToRad(rescale(footBank, -1.0, 0.0, 1.0, 0.0).clamp(0.0, 1) * (90 * leftBankAngleMult));
+  leftBankOutOri.setFromAxisAndAngle(Vec3(0, 0, 1), leftBankAngle);
+  leftBankOutXfo.ori = leftDeltaXfo.ori * leftBankOutOri;
+
+  // Right Bank
+  Scalar rightBankAngleMult = 1.0;
+  if (rightSide) {
+    rightBankAngleMult = -1.0;
+  }
+
+  Xfo rightBankOutXfo = Xfo(rightDeltaXfo);
+  Quat rightBankOutOri;
+  Scalar rightBankAngle = Math_degToRad(rescale(footBank, 0.0, 1.0, 0.0, 1.0).clamp(0.0, 1) * (90 * rightBankAngleMult));
+  rightBankOutOri.setFromAxisAndAngle(Vec3(0, 0, 1), rightBankAngle);
+  rightBankOutXfo.ori = rightDeltaXfo.ori * rightBankOutOri;
+
+  result = (frontPivotOutXfo * leftBankOutXfo * rightBankOutXfo * footAllDeltaXfo).toMat44();
+}
