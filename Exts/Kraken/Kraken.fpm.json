@@ -13,6 +13,7 @@
     "Solvers/NBoneIKSolver.kl",
     "Solvers/TentacleSolver.kl",
     "Solvers/DynamicChainSolver.kl",
+    "Solvers/BipedFootSolver.kl",
     "PersistenceHelpers.kl"
   ]
 }

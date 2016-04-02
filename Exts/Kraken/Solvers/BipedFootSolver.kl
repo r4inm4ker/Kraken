@@ -1,0 +1,141 @@
+require InlineDrawing;
+require Geometry;
+
+
+object BipedFootSolver : KrakenSolver {
+};
+
+
+// Default Constructor
+function BipedFootSolver()
+{
+
+}
+
+
+// Return Arguments for Kraken
+function KrakenSolverArg[] BipedFootSolver.getArguments(){
+  KrakenSolverArg args[] = this.parent.getArguments();
+  args.push(KrakenSolverArg('ikBlend', 'In', 'Scalar'));
+  args.push(KrakenSolverArg('ankleLen', 'In', 'Scalar'));
+  args.push(KrakenSolverArg('toeLen', 'In', 'Scalar'));
+  args.push(KrakenSolverArg('legEnd', 'In', 'Mat44'));
+  args.push(KrakenSolverArg('ankleIK', 'In', 'Mat44'));
+  args.push(KrakenSolverArg('toeIK', 'In', 'Mat44'));
+  args.push(KrakenSolverArg('ankleFK', 'In', 'Mat44'));
+  args.push(KrakenSolverArg('toeFK', 'In', 'Mat44'));
+
+  args.push(KrakenSolverArg('ankle_result', 'Out', 'Mat44'));
+  args.push(KrakenSolverArg('toe_result', 'Out', 'Mat44'));
+
+  return args;
+}
+
+
+function Xfo ankleIKSolve
+(
+  Scalar rigScale,
+  Scalar ankleLen,
+  Mat44 legEnd,
+  Mat44 ankleIK
+) {
+  Xfo ankleIKOut;
+  Quat ankleOri;
+
+  Vec3 ankleDir = (ankleIK.translation() - ankleIK.multiplyVector3(Vec3(-1.0 * ankleLen, 0, 0))).unit();
+  Vec3 ankleUpV = (ankleIK.multiplyVector3(Vec3(0, -1, 0)) - ankleIK.translation()).unit();
+
+  Quat ankleDirOri;
+  ankleDirOri.setFromDirectionAndUpvector(ankleDir, ankleUpV);
+
+  Quat ankleYOffset;
+  ankleYOffset.setFromAxisAndAngle(Vec3(0, 1, 0), HALF_PI * -1.0);
+
+  Quat ankleXOffset;
+  ankleXOffset.setFromAxisAndAngle(Vec3(1, 0, 0), HALF_PI * -1.0);
+
+  ankleOri = (ankleDirOri * ankleYOffset) * ankleXOffset;
+
+  ankleIKOut.tr = legEnd.translation();
+  ankleIKOut.ori = ankleOri;
+  ankleIKOut.sc = Vec3(rigScale);
+
+  return ankleIKOut;
+}
+
+
+function Xfo toeIKSolve
+(
+  Scalar rigScale,
+  Scalar ankleLen,
+  Scalar toeLen,
+  Mat44 toeIK,
+  Xfo ankleXfo
+) {
+  Xfo toeIKOut;
+  Quat toeOri;
+
+  Vec3 toeDir = (toeIK.multiplyVector3(Vec3(toeLen, 0, 0)) - toeIK.translation()).unit();
+  Vec3 toeUpV = (toeIK.multiplyVector3(Vec3(0, -1, 0)) - toeIK.translation()).unit();
+
+  Quat toeDirOri;
+  toeDirOri.setFromDirectionAndUpvector(toeDir, toeUpV);
+
+  Quat toeYOffset;
+  toeYOffset.setFromAxisAndAngle(Vec3(0, 1, 0), HALF_PI * -1.0);
+
+  Quat toeXOffset;
+  toeXOffset.setFromAxisAndAngle(Vec3(1, 0, 0), HALF_PI * -1.0);
+
+  toeOri = (toeDirOri * toeYOffset) * toeXOffset;
+
+  toeIKOut.tr = ankleXfo.transformVector(Vec3(ankleLen, 0, 0));
+  toeIKOut.ori = toeOri;
+  toeIKOut.sc = Vec3(rigScale);
+
+  return toeIKOut;
+}
+
+
+// Solve
+function BipedFootSolver.solve!
+(
+  in Boolean drawDebug,
+  in Scalar rigScale,
+
+  Scalar ikBlend,
+  Scalar ankleLen,
+  Scalar toeLen,
+  Mat44 legEnd,
+  Mat44 ankleIK,
+  Mat44 toeIK,
+  Mat44 ankleFK,
+  Mat44 toeFK,
+
+  io Mat44 ankle_result,
+  io Mat44 toe_result
+)
+{
+  Xfo ankleOut;
+  Xfo toeOut;
+
+  Xfo ankleFKXfo = Xfo(ankleFK);
+  ankleFKXfo.tr = legEnd.translation();
+
+  Xfo toeFKXfo = Xfo(toeFK);
+  toeFKXfo.tr = ankleFKXfo.transformVector(Vec3(ankleLen, 0, 0));
+
+  ankleOut = ankleFKXfo;
+  toeOut = toeFKXfo;
+
+  if (ikBlend > 0.0) {
+    Xfo ankleIKOut = ankleIKSolve(rigScale, ankleLen, legEnd, ankleIK).toMat44();
+    Xfo toeIKOut = toeIKSolve(rigScale, ankleLen, toeLen, toeIK, ankleIKOut).toMat44();
+
+    ankleOut = ankleFKXfo.linearInterpolate(ankleIKOut, ikBlend);
+    toeOut = toeFKXfo.linearInterpolate(toeIKOut, ikBlend);
+  }
+
+  ankle_result = ankleOut.toMat44();
+  toe_result = toeOut.toMat44();
+}

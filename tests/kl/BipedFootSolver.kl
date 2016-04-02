@@ -1,0 +1,28 @@
+
+require Kraken;
+
+operator entry(){
+	BipedFootSolver solver();
+
+    Boolean drawDebug = true;
+    Scalar rigScale = 1.0;
+
+    Scalar ikBlend = 1.0;
+    Scalar ankleLen =1.67705094814;
+    Scalar toeLen = 1.25;
+    Mat44 legEnd = Xfo(Quat(Vec3(0.0,0.0,0.0),1.0), Vec3(1.75,1.14999997616,-1.25), Vec3(1.0,1.0,1.0)).toMat44();
+    Mat44 ankleIK = Xfo(Quat(Vec3(0.162459865212,-0.688190937042,-0.162459850311),0.688191056252), Vec3(1.75,0.40000000596,0.25), Vec3(1.0,1.0,1.0)).toMat44();
+    Mat44 toeIK = Xfo(Quat(Vec3(-0.0,-0.70710682869,0.0),0.70710682869), Vec3(1.75,0.40000000596,0.25), Vec3(1.0,1.0,1.0)).toMat44();
+    Mat44 ankleFK = Xfo(Quat(Vec3(0.601501047611,-0.601500928402,0.371748030186),0.37174808979), Vec3(1.75,0.40000000596,0.25), Vec3(1.0,1.0,1.0)).toMat44();
+    Mat44 toeFK = Xfo(Quat(Vec3(0.5,-0.5,0.5),0.5), Vec3(1.75,0.40000000596,0.25), Vec3(1.0,1.0,1.0)).toMat44();
+
+    Mat44 ankle_result;
+    Mat44 toe_result;
+
+    solver.solve(drawDebug, rigScale, ikBlend, ankleLen, toeLen, legEnd, ankleIK, toeIK, ankleFK, toeFK, ankle_result, toe_result);
+
+    Xfo ankleOutXfo = Xfo(ankle_result);
+    Xfo toeOutXfo = Xfo(toe_result);
+    report('Ankle Xfo: ' + ankleOutXfo);
+    report('Toe Xfo: ' + toeOutXfo);
+}
