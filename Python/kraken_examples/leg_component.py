@@ -267,6 +267,7 @@ class LegComponentRig(LegComponent):
         # ==========
         deformersLayer = self.getOrCreateLayer('deformers')
         self.defCmpGrp = ComponentGroup(self.getName(), self, parent=deformersLayer)
+        self.addItem('defCmpGrp', self.defCmpGrp)
 
         femurDef = Joint('femur', parent=self.defCmpGrp)
         femurDef.setComponent(self)

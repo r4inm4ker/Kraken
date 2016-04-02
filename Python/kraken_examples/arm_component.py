@@ -279,7 +279,6 @@ class ArmComponentRig(ArmComponent):
         # ==========
         self.deformersLayer = self.getOrCreateLayer('deformers')
         self.defCmpGrp = ComponentGroup(self.getName(), self, parent=self.deformersLayer)
-        self.defCmpGrp.setComponent(self)
         self.addItem('defCmpGrp', self.defCmpGrp)
 
         self.bicepDef = Joint('bicep', parent=self.defCmpGrp)
