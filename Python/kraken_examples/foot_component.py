@@ -317,12 +317,13 @@ class FootComponentRig(FootComponent):
         # Deformers
         # ==========
         deformersLayer = self.getOrCreateLayer('deformers')
-        defCmpGrp = ComponentGroup(self.getName(), self, parent=deformersLayer)
+        self.defCmpGrp = ComponentGroup(self.getName(), self, parent=deformersLayer)
+        self.addItem('defCmpGrp', self.defCmpGrp)
 
-        self.ankleDef = Joint('ankle', parent=defCmpGrp)
+        self.ankleDef = Joint('ankle', parent=self.defCmpGrp)
         self.ankleDef.setComponent(self)
 
-        self.toeDef = Joint('toe', parent=defCmpGrp)
+        self.toeDef = Joint('toe', parent=self.defCmpGrp)
         self.toeDef.setComponent(self)
 
 
@@ -374,7 +375,8 @@ class FootComponentRig(FootComponent):
         # =========================
         # Add Foot Solver Canvas Op
         # =========================
-        self.footSolverCanvasOp = CanvasOperator('footSolverCanvasOp', 'Kraken.Solvers.BipedFootSolver')
+        # self.footSolverCanvasOp = CanvasOperator('footSolverCanvasOp', 'Kraken.Solvers.BipedFootSolver')
+        self.footSolverCanvasOp = KLOperator('footSolverKLOp', 'BipedFootSolver', 'Kraken')
         self.addOperator(self.footSolverCanvasOp)
 
         # Add Att Inputs
@@ -439,6 +441,9 @@ class FootComponentRig(FootComponent):
         frontPivotXfo = data.get('frontPivotXfo')
         outerPivotXfo = data.get('outerPivotXfo')
         innerPivotXfo = data.get('innerPivotXfo')
+
+        for k, v in data.iteritems():
+            print k + ": " + str(v)
 
         self.footAll.xfo = footXfo
         self.ankleIKCtrlSpace.xfo = ankleXfo

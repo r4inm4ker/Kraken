@@ -78,6 +78,17 @@ class ComponentOutputPort(SceneItem):
         return self._connections[index]
 
 
+    def getNumConnections(self):
+        """Gets the number of connections for this output port.
+
+        Returns:
+            int: Number of connections.
+
+        """
+
+        return len(self._connections)
+
+
     def _addConnection(self, connectionObj):
         """Adds a connection to the output.
 

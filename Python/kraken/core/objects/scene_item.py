@@ -13,6 +13,7 @@ class SceneItem(object):
         super(SceneItem, self).__init__()
         self._parent = parent
         self._name = name
+        self._component = None
 
 
     # ==============
@@ -168,5 +169,33 @@ class SceneItem(object):
         """
 
         self._parent = parent
+
+        return True
+
+    # ==================
+    # Component Methods
+    # ==================
+    def getComponent(self):
+        """Returns the component of the object as an object.
+
+        Returns:
+            Object: Component of this object.
+
+        """
+
+        return self._component
+
+    def setComponent(self, component):
+        """Sets the component attribute of this object.
+
+        Args:
+            component (Object): Object that is the component of this one.
+
+        Returns:
+            bool: True if successful.
+
+        """
+
+        self._component = component
 
         return True

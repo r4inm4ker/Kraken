@@ -80,6 +80,7 @@ class ArmComponentGuide(ArmComponent):
         self.wristCtrl = Control('wrist', parent=self.ctrlCmpGrp, shape="sphere")
         self.wristCtrl.setColor('blue')
 
+
         self.default_data = {
             "name": name,
             "location": "L",
@@ -278,7 +279,7 @@ class ArmComponentRig(ArmComponent):
         # ==========
         self.deformersLayer = self.getOrCreateLayer('deformers')
         self.defCmpGrp = ComponentGroup(self.getName(), self, parent=self.deformersLayer)
-        self.defCmpGrp.setComponent(self)
+        self.addItem('defCmpGrp', self.defCmpGrp)
 
         self.bicepDef = Joint('bicep', parent=self.defCmpGrp)
         self.bicepDef.setComponent(self)

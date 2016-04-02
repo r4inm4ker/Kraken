@@ -30,7 +30,7 @@ arm = ArmComponentRig()
 arm.loadData(armGuideData)
 
 builder = plugins.getBuilder()
-builder.build(arm)
+builder.buildComponent(arm)
 
 Profiler.getInstance().pop()
 
