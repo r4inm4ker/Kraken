@@ -157,6 +157,7 @@ class MainSrtComponentGuide(MainSrtComponent):
 
         return MainSrtComponentRig
 
+
 class MainSrtComponentRig(MainSrtComponent):
     """MainSrt Component Rig"""
 

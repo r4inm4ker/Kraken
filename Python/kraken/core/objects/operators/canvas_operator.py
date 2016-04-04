@@ -149,7 +149,7 @@ class CanvasOperator(Operator):
 
             if portConnectionType == 'In':
                 if str(portDataType).endswith('[]'):
-                    rtValArray = ks.rtVal(portDataType[:-2]+'Array')
+                    rtValArray = ks.rtVal(portDataType)
                     rtValArray.resize(len(self.inputs[portName]))
                     for j in xrange(len(self.inputs[portName])):
                         rtVal = getRTVal(self.inputs[portName][j])
@@ -168,7 +168,7 @@ class CanvasOperator(Operator):
                     self.binding.setArgValue(portName, rtVal, False)
             else:
                 if str(portDataType).endswith('[]'):
-                    rtValArray = ks.rtVal(portDataType[:-2]+'Array')
+                    rtValArray = ks.rtVal(portDataType)
                     rtValArray.resize(len(self.outputs[portName]))
                     for j in xrange(len(self.outputs[portName])):
                         rtVal = getRTVal(self.outputs[portName][j])

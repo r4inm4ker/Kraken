@@ -765,9 +765,23 @@ class Builder(object):
         buildName = kRig.getBuildName()
         dccSceneItem = self.buildContainer(kRig, buildName)
 
+        if dccSceneItem is not None:
+            self.buildAttributes(kRig)
+            self.setTransform(kRig)
+            self.lockParameters(kRig)
+            self.setVisibility(kRig)
+            self.setObjectColor(kRig)
+
         for layer in kRig.getChildrenByType('Layer'):
             buildName = layer.getBuildName()
-            self.buildLayer(layer, buildName)
+            dccSceneItem = self.buildLayer(layer, buildName)
+
+            if dccSceneItem is not None:
+                self.buildAttributes(layer)
+                self.setTransform(layer)
+                self.lockParameters(layer)
+                self.setVisibility(layer)
+                self.setObjectColor(layer)
 
 
         def dep_walk(comp, visited, unseen):
@@ -841,7 +855,8 @@ class Builder(object):
 
             return orderedComponents
 
-        orderedComponents = getBuildOrder()
+        # orderedComponents = getBuildOrder()
+        orderedComponents = kRig.getChildrenByType('Component') # getBuildOrder()
 
         # Build Components in the correct order
         for component in orderedComponents:

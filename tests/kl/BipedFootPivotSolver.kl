@@ -1,0 +1,25 @@
+
+require Kraken;
+
+operator entry(){
+	BipedFootPivotSolver solver();
+
+    Boolean drawDebug = true;
+    Scalar rigScale = 1.0;
+
+    Boolean rightSide = false;
+    Scalar footRock = 0.0;
+    Scalar footBank = 0.0;
+    Mat44 pivotAll = Xfo(Quat(Vec3(0.0,0.0,0.0),1.0), Vec3(1.75,1.14999997616,-1.25), Vec3(1.0,1.0,1.0)).toMat44();
+    Mat44 backPivot = Xfo(Quat(Vec3(0.0,0.0,0.0),1.0), Vec3(1.75,0.0,-2.5), Vec3(1.0,1.0,1.0)).toMat44();
+    Mat44 frontPivot = Xfo(Quat(Vec3(0.0,0.0,0.0),1.0), Vec3(1.75,0.0,2.0), Vec3(1.0,1.0,1.0)).toMat44();
+    Mat44 outerPivot = Xfo(Quat(Vec3(0.0,0.0,0.0),1.0), Vec3(2.5,0.0,-1.25), Vec3(1.0,1.0,1.0)).toMat44();
+    Mat44 innerPivot = Xfo(Quat(Vec3(0.0,0.0,0.0),1.0), Vec3(1.0,0.0,-1.25), Vec3(1.0,1.0,1.0)).toMat44();
+
+    Mat44 result;
+
+    solver.solve(drawDebug, rigScale, rightSide, footRock, footBank, pivotAll, backPivot, frontPivot, outerPivot, innerPivot, result);
+
+    Xfo pivot_result = Xfo(result);
+    report('Pivot Xfo: ' + pivot_result);
+}

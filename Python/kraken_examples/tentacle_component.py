@@ -315,6 +315,7 @@ class TentacleComponentRig(TentacleComponent):
         # ==========
         deformersLayer = self.getOrCreateLayer('deformers')
         self.defCmpGrp = ComponentGroup(self.getName(), self, parent=deformersLayer)
+        self.addItem('defCmpGrp', self.defCmpGrp)
         self.deformerJoints = []
         self.boneOutputsTgt = []
         self.setNumDeformers(4)
