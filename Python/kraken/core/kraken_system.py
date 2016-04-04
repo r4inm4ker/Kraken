@@ -134,12 +134,17 @@ class KrakenSystem(object):
                 try:
                     value = klType.create()
                 except:
-                    value = klType()
-                for i in range(0, len(typeDesc['members'])):
+                    try:
+                        return klType()
+                    except Exception as e:
+                        raise Exception("Error constructing RTVal:" + dataType)
+
+                for i in xrange(0, len(typeDesc['members'])):
                     memberName = typeDesc['members'][i]['name']
                     memberType = typeDesc['members'][i]['type']
                     if memberName in defaultValue:
                         setattr(value, memberName, self.constructRTVal(memberType, getattr(defaultValue, memberName)))
+
                 return value
 
             else:
