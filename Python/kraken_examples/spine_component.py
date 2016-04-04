@@ -237,6 +237,7 @@ class SpineComponentRig(SpineComponent):
         # ==========
         deformersLayer = self.getOrCreateLayer('deformers')
         self.defCmpGrp = ComponentGroup(self.getName(), self, parent=deformersLayer)
+        self.addItem('defCmpGrp', self.defCmpGrp)
         self.deformerJoints = []
         self.spineOutputs = []
         self.setNumDeformers(1)

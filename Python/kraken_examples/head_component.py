@@ -216,18 +216,19 @@ class HeadComponentRig(HeadComponent):
         # Deformers
         # ==========
         deformersLayer = self.getOrCreateLayer('deformers')
-        defCmpGrp = ComponentGroup(self.getName(), self, parent=deformersLayer)
+        self.defCmpGrp = ComponentGroup(self.getName(), self, parent=deformersLayer)
+        self.addItem('defCmpGrp', self.defCmpGrp)
 
-        headDef = Joint('head', parent=defCmpGrp)
+        headDef = Joint('head', parent=self.defCmpGrp)
         headDef.setComponent(self)
 
-        jawDef = Joint('jaw', parent=defCmpGrp)
+        jawDef = Joint('jaw', parent=self.defCmpGrp)
         jawDef.setComponent(self)
 
-        eyeLeftDef = Joint('eyeLeft', parent=defCmpGrp)
+        eyeLeftDef = Joint('eyeLeft', parent=self.defCmpGrp)
         eyeLeftDef.setComponent(self)
 
-        eyeRightDef = Joint('eyeRight', parent=defCmpGrp)
+        eyeRightDef = Joint('eyeRight', parent=self.defCmpGrp)
         eyeRightDef.setComponent(self)
 
 
@@ -270,7 +271,6 @@ class HeadComponentRig(HeadComponent):
         self.outputsToDeformersKLOp.setOutput('constrainees', [headDef, jawDef, eyeLeftDef, eyeRightDef])
 
         Profiler.getInstance().pop()
-
 
 
     def loadData(self, data=None):

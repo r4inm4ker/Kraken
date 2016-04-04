@@ -346,7 +346,7 @@ class HandComponentRig(HandComponent):
         # ==========
         self.deformersLayer = self.getOrCreateLayer('deformers')
         self.defCmpGrp = ComponentGroup(self.getName(), self, parent=self.deformersLayer)
-        self.defCmpGrp.setComponent(self)
+        self.addItem('defCmpGrp', self.defCmpGrp)
 
         self.handDef = Joint('hand', parent=self.defCmpGrp)
         self.handDef.setComponent(self)

@@ -195,9 +195,10 @@ class NeckComponentRig(NeckComponent):
         # Deformers
         # ==========
         deformersLayer = self.getOrCreateLayer('deformers')
-        defCmpGrp = ComponentGroup(self.getName(), self, parent=deformersLayer)
+        self.defCmpGrp = ComponentGroup(self.getName(), self, parent=deformersLayer)
+        self.addItem('defCmpGrp', self.defCmpGrp)
 
-        neckDef = Joint('neck', parent=defCmpGrp)
+        neckDef = Joint('neck', parent=self.defCmpGrp)
         neckDef.setComponent(self)
 
 
