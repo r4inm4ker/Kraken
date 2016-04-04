@@ -548,10 +548,7 @@ class Object3D(SceneItem):
 
         """
 
-        if name in self._flags:
-            return True
-
-        return False
+        return name in self._flags
 
 
     def clearFlag(self, name):
