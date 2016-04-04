@@ -87,15 +87,16 @@ class Synchronizer(Synchronizer):
 
         dccPos = dccItem.getTranslation(space='world')
         dccQuat = dccItem.getRotation(space='world', quaternion=True).get()
-        dccScl = Vec3(x=1.0, y=1.0, z=1.0) # By default we don't sync DCC scale
-
-        # If flag is set, pass the DCC Scale values.
-        if kObject.testFlag('SYNC_SCALE') is True:
-            dccScl = dccItem.getScale()
+        dccScl = dccItem.getScale()
 
         pos = Vec3(x=dccPos[0], y=dccPos[1], z=dccPos[2])
         quat = Quat(v=Vec3(dccQuat[0], dccQuat[1], dccQuat[2]), w=dccQuat[3])
-        scl = Vec3(x=dccScl[0], y=dccScl[1], z=dccScl[2])
+
+        # If flag is set, pass the DCC Scale values.
+        if kObject.testFlag('SYNC_SCALE') is True:
+            scl = Vec3(1.0, 1.0, 1.0)
+        else:
+            scl = Vec3(x=dccScl[0], y=dccScl[1], z=dccScl[2])
 
         newXfo = Xfo(tr=pos, ori=quat, sc=scl)
 
