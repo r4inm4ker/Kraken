@@ -65,7 +65,7 @@ class Synchronizer(Synchronizer):
             kObject (object): object to sync the xfo for.
 
         Returns:
-            object: True if successful.
+            Boolean: True if successful.
 
         """
 
@@ -84,11 +84,15 @@ class Synchronizer(Synchronizer):
         dccXfo = dccItem.Kinematics.Global.GetTransform2(None)
         dccPos = dccXfo.Translation.Get2()
         dccQuat = dccXfo.Rotation.Quaternion.Get2()
-        dccScl = dccXfo.Scaling.Get2()
+        dccScl = Vec3(x=1.0, y=1.0, z=1.0) # By default we don't sync DCC scale
+
+        # If flag is set, pass the DCC Scale values.
+        if kObject.testFlag('SYNC_SCALE') is True:
+            dccScl = dccXfo.Scaling.Get2()
 
         pos = Vec3(x=dccPos[0], y=dccPos[1], z=dccPos[2])
         quat = Quat(v=Vec3(dccQuat[1], dccQuat[2], dccQuat[3]), w=dccQuat[0])
-        scl = Vec3(x=1.0, y=1.0, z=1.0) # we don't want scale recorded
+        scl = Vec3(x=dccScl[0], y=dccScl[1], z=dccScl[2])
 
         newXfo = Xfo(tr=pos, ori=quat, sc=scl)
 
