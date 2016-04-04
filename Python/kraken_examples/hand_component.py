@@ -44,7 +44,6 @@ class HandComponent(BaseExampleComponent):
         # Declare Input Attrs
         self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=False, parent=self.cmpInputAttrGrp).getTarget()
         self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp).getTarget()
-        self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', value=self.getLocation() is 'R', parent=self.cmpInputAttrGrp).getTarget()
 
         # Declare Output Attrs
 
@@ -188,7 +187,7 @@ class HandComponentGuide(HandComponent):
     def addFinger(self, name):
         firstDigitCtrl = Control(name + "01", parent=self.handCtrl, shape='sphere')
         firstDigitCtrl.setColor('orange')
-        firstDigitCtrl.scalePoints(Vec3(0.25, 0.25, 0.25))
+        firstDigitCtrl.scalePoints(Vec3(0.125, 0.125, 0.125))
         firstDigitCtrl.lockScale(True, True, True)
 
         self.fingers[name] = []
@@ -201,7 +200,7 @@ class HandComponentGuide(HandComponent):
         for i in xrange(2, numJoints + 2):
             digitCtrl = Control(name + str(i).zfill(2), parent=parent, shape='sphere')
             digitCtrl.setColor('orange')
-            digitCtrl.scalePoints(Vec3(0.25, 0.25, 0.25))
+            digitCtrl.scalePoints(Vec3(0.125, 0.125, 0.125))
             digitCtrl.lockScale(True, True, True)
 
             self.fingers[name].append(digitCtrl)
@@ -216,7 +215,7 @@ class HandComponentGuide(HandComponent):
 
     def placeFingers(self):
 
-        spacing = 0.5
+        spacing = 0.25
         length = spacing * (len(self.fingers.keys()) - 1)
         mid = length / 2.0
         startOffset = length - mid
@@ -229,9 +228,9 @@ class HandComponentGuide(HandComponent):
                 numJoints = 3
             for y in xrange(numJoints + 1):
                 if y == 1:
-                    xOffset = 2
+                    xOffset = 0.375
                 else:
-                    xOffset = 0.5
+                    xOffset = 0.25
 
                 if y == 0:
                     offsetVec = Vec3(xOffset, 0, startOffset - (i * spacing))

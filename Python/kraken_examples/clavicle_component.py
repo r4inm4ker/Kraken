@@ -64,16 +64,24 @@ class ClavicleComponentGuide(ClavicleComponent):
         # Guide Controls
         guideSettingsAttrGrp = AttributeGroup("GuideSettings", parent=self)
 
-        self.clavicleCtrl = Control('clavicle', parent=self.ctrlCmpGrp, shape="sphere")
+        self.clavicleCtrl = Control('clavicle', parent=self.ctrlCmpGrp, shape="circle")
+        self.clavicleCtrl.scalePoints(Vec3(0.75, 0.75, 0.75))
+        self.clavicleCtrl.rotatePoints(0.0, 0.0, 90.0)
+
         self.clavicleUpVCtrl = Control('clavicleUpV', parent=self.ctrlCmpGrp, shape="triangle")
         self.clavicleUpVCtrl.setColor('red')
-        self.clavicleEndCtrl = Control('clavicleEnd', parent=self.ctrlCmpGrp, shape="sphere")
+        self.clavicleUpVCtrl.rotatePoints(-90.0, 0.0, 0.0)
+        self.clavicleUpVCtrl.rotatePoints(0.0, 90.0, 0.0)
+        self.clavicleUpVCtrl.scalePoints(Vec3(0.5, 0.5, 0.5))
+
+        self.clavicleEndCtrl = Control('clavicleEnd', parent=self.ctrlCmpGrp, shape="cube")
+        self.clavicleEndCtrl.scalePoints(Vec3(0.25, 0.25, 0.25))
 
         data = {
                 "name": name,
                 "location": "L",
                 "clavicleXfo": Xfo(Vec3(0.1322, 15.403, -0.5723)),
-                "clavicleUpVXfo": Xfo(Vec3(0.0, 1.0, 0.0)),
+                "clavicleUpVXfo": Xfo(Vec3(0.1322, 16.403, -0.5723)),
                 "clavicleEndXfo": Xfo(Vec3(2.27, 15.295, -0.753))
                }
 
@@ -116,7 +124,7 @@ class ClavicleComponentGuide(ClavicleComponent):
         super(ClavicleComponentGuide, self).loadData( data )
 
         self.clavicleCtrl.xfo = data['clavicleXfo']
-        self.clavicleUpVCtrl.xfo = self.clavicleCtrl.xfo.multiply(data['clavicleUpVXfo'])
+        self.clavicleUpVCtrl.xfo = data['clavicleUpVXfo']
         self.clavicleEndCtrl.xfo = data['clavicleEndXfo']
 
         return True
