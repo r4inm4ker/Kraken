@@ -444,9 +444,6 @@ class FootComponentRig(FootComponent):
         outerPivotXfo = data.get('outerPivotXfo')
         innerPivotXfo = data.get('innerPivotXfo')
 
-        for k, v in data.iteritems():
-            print k + ": " + str(v)
-
         self.footAll.xfo = footXfo
         self.ankleIKCtrlSpace.xfo = ankleXfo
         self.ankleIKCtrl.xfo = ankleXfo
