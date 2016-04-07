@@ -241,7 +241,10 @@ class KLOperator(Operator):
             elif isinstance(obj, Attribute):
                 obj.setValue(rtval)
             else:
-                print "Warning: Not setting rtval " + str(rtval) + " for object " + str(obj)
+                if hasattr(obj, '__iter__'):
+                    print "Warning: trying to set a KL port with an array directly."
+                print "Warning: Not setting rtval: %s\n\tfor output object: %s\n\ton port: %s\n\tof KL object: %s\n." % \
+                (rtval, obj, portName, self.getName())
 
         for i in xrange(len(argVals)):
             arg = self.args[i]
@@ -250,7 +253,7 @@ class KLOperator(Operator):
             argConnectionType = arg.connectionType.getSimpleType()
 
             if argConnectionType != 'In':
-                if argDataType.endswith('[]'):
+                if str(argDataType).endswith('[]'):
                     for j in xrange(len(argVals[i])):
                         setRTVal(self.outputs[argName][j], argVals[i][j])
                 else:

@@ -218,7 +218,10 @@ class CanvasOperator(Operator):
             elif isinstance(obj, Attribute):
                 obj.setValue(rtval)
             else:
-                print "Warning: Not setting rtval " + str(rtval) + " for object " + str(obj)
+                if hasattr(obj, '__iter__'):
+                    print "Warning: trying to set a canvas port item with an array directly."
+                print "Warning: Not setting rtval: %s\n\tfor output object: %s\n\ton port: %s\n\tof canvas object: %s\n." % \
+                (rtval, obj, portName, self.getName())
 
 
         for i in xrange(self.node.getExecPortCount()):
@@ -229,7 +232,7 @@ class CanvasOperator(Operator):
 
             if portConnectionType != 'In':
                 outVal = self.binding.getArgValue(portName)
-                if hasattr(outVal.getSimpleType(), '__iter__'):
+                if str(portDataType).endswith('[]' or hasattr(outVal.getSimpleType(), '__iter__')):
                     for j in xrange(len(outVal)):
                         setRTVal(self.outputs[portName][j], outVal[j])
                 else:
