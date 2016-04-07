@@ -864,8 +864,10 @@ class Builder(Builder):
 
                         connectionTargets.append( { 'opObject': opObject, 'dccSceneItem': dccSceneItem} )
                 else:
+                    # If there are no connected objects, continue
                     if connectedObjects is None:
-                        raise Exception("Operator '"+kOperator.getName()+"' of type '"+kOperator.getPresetPath()+"' port '"+portName+"' not connected.")
+                        pm.warning("Operator '" + kOperator.getName() + "' of type '" + kOperator.getPresetPath() + "' port '" + portName + "' not connected.")
+                        continue
 
                     opObject = connectedObjects
                     dccSceneItem = self.getDCCSceneItem(opObject)
