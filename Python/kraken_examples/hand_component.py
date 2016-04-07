@@ -1,4 +1,7 @@
+
+import copy
 from collections import OrderedDict
+
 
 from kraken.core.maths import Vec3
 from kraken.core.maths.xfo import Xfo
@@ -19,6 +22,7 @@ from kraken.core.objects.joint import Joint
 from kraken.core.objects.ctrlSpace import CtrlSpace
 from kraken.core.objects.control import Control
 
+from kraken.core.objects.operators.canvas_operator import CanvasOperator
 from kraken.core.objects.operators.kl_operator import KLOperator
 
 from kraken.core.profiler import Profiler
@@ -71,8 +75,12 @@ class HandComponentGuide(HandComponent):
 
         self.fingers = OrderedDict()
 
-        self.handCtrl = Control('hand', parent=self.ctrlCmpGrp, shape="sphere")
+        self.handCtrl = Control('hand', parent=self.ctrlCmpGrp, shape="square")
+        self.handCtrl.rotatePoints(0.0, 0.0, 90.0)
+        self.handCtrl.scalePoints(Vec3(1.0, 0.75, 1.0))
         self.handCtrl.setColor('yellow')
+
+        self.guideCtrlHrcGrp = HierarchyGroup('controlShapes', parent=self.ctrlCmpGrp)
 
         self.default_data = {
             "name": name,
@@ -113,7 +121,6 @@ class HandComponentGuide(HandComponent):
 
         return data
 
-
     def loadData(self, data):
         """Load a saved guide representation from persisted data.
 
@@ -139,7 +146,6 @@ class HandComponentGuide(HandComponent):
                     self.fingers[finger][i].xfo = fingersGuideXfos[finger][i]
 
         return True
-
 
     def getRigBuildData(self):
         """Returns the Guide data used by the Rig Component to define the layout of the final rig..
@@ -185,10 +191,29 @@ class HandComponentGuide(HandComponent):
     # Callbacks
     # ==========
     def addFinger(self, name):
+
+        digitSizeAttributes = []
+        fingerGuideCtrls = []
+
         firstDigitCtrl = Control(name + "01", parent=self.handCtrl, shape='sphere')
-        firstDigitCtrl.setColor('orange')
         firstDigitCtrl.scalePoints(Vec3(0.125, 0.125, 0.125))
+
+        firstDigitGuideCtrl = Control(name + "Gd01", parent=self.guideCtrlHrcGrp, shape='square')
+        firstDigitGuideCtrl.scalePoints(Vec3(0.175, 0.175, 0.175))
+        firstDigitGuideCtrl.translatePoints(Vec3(0.0, 0.125, 0.0))
+        fingerGuideCtrls.append(firstDigitGuideCtrl)
+
+        triangleCtrl = Control('tempCtrl', parent=None, shape='triangle')
+        triangleCtrl.rotatePoints(90.0, 0.0, 0.0)
+        triangleCtrl.scalePoints(Vec3(0.025, 0.025, 0.025))
+        triangleCtrl.translatePoints(Vec3(0.0, 0.0875, 0.0))
+
+        firstDigitCtrl.appendCurveData(triangleCtrl.getCurveData())
         firstDigitCtrl.lockScale(True, True, True)
+
+        digitSettingsAttrGrp = AttributeGroup("DigitSettings", parent=firstDigitCtrl)
+        digitSizeAttr = ScalarAttribute('size', value=0.25, parent=digitSettingsAttrGrp)
+        digitSizeAttributes.append(digitSizeAttr)
 
         self.fingers[name] = []
         self.fingers[name].append(firstDigitCtrl)
@@ -199,13 +224,51 @@ class HandComponentGuide(HandComponent):
             numJoints = 3
         for i in xrange(2, numJoints + 2):
             digitCtrl = Control(name + str(i).zfill(2), parent=parent, shape='sphere')
-            digitCtrl.setColor('orange')
-            digitCtrl.scalePoints(Vec3(0.125, 0.125, 0.125))
+
+            if i != numJoints + 1:
+                digitCtrl.scalePoints(Vec3(0.125, 0.125, 0.125))
+                digitCtrl.appendCurveData(triangleCtrl.getCurveData())
+
+                digitGuideCtrl = Control(name + 'Gd' + str(i).zfill(2), parent=self.guideCtrlHrcGrp, shape='circle')
+                digitGuideCtrl.scalePoints(Vec3(0.175, 0.175, 0.175))
+
+                if i == 2:
+                    digitGuideCtrl.translatePoints(Vec3(0.0, 0.125, 0.0))
+                else:
+                    digitGuideCtrl.rotatePoints(0.0, 0.0, 90.0)
+
+                fingerGuideCtrls.append(digitGuideCtrl)
+
+                # Add size attr to all but last guide control
+                digitSettingsAttrGrp = AttributeGroup("DigitSettings", parent=digitCtrl)
+                digitSizeAttr = ScalarAttribute('size', value=0.25, parent=digitSettingsAttrGrp)
+                digitSizeAttributes.append(digitSizeAttr)
+            else:
+                digitCtrl.scalePoints(Vec3(0.0875, 0.0875, 0.0875))
+
             digitCtrl.lockScale(True, True, True)
 
             self.fingers[name].append(digitCtrl)
 
             parent = digitCtrl
+
+        # ===========================
+        # Create Canvas Operators
+        # ===========================
+        # Add Finger Guide Canvas Op
+        fingerGuideCanvasOp = CanvasOperator(name + 'FingerGuideOp', 'Kraken.Solvers.Biped.BipedFingerGuideSolver')
+        self.addOperator(fingerGuideCanvasOp)
+
+        # Add Att Inputs
+        fingerGuideCanvasOp.setInput('drawDebug', self.drawDebugInputAttr)
+        fingerGuideCanvasOp.setInput('rigScale', self.rigScaleInputAttr)
+
+        # Add Xfo Inputs
+        fingerGuideCanvasOp.setInput('controls', self.fingers[name])
+        fingerGuideCanvasOp.setInput('planeSizes', digitSizeAttributes)
+
+        # Add Xfo Outputs
+        fingerGuideCanvasOp.setOutput('result', fingerGuideCtrls)
 
         return firstDigitCtrl
 
@@ -336,8 +399,7 @@ class HandComponentRig(HandComponent):
         # =========
         # Hand
         self.handCtrlSpace = CtrlSpace('hand', parent=self.ctrlCmpGrp)
-        self.handCtrl = Control('hand', parent=self.handCtrlSpace, shape="cube")
-        self.handCtrl.alignOnXAxis()
+        self.handCtrl = Control('hand', parent=self.handCtrlSpace, shape="square")
 
 
         # ==========
