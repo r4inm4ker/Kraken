@@ -1,8 +1,10 @@
 {
   "objectType" : "Graph",
   "metadata" : {
-    "uiGraphZoom" : "{\n  \"value\" : 0.6870590448379517\n  }",
-    "uiGraphPan" : "{\n  \"x\" : 646.740966796875,\n  \"y\" : 115.8140411376953\n  }"
+    "uiTextColor" : "{\n  \"r\" : 20,\n  \"g\" : 20,\n  \"b\" : 20\n  }",
+    "uiNodeColor" : "{\n  \"r\" : 121,\n  \"g\" : 134,\n  \"b\" : 143\n  }",
+    "uiGraphZoom" : "{\n  \"value\" : 0.788560688495636\n  }",
+    "uiGraphPan" : "{\n  \"x\" : 651.1090713826277,\n  \"y\" : 26.75503241269212\n  }"
     },
   "title" : "BipedFingerGuideSolver",
   "ports" : [
@@ -17,7 +19,6 @@
       },
     {
       "objectType" : "Port",
-      "metadata" : {},
       "nodePortType" : "In",
       "defaultValues" : {
         "DrawingHandle" : null
@@ -38,18 +39,18 @@
       "objectType" : "Port",
       "nodePortType" : "Out",
       "defaultValues" : {
-        "Scalar" : 0
+        "Boolean" : false
         },
-      "name" : "rigScale",
+      "name" : "drawDebug",
       "execPortType" : "In"
       },
     {
       "objectType" : "Port",
       "nodePortType" : "Out",
       "defaultValues" : {
-        "Boolean" : false
+        "Scalar" : 0
         },
-      "name" : "drawDebug",
+      "name" : "rigScale",
       "execPortType" : "In"
       },
     {
@@ -74,7 +75,7 @@
   "extDeps" : {
     "InlineDrawing" : "*"
     },
-  "presetGUID" : "AC95239D46DC2DF59D899FEEEAE1AFEC",
+  "presetGUID" : "55F10AF8244F59CC75F62164D2F6DA39",
   "nodes" : [
     {
       "objectType" : "Inst",
@@ -429,7 +430,7 @@
     {
       "objectType" : "Inst",
       "metadata" : {
-        "uiGraphPos" : "{\"x\":-627.201,\"y\":-76.70520000000001}"
+        "uiGraphPos" : "{\"x\":-625.745,\"y\":1.89068}"
         },
       "name" : "Scalar_1",
       "ports" : [
@@ -445,7 +446,7 @@
     {
       "objectType" : "Inst",
       "metadata" : {
-        "uiGraphPos" : "{\"x\":-624.209,\"y\":-12.5852}"
+        "uiGraphPos" : "{\"x\":-625.664,\"y\":-78.0821}"
         },
       "name" : "Boolean_1",
       "ports" : [
@@ -461,7 +462,7 @@
     {
       "objectType" : "Inst",
       "metadata" : {
-        "uiGraphPos" : "{\"x\":-500.263,\"y\":-92.00620000000001}"
+        "uiGraphPos" : "{\"x\":-498.808,\"y\":-13.4103}"
         },
       "name" : "Cache_2",
       "ports" : [
@@ -477,7 +478,7 @@
     {
       "objectType" : "Inst",
       "metadata" : {
-        "uiGraphPos" : "{\"x\":-498.766,\"y\":-14.9772}"
+        "uiGraphPos" : "{\"x\":-500.222,\"y\":-80.47410000000001}"
         },
       "name" : "Cache_3",
       "ports" : [
@@ -509,7 +510,7 @@
     {
       "objectType" : "Inst",
       "metadata" : {
-        "uiGraphPos" : "{\"x\":-493.016,\"y\":229.614}"
+        "uiGraphPos" : "{\"x\":-665.1230000000001,\"y\":232.061}"
         },
       "name" : "Cache_5",
       "ports" : [
@@ -521,14 +522,46 @@
         ],
       "executable" : "Fabric.Core.Data.Cache",
       "presetGUID" : "D903AFD981FE9214C69943F542D5FD60"
+      },
+    {
+      "objectType" : "Inst",
+      "metadata" : {
+        "uiGraphPos" : "{\"x\":-499.018,\"y\":226.561}"
+        },
+      "name" : "ForceMat44Array",
+      "ports" : [
+        {
+          "objectType" : "InstPort",
+          "nodePortType" : "In",
+          "name" : "this"
+          }
+        ],
+      "definition" : {
+        "objectType" : "Func",
+        "title" : "ForceMat44Array",
+        "ports" : [
+          {
+            "objectType" : "Port",
+            "nodePortType" : "Out",
+            "name" : "this",
+            "execPortType" : "In",
+            "typeSpec" : "Mat44[]"
+            }
+          ],
+        "extDeps" : {},
+        "code" : "dfgEntry {
+  //result = lhs + rhs;
+}
+"
+        }
       }
     ],
   "connections" : {
-    "rigScale" : [
-      "Scalar_1.value"
-      ],
     "drawDebug" : [
       "Boolean_1.value"
+      ],
+    "rigScale" : [
+      "Scalar_1.value"
       ],
     "controls" : [
       "Cache_5.value"
@@ -582,15 +615,20 @@
       "GenerateDebugPlanes.sizes"
       ],
     "Cache_5.value" : [
+      "ForceMat44Array.this"
+      ],
+    "ForceMat44Array.this" : [
       "Convert_1.array"
       ]
     },
   "requiredPresets" : {
-    "Kraken.Solvers.BipedFingerGuideSolver" : {
+    "Kraken.Solvers.Biped.BipedFingerGuideSolver" : {
       "objectType" : "Graph",
       "metadata" : {
-        "uiGraphZoom" : "{\n  \"value\" : 0.6870590448379517\n  }",
-        "uiGraphPan" : "{\n  \"x\" : 646.740966796875,\n  \"y\" : 115.8140411376953\n  }"
+        "uiTextColor" : "{\n  \"r\" : 20,\n  \"g\" : 20,\n  \"b\" : 20\n  }",
+        "uiNodeColor" : "{\n  \"r\" : 121,\n  \"g\" : 134,\n  \"b\" : 143\n  }",
+        "uiGraphZoom" : "{\n  \"value\" : 0.788560688495636\n  }",
+        "uiGraphPan" : "{\n  \"x\" : 651.1090713826277,\n  \"y\" : 26.75503241269212\n  }"
         },
       "title" : "BipedFingerGuideSolver",
       "ports" : [
@@ -605,7 +643,6 @@
           },
         {
           "objectType" : "Port",
-          "metadata" : {},
           "nodePortType" : "In",
           "defaultValues" : {
             "DrawingHandle" : null
@@ -626,18 +663,18 @@
           "objectType" : "Port",
           "nodePortType" : "Out",
           "defaultValues" : {
-            "Scalar" : 0
+            "Boolean" : false
             },
-          "name" : "rigScale",
+          "name" : "drawDebug",
           "execPortType" : "In"
           },
         {
           "objectType" : "Port",
           "nodePortType" : "Out",
           "defaultValues" : {
-            "Boolean" : false
+            "Scalar" : 0
             },
-          "name" : "drawDebug",
+          "name" : "rigScale",
           "execPortType" : "In"
           },
         {
@@ -662,7 +699,7 @@
       "extDeps" : {
         "InlineDrawing" : "*"
         },
-      "presetGUID" : "AC95239D46DC2DF59D899FEEEAE1AFEC",
+      "presetGUID" : "55F10AF8244F59CC75F62164D2F6DA39",
       "nodes" : [
         {
           "objectType" : "Inst",
@@ -1017,7 +1054,7 @@
         {
           "objectType" : "Inst",
           "metadata" : {
-            "uiGraphPos" : "{\"x\":-627.201,\"y\":-76.70520000000001}"
+            "uiGraphPos" : "{\"x\":-625.745,\"y\":1.89068}"
             },
           "name" : "Scalar_1",
           "ports" : [
@@ -1033,7 +1070,7 @@
         {
           "objectType" : "Inst",
           "metadata" : {
-            "uiGraphPos" : "{\"x\":-624.209,\"y\":-12.5852}"
+            "uiGraphPos" : "{\"x\":-625.664,\"y\":-78.0821}"
             },
           "name" : "Boolean_1",
           "ports" : [
@@ -1049,7 +1086,7 @@
         {
           "objectType" : "Inst",
           "metadata" : {
-            "uiGraphPos" : "{\"x\":-500.263,\"y\":-92.00620000000001}"
+            "uiGraphPos" : "{\"x\":-498.808,\"y\":-13.4103}"
             },
           "name" : "Cache_2",
           "ports" : [
@@ -1065,7 +1102,7 @@
         {
           "objectType" : "Inst",
           "metadata" : {
-            "uiGraphPos" : "{\"x\":-498.766,\"y\":-14.9772}"
+            "uiGraphPos" : "{\"x\":-500.222,\"y\":-80.47410000000001}"
             },
           "name" : "Cache_3",
           "ports" : [
@@ -1097,7 +1134,7 @@
         {
           "objectType" : "Inst",
           "metadata" : {
-            "uiGraphPos" : "{\"x\":-493.016,\"y\":229.614}"
+            "uiGraphPos" : "{\"x\":-665.1230000000001,\"y\":232.061}"
             },
           "name" : "Cache_5",
           "ports" : [
@@ -1109,14 +1146,46 @@
             ],
           "executable" : "Fabric.Core.Data.Cache",
           "presetGUID" : "D903AFD981FE9214C69943F542D5FD60"
+          },
+        {
+          "objectType" : "Inst",
+          "metadata" : {
+            "uiGraphPos" : "{\"x\":-499.018,\"y\":226.561}"
+            },
+          "name" : "ForceMat44Array",
+          "ports" : [
+            {
+              "objectType" : "InstPort",
+              "nodePortType" : "In",
+              "name" : "this"
+              }
+            ],
+          "definition" : {
+            "objectType" : "Func",
+            "title" : "ForceMat44Array",
+            "ports" : [
+              {
+                "objectType" : "Port",
+                "nodePortType" : "Out",
+                "name" : "this",
+                "execPortType" : "In",
+                "typeSpec" : "Mat44[]"
+                }
+              ],
+            "extDeps" : {},
+            "code" : "dfgEntry {
+  //result = lhs + rhs;
+}
+"
+            }
           }
         ],
       "connections" : {
-        "rigScale" : [
-          "Scalar_1.value"
-          ],
         "drawDebug" : [
           "Boolean_1.value"
+          ],
+        "rigScale" : [
+          "Scalar_1.value"
           ],
         "controls" : [
           "Cache_5.value"
@@ -1170,6 +1239,9 @@
           "GenerateDebugPlanes.sizes"
           ],
         "Cache_5.value" : [
+          "ForceMat44Array.this"
+          ],
+        "ForceMat44Array.this" : [
           "Convert_1.array"
           ]
         }
