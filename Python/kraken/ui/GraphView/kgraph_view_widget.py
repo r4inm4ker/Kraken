@@ -114,7 +114,7 @@ class KGraphViewWidget(GraphViewWidget):
 
             filePath = self.openedFile
 
-            if not os.path.isdir(os.path.dirname(filePath)) or saveAs is True:
+            if saveAs is True or not filePath or not os.path.isdir(os.path.dirname(filePath)):
 
                 settings = self.window().getSettings()
                 settings.beginGroup('Files')
