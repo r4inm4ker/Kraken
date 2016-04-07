@@ -864,7 +864,11 @@ class Builder(object):
 
         # Create the connections now that all the components are built.
         for component in orderedComponents:
-            self.buildAttrConnections(component)
+
+            items = component.getItems()
+            for key, kObject in items.iteritems():
+                self.buildAttrConnections(kObject)
+
             self.buildInputConnections(component)
 
         for component in orderedComponents:
