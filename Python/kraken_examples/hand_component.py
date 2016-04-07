@@ -79,8 +79,11 @@ class HandComponentGuide(HandComponent):
         self.handCtrl.scalePoints(Vec3(1.0, 0.75, 1.0))
         self.handCtrl.setColor('yellow')
 
-        self.handGuideSettingsAttrGrp = AttributeGroup("GuideSettings", parent=self.handCtrl)
+        self.handGuideSettingsAttrGrp = AttributeGroup("Settings", parent=self.handCtrl)
         self.ctrlShapeToggle = BoolAttribute('ctrlShape_vis', value=False, parent=self.handGuideSettingsAttrGrp)
+        self.handDebugInputAttr = BoolAttribute('drawDebug', value=False, parent=self.handGuideSettingsAttrGrp)
+
+        self.drawDebugInputAttr.connect(self.handDebugInputAttr)
 
         self.guideCtrlHrcGrp = HierarchyGroup('controlShapes', parent=self.ctrlCmpGrp)
 
@@ -116,10 +119,17 @@ class HandComponentGuide(HandComponent):
         data['numJoints'] = self.numJointsAttr.getValue()
 
         fingerXfos = {}
+        fingerShapeCtrlData = {}
         for finger in self.fingers.keys():
             fingerXfos[finger] = [x.xfo for x in self.fingers[finger]]
 
+            fingerShapeCtrlData[finger] = []
+            for i, digit in enumerate(self.fingers[finger]):
+                if i != len(self.fingers[finger]) - 1:
+                    fingerShapeCtrlData[finger].append(digit.shapeCtrl.getCurveData())
+
         data['fingersGuideXfos'] = fingerXfos
+        data['fingerShapeCtrlData'] = fingerShapeCtrlData
 
         return data
 
@@ -141,11 +151,15 @@ class HandComponentGuide(HandComponent):
         self.digitNamesAttr.setValue(data.get('digitNames'))
 
         fingersGuideXfos = data.get('fingersGuideXfos')
+        fingerShapeCtrlData = data.get('fingerShapeCtrlData')
         if fingersGuideXfos is not None:
 
             for finger in self.fingers.keys():
                 for i in xrange(len(self.fingers[finger])):
                     self.fingers[finger][i].xfo = fingersGuideXfos[finger][i]
+
+                    if hasattr(self.fingers[finger][i], 'shapeCtrl'):
+                        self.fingers[finger][i].shapeCtrl.setCurveData(fingerShapeCtrlData[finger][i])
 
         return True
 
@@ -178,6 +192,7 @@ class HandComponentGuide(HandComponent):
                 jointXfo.setFromVectors(boneVec.unit(), bone1Normal, bone1ZAxis, self.fingers[finger][i].xfo.tr)
 
                 jointData = {
+                    'curveData': self.fingers[finger][i].shapeCtrl.getCurveData(),
                     'length': self.fingers[finger][i].xfo.tr.distanceTo(self.fingers[finger][i+1].xfo.tr),
                     'xfo': jointXfo
                 }
@@ -200,12 +215,14 @@ class HandComponentGuide(HandComponent):
         firstDigitCtrl = Control(name + "01", parent=self.handCtrl, shape='sphere')
         firstDigitCtrl.scalePoints(Vec3(0.125, 0.125, 0.125))
 
-        firstDigitGuideCtrl = Control(name + "Gd01", parent=self.guideCtrlHrcGrp, shape='square')
-        firstDigitGuideCtrl.scalePoints(Vec3(0.175, 0.175, 0.175))
-        firstDigitGuideCtrl.translatePoints(Vec3(0.0, 0.125, 0.0))
-        fingerGuideCtrls.append(firstDigitGuideCtrl)
+        firstDigitShapeCtrl = Control(name + "Shp01", parent=self.guideCtrlHrcGrp, shape='square')
+        firstDigitShapeCtrl.setColor('yellow')
+        firstDigitShapeCtrl.scalePoints(Vec3(0.175, 0.175, 0.175))
+        firstDigitShapeCtrl.translatePoints(Vec3(0.0, 0.125, 0.0))
+        fingerGuideCtrls.append(firstDigitShapeCtrl)
+        firstDigitCtrl.shapeCtrl = firstDigitShapeCtrl
 
-        firstDigitVisAttr = firstDigitGuideCtrl.getVisibilityAttr()
+        firstDigitVisAttr = firstDigitShapeCtrl.getVisibilityAttr()
         firstDigitVisAttr.connect(self.ctrlShapeToggle)
 
         triangleCtrl = Control('tempCtrl', parent=None, shape='triangle')
@@ -220,6 +237,7 @@ class HandComponentGuide(HandComponent):
         digitSizeAttr = ScalarAttribute('size', value=0.25, parent=digitSettingsAttrGrp)
         digitSizeAttributes.append(digitSizeAttr)
 
+        # Set Finger
         self.fingers[name] = []
         self.fingers[name].append(firstDigitCtrl)
 
@@ -234,17 +252,19 @@ class HandComponentGuide(HandComponent):
                 digitCtrl.scalePoints(Vec3(0.125, 0.125, 0.125))
                 digitCtrl.appendCurveData(triangleCtrl.getCurveData())
 
-                digitGuideCtrl = Control(name + 'Gd' + str(i).zfill(2), parent=self.guideCtrlHrcGrp, shape='circle')
-                digitGuideCtrl.scalePoints(Vec3(0.175, 0.175, 0.175))
+                digitShapeCtrl = Control(name + 'Shp' + str(i).zfill(2), parent=self.guideCtrlHrcGrp, shape='circle')
+                digitShapeCtrl.setColor('yellow')
+                digitShapeCtrl.scalePoints(Vec3(0.175, 0.175, 0.175))
+                digitShapeCtrl.getVisibilityAttr().connect(self.ctrlShapeToggle)
 
-                digitGuideCtrl.getVisibilityAttr().connect(self.ctrlShapeToggle)
+                digitCtrl.shapeCtrl = digitShapeCtrl
 
                 if i == 2:
-                    digitGuideCtrl.translatePoints(Vec3(0.0, 0.125, 0.0))
+                    digitShapeCtrl.translatePoints(Vec3(0.0, 0.125, 0.0))
                 else:
-                    digitGuideCtrl.rotatePoints(0.0, 0.0, 90.0)
+                    digitShapeCtrl.rotatePoints(0.0, 0.0, 90.0)
 
-                fingerGuideCtrls.append(digitGuideCtrl)
+                fingerGuideCtrls.append(digitShapeCtrl)
 
                 # Add size attr to all but last guide control
                 digitSettingsAttrGrp = AttributeGroup("DigitSettings", parent=digitCtrl)
@@ -276,6 +296,7 @@ class HandComponentGuide(HandComponent):
 
         # Add Xfo Outputs
         fingerGuideCanvasOp.setOutput('result', fingerGuideCtrls)
+        fingerGuideCanvasOp.setOutput('forceEval', firstDigitCtrl.getVisibilityAttr())
 
         return firstDigitCtrl
 
@@ -456,26 +477,14 @@ class HandComponentRig(HandComponent):
 
             jointXfo = joint.get('xfo', Xfo())
             jointLen = joint.get('length', 1.0)
+            jointCrvData = joint.get('curveData')
 
             # Create Controls
-            if i == 0:
-                ctrlShape = "square"
-            else:
-                ctrlShape = "circle"
-
             newJointCtrlSpace = CtrlSpace(jointName, parent=parentCtrl)
-            newJointCtrl = Control(jointName, parent=newJointCtrlSpace, shape=ctrlShape)
+            newJointCtrl = Control(jointName, parent=newJointCtrlSpace, shape='square')
 
-            scaleVec = Vec3(0.3, 0.3, 0.3)
-            if i == 0:
-                newJointCtrl.alignOnXAxis()
-                newJointCtrl.scalePoints(Vec3(jointLen * 0.8, 0.2, 0.2))
-                newJointCtrl.translatePoints(Vec3(0.0, 0.35, 0.0))
-            elif i == 1:
-                newJointCtrl.scalePoints(Vec3(0.2, 0.2, 0.2))
-                newJointCtrl.translatePoints(Vec3(0.0, 0.35, 0.0))
-            elif i > 1:
-                newJointCtrl.rotatePoints(0.0, 0.0, 90)
+            if jointCrvData is not None:
+                newJointCtrl.setCurveData(jointCrvData)
 
             fingerCtrls.append(newJointCtrl)
 
