@@ -23,7 +23,7 @@ from kraken.core.objects.components.component_output import ComponentOutput
 
 
 # Note: does a Component need to inherit off 'Object3D'?
-# These items exist only to structure a rig as a graph. 
+# These items exist only to structure a rig as a graph.
 # The never get built.
 class Component(Object3D):
     """Kraken Component object."""
@@ -200,7 +200,7 @@ class Component(Object3D):
 
         """
 
-        # Note: layer objects are added to the generated rig, but without a rig, they are 
+        # Note: layer objects are added to the generated rig, but without a rig, they are
         # simply root items in the scene. This is because components are never built
         container = self.getContainer()
 
@@ -275,38 +275,35 @@ class Component(Object3D):
         return True
 
 
-    def getAllHierarchyNodes(self, classType, inheritedClass=False):
+    def getHierarchyNodes(self, classType=None, inheritedClass=False):
         """Returns a nodeList with all children in component hierarchy that
         matches classType.
 
         Args:
-            classType (type): Class type to match.
-            inheritedClass (bool): Match nodes that is a sub-class of type.
+            classType (str): Optional Class type to match.
+            inheritedClass (bool): Optional Match nodes that is a sub-class of type.
 
         Returns:
             list: Nodes that match the class type.
 
         """
 
-        raise Exception("We should not be here. This mehtod is to be deprecated")
-
-        def getHierarchyNodes(kObject, classType, nodeList, inheritedClass):
-            for i in xrange(kObject.getNumChildren()):
-                child = kObject.getChildByIndex(i)
-                if inheritedClass and issubclass(child.__class__.__name__, classType):
-                    nodeList.append(child)
-                elif isinstance(child, classType):
-                    nodeList.append(child)
-
-                getHierarchyNodes(child, classType=classType, nodeList=nodeList, inheritedClass=inheritedClass)
-
-        container = self.getContainer()
         nodeList = []
-        for i in xrange(container.getNumChildren()):
-            child = container.getChildByIndex(i)
-            getHierarchyNodes(child, classType=classType, nodeList=nodeList, inheritedClass=inheritedClass)
 
-        nodeList = [x for x in nodeList if x.getComponent() is self]
+        for name, item in self._items.iteritems():
+
+            if not item.isTypeOf("Object3D"):
+                continue
+
+            if classType:
+                if inheritedClass and item.isTypeOf(classType):
+                    nodeList.append(item)
+                elif item.getTypeName() == classType
+                    nodeList.append(item)
+            else:
+                nodeList.append(item)
+
+            item.getDescendents(nodeList=nodeList, classType=classType, inheritedClass=inheritedClass)
 
         return nodeList
 
@@ -394,6 +391,32 @@ class Component(Object3D):
 
         return componentInputPort
 
+    def deleteInput(self, name, **kwargs):
+        """Deletes an input object and also any connected target object that matches
+        the data type that is passed.
+
+        Args:
+            name (str): Name of the input to delete.
+
+        """
+        dataType = None
+        for eachInput in self._inputs:
+            if eachInput.getName() == name:
+                dataType = eachInput.getDataType()
+
+        # Handle keyword arguments
+        for k, v in kwargs.iteritems():
+            if k == 'parent':
+                if dataType.startswith('Xfo'):
+                    v.removeChildByName(name)
+                else:
+                    v.removeAttributeByName(name)
+            else:
+                print "Keyword '" + k + "' is not supported with createInput method!"
+
+        self.removeInputByName(name)
+
+
 
     def addInput(self, name, dataType):
         """Add input port Object to this object.
@@ -460,6 +483,49 @@ class Component(Object3D):
 
         return True
 
+
+    def removeOutputByIndex(self, index):
+        """Remove ComponentOutputPort at specified index.
+
+        Args:
+            index (int): Index of the ComponentOutputPort to remove.
+
+        Returns:
+            bool: True if successful.
+
+        """
+
+        if self.checkOutputIndex(index) is not True:
+            return False
+
+        del self._outputs[index]
+
+        return True
+
+
+    def removeOutputByName(self, name):
+        """Removes a output from this object by name.
+
+        Args:
+            name (str): Name of output to remove.
+
+        Returns:
+            bool: True if successful.
+
+        """
+
+        removeIndex = None
+
+        for i, eachOutput in enumerate(self._outputs):
+            if eachOutput.getName() == name:
+                removeIndex = i
+
+        if removeIndex is None:
+            raise ValueError("'" + name + "' is not a valid output of this object.")
+
+        self.removeOutputByIndex(removeIndex)
+
+        return True
 
     def getNumInputs(self):
         """Returns the number of inputs this component has.
@@ -973,9 +1039,95 @@ class Component(Object3D):
         return True
 
 
+    def saveAllObjectData(self, data, classType="Control", inheritedClass=False):
+        """Stores the Guide data for all objects of this type in the component.
+
+        Args:
+            data (dict): The JSON rig data object.
+            classType (str): The class of the type of object we want to store to data
+            inheritedClass (bool): Also include all objects that are inherited from classType
+
+        Returns:
+            dict: The JSON rig data object.
+
+        """
+        for obj in self.getHierarchyNodes(classType=classType, inheritedClass=inheritedClass):
+            self.saveObjectData(data, [obj])
+
+        return data
+
+
+    def saveObjectData(self, data, objectList):
+        """
+        Stores the Guide data for component objects in this list.
+        Guide data is xfo and curve information
+
+        Args:
+            data (dict): The JSON rig data object.
+            objectList (list): list of Object3D objects
+
+        Returns:
+            dict: The JSON rig data object.
+
+        """
+        for obj in objectList:
+            objName = obj.getName()
+            data[objName + "Xfo"] = obj.xfo
+            if obj.isTypeOf("Curve"):
+                data[objName + "CurveData"] = obj.getCurveData()
+
+        return data
+
+
+
+    def loadAllObjectData(self, data, classType=Control, inheritedClass=False):
+        """Stores the Guide data for all objects of this type in the component.
+
+        Args:
+
+            data (dict): The JSON rig data object.
+            classType (type): The class of the type of object we want to store to data
+            inheritedClass (bool): Also include all objects that are inherited from classType
+
+        Returns:
+            dict: The JSON rig data object.
+
+        """
+        for obj in self.getHierarchyNodes(classType=classType, inheritedClass=inheritedClass):
+            data[obj.getName() + "Xfo"] = obj.xfo
+            try:
+                data[obj.getName() + "CurveData"] = obj.getCurveData()
+            except:
+                pass
+
+        return data
+
+
+    def loadObjectData(self, data, objectList):
+        """
+        Loads the Guide data for component objects in this list.
+        Guide data is xfo and curve information
+
+        Args:
+            data (dict): The JSON rig data object.
+            objectList (list): list of Object3D objects
+
+        """
+             # this should probably live in the GuideClase
+        for obj in objectList:
+            objName = obj.getName()
+            if (objName + "Xfo") in data:
+                obj.xfo = data[objName + "Xfo"]
+
+            if obj.isTypeOf("Curve"):
+                if (objName + "CurveData") in data:
+                    obj.setCurveData(data[objName + "CurveData"])
+
+
     # ==================
     # Rig Build Methods
     # =================
+
     def getRigBuildData(self):
         """Returns the Guide data used by the Rig Component to define the layout of the final rig..
 
