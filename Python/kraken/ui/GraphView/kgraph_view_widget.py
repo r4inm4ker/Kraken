@@ -112,20 +112,24 @@ class KGraphViewWidget(GraphViewWidget):
         try:
             self.window().setCursor(QtCore.Qt.WaitCursor)
 
-            if self.openedFile is None:
-                filePath = GetKrakenPath()
-            else:
+            filePath = self.openedFile
+
+            if not os.path.isdir(os.path.dirname(filePath)) or saveAs is True:
+
                 settings = self.window().getSettings()
                 settings.beginGroup('Files')
-                filePath = settings.value("lastFilePath", os.path.join(GetKrakenPath(), self.guideRig.getName()))
+                lastFilePath = settings.value("lastFilePath", os.path.join(GetKrakenPath(), self.guideRig.getName()))
                 settings.endGroup()
 
-            if saveAs is True:
+                filePathDir = os.path.dirname(lastFilePath)
+
+                if not os.path.isdir(filePathDir):
+                    filePathDir = GetKrakenPath()
 
                 fileDialog = QtGui.QFileDialog(self)
                 fileDialog.setOption(QtGui.QFileDialog.DontUseNativeDialog, on=True)
                 fileDialog.setWindowTitle('Save Rig Preset As')
-                fileDialog.setDirectory(os.path.abspath(filePath))
+                fileDialog.setDirectory(os.path.abspath(filePathDir))
                 fileDialog.setAcceptMode(QtGui.QFileDialog.AcceptSave)
                 fileDialog.setNameFilter('Kraken Rig (*.krg)')
                 fileDialog.setDefaultSuffix('krg')
@@ -146,16 +150,19 @@ class KGraphViewWidget(GraphViewWidget):
             self.guideRig.setMetaData('backdrops', backdropData)
 
             # Write rig file
-            self.guideRig.writeRigDefinitionFile(filePath)
+            try:
+                self.guideRig.writeRigDefinitionFile(filePath)
+                settings = self.window().getSettings()
+                settings.beginGroup('Files')
+                settings.setValue("lastFilePath", filePath)
+                settings.endGroup()
+                self.openedFile = filePath
 
-            settings = self.window().getSettings()
-            settings.beginGroup('Files')
-            settings.setValue("lastFilePath", filePath)
-            settings.endGroup()
+                self.reportMessage('Saved Rig file: ' + filePath, level='information')
 
-            self.openedFile = filePath
-
-            self.reportMessage('Saved Rig file: ' + filePath, level='information')
+            except Exception as e:
+                self.reportMessage('Error Saving Rig File', level='error', exception=e, timeOut=0)
+                return False
 
             return filePath
 
@@ -191,6 +198,9 @@ class KGraphViewWidget(GraphViewWidget):
             settings.beginGroup('Files')
             lastFilePath = settings.value("lastFilePath", os.path.join(GetKrakenPath(), self.guideRig.getName()))
             settings.endGroup()
+
+            if not lastFilePath:
+                lastFilePath = GetKrakenPath()
 
             fileDialog = QtGui.QFileDialog(self)
             fileDialog.setOption(QtGui.QFileDialog.DontUseNativeDialog, on=True)
