@@ -442,10 +442,12 @@ class Object3D(SceneItem):
             nodeList = []
 
         for child in self._children:
-                if classType:
-                    if inheritedClass and child.isTypeOf(classType):
+                if classType is not None:
+                    if inheritedClass is not None and child.isTypeOf(classType):
                         nodeList.append(child)
-                    elif child.getTypeName() == classType
+                    elif child.getTypeName() == classType:
+                        nodeList.append(child)
+
                 else:
                     nodeList.append(child)
 

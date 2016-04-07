@@ -298,7 +298,7 @@ class Component(Object3D):
             if classType:
                 if inheritedClass and item.isTypeOf(classType):
                     nodeList.append(item)
-                elif item.getTypeName() == classType
+                elif item.getTypeName() == classType:
                     nodeList.append(item)
             else:
                 nodeList.append(item)
@@ -1080,7 +1080,7 @@ class Component(Object3D):
 
 
 
-    def loadAllObjectData(self, data, classType=Control, inheritedClass=False):
+    def loadAllObjectData(self, data, classType="Control", inheritedClass=False):
         """Stores the Guide data for all objects of this type in the component.
 
         Args:
