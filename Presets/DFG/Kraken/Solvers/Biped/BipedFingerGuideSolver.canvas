@@ -4,7 +4,7 @@
     "uiTextColor" : "{\n  \"r\" : 20,\n  \"g\" : 20,\n  \"b\" : 20\n  }",
     "uiNodeColor" : "{\n  \"r\" : 121,\n  \"g\" : 134,\n  \"b\" : 143\n  }",
     "uiGraphZoom" : "{\n  \"value\" : 0.788560688495636\n  }",
-    "uiGraphPan" : "{\n  \"x\" : 651.1090713826277,\n  \"y\" : 26.75503241269212\n  }"
+    "uiGraphPan" : "{\n  \"x\" : 219.1090698242188,\n  \"y\" : -90.24496459960938\n  }"
     },
   "title" : "BipedFingerGuideSolver",
   "ports" : [
@@ -70,12 +70,21 @@
         },
       "name" : "planeSizes",
       "execPortType" : "In"
+      },
+    {
+      "objectType" : "Port",
+      "nodePortType" : "In",
+      "defaultValues" : {
+        "Boolean" : false
+        },
+      "name" : "forceEval",
+      "execPortType" : "Out"
       }
     ],
   "extDeps" : {
     "InlineDrawing" : "*"
     },
-  "presetGUID" : "55F10AF8244F59CC75F62164D2F6DA39",
+  "presetGUID" : "136ACF7A9D415E6927A21C0863AD90BF",
   "nodes" : [
     {
       "objectType" : "Inst",
@@ -554,6 +563,25 @@
 }
 "
         }
+      },
+    {
+      "objectType" : "Inst",
+      "metadata" : {
+        "uiGraphPos" : "{\"x\":-19.1606,\"y\":298.322}"
+        },
+      "name" : "Boolean_2",
+      "ports" : [
+        {
+          "objectType" : "InstPort",
+          "nodePortType" : "In",
+          "defaultValues" : {
+            "Boolean" : true
+            },
+          "name" : "value"
+          }
+        ],
+      "executable" : "Fabric.Core.Constants.Boolean",
+      "presetGUID" : "AC57A4CE7AD2AF05FAECFA35F4E8C2F6"
       }
     ],
   "connections" : {
@@ -619,6 +647,9 @@
       ],
     "ForceMat44Array.this" : [
       "Convert_1.array"
+      ],
+    "Boolean_2.value" : [
+      "forceEval"
       ]
     },
   "requiredPresets" : {
@@ -628,7 +659,7 @@
         "uiTextColor" : "{\n  \"r\" : 20,\n  \"g\" : 20,\n  \"b\" : 20\n  }",
         "uiNodeColor" : "{\n  \"r\" : 121,\n  \"g\" : 134,\n  \"b\" : 143\n  }",
         "uiGraphZoom" : "{\n  \"value\" : 0.788560688495636\n  }",
-        "uiGraphPan" : "{\n  \"x\" : 651.1090713826277,\n  \"y\" : 26.75503241269212\n  }"
+        "uiGraphPan" : "{\n  \"x\" : 219.1090698242188,\n  \"y\" : -90.24496459960938\n  }"
         },
       "title" : "BipedFingerGuideSolver",
       "ports" : [
@@ -694,12 +725,21 @@
             },
           "name" : "planeSizes",
           "execPortType" : "In"
+          },
+        {
+          "objectType" : "Port",
+          "nodePortType" : "In",
+          "defaultValues" : {
+            "Boolean" : false
+            },
+          "name" : "forceEval",
+          "execPortType" : "Out"
           }
         ],
       "extDeps" : {
         "InlineDrawing" : "*"
         },
-      "presetGUID" : "55F10AF8244F59CC75F62164D2F6DA39",
+      "presetGUID" : "136ACF7A9D415E6927A21C0863AD90BF",
       "nodes" : [
         {
           "objectType" : "Inst",
@@ -1178,6 +1218,25 @@
 }
 "
             }
+          },
+        {
+          "objectType" : "Inst",
+          "metadata" : {
+            "uiGraphPos" : "{\"x\":-19.1606,\"y\":298.322}"
+            },
+          "name" : "Boolean_2",
+          "ports" : [
+            {
+              "objectType" : "InstPort",
+              "nodePortType" : "In",
+              "defaultValues" : {
+                "Boolean" : true
+                },
+              "name" : "value"
+              }
+            ],
+          "executable" : "Fabric.Core.Constants.Boolean",
+          "presetGUID" : "AC57A4CE7AD2AF05FAECFA35F4E8C2F6"
           }
         ],
       "connections" : {
@@ -1243,6 +1302,9 @@
           ],
         "ForceMat44Array.this" : [
           "Convert_1.array"
+          ],
+        "Boolean_2.value" : [
+          "forceEval"
           ]
         }
       },
