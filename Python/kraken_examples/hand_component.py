@@ -12,6 +12,7 @@ from kraken.core.objects.attributes.attribute_group import AttributeGroup
 from kraken.core.objects.attributes.scalar_attribute import ScalarAttribute
 from kraken.core.objects.attributes.integer_attribute import IntegerAttribute
 from kraken.core.objects.attributes.string_attribute import StringAttribute
+from kraken.core.objects.attributes.bool_attribute import BoolAttribute
 
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
@@ -27,7 +28,6 @@ from kraken.core.objects.operators.kl_operator import KLOperator
 
 from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
-
 
 
 class HandComponent(BaseExampleComponent):
@@ -50,7 +50,6 @@ class HandComponent(BaseExampleComponent):
         self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp).getTarget()
 
         # Declare Output Attrs
-
 
 
 class HandComponentGuide(HandComponent):
@@ -79,6 +78,9 @@ class HandComponentGuide(HandComponent):
         self.handCtrl.rotatePoints(0.0, 0.0, 90.0)
         self.handCtrl.scalePoints(Vec3(1.0, 0.75, 1.0))
         self.handCtrl.setColor('yellow')
+
+        self.handGuideSettingsAttrGrp = AttributeGroup("GuideSettings", parent=self.handCtrl)
+        self.ctrlShapeToggle = BoolAttribute('ctrlShape_vis', value=False, parent=self.handGuideSettingsAttrGrp)
 
         self.guideCtrlHrcGrp = HierarchyGroup('controlShapes', parent=self.ctrlCmpGrp)
 
@@ -203,6 +205,9 @@ class HandComponentGuide(HandComponent):
         firstDigitGuideCtrl.translatePoints(Vec3(0.0, 0.125, 0.0))
         fingerGuideCtrls.append(firstDigitGuideCtrl)
 
+        firstDigitVisAttr = firstDigitGuideCtrl.getVisibilityAttr()
+        firstDigitVisAttr.connect(self.ctrlShapeToggle)
+
         triangleCtrl = Control('tempCtrl', parent=None, shape='triangle')
         triangleCtrl.rotatePoints(90.0, 0.0, 0.0)
         triangleCtrl.scalePoints(Vec3(0.025, 0.025, 0.025))
@@ -231,6 +236,8 @@ class HandComponentGuide(HandComponent):
 
                 digitGuideCtrl = Control(name + 'Gd' + str(i).zfill(2), parent=self.guideCtrlHrcGrp, shape='circle')
                 digitGuideCtrl.scalePoints(Vec3(0.175, 0.175, 0.175))
+
+                digitGuideCtrl.getVisibilityAttr().connect(self.ctrlShapeToggle)
 
                 if i == 2:
                     digitGuideCtrl.translatePoints(Vec3(0.0, 0.125, 0.0))
