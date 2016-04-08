@@ -391,32 +391,6 @@ class Component(Object3D):
 
         return componentInputPort
 
-    def deleteInput(self, name, **kwargs):
-        """Deletes an input object and also any connected target object that matches
-        the data type that is passed.
-
-        Args:
-            name (str): Name of the input to delete.
-
-        """
-        dataType = None
-        for eachInput in self._inputs:
-            if eachInput.getName() == name:
-                dataType = eachInput.getDataType()
-
-        # Handle keyword arguments
-        for k, v in kwargs.iteritems():
-            if k == 'parent':
-                if dataType.startswith('Xfo'):
-                    v.removeChildByName(name)
-                else:
-                    v.removeAttributeByName(name)
-            else:
-                print "Keyword '" + k + "' is not supported with createInput method!"
-
-        self.removeInputByName(name)
-
-
 
     def addInput(self, name, dataType):
         """Add input port Object to this object.
@@ -483,49 +457,6 @@ class Component(Object3D):
 
         return True
 
-
-    def removeOutputByIndex(self, index):
-        """Remove ComponentOutputPort at specified index.
-
-        Args:
-            index (int): Index of the ComponentOutputPort to remove.
-
-        Returns:
-            bool: True if successful.
-
-        """
-
-        if self.checkOutputIndex(index) is not True:
-            return False
-
-        del self._outputs[index]
-
-        return True
-
-
-    def removeOutputByName(self, name):
-        """Removes a output from this object by name.
-
-        Args:
-            name (str): Name of output to remove.
-
-        Returns:
-            bool: True if successful.
-
-        """
-
-        removeIndex = None
-
-        for i, eachOutput in enumerate(self._outputs):
-            if eachOutput.getName() == name:
-                removeIndex = i
-
-        if removeIndex is None:
-            raise ValueError("'" + name + "' is not a valid output of this object.")
-
-        self.removeOutputByIndex(removeIndex)
-
-        return True
 
     def getNumInputs(self):
         """Returns the number of inputs this component has.
