@@ -1,53 +1,122 @@
 Failed to find DCC builder. Falling back to Python builder.
-building:Leg as:LLeg
-building:Leg.controls as:controls
-building:Leg.controls.Leg as:Leg_L_cmp
-building:Leg.controls.Leg.inputs as:Leg_L_inputs_hrc
-building:Leg.controls.Leg.inputs.globalSRT as:Leg_L_globalSRT_cmpIn
-building:Leg.controls.Leg.inputs.pelvisInput as:Leg_L_pelvisInput_cmpIn
-building:Leg.controls.Leg.inputs.ikTarget as:Leg_L_ikTarget_cmpIn
-building:Leg.controls.Leg.outputs as:Leg_L_outputs_hrc
-building:Leg.controls.Leg.outputs.femur as:Leg_L_femur_cmpOut
-building:Leg.controls.Leg.outputs.shin as:Leg_L_shin_cmpOut
-building:Leg.controls.Leg.outputs.ikHandle as:Leg_L_ikHandle_cmpOut
-building:Leg.controls.Leg.outputs.legEnd as:Leg_L_legEnd_cmpOut
-building:Leg.controls.Leg.outputs.legEndFK as:Leg_L_legEndFK_cmpOut
-building:Leg.controls.Leg.femurFK as:Leg_L_femurFK_ctrlSpace
-building:Leg.controls.Leg.femurFK.femurFK as:Leg_L_femurFK_ctrl
-building:Leg.controls.Leg.femurFK.femurFK.shinFK as:Leg_L_shinFK_ctrlSpace
-building:Leg.controls.Leg.femurFK.femurFK.shinFK.shinFK as:Leg_L_shinFK_ctrl
-building:Leg.controls.Leg.IK as:Leg_L_IK_ctrlSpace
-building:Leg.controls.Leg.IK.IK as:Leg_L_IK_ctrl
-building:Leg.controls.Leg.ikRootPosition as:Leg_L_ikRootPosition_loc
-building:Leg.controls.Leg.UpV as:Leg_L_UpV_ctrlSpace
-building:Leg.controls.Leg.UpV.UpV as:Leg_L_UpV_ctrl
-building:Leg.deformers as:deformers
-building:Leg.deformers.Leg as:Leg_L_cmp
-building:Leg.deformers.Leg.femur as:Leg_L_femur_def
-building:Leg.deformers.Leg.shin as:Leg_L_shin_def
-Leg:L
-Leg:L.controls
-Leg:L.controls.Leg:L
-Leg:L.controls.Leg:L.inputs
-Leg:L.controls.Leg:L.inputs.globalSRT
-Leg:L.controls.Leg:L.inputs.pelvisInput
-Leg:L.controls.Leg:L.inputs.ikTarget
-Leg:L.controls.Leg:L.outputs
-Leg:L.controls.Leg:L.outputs.femur
-Leg:L.controls.Leg:L.outputs.shin
-Leg:L.controls.Leg:L.outputs.ikHandle
-Leg:L.controls.Leg:L.outputs.legEnd
-Leg:L.controls.Leg:L.outputs.legEndFK
-Leg:L.controls.Leg:L.femurFK
-Leg:L.controls.Leg:L.femurFK.femurFK
-Leg:L.controls.Leg:L.femurFK.femurFK.shinFK
-Leg:L.controls.Leg:L.femurFK.femurFK.shinFK.shinFK
-Leg:L.controls.Leg:L.IK
-Leg:L.controls.Leg:L.IK.IK
-Leg:L.controls.Leg:L.ikRootPosition
-Leg:L.controls.Leg:L.UpV
-Leg:L.controls.Leg:L.UpV.UpV
-Leg:L.deformers
-Leg:L.deformers.Leg:L
-Leg:L.deformers.Leg:L.femur
-Leg:L.deformers.Leg:L.shin
+building: controls.Leg as: Leg_L_cmp type: ComponentGroup
+buildGroup: controls.Leg as: Leg_L_cmp
+building: controls.Leg.inputs as: Leg_L_inputs_hrc type: HierarchyGroup
+buildHierarchyGroup: controls.Leg.inputs as: Leg_L_inputs_hrc
+building: controls.Leg.inputs.globalSRT as: Leg_L_globalSRT_cmpIn type: ComponentInput
+buildLocator: controls.Leg.inputs.globalSRT as: Leg_L_globalSRT_cmpIn
+building: controls.Leg.inputs.pelvisInput as: Leg_L_pelvisInput_cmpIn type: ComponentInput
+buildLocator: controls.Leg.inputs.pelvisInput as: Leg_L_pelvisInput_cmpIn
+building: controls.Leg.inputs.ikTarget as: Leg_L_ikTarget_cmpIn type: ComponentInput
+buildLocator: controls.Leg.inputs.ikTarget as: Leg_L_ikTarget_cmpIn
+building: controls.Leg.outputs as: Leg_L_outputs_hrc type: HierarchyGroup
+buildHierarchyGroup: controls.Leg.outputs as: Leg_L_outputs_hrc
+building: controls.Leg.outputs.femur as: Leg_L_femur_cmpOut type: ComponentOutput
+buildLocator: controls.Leg.outputs.femur as: Leg_L_femur_cmpOut
+building: controls.Leg.outputs.shin as: Leg_L_shin_cmpOut type: ComponentOutput
+buildLocator: controls.Leg.outputs.shin as: Leg_L_shin_cmpOut
+building: controls.Leg.outputs.ikHandle as: Leg_L_ikHandle_cmpOut type: ComponentOutput
+buildLocator: controls.Leg.outputs.ikHandle as: Leg_L_ikHandle_cmpOut
+building: controls.Leg.outputs.legEnd as: Leg_L_legEnd_cmpOut type: ComponentOutput
+buildLocator: controls.Leg.outputs.legEnd as: Leg_L_legEnd_cmpOut
+building: controls.Leg.outputs.legEndFK as: Leg_L_legEndFK_cmpOut type: ComponentOutput
+buildLocator: controls.Leg.outputs.legEndFK as: Leg_L_legEndFK_cmpOut
+building: controls.Leg.femurFK as: Leg_L_femurFK_ctrlSpace type: CtrlSpace
+buildGroup: controls.Leg.femurFK as: Leg_L_femurFK_ctrlSpace
+building: controls.Leg.femurFK.femurFK as: Leg_L_femurFK_ctrl type: Control
+buildControl:controls.Leg.femurFK.femurFK as: Leg_L_femurFK_ctrl
+building: controls.Leg.femurFK.femurFK.shinFK as: Leg_L_shinFK_ctrlSpace type: CtrlSpace
+buildGroup: controls.Leg.femurFK.femurFK.shinFK as: Leg_L_shinFK_ctrlSpace
+building: controls.Leg.femurFK.femurFK.shinFK.shinFK as: Leg_L_shinFK_ctrl type: Control
+buildControl:controls.Leg.femurFK.femurFK.shinFK.shinFK as: Leg_L_shinFK_ctrl
+building: controls.Leg.IK as: Leg_L_IK_ctrlSpace type: CtrlSpace
+buildGroup: controls.Leg.IK as: Leg_L_IK_ctrlSpace
+building: controls.Leg.IK.IK as: Leg_L_IK_ctrl type: Control
+buildControl:controls.Leg.IK.IK as: Leg_L_IK_ctrl
+building: controls.Leg.ikRootPosition as: Leg_L_ikRootPosition_loc type: Locator
+buildLocator: controls.Leg.ikRootPosition as: Leg_L_ikRootPosition_loc
+building: controls.Leg.UpV as: Leg_L_UpV_ctrlSpace type: CtrlSpace
+buildGroup: controls.Leg.UpV as: Leg_L_UpV_ctrlSpace
+building: controls.Leg.UpV.UpV as: Leg_L_UpV_ctrl type: Control
+buildControl:controls.Leg.UpV.UpV as: Leg_L_UpV_ctrl
+building: deformers as: deformers type: Layer
+buildLayer: deformers as: deformers
+building: deformers.Leg as: Leg_L_cmp type: ComponentGroup
+buildGroup: deformers.Leg as: Leg_L_cmp
+building: deformers.Leg.femur as: Leg_L_femur_def type: Joint
+buildJoint: deformers.Leg.femur as: Leg_L_femur_def
+building: deformers.Leg.shin as: Leg_L_shin_def type: Joint
+buildJoint: deformers.Leg.shin as: Leg_L_shin_def
+building: controls as: controls type: Layer
+buildLayer: controls as: controls
+building: controls.Leg as: Leg_L_cmp type: ComponentGroup
+buildGroup: controls.Leg as: Leg_L_cmp
+building: controls.Leg.inputs as: Leg_L_inputs_hrc type: HierarchyGroup
+buildHierarchyGroup: controls.Leg.inputs as: Leg_L_inputs_hrc
+building: controls.Leg.inputs.globalSRT as: Leg_L_globalSRT_cmpIn type: ComponentInput
+buildLocator: controls.Leg.inputs.globalSRT as: Leg_L_globalSRT_cmpIn
+building: controls.Leg.inputs.pelvisInput as: Leg_L_pelvisInput_cmpIn type: ComponentInput
+buildLocator: controls.Leg.inputs.pelvisInput as: Leg_L_pelvisInput_cmpIn
+building: controls.Leg.inputs.ikTarget as: Leg_L_ikTarget_cmpIn type: ComponentInput
+buildLocator: controls.Leg.inputs.ikTarget as: Leg_L_ikTarget_cmpIn
+building: controls.Leg.outputs as: Leg_L_outputs_hrc type: HierarchyGroup
+buildHierarchyGroup: controls.Leg.outputs as: Leg_L_outputs_hrc
+building: controls.Leg.outputs.femur as: Leg_L_femur_cmpOut type: ComponentOutput
+buildLocator: controls.Leg.outputs.femur as: Leg_L_femur_cmpOut
+building: controls.Leg.outputs.shin as: Leg_L_shin_cmpOut type: ComponentOutput
+buildLocator: controls.Leg.outputs.shin as: Leg_L_shin_cmpOut
+building: controls.Leg.outputs.ikHandle as: Leg_L_ikHandle_cmpOut type: ComponentOutput
+buildLocator: controls.Leg.outputs.ikHandle as: Leg_L_ikHandle_cmpOut
+building: controls.Leg.outputs.legEnd as: Leg_L_legEnd_cmpOut type: ComponentOutput
+buildLocator: controls.Leg.outputs.legEnd as: Leg_L_legEnd_cmpOut
+building: controls.Leg.outputs.legEndFK as: Leg_L_legEndFK_cmpOut type: ComponentOutput
+buildLocator: controls.Leg.outputs.legEndFK as: Leg_L_legEndFK_cmpOut
+building: controls.Leg.femurFK as: Leg_L_femurFK_ctrlSpace type: CtrlSpace
+buildGroup: controls.Leg.femurFK as: Leg_L_femurFK_ctrlSpace
+building: controls.Leg.femurFK.femurFK as: Leg_L_femurFK_ctrl type: Control
+buildControl:controls.Leg.femurFK.femurFK as: Leg_L_femurFK_ctrl
+building: controls.Leg.femurFK.femurFK.shinFK as: Leg_L_shinFK_ctrlSpace type: CtrlSpace
+buildGroup: controls.Leg.femurFK.femurFK.shinFK as: Leg_L_shinFK_ctrlSpace
+building: controls.Leg.femurFK.femurFK.shinFK.shinFK as: Leg_L_shinFK_ctrl type: Control
+buildControl:controls.Leg.femurFK.femurFK.shinFK.shinFK as: Leg_L_shinFK_ctrl
+building: controls.Leg.IK as: Leg_L_IK_ctrlSpace type: CtrlSpace
+buildGroup: controls.Leg.IK as: Leg_L_IK_ctrlSpace
+building: controls.Leg.IK.IK as: Leg_L_IK_ctrl type: Control
+buildControl:controls.Leg.IK.IK as: Leg_L_IK_ctrl
+building: controls.Leg.ikRootPosition as: Leg_L_ikRootPosition_loc type: Locator
+buildLocator: controls.Leg.ikRootPosition as: Leg_L_ikRootPosition_loc
+building: controls.Leg.UpV as: Leg_L_UpV_ctrlSpace type: CtrlSpace
+buildGroup: controls.Leg.UpV as: Leg_L_UpV_ctrlSpace
+building: controls.Leg.UpV.UpV as: Leg_L_UpV_ctrl type: Control
+buildControl:controls.Leg.UpV.UpV as: Leg_L_UpV_ctrl
+building: deformers.Leg as: Leg_L_cmp type: ComponentGroup
+buildGroup: deformers.Leg as: Leg_L_cmp
+building: deformers.Leg.femur as: Leg_L_femur_def type: Joint
+buildJoint: deformers.Leg.femur as: Leg_L_femur_def
+building: deformers.Leg.shin as: Leg_L_shin_def type: Joint
+buildJoint: deformers.Leg.shin as: Leg_L_shin_def
+deformers
+deformers.Leg:L
+deformers.Leg:L.femur
+deformers.Leg:L.shin
+controls
+controls.Leg:L
+controls.Leg:L.inputs
+controls.Leg:L.inputs.globalSRT
+controls.Leg:L.inputs.pelvisInput
+controls.Leg:L.inputs.ikTarget
+controls.Leg:L.outputs
+controls.Leg:L.outputs.femur
+controls.Leg:L.outputs.shin
+controls.Leg:L.outputs.ikHandle
+controls.Leg:L.outputs.legEnd
+controls.Leg:L.outputs.legEndFK
+controls.Leg:L.femurFK
+controls.Leg:L.femurFK.femurFK
+controls.Leg:L.femurFK.femurFK.shinFK
+controls.Leg:L.femurFK.femurFK.shinFK.shinFK
+controls.Leg:L.IK
+controls.Leg:L.IK.IK
+controls.Leg:L.ikRootPosition
+controls.Leg:L.UpV
+controls.Leg:L.UpV.UpV

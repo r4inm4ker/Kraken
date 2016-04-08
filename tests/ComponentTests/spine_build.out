@@ -1,75 +1,177 @@
 Failed to find DCC builder. Falling back to Python builder.
-building:spine as:Mspine
-building:spine.controls as:controls
-building:spine.controls.spine as:spine_M_cmp
-building:spine.controls.spine.inputs as:spine_M_inputs_hrc
-building:spine.controls.spine.inputs.mainSrt as:spine_M_mainSrt_cmpIn
-building:spine.controls.spine.outputs as:spine_M_outputs_hrc
-building:spine.controls.spine.outputs.cog as:spine_M_cog_cmpOut
-building:spine.controls.spine.outputs.spineBase as:spine_M_spineBase_cmpOut
-building:spine.controls.spine.outputs.pelvis as:spine_M_pelvis_cmpOut
-building:spine.controls.spine.outputs.spineEnd as:spine_M_spineEnd_cmpOut
-building:spine.controls.spine.outputs.spine01 as:spine_M_spine01_cmpOut
-building:spine.controls.spine.outputs.spine02 as:spine_M_spine02_cmpOut
-building:spine.controls.spine.outputs.spine03 as:spine_M_spine03_cmpOut
-building:spine.controls.spine.outputs.spine04 as:spine_M_spine04_cmpOut
-building:spine.controls.spine.outputs.spine05 as:spine_M_spine05_cmpOut
-building:spine.controls.spine.outputs.spine06 as:spine_M_spine06_cmpOut
-building:spine.controls.spine.cog as:spine_M_cog_ctrlSpace
-building:spine.controls.spine.cog.cog as:spine_M_cog_ctrl
-building:spine.controls.spine.cog.cog.spine01 as:spine_M_spine01_ctrlSpace
-building:spine.controls.spine.cog.cog.spine01.spine01 as:spine_M_spine01_ctrl
-building:spine.controls.spine.cog.cog.spine01.spine01.spine02 as:spine_M_spine02_ctrlSpace
-building:spine.controls.spine.cog.cog.spine01.spine01.spine02.spine02 as:spine_M_spine02_ctrl
-building:spine.controls.spine.cog.cog.spine01.spine01.spine02.spine02.spine03 as:spine_M_spine03_ctrlSpace
-building:spine.controls.spine.cog.cog.spine01.spine01.spine02.spine02.spine03.spine03 as:spine_M_spine03_ctrl
-building:spine.controls.spine.cog.cog.spine04 as:spine_M_spine04_ctrlSpace
-building:spine.controls.spine.cog.cog.spine04.spine04 as:spine_M_spine04_ctrl
-building:spine.controls.spine.cog.cog.pelvis as:spine_M_pelvis_ctrlSpace
-building:spine.controls.spine.cog.cog.pelvis.pelvis as:spine_M_pelvis_ctrl
-building:spine.deformers as:deformers
-building:spine.deformers.spine as:spine_M_cmp
-building:spine.deformers.spine.spine01 as:spine_M_spine01_def
-building:spine.deformers.spine.pelvis as:spine_M_pelvis_def
-building:spine.deformers.spine.spine02 as:spine_M_spine02_def
-building:spine.deformers.spine.spine03 as:spine_M_spine03_def
-building:spine.deformers.spine.spine04 as:spine_M_spine04_def
-building:spine.deformers.spine.spine05 as:spine_M_spine05_def
-building:spine.deformers.spine.spine06 as:spine_M_spine06_def
-spine:M
-spine:M.controls
-spine:M.controls.spine:M
-spine:M.controls.spine:M.inputs
-spine:M.controls.spine:M.inputs.mainSrt
-spine:M.controls.spine:M.outputs
-spine:M.controls.spine:M.outputs.cog
-spine:M.controls.spine:M.outputs.spineBase
-spine:M.controls.spine:M.outputs.pelvis
-spine:M.controls.spine:M.outputs.spineEnd
-spine:M.controls.spine:M.outputs.spine01
-spine:M.controls.spine:M.outputs.spine02
-spine:M.controls.spine:M.outputs.spine03
-spine:M.controls.spine:M.outputs.spine04
-spine:M.controls.spine:M.outputs.spine05
-spine:M.controls.spine:M.outputs.spine06
-spine:M.controls.spine:M.cog
-spine:M.controls.spine:M.cog.cog
-spine:M.controls.spine:M.cog.cog.spine01
-spine:M.controls.spine:M.cog.cog.spine01.spine01
-spine:M.controls.spine:M.cog.cog.spine01.spine01.spine02
-spine:M.controls.spine:M.cog.cog.spine01.spine01.spine02.spine02
-spine:M.controls.spine:M.cog.cog.spine01.spine01.spine02.spine02.spine03
-spine:M.controls.spine:M.cog.cog.spine01.spine01.spine02.spine02.spine03.spine03
-spine:M.controls.spine:M.cog.cog.spine04
-spine:M.controls.spine:M.cog.cog.spine04.spine04
-spine:M.controls.spine:M.cog.cog.pelvis
-spine:M.controls.spine:M.cog.cog.pelvis.pelvis
-spine:M.deformers
-spine:M.deformers.spine:M
-spine:M.deformers.spine:M.spine01
-spine:M.deformers.spine:M.pelvis
-spine:M.deformers.spine:M.spine02
-spine:M.deformers.spine:M.spine03
-spine:M.deformers.spine:M.spine04
-spine:M.deformers.spine:M.spine05
-spine:M.deformers.spine:M.spine06
+building: controls.spine as: spine_M_cmp type: ComponentGroup
+buildGroup: controls.spine as: spine_M_cmp
+building: controls.spine.inputs as: spine_M_inputs_hrc type: HierarchyGroup
+buildHierarchyGroup: controls.spine.inputs as: spine_M_inputs_hrc
+building: controls.spine.inputs.mainSrt as: spine_M_mainSrt_cmpIn type: ComponentInput
+buildLocator: controls.spine.inputs.mainSrt as: spine_M_mainSrt_cmpIn
+building: controls.spine.outputs as: spine_M_outputs_hrc type: HierarchyGroup
+buildHierarchyGroup: controls.spine.outputs as: spine_M_outputs_hrc
+building: controls.spine.outputs.cog as: spine_M_cog_cmpOut type: ComponentOutput
+buildLocator: controls.spine.outputs.cog as: spine_M_cog_cmpOut
+building: controls.spine.outputs.spineBase as: spine_M_spineBase_cmpOut type: ComponentOutput
+buildLocator: controls.spine.outputs.spineBase as: spine_M_spineBase_cmpOut
+building: controls.spine.outputs.pelvis as: spine_M_pelvis_cmpOut type: ComponentOutput
+buildLocator: controls.spine.outputs.pelvis as: spine_M_pelvis_cmpOut
+building: controls.spine.outputs.spineEnd as: spine_M_spineEnd_cmpOut type: ComponentOutput
+buildLocator: controls.spine.outputs.spineEnd as: spine_M_spineEnd_cmpOut
+building: controls.spine.outputs.spine01 as: spine_M_spine01_cmpOut type: ComponentOutput
+buildLocator: controls.spine.outputs.spine01 as: spine_M_spine01_cmpOut
+building: controls.spine.outputs.spine02 as: spine_M_spine02_cmpOut type: ComponentOutput
+buildLocator: controls.spine.outputs.spine02 as: spine_M_spine02_cmpOut
+building: controls.spine.outputs.spine03 as: spine_M_spine03_cmpOut type: ComponentOutput
+buildLocator: controls.spine.outputs.spine03 as: spine_M_spine03_cmpOut
+building: controls.spine.outputs.spine04 as: spine_M_spine04_cmpOut type: ComponentOutput
+buildLocator: controls.spine.outputs.spine04 as: spine_M_spine04_cmpOut
+building: controls.spine.outputs.spine05 as: spine_M_spine05_cmpOut type: ComponentOutput
+buildLocator: controls.spine.outputs.spine05 as: spine_M_spine05_cmpOut
+building: controls.spine.outputs.spine06 as: spine_M_spine06_cmpOut type: ComponentOutput
+buildLocator: controls.spine.outputs.spine06 as: spine_M_spine06_cmpOut
+building: controls.spine.cog as: spine_M_cog_ctrlSpace type: CtrlSpace
+buildGroup: controls.spine.cog as: spine_M_cog_ctrlSpace
+building: controls.spine.cog.cog as: spine_M_cog_ctrl type: Control
+buildControl:controls.spine.cog.cog as: spine_M_cog_ctrl
+building: controls.spine.cog.cog.spine01 as: spine_M_spine01_ctrlSpace type: CtrlSpace
+buildGroup: controls.spine.cog.cog.spine01 as: spine_M_spine01_ctrlSpace
+building: controls.spine.cog.cog.spine01.spine01 as: spine_M_spine01_ctrl type: Control
+buildControl:controls.spine.cog.cog.spine01.spine01 as: spine_M_spine01_ctrl
+building: controls.spine.cog.cog.spine01.spine01.spine02 as: spine_M_spine02_ctrlSpace type: CtrlSpace
+buildGroup: controls.spine.cog.cog.spine01.spine01.spine02 as: spine_M_spine02_ctrlSpace
+building: controls.spine.cog.cog.spine01.spine01.spine02.spine02 as: spine_M_spine02_ctrl type: Control
+buildControl:controls.spine.cog.cog.spine01.spine01.spine02.spine02 as: spine_M_spine02_ctrl
+building: controls.spine.cog.cog.spine01.spine01.spine02.spine02.spine03 as: spine_M_spine03_ctrlSpace type: CtrlSpace
+buildGroup: controls.spine.cog.cog.spine01.spine01.spine02.spine02.spine03 as: spine_M_spine03_ctrlSpace
+building: controls.spine.cog.cog.spine01.spine01.spine02.spine02.spine03.spine03 as: spine_M_spine03_ctrl type: Control
+buildControl:controls.spine.cog.cog.spine01.spine01.spine02.spine02.spine03.spine03 as: spine_M_spine03_ctrl
+building: controls.spine.cog.cog.spine04 as: spine_M_spine04_ctrlSpace type: CtrlSpace
+buildGroup: controls.spine.cog.cog.spine04 as: spine_M_spine04_ctrlSpace
+building: controls.spine.cog.cog.spine04.spine04 as: spine_M_spine04_ctrl type: Control
+buildControl:controls.spine.cog.cog.spine04.spine04 as: spine_M_spine04_ctrl
+building: controls.spine.cog.cog.pelvis as: spine_M_pelvis_ctrlSpace type: CtrlSpace
+buildGroup: controls.spine.cog.cog.pelvis as: spine_M_pelvis_ctrlSpace
+building: controls.spine.cog.cog.pelvis.pelvis as: spine_M_pelvis_ctrl type: Control
+buildControl:controls.spine.cog.cog.pelvis.pelvis as: spine_M_pelvis_ctrl
+building: deformers as: deformers type: Layer
+buildLayer: deformers as: deformers
+building: deformers.spine as: spine_M_cmp type: ComponentGroup
+buildGroup: deformers.spine as: spine_M_cmp
+building: deformers.spine.spine01 as: spine_M_spine01_def type: Joint
+buildJoint: deformers.spine.spine01 as: spine_M_spine01_def
+building: deformers.spine.pelvis as: spine_M_pelvis_def type: Joint
+buildJoint: deformers.spine.pelvis as: spine_M_pelvis_def
+building: deformers.spine.spine02 as: spine_M_spine02_def type: Joint
+buildJoint: deformers.spine.spine02 as: spine_M_spine02_def
+building: deformers.spine.spine03 as: spine_M_spine03_def type: Joint
+buildJoint: deformers.spine.spine03 as: spine_M_spine03_def
+building: deformers.spine.spine04 as: spine_M_spine04_def type: Joint
+buildJoint: deformers.spine.spine04 as: spine_M_spine04_def
+building: deformers.spine.spine05 as: spine_M_spine05_def type: Joint
+buildJoint: deformers.spine.spine05 as: spine_M_spine05_def
+building: deformers.spine.spine06 as: spine_M_spine06_def type: Joint
+buildJoint: deformers.spine.spine06 as: spine_M_spine06_def
+building: controls as: controls type: Layer
+buildLayer: controls as: controls
+building: controls.spine as: spine_M_cmp type: ComponentGroup
+buildGroup: controls.spine as: spine_M_cmp
+building: controls.spine.inputs as: spine_M_inputs_hrc type: HierarchyGroup
+buildHierarchyGroup: controls.spine.inputs as: spine_M_inputs_hrc
+building: controls.spine.inputs.mainSrt as: spine_M_mainSrt_cmpIn type: ComponentInput
+buildLocator: controls.spine.inputs.mainSrt as: spine_M_mainSrt_cmpIn
+building: controls.spine.outputs as: spine_M_outputs_hrc type: HierarchyGroup
+buildHierarchyGroup: controls.spine.outputs as: spine_M_outputs_hrc
+building: controls.spine.outputs.cog as: spine_M_cog_cmpOut type: ComponentOutput
+buildLocator: controls.spine.outputs.cog as: spine_M_cog_cmpOut
+building: controls.spine.outputs.spineBase as: spine_M_spineBase_cmpOut type: ComponentOutput
+buildLocator: controls.spine.outputs.spineBase as: spine_M_spineBase_cmpOut
+building: controls.spine.outputs.pelvis as: spine_M_pelvis_cmpOut type: ComponentOutput
+buildLocator: controls.spine.outputs.pelvis as: spine_M_pelvis_cmpOut
+building: controls.spine.outputs.spineEnd as: spine_M_spineEnd_cmpOut type: ComponentOutput
+buildLocator: controls.spine.outputs.spineEnd as: spine_M_spineEnd_cmpOut
+building: controls.spine.outputs.spine01 as: spine_M_spine01_cmpOut type: ComponentOutput
+buildLocator: controls.spine.outputs.spine01 as: spine_M_spine01_cmpOut
+building: controls.spine.outputs.spine02 as: spine_M_spine02_cmpOut type: ComponentOutput
+buildLocator: controls.spine.outputs.spine02 as: spine_M_spine02_cmpOut
+building: controls.spine.outputs.spine03 as: spine_M_spine03_cmpOut type: ComponentOutput
+buildLocator: controls.spine.outputs.spine03 as: spine_M_spine03_cmpOut
+building: controls.spine.outputs.spine04 as: spine_M_spine04_cmpOut type: ComponentOutput
+buildLocator: controls.spine.outputs.spine04 as: spine_M_spine04_cmpOut
+building: controls.spine.outputs.spine05 as: spine_M_spine05_cmpOut type: ComponentOutput
+buildLocator: controls.spine.outputs.spine05 as: spine_M_spine05_cmpOut
+building: controls.spine.outputs.spine06 as: spine_M_spine06_cmpOut type: ComponentOutput
+buildLocator: controls.spine.outputs.spine06 as: spine_M_spine06_cmpOut
+building: controls.spine.cog as: spine_M_cog_ctrlSpace type: CtrlSpace
+buildGroup: controls.spine.cog as: spine_M_cog_ctrlSpace
+building: controls.spine.cog.cog as: spine_M_cog_ctrl type: Control
+buildControl:controls.spine.cog.cog as: spine_M_cog_ctrl
+building: controls.spine.cog.cog.spine01 as: spine_M_spine01_ctrlSpace type: CtrlSpace
+buildGroup: controls.spine.cog.cog.spine01 as: spine_M_spine01_ctrlSpace
+building: controls.spine.cog.cog.spine01.spine01 as: spine_M_spine01_ctrl type: Control
+buildControl:controls.spine.cog.cog.spine01.spine01 as: spine_M_spine01_ctrl
+building: controls.spine.cog.cog.spine01.spine01.spine02 as: spine_M_spine02_ctrlSpace type: CtrlSpace
+buildGroup: controls.spine.cog.cog.spine01.spine01.spine02 as: spine_M_spine02_ctrlSpace
+building: controls.spine.cog.cog.spine01.spine01.spine02.spine02 as: spine_M_spine02_ctrl type: Control
+buildControl:controls.spine.cog.cog.spine01.spine01.spine02.spine02 as: spine_M_spine02_ctrl
+building: controls.spine.cog.cog.spine01.spine01.spine02.spine02.spine03 as: spine_M_spine03_ctrlSpace type: CtrlSpace
+buildGroup: controls.spine.cog.cog.spine01.spine01.spine02.spine02.spine03 as: spine_M_spine03_ctrlSpace
+building: controls.spine.cog.cog.spine01.spine01.spine02.spine02.spine03.spine03 as: spine_M_spine03_ctrl type: Control
+buildControl:controls.spine.cog.cog.spine01.spine01.spine02.spine02.spine03.spine03 as: spine_M_spine03_ctrl
+building: controls.spine.cog.cog.spine04 as: spine_M_spine04_ctrlSpace type: CtrlSpace
+buildGroup: controls.spine.cog.cog.spine04 as: spine_M_spine04_ctrlSpace
+building: controls.spine.cog.cog.spine04.spine04 as: spine_M_spine04_ctrl type: Control
+buildControl:controls.spine.cog.cog.spine04.spine04 as: spine_M_spine04_ctrl
+building: controls.spine.cog.cog.pelvis as: spine_M_pelvis_ctrlSpace type: CtrlSpace
+buildGroup: controls.spine.cog.cog.pelvis as: spine_M_pelvis_ctrlSpace
+building: controls.spine.cog.cog.pelvis.pelvis as: spine_M_pelvis_ctrl type: Control
+buildControl:controls.spine.cog.cog.pelvis.pelvis as: spine_M_pelvis_ctrl
+building: deformers.spine as: spine_M_cmp type: ComponentGroup
+buildGroup: deformers.spine as: spine_M_cmp
+building: deformers.spine.spine01 as: spine_M_spine01_def type: Joint
+buildJoint: deformers.spine.spine01 as: spine_M_spine01_def
+building: deformers.spine.pelvis as: spine_M_pelvis_def type: Joint
+buildJoint: deformers.spine.pelvis as: spine_M_pelvis_def
+building: deformers.spine.spine02 as: spine_M_spine02_def type: Joint
+buildJoint: deformers.spine.spine02 as: spine_M_spine02_def
+building: deformers.spine.spine03 as: spine_M_spine03_def type: Joint
+buildJoint: deformers.spine.spine03 as: spine_M_spine03_def
+building: deformers.spine.spine04 as: spine_M_spine04_def type: Joint
+buildJoint: deformers.spine.spine04 as: spine_M_spine04_def
+building: deformers.spine.spine05 as: spine_M_spine05_def type: Joint
+buildJoint: deformers.spine.spine05 as: spine_M_spine05_def
+building: deformers.spine.spine06 as: spine_M_spine06_def type: Joint
+buildJoint: deformers.spine.spine06 as: spine_M_spine06_def
+deformers
+deformers.spine:M
+deformers.spine:M.spine01
+deformers.spine:M.pelvis
+deformers.spine:M.spine02
+deformers.spine:M.spine03
+deformers.spine:M.spine04
+deformers.spine:M.spine05
+deformers.spine:M.spine06
+controls
+controls.spine:M
+controls.spine:M.inputs
+controls.spine:M.inputs.mainSrt
+controls.spine:M.outputs
+controls.spine:M.outputs.cog
+controls.spine:M.outputs.spineBase
+controls.spine:M.outputs.pelvis
+controls.spine:M.outputs.spineEnd
+controls.spine:M.outputs.spine01
+controls.spine:M.outputs.spine02
+controls.spine:M.outputs.spine03
+controls.spine:M.outputs.spine04
+controls.spine:M.outputs.spine05
+controls.spine:M.outputs.spine06
+controls.spine:M.cog
+controls.spine:M.cog.cog
+controls.spine:M.cog.cog.spine01
+controls.spine:M.cog.cog.spine01.spine01
+controls.spine:M.cog.cog.spine01.spine01.spine02
+controls.spine:M.cog.cog.spine01.spine01.spine02.spine02
+controls.spine:M.cog.cog.spine01.spine01.spine02.spine02.spine03
+controls.spine:M.cog.cog.spine01.spine01.spine02.spine02.spine03.spine03
+controls.spine:M.cog.cog.spine04
+controls.spine:M.cog.cog.spine04.spine04
+controls.spine:M.cog.cog.pelvis
+controls.spine:M.cog.cog.pelvis.pelvis

@@ -1,16 +1,63 @@
 Failed to find DCC builder. Falling back to Python builder.
-building:armGuide as:armGuide
-building:armGuide.Arm as:LArm
-building:armGuide.controls as:armGuide_controls
-building:armGuide.controls.Arm as:Arm_L_cmp
-building:armGuide.controls.Arm.inputs as:Arm_L_inputs_hrc
-building:armGuide.controls.Arm.inputs.globalSRT as:Arm_L_globalSRT_cmpIn
-building:armGuide.controls.Arm.inputs.root as:Arm_L_root_cmpIn
-building:armGuide.controls.Arm.outputs as:Arm_L_outputs_hrc
-building:armGuide.controls.Arm.outputs.bicep as:Arm_L_bicep_cmpOut
-building:armGuide.controls.Arm.outputs.forearm as:Arm_L_forearm_cmpOut
-building:armGuide.controls.Arm.outputs.wrist as:Arm_L_wrist_cmpOut
-building:armGuide.controls.Arm.bicep as:Arm_L_bicep_ctrl
-building:armGuide.controls.Arm.forearm as:Arm_L_forearm_ctrl
-building:armGuide.controls.Arm.wrist as:Arm_L_wrist_ctrl
-armGuide.Arm:L
+building: armGuide as: armGuide type: Container
+buildLocator: armGuide as: armGuide
+building: armGuide.Arm as: LArm type: ArmComponentGuide
+building: armGuide.controls as: armGuide_controls type: Layer
+buildLayer: armGuide.controls as: armGuide_controls
+building: armGuide.controls.Arm as: Arm_L_cmp type: ComponentGroup
+buildGroup: armGuide.controls.Arm as: Arm_L_cmp
+building: armGuide.controls.Arm.inputs as: Arm_L_inputs_hrc type: HierarchyGroup
+buildHierarchyGroup: armGuide.controls.Arm.inputs as: Arm_L_inputs_hrc
+building: armGuide.controls.Arm.inputs.globalSRT as: Arm_L_globalSRT_cmpIn type: ComponentInput
+buildLocator: armGuide.controls.Arm.inputs.globalSRT as: Arm_L_globalSRT_cmpIn
+building: armGuide.controls.Arm.inputs.root as: Arm_L_root_cmpIn type: ComponentInput
+buildLocator: armGuide.controls.Arm.inputs.root as: Arm_L_root_cmpIn
+building: armGuide.controls.Arm.outputs as: Arm_L_outputs_hrc type: HierarchyGroup
+buildHierarchyGroup: armGuide.controls.Arm.outputs as: Arm_L_outputs_hrc
+building: armGuide.controls.Arm.outputs.bicep as: Arm_L_bicep_cmpOut type: ComponentOutput
+buildLocator: armGuide.controls.Arm.outputs.bicep as: Arm_L_bicep_cmpOut
+building: armGuide.controls.Arm.outputs.forearm as: Arm_L_forearm_cmpOut type: ComponentOutput
+buildLocator: armGuide.controls.Arm.outputs.forearm as: Arm_L_forearm_cmpOut
+building: armGuide.controls.Arm.outputs.wrist as: Arm_L_wrist_cmpOut type: ComponentOutput
+buildLocator: armGuide.controls.Arm.outputs.wrist as: Arm_L_wrist_cmpOut
+building: armGuide.controls.Arm.bicep as: Arm_L_bicep_ctrl type: Control
+buildControl:armGuide.controls.Arm.bicep as: Arm_L_bicep_ctrl
+building: armGuide.controls.Arm.forearm as: Arm_L_forearm_ctrl type: Control
+buildControl:armGuide.controls.Arm.forearm as: Arm_L_forearm_ctrl
+building: armGuide.controls.Arm.wrist as: Arm_L_wrist_ctrl type: Control
+buildControl:armGuide.controls.Arm.wrist as: Arm_L_wrist_ctrl
+connectAttribute: armGuide.implicitAttrGrp.visibility
+connectAttribute: armGuide.implicitAttrGrp.shapeVisibility
+connectAttribute: armGuide.Arm.implicitAttrGrp.visibility
+connectAttribute: armGuide.Arm.implicitAttrGrp.shapeVisibility
+connectAttribute: armGuide.Arm.GuideSettings.bicepFKCtrlSize
+connectAttribute: armGuide.Arm.GuideSettings.forearmFKCtrlSize
+connectAttribute: armGuide.controls.implicitAttrGrp.visibility
+connectAttribute: armGuide.controls.implicitAttrGrp.shapeVisibility
+connectAttribute: armGuide.controls.Arm.implicitAttrGrp.visibility
+connectAttribute: armGuide.controls.Arm.implicitAttrGrp.shapeVisibility
+connectAttribute: armGuide.controls.Arm.inputs.implicitAttrGrp.visibility
+connectAttribute: armGuide.controls.Arm.inputs.implicitAttrGrp.shapeVisibility
+connectAttribute: armGuide.controls.Arm.inputs.inputs.drawDebug
+connectAttribute: armGuide.controls.Arm.inputs.inputs.rigScale
+connectAttribute: armGuide.controls.Arm.inputs.inputs.rightSide
+connectAttribute: armGuide.controls.Arm.inputs.globalSRT.implicitAttrGrp.visibility
+connectAttribute: armGuide.controls.Arm.inputs.globalSRT.implicitAttrGrp.shapeVisibility
+connectAttribute: armGuide.controls.Arm.inputs.root.implicitAttrGrp.visibility
+connectAttribute: armGuide.controls.Arm.inputs.root.implicitAttrGrp.shapeVisibility
+connectAttribute: armGuide.controls.Arm.outputs.implicitAttrGrp.visibility
+connectAttribute: armGuide.controls.Arm.outputs.implicitAttrGrp.shapeVisibility
+connectAttribute: armGuide.controls.Arm.outputs.outputs.drawDebug
+connectAttribute: armGuide.controls.Arm.outputs.outputs.ikBlend
+connectAttribute: armGuide.controls.Arm.outputs.bicep.implicitAttrGrp.visibility
+connectAttribute: armGuide.controls.Arm.outputs.bicep.implicitAttrGrp.shapeVisibility
+connectAttribute: armGuide.controls.Arm.outputs.forearm.implicitAttrGrp.visibility
+connectAttribute: armGuide.controls.Arm.outputs.forearm.implicitAttrGrp.shapeVisibility
+connectAttribute: armGuide.controls.Arm.outputs.wrist.implicitAttrGrp.visibility
+connectAttribute: armGuide.controls.Arm.outputs.wrist.implicitAttrGrp.shapeVisibility
+connectAttribute: armGuide.controls.Arm.bicep.implicitAttrGrp.visibility
+connectAttribute: armGuide.controls.Arm.bicep.implicitAttrGrp.shapeVisibility
+connectAttribute: armGuide.controls.Arm.forearm.implicitAttrGrp.visibility
+connectAttribute: armGuide.controls.Arm.forearm.implicitAttrGrp.shapeVisibility
+connectAttribute: armGuide.controls.Arm.wrist.implicitAttrGrp.visibility
+connectAttribute: armGuide.controls.Arm.wrist.implicitAttrGrp.shapeVisibility

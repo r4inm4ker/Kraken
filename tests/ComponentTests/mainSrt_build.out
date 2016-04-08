@@ -1,23 +1,49 @@
 Failed to find DCC builder. Falling back to Python builder.
-building:mainSrt as:MmainSrt
-building:mainSrt.controls as:controls
-building:mainSrt.controls.mainSrt as:mainSrt_M_cmp
-building:mainSrt.controls.mainSrt.inputs as:mainSrt_M_inputs_hrc
-building:mainSrt.controls.mainSrt.outputs as:mainSrt_M_outputs_hrc
-building:mainSrt.controls.mainSrt.outputs.srt as:mainSrt_M_srt_cmpOut
-building:mainSrt.controls.mainSrt.outputs.offset as:mainSrt_M_offset_cmpOut
-building:mainSrt.controls.mainSrt.SRT as:mainSrt_M_SRT_ctrlSpace
-building:mainSrt.controls.mainSrt.SRT.SRT as:mainSrt_M_SRT_ctrl
-building:mainSrt.controls.mainSrt.SRT.SRT.Offset as:mainSrt_M_Offset_ctrlSpace
-building:mainSrt.controls.mainSrt.SRT.SRT.Offset.Offset as:mainSrt_M_Offset_ctrl
-mainSrt:M
-mainSrt:M.controls
-mainSrt:M.controls.mainSrt:M
-mainSrt:M.controls.mainSrt:M.inputs
-mainSrt:M.controls.mainSrt:M.outputs
-mainSrt:M.controls.mainSrt:M.outputs.srt
-mainSrt:M.controls.mainSrt:M.outputs.offset
-mainSrt:M.controls.mainSrt:M.SRT
-mainSrt:M.controls.mainSrt:M.SRT.SRT
-mainSrt:M.controls.mainSrt:M.SRT.SRT.Offset
-mainSrt:M.controls.mainSrt:M.SRT.SRT.Offset.Offset
+building: controls.mainSrt as: mainSrt_M_cmp type: ComponentGroup
+buildGroup: controls.mainSrt as: mainSrt_M_cmp
+building: controls.mainSrt.inputs as: mainSrt_M_inputs_hrc type: HierarchyGroup
+buildHierarchyGroup: controls.mainSrt.inputs as: mainSrt_M_inputs_hrc
+building: controls.mainSrt.outputs as: mainSrt_M_outputs_hrc type: HierarchyGroup
+buildHierarchyGroup: controls.mainSrt.outputs as: mainSrt_M_outputs_hrc
+building: controls.mainSrt.outputs.srt as: mainSrt_M_srt_cmpOut type: ComponentOutput
+buildLocator: controls.mainSrt.outputs.srt as: mainSrt_M_srt_cmpOut
+building: controls.mainSrt.outputs.offset as: mainSrt_M_offset_cmpOut type: ComponentOutput
+buildLocator: controls.mainSrt.outputs.offset as: mainSrt_M_offset_cmpOut
+building: controls.mainSrt.SRT as: mainSrt_M_SRT_ctrlSpace type: CtrlSpace
+buildGroup: controls.mainSrt.SRT as: mainSrt_M_SRT_ctrlSpace
+building: controls.mainSrt.SRT.SRT as: mainSrt_M_SRT_ctrl type: Control
+buildControl:controls.mainSrt.SRT.SRT as: mainSrt_M_SRT_ctrl
+building: controls.mainSrt.SRT.SRT.Offset as: mainSrt_M_Offset_ctrlSpace type: CtrlSpace
+buildGroup: controls.mainSrt.SRT.SRT.Offset as: mainSrt_M_Offset_ctrlSpace
+building: controls.mainSrt.SRT.SRT.Offset.Offset as: mainSrt_M_Offset_ctrl type: Control
+buildControl:controls.mainSrt.SRT.SRT.Offset.Offset as: mainSrt_M_Offset_ctrl
+building: controls as: controls type: Layer
+buildLayer: controls as: controls
+building: controls.mainSrt as: mainSrt_M_cmp type: ComponentGroup
+buildGroup: controls.mainSrt as: mainSrt_M_cmp
+building: controls.mainSrt.inputs as: mainSrt_M_inputs_hrc type: HierarchyGroup
+buildHierarchyGroup: controls.mainSrt.inputs as: mainSrt_M_inputs_hrc
+building: controls.mainSrt.outputs as: mainSrt_M_outputs_hrc type: HierarchyGroup
+buildHierarchyGroup: controls.mainSrt.outputs as: mainSrt_M_outputs_hrc
+building: controls.mainSrt.outputs.srt as: mainSrt_M_srt_cmpOut type: ComponentOutput
+buildLocator: controls.mainSrt.outputs.srt as: mainSrt_M_srt_cmpOut
+building: controls.mainSrt.outputs.offset as: mainSrt_M_offset_cmpOut type: ComponentOutput
+buildLocator: controls.mainSrt.outputs.offset as: mainSrt_M_offset_cmpOut
+building: controls.mainSrt.SRT as: mainSrt_M_SRT_ctrlSpace type: CtrlSpace
+buildGroup: controls.mainSrt.SRT as: mainSrt_M_SRT_ctrlSpace
+building: controls.mainSrt.SRT.SRT as: mainSrt_M_SRT_ctrl type: Control
+buildControl:controls.mainSrt.SRT.SRT as: mainSrt_M_SRT_ctrl
+building: controls.mainSrt.SRT.SRT.Offset as: mainSrt_M_Offset_ctrlSpace type: CtrlSpace
+buildGroup: controls.mainSrt.SRT.SRT.Offset as: mainSrt_M_Offset_ctrlSpace
+building: controls.mainSrt.SRT.SRT.Offset.Offset as: mainSrt_M_Offset_ctrl type: Control
+buildControl:controls.mainSrt.SRT.SRT.Offset.Offset as: mainSrt_M_Offset_ctrl
+controls
+controls.mainSrt:M
+controls.mainSrt:M.inputs
+controls.mainSrt:M.outputs
+controls.mainSrt:M.outputs.srt
+controls.mainSrt:M.outputs.offset
+controls.mainSrt:M.SRT
+controls.mainSrt:M.SRT.SRT
+controls.mainSrt:M.SRT.SRT.Offset
+controls.mainSrt:M.SRT.SRT.Offset.Offset

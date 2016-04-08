@@ -1,2 +1,5 @@
 Failed to find DCC builder. Falling back to Python builder.
-building:NullControl as:NullControl
+building: NullControl as: NullControl type: Control
+buildControl:NullControl as: NullControl
+connectAttribute: NullControl.implicitAttrGrp.visibility
+connectAttribute: NullControl.implicitAttrGrp.shapeVisibility

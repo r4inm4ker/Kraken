@@ -53,9 +53,17 @@ def buildArm(mode='guide'):
         print Profiler.getInstance().generateReport()
     else:
         if mode == 'guide':
-            logHierarchy(armGuide)
+            for each in armGuide.getItems().values():
+                # Only log hierarchy for Layer objects as Layers in this test are added to
+                # the component since there is no rig object.
+                if each.isTypeOf('Layer'):
+                    logHierarchy(each)
         elif mode == 'rig':
-            logHierarchy(arm)
+            for each in arm.getItems().values():
+                # Only log hierarchy for Layer objects as Layers in this test are added to
+                # the component since there is no rig object.
+                if each.isTypeOf('Layer'):
+                    logHierarchy(each)
 
 # Run once in guide mode, then in rig mode.
 # Delete Rig Hierarchy

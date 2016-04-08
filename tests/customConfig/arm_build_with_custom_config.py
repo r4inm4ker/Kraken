@@ -57,11 +57,11 @@ arm = ArmComponentRig()
 arm.loadData(armGuideData)
 
 builder = plugins.getBuilder()
-builder.build(arm)
+builder.buildComponent(arm)
 
 # Set the custom config as the new singleton value.
 CustomConfig.makeCurrent()
 
 builder = plugins.getBuilder()
-builder.build(arm)
+builder.buildComponent(arm)
 

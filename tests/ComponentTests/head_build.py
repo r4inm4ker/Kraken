@@ -29,11 +29,15 @@ head = HeadComponentRig()
 head.loadData(headGuideData)
 
 builder = plugins.getBuilder()
-builder.build(head)
+builder.buildComponent(head)
 
 Profiler.getInstance().pop()
 
 if __name__ == "__main__":
     print Profiler.getInstance().generateReport()
 else:
-    logHierarchy(head)
+    for each in head.getItems().values():
+        # Only log hierarchy for Layer objects as Layers in this test are added to
+        # the component since there is no rig object.
+        if each.isTypeOf('Layer'):
+            logHierarchy(each)
