@@ -106,7 +106,7 @@ class Builder(object):
         """
 
         if self._debugMode:
-            print "buildContainer:" + kContainer.getPath() + " as:" + buildName
+            print "buildContainer: " + kContainer.getPath() + " as: " + buildName
 
         # Build any items(and thier subtrees) owned by this item.
         items = kContainer.getItems()
@@ -133,7 +133,7 @@ class Builder(object):
         """
 
         if self._debugMode:
-            print "buildLayer:" + kSceneItem.getPath() + " as:" + buildName
+            print "buildLayer: " + kSceneItem.getPath() + " as: " + buildName
 
         return None
 
@@ -152,7 +152,7 @@ class Builder(object):
 
 
         if self._debugMode:
-            print "buildHierarchyGroup:" + kSceneItem.getPath() + " as:" + buildName
+            print "buildHierarchyGroup: " + kSceneItem.getPath() + " as: " + buildName
 
         return None
 
@@ -170,7 +170,7 @@ class Builder(object):
         """
 
         if self._debugMode:
-            print "buildGroup:" + kSceneItem.getPath() + " as:" + buildName
+            print "buildGroup: " + kSceneItem.getPath() + " as: " + buildName
 
         return None
 
@@ -188,7 +188,7 @@ class Builder(object):
         """
 
         if self._debugMode:
-            print "buildJoint:" + kSceneItem.getPath() + " as:" + buildName
+            print "buildJoint: " + kSceneItem.getPath() + " as: " + buildName
 
         return None
 
@@ -207,7 +207,7 @@ class Builder(object):
 
 
         if self._debugMode:
-            print "buildLocator:" + kSceneItem.getPath() + " as:" + buildName
+            print "buildLocator: " + kSceneItem.getPath() + " as: " + buildName
 
         return None
 
@@ -225,7 +225,7 @@ class Builder(object):
         """
 
         if self._debugMode:
-            print "buildCurve:" + kSceneItem.getPath() + " as:" + buildName
+            print "buildCurve: " + kSceneItem.getPath() + " as: " + buildName
 
 
         return None
@@ -244,7 +244,7 @@ class Builder(object):
         """
 
         if self._debugMode:
-            print "buildControl:" + kSceneItem.getPath() + " as:" + buildName
+            print "buildControl:" + kSceneItem.getPath() + " as: " + buildName
 
         return None
 
@@ -264,7 +264,7 @@ class Builder(object):
         """
 
         if self._debugMode:
-            print "buildBoolAttribute:" + kAttribute.getPath()
+            print "buildBoolAttribute: " + kAttribute.getPath()
 
         return True
 
@@ -282,7 +282,7 @@ class Builder(object):
 
 
         if self._debugMode:
-            print "buildScalarAttribute:" + kAttribute.getPath()
+            print "buildScalarAttribute: " + kAttribute.getPath()
 
         return True
 
@@ -300,7 +300,7 @@ class Builder(object):
 
 
         if self._debugMode:
-            print "buildIntegerAttribute:" + kAttribute.getPath()
+            print "buildIntegerAttribute: " + kAttribute.getPath()
 
         return True
 
@@ -317,7 +317,7 @@ class Builder(object):
         """
 
         if self._debugMode:
-            print "buildStringAttribute:" + kAttribute.getPath()
+            print "buildStringAttribute: " + kAttribute.getPath()
 
         return True
 
@@ -334,7 +334,7 @@ class Builder(object):
         """
 
         if self._debugMode:
-            print "buildAttributeGroup:" + kAttributeGroup.getPath()
+            print "buildAttributeGroup: " + kAttributeGroup.getPath()
 
         return True
 
@@ -352,7 +352,7 @@ class Builder(object):
 
 
         if self._debugMode:
-            print "connectAttribute:" + kAttribute.getPath()
+            print "connectAttribute: " + kAttribute.getPath()
 
         return True
 
@@ -372,7 +372,7 @@ class Builder(object):
         """
 
         if self._debugMode:
-            print "buildOrientationConstraint:" + kConstraint.getPath() + " to:" + kConstraint.getConstrainee().getPath()
+            print "buildOrientationConstraint: " + kConstraint.getPath() + " to: " + kConstraint.getConstrainee().getPath()
 
         constraineeDCCSceneItem = self.getDCCSceneItem(kConstraint.getConstrainee())
         dccSceneItem = None # Add constraint object here.
@@ -392,7 +392,7 @@ class Builder(object):
 
         """
         if self._debugMode:
-            print "buildPoseConstraint:" + kConstraint.getPath() + " to:" + kConstraint.getConstrainee().getPath()
+            print "buildPoseConstraint: " + kConstraint.getPath() + " to: " + kConstraint.getConstrainee().getPath()
 
         constraineeDCCSceneItem = self.getDCCSceneItem(kConstraint.getConstrainee())
         dccSceneItem = None # Add constraint object here.
@@ -412,7 +412,7 @@ class Builder(object):
 
         """
         if self._debugMode:
-            print "buildPositionConstraint:" + kConstraint.getPath() + " to:" + kConstraint.getConstrainee().getPath()
+            print "buildPositionConstraint:" + kConstraint.getPath() + " to: " + kConstraint.getConstrainee().getPath()
 
         constraineeDCCSceneItem = self.getDCCSceneItem(kConstraint.getConstrainee())
         dccSceneItem = None # Add constraint object here.
@@ -432,7 +432,7 @@ class Builder(object):
 
         """
         if self._debugMode:
-            print "buildScaleConstraint:" + kConstraint.getPath() + " to:" + kConstraint.getConstrainee().getPath()
+            print "buildScaleConstraint: " + kConstraint.getPath() + " to: " + kConstraint.getConstrainee().getPath()
 
         constraineeDCCSceneItem = self.getDCCSceneItem(kConstraint.getConstrainee())
         dccSceneItem = None # Add constraint object here.
@@ -455,7 +455,7 @@ class Builder(object):
 
         """
         if self._debugMode:
-            print "buildXfoConnection:" + componentInput.getPath()
+            print "buildXfoConnection: " + componentInput.getPath()
 
         if componentInput.isConnected() is False:
             return False
@@ -502,7 +502,7 @@ class Builder(object):
 
         """
         if self._debugMode:
-            print "buildAttributeConnection:" + componentInput.getPath()
+            print "buildAttributeConnection: " + componentInput.getPath()
 
 
         # Implemented in DCC Plugins.
@@ -539,7 +539,7 @@ class Builder(object):
 
         """
         if self._debugMode:
-            print "buildCanvasOperator:" + kOperator.getPath()
+            print "buildCanvasOperator: " + kOperator.getPath()
 
         return True
 
@@ -558,7 +558,7 @@ class Builder(object):
 
         """
         if self._debugMode:
-            print "buildAttributes:" + kObject.getPath()
+            print "buildAttributes: " + kObject.getPath()
 
         for i in xrange(kObject.getNumAttributeGroups()):
             attributeGroup = kObject.getAttributeGroupByIndex(i)
@@ -585,7 +585,7 @@ class Builder(object):
         buildName = kObject.getBuildName()
 
         if self._debugMode:
-            print "building:" + kObject.getPath() + " as:" + buildName + " type:" + kObject.getTypeName()
+            print "building: " + kObject.getPath() + " as: " + buildName + " type: " + kObject.getTypeName()
 
         # Build Object
         if kObject.isTypeOf("Layer"):
@@ -709,7 +709,7 @@ class Builder(object):
                     continue
 
                 if self._debugMode:
-                    print "buildConnection:" + componentInput.getName()
+                    print "buildConnection: " + componentInput.getName()
 
                 if componentInput.getDataType().startswith('Xfo'):
                     self.buildXfoConnection(componentInput)
@@ -859,7 +859,11 @@ class Builder(object):
 
             return orderedComponents
 
+        # TODO: Implement code to more thoroughly  walk each component to check
+        # for cycles
+        #
         # orderedComponents = getBuildOrder()
+
         orderedComponents = kRig.getChildrenByType('Component') # getBuildOrder()
 
         # Build Components in the correct order
