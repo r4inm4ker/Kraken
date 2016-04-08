@@ -166,7 +166,7 @@ class Synchronizer(object):
                 self.syncXfo(kObject)
 
             # Sync Curves / Controls
-            elif kObject.isTypeOf('Curve') is True:
+            if kObject.isTypeOf('Curve') is True:
                 self.syncCurveData(kObject)
 
         elif kObject.isTypeOf('Attribute'):
@@ -186,9 +186,11 @@ class Synchronizer(object):
 
         # Iterate over attributes
         if kObject.isTypeOf('AttributeGroup'):
-            for i in xrange(kObject.getNumAttributes()):
-                attr = kObject.getAttributeByIndex(i)
-                self.synchronize(attr)
+
+            if kObject.getName() != 'implicitAttrGrp':
+                for i in xrange(kObject.getNumAttributes()):
+                    attr = kObject.getAttributeByIndex(i)
+                    self.synchronize(attr)
 
         if kObject.isTypeOf('Object3D'):
 

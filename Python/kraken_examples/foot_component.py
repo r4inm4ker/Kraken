@@ -351,7 +351,7 @@ class FootComponentRig(FootComponent):
         # =========================
         # Add Foot Pivot Canvas Op
         # =========================
-        # self.footPivotCanvasOp = CanvasOperator('footPivotCanvasOp', 'Kraken.Solvers.BipedFootPivotSolver')
+        # self.footPivotCanvasOp = CanvasOperator('footPivotCanvasOp', 'Kraken.Solvers.Biped.BipedFootPivotSolver')
         self.footPivotCanvasOp = KLOperator('footPivotKLOp', 'BipedFootPivotSolver', 'Kraken')
 
         self.addOperator(self.footPivotCanvasOp)
@@ -377,7 +377,7 @@ class FootComponentRig(FootComponent):
         # =========================
         # Add Foot Solver Canvas Op
         # =========================
-        # self.footSolverCanvasOp = CanvasOperator('footSolverCanvasOp', 'Kraken.Solvers.BipedFootSolver')
+        # self.footSolverCanvasOp = CanvasOperator('footSolverCanvasOp', 'Kraken.Solvers.Biped.BipedFootSolver')
         self.footSolverCanvasOp = KLOperator('footSolverKLOp', 'BipedFootSolver', 'Kraken')
         self.addOperator(self.footSolverCanvasOp)
 

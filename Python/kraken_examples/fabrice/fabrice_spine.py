@@ -203,7 +203,6 @@ class FabriceSpineGuide(FabriceSpine):
 
         return data
 
-
     def loadData(self, data):
         """Load a saved guide representation from persisted data.
 
@@ -241,7 +240,6 @@ class FabriceSpineGuide(FabriceSpine):
         self.bezierSpineKLOp.evaluate()
 
         return True
-
 
     def getRigBuildData(self):
         """Returns the Guide data used by the Rig Component to define the layout of the final rig.
@@ -356,6 +354,8 @@ class FabriceSpineRig(FabriceSpine):
         # ==========
         deformersLayer = self.getOrCreateLayer('deformers')
         self.defCmpGrp = ComponentGroup(self.getName(), self, parent=deformersLayer)
+        self.addItem('defCmpGrp', self.defCmpGrp)
+
         self.chestDef = Joint('chest', parent=self.defCmpGrp)
         self.chestDef.setComponent(self)
 

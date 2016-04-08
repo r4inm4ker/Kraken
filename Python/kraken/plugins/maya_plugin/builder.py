@@ -865,11 +865,23 @@ class Builder(Builder):
 
                         connectionTargets.append( { 'opObject': opObject, 'dccSceneItem': dccSceneItem} )
                 else:
+                    # If there are no connected objects, continue
                     if connectedObjects is None:
-                        raise Exception("Operator '"+kOperator.getName()+"' of type '"+kOperator.getPresetPath()+"' port '"+portName+"' not connected.")
+                        pm.warning("Operator '" + kOperator.getName() + "' of type '" + kOperator.getPresetPath() + "' port '" + portName + "' not connected.")
+                        continue
 
                     opObject = connectedObjects
                     dccSceneItem = self.getDCCSceneItem(opObject)
+
+                    # Handle output connections to visibility attributes.
+                    if opObject.getName() == 'visibility' and opObject.getParent().getName() == 'implicitAttrGrp':
+                        dccItem = self.getDCCSceneItem(opObject.getParent().getParent())
+                        dccSceneItem = dccItem.attr('visibility')
+
+                    elif opObject.getName() == 'shapeVisibility' and opObject.getParent().getName() == 'implicitAttrGrp':
+                        dccItem = self.getDCCSceneItem(opObject.getParent().getParent())
+                        shape = dccItem.getShape()
+                        dccSceneItem = shape.attr('visibility')
 
                     connectionTargets = { 'opObject': opObject, 'dccSceneItem': dccSceneItem }
 
@@ -901,6 +913,7 @@ class Builder(Builder):
                     def connectOutput(src, opObject, dccSceneItem):
                         if isinstance(opObject, Attribute):
                             pm.connectAttr(src, dccSceneItem)
+
                         elif isinstance(opObject, Object3D):
                             decomposeNode = pm.createNode('decomposeMatrix')
                             pm.connectAttr(src, decomposeNode.attr("inputMatrix"))
@@ -908,6 +921,7 @@ class Builder(Builder):
                             decomposeNode.attr("outputRotate").connect(dccSceneItem.attr("rotate"))
                             decomposeNode.attr("outputScale").connect(dccSceneItem.attr("scale"))
                             decomposeNode.attr("outputTranslate").connect(dccSceneItem.attr("translate"))
+
                         elif isinstance(opObject, Xfo):
                             raise NotImplementedError("Kraken Canvas Operator cannot set object [%s] outputs with Xfo outputs types directly!")
                         elif isinstance(opObject, Mat44):

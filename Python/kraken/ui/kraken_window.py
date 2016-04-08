@@ -149,6 +149,7 @@ class KrakenWindow(QtGui.QMainWindow):
         outputDialog = OutputLogDialog(self)
         outputDialog.show()
         outputDialog.setText(self.outputLog.getLog())
+        outputDialog.textWidget.moveCursor(QtGui.QTextCursor.End)
 
 
 class OutputLogDialog(QtGui.QDialog):

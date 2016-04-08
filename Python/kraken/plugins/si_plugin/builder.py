@@ -984,6 +984,8 @@ class Builder(Builder):
                     elementDataType = portDataType[:-2]
                     if portConnectionType == 'In':
                         connectedObjects = kOperator.getInput(portName)
+                        if connectedObjects is None:
+                            continue
 
                         arrayNode = si.FabricCanvasAddFunc(canvasOpPath, "", portName+"_ComposeArray", "dfgEntry {}", "40", str(i * 100))
                         si.FabricCanvasAddPort(canvasOpPath, arrayNode, "array", "Out", portDataType, "")
@@ -999,6 +1001,8 @@ class Builder(Builder):
 
                     elif portConnectionType in ['IO', 'Out']:
                         connectedObjects = kOperator.getOutput(portName)
+                        if connectedObjects is None:
+                            continue
 
                         arrayNode = si.FabricCanvasAddFunc(canvasOpPath, "", portName+"_DecomposeArray", "dfgEntry {}", "800", str(i * 100))
                         si.FabricCanvasAddPort(canvasOpPath, arrayNode, "array", "In", portDataType, "")
@@ -1018,7 +1022,7 @@ class Builder(Builder):
                     for j in xrange(len(connectedObjects)):
                         dccSceneItem = self.getDCCSceneItem(connectedObjects[j])
                         if dccSceneItem is None:
-                            raise Exception("Operator:'"+kOperator.getName()+"' of type:'"+kOperator.getPresetPath()+"' port:'"+portName+"' dcc item not found for item:" + connectedObjects[j].getPath())
+                            raise Exception("Operator:'" + kOperator.getName() + "' of type:'" + kOperator.getPresetPath() + "' port:'" + portName + "' dcc item not found for item:" + connectedObjects[j].getPath())
 
                         # Note: Need to find the operator each time as the
                         # operator is destroyed and recreated each time you add
@@ -1034,11 +1038,14 @@ class Builder(Builder):
                     elif portConnectionType in ['IO', 'Out']:
                         connectedObject = kOperator.getOutput(portName)
 
+                    if connectedObject is None:
+                        continue
+
                     dccSceneItem = self.getDCCSceneItem(connectedObject)
                     if dccSceneItem is None:
-                        raise Exception("Operator:'"+kOperator.getName()+"' of type:'"+kOperator.getPresetPath()+"' port:'"+portName+"' dcc item not found for item:" + connectedObject.getPath())
+                        log("Operator:'" + kOperator.getName() + "' of type:'" + kOperator.getPresetPath() + "' port:'" + portName + "' dcc item not found for item:" + connectedObject.getPath(), 4)
 
-                    addCanvasPorts(canvasOpPath, portName, uniqueNodeName+"."+portName, portDataType, portConnectionType, dccSceneItem)
+                    addCanvasPorts(canvasOpPath, portName, uniqueNodeName + "." + portName, portDataType, portConnectionType, dccSceneItem)
 
                 canvasOpPath = canvasOpPath2[:-1]
 
