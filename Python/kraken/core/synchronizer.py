@@ -167,7 +167,6 @@ class Synchronizer(object):
 
             # Sync Curves / Controls
             if kObject.isTypeOf('Curve') is True:
-                print "SYNCING CURVE DATA for: " + kObject.getName()
                 self.syncCurveData(kObject)
 
         elif kObject.isTypeOf('Attribute'):
