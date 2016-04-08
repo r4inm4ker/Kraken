@@ -1,198 +1,809 @@
 Failed to find DCC builder. Falling back to Python builder.
-building:char_bob as:char_bob
-building:char_bob.controls as:char_bob_controls
-building:char_bob.controls.spine as:spine_M_cmp
-building:char_bob.controls.spine.inputs as:spine_M_inputs_hrc
-building:char_bob.controls.spine.inputs.mainSrt as:spine_M_mainSrt_cmpIn
-building:char_bob.controls.spine.outputs as:spine_M_outputs_hrc
-building:char_bob.controls.spine.outputs.cog as:spine_M_cog_cmpOut
-building:char_bob.controls.spine.outputs.spineBase as:spine_M_spineBase_cmpOut
-building:char_bob.controls.spine.outputs.pelvis as:spine_M_pelvis_cmpOut
-building:char_bob.controls.spine.outputs.spineEnd as:spine_M_spineEnd_cmpOut
-building:char_bob.controls.spine.outputs.spine01 as:spine_M_spine01_cmpOut
-building:char_bob.controls.spine.outputs.spine02 as:spine_M_spine02_cmpOut
-building:char_bob.controls.spine.outputs.spine03 as:spine_M_spine03_cmpOut
-building:char_bob.controls.spine.outputs.spine04 as:spine_M_spine04_cmpOut
-building:char_bob.controls.spine.outputs.spine05 as:spine_M_spine05_cmpOut
-building:char_bob.controls.spine.outputs.spine06 as:spine_M_spine06_cmpOut
-building:char_bob.controls.spine.cog as:spine_M_cog_ctrlSpace
-building:char_bob.controls.spine.cog.cog as:spine_M_cog_ctrl
-building:char_bob.controls.spine.cog.cog.spine01 as:spine_M_spine01_ctrlSpace
-building:char_bob.controls.spine.cog.cog.spine01.spine01 as:spine_M_spine01_ctrl
-building:char_bob.controls.spine.cog.cog.spine01.spine01.spine02 as:spine_M_spine02_ctrlSpace
-building:char_bob.controls.spine.cog.cog.spine01.spine01.spine02.spine02 as:spine_M_spine02_ctrl
-building:char_bob.controls.spine.cog.cog.spine01.spine01.spine02.spine02.spine03 as:spine_M_spine03_ctrlSpace
-building:char_bob.controls.spine.cog.cog.spine01.spine01.spine02.spine02.spine03.spine03 as:spine_M_spine03_ctrl
-building:char_bob.controls.spine.cog.cog.spine04 as:spine_M_spine04_ctrlSpace
-building:char_bob.controls.spine.cog.cog.spine04.spine04 as:spine_M_spine04_ctrl
-building:char_bob.controls.spine.cog.cog.pelvis as:spine_M_pelvis_ctrlSpace
-building:char_bob.controls.spine.cog.cog.pelvis.pelvis as:spine_M_pelvis_ctrl
-building:char_bob.controls.neck as:neck_M_cmp
-building:char_bob.controls.neck.inputs as:neck_M_inputs_hrc
-building:char_bob.controls.neck.inputs.neckBase as:neck_M_neckBase_cmpIn
-building:char_bob.controls.neck.outputs as:neck_M_outputs_hrc
-building:char_bob.controls.neck.outputs.neck as:neck_M_neck_cmpOut
-building:char_bob.controls.neck.outputs.neckEnd as:neck_M_neckEnd_cmpOut
-building:char_bob.controls.neck.neck as:neck_M_neck_ctrlSpace
-building:char_bob.controls.neck.neck.neck as:neck_M_neck_ctrl
-building:char_bob.controls.head as:head_M_cmp
-building:char_bob.controls.head.inputs as:head_M_inputs_hrc
-building:char_bob.controls.head.inputs.headBase as:head_M_headBase_cmpIn
-building:char_bob.controls.head.outputs as:head_M_outputs_hrc
-building:char_bob.controls.head.outputs.head as:head_M_head_cmpOut
-building:char_bob.controls.head.outputs.jaw as:head_M_jaw_cmpOut
-building:char_bob.controls.head.outputs.eyeL as:head_M_eyeL_cmpOut
-building:char_bob.controls.head.outputs.eyeR as:head_M_eyeR_cmpOut
-building:char_bob.controls.head.head as:head_M_head_ctrlSpace
-building:char_bob.controls.head.head.head as:head_M_head_ctrl
-building:char_bob.controls.head.head.head.eyeLeft as:head_M_eyeLeft_ctrlSpace
-building:char_bob.controls.head.head.head.eyeLeft.eyeLeft as:head_M_eyeLeft_ctrl
-building:char_bob.controls.head.head.head.eyeRight as:head_M_eyeRight_ctrlSpace
-building:char_bob.controls.head.head.head.eyeRight.eyeRight as:head_M_eyeRight_ctrl
-building:char_bob.controls.head.head.head.jawCtrlSpace as:head_M_jawCtrlSpace_ctrlSpace
-building:char_bob.controls.head.head.head.jawCtrlSpace.jaw as:head_M_jaw_ctrl
-building:char_bob.controls.Clavicle as:Clavicle_L_cmp
-building:char_bob.controls.Clavicle.inputs as:Clavicle_L_inputs_hrc
-building:char_bob.controls.Clavicle.inputs.spineEnd as:Clavicle_L_spineEnd_cmpIn
-building:char_bob.controls.Clavicle.outputs as:Clavicle_L_outputs_hrc
-building:char_bob.controls.Clavicle.outputs.clavicle as:Clavicle_L_clavicle_cmpOut
-building:char_bob.controls.Clavicle.outputs.clavicleEnd as:Clavicle_L_clavicleEnd_cmpOut
-building:char_bob.controls.Clavicle.clavicle as:Clavicle_L_clavicle_ctrlSpace
-building:char_bob.controls.Clavicle.clavicle.clavicle as:Clavicle_L_clavicle_ctrl
-building:char_bob.controls.Clavicle as:Clavicle_R_cmp
-building:char_bob.controls.Clavicle.inputs as:Clavicle_R_inputs_hrc
-building:char_bob.controls.Clavicle.inputs.spineEnd as:Clavicle_R_spineEnd_cmpIn
-building:char_bob.controls.Clavicle.outputs as:Clavicle_R_outputs_hrc
-building:char_bob.controls.Clavicle.outputs.clavicle as:Clavicle_R_clavicle_cmpOut
-building:char_bob.controls.Clavicle.outputs.clavicleEnd as:Clavicle_R_clavicleEnd_cmpOut
-building:char_bob.controls.Clavicle.clavicle as:Clavicle_R_clavicle_ctrlSpace
-building:char_bob.controls.Clavicle.clavicle.clavicle as:Clavicle_R_clavicle_ctrl
-building:char_bob.controls.Arm as:Arm_L_cmp
-building:char_bob.controls.Arm.inputs as:Arm_L_inputs_hrc
-building:char_bob.controls.Arm.inputs.globalSRT as:Arm_L_globalSRT_cmpIn
-building:char_bob.controls.Arm.inputs.root as:Arm_L_root_cmpIn
-building:char_bob.controls.Arm.outputs as:Arm_L_outputs_hrc
-building:char_bob.controls.Arm.outputs.bicep as:Arm_L_bicep_cmpOut
-building:char_bob.controls.Arm.outputs.forearm as:Arm_L_forearm_cmpOut
-building:char_bob.controls.Arm.outputs.wrist as:Arm_L_wrist_cmpOut
-building:char_bob.controls.Arm.bicepFK as:Arm_L_bicepFK_ctrlSpace
-building:char_bob.controls.Arm.bicepFK.bicepFK as:Arm_L_bicepFK_ctrl
-building:char_bob.controls.Arm.bicepFK.bicepFK.forearmFK as:Arm_L_forearmFK_ctrlSpace
-building:char_bob.controls.Arm.bicepFK.bicepFK.forearmFK.forearmFK as:Arm_L_forearmFK_ctrl
-building:char_bob.controls.Arm.IK as:Arm_L_IK_ctrlSpace
-building:char_bob.controls.Arm.IK.IK as:Arm_L_IK_ctrl
-building:char_bob.controls.Arm.ikPosition as:Arm_L_ikPosition_null
-building:char_bob.controls.Arm.UpV as:Arm_L_UpV_ctrlSpace
-building:char_bob.controls.Arm.UpV.UpV as:Arm_L_UpV_ctrl
-building:char_bob.controls.Arm as:Arm_R_cmp
-building:char_bob.controls.Arm.inputs as:Arm_R_inputs_hrc
-building:char_bob.controls.Arm.inputs.globalSRT as:Arm_R_globalSRT_cmpIn
-building:char_bob.controls.Arm.inputs.root as:Arm_R_root_cmpIn
-building:char_bob.controls.Arm.outputs as:Arm_R_outputs_hrc
-building:char_bob.controls.Arm.outputs.bicep as:Arm_R_bicep_cmpOut
-building:char_bob.controls.Arm.outputs.forearm as:Arm_R_forearm_cmpOut
-building:char_bob.controls.Arm.outputs.wrist as:Arm_R_wrist_cmpOut
-building:char_bob.controls.Arm.bicepFK as:Arm_R_bicepFK_ctrlSpace
-building:char_bob.controls.Arm.bicepFK.bicepFK as:Arm_R_bicepFK_ctrl
-building:char_bob.controls.Arm.bicepFK.bicepFK.forearmFK as:Arm_R_forearmFK_ctrlSpace
-building:char_bob.controls.Arm.bicepFK.bicepFK.forearmFK.forearmFK as:Arm_R_forearmFK_ctrl
-building:char_bob.controls.Arm.IK as:Arm_R_IK_ctrlSpace
-building:char_bob.controls.Arm.IK.IK as:Arm_R_IK_ctrl
-building:char_bob.controls.Arm.ikPosition as:Arm_R_ikPosition_null
-building:char_bob.controls.Arm.UpV as:Arm_R_UpV_ctrlSpace
-building:char_bob.controls.Arm.UpV.UpV as:Arm_R_UpV_ctrl
-building:char_bob.controls.Leg as:Leg_L_cmp
-building:char_bob.controls.Leg.inputs as:Leg_L_inputs_hrc
-building:char_bob.controls.Leg.inputs.globalSRT as:Leg_L_globalSRT_cmpIn
-building:char_bob.controls.Leg.inputs.pelvisInput as:Leg_L_pelvisInput_cmpIn
-building:char_bob.controls.Leg.inputs.ikTarget as:Leg_L_ikTarget_cmpIn
-building:char_bob.controls.Leg.outputs as:Leg_L_outputs_hrc
-building:char_bob.controls.Leg.outputs.femur as:Leg_L_femur_cmpOut
-building:char_bob.controls.Leg.outputs.shin as:Leg_L_shin_cmpOut
-building:char_bob.controls.Leg.outputs.ikHandle as:Leg_L_ikHandle_cmpOut
-building:char_bob.controls.Leg.outputs.legEnd as:Leg_L_legEnd_cmpOut
-building:char_bob.controls.Leg.outputs.legEndFK as:Leg_L_legEndFK_cmpOut
-building:char_bob.controls.Leg.femurFK as:Leg_L_femurFK_ctrlSpace
-building:char_bob.controls.Leg.femurFK.femurFK as:Leg_L_femurFK_ctrl
-building:char_bob.controls.Leg.femurFK.femurFK.shinFK as:Leg_L_shinFK_ctrlSpace
-building:char_bob.controls.Leg.femurFK.femurFK.shinFK.shinFK as:Leg_L_shinFK_ctrl
-building:char_bob.controls.Leg.IK as:Leg_L_IK_ctrlSpace
-building:char_bob.controls.Leg.IK.IK as:Leg_L_IK_ctrl
-building:char_bob.controls.Leg.ikRootPosition as:Leg_L_ikRootPosition_loc
-building:char_bob.controls.Leg.UpV as:Leg_L_UpV_ctrlSpace
-building:char_bob.controls.Leg.UpV.UpV as:Leg_L_UpV_ctrl
-building:char_bob.controls.Leg as:Leg_R_cmp
-building:char_bob.controls.Leg.inputs as:Leg_R_inputs_hrc
-building:char_bob.controls.Leg.inputs.globalSRT as:Leg_R_globalSRT_cmpIn
-building:char_bob.controls.Leg.inputs.pelvisInput as:Leg_R_pelvisInput_cmpIn
-building:char_bob.controls.Leg.inputs.ikTarget as:Leg_R_ikTarget_cmpIn
-building:char_bob.controls.Leg.outputs as:Leg_R_outputs_hrc
-building:char_bob.controls.Leg.outputs.femur as:Leg_R_femur_cmpOut
-building:char_bob.controls.Leg.outputs.shin as:Leg_R_shin_cmpOut
-building:char_bob.controls.Leg.outputs.ikHandle as:Leg_R_ikHandle_cmpOut
-building:char_bob.controls.Leg.outputs.legEnd as:Leg_R_legEnd_cmpOut
-building:char_bob.controls.Leg.outputs.legEndFK as:Leg_R_legEndFK_cmpOut
-building:char_bob.controls.Leg.femurFK as:Leg_R_femurFK_ctrlSpace
-building:char_bob.controls.Leg.femurFK.femurFK as:Leg_R_femurFK_ctrl
-building:char_bob.controls.Leg.femurFK.femurFK.shinFK as:Leg_R_shinFK_ctrlSpace
-building:char_bob.controls.Leg.femurFK.femurFK.shinFK.shinFK as:Leg_R_shinFK_ctrl
-building:char_bob.controls.Leg.IK as:Leg_R_IK_ctrlSpace
-building:char_bob.controls.Leg.IK.IK as:Leg_R_IK_ctrl
-building:char_bob.controls.Leg.ikRootPosition as:Leg_R_ikRootPosition_loc
-building:char_bob.controls.Leg.UpV as:Leg_R_UpV_ctrlSpace
-building:char_bob.controls.Leg.UpV.UpV as:Leg_R_UpV_ctrl
-building:char_bob.deformers as:char_bob_deformers
-building:char_bob.deformers.spine as:spine_M_cmp
-building:char_bob.deformers.spine.spine01 as:spine_M_spine01_def
-building:char_bob.deformers.spine.pelvis as:spine_M_pelvis_def
-building:char_bob.deformers.spine.spine02 as:spine_M_spine02_def
-building:char_bob.deformers.spine.spine03 as:spine_M_spine03_def
-building:char_bob.deformers.spine.spine04 as:spine_M_spine04_def
-building:char_bob.deformers.spine.spine05 as:spine_M_spine05_def
-building:char_bob.deformers.spine.spine06 as:spine_M_spine06_def
-building:char_bob.deformers.neck as:neck_M_cmp
-building:char_bob.deformers.neck.neck as:neck_M_neck_def
-building:char_bob.deformers.head as:head_M_cmp
-building:char_bob.deformers.head.head as:head_M_head_def
-building:char_bob.deformers.head.jaw as:head_M_jaw_def
-building:char_bob.deformers.head.eyeLeft as:head_M_eyeLeft_def
-building:char_bob.deformers.head.eyeRight as:head_M_eyeRight_def
-building:char_bob.deformers.Clavicle as:Clavicle_L_cmp
-building:char_bob.deformers.Clavicle.clavicle as:Clavicle_L_clavicle_def
-building:char_bob.deformers.Clavicle as:Clavicle_R_cmp
-building:char_bob.deformers.Clavicle.clavicle as:Clavicle_R_clavicle_def
-building:char_bob.deformers.Arm as:Arm_L_cmp
-building:char_bob.deformers.Arm.bicep as:Arm_L_bicep_def
-building:char_bob.deformers.Arm.forearm as:Arm_L_forearm_def
-building:char_bob.deformers.Arm.wrist as:Arm_L_wrist_def
-building:char_bob.deformers.Arm as:Arm_R_cmp
-building:char_bob.deformers.Arm.bicep as:Arm_R_bicep_def
-building:char_bob.deformers.Arm.forearm as:Arm_R_forearm_def
-building:char_bob.deformers.Arm.wrist as:Arm_R_wrist_def
-building:char_bob.deformers.Leg as:Leg_L_cmp
-building:char_bob.deformers.Leg.femur as:Leg_L_femur_def
-building:char_bob.deformers.Leg.shin as:Leg_L_shin_def
-building:char_bob.deformers.Leg as:Leg_R_cmp
-building:char_bob.deformers.Leg.femur as:Leg_R_femur_def
-building:char_bob.deformers.Leg.shin as:Leg_R_shin_def
-building:char_bob.spine as:Mspine
-building:char_bob.Leg as:RLeg
-building:char_bob.Leg as:LLeg
-building:char_bob.Clavicle as:RClavicle
-building:char_bob.Clavicle as:LClavicle
-building:char_bob.neck as:Mneck
-building:char_bob.Arm as:RArm
-building:char_bob.Arm as:LArm
-building:char_bob.head as:Mhead
-buildConnection:pelvisInput
-buildConnection:pelvisInput
-buildConnection:spineEnd
-buildConnection:spineEnd
-buildConnection:neckBase
-buildConnection:root
-buildConnection:root
-buildConnection:headBase
+buildContainer: char_bob as: char_bob
+building: char_bob.deformers as: char_bob_deformers type: Layer
+buildLayer: char_bob.deformers as: char_bob_deformers
+building: char_bob.deformers.spine as: spine_M_cmp type: ComponentGroup
+buildGroup: char_bob.deformers.spine as: spine_M_cmp
+building: char_bob.deformers.spine.spine01 as: spine_M_spine01_def type: Joint
+buildJoint: char_bob.deformers.spine.spine01 as: spine_M_spine01_def
+building: char_bob.deformers.spine.pelvis as: spine_M_pelvis_def type: Joint
+buildJoint: char_bob.deformers.spine.pelvis as: spine_M_pelvis_def
+building: char_bob.deformers.spine.spine02 as: spine_M_spine02_def type: Joint
+buildJoint: char_bob.deformers.spine.spine02 as: spine_M_spine02_def
+building: char_bob.deformers.spine.spine03 as: spine_M_spine03_def type: Joint
+buildJoint: char_bob.deformers.spine.spine03 as: spine_M_spine03_def
+building: char_bob.deformers.spine.spine04 as: spine_M_spine04_def type: Joint
+buildJoint: char_bob.deformers.spine.spine04 as: spine_M_spine04_def
+building: char_bob.deformers.spine.spine05 as: spine_M_spine05_def type: Joint
+buildJoint: char_bob.deformers.spine.spine05 as: spine_M_spine05_def
+building: char_bob.deformers.spine.spine06 as: spine_M_spine06_def type: Joint
+buildJoint: char_bob.deformers.spine.spine06 as: spine_M_spine06_def
+building: char_bob.deformers.neck as: neck_M_cmp type: ComponentGroup
+buildGroup: char_bob.deformers.neck as: neck_M_cmp
+building: char_bob.deformers.neck.neck as: neck_M_neck_def type: Joint
+buildJoint: char_bob.deformers.neck.neck as: neck_M_neck_def
+building: char_bob.deformers.head as: head_M_cmp type: ComponentGroup
+buildGroup: char_bob.deformers.head as: head_M_cmp
+building: char_bob.deformers.head.head as: head_M_head_def type: Joint
+buildJoint: char_bob.deformers.head.head as: head_M_head_def
+building: char_bob.deformers.head.jaw as: head_M_jaw_def type: Joint
+buildJoint: char_bob.deformers.head.jaw as: head_M_jaw_def
+building: char_bob.deformers.head.eyeLeft as: head_M_eyeLeft_def type: Joint
+buildJoint: char_bob.deformers.head.eyeLeft as: head_M_eyeLeft_def
+building: char_bob.deformers.head.eyeRight as: head_M_eyeRight_def type: Joint
+buildJoint: char_bob.deformers.head.eyeRight as: head_M_eyeRight_def
+building: char_bob.deformers.Clavicle as: Clavicle_L_cmp type: ComponentGroup
+buildGroup: char_bob.deformers.Clavicle as: Clavicle_L_cmp
+building: char_bob.deformers.Clavicle.clavicle as: Clavicle_L_clavicle_def type: Joint
+buildJoint: char_bob.deformers.Clavicle.clavicle as: Clavicle_L_clavicle_def
+building: char_bob.deformers.Clavicle as: Clavicle_R_cmp type: ComponentGroup
+buildGroup: char_bob.deformers.Clavicle as: Clavicle_R_cmp
+building: char_bob.deformers.Clavicle.clavicle as: Clavicle_R_clavicle_def type: Joint
+buildJoint: char_bob.deformers.Clavicle.clavicle as: Clavicle_R_clavicle_def
+building: char_bob.deformers.Arm as: Arm_L_cmp type: ComponentGroup
+buildGroup: char_bob.deformers.Arm as: Arm_L_cmp
+building: char_bob.deformers.Arm.bicep as: Arm_L_bicep_def type: Joint
+buildJoint: char_bob.deformers.Arm.bicep as: Arm_L_bicep_def
+building: char_bob.deformers.Arm.forearm as: Arm_L_forearm_def type: Joint
+buildJoint: char_bob.deformers.Arm.forearm as: Arm_L_forearm_def
+building: char_bob.deformers.Arm.wrist as: Arm_L_wrist_def type: Joint
+buildJoint: char_bob.deformers.Arm.wrist as: Arm_L_wrist_def
+building: char_bob.deformers.Arm as: Arm_R_cmp type: ComponentGroup
+buildGroup: char_bob.deformers.Arm as: Arm_R_cmp
+building: char_bob.deformers.Arm.bicep as: Arm_R_bicep_def type: Joint
+buildJoint: char_bob.deformers.Arm.bicep as: Arm_R_bicep_def
+building: char_bob.deformers.Arm.forearm as: Arm_R_forearm_def type: Joint
+buildJoint: char_bob.deformers.Arm.forearm as: Arm_R_forearm_def
+building: char_bob.deformers.Arm.wrist as: Arm_R_wrist_def type: Joint
+buildJoint: char_bob.deformers.Arm.wrist as: Arm_R_wrist_def
+building: char_bob.deformers.Leg as: Leg_L_cmp type: ComponentGroup
+buildGroup: char_bob.deformers.Leg as: Leg_L_cmp
+building: char_bob.deformers.Leg.femur as: Leg_L_femur_def type: Joint
+buildJoint: char_bob.deformers.Leg.femur as: Leg_L_femur_def
+building: char_bob.deformers.Leg.shin as: Leg_L_shin_def type: Joint
+buildJoint: char_bob.deformers.Leg.shin as: Leg_L_shin_def
+building: char_bob.deformers.Leg as: Leg_R_cmp type: ComponentGroup
+buildGroup: char_bob.deformers.Leg as: Leg_R_cmp
+building: char_bob.deformers.Leg.femur as: Leg_R_femur_def type: Joint
+buildJoint: char_bob.deformers.Leg.femur as: Leg_R_femur_def
+building: char_bob.deformers.Leg.shin as: Leg_R_shin_def type: Joint
+buildJoint: char_bob.deformers.Leg.shin as: Leg_R_shin_def
+building: char_bob.controls as: char_bob_controls type: Layer
+buildLayer: char_bob.controls as: char_bob_controls
+building: char_bob.controls.spine as: spine_M_cmp type: ComponentGroup
+buildGroup: char_bob.controls.spine as: spine_M_cmp
+building: char_bob.controls.spine.inputs as: spine_M_inputs_hrc type: HierarchyGroup
+buildHierarchyGroup: char_bob.controls.spine.inputs as: spine_M_inputs_hrc
+building: char_bob.controls.spine.inputs.mainSrt as: spine_M_mainSrt_cmpIn type: ComponentInput
+buildLocator: char_bob.controls.spine.inputs.mainSrt as: spine_M_mainSrt_cmpIn
+building: char_bob.controls.spine.outputs as: spine_M_outputs_hrc type: HierarchyGroup
+buildHierarchyGroup: char_bob.controls.spine.outputs as: spine_M_outputs_hrc
+building: char_bob.controls.spine.outputs.cog as: spine_M_cog_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.spine.outputs.cog as: spine_M_cog_cmpOut
+building: char_bob.controls.spine.outputs.spineBase as: spine_M_spineBase_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.spine.outputs.spineBase as: spine_M_spineBase_cmpOut
+building: char_bob.controls.spine.outputs.pelvis as: spine_M_pelvis_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.spine.outputs.pelvis as: spine_M_pelvis_cmpOut
+building: char_bob.controls.spine.outputs.spineEnd as: spine_M_spineEnd_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.spine.outputs.spineEnd as: spine_M_spineEnd_cmpOut
+building: char_bob.controls.spine.outputs.spine01 as: spine_M_spine01_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.spine.outputs.spine01 as: spine_M_spine01_cmpOut
+building: char_bob.controls.spine.outputs.spine02 as: spine_M_spine02_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.spine.outputs.spine02 as: spine_M_spine02_cmpOut
+building: char_bob.controls.spine.outputs.spine03 as: spine_M_spine03_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.spine.outputs.spine03 as: spine_M_spine03_cmpOut
+building: char_bob.controls.spine.outputs.spine04 as: spine_M_spine04_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.spine.outputs.spine04 as: spine_M_spine04_cmpOut
+building: char_bob.controls.spine.outputs.spine05 as: spine_M_spine05_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.spine.outputs.spine05 as: spine_M_spine05_cmpOut
+building: char_bob.controls.spine.outputs.spine06 as: spine_M_spine06_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.spine.outputs.spine06 as: spine_M_spine06_cmpOut
+building: char_bob.controls.spine.cog as: spine_M_cog_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.spine.cog as: spine_M_cog_ctrlSpace
+building: char_bob.controls.spine.cog.cog as: spine_M_cog_ctrl type: Control
+buildControl:char_bob.controls.spine.cog.cog as: spine_M_cog_ctrl
+building: char_bob.controls.spine.cog.cog.spine01 as: spine_M_spine01_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.spine.cog.cog.spine01 as: spine_M_spine01_ctrlSpace
+building: char_bob.controls.spine.cog.cog.spine01.spine01 as: spine_M_spine01_ctrl type: Control
+buildControl:char_bob.controls.spine.cog.cog.spine01.spine01 as: spine_M_spine01_ctrl
+building: char_bob.controls.spine.cog.cog.spine01.spine01.spine02 as: spine_M_spine02_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.spine.cog.cog.spine01.spine01.spine02 as: spine_M_spine02_ctrlSpace
+building: char_bob.controls.spine.cog.cog.spine01.spine01.spine02.spine02 as: spine_M_spine02_ctrl type: Control
+buildControl:char_bob.controls.spine.cog.cog.spine01.spine01.spine02.spine02 as: spine_M_spine02_ctrl
+building: char_bob.controls.spine.cog.cog.spine01.spine01.spine02.spine02.spine03 as: spine_M_spine03_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.spine.cog.cog.spine01.spine01.spine02.spine02.spine03 as: spine_M_spine03_ctrlSpace
+building: char_bob.controls.spine.cog.cog.spine01.spine01.spine02.spine02.spine03.spine03 as: spine_M_spine03_ctrl type: Control
+buildControl:char_bob.controls.spine.cog.cog.spine01.spine01.spine02.spine02.spine03.spine03 as: spine_M_spine03_ctrl
+building: char_bob.controls.spine.cog.cog.spine04 as: spine_M_spine04_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.spine.cog.cog.spine04 as: spine_M_spine04_ctrlSpace
+building: char_bob.controls.spine.cog.cog.spine04.spine04 as: spine_M_spine04_ctrl type: Control
+buildControl:char_bob.controls.spine.cog.cog.spine04.spine04 as: spine_M_spine04_ctrl
+building: char_bob.controls.spine.cog.cog.pelvis as: spine_M_pelvis_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.spine.cog.cog.pelvis as: spine_M_pelvis_ctrlSpace
+building: char_bob.controls.spine.cog.cog.pelvis.pelvis as: spine_M_pelvis_ctrl type: Control
+buildControl:char_bob.controls.spine.cog.cog.pelvis.pelvis as: spine_M_pelvis_ctrl
+building: char_bob.controls.neck as: neck_M_cmp type: ComponentGroup
+buildGroup: char_bob.controls.neck as: neck_M_cmp
+building: char_bob.controls.neck.inputs as: neck_M_inputs_hrc type: HierarchyGroup
+buildHierarchyGroup: char_bob.controls.neck.inputs as: neck_M_inputs_hrc
+building: char_bob.controls.neck.inputs.neckBase as: neck_M_neckBase_cmpIn type: ComponentInput
+buildLocator: char_bob.controls.neck.inputs.neckBase as: neck_M_neckBase_cmpIn
+building: char_bob.controls.neck.outputs as: neck_M_outputs_hrc type: HierarchyGroup
+buildHierarchyGroup: char_bob.controls.neck.outputs as: neck_M_outputs_hrc
+building: char_bob.controls.neck.outputs.neck as: neck_M_neck_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.neck.outputs.neck as: neck_M_neck_cmpOut
+building: char_bob.controls.neck.outputs.neckEnd as: neck_M_neckEnd_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.neck.outputs.neckEnd as: neck_M_neckEnd_cmpOut
+building: char_bob.controls.neck.neck as: neck_M_neck_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.neck.neck as: neck_M_neck_ctrlSpace
+building: char_bob.controls.neck.neck.neck as: neck_M_neck_ctrl type: Control
+buildControl:char_bob.controls.neck.neck.neck as: neck_M_neck_ctrl
+building: char_bob.controls.head as: head_M_cmp type: ComponentGroup
+buildGroup: char_bob.controls.head as: head_M_cmp
+building: char_bob.controls.head.inputs as: head_M_inputs_hrc type: HierarchyGroup
+buildHierarchyGroup: char_bob.controls.head.inputs as: head_M_inputs_hrc
+building: char_bob.controls.head.inputs.headBase as: head_M_headBase_cmpIn type: ComponentInput
+buildLocator: char_bob.controls.head.inputs.headBase as: head_M_headBase_cmpIn
+building: char_bob.controls.head.outputs as: head_M_outputs_hrc type: HierarchyGroup
+buildHierarchyGroup: char_bob.controls.head.outputs as: head_M_outputs_hrc
+building: char_bob.controls.head.outputs.head as: head_M_head_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.head.outputs.head as: head_M_head_cmpOut
+building: char_bob.controls.head.outputs.jaw as: head_M_jaw_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.head.outputs.jaw as: head_M_jaw_cmpOut
+building: char_bob.controls.head.outputs.eyeL as: head_M_eyeL_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.head.outputs.eyeL as: head_M_eyeL_cmpOut
+building: char_bob.controls.head.outputs.eyeR as: head_M_eyeR_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.head.outputs.eyeR as: head_M_eyeR_cmpOut
+building: char_bob.controls.head.head as: head_M_head_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.head.head as: head_M_head_ctrlSpace
+building: char_bob.controls.head.head.head as: head_M_head_ctrl type: Control
+buildControl:char_bob.controls.head.head.head as: head_M_head_ctrl
+building: char_bob.controls.head.head.head.eyeLeft as: head_M_eyeLeft_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.head.head.head.eyeLeft as: head_M_eyeLeft_ctrlSpace
+building: char_bob.controls.head.head.head.eyeLeft.eyeLeft as: head_M_eyeLeft_ctrl type: Control
+buildControl:char_bob.controls.head.head.head.eyeLeft.eyeLeft as: head_M_eyeLeft_ctrl
+building: char_bob.controls.head.head.head.eyeRight as: head_M_eyeRight_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.head.head.head.eyeRight as: head_M_eyeRight_ctrlSpace
+building: char_bob.controls.head.head.head.eyeRight.eyeRight as: head_M_eyeRight_ctrl type: Control
+buildControl:char_bob.controls.head.head.head.eyeRight.eyeRight as: head_M_eyeRight_ctrl
+building: char_bob.controls.head.head.head.jawCtrlSpace as: head_M_jawCtrlSpace_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.head.head.head.jawCtrlSpace as: head_M_jawCtrlSpace_ctrlSpace
+building: char_bob.controls.head.head.head.jawCtrlSpace.jaw as: head_M_jaw_ctrl type: Control
+buildControl:char_bob.controls.head.head.head.jawCtrlSpace.jaw as: head_M_jaw_ctrl
+building: char_bob.controls.Clavicle as: Clavicle_L_cmp type: ComponentGroup
+buildGroup: char_bob.controls.Clavicle as: Clavicle_L_cmp
+building: char_bob.controls.Clavicle.inputs as: Clavicle_L_inputs_hrc type: HierarchyGroup
+buildHierarchyGroup: char_bob.controls.Clavicle.inputs as: Clavicle_L_inputs_hrc
+building: char_bob.controls.Clavicle.inputs.spineEnd as: Clavicle_L_spineEnd_cmpIn type: ComponentInput
+buildLocator: char_bob.controls.Clavicle.inputs.spineEnd as: Clavicle_L_spineEnd_cmpIn
+building: char_bob.controls.Clavicle.outputs as: Clavicle_L_outputs_hrc type: HierarchyGroup
+buildHierarchyGroup: char_bob.controls.Clavicle.outputs as: Clavicle_L_outputs_hrc
+building: char_bob.controls.Clavicle.outputs.clavicle as: Clavicle_L_clavicle_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.Clavicle.outputs.clavicle as: Clavicle_L_clavicle_cmpOut
+building: char_bob.controls.Clavicle.outputs.clavicleEnd as: Clavicle_L_clavicleEnd_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.Clavicle.outputs.clavicleEnd as: Clavicle_L_clavicleEnd_cmpOut
+building: char_bob.controls.Clavicle.clavicle as: Clavicle_L_clavicle_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.Clavicle.clavicle as: Clavicle_L_clavicle_ctrlSpace
+building: char_bob.controls.Clavicle.clavicle.clavicle as: Clavicle_L_clavicle_ctrl type: Control
+buildControl:char_bob.controls.Clavicle.clavicle.clavicle as: Clavicle_L_clavicle_ctrl
+building: char_bob.controls.Clavicle as: Clavicle_R_cmp type: ComponentGroup
+buildGroup: char_bob.controls.Clavicle as: Clavicle_R_cmp
+building: char_bob.controls.Clavicle.inputs as: Clavicle_R_inputs_hrc type: HierarchyGroup
+buildHierarchyGroup: char_bob.controls.Clavicle.inputs as: Clavicle_R_inputs_hrc
+building: char_bob.controls.Clavicle.inputs.spineEnd as: Clavicle_R_spineEnd_cmpIn type: ComponentInput
+buildLocator: char_bob.controls.Clavicle.inputs.spineEnd as: Clavicle_R_spineEnd_cmpIn
+building: char_bob.controls.Clavicle.outputs as: Clavicle_R_outputs_hrc type: HierarchyGroup
+buildHierarchyGroup: char_bob.controls.Clavicle.outputs as: Clavicle_R_outputs_hrc
+building: char_bob.controls.Clavicle.outputs.clavicle as: Clavicle_R_clavicle_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.Clavicle.outputs.clavicle as: Clavicle_R_clavicle_cmpOut
+building: char_bob.controls.Clavicle.outputs.clavicleEnd as: Clavicle_R_clavicleEnd_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.Clavicle.outputs.clavicleEnd as: Clavicle_R_clavicleEnd_cmpOut
+building: char_bob.controls.Clavicle.clavicle as: Clavicle_R_clavicle_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.Clavicle.clavicle as: Clavicle_R_clavicle_ctrlSpace
+building: char_bob.controls.Clavicle.clavicle.clavicle as: Clavicle_R_clavicle_ctrl type: Control
+buildControl:char_bob.controls.Clavicle.clavicle.clavicle as: Clavicle_R_clavicle_ctrl
+building: char_bob.controls.Arm as: Arm_L_cmp type: ComponentGroup
+buildGroup: char_bob.controls.Arm as: Arm_L_cmp
+building: char_bob.controls.Arm.inputs as: Arm_L_inputs_hrc type: HierarchyGroup
+buildHierarchyGroup: char_bob.controls.Arm.inputs as: Arm_L_inputs_hrc
+building: char_bob.controls.Arm.inputs.globalSRT as: Arm_L_globalSRT_cmpIn type: ComponentInput
+buildLocator: char_bob.controls.Arm.inputs.globalSRT as: Arm_L_globalSRT_cmpIn
+building: char_bob.controls.Arm.inputs.root as: Arm_L_root_cmpIn type: ComponentInput
+buildLocator: char_bob.controls.Arm.inputs.root as: Arm_L_root_cmpIn
+building: char_bob.controls.Arm.outputs as: Arm_L_outputs_hrc type: HierarchyGroup
+buildHierarchyGroup: char_bob.controls.Arm.outputs as: Arm_L_outputs_hrc
+building: char_bob.controls.Arm.outputs.bicep as: Arm_L_bicep_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.Arm.outputs.bicep as: Arm_L_bicep_cmpOut
+building: char_bob.controls.Arm.outputs.forearm as: Arm_L_forearm_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.Arm.outputs.forearm as: Arm_L_forearm_cmpOut
+building: char_bob.controls.Arm.outputs.wrist as: Arm_L_wrist_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.Arm.outputs.wrist as: Arm_L_wrist_cmpOut
+building: char_bob.controls.Arm.bicepFK as: Arm_L_bicepFK_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.Arm.bicepFK as: Arm_L_bicepFK_ctrlSpace
+building: char_bob.controls.Arm.bicepFK.bicepFK as: Arm_L_bicepFK_ctrl type: Control
+buildControl:char_bob.controls.Arm.bicepFK.bicepFK as: Arm_L_bicepFK_ctrl
+building: char_bob.controls.Arm.bicepFK.bicepFK.forearmFK as: Arm_L_forearmFK_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.Arm.bicepFK.bicepFK.forearmFK as: Arm_L_forearmFK_ctrlSpace
+building: char_bob.controls.Arm.bicepFK.bicepFK.forearmFK.forearmFK as: Arm_L_forearmFK_ctrl type: Control
+buildControl:char_bob.controls.Arm.bicepFK.bicepFK.forearmFK.forearmFK as: Arm_L_forearmFK_ctrl
+building: char_bob.controls.Arm.IK as: Arm_L_IK_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.Arm.IK as: Arm_L_IK_ctrlSpace
+building: char_bob.controls.Arm.IK.IK as: Arm_L_IK_ctrl type: Control
+buildControl:char_bob.controls.Arm.IK.IK as: Arm_L_IK_ctrl
+building: char_bob.controls.Arm.ikPosition as: Arm_L_ikPosition_null type: Transform
+buildGroup: char_bob.controls.Arm.ikPosition as: Arm_L_ikPosition_null
+building: char_bob.controls.Arm.UpV as: Arm_L_UpV_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.Arm.UpV as: Arm_L_UpV_ctrlSpace
+building: char_bob.controls.Arm.UpV.UpV as: Arm_L_UpV_ctrl type: Control
+buildControl:char_bob.controls.Arm.UpV.UpV as: Arm_L_UpV_ctrl
+building: char_bob.controls.Arm as: Arm_R_cmp type: ComponentGroup
+buildGroup: char_bob.controls.Arm as: Arm_R_cmp
+building: char_bob.controls.Arm.inputs as: Arm_R_inputs_hrc type: HierarchyGroup
+buildHierarchyGroup: char_bob.controls.Arm.inputs as: Arm_R_inputs_hrc
+building: char_bob.controls.Arm.inputs.globalSRT as: Arm_R_globalSRT_cmpIn type: ComponentInput
+buildLocator: char_bob.controls.Arm.inputs.globalSRT as: Arm_R_globalSRT_cmpIn
+building: char_bob.controls.Arm.inputs.root as: Arm_R_root_cmpIn type: ComponentInput
+buildLocator: char_bob.controls.Arm.inputs.root as: Arm_R_root_cmpIn
+building: char_bob.controls.Arm.outputs as: Arm_R_outputs_hrc type: HierarchyGroup
+buildHierarchyGroup: char_bob.controls.Arm.outputs as: Arm_R_outputs_hrc
+building: char_bob.controls.Arm.outputs.bicep as: Arm_R_bicep_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.Arm.outputs.bicep as: Arm_R_bicep_cmpOut
+building: char_bob.controls.Arm.outputs.forearm as: Arm_R_forearm_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.Arm.outputs.forearm as: Arm_R_forearm_cmpOut
+building: char_bob.controls.Arm.outputs.wrist as: Arm_R_wrist_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.Arm.outputs.wrist as: Arm_R_wrist_cmpOut
+building: char_bob.controls.Arm.bicepFK as: Arm_R_bicepFK_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.Arm.bicepFK as: Arm_R_bicepFK_ctrlSpace
+building: char_bob.controls.Arm.bicepFK.bicepFK as: Arm_R_bicepFK_ctrl type: Control
+buildControl:char_bob.controls.Arm.bicepFK.bicepFK as: Arm_R_bicepFK_ctrl
+building: char_bob.controls.Arm.bicepFK.bicepFK.forearmFK as: Arm_R_forearmFK_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.Arm.bicepFK.bicepFK.forearmFK as: Arm_R_forearmFK_ctrlSpace
+building: char_bob.controls.Arm.bicepFK.bicepFK.forearmFK.forearmFK as: Arm_R_forearmFK_ctrl type: Control
+buildControl:char_bob.controls.Arm.bicepFK.bicepFK.forearmFK.forearmFK as: Arm_R_forearmFK_ctrl
+building: char_bob.controls.Arm.IK as: Arm_R_IK_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.Arm.IK as: Arm_R_IK_ctrlSpace
+building: char_bob.controls.Arm.IK.IK as: Arm_R_IK_ctrl type: Control
+buildControl:char_bob.controls.Arm.IK.IK as: Arm_R_IK_ctrl
+building: char_bob.controls.Arm.ikPosition as: Arm_R_ikPosition_null type: Transform
+buildGroup: char_bob.controls.Arm.ikPosition as: Arm_R_ikPosition_null
+building: char_bob.controls.Arm.UpV as: Arm_R_UpV_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.Arm.UpV as: Arm_R_UpV_ctrlSpace
+building: char_bob.controls.Arm.UpV.UpV as: Arm_R_UpV_ctrl type: Control
+buildControl:char_bob.controls.Arm.UpV.UpV as: Arm_R_UpV_ctrl
+building: char_bob.controls.Leg as: Leg_L_cmp type: ComponentGroup
+buildGroup: char_bob.controls.Leg as: Leg_L_cmp
+building: char_bob.controls.Leg.inputs as: Leg_L_inputs_hrc type: HierarchyGroup
+buildHierarchyGroup: char_bob.controls.Leg.inputs as: Leg_L_inputs_hrc
+building: char_bob.controls.Leg.inputs.globalSRT as: Leg_L_globalSRT_cmpIn type: ComponentInput
+buildLocator: char_bob.controls.Leg.inputs.globalSRT as: Leg_L_globalSRT_cmpIn
+building: char_bob.controls.Leg.inputs.pelvisInput as: Leg_L_pelvisInput_cmpIn type: ComponentInput
+buildLocator: char_bob.controls.Leg.inputs.pelvisInput as: Leg_L_pelvisInput_cmpIn
+building: char_bob.controls.Leg.inputs.ikTarget as: Leg_L_ikTarget_cmpIn type: ComponentInput
+buildLocator: char_bob.controls.Leg.inputs.ikTarget as: Leg_L_ikTarget_cmpIn
+building: char_bob.controls.Leg.outputs as: Leg_L_outputs_hrc type: HierarchyGroup
+buildHierarchyGroup: char_bob.controls.Leg.outputs as: Leg_L_outputs_hrc
+building: char_bob.controls.Leg.outputs.femur as: Leg_L_femur_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.Leg.outputs.femur as: Leg_L_femur_cmpOut
+building: char_bob.controls.Leg.outputs.shin as: Leg_L_shin_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.Leg.outputs.shin as: Leg_L_shin_cmpOut
+building: char_bob.controls.Leg.outputs.ikHandle as: Leg_L_ikHandle_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.Leg.outputs.ikHandle as: Leg_L_ikHandle_cmpOut
+building: char_bob.controls.Leg.outputs.legEnd as: Leg_L_legEnd_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.Leg.outputs.legEnd as: Leg_L_legEnd_cmpOut
+building: char_bob.controls.Leg.outputs.legEndFK as: Leg_L_legEndFK_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.Leg.outputs.legEndFK as: Leg_L_legEndFK_cmpOut
+building: char_bob.controls.Leg.femurFK as: Leg_L_femurFK_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.Leg.femurFK as: Leg_L_femurFK_ctrlSpace
+building: char_bob.controls.Leg.femurFK.femurFK as: Leg_L_femurFK_ctrl type: Control
+buildControl:char_bob.controls.Leg.femurFK.femurFK as: Leg_L_femurFK_ctrl
+building: char_bob.controls.Leg.femurFK.femurFK.shinFK as: Leg_L_shinFK_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.Leg.femurFK.femurFK.shinFK as: Leg_L_shinFK_ctrlSpace
+building: char_bob.controls.Leg.femurFK.femurFK.shinFK.shinFK as: Leg_L_shinFK_ctrl type: Control
+buildControl:char_bob.controls.Leg.femurFK.femurFK.shinFK.shinFK as: Leg_L_shinFK_ctrl
+building: char_bob.controls.Leg.IK as: Leg_L_IK_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.Leg.IK as: Leg_L_IK_ctrlSpace
+building: char_bob.controls.Leg.IK.IK as: Leg_L_IK_ctrl type: Control
+buildControl:char_bob.controls.Leg.IK.IK as: Leg_L_IK_ctrl
+building: char_bob.controls.Leg.ikRootPosition as: Leg_L_ikRootPosition_loc type: Locator
+buildLocator: char_bob.controls.Leg.ikRootPosition as: Leg_L_ikRootPosition_loc
+building: char_bob.controls.Leg.UpV as: Leg_L_UpV_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.Leg.UpV as: Leg_L_UpV_ctrlSpace
+building: char_bob.controls.Leg.UpV.UpV as: Leg_L_UpV_ctrl type: Control
+buildControl:char_bob.controls.Leg.UpV.UpV as: Leg_L_UpV_ctrl
+building: char_bob.controls.Leg as: Leg_R_cmp type: ComponentGroup
+buildGroup: char_bob.controls.Leg as: Leg_R_cmp
+building: char_bob.controls.Leg.inputs as: Leg_R_inputs_hrc type: HierarchyGroup
+buildHierarchyGroup: char_bob.controls.Leg.inputs as: Leg_R_inputs_hrc
+building: char_bob.controls.Leg.inputs.globalSRT as: Leg_R_globalSRT_cmpIn type: ComponentInput
+buildLocator: char_bob.controls.Leg.inputs.globalSRT as: Leg_R_globalSRT_cmpIn
+building: char_bob.controls.Leg.inputs.pelvisInput as: Leg_R_pelvisInput_cmpIn type: ComponentInput
+buildLocator: char_bob.controls.Leg.inputs.pelvisInput as: Leg_R_pelvisInput_cmpIn
+building: char_bob.controls.Leg.inputs.ikTarget as: Leg_R_ikTarget_cmpIn type: ComponentInput
+buildLocator: char_bob.controls.Leg.inputs.ikTarget as: Leg_R_ikTarget_cmpIn
+building: char_bob.controls.Leg.outputs as: Leg_R_outputs_hrc type: HierarchyGroup
+buildHierarchyGroup: char_bob.controls.Leg.outputs as: Leg_R_outputs_hrc
+building: char_bob.controls.Leg.outputs.femur as: Leg_R_femur_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.Leg.outputs.femur as: Leg_R_femur_cmpOut
+building: char_bob.controls.Leg.outputs.shin as: Leg_R_shin_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.Leg.outputs.shin as: Leg_R_shin_cmpOut
+building: char_bob.controls.Leg.outputs.ikHandle as: Leg_R_ikHandle_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.Leg.outputs.ikHandle as: Leg_R_ikHandle_cmpOut
+building: char_bob.controls.Leg.outputs.legEnd as: Leg_R_legEnd_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.Leg.outputs.legEnd as: Leg_R_legEnd_cmpOut
+building: char_bob.controls.Leg.outputs.legEndFK as: Leg_R_legEndFK_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.Leg.outputs.legEndFK as: Leg_R_legEndFK_cmpOut
+building: char_bob.controls.Leg.femurFK as: Leg_R_femurFK_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.Leg.femurFK as: Leg_R_femurFK_ctrlSpace
+building: char_bob.controls.Leg.femurFK.femurFK as: Leg_R_femurFK_ctrl type: Control
+buildControl:char_bob.controls.Leg.femurFK.femurFK as: Leg_R_femurFK_ctrl
+building: char_bob.controls.Leg.femurFK.femurFK.shinFK as: Leg_R_shinFK_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.Leg.femurFK.femurFK.shinFK as: Leg_R_shinFK_ctrlSpace
+building: char_bob.controls.Leg.femurFK.femurFK.shinFK.shinFK as: Leg_R_shinFK_ctrl type: Control
+buildControl:char_bob.controls.Leg.femurFK.femurFK.shinFK.shinFK as: Leg_R_shinFK_ctrl
+building: char_bob.controls.Leg.IK as: Leg_R_IK_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.Leg.IK as: Leg_R_IK_ctrlSpace
+building: char_bob.controls.Leg.IK.IK as: Leg_R_IK_ctrl type: Control
+buildControl:char_bob.controls.Leg.IK.IK as: Leg_R_IK_ctrl
+building: char_bob.controls.Leg.ikRootPosition as: Leg_R_ikRootPosition_loc type: Locator
+buildLocator: char_bob.controls.Leg.ikRootPosition as: Leg_R_ikRootPosition_loc
+building: char_bob.controls.Leg.UpV as: Leg_R_UpV_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.Leg.UpV as: Leg_R_UpV_ctrlSpace
+building: char_bob.controls.Leg.UpV.UpV as: Leg_R_UpV_ctrl type: Control
+buildControl:char_bob.controls.Leg.UpV.UpV as: Leg_R_UpV_ctrl
+buildLayer: char_bob.controls as: char_bob_controls
+buildLayer: char_bob.deformers as: char_bob_deformers
+building: char_bob.controls.spine as: spine_M_cmp type: ComponentGroup
+buildGroup: char_bob.controls.spine as: spine_M_cmp
+building: char_bob.controls.spine.inputs as: spine_M_inputs_hrc type: HierarchyGroup
+buildHierarchyGroup: char_bob.controls.spine.inputs as: spine_M_inputs_hrc
+building: char_bob.controls.spine.inputs.mainSrt as: spine_M_mainSrt_cmpIn type: ComponentInput
+buildLocator: char_bob.controls.spine.inputs.mainSrt as: spine_M_mainSrt_cmpIn
+building: char_bob.controls.spine.outputs as: spine_M_outputs_hrc type: HierarchyGroup
+buildHierarchyGroup: char_bob.controls.spine.outputs as: spine_M_outputs_hrc
+building: char_bob.controls.spine.outputs.cog as: spine_M_cog_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.spine.outputs.cog as: spine_M_cog_cmpOut
+building: char_bob.controls.spine.outputs.spineBase as: spine_M_spineBase_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.spine.outputs.spineBase as: spine_M_spineBase_cmpOut
+building: char_bob.controls.spine.outputs.pelvis as: spine_M_pelvis_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.spine.outputs.pelvis as: spine_M_pelvis_cmpOut
+building: char_bob.controls.spine.outputs.spineEnd as: spine_M_spineEnd_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.spine.outputs.spineEnd as: spine_M_spineEnd_cmpOut
+building: char_bob.controls.spine.outputs.spine01 as: spine_M_spine01_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.spine.outputs.spine01 as: spine_M_spine01_cmpOut
+building: char_bob.controls.spine.outputs.spine02 as: spine_M_spine02_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.spine.outputs.spine02 as: spine_M_spine02_cmpOut
+building: char_bob.controls.spine.outputs.spine03 as: spine_M_spine03_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.spine.outputs.spine03 as: spine_M_spine03_cmpOut
+building: char_bob.controls.spine.outputs.spine04 as: spine_M_spine04_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.spine.outputs.spine04 as: spine_M_spine04_cmpOut
+building: char_bob.controls.spine.outputs.spine05 as: spine_M_spine05_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.spine.outputs.spine05 as: spine_M_spine05_cmpOut
+building: char_bob.controls.spine.outputs.spine06 as: spine_M_spine06_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.spine.outputs.spine06 as: spine_M_spine06_cmpOut
+building: char_bob.controls.spine.cog as: spine_M_cog_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.spine.cog as: spine_M_cog_ctrlSpace
+building: char_bob.controls.spine.cog.cog as: spine_M_cog_ctrl type: Control
+buildControl:char_bob.controls.spine.cog.cog as: spine_M_cog_ctrl
+building: char_bob.controls.spine.cog.cog.spine01 as: spine_M_spine01_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.spine.cog.cog.spine01 as: spine_M_spine01_ctrlSpace
+building: char_bob.controls.spine.cog.cog.spine01.spine01 as: spine_M_spine01_ctrl type: Control
+buildControl:char_bob.controls.spine.cog.cog.spine01.spine01 as: spine_M_spine01_ctrl
+building: char_bob.controls.spine.cog.cog.spine01.spine01.spine02 as: spine_M_spine02_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.spine.cog.cog.spine01.spine01.spine02 as: spine_M_spine02_ctrlSpace
+building: char_bob.controls.spine.cog.cog.spine01.spine01.spine02.spine02 as: spine_M_spine02_ctrl type: Control
+buildControl:char_bob.controls.spine.cog.cog.spine01.spine01.spine02.spine02 as: spine_M_spine02_ctrl
+building: char_bob.controls.spine.cog.cog.spine01.spine01.spine02.spine02.spine03 as: spine_M_spine03_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.spine.cog.cog.spine01.spine01.spine02.spine02.spine03 as: spine_M_spine03_ctrlSpace
+building: char_bob.controls.spine.cog.cog.spine01.spine01.spine02.spine02.spine03.spine03 as: spine_M_spine03_ctrl type: Control
+buildControl:char_bob.controls.spine.cog.cog.spine01.spine01.spine02.spine02.spine03.spine03 as: spine_M_spine03_ctrl
+building: char_bob.controls.spine.cog.cog.spine04 as: spine_M_spine04_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.spine.cog.cog.spine04 as: spine_M_spine04_ctrlSpace
+building: char_bob.controls.spine.cog.cog.spine04.spine04 as: spine_M_spine04_ctrl type: Control
+buildControl:char_bob.controls.spine.cog.cog.spine04.spine04 as: spine_M_spine04_ctrl
+building: char_bob.controls.spine.cog.cog.pelvis as: spine_M_pelvis_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.spine.cog.cog.pelvis as: spine_M_pelvis_ctrlSpace
+building: char_bob.controls.spine.cog.cog.pelvis.pelvis as: spine_M_pelvis_ctrl type: Control
+buildControl:char_bob.controls.spine.cog.cog.pelvis.pelvis as: spine_M_pelvis_ctrl
+building: char_bob.deformers.spine as: spine_M_cmp type: ComponentGroup
+buildGroup: char_bob.deformers.spine as: spine_M_cmp
+building: char_bob.deformers.spine.spine01 as: spine_M_spine01_def type: Joint
+buildJoint: char_bob.deformers.spine.spine01 as: spine_M_spine01_def
+building: char_bob.deformers.spine.pelvis as: spine_M_pelvis_def type: Joint
+buildJoint: char_bob.deformers.spine.pelvis as: spine_M_pelvis_def
+building: char_bob.deformers.spine.spine02 as: spine_M_spine02_def type: Joint
+buildJoint: char_bob.deformers.spine.spine02 as: spine_M_spine02_def
+building: char_bob.deformers.spine.spine03 as: spine_M_spine03_def type: Joint
+buildJoint: char_bob.deformers.spine.spine03 as: spine_M_spine03_def
+building: char_bob.deformers.spine.spine04 as: spine_M_spine04_def type: Joint
+buildJoint: char_bob.deformers.spine.spine04 as: spine_M_spine04_def
+building: char_bob.deformers.spine.spine05 as: spine_M_spine05_def type: Joint
+buildJoint: char_bob.deformers.spine.spine05 as: spine_M_spine05_def
+building: char_bob.deformers.spine.spine06 as: spine_M_spine06_def type: Joint
+buildJoint: char_bob.deformers.spine.spine06 as: spine_M_spine06_def
+building: char_bob.controls.neck as: neck_M_cmp type: ComponentGroup
+buildGroup: char_bob.controls.neck as: neck_M_cmp
+building: char_bob.controls.neck.inputs as: neck_M_inputs_hrc type: HierarchyGroup
+buildHierarchyGroup: char_bob.controls.neck.inputs as: neck_M_inputs_hrc
+building: char_bob.controls.neck.inputs.neckBase as: neck_M_neckBase_cmpIn type: ComponentInput
+buildLocator: char_bob.controls.neck.inputs.neckBase as: neck_M_neckBase_cmpIn
+building: char_bob.controls.neck.outputs as: neck_M_outputs_hrc type: HierarchyGroup
+buildHierarchyGroup: char_bob.controls.neck.outputs as: neck_M_outputs_hrc
+building: char_bob.controls.neck.outputs.neck as: neck_M_neck_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.neck.outputs.neck as: neck_M_neck_cmpOut
+building: char_bob.controls.neck.outputs.neckEnd as: neck_M_neckEnd_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.neck.outputs.neckEnd as: neck_M_neckEnd_cmpOut
+building: char_bob.controls.neck.neck as: neck_M_neck_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.neck.neck as: neck_M_neck_ctrlSpace
+building: char_bob.controls.neck.neck.neck as: neck_M_neck_ctrl type: Control
+buildControl:char_bob.controls.neck.neck.neck as: neck_M_neck_ctrl
+building: char_bob.deformers.neck as: neck_M_cmp type: ComponentGroup
+buildGroup: char_bob.deformers.neck as: neck_M_cmp
+building: char_bob.deformers.neck.neck as: neck_M_neck_def type: Joint
+buildJoint: char_bob.deformers.neck.neck as: neck_M_neck_def
+building: char_bob.controls.head as: head_M_cmp type: ComponentGroup
+buildGroup: char_bob.controls.head as: head_M_cmp
+building: char_bob.controls.head.inputs as: head_M_inputs_hrc type: HierarchyGroup
+buildHierarchyGroup: char_bob.controls.head.inputs as: head_M_inputs_hrc
+building: char_bob.controls.head.inputs.headBase as: head_M_headBase_cmpIn type: ComponentInput
+buildLocator: char_bob.controls.head.inputs.headBase as: head_M_headBase_cmpIn
+building: char_bob.controls.head.outputs as: head_M_outputs_hrc type: HierarchyGroup
+buildHierarchyGroup: char_bob.controls.head.outputs as: head_M_outputs_hrc
+building: char_bob.controls.head.outputs.head as: head_M_head_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.head.outputs.head as: head_M_head_cmpOut
+building: char_bob.controls.head.outputs.jaw as: head_M_jaw_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.head.outputs.jaw as: head_M_jaw_cmpOut
+building: char_bob.controls.head.outputs.eyeL as: head_M_eyeL_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.head.outputs.eyeL as: head_M_eyeL_cmpOut
+building: char_bob.controls.head.outputs.eyeR as: head_M_eyeR_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.head.outputs.eyeR as: head_M_eyeR_cmpOut
+building: char_bob.controls.head.head as: head_M_head_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.head.head as: head_M_head_ctrlSpace
+building: char_bob.controls.head.head.head as: head_M_head_ctrl type: Control
+buildControl:char_bob.controls.head.head.head as: head_M_head_ctrl
+building: char_bob.controls.head.head.head.eyeLeft as: head_M_eyeLeft_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.head.head.head.eyeLeft as: head_M_eyeLeft_ctrlSpace
+building: char_bob.controls.head.head.head.eyeLeft.eyeLeft as: head_M_eyeLeft_ctrl type: Control
+buildControl:char_bob.controls.head.head.head.eyeLeft.eyeLeft as: head_M_eyeLeft_ctrl
+building: char_bob.controls.head.head.head.eyeRight as: head_M_eyeRight_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.head.head.head.eyeRight as: head_M_eyeRight_ctrlSpace
+building: char_bob.controls.head.head.head.eyeRight.eyeRight as: head_M_eyeRight_ctrl type: Control
+buildControl:char_bob.controls.head.head.head.eyeRight.eyeRight as: head_M_eyeRight_ctrl
+building: char_bob.controls.head.head.head.jawCtrlSpace as: head_M_jawCtrlSpace_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.head.head.head.jawCtrlSpace as: head_M_jawCtrlSpace_ctrlSpace
+building: char_bob.controls.head.head.head.jawCtrlSpace.jaw as: head_M_jaw_ctrl type: Control
+buildControl:char_bob.controls.head.head.head.jawCtrlSpace.jaw as: head_M_jaw_ctrl
+building: char_bob.deformers.head as: head_M_cmp type: ComponentGroup
+buildGroup: char_bob.deformers.head as: head_M_cmp
+building: char_bob.deformers.head.head as: head_M_head_def type: Joint
+buildJoint: char_bob.deformers.head.head as: head_M_head_def
+building: char_bob.deformers.head.jaw as: head_M_jaw_def type: Joint
+buildJoint: char_bob.deformers.head.jaw as: head_M_jaw_def
+building: char_bob.deformers.head.eyeLeft as: head_M_eyeLeft_def type: Joint
+buildJoint: char_bob.deformers.head.eyeLeft as: head_M_eyeLeft_def
+building: char_bob.deformers.head.eyeRight as: head_M_eyeRight_def type: Joint
+buildJoint: char_bob.deformers.head.eyeRight as: head_M_eyeRight_def
+building: char_bob.controls.Clavicle as: Clavicle_L_cmp type: ComponentGroup
+buildGroup: char_bob.controls.Clavicle as: Clavicle_L_cmp
+building: char_bob.controls.Clavicle.inputs as: Clavicle_L_inputs_hrc type: HierarchyGroup
+buildHierarchyGroup: char_bob.controls.Clavicle.inputs as: Clavicle_L_inputs_hrc
+building: char_bob.controls.Clavicle.inputs.spineEnd as: Clavicle_L_spineEnd_cmpIn type: ComponentInput
+buildLocator: char_bob.controls.Clavicle.inputs.spineEnd as: Clavicle_L_spineEnd_cmpIn
+building: char_bob.controls.Clavicle.outputs as: Clavicle_L_outputs_hrc type: HierarchyGroup
+buildHierarchyGroup: char_bob.controls.Clavicle.outputs as: Clavicle_L_outputs_hrc
+building: char_bob.controls.Clavicle.outputs.clavicle as: Clavicle_L_clavicle_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.Clavicle.outputs.clavicle as: Clavicle_L_clavicle_cmpOut
+building: char_bob.controls.Clavicle.outputs.clavicleEnd as: Clavicle_L_clavicleEnd_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.Clavicle.outputs.clavicleEnd as: Clavicle_L_clavicleEnd_cmpOut
+building: char_bob.controls.Clavicle.clavicle as: Clavicle_L_clavicle_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.Clavicle.clavicle as: Clavicle_L_clavicle_ctrlSpace
+building: char_bob.controls.Clavicle.clavicle.clavicle as: Clavicle_L_clavicle_ctrl type: Control
+buildControl:char_bob.controls.Clavicle.clavicle.clavicle as: Clavicle_L_clavicle_ctrl
+building: char_bob.deformers.Clavicle as: Clavicle_L_cmp type: ComponentGroup
+buildGroup: char_bob.deformers.Clavicle as: Clavicle_L_cmp
+building: char_bob.deformers.Clavicle.clavicle as: Clavicle_L_clavicle_def type: Joint
+buildJoint: char_bob.deformers.Clavicle.clavicle as: Clavicle_L_clavicle_def
+building: char_bob.controls.Clavicle as: Clavicle_R_cmp type: ComponentGroup
+buildGroup: char_bob.controls.Clavicle as: Clavicle_R_cmp
+building: char_bob.controls.Clavicle.inputs as: Clavicle_R_inputs_hrc type: HierarchyGroup
+buildHierarchyGroup: char_bob.controls.Clavicle.inputs as: Clavicle_R_inputs_hrc
+building: char_bob.controls.Clavicle.inputs.spineEnd as: Clavicle_R_spineEnd_cmpIn type: ComponentInput
+buildLocator: char_bob.controls.Clavicle.inputs.spineEnd as: Clavicle_R_spineEnd_cmpIn
+building: char_bob.controls.Clavicle.outputs as: Clavicle_R_outputs_hrc type: HierarchyGroup
+buildHierarchyGroup: char_bob.controls.Clavicle.outputs as: Clavicle_R_outputs_hrc
+building: char_bob.controls.Clavicle.outputs.clavicle as: Clavicle_R_clavicle_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.Clavicle.outputs.clavicle as: Clavicle_R_clavicle_cmpOut
+building: char_bob.controls.Clavicle.outputs.clavicleEnd as: Clavicle_R_clavicleEnd_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.Clavicle.outputs.clavicleEnd as: Clavicle_R_clavicleEnd_cmpOut
+building: char_bob.controls.Clavicle.clavicle as: Clavicle_R_clavicle_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.Clavicle.clavicle as: Clavicle_R_clavicle_ctrlSpace
+building: char_bob.controls.Clavicle.clavicle.clavicle as: Clavicle_R_clavicle_ctrl type: Control
+buildControl:char_bob.controls.Clavicle.clavicle.clavicle as: Clavicle_R_clavicle_ctrl
+building: char_bob.deformers.Clavicle as: Clavicle_R_cmp type: ComponentGroup
+buildGroup: char_bob.deformers.Clavicle as: Clavicle_R_cmp
+building: char_bob.deformers.Clavicle.clavicle as: Clavicle_R_clavicle_def type: Joint
+buildJoint: char_bob.deformers.Clavicle.clavicle as: Clavicle_R_clavicle_def
+building: char_bob.controls.Arm as: Arm_L_cmp type: ComponentGroup
+buildGroup: char_bob.controls.Arm as: Arm_L_cmp
+building: char_bob.controls.Arm.inputs as: Arm_L_inputs_hrc type: HierarchyGroup
+buildHierarchyGroup: char_bob.controls.Arm.inputs as: Arm_L_inputs_hrc
+building: char_bob.controls.Arm.inputs.globalSRT as: Arm_L_globalSRT_cmpIn type: ComponentInput
+buildLocator: char_bob.controls.Arm.inputs.globalSRT as: Arm_L_globalSRT_cmpIn
+building: char_bob.controls.Arm.inputs.root as: Arm_L_root_cmpIn type: ComponentInput
+buildLocator: char_bob.controls.Arm.inputs.root as: Arm_L_root_cmpIn
+building: char_bob.controls.Arm.outputs as: Arm_L_outputs_hrc type: HierarchyGroup
+buildHierarchyGroup: char_bob.controls.Arm.outputs as: Arm_L_outputs_hrc
+building: char_bob.controls.Arm.outputs.bicep as: Arm_L_bicep_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.Arm.outputs.bicep as: Arm_L_bicep_cmpOut
+building: char_bob.controls.Arm.outputs.forearm as: Arm_L_forearm_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.Arm.outputs.forearm as: Arm_L_forearm_cmpOut
+building: char_bob.controls.Arm.outputs.wrist as: Arm_L_wrist_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.Arm.outputs.wrist as: Arm_L_wrist_cmpOut
+building: char_bob.controls.Arm.bicepFK as: Arm_L_bicepFK_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.Arm.bicepFK as: Arm_L_bicepFK_ctrlSpace
+building: char_bob.controls.Arm.bicepFK.bicepFK as: Arm_L_bicepFK_ctrl type: Control
+buildControl:char_bob.controls.Arm.bicepFK.bicepFK as: Arm_L_bicepFK_ctrl
+building: char_bob.controls.Arm.bicepFK.bicepFK.forearmFK as: Arm_L_forearmFK_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.Arm.bicepFK.bicepFK.forearmFK as: Arm_L_forearmFK_ctrlSpace
+building: char_bob.controls.Arm.bicepFK.bicepFK.forearmFK.forearmFK as: Arm_L_forearmFK_ctrl type: Control
+buildControl:char_bob.controls.Arm.bicepFK.bicepFK.forearmFK.forearmFK as: Arm_L_forearmFK_ctrl
+building: char_bob.controls.Arm.IK as: Arm_L_IK_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.Arm.IK as: Arm_L_IK_ctrlSpace
+building: char_bob.controls.Arm.IK.IK as: Arm_L_IK_ctrl type: Control
+buildControl:char_bob.controls.Arm.IK.IK as: Arm_L_IK_ctrl
+building: char_bob.controls.Arm.ikPosition as: Arm_L_ikPosition_null type: Transform
+buildGroup: char_bob.controls.Arm.ikPosition as: Arm_L_ikPosition_null
+building: char_bob.controls.Arm.UpV as: Arm_L_UpV_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.Arm.UpV as: Arm_L_UpV_ctrlSpace
+building: char_bob.controls.Arm.UpV.UpV as: Arm_L_UpV_ctrl type: Control
+buildControl:char_bob.controls.Arm.UpV.UpV as: Arm_L_UpV_ctrl
+building: char_bob.deformers.Arm as: Arm_L_cmp type: ComponentGroup
+buildGroup: char_bob.deformers.Arm as: Arm_L_cmp
+building: char_bob.deformers.Arm.bicep as: Arm_L_bicep_def type: Joint
+buildJoint: char_bob.deformers.Arm.bicep as: Arm_L_bicep_def
+building: char_bob.deformers.Arm.forearm as: Arm_L_forearm_def type: Joint
+buildJoint: char_bob.deformers.Arm.forearm as: Arm_L_forearm_def
+building: char_bob.deformers.Arm.wrist as: Arm_L_wrist_def type: Joint
+buildJoint: char_bob.deformers.Arm.wrist as: Arm_L_wrist_def
+building: char_bob.controls.Arm as: Arm_R_cmp type: ComponentGroup
+buildGroup: char_bob.controls.Arm as: Arm_R_cmp
+building: char_bob.controls.Arm.inputs as: Arm_R_inputs_hrc type: HierarchyGroup
+buildHierarchyGroup: char_bob.controls.Arm.inputs as: Arm_R_inputs_hrc
+building: char_bob.controls.Arm.inputs.globalSRT as: Arm_R_globalSRT_cmpIn type: ComponentInput
+buildLocator: char_bob.controls.Arm.inputs.globalSRT as: Arm_R_globalSRT_cmpIn
+building: char_bob.controls.Arm.inputs.root as: Arm_R_root_cmpIn type: ComponentInput
+buildLocator: char_bob.controls.Arm.inputs.root as: Arm_R_root_cmpIn
+building: char_bob.controls.Arm.outputs as: Arm_R_outputs_hrc type: HierarchyGroup
+buildHierarchyGroup: char_bob.controls.Arm.outputs as: Arm_R_outputs_hrc
+building: char_bob.controls.Arm.outputs.bicep as: Arm_R_bicep_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.Arm.outputs.bicep as: Arm_R_bicep_cmpOut
+building: char_bob.controls.Arm.outputs.forearm as: Arm_R_forearm_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.Arm.outputs.forearm as: Arm_R_forearm_cmpOut
+building: char_bob.controls.Arm.outputs.wrist as: Arm_R_wrist_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.Arm.outputs.wrist as: Arm_R_wrist_cmpOut
+building: char_bob.controls.Arm.bicepFK as: Arm_R_bicepFK_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.Arm.bicepFK as: Arm_R_bicepFK_ctrlSpace
+building: char_bob.controls.Arm.bicepFK.bicepFK as: Arm_R_bicepFK_ctrl type: Control
+buildControl:char_bob.controls.Arm.bicepFK.bicepFK as: Arm_R_bicepFK_ctrl
+building: char_bob.controls.Arm.bicepFK.bicepFK.forearmFK as: Arm_R_forearmFK_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.Arm.bicepFK.bicepFK.forearmFK as: Arm_R_forearmFK_ctrlSpace
+building: char_bob.controls.Arm.bicepFK.bicepFK.forearmFK.forearmFK as: Arm_R_forearmFK_ctrl type: Control
+buildControl:char_bob.controls.Arm.bicepFK.bicepFK.forearmFK.forearmFK as: Arm_R_forearmFK_ctrl
+building: char_bob.controls.Arm.IK as: Arm_R_IK_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.Arm.IK as: Arm_R_IK_ctrlSpace
+building: char_bob.controls.Arm.IK.IK as: Arm_R_IK_ctrl type: Control
+buildControl:char_bob.controls.Arm.IK.IK as: Arm_R_IK_ctrl
+building: char_bob.controls.Arm.ikPosition as: Arm_R_ikPosition_null type: Transform
+buildGroup: char_bob.controls.Arm.ikPosition as: Arm_R_ikPosition_null
+building: char_bob.controls.Arm.UpV as: Arm_R_UpV_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.Arm.UpV as: Arm_R_UpV_ctrlSpace
+building: char_bob.controls.Arm.UpV.UpV as: Arm_R_UpV_ctrl type: Control
+buildControl:char_bob.controls.Arm.UpV.UpV as: Arm_R_UpV_ctrl
+building: char_bob.deformers.Arm as: Arm_R_cmp type: ComponentGroup
+buildGroup: char_bob.deformers.Arm as: Arm_R_cmp
+building: char_bob.deformers.Arm.bicep as: Arm_R_bicep_def type: Joint
+buildJoint: char_bob.deformers.Arm.bicep as: Arm_R_bicep_def
+building: char_bob.deformers.Arm.forearm as: Arm_R_forearm_def type: Joint
+buildJoint: char_bob.deformers.Arm.forearm as: Arm_R_forearm_def
+building: char_bob.deformers.Arm.wrist as: Arm_R_wrist_def type: Joint
+buildJoint: char_bob.deformers.Arm.wrist as: Arm_R_wrist_def
+building: char_bob.controls.Leg as: Leg_L_cmp type: ComponentGroup
+buildGroup: char_bob.controls.Leg as: Leg_L_cmp
+building: char_bob.controls.Leg.inputs as: Leg_L_inputs_hrc type: HierarchyGroup
+buildHierarchyGroup: char_bob.controls.Leg.inputs as: Leg_L_inputs_hrc
+building: char_bob.controls.Leg.inputs.globalSRT as: Leg_L_globalSRT_cmpIn type: ComponentInput
+buildLocator: char_bob.controls.Leg.inputs.globalSRT as: Leg_L_globalSRT_cmpIn
+building: char_bob.controls.Leg.inputs.pelvisInput as: Leg_L_pelvisInput_cmpIn type: ComponentInput
+buildLocator: char_bob.controls.Leg.inputs.pelvisInput as: Leg_L_pelvisInput_cmpIn
+building: char_bob.controls.Leg.inputs.ikTarget as: Leg_L_ikTarget_cmpIn type: ComponentInput
+buildLocator: char_bob.controls.Leg.inputs.ikTarget as: Leg_L_ikTarget_cmpIn
+building: char_bob.controls.Leg.outputs as: Leg_L_outputs_hrc type: HierarchyGroup
+buildHierarchyGroup: char_bob.controls.Leg.outputs as: Leg_L_outputs_hrc
+building: char_bob.controls.Leg.outputs.femur as: Leg_L_femur_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.Leg.outputs.femur as: Leg_L_femur_cmpOut
+building: char_bob.controls.Leg.outputs.shin as: Leg_L_shin_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.Leg.outputs.shin as: Leg_L_shin_cmpOut
+building: char_bob.controls.Leg.outputs.ikHandle as: Leg_L_ikHandle_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.Leg.outputs.ikHandle as: Leg_L_ikHandle_cmpOut
+building: char_bob.controls.Leg.outputs.legEnd as: Leg_L_legEnd_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.Leg.outputs.legEnd as: Leg_L_legEnd_cmpOut
+building: char_bob.controls.Leg.outputs.legEndFK as: Leg_L_legEndFK_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.Leg.outputs.legEndFK as: Leg_L_legEndFK_cmpOut
+building: char_bob.controls.Leg.femurFK as: Leg_L_femurFK_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.Leg.femurFK as: Leg_L_femurFK_ctrlSpace
+building: char_bob.controls.Leg.femurFK.femurFK as: Leg_L_femurFK_ctrl type: Control
+buildControl:char_bob.controls.Leg.femurFK.femurFK as: Leg_L_femurFK_ctrl
+building: char_bob.controls.Leg.femurFK.femurFK.shinFK as: Leg_L_shinFK_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.Leg.femurFK.femurFK.shinFK as: Leg_L_shinFK_ctrlSpace
+building: char_bob.controls.Leg.femurFK.femurFK.shinFK.shinFK as: Leg_L_shinFK_ctrl type: Control
+buildControl:char_bob.controls.Leg.femurFK.femurFK.shinFK.shinFK as: Leg_L_shinFK_ctrl
+building: char_bob.controls.Leg.IK as: Leg_L_IK_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.Leg.IK as: Leg_L_IK_ctrlSpace
+building: char_bob.controls.Leg.IK.IK as: Leg_L_IK_ctrl type: Control
+buildControl:char_bob.controls.Leg.IK.IK as: Leg_L_IK_ctrl
+building: char_bob.controls.Leg.ikRootPosition as: Leg_L_ikRootPosition_loc type: Locator
+buildLocator: char_bob.controls.Leg.ikRootPosition as: Leg_L_ikRootPosition_loc
+building: char_bob.controls.Leg.UpV as: Leg_L_UpV_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.Leg.UpV as: Leg_L_UpV_ctrlSpace
+building: char_bob.controls.Leg.UpV.UpV as: Leg_L_UpV_ctrl type: Control
+buildControl:char_bob.controls.Leg.UpV.UpV as: Leg_L_UpV_ctrl
+building: char_bob.deformers.Leg as: Leg_L_cmp type: ComponentGroup
+buildGroup: char_bob.deformers.Leg as: Leg_L_cmp
+building: char_bob.deformers.Leg.femur as: Leg_L_femur_def type: Joint
+buildJoint: char_bob.deformers.Leg.femur as: Leg_L_femur_def
+building: char_bob.deformers.Leg.shin as: Leg_L_shin_def type: Joint
+buildJoint: char_bob.deformers.Leg.shin as: Leg_L_shin_def
+building: char_bob.controls.Leg as: Leg_R_cmp type: ComponentGroup
+buildGroup: char_bob.controls.Leg as: Leg_R_cmp
+building: char_bob.controls.Leg.inputs as: Leg_R_inputs_hrc type: HierarchyGroup
+buildHierarchyGroup: char_bob.controls.Leg.inputs as: Leg_R_inputs_hrc
+building: char_bob.controls.Leg.inputs.globalSRT as: Leg_R_globalSRT_cmpIn type: ComponentInput
+buildLocator: char_bob.controls.Leg.inputs.globalSRT as: Leg_R_globalSRT_cmpIn
+building: char_bob.controls.Leg.inputs.pelvisInput as: Leg_R_pelvisInput_cmpIn type: ComponentInput
+buildLocator: char_bob.controls.Leg.inputs.pelvisInput as: Leg_R_pelvisInput_cmpIn
+building: char_bob.controls.Leg.inputs.ikTarget as: Leg_R_ikTarget_cmpIn type: ComponentInput
+buildLocator: char_bob.controls.Leg.inputs.ikTarget as: Leg_R_ikTarget_cmpIn
+building: char_bob.controls.Leg.outputs as: Leg_R_outputs_hrc type: HierarchyGroup
+buildHierarchyGroup: char_bob.controls.Leg.outputs as: Leg_R_outputs_hrc
+building: char_bob.controls.Leg.outputs.femur as: Leg_R_femur_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.Leg.outputs.femur as: Leg_R_femur_cmpOut
+building: char_bob.controls.Leg.outputs.shin as: Leg_R_shin_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.Leg.outputs.shin as: Leg_R_shin_cmpOut
+building: char_bob.controls.Leg.outputs.ikHandle as: Leg_R_ikHandle_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.Leg.outputs.ikHandle as: Leg_R_ikHandle_cmpOut
+building: char_bob.controls.Leg.outputs.legEnd as: Leg_R_legEnd_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.Leg.outputs.legEnd as: Leg_R_legEnd_cmpOut
+building: char_bob.controls.Leg.outputs.legEndFK as: Leg_R_legEndFK_cmpOut type: ComponentOutput
+buildLocator: char_bob.controls.Leg.outputs.legEndFK as: Leg_R_legEndFK_cmpOut
+building: char_bob.controls.Leg.femurFK as: Leg_R_femurFK_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.Leg.femurFK as: Leg_R_femurFK_ctrlSpace
+building: char_bob.controls.Leg.femurFK.femurFK as: Leg_R_femurFK_ctrl type: Control
+buildControl:char_bob.controls.Leg.femurFK.femurFK as: Leg_R_femurFK_ctrl
+building: char_bob.controls.Leg.femurFK.femurFK.shinFK as: Leg_R_shinFK_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.Leg.femurFK.femurFK.shinFK as: Leg_R_shinFK_ctrlSpace
+building: char_bob.controls.Leg.femurFK.femurFK.shinFK.shinFK as: Leg_R_shinFK_ctrl type: Control
+buildControl:char_bob.controls.Leg.femurFK.femurFK.shinFK.shinFK as: Leg_R_shinFK_ctrl
+building: char_bob.controls.Leg.IK as: Leg_R_IK_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.Leg.IK as: Leg_R_IK_ctrlSpace
+building: char_bob.controls.Leg.IK.IK as: Leg_R_IK_ctrl type: Control
+buildControl:char_bob.controls.Leg.IK.IK as: Leg_R_IK_ctrl
+building: char_bob.controls.Leg.ikRootPosition as: Leg_R_ikRootPosition_loc type: Locator
+buildLocator: char_bob.controls.Leg.ikRootPosition as: Leg_R_ikRootPosition_loc
+building: char_bob.controls.Leg.UpV as: Leg_R_UpV_ctrlSpace type: CtrlSpace
+buildGroup: char_bob.controls.Leg.UpV as: Leg_R_UpV_ctrlSpace
+building: char_bob.controls.Leg.UpV.UpV as: Leg_R_UpV_ctrl type: Control
+buildControl:char_bob.controls.Leg.UpV.UpV as: Leg_R_UpV_ctrl
+building: char_bob.deformers.Leg as: Leg_R_cmp type: ComponentGroup
+buildGroup: char_bob.deformers.Leg as: Leg_R_cmp
+building: char_bob.deformers.Leg.femur as: Leg_R_femur_def type: Joint
+buildJoint: char_bob.deformers.Leg.femur as: Leg_R_femur_def
+building: char_bob.deformers.Leg.shin as: Leg_R_shin_def type: Joint
+buildJoint: char_bob.deformers.Leg.shin as: Leg_R_shin_def
+connectAttribute: char_bob.spine.implicitAttrGrp.visibility
+connectAttribute: char_bob.spine.implicitAttrGrp.shapeVisibility
+connectAttribute: char_bob.neck.implicitAttrGrp.visibility
+connectAttribute: char_bob.neck.implicitAttrGrp.shapeVisibility
+buildConnection: neckBase
+buildXfoConnection: char_bob.neck.neckBase
+buildPoseConstraint: char_bob.controls.neck.inputs.neckBase.neckBase_To_spineEnd_PoseConstraint to: char_bob.controls.neck.inputs.neckBase
+connectAttribute: char_bob.head.implicitAttrGrp.visibility
+connectAttribute: char_bob.head.implicitAttrGrp.shapeVisibility
+buildConnection: headBase
+buildXfoConnection: char_bob.head.headBase
+buildPoseConstraint: char_bob.controls.head.inputs.headBase.headBase_To_neckEnd_PoseConstraint to: char_bob.controls.head.inputs.headBase
+connectAttribute: char_bob.Clavicle.implicitAttrGrp.visibility
+connectAttribute: char_bob.Clavicle.implicitAttrGrp.shapeVisibility
+buildConnection: spineEnd
+buildXfoConnection: char_bob.Clavicle.spineEnd
+buildPoseConstraint: char_bob.controls.Clavicle.inputs.spineEnd.spineEnd_To_spineEnd_PoseConstraint to: char_bob.controls.Clavicle.inputs.spineEnd
+connectAttribute: char_bob.Clavicle.implicitAttrGrp.visibility
+connectAttribute: char_bob.Clavicle.implicitAttrGrp.shapeVisibility
+buildConnection: spineEnd
+buildXfoConnection: char_bob.Clavicle.spineEnd
+buildPoseConstraint: char_bob.controls.Clavicle.inputs.spineEnd.spineEnd_To_spineEnd_PoseConstraint to: char_bob.controls.Clavicle.inputs.spineEnd
+connectAttribute: char_bob.Arm.implicitAttrGrp.visibility
+connectAttribute: char_bob.Arm.implicitAttrGrp.shapeVisibility
+buildConnection: root
+buildXfoConnection: char_bob.Arm.root
+buildPoseConstraint: char_bob.controls.Arm.inputs.root.root_To_clavicleEnd_PoseConstraint to: char_bob.controls.Arm.inputs.root
+connectAttribute: char_bob.Arm.implicitAttrGrp.visibility
+connectAttribute: char_bob.Arm.implicitAttrGrp.shapeVisibility
+buildConnection: root
+buildXfoConnection: char_bob.Arm.root
+buildPoseConstraint: char_bob.controls.Arm.inputs.root.root_To_clavicleEnd_PoseConstraint to: char_bob.controls.Arm.inputs.root
+connectAttribute: char_bob.Leg.implicitAttrGrp.visibility
+connectAttribute: char_bob.Leg.implicitAttrGrp.shapeVisibility
+buildConnection: pelvisInput
+buildXfoConnection: char_bob.Leg.pelvisInput
+buildPoseConstraint: char_bob.controls.Leg.inputs.pelvisInput.pelvisInput_To_pelvis_PoseConstraint to: char_bob.controls.Leg.inputs.pelvisInput
+connectAttribute: char_bob.Leg.implicitAttrGrp.visibility
+connectAttribute: char_bob.Leg.implicitAttrGrp.shapeVisibility
+buildConnection: pelvisInput
+buildXfoConnection: char_bob.Leg.pelvisInput
+buildPoseConstraint: char_bob.controls.Leg.inputs.pelvisInput.pelvisInput_To_pelvis_PoseConstraint to: char_bob.controls.Leg.inputs.pelvisInput
+buildKLOperator:char_bob.spine.spineKLOp
+buildKLOperator:char_bob.spine.spineDeformerKLOp
+buildKLOperator:char_bob.spine.pelvisDeformerKLOp
+buildPoseConstraint: char_bob.controls.spine.outputs.cog.cog_To_cog to: char_bob.controls.spine.outputs.cog
+buildPoseConstraint: char_bob.controls.spine.outputs.spineBase.spineBase_To_spineBase to: char_bob.controls.spine.outputs.spineBase
+buildPoseConstraint: char_bob.controls.spine.outputs.pelvis.pelvis_To_pelvis to: char_bob.controls.spine.outputs.pelvis
+buildPoseConstraint: char_bob.controls.spine.outputs.spineEnd.spineEnd_To_spineEnd to: char_bob.controls.spine.outputs.spineEnd
+buildPoseConstraint: char_bob.controls.spine.cog.cog_To_mainSrt to: char_bob.controls.spine.cog
+buildKLOperator:char_bob.neck.neckDeformerKLOp
+buildPoseConstraint: char_bob.controls.neck.inputs.neckBase.neckBase_To_spineEnd_PoseConstraint to: char_bob.controls.neck.inputs.neckBase
+buildPoseConstraint: char_bob.controls.neck.outputs.neck.neck_To_neck to: char_bob.controls.neck.outputs.neck
+buildPoseConstraint: char_bob.controls.neck.outputs.neckEnd.neckEnd_To_neck to: char_bob.controls.neck.outputs.neckEnd
+buildPoseConstraint: char_bob.controls.neck.neck.neck_To_neckBase to: char_bob.controls.neck.neck
+buildKLOperator:char_bob.head.headDeformerKLOp
+buildPoseConstraint: char_bob.controls.head.inputs.headBase.headBase_To_neckEnd_PoseConstraint to: char_bob.controls.head.inputs.headBase
+buildPoseConstraint: char_bob.controls.head.outputs.head.head_To_head to: char_bob.controls.head.outputs.head
+buildPoseConstraint: char_bob.controls.head.outputs.jaw.jaw_To_jaw to: char_bob.controls.head.outputs.jaw
+buildPoseConstraint: char_bob.controls.head.outputs.eyeL.eyeL_To_eyeLeft to: char_bob.controls.head.outputs.eyeL
+buildPoseConstraint: char_bob.controls.head.outputs.eyeR.eyeR_To_eyeRight to: char_bob.controls.head.outputs.eyeR
+buildPoseConstraint: char_bob.controls.head.head.head_To_headBase to: char_bob.controls.head.head
+buildKLOperator:char_bob.Clavicle.clavicleDeformerKLOp
+buildPoseConstraint: char_bob.controls.Clavicle.inputs.spineEnd.spineEnd_To_spineEnd_PoseConstraint to: char_bob.controls.Clavicle.inputs.spineEnd
+buildPoseConstraint: char_bob.controls.Clavicle.outputs.clavicle.clavicle_To_clavicle to: char_bob.controls.Clavicle.outputs.clavicle
+buildPoseConstraint: char_bob.controls.Clavicle.outputs.clavicleEnd.clavicleEnd_To_clavicle to: char_bob.controls.Clavicle.outputs.clavicleEnd
+buildPoseConstraint: char_bob.controls.Clavicle.clavicle.clavicle_To_spineEnd to: char_bob.controls.Clavicle.clavicle
+buildKLOperator:char_bob.Clavicle.clavicleDeformerKLOp
+buildPoseConstraint: char_bob.controls.Clavicle.inputs.spineEnd.spineEnd_To_spineEnd_PoseConstraint to: char_bob.controls.Clavicle.inputs.spineEnd
+buildPoseConstraint: char_bob.controls.Clavicle.outputs.clavicle.clavicle_To_clavicle to: char_bob.controls.Clavicle.outputs.clavicle
+buildPoseConstraint: char_bob.controls.Clavicle.outputs.clavicleEnd.clavicleEnd_To_clavicle to: char_bob.controls.Clavicle.outputs.clavicleEnd
+buildPoseConstraint: char_bob.controls.Clavicle.clavicle.clavicle_To_spineEnd to: char_bob.controls.Clavicle.clavicle
+buildKLOperator:char_bob.Arm.armKLOp
+buildKLOperator:char_bob.Arm.armDeformerKLOp
+buildPoseConstraint: char_bob.controls.Arm.inputs.root.root_To_clavicleEnd_PoseConstraint to: char_bob.controls.Arm.inputs.root
+buildPoseConstraint: char_bob.controls.Arm.bicepFK.bicepFK_To_root to: char_bob.controls.Arm.bicepFK
+buildPoseConstraint: char_bob.controls.Arm.IK.IK_To_globalSRT to: char_bob.controls.Arm.IK
+buildPoseConstraint: char_bob.controls.Arm.ikPosition.ikPosition_To_root to: char_bob.controls.Arm.ikPosition
+buildPoseConstraint: char_bob.controls.Arm.UpV.UpV_To_globalSRT to: char_bob.controls.Arm.UpV
+buildKLOperator:char_bob.Arm.armKLOp
+buildKLOperator:char_bob.Arm.armDeformerKLOp
+buildPoseConstraint: char_bob.controls.Arm.inputs.root.root_To_clavicleEnd_PoseConstraint to: char_bob.controls.Arm.inputs.root
+buildPoseConstraint: char_bob.controls.Arm.bicepFK.bicepFK_To_root to: char_bob.controls.Arm.bicepFK
+buildPoseConstraint: char_bob.controls.Arm.IK.IK_To_globalSRT to: char_bob.controls.Arm.IK
+buildPoseConstraint: char_bob.controls.Arm.ikPosition.ikPosition_To_root to: char_bob.controls.Arm.ikPosition
+buildPoseConstraint: char_bob.controls.Arm.UpV.UpV_To_globalSRT to: char_bob.controls.Arm.UpV
+buildKLOperator:char_bob.Leg.legKLOp
+buildKLOperator:char_bob.Leg.legDeformerKLOp
+buildPoseConstraint: char_bob.controls.Leg.inputs.pelvisInput.pelvisInput_To_pelvis_PoseConstraint to: char_bob.controls.Leg.inputs.pelvisInput
+buildPoseConstraint: char_bob.controls.Leg.outputs.ikHandle.ikHandle_To_IK to: char_bob.controls.Leg.outputs.ikHandle
+buildPoseConstraint: char_bob.controls.Leg.outputs.legEndFK.legEndFK_To_shinFK to: char_bob.controls.Leg.outputs.legEndFK
+buildPoseConstraint: char_bob.controls.Leg.femurFK.femurFK_To_pelvisInput to: char_bob.controls.Leg.femurFK
+buildPoseConstraint: char_bob.controls.Leg.IK.IK_To_globalSRT to: char_bob.controls.Leg.IK
+buildPoseConstraint: char_bob.controls.Leg.ikRootPosition.ikRootPosition_To_pelvisInput to: char_bob.controls.Leg.ikRootPosition
+buildPoseConstraint: char_bob.controls.Leg.UpV.UpV_To_globalSRT to: char_bob.controls.Leg.UpV
+buildKLOperator:char_bob.Leg.legKLOp
+buildKLOperator:char_bob.Leg.legDeformerKLOp
+buildPoseConstraint: char_bob.controls.Leg.inputs.pelvisInput.pelvisInput_To_pelvis_PoseConstraint to: char_bob.controls.Leg.inputs.pelvisInput
+buildPoseConstraint: char_bob.controls.Leg.outputs.ikHandle.ikHandle_To_IK to: char_bob.controls.Leg.outputs.ikHandle
+buildPoseConstraint: char_bob.controls.Leg.outputs.legEndFK.legEndFK_To_shinFK to: char_bob.controls.Leg.outputs.legEndFK
+buildPoseConstraint: char_bob.controls.Leg.femurFK.femurFK_To_pelvisInput to: char_bob.controls.Leg.femurFK
+buildPoseConstraint: char_bob.controls.Leg.IK.IK_To_globalSRT to: char_bob.controls.Leg.IK
+buildPoseConstraint: char_bob.controls.Leg.ikRootPosition.ikRootPosition_To_pelvisInput to: char_bob.controls.Leg.ikRootPosition
+buildPoseConstraint: char_bob.controls.Leg.UpV.UpV_To_globalSRT to: char_bob.controls.Leg.UpV
 char_bob
+char_bob.spine:M
 char_bob.controls
 char_bob.controls.spine:M
 char_bob.controls.spine:M.inputs
@@ -368,12 +979,11 @@ char_bob.deformers.Leg:L.shin
 char_bob.deformers.Leg:R
 char_bob.deformers.Leg:R.femur
 char_bob.deformers.Leg:R.shin
-char_bob.spine:M
-char_bob.Leg:R
-char_bob.Leg:L
-char_bob.Clavicle:R
-char_bob.Clavicle:L
 char_bob.neck:M
-char_bob.Arm:R
-char_bob.Arm:L
 char_bob.head:M
+char_bob.Clavicle:L
+char_bob.Clavicle:R
+char_bob.Arm:L
+char_bob.Arm:R
+char_bob.Leg:L
+char_bob.Leg:R

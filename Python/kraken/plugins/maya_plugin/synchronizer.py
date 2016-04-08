@@ -94,9 +94,9 @@ class Synchronizer(Synchronizer):
 
         # If flag is set, pass the DCC Scale values.
         if kObject.testFlag('SYNC_SCALE') is True:
-            scl = Vec3(1.0, 1.0, 1.0)
-        else:
             scl = Vec3(x=dccScl[0], y=dccScl[1], z=dccScl[2])
+        else:
+            scl = Vec3(1.0, 1.0, 1.0)
 
         newXfo = Xfo(tr=pos, ori=quat, sc=scl)
 

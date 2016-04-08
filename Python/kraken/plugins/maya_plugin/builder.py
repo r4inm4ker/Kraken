@@ -12,6 +12,7 @@ from kraken.core.builder import Builder
 from kraken.core.objects.object_3d import Object3D
 from kraken.core.objects.control import Control
 from kraken.core.maths.xfo import Xfo
+from kraken.core.maths.mat44 import Mat44
 from kraken.core.objects.attributes.attribute import Attribute
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 from kraken.plugins.maya_plugin.utils import *
@@ -630,15 +631,15 @@ class Builder(Builder):
             if type(rtVal) in (bool, str, int, float):
                 if argDataType in ('Scalar', 'Float32', 'UInt32', 'Integer'):
                     if type(rtVal) not in (float, int):
-                        raise TypeError(self.getName() + ".evaluate(): Invalid Argument Value: " + str(rtVal) + " (" + type(rtVal).__name__ + "), for Argument: " + argName + " (" + argDataType + ")")
+                        raise TypeError(kOperator.getName() + ".evaluate(): Invalid Argument Value: " + str(rtVal) + " (" + type(rtVal).__name__ + "), for Argument: " + argName + " (" + argDataType + ")")
 
                 elif argDataType == 'Boolean':
-                    if type(rtVal) != bool:
-                        raise TypeError(self.getName() + ".evaluate(): Invalid Argument Value: " + str(rtVal) + " (" + type(rtVal).__name__ + "), for Argument: " + argName + " (" + argDataType + ")")
+                    if type(rtVal) != bool and not (type(rtVal) == int and (rtVal == 0 or rtVal == 1)):
+                        raise TypeError(kOperator.getName() + ".evaluate(): Invalid Argument Value: " + str(rtVal) + " (" + type(rtVal).__name__ + "), for Argument: " + argName + " (" + argDataType + ")")
 
                 elif argDataType == 'String':
                     if type(rtVal) != str:
-                        raise TypeError(self.getName() + ".evaluate(): Invalid Argument Value: " + str(rtVal) + " (" + type(rtVal).__name__ + "), for Argument: " + argName + " (" + argDataType + ")")
+                        raise TypeError(kOperator.getName() + ".evaluate(): Invalid Argument Value: " + str(rtVal) + " (" + type(rtVal).__name__ + "), for Argument: " + argName + " (" + argDataType + ")")
 
         try:
             solverTypeName = kOperator.getSolverTypeName()
@@ -790,15 +791,15 @@ class Builder(Builder):
             if type(rtVal) in (bool, str, int, float):
                 if portDataType in ('Scalar', 'Float32', 'UInt32'):
                     if type(rtVal) not in (float, int):
-                        raise TypeError(self.getName() + ".evaluate(): Invalid Argument Value: " + str(rtVal) + " (" + type(rtVal).__name__ + "), for Argument: " + portName + " (" + portDataType + ")")
+                        raise TypeError(kOperator.getName() + ".evaluate(): Invalid Argument Value: " + str(rtVal) + " (" + type(rtVal).__name__ + "), for Argument: " + portName + " (" + portDataType + ")")
 
                 elif portDataType == 'Boolean':
-                    if type(rtVal) != bool:
-                        raise TypeError(self.getName() + ".evaluate(): Invalid Argument Value: " + str(rtVal) + " (" + type(rtVal).__name__ + "), for Argument: " + portName + " (" + portDataType + ")")
+                    if type(rtVal) != bool and not (type(rtVal) == int and (rtVal == 0 or rtVal == 1)):
+                        raise TypeError(kOperator.getName() + ".evaluate(): Invalid Argument Value: " + str(rtVal) + " (" + type(rtVal).__name__ + "), for Argument: " + portName + " (" + portDataType + ")")
 
                 elif portDataType == 'String':
                     if type(rtVal) != str:
-                        raise TypeError(self.getName() + ".evaluate(): Invalid Argument Value: " + str(rtVal) + " (" + type(rtVal).__name__ + "), for Argument: " + portName + " (" + portDataType + ")")
+                        raise TypeError(kOperator.getName() + ".evaluate(): Invalid Argument Value: " + str(rtVal) + " (" + type(rtVal).__name__ + "), for Argument: " + portName + " (" + portDataType + ")")
 
         try:
             host = ks.getCoreClient().DFG.host
@@ -894,7 +895,7 @@ class Builder(Builder):
                             pm.connectAttr(dccSceneItem.attr('worldMatrix'), tgt)
                         elif isinstance(opObject, Xfo):
                             self.setMat44Attr(tgt.partition(".")[0], tgt.partition(".")[2], opObject.toMat44())
-                        elif isinstance(obj, Mat44):
+                        elif isinstance(opObject, Mat44):
                             self.setMat44Attr(tgt.partition(".")[0], tgt.partition(".")[2], opObject)
                         else:
                             validateArg(opObject, portName, portDataType)
@@ -922,11 +923,11 @@ class Builder(Builder):
                             decomposeNode.attr("outputTranslate").connect(dccSceneItem.attr("translate"))
 
                         elif isinstance(opObject, Xfo):
-                            raise NotImplementedError("Kraken Canvas Operator cannot set Xfo outputs types directly!")
+                            raise NotImplementedError("Kraken Canvas Operator cannot set object [%s] outputs with Xfo outputs types directly!")
                         elif isinstance(opObject, Mat44):
-                            raise NotImplementedError("Kraken Canvas Operator cannot set Mat44 outputs types directly!")
+                            raise NotImplementedError("Kraken Canvas Operator cannot set object [%s] outputs with Mat44 types directly!")
                         else:
-                            raise NotImplementedError("Kraken Canvas Operator cannot set outputs with Python built-in types directly!")
+                            raise NotImplementedError("Kraken Canvas Operator cannot set object [%s] outputs with Python built-in types [%s] directly!" % (src, opObject.__class__.__name__))
 
                     if portDataType.endswith('[]'):
                         for i in xrange(len(connectionTargets)):

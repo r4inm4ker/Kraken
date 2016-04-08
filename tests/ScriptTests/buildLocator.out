@@ -1,3 +1,6 @@
 Failed to find DCC builder. Falling back to Python builder.
-building:myLocator as:myLocator
+building: myLocator as: myLocator type: Locator
+buildLocator: myLocator as: myLocator
+connectAttribute: myLocator.implicitAttrGrp.visibility
+connectAttribute: myLocator.implicitAttrGrp.shapeVisibility
 myLocator

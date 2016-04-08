@@ -1,27 +1,57 @@
 Failed to find DCC builder. Falling back to Python builder.
-building:Clavicle as:LClavicle
-building:Clavicle.controls as:controls
-building:Clavicle.controls.Clavicle as:Clavicle_L_cmp
-building:Clavicle.controls.Clavicle.inputs as:Clavicle_L_inputs_hrc
-building:Clavicle.controls.Clavicle.inputs.spineEnd as:Clavicle_L_spineEnd_cmpIn
-building:Clavicle.controls.Clavicle.outputs as:Clavicle_L_outputs_hrc
-building:Clavicle.controls.Clavicle.outputs.clavicle as:Clavicle_L_clavicle_cmpOut
-building:Clavicle.controls.Clavicle.outputs.clavicleEnd as:Clavicle_L_clavicleEnd_cmpOut
-building:Clavicle.controls.Clavicle.clavicle as:Clavicle_L_clavicle_ctrlSpace
-building:Clavicle.controls.Clavicle.clavicle.clavicle as:Clavicle_L_clavicle_ctrl
-building:Clavicle.deformers as:deformers
-building:Clavicle.deformers.Clavicle as:Clavicle_L_cmp
-building:Clavicle.deformers.Clavicle.clavicle as:Clavicle_L_clavicle_def
-Clavicle:L
-Clavicle:L.controls
-Clavicle:L.controls.Clavicle:L
-Clavicle:L.controls.Clavicle:L.inputs
-Clavicle:L.controls.Clavicle:L.inputs.spineEnd
-Clavicle:L.controls.Clavicle:L.outputs
-Clavicle:L.controls.Clavicle:L.outputs.clavicle
-Clavicle:L.controls.Clavicle:L.outputs.clavicleEnd
-Clavicle:L.controls.Clavicle:L.clavicle
-Clavicle:L.controls.Clavicle:L.clavicle.clavicle
-Clavicle:L.deformers
-Clavicle:L.deformers.Clavicle:L
-Clavicle:L.deformers.Clavicle:L.clavicle
+building: controls.Clavicle as: Clavicle_L_cmp type: ComponentGroup
+buildGroup: controls.Clavicle as: Clavicle_L_cmp
+building: controls.Clavicle.inputs as: Clavicle_L_inputs_hrc type: HierarchyGroup
+buildHierarchyGroup: controls.Clavicle.inputs as: Clavicle_L_inputs_hrc
+building: controls.Clavicle.inputs.spineEnd as: Clavicle_L_spineEnd_cmpIn type: ComponentInput
+buildLocator: controls.Clavicle.inputs.spineEnd as: Clavicle_L_spineEnd_cmpIn
+building: controls.Clavicle.outputs as: Clavicle_L_outputs_hrc type: HierarchyGroup
+buildHierarchyGroup: controls.Clavicle.outputs as: Clavicle_L_outputs_hrc
+building: controls.Clavicle.outputs.clavicle as: Clavicle_L_clavicle_cmpOut type: ComponentOutput
+buildLocator: controls.Clavicle.outputs.clavicle as: Clavicle_L_clavicle_cmpOut
+building: controls.Clavicle.outputs.clavicleEnd as: Clavicle_L_clavicleEnd_cmpOut type: ComponentOutput
+buildLocator: controls.Clavicle.outputs.clavicleEnd as: Clavicle_L_clavicleEnd_cmpOut
+building: controls.Clavicle.clavicle as: Clavicle_L_clavicle_ctrlSpace type: CtrlSpace
+buildGroup: controls.Clavicle.clavicle as: Clavicle_L_clavicle_ctrlSpace
+building: controls.Clavicle.clavicle.clavicle as: Clavicle_L_clavicle_ctrl type: Control
+buildControl:controls.Clavicle.clavicle.clavicle as: Clavicle_L_clavicle_ctrl
+building: deformers as: deformers type: Layer
+buildLayer: deformers as: deformers
+building: deformers.Clavicle as: Clavicle_L_cmp type: ComponentGroup
+buildGroup: deformers.Clavicle as: Clavicle_L_cmp
+building: deformers.Clavicle.clavicle as: Clavicle_L_clavicle_def type: Joint
+buildJoint: deformers.Clavicle.clavicle as: Clavicle_L_clavicle_def
+building: controls as: controls type: Layer
+buildLayer: controls as: controls
+building: controls.Clavicle as: Clavicle_L_cmp type: ComponentGroup
+buildGroup: controls.Clavicle as: Clavicle_L_cmp
+building: controls.Clavicle.inputs as: Clavicle_L_inputs_hrc type: HierarchyGroup
+buildHierarchyGroup: controls.Clavicle.inputs as: Clavicle_L_inputs_hrc
+building: controls.Clavicle.inputs.spineEnd as: Clavicle_L_spineEnd_cmpIn type: ComponentInput
+buildLocator: controls.Clavicle.inputs.spineEnd as: Clavicle_L_spineEnd_cmpIn
+building: controls.Clavicle.outputs as: Clavicle_L_outputs_hrc type: HierarchyGroup
+buildHierarchyGroup: controls.Clavicle.outputs as: Clavicle_L_outputs_hrc
+building: controls.Clavicle.outputs.clavicle as: Clavicle_L_clavicle_cmpOut type: ComponentOutput
+buildLocator: controls.Clavicle.outputs.clavicle as: Clavicle_L_clavicle_cmpOut
+building: controls.Clavicle.outputs.clavicleEnd as: Clavicle_L_clavicleEnd_cmpOut type: ComponentOutput
+buildLocator: controls.Clavicle.outputs.clavicleEnd as: Clavicle_L_clavicleEnd_cmpOut
+building: controls.Clavicle.clavicle as: Clavicle_L_clavicle_ctrlSpace type: CtrlSpace
+buildGroup: controls.Clavicle.clavicle as: Clavicle_L_clavicle_ctrlSpace
+building: controls.Clavicle.clavicle.clavicle as: Clavicle_L_clavicle_ctrl type: Control
+buildControl:controls.Clavicle.clavicle.clavicle as: Clavicle_L_clavicle_ctrl
+building: deformers.Clavicle as: Clavicle_L_cmp type: ComponentGroup
+buildGroup: deformers.Clavicle as: Clavicle_L_cmp
+building: deformers.Clavicle.clavicle as: Clavicle_L_clavicle_def type: Joint
+buildJoint: deformers.Clavicle.clavicle as: Clavicle_L_clavicle_def
+deformers
+deformers.Clavicle:L
+deformers.Clavicle:L.clavicle
+controls
+controls.Clavicle:L
+controls.Clavicle:L.inputs
+controls.Clavicle:L.inputs.spineEnd
+controls.Clavicle:L.outputs
+controls.Clavicle:L.outputs.clavicle
+controls.Clavicle:L.outputs.clavicleEnd
+controls.Clavicle:L.clavicle
+controls.Clavicle:L.clavicle.clavicle

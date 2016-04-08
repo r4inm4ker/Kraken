@@ -37,12 +37,20 @@ armLeft.loadData(leftArmGuide.getRigBuildData())
 armRight = ArmComponentRig()
 armRight.loadData(rightArmGuide.getRigBuildData())
 
-builder.build(armLeft)
-builder.build(armRight)
+builder.buildComponent(armLeft)
+builder.buildComponent(armRight)
 
 print '==armLeft=='
-logHierarchy(armLeft)
+for each in armLeft.getItems().values():
+    # Only log hierarchy for Layer objects as Layers in this test are added to
+    # the component since there is no rig object.
+    if each.isTypeOf('Layer'):
+        logHierarchy(each)
 
 print '==armRight=='
-logHierarchy(armRight)
+for each in armRight.getItems().values():
+    # Only log hierarchy for Layer objects as Layers in this test are added to
+    # the component since there is no rig object.
+    if each.isTypeOf('Layer'):
+        logHierarchy(each)
 

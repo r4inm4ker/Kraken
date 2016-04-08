@@ -205,7 +205,7 @@ class Control(Curve):
 
         scaleList = [1.0, 1.0, 1.0]
         for i, x in enumerate(axis):
-            if x > 0:
+            if x != 0:
                 scaleList[i] = scale * axis[i]
 
         return self.scalePoints(Vec3(scaleList[0], scaleList[1], scaleList[2]))

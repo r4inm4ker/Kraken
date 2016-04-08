@@ -162,7 +162,6 @@ class Constraint(SceneItem):
         ks.loadExtension('KrakenForCanvas')
         rtVal = ks.rtVal('Kraken%s' % cls)
 
-        rtVal.offset = ks.rtVal('Xfo', self._constrainee.xfo)
         for c in self._constrainers:
             rtVal.addConstrainer('', ks.rtVal('Xfo', getGlobalXfoFunc(c)))
 
@@ -203,10 +202,8 @@ class Constraint(SceneItem):
             def getGlobalXfoFunc(c):
                 return c.xfo
 
-            self.getConstrainee().xfo = self.computeOffset(getGlobalXfoFunc=getGlobalXfoFunc)
-
-            # print "Constraint: " + self.getName() + " evaluate()"
-            # print "\tOffset: " + str(self.getConstrainee().xfo)
+            self.getConstrainee().xfo = self.compute(getGlobalXfoFunc=getGlobalXfoFunc)
+            return True
 
         return False
 
