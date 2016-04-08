@@ -11,6 +11,7 @@ from kraken.core.kraken_system import KrakenSystem
 from kraken.core.configs.config import Config
 from kraken.core.profiler import Profiler
 
+from kraken.core.objects.scene_item import SceneItem
 from kraken.core.objects.components.component import Component
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
@@ -71,9 +72,10 @@ class Builder(object):
 
         """
 
-        for builtElement in self._buildElements:
-            if builtElement['src'] == kSceneItem:
-                return builtElement['tgt']
+        if isinstance(kSceneItem, SceneItem):
+            for builtElement in self._buildElements:
+                if builtElement['src'] == kSceneItem:
+                    return builtElement['tgt']
 
         return None
 
@@ -479,6 +481,8 @@ class Builder(object):
 
         # There should be no offset between an output xfo from one component and the connected input of another
         # If connected, they should be exactly the same.
+
+        inputTarget.removeAllConstraints()
         constraint = inputTarget.constrainTo(connectionTarget, maintainOffset=False)
 
         dccSceneItem = self.buildPoseConstraint(constraint)

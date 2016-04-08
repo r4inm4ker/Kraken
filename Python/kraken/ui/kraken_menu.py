@@ -237,6 +237,7 @@ class KrakenMenu(QtGui.QWidget):
         krakenUIWidget = self.window().krakenUI
         graphViewWidget = krakenUIWidget.graphViewWidget
 
+        openedFile = graphViewWidget.openedFile
         # Sync and Store Graph Data
         graphViewWidget.synchGuideRig()
         rigData = graphViewWidget.guideRig.getData()
@@ -247,6 +248,10 @@ class KrakenMenu(QtGui.QWidget):
             graphViewWidget.reportMessage('Success Reloading Modules', level='information')
         else:
             graphViewWidget.reportMessage('Error Reloading Modules', level='error', timeOut=0) #Keep this message!
+
+        if openedFile:
+            self.window().setWindowTitle('Kraken Editor - ' + openedFile + '[*]')
+            graphViewWidget.openedFile = openedFile
 
         krakenUIWidget.nodeLibrary.componentTreeWidget.buildWidgets()
 
