@@ -292,7 +292,7 @@ class Component(Object3D):
 
         for name, item in self._items.iteritems():
 
-            if not item.isTypeOf("Object3D"):
+            if item.isTypeOf("Object3D") is False:
                 continue
 
             if classType:
