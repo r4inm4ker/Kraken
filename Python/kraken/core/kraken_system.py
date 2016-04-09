@@ -303,7 +303,7 @@ class KrakenSystem(object):
     def loadComponentModules(self):
         """Loads all the component modules and configs specified in the 'KRAKEN_PATHS' environment variable.
 
-        The kraken_examples are loaded at all times.
+        The kraken_components are loaded at all times.
 
         Returns:
             bool: True if all components loaded, else False.
@@ -386,8 +386,8 @@ class KrakenSystem(object):
 
 
         # find the kraken examples module in the same folder as the kraken module.
-        examplePaths = os.path.normpath(os.path.join(os.environ.get('KRAKEN_PATH'), 'Python', 'kraken_examples'))
-        isSuccessful = __importDirRecursive(examplePaths)
+        default_component_path = os.path.normpath(os.path.join(os.environ.get('KRAKEN_PATH'), 'Python', 'kraken_components'))
+        isSuccessful = __importDirRecursive(default_component_path)
 
         pathsVar = os.getenv('KRAKEN_PATHS')
         if pathsVar is not None:
