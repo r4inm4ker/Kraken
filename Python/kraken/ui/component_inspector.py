@@ -103,7 +103,7 @@ class ComponentInspector(BaseInspector):
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
 
-    from kraken_examples.arm_component import ArmComponentGuide
+    from kraken_components.biped.arm_component import ArmComponentGuide
     armGuide = ArmComponentGuide("arm")
 
     widget = ComponentInspector(component=armGuide)

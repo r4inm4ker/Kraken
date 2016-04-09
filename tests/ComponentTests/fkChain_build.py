@@ -1,6 +1,6 @@
 from kraken import plugins
 from kraken.core.maths import Vec3
-from kraken_examples.fkChain_component import FKChainComponentGuide, FKChainComponentRig
+from kraken_components.generic.fkChain_component import FKChainComponentGuide, FKChainComponentRig
 
 from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy

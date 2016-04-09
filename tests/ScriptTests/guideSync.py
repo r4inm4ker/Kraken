@@ -3,7 +3,7 @@ import json
 from kraken import plugins
 from kraken.core.maths import Xfo, Vec3, Quat
 from kraken.core.objects.container import Container
-from kraken_examples.arm_component import ArmComponentGuide, ArmComponent
+from kraken_components.biped.arm_component import ArmComponentGuide, ArmComponent
 from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
 

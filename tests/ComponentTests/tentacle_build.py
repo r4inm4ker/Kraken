@@ -1,7 +1,7 @@
 
 from kraken import plugins
 from kraken.core.maths import Vec3
-from kraken_examples.tentacle_component import TentacleComponentGuide, TentacleComponentRig
+from kraken_components.generic.tentacle_component import TentacleComponentGuide, TentacleComponentRig
 
 from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
