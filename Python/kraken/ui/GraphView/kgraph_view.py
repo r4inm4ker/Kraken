@@ -114,15 +114,13 @@ class KGraphView(GraphView):
             zoom_with_alt_rmb = self.window().preferences.getPreferenceValue('zoom_with_alt_rmb')
             if zoom_with_alt_rmb and modifiers == QtCore.Qt.AltModifier:
                 self.setCursor(QtCore.Qt.SizeHorCursor)
+                self._lastMousePos = event.pos()
                 self._manipulationMode = MANIP_MODE_ZOOM
-                self._lastZoomPoint = self.mapToScene(event.pos())
                 self._lastTransform = QtGui.QTransform(self.transform())
-                #self._lastTransformationAnchor =self.transformationAnchor()
-                #self.setTransformationAnchor(QtGui.QGraphicsView.NoAnchor)
-                #self.setResizeAnchor(QtGui.QGraphicsView.NoAnchor)
                 self._lastSceneRect = self.sceneRect()
-                center = (self.rect().topLeft() + self.rect().bottomRight()) * 0.5
-                self._lastCenter = self.mapToScene(center)
+                self._lastCenter = self.mapToScene((self.rect().topLeft() + self.rect().bottomRight()) / 2.0)
+                self._lastZoomPoint = self.mapToScene(event.pos())
+                self._lastPosFromSceneCenter = self._lastZoomPoint - self._lastCenter
                 return
 
 
