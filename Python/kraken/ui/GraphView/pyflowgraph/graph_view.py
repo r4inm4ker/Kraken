@@ -485,41 +485,30 @@ class GraphView(QtGui.QGraphicsView):
 
         elif self._manipulationMode == MANIP_MODE_ZOOM:
 
-
-
             # Reset to when we mouse pressed
             self.setSceneRect(self._lastSceneRect)
 
-            cur_point = self.mapToScene(event.pos())
-            print("TTPrint: _lastZoomPoint:"),
-            print(self._lastZoomPoint)
-
-            # Zoom it (QGraphicsView auto-centers!)
-            delta = cur_point - self._lastZoomPoint
-            zoomFactor = 1
+            # Zoom in (QGraphicsView auto-centers!)
+            delta = event.pos() - self._lastMousePos
+            zoomFactor = 1.0
             if delta.x() > 0:
-                zoomFactor = 1 + delta.x() / 1000
+                zoomFactor = 1.0 + delta.x() / 1000.0
             else:
-                zoomFactor = 1 / (1 + abs(delta.x()) / 1000)
+                zoomFactor = 1.0 / (1.0 + abs(delta.x()) / 1000.0)
+
+            transform = self.transform()
+            # Limit zoom to 3x
+            if transform.m22() * zoomFactor >= 2.0:
+                return
+
             self.setTransform(self._lastTransform)
             self.scale(zoomFactor, zoomFactor)
 
-            point_from_scale_origin = self._lastZoomPoint - self._lastCenter
-            print("TTPrint: point_from_scale_origin:"),
-            print(point_from_scale_origin)
-
-            print("TTPrint: zoomFactor:"),
-            print(zoomFactor)
+            # Translate scene back to align original mouse presss
             rect = self.sceneRect()
-
-            moveX = (point_from_scale_origin.x() - (zoomFactor * point_from_scale_origin.x()) * 1)
-            moveY = (point_from_scale_origin.y() - (zoomFactor * point_from_scale_origin.y()) * 1)
-
-            print("TTPrint: moveX:"),
-            print(moveX)
-            print("TTPrint: moveY:"),
-            print(moveY)
-            rect.translate(-moveX, -moveY)
+            moveX = ((zoomFactor * self._lastPosFromSceneCenter.x()) - self._lastPosFromSceneCenter.x()) / zoomFactor
+            moveY = ((zoomFactor * self._lastPosFromSceneCenter.y()) - self._lastPosFromSceneCenter.y()) / zoomFactor
+            rect.translate(moveX, moveY)
             self.setSceneRect(rect)
 
             # Call udpate to redraw background
@@ -572,37 +561,25 @@ class GraphView(QtGui.QGraphicsView):
 
     def wheelEvent(self, event):
 
-        (xfo, invRes) = self.transform().inverted()
-        topLeft = xfo.map(self.rect().topLeft())
-        bottomRight = xfo.map(self.rect().bottomRight())
-        center = ( topLeft + bottomRight ) * 0.5
-        center = self.mapToScene(center)
-        print("\nTTPrint: center ORIG:"),
-        print(center)
-
-        topLeft = self.rect().topLeft()
-        bottomRight = self.rect().bottomRight()
-        center = (topLeft + bottomRight) * 0.5
-
-        center = self.mapToScene(center)
-
-        print("TTPrint: topLeft:"),
-        print(topLeft)
-        print("TTPrint: bottomRight:"),
-        print(bottomRight)
-        print("TTPrint: center:"),
-        print(center)
-
+        center = self.mapToScene((self.rect().topLeft() + self.rect().bottomRight()) / 2.0)
+        zoomPoint = self.mapToScene(event.pos())
+        posFromSceneCenter = zoomPoint - center
 
         zoomFactor = 1.0 + event.delta() * self._mouseWheelZoomRate
 
         transform = self.transform()
-
         # Limit zoom to 3x
         if transform.m22() * zoomFactor >= 2.0:
             return
 
         self.scale(zoomFactor, zoomFactor)
+
+         # Translate scene back to align original mouse presss
+        rect = self.sceneRect()
+        moveX = ((zoomFactor * posFromSceneCenter.x()) - posFromSceneCenter.x()) / zoomFactor
+        moveY = ((zoomFactor * posFromSceneCenter.y()) - posFromSceneCenter.y()) / zoomFactor
+        rect.translate(moveX, moveY)
+        self.setSceneRect(rect)
 
         # Call udpate to redraw background
         self.update()
