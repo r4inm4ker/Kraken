@@ -6,7 +6,7 @@ import copy
 
 from PySide import QtGui, QtCore
 
-from pyflowgraph.graph_view import GraphView
+from pyflowgraph.graph_view import *
 from pyflowgraph.connection import Connection
 from pyflowgraph.selection_rect import SelectionRect
 from knode import KNode
@@ -111,6 +111,21 @@ class KGraphView(GraphView):
 
         if event.button() == QtCore.Qt.MouseButton.RightButton:
 
+            zoom_with_alt_rmb = self.window().preferences.getPreferenceValue('zoom_with_alt_rmb')
+            if zoom_with_alt_rmb and modifiers == QtCore.Qt.AltModifier:
+                self.setCursor(QtCore.Qt.SizeHorCursor)
+                self._manipulationMode = MANIP_MODE_ZOOM
+                self._lastZoomPoint = self.mapToScene(event.pos())
+                self._lastTransform = QtGui.QTransform(self.transform())
+                #self._lastTransformationAnchor =self.transformationAnchor()
+                #self.setTransformationAnchor(QtGui.QGraphicsView.NoAnchor)
+                #self.setResizeAnchor(QtGui.QGraphicsView.NoAnchor)
+                self._lastSceneRect = self.sceneRect()
+                center = (self.rect().topLeft() + self.rect().bottomRight()) * 0.5
+                self._lastCenter = self.mapToScene(center)
+                return
+
+
             def graphItemAt(item):
                 if isinstance(item, KNode):
                     return item
@@ -189,7 +204,7 @@ class KGraphView(GraphView):
 
         elif event.button() is QtCore.Qt.MouseButton.LeftButton and self.itemAt(event.pos()) is None:
             self.beginNodeSelection.emit()
-            self._manipulationMode = 1
+            self._manipulationMode = MANIP_MODE_SELECT
             self._mouseDownSelection = copy.copy(self.getSelectedNodes())
             self._selectionRect = SelectionRect(graph=self, mouseDownPos=self.mapToScene(event.pos()))
 
@@ -200,7 +215,7 @@ class KGraphView(GraphView):
                 return
 
             self.setCursor(QtCore.Qt.OpenHandCursor)
-            self._manipulationMode = 2
+            self._manipulationMode = MANIP_MODE_PAN
             self._lastPanPoint = self.mapToScene(event.pos())
 
         else:

@@ -3,6 +3,7 @@
 #
 
 import copy
+import math
 
 from PySide import QtGui, QtCore
 
@@ -11,6 +12,11 @@ from connection import Connection
 
 from selection_rect import SelectionRect
 
+MANIP_MODE_NONE = 0
+MANIP_MODE_SELECT = 1
+MANIP_MODE_PAN = 2
+MANIP_MODE_MOVE = 3
+MANIP_MODE_ZOOM = 4
 
 class GraphView(QtGui.QGraphicsView):
 
@@ -84,7 +90,7 @@ class GraphView(QtGui.QGraphicsView):
         self.__nodes = {}
         self.__selection = set()
 
-        self._manipulationMode = 0
+        self._manipulationMode = MANIP_MODE_NONE
         self._selectionRect = None
 
     def getGridSize(self):
@@ -397,15 +403,20 @@ class GraphView(QtGui.QGraphicsView):
 
         if event.button() is QtCore.Qt.MouseButton.LeftButton and self.itemAt(event.pos()) is None:
             self.beginNodeSelection.emit()
-            self._manipulationMode = 1
+            self._manipulationMode = MANIP_MODE_SELECT
             self._mouseDownSelection = copy.copy(self.getSelectedNodes())
             self._selectionRect = SelectionRect(graph=self, mouseDownPos=self.mapToScene(event.pos()))
 
         elif event.button() is QtCore.Qt.MouseButton.MiddleButton:
-
             self.setCursor(QtCore.Qt.OpenHandCursor)
-            self._manipulationMode = 2
+            self._manipulationMode = MANIP_MODE_PAN
             self._lastPanPoint = self.mapToScene(event.pos())
+
+        elif event.button() is QtCore.Qt.MouseButton.RightButton:
+            self.setCursor(QtCore.Qt.SizeHorCursor)
+            self._manipulationMode = MANIP_MODE_ZOOM
+            self._lastZoomPoint = self.mapToScene(event.pos())
+            self._lastTransform = QtGui.QTransform(self.transform())
 
         else:
             super(GraphView, self).mousePressEvent(event)
@@ -413,7 +424,7 @@ class GraphView(QtGui.QGraphicsView):
     def mouseMoveEvent(self, event):
         modifiers = QtGui.QApplication.keyboardModifiers()
 
-        if self._manipulationMode == 1:
+        if self._manipulationMode == MANIP_MODE_SELECT:
             dragPoint = self.mapToScene(event.pos())
             self._selectionRect.setDragPoint(dragPoint)
 
@@ -451,7 +462,7 @@ class GraphView(QtGui.QGraphicsView):
                     elif node.isSelected() and not self._selectionRect.collidesWithItem(node):
                         self.deselectNode(node, emitSignal=False)
 
-        elif self._manipulationMode == 2:
+        elif self._manipulationMode == MANIP_MODE_PAN:
             delta = self.mapToScene(event.pos()) - self._lastPanPoint
 
             rect = self.sceneRect()
@@ -460,7 +471,7 @@ class GraphView(QtGui.QGraphicsView):
 
             self._lastPanPoint = self.mapToScene(event.pos())
 
-        elif self._manipulationMode == 3:
+        elif self._manipulationMode == MANIP_MODE_MOVE:
 
             newPos = self.mapToScene(event.pos())
             delta = newPos - self._lastDragPoint
@@ -472,11 +483,54 @@ class GraphView(QtGui.QGraphicsView):
             for node in selectedNodes:
                 node.translate(delta.x(), delta.y())
 
+        elif self._manipulationMode == MANIP_MODE_ZOOM:
+
+
+
+            # Reset to when we mouse pressed
+            self.setSceneRect(self._lastSceneRect)
+
+            cur_point = self.mapToScene(event.pos())
+            print("TTPrint: _lastZoomPoint:"),
+            print(self._lastZoomPoint)
+
+            # Zoom it (QGraphicsView auto-centers!)
+            delta = cur_point - self._lastZoomPoint
+            zoomFactor = 1
+            if delta.x() > 0:
+                zoomFactor = 1 + delta.x() / 1000
+            else:
+                zoomFactor = 1 / (1 + abs(delta.x()) / 1000)
+            self.setTransform(self._lastTransform)
+            self.scale(zoomFactor, zoomFactor)
+
+            point_from_scale_origin = self._lastZoomPoint - self._lastCenter
+            print("TTPrint: point_from_scale_origin:"),
+            print(point_from_scale_origin)
+
+            print("TTPrint: zoomFactor:"),
+            print(zoomFactor)
+            rect = self.sceneRect()
+
+            moveX = (point_from_scale_origin.x() - (zoomFactor * point_from_scale_origin.x()) * 1)
+            moveY = (point_from_scale_origin.y() - (zoomFactor * point_from_scale_origin.y()) * 1)
+
+            print("TTPrint: moveX:"),
+            print(moveX)
+            print("TTPrint: moveY:"),
+            print(moveY)
+            rect.translate(-moveX, -moveY)
+            self.setSceneRect(rect)
+
+            # Call udpate to redraw background
+            self.update()
+
+
         else:
             super(GraphView, self).mouseMoveEvent(event)
 
     def mouseReleaseEvent(self, event):
-        if self._manipulationMode == 1:
+        if self._manipulationMode == MANIP_MODE_SELECT:
 
             # If users simply clicks in the empty space, clear selection.
             if self.mapToScene(event.pos()) == self._selectionRect.pos():
@@ -484,7 +538,7 @@ class GraphView(QtGui.QGraphicsView):
 
             self._selectionRect.destroy()
             self._selectionRect = None
-            self._manipulationMode = 0
+            self._manipulationMode = MANIP_MODE_NONE
 
             selection = self.getSelectedNodes()
 
@@ -504,9 +558,14 @@ class GraphView(QtGui.QGraphicsView):
 
             self.endNodeSelection.emit()
 
-        elif self._manipulationMode == 2:
+        elif self._manipulationMode == MANIP_MODE_PAN:
             self.setCursor(QtCore.Qt.ArrowCursor)
-            self._manipulationMode = 0
+            self._manipulationMode = MANIP_MODE_NONE
+
+        elif self._manipulationMode == MANIP_MODE_ZOOM:
+            self.setCursor(QtCore.Qt.ArrowCursor)
+            self._manipulationMode = MANIP_MODE_NONE
+            #self.setTransformationAnchor(self._lastAnchor)
 
         else:
             super(GraphView, self).mouseReleaseEvent(event)
@@ -517,6 +576,23 @@ class GraphView(QtGui.QGraphicsView):
         topLeft = xfo.map(self.rect().topLeft())
         bottomRight = xfo.map(self.rect().bottomRight())
         center = ( topLeft + bottomRight ) * 0.5
+        center = self.mapToScene(center)
+        print("\nTTPrint: center ORIG:"),
+        print(center)
+
+        topLeft = self.rect().topLeft()
+        bottomRight = self.rect().bottomRight()
+        center = (topLeft + bottomRight) * 0.5
+
+        center = self.mapToScene(center)
+
+        print("TTPrint: topLeft:"),
+        print(topLeft)
+        print("TTPrint: bottomRight:"),
+        print(bottomRight)
+        print("TTPrint: center:"),
+        print(center)
+
 
         zoomFactor = 1.0 + event.delta() * self._mouseWheelZoomRate
 
