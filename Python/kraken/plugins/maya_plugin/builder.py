@@ -873,7 +873,8 @@ class Builder(Builder):
                     opObject = connectedObjects
                     dccSceneItem = self.getDCCSceneItem(opObject)
 
-                    if dccSceneItem is not None: # may be a value, not a sceneItem
+                    if not isinstance(opObject, (str, unicode, int, float, long, bool)):
+
                         # Handle output connections to visibility attributes.
                         if opObject.getName() == 'visibility' and opObject.getParent().getName() == 'implicitAttrGrp':
                             dccItem = self.getDCCSceneItem(opObject.getParent().getParent())
