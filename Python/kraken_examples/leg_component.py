@@ -399,7 +399,7 @@ class LegComponentRig(LegComponent):
         self.legEndFKOutputTgt.xfo.tr = handleXfo.tr
         self.legEndFKOutputTgt.xfo.ori = kneeXfo.ori
 
-        self.ikHandleOutputTgt.xfo.tr = handleXfo
+        self.ikHandleOutputTgt.xfo = handleXfo
 
         self.ikRootPosition.xfo = femurXfo
 
