@@ -399,6 +399,8 @@ class LegComponentRig(LegComponent):
         self.legEndFKOutputTgt.xfo.tr = handleXfo.tr
         self.legEndFKOutputTgt.xfo.ori = kneeXfo.ori
 
+        self.ikHandleOutputTgt.xfo.tr = handleXfo
+
         self.ikRootPosition.xfo = femurXfo
 
         self.legIKCtrlSpace.xfo = handleXfo
@@ -446,6 +448,7 @@ class LegComponentRig(LegComponent):
 
         # Eval Output Constraints
         self.legEndFKOutputConstraint.evaluate()
+        self.ikHandleOutputConstraint.evaluate()
 
 
 from kraken.core.kraken_system import KrakenSystem
