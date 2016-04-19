@@ -158,8 +158,8 @@ class HandComponentGuide(HandComponent):
                 for i in xrange(len(self.fingers[finger])):
                     self.fingers[finger][i].xfo = fingersGuideXfos[finger][i]
 
-                    if hasattr(self.fingers[finger][i], 'shapeCtrl'):
-                        self.fingers[finger][i].shapeCtrl.setCurveData(fingerShapeCtrlData[finger][i])
+                    # if hasattr(self.fingers[finger][i], 'shapeCtrl'):
+                    #     self.fingers[finger][i].shapeCtrl.setCurveData(fingerShapeCtrlData[finger][i])
 
         return True
 
