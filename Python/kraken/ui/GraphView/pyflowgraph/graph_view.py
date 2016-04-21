@@ -576,9 +576,9 @@ class GraphView(QtGui.QGraphicsView):
         if transform.m22() * zoomFactor >= 2.0:
             return
 
-        center = self.sceneRect().center()
+        sceneCenter = self.sceneRect().center()
         scenePoint = self.mapToScene(event.pos())
-        posFromSceneCenter = scenePoint - center
+        posFromSceneCenter = scenePoint - sceneCenter
 
         rect = self.sceneRect()
         rect.translate(posFromSceneCenter)
@@ -589,9 +589,9 @@ class GraphView(QtGui.QGraphicsView):
         self.scale(zoomFactor, zoomFactor)
 
          # Translate scene back to align original mouse presss
-        center = self.sceneRect().center()
+        sceneCenter = self.sceneRect().center()
         scenePoint = self.mapToScene(event.pos())
-        posFromSceneCenter = scenePoint - center
+        posFromSceneCenter = scenePoint - sceneCenter
 
         rect = self.sceneRect()
         rect.translate(-1 * posFromSceneCenter)
