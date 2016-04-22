@@ -151,16 +151,15 @@ class HandComponentGuide(HandComponent):
         self.digitNamesAttr.setValue(data.get('digitNames'))
 
         fingersGuideXfos = data.get('fingersGuideXfos')
+        fingerShapeCtrlData = data.get('fingerShapeCtrlData')
         if fingersGuideXfos is not None:
 
             for finger in self.fingers.keys():
                 for i in xrange(len(self.fingers[finger])):
                     self.fingers[finger][i].xfo = fingersGuideXfos[finger][i]
 
-                    if hasattr(self.fingers[finger][i], 'shapeCtrl'):
-                        fingerShapeCtrlData = data.get('fingerShapeCtrlData')
-                        if fingerShapeCtrlData is not None:
-                            self.fingers[finger][i].shapeCtrl.setCurveData(fingerShapeCtrlData[finger][i])
+                    # if hasattr(self.fingers[finger][i], 'shapeCtrl'):
+                    #     self.fingers[finger][i].shapeCtrl.setCurveData(fingerShapeCtrlData[finger][i])
 
         return True
 
