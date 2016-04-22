@@ -6,10 +6,10 @@ When posting issues users should use the following table to set labels on issues
 
 | Label     | Definition |
 | --------- | ---------- |
-| P1        | Drop everthing, customer has encountered a show stopper! |
-| P2        | Crashes or data corruption. We should not ship with any known high priority bugs. |
-| P3        | Bugs impeding understanding, workflow, or causes customer perception of product. Some may get pushed to a future release. |
-| P4        | Would be nice. Fix these when you happen to be in that area of the code fixing other things or all the other higher priority bugs have been cleared. |
+| P1        | 911, drop everything to fix this because this is a true showstopper or this bug is preventing ANY useful work from being accomplished |
+| P2        | Crashes or data corruption. |
+| P3        | Bugs impeding understanding or workflow or that make the software look unprofessional. Some may get pushed to a future release. |
+| P4        | Would be nice. These will typically get addressed if quick and easy and low risk or all the other higher priority bugs have been cleared. |
 | Bug       | A problem which impairs or prevents the functions of the product.
 | Sug       | An improvement or enhancement to an existing feature or functionality. Use *New* for entirely new things.
 | New       | A new feature of the product, which has yet to be developed.
