@@ -6,7 +6,9 @@ import copy
 
 from PySide import QtGui, QtCore
 
-from pyflowgraph.graph_view import *
+from pyflowgraph.graph_view import GraphView
+from pyflowgraph.graph_view import MANIP_MODE_NONE, MANIP_MODE_SELECT, MANIP_MODE_PAN, MANIP_MODE_MOVE, MANIP_MODE_ZOOM
+
 from pyflowgraph.connection import Connection
 from pyflowgraph.selection_rect import SelectionRect
 from knode import KNode
