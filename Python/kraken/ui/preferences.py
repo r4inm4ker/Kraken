@@ -31,6 +31,13 @@ class Preferences(object):
                 'default_value': True,
                 'value': True
             },
+            'zoom_with_alt_rmb': {
+                'type': 'bool',
+                'nice_name': 'Zoom with Alt+RMB',
+                'description': 'Allows users to zoom with the right mouse button while holding down the ALT key.',
+                'default_value': False,
+                'value': False
+            },
             'delete_existing_rigs': {
                 'type': 'bool',
                 'nice_name': 'Delete Existing Rigs before Build',
