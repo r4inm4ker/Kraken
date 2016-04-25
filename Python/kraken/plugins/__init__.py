@@ -58,7 +58,7 @@ def getSynchronizer():
             dccSynchronizer = loaded_class()
 
     if dccSynchronizer is None:
-        print "Failed to find DCC inspector. Falling back to Python inspector."
+        print "Failed to find DCC Synchronizer. Falling back to Python Synchronizer."
 
         from kraken.core import synchronizer
         dccSynchronizer = synchronizer.Synchronizer()

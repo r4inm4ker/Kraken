@@ -32,11 +32,15 @@ chain = FKChainComponentRig()
 chain.loadData(fkChainGuideData)
 
 builder = plugins.getBuilder()
-builder.build(chain)
+builder.buildComponent(chain)
 
 Profiler.getInstance().pop()
 
 if __name__ == "__main__":
     print Profiler.getInstance().generateReport()
 else:
-    logHierarchy(chain)
+    for each in chain.getItems().values():
+        # Only log hierarchy for Layer objects as Layers in this test are added to
+        # the component since there is no rig object.
+        if each.isTypeOf('Layer'):
+            logHierarchy(each)

@@ -15,7 +15,7 @@ bobRig = Rig()
 bobRig.loadRigDefinition(bobRigData)
 
 builder = plugins.getBuilder()
-builder.build(bobRig)
+builder.buildRig(bobRig)
 
 Profiler.getInstance().pop()
 

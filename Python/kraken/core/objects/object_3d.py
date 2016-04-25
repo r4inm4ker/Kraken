@@ -427,6 +427,35 @@ class Object3D(SceneItem):
         return True
 
 
+    def getDescendents(self, nodeList=None, classType=None, inheritedClass=False):
+        """Gets the children of this object.
+
+        Args:
+            nodeList: (list): optional list to append children to
+            classType (str): Name of the type of class to limit the search to
+            inheritedClass (bool): Match nodes that is a sub-class of type.
+        Returns:
+            list: Child objects.
+
+        """
+        if nodeList is None:
+            nodeList = []
+
+        for child in self._children:
+                if classType is not None:
+                    if inheritedClass is not None and child.isTypeOf(classType):
+                        nodeList.append(child)
+                    elif child.getTypeName() == classType:
+                        nodeList.append(child)
+
+                else:
+                    nodeList.append(child)
+
+                child.getDescendents(classType=classType, nodeList=nodeList, inheritedClass=inheritedClass)
+
+        return nodeList
+
+
     def getChildren(self):
         """Gets the children of this object.
 
@@ -548,10 +577,7 @@ class Object3D(SceneItem):
 
         """
 
-        if name in self._flags:
-            return True
-
-        return False
+        return name in self._flags
 
 
     def clearFlag(self, name):
@@ -836,6 +862,19 @@ class Object3D(SceneItem):
             return False
 
         self.removeConstraintByIndex(removeIndex)
+
+        return True
+
+
+    def removeAllConstraints(self):
+        """Removes all of the constraints for this object.
+
+        Returns:
+            bool: True if successful.
+
+        """
+
+        del self._constraints[:]
 
         return True
 

@@ -34,7 +34,11 @@ armLeft = ArmComponentRig()
 armLeft.loadData(armRigData)
 
 print "==armLeft=="
-logHierarchy(armLeft)
+for each in armLeft.getItems().values():
+    # Only log hierarchy for Layer objects as Layers in this test are added to
+    # the component since there is no rig object.
+    if each.isTypeOf('Layer'):
+        logHierarchy(each)
 
 # saver = KrakenSaver()
 # jsonData1 = armLeft.jsonEncode(saver)

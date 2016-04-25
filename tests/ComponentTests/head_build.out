@@ -1,49 +1,112 @@
 Failed to find DCC builder. Falling back to Python builder.
-building:Head as:MHead
-building:Head.controls as:controls
-building:Head.controls.Head as:Head_M_cmp
-building:Head.controls.Head.inputs as:Head_M_inputs_hrc
-building:Head.controls.Head.inputs.headBase as:Head_M_headBase_cmpIn
-building:Head.controls.Head.outputs as:Head_M_outputs_hrc
-building:Head.controls.Head.outputs.head as:Head_M_head_cmpOut
-building:Head.controls.Head.outputs.jaw as:Head_M_jaw_cmpOut
-building:Head.controls.Head.outputs.eyeL as:Head_M_eyeL_cmpOut
-building:Head.controls.Head.outputs.eyeR as:Head_M_eyeR_cmpOut
-building:Head.controls.Head.head as:Head_M_head_ctrlSpace
-building:Head.controls.Head.head.head as:Head_M_head_ctrl
-building:Head.controls.Head.head.head.eyeLeft as:Head_M_eyeLeft_ctrlSpace
-building:Head.controls.Head.head.head.eyeLeft.eyeLeft as:Head_M_eyeLeft_ctrl
-building:Head.controls.Head.head.head.eyeRight as:Head_M_eyeRight_ctrlSpace
-building:Head.controls.Head.head.head.eyeRight.eyeRight as:Head_M_eyeRight_ctrl
-building:Head.controls.Head.head.head.jawCtrlSpace as:Head_M_jawCtrlSpace_ctrlSpace
-building:Head.controls.Head.head.head.jawCtrlSpace.jaw as:Head_M_jaw_ctrl
-building:Head.deformers as:deformers
-building:Head.deformers.Head as:Head_M_cmp
-building:Head.deformers.Head.head as:Head_M_head_def
-building:Head.deformers.Head.jaw as:Head_M_jaw_def
-building:Head.deformers.Head.eyeLeft as:Head_M_eyeLeft_def
-building:Head.deformers.Head.eyeRight as:Head_M_eyeRight_def
-Head:M
-Head:M.controls
-Head:M.controls.Head:M
-Head:M.controls.Head:M.inputs
-Head:M.controls.Head:M.inputs.headBase
-Head:M.controls.Head:M.outputs
-Head:M.controls.Head:M.outputs.head
-Head:M.controls.Head:M.outputs.jaw
-Head:M.controls.Head:M.outputs.eyeL
-Head:M.controls.Head:M.outputs.eyeR
-Head:M.controls.Head:M.head
-Head:M.controls.Head:M.head.head
-Head:M.controls.Head:M.head.head.eyeLeft
-Head:M.controls.Head:M.head.head.eyeLeft.eyeLeft
-Head:M.controls.Head:M.head.head.eyeRight
-Head:M.controls.Head:M.head.head.eyeRight.eyeRight
-Head:M.controls.Head:M.head.head.jawCtrlSpace
-Head:M.controls.Head:M.head.head.jawCtrlSpace.jaw
-Head:M.deformers
-Head:M.deformers.Head:M
-Head:M.deformers.Head:M.head
-Head:M.deformers.Head:M.jaw
-Head:M.deformers.Head:M.eyeLeft
-Head:M.deformers.Head:M.eyeRight
+building: controls.Head as: Head_M_cmp type: ComponentGroup
+buildGroup: controls.Head as: Head_M_cmp
+building: controls.Head.inputs as: Head_M_inputs_hrc type: HierarchyGroup
+buildHierarchyGroup: controls.Head.inputs as: Head_M_inputs_hrc
+building: controls.Head.inputs.headBase as: Head_M_headBase_cmpIn type: ComponentInput
+buildLocator: controls.Head.inputs.headBase as: Head_M_headBase_cmpIn
+building: controls.Head.outputs as: Head_M_outputs_hrc type: HierarchyGroup
+buildHierarchyGroup: controls.Head.outputs as: Head_M_outputs_hrc
+building: controls.Head.outputs.head as: Head_M_head_cmpOut type: ComponentOutput
+buildLocator: controls.Head.outputs.head as: Head_M_head_cmpOut
+building: controls.Head.outputs.jaw as: Head_M_jaw_cmpOut type: ComponentOutput
+buildLocator: controls.Head.outputs.jaw as: Head_M_jaw_cmpOut
+building: controls.Head.outputs.eyeL as: Head_M_eyeL_cmpOut type: ComponentOutput
+buildLocator: controls.Head.outputs.eyeL as: Head_M_eyeL_cmpOut
+building: controls.Head.outputs.eyeR as: Head_M_eyeR_cmpOut type: ComponentOutput
+buildLocator: controls.Head.outputs.eyeR as: Head_M_eyeR_cmpOut
+building: controls.Head.head as: Head_M_head_ctrlSpace type: CtrlSpace
+buildGroup: controls.Head.head as: Head_M_head_ctrlSpace
+building: controls.Head.head.head as: Head_M_head_ctrl type: Control
+buildControl:controls.Head.head.head as: Head_M_head_ctrl
+building: controls.Head.head.head.eyeLeft as: Head_M_eyeLeft_ctrlSpace type: CtrlSpace
+buildGroup: controls.Head.head.head.eyeLeft as: Head_M_eyeLeft_ctrlSpace
+building: controls.Head.head.head.eyeLeft.eyeLeft as: Head_M_eyeLeft_ctrl type: Control
+buildControl:controls.Head.head.head.eyeLeft.eyeLeft as: Head_M_eyeLeft_ctrl
+building: controls.Head.head.head.eyeRight as: Head_M_eyeRight_ctrlSpace type: CtrlSpace
+buildGroup: controls.Head.head.head.eyeRight as: Head_M_eyeRight_ctrlSpace
+building: controls.Head.head.head.eyeRight.eyeRight as: Head_M_eyeRight_ctrl type: Control
+buildControl:controls.Head.head.head.eyeRight.eyeRight as: Head_M_eyeRight_ctrl
+building: controls.Head.head.head.jawCtrlSpace as: Head_M_jawCtrlSpace_ctrlSpace type: CtrlSpace
+buildGroup: controls.Head.head.head.jawCtrlSpace as: Head_M_jawCtrlSpace_ctrlSpace
+building: controls.Head.head.head.jawCtrlSpace.jaw as: Head_M_jaw_ctrl type: Control
+buildControl:controls.Head.head.head.jawCtrlSpace.jaw as: Head_M_jaw_ctrl
+building: deformers as: deformers type: Layer
+buildLayer: deformers as: deformers
+building: deformers.Head as: Head_M_cmp type: ComponentGroup
+buildGroup: deformers.Head as: Head_M_cmp
+building: deformers.Head.head as: Head_M_head_def type: Joint
+buildJoint: deformers.Head.head as: Head_M_head_def
+building: deformers.Head.jaw as: Head_M_jaw_def type: Joint
+buildJoint: deformers.Head.jaw as: Head_M_jaw_def
+building: deformers.Head.eyeLeft as: Head_M_eyeLeft_def type: Joint
+buildJoint: deformers.Head.eyeLeft as: Head_M_eyeLeft_def
+building: deformers.Head.eyeRight as: Head_M_eyeRight_def type: Joint
+buildJoint: deformers.Head.eyeRight as: Head_M_eyeRight_def
+building: controls as: controls type: Layer
+buildLayer: controls as: controls
+building: controls.Head as: Head_M_cmp type: ComponentGroup
+buildGroup: controls.Head as: Head_M_cmp
+building: controls.Head.inputs as: Head_M_inputs_hrc type: HierarchyGroup
+buildHierarchyGroup: controls.Head.inputs as: Head_M_inputs_hrc
+building: controls.Head.inputs.headBase as: Head_M_headBase_cmpIn type: ComponentInput
+buildLocator: controls.Head.inputs.headBase as: Head_M_headBase_cmpIn
+building: controls.Head.outputs as: Head_M_outputs_hrc type: HierarchyGroup
+buildHierarchyGroup: controls.Head.outputs as: Head_M_outputs_hrc
+building: controls.Head.outputs.head as: Head_M_head_cmpOut type: ComponentOutput
+buildLocator: controls.Head.outputs.head as: Head_M_head_cmpOut
+building: controls.Head.outputs.jaw as: Head_M_jaw_cmpOut type: ComponentOutput
+buildLocator: controls.Head.outputs.jaw as: Head_M_jaw_cmpOut
+building: controls.Head.outputs.eyeL as: Head_M_eyeL_cmpOut type: ComponentOutput
+buildLocator: controls.Head.outputs.eyeL as: Head_M_eyeL_cmpOut
+building: controls.Head.outputs.eyeR as: Head_M_eyeR_cmpOut type: ComponentOutput
+buildLocator: controls.Head.outputs.eyeR as: Head_M_eyeR_cmpOut
+building: controls.Head.head as: Head_M_head_ctrlSpace type: CtrlSpace
+buildGroup: controls.Head.head as: Head_M_head_ctrlSpace
+building: controls.Head.head.head as: Head_M_head_ctrl type: Control
+buildControl:controls.Head.head.head as: Head_M_head_ctrl
+building: controls.Head.head.head.eyeLeft as: Head_M_eyeLeft_ctrlSpace type: CtrlSpace
+buildGroup: controls.Head.head.head.eyeLeft as: Head_M_eyeLeft_ctrlSpace
+building: controls.Head.head.head.eyeLeft.eyeLeft as: Head_M_eyeLeft_ctrl type: Control
+buildControl:controls.Head.head.head.eyeLeft.eyeLeft as: Head_M_eyeLeft_ctrl
+building: controls.Head.head.head.eyeRight as: Head_M_eyeRight_ctrlSpace type: CtrlSpace
+buildGroup: controls.Head.head.head.eyeRight as: Head_M_eyeRight_ctrlSpace
+building: controls.Head.head.head.eyeRight.eyeRight as: Head_M_eyeRight_ctrl type: Control
+buildControl:controls.Head.head.head.eyeRight.eyeRight as: Head_M_eyeRight_ctrl
+building: controls.Head.head.head.jawCtrlSpace as: Head_M_jawCtrlSpace_ctrlSpace type: CtrlSpace
+buildGroup: controls.Head.head.head.jawCtrlSpace as: Head_M_jawCtrlSpace_ctrlSpace
+building: controls.Head.head.head.jawCtrlSpace.jaw as: Head_M_jaw_ctrl type: Control
+buildControl:controls.Head.head.head.jawCtrlSpace.jaw as: Head_M_jaw_ctrl
+building: deformers.Head as: Head_M_cmp type: ComponentGroup
+buildGroup: deformers.Head as: Head_M_cmp
+building: deformers.Head.head as: Head_M_head_def type: Joint
+buildJoint: deformers.Head.head as: Head_M_head_def
+building: deformers.Head.jaw as: Head_M_jaw_def type: Joint
+buildJoint: deformers.Head.jaw as: Head_M_jaw_def
+building: deformers.Head.eyeLeft as: Head_M_eyeLeft_def type: Joint
+buildJoint: deformers.Head.eyeLeft as: Head_M_eyeLeft_def
+building: deformers.Head.eyeRight as: Head_M_eyeRight_def type: Joint
+buildJoint: deformers.Head.eyeRight as: Head_M_eyeRight_def
+deformers
+deformers.Head:M
+deformers.Head:M.head
+deformers.Head:M.jaw
+deformers.Head:M.eyeLeft
+deformers.Head:M.eyeRight
+controls
+controls.Head:M
+controls.Head:M.inputs
+controls.Head:M.inputs.headBase
+controls.Head:M.outputs
+controls.Head:M.outputs.head
+controls.Head:M.outputs.jaw
+controls.Head:M.outputs.eyeL
+controls.Head:M.outputs.eyeR
+controls.Head:M.head
+controls.Head:M.head.head
+controls.Head:M.head.head.eyeLeft
+controls.Head:M.head.head.eyeLeft.eyeLeft
+controls.Head:M.head.head.eyeRight
+controls.Head:M.head.head.eyeRight.eyeRight
+controls.Head:M.head.head.jawCtrlSpace
+controls.Head:M.head.head.jawCtrlSpace.jaw

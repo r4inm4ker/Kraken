@@ -11,6 +11,7 @@ from kraken.core.kraken_system import KrakenSystem
 from kraken.core.configs.config import Config
 from kraken.core.profiler import Profiler
 
+from kraken.core.objects.scene_item import SceneItem
 from kraken.core.objects.components.component import Component
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
@@ -71,9 +72,10 @@ class Builder(object):
 
         """
 
-        for builtElement in self._buildElements:
-            if builtElement['src'] == kSceneItem:
-                return builtElement['tgt']
+        if isinstance(kSceneItem, SceneItem):
+            for builtElement in self._buildElements:
+                if builtElement['src'] == kSceneItem:
+                    return builtElement['tgt']
 
         return None
 
@@ -104,7 +106,7 @@ class Builder(object):
         """
 
         if self._debugMode:
-            print "buildContainer:" + kContainer.getPath() + " as:" + buildName
+            print "buildContainer: " + kContainer.getPath() + " as: " + buildName
 
         # Build any items(and thier subtrees) owned by this item.
         items = kContainer.getItems()
@@ -131,7 +133,7 @@ class Builder(object):
         """
 
         if self._debugMode:
-            print "buildLayer:" + kSceneItem.getPath() + " as:" + buildName
+            print "buildLayer: " + kSceneItem.getPath() + " as: " + buildName
 
         return None
 
@@ -150,7 +152,7 @@ class Builder(object):
 
 
         if self._debugMode:
-            print "buildHierarchyGroup:" + kSceneItem.getPath() + " as:" + buildName
+            print "buildHierarchyGroup: " + kSceneItem.getPath() + " as: " + buildName
 
         return None
 
@@ -168,7 +170,7 @@ class Builder(object):
         """
 
         if self._debugMode:
-            print "buildGroup:" + kSceneItem.getPath() + " as:" + buildName
+            print "buildGroup: " + kSceneItem.getPath() + " as: " + buildName
 
         return None
 
@@ -186,7 +188,7 @@ class Builder(object):
         """
 
         if self._debugMode:
-            print "buildJoint:" + kSceneItem.getPath() + " as:" + buildName
+            print "buildJoint: " + kSceneItem.getPath() + " as: " + buildName
 
         return None
 
@@ -205,7 +207,7 @@ class Builder(object):
 
 
         if self._debugMode:
-            print "buildLocator:" + kSceneItem.getPath() + " as:" + buildName
+            print "buildLocator: " + kSceneItem.getPath() + " as: " + buildName
 
         return None
 
@@ -223,7 +225,7 @@ class Builder(object):
         """
 
         if self._debugMode:
-            print "buildCurve:" + kSceneItem.getPath() + " as:" + buildName
+            print "buildCurve: " + kSceneItem.getPath() + " as: " + buildName
 
 
         return None
@@ -242,7 +244,7 @@ class Builder(object):
         """
 
         if self._debugMode:
-            print "buildControl:" + kSceneItem.getPath() + " as:" + buildName
+            print "buildControl:" + kSceneItem.getPath() + " as: " + buildName
 
         return None
 
@@ -262,7 +264,7 @@ class Builder(object):
         """
 
         if self._debugMode:
-            print "buildBoolAttribute:" + kAttribute.getPath()
+            print "buildBoolAttribute: " + kAttribute.getPath()
 
         return True
 
@@ -280,7 +282,7 @@ class Builder(object):
 
 
         if self._debugMode:
-            print "buildScalarAttribute:" + kAttribute.getPath()
+            print "buildScalarAttribute: " + kAttribute.getPath()
 
         return True
 
@@ -298,7 +300,7 @@ class Builder(object):
 
 
         if self._debugMode:
-            print "buildIntegerAttribute:" + kAttribute.getPath()
+            print "buildIntegerAttribute: " + kAttribute.getPath()
 
         return True
 
@@ -315,7 +317,7 @@ class Builder(object):
         """
 
         if self._debugMode:
-            print "buildStringAttribute:" + kAttribute.getPath()
+            print "buildStringAttribute: " + kAttribute.getPath()
 
         return True
 
@@ -332,7 +334,7 @@ class Builder(object):
         """
 
         if self._debugMode:
-            print "buildAttributeGroup:" + kAttributeGroup.getPath()
+            print "buildAttributeGroup: " + kAttributeGroup.getPath()
 
         return True
 
@@ -350,7 +352,7 @@ class Builder(object):
 
 
         if self._debugMode:
-            print "connectAttribute:" + kAttribute.getPath()
+            print "connectAttribute: " + kAttribute.getPath()
 
         return True
 
@@ -370,7 +372,7 @@ class Builder(object):
         """
 
         if self._debugMode:
-            print "buildOrientationConstraint:" + kConstraint.getPath() + " to:" + kConstraint.getConstrainee().getPath()
+            print "buildOrientationConstraint: " + kConstraint.getPath() + " to: " + kConstraint.getConstrainee().getPath()
 
         constraineeDCCSceneItem = self.getDCCSceneItem(kConstraint.getConstrainee())
         dccSceneItem = None # Add constraint object here.
@@ -390,7 +392,7 @@ class Builder(object):
 
         """
         if self._debugMode:
-            print "buildPoseConstraint:" + kConstraint.getPath() + " to:" + kConstraint.getConstrainee().getPath()
+            print "buildPoseConstraint: " + kConstraint.getPath() + " to: " + kConstraint.getConstrainee().getPath()
 
         constraineeDCCSceneItem = self.getDCCSceneItem(kConstraint.getConstrainee())
         dccSceneItem = None # Add constraint object here.
@@ -410,7 +412,7 @@ class Builder(object):
 
         """
         if self._debugMode:
-            print "buildPositionConstraint:" + kConstraint.getPath() + " to:" + kConstraint.getConstrainee().getPath()
+            print "buildPositionConstraint:" + kConstraint.getPath() + " to: " + kConstraint.getConstrainee().getPath()
 
         constraineeDCCSceneItem = self.getDCCSceneItem(kConstraint.getConstrainee())
         dccSceneItem = None # Add constraint object here.
@@ -430,7 +432,7 @@ class Builder(object):
 
         """
         if self._debugMode:
-            print "buildScaleConstraint:" + kConstraint.getPath() + " to:" + kConstraint.getConstrainee().getPath()
+            print "buildScaleConstraint: " + kConstraint.getPath() + " to: " + kConstraint.getConstrainee().getPath()
 
         constraineeDCCSceneItem = self.getDCCSceneItem(kConstraint.getConstrainee())
         dccSceneItem = None # Add constraint object here.
@@ -453,7 +455,7 @@ class Builder(object):
 
         """
         if self._debugMode:
-            print "buildXfoConnection:" + componentInput.getPath()
+            print "buildXfoConnection: " + componentInput.getPath()
 
         if componentInput.isConnected() is False:
             return False
@@ -479,6 +481,8 @@ class Builder(object):
 
         # There should be no offset between an output xfo from one component and the connected input of another
         # If connected, they should be exactly the same.
+
+        inputTarget.removeAllConstraints()
         constraint = inputTarget.constrainTo(connectionTarget, maintainOffset=False)
 
         dccSceneItem = self.buildPoseConstraint(constraint)
@@ -498,7 +502,7 @@ class Builder(object):
 
         """
         if self._debugMode:
-            print "buildAttributeConnection:" + componentInput.getPath()
+            print "buildAttributeConnection: " + componentInput.getPath()
 
 
         # Implemented in DCC Plugins.
@@ -535,7 +539,7 @@ class Builder(object):
 
         """
         if self._debugMode:
-            print "buildCanvasOperator:" + kOperator.getPath()
+            print "buildCanvasOperator: " + kOperator.getPath()
 
         return True
 
@@ -554,7 +558,7 @@ class Builder(object):
 
         """
         if self._debugMode:
-            print "buildAttributes:" + kObject.getPath()
+            print "buildAttributes: " + kObject.getPath()
 
         for i in xrange(kObject.getNumAttributeGroups()):
             attributeGroup = kObject.getAttributeGroupByIndex(i)
@@ -581,7 +585,7 @@ class Builder(object):
         buildName = kObject.getBuildName()
 
         if self._debugMode:
-            print "building:" + kObject.getPath() + " as:" + buildName + " type:" + kObject.getTypeName()
+            print "building: " + kObject.getPath() + " as: " + buildName + " type: " + kObject.getTypeName()
 
         # Build Object
         if kObject.isTypeOf("Layer"):
@@ -705,7 +709,7 @@ class Builder(object):
                     continue
 
                 if self._debugMode:
-                    print "buildConnection:" + componentInput.getName()
+                    print "buildConnection: " + componentInput.getName()
 
                 if componentInput.getDataType().startswith('Xfo'):
                     self.buildXfoConnection(componentInput)
@@ -762,127 +766,148 @@ class Builder(object):
 
         """
 
-        buildName = kRig.getBuildName()
-        dccSceneItem = self.buildContainer(kRig, buildName)
+        Profiler.getInstance().push("buildRig:" + kRig.getName())
 
-        if dccSceneItem is not None:
-            self.buildAttributes(kRig)
-            self.setTransform(kRig)
-            self.lockParameters(kRig)
-            self.setVisibility(kRig)
-            self.setObjectColor(kRig)
+        try:
+            self._preBuild(kRig)
 
-        for layer in kRig.getChildrenByType('Layer'):
-            buildName = layer.getBuildName()
-            dccSceneItem = self.buildLayer(layer, buildName)
+            buildName = kRig.getBuildName()
+            dccSceneItem = self.buildContainer(kRig, buildName)
 
             if dccSceneItem is not None:
-                self.buildAttributes(layer)
-                self.setTransform(layer)
-                self.lockParameters(layer)
-                self.setVisibility(layer)
-                self.setObjectColor(layer)
+                self.buildAttributes(kRig)
+                self.setTransform(kRig)
+                self.lockParameters(kRig)
+                self.setVisibility(kRig)
+                self.setObjectColor(kRig)
+
+            for layer in kRig.getChildrenByType('Layer'):
+                buildName = layer.getBuildName()
+                dccSceneItem = self.buildLayer(layer, buildName)
+
+                if dccSceneItem is not None:
+                    self.buildAttributes(layer)
+                    self.setTransform(layer)
+                    self.lockParameters(layer)
+                    self.setVisibility(layer)
+                    self.setObjectColor(layer)
 
 
-        def dep_walk(comp, visited, unseen):
-            """Recursively walks the input connections for the specified
-            component while adding visited components to the visited list.
+            def dep_walk(comp, visited, unseen):
+                """Recursively walks the input connections for the specified
+                component while adding visited components to the visited list.
 
-            Args:
-                comp (Component): the component to walk.
-                visited (list): list that holds the visited components.
-                unseen (list): list that holds the unseen components.
+                Args:
+                    comp (Component): the component to walk.
+                    visited (list): list that holds the visited components.
+                    unseen (list): list that holds the unseen components.
 
-            """
+                """
 
-            unseen.append(comp)
+                unseen.append(comp)
 
-            connectedInputs = [x for x in comp.getInputs() if x.isConnected() is True]
-            connectedComps = [x.getConnection().getParent() for x in connectedInputs]
-            for connComp in connectedComps:
-                if connComp not in visited:
-                    if connComp in unseen:
-                        raise Exception("Circular Dependency " + comp.getName() + " <-> " + connComp.getName())
-
-                    dep_walk(connComp, visited, unseen)
-
-            visited.append(comp)
-            unseen.remove(comp)
-
-        def getBuildOrder():
-            """Returns the build order for the components.
-
-            This also checks the components for cycles and raises an exception if any are found.
-
-            Returns:
-                list: List of components in build order.
-
-            """
-
-            # Get the components with no output connections.
-            # We start with the leaf components and walk up the graph to ensure that
-            # proper build order is generated.
-            leafComps = []
-            components = kRig.getChildrenByType('Component')
-            for comp in components:
-                connectedOutputs = [x for x in comp.getOutputs() if x.isConnected() is True]
-                if len(connectedOutputs) == 0:
-                    leafComps.append(comp)
-
-            unseen = []
-            orderedComponents = []
-            for comp in leafComps:
-                dep_walk(comp, orderedComponents, unseen)
-
-            cyclicMessages = []
-            cyclicComponents = list(set(components) - set(orderedComponents))
-            for comp in cyclicComponents:
                 connectedInputs = [x for x in comp.getInputs() if x.isConnected() is True]
-                connInputComps = [x.getConnection().getParent() for x in connectedInputs]
+                connectedComps = [x.getConnection().getParent() for x in connectedInputs]
+                for connComp in connectedComps:
+                    if connComp not in visited:
+                        if connComp in unseen:
+                            raise Exception("Circular Dependency " + comp.getName() + " <-> " + connComp.getName())
 
-                connCyclicComps = []
-                connectedOutputs = [x for x in comp.getOutputs() if x.isConnected() is True]
-                for connOutput in connectedOutputs:
-                    for i in xrange(connOutput.getNumConnections()):
-                        connComp = connOutput.getConnection(i).getParent()
-                        if connComp in connInputComps:
-                            if connComp not in connCyclicComps:
-                                connCyclicComps.append(connComp)
-                                cyclicMessages.append("\n > Circular Dependency " + comp.getName() + " <-> " + connComp.getName())
+                        dep_walk(connComp, visited, unseen)
 
-            if len(cyclicMessages) > 0:
-                raise Exception("Circular Dependencies Detected:" + "".join([x for x in cyclicMessages]))
+                visited.append(comp)
+                unseen.remove(comp)
 
-            return orderedComponents
+            def getBuildOrder():
+                """Returns the build order for the components.
 
-        # orderedComponents = getBuildOrder()
-        orderedComponents = kRig.getChildrenByType('Component') # getBuildOrder()
+                This also checks the components for cycles and raises an exception if any are found.
 
-        # Build Components in the correct order
-        for component in orderedComponents:
-            self.buildComponent(component)
+                Returns:
+                    list: List of components in build order.
 
-        # Create the connections now that all the components are built.
-        for component in orderedComponents:
-            self.buildAttrConnections(component)
-            self.buildInputConnections(component)
+                """
 
-        for component in orderedComponents:
-            operators = component.getOperators()
-            for operator in operators:
-                # Build operators
-                if operator.isTypeOf('KLOperator'):
-                    self.buildKLOperator(operator)
-                elif operator.isTypeOf('CanvasOperator'):
-                    self.buildCanvasOperator(operator)
-                else:
-                    raise NotImplementedError(operator.getName() + ' has an unsupported type: ' + str(type(operator)))
+                # Get the components with no output connections.
+                # We start with the leaf components and walk up the graph to ensure that
+                # proper build order is generated.
+                leafComps = []
+                components = kRig.getChildrenByType('Component')
+                for comp in components:
+                    connectedOutputs = [x for x in comp.getOutputs() if x.isConnected() is True]
+                    if len(connectedOutputs) == 0:
+                        leafComps.append(comp)
 
-            items = component.getItems()
-            for key, kObject in items.iteritems():
-                self.buildConstraints(kObject)
+                unseen = []
+                orderedComponents = []
+                for comp in leafComps:
+                    dep_walk(comp, orderedComponents, unseen)
 
-        return
+                cyclicMessages = []
+                cyclicComponents = list(set(components) - set(orderedComponents))
+                for comp in cyclicComponents:
+                    connectedInputs = [x for x in comp.getInputs() if x.isConnected() is True]
+                    connInputComps = [x.getConnection().getParent() for x in connectedInputs]
+
+                    connCyclicComps = []
+                    connectedOutputs = [x for x in comp.getOutputs() if x.isConnected() is True]
+                    for connOutput in connectedOutputs:
+                        for i in xrange(connOutput.getNumConnections()):
+                            connComp = connOutput.getConnection(i).getParent()
+                            if connComp in connInputComps:
+                                if connComp not in connCyclicComps:
+                                    connCyclicComps.append(connComp)
+                                    cyclicMessages.append("\n > Circular Dependency " + comp.getName() + " <-> " + connComp.getName())
+
+                if len(cyclicMessages) > 0:
+                    raise Exception("Circular Dependencies Detected:" + "".join([x for x in cyclicMessages]))
+
+                return orderedComponents
+
+            # TODO: Implement code to more thoroughly  walk each component to check
+            # for cycles
+            #
+            # orderedComponents = getBuildOrder()
+
+            orderedComponents = kRig.getChildrenByType('Component') # getBuildOrder()
+
+            # Build Components in the correct order
+            for component in orderedComponents:
+                self.buildComponent(component)
+
+            # Create the connections now that all the components are built.
+            for component in orderedComponents:
+
+                items = component.getItems()
+                for key, kObject in items.iteritems():
+                    self.buildAttrConnections(kObject)
+
+                self.buildInputConnections(component)
+
+            for component in orderedComponents:
+                operators = component.getOperators()
+                for operator in operators:
+                    # Build operators
+                    if operator.isTypeOf('KLOperator'):
+                        self.buildKLOperator(operator)
+                    elif operator.isTypeOf('CanvasOperator'):
+                        self.buildCanvasOperator(operator)
+                    else:
+                        raise NotImplementedError(operator.getName() + ' has an unsupported type: ' + str(type(operator)))
+
+                items = component.getItems()
+                for key, kObject in items.iteritems():
+                    self.buildConstraints(kObject)
+
+        finally:
+            self._postBuild()
+
+            # Clear Config when finished.
+            self.config.clearInstance()
+
+        Profiler.getInstance().pop()
+
+        return self.getDCCSceneItem(kRig)
 
 
     def buildComponent(self, kComponent):

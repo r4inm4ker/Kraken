@@ -212,6 +212,7 @@ class FabriceHeadRig(FabriceHead):
         # ==========
         deformersLayer = self.getOrCreateLayer('deformers')
         defCmpGrp = ComponentGroup(self.getName(), self, parent=deformersLayer)
+        self.addItem('defCmpGrp', self.defCmpGrp)
 
         headDef = Joint('head', parent=defCmpGrp)
         headDef.setComponent(self)

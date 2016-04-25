@@ -30,7 +30,7 @@ spine = SpineComponentRig()
 spine.loadData(spineGuideData)
 
 builder = plugins.getBuilder()
-builder.build(spine)
+builder.buildComponent(spine)
 
 Profiler.getInstance().pop()
 
@@ -38,4 +38,8 @@ Profiler.getInstance().pop()
 if __name__ == "__main__":
     print Profiler.getInstance().generateReport()
 else:
-    logHierarchy(spine)
+    for each in spine.getItems().values():
+        # Only log hierarchy for Layer objects as Layers in this test are added to
+        # the component since there is no rig object.
+        if each.isTypeOf('Layer'):
+            logHierarchy(each)

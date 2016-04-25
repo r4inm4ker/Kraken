@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "tests\ScriptTests\buildAllControls.py", line 2, in <module>
+    from kraken.plugins.maya_plugin import builder as mayaBuilder
+  File "Python\kraken\plugins\maya_plugin\builder.py", line 18, in <module>
+    from kraken.plugins.maya_plugin.utils import *
+  File "Python\kraken\plugins\maya_plugin\utils\__init__.py", line 1, in <module>
+    import pymel.core as pm
+ImportError: No module named pymel.core
+

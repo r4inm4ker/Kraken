@@ -40,11 +40,15 @@ tentacle = TentacleComponentRig()
 tentacle.loadData(tentacleGuideData)
 
 builder = plugins.getBuilder()
-builder.build(tentacle)
+builder.buildComponent(tentacle)
 
 Profiler.getInstance().pop()
 
 if __name__ == "__main__":
     print Profiler.getInstance().generateReport()
 else:
-    logHierarchy(tentacle)
+    for each in tentacle.getItems().values():
+        # Only log hierarchy for Layer objects as Layers in this test are added to
+        # the component since there is no rig object.
+        if each.isTypeOf('Layer'):
+            logHierarchy(each)

@@ -1,49 +1,113 @@
+Failed to find DCC client. Falling back to Python client.
 Failed to find DCC builder. Falling back to Python builder.
-building:Arm as:LArm
-building:Arm.controls as:controls
-building:Arm.controls.Arm as:Arm_L_cmp
-building:Arm.controls.Arm.inputs as:Arm_L_inputs_hrc
-building:Arm.controls.Arm.inputs.globalSRT as:Arm_L_globalSRT_cmpIn
-building:Arm.controls.Arm.inputs.root as:Arm_L_root_cmpIn
-building:Arm.controls.Arm.outputs as:Arm_L_outputs_hrc
-building:Arm.controls.Arm.outputs.bicep as:Arm_L_bicep_cmpOut
-building:Arm.controls.Arm.outputs.forearm as:Arm_L_forearm_cmpOut
-building:Arm.controls.Arm.outputs.wrist as:Arm_L_wrist_cmpOut
-building:Arm.controls.Arm.bicepFK as:Arm_L_bicepFK_ctrlSpace
-building:Arm.controls.Arm.bicepFK.bicepFK as:Arm_L_bicepFK_ctrl
-building:Arm.controls.Arm.bicepFK.bicepFK.forearmFK as:Arm_L_forearmFK_ctrlSpace
-building:Arm.controls.Arm.bicepFK.bicepFK.forearmFK.forearmFK as:Arm_L_forearmFK_ctrl
-building:Arm.controls.Arm.IK as:Arm_L_IK_ctrlSpace
-building:Arm.controls.Arm.IK.IK as:Arm_L_IK_ctrl
-building:Arm.controls.Arm.ikPosition as:Arm_L_ikPosition_null
-building:Arm.controls.Arm.UpV as:Arm_L_UpV_ctrlSpace
-building:Arm.controls.Arm.UpV.UpV as:Arm_L_UpV_ctrl
-building:Arm.deformers as:deformers
-building:Arm.deformers.Arm as:Arm_L_cmp
-building:Arm.deformers.Arm.bicep as:Arm_L_bicep_def
-building:Arm.deformers.Arm.forearm as:Arm_L_forearm_def
-building:Arm.deformers.Arm.wrist as:Arm_L_wrist_def
-Arm:L
-Arm:L.controls
-Arm:L.controls.Arm:L
-Arm:L.controls.Arm:L.inputs
-Arm:L.controls.Arm:L.inputs.globalSRT
-Arm:L.controls.Arm:L.inputs.root
-Arm:L.controls.Arm:L.outputs
-Arm:L.controls.Arm:L.outputs.bicep
-Arm:L.controls.Arm:L.outputs.forearm
-Arm:L.controls.Arm:L.outputs.wrist
-Arm:L.controls.Arm:L.bicepFK
-Arm:L.controls.Arm:L.bicepFK.bicepFK
-Arm:L.controls.Arm:L.bicepFK.bicepFK.forearmFK
-Arm:L.controls.Arm:L.bicepFK.bicepFK.forearmFK.forearmFK
-Arm:L.controls.Arm:L.IK
-Arm:L.controls.Arm:L.IK.IK
-Arm:L.controls.Arm:L.ikPosition
-Arm:L.controls.Arm:L.UpV
-Arm:L.controls.Arm:L.UpV.UpV
-Arm:L.deformers
-Arm:L.deformers.Arm:L
-Arm:L.deformers.Arm:L.bicep
-Arm:L.deformers.Arm:L.forearm
-Arm:L.deformers.Arm:L.wrist
+building: controls.Arm as: Arm_L_cmp type: ComponentGroup
+buildGroup: controls.Arm as: Arm_L_cmp
+building: controls.Arm.inputs as: Arm_L_inputs_hrc type: HierarchyGroup
+buildHierarchyGroup: controls.Arm.inputs as: Arm_L_inputs_hrc
+building: controls.Arm.inputs.globalSRT as: Arm_L_globalSRT_cmpIn type: ComponentInput
+buildLocator: controls.Arm.inputs.globalSRT as: Arm_L_globalSRT_cmpIn
+building: controls.Arm.inputs.root as: Arm_L_root_cmpIn type: ComponentInput
+buildLocator: controls.Arm.inputs.root as: Arm_L_root_cmpIn
+building: controls.Arm.outputs as: Arm_L_outputs_hrc type: HierarchyGroup
+buildHierarchyGroup: controls.Arm.outputs as: Arm_L_outputs_hrc
+building: controls.Arm.outputs.bicep as: Arm_L_bicep_cmpOut type: ComponentOutput
+buildLocator: controls.Arm.outputs.bicep as: Arm_L_bicep_cmpOut
+building: controls.Arm.outputs.forearm as: Arm_L_forearm_cmpOut type: ComponentOutput
+buildLocator: controls.Arm.outputs.forearm as: Arm_L_forearm_cmpOut
+building: controls.Arm.outputs.wrist as: Arm_L_wrist_cmpOut type: ComponentOutput
+buildLocator: controls.Arm.outputs.wrist as: Arm_L_wrist_cmpOut
+building: controls.Arm.bicepFK as: Arm_L_bicepFK_ctrlSpace type: CtrlSpace
+buildGroup: controls.Arm.bicepFK as: Arm_L_bicepFK_ctrlSpace
+building: controls.Arm.bicepFK.bicepFK as: Arm_L_bicepFK_ctrl type: Control
+buildControl:controls.Arm.bicepFK.bicepFK as: Arm_L_bicepFK_ctrl
+building: controls.Arm.bicepFK.bicepFK.forearmFK as: Arm_L_forearmFK_ctrlSpace type: CtrlSpace
+buildGroup: controls.Arm.bicepFK.bicepFK.forearmFK as: Arm_L_forearmFK_ctrlSpace
+building: controls.Arm.bicepFK.bicepFK.forearmFK.forearmFK as: Arm_L_forearmFK_ctrl type: Control
+buildControl:controls.Arm.bicepFK.bicepFK.forearmFK.forearmFK as: Arm_L_forearmFK_ctrl
+building: controls.Arm.IK as: Arm_L_IK_ctrlSpace type: CtrlSpace
+buildGroup: controls.Arm.IK as: Arm_L_IK_ctrlSpace
+building: controls.Arm.IK.IK as: Arm_L_IK_ctrl type: Control
+buildControl:controls.Arm.IK.IK as: Arm_L_IK_ctrl
+building: controls.Arm.ikPosition as: Arm_L_ikPosition_null type: Transform
+buildGroup: controls.Arm.ikPosition as: Arm_L_ikPosition_null
+building: controls.Arm.UpV as: Arm_L_UpV_ctrlSpace type: CtrlSpace
+buildGroup: controls.Arm.UpV as: Arm_L_UpV_ctrlSpace
+building: controls.Arm.UpV.UpV as: Arm_L_UpV_ctrl type: Control
+buildControl:controls.Arm.UpV.UpV as: Arm_L_UpV_ctrl
+building: deformers as: deformers type: Layer
+buildLayer: deformers as: deformers
+building: deformers.Arm as: Arm_L_cmp type: ComponentGroup
+buildGroup: deformers.Arm as: Arm_L_cmp
+building: deformers.Arm.bicep as: Arm_L_bicep_def type: Joint
+buildJoint: deformers.Arm.bicep as: Arm_L_bicep_def
+building: deformers.Arm.forearm as: Arm_L_forearm_def type: Joint
+buildJoint: deformers.Arm.forearm as: Arm_L_forearm_def
+building: deformers.Arm.wrist as: Arm_L_wrist_def type: Joint
+buildJoint: deformers.Arm.wrist as: Arm_L_wrist_def
+building: controls as: controls type: Layer
+buildLayer: controls as: controls
+building: controls.Arm as: Arm_L_cmp type: ComponentGroup
+buildGroup: controls.Arm as: Arm_L_cmp
+building: controls.Arm.inputs as: Arm_L_inputs_hrc type: HierarchyGroup
+buildHierarchyGroup: controls.Arm.inputs as: Arm_L_inputs_hrc
+building: controls.Arm.inputs.globalSRT as: Arm_L_globalSRT_cmpIn type: ComponentInput
+buildLocator: controls.Arm.inputs.globalSRT as: Arm_L_globalSRT_cmpIn
+building: controls.Arm.inputs.root as: Arm_L_root_cmpIn type: ComponentInput
+buildLocator: controls.Arm.inputs.root as: Arm_L_root_cmpIn
+building: controls.Arm.outputs as: Arm_L_outputs_hrc type: HierarchyGroup
+buildHierarchyGroup: controls.Arm.outputs as: Arm_L_outputs_hrc
+building: controls.Arm.outputs.bicep as: Arm_L_bicep_cmpOut type: ComponentOutput
+buildLocator: controls.Arm.outputs.bicep as: Arm_L_bicep_cmpOut
+building: controls.Arm.outputs.forearm as: Arm_L_forearm_cmpOut type: ComponentOutput
+buildLocator: controls.Arm.outputs.forearm as: Arm_L_forearm_cmpOut
+building: controls.Arm.outputs.wrist as: Arm_L_wrist_cmpOut type: ComponentOutput
+buildLocator: controls.Arm.outputs.wrist as: Arm_L_wrist_cmpOut
+building: controls.Arm.bicepFK as: Arm_L_bicepFK_ctrlSpace type: CtrlSpace
+buildGroup: controls.Arm.bicepFK as: Arm_L_bicepFK_ctrlSpace
+building: controls.Arm.bicepFK.bicepFK as: Arm_L_bicepFK_ctrl type: Control
+buildControl:controls.Arm.bicepFK.bicepFK as: Arm_L_bicepFK_ctrl
+building: controls.Arm.bicepFK.bicepFK.forearmFK as: Arm_L_forearmFK_ctrlSpace type: CtrlSpace
+buildGroup: controls.Arm.bicepFK.bicepFK.forearmFK as: Arm_L_forearmFK_ctrlSpace
+building: controls.Arm.bicepFK.bicepFK.forearmFK.forearmFK as: Arm_L_forearmFK_ctrl type: Control
+buildControl:controls.Arm.bicepFK.bicepFK.forearmFK.forearmFK as: Arm_L_forearmFK_ctrl
+building: controls.Arm.IK as: Arm_L_IK_ctrlSpace type: CtrlSpace
+buildGroup: controls.Arm.IK as: Arm_L_IK_ctrlSpace
+building: controls.Arm.IK.IK as: Arm_L_IK_ctrl type: Control
+buildControl:controls.Arm.IK.IK as: Arm_L_IK_ctrl
+building: controls.Arm.ikPosition as: Arm_L_ikPosition_null type: Transform
+buildGroup: controls.Arm.ikPosition as: Arm_L_ikPosition_null
+building: controls.Arm.UpV as: Arm_L_UpV_ctrlSpace type: CtrlSpace
+buildGroup: controls.Arm.UpV as: Arm_L_UpV_ctrlSpace
+building: controls.Arm.UpV.UpV as: Arm_L_UpV_ctrl type: Control
+buildControl:controls.Arm.UpV.UpV as: Arm_L_UpV_ctrl
+building: deformers.Arm as: Arm_L_cmp type: ComponentGroup
+buildGroup: deformers.Arm as: Arm_L_cmp
+building: deformers.Arm.bicep as: Arm_L_bicep_def type: Joint
+buildJoint: deformers.Arm.bicep as: Arm_L_bicep_def
+building: deformers.Arm.forearm as: Arm_L_forearm_def type: Joint
+buildJoint: deformers.Arm.forearm as: Arm_L_forearm_def
+building: deformers.Arm.wrist as: Arm_L_wrist_def type: Joint
+buildJoint: deformers.Arm.wrist as: Arm_L_wrist_def
+deformers
+deformers.Arm:L
+deformers.Arm:L.bicep
+deformers.Arm:L.forearm
+deformers.Arm:L.wrist
+controls
+controls.Arm:L
+controls.Arm:L.inputs
+controls.Arm:L.inputs.globalSRT
+controls.Arm:L.inputs.root
+controls.Arm:L.outputs
+controls.Arm:L.outputs.bicep
+controls.Arm:L.outputs.forearm
+controls.Arm:L.outputs.wrist
+controls.Arm:L.bicepFK
+controls.Arm:L.bicepFK.bicepFK
+controls.Arm:L.bicepFK.bicepFK.forearmFK
+controls.Arm:L.bicepFK.bicepFK.forearmFK.forearmFK
+controls.Arm:L.IK
+controls.Arm:L.IK.IK
+controls.Arm:L.ikPosition
+controls.Arm:L.UpV
+controls.Arm:L.UpV.UpV

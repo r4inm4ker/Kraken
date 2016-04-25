@@ -65,7 +65,7 @@ class Synchronizer(Synchronizer):
             kObject (object): object to sync the xfo for.
 
         Returns:
-            object: True if successful.
+            Boolean: True if successful.
 
         """
 
@@ -88,7 +88,12 @@ class Synchronizer(Synchronizer):
 
         pos = Vec3(x=dccPos[0], y=dccPos[1], z=dccPos[2])
         quat = Quat(v=Vec3(dccQuat[1], dccQuat[2], dccQuat[3]), w=dccQuat[0])
-        scl = Vec3(x=1.0, y=1.0, z=1.0) # we don't want scale recorded
+
+        # If flag is set, pass the DCC Scale values.
+        if kObject.testFlag('SYNC_SCALE') is True:
+            scl = Vec3(1.0, 1.0, 1.0)
+        else:
+            scl = Vec3(x=dccScl[0], y=dccScl[1], z=dccScl[2])
 
         newXfo = Xfo(tr=pos, ori=quat, sc=scl)
 
