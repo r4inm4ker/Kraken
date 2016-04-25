@@ -1,6 +1,23 @@
 # Kraken Development Guidelines
 Contributing to the Kraken project is generally straight forward but there are some guidelines that should be followed.
 
+## Issues
+When posting issues users should use the following table to set labels on issues that are submitted. In addition to these labels, other labels are included to mark what component of Kraken the issue relates to.
+
+| Label     | Definition |
+| --------- | ---------- |
+| P1        | 911, drop everything to fix this because this is a true showstopper or this bug is preventing ANY useful work from being accomplished |
+| P2        | Crashes or data corruption. |
+| P3        | Bugs impeding understanding or workflow or that make the software look unprofessional. Some may get pushed to a future release. |
+| P4        | Would be nice. These will typically get addressed if quick and easy and low risk or all the other higher priority bugs have been cleared. |
+| Bug       | A problem which impairs or prevents the functions of the product.
+| Sug       | An improvement or enhancement to an existing feature or functionality. Use *New* for entirely new things.
+| New       | A new feature of the product, which has yet to be developed.
+| Task      | A task that needs to be done.
+| Urgent    | Used to flag customer-reported tickets that they feel should be get attention IMMEDIATELY
+| Important | Used to flag customer-reported tickets that they feel should be get attention sooner versus “you should fix this sometime"
+
+
 ## Python
 In general follow the rules laid out by the PEP8 article except that variable names in Kraken are lower-camel case and don't use underscores in the names.
 

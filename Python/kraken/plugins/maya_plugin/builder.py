@@ -873,15 +873,17 @@ class Builder(Builder):
                     opObject = connectedObjects
                     dccSceneItem = self.getDCCSceneItem(opObject)
 
-                    # Handle output connections to visibility attributes.
-                    if opObject.getName() == 'visibility' and opObject.getParent().getName() == 'implicitAttrGrp':
-                        dccItem = self.getDCCSceneItem(opObject.getParent().getParent())
-                        dccSceneItem = dccItem.attr('visibility')
+                    if not isinstance(opObject, (str, unicode, int, float, long, bool)):
 
-                    elif opObject.getName() == 'shapeVisibility' and opObject.getParent().getName() == 'implicitAttrGrp':
-                        dccItem = self.getDCCSceneItem(opObject.getParent().getParent())
-                        shape = dccItem.getShape()
-                        dccSceneItem = shape.attr('visibility')
+                        # Handle output connections to visibility attributes.
+                        if opObject.getName() == 'visibility' and opObject.getParent().getName() == 'implicitAttrGrp':
+                            dccItem = self.getDCCSceneItem(opObject.getParent().getParent())
+                            dccSceneItem = dccItem.attr('visibility')
+
+                        elif opObject.getName() == 'shapeVisibility' and opObject.getParent().getName() == 'implicitAttrGrp':
+                            dccItem = self.getDCCSceneItem(opObject.getParent().getParent())
+                            shape = dccItem.getShape()
+                            dccSceneItem = shape.attr('visibility')
 
                     connectionTargets = { 'opObject': opObject, 'dccSceneItem': dccSceneItem }
 
