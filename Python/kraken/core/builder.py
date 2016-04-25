@@ -5,15 +5,11 @@ Builder -- Base builder object to build objects in DCC.
 
 """
 
-from collections import deque
-
 from kraken.core.kraken_system import KrakenSystem
 from kraken.core.configs.config import Config
 from kraken.core.profiler import Profiler
 
 from kraken.core.objects.scene_item import SceneItem
-from kraken.core.objects.components.component import Component
-from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
 
 class Builder(object):
@@ -21,7 +17,7 @@ class Builder(object):
     plugin."""
 
 
-    def __init__(self, debugMode = False):
+    def __init__(self, debugMode=False):
         super(Builder, self).__init__()
         self._buildElements = []
 
@@ -47,9 +43,9 @@ class Builder(object):
         """
 
         pairing = {
-                   'src': kSceneItem,
-                   'tgt': dccSceneItem
-                  }
+            'src': kSceneItem,
+            'tgt': dccSceneItem
+        }
 
         self._buildElements.append(pairing)
 
@@ -374,12 +370,10 @@ class Builder(object):
         if self._debugMode:
             print "buildOrientationConstraint: " + kConstraint.getPath() + " to: " + kConstraint.getConstrainee().getPath()
 
-        constraineeDCCSceneItem = self.getDCCSceneItem(kConstraint.getConstrainee())
-        dccSceneItem = None # Add constraint object here.
+        dccSceneItem = None  # Add constraint object here.
         self._registerSceneItemPair(kConstraint, dccSceneItem)
 
         return dccSceneItem
-
 
     def buildPoseConstraint(self, kConstraint):
         """Builds an pose constraint represented by the kConstraint.
@@ -391,15 +385,14 @@ class Builder(object):
             bool: True if successful.
 
         """
+
         if self._debugMode:
             print "buildPoseConstraint: " + kConstraint.getPath() + " to: " + kConstraint.getConstrainee().getPath()
 
-        constraineeDCCSceneItem = self.getDCCSceneItem(kConstraint.getConstrainee())
-        dccSceneItem = None # Add constraint object here.
+        dccSceneItem = None  # Add constraint object here.
         self._registerSceneItemPair(kConstraint, dccSceneItem)
 
         return dccSceneItem
-
 
     def buildPositionConstraint(self, kConstraint):
         """Builds an position constraint represented by the kConstraint.
@@ -411,15 +404,14 @@ class Builder(object):
             bool: True if successful.
 
         """
+
         if self._debugMode:
             print "buildPositionConstraint:" + kConstraint.getPath() + " to: " + kConstraint.getConstrainee().getPath()
 
-        constraineeDCCSceneItem = self.getDCCSceneItem(kConstraint.getConstrainee())
-        dccSceneItem = None # Add constraint object here.
+        dccSceneItem = None  # Add constraint object here.
         self._registerSceneItemPair(kConstraint, dccSceneItem)
 
         return dccSceneItem
-
 
     def buildScaleConstraint(self, kConstraint):
         """Builds an scale constraint represented by the kConstraint.
@@ -431,11 +423,11 @@ class Builder(object):
             bool: True if successful.
 
         """
+
         if self._debugMode:
             print "buildScaleConstraint: " + kConstraint.getPath() + " to: " + kConstraint.getConstrainee().getPath()
 
-        constraineeDCCSceneItem = self.getDCCSceneItem(kConstraint.getConstrainee())
-        dccSceneItem = None # Add constraint object here.
+        dccSceneItem = None  # Add constraint object here.
         self._registerSceneItemPair(kConstraint, dccSceneItem)
 
         return dccSceneItem
@@ -454,6 +446,7 @@ class Builder(object):
             bool: True if successful.
 
         """
+
         if self._debugMode:
             print "buildXfoConnection: " + componentInput.getPath()
 
@@ -471,9 +464,9 @@ class Builder(object):
                 inputParentDecoration = inputParent.getNameDecoration()
                 fullInputName = inputParent.getName() + inputParentDecoration + "." + componentInput.getName()
 
-                raise Exception(fullInputName + " index ("
-                                + str(componentInput.getIndex()) + ") is out of range ("
-                                + str(len(connection.getTarget()) - 1) + ")!")
+                raise Exception(fullInputName + " index (" +
+                                str(componentInput.getIndex()) + ") is out of range (" +
+                                str(len(connection.getTarget()) - 1) + ")!")
 
             connectionTarget = connection.getTarget()[componentInput.getIndex()]
         else:
@@ -489,7 +482,6 @@ class Builder(object):
         self._registerSceneItemPair(componentInput, dccSceneItem)
 
         return True
-
 
     def buildAttributeConnection(self, componentInput):
         """Builds the link between the target and connection target.
@@ -655,26 +647,27 @@ class Builder(object):
 
         """
 
-        dccSceneItem = None
         for i in xrange(kObject.getNumConstraints()):
 
             constraint = kObject.getConstraintByIndex(i)
 
             # Build Object
             if constraint.isTypeOf("OrientationConstraint"):
-                dccSceneItem = self.buildOrientationConstraint(constraint)
+                self.buildOrientationConstraint(constraint)
 
             elif constraint.isTypeOf("PoseConstraint"):
-                dccSceneItem = self.buildPoseConstraint(constraint)
+                self.buildPoseConstraint(constraint)
 
             elif constraint.isTypeOf("PositionConstraint"):
-                dccSceneItem = self.buildPositionConstraint(constraint)
+                self.buildPositionConstraint(constraint)
 
             elif constraint.isTypeOf("ScaleConstraint"):
-                dccSceneItem = self.buildScaleConstraint(constraint)
+                self.buildScaleConstraint(constraint)
 
             else:
-                raise NotImplementedError(constraint.getName() + ' has an unsupported type: ' + str(type(constraint)))
+                raise NotImplementedError(constraint.getName() +
+                                          ' has an unsupported type: ' +
+                                          str(type(constraint)))
 
         # Build children
         for i in xrange(kObject.getNumChildren()):
@@ -869,7 +862,7 @@ class Builder(object):
             #
             # orderedComponents = getBuildOrder()
 
-            orderedComponents = kRig.getChildrenByType('Component') # getBuildOrder()
+            orderedComponents = kRig.getChildrenByType('Component')  # getBuildOrder()
 
             # Build Components in the correct order
             for component in orderedComponents:
@@ -1051,7 +1044,7 @@ class Builder(object):
 
         """
 
-        dccSceneItem = self.getDCCSceneItem(kSceneItem)
+        # dccSceneItem = self.getDCCSceneItem(kSceneItem)
 
         # Re-implement in DCC builders.
 
@@ -1161,4 +1154,3 @@ class Builder(object):
         """
 
         return True
-

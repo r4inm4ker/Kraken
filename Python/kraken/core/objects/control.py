@@ -260,7 +260,6 @@ class Control(Curve):
         quatRot.setFromEuler(Euler(Math_degToRad(xRot), Math_degToRad(yRot),
                                    Math_degToRad(zRot)))
 
-        newPoints = []
         for eachSubCurve in curveData:
 
             for eachPoint in eachSubCurve["points"]:
