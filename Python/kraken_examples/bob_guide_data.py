@@ -1,3 +1,4 @@
+"""Example data that can be loaded onto a guide rig."""
 
 from kraken.core.maths import Vec2, Vec3, Euler, Quat, Xfo
 

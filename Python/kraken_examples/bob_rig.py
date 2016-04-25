@@ -1,7 +1,6 @@
 from kraken.core.maths import Vec3, Quat, Xfo
 
 from kraken.core.objects.container import Container
-from kraken.core.objects.layer import Layer
 
 from kraken_components.generic.mainSrt_component import MainSrtComponentRig
 from kraken_components.biped.head_component import HeadComponentRig
@@ -12,11 +11,16 @@ from kraken_components.biped.spine_component import SpineComponentRig
 from kraken_components.biped.neck_component import NeckComponentGuide, NeckComponentRig
 
 from kraken.core.profiler import Profiler
-from kraken.helpers.utility_methods import logHierarchy
 
 
 class BobRig(Container):
-    """Test Arm Component"""
+    """Simple biped test rig.
+
+    This example shows how to create a simple scripted biped rig that loads data
+    onto component rig classes and also onto guide classes. It also demonstrates
+    how to make connections between components.
+
+    """
 
     def __init__(self, name):
 

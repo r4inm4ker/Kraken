@@ -14,13 +14,18 @@ from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
 
 
-class BobGuide(Rig):
-    """Bobe Guide Rig"""
+class BobGuideRig(Rig):
+    """Simple biped test guide rig.
+
+    This example shows how to instantiate guide components and load data onto
+    them.
+
+    """
 
     def __init__(self, name):
 
-        Profiler.getInstance().push("Construct BobGuide:" + name)
-        super(BobGuide, self).__init__(name)
+        Profiler.getInstance().push("Construct BobGuideRig:" + name)
+        super(BobGuideRig, self).__init__(name)
 
         # Add Components to Layers
         spineComponent = SpineComponentGuide('spine', self)
