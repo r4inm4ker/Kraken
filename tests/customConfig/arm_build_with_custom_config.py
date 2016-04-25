@@ -6,7 +6,8 @@ from kraken.core.profiler import Profiler
 from kraken.core.configs.config import Config
 from kraken.helpers.utility_methods import logHierarchy
 
-from kraken_examples.arm_component import ArmComponentGuide, ArmComponentRig
+from kraken_components.biped.arm_component import ArmComponentGuide, ArmComponentRig
+
 
 class CustomConfig(Config):
     """Base Configuration for Kraken builders."""

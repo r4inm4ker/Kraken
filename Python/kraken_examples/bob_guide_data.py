@@ -1,3 +1,4 @@
+"""Example data that can be loaded onto a guide rig."""
 
 from kraken.core.maths import Vec2, Vec3, Euler, Quat, Xfo
 
@@ -5,7 +6,7 @@ from kraken.core.maths import Vec2, Vec3, Euler, Quat, Xfo
 bob_guide_data = {
     "components":[
         {
-            "class": "kraken_examples.spine_component.SpineComponentGuide",
+            "class": "kraken_components.biped.spine_component.SpineComponentGuide",
             'cogPosition': Vec3(0.0, 11.1351, -0.1382),
             'spine01Position': Vec3(0.0, 11.1351, -0.1382),
             'spine02Position': Vec3(0.0, 11.8013, -0.1995),
@@ -14,12 +15,12 @@ bob_guide_data = {
             'numDeformers': 6
         },
         {
-            "class": "kraken_examples.neck_component.NeckComponentGuide",
+            "class": "kraken_components.biped.neck_component.NeckComponentGuide",
             "neckPosition": Vec3(0.0, 16.5572, -0.6915),
             "neckEndPosition": Vec3(0.0, 17.4756, -0.421)
         },
         {
-            "class": "kraken_examples.head_component.HeadComponentGuide",
+            "class": "kraken_components.biped.head_component.HeadComponentGuide",
             "headPosition": Vec3(0.0, 17.4756, -0.421),
             "headEndPosition": Vec3(0.0, 19.5, -0.421),
             "eyeLeftPosition": Vec3(0.3497, 18.0878, 0.6088),
@@ -27,7 +28,7 @@ bob_guide_data = {
             "jawPosition": Vec3(0.0, 17.613, -0.2731)
         },
         {
-            "class": "kraken_examples.clavicle_component.ClavicleComponentGuide",
+            "class": "kraken_components.biped.clavicle_component.ClavicleComponentGuide",
             "name": "Clavicle",
             "location": "L",
             "clavicleXfo": Xfo(Vec3(0.1322, 15.403, -0.5723)),
@@ -35,7 +36,7 @@ bob_guide_data = {
             "clavicleEndXfo": Xfo(Vec3(2.27, 15.295, -0.753))
         },
         {
-            "class": "kraken_examples.clavicle_component.ClavicleComponentGuide",
+            "class": "kraken_components.biped.clavicle_component.ClavicleComponentGuide",
             "name": "Clavicle",
             "location": "R",
             "clavicleXfo": Xfo(Vec3(-0.1322, 15.403, -0.5723)),
@@ -43,7 +44,7 @@ bob_guide_data = {
             "clavicleEndXfo": Xfo(Vec3(-2.27, 15.295, -0.753))
         },
         {
-            "class": "kraken_examples.arm_component.ArmComponentGuide",
+            "class": "kraken_components.biped.arm_component.ArmComponentGuide",
             "name": "Arm",
             "location": "L",
             "bicepXfo": Xfo(Vec3(2.27, 15.295, -0.753)),
@@ -55,7 +56,7 @@ bob_guide_data = {
             "forearmFKCtrlSize": 1.5
         },
         {
-            "class": "kraken_examples.arm_component.ArmComponentGuide",
+            "class": "kraken_components.biped.arm_component.ArmComponentGuide",
             "name": "Arm",
             "location": "R",
             "bicepXfo": Xfo(Vec3(-2.27, 15.295, -0.753)),
@@ -67,7 +68,7 @@ bob_guide_data = {
             "forearmFKCtrlSize": 1.5
         },
         {
-            "class": "kraken_examples.leg_component.LegComponentGuide",
+            "class": "kraken_components.biped.leg_component.LegComponentGuide",
             "name": "Leg",
             "location": "L",
             "femurXfo": Xfo(Vec3(0.9811, 9.769, -0.4572)),
@@ -77,7 +78,7 @@ bob_guide_data = {
             "toeTipXfo": Xfo(Vec3(1.85, 0.4, 1.5))
         },
         {
-            "class": "kraken_examples.leg_component.LegComponentGuide",
+            "class": "kraken_components.biped.leg_component.LegComponentGuide",
             "name": "Leg",
             "location": "R",
             "femurXfo": Xfo(Vec3(-0.9811, 9.769, -0.4572)),
