@@ -1,0 +1,46 @@
+require Math;
+require Kraken;
+
+operator entry() {
+
+	TwistSolver solver();
+
+  Scalar blendStart = 0.75;
+  Scalar blendEnd = 1.0;
+
+  Mat44 origin;
+  origin.setTranslation(Vec3(0, 0, 0));
+  Mat44 originUpV;
+  originUpV.setTranslation(Vec3(0, 1, 0));
+
+  originUpV = origin * originUpV;
+
+  Quat insertOri;
+  insertOri.setFromAxisAndAngle(Vec3(1, 0, 0), Math_degToRad(90));
+
+  Mat44 insert;
+  insert.setTranslation(Vec3(5, 0, 0));
+  insert.setRotation(insertOri);
+
+  Mat44 insertUpV;
+  insertUpV.setTranslation(Vec3(0, 1, 0));
+
+  insertUpV = insert * insertUpV;
+
+  Mat44 outPose[];
+  outPose.resize(5);
+
+  solver.solve(false, 1.0, blendStart, blendEnd, origin, originUpV, insert, insertUpV, outPose);
+
+  for(Integer i=0; i < outPose.size(); i++) {
+    if (i > 0) {
+      report('');
+    }
+
+    report('Pose: ' + i);
+    report('Translation: ' + outPose[i].translation());
+    report('X Rotation:  ' + Math_radToDeg(Xfo(outPose[i]).ori.toEulerAngles().x));
+    report('Scale:       ' + Xfo(outPose[i]).sc);
+  }
+
+}

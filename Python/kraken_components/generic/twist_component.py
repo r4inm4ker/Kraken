@@ -5,13 +5,11 @@ from kraken.core.objects.components.base_example_component import BaseExampleCom
 
 from kraken.core.objects.attributes.attribute_group import AttributeGroup
 from kraken.core.objects.attributes.integer_attribute import IntegerAttribute
-
-from kraken.core.objects.constraints.pose_constraint import PoseConstraint
+from kraken.core.objects.attributes.scalar_attribute import ScalarAttribute
 
 from kraken.core.objects.component_group import ComponentGroup
 from kraken.core.objects.components.component_output import ComponentOutput
 from kraken.core.objects.joint import Joint
-from kraken.core.objects.ctrlSpace import CtrlSpace
 from kraken.core.objects.control import Control
 from kraken.core.objects.transform import Transform
 
@@ -57,6 +55,7 @@ class TwistComponentGuide(TwistComponent):
         # ========
         guideSettingsAttrGrp = AttributeGroup('GuideSettings', parent=self)
         self.numDeformersAttr = IntegerAttribute('numDeformers', value=1, minValue=0, maxValue=20, parent=guideSettingsAttrGrp)
+        self.blendBiasAttr = ScalarAttribute('blendBias', value=0.0, minValue=0, maxValue=1.0, parent=guideSettingsAttrGrp)
 
         # Guide Controls
         triangleCtrl = Control('triangle', shape='triangle')
@@ -78,6 +77,7 @@ class TwistComponentGuide(TwistComponent):
         self.default_data = {
             'name': name,
             'location': 'M',
+            'blendBias': 0.5,
             'originXfo': Xfo(Vec3(0.0, 0.0, 0.0)),
             'insertXfo': Xfo(Vec3(5.0, 0.0, 0.0)),
             'numDeformers': 5
@@ -101,6 +101,7 @@ class TwistComponentGuide(TwistComponent):
 
         data = super(TwistComponentGuide, self).saveData()
 
+        data['blendBias'] = self.blendBiasAttr.getValue()
         data['originXfo'] = self.originCtrl.xfo
         data['insertXfo'] = self.insertCtrl.xfo
         data['numDeformers'] = self.numDeformersAttr.getValue()
@@ -121,6 +122,7 @@ class TwistComponentGuide(TwistComponent):
 
         super(TwistComponentGuide, self).loadData(data)
 
+        self.blendBiasAttr.setValue(data.get('blendBias', 0.0))
         self.originCtrl.xfo = data.get('originXfo', Xfo())
         self.insertCtrl.xfo = data.get('insertXfo', Xfo())
         self.numDeformersAttr.setValue(data.get('numDeformers', 5))
@@ -137,6 +139,8 @@ class TwistComponentGuide(TwistComponent):
         """
 
         data = super(TwistComponentGuide, self).getRigBuildData()
+
+        data['blendBias'] = self.blendBiasAttr.getValue()
 
         data['originXfo'] = self.originCtrl.xfo
         data['insertXfo'] = self.insertCtrl.xfo
@@ -194,6 +198,10 @@ class TwistComponentRig(TwistComponent):
         self.originUpVTransform = Transform('originUpV', parent=self.ctrlCmpGrp)
         self.insertTransform = Transform('insert', parent=self.ctrlCmpGrp)
         self.insertUpVTransform = Transform('insertUpV', parent=self.ctrlCmpGrp)
+
+        # Add Params to origin transform
+        twistSettings = AttributeGroup("DisplayInfo_TwistSettings", parent=self.originTransform)
+        self.blendBiasInputAttr = ScalarAttribute('blendBias', value=0.0, minValue=0.0, maxValue=1.0, parent=twistSettings)
 
         # ==========
         # Deformers
@@ -272,6 +280,7 @@ class TwistComponentRig(TwistComponent):
         # Add Att Inputs
         self.twistKLOp.setInput('drawDebug', self.drawDebugInputAttr)
         self.twistKLOp.setInput('rigScale', self.rigScaleInputAttr)
+        self.twistKLOp.setInput('blendBias', self.blendBiasInputAttr)
 
         # Add Xfo Inputs
         self.twistKLOp.setInput('origin', self.originTransform)
@@ -329,11 +338,14 @@ class TwistComponentRig(TwistComponent):
 
         super(TwistComponentRig, self).loadData(data)
 
-        originXfo = data.get('originXfo', Xfo())
-        insertXfo = data.get('insertXfo', Xfo())
-        originUpVXfo = data.get('originUpVXfo', Xfo())
-        insertUpVXfo = data.get('insertUpVXfo', Xfo())
-        numDeformers = data.get('numDeformers', 5)
+        blendBias = data.get('blendBias')
+        originXfo = data.get('originXfo')
+        insertXfo = data.get('insertXfo')
+        originUpVXfo = data.get('originUpVXfo')
+        insertUpVXfo = data.get('insertUpVXfo')
+        numDeformers = data.get('numDeformers')
+
+        self.blendBiasInputAttr.setValue(blendBias)
 
         self.originTransform.xfo = originXfo
         self.originUpVTransform.xfo = originUpVXfo
