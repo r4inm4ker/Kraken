@@ -1,0 +1,27 @@
+// Created by kl2dfg (processFunction)
+{
+  "objectType" : "Func",
+  "metadata" : {
+    "uiTooltip" : "Supported types:\n  result: KrakenClipStack\n"
+    },
+  "title" : "KrakenClipStack",
+  "ports" : [
+    {
+      "objectType" : "Port",
+      "nodePortType" : "In",
+      "name" : "result",
+      "execPortType" : "Out",
+      "typeSpec" : "KrakenClipStack"
+      }
+    ],
+  "extDeps" : {
+    "KrakenAnimation" : "*"
+    },
+  "presetGUID" : "9A396B2AB3A30AB7913A8A1D56EE2E6E",
+  "code" : "require KrakenAnimation;
+
+dfgEntry {
+  result = KrakenClipStack();
+}
+"
+  }

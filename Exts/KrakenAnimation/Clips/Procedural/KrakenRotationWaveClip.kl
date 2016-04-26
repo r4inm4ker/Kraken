@@ -1,0 +1,118 @@
+require Math;
+
+object KrakenRotationWaveClip : KrakenClip {
+  String names[];
+  UInt32 nameToId[String];
+  Vec3 axes[];
+  Float32 amplitudes[];
+  Float32 shifts[];
+  Float32 speeds[];
+  Float32 offsets[];
+
+  KrakenClipLookup lookup;
+};
+
+function KrakenRotationWaveClip() {
+  this.lookup = null;
+}
+
+/// \dfgPresetDefault axis {"x": 1.0, "y": 0.0, "z": 0.0}
+/// \dfgPresetDefault amplitude 1.0
+/// \dfgPresetDefault shift 0.0
+/// \dfgPresetDefault speed 3.0
+/// \dfgPresetDefault offset 0.0
+function KrakenRotationWaveClip.defineWave!(
+  String name, 
+  Vec3 axis,
+  Float32 amplitude,
+  Float32 shift,
+  Float32 speed,
+  Float32 offset
+) {
+  UInt32 id = this.nameToId.get(name, this.names.size());
+  if(id == this.names.size()) {
+    this.nameToId[name] = this.names.size();
+    this.names.push(name);
+    this.axes.push(axis);
+    this.amplitudes.push(amplitude);
+    this.shifts.push(shift);
+    this.speeds.push(speed);
+    this.offsets.push(offset);
+  } else {
+    this.axes[id] = axis;
+    this.amplitudes[id] = amplitude;
+    this.shifts[id] = shift;
+    this.speeds[id] = speed;
+    this.offsets[id] = offset;
+  }
+  this.lookup = null;
+}
+
+UInt32 KrakenRotationWaveClip.getChannelCount() {
+  return this.names.size();
+}
+
+String KrakenRotationWaveClip.getChannelName(UInt32 id) {
+  return this.names[id];
+}
+
+UInt32 KrakenRotationWaveClip.getChannelType(UInt32 id) {
+  return KrakenClipChannel_Xfo;
+}
+
+Float32 KrakenRotationWaveClip.evaluateFloat32!(UInt32 id, KrakenClipContext context) {
+  return Float32();
+}
+
+Xfo KrakenRotationWaveClip.evaluateXfo!(UInt32 id, KrakenClipContext context) {
+  Xfo xfo;
+  Float32 angle = this.shifts[id] + this.amplitudes[id] * sin(this.offsets[id] + Float32(context.time) * this.speeds[id]);
+  xfo.ori.setFromAxisAndAngle(this.axes[id], angle);
+  return xfo;
+}
+
+function KrakenRotationWaveClip.apply(io KrakenKLRig rig, KrakenClipContext context, Float32 factor) {
+  KrakenRotationWaveClip clip = this;
+  if(clip.lookup == null)
+    clip.lookup = KrakenClipLookup(rig, clip);
+  clip.lookup.applyClip(rig, clip, context, factor);
+}
+
+function JSONDictValue KrakenRotationWaveClip.saveToJson!() {
+  JSONArrayValue waves();
+  for(Size i=0;i<this.names.size();i++) {
+    JSONDictValue wave();
+    wave.setString('name', this.names[i]);
+    wave.setVec3('axis', this.axes[i]);
+    wave.setScalar('amplitude', this.amplitudes[i]);
+    wave.setScalar('shift', this.shifts[i]);
+    wave.setScalar('speed', this.speeds[i]);
+    wave.setScalar('offset', this.offsets[i]);
+    waves.add(wave);
+  }
+  JSONDictValue content();
+  content.set('waves', waves);
+  return content;
+}
+
+function KrakenRotationWaveClip.loadFromJson!(JSONDictValue json) {
+  this.names.resize(0);
+  this.nameToId.clear();
+  this.axes.resize(0);
+  this.amplitudes.resize(0);
+  this.shifts.resize(0);
+  this.speeds.resize(0);
+  this.offsets.resize(0);
+
+  JSONArrayValue waves = json.get('waves');
+  for(Size i=0;i<waves.size();i++) {
+    JSONDictValue wave = waves.get(i);
+    String name = wave.getString('name');
+    Vec3 axis = wave.getVec3('axis');
+    Float32 amplitude = wave.getScalar('amplitude');
+    Float32 shift = wave.getScalar('shift');
+    Float32 speed = wave.getScalar('speed');
+    Float32 offset = wave.getScalar('offset');
+    this.defineWave(name, axis, amplitude, shift, speed, offset);
+  }
+}

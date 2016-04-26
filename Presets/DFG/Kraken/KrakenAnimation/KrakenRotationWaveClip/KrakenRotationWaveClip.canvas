@@ -1,0 +1,27 @@
+// Created by kl2dfg (processFunction)
+{
+  "objectType" : "Func",
+  "metadata" : {
+    "uiTooltip" : "Supported types:\n  result: KrakenRotationWaveClip\n"
+    },
+  "title" : "KrakenRotationWaveClip",
+  "ports" : [
+    {
+      "objectType" : "Port",
+      "nodePortType" : "In",
+      "name" : "result",
+      "execPortType" : "Out",
+      "typeSpec" : "KrakenRotationWaveClip"
+      }
+    ],
+  "extDeps" : {
+    "KrakenAnimation" : "*"
+    },
+  "presetGUID" : "A824FB6D68B6DEFA3729DB2C318F6FD9",
+  "code" : "require KrakenAnimation;
+
+dfgEntry {
+  result = KrakenRotationWaveClip();
+}
+"
+  }
