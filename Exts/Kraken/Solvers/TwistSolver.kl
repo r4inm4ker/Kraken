@@ -43,7 +43,7 @@ function TwistSolver.solve!
                                             insertUpV.translation() - insert.translation());
 
   Quat xAlignOri;
-  xAlignOri.setFromAxisAndAngle(Vec3(0, 0, 1), Math_degToRad(90));
+  xAlignOri.setFromAxisAndAngle(Vec3(0, 1, 0), Math_degToRad(-90));
 
   Scalar blend;
   for(Integer i=0; i < pose.size(); i++) {

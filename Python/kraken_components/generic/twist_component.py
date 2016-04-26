@@ -340,6 +340,9 @@ class TwistComponentRig(TwistComponent):
         self.insertTransform.xfo = insertXfo
         self.insertUpVTransform.xfo = insertUpVXfo
 
+        self.originInputTgt.xfo = originXfo
+        self.insertInputTgt.xfo = insertXfo
+
         # Update number of deformers and outputs
         self.setNumDeformers(numDeformers)
 
