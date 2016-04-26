@@ -1,0 +1,316 @@
+{
+  "objectType" : "Func",
+  "title" : "DrawLabels",
+  "ports" : [
+    {
+      "objectType" : "Port",
+      "nodePortType" : "IO",
+      "defaultValues" : {
+        "DrawingHandle" : null
+        },
+      "name" : "handle",
+      "execPortType" : "IO",
+      "typeSpec" : "DrawingHandle"
+      },
+    {
+      "objectType" : "Port",
+      "nodePortType" : "Out",
+      "defaultValues" : {
+        "Xfo[]" : []
+        },
+      "name" : "xfos",
+      "execPortType" : "In",
+      "typeSpec" : "Xfo[]"
+      },
+    {
+      "objectType" : "Port",
+      "nodePortType" : "Out",
+      "defaultValues" : {
+        "String[]" : []
+        },
+      "name" : "labels",
+      "execPortType" : "In",
+      "typeSpec" : "String[]"
+      },
+    {
+      "objectType" : "Port",
+      "nodePortType" : "Out",
+      "defaultValues" : {
+        "Float32" : 0.300000011920929
+        },
+      "name" : "scale",
+      "execPortType" : "In",
+      "typeSpec" : "Float32"
+      },
+    {
+      "objectType" : "Port",
+      "nodePortType" : "Out",
+      "defaultValues" : {
+        "Color" : {
+          "r" : 1,
+          "g" : 1,
+          "b" : 1,
+          "a" : 1
+          }
+        },
+      "name" : "color",
+      "execPortType" : "In",
+      "typeSpec" : "Color"
+      },
+    {
+      "objectType" : "Port",
+      "nodePortType" : "Out",
+      "defaultValues" : {
+        "Boolean" : true
+        },
+      "name" : "justPosition",
+      "execPortType" : "In",
+      "typeSpec" : "Boolean"
+      }
+    ],
+  "extDeps" : {
+    "InlineDrawing" : "*",
+    "mactext" : "*"
+    },
+  "presetGUID" : "90148BF4348F04328D60DDAC5A4EA829",
+  "code" : "function Color[] maCTextLocal(String instanceName, io DrawingHandle dhandle,String text,Xfo xfo,Color col,out InlineInstance instance,Boolean draw) {
+Size charindex[String];
+Size chardata[][];
+maCTextGetChars(charindex,chardata);
+
+Vec3 dummyvec;
+Color pixels[];
+
+String l[]=text.split(\"\\n\");
+String lines[];
+
+Color c=col;
+c.a=1.0;
+Color b();
+b.r=0;b.g=0;b.b=0;b.a=0;
+
+lines.resize(l.size()+2);
+for(Size i=0;i<l.size();i++) lines[1+i]=l[i];
+lines[0]=\" \";lines[lines.size()-1]=\" \";
+Size rows=0;
+Size cols=0;
+rows=lines.size();
+
+for(Size i=0;i<rows;i++)
+  {
+  if(lines[i].length()>cols) cols=lines[i].length();
+  }
+  pixels.resize(8*cols*rows*8);
+
+for(Size y=0;y<rows;y++)
+  {
+     maCTextOp<<<lines[y].length()>>>(charindex,chardata,lines,y,rows,cols,pixels,c,b);
+  } // for y in lines
+
+if(draw)
+  {
+    Xfo xfoo=xfo;
+    xfoo.sc.x*=cols;
+    xfoo.sc.z*=rows;
+    InlineDrawing drawing = dhandle.getDrawing();
+    dhandle.drawTexturedPlane ( instanceName, cols*8, rows*8, pixels, false, false, true, xfoo, dummyvec, instance );
+      dhandle.setActive(false);
+      dhandle.setActive(true);
+  }
+
+return(pixels);    
+}
+
+dfgEntry {
+  if(xfos.size() != labels.size())
+    return;
+    
+  Xfo shifts[SInt32];
+    
+  Xfo offset;
+  offset.ori.setFromAxisAndAngle(Vec3(1, 0, 0), HALF_PI);
+  offset.sc *= scale * 0.1;
+  for(Size i=0;i<xfos.size();i++) {
+    InlineInstance instance = null;
+    Xfo xfo;
+   if(justPosition)
+     xfo.tr = xfos[i].tr;
+   else
+     xfo = xfos[i];
+     
+    xfo = xfo * offset;
+    
+    Vec3 v = xfo.tr;
+    SInt32 hash = SInt32(v.x * 100.0) * 17 + SInt32(v.y * 100.0) * 219 + SInt32(v.z * 100.0) * 3;
+    Xfo shift = shifts.get(hash, Xfo());
+    
+    xfo = xfo * shift;
+    
+    shift.tr.z += 1.0;
+    
+    maCTextLocal(labels[i]+i, handle, labels[i], xfo, color, instance, true);
+    
+    shifts[hash] = shift;
+  }
+}
+",
+  "requiredPresets" : {
+    "Kraken.KrakenAnimation.DrawLabels" : {
+      "objectType" : "Func",
+      "title" : "DrawLabels",
+      "ports" : [
+        {
+          "objectType" : "Port",
+          "nodePortType" : "IO",
+          "defaultValues" : {
+            "DrawingHandle" : null
+            },
+          "name" : "handle",
+          "execPortType" : "IO",
+          "typeSpec" : "DrawingHandle"
+          },
+        {
+          "objectType" : "Port",
+          "nodePortType" : "Out",
+          "defaultValues" : {
+            "Xfo[]" : []
+            },
+          "name" : "xfos",
+          "execPortType" : "In",
+          "typeSpec" : "Xfo[]"
+          },
+        {
+          "objectType" : "Port",
+          "nodePortType" : "Out",
+          "defaultValues" : {
+            "String[]" : []
+            },
+          "name" : "labels",
+          "execPortType" : "In",
+          "typeSpec" : "String[]"
+          },
+        {
+          "objectType" : "Port",
+          "nodePortType" : "Out",
+          "defaultValues" : {
+            "Float32" : 0.300000011920929
+            },
+          "name" : "scale",
+          "execPortType" : "In",
+          "typeSpec" : "Float32"
+          },
+        {
+          "objectType" : "Port",
+          "nodePortType" : "Out",
+          "defaultValues" : {
+            "Color" : {
+              "r" : 1,
+              "g" : 1,
+              "b" : 1,
+              "a" : 1
+              }
+            },
+          "name" : "color",
+          "execPortType" : "In",
+          "typeSpec" : "Color"
+          },
+        {
+          "objectType" : "Port",
+          "nodePortType" : "Out",
+          "defaultValues" : {
+            "Boolean" : true
+            },
+          "name" : "justPosition",
+          "execPortType" : "In",
+          "typeSpec" : "Boolean"
+          }
+        ],
+      "extDeps" : {
+        "InlineDrawing" : "*",
+        "mactext" : "*"
+        },
+      "presetGUID" : "90148BF4348F04328D60DDAC5A4EA829",
+      "code" : "function Color[] maCTextLocal(String instanceName, io DrawingHandle dhandle,String text,Xfo xfo,Color col,out InlineInstance instance,Boolean draw) {
+Size charindex[String];
+Size chardata[][];
+maCTextGetChars(charindex,chardata);
+
+Vec3 dummyvec;
+Color pixels[];
+
+String l[]=text.split(\"\\n\");
+String lines[];
+
+Color c=col;
+c.a=1.0;
+Color b();
+b.r=0;b.g=0;b.b=0;b.a=0;
+
+lines.resize(l.size()+2);
+for(Size i=0;i<l.size();i++) lines[1+i]=l[i];
+lines[0]=\" \";lines[lines.size()-1]=\" \";
+Size rows=0;
+Size cols=0;
+rows=lines.size();
+
+for(Size i=0;i<rows;i++)
+  {
+  if(lines[i].length()>cols) cols=lines[i].length();
+  }
+  pixels.resize(8*cols*rows*8);
+
+for(Size y=0;y<rows;y++)
+  {
+     maCTextOp<<<lines[y].length()>>>(charindex,chardata,lines,y,rows,cols,pixels,c,b);
+  } // for y in lines
+
+if(draw)
+  {
+    Xfo xfoo=xfo;
+    xfoo.sc.x*=cols;
+    xfoo.sc.z*=rows;
+    InlineDrawing drawing = dhandle.getDrawing();
+    dhandle.drawTexturedPlane ( instanceName, cols*8, rows*8, pixels, false, false, true, xfoo, dummyvec, instance );
+      dhandle.setActive(false);
+      dhandle.setActive(true);
+  }
+
+return(pixels);    
+}
+
+dfgEntry {
+  if(xfos.size() != labels.size())
+    return;
+    
+  Xfo shifts[SInt32];
+    
+  Xfo offset;
+  offset.ori.setFromAxisAndAngle(Vec3(1, 0, 0), HALF_PI);
+  offset.sc *= scale * 0.1;
+  for(Size i=0;i<xfos.size();i++) {
+    InlineInstance instance = null;
+    Xfo xfo;
+   if(justPosition)
+     xfo.tr = xfos[i].tr;
+   else
+     xfo = xfos[i];
+     
+    xfo = xfo * offset;
+    
+    Vec3 v = xfo.tr;
+    SInt32 hash = SInt32(v.x * 100.0) * 17 + SInt32(v.y * 100.0) * 219 + SInt32(v.z * 100.0) * 3;
+    Xfo shift = shifts.get(hash, Xfo());
+    
+    xfo = xfo * shift;
+    
+    shift.tr.z += 1.0;
+    
+    maCTextLocal(labels[i]+i, handle, labels[i], xfo, color, instance, true);
+    
+    shifts[hash] = shift;
+  }
+}
+"
+      }
+    }
+  }

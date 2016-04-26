@@ -1,0 +1,41 @@
+// Created by kl2dfg (processFunction)
+{
+  "objectType" : "Func",
+  "metadata" : {
+    "uiTooltip" : "Supported types:\n  rig: KrakenKLRig\n  character: Character\n  result: KrakenKLRigPoseAdaptor\n"
+    },
+  "title" : "KrakenKLRigPoseAdaptor",
+  "ports" : [
+    {
+      "objectType" : "Port",
+      "nodePortType" : "Out",
+      "name" : "rig",
+      "execPortType" : "In",
+      "typeSpec" : "KrakenKLRig"
+      },
+    {
+      "objectType" : "Port",
+      "nodePortType" : "Out",
+      "name" : "character",
+      "execPortType" : "In",
+      "typeSpec" : "Character"
+      },
+    {
+      "objectType" : "Port",
+      "nodePortType" : "In",
+      "name" : "result",
+      "execPortType" : "Out",
+      "typeSpec" : "KrakenKLRigPoseAdaptor"
+      }
+    ],
+  "extDeps" : {
+    "KrakenAnimation" : "*"
+    },
+  "presetGUID" : "C1940FF079F6781CDD6B9A6859FB4B47",
+  "code" : "require KrakenAnimation;
+
+dfgEntry {
+  result = KrakenKLRigPoseAdaptor(rig, character);
+}
+"
+  }

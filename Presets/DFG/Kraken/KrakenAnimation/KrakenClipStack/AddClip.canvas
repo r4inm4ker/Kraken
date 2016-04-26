@@ -1,0 +1,44 @@
+// Created by kl2dfg (processFunction)
+{
+  "objectType" : "Func",
+  "metadata" : {
+    "uiTooltip" : "Supported types:\n  this: KrakenClipStack\n  clip: KrakenClip\n  weight: Float32\n"
+    },
+  "title" : "AddClip",
+  "ports" : [
+    {
+      "objectType" : "Port",
+      "nodePortType" : "IO",
+      "name" : "this",
+      "execPortType" : "IO",
+      "typeSpec" : "KrakenClipStack"
+      },
+    {
+      "objectType" : "Port",
+      "nodePortType" : "Out",
+      "name" : "clip",
+      "execPortType" : "In",
+      "typeSpec" : "KrakenClip"
+      },
+    {
+      "objectType" : "Port",
+      "nodePortType" : "Out",
+      "defaultValues" : {
+        "Float32" : 1
+        },
+      "name" : "weight",
+      "execPortType" : "In",
+      "typeSpec" : "Float32"
+      }
+    ],
+  "extDeps" : {
+    "KrakenAnimation" : "*"
+    },
+  "presetGUID" : "D91DF2CDCDCE03FD688609D028B24A1B",
+  "code" : "require KrakenAnimation;
+
+dfgEntry {
+  this.addClip(clip, weight);
+}
+"
+  }

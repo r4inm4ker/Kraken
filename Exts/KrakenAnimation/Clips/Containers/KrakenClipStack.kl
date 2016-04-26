@@ -1,0 +1,84 @@
+
+object KrakenClipStack : KrakenClip {
+  KrakenClip clips[];
+  Float32 weights[];
+};
+
+function KrakenClipStack() {}
+
+/// \dfgPresetDefault weight 1.0
+function KrakenClipStack.addClip!(KrakenClip clip, Float32 weight) {
+  this.clips.push(clip);
+  this.weights.push(weight);
+}
+
+/// \dfgPresetDefault weight 1.0
+function KrakenClipStack.setClipWeight!(UInt32 id, Float32 weight) {
+  this.weights[id] = weight;
+}
+
+function UInt32 KrakenClipStack.getClipCount() {
+  return this.clips.size();
+}
+
+function KrakenClip KrakenClipStack.getClip(UInt32 id) {
+  return this.clips[id];
+}
+
+UInt32 KrakenClipStack.getChannelCount() {
+  return 0;
+}
+
+String KrakenClipStack.getChannelName(UInt32 id) {
+  return "";
+}
+
+UInt32 KrakenClipStack.getChannelType(UInt32 id) {
+  return 0;
+}
+
+Float32 KrakenClipStack.evaluateFloat32!(UInt32 id, KrakenClipContext context) {
+  return Float32();
+}
+
+Xfo KrakenClipStack.evaluateXfo!(UInt32 id, KrakenClipContext context) {
+  return Xfo();
+}
+
+function KrakenClipStack.apply(io KrakenKLRig rig, KrakenClipContext context, Float32 factor) {
+  for(Size i=0;i<this.clips.size();i++)
+    this.clips[i].apply(rig, context, factor * this.weights[i]);
+}
+
+function JSONDictValue KrakenClipStack.saveToJson!() {
+  JSONArrayValue clips();
+  for(Size i=0;i<this.clips.size();i++) {
+    JSONDictValue clip();
+    clip.setString('clipType', String(this.clips[i].type()));
+    clip.setScalar('weight', this.weights[i]);
+    clip.set('content', this.clips[i].saveToJson());
+    clips.add(clip);
+  }
+
+  JSONDictValue content();
+  content.set('clips', clips);
+  return content;
+}
+
+function KrakenClipStack.loadFromJson!(JSONDictValue json) {
+  this.clips.resize(0);
+  this.weights.resize(0);
+
+  JSONArrayValue clips = json.get('clips');
+  for(Size i=0;i<clips.size();i++) {
+    JSONDictValue clip = clips.get(i);
+    String clipType = clip.getString('clipType');
+    KrakenClip c = KrakenClip_getFromTypeName(clipType);
+    if(c == null)
+      continue;
+    Float32 weight = clip.getScalar('weight');
+    JSONDictValue content = clip.get('content');
+    c.loadFromJson(content);
+    this.addClip(c, weight);
+  }
+}

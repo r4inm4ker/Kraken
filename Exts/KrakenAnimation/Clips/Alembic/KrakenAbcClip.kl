@@ -1,0 +1,201 @@
+require Math;
+require AlembicWrapper;
+require FileIO;
+require Animation;
+
+object KrakenAbcClip : KrakenClip {
+  String names[];
+  UInt32 nameToId[String];
+  UInt32 types[];
+  Vec2 ranges[];
+  Xfo xfos[][];
+  Float32 scalars[][];
+  KrakenClipLookup lookup;
+  String filePath;
+};
+
+function KrakenAbcClip() {
+}
+
+function KrakenAbcClip(String filePath) {
+  this.construct(filePath);
+}
+
+private function KrakenAbcClip.construct!(String filePath) {
+  this.names.resize(0);
+  this.nameToId.clear();
+  this.types.resize(0);
+  this.ranges.resize(0);
+  this.xfos.resize(0);
+  this.scalars.resize(0);
+
+  this.filePath = filePath;
+  FilePath path = filePath;
+  path = path.expandEnvVars();
+  if(!path.exists())
+    throw("Abc file "+filePath+' does not exist!');
+
+  AlembicArchiveReader archive(path.string());
+  String paths[] = archive.getPathsOfType('Xform');
+  Float64 propTimes[];
+
+  for(Size i=0;i<paths.size();i++) {
+    String name = paths[i];
+    AlembicXformReader reader = archive.getXform(name);
+    Float64 times[] = reader.getTimes();
+    if(propTimes.size() < times.size())
+      propTimes = times;
+
+    Xfo xfos[];
+    for(Size j=0;j<times.size();j++)
+      xfos.push(reader.readSample(times[j]));
+    if(xfos.size() == 0)
+      continue;
+
+    String channelName = name.reversePartition('/')[2].reversePartition(':')[2];
+    this.nameToId[channelName] = this.xfos.size();
+    this.names.push(channelName);
+    this.types.push(KrakenClipChannel_Xfo);
+    this.ranges.push(Vec2(Float32(times[0]), Float32(times[times.size()-1])));
+    this.xfos.push(xfos);
+  }
+
+  for(Size i=0;i<paths.size();i++) {
+    String name = paths[i];
+    String propKeys[] = archive.getPropertyKeys(name);
+    AlembicXformReader reader = archive.getXform(name);
+    Float64 times[] = propTimes;
+    for(Size j=0;j<propKeys.size();j++) {
+      if(!propKeys[j].startsWith('.xform/.arbGeomParams/'))
+        continue;
+
+      AlembicPropertyReader prop = archive.getProperty(name, propKeys[j]);
+      String propType = prop.getPropertyType();
+      Float32 scalars[];
+      for(Size k=0;k<times.size();k++) {
+        switch(propType) {
+          case "array-float32_t-1":
+          {
+            Float32 values32[] = prop.readFloat32ArraySample(times[k]);
+            scalars.push(values32[0]);
+            break;
+          }
+          case "array-float64_t-1":
+          {
+            Float64 values64[] = prop.readFloat64ArraySample(times[k]);
+            scalars.push(Float32(values64[0]));
+            break;
+          }
+        }
+      }
+      if(scalars.size() == 0)
+        continue;
+
+      String channelName = name.reversePartition('/')[2].reversePartition(':')[2];
+      channelName += '.'+propKeys[j].reversePartition('/')[2]; 
+      this.nameToId[channelName] = this.scalars.size();
+      this.names.push(channelName);
+      this.types.push(KrakenClipChannel_Float32);
+      this.ranges.push(Vec2(Float32(times[0]), Float32(times[times.size()-1])));
+      this.scalars.push(scalars);
+    }
+  }
+
+  this.lookup = null;
+}
+
+UInt32 KrakenAbcClip.getChannelCount() {
+  return this.names.size();
+}
+
+String KrakenAbcClip.getChannelName(UInt32 id) {
+  return this.names[id];
+}
+
+UInt32 KrakenAbcClip.getChannelType(UInt32 id) {
+  return this.types[id];
+}
+
+private KrakenAbcClip.getSampleInfo(Vec2 range, Size numSamples, Float64 time, out UInt32 a, out UInt32 b, out Float32 t) {
+  if(numSamples == 1) {
+    a = 0;
+    b = a;
+    t = 0.0;
+  } else if(range.x >= Float32(time)) {
+    a = 0;
+    b = a;
+    t = 0.0;
+  } else if(range.y <= Float32(time)) {
+    a = numSamples - 1;
+    b = a;
+    t = 0.0;
+  } else {
+    Float32 length = range.y - range.x;
+    Float32 step = length;
+    if(numSamples > 1)
+      step = length / Float32(numSamples - 1);
+
+    Float32 ratio = (Float32(time) - range.x) / length;
+    a = UInt32(ratio * Float32(numSamples));
+    b = a + 1;
+    t = ratio % step;
+  }
+}
+
+Float32 KrakenAbcClip.evaluateFloat32!(UInt32 id, KrakenClipContext context) {
+  if(this.types[id] != KrakenClipChannel_Float32)
+    return Float32();
+
+  UInt32 propId = id - this.xfos.size();
+  if(this.scalars[propId].size() == 0)
+    return Float32();
+
+  UInt32 a, b;
+  Float32 t;
+  this.getSampleInfo(this.ranges[id], this.scalars[propId].size(), context.time, a, b, t);
+
+  if(a == b)
+    return this.scalars[propId][a];
+  if(t <= 0.0001)
+    return this.scalars[propId][a];
+  if(t >= 0.9999)
+    return this.scalars[propId][b];
+
+  return Math_linearInterpolate(this.scalars[propId][a], this.scalars[propId][b], t);
+}
+
+Xfo KrakenAbcClip.evaluateXfo!(UInt32 id, KrakenClipContext context) {
+  if(this.xfos[id].size() == 0)
+    return Xfo();
+
+  UInt32 a, b;
+  Float32 t;
+  this.getSampleInfo(this.ranges[id], this.xfos[id].size(), context.time, a, b, t);
+
+  if(a == b)
+    return this.xfos[id][a];
+  if(t <= 0.0001)
+    return this.xfos[id][a];
+  if(t >= 0.9999)
+    return this.xfos[id][b];
+
+  return this.xfos[id][a].linearInterpolate(this.xfos[id][b], t);
+}
+
+function KrakenAbcClip.apply(io KrakenKLRig rig, KrakenClipContext context, Float32 factor) {
+  KrakenAbcClip clip = this;
+  if(clip.lookup == null)
+    clip.lookup = KrakenClipLookup(rig, clip);
+  clip.lookup.applyClip(rig, clip, context, factor);
+}
+
+function JSONDictValue KrakenAbcClip.saveToJson!() {
+  JSONDictValue json();
+  json.setString('filePath', this.filePath.replace('\\', '/'));
+  return json;
+}
+
+function KrakenAbcClip.loadFromJson!(JSONDictValue json) {
+  String filePath = json.getString('filePath');
+  this.construct(filePath);
+}

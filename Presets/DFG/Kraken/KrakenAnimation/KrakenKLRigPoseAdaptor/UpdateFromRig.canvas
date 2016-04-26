@@ -1,0 +1,48 @@
+// Created by kl2dfg (processFunction)
+{
+  "objectType" : "Func",
+  "metadata" : {
+    "uiTooltip" : "Supported types:\n  this: KrakenKLRigPoseAdaptor\n  context: KrakenClipContext\n  rig: KrakenKLRig\n  character: Character\n"
+    },
+  "title" : "UpdateFromRig",
+  "ports" : [
+    {
+      "objectType" : "Port",
+      "nodePortType" : "IO",
+      "name" : "this",
+      "execPortType" : "IO",
+      "typeSpec" : "KrakenKLRigPoseAdaptor"
+      },
+    {
+      "objectType" : "Port",
+      "nodePortType" : "Out",
+      "name" : "context",
+      "execPortType" : "In",
+      "typeSpec" : "KrakenClipContext"
+      },
+    {
+      "objectType" : "Port",
+      "nodePortType" : "In",
+      "name" : "rig",
+      "execPortType" : "Out",
+      "typeSpec" : "KrakenKLRig"
+      },
+    {
+      "objectType" : "Port",
+      "nodePortType" : "In",
+      "name" : "character",
+      "execPortType" : "Out",
+      "typeSpec" : "Character"
+      }
+    ],
+  "extDeps" : {
+    "KrakenAnimation" : "*"
+    },
+  "presetGUID" : "4ABD5BFE8BAF229093433E6A09B489F8",
+  "code" : "require KrakenAnimation;
+
+dfgEntry {
+  this.updateFromRig(context, rig, character);
+}
+"
+  }

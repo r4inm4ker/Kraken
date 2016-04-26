@@ -1,0 +1,48 @@
+// Created by kl2dfg (processFunction)
+{
+  "objectType" : "Func",
+  "metadata" : {
+    "uiTooltip" : "Supported types:\n  this: KrakenClip, KrakenStaticClip, KrakenAbcClip, KrakenClipStack, KrakenRotationWaveClip\n  rig: KrakenKLRig\n  context: KrakenClipContext\n  factor: Float32\n"
+    },
+  "title" : "Apply",
+  "ports" : [
+    {
+      "objectType" : "Port",
+      "nodePortType" : "Out",
+      "name" : "this",
+      "execPortType" : "In",
+      "typeSpec" : "$TYPE$"
+      },
+    {
+      "objectType" : "Port",
+      "nodePortType" : "IO",
+      "name" : "rig",
+      "execPortType" : "IO",
+      "typeSpec" : "KrakenKLRig"
+      },
+    {
+      "objectType" : "Port",
+      "nodePortType" : "Out",
+      "name" : "context",
+      "execPortType" : "In",
+      "typeSpec" : "KrakenClipContext"
+      },
+    {
+      "objectType" : "Port",
+      "nodePortType" : "Out",
+      "name" : "factor",
+      "execPortType" : "In",
+      "typeSpec" : "Float32"
+      }
+    ],
+  "extDeps" : {
+    "KrakenAnimation" : "*"
+    },
+  "presetGUID" : "4EEFA9370C2D99751A6D4428FA31D573",
+  "code" : "require KrakenAnimation;
+
+dfgEntry {
+  this.apply(rig, context, factor);
+}
+"
+  }

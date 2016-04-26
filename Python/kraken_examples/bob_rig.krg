@@ -132,7 +132,7 @@
     }, 
     {
       "source": "Arm:L.wrist", 
-      "target": "hand:L.armEnd", 
+      "target": "hand:R.armEnd", 
       "targetIndex": 0
     }, 
     {
@@ -177,7 +177,7 @@
     }, 
     {
       "source": "Arm:R.wrist", 
-      "target": "hand:R.armEnd", 
+      "target": "hand:L.armEnd", 
       "targetIndex": 0
     }, 
     {

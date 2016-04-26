@@ -1,0 +1,46 @@
+require JSON;
+require FileIO;
+
+function Boolean KrakenClip_saveToFile(Ref<KrakenClip> clipRef, String filePath) {
+  KrakenClip clip = clipRef;
+  FilePath path = filePath;
+  path = path.expandEnvVars();
+  JSONDoc doc();
+  doc.root.setString('clipType', String(clip.type()));
+  doc.root.set('content', clip.saveToJson());
+  String json = doc.write(2);
+  TextWriter writer(path.string());
+  writer.write(json);
+  return true;
+}
+
+function KrakenClip KrakenClip_getFromTypeName(String typeName) {
+  switch(typeName) {
+    case "KrakenStaticClip":
+      return KrakenStaticClip();
+    case "KrakenAbcClip":
+      return KrakenAbcClip();
+    case "KrakenClipStack":
+      return KrakenClipStack();
+    case "KrakenRotationWaveClip":
+      return KrakenRotationWaveClip();
+  }
+  return null;
+}
+
+function KrakenClip KrakenClip_loadFromFile(String filePath) {
+  FilePath path = filePath;
+  path = path.expandEnvVars();
+
+  TextReader reader(path.string());
+  String json = reader.readAll();
+  JSONDoc doc();
+  doc.parse(json);
+
+  String clipType = doc.root.getString('clipType');
+
+  KrakenClip clip = KrakenClip_getFromTypeName(clipType);
+  if(clip)
+    clip.loadFromJson(doc.root.get('content'));
+  return clip;
+}

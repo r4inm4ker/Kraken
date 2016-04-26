@@ -1,0 +1,84 @@
+require Math;
+require Characters;
+
+object KrakenKLRigPoseAdaptor : IPose {
+  KrakenKLRig rig;
+  Skeleton skeleton;
+  Character character;
+  SInt32 boneMap[];
+  Xfo rigBones[];
+  Xfo bones[];
+  UInt64 version;
+};
+
+function KrakenKLRigPoseAdaptor(KrakenKLRig rig, Character character) {
+  this.rig = rig;
+  this.character = character;
+  this.skeleton = character.getSkeleton();
+
+  String boneNames[];
+  SInt32 boneNameMap[String];
+  this.bones.resize(this.skeleton.getNumBones());
+  for(Size i=0;i<this.skeleton.getNumBones();i++) {
+    Bone bone = this.skeleton.getBone(i);
+    boneNameMap[bone.name] = boneNames.size();
+    boneNames.push(bone.name);
+    this.bones[i] = this.skeleton.getReferencePose(i);
+  }
+
+  String rigBoneNames[] = this.rig.getJointNames();
+  this.boneMap.resize(rigBoneNames.size());
+  this.rigBones.resize(rigBoneNames.size());
+  for(Size i=0;i<rigBoneNames.size();i++)
+    this.boneMap[i] = boneNameMap.get(rigBoneNames[i], -1);
+
+  // report(this.boneMap);
+}
+
+function KrakenKLRigPoseAdaptor.updateFromRig!(KrakenClipContext context, out KrakenKLRig rig, out Character character) {
+
+  Xfo xfos<>(this.rigBones.data(), this.rigBones.size());
+  this.rig.evaluate(context, true, xfos);
+  for(Size i=0;i<this.boneMap.size();i++) {
+    if(this.boneMap[i] == -1)
+      continue;
+    this.bones[this.boneMap[i]] = this.rigBones[i];
+  }
+
+  this.version += 3;
+  this.character.setPose(this);
+  this.character.incrementVersion();
+
+  rig = this.rig;
+  character = this.character;
+}
+
+/// \dfgPresetOmit
+function KrakenKLRigPoseAdaptor.reset!() {
+  // we don't allow this either
+}
+
+/// \dfgPresetOmit
+function Xfo KrakenKLRigPoseAdaptor.getBoneXfo!(Index index) {
+  return this.bones[index];
+}
+
+/// \dfgPresetOmit
+function KrakenKLRigPoseAdaptor.setBoneXfo!(Index index, Xfo xfo) {
+  // we don't allow this
+}
+
+/// \dfgPresetOmit
+function UInt64 KrakenKLRigPoseAdaptor.getVersion() {
+  return this.version;
+}
+
+/// \dfgPresetOmit
+function String KrakenKLRigPoseAdaptor.getDesc(String indent, Boolean includeXfos) {
+  return "KrakenKLRigPoseAdaptor";
+}
+
+/// \dfgPresetOmit
+function String KrakenKLRigPoseAdaptor.getDesc() {
+  return "KrakenKLRigPoseAdaptor";
+}

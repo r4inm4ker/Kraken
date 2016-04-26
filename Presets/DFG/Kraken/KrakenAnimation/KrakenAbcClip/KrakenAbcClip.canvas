@@ -1,0 +1,34 @@
+// Created by kl2dfg (processFunction)
+{
+  "objectType" : "Func",
+  "metadata" : {
+    "uiTooltip" : "Supported types:\n  filePath: String\n  result: KrakenAbcClip\n"
+    },
+  "title" : "KrakenAbcClip",
+  "ports" : [
+    {
+      "objectType" : "Port",
+      "nodePortType" : "Out",
+      "name" : "filePath",
+      "execPortType" : "In",
+      "typeSpec" : "String"
+      },
+    {
+      "objectType" : "Port",
+      "nodePortType" : "In",
+      "name" : "result",
+      "execPortType" : "Out",
+      "typeSpec" : "KrakenAbcClip"
+      }
+    ],
+  "extDeps" : {
+    "KrakenAnimation" : "*"
+    },
+  "presetGUID" : "F2D5796F8FE29C4DE81027B80DF4CBE8",
+  "code" : "require KrakenAnimation;
+
+dfgEntry {
+  result = KrakenAbcClip(filePath);
+}
+"
+  }
