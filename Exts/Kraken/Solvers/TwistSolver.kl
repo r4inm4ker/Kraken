@@ -1,0 +1,65 @@
+require InlineDrawing;
+require Geometry;
+
+object TwistSolver : KrakenSolver {
+};
+
+
+// Return Arguments for Kraken
+function KrakenSolverArg[] TwistSolver.getArguments(){
+  KrakenSolverArg args[] = this.parent.getArguments();
+  args.push(KrakenSolverArg('origin', 'In', 'Mat44'));
+  args.push(KrakenSolverArg('originUpV', 'In', 'Mat44'));
+  args.push(KrakenSolverArg('insert', 'In', 'Mat44'));
+  args.push(KrakenSolverArg('insertUpV', 'In', 'Mat44'));
+  args.push(KrakenSolverArg('pose', 'Out', 'Mat44[]'));
+  return args;
+}
+
+
+// Solve
+function TwistSolver.solve!
+(
+  in Boolean drawDebug,
+  in Scalar rigScale,
+  in Mat44 origin,
+  in Mat44 originUpV,
+  in Mat44 insert,
+  in Mat44 insertUpV,
+  io Mat44 pose[]
+  )
+{
+  Xfo xfo[];
+  xfo.resize(pose.size());
+
+  Xfo originDir;
+  originDir.tr = origin.translation();
+  originDir.ori.setFromDirectionAndUpvector(insert.translation() - origin.translation(),
+                                            originUpV.translation() - origin.translation());
+
+  Xfo insertDir;
+  insertDir.tr = insert.translation();
+  insertDir.ori.setFromDirectionAndUpvector(insert.translation() - origin.translation(),
+                                            insertUpV.translation() - insert.translation());
+
+  Quat xAlignOri;
+  xAlignOri.setFromAxisAndAngle(Vec3(0, 0, 1), Math_degToRad(90));
+
+  Scalar blend;
+  for(Integer i=0; i < pose.size(); i++) {
+    blend = Scalar(i) / (pose.size() - 1);
+    xfo[i] = originDir.linearInterpolate(insertDir, blend);
+    xfo[i].ori *= xAlignOri;
+  }
+
+  for(Integer i=0; i < pose.size(); i++) {
+    pose[i] = xfo[i].toMat44();
+  }
+
+
+  // Set debugging visibility.
+  this.setDebug(this.drawDebug);
+  if(this.drawDebug) {
+
+  }
+}

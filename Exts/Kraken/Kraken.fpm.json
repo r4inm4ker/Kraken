@@ -15,6 +15,7 @@
     "Solvers/DynamicChainSolver.kl",
     "Solvers/BipedFootSolver.kl",
     "Solvers/BipedFootPivotSolver.kl",
+    "Solvers/TwistSolver.kl",
     "PersistenceHelpers.kl"
   ]
 }

@@ -212,19 +212,52 @@ class TwistComponentRig(TwistComponent):
         self.twistJointOutput.setTarget(self.twistOutputs)
 
 
-        # ==============
-        # Constrain I/O
-        # ==============
+        # ============
+        # Constraints
+        # ============
         # Constrain inputs
-        self.originUpVInputConstraint = PoseConstraint('_'.join([self.originUpVTransform.getName(), 'To', self.originTransform.getName()]))
-        self.originUpVInputConstraint.addConstrainer(self.originTransform)
-        self.originUpVInputConstraint.setMaintainOffset(True)
-        self.originUpVTransform.addConstraint(self.originUpVInputConstraint)
 
-        self.insertUpVInputConstraint = PoseConstraint('_'.join([self.insertUpVTransform.getName(), 'To', self.insertTransform.getName()]))
-        self.insertUpVInputConstraint.addConstrainer(self.insertTransform)
-        self.insertUpVInputConstraint.setMaintainOffset(True)
-        self.insertUpVTransform.addConstraint(self.insertUpVInputConstraint)
+        # Origin and Insert
+        constraintName = '_'.join([self.originTransform.getName(),
+                                   'To',
+                                   self.originInputTgt.getName()])
+
+        self.originInputConstraint = self.originTransform.constrainTo(
+            self.originInputTgt,
+            constraintType='Position',
+            maintainOffset=True,
+            name=constraintName)
+
+        constraintName = '_'.join([self.insertTransform.getName(),
+                                   'To',
+                                   self.insertInputTgt.getName()])
+
+        self.insertInputConstraint = self.insertTransform.constrainTo(
+            self.insertInputTgt,
+            constraintType='Position',
+            maintainOffset=True,
+            name=constraintName)
+
+        # Up Vectors
+        constraintName = '_'.join([self.originUpVTransform.getName(),
+                                   'To',
+                                   self.originInputTgt.getName()])
+
+        self.originUpVInputConstraint = self.originUpVTransform.constrainTo(
+            self.originInputTgt,
+            constraintType='Pose',
+            maintainOffset=True,
+            name=constraintName)
+
+        constraintName = '_'.join([self.insertUpVTransform.getName(),
+                                   'To',
+                                   self.insertInputTgt.getName()])
+
+        self.insertUpVInputConstraint = self.insertUpVTransform.constrainTo(
+            self.insertInputTgt,
+            constraintType='Pose',
+            maintainOffset=True,
+            name=constraintName)
 
         # Constrain outputs
 
@@ -233,21 +266,21 @@ class TwistComponentRig(TwistComponent):
         # Add Splice Ops
         # ===============
         # Add Spine Splice Op
-        # self.twistKLOp = KLOperator('TwistOp', 'TwistSolver', 'Kraken')
-        # self.addOperator(self.twistKLOp)
+        self.twistKLOp = KLOperator('TwistOp', 'TwistSolver', 'Kraken')
+        self.addOperator(self.twistKLOp)
 
-        # # Add Att Inputs
-        # self.twistKLOp.setInput('drawDebug', self.drawDebugInputAttr)
-        # self.twistKLOp.setInput('rigScale', self.rigScaleInputAttr)
+        # Add Att Inputs
+        self.twistKLOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.twistKLOp.setInput('rigScale', self.rigScaleInputAttr)
 
-        # # Add Xfo Inputs
-        # self.twistKLOp.setInput('origin', self.originTransform)
-        # self.twistKLOp.setInput('originUpV', self.originUpVTransform)
-        # self.twistKLOp.setInput('insert', self.insertTransform)
-        # self.twistKLOp.setInput('insertUpV', self.insertUpVTransform)
+        # Add Xfo Inputs
+        self.twistKLOp.setInput('origin', self.originTransform)
+        self.twistKLOp.setInput('originUpV', self.originUpVTransform)
+        self.twistKLOp.setInput('insert', self.insertTransform)
+        self.twistKLOp.setInput('insertUpV', self.insertUpVTransform)
 
-        # # Add Xfo Outputs
-        # self.twistKLOp.setOutput('outputs', self.twistOutputs)
+        # Add Xfo Outputs
+        self.twistKLOp.setOutput('pose', self.twistOutputs)
 
         # # Add Deformer Splice Op
         self.deformersToOutputsKLOp = KLOperator('twistDeformerKLOp', 'MultiPoseConstraintSolver', 'Kraken')
@@ -311,6 +344,8 @@ class TwistComponentRig(TwistComponent):
         self.setNumDeformers(numDeformers)
 
         # Evaluate Constraints
+        self.originInputConstraint.evaluate()
+        self.insertInputConstraint.evaluate()
         self.originUpVInputConstraint.evaluate()
         self.insertUpVInputConstraint.evaluate()
 
