@@ -5,8 +5,7 @@ operator entry() {
 
 	TwistSolver solver();
 
-  Scalar blendStart = 0.75;
-  Scalar blendEnd = 1.0;
+  Scalar bias = 0.75;
 
   Mat44 origin;
   origin.setTranslation(Vec3(0, 0, 0));
@@ -30,7 +29,7 @@ operator entry() {
   Mat44 outPose[];
   outPose.resize(5);
 
-  solver.solve(false, 1.0, blendStart, blendEnd, origin, originUpV, insert, insertUpV, outPose);
+  solver.solve(false, Scalar(1.0), bias, origin, originUpV, insert, insertUpV, outPose);
 
   for(Integer i=0; i < outPose.size(); i++) {
     if (i > 0) {
