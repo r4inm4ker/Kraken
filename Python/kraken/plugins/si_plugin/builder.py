@@ -414,25 +414,6 @@ class Builder(Builder):
         dccSceneItem = parentDCCSceneItem.AddProperty("CustomParameterSet", False, groupName)
         self._registerSceneItemPair(kAttributeGroup, dccSceneItem)
 
-        # Create Attributes on this Attribute Group
-        for i in xrange(kAttributeGroup.getNumAttributes()):
-            kAttribute = kAttributeGroup.getAttributeByIndex(i)
-
-            if kAttribute.isTypeOf("BoolAttribute"):
-                self.buildBoolAttribute(kAttribute)
-
-            elif kAttribute.isTypeOf("ScalarAttribute"):
-                self.buildScalarAttribute(kAttribute)
-
-            elif kAttribute.isTypeOf("IntegerAttribute"):
-                self.buildIntegerAttribute(kAttribute)
-
-            elif kAttribute.isTypeOf("StringAttribute"):
-                self.buildStringAttribute(kAttribute)
-
-            else:
-                raise NotImplementedError(kAttribute.getName() + ' has an unsupported type: ' + str(type(kAttribute)))
-
         return True
 
 

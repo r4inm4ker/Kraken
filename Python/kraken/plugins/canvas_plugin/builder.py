@@ -795,24 +795,6 @@ class Builder(Builder):
 
         """
 
-        for i in xrange(kAttributeGroup.getNumAttributes()):
-            kAttribute = kAttributeGroup.getAttributeByIndex(i)
-
-            if kAttribute.isTypeOf("BoolAttribute"):
-                self.buildBoolAttribute(kAttribute)
-
-            elif kAttribute.isTypeOf("ScalarAttribute"):
-                self.buildScalarAttribute(kAttribute)
-
-            elif kAttribute.isTypeOf("IntegerAttribute"):
-                self.buildIntegerAttribute(kAttribute)
-
-            elif kAttribute.isTypeOf("StringAttribute"):
-                self.buildStringAttribute(kAttribute)
-
-            else:
-                raise NotImplementedError(kAttribute.getName() + ' has an unsupported type: ' + str(type(kAttribute)))
-
         return True
 
     def connectAttribute(self, kAttribute):

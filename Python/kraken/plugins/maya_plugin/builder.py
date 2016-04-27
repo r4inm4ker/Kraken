@@ -26,7 +26,7 @@ class Builder(Builder):
     """Builder object for building Kraken objects in Maya."""
 
     def __init__(self):
-        super(Builder, self).__init__()
+        super(Builder, self).__init__(debugMode = True)
 
 
     def deleteBuildElements(self):
@@ -425,25 +425,6 @@ class Builder(Builder):
         pm.setAttr(parentDCCSceneItem + "." + groupName, lock=True)
 
         self._registerSceneItemPair(kAttributeGroup, dccSceneItem)
-
-         # Create Attributes on this Attribute Group
-        for i in xrange(kAttributeGroup.getNumAttributes()):
-            kAttribute = kAttributeGroup.getAttributeByIndex(i)
-
-            if kAttribute.isTypeOf("BoolAttribute"):
-                self.buildBoolAttribute(kAttribute)
-
-            elif kAttribute.isTypeOf("ScalarAttribute"):
-                self.buildScalarAttribute(kAttribute)
-
-            elif kAttribute.isTypeOf("IntegerAttribute"):
-                self.buildIntegerAttribute(kAttribute)
-
-            elif kAttribute.isTypeOf("StringAttribute"):
-                self.buildStringAttribute(kAttribute)
-
-            else:
-                raise NotImplementedError(kAttribute.getName() + ' has an unsupported type: ' + str(type(kAttribute)))
 
         return True
 

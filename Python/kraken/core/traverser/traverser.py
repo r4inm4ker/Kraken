@@ -143,6 +143,9 @@ class Traverser(object):
 
         self._visited[item.getId()] = True
 
+        if hasattr(item, 'getParent') and item.getParent():
+            self.__visitItem(item.getParent(), itemCallback, discoverCallback, discoveredItemsFirst)
+
         sourcedByConstraintOrOperator = False
         if discoveredItemsFirst:
             for source in item.getSources():

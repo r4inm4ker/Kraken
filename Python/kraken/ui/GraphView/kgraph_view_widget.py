@@ -253,7 +253,7 @@ class KGraphViewWidget(GraphViewWidget):
                     self._guideBuilder.deleteBuildElements()
 
             self._guideBuilder = plugins.getBuilder()
-            self._guideBuilder.buildRig(self.guideRig)
+            self._guideBuilder.build(self.guideRig)
 
             self.reportMessage('Guide Rig Build Success', level='information', timeOut=6000)
 
@@ -301,7 +301,7 @@ class KGraphViewWidget(GraphViewWidget):
                     self._builder.deleteBuildElements()
 
             self._builder = plugins.getBuilder()
-            self._builder.buildRig(rig)
+            self._builder.build(rig)
 
             self.reportMessage('Rig Build Success', level='information', timeOut=6000)
 

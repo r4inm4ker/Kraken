@@ -11,7 +11,7 @@ Profiler.getInstance().push("spineClav_build")
 spineClavRig = SpineClavRig("char_bob")
 
 builder = plugins.getBuilder()
-builder.buildRig(spineClavRig)
+builder.build(spineClavRig)
 
 Profiler.getInstance().pop()
 

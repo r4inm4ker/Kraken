@@ -28,5 +28,5 @@ config.setMetaData('SetupDebugDrawing', True)
 config.setMetaData('CollapseComponents', False)
 config.setMetaData('AddCollectJointsNode', True)
 
-builder.buildRig(rig)
+builder.build(rig)
 

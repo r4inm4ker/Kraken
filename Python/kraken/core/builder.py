@@ -12,6 +12,7 @@ from kraken.core.configs.config import Config
 from kraken.core.profiler import Profiler
 
 from kraken.core.objects.scene_item import SceneItem
+from kraken.core.objects.object_3d import Object3D
 from kraken.core.objects.components.component import Component
 from kraken.core.objects.constraints.pose_constraint import Constraint
 from kraken.core.objects.operators.operator import Operator
@@ -597,7 +598,7 @@ class Builder(object):
         else:
             raise NotImplementedError(kObject.getName() + ' has an unsupported type: ' + str(type(kObject)))
 
-        if dccSceneItem is not None:
+        if dccSceneItem is not None and isinstance(kObject, Object3D):
             self.setTransform(kObject)
             self.lockParameters(kObject)
             self.setVisibility(kObject)
@@ -626,19 +627,19 @@ class Builder(object):
         traverser.addRootItem(kSceneItem)
         
         rootItems = traverser.traverse(discoverCallback=traverser.discoverChildren, discoveredItemsFirst=False)
-        rootItems = reversed(rootItems)
 
         traverser = Traverser('Build')
         for rootItem in rootItems:
             traverser.addRootItem(rootItem)
 
-        traverser.traverse()
-
-        items = traverser.items
-        
+        items = traverser.traverse()
         if items[0] != kSceneItem:
             raise NotImplementedError(rig.getName() + ' resulted in an unexpected traversal.')
-        items[1:]
+
+        if self._debugMode:
+            for i in xrange(len(items)):
+                print 'Build order %d: %s' % (i, items[i].getPath())
+            print '_-----------------------------------_---------------_------------'
 
         try:
             self._preBuild(kSceneItem)
