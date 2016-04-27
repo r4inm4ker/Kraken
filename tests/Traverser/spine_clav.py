@@ -23,8 +23,8 @@ clavicleSpineEndInput = clavComponent.getInputByName('spineEnd')
 clavicleSpineEndInput.setConnection(vertebraeOutputs, 2)
 
 trav = Traverser()
-trav.addRootItem(clavComponent)
 trav.addRootItem(spineComponent)
+trav.addRootItem(clavComponent)
 
 items = trav.traverse(discoverCallback = trav.discoverChildren)
 

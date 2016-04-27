@@ -1,5 +1,6 @@
 Failed to find DCC client. Falling back to Python client.
 Visited spine:M
+Visited clavicle:M
 Visited controls
 Visited controls.spine:M
 Visited controls.spine:M.inputs
@@ -45,3 +46,25 @@ Visited deformers.spine:M.spine04
 Visited spine:M.spineDeformerKLOp
 Visited deformers.spine:M.pelvis
 Visited spine:M.pelvisDeformerKLOp
+Visited controls
+Visited controls.clavicle:M
+Visited controls.clavicle:M.inputs
+Visited controls.clavicle:M.inputs.inputs
+Visited controls.clavicle:M.inputs.inputs.drawDebug
+Visited controls.clavicle:M.inputs.inputs.rigScale
+Visited controls.clavicle:M.inputs.inputs.rightSide
+Visited controls.clavicle:M.inputs.spineEnd
+Visited controls.clavicle:M.inputs.spineEnd.spineEnd_To_spine03_PoseConstraint
+Visited controls.clavicle:M.outputs
+Visited controls.clavicle:M.outputs.outputs
+Visited controls.clavicle:M.outputs.clavicle
+Visited controls.clavicle:M.clavicle
+Visited controls.clavicle:M.clavicle.clavicle_To_spineEnd
+Visited controls.clavicle:M.clavicle.clavicle
+Visited controls.clavicle:M.outputs.clavicle.clavicle_To_clavicle
+Visited controls.clavicle:M.outputs.clavicleEnd
+Visited controls.clavicle:M.outputs.clavicleEnd.clavicleEnd_To_clavicle
+Visited deformers.clavicle:M.clavicle
+Visited deformers
+Visited deformers.clavicle:M
+Visited clavicle:M.clavicleDeformerKLOp

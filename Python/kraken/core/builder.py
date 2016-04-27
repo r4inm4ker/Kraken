@@ -562,6 +562,12 @@ class Builder(object):
         elif kObject.isTypeOf("ScaleConstraint"):
             dccSceneItem = self.buildScaleConstraint(kObject)
 
+        elif kObject.isTypeOf("KLOperator"):
+            dccSceneItem = self.buildKLOperator(kObject)
+
+        elif kObject.isTypeOf("CanvasOperator"):
+            dccSceneItem = self.buildCanvasOperator(kObject)
+
         elif kObject.isTypeOf('AttributeGroup'):
             dccSceneItem = self.buildAttributeGroup(kObject)
 
