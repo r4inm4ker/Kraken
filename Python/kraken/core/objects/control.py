@@ -308,7 +308,8 @@ class Control(Curve):
         """Adds a CtrlSpace object above this object
 
         Args:
-            name (string): optional name for this CtrlSpace, default is same as this object
+            name (string): optional name for this CtrlSpace, default is same as
+                this object
 
         Returns:
             object: New CtrlSpace object
@@ -326,5 +327,10 @@ class Control(Curve):
         newCtrlSpace.addChild(self)
 
         newCtrlSpace.xfo = Xfo(self.xfo)
+
+        # To ensure that names of control spaces don't clash with controls and
+        # if they do, set's the control space's name back to what it was intended
+        if self.getName() == name:
+            newCtrlSpace.setName(name)
 
         return newCtrlSpace
