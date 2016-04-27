@@ -6,7 +6,8 @@ ComponentInputPort -- Component input port representation.
 """
 
 from kraken.core.objects.scene_item import SceneItem
-
+from kraken.core.objects.object_3d import Object3D
+from kraken.core.objects.attributes.attribute import Attribute
 
 class ComponentInputPort(SceneItem):
     """Component Input Object."""
@@ -17,6 +18,7 @@ class ComponentInputPort(SceneItem):
         self._connection = None
         self._target = None
         self._index = 0
+        self._sourceIndex = None
 
         self.setDataType(dataType)
 
@@ -76,7 +78,7 @@ class ComponentInputPort(SceneItem):
         return self._connection
 
 
-    def setConnection(self, connectionObj):
+    def setConnection(self, connectionObj, index = 0):
         """Sets the connection to the component output.
 
         Args:
@@ -95,8 +97,8 @@ class ComponentInputPort(SceneItem):
             raise Exception("'connectionObj' is already set as the connection.")
 
         self._connection = connectionObj
-
         connectionObj._addConnection(self)
+        self.__setIndex(index)
 
         return True
 
@@ -158,7 +160,7 @@ class ComponentInputPort(SceneItem):
         return self._index
 
 
-    def setIndex(self, index):
+    def __setIndex(self, index):
         """Sets the index of the connection.
 
         Args:
@@ -169,6 +171,30 @@ class ComponentInputPort(SceneItem):
 
         """
 
+        # if you see an error calling this or the previous public
+        # version of this you will need to refactor your code to call
+        # setConnection(target, index = 12) for example.
+
         self._index = index
+
+        # register the source
+        # this is relevant for traversing for build order
+        target = self.getTarget()
+        connectedTarget = self._connection.getTarget()
+
+        if isinstance(connectedTarget, list):
+            connectedTarget = connectedTarget[self._index]
+
+        if self._sourceIndex is None:
+            self._sourceIndex = target.addSource(connectedTarget)
+        else:
+            target.setSource(self._sourceIndex, connectedTarget)
+
+        if isinstance(target, Attribute):
+            target.connect(connectedTarget)
+
+        elif isinstance(target, Object3D):
+            target.removeAllConstraints()
+            target.constrainTo(connectedTarget, maintainOffset=False)
 
         return True

@@ -438,52 +438,6 @@ class Builder(object):
     # ========================
     # Component Build Methods
     # ========================
-    def buildXfoConnection(self, componentInput):
-        """Builds the constraint between the target and connection target.
-
-        Args:
-            componentInput (object): kraken component input to build connections for.
-
-        Returns:
-            bool: True if successful.
-
-        """
-        if self._debugMode:
-            print "buildXfoConnection: " + componentInput.getPath()
-
-        if componentInput.isConnected() is False:
-            return False
-
-        connection = componentInput.getConnection()
-        connectionTarget = connection.getTarget()
-        inputTarget = componentInput.getTarget()
-
-        if connection.getDataType().endswith('[]'):
-            if componentInput.getIndex() > len(connection.getTarget()) - 1:
-
-                inputParent = componentInput.getParent()
-                inputParentDecoration = inputParent.getNameDecoration()
-                fullInputName = inputParent.getName() + inputParentDecoration + "." + componentInput.getName()
-
-                raise Exception(fullInputName + " index ("
-                                + str(componentInput.getIndex()) + ") is out of range ("
-                                + str(len(connection.getTarget()) - 1) + ")!")
-
-            connectionTarget = connection.getTarget()[componentInput.getIndex()]
-        else:
-            connectionTarget = connection.getTarget()
-
-        # There should be no offset between an output xfo from one component and the connected input of another
-        # If connected, they should be exactly the same.
-
-        inputTarget.removeAllConstraints()
-        constraint = inputTarget.constrainTo(connectionTarget, maintainOffset=False)
-
-        dccSceneItem = self.buildPoseConstraint(constraint)
-        self._registerSceneItemPair(componentInput, dccSceneItem)
-
-        return True
-
 
     def buildAttributeConnection(self, componentInput):
         """Builds the link between the target and connection target.
@@ -646,47 +600,6 @@ class Builder(object):
         return dccSceneItem
 
 
-    def buildInputConnections(self, kObject): # todo
-        """Builds the connections between the component inputs of each
-        component.
-
-        Only input connections are built otherwise duplicate constraints / expressions
-        would be created.
-
-        Args:
-            kObject (object): kraken object to create connections for.
-
-        Returns:
-            bool: True if successful.
-
-        """
-
-        if kObject.isTypeOf('Component'):
-
-            # Build input connections
-            for i in xrange(kObject.getNumInputs()):
-
-                componentInput = kObject.getInputByIndex(i)
-                if componentInput.getTarget() is None or componentInput.getConnection() is None:
-                    continue
-
-                if self._debugMode:
-                    print "buildConnection: " + componentInput.getName()
-
-                if componentInput.getDataType().startswith('Xfo'):
-                    self.buildXfoConnection(componentInput)
-
-                elif componentInput.getDataType().startswith(('Boolean', 'Float', 'Integer', 'String')):
-                    self.buildAttributeConnection(componentInput)
-
-        # Build connections for children.
-        for i in xrange(kObject.getNumChildren()):
-            child = kObject.getChildByIndex(i)
-            self.buildInputConnections(child)
-
-        return True
-
-
     def build(self, kSceneItem):
         """Builds a rig object.
 
@@ -706,7 +619,7 @@ class Builder(object):
         traverser = Traverser('Children')
         traverser.addRootItem(kSceneItem)
         
-        rootItems = traverser.traverse(discoverCallback=traverser.discoverByChildren, discoveredItemsFirst=False)
+        rootItems = traverser.traverse(discoverCallback=traverser.discoverChildren, discoveredItemsFirst=False)
         rootItems = reversed(rootItems)
 
         traverser = Traverser('Build')

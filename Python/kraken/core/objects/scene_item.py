@@ -203,17 +203,30 @@ class SceneItem(object):
 
 
     def addSource(self, source):
-        """Sets the source attribute of this object.
+        """Adds another source to this object.
 
         Arguments:
         source (Object): Object that is the source of this one.
 
         Returns:
-            bool: True if successful.
+            int: Index of the source used
 
         """
 
         self._sources.append(source)
+        return True
+
+
+    def setSource(self, index, source):
+        """Sets the source of this object.
+
+        Arguments:
+        index (int): The index of the source to update.
+        source (Object): Object that is the source of this one.
+
+        """
+
+        self._sources[index] = source
         return True
 
 

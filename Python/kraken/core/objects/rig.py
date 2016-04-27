@@ -149,8 +149,7 @@ class Rig(Container):
                 connectionFailure = True
 
             if connectionFailure is False:
-                inputPort.setConnection(outputPort)
-                inputPort.setIndex(connectionData.get('targetIndex', 0))
+                inputPort.setConnection(outputPort, index = connectionData.get('targetIndex', 0))
 
         Profiler.getInstance().pop()
 

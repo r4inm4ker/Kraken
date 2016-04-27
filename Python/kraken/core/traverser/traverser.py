@@ -7,8 +7,10 @@ Traverser - Base Traverser.
 
 from kraken.core.objects.scene_item import SceneItem
 from kraken.core.objects.object_3d import Object3D
+from kraken.core.objects.components.component import Component
 from kraken.core.objects.attributes.attribute_group import AttributeGroup
 from kraken.core.objects.constraints.constraint import Constraint
+from kraken.core.objects.operators.operator import Operator
 
 class Traverser(object):
     """Kraken base traverser for any scene item."""
@@ -49,6 +51,22 @@ class Traverser(object):
                 return False
 
         self._rootItems.append(item)
+
+        return True
+
+    def addRootItems(self, items):
+        """Adds a bunch of root items to this Traverser
+
+        Args:
+            items (SceneItem[]): The SceneItems to add as root items.
+
+        Returns:
+            bool: True if successful.
+
+        """
+
+        for item in items:
+            self.addRootItem(item)
 
         return True
 
@@ -125,7 +143,14 @@ class Traverser(object):
 
         self._visited[item.getId()] = True
 
-        if not discoveredItemsFirst:
+        sourcedByConstraintOrOperator = False
+        if discoveredItemsFirst:
+            for source in item.getSources():
+                if isinstance(source, Constraint) or isinstance(source, Operator):
+                    sourcedByConstraintOrOperator = True
+                    break
+
+        if not discoveredItemsFirst or sourcedByConstraintOrOperator:
             self.__collectVisitedItem(item, itemCallback)
 
         if discoverCallback:
@@ -134,16 +159,21 @@ class Traverser(object):
                 for discoveredItem in discoveredItems:
                     self.__visitItem(discoveredItem, itemCallback, discoverCallback, discoveredItemsFirst)
 
-        if discoveredItemsFirst:
+        if discoveredItemsFirst and not sourcedByConstraintOrOperator:
             self.__collectVisitedItem(item, itemCallback)
 
         return True
 
     def discoverChildren(self, item):
         result = []
+
+        if isinstance(item, Component):
+            result += item.getItems().values()
         
         if isinstance(item, Object3D):
             for i in xrange(item.getNumAttributeGroups()):
+                if item.getAttributeGroupByIndex(i).getName() == 'implicitAttrGrp':
+                    continue
                 result.append(item.getAttributeGroupByIndex(i))
             result += item.getChildren()
 
@@ -157,6 +187,16 @@ class Traverser(object):
         result = []
 
         for source in item.getSources():
+            if isinstance(source, Operator):
+                for outputName in source.getOutputNames():
+                    operatorOutputs = source.getOutput(outputName)
+                    if not isinstance(operatorOutputs, list):
+                        operatorOutputs = [operatorOutputs]
+                    for operatorOutput in operatorOutputs:
+                        if not isinstance(operatorOutput, SceneItem):
+                            continue
+                        result.append(operatorOutput)
+
             result.append(source)
 
         return result
