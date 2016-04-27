@@ -4,17 +4,18 @@
     "Solvers/Math.kl",
     "Solvers/KrakenSolverArg.kl",
     "Solvers/KrakenSolver.kl",
-    "Solvers/KrakenRigScaleSolver.kl",
-    "Solvers/KrakenDirectionConstraintSolver.kl",
-    "Solvers/KrakenPoseConstraintSolver.kl",
-    "Solvers/KrakenMultiPoseConstraintSolver.kl"
+    "Solvers/RigScaleSolver.kl",
+    "Solvers/DirectionConstraintSolver.kl",
+    "Solvers/PoseConstraintSolver.kl",
+    "Solvers/MultiPoseConstraintSolver.kl"
     "Solvers/BezierSpineSolver.kl",
     "Solvers/TwoBoneIKSolver.kl",
     "Solvers/NBoneIKSolver.kl",
     "Solvers/TentacleSolver.kl",
     "Solvers/DynamicChainSolver.kl",
-    "Solvers/BipedFootSolver.kl",
-    "Solvers/BipedFootPivotSolver.kl",
+    "Solvers/Biped/BipedFootSolver.kl",
+    "Solvers/Biped/BipedFootPivotSolver.kl",
+    "Solvers/Biped/NeckGuideSolver.kl",
     "Solvers/TwistSolver.kl",
     "PersistenceHelpers.kl"
   ]
