@@ -9,16 +9,31 @@ SceneItem - Base SceneItem Object.
 class SceneItem(object):
     """Kraken base object type for any 3D object."""
 
+    __maxId = 0
+
     def __init__(self, name, parent=None):
         super(SceneItem, self).__init__()
         self._parent = parent
         self._name = name
         self._component = None
-
+        self._source = None
+        self._id = SceneItem.__maxId
+        SceneItem.__maxId = SceneItem.__maxId + 1
 
     # ==============
     # Type Methods
     # ==============
+    def getId(self):
+        """Returns the unique Id of this object.
+
+        Returns:
+            int: Unique id.
+
+        """
+
+        return self._id
+
+
     def getTypeName(self):
         """Returns the class name of this object.
 
@@ -169,8 +184,40 @@ class SceneItem(object):
         """
 
         self._parent = parent
+        if self._source is None:
+            self.setSource(parent)
 
         return True
+
+    # ===============
+    # Source Methods
+    # ===============
+    def getSource(self):
+        """Returns the source of the object as an object.
+
+        Returns:
+            Object: Source of this object.
+
+        """
+
+        return self._source
+
+
+    def setSource(self, source):
+        """Sets the source attribute of this object.
+
+        Arguments:
+        source (Object): Object that is the source of this one.
+
+        Returns:
+            bool: True if successful.
+
+        """
+
+        self._source = source
+
+        return True
+
 
     # ==================
     # Component Methods

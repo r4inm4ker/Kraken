@@ -62,6 +62,7 @@ class Constraint(SceneItem):
         """
 
         self._constrainee = constrainee
+        self._constrainee.setSource(self)
 
         return True
 

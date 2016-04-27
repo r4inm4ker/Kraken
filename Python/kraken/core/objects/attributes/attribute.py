@@ -248,6 +248,7 @@ class Attribute(SceneItem):
         """
 
         self._connection = attribute
+        self.setSource(attribute)
 
         return True
 

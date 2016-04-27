@@ -39,9 +39,10 @@ class Operator(SceneItem):
             raise Exception("Input with name '" + name + "' was not found in operator: " + self.getName() + ".")
 
         if isinstance(self.inputs[name], list):
-            self.inputs.resize(count)
+            while len(self.inputs[name]) < count:
+                self.inputs[name].append(None)
         else:
-            raise Exception("Output is not an array output: " + name + ".")
+            raise Exception("Input is not an array input: " + name + ".")
 
         return True
 
@@ -123,7 +124,8 @@ class Operator(SceneItem):
             raise Exception("Output with name '" + name + "' was not found in operator: " + self.getName() + ".")
 
         if isinstance(self.outputs[name], list):
-            self.outputs.resize(count)
+            while len(self.outputs[name]) < count:
+                self.outputs[name].append(None)
         else:
             raise Exception("Output is not an array output: " + name + ".")
 
@@ -149,12 +151,16 @@ class Operator(SceneItem):
             # Set the entire output array
             if isinstance(operatorOutput, list):
                 self.outputs[name] = operatorOutput
+                for outputItem in operatorOutput:
+                    outputItem.setSource(self)
             else:
                 if index >= len(self.outputs[name]):
                     raise Exception("Out of range index for array output index: " + str(index) + " size: " + str(len(self.outputs[name])) + ".")
                 self.outputs[name][index] = operatorOutput
+                operatorOutput.setSource(self)
         else:
             self.outputs[name] = operatorOutput
+            operatorOutput.setSource(self)
 
         return True
 
