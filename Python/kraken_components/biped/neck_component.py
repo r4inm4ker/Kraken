@@ -1,25 +1,14 @@
-from kraken.core.maths import Vec3
-from kraken.core.maths.xfo import Xfo
+from kraken.core.maths import Vec3, Xfo, Quat
 
 from kraken.core.objects.components.base_example_component import BaseExampleComponent
 
-from kraken.core.objects.attributes.attribute_group import AttributeGroup
-from kraken.core.objects.attributes.bool_attribute import BoolAttribute
-from kraken.core.objects.attributes.string_attribute import StringAttribute
-
-from kraken.core.objects.constraints.pose_constraint import PoseConstraint
-
-from kraken.core.objects.component_group import ComponentGroup
-from kraken.core.objects.hierarchy_group import HierarchyGroup
-from kraken.core.objects.locator import Locator
 from kraken.core.objects.joint import Joint
-from kraken.core.objects.ctrlSpace import CtrlSpace
-from kraken.core.objects.control  import Control
+from kraken.core.objects.control import Control
+from kraken.core.objects.component_group import ComponentGroup
 
 from kraken.core.objects.operators.kl_operator import KLOperator
 
 from kraken.core.profiler import Profiler
-from kraken.helpers.utility_methods import logHierarchy
 
 
 class NeckComponent(BaseExampleComponent):
@@ -32,16 +21,25 @@ class NeckComponent(BaseExampleComponent):
         # Declare IO
         # ===========
         # Declare Inputs Xfos
-        self.neckBaseInputTgt = self.createInput('neckBase', dataType='Xfo', parent=self.inputHrcGrp).getTarget()
+        self.neckBaseInputTgt = self.createInput(
+            'neckBase', dataType='Xfo', parent=self.inputHrcGrp).getTarget()
 
         # Declare Output Xfos
-        self.neckOutputTgt = self.createOutput('neck', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
-        self.neckEndOutputTgt = self.createOutput('neckEnd', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
+        self.neck01OutputTgt = self.createOutput(
+            'neck01', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
+
+        self.neck02OutputTgt = self.createOutput(
+            'neck02', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
+
+        self.neckEndOutputTgt = self.createOutput(
+            'neckEnd', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
 
         # Declare Input Attrs
-        self.drawDebugInputAttr = self.createInput('drawDebug', dataType='Boolean', value=False, parent=self.cmpInputAttrGrp).getTarget()
-        self.rigScaleInputAttr = self.createInput('rigScale', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp).getTarget()
-        self.rightSideInputAttr = self.createInput('rightSide', dataType='Boolean', value=self.getLocation() is 'R', parent=self.cmpInputAttrGrp).getTarget()
+        self.drawDebugInputAttr = self.createInput(
+            'drawDebug', dataType='Boolean', value=False, parent=self.cmpInputAttrGrp).getTarget()
+
+        self.rigScaleInputAttr = self.createInput(
+            'rigScale', dataType='Float', value=1.0, parent=self.cmpInputAttrGrp).getTarget()
 
         # Declare Output Attrs
 
@@ -51,27 +49,70 @@ class NeckComponentGuide(NeckComponent):
 
     def __init__(self, name='neck', parent=None):
 
-        Profiler.getInstance().push("Construct Neck Component:" + name)
+        Profiler.getInstance().push('Construct Neck Component:' + name)
         super(NeckComponentGuide, self).__init__(name, parent)
 
         # =========
         # Controls
-        # ========
-
-        guideSettingsAttrGrp = AttributeGroup("GuideSettings", parent=self)
+        # =========
 
         # Guide Controls
-        self.neckCtrl = Control('neck', parent=self.ctrlCmpGrp, shape="sphere")
-        self.neckEndCtrl = Control('neckEnd', parent=self.ctrlCmpGrp, shape="sphere")
+        self.neckCtrl = Control('neck', parent=self.ctrlCmpGrp, shape='sphere')
+        self.neckCtrl.scalePoints(Vec3(0.5, 0.5, 0.5))
+        self.neckMidCtrl = Control('neckMid', parent=self.ctrlCmpGrp, shape='sphere')
+        self.neckMidCtrl.scalePoints(Vec3(0.5, 0.5, 0.5))
+        self.neckEndCtrl = Control('neckEnd', parent=self.ctrlCmpGrp, shape='sphere')
+        self.neckEndCtrl.scalePoints(Vec3(0.5, 0.5, 0.5))
 
-        data = {
-                "name": name,
-                "location": "M",
-                "neckPosition": Vec3(0.0, 16.5572, -0.6915),
-                "neckEndPosition": Vec3(0.0, 17.4756, -0.421)
-               }
+        self.neckCtrlShape = Control('neck', parent=self.ctrlCmpGrp, shape='pin')
+        self.neckCtrlShape.rotatePoints(90.0, 0.0, 0.0)
+        self.neckCtrlShape.rotatePoints(0.0, 90.0, 0.0)
+        self.neckCtrlShape.setColor('orange')
+        self.neckMidCtrlShape = Control('neckMid', parent=self.ctrlCmpGrp, shape='pin')
+        self.neckMidCtrlShape.rotatePoints(90.0, 0.0, 0.0)
+        self.neckMidCtrlShape.rotatePoints(0.0, 90.0, 0.0)
+        self.neckMidCtrlShape.setColor('orange')
 
-        self.loadData(data)
+        # Guide Operator
+        self.neckGuideKLOp = KLOperator(name + 'GuideKLOp', 'NeckGuideSolver', 'Kraken')
+        self.addOperator(self.neckGuideKLOp)
+
+        # Add Att Inputs
+        self.neckGuideKLOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.neckGuideKLOp.setInput('rigScale', self.rigScaleInputAttr)
+
+        # Add Source Inputs
+        self.neckGuideKLOp.setInput('sources', [self.neckCtrl, self.neckMidCtrl, self.neckEndCtrl])
+
+        # Add Target Outputs
+        self.neckGuideKLOp.setOutput('targets', [self.neckCtrlShape, self.neckMidCtrlShape])
+
+
+        # Calculate default values
+        neckVec = Vec3(0.0, 16.00, -0.75)
+        neckMidVec = Vec3(0.0, 16.50, -0.50)
+        neckEndVec = Vec3(0.0, 17.00, -0.25)
+        upVector = Vec3(0.0, 0.0, -1.0)
+
+        neckOri = Quat()
+        neckOri.setFromDirectionAndUpvector((neckMidVec - neckVec).unit(),
+                                            ((neckVec + upVector) - neckVec).unit())
+
+        neckMidOri = Quat()
+        neckMidOri.setFromDirectionAndUpvector((neckEndVec - neckMidVec).unit(),
+                                               ((neckMidVec + upVector) - neckMidVec).unit())
+
+        self.default_data = {
+            "name": name,
+            "location": "M",
+            "neckXfo": Xfo(tr=neckVec, ori=neckOri),
+            "neckMidXfo": Xfo(tr=neckMidVec, ori=neckMidOri),
+            "neckEndXfo": Xfo(tr=neckEndVec, ori=neckMidOri),
+            "neckCrvData": self.neckCtrlShape.getCurveData(),
+            "neckMidCrvData": self.neckMidCtrlShape.getCurveData()
+        }
+
+        self.loadData(self.default_data)
 
         Profiler.getInstance().pop()
 
@@ -89,8 +130,12 @@ class NeckComponentGuide(NeckComponent):
 
         data = super(NeckComponentGuide, self).saveData()
 
-        data['neckPosition'] = self.neckCtrl.xfo.tr
-        data['neckEndPosition'] = self.neckEndCtrl.xfo.tr
+        data['neckXfo'] = self.neckCtrl.xfo
+        data['neckMidXfo'] = self.neckMidCtrl.xfo
+        data['neckEndXfo'] = self.neckEndCtrl.xfo
+
+        data['neckCrvData'] = self.neckCtrlShape.getCurveData()
+        data['neckMidCrvData'] = self.neckMidCtrlShape.getCurveData()
 
         return data
 
@@ -99,23 +144,31 @@ class NeckComponentGuide(NeckComponent):
         """Load a saved guide representation from persisted data.
 
         Arguments:
-        data -- object, The JSON data object.
+            data (object): The JSON data object.
 
-        Return:
-        True if successful.
+        Returns:
+            bool: True if successful.
 
         """
 
-        super(NeckComponentGuide, self).loadData( data )
+        super(NeckComponentGuide, self).loadData(data)
 
-        self.neckCtrl.xfo.tr = data['neckPosition']
-        self.neckEndCtrl.xfo.tr = data['neckEndPosition']
+        self.neckCtrl.xfo = data.get('neckXfo')
+        self.neckMidCtrl.xfo = data.get('neckMidXfo')
+        self.neckEndCtrl.xfo = data.get('neckEndXfo')
+
+        self.neckCtrlShape.setCurveData(data.get('neckCrvData'))
+        self.neckMidCtrlShape.setCurveData(data.get('neckMidCrvData'))
+
+        # Evaluate guide operators
+        self.neckGuideKLOp.evaluate()
 
         return True
 
 
     def getRigBuildData(self):
-        """Returns the Guide data used by the Rig Component to define the layout of the final rig.
+        """Returns the Guide data used by the Rig Component to define the layout
+        of the final rig.
 
         Return:
         The JSON rig data object.
@@ -124,21 +177,14 @@ class NeckComponentGuide(NeckComponent):
 
         data = super(NeckComponentGuide, self).getRigBuildData()
 
-        # values
-        neckEndPosition = self.neckCtrl.xfo.tr
-        neckPosition = self.neckEndCtrl.xfo.tr
-        neckUpV = Vec3(0.0, 0.0, -1.0)
+        neckEndXfo = Xfo(tr=self.neckEndCtrl.xfo.tr,
+                         ori=self.neckMidCtrlShape.xfo.ori)
 
-        # Calculate Neck Xfo
-        rootToEnd = neckEndPosition.subtract(neckPosition).unit()
-        rootToUpV = neckUpV.subtract(neckPosition).unit()
-        bone1ZAxis = rootToUpV.cross(rootToEnd).unit()
-        bone1Normal = bone1ZAxis.cross(rootToEnd).unit()
-
-        neckXfo = Xfo()
-        neckXfo.setFromVectors(rootToEnd, bone1Normal, bone1ZAxis, neckPosition)
-
-        data['neckXfo'] = neckXfo
+        data['neckXfo'] = self.neckCtrlShape.xfo
+        data['neckCrvData'] = self.neckCtrlShape.getCurveData()
+        data['neckMidXfo'] = self.neckMidCtrlShape.xfo
+        data['neckMidCrvData'] = self.neckMidCtrlShape.getCurveData()
+        data['neckEndXfo'] = neckEndXfo
 
         return data
 
@@ -148,10 +194,11 @@ class NeckComponentGuide(NeckComponent):
     # ==============
     @classmethod
     def getComponentType(cls):
-        """Enables introspection of the class prior to construction to determine if it is a guide component.
+        """Enables introspection of the class prior to construction to determine
+        if it is a guide component.
 
-        Return:
-        The true if this component is a guide component.
+        Returns:
+            bool: Whether the component is a guide component.
 
         """
 
@@ -160,10 +207,11 @@ class NeckComponentGuide(NeckComponent):
 
     @classmethod
     def getRigComponentClass(cls):
-        """Returns the corresponding rig component class for this guide component class
+        """Returns the corresponding rig component class for this guide
+        component class.
 
-        Return:
-        The rig component class.
+        Returns:
+            class: The rig component class.
 
         """
 
@@ -183,12 +231,15 @@ class NeckComponentRig(NeckComponent):
         # Controls
         # =========
         # Neck
-        self.neckCtrlSpace = CtrlSpace('neck', parent=self.ctrlCmpGrp)
-        self.neckCtrl = Control('neck', parent=self.neckCtrlSpace, shape="pin")
-        self.neckCtrl.scalePoints(Vec3(1.25, 1.25, 1.25))
-        self.neckCtrl.translatePoints(Vec3(0, 0, -0.5))
-        self.neckCtrl.rotatePoints(90, 0, 90)
-        self.neckCtrl.setColor("orange")
+        self.neck01Ctrl = Control('neck01', parent=self.ctrlCmpGrp, shape="pin")
+        self.neck01Ctrl.setColor("orange")
+
+        self.neck01CtrlSpace = self.neck01Ctrl.insertCtrlSpace(name='neck01')
+
+        self.neck02Ctrl = Control('neck02', parent=self.ctrlCmpGrp, shape="pin")
+        self.neck02Ctrl.setColor("orange")
+
+        self.neck02CtrlSpace = self.neck02Ctrl.insertCtrlSpace(name='neck02')
 
 
         # ==========
@@ -198,45 +249,81 @@ class NeckComponentRig(NeckComponent):
         self.defCmpGrp = ComponentGroup(self.getName(), self, parent=deformersLayer)
         self.addItem('defCmpGrp', self.defCmpGrp)
 
-        neckDef = Joint('neck', parent=self.defCmpGrp)
-        neckDef.setComponent(self)
+        self.neck01Def = Joint('neck01', parent=self.defCmpGrp)
+        self.neck01Def.setComponent(self)
+
+        self.neck02Def = Joint('neck02', parent=self.defCmpGrp)
+        self.neck02Def.setComponent(self)
 
 
         # ==============
         # Constrain I/O
         # ==============
         # Constraint inputs
-        neckInputConstraint = PoseConstraint('_'.join([self.neckCtrlSpace.getName(), 'To', self.neckBaseInputTgt.getName()]))
-        neckInputConstraint.setMaintainOffset(True)
-        neckInputConstraint.addConstrainer(self.neckBaseInputTgt)
-        self.neckCtrlSpace.addConstraint(neckInputConstraint)
+        neckInputConstraintName = '_'.join([self.neck01CtrlSpace.getName(),
+                                            'To',
+                                            self.neckBaseInputTgt.getName()])
+
+        self.neckInputCnstr = self.neck01CtrlSpace.constrainTo(
+            self.neckBaseInputTgt,
+            'Pose',
+            maintainOffset=False,
+            name=neckInputConstraintName)
+
 
         # Constraint outputs
-        neckOutputConstraint = PoseConstraint('_'.join([self.neckOutputTgt.getName(), 'To', self.neckCtrl.getName()]))
-        neckOutputConstraint.addConstrainer(self.neckCtrl)
-        self.neckOutputTgt.addConstraint(neckOutputConstraint)
+        neck01OutCnstrName = '_'.join([self.neck01OutputTgt.getName(),
+                                       'To',
+                                       self.neck01Ctrl.getName()])
 
-        neckEndConstraint = PoseConstraint('_'.join([self.neckEndOutputTgt.getName(), 'To', self.neckCtrl.getName()]))
-        neckEndConstraint.addConstrainer(self.neckCtrl)
-        self.neckEndOutputTgt.addConstraint(neckEndConstraint)
+        self.neck01OutCnstr = self.neck01OutputTgt.constrainTo(
+            self.neck01Ctrl,
+            'Pose',
+            maintainOffset=False,
+            name=neck01OutCnstrName)
+
+        neck02OutCnstrName = '_'.join([self.neck02OutputTgt.getName(),
+                                       'To',
+                                       self.neck02Ctrl.getName()])
+
+        self.neck02OutCnstr = self.neck02OutputTgt.constrainTo(
+            self.neck02Ctrl,
+            'Pose',
+            maintainOffset=False,
+            name=neck02OutCnstrName)
+
+        neckEndCnstrName = '_'.join([self.neckEndOutputTgt.getName(),
+                                     'To',
+                                     self.neck02Ctrl.getName()])
+
+        self.neckEndCnstr = self.neckEndOutputTgt.constrainTo(
+            self.neck01Ctrl,
+            'Pose',
+            maintainOffset=True,
+            name=neckEndCnstrName)
 
 
-        # ===============
-        # Add Splice Ops
-        # ===============
-        #Add Deformer Splice Op
-        spliceOp = KLOperator('neckDeformerKLOp', 'PoseConstraintSolver', 'Kraken')
-        self.addOperator(spliceOp)
+        # ==============
+        # Add Operators
+        # ==============
+        # Add Deformer KL Op
+        self.neckDeformerKLOp = KLOperator('neckDeformerKLOp',
+                                           'MultiPoseConstraintSolver',
+                                           'Kraken')
+
+        self.addOperator(self.neckDeformerKLOp)
 
         # Add Att Inputs
-        spliceOp.setInput('drawDebug', self.drawDebugInputAttr)
-        spliceOp.setInput('rigScale', self.rigScaleInputAttr)
+        self.neckDeformerKLOp.setInput('drawDebug', self.drawDebugInputAttr)
+        self.neckDeformerKLOp.setInput('rigScale', self.rigScaleInputAttr)
 
         # Add Xfo Inputstrl)
-        spliceOp.setInput('constrainer', self.neckEndOutputTgt)
+        self.neckDeformerKLOp.setInput('constrainers',
+                                       [self.neck01Ctrl, self.neck02Ctrl])
 
         # Add Xfo Outputs
-        spliceOp.setOutput('constrainee', neckDef)
+        self.neckDeformerKLOp.setOutput('constrainees',
+                                        [self.neck01Def, self.neck02Def])
 
         Profiler.getInstance().pop()
 
@@ -252,17 +339,35 @@ class NeckComponentRig(NeckComponent):
 
         """
 
-        super(NeckComponentRig, self).loadData( data )
+        super(NeckComponentRig, self).loadData(data)
+        neckXfo = data.get('neckXfo')
+        neckCrvData = data.get('neckCrvData')
+        neckMidXfo = data.get('neckMidXfo')
+        neckMidCrvData = data.get('neckMidCrvData')
+        neckEndXfo = data.get('neckEndXfo')
 
-        self.neckCtrlSpace.xfo = data['neckXfo']
-        self.neckCtrl.xfo = data['neckXfo']
+        self.neck01CtrlSpace.xfo = neckXfo
+        self.neck01Ctrl.xfo = neckXfo
+        self.neck01Ctrl.setCurveData(neckCrvData)
+
+        self.neck02CtrlSpace.xfo = neckMidXfo
+        self.neck02Ctrl.xfo = neckMidXfo
+        self.neck02Ctrl.setCurveData(neckMidCrvData)
+
 
         # ============
         # Set IO Xfos
         # ============
-        self.neckBaseInputTgt.xfo = data['neckXfo']
-        self.neckEndOutputTgt.xfo = data['neckXfo']
-        self.neckOutputTgt.xfo = data['neckXfo']
+        self.neckBaseInputTgt.xfo = neckXfo
+        self.neck01OutputTgt.xfo = neckXfo
+        self.neck02OutputTgt.xfo = neckMidXfo
+        self.neckEndOutputTgt.xfo = neckEndXfo
+
+        # Evaluate Constraints
+        self.neckInputCnstr.evaluate()
+        self.neck01OutCnstr.evaluate()
+        self.neck02OutCnstr.evaluate()
+        self.neckEndCnstr.evaluate()
 
 
 from kraken.core.kraken_system import KrakenSystem
