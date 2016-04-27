@@ -11,7 +11,7 @@ Profiler.getInstance().push("bob_build")
 bobRig = BobRig("char_bob")
 
 builder = plugins.getBuilder()
-builder.buildRig(bobRig)
+builder.build(bobRig)
 
 Profiler.getInstance().pop()
 

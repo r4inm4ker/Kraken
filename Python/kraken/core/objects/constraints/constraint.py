@@ -62,7 +62,7 @@ class Constraint(SceneItem):
         """
 
         self._constrainee = constrainee
-        self._constrainee.setSource(self)
+        self._constrainee.addSource(self)
 
         return True
 
@@ -117,6 +117,7 @@ class Constraint(SceneItem):
             raise Exception("'kObject3D' argument is already a constrainer: '" + kObject3D.getName() + "'.")
 
         self._constrainers[index] = kObject3D
+        self.addSource(kObject3D)
 
         return True
 

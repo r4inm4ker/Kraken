@@ -6,8 +6,9 @@ Traverser - Base Traverser.
 """
 
 from kraken.core.objects.scene_item import SceneItem
+from kraken.core.objects.object_3d import Object3D
+from kraken.core.objects.attributes.attribute_group import AttributeGroup
 from kraken.core.objects.constraints.constraint import Constraint
-from kraken.core.objects.operators.operator import Operator
 
 class Traverser(object):
     """Kraken base traverser for any scene item."""
@@ -94,7 +95,7 @@ class Traverser(object):
         self._items = []
 
 
-    def traverse(self, itemCallback = None, discoverCallback = None):
+    def traverse(self, itemCallback = None, discoverCallback = None, discoveredItemsFirst = True):
         """Visits all objects within this Traverser based on the root items.
 
         Args:
@@ -105,51 +106,57 @@ class Traverser(object):
         self.reset()
 
         if discoverCallback is None:
-            discoverCallback = self.__discoverBySource
+            discoverCallback = self.discoverBySource
 
         for item in self._rootItems:
-            self.__visitItem(item, itemCallback, discoverCallback)
+            self.__visitItem(item, itemCallback, discoverCallback, discoveredItemsFirst)
 
+        return self.items
 
-    def __visitItem(self, item, itemCallback, discoverCallback):
+    def __collectVisitedItem(self, item, itemCallback):
+        if not itemCallback is None:
+            itemCallback(item = item, traverser = self)
+        self._items.append(item)
+
+    def __visitItem(self, item, itemCallback, discoverCallback, discoveredItemsFirst):
 
         if self._visited.get(item.getId(), False):
             return False
 
+        self._visited[item.getId()] = True
+
+        if not discoveredItemsFirst:
+            self.__collectVisitedItem(item, itemCallback)
+
         if discoverCallback:
             discoveredItems = discoverCallback(item)
-            for discoveredItem in discoveredItems:
-                self.__visitItem(discoveredItem, itemCallback, discoverCallback)
+            if discoveredItems:
+                for discoveredItem in discoveredItems:
+                    self.__visitItem(discoveredItem, itemCallback, discoverCallback, discoveredItemsFirst)
 
-        if not itemCallback is None:
-            itemCallback(item = item, traverser = self)
-
-        self._visited[item.getId()] = True
-        self._items.append(item)
+        if discoveredItemsFirst:
+            self.__collectVisitedItem(item, itemCallback)
 
         return True
 
+    def discoverChildren(self, item):
+        result = []
+        
+        if isinstance(item, Object3D):
+            for i in xrange(item.getNumAttributeGroups()):
+                result.append(item.getAttributeGroupByIndex(i))
+            result += item.getChildren()
 
-    def __discoverBySource(self, item):
+        if isinstance(item, AttributeGroup):
+            for i in xrange(item.getNumAttributes()):
+                result.append(item.getAttributeByIndex(i))
+
+        return result
+
+    def discoverBySource(self, item):
         result = []
 
-        if not item.getSource() is None:
-            result.append(item.getSource())
+        for source in item.getSources():
+            result.append(source)
 
-        if not item.getParent() is None and not item.getParent() == item.getSource():
-            result.append(item.getParent())
-
-        if isinstance(item, Constraint):
-            for constrainer in item.getConstrainers():
-                result.append(constrainer)
-
-        if isinstance(item, Operator):
-            for inputName in item.getInputNames():
-                operatorInput = item.getInput(inputName)
-                if not isinstance(operatorInput, list):
-                    operatorInput = [operatorInput]
-                for inputItem in operatorInput:
-                    if isinstance(inputItem, SceneItem):
-                        result.append(inputItem)
-                
         return result

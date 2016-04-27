@@ -16,7 +16,7 @@ class SceneItem(object):
         self._parent = parent
         self._name = name
         self._component = None
-        self._source = None
+        self._sources = []
         self._id = SceneItem.__maxId
         SceneItem.__maxId = SceneItem.__maxId + 1
 
@@ -184,15 +184,14 @@ class SceneItem(object):
         """
 
         self._parent = parent
-        if self._source is None:
-            self.setSource(parent)
+        self.addSource(parent)
 
         return True
 
     # ===============
     # Source Methods
     # ===============
-    def getSource(self):
+    def getSources(self):
         """Returns the source of the object as an object.
 
         Returns:
@@ -200,10 +199,10 @@ class SceneItem(object):
 
         """
 
-        return self._source
+        return self._sources
 
 
-    def setSource(self, source):
+    def addSource(self, source):
         """Sets the source attribute of this object.
 
         Arguments:
@@ -214,8 +213,7 @@ class SceneItem(object):
 
         """
 
-        self._source = source
-
+        self._sources.append(source)
         return True
 
 

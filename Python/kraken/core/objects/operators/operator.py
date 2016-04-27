@@ -66,12 +66,19 @@ class Operator(SceneItem):
             # Set the entire output array
             if isinstance(operatorInput, list):
                 self.inputs[name] = operatorInput
+                for opInput in operatorInput:
+                    if isinstance(opInput, SceneItem):
+                        self.addSource(opInput)
             else:
                 if index >= len(self.inputs[name]):
                     raise Exception("Out of range index for array output index: " + str(index) + " size: " + str(len(self.inputs[name])) + ".")
                 self.inputs[name][index] = operatorInput
+                if isinstance(operatorInput, SceneItem):
+                    self.addSource(operatorInput)
         else:
             self.inputs[name] = operatorInput
+            if isinstance(operatorInput, SceneItem):
+                self.addSource(operatorInput)
 
         return True
 
@@ -152,15 +159,15 @@ class Operator(SceneItem):
             if isinstance(operatorOutput, list):
                 self.outputs[name] = operatorOutput
                 for outputItem in operatorOutput:
-                    outputItem.setSource(self)
+                    outputItem.addSource(self)
             else:
                 if index >= len(self.outputs[name]):
                     raise Exception("Out of range index for array output index: " + str(index) + " size: " + str(len(self.outputs[name])) + ".")
                 self.outputs[name][index] = operatorOutput
-                operatorOutput.setSource(self)
+                operatorOutput.addSource(self)
         else:
             self.outputs[name] = operatorOutput
-            operatorOutput.setSource(self)
+            operatorOutput.addSource(self)
 
         return True
 
