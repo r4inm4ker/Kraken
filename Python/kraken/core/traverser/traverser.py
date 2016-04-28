@@ -173,9 +173,13 @@ class Traverser(object):
         result = []
 
         if isinstance(item, Component):
-            result += item.getItems().values()
+            subItems = item.getItems().values()
+            for subItem in subItems:
+                if isinstance(subItem, AttributeGroup):
+                    continue
+                result.append(subItem)
         
-        if isinstance(item, Object3D):
+        elif isinstance(item, Object3D):
             for i in xrange(item.getNumAttributeGroups()):
                 result.append(item.getAttributeGroupByIndex(i))
             result += item.getChildren()
