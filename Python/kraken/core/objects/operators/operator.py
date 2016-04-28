@@ -221,14 +221,10 @@ class Operator(SceneItem):
     # Evaluation Methods
     # ==================
 
-    def evaluate(self):
-        """invokes the operator causing the output values to be computed.
-
-        Returns:
-            bool: True if successful.
+    def updateTargets(self):
+        """updates all targets so that they have a hold on this operator.
 
         """
-
         for name in self.getOutputNames():
             outputTargets = self.getOutput(name)
             if not isinstance(outputTargets, list):
@@ -237,5 +233,15 @@ class Operator(SceneItem):
                 if not isinstance(outputTarget, SceneItem):
                     continue
                 outputTarget.addSource(self)
+
+    def evaluate(self):
+        """invokes the operator causing the output values to be computed.
+
+        Returns:
+            bool: True if successful.
+
+        """
+
+        self.updateTargets()
 
         return True
