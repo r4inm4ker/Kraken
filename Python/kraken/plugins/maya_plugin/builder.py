@@ -26,7 +26,7 @@ class Builder(Builder):
     """Builder object for building Kraken objects in Maya."""
 
     def __init__(self):
-        super(Builder, self).__init__(debugMode = True)
+        super(Builder, self).__init__()
 
 
     def deleteBuildElements(self):
@@ -154,8 +154,8 @@ class Builder(Builder):
 
         parentNode = self.getDCCSceneItem(kSceneItem.getParent())
 
+        pm.select(parentNode)
         dccSceneItem = pm.joint(name="joint")
-        pm.parent(dccSceneItem, parentNode)
         pm.rename(dccSceneItem, buildName)
 
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
@@ -298,6 +298,9 @@ class Builder(Builder):
 
         """
 
+        if kAttribute.getParent().getName() == 'implicitAttrGrp':
+            return False
+
         parentDCCSceneItem = self.getDCCSceneItem(kAttribute.getParent().getParent())
         parentDCCSceneItem.addAttr(kAttribute.getName(), niceName=kAttribute.getName(), attributeType="bool", defaultValue=kAttribute.getValue(), keyable=True)
         dccSceneItem = parentDCCSceneItem.attr(kAttribute.getName())
@@ -317,6 +320,9 @@ class Builder(Builder):
             bool: True if successful.
 
         """
+
+        if kAttribute.getParent().getName() == 'implicitAttrGrp':
+            return False
 
         parentDCCSceneItem = self.getDCCSceneItem(kAttribute.getParent().getParent())
         parentDCCSceneItem.addAttr(kAttribute.getName(), niceName=kAttribute.getName(), attributeType="float", defaultValue=kAttribute.getValue(), keyable=True)
@@ -350,6 +356,9 @@ class Builder(Builder):
             bool: True if successful.
 
         """
+
+        if kAttribute.getParent().getName() == 'implicitAttrGrp':
+            return False
 
         mininum = kAttribute.getMin()
         if mininum == None:
@@ -392,6 +401,9 @@ class Builder(Builder):
             bool: True if successful.
 
         """
+
+        if kAttribute.getParent().getName() == 'implicitAttrGrp':
+            return False
 
         parentDCCSceneItem = self.getDCCSceneItem(kAttribute.getParent().getParent())
         parentDCCSceneItem.addAttr(kAttribute.getName(), niceName=kAttribute.getName(), dataType="string")

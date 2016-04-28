@@ -21,3 +21,4 @@ def callback(**args):
     print 'Visited '+item.getPath()
 
 trav.traverse(itemCallback = callback)
+

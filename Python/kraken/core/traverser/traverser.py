@@ -18,7 +18,6 @@ class Traverser(object):
     def __init__(self, name = 'Traverser'):
         self._rootItems = []
         self.reset()
-        self._items = []
 
     # ==================
     # Property Methods
@@ -83,7 +82,7 @@ class Traverser(object):
         return self._items
 
 
-    def getItemsOfType(self, typeName):
+    def getItemsOfType(self, typeNames):
         """Gets only the traversed items of a given type.
 
         Args:
@@ -93,11 +92,13 @@ class Traverser(object):
             []: The items in the total items list matching the given type.
         """
 
+        if not isinstance(typeNames, list):
+            typeNames = [typeNames]
+
         result = []
         for item in self._items:
-            if not item.isTypeOf(typeName):
-                continue
-            result.append(item)
+            if item.isOfAnyType(typeNames):
+                result.append(item)
         return result
 
 
@@ -132,6 +133,7 @@ class Traverser(object):
         return self.items
 
     def __collectVisitedItem(self, item, itemCallback):
+
         if not itemCallback is None:
             itemCallback(item = item, traverser = self)
         self._items.append(item)
@@ -175,8 +177,6 @@ class Traverser(object):
         
         if isinstance(item, Object3D):
             for i in xrange(item.getNumAttributeGroups()):
-                if item.getAttributeGroupByIndex(i).getName() == 'implicitAttrGrp':
-                    continue
                 result.append(item.getAttributeGroupByIndex(i))
             result += item.getChildren()
 
@@ -190,6 +190,7 @@ class Traverser(object):
         result = []
 
         for source in item.getSources():
+
             if isinstance(source, Operator):
                 for outputName in source.getOutputNames():
                     operatorOutputs = source.getOutput(outputName)

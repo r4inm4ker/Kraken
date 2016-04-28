@@ -77,6 +77,19 @@ class SceneItem(object):
         return False
 
 
+    def isOfAnyType(self, typeNames):
+        """Returns true if this item has any of the given type names
+
+        Returns:
+            bool: True if the scene item is of the given type.
+
+        """
+        for typeName in typeNames:
+            if self.isTypeOf(typeName):
+                return True
+        return False
+
+
     # =============
     # Name methods
     # =============

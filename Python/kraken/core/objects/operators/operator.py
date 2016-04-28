@@ -63,18 +63,23 @@ class Operator(SceneItem):
             raise Exception("Input with name '" + name + "' was not found in operator: " + self.getName() + ".\nValid inputs are:\n" + "\n".join(self.inputs.keys()))
 
         if isinstance(self.inputs[name], list):
+
             # Set the entire output array
             if isinstance(operatorInput, list):
                 self.inputs[name] = operatorInput
-                for opInput in operatorInput:
-                    if isinstance(opInput, SceneItem):
-                        self.addSource(opInput)
+
+                for i in xrange(len(operatorInput)):
+                    if not isinstance(operatorInput[i], SceneItem):
+                        continue
+                    self.addSource(operatorInput[i])
+
             else:
                 if index >= len(self.inputs[name]):
                     raise Exception("Out of range index for array output index: " + str(index) + " size: " + str(len(self.inputs[name])) + ".")
                 self.inputs[name][index] = operatorInput
                 if isinstance(operatorInput, SceneItem):
                     self.addSource(operatorInput)
+
         else:
             self.inputs[name] = operatorInput
             if isinstance(operatorInput, SceneItem):

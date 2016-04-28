@@ -328,6 +328,9 @@ class Builder(Builder):
 
         """
 
+        if kAttribute.getParent().getName() == 'implicitAttrGrp':
+            return False
+
         parentDCCSceneItem = Dispatch(self.getDCCSceneItem(kAttribute.getParent()))
         dccSceneItem = parentDCCSceneItem.AddParameter2(kAttribute.getName(), constants.siBool, kAttribute.getValue(), "", "", "", "", constants.siClassifUnknown, 2053, kAttribute.getName())
         dccSceneItem.Animatable = kAttribute.getAnimatable()
@@ -348,6 +351,9 @@ class Builder(Builder):
 
         """
 
+        if kAttribute.getParent().getName() == 'implicitAttrGrp':
+            return False
+
         parentDCCSceneItem = Dispatch(self.getDCCSceneItem(kAttribute.getParent()))
         dccSceneItem = parentDCCSceneItem.AddParameter2(kAttribute.getName(), constants.siDouble, kAttribute.getValue(), kAttribute.getMin(), kAttribute.getMax(), kAttribute.getUIMin(), kAttribute.getUIMax(), constants.siClassifUnknown, 2053, kAttribute.getName())
 
@@ -367,6 +373,9 @@ class Builder(Builder):
 
         """
 
+        if kAttribute.getParent().getName() == 'implicitAttrGrp':
+            return False
+
         parentDCCSceneItem = Dispatch(self.getDCCSceneItem(kAttribute.getParent()))
         dccSceneItem = parentDCCSceneItem.AddParameter2(kAttribute.getName(), constants.siInt4, kAttribute.getValue(), kAttribute.getMin(), kAttribute.getMax(), kAttribute.getUIMin(), kAttribute.getUIMax(), constants.siClassifUnknown, 2053, kAttribute.getName())
 
@@ -385,6 +394,9 @@ class Builder(Builder):
             bool: True if successful.
 
         """
+
+        if kAttribute.getParent().getName() == 'implicitAttrGrp':
+            return False
 
         parentDCCSceneItem = Dispatch(self.getDCCSceneItem(kAttribute.getParent()))
         dccSceneItem = parentDCCSceneItem.AddParameter2(kAttribute.getName(), constants.siString, kAttribute.getValue(), "", "", "", "", constants.siClassifUnknown, 2053, kAttribute.getName())

@@ -24,10 +24,14 @@ class Builder(object):
     """Builder object for building objects in DCC's. Sub-class per DCC in a
     plugin."""
 
+    _buildPhase_3DObjectsAttributes = 0
+    _buildPhase_AttributeConnections = 1
+    _buildPhase_ConstraintsOperators = 2
 
     def __init__(self, debugMode = False):
         super(Builder, self).__init__()
         self._buildElements = []
+        self._sceneItemsById = {}
 
         self.config = Config.getInstance()
 
@@ -497,7 +501,7 @@ class Builder(object):
     # Build Object Methods
     # =====================
 
-    def buildSceneItem(self, kObject):
+    def __buildSceneItem(self, kObject, phase):
         """Builds the DCC sceneitem for the supplied kObject.
 
         Args:
@@ -515,96 +519,132 @@ class Builder(object):
             buildName = kObject.getBuildName()
 
         if self._debugMode:
-            print "building: " + kObject.getPath() + " as: " + buildName + " type: " + kObject.getTypeName()
+            print "building(" + str(phase) + "): " + kObject.getPath() + " as: " + buildName + " type: " + kObject.getTypeName()
 
         # Build Object
         if kObject.isTypeOf("Rig"):
-            dccSceneItem = self.buildContainer(kObject, buildName)
+            if phase == self._buildPhase_3DObjectsAttributes:
+                dccSceneItem = self.buildContainer(kObject, buildName)
 
         elif kObject.isTypeOf("Layer"):
-            dccSceneItem = self.buildLayer(kObject, buildName)
+            if phase == self._buildPhase_3DObjectsAttributes:
+                dccSceneItem = self.buildLayer(kObject, buildName)
 
         elif kObject.isTypeOf("Component"):
-            pass
+            return None
 
         elif kObject.isTypeOf("ComponentGroup"):
-            dccSceneItem = self.buildGroup(kObject, buildName)
+            if phase == self._buildPhase_3DObjectsAttributes:
+                dccSceneItem = self.buildGroup(kObject, buildName)
 
         elif kObject.isTypeOf("HierarchyGroup"):
-            dccSceneItem = self.buildHierarchyGroup(kObject, buildName)
+            if phase == self._buildPhase_3DObjectsAttributes:
+                dccSceneItem = self.buildHierarchyGroup(kObject, buildName)
 
         elif kObject.isTypeOf("CtrlSpace"):
-            dccSceneItem = self.buildGroup(kObject, buildName)
+            if phase == self._buildPhase_3DObjectsAttributes:
+                dccSceneItem = self.buildGroup(kObject, buildName)
 
         elif kObject.isTypeOf("Transform"):
-            dccSceneItem = self.buildGroup(kObject, buildName)
+            if phase == self._buildPhase_3DObjectsAttributes:
+                dccSceneItem = self.buildGroup(kObject, buildName)
 
         elif kObject.isTypeOf("Locator"):
-            dccSceneItem = self.buildLocator(kObject, buildName)
+            if phase == self._buildPhase_3DObjectsAttributes:
+                dccSceneItem = self.buildLocator(kObject, buildName)
 
         elif kObject.isTypeOf("Joint"):
-            dccSceneItem = self.buildJoint(kObject, buildName)
+            if phase == self._buildPhase_3DObjectsAttributes:
+                dccSceneItem = self.buildJoint(kObject, buildName)
 
         elif kObject.isTypeOf("Control"):
-            dccSceneItem = self.buildControl(kObject, buildName)
+            if phase == self._buildPhase_3DObjectsAttributes:
+                dccSceneItem = self.buildControl(kObject, buildName)
 
         elif kObject.isTypeOf("Curve"):
-            dccSceneItem = self.buildCurve(kObject, buildName)
-
-        elif kObject.isTypeOf("OrientationConstraint"):
-            dccSceneItem = self.buildOrientationConstraint(kObject)
-
-        elif kObject.isTypeOf("PoseConstraint"):
-            dccSceneItem = self.buildPoseConstraint(kObject)
-
-        elif kObject.isTypeOf("PositionConstraint"):
-            dccSceneItem = self.buildPositionConstraint(kObject)
-
-        elif kObject.isTypeOf("ScaleConstraint"):
-            dccSceneItem = self.buildScaleConstraint(kObject)
-
-        elif kObject.isTypeOf("KLOperator"):
-            dccSceneItem = self.buildKLOperator(kObject)
-
-        elif kObject.isTypeOf("CanvasOperator"):
-            dccSceneItem = self.buildCanvasOperator(kObject)
+            if phase == self._buildPhase_3DObjectsAttributes:
+                dccSceneItem = self.buildCurve(kObject, buildName)
 
         elif kObject.isTypeOf('AttributeGroup'):
-            dccSceneItem = self.buildAttributeGroup(kObject)
+            if phase == self._buildPhase_3DObjectsAttributes:
+                dccSceneItem = self.buildAttributeGroup(kObject)
 
         elif kObject.isTypeOf("BoolAttribute"):
-            dccSceneItem = self.buildBoolAttribute(kObject)
-            self.connectAttribute(kObject)
+            if phase == self._buildPhase_3DObjectsAttributes:
+                dccSceneItem = self.buildBoolAttribute(kObject)
+            elif phase == self._buildPhase_AttributeConnections:
+                self.connectAttribute(kObject)
 
         elif kObject.isTypeOf("ScalarAttribute"):
-            dccSceneItem = self.buildScalarAttribute(kObject)
-            self.connectAttribute(kObject)
+            if phase == self._buildPhase_3DObjectsAttributes:
+                dccSceneItem = self.buildScalarAttribute(kObject)
+            elif phase == self._buildPhase_AttributeConnections:
+                self.connectAttribute(kObject)
 
         elif kObject.isTypeOf("IntegerAttribute"):
-            dccSceneItem= self.buildIntegerAttribute(kObject)
-            self.connectAttribute(kObject)
+            if phase == self._buildPhase_3DObjectsAttributes:
+                dccSceneItem= self.buildIntegerAttribute(kObject)
+            elif phase == self._buildPhase_AttributeConnections:
+                self.connectAttribute(kObject)
 
         elif kObject.isTypeOf("StringAttribute"):
-            dccSceneItem = self.buildStringAttribute(kObject)
-            self.connectAttribute(kObject)
+            if phase == self._buildPhase_3DObjectsAttributes:
+                dccSceneItem = self.buildStringAttribute(kObject)
+            elif phase == self._buildPhase_AttributeConnections:
+                self.connectAttribute(kObject)
 
+        elif kObject.isTypeOf("OrientationConstraint"):
+            if phase == self._buildPhase_ConstraintsOperators:
+                dccSceneItem = self.buildOrientationConstraint(kObject)
+
+        elif kObject.isTypeOf("PoseConstraint"):
+            if phase == self._buildPhase_ConstraintsOperators:
+                dccSceneItem = self.buildPoseConstraint(kObject)
+
+        elif kObject.isTypeOf("PositionConstraint"):
+            if phase == self._buildPhase_ConstraintsOperators:
+                dccSceneItem = self.buildPositionConstraint(kObject)
+
+        elif kObject.isTypeOf("ScaleConstraint"):
+            if phase == self._buildPhase_ConstraintsOperators:
+                dccSceneItem = self.buildScaleConstraint(kObject)
+
+        elif kObject.isTypeOf("KLOperator"):
+            if phase == self._buildPhase_ConstraintsOperators:
+                dccSceneItem = self.buildKLOperator(kObject)
+
+        elif kObject.isTypeOf("CanvasOperator"):
+            if phase == self._buildPhase_ConstraintsOperators:
+                dccSceneItem = self.buildCanvasOperator(kObject)
 
         # Important Note: The order of these tests is important.
         # New classes should be added above the classes they are derrived from.
         # No new types should be added below SceneItem here.
         elif kObject.isTypeOf("SceneItem"):
-            dccSceneItem = self.buildLocator(kObject, buildName)
+            if phase == 0:
+                dccSceneItem = self.buildLocator(kObject, buildName)
 
         else:
             raise NotImplementedError(kObject.getName() + ' has an unsupported type: ' + str(type(kObject)))
 
-        if dccSceneItem is not None and isinstance(kObject, Object3D):
+        if dccSceneItem is not None:
+            self._sceneItemsById[kObject.getId()] = dccSceneItem
+        else:
+            dccSceneItem = self._sceneItemsById.get(kObject.getId(), None)
+
+        if dccSceneItem is not None and isinstance(kObject, Object3D) and phase == self._buildPhase_ConstraintsOperators:
             self.setTransform(kObject)
             self.lockParameters(kObject)
             self.setVisibility(kObject)
             self.setObjectColor(kObject)
 
         return dccSceneItem
+
+
+    def __buildSceneItemList(self, kObjects, phase):
+
+        for kObject in kObjects:
+            self.__buildSceneItem(kObject, phase)
 
 
     def build(self, kSceneItem):
@@ -631,22 +671,25 @@ class Builder(object):
         traverser = Traverser('Build')
         for rootItem in rootItems:
             traverser.addRootItem(rootItem)
-
-        items = traverser.traverse()
-        if items[0] != kSceneItem:
-            raise NotImplementedError(rig.getName() + ' resulted in an unexpected traversal.')
-
-        if self._debugMode:
-            for i in xrange(len(items)):
-                print 'Build order %d: %s' % (i, items[i].getPath())
-            print '_-----------------------------------_---------------_------------'
+        traverser.traverse()
 
         try:
             self._preBuild(kSceneItem)
 
             buildName = kSceneItem.getBuildName()
-            for item in items:
-                self.buildSceneItem(item)
+
+            objects3d = traverser.getItemsOfType('Object3D')
+            attributes = traverser.getItemsOfType(['AttributeGroup', 'Attribute'])
+
+            # build all 3D objects and attributes
+            self.__buildSceneItemList(objects3d, self._buildPhase_3DObjectsAttributes)
+            self.__buildSceneItemList(attributes, self._buildPhase_3DObjectsAttributes)
+
+            # connect all attributes
+            self.__buildSceneItemList(attributes, self._buildPhase_AttributeConnections)
+
+            # build all additional connections
+            self.__buildSceneItemList(traverser.items, self._buildPhase_ConstraintsOperators)
 
         finally:
             self._postBuild()
@@ -657,7 +700,6 @@ class Builder(object):
         Profiler.getInstance().pop()
 
         return self.getDCCSceneItem(kSceneItem)
-
 
     # ==================
     # Parameter Methods
@@ -689,14 +731,6 @@ class Builder(object):
             bool: True if successful.
 
         """
-
-        if hasattr(kSceneItem, 'getShapeVisibility') is False:
-            return False
-
-        if kSceneItem.getShapeVisibility() is False:
-            pass
-
-            # Re-implement in DCC builders.
 
         return True
 
@@ -771,10 +805,6 @@ class Builder(object):
             bool: True if successful.
 
         """
-
-        dccSceneItem = self.getDCCSceneItem(kSceneItem)
-
-        # Re-implement in DCC builders.
 
         return True
 
