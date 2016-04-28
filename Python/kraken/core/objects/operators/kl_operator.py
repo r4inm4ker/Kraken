@@ -55,7 +55,6 @@ class KLOperator(Operator):
                 else:
                     self.outputs[argName] = None
 
-
     def getSolverTypeName(self):
         """Returns the solver type name for this operator.
 
@@ -65,7 +64,6 @@ class KLOperator(Operator):
         """
 
         return self.solverTypeName
-
 
     def getExtension(self):
         """Returns the extention this operator uses.
@@ -77,7 +75,6 @@ class KLOperator(Operator):
 
         return self.extension
 
-
     def getSolverArgs(self):
         """Returns the args array defined by the KL Operator.
 
@@ -87,7 +84,6 @@ class KLOperator(Operator):
         """
 
         return self.args
-
 
     def generateSourceCode(self, arraySizes={}):
         """Returns the source code for a stub operator that will invoke the KL operator
@@ -100,10 +96,12 @@ class KLOperator(Operator):
         # Start constructing the source code.
         opSourceCode = "dfgEntry {\n"
 
-        # In SpliceMaya, output arrays are not resized by the system prior to calling into Splice, so we
-        # explicily resize the arrays in the generated operator stub code.
+        # In SpliceMaya, output arrays are not resized by the system prior to
+        # calling into Splice, so we explicily resize the arrays in the
+        # generated operator stub code.
         for argName, arraySize in arraySizes.iteritems():
-            opSourceCode += "  "+argName+".resize("+str(arraySize)+");\n"
+            opSourceCode += "  " + argName + ".resize(" + str(arraySize) + \
+                ");\n"
 
         opSourceCode += "  if(solver == null)\n"
         opSourceCode += "    solver = " + self.solverTypeName + "();\n"
@@ -120,17 +118,17 @@ class KLOperator(Operator):
 
         return opSourceCode
 
-
     def evaluate(self):
-        """invokes the Splice operator causing the output values to be computed.
+        """Invokes the KL operator causing the output values to be computed.
 
         Returns:
             bool: True if successful.
 
         """
+
         super(KLOperator, self).evaluate()
 
-        def getRTVal(obj, asInput = True):
+        def getRTVal(obj, asInput=True):
             if isinstance(obj, Object3D):
                 if asInput:
                     return obj.globalXfo.getRTVal().toMat44('Mat44')
@@ -209,7 +207,8 @@ class KLOperator(Operator):
                     rtValArray = ks.rtVal(argDataType)
                     rtValArray.resize(len(self.outputs[argName]))
                     for j in xrange(len(self.outputs[argName])):
-                        rtVal = getRTVal(self.outputs[argName][j], asInput = False)
+                        rtVal = getRTVal(self.outputs[argName][j],
+                                         asInput=False)
 
                         validateArg(rtVal, argName, argDataType[:-2])
 
@@ -217,18 +216,30 @@ class KLOperator(Operator):
 
                     argVals.append(rtValArray)
                 else:
-                    rtVal = getRTVal(self.outputs[argName], asInput = False)
+                    rtVal = getRTVal(self.outputs[argName],
+                                     asInput=False)
 
                     validateArg(rtVal, argName, argDataType)
 
                     argVals.append(rtVal)
 
-            debug.append({argName : [{"dataType": argDataType, "connectionType": argConnectionType}, argVals[-1]]})
+            debug.append(
+                {
+                    argName: [
+                        {
+                            "dataType": argDataType,
+                            "connectionType": argConnectionType
+                        },
+                        argVals[-1]
+                    ]
+                })
 
         try:
             self.solverRTVal.solve('', *argVals)
         except:
-            errorMsg = "Possible problem with KL operator '" + self.getName() + "' arguments:"
+            errorMsg = "Possible problem with KL operator '" + \
+                self.getName() + "' arguments:"
+
             print errorMsg
             pprint.pprint(debug, width=800)
 
@@ -246,9 +257,12 @@ class KLOperator(Operator):
                 obj.setValue(rtval)
             else:
                 if hasattr(obj, '__iter__'):
-                    print "Warning: trying to set a KL port with an array directly."
-                print "Warning: Not setting rtval: %s\n\tfor output object: %s\n\ton port: %s\n\tof KL object: %s\n." % \
-                (rtval, obj, portName, self.getName())
+                    print "Warning: Trying to set a KL port with an " + \
+                        "array directly."
+
+                print "Warning: Not setting rtval: %s\n\tfor output object: \
+                    %s\n\ton port: %s\n\tof KL object: %s\n." % \
+                    (rtval, obj, self.getName())
 
         for i in xrange(len(argVals)):
             arg = self.args[i]
