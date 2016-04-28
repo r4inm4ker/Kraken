@@ -33,7 +33,6 @@ class SceneItem(object):
 
         return self._id
 
-
     def getTypeName(self):
         """Returns the class name of this object.
 
@@ -43,7 +42,6 @@ class SceneItem(object):
         """
 
         return self.__class__.__name__
-
 
     def getTypeHierarchyNames(self):
         """Returns the class name of this object.
@@ -61,7 +59,6 @@ class SceneItem(object):
 
         return khierarchy
 
-
     def isTypeOf(self, typeName):
         """Returns the class name of this object.
 
@@ -76,7 +73,6 @@ class SceneItem(object):
 
         return False
 
-
     def isOfAnyType(self, typeNames):
         """Returns true if this item has any of the given type names
 
@@ -84,11 +80,12 @@ class SceneItem(object):
             bool: True if the scene item is of the given type.
 
         """
+
         for typeName in typeNames:
             if self.isTypeOf(typeName):
                 return True
-        return False
 
+        return False
 
     # =============
     # Name methods
@@ -102,7 +99,6 @@ class SceneItem(object):
         """
 
         return self._name
-
 
     def setName(self, name):
         """Sets the name of the object with a string.
@@ -119,7 +115,6 @@ class SceneItem(object):
 
         return True
 
-
     def getPath(self):
         """Returns the full hierarchical path to this object.
 
@@ -133,7 +128,6 @@ class SceneItem(object):
 
         return self.getName()
 
-
     def getNameDecoration(self):
         """Gets the decorated name of the object.
 
@@ -143,7 +137,6 @@ class SceneItem(object):
         """
 
         return ""
-
 
     def getDecoratedName(self):
         """Gets the decorated name of the object.
@@ -155,7 +148,6 @@ class SceneItem(object):
 
         return self.getName() + self.getNameDecoration()
 
-
     def getDecoratedPath(self):
         """Gets the decorated path of the object.
 
@@ -164,12 +156,11 @@ class SceneItem(object):
 
         """
 
-
         if self.getParent() is not None:
-            return self.getParent().getDecoratedPath() + '.' + self.getDecoratedName()
+            return self.getParent().getDecoratedPath() + '.' + \
+                self.getDecoratedName()
 
         return self.getDecoratedName()
-
 
     # ===============
     # Parent Methods
@@ -183,7 +174,6 @@ class SceneItem(object):
         """
 
         return self._parent
-
 
     def setParent(self, parent):
         """Sets the parent attribute of this object.
@@ -214,7 +204,6 @@ class SceneItem(object):
 
         return self._sources
 
-
     def getCurrentSource(self):
         """Returns the source of the object which is currently driving it.
 
@@ -222,10 +211,11 @@ class SceneItem(object):
             Object: source of this object
 
         """
+
         if len(self.getSources()) > 0:
             return self.getSources()[-1]
-        return None
 
+        return None
 
     def addSource(self, source):
         """Adds another source to this object.
@@ -246,8 +236,8 @@ class SceneItem(object):
                 return False
 
         self._sources.append(source)
-        return True
 
+        return True
 
     def setSource(self, index, source):
         """Sets the source of this object.
@@ -259,8 +249,8 @@ class SceneItem(object):
         """
 
         self._sources[index] = source
-        return True
 
+        return True
 
     # ==================
     # Component Methods
