@@ -23,7 +23,6 @@ class Rig(Container):
         super(Rig, self).__init__(name)
         self._metaData = {}
 
-
     # ====================
     # Load / Save Methods
     # ====================
@@ -50,7 +49,6 @@ class Rig(Container):
 
         Profiler.getInstance().pop()
 
-
     def loadRigDefinitionFile(self, filepath):
         """Load a rig definition from a file on disk.
 
@@ -76,7 +74,6 @@ class Rig(Container):
         self.loadRigDefinition(jsonData)
         Profiler.getInstance().pop()
 
-
     def _loadComponents(self, componentsJson):
         """Loads components from a JSON dict.
 
@@ -93,8 +90,13 @@ class Rig(Container):
         for componentData in componentsJson:
             # trim off the class name to get the module path.
             modulePath = '.'.join(componentData['class'].split('.')[:-1])
+
             if modulePath is not "":
-                importlib.import_module(modulePath)
+                try:
+                    importlib.import_module(modulePath)
+                except:
+                    print "Warning: Error finding module path: " + modulePath
+                    continue
 
             componentClass = krakenSystem.getComponentClass(componentData['class'])
             if 'name' in componentData:
@@ -105,7 +107,6 @@ class Rig(Container):
 
         Profiler.getInstance().pop()
 
-
     def _makeConnections(self, connectionsJson):
         """Makes connections based on JSON dict.
 
@@ -113,7 +114,6 @@ class Rig(Container):
             connectionsJson (dict): Dictionary of connections to make.
 
         """
-
 
         Profiler.getInstance().push("__makeConnections")
 
@@ -126,26 +126,26 @@ class Rig(Container):
 
             sourceComponent = self.getChildByDecoratedName(sourceComponentDecoratedName)
             if sourceComponent is None:
-                print("Warning: Error making connection:" + connectionData['source'] + " -> " + \
-                    connectionData['target']+". Source component not found:" + sourceComponentDecoratedName)
+                print("Warning: Error making connection:" + connectionData['source'] + " -> " +
+                      connectionData['target'] + ". Source component not found:" + sourceComponentDecoratedName)
                 connectionFailure = True
 
             targetComponent = self.getChildByDecoratedName(targetComponentDecoratedName)
             if targetComponent is None:
-                print("Warning: Error making connection:" + connectionData['source'] + " -> " + \
-                    connectionData['target']+". Target component not found:" + targetComponentDecoratedName)
+                print("Warning: Error making connection:" + connectionData['source'] + " -> " +
+                      connectionData['target'] + ". Target component not found:" + targetComponentDecoratedName)
                 connectionFailure = True
 
             outputPort = sourceComponent.getOutputByName(outputName)
             if outputPort is None:
-                print("Warning: Error making connection:" + connectionData['source'] + " -> " + \
-                    connectionData['target']+". Output '" + outputName + "' not found on Component:" + sourceComponent.getPath())
+                print("Warning: Error making connection:" + connectionData['source'] + " -> " +
+                      connectionData['target'] + ". Output '" + outputName + "' not found on Component:" + sourceComponent.getPath())
                 connectionFailure = True
 
             inputPort = targetComponent.getInputByName(inputName)
             if inputPort is None:
-                print("Warning: Error making connection:" + connectionData['source'] + " -> " + \
-                    connectionData['target']+". Input '" + inputName + "' not found on Component:" + targetComponent.getPath())
+                print("Warning: Error making connection:" + connectionData['source'] + " -> " +
+                      connectionData['target'] + ". Input '" + inputName + "' not found on Component:" + targetComponent.getPath())
                 connectionFailure = True
 
             if connectionFailure is False:
@@ -153,7 +153,6 @@ class Rig(Container):
                 inputPort.setIndex(connectionData.get('targetIndex', 0))
 
         Profiler.getInstance().pop()
-
 
     def loadRigDefinition(self, jsonData):
         """Load a rig definition from a JSON structure.
@@ -186,7 +185,6 @@ class Rig(Container):
 
         Profiler.getInstance().pop()
 
-
     def writeGuideDefinitionFile(self, filepath):
         """Writes a rig definition to a file on disk.
 
@@ -209,7 +207,6 @@ class Rig(Container):
             rigDef.write(json.dumps(pureJSON, indent=2))
 
         Profiler.getInstance().pop()
-
 
     def getData(self):
         """Get the graph definition of the rig. This method is used to save the state of the guide itself.
@@ -246,7 +243,6 @@ class Rig(Container):
         guideData['metaData'] = self._metaData
 
         return guideData
-
 
     def getRigBuildData(self):
         """Get the graph definition of the guide for building the final rig.
