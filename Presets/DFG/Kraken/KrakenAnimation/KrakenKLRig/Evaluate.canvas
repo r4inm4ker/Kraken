@@ -1,0 +1,51 @@
+// Created by kl2dfg (processFunction)
+{
+  "objectType" : "Func",
+  "metadata" : {
+    "uiTooltip" : "Supported types:\n  this: KrakenKLRig\n  context: KrakenClipContext\n  inGlobalSpace: Boolean\n  joints: Xfo<>\n"
+    },
+  "title" : "Evaluate",
+  "ports" : [
+    {
+      "objectType" : "Port",
+      "nodePortType" : "IO",
+      "name" : "this",
+      "execPortType" : "IO",
+      "typeSpec" : "KrakenKLRig"
+      },
+    {
+      "objectType" : "Port",
+      "nodePortType" : "Out",
+      "name" : "context",
+      "execPortType" : "In",
+      "typeSpec" : "KrakenClipContext"
+      },
+    {
+      "objectType" : "Port",
+      "nodePortType" : "Out",
+      "name" : "inGlobalSpace",
+      "execPortType" : "In",
+      "typeSpec" : "Boolean"
+      },
+    {
+      "objectType" : "Port",
+      "metadata" : {
+        "uiColor" : "{\n  \"r\" : 249,\n  \"g\" : 157,\n  \"b\" : 28\n  }"
+        },
+      "nodePortType" : "IO",
+      "name" : "joints",
+      "execPortType" : "IO",
+      "typeSpec" : "Xfo<>"
+      }
+    ],
+  "extDeps" : {
+    "KrakenAnimation" : "*"
+    },
+  "presetGUID" : "030B3FE12068819D9E83B1F7D6C51A49",
+  "code" : "require KrakenAnimation;
+
+dfgEntry {
+  this.evaluate(context, inGlobalSpace, joints);
+}
+"
+  }

@@ -1,0 +1,27 @@
+// Created by kl2dfg (processFunction)
+{
+  "objectType" : "Func",
+  "metadata" : {
+    "uiTooltip" : "Supported types:\n  result: KrakenStaticClip\n"
+    },
+  "title" : "KrakenStaticClip",
+  "ports" : [
+    {
+      "objectType" : "Port",
+      "nodePortType" : "In",
+      "name" : "result",
+      "execPortType" : "Out",
+      "typeSpec" : "KrakenStaticClip"
+      }
+    ],
+  "extDeps" : {
+    "KrakenAnimation" : "*"
+    },
+  "presetGUID" : "7F433535354A63134659FCC20583EAE5",
+  "code" : "require KrakenAnimation;
+
+dfgEntry {
+  result = KrakenStaticClip();
+}
+"
+  }

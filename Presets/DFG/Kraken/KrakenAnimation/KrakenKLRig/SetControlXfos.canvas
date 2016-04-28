@@ -1,0 +1,37 @@
+// Created by kl2dfg (processFunction)
+{
+  "objectType" : "Func",
+  "metadata" : {
+    "uiTooltip" : "Supported types:\n  this: KrakenKLRig\n  values: Xfo<>\n"
+    },
+  "title" : "SetControlXfos",
+  "ports" : [
+    {
+      "objectType" : "Port",
+      "nodePortType" : "IO",
+      "name" : "this",
+      "execPortType" : "IO",
+      "typeSpec" : "KrakenKLRig"
+      },
+    {
+      "objectType" : "Port",
+      "metadata" : {
+        "uiColor" : "{\n  \"r\" : 249,\n  \"g\" : 157,\n  \"b\" : 28\n  }"
+        },
+      "nodePortType" : "Out",
+      "name" : "values",
+      "execPortType" : "In",
+      "typeSpec" : "Xfo<>"
+      }
+    ],
+  "extDeps" : {
+    "KrakenAnimation" : "*"
+    },
+  "presetGUID" : "AA5EAB4A3DB5592587EC36FE82A606E0",
+  "code" : "require KrakenAnimation;
+
+dfgEntry {
+  this.setControlXfos(values);
+}
+"
+  }

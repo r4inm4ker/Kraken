@@ -1,0 +1,9 @@
+require Math;
+
+struct KrakenClipContext {
+  Float64 time;
+};
+
+function KrakenClipContext(Float64 time) {
+  this.time = time;
+}

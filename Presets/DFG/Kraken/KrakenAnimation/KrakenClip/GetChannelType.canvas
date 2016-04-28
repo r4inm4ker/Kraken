@@ -1,0 +1,41 @@
+// Created by kl2dfg (processFunction)
+{
+  "objectType" : "Func",
+  "metadata" : {
+    "uiTooltip" : "Supported types:\n  this: KrakenClip, KrakenStaticClip, KrakenAbcClip, KrakenClipStack, KrakenRotationWaveClip\n  id: UInt32\n  result: UInt32\n"
+    },
+  "title" : "GetChannelType",
+  "ports" : [
+    {
+      "objectType" : "Port",
+      "nodePortType" : "Out",
+      "name" : "this",
+      "execPortType" : "In",
+      "typeSpec" : "$TYPE$"
+      },
+    {
+      "objectType" : "Port",
+      "nodePortType" : "Out",
+      "name" : "id",
+      "execPortType" : "In",
+      "typeSpec" : "UInt32"
+      },
+    {
+      "objectType" : "Port",
+      "nodePortType" : "In",
+      "name" : "result",
+      "execPortType" : "Out",
+      "typeSpec" : "UInt32"
+      }
+    ],
+  "extDeps" : {
+    "KrakenAnimation" : "*"
+    },
+  "presetGUID" : "36D4F8DAA2BCAD1FF1410FF557DCBC2F",
+  "code" : "require KrakenAnimation;
+
+dfgEntry {
+  result = this.getChannelType(id);
+}
+"
+  }
