@@ -20,6 +20,17 @@ class Constraint(SceneItem):
         self._constrainers = []
         self._maintainOffset = False
 
+    # ===============
+    # Source Methods
+    # ===============
+    def getSources(self):
+        """Returns the sources of the object.
+
+        Returns:
+            list: All sources of this object.
+
+        """
+        return super(Constraint, self).getSources() + self._constrainers
 
     # ===================
     # Constraint Methods
@@ -117,7 +128,6 @@ class Constraint(SceneItem):
             raise Exception("'kObject3D' argument is already a constrainer: '" + kObject3D.getName() + "'.")
 
         self._constrainers[index] = kObject3D
-        self.addSource(kObject3D)
 
         return True
 

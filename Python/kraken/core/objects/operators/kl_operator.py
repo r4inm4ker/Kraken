@@ -128,6 +128,7 @@ class KLOperator(Operator):
             bool: True if successful.
 
         """
+        super(KLOperator, self).evaluate()
 
         def getRTVal(obj):
             if isinstance(obj, Object3D):

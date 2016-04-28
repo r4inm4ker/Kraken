@@ -17,6 +17,27 @@ class Operator(SceneItem):
         self.inputs = {}
         self.outputs = {}
 
+    # ===============
+    # Source Methods
+    # ===============
+    def getSources(self):
+        """Returns the sources of the object.
+
+        Returns:
+            list: All sources of this object.
+
+        """
+        sources = []
+        for name in self.getInputNames():
+            inputTargets = self.getInput(name)
+            if not isinstance(inputTargets, list):
+                inputTargets = [inputTargets]
+            for inputTarget in inputTargets:
+                if not isinstance(inputTarget, SceneItem):
+                    continue
+                sources.append(inputTarget)
+                
+        return super(Operator, self).getSources() + sources
 
     # ==============
     # Input Methods
@@ -68,22 +89,13 @@ class Operator(SceneItem):
             if isinstance(operatorInput, list):
                 self.inputs[name] = operatorInput
 
-                for i in xrange(len(operatorInput)):
-                    if not isinstance(operatorInput[i], SceneItem):
-                        continue
-                    self.addSource(operatorInput[i])
-
             else:
                 if index >= len(self.inputs[name]):
                     raise Exception("Out of range index for array output index: " + str(index) + " size: " + str(len(self.inputs[name])) + ".")
                 self.inputs[name][index] = operatorInput
-                if isinstance(operatorInput, SceneItem):
-                    self.addSource(operatorInput)
 
         else:
             self.inputs[name] = operatorInput
-            if isinstance(operatorInput, SceneItem):
-                self.addSource(operatorInput)
 
         return True
 
@@ -204,3 +216,26 @@ class Operator(SceneItem):
 
         return self.outputs.keys()
 
+
+    # ==================
+    # Evaluation Methods
+    # ==================
+
+    def evaluate(self):
+        """invokes the operator causing the output values to be computed.
+
+        Returns:
+            bool: True if successful.
+
+        """
+
+        for name in self.getOutputNames():
+            outputTargets = self.getOutput(name)
+            if not isinstance(outputTargets, list):
+                outputTargets = [outputTargets]
+            for outputTarget in outputTargets:
+                if not isinstance(outputTarget, SceneItem):
+                    continue
+                outputTarget.addSource(self)
+
+        return True

@@ -205,14 +205,26 @@ class SceneItem(object):
     # Source Methods
     # ===============
     def getSources(self):
-        """Returns the source of the object as an object.
+        """Returns the sources of the object.
 
         Returns:
-            Object: Source of this object.
+            list: All sources of this object.
 
         """
 
         return self._sources
+
+
+    def getCurrentSource(self):
+        """Returns the source of the object which is currently driving it.
+
+        Returns:
+            Object: source of this object
+
+        """
+        if len(self.getSources()) > 0:
+            return self.getSources()[-1]
+        return None
 
 
     def addSource(self, source):
@@ -225,6 +237,13 @@ class SceneItem(object):
             int: Index of the source used
 
         """
+
+        if not isinstance(source, SceneItem):
+            return False
+
+        for prevSource in self._sources:
+            if prevSource.getId() == source.getId():
+                return False
 
         self._sources.append(source)
         return True
