@@ -157,7 +157,7 @@ class Constraint(SceneItem):
         return self._constrainers
 
 
-    def compute(self, getGlobalXfoFunc):
+    def compute(self):
         """invokes the constraint and returns the resulting transform
 
         Returns:
@@ -169,17 +169,19 @@ class Constraint(SceneItem):
             return None
         if len(self._constrainers) == 0:
             return None
+        if self.getMaintainOffset():
+            return self._constrainee.xfo
 
         cls = self.__class__.__name__
         ks.loadExtension('KrakenForCanvas')
         rtVal = ks.rtVal('Kraken%s' % cls)
 
         for c in self._constrainers:
-            rtVal.addConstrainer('', ks.rtVal('Xfo', getGlobalXfoFunc(c)))
+            rtVal.addConstrainer('', ks.rtVal('Xfo', c.globalXfo))
 
-        return Xfo(rtVal.compute("Xfo", ks.rtVal('Xfo', getGlobalXfoFunc(self._constrainee))))
+        return Xfo(rtVal.compute("Xfo", ks.rtVal('Xfo', self._constrainee.xfo))) # using globalXfo here would cause a recursion
 
-    def computeOffset(self, getGlobalXfoFunc):
+    def computeOffset(self):
         """invokes the constraint and computes the offset
 
         Returns:
@@ -191,6 +193,8 @@ class Constraint(SceneItem):
             return Xfo()
         if len(self._constrainers) == 0:
             return Xfo()
+        if not self.getMaintainOffset():
+            return Xfo()
 
         cls = self.__class__.__name__
         ks.loadExtension('KrakenForCanvas')
@@ -198,9 +202,9 @@ class Constraint(SceneItem):
 
         rtVal.offset = ks.rtVal('Xfo', Xfo())
         for c in self._constrainers:
-            rtVal.addConstrainer('', ks.rtVal('Xfo', getGlobalXfoFunc(c)))
+            rtVal.addConstrainer('', ks.rtVal('Xfo', c.globalXfo))
 
-        return Xfo(rtVal.computeOffset("Xfo", ks.rtVal('Xfo', getGlobalXfoFunc(self._constrainee))))
+        return Xfo(rtVal.computeOffset("Xfo", ks.rtVal('Xfo', self._constrainee.xfo)))
 
     def evaluate(self):
         """invokes the constraint causing the output value to be computed.
@@ -211,10 +215,7 @@ class Constraint(SceneItem):
         """
 
         if self.getMaintainOffset() is False:
-            def getGlobalXfoFunc(c):
-                return c.xfo
-
-            self.getConstrainee().xfo = self.compute(getGlobalXfoFunc=getGlobalXfoFunc)
+            self.getConstrainee().xfo = self.compute()
             return True
 
         return False

@@ -89,9 +89,12 @@ class CanvasOperator(Operator):
         """
         super(KLOperator, self).evaluate()
 
-        def getRTVal(obj):
+        def getRTVal(obj, asInput = True):
             if isinstance(obj, Object3D):
-                return obj.xfo.getRTVal().toMat44('Mat44')
+                if asInput:
+                    return obj.globalXfo.getRTVal().toMat44('Mat44')
+                else:
+                    return obj.xfo.getRTVal().toMat44('Mat44')
             elif isinstance(obj, Xfo):
                 return obj.getRTVal().toMat44('Mat44')
             elif isinstance(obj, Mat44):
@@ -172,7 +175,7 @@ class CanvasOperator(Operator):
                     rtValArray = ks.rtVal(portDataType)
                     rtValArray.resize(len(self.outputs[portName]))
                     for j in xrange(len(self.outputs[portName])):
-                        rtVal = getRTVal(self.outputs[portName][j])
+                        rtVal = getRTVal(self.outputs[portName][j], asInput = False)
 
                         validateArg(rtVal, portName, portDataType[:-2])
 
@@ -181,7 +184,7 @@ class CanvasOperator(Operator):
                     portVal = rtValArray
                     self.binding.setArgValue(portName, portVal, False)
                 else:
-                    rtVal = getRTVal(self.outputs[portName])
+                    rtVal = getRTVal(self.outputs[portName], asInput = False)
 
                     validateArg(rtVal, portName, portDataType)
 

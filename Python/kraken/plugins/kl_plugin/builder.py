@@ -421,7 +421,8 @@ class Builder(Builder):
         kl += ["", "  // build constraints"]
         for constraint in self.__klConstraints:
             memberName = constraint['member']
-            kl += ["  this.%s.offset = %s;" % (memberName, constraint.get('offset', 'Xfo()'))]
+            if constraint['sceneItem'].getMaintainOffset():
+                kl += ["  this.%s.offset = %s;" % (memberName, self.__getXfoAsStr(constraint['sceneItem'].computeOffset()))]
             kl += ["  this.%s.constrainers.resize(%d);" % (memberName, len(constraint['constrainers']))]
 
         kl += ["", "  // build kl solvers"]
@@ -508,7 +509,7 @@ class Builder(Builder):
         kl += ["function %s.resetPose!() {" % self.getKLExtensionName()]
         kl += ["  // reset objects"]
         for obj in self.__klObjects:
-            kl += ["  this.%s.xfo = %s;" % (obj['member'], obj.get('xfo', 'Xfo()'))]
+            kl += ["  this.%s.xfo = %s;" % (obj['member'], self.__getXfoAsStr(obj['sceneItem'].localXfo))]
         kl += ["  // reset attributes"]
         for attr in scalarAttributes:
             kl += ["  this.%s.value = %f;" % (attr['member'], attr['value'])]
@@ -1568,60 +1569,6 @@ class Builder(Builder):
 
         return True
 
-    def __computeGlobalTransform(self, item, rig):
-        if isinstance(item, Constraint):
-            itemObj = self.findKLObjectForSI(item.getConstrainee())
-            constraintObj = self.findKLConstraint(item)
-            krkConstraint = getattr(rig, constraintObj['member'])
-
-            for i in range(len(item.getConstrainers())):
-                constrainer = item.getConstrainers()[i]
-                globalXfo = self.__computeGlobalTransform(constrainer, rig)
-                krkConstraint.constrainers[i] = globalXfo
-
-            initialXfo = itemObj.get('initialXfo', Xfo().getRTVal())
-            return krkConstraint.compute("Xfo", initialXfo)
-        else:
-            itemObj = self.findKLObjectForSI(item)
-
-            source = itemObj['sceneItem'].getCurrentSource()
-            if isinstance(source, Constraint):
-                if source.getMaintainOffset() == False:
-                    return self.__computeGlobalTransform(source, rig)
-
-            return itemObj.get('initialXfo', Xfo().getRTVal())
-
-    def __computeOffset(self, item, rig):
-        if isinstance(item['sceneItem'], Object3D):
-            source = item['sceneItem'].getCurrentSource()
-            if isinstance(source, Object3D):
-                sourceObj = self.findKLObjectForSI(source)
-                print 'Solving local xfo for '+item['member']
-                rig.solve("")
-
-                parentXfo = getattr(rig, sourceObj['member']).globalXfo
-                initialXfo = item.get('initialXfo', Xfo().getRTVal())
-                localXfo = parentXfo.inverse('Xfo').multiply('Xfo', initialXfo)
-                krkObj = getattr(rig, item['member'])
-                krkObj.xfo = localXfo
-                setattr(rig, item['member'], krkObj)
-                item['xfo'] = self.__getXfoAsStr(Xfo(localXfo))
-
-            elif isinstance(source, Constraint):
-
-                if not source.getMaintainOffset():
-                    return
-                    
-                sourceObj = self.findKLConstraint(source)
-                print 'Solving offset for '+sourceObj['member']
-                rig.solve("")
-
-                krkConstraint = getattr(rig, sourceObj['member'])
-                initialXfo = item.get('initialXfo', Xfo().getRTVal())
-                offsetXfo = krkConstraint.computeOffset('Xfo', initialXfo)
-                krkConstraint.offset = offsetXfo
-                setattr(rig, sourceObj['member'], krkConstraint)
-                sourceObj['offset'] = self.__getXfoAsStr(Xfo(offsetXfo))
 
     def _postBuild(self):
         """Post-Build commands.
@@ -1630,16 +1577,5 @@ class Builder(Builder):
             bool: True if successful.
 
         """
-
-        # self.saveKLExtension()
-        self.loadKLExtension()
-        client = ks.getCoreClient()
-
-        # get the rig
-        rt = client.RT.types
-        rig = getattr(rt, self.getKLExtensionName()).create()
-
-        for item in self.__krkVisitedObjects:
-            self.__computeOffset(item, rig)
 
         return self.saveKLExtension()

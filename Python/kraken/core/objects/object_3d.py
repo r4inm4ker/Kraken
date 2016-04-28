@@ -14,10 +14,12 @@ from kraken.core.maths.rotation_order import RotationOrder
 from kraken.core.objects.attributes.attribute_group import AttributeGroup
 from kraken.core.objects.attributes.bool_attribute import BoolAttribute
 
+from kraken.core.objects.constraints.constraint import Constraint
 from kraken.core.objects.constraints.orientation_constraint import OrientationConstraint
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 from kraken.core.objects.constraints.position_constraint import PositionConstraint
 from kraken.core.objects.constraints.scale_constraint import ScaleConstraint
+from kraken.core.objects.operators.operator import Operator
 
 
 class Object3D(SceneItem):
@@ -126,6 +128,44 @@ class Object3D(SceneItem):
         return True
 
 
+    @property
+    def localXfo(self):
+        """Gets local transform of this Object3D
+
+        Returns:
+            float: Xfo
+
+        """
+
+        globalXfo = self.globalXfo
+
+        parent = self.getParent()
+        if not isinstance(parent, SceneItem):
+            return globalXfo
+
+        parentXfo = parent.globalXfo
+        return parentXfo.inverse().multiply(globalXfo)
+
+
+    @property
+    def globalXfo(self):
+        """Gets global transform of this Object3D
+
+        Returns:
+            float: Xfo
+
+        """
+
+        for source in self.getSources():
+            if isinstance(source, Object3D):
+                continue
+            if isinstance(source, Constraint):
+                return source.compute()
+            if isinstance(source, Operator):
+                source.evaluate()
+                break
+
+        return self._xfo
 
     # =============
     # Name Methods

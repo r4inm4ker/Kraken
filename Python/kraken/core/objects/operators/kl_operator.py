@@ -130,9 +130,12 @@ class KLOperator(Operator):
         """
         super(KLOperator, self).evaluate()
 
-        def getRTVal(obj):
+        def getRTVal(obj, asInput = True):
             if isinstance(obj, Object3D):
-                return obj.xfo.getRTVal().toMat44('Mat44')
+                if asInput:
+                    return obj.globalXfo.getRTVal().toMat44('Mat44')
+                else:
+                    return obj.xfo.getRTVal().toMat44('Mat44')
             elif isinstance(obj, Xfo):
                 return obj.getRTVal().toMat44('Mat44')
             elif isinstance(obj, Attribute):
@@ -206,7 +209,7 @@ class KLOperator(Operator):
                     rtValArray = ks.rtVal(argDataType)
                     rtValArray.resize(len(self.outputs[argName]))
                     for j in xrange(len(self.outputs[argName])):
-                        rtVal = getRTVal(self.outputs[argName][j])
+                        rtVal = getRTVal(self.outputs[argName][j], asInput = False)
 
                         validateArg(rtVal, argName, argDataType[:-2])
 
@@ -214,7 +217,7 @@ class KLOperator(Operator):
 
                     argVals.append(rtValArray)
                 else:
-                    rtVal = getRTVal(self.outputs[argName])
+                    rtVal = getRTVal(self.outputs[argName], asInput = False)
 
                     validateArg(rtVal, argName, argDataType)
 
