@@ -203,7 +203,7 @@ class Rig(Container):
         # now preprocess the data ready for saving to disk.
         pureJSON = prepareToSave(guideData)
 
-        with open(filepath,'w') as rigDef:
+        with open(filepath, 'w') as rigDef:
             rigDef.write(json.dumps(pureJSON, indent=2))
 
         Profiler.getInstance().pop()
