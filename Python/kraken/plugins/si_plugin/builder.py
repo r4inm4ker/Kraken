@@ -7,10 +7,8 @@ Builder -- Component representation.
 
 from kraken.core.kraken_system import ks
 from kraken.core.builder import Builder
-from kraken.core.objects.constraints.pose_constraint import PoseConstraint
+
 from kraken.plugins.si_plugin.utils import *
-from kraken.core.maths.xfo import Xfo
-import FabricEngine.Core as core
 
 
 class Builder(Builder):
@@ -18,7 +16,6 @@ class Builder(Builder):
 
     def __init__(self):
         super(Builder, self).__init__()
-
 
     def deleteBuildElements(self):
         """Clear out all dcc built elements from the scene if exist."""
@@ -50,7 +47,8 @@ class Builder(Builder):
         """Builds a container / namespace object.
 
         Args:
-            kSceneItem (object): kSceneItem that represents a container to be built.
+            kSceneItem (object): kSceneItem that represents a container to be
+                built.
             buildName (str): The name to use on the built object.
 
         Returns:
@@ -69,13 +67,13 @@ class Builder(Builder):
         self._registerSceneItemPair(kSceneItem, dccSceneItem)
 
         return dccSceneItem
-
 
     def buildLayer(self, kSceneItem, buildName):
         """Builds a layer object.
 
         Args:
-            kSceneItem (object): kSceneItem that represents a layer to be built.
+            kSceneItem (object): kSceneItem that represents a layer to be
+                built.
             buildName (str): The name to use on the built object.
 
         Returns:
@@ -94,12 +92,12 @@ class Builder(Builder):
 
         return dccSceneItem
 
-
     def buildHierarchyGroup(self, kSceneItem, buildName):
         """Builds a hierarchy group object.
 
         Args:
-            kSceneItem (object): kSceneItem that represents a group to be built.
+            kSceneItem (object): kSceneItem that represents a group to be
+                built.
             buildName (str): The name to use on the built object.
 
         Returns:
@@ -121,12 +119,12 @@ class Builder(Builder):
 
         return dccSceneItem
 
-
     def buildGroup(self, kSceneItem, buildName):
         """Builds a locator / null object.
 
         Args:
-            kSceneItem (object): kSceneItem that represents a group to be built.
+            kSceneItem (object): kSceneItem that represents a group to be
+                built.
             buildName (str): The name to use on the built object.
 
         Returns:
@@ -145,12 +143,12 @@ class Builder(Builder):
 
         return dccSceneItem
 
-
     def buildJoint(self, kSceneItem, buildName):
         """Builds a joint object.
 
         Args:
-            kSceneItem (object): kSceneItem that represents a joint to be built.
+            kSceneItem (object): kSceneItem that represents a joint to be
+                built.
             buildName (str): The name to use on the built object.
 
         Returns:
@@ -171,12 +169,12 @@ class Builder(Builder):
 
         return dccSceneItem
 
-
     def buildLocator(self, kSceneItem, buildName):
         """Builds a locator / null object.
 
         Args:
-            kSceneItem (object): kSceneItem that represents a locator / null to be built.
+            kSceneItem (object): kSceneItem that represents a locator / null
+                to be built.
             buildName (str): The name to use on the built object.
 
         Returns:
@@ -195,12 +193,12 @@ class Builder(Builder):
 
         return dccSceneItem
 
-
     def buildCurve(self, kSceneItem, buildName):
         """Builds a Curve object.
 
         Args:
-            kSceneItem (object): kSceneItem that represents a curve to be built.
+            kSceneItem (object): kSceneItem that represents a curve to be
+                built.
             buildName (str): The name to use on the built object.
 
         Returns:
@@ -245,21 +243,33 @@ class Builder(Builder):
                 knots = list(xrange(len(eachSubCurve[0])))
 
             if i == 0:
-                dccSceneItem = parentDCCSceneItem.AddNurbsCurve(list(eachSubCurve), knots, closedSubCurve, 1, constants.siNonUniformParameterization, constants.siSINurbs)
+                dccSceneItem = parentDCCSceneItem.AddNurbsCurve(
+                    list(eachSubCurve),
+                    knots,
+                    closedSubCurve,
+                    1,
+                    constants.siNonUniformParameterization,
+                    constants.siSINurbs)
+
                 self._registerSceneItemPair(kSceneItem, dccSceneItem)
             else:
-                dccSceneItem.ActivePrimitive.Geometry.AddCurve(eachSubCurve, knots, closedSubCurve, 1, constants.siNonUniformParameterization)
+                dccSceneItem.ActivePrimitive.Geometry.AddCurve(
+                    eachSubCurve,
+                    knots,
+                    closedSubCurve,
+                    1,
+                    constants.siNonUniformParameterization)
 
         dccSceneItem.Name = buildName
 
         return dccSceneItem
-
 
     def buildControl(self, kSceneItem, buildName):
         """Builds a Control object.
 
         Args:
-            kSceneItem (object): kSceneItem that represents a control to be built.
+            kSceneItem (object): kSceneItem that represents a control to be
+                built.
             buildName (str): The name to use on the built object.
 
         Returns:
@@ -304,15 +314,26 @@ class Builder(Builder):
                 knots = list(xrange(len(eachSubCurve[0])))
 
             if i == 0:
-                dccSceneItem = parentDCCSceneItem.AddNurbsCurve(list(eachSubCurve), knots, closedSubCurve, 1, constants.siNonUniformParameterization, constants.siSINurbs)
+                dccSceneItem = parentDCCSceneItem.AddNurbsCurve(
+                    list(eachSubCurve),
+                    knots,
+                    closedSubCurve,
+                    1,
+                    constants.siNonUniformParameterization,
+                    constants.siSINurbs)
+
                 self._registerSceneItemPair(kSceneItem, dccSceneItem)
             else:
-                dccSceneItem.ActivePrimitive.Geometry.AddCurve(eachSubCurve, knots, closedSubCurve, 1, constants.siNonUniformParameterization)
+                dccSceneItem.ActivePrimitive.Geometry.AddCurve(
+                    eachSubCurve,
+                    knots,
+                    closedSubCurve,
+                    1,
+                    constants.siNonUniformParameterization)
 
         dccSceneItem.Name = buildName
 
         return dccSceneItem
-
 
     # ========================
     # Attribute Build Methods
@@ -321,7 +342,8 @@ class Builder(Builder):
         """Builds a Bool attribute.
 
         Args:
-            kAttribute (object): kAttribute that represents a boolean attribute to be built.
+            kAttribute (object): kAttribute that represents a boolean attribute
+            to be built.
 
         Returns:
             bool: True if successful.
@@ -332,13 +354,23 @@ class Builder(Builder):
             return False
 
         parentDCCSceneItem = Dispatch(self.getDCCSceneItem(kAttribute.getParent()))
-        dccSceneItem = parentDCCSceneItem.AddParameter2(kAttribute.getName(), constants.siBool, kAttribute.getValue(), "", "", "", "", constants.siClassifUnknown, 2053, kAttribute.getName())
+        dccSceneItem = parentDCCSceneItem.AddParameter2(
+            kAttribute.getName(),
+            constants.siBool,
+            kAttribute.getValue(),
+            "",
+            "",
+            "",
+            "",
+            constants.siClassifUnknown,
+            2053,
+            kAttribute.getName())
+
         dccSceneItem.Animatable = kAttribute.getAnimatable()
         dccSceneItem.Keyable = kAttribute.getKeyable()
         self._registerSceneItemPair(kAttribute, dccSceneItem)
 
         return True
-
 
     def buildScalarAttribute(self, kAttribute):
         """Builds a Float attribute.
@@ -355,12 +387,21 @@ class Builder(Builder):
             return False
 
         parentDCCSceneItem = Dispatch(self.getDCCSceneItem(kAttribute.getParent()))
-        dccSceneItem = parentDCCSceneItem.AddParameter2(kAttribute.getName(), constants.siDouble, kAttribute.getValue(), kAttribute.getMin(), kAttribute.getMax(), kAttribute.getUIMin(), kAttribute.getUIMax(), constants.siClassifUnknown, 2053, kAttribute.getName())
+        dccSceneItem = parentDCCSceneItem.AddParameter2(
+            kAttribute.getName(),
+            constants.siDouble,
+            kAttribute.getValue(),
+            kAttribute.getMin(),
+            kAttribute.getMax(),
+            kAttribute.getUIMin(),
+            kAttribute.getUIMax(),
+            constants.siClassifUnknown,
+            2053,
+            kAttribute.getName())
 
         self._registerSceneItemPair(kAttribute, dccSceneItem)
 
         return True
-
 
     def buildIntegerAttribute(self, kAttribute):
         """Builds a Integer attribute.
@@ -377,12 +418,21 @@ class Builder(Builder):
             return False
 
         parentDCCSceneItem = Dispatch(self.getDCCSceneItem(kAttribute.getParent()))
-        dccSceneItem = parentDCCSceneItem.AddParameter2(kAttribute.getName(), constants.siInt4, kAttribute.getValue(), kAttribute.getMin(), kAttribute.getMax(), kAttribute.getUIMin(), kAttribute.getUIMax(), constants.siClassifUnknown, 2053, kAttribute.getName())
+        dccSceneItem = parentDCCSceneItem.AddParameter2(
+            kAttribute.getName(),
+            constants.siInt4,
+            kAttribute.getValue(),
+            kAttribute.getMin(),
+            kAttribute.getMax(),
+            kAttribute.getUIMin(),
+            kAttribute.getUIMax(),
+            constants.siClassifUnknown,
+            2053,
+            kAttribute.getName())
 
         self._registerSceneItemPair(kAttribute, dccSceneItem)
 
         return True
-
 
     def buildStringAttribute(self, kAttribute):
         """Builds a String attribute.
@@ -399,12 +449,21 @@ class Builder(Builder):
             return False
 
         parentDCCSceneItem = Dispatch(self.getDCCSceneItem(kAttribute.getParent()))
-        dccSceneItem = parentDCCSceneItem.AddParameter2(kAttribute.getName(), constants.siString, kAttribute.getValue(), "", "", "", "", constants.siClassifUnknown, 2053, kAttribute.getName())
+        dccSceneItem = parentDCCSceneItem.AddParameter2(
+            kAttribute.getName(),
+            constants.siString,
+            kAttribute.getValue(),
+            "",
+            "",
+            "",
+            "",
+            constants.siClassifUnknown,
+            2053,
+            kAttribute.getName())
 
         self._registerSceneItemPair(kAttribute, dccSceneItem)
 
         return True
-
 
     def buildAttributeGroup(self, kAttributeGroup):
         """Builds attribute groups on the DCC object.
@@ -427,7 +486,6 @@ class Builder(Builder):
         self._registerSceneItemPair(kAttributeGroup, dccSceneItem)
 
         return True
-
 
     def connectAttribute(self, kAttribute):
         """Connects the driver attribute to this one.
@@ -471,7 +529,6 @@ class Builder(Builder):
 
         return True
 
-
     # =========================
     # Constraint Build Methods
     # =========================
@@ -492,11 +549,14 @@ class Builder(Builder):
         for eachConstrainer in kConstraint.getConstrainers():
             constrainers.AddItems(self.getDCCSceneItem(eachConstrainer))
 
-        dccSceneItem = constraineeDCCSceneItem.Kinematics.AddConstraint("Orientation", constrainers, kConstraint.getMaintainOffset())
+        dccSceneItem = constraineeDCCSceneItem.Kinematics.AddConstraint(
+            "Orientation",
+            constrainers,
+            kConstraint.getMaintainOffset())
+
         self._registerSceneItemPair(kConstraint, dccSceneItem)
 
         return dccSceneItem
-
 
     def buildPoseConstraint(self, kConstraint):
         """Builds an pose constraint represented by the kConstraint.
@@ -509,26 +569,29 @@ class Builder(Builder):
 
         """
 
-
         useXSIConstraint = True
         if useXSIConstraint:
 
             constraineeDCCSceneItem = self.getDCCSceneItem(kConstraint.getConstrainee())
-            if kConstraint.getMaintainOffset():
-                constraineeTransform = constraineeDCCSceneItem.Kinematics.Global.Transform
+            # if kConstraint.getMaintainOffset():
+            #     constraineeTransform = constraineeDCCSceneItem.Kinematics.Global.Transform
 
             constrainingObjs = getCollection()
             for eachConstrainer in kConstraint.getConstrainers():
                 constrainer = self.getDCCSceneItem(eachConstrainer)
 
-                if kConstraint.getMaintainOffset():
-                    constrainerTransform = constrainer.Kinematics.Global.Transform
+                # if kConstraint.getMaintainOffset():
+                #     constrainerTransform = constrainer.Kinematics.Global.Transform
 
                 # si.LogMessage( "%s,%s,%s" % (constrainer.posx.Value, constrainer.posy.Value, constrainer.posz.Value) )
 
                 constrainingObjs.AddItems(constrainer)
 
-            dccSceneItem = constraineeDCCSceneItem.Kinematics.AddConstraint("Pose", constrainingObjs, kConstraint.getMaintainOffset())
+            dccSceneItem = constraineeDCCSceneItem.Kinematics.AddConstraint(
+                "Pose",
+                constrainingObjs,
+                kConstraint.getMaintainOffset())
+
             self._registerSceneItemPair(kConstraint, dccSceneItem)
 
         else:
@@ -537,7 +600,7 @@ class Builder(Builder):
             ks.loadCoreClient()
             ks.loadExtension('Kraken')
             solverTypeName = 'PoseConstraintSolver'
-            target = constraineeDCCSceneItem.FullName# + ".kine.global"
+            target = constraineeDCCSceneItem.FullName  # + ".kine.global"
             canvasOpPath = target + ".kine.global.CanvasOp"
 
             si.FabricCanvasOpApply(target, "", True, "", "")
@@ -546,19 +609,19 @@ class Builder(Builder):
             si.FabricCanvasAddPort(canvasOpPath, "", "debug", "In", "Boolean", "")
             si.FabricCanvasAddPort(canvasOpPath, "", "rightSide", "In", "Boolean", "")
 
-            connectionTargets = ""
-            connectionSuffix = ".kine.global"
+            # connectionTargets = ""
+            # connectionSuffix = ".kine.global"
             for eachConstrainer in kConstraint.getConstrainers():
 
                 if eachConstrainer is None:
-                    raise Exception("Constraint '"+kConstraint.getPath()+"' has invalid connection.")
+                    raise Exception("Constraint '" + kConstraint.getPath() + "' has invalid connection.")
 
                 dccSceneItem = self.getDCCSceneItem(eachConstrainer)
 
                 if dccSceneItem is None:
-                    raise Exception("Constraint '"+kConstraint.getPath()+"' of type '"+solverTypeName+"' is connected to object without corresponding SceneItem:" + eachConstrainer.getPath())
+                    raise Exception("Constraint '" + kConstraint.getPath() + "' of type '" + solverTypeName + "' is connected to object without corresponding SceneItem:" + eachConstrainer.getPath())
 
-                connectionTargets = dccSceneItem.FullName + connectionSuffix
+                # connectionTargets = dccSceneItem.FullName + connectionSuffix
                 break
 
             si.FabricCanvasAddPort(canvasOpPath, "", "constrainer", "In", "Mat44", "")
@@ -582,7 +645,6 @@ class Builder(Builder):
 
         return dccSceneItem
 
-
     def buildPositionConstraint(self, kConstraint):
         """Builds an position constraint represented by the kConstraint.
 
@@ -600,11 +662,14 @@ class Builder(Builder):
         for eachConstrainer in kConstraint.getConstrainers():
             constrainers.AddItems(self.getDCCSceneItem(eachConstrainer))
 
-        dccSceneItem = constraineeDCCSceneItem.Kinematics.AddConstraint("Position", constrainers, kConstraint.getMaintainOffset())
+        dccSceneItem = constraineeDCCSceneItem.Kinematics.AddConstraint(
+            "Position",
+            constrainers,
+            kConstraint.getMaintainOffset())
+
         self._registerSceneItemPair(kConstraint, dccSceneItem)
 
         return dccSceneItem
-
 
     def buildScaleConstraint(self, kConstraint):
         """Builds an scale constraint represented by the kConstraint.
@@ -623,11 +688,14 @@ class Builder(Builder):
         for eachConstrainer in kConstraint.getConstrainers():
             constrainers.AddItems(self.getDCCSceneItem(eachConstrainer))
 
-        dccSceneItem = constraineeDCCSceneItem.Kinematics.AddConstraint("Scaling", constrainers, kConstraint.getMaintainOffset())
+        dccSceneItem = constraineeDCCSceneItem.Kinematics.AddConstraint(
+            "Scaling",
+            constrainers,
+            kConstraint.getMaintainOffset())
+
         self._registerSceneItemPair(kConstraint, dccSceneItem)
 
         return dccSceneItem
-
 
     # ========================
     # Component Build Methods
@@ -636,7 +704,8 @@ class Builder(Builder):
         """Builds the link between the target and connection target.
 
         Args:
-            connectionInput (object): kraken component input to build connections for.
+            connectionInput (object): kraken component input to build
+                connections for.
 
         Returns:
             bool: True if successful.
@@ -661,7 +730,6 @@ class Builder(Builder):
 
         return True
 
-
     # =========================
     # Operator Builder Methods
     # =========================
@@ -669,12 +737,13 @@ class Builder(Builder):
         """Builds KL Operators on the components.
 
         Args:
-            kOperator (object): kraken operator that represents a Splice operator.
+            kOperator (object): kraken operator that represents a KL operator.
 
         Returns:
             bool: True if successful.
 
         """
+
         try:
             solverTypeName = kOperator.getSolverTypeName()
             args = kOperator.getSolverArgs()
@@ -683,7 +752,7 @@ class Builder(Builder):
             def findPortOfType(dataTypes, connectionTypes):
                 for i in xrange(len(args)):
                     arg = args[i]
-                    argName = arg.name.getSimpleType()
+                    # argName = arg.name.getSimpleType()
                     argDataType = arg.dataType.getSimpleType()
                     argConnectionType = arg.connectionType.getSimpleType()
 
@@ -700,13 +769,13 @@ class Builder(Builder):
             ownerArg = args[ownerOutPortIndex]
             ownerArgName = ownerArg.name.getSimpleType()
             ownerArgDataType = ownerArg.dataType.getSimpleType()
-            ownerArgConnectionType = ownerArg.connectionType.getSimpleType()
+            # ownerArgConnectionType = ownerArg.connectionType.getSimpleType()
 
             if ownerArgDataType == 'Mat44[]':
-                operatorOwner = self.getDCCSceneItem( kOperator.getOutput(ownerArgName)[0] )
-                ownerArgName = ownerArgName+str(0)
+                operatorOwner = self.getDCCSceneItem(kOperator.getOutput(ownerArgName)[0])
+                ownerArgName = ownerArgName + str(0)
             else:
-                operatorOwner = self.getDCCSceneItem( kOperator.getOutput(ownerArgName) )
+                operatorOwner = self.getDCCSceneItem(kOperator.getOutput(ownerArgName))
 
 
             # Create Splice Operator
@@ -714,13 +783,39 @@ class Builder(Builder):
             canvasOp = si.Dictionary.GetObject(canvasOpPath, False)
             self._registerSceneItemPair(kOperator, canvasOp)
 
-            si.FabricCanvasSetExtDeps(canvasOpPath, "", "Kraken" )
+            si.FabricCanvasSetExtDeps(canvasOpPath, "", "Kraken")
 
-            si.FabricCanvasAddFunc(canvasOpPath, "", kOperator.getName(), "dfgEntry {}", "400", "0")
-            si.FabricCanvasAddPort(canvasOpPath, kOperator.getName(), "solver", "IO", solverTypeName, "", "Kraken")
-            si.FabricCanvasAddPort(canvasOpPath, "", "solver", "IO", solverTypeName, "", "Kraken" )
-            si.FabricCanvasConnect(canvasOpPath, "", "solver", kOperator.getName()+".solver")
-            si.FabricCanvasConnect(canvasOpPath, "", kOperator.getName()+".solver", "solver")
+            si.FabricCanvasAddFunc(canvasOpPath, "",
+                                   kOperator.getName(),
+                                   "dfgEntry {}",
+                                   "400",
+                                   "0")
+
+            si.FabricCanvasAddPort(canvasOpPath,
+                                   kOperator.getName(),
+                                   "solver",
+                                   "IO",
+                                   solverTypeName,
+                                   "",
+                                   "Kraken")
+
+            si.FabricCanvasAddPort(canvasOpPath,
+                                   "",
+                                   "solver",
+                                   "IO",
+                                   solverTypeName,
+                                   "",
+                                   "Kraken")
+
+            si.FabricCanvasConnect(canvasOpPath,
+                                   "",
+                                   "solver",
+                                   kOperator.getName() + ".solver")
+
+            si.FabricCanvasConnect(canvasOpPath,
+                                   "",
+                                   kOperator.getName() + ".solver",
+                                   "solver")
 
 
             def addCanvasPorts(canvasOpPath, portName, canvasGraphPort, portDataType, argConnectionType, dccSceneItem):
@@ -737,18 +832,21 @@ class Builder(Builder):
 
                 # Append the suffix based on the argument type, Softimage Only
                 if portDataType == 'Mat44':
-                    portmapDefinition = portName+"|XSI Port"
+                    portmapDefinition = portName + "|XSI Port"
 
                     canvasOpPath2 = str(canvasOpPath) + ":"
                     si.FabricCanvasOpPortMapDefine(canvasOpPath, portmapDefinition)
                     canvasOpPath = str(canvasOpPath2)[:-1]
 
                     canvasOp = si.Dictionary.GetObject(canvasOpPath, False)
-                    si.FabricCanvasOpConnectPort(canvasOpPath, portName, dccSceneItem.FullName+".kine.global")
+                    si.FabricCanvasOpConnectPort(
+                        canvasOpPath,
+                        portName,
+                        dccSceneItem.FullName + ".kine.global")
 
                 elif portDataType in ['Scalar', 'Boolean', 'Integer']:
 
-                    portmapDefinition = portName+"|XSI Parameter"
+                    portmapDefinition = portName + "|XSI Parameter"
 
                     canvasOpPath2 = str(canvasOpPath) + ":"
                     si.FabricCanvasOpPortMapDefine(canvasOpPath, portmapDefinition)
@@ -766,13 +864,6 @@ class Builder(Builder):
                         else:
                             parameter.AddExpression(dccSceneItem.FullName)
 
-            # Add the private/non-mayaAttr port that stores the Solver object
-            # Note: persistence will have to be re-setup for 2.0. the interface has changed,
-            # and I don't think we need a command to enable it anymore.
-            # si.fabricSplice("addInternalPort", spliceOpPath, "{\"portName\":\"solver\", \"dataType\":\"" + solverTypeName + "\", \"extension\":\"" + kOperator.getExtension() + "\", \"portMode\":\"io\"}", "")
-            # si.fabricSplice("setPortPersistence", spliceOpPath, '{"portName":"solver", "persistence":true }', "")
-
-
             arraySizes = {}
             # connect the operator to the objects in the DCC
             for i in xrange(len(args)):
@@ -788,32 +879,94 @@ class Builder(Builder):
                     if argConnectionType == 'In':
                         connectedObjects = kOperator.getInput(argName)
 
-                        arrayNode = si.FabricCanvasAddFunc(canvasOpPath, "", argName+"_ComposeArray", "dfgEntry {}", "40", str(i * 100))
-                        si.FabricCanvasAddPort(canvasOpPath, arrayNode, "array", "Out", argDataType, "")
-                        arrayNodeCode = "dfgEntry { \n  array.resize("+str(len(connectedObjects))+");\n"
-                        for j in range(len(connectedObjects)):
-                            si.FabricCanvasAddPort(canvasOpPath, arrayNode, "value"+str(j), "In", elementDataType, "", "")
-                            arrayNodeCode += "  array["+str(j)+"] = value"+str(j)+";\n"
-                        arrayNodeCode += "}"
-                        si.FabricCanvasSetCode(canvasOpPath, arrayNode, arrayNodeCode)
+                        arrayNode = si.FabricCanvasAddFunc(
+                            canvasOpPath,
+                            "",
+                            argName + "_ComposeArray",
+                            "dfgEntry {}",
+                            "40",
+                            str(i * 100))
 
-                        si.FabricCanvasAddPort(canvasOpPath, kOperator.getName(), argName, "In", argDataType, "")
-                        si.FabricCanvasConnect(canvasOpPath, "", arrayNode+".array", kOperator.getName()+"."+argName)
+                        si.FabricCanvasAddPort(
+                            canvasOpPath,
+                            arrayNode,
+                            "array",
+                            "Out",
+                            argDataType,
+                            "")
+
+                        arrayNodeCode = "dfgEntry { \n  array.resize(" + str(len(connectedObjects)) + ");\n"
+                        for j in range(len(connectedObjects)):
+                            si.FabricCanvasAddPort(canvasOpPath,
+                                                   arrayNode,
+                                                   "value" + str(j),
+                                                   "In",
+                                                   elementDataType,
+                                                   "",
+                                                   "")
+
+                            arrayNodeCode += "  array[" + str(j) + "] = value" + str(j) + ";\n"
+
+                        arrayNodeCode += "}"
+
+                        si.FabricCanvasSetCode(canvasOpPath,
+                                               arrayNode,
+                                               arrayNodeCode)
+
+                        si.FabricCanvasAddPort(canvasOpPath,
+                                               kOperator.getName(),
+                                               argName,
+                                               "In",
+                                               argDataType,
+                                               "")
+
+                        si.FabricCanvasConnect(canvasOpPath,
+                                               "",
+                                               arrayNode + ".array",
+                                               kOperator.getName() + "." + argName)
 
                     elif argConnectionType in ['IO', 'Out']:
                         connectedObjects = kOperator.getOutput(argName)
 
-                        arrayNode = si.FabricCanvasAddFunc(canvasOpPath, "", argName+"_DecomposeArray", "dfgEntry {}", "800", str(i * 100))
+                        arrayNode = si.FabricCanvasAddFunc(
+                            canvasOpPath,
+                            "",
+                            argName + "_DecomposeArray",
+                            "dfgEntry {}",
+                            "800",
+                            str(i * 100))
+
                         si.FabricCanvasAddPort(canvasOpPath, arrayNode, "array", "In", argDataType, "")
                         arrayNodeCode = "dfgEntry { \n"
                         for j in range(len(connectedObjects)):
-                            si.FabricCanvasAddPort(canvasOpPath, arrayNode, "value"+str(j), "Out", elementDataType, "", "")
-                            arrayNodeCode += "  value"+str(j)+" = array["+str(j)+"];\n"
-                        arrayNodeCode += "}"
-                        si.FabricCanvasSetCode(canvasOpPath, arrayNode, arrayNodeCode)
+                            si.FabricCanvasAddPort(
+                                canvasOpPath,
+                                arrayNode,
+                                "value" + str(j),
+                                "Out",
+                                elementDataType,
+                                "",
+                                "")
 
-                        si.FabricCanvasAddPort(canvasOpPath, kOperator.getName(), argName, "Out", argDataType, "")
-                        si.FabricCanvasConnect(canvasOpPath, "", kOperator.getName()+"."+argName, arrayNode+".array")
+                            arrayNodeCode += "  value" + str(j) + " = array[" + str(j) + "];\n"
+
+                        arrayNodeCode += "}"
+
+                        si.FabricCanvasSetCode(canvasOpPath,
+                                               arrayNode,
+                                               arrayNodeCode)
+
+                        si.FabricCanvasAddPort(canvasOpPath,
+                                               kOperator.getName(),
+                                               argName,
+                                               "Out",
+                                               argDataType,
+                                               "")
+
+                        si.FabricCanvasConnect(canvasOpPath,
+                                               "",
+                                               kOperator.getName() + "." + argName,
+                                               arrayNode + ".array")
 
                         # OutArrays must be resized by the splice op.
                         arraySizes[argName] = len(connectedObjects)
@@ -821,8 +974,14 @@ class Builder(Builder):
                     for j in range(len(connectedObjects)):
                         dccSceneItem = self.getDCCSceneItem(connectedObjects[j])
                         if dccSceneItem is None:
-                            raise Exception("Operator:'"+kOperator.getName()+"' of type:'"+solverTypeName+"' arg:'"+argName+"' dcc item not found for item:" + connectedObjects[j].getPath())
-                        addCanvasPorts(canvasOpPath, argName+str(j), arrayNode+".value"+str(j), elementDataType, argConnectionType, dccSceneItem)
+                            raise Exception("Operator:'" + kOperator.getName() + "' of type:'" + solverTypeName + "' arg:'" + argName + "' dcc item not found for item:" + connectedObjects[j].getPath())
+
+                        addCanvasPorts(canvasOpPath,
+                                       argName + str(j),
+                                       arrayNode + ".value" + str(j),
+                                       elementDataType,
+                                       argConnectionType,
+                                       dccSceneItem)
 
 
                 else:
@@ -835,8 +994,14 @@ class Builder(Builder):
 
                     dccSceneItem = self.getDCCSceneItem(connectedObject)
                     if dccSceneItem is None:
-                        raise Exception("Operator:'"+kOperator.getName()+"' of type:'"+solverTypeName+"' arg:'"+argName+"' dcc item not found for item:" + connectedObject.getPath())
-                    addCanvasPorts(canvasOpPath, argName, kOperator.getName()+"."+argName, argDataType, argConnectionType, dccSceneItem)
+                        raise Exception("Operator:'" + kOperator.getName() + "' of type:'" + solverTypeName + "' arg:'" + argName + "' dcc item not found for item:" + connectedObject.getPath())
+
+                    addCanvasPorts(canvasOpPath,
+                                   argName,
+                                   kOperator.getName() + "." + argName,
+                                   argDataType,
+                                   argConnectionType,
+                                   dccSceneItem)
 
                 canvasOpPath = canvasOpPath2[:-1]
 
@@ -850,7 +1015,6 @@ class Builder(Builder):
 
         return True
 
-
     def buildCanvasOperator(self, kOperator):
         """Builds Canvas Operators on the components.
 
@@ -863,8 +1027,6 @@ class Builder(Builder):
         """
 
         try:
-            graphNodeName = kOperator.getPresetPath().split('.')[-1]
-
             host = ks.getCoreClient().DFG.host
             opBinding = host.createBindingToPreset(kOperator.getPresetPath())
             node = opBinding.getExec()
@@ -899,13 +1061,13 @@ class Builder(Builder):
 
             ownerOutPortName = ownerOutPortData['name']
             ownerOutPortDataType = ownerOutPortData['typeSpec']
-            ownerOutPortConnectionType = ownerOutPortData['execPortType']
+            # ownerOutPortConnectionType = ownerOutPortData['execPortType']
 
             if ownerOutPortDataType == 'Mat44[]':
-                operatorOwner = self.getDCCSceneItem( kOperator.getOutput(ownerOutPortName)[0] )
-                ownerOutPortName = ownerOutPortName+str(0)
+                operatorOwner = self.getDCCSceneItem(kOperator.getOutput(ownerOutPortName)[0])
+                ownerOutPortName = ownerOutPortName + str(0)
             else:
-                operatorOwner = self.getDCCSceneItem( kOperator.getOutput(ownerOutPortName) )
+                operatorOwner = self.getDCCSceneItem(kOperator.getOutput(ownerOutPortName))
 
 
             # Create Splice Operator
@@ -913,7 +1075,7 @@ class Builder(Builder):
             canvasOp = si.Dictionary.GetObject(canvasOpPath, False)
             self._registerSceneItemPair(kOperator, canvasOp)
 
-            si.FabricCanvasSetExtDeps(canvasOpPath, "", "Kraken" )
+            si.FabricCanvasSetExtDeps(canvasOpPath, "", "Kraken")
             uniqueNodeName = si.FabricCanvasInstPreset(canvasOpPath, "", kOperator.getPresetPath(), "400", "0")
 
             def addCanvasPorts(canvasOpPath, portName, canvasGraphPort, portDataType, argConnectionType, dccSceneItem):
@@ -930,18 +1092,21 @@ class Builder(Builder):
 
                 # Append the suffix based on the argument type, Softimage Only
                 if portDataType == 'Mat44':
-                    portmapDefinition = portName+"|XSI Port"
+                    portmapDefinition = portName + "|XSI Port"
 
                     canvasOpPath2 = str(canvasOpPath) + ":"
                     si.FabricCanvasOpPortMapDefine(canvasOpPath, portmapDefinition)
                     canvasOpPath = str(canvasOpPath2)[:-1]
 
                     canvasOp = si.Dictionary.GetObject(canvasOpPath, False)
-                    si.FabricCanvasOpConnectPort(canvasOpPath, portName, dccSceneItem.FullName+".kine.global")
+                    si.FabricCanvasOpConnectPort(
+                        canvasOpPath,
+                        portName,
+                        dccSceneItem.FullName + ".kine.global")
 
                 elif portDataType in ['Scalar', 'Boolean', 'Integer']:
 
-                    portmapDefinition = portName+"|XSI Parameter"
+                    portmapDefinition = portName + "|XSI Parameter"
 
                     canvasOpPath2 = str(canvasOpPath) + ":"
                     si.FabricCanvasOpPortMapDefine(canvasOpPath, portmapDefinition)
@@ -980,34 +1145,82 @@ class Builder(Builder):
                         if connectedObjects is None:
                             continue
 
-                        arrayNode = si.FabricCanvasAddFunc(canvasOpPath, "", portName+"_ComposeArray", "dfgEntry {}", "40", str(i * 100))
-                        si.FabricCanvasAddPort(canvasOpPath, arrayNode, "array", "Out", portDataType, "")
-                        arrayNodeCode = "dfgEntry { \n  array.resize("+str(len(connectedObjects))+");\n"
+                        arrayNode = si.FabricCanvasAddFunc(
+                            canvasOpPath,
+                            "",
+                            portName + "_ComposeArray",
+                            "dfgEntry {}",
+                            "40",
+                            str(i * 100))
+
+                        si.FabricCanvasAddPort(canvasOpPath,
+                                               arrayNode,
+                                               "array",
+                                               "Out",
+                                               portDataType,
+                                               "")
+
+                        arrayNodeCode = "dfgEntry { \n  array.resize(" + str(len(connectedObjects)) + ");\n"
                         for j in xrange(len(connectedObjects)):
-                            si.FabricCanvasAddPort(canvasOpPath, arrayNode, "value"+str(j), "In", elementDataType, "", "")
-                            arrayNodeCode += "  array["+str(j)+"] = value"+str(j)+";\n"
+                            si.FabricCanvasAddPort(canvasOpPath,
+                                                   arrayNode,
+                                                   "value" + str(j),
+                                                   "In",
+                                                   elementDataType,
+                                                   "",
+                                                   "")
+
+                            arrayNodeCode += "  array[" + str(j) + "] = value" + str(j) + ";\n"
 
                         arrayNodeCode += "}"
                         si.FabricCanvasSetCode(canvasOpPath, arrayNode, arrayNodeCode)
 
-                        si.FabricCanvasConnect(canvasOpPath, "", arrayNode+".array", uniqueNodeName + "." + portName)
+                        si.FabricCanvasConnect(canvasOpPath,
+                                               "",
+                                               arrayNode + ".array",
+                                               uniqueNodeName + "." + portName)
 
                     elif portConnectionType in ['IO', 'Out']:
                         connectedObjects = kOperator.getOutput(portName)
                         if connectedObjects is None:
                             continue
 
-                        arrayNode = si.FabricCanvasAddFunc(canvasOpPath, "", portName+"_DecomposeArray", "dfgEntry {}", "800", str(i * 100))
-                        si.FabricCanvasAddPort(canvasOpPath, arrayNode, "array", "In", portDataType, "")
+                        arrayNode = si.FabricCanvasAddFunc(
+                            canvasOpPath,
+                            "",
+                            portName + "_DecomposeArray",
+                            "dfgEntry {}",
+                            "800",
+                            str(i * 100))
+
+                        si.FabricCanvasAddPort(canvasOpPath,
+                                               arrayNode,
+                                               "array",
+                                               "In",
+                                               portDataType,
+                                               "")
+
                         arrayNodeCode = "dfgEntry { \n"
                         for j in xrange(len(connectedObjects)):
-                            si.FabricCanvasAddPort(canvasOpPath, arrayNode, "value"+str(j), "Out", elementDataType, "", "")
-                            arrayNodeCode += "  value"+str(j)+" = array["+str(j)+"];\n"
+                            si.FabricCanvasAddPort(canvasOpPath,
+                                                   arrayNode,
+                                                   "value" + str(j),
+                                                   "Out",
+                                                   elementDataType,
+                                                   "",
+                                                   "")
+
+                            arrayNodeCode += "  value" + str(j) + " = array[" + str(j) + "];\n"
 
                         arrayNodeCode += "}"
-                        si.FabricCanvasSetCode(canvasOpPath, arrayNode, arrayNodeCode)
+                        si.FabricCanvasSetCode(canvasOpPath,
+                                               arrayNode,
+                                               arrayNodeCode)
 
-                        si.FabricCanvasConnect(canvasOpPath, "", uniqueNodeName + "." + portName, arrayNode+".array")
+                        si.FabricCanvasConnect(canvasOpPath,
+                                               "",
+                                               uniqueNodeName + "." + portName,
+                                               arrayNode + ".array")
 
                         # OutArrays must be resized by the splice op.
                         # arraySizes[portName] = len(connectedObjects)
@@ -1022,7 +1235,12 @@ class Builder(Builder):
                         # a new port.
                         canvasOp = si.Dictionary.GetObject(operatorOwner.Fullname + ".kine.global.CanvasOp", False)
 
-                        addCanvasPorts(canvasOp, portName+str(j), arrayNode+".value"+str(j), elementDataType, portConnectionType, dccSceneItem)
+                        addCanvasPorts(canvasOp,
+                                       portName + str(j),
+                                       arrayNode + ".value" + str(j),
+                                       elementDataType,
+                                       portConnectionType,
+                                       dccSceneItem)
 
 
                 else:
@@ -1104,7 +1322,6 @@ class Builder(Builder):
 
         return True
 
-
     # ===================
     # Visibility Methods
     # ===================
@@ -1133,7 +1350,6 @@ class Builder(Builder):
 
         return True
 
-
     # ================
     # Display Methods
     # ================
@@ -1160,7 +1376,6 @@ class Builder(Builder):
 
         return True
 
-
     # ==================
     # Transform Methods
     # ==================
@@ -1178,10 +1393,18 @@ class Builder(Builder):
         dccSceneItem = self.getDCCSceneItem(kSceneItem)
 
         xfo = XSIMath.CreateTransform()
-        sc = XSIMath.CreateVector3(kSceneItem.xfo.sc.x, kSceneItem.xfo.sc.y, kSceneItem.xfo.sc.z)
+        sc = XSIMath.CreateVector3(kSceneItem.xfo.sc.x,
+                                   kSceneItem.xfo.sc.y,
+                                   kSceneItem.xfo.sc.z)
 
-        quat = XSIMath.CreateQuaternion(kSceneItem.xfo.ori.w, kSceneItem.xfo.ori.v.x, kSceneItem.xfo.ori.v.y, kSceneItem.xfo.ori.v.z)
-        tr = XSIMath.CreateVector3(kSceneItem.xfo.tr.x, kSceneItem.xfo.tr.y, kSceneItem.xfo.tr.z)
+        quat = XSIMath.CreateQuaternion(kSceneItem.xfo.ori.w,
+                                        kSceneItem.xfo.ori.v.x,
+                                        kSceneItem.xfo.ori.v.y,
+                                        kSceneItem.xfo.ori.v.z)
+
+        tr = XSIMath.CreateVector3(kSceneItem.xfo.tr.x,
+                                   skSceneItem.xfo.tr.y,
+                                   skSceneItem.xfo.tr.z)
 
         xfo.SetScaling(sc)
         xfo.SetRotationFromQuaternion(quat)
@@ -1223,7 +1446,6 @@ class Builder(Builder):
 
         return True
 
-
     # ==============
     # Build Methods
     # ==============
@@ -1241,7 +1463,6 @@ class Builder(Builder):
         si.SetValue("preferences.scripting.cmdlog", False, "")
 
         return True
-
 
     def _postBuild(self):
         """Post-Build commands.
