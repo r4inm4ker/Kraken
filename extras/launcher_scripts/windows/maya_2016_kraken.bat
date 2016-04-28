@@ -1,5 +1,5 @@
-call D:\fabric\FabricEngine-2.0.1-Windows-x86_64\environment.bat
-
+@ECHO OFF
+ECHO "Releasing The Kraken!"
 
 set KRAKEN_PATH=D:\dev\kraken
 set FABRIC_EXTS_PATH=%FABRIC_EXTS_PATH%;%KRAKEN_PATH%\Exts;

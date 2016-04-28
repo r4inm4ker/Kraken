@@ -68,7 +68,7 @@
         "__mathObjectClass__": "Vec3", 
         "z": -0.19949999451637268
       }, 
-      "class": "kraken_examples.spine_component.SpineComponentGuide", 
+      "class": "kraken_components.biped.spine_component.SpineComponentGuide", 
       "spine04Position": {
         "y": 13.10509967803955, 
         "x": 0.0, 
@@ -83,7 +83,7 @@
         "__mathObjectClass__": "Vec3", 
         "z": -0.6915000081062317
       }, 
-      "class": "kraken_examples.neck_component.NeckComponentGuide", 
+      "class": "kraken_components.biped.neck_component.NeckComponentGuide", 
       "neckEndPosition": {
         "y": 17.47559928894043, 
         "x": 0.0, 
@@ -116,7 +116,7 @@
         "__mathObjectClass__": "Vec3", 
         "z": -0.42100000381469727
       }, 
-      "class": "kraken_examples.head_component.HeadComponentGuide", 
+      "class": "kraken_components.biped.head_component.HeadComponentGuide", 
       "eyeRightPosition": {
         "y": 18.087799072265625, 
         "x": -0.349700003862381, 
@@ -177,7 +177,7 @@
         }
       }, 
       "location": "L", 
-      "class": "kraken_examples.clavicle_component.ClavicleComponentGuide", 
+      "class": "kraken_components.biped.clavicle_component.ClavicleComponentGuide", 
       "clavicleXfo": {
         "sc": {
           "y": 1.0, 
@@ -257,7 +257,7 @@
         }
       }, 
       "location": "R", 
-      "class": "kraken_examples.clavicle_component.ClavicleComponentGuide", 
+      "class": "kraken_components.biped.clavicle_component.ClavicleComponentGuide", 
       "clavicleXfo": {
         "sc": {
           "y": 1.0, 
@@ -388,7 +388,7 @@
           }
         }
       }, 
-      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "class": "kraken_components.biped.arm_component.ArmComponentGuide", 
       "bicepFKCtrlSize": 1.75
     }, 
     {
@@ -495,7 +495,7 @@
           }
         }
       }, 
-      "class": "kraken_examples.arm_component.ArmComponentGuide", 
+      "class": "kraken_components.biped.arm_component.ArmComponentGuide", 
       "bicepFKCtrlSize": 1.75
     }, 
     {
@@ -601,7 +601,7 @@
         }
       }, 
       "location": "L", 
-      "class": "kraken_examples.leg_component.LegComponentGuide", 
+      "class": "kraken_components.biped.leg_component.LegComponentGuide", 
       "femurXfo": {
         "sc": {
           "y": 1.0, 
@@ -731,7 +731,7 @@
         }
       }, 
       "location": "R", 
-      "class": "kraken_examples.leg_component.LegComponentGuide", 
+      "class": "kraken_components.biped.leg_component.LegComponentGuide", 
       "femurXfo": {
         "sc": {
           "y": 1.0, 

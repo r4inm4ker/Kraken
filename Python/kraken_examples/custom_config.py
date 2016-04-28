@@ -3,7 +3,12 @@
 from kraken.core.configs.config import Config
 
 class CustomConfig(Config):
-    """Base Configuration for Kraken builders."""
+    """Custom Config Example.
+
+    This demonstrates to users how they can customize only the name template
+    portion of a Config when sub-classed off of the base Config.
+
+    """
 
     def __init__(self):
         super(CustomConfig, self).__init__()

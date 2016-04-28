@@ -2,7 +2,7 @@ import json
 
 from kraken import plugins
 from kraken.core.maths import Xfo, Vec3, Quat
-from kraken_examples.leg_component import LegComponentGuide, LegComponentRig
+from kraken_components.biped.leg_component import LegComponentGuide, LegComponentRig
 
 from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
