@@ -1,14 +1,12 @@
 from kraken.core.maths import Vec3
 from kraken.core.maths.xfo import Xfo
 from kraken.core.maths.xfo import xfoFromDirAndUpV
-from kraken.core.maths.quat import Quat
 
 from kraken.core.objects.components.base_example_component import BaseExampleComponent
 
 from kraken.core.objects.attributes.attribute_group import AttributeGroup
 from kraken.core.objects.attributes.bool_attribute import BoolAttribute
 from kraken.core.objects.attributes.scalar_attribute import ScalarAttribute
-from kraken.core.objects.attributes.string_attribute import StringAttribute
 
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
@@ -21,7 +19,6 @@ from kraken.core.objects.control import Control
 from kraken.core.objects.operators.kl_operator import KLOperator
 
 from kraken.core.profiler import Profiler
-from kraken.helpers.utility_methods import logHierarchy
 
 
 class ArmComponent(BaseExampleComponent):
@@ -66,8 +63,8 @@ class ArmComponentGuide(ArmComponent):
         # Add Component Params to IK control
         guideSettingsAttrGrp = AttributeGroup("GuideSettings", parent=self)
 
-        self.bicepFKCtrlSizeInputAttr = ScalarAttribute('bicepFKCtrlSize', value=1.75, minValue=0.0,   maxValue=10.0, parent=guideSettingsAttrGrp)
-        self.forearmFKCtrlSizeInputAttr = ScalarAttribute('forearmFKCtrlSize', value=1.5, minValue=0.0,   maxValue=10.0, parent=guideSettingsAttrGrp)
+        self.bicepFKCtrlSizeInputAttr = ScalarAttribute('bicepFKCtrlSize', value=1.75, minValue=0.0, maxValue=10.0, parent=guideSettingsAttrGrp)
+        self.forearmFKCtrlSizeInputAttr = ScalarAttribute('forearmFKCtrlSize', value=1.5, minValue=0.0, maxValue=10.0, parent=guideSettingsAttrGrp)
 
         # =========
         # Controls
@@ -128,7 +125,7 @@ class ArmComponentGuide(ArmComponent):
 
         """
 
-        super(ArmComponentGuide, self).loadData( data )
+        super(ArmComponentGuide, self).loadData(data)
 
         self.bicepCtrl.xfo = data['bicepXfo']
         self.forearmCtrl.xfo = data['forearmXfo']
@@ -379,7 +376,7 @@ class ArmComponentRig(ArmComponent):
 
         """
 
-        super(ArmComponentRig, self).loadData( data )
+        super(ArmComponentRig, self).loadData(data)
 
         bicepXfo = data.get('bicepXfo')
         forearmXfo = data.get('forearmXfo')

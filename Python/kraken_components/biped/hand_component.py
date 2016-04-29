@@ -1,5 +1,4 @@
 
-import copy
 from collections import OrderedDict
 
 
@@ -18,7 +17,6 @@ from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
 from kraken.core.objects.component_group import ComponentGroup
 from kraken.core.objects.hierarchy_group import HierarchyGroup
-from kraken.core.objects.locator import Locator
 from kraken.core.objects.joint import Joint
 from kraken.core.objects.ctrlSpace import CtrlSpace
 from kraken.core.objects.control import Control
@@ -27,7 +25,6 @@ from kraken.core.objects.operators.canvas_operator import CanvasOperator
 from kraken.core.objects.operators.kl_operator import KLOperator
 
 from kraken.core.profiler import Profiler
-from kraken.helpers.utility_methods import logHierarchy
 
 
 class HandComponent(BaseExampleComponent):
@@ -144,7 +141,7 @@ class HandComponentGuide(HandComponent):
 
         """
 
-        super(HandComponentGuide, self).loadData( data )
+        super(HandComponentGuide, self).loadData(data)
 
         self.handCtrl.xfo = data.get('handXfo')
         self.numJointsAttr.setValue(data.get('numJoints'))
@@ -152,14 +149,17 @@ class HandComponentGuide(HandComponent):
 
         fingersGuideXfos = data.get('fingersGuideXfos')
         fingerShapeCtrlData = data.get('fingerShapeCtrlData')
+
         if fingersGuideXfos is not None:
 
             for finger in self.fingers.keys():
-                for i in xrange(len(self.fingers[finger])):
+                for i in xrange(len(self.fingers[finger]) - 1):
                     self.fingers[finger][i].xfo = fingersGuideXfos[finger][i]
 
-                    # if hasattr(self.fingers[finger][i], 'shapeCtrl'):
-                    #     self.fingers[finger][i].shapeCtrl.setCurveData(fingerShapeCtrlData[finger][i])
+                    if hasattr(self.fingers[finger][i], 'shapeCtrl'):
+                        if fingerShapeCtrlData is not None:
+                            if finger in fingerShapeCtrlData:
+                                self.fingers[finger][i].shapeCtrl.setCurveData(fingerShapeCtrlData[finger][i])
 
         return True
 
@@ -184,7 +184,7 @@ class HandComponentGuide(HandComponent):
                     continue
 
                 # Calculate Xfo
-                boneVec = self.fingers[finger][i+1].xfo.tr - self.fingers[finger][i].xfo.tr
+                boneVec = self.fingers[finger][i + 1].xfo.tr - self.fingers[finger][i].xfo.tr
                 bone1Normal = self.fingers[finger][i].xfo.ori.getZaxis().cross(boneVec).unit()
                 bone1ZAxis = boneVec.cross(bone1Normal).unit()
 
@@ -193,7 +193,7 @@ class HandComponentGuide(HandComponent):
 
                 jointData = {
                     'curveData': self.fingers[finger][i].shapeCtrl.getCurveData(),
-                    'length': self.fingers[finger][i].xfo.tr.distanceTo(self.fingers[finger][i+1].xfo.tr),
+                    'length': self.fingers[finger][i].xfo.tr.distanceTo(self.fingers[finger][i + 1].xfo.tr),
                     'xfo': jointXfo
                 }
 
@@ -351,7 +351,7 @@ class HandComponentGuide(HandComponent):
             if finger in self.fingers.keys():
                 continue
 
-            newFinger = self.addFinger(finger)
+            self.addFinger(finger)
 
         self.placeFingers()
 
@@ -470,13 +470,12 @@ class HandComponentRig(HandComponent):
 
         parentCtrl = self.handCtrl
         for i, joint in enumerate(data):
-            if i ==0:
+            if i == 0:
                 jointName = name + 'Meta'
             else:
                 jointName = name + str(i).zfill(2)
 
             jointXfo = joint.get('xfo', Xfo())
-            jointLen = joint.get('length', 1.0)
             jointCrvData = joint.get('curveData')
 
             # Create Controls
@@ -532,7 +531,7 @@ class HandComponentRig(HandComponent):
 
         """
 
-        super(HandComponentRig, self).loadData( data )
+        super(HandComponentRig, self).loadData(data)
 
         # Data
         fingerData = data.get('fingerData')

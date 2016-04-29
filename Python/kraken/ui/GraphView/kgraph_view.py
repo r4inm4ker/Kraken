@@ -59,8 +59,8 @@ class KGraphView(GraphView):
                     componentOutput = componentInput.getConnection()
 
                     self.connectPorts(
-                        srcNode = componentOutput.getParent().getDecoratedName(), outputName = componentOutput.getName(),
-                        tgtNode = component.getDecoratedName(), inputName=componentInput.getName()
+                        srcNode=componentOutput.getParent().getDecoratedName(), outputName=componentOutput.getName(),
+                        tgtNode=component.getDecoratedName(), inputName=componentInput.getName()
                     )
 
         # Get backdrops from meta data

@@ -1,0 +1,57 @@
+require InlineDrawing;
+
+object NeckGuideSolver : KrakenSolver {
+};
+
+
+// Return Arguments for Kraken
+function KrakenSolverArg[] NeckGuideSolver.getArguments(){
+  KrakenSolverArg args[] = this.parent.getArguments();
+  args.push(KrakenSolverArg('sources', 'In', 'Mat44[]'));
+  args.push(KrakenSolverArg('targets', 'Out', 'Mat44[]'));
+  return args;
+}
+
+
+// Solve
+function NeckGuideSolver.solve!
+(
+  in Boolean drawDebug,
+  in Scalar rigScale,
+  in Mat44 sources[],
+  io Mat44 targets[]
+  )
+{
+
+  Quat targetOri;
+  Quat xAlignOri;
+  Vec3 dir;
+  Vec3 upV;
+  for (Integer i=0; i < targets.size(); i++) {
+    if (i == sources.size() - 1) {
+      targets[i] = targets[i - 1];
+      targets[i].setTranslation(sources[i].translation());
+    }
+    else{
+
+      dir = (sources[i + 1].translation() - sources[i].translation()).unit();
+      upV = (sources[i].multiplyVector3(Vec3(0, 1, 0)) - sources[i].translation()).unit();
+
+      targetOri.setFromDirectionAndUpvector(dir, upV);
+      xAlignOri.setFromAxisAndAngle(Vec3(0, 1, 0), Math_degToRad(-90));
+      targetOri *= xAlignOri;
+
+      targets[i].setScaling(Vec3(rigScale));
+      targets[i].setRotation(targetOri);
+      targets[i].setTranslation(sources[i].translation());
+    }
+  }
+
+  // Set debugging visibility.
+  this.setDebug(this.drawDebug);
+  if(this.drawDebug){
+    if(!this.handle)
+      this.handle = DrawingHandle();
+
+  }
+}

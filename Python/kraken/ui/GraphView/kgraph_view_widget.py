@@ -219,7 +219,7 @@ class KGraphViewWidget(GraphViewWidget):
     def loadRigPreset(self, filePath):
         self.guideRig = Rig()
         self.guideRig.loadRigDefinitionFile(filePath)
-        self.setGuideRigName(self.guideRig.getName()) # Remove "_guide" from end of name
+        self.setGuideRigName(self.guideRig.getName())  # Remove "_guide" from end of name
         self.graphView.displayGraph(self.guideRig)
 
         settings = self.window().getSettings()
