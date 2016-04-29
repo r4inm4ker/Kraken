@@ -5,6 +5,8 @@ Builder -- Base builder object to build objects in DCC.
 
 """
 
+from kraken.logging import getLogger
+
 from collections import deque
 
 from kraken.core.kraken_system import KrakenSystem
