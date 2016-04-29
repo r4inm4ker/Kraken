@@ -422,6 +422,4 @@ class KrakenSystem(object):
         return cls.__instance
 
 
-
-
 ks = KrakenSystem.getInstance()
