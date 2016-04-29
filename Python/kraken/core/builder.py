@@ -5,13 +5,18 @@ Builder -- Base builder object to build objects in DCC.
 
 """
 
-from kraken.logging import getLogger
+import logging
+
+from kraken.log import getLogger
 
 from kraken.core.kraken_system import KrakenSystem
 from kraken.core.configs.config import Config
 from kraken.core.profiler import Profiler
 
 from kraken.core.objects.scene_item import SceneItem
+
+logger = getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
 
 class Builder(object):
@@ -58,7 +63,6 @@ class Builder(object):
 
         return None
 
-
     def getDCCSceneItem(self, kSceneItem):
         """Given a kSceneItem, returns the built dcc scene item.
 
@@ -77,7 +81,6 @@ class Builder(object):
 
         return None
 
-
     def getDCCSceneItemPairs(self):
         """Returns all of the built dcc scene item pairs.
 
@@ -85,8 +88,8 @@ class Builder(object):
             array: An array of dicts with 'src' and 'tgt' key value pairs
 
         """
-        return self._buildElements
 
+        return self._buildElements
 
     # ========================
     # SceneItem Build Methods
@@ -103,8 +106,7 @@ class Builder(object):
 
         """
 
-        if self._debugMode:
-            print "buildContainer: " + kContainer.getPath() + " as: " + buildName
+        logger.debug("buildContainer: " + kContainer.getPath() + " as: " + buildName)
 
         # Build any items(and thier subtrees) owned by this item.
         items = kContainer.getItems()
@@ -116,7 +118,6 @@ class Builder(object):
             self.buildHierarchy(kObject)
 
         return None
-
 
     def buildLayer(self, kSceneItem, buildName):
         """Builds a layer object.
@@ -130,11 +131,9 @@ class Builder(object):
 
         """
 
-        if self._debugMode:
-            print "buildLayer: " + kSceneItem.getPath() + " as: " + buildName
+        logger.debug("buildLayer: " + kSceneItem.getPath() + " as: " + buildName)
 
         return None
-
 
     def buildHierarchyGroup(self, kSceneItem, buildName):
         """Builds a hierarchy group object.
@@ -149,11 +148,9 @@ class Builder(object):
         """
 
 
-        if self._debugMode:
-            print "buildHierarchyGroup: " + kSceneItem.getPath() + " as: " + buildName
+        logger.debug("buildHierarchyGroup: " + kSceneItem.getPath() + " as: " + buildName)
 
         return None
-
 
     def buildGroup(self, kSceneItem, buildName):
         """Builds a group object.
@@ -167,11 +164,9 @@ class Builder(object):
 
         """
 
-        if self._debugMode:
-            print "buildGroup: " + kSceneItem.getPath() + " as: " + buildName
+        logger.debug("buildGroup: " + kSceneItem.getPath() + " as: " + buildName)
 
         return None
-
 
     def buildJoint(self, kSceneItem, buildName):
         """Builds a joint object.
@@ -185,11 +180,9 @@ class Builder(object):
 
         """
 
-        if self._debugMode:
-            print "buildJoint: " + kSceneItem.getPath() + " as: " + buildName
+        logger.debug("buildJoint: " + kSceneItem.getPath() + " as: " + buildName)
 
         return None
-
 
     def buildLocator(self, kSceneItem, buildName):
         """Builds a locator / null object.
@@ -204,11 +197,9 @@ class Builder(object):
         """
 
 
-        if self._debugMode:
-            print "buildLocator: " + kSceneItem.getPath() + " as: " + buildName
+        logger.debug("buildLocator: " + kSceneItem.getPath() + " as: " + buildName)
 
         return None
-
 
     def buildCurve(self, kSceneItem, buildName):
         """Builds a Curve object.
@@ -222,12 +213,10 @@ class Builder(object):
 
         """
 
-        if self._debugMode:
-            print "buildCurve: " + kSceneItem.getPath() + " as: " + buildName
+        logger.debug("buildCurve: " + kSceneItem.getPath() + " as: " + buildName)
 
 
         return None
-
 
     def buildControl(self, kSceneItem, buildName):
         """Builds a Control object.
@@ -241,11 +230,9 @@ class Builder(object):
 
         """
 
-        if self._debugMode:
-            print "buildControl:" + kSceneItem.getPath() + " as: " + buildName
+        logger.debug("buildControl:" + kSceneItem.getPath() + " as: " + buildName)
 
         return None
-
 
     # ========================
     # Attribute Build Methods
@@ -261,11 +248,9 @@ class Builder(object):
 
         """
 
-        if self._debugMode:
-            print "buildBoolAttribute: " + kAttribute.getPath()
+        logger.debug("buildBoolAttribute: " + kAttribute.getPath())
 
         return True
-
 
     def buildScalarAttribute(self, kAttribute):
         """Builds a Float attribute.
@@ -279,11 +264,9 @@ class Builder(object):
         """
 
 
-        if self._debugMode:
-            print "buildScalarAttribute: " + kAttribute.getPath()
+        logger.debug("buildScalarAttribute: " + kAttribute.getPath())
 
         return True
-
 
     def buildIntegerAttribute(self, kAttribute):
         """Builds a Integer attribute.
@@ -297,11 +280,9 @@ class Builder(object):
         """
 
 
-        if self._debugMode:
-            print "buildIntegerAttribute: " + kAttribute.getPath()
+        logger.debug("buildIntegerAttribute: " + kAttribute.getPath())
 
         return True
-
 
     def buildStringAttribute(self, kAttribute):
         """Builds a String attribute.
@@ -314,11 +295,9 @@ class Builder(object):
 
         """
 
-        if self._debugMode:
-            print "buildStringAttribute: " + kAttribute.getPath()
+        logger.debug("buildStringAttribute: " + kAttribute.getPath())
 
         return True
-
 
     def buildAttributeGroup(self, kAttributeGroup):
         """Builds attribute groups on the DCC object.
@@ -331,11 +310,9 @@ class Builder(object):
 
         """
 
-        if self._debugMode:
-            print "buildAttributeGroup: " + kAttributeGroup.getPath()
+        logger.debug("buildAttributeGroup: " + kAttributeGroup.getPath())
 
         return True
-
 
     def connectAttribute(self, kAttribute):
         """Connects the driver attribute to this one.
@@ -349,11 +326,9 @@ class Builder(object):
         """
 
 
-        if self._debugMode:
-            print "connectAttribute: " + kAttribute.getPath()
+        logger.debug("connectAttribute: " + kAttribute.getPath())
 
         return True
-
 
     # =========================
     # Constraint Build Methods
@@ -369,8 +344,7 @@ class Builder(object):
 
         """
 
-        if self._debugMode:
-            print "buildOrientationConstraint: " + kConstraint.getPath() + " to: " + kConstraint.getConstrainee().getPath()
+        logger.debug("buildOrientationConstraint: " + kConstraint.getPath() + " to: " + kConstraint.getConstrainee().getPath())
 
         dccSceneItem = None  # Add constraint object here.
         self._registerSceneItemPair(kConstraint, dccSceneItem)
@@ -388,8 +362,7 @@ class Builder(object):
 
         """
 
-        if self._debugMode:
-            print "buildPoseConstraint: " + kConstraint.getPath() + " to: " + kConstraint.getConstrainee().getPath()
+        logger.debug("buildPoseConstraint: " + kConstraint.getPath() + " to: " + kConstraint.getConstrainee().getPath())
 
         dccSceneItem = None  # Add constraint object here.
         self._registerSceneItemPair(kConstraint, dccSceneItem)
@@ -407,8 +380,7 @@ class Builder(object):
 
         """
 
-        if self._debugMode:
-            print "buildPositionConstraint:" + kConstraint.getPath() + " to: " + kConstraint.getConstrainee().getPath()
+        logger.debug("buildPositionConstraint:" + kConstraint.getPath() + " to: " + kConstraint.getConstrainee().getPath())
 
         dccSceneItem = None  # Add constraint object here.
         self._registerSceneItemPair(kConstraint, dccSceneItem)
@@ -426,14 +398,12 @@ class Builder(object):
 
         """
 
-        if self._debugMode:
-            print "buildScaleConstraint: " + kConstraint.getPath() + " to: " + kConstraint.getConstrainee().getPath()
+        logger.debug("buildScaleConstraint: " + kConstraint.getPath() + " to: " + kConstraint.getConstrainee().getPath())
 
         dccSceneItem = None  # Add constraint object here.
         self._registerSceneItemPair(kConstraint, dccSceneItem)
 
         return dccSceneItem
-
 
     # ========================
     # Component Build Methods
@@ -449,8 +419,7 @@ class Builder(object):
 
         """
 
-        if self._debugMode:
-            print "buildXfoConnection: " + componentInput.getPath()
+        logger.debug("buildXfoConnection: " + componentInput.getPath())
 
         if componentInput.isConnected() is False:
             return False
@@ -495,14 +464,12 @@ class Builder(object):
             bool: True if successful.
 
         """
-        if self._debugMode:
-            print "buildAttributeConnection: " + componentInput.getPath()
+        logger.debug("buildAttributeConnection: " + componentInput.getPath())
 
 
         # Implemented in DCC Plugins.
 
         return True
-
 
     # =========================
     # Operator Builder Methods
@@ -517,8 +484,7 @@ class Builder(object):
             bool: True if successful.
 
         """
-        if self._debugMode:
-            print "buildKLOperator:" + kKLOperator.getPath()
+        logger.debug("buildKLOperator:" + kKLOperator.getPath())
 
         return True
 
@@ -532,11 +498,9 @@ class Builder(object):
             bool: True if successful.
 
         """
-        if self._debugMode:
-            print "buildCanvasOperator: " + kOperator.getPath()
+        logger.debug("buildCanvasOperator: " + kOperator.getPath())
 
         return True
-
 
     # =====================
     # Build Object Methods
@@ -551,15 +515,13 @@ class Builder(object):
             bool: True if successful.
 
         """
-        if self._debugMode:
-            print "buildAttributes: " + kObject.getPath()
+        logger.debug("buildAttributes: " + kObject.getPath())
 
         for i in xrange(kObject.getNumAttributeGroups()):
             attributeGroup = kObject.getAttributeGroupByIndex(i)
             self.buildAttributeGroup(attributeGroup)
 
         return True
-
 
     def buildHierarchy(self, kObject, component=None):
         """Builds the hierarchy for the supplied kObject.
@@ -578,8 +540,7 @@ class Builder(object):
 
         buildName = kObject.getBuildName()
 
-        if self._debugMode:
-            print "building: " + kObject.getPath() + " as: " + buildName + " type: " + kObject.getTypeName()
+        logger.debug("building: " + kObject.getPath() + " as: " + buildName + " type: " + kObject.getTypeName())
 
         # Build Object
         if kObject.isTypeOf("Layer"):
@@ -637,7 +598,6 @@ class Builder(object):
 
         return dccSceneItem
 
-
     def buildConstraints(self, kObject):
         """Builds constraints for the supplied kObject.
 
@@ -678,7 +638,6 @@ class Builder(object):
 
         return True
 
-
     def buildInputConnections(self, kObject):
         """Builds the connections between the component inputs of each
         component.
@@ -718,7 +677,6 @@ class Builder(object):
             self.buildInputConnections(child)
 
         return True
-
 
     def buildAttrConnections(self, kObject):
         """Builds the connections between the component inputs and outputs of each
@@ -904,7 +862,6 @@ class Builder(object):
 
         return self.getDCCSceneItem(kRig)
 
-
     def buildComponent(self, kComponent):
         """Protected build method.
 
@@ -932,7 +889,6 @@ class Builder(object):
 
         return True
 
-
     # ==================
     # Parameter Methods
     # ==================
@@ -948,7 +904,6 @@ class Builder(object):
         """
 
         return True
-
 
     # ===================
     # Visibility Methods
@@ -973,7 +928,6 @@ class Builder(object):
             # Re-implement in DCC builders.
 
         return True
-
 
     # ================
     # Display Methods
@@ -1017,7 +971,6 @@ class Builder(object):
 
         return buildColor
 
-
     def setObjectColor(self, kSceneItem):
         """Sets the color on the dccSceneItem.
 
@@ -1030,7 +983,6 @@ class Builder(object):
         """
 
         return True
-
 
     # ==================
     # Transform Methods
@@ -1052,7 +1004,6 @@ class Builder(object):
 
         return True
 
-
     # ===============
     # Config Methods
     # ===============
@@ -1065,7 +1016,6 @@ class Builder(object):
         """
 
         return self.config
-
 
     def setConfig(self, config):
         """Sets the builder's config.
@@ -1082,7 +1032,6 @@ class Builder(object):
 
         return True
 
-
     # ==============
     # Build Methods
     # ==============
@@ -1098,7 +1047,6 @@ class Builder(object):
         """
 
         return True
-
 
     def _build(self, kSceneItem):
         """Protected build method.
@@ -1117,7 +1065,6 @@ class Builder(object):
         self.buildConstraints(kSceneItem)
 
         return True
-
 
     def build(self, kSceneItem):
         """Builds the supplied kSceneItem into a DCC representation.
@@ -1145,7 +1092,6 @@ class Builder(object):
         Profiler.getInstance().pop()
 
         return self.getDCCSceneItem(kSceneItem)
-
 
     def _postBuild(self):
         """Protected Post-Build method.
