@@ -1,3 +1,5 @@
+import logging
+
 from kraken.plugins.maya_plugin.utils import *
 
 

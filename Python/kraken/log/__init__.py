@@ -17,6 +17,7 @@ def getLogger(name):
 
     dccHandler = getLogHandler()
     logger = logging.getLogger(name)
-    logger.addHandler(dccHandler)
+    if dccHandler not in logger.handlers:
+        logger.addHandler(dccHandler)
 
     return logger
