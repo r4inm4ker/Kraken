@@ -14,7 +14,7 @@ from kraken.core.builder import Builder
 
 from kraken.plugins.si_plugin.utils import *
 
-loggeer = getLogger(__name__)
+logger = getLogger(__name__)
 
 
 class Builder(Builder):

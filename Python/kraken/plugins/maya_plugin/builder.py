@@ -5,6 +5,10 @@ Builder -- Component representation.
 
 """
 
+import logging
+
+from kraken.log import getLogger
+
 from kraken.core.kraken_system import ks
 
 from kraken.core.maths.xfo import Xfo
@@ -18,6 +22,9 @@ from kraken.core.objects.attributes.attribute import Attribute
 from kraken.plugins.maya_plugin.utils import *
 
 import maya.cmds as cmds
+
+logger = getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 
 class Builder(Builder):
