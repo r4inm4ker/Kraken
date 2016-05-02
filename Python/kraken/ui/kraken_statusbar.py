@@ -1,11 +1,27 @@
+
 from PySide import QtGui, QtCore
+
+from kraken.log import getLogger
+
+logger = getLogger('kraken')
 
 
 class KrakenStatusBar(QtGui.QStatusBar):
     """Custom status bar widget for Kraken."""
 
-    def __init__(self, parent):
+    def __init__(self, parent=None):
         super(KrakenStatusBar, self).__init__(parent)
+
+        for handler in logger.handlers:
+            if type(handler).__name__ == 'WidgetHandler':
+                handler.addWidget(self)
+
+        self.createLayout()
+
+    def createLayout(self):
+        self.outputLogButton = QtGui.QPushButton('Log', self)
+        self.outputLogButton.setObjectName('outputLog_button')
+        self.insertPermanentWidget(0, self.outputLogButton)
 
     def showMessage(self, message, timeout=0):
         super(KrakenStatusBar, self).showMessage(message, timeout)

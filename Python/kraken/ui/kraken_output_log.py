@@ -27,7 +27,7 @@ class OutputLogDialog(QtGui.QDialog):
     def createLayout(self):
         """Sets up the layout for the dialog."""
 
-        self.textWidget = QtGui.QTextEdit()
+        self.textWidget = QtGui.QTextEdit(self)
         self.textWidget.setLineWrapMode(QtGui.QTextEdit.NoWrap)
         self.textWidget.setReadOnly(True)
         self.textWidget.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
