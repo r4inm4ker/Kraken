@@ -1,6 +1,7 @@
 
 import logging
 
+from kraken.log.widget_handler import WidgetHandler
 from kraken.plugins import getLogHandler
 
 
@@ -15,9 +16,16 @@ def getLogger(name):
 
     """
 
-    dccHandler = getLogHandler()
     logger = logging.getLogger(name)
-    if dccHandler not in logger.handlers:
-        logger.addHandler(dccHandler)
+
+    dccHandler = getLogHandler()
+    if dccHandler is not None:
+        if dccHandler not in logger.handlers:
+            logger.addHandler(dccHandler)
+
+    handlerNames = [type(x).__name__ for x in logger.handlers]
+    if 'WidgetHandler' not in handlerNames:
+        widgetHandler = WidgetHandler()
+        logger.addHandler(widgetHandler)
 
     return logger
