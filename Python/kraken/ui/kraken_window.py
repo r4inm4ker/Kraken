@@ -1,3 +1,6 @@
+"""Kraken Main Window and Launcher."""
+
+import argparse
 import logging
 import os
 import sys
@@ -10,8 +13,9 @@ from kraken.ui import images_rc
 from kraken.ui.kraken_menu import KrakenMenu
 from kraken.ui.kraken_ui import KrakenUI
 from kraken.ui.preferences import Preferences
+from kraken.ui.kraken_output_log import OutputLogDialog
 from kraken.ui.kraken_statusbar import KrakenStatusBar
-
+from kraken.ui.kraken_splash import KrakenSplash
 
 logger = getLogger('kraken')
 
@@ -50,9 +54,6 @@ class KrakenWindow(QtGui.QMainWindow):
 
         # Setup Status Bar
         self.statusBar = KrakenStatusBar(self)
-        self.outputLogButton = QtGui.QPushButton('Log', self)
-        self.outputLogButton.setObjectName('outputLog_button')
-        self.statusBar.insertPermanentWidget(0, self.outputLogButton)
 
         mainWidget = QtGui.QWidget()
 
@@ -81,13 +82,7 @@ class KrakenWindow(QtGui.QMainWindow):
 
 
     def createConnections(self):
-        for handler in logger.handlers:
-            if type(handler).__name__ == 'WidgetHandler':
-                handler.addWidget(self.outputDialog)
-                handler.addWidget(self.statusBar)
-
-
-        self.outputLogButton.clicked.connect(self.showOutputLog)
+        self.statusBar.outputLogButton.clicked.connect(self.showOutputLog)
         self.krakenUI.graphViewWidget.rigLoaded.connect(self.krakenMenu.buildRecentFilesMenu)
         self.krakenUI.graphViewWidget.rigNameChanged.connect(self.krakenMenu.updateRigNameLabel)
 
@@ -154,116 +149,23 @@ class KrakenWindow(QtGui.QMainWindow):
 
         self.writeSettings()
 
+        # Clear widget handler of any widgets otherwise references to deleted
+        # widgets remain.
+        for handler in logger.handlers:
+            if type(handler).__name__ == 'WidgetHandler':
+                handler.clearWidgets()
+
     def showOutputLog(self):
+
         self.outputDialog.show()
         self.outputDialog.textWidget.moveCursor(QtGui.QTextCursor.End)
-
-
-class OutputLogDialog(QtGui.QDialog):
-    """Output Dialog"""
-
-    def __init__(self, parent=None):
-        super(OutputLogDialog, self).__init__(parent)
-        self.setObjectName('outputLog')
-        self.resize(700, 300)
-        self.setWindowTitle('Kraken Output Log')
-
-        self.createLayout()
-        self.createConnections()
-
-
-    def createLayout(self):
-        """Sets up the layout for the dialog."""
-
-        self.textWidget = QtGui.QTextEdit()
-        self.textWidget.setLineWrapMode(QtGui.QTextEdit.NoWrap)
-        self.textWidget.setReadOnly(True)
-        self.textWidget.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
-
-        self.outputLogLayout = QtGui.QVBoxLayout(self)
-        self.outputLogLayout.addWidget(self.textWidget)
-
-        self.setLayout(self.outputLogLayout)
-
-    def createConnections(self):
-        """Connects widgets to methods or other signals."""
-
-        self.textWidget.customContextMenuRequested.connect(self.createContextMenu)
-
-    def write(self, msg, level):
-
-        if level == 'DEBUG':
-            messageColor = QtGui.QColor("#B4EEB4")
-        elif level == 'INFO':
-            messageColor = QtGui.QColor(QtCore.Qt.white)
-        elif level == 'WARNING':
-            messageColor = QtGui.QColor("#CC3300")
-        elif level == 'ERROR':
-            messageColor = QtGui.QColor("#FF0000")
-        elif level == 'CRITICAL':
-            messageColor = QtGui.QColor("#FF0000")
-        else:
-            messageColor = QtGui.QColor(QtCore.Qt.white)
-
-        self.textWidget.setTextColor(messageColor)
-        charFormat = self.textWidget.currentCharFormat()
-        textCursor = self.textWidget.textCursor()
-        textCursor.movePosition(QtGui.QTextCursor.End)
-        textCursor.insertText(msg, charFormat)
-
-        self.textWidget.setTextCursor(textCursor)
-        self.textWidget.ensureCursorVisible()
-
-    # =============
-    # Context Menu
-    # =============
-    def createContextMenu(self):
-        self.contextMenu = QtGui.QMenu(self)
-        selectAllAction = self.contextMenu.addAction("Select All")
-        copyAction = self.contextMenu.addAction("Copy")
-        self.contextMenu.addSeparator()
-        clearAction = self.contextMenu.addAction("Clear")
-
-        selectAllAction.triggered.connect(self.contextSelectAll)
-        copyAction.triggered.connect(self.contextCopy)
-        clearAction.triggered.connect(self.textWidget.clear)
-
-        self.contextMenu.exec_(QtGui.QCursor.pos())
-
-    def contextSelectAll(self):
-        self.textWidget.selectAll()
-
-    def contextCopy(self):
-        self.textWidget.copy()
-
-
-def createSplash(app):
-    """Creates a splash screen object to show while the Window is loading.
-
-    Return:
-    SplashScreen object.
-
-    """
-
-    splashPixmap = QtGui.QPixmap(':/images/KrakenUI_Splash.png')
-
-    splash = QtGui.QSplashScreen(splashPixmap)
-    splash.setMask(splashPixmap.mask())
-    splash.showMessage("Loading Extensions...",
-                       QtCore.Qt.AlignBottom | QtCore.Qt.AlignLeft,
-                       QtCore.Qt.white)
-
-    splash.show()
-
-    app.processEvents()
-
-    return splash
 
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
 
-    splash = createSplash(app)
+    splash = KrakenSplash(app)
+    splash.show()
 
     window = KrakenWindow()
     window.show()
