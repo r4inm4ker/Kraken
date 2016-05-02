@@ -70,7 +70,7 @@ def getLogHandler():
     """Returns the appropriate logging handler for the DCC.
 
     Returns:
-        class: Instance of the log handler.
+        class: Instance of the log handler or None if not found.
 
     """
 
@@ -86,12 +86,6 @@ def getLogHandler():
             loaded_class = getattr(loaded_mod, 'Handler')
 
             handler = loaded_class()
-
-    if handler is None:
-        print "Failed to find DCC log handler. Falling back to default handler."
-
-        import logging
-        handler = logging.StreamHandler()
 
     return handler
 
