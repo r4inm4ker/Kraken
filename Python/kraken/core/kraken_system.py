@@ -19,6 +19,7 @@ from kraken.core.profiler import Profiler
 from kraken.plugins import getFabricClient
 
 from kraken.log import getLogger
+from kraken.log.utils import fabricCallback
 
 
 krakenSystemModuleDir = os.path.join(os.path.dirname(os.path.realpath(__file__)))
@@ -67,9 +68,19 @@ class KrakenSystem(object):
         if self.client is None:
             Profiler.getInstance().push("loadCoreClient")
 
+            fabricHandler = None
+            for handler in logger.handlers:
+                if type(handler).__name__ == 'FabricHandler':
+                    fabricHandler = handler
+
             client = getFabricClient()
             if client is None:
-                client = FabricEngine.Core.createClient({'guarded': True})
+                options = {
+                    'reportCallback': fabricCallback,
+                    'guarded': True
+                }
+
+                client = FabricEngine.Core.createClient(options)
 
             self.client = client
 

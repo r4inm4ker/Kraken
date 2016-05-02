@@ -1,5 +1,6 @@
 import FabricEngine.Core
 
+from kraken.log.utils import fabricCallback
 from kraken.plugins.si_plugin.utils import *
 
 
@@ -9,4 +10,12 @@ def getClient():
         si.fabricSplice('constructClient')
         contextID = si.fabricSplice('getClientContextID')
 
-    return FabricEngine.Core.createClient({"contextID": contextID})
+    options = {
+        'contextID': contextID,
+        'reportCallback': fabricCallback,
+        'guarded': True
+    }
+
+    client = FabricEngine.Core.createClient(options)
+
+    return client
