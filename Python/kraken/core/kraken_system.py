@@ -5,25 +5,25 @@ KrakenSystem - Class for constructing the Fabric Engine Core client.
 
 """
 
+import logging
 import os
 import sys
 import json
-import imp
-import inspect
 import importlib
 from collections import OrderedDict
-import traceback
 
 import FabricEngine.Core
 
-import kraken
+# import kraken
 from kraken.core.profiler import Profiler
 from kraken.plugins import getFabricClient
+
+from kraken.log import getLogger
 
 
 krakenSystemModuleDir = os.path.join(os.path.dirname(os.path.realpath(__file__)))
 krakenDir = os.path.abspath(os.path.join(krakenSystemModuleDir, '..', '..', '..'))
-os.environ['KRAKEN_PATH']  = krakenDir
+os.environ['KRAKEN_PATH'] = krakenDir
 
 krakenExtsDir = os.path.join(krakenDir, 'Exts')
 if krakenExtsDir not in os.environ['FABRIC_EXTS_PATH']:
@@ -35,6 +35,9 @@ if 'FABRIC_DFG_PATH' in os.environ:
         os.environ['FABRIC_DFG_PATH'] = canvasPresetsDir + os.pathsep + os.environ['FABRIC_DFG_PATH']
 else:
     os.environ['FABRIC_DFG_PATH'] = canvasPresetsDir
+
+
+logger = getLogger('kraken')
 
 
 class KrakenSystem(object):
@@ -61,7 +64,7 @@ class KrakenSystem(object):
     def loadCoreClient(self):
         """Loads the Fabric Engine Core Client"""
 
-        if self.client == None:
+        if self.client is None:
             Profiler.getInstance().push("loadCoreClient")
 
             client = getFabricClient()
@@ -317,7 +320,7 @@ class KrakenSystem(object):
 
         self.registeredComponents = {}
 
-        print "\nLoading component modules..."
+        logger.info("Loading component modules...")
 
         def __importDirRecursive(path, parentModulePath=''):
             isSuccessful = True
@@ -339,7 +342,7 @@ class KrakenSystem(object):
 
 
             if moduleFilefound:
-                print(" " + path + ":")
+                logger.info(" " + path + ":")
                 for i, item in enumerate(contents):
                     if os.path.isfile(os.path.join(path, item)):
 
@@ -354,23 +357,18 @@ class KrakenSystem(object):
                         if item.endswith(".py") and item != "__init__.py":
                             module = modulePath + "." + item[:-3]
                             try:
-                                print "  " + module
+                                logger.info("  " + module)
                                 importlib.import_module(module)
 
                             except ImportError, e:
                                 isSuccessful = False
-                                print " Failed..."
-                                print e
-                                for arg in e.args:
-                                    print arg
+                                logging.exception("Error importing '" + module)
 
                             except Exception, e:
                                 isSuccessful = False
-                                print "Failed..."
-                                for arg in e.args:
-                                    print arg
+                                logging.exception("Error Loading Modules'" + module)
 
-                print "\n"
+                logging.info("")
 
 
             for item in contents:
@@ -398,7 +396,7 @@ class KrakenSystem(object):
                     continue
 
                 if not os.path.exists(path):
-                    print "Invalid Kraken Path: " + path
+                    logging.info("Invalid Kraken Path: " + path)
                     continue
 
                 if not __importDirRecursive(path):

@@ -15,8 +15,7 @@ from kraken.core.profiler import Profiler
 
 from kraken.core.objects.scene_item import SceneItem
 
-logger = getLogger(__name__)
-logger.setLevel(logging.DEBUG)
+logger = getLogger('kraken')
 
 
 class Builder(object):

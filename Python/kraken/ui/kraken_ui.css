@@ -72,14 +72,14 @@ QMainWindow#KrakenMainWindow {
 }
 
 /* Status Bar */
-QMainWindow#KrakenMainWindow QStatusBar {
+QMainWindow#KrakenMainWindow KrakenStatusBar {
     border-top: 1px solid #222;
 
     background-color: #111;
     color: #e1ffff;
 }
 
-QMainWindow#KrakenMainWindow QStatusBar::item {
+QMainWindow#KrakenMainWindow KrakenStatusBar::item {
     color: #e1ffff;
 }
 

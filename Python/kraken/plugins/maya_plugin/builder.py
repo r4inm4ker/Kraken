@@ -23,8 +23,7 @@ from kraken.plugins.maya_plugin.utils import *
 
 import maya.cmds as cmds
 
-logger = getLogger(__name__)
-logger.setLevel(logging.INFO)
+logger = getLogger('kraken')
 
 
 class Builder(Builder):
