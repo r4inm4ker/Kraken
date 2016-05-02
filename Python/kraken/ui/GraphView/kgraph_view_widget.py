@@ -407,64 +407,6 @@ class KGraphViewWidget(GraphViewWidget):
 
         return backdropNode
 
-    # ==================
-    # Message Reporting
-    # ==================
-    # def reportMessage(self, message, level='error', exception=None, timeOut=3500):
-    #     """Shows an error message in the status bar.
-
-    #     Args:
-    #         message (str): Message to display to the user.
-
-    #     """
-
-    #     statusBar = self.window().statusBar
-
-    #     currentLables = statusBar.findChildren(QtGui.QLabel)
-    #     for label in currentLables:
-    #         statusBar.removeWidget(label)
-
-    #     if exception is not None:
-    #         fullMessage = level[0].upper() + level[1:] + ": " + message + '; ' + ', '.join([str(x) for x in exception.args])
-    #     else:
-    #         fullMessage = level[0].upper() + level[1:] + ": " + message
-
-    #     messageLabel = QtGui.QLabel(fullMessage)
-
-    #     print fullMessage
-
-    #     messageColors = {
-    #         'information': '#009900',
-    #         'warning': '#CC3300',
-    #         'error': '#AA0000'
-    #     }
-
-    #     if level not in messageColors.keys():
-    #         level = 'error'
-
-    #     messageLabel.setStyleSheet("QLabel { border-radius: 3px; background-color: " + messageColors[level] + "}")
-
-    #     def addMessage():
-    #         statusBar.clearMessage()
-    #         statusBar.currentMessage = messageLabel
-    #         statusBar.addWidget(messageLabel, 1)
-    #         statusBar.repaint()
-    #         if timeOut > 0.0:
-    #             timer.start()
-
-    #     def endMessage():
-    #         timer.stop()
-    #         statusBar.removeWidget(messageLabel)
-    #         statusBar.repaint()
-    #         statusBar.showMessage('Ready', 2000)
-
-    #     if timeOut > 0.0:
-    #         timer = QtCore.QTimer()
-    #         timer.setInterval(timeOut)
-    #         timer.timeout.connect(endMessage)
-
-    #     addMessage()
-
     # ===============
     # Signal Handlers
     # ===============
