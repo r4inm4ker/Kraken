@@ -92,7 +92,7 @@ class KGraphViewWidget(GraphViewWidget):
         self.rigNameChanged.emit()
 
     def newRigPreset(self):
-        logger.debug("New Rig")
+        logger.info("New Rig Created")
 
         try:
 

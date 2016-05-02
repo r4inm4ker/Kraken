@@ -28,17 +28,6 @@ class KrakenSplash(QtGui.QSplashScreen):
         self.showMessage('Releasing the Kraken!', self.messageFlag, QtCore.Qt.white)
         self._app.processEvents()
 
-    # def write(self, msg):
-    #     filtered = filter(lambda x: not re.match(r'^$', x), msg)
-
-    #     if filtered != "":
-    #         if len(self._msg) == 1:
-    #             del self._msg[0]
-
-    #         self._msg.append(filtered)
-
-    #         self.showMessage("\n".join(self._msg), self.messageFlag, QtCore.Qt.white)
-
     def write(self, msg, level):
         filtered = filter(lambda x: not re.match(r'^$', x), msg)
 
