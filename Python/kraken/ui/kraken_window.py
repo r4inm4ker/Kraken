@@ -82,7 +82,7 @@ class KrakenWindow(QtGui.QMainWindow):
 
 
     def createConnections(self):
-        self.statusBar.outputLogButton.clicked.connect(self.showOutputLog)
+        self.statusBar.outputLogButton.clicked.connect(self.showOutputDialog)
         self.krakenUI.graphViewWidget.rigLoaded.connect(self.krakenMenu.buildRecentFilesMenu)
         self.krakenUI.graphViewWidget.rigNameChanged.connect(self.krakenMenu.updateRigNameLabel)
 
@@ -155,7 +155,7 @@ class KrakenWindow(QtGui.QMainWindow):
             if type(handler).__name__ == 'WidgetHandler':
                 handler.clearWidgets()
 
-    def showOutputLog(self):
+    def showOutputDialog(self):
 
         self.outputDialog.show()
         self.outputDialog.textWidget.moveCursor(QtGui.QTextCursor.End)
