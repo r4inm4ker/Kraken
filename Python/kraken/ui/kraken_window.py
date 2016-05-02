@@ -1,14 +1,19 @@
+import logging
 import os
 import sys
 import json
 
 from PySide import QtGui, QtCore
 
+from kraken.log import getLogger
 from kraken.ui import images_rc
 from kraken.ui.kraken_menu import KrakenMenu
 from kraken.ui.kraken_ui import KrakenUI
 from kraken.ui.preferences import Preferences
-from kraken.plugins.logger import OutputLog
+from kraken.ui.kraken_statusbar import KrakenStatusBar
+
+
+logger = getLogger('kraken')
 
 
 class KrakenWindow(QtGui.QMainWindow):
@@ -20,10 +25,6 @@ class KrakenWindow(QtGui.QMainWindow):
         self.setWindowTitle('Kraken Editor')
         self.setWindowIcon(QtGui.QIcon(':/images/Kraken_Icon.png'))
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
-
-        # Set system output to write to output log object
-        self.outputLog = OutputLog()
-        sys.stdout = self.outputLog
 
         QtCore.QCoreApplication.setOrganizationName("Kraken")
         QtCore.QCoreApplication.setApplicationName("Kraken Editor")
@@ -45,11 +46,13 @@ class KrakenWindow(QtGui.QMainWindow):
 
     def createLayout(self):
 
+        self.outputDialog = OutputLogDialog(self)
+
         # Setup Status Bar
-        statusBar = self.statusBar()
+        self.statusBar = KrakenStatusBar(self)
         self.outputLogButton = QtGui.QPushButton('Log', self)
         self.outputLogButton.setObjectName('outputLog_button')
-        statusBar.insertPermanentWidget(0, self.outputLogButton)
+        self.statusBar.insertPermanentWidget(0, self.outputLogButton)
 
         mainWidget = QtGui.QWidget()
 
@@ -64,11 +67,12 @@ class KrakenWindow(QtGui.QMainWindow):
 
         self.mainLayout.addWidget(self.krakenMenu)
         self.mainLayout.addWidget(self.krakenUI, 1)
+        self.mainLayout.addWidget(self.statusBar)
 
         mainWidget.setLayout(self.mainLayout)
         self.setCentralWidget(mainWidget)
 
-        self.statusBar().showMessage('Ready', 2000)
+        self.statusBar.showMessage('Ready', 2000)
 
         self.setGeometry(250, 150, 800, 475)
         self.center()
@@ -77,8 +81,13 @@ class KrakenWindow(QtGui.QMainWindow):
 
 
     def createConnections(self):
+        for handler in logger.handlers:
+            if type(handler).__name__ == 'WidgetHandler':
+                handler.addWidget(self.outputDialog)
+                handler.addWidget(self.statusBar)
+
+
         self.outputLogButton.clicked.connect(self.showOutputLog)
-        self.krakenMenu.newAction.triggered.connect(self.krakenUI.graphViewWidget.newRigPreset)
         self.krakenUI.graphViewWidget.rigLoaded.connect(self.krakenMenu.buildRecentFilesMenu)
         self.krakenUI.graphViewWidget.rigNameChanged.connect(self.krakenMenu.updateRigNameLabel)
 
@@ -141,18 +150,13 @@ class KrakenWindow(QtGui.QMainWindow):
         elif ret == QtGui.QMessageBox.Save:
             self.kraken_ui.graphViewWidget.saveRigPreset()
 
-            self.statusBar().showMessage('Closing')
+            self.statusBar.showMessage('Closing')
 
         self.writeSettings()
 
     def showOutputLog(self):
-        outputDialog = self.findChild(QtGui.QDialog, 'outputLog')
-        if outputDialog is None:
-            outputDialog = OutputLogDialog(self)
-
-        outputDialog.show()
-        outputDialog.setText(self.outputLog.getLog())
-        outputDialog.textWidget.moveCursor(QtGui.QTextCursor.End)
+        self.outputDialog.show()
+        self.outputDialog.textWidget.moveCursor(QtGui.QTextCursor.End)
 
 
 class OutputLogDialog(QtGui.QDialog):
@@ -181,18 +185,34 @@ class OutputLogDialog(QtGui.QDialog):
 
         self.setLayout(self.outputLogLayout)
 
-
     def createConnections(self):
         """Connects widgets to methods or other signals."""
 
         self.textWidget.customContextMenuRequested.connect(self.createContextMenu)
 
+    def write(self, msg, level):
 
-    def setText(self, text):
-        """Sets the text of the text widget."""
+        if level == 'DEBUG':
+            messageColor = QtGui.QColor("#B4EEB4")
+        elif level == 'INFO':
+            messageColor = QtGui.QColor(QtCore.Qt.white)
+        elif level == 'WARNING':
+            messageColor = QtGui.QColor("#CC3300")
+        elif level == 'ERROR':
+            messageColor = QtGui.QColor("#FF0000")
+        elif level == 'CRITICAL':
+            messageColor = QtGui.QColor("#FF0000")
+        else:
+            messageColor = QtGui.QColor(QtCore.Qt.white)
 
-        self.textWidget.setText(text)
+        self.textWidget.setTextColor(messageColor)
+        charFormat = self.textWidget.currentCharFormat()
+        textCursor = self.textWidget.textCursor()
+        textCursor.movePosition(QtGui.QTextCursor.End)
+        textCursor.insertText(msg, charFormat)
 
+        self.textWidget.setTextCursor(textCursor)
+        self.textWidget.ensureCursorVisible()
 
     # =============
     # Context Menu
@@ -206,7 +226,7 @@ class OutputLogDialog(QtGui.QDialog):
 
         selectAllAction.triggered.connect(self.contextSelectAll)
         copyAction.triggered.connect(self.contextCopy)
-        clearAction.triggered.connect(self.contextClear)
+        clearAction.triggered.connect(self.textWidget.clear)
 
         self.contextMenu.exec_(QtGui.QCursor.pos())
 
@@ -215,12 +235,6 @@ class OutputLogDialog(QtGui.QDialog):
 
     def contextCopy(self):
         self.textWidget.copy()
-
-    def contextClear(self):
-        outputLog = self.parent().outputLog
-        outputLog.clear()
-        self.textWidget.clear()
-
 
 
 def createSplash(app):
