@@ -12,9 +12,12 @@ class WidgetHandler(logging.Handler):
         if widget not in self._widgets:
             self._widgets.append(widget)
 
-    def removeWidet(self, widget):
+    def removeWidget(self, widget):
         if widget in self._widgets:
             self._widgets.remove(widget)
+
+    def clearWidgets(self):
+        self._widgets = []
 
     def emit(self, record):
 
