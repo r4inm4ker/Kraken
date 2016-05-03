@@ -2,7 +2,7 @@ import json
 
 from kraken.core.maths import Xfo, Vec3, Quat
 
-from kraken_examples.arm_component import ArmComponentGuide, ArmComponentRig
+from kraken_components.biped.arm_component import ArmComponentGuide, ArmComponentRig
 
 from kraken.core.io.kraken_saver import KrakenSaver
 from kraken.core.io.kraken_loader import KrakenLoader

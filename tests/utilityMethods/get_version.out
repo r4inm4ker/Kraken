@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "tests\utilityMethods\get_version.py", line 23, in <module>
+    versionSplit = versionSplit[:2] + [suffix_split[0]]
+TypeError: 'NoneType' object has no attribute '__getitem__'
+

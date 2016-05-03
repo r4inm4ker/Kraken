@@ -26,10 +26,10 @@ def buildBob(mode='guide'):
         bobRig.loadRigDefinition(bobRigData)
 
         builder = plugins.getBuilder()
-        builder.build(bobRig)
+        builder.buildRig(bobRig)
 
     else:
-        LogMessage('Invalid mode set')
+        print 'Invalid mode set'
 
     Profiler.getInstance().pop()
 

@@ -258,7 +258,8 @@ class Xfo(MathObject):
 
         """
 
-        return Ray(self._rtval.transformRay('Ray', ks.rtVal('Ray', ray)))
+        # return Ray(self._rtval.transformRay('Ray', ks.rtVal('Ray', ray)))
+        raise NotImplementedError('Ray object is not implemented!')
 
 
     def inverse(self):
@@ -388,16 +389,16 @@ def aimAt(targetXfo, aimPos=None, aimVector=None, aimAxis=(1, 0, 0), upPos=None,
         raise ValueError("Must provide either upPos or upVector argument")
 
 
-    aimAxisVector = aimVector #same as input arg always
+    aimAxisVector = aimVector  # same as input arg always
     normalAxisVector = upVector.cross(aimAxisVector).unit()  # perpendiculuar to aim, but could be one of two directions
-    upAxisVector = normalAxisVector.cross(aimAxisVector).unit() # perpendicular to aim and normal, but could be one of two directions
+    upAxisVector = normalAxisVector.cross(aimAxisVector).unit()  # perpendicular to aim and normal, but could be one of two directions
 
     # Measure the upAxisVector against the original upVector to see if it is less that 90, if not, we want the opposite side, so negate
     angle = upVector.dot(upAxisVector)
     if angle < 0:  # more than 90 degrees from the ideal upvector
         upAxisVector = upAxisVector.negate()
 
-    #Simply negate the directions of aimAxis and upAxis if needed depending on sign of arguments
+    # Simply negate the directions of aimAxis and upAxis if needed depending on sign of arguments
     if -1 in upAxis:
         upAxisVector = upAxisVector.negate()
 
@@ -421,13 +422,13 @@ def aimAt(targetXfo, aimPos=None, aimVector=None, aimAxis=(1, 0, 0), upPos=None,
     # That leaves us with a third to solve for
     # Based on the right-hand rule universe, we know the order to cross product the two known vectors
 
-    if not aimAxis[0] and not upAxis[0]: # X is normal axis, so do Y cross Z (in that order) to get it
+    if not aimAxis[0] and not upAxis[0]:  # X is normal axis, so do Y cross Z (in that order) to get it
         normalAxisVector = argVectors[1].cross(argVectors[2]).unit()
 
-    elif not aimAxis[1] and not upAxis[1]: # Y is normal axis, so do Z cross X (in that order) to get it
+    elif not aimAxis[1] and not upAxis[1]:  # Y is normal axis, so do Z cross X (in that order) to get it
         normalAxisVector = argVectors[2].cross(argVectors[0]).unit()
 
-    elif not aimAxis[2] and not upAxis[2]: # Z is normal axis, so do X cross Y (in that order) to get it
+    elif not aimAxis[2] and not upAxis[2]:  # Z is normal axis, so do X cross Y (in that order) to get it
         normalAxisVector = argVectors[0].cross(argVectors[1]).unit()
 
     # add the normalAxisVector to the remaining axis
