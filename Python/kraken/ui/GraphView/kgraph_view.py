@@ -11,6 +11,7 @@ from pyflowgraph.graph_view import MANIP_MODE_NONE, MANIP_MODE_SELECT, MANIP_MOD
 
 from pyflowgraph.connection import Connection
 from pyflowgraph.selection_rect import SelectionRect
+
 from knode import KNode
 from kbackdrop import KBackdrop
 from edit_index_widget import EditIndexWidget
@@ -73,7 +74,6 @@ class KGraphView(GraphView):
 
         self.frameAllNodes()
 
-
     def addConnection(self, connection, emitSignal=True):
 
         result = super(KGraphView, self).addConnection(connection, emitSignal=emitSignal)
@@ -87,7 +87,6 @@ class KGraphView(GraphView):
                 connection.setPenWidth(2.5)
 
         return connection
-
 
     def getNodesOfType(self, nodeType):
         """Gets all the nodes of the specified type.
@@ -220,7 +219,6 @@ class KGraphView(GraphView):
 
         else:
             super(GraphView, self).mousePressEvent(event)
-
 
     def dragEnterEvent(self, event):
         textParts = event.mimeData().text().split(':')

@@ -9,7 +9,7 @@ import types
 import kraken
 import kraken.ui.kraken_window
 from kraken.ui.kraken_window import KrakenWindow
-from kraken.ui.kraken_window import createSplash
+from kraken.ui.kraken_splash import KrakenSplash
 
 import maya
 from maya import cmds
@@ -52,7 +52,8 @@ class OpenKrakenEditorCommand(OpenMayaMPx.MPxCommand):
 
                 return
 
-        splash = createSplash(app)
+        splash = KrakenSplash(app)
+        splash.show()
 
         window = KrakenWindow(parent=getMayaWindow())
         window.show()
