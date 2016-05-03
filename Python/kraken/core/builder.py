@@ -18,6 +18,7 @@ from kraken.core.objects.object_3d import Object3D
 from kraken.core.traverser.traverser import Traverser
 
 logger = getLogger('kraken')
+logger.setLevel(logging.DEBUG)
 
 
 class Builder(object):
