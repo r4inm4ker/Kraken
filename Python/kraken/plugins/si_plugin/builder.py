@@ -15,6 +15,7 @@ from kraken.core.builder import Builder
 from kraken.plugins.si_plugin.utils import *
 
 logger = getLogger('kraken')
+logger.setLevel(logging.INFO)
 
 
 class Builder(Builder):
@@ -33,7 +34,7 @@ class Builder(Builder):
                 continue
 
             node = builtElement['tgt']
-            if node is not None:
+            if node is not None and node.Parent.Name == 'Scene_Root':
                 try:
                     si.DeleteObj("B:" + node.FullName)
                     si.Desktop.RedrawUI()
@@ -1409,8 +1410,8 @@ class Builder(Builder):
                                         kSceneItem.xfo.ori.v.z)
 
         tr = XSIMath.CreateVector3(kSceneItem.xfo.tr.x,
-                                   skSceneItem.xfo.tr.y,
-                                   skSceneItem.xfo.tr.z)
+                                   kSceneItem.xfo.tr.y,
+                                   kSceneItem.xfo.tr.z)
 
         xfo.SetScaling(sc)
         xfo.SetRotationFromQuaternion(quat)
