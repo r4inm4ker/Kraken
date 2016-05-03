@@ -10,26 +10,23 @@ from kraken.helpers.utility_methods import logHierarchy
 Profiler.getInstance().push("tentacle_build")
 
 tentacleGuide = TentacleComponentGuide("tentacle")
-tentacleGuide.loadData(
-                        {
-                         "name": "tentacle",
-                         "location": "L",
-                         "numJoints": 12,
-                         "jointPositions": [
-                                            Vec3(0.9811,    12, -1.237),
-                                            Vec3(5.4488,    11, -1.237),
-                                            Vec3(4.0,       10, -1.237),
-                                            Vec3(6.841,     9, -1.237),
-                                            Vec3(9.841,     8, -1.237),
-                                            Vec3(9.841,     7, -1.237),
-                                            Vec3(9.841,     6, -1.237),
-                                            Vec3(9.841,     5, -1.237),
-                                            Vec3(9.841,     4, -1.237),
-                                            Vec3(9.841,     3, -1.237),
-                                            Vec3(9.841,     2, -1.237),
-                                            Vec3(9.841,     1, -1.237)
-                                           ]
-                        })
+tentacleGuide.loadData({
+    "name": "tentacle",
+    "location": "L",
+    "numJoints": 12,
+    "jointPositions": [Vec3(0.9811, 12, -1.237),
+                       Vec3(5.4488, 11, -1.237),
+                       Vec3(4.0, 10, -1.237),
+                       Vec3(6.841, 9, -1.237),
+                       Vec3(9.841, 8, -1.237),
+                       Vec3(9.841, 7, -1.237),
+                       Vec3(9.841, 6, -1.237),
+                       Vec3(9.841, 5, -1.237),
+                       Vec3(9.841, 4, -1.237),
+                       Vec3(9.841, 3, -1.237),
+                       Vec3(9.841, 2, -1.237),
+                       Vec3(9.841, 1, -1.237)]
+})
 
 # Save the hand guide data for persistence.
 saveData = tentacleGuide.saveData()
@@ -40,7 +37,7 @@ tentacle = TentacleComponentRig()
 tentacle.loadData(tentacleGuideData)
 
 builder = plugins.getBuilder()
-builder.buildComponent(tentacle)
+builder.build(tentacle)
 
 Profiler.getInstance().pop()
 

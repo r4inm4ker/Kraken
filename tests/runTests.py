@@ -56,7 +56,7 @@ def checkTestOutput(filepath, output, update, printoutput=False):
             print "Test Passed:" + filepath
         else:
             print "Test Failed:" + filepath
-            resultfile = os.path.splitext(filepath)[0]+'.result'
+            resultfile = os.path.splitext(filepath)[0] + '.result'
             with open(resultfile, 'w') as f:
                 f.write(output)
 
@@ -141,22 +141,22 @@ def runKLTest(filepath, update, printoutput=False):
 
 
 def runTest(filepath, update, printoutput=False):
-    skipile = os.path.splitext(filepath)[0]+'.skip'
+    skipile = os.path.splitext(filepath)[0] + '.skip'
     if os.path.exists(skipile):
         print "Test Skipped:" + filepath
         return
 
     if filepath.endswith(".py"):
-        runPytonTest( filepath, update, printoutput )
+        runPytonTest(filepath, update, printoutput)
     elif filepath.endswith(".kl"):
-        runKLTest( filepath, update, printoutput )
+        runKLTest(filepath, update, printoutput)
 
 
 if __name__ == '__main__':
     # Parse the commandline args.
     parser = argparse.ArgumentParser()
-    parser.add_argument('--file', required=False, help = "The python or kl File to use in the test (optional)")
-    parser.add_argument('--update', required=False, action='store_const', const=True, default=False, help = "Force the update of the reference file(s). (optional)")
+    parser.add_argument('--file', required=False, help="The python or kl File to use in the test (optional)")
+    parser.add_argument('--update', required=False, action='store_const', const=True, default=False, help="Force the update of the reference file(s). (optional)")
     args = parser.parse_args()
     update = args.update
 

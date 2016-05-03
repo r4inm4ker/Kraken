@@ -5,6 +5,10 @@ Builder -- Base builder object to build objects in DCC.
 
 """
 
+import logging
+
+from kraken.log import getLogger
+
 from kraken.core.kraken_system import KrakenSystem
 from kraken.core.configs.config import Config
 from kraken.core.profiler import Profiler
@@ -12,6 +16,8 @@ from kraken.core.profiler import Profiler
 from kraken.core.objects.scene_item import SceneItem
 from kraken.core.objects.object_3d import Object3D
 from kraken.core.traverser.traverser import Traverser
+
+logger = getLogger('kraken')
 
 
 class Builder(object):
@@ -24,6 +30,11 @@ class Builder(object):
     the build order has been determined, the builder iterates through the list
     and builds each object type. Each object type has it's own method for users
     to re-implement for each application.
+
+    Attributes:
+        _buildPhase_3DObjectsAttributes (type): Description.
+        _buildPhase_AttributeConnections (type): Description.
+        _buildPhase_ConstraintsOperators (type): Description.
 
     """
 
@@ -95,6 +106,7 @@ class Builder(object):
             array: An array of dicts with 'src' and 'tgt' key value pairs
 
         """
+
         return self._buildElements
 
     # ========================
@@ -113,9 +125,8 @@ class Builder(object):
 
         """
 
-        if self._debugMode:
-            print "buildContainer: " + kContainer.getPath() + " as: " + \
-                buildName
+        logger.info("buildContainer: " + kContainer.getPath() + " as: " +
+                    buildName)
 
         return self.buildLocator(kContainer, buildName)
 
@@ -131,8 +142,7 @@ class Builder(object):
 
         """
 
-        if self._debugMode:
-            print "buildLayer: " + kSceneItem.getPath() + " as: " + buildName
+        logger.info("buildLayer: " + kSceneItem.getPath() + " as: " + buildName)
 
         return None
 
@@ -149,8 +159,8 @@ class Builder(object):
         """
 
 
-        if self._debugMode:
-            print "buildHierarchyGroup: " + kSceneItem.getPath() + " as: " + buildName
+        logger.info("buildHierarchyGroup: " + kSceneItem.getPath() + " as: " +
+                    buildName)
 
         return None
 
@@ -166,8 +176,8 @@ class Builder(object):
 
         """
 
-        if self._debugMode:
-            print "buildGroup: " + kSceneItem.getPath() + " as: " + buildName
+        logger.info("buildGroup: " + kSceneItem.getPath() + " as: " +
+                    buildName)
 
         return None
 
@@ -183,8 +193,8 @@ class Builder(object):
 
         """
 
-        if self._debugMode:
-            print "buildJoint: " + kSceneItem.getPath() + " as: " + buildName
+        logger.info("buildJoint: " + kSceneItem.getPath() + " as: " +
+                    buildName)
 
         return None
 
@@ -201,8 +211,8 @@ class Builder(object):
         """
 
 
-        if self._debugMode:
-            print "buildLocator: " + kSceneItem.getPath() + " as: " + buildName
+        logger.info("buildLocator: " + kSceneItem.getPath() + " as: " +
+                    buildName)
 
         return None
 
@@ -218,9 +228,8 @@ class Builder(object):
 
         """
 
-        if self._debugMode:
-            print "buildCurve: " + kSceneItem.getPath() + " as: " + buildName
-
+        logger.info("buildCurve: " + kSceneItem.getPath() + " as: " +
+                    buildName)
 
         return None
 
@@ -236,8 +245,8 @@ class Builder(object):
 
         """
 
-        if self._debugMode:
-            print "buildControl:" + kSceneItem.getPath() + " as: " + buildName
+        logger.info("buildControl:" + kSceneItem.getPath() + " as: " +
+                    buildName)
 
         return None
 
@@ -255,8 +264,7 @@ class Builder(object):
 
         """
 
-        if self._debugMode:
-            print "buildBoolAttribute: " + kAttribute.getPath()
+        logger.info("buildBoolAttribute: " + kAttribute.getPath())
 
         return True
 
@@ -272,8 +280,7 @@ class Builder(object):
         """
 
 
-        if self._debugMode:
-            print "buildScalarAttribute: " + kAttribute.getPath()
+        logger.info("buildScalarAttribute: " + kAttribute.getPath())
 
         return True
 
@@ -289,8 +296,7 @@ class Builder(object):
         """
 
 
-        if self._debugMode:
-            print "buildIntegerAttribute: " + kAttribute.getPath()
+        logger.info("buildIntegerAttribute: " + kAttribute.getPath())
 
         return True
 
@@ -305,8 +311,7 @@ class Builder(object):
 
         """
 
-        if self._debugMode:
-            print "buildStringAttribute: " + kAttribute.getPath()
+        logger.info("buildStringAttribute: " + kAttribute.getPath())
 
         return True
 
@@ -321,8 +326,7 @@ class Builder(object):
 
         """
 
-        if self._debugMode:
-            print "buildAttributeGroup: " + kAttributeGroup.getPath()
+        logger.info("buildAttributeGroup: " + kAttributeGroup.getPath())
 
         return True
 
@@ -338,8 +342,7 @@ class Builder(object):
         """
 
 
-        if self._debugMode:
-            print "connectAttribute: " + kAttribute.getPath()
+        logger.info("connectAttribute: " + kAttribute.getPath())
 
         return True
 
@@ -357,9 +360,8 @@ class Builder(object):
 
         """
 
-        if self._debugMode:
-            print "buildOrientationConstraint: " + kConstraint.getPath() + \
-                " to: " + kConstraint.getConstrainee().getPath()
+        logger.info("buildOrientationConstraint: " + kConstraint.getPath() +
+                    " to: " + kConstraint.getConstrainee().getPath())
 
         dccSceneItem = None  # Add constraint object here.
         self._registerSceneItemPair(kConstraint, dccSceneItem)
@@ -377,9 +379,8 @@ class Builder(object):
 
         """
 
-        if self._debugMode:
-            print "buildPoseConstraint: " + kConstraint.getPath() + " to: " + \
-                kConstraint.getConstrainee().getPath()
+        logger.info("buildPoseConstraint: " + kConstraint.getPath() + " to: " +
+                    kConstraint.getConstrainee().getPath())
 
         dccSceneItem = None  # Add constraint object here.
         self._registerSceneItemPair(kConstraint, dccSceneItem)
@@ -396,9 +397,9 @@ class Builder(object):
             bool: True if successful.
 
         """
-        if self._debugMode:
-            print "buildPositionConstraint:" + kConstraint.getPath() + \
-                " to: " + kConstraint.getConstrainee().getPath()
+
+        logger.info("buildPositionConstraint:" + kConstraint.getPath() +
+                    " to: " + kConstraint.getConstrainee().getPath())
 
         dccSceneItem = None  # Add constraint object here.
         self._registerSceneItemPair(kConstraint, dccSceneItem)
@@ -415,9 +416,9 @@ class Builder(object):
             bool: True if successful.
 
         """
-        if self._debugMode:
-            print "buildScaleConstraint: " + kConstraint.getPath() + \
-                " to: " + kConstraint.getConstrainee().getPath()
+
+        logger.info("buildScaleConstraint: " + kConstraint.getPath() +
+                    " to: " + kConstraint.getConstrainee().getPath())
 
         dccSceneItem = None  # Add constraint object here.
         self._registerSceneItemPair(kConstraint, dccSceneItem)
@@ -430,6 +431,9 @@ class Builder(object):
     def buildAttributeConnection(self, componentInput):
         """Builds the link between the target and connection target.
 
+        Note:
+            Implement in DCC Plugins.
+
         Args:
             componentInput (object): kraken connection to build.
 
@@ -437,11 +441,8 @@ class Builder(object):
             bool: True if successful.
 
         """
-        if self._debugMode:
-            print "buildAttributeConnection: " + componentInput.getPath()
 
-
-        # Implemented in DCC Plugins.
+        logger.info("buildAttributeConnection: " + componentInput.getPath())
 
         return True
 
@@ -451,6 +452,9 @@ class Builder(object):
     def buildKLOperator(self, kKLOperator):
         """Builds Splice Operators on the components.
 
+        Note:
+            Implement in DCC Plugins.
+
         Args:
             kOperator (object): kraken operator that represents a KL operator.
 
@@ -458,13 +462,16 @@ class Builder(object):
             bool: True if successful.
 
         """
-        if self._debugMode:
-            print "buildKLOperator:" + kKLOperator.getPath()
+
+        logger.info("buildKLOperator:" + kKLOperator.getPath())
 
         return True
 
     def buildCanvasOperator(self, kOperator):
         """Builds Splice Operators on the components.
+
+        Note:
+            Implement in DCC Plugins.
 
         Args:
             kOperator (object): kraken operator that represents a Canvas
@@ -474,8 +481,8 @@ class Builder(object):
             bool: True if successful.
 
         """
-        if self._debugMode:
-            print "buildCanvasOperator: " + kOperator.getPath()
+
+        logger.info("buildCanvasOperator: " + kOperator.getPath())
 
         return True
 
@@ -487,6 +494,7 @@ class Builder(object):
 
         Args:
             kObject (object): kraken object to build.
+            phase (type): Description.
 
         Returns:
             object: DCC object that was created.
@@ -499,9 +507,8 @@ class Builder(object):
         if hasattr(kObject, 'getBuildName'):
             buildName = kObject.getBuildName()
 
-        if self._debugMode:
-            print "building(" + str(phase) + "): " + kObject.getPath() + \
-                " as: " + buildName + " type: " + kObject.getTypeName()
+        logger.info("building(" + str(phase) + "): " + kObject.getPath() +
+                    " as: " + buildName + " type: " + kObject.getTypeName())
 
         # Build Object
         if kObject.isTypeOf("Rig"):
@@ -627,9 +634,20 @@ class Builder(object):
         return dccSceneItem
 
     def __buildSceneItemList(self, kObjects, phase):
+        """Builds the provided list of objects.
+
+        Args:
+            kObjects (list): Objects to be built.
+            phase (int): Description.
+
+        Returns:
+            Type: True if successful.
+
+        """
 
         for kObject in kObjects:
             self.__buildSceneItem(kObject, phase)
+
 
     def build(self, kSceneItem):
         """Builds a rig object.

@@ -21,7 +21,7 @@ neck = NeckComponentRig()
 neck.loadData(neckGuideData)
 
 builder = plugins.getBuilder()
-builder.buildComponent(neck)
+builder.build(neck)
 
 Profiler.getInstance().pop()
 

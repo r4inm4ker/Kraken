@@ -11,14 +11,14 @@ Profiler.getInstance().push("head_build")
 
 headGuide = HeadComponentGuide("head")
 headGuide.loadData({
-                    "name": "Head",
-                    "location": "M",
-                    "headPosition": Vec3(0.0, 17.4756, -0.421),
-                    "headEndPosition": Vec3(0.0, 19.5, -0.421),
-                    "eyeLeftPosition": Vec3(0.3497, 18.0878, 0.6088),
-                    "eyeRightPosition": Vec3(-0.3497, 18.0878, 0.6088),
-                    "jawPosition": Vec3(0.0, 17.613, -0.2731)
-                   })
+    "name": "Head",
+    "location": "M",
+    "headPosition": Vec3(0.0, 17.4756, -0.421),
+    "headEndPosition": Vec3(0.0, 19.5, -0.421),
+    "eyeLeftPosition": Vec3(0.3497, 18.0878, 0.6088),
+    "eyeRightPosition": Vec3(-0.3497, 18.0878, 0.6088),
+    "jawPosition": Vec3(0.0, 17.613, -0.2731)
+})
 
 # Save the hand guide data for persistence.
 saveData = headGuide.saveData()
@@ -29,7 +29,7 @@ head = HeadComponentRig()
 head.loadData(headGuideData)
 
 builder = plugins.getBuilder()
-builder.buildComponent(head)
+builder.build(head)
 
 Profiler.getInstance().pop()
 

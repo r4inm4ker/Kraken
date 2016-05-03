@@ -26,7 +26,7 @@ def buildBob(mode='guide'):
         bobRig.loadRigDefinition(bobRigData)
 
         builder = plugins.getBuilder()
-        builder.buildRig(bobRig)
+        builder.build(bobRig)
 
     else:
         print 'Invalid mode set'

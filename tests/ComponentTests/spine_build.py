@@ -11,15 +11,15 @@ Profiler.getInstance().push("spine_build")
 
 spineGuide = SpineComponentGuide("spine")
 spineGuide.loadData({
-                     "name": "spine",
-                     "location": "M",
-                     "cogPosition": Vec3(0.0, 11.1351, -0.1382),
-                     "spine01Position": Vec3(0.0, 11.1351, -0.1382),
-                     "spine02Position": Vec3(0.0, 11.8013, -0.1995),
-                     "spine03Position": Vec3(0.0, 12.4496, -0.3649),
-                     "spine04Position": Vec3(0.0, 13.1051, -0.4821),
-                     "numDeformers": 6
-                    })
+    "name": "spine",
+    "location": "M",
+    "cogPosition": Vec3(0.0, 11.1351, -0.1382),
+    "spine01Position": Vec3(0.0, 11.1351, -0.1382),
+    "spine02Position": Vec3(0.0, 11.8013, -0.1995),
+    "spine03Position": Vec3(0.0, 12.4496, -0.3649),
+    "spine04Position": Vec3(0.0, 13.1051, -0.4821),
+    "numDeformers": 6
+})
 
 # Save the hand guide data for persistence.
 saveData = spineGuide.saveData()
@@ -30,7 +30,7 @@ spine = SpineComponentRig()
 spine.loadData(spineGuideData)
 
 builder = plugins.getBuilder()
-builder.buildComponent(spine)
+builder.build(spine)
 
 Profiler.getInstance().pop()
 

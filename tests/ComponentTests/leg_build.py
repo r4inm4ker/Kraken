@@ -1,7 +1,5 @@
-import json
-
 from kraken import plugins
-from kraken.core.maths import Xfo, Vec3, Quat
+from kraken.core.maths import Xfo, Vec3
 from kraken_components.biped.leg_component import LegComponentGuide, LegComponentRig
 
 from kraken.core.profiler import Profiler
@@ -29,7 +27,7 @@ leg = LegComponentRig()
 leg.loadData(legGuideData)
 
 builder = plugins.getBuilder()
-builder.buildComponent(leg)
+builder.build(leg)
 
 Profiler.getInstance().pop()
 

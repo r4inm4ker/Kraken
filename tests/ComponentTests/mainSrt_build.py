@@ -1,5 +1,5 @@
 from kraken import plugins
-from kraken.core.maths import Xfo, Vec3, Quat
+from kraken.core.maths import Xfo, Vec3
 
 from kraken_components.generic.mainSrt_component import MainSrtComponentGuide, MainSrtComponentRig
 
@@ -11,11 +11,11 @@ Profiler.getInstance().push("mainSrt_build")
 
 mainSrtGuide = MainSrtComponentGuide("mainSrt")
 mainSrtGuide.loadData({
-                      "name": "mainSrt",
-                      "location": "M",
-                      "mainSrtXfo": Xfo(tr=Vec3(0.0, 0.0, 0.0)),
-                      "mainSrtSize": 3.0
-                     })
+    "name": "mainSrt",
+    "location": "M",
+    "mainSrtXfo": Xfo(tr=Vec3(0.0, 0.0, 0.0)),
+    "mainSrtSize": 3.0
+})
 
 # Save the main srt guide data for persistence.
 saveData = mainSrtGuide.saveData()
@@ -26,7 +26,7 @@ mainSrt = MainSrtComponentRig()
 mainSrt.loadData(mainSrtGuideData)
 
 builder = plugins.getBuilder()
-builder.buildComponent(mainSrt)
+builder.build(mainSrt)
 
 Profiler.getInstance().pop()
 
