@@ -18,12 +18,13 @@ def getLogger(name):
 
     logger = logging.getLogger(name)
 
-    dccHandler = getLogHandler()
-    if dccHandler is not None:
-        if dccHandler not in logger.handlers:
+    handlerNames = [type(x).__name__ for x in logger.handlers]
+
+    if 'DCCHandler' not in handlerNames:
+        dccHandler = getLogHandler()
+        if dccHandler is not None:
             logger.addHandler(dccHandler)
 
-    handlerNames = [type(x).__name__ for x in logger.handlers]
     if 'WidgetHandler' not in handlerNames:
         widgetHandler = WidgetHandler()
         logger.addHandler(widgetHandler)

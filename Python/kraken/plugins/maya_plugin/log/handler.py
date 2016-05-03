@@ -3,7 +3,7 @@ import logging
 from kraken.plugins.maya_plugin.utils import *
 
 
-class Handler(logging.Handler):
+class DCCHandler(logging.Handler):
     """Logging Handler for Maya."""
 
     def emit(self, record):

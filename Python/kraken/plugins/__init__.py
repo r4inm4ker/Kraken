@@ -83,7 +83,7 @@ def getLogHandler():
         if mod.dccTest() is True:
             loaded_mod = __import__("kraken.plugins." + eachPlugin + ".log.handler", fromlist=['handler'])
             reload(loaded_mod)
-            loaded_class = getattr(loaded_mod, 'Handler')
+            loaded_class = getattr(loaded_mod, 'DCCHandler')
 
             handler = loaded_class()
 

@@ -1,8 +1,8 @@
-import types
+import logging
 
 
-class Handler(logging.StreamHandler):
+class DCCHandler(logging.StreamHandler):
     """Logging Handler for Canvas."""
 
     def __init__(self, *args, **kwargs):
-        super(Handler, self).__init__(args, kwargs)
+        super(DCCHandler, self).__init__(args, kwargs)

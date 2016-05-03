@@ -3,7 +3,7 @@ import logging
 from kraken.plugins.si_plugin.utils import *
 
 
-class Handler(logging.Handler):
+class DCCHandler(logging.Handler):
     """Logging Handler for Softimage."""
 
     def emit(self, record):
