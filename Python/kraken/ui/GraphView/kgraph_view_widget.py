@@ -1,4 +1,6 @@
-import json, difflib
+import difflib
+import json
+import logging
 import os
 import re
 import traceback
@@ -12,8 +14,11 @@ from kgraph_view import KGraphView
 from kraken.ui.undoredo.undo_redo_manager import UndoRedoManager
 import graph_commands
 
+from kraken.log import getLogger
 from kraken.core.objects.rig import Rig
 from kraken import plugins
+
+logger = getLogger('kraken')
 
 
 def GetKrakenPath():
@@ -77,7 +82,6 @@ class KGraphViewWidget(GraphViewWidget):
         if ok is True:
             self.setGuideRigName(text)
 
-
     def setGuideRigName(self, text):
 
 
@@ -87,16 +91,21 @@ class KGraphViewWidget(GraphViewWidget):
         self.guideRig.setName(text)
         self.rigNameChanged.emit()
 
-
     def newRigPreset(self):
-        self.guideRig = Rig()
-        self.getGraphView().displayGraph(self.guideRig)
-        self.setGuideRigName('MyRig')
+        logger.info("New Rig Created")
 
-        self.openedFile = None
+        try:
 
-        self.window().setWindowTitle('Kraken Editor')
+            self.guideRig = Rig()
+            self.getGraphView().displayGraph(self.guideRig)
+            self.setGuideRigName('MyRig')
 
+            self.openedFile = None
+
+            self.window().setWindowTitle('Kraken Editor')
+
+        except Exception as e:
+            logger.exception("Error Creating New Rig")
 
     def saveRig(self, saveAs=False):
         """Saves the current rig to disc.
@@ -158,17 +167,16 @@ class KGraphViewWidget(GraphViewWidget):
                 settings.endGroup()
                 self.openedFile = filePath
 
-                self.reportMessage('Saved Rig file: ' + filePath, level='information')
+                logger.info('Saved Rig file: ' + filePath)
 
             except Exception as e:
-                self.reportMessage('Error Saving Rig File', level='error', exception=e, timeOut=0)
+                logger.exception('Error Saving Rig File')
                 return False
 
             return filePath
 
         finally:
             self.window().setCursor(QtCore.Qt.ArrowCursor)
-
 
     def saveAsRigPreset(self):
         """Opens a dialogue window to save the current rig as a different file."""
@@ -187,7 +195,6 @@ class KGraphViewWidget(GraphViewWidget):
         else:
             self.saveRig(saveAs=False)
             self.rigLoaded.emit(self.openedFile)
-
 
     def openRigPreset(self):
 
@@ -219,7 +226,7 @@ class KGraphViewWidget(GraphViewWidget):
     def loadRigPreset(self, filePath):
         self.guideRig = Rig()
         self.guideRig.loadRigDefinitionFile(filePath)
-        self.setGuideRigName(self.guideRig.getName()) # Remove "_guide" from end of name
+        self.setGuideRigName(self.guideRig.getName())  # Remove "_guide" from end of name
         self.graphView.displayGraph(self.guideRig)
 
         settings = self.window().getSettings()
@@ -229,16 +236,17 @@ class KGraphViewWidget(GraphViewWidget):
 
         self.openedFile = filePath
         self.window().setWindowTitle('Kraken Editor - ' + filePath + '[*]')
-        self.reportMessage('Loaded Rig file: ' + filePath, level='information')
+        logger.info('Loaded Rig file: ' + filePath)
 
         self.rigLoaded.emit(filePath)
 
     def buildGuideRig(self):
 
         try:
+            logger.info('Building Guide')
             self.window().setCursor(QtCore.Qt.WaitCursor)
 
-            self.window().statusBar().showMessage('Building Guide')
+            # self.window().statusBar().showMessage('Building Guide')
 
             initConfigIndex = self.window().krakenMenu.configsWidget.currentIndex()
 
@@ -255,15 +263,12 @@ class KGraphViewWidget(GraphViewWidget):
             self._guideBuilder = plugins.getBuilder()
             self._guideBuilder.buildRig(self.guideRig)
 
-            self.reportMessage('Guide Rig Build Success', level='information', timeOut=6000)
+            logger.info('Guide Rig Build Success')
 
             self.window().krakenMenu.setCurrentConfig(initConfigIndex)
 
         except Exception as e:
-            # Add the callstak to the log
-            callstack = traceback.format_exc()
-            print callstack
-            self.reportMessage('Error Building', level='error', exception=e, timeOut=0) #Keep this message!
+            logger.exception('Error Building')
 
         finally:
             self.window().setCursor(QtCore.Qt.ArrowCursor)
@@ -278,13 +283,12 @@ class KGraphViewWidget(GraphViewWidget):
         synchronizer.setTarget(self.guideRig)
         synchronizer.sync()
 
-
     def buildRig(self):
 
         try:
             self.window().setCursor(QtCore.Qt.WaitCursor)
 
-            self.window().statusBar().showMessage('Building Rig')
+            self.window().statusBar.showMessage('Building Rig')
 
             initConfigIndex = self.window().krakenMenu.configsWidget.currentIndex()
 
@@ -303,15 +307,12 @@ class KGraphViewWidget(GraphViewWidget):
             self._builder = plugins.getBuilder()
             self._builder.buildRig(rig)
 
-            self.reportMessage('Rig Build Success', level='information', timeOut=6000)
+            logger.info('Rig Build Success')
 
             self.window().krakenMenu.setCurrentConfig(initConfigIndex)
 
         except Exception as e:
-            # Add the callstak to the log
-            callstack = traceback.format_exc()
-            print callstack
-            self.reportMessage('Error Building', level='error', exception=e, timeOut=0)
+            logger.exception('Error Building')
 
         finally:
             self.window().setCursor(QtCore.Qt.ArrowCursor)
@@ -324,14 +325,12 @@ class KGraphViewWidget(GraphViewWidget):
         pos = graphView.getSelectedNodesCentroid()
         graphView.copySettings(pos)
 
-
     def paste(self):
         graphView = self.getGraphView()
         clipboardData = self.graphView.getClipboardData()
 
         pos = clipboardData['copyPos'] + QtCore.QPoint(20, 20)
         graphView.pasteSettings(pos, mirrored=False, createConnectionsToExistingNodes=True)
-
 
     def pasteUnconnected(self):
         graphView = self.getGraphView()
@@ -340,14 +339,12 @@ class KGraphViewWidget(GraphViewWidget):
         pos = clipboardData['copyPos'] + QtCore.QPoint(20, 20)
         graphView.pasteSettings(pos, mirrored=False, createConnectionsToExistingNodes=False)
 
-
     def pasteMirrored(self):
         graphView = self.getGraphView()
         clipboardData = self.graphView.getClipboardData()
 
         pos = clipboardData['copyPos'] + QtCore.QPoint(20, 20)
         graphView.pasteSettings(pos, mirrored=True, createConnectionsToExistingNodes=False)
-
 
     def pasteMirroredConnected(self):
         graphView = self.getGraphView()
@@ -356,13 +353,11 @@ class KGraphViewWidget(GraphViewWidget):
         pos = clipboardData['copyPos'] + QtCore.QPoint(20, 20)
         graphView.pasteSettings(pos, mirrored=True, createConnectionsToExistingNodes=True)
 
-
     def undo(self):
         UndoRedoManager.getInstance().undo()
 
     def redo(self):
         UndoRedoManager.getInstance().redo()
-
 
     def openContextualNodeList(self):
         pos = self.mapFromGlobal(QtGui.QCursor.pos())
@@ -371,7 +366,6 @@ class KGraphViewWidget(GraphViewWidget):
 
         scenepos = self.graphView.mapToScene(pos)
         contextualNodeList.showAtPos(pos, scenepos, self.graphView)
-
 
     # ==============
     # Other Methods
@@ -413,65 +407,6 @@ class KGraphViewWidget(GraphViewWidget):
 
         return backdropNode
 
-    # ==================
-    # Message Reporting
-    # ==================
-    def reportMessage(self, message, level='error', exception=None, timeOut=3500):
-        """Shows an error message in the status bar.
-
-        Args:
-            message (str): Message to display to the user.
-
-        """
-
-        statusBar = self.window().statusBar()
-
-        currentLables = statusBar.findChildren(QtGui.QLabel)
-        for label in currentLables:
-            statusBar.removeWidget(label)
-
-        if exception is not None:
-            fullMessage = level[0].upper() + level[1:] + ": " + message + '; ' + ', '.join([str(x) for x in exception.args])
-        else:
-            fullMessage = level[0].upper() + level[1:] + ": " + message
-
-        messageLabel = QtGui.QLabel(fullMessage)
-
-        print fullMessage
-
-        messageColors = {
-            'information': '#009900',
-            'warning': '#CC3300',
-            'error': '#AA0000'
-        }
-
-        if level not in messageColors.keys():
-            level = 'error'
-
-        messageLabel.setStyleSheet("QLabel { border-radius: 3px; background-color: " + messageColors[level] + "}")
-
-        def addMessage():
-            statusBar.clearMessage()
-            statusBar.currentMessage = messageLabel
-            statusBar.addWidget(messageLabel, 1)
-            statusBar.repaint()
-            if timeOut > 0.0:
-                timer.start()
-
-        def endMessage():
-            timer.stop()
-            statusBar.removeWidget(messageLabel)
-            statusBar.repaint()
-            statusBar.showMessage('Ready', 2000)
-
-        if timeOut > 0.0:
-            timer = QtCore.QTimer()
-            timer.setInterval(timeOut)
-            timer.timeout.connect(endMessage)
-
-        addMessage()
-
-
     # ===============
     # Signal Handlers
     # ===============
@@ -479,7 +414,6 @@ class KGraphViewWidget(GraphViewWidget):
         if not UndoRedoManager.getInstance().isUndoingOrRedoing():
             command = graph_commands.AddNodeCommand(self.graphView, self.guideRig, node)
             UndoRedoManager.getInstance().addCommand(command)
-
 
     def __onNodeRemoved(self, node):
 
@@ -490,42 +424,34 @@ class KGraphViewWidget(GraphViewWidget):
             command = graph_commands.RemoveNodeCommand(self.graphView, self.guideRig, node)
             UndoRedoManager.getInstance().addCommand(command)
 
-
     def __onBeginConnectionManipulation(self):
         UndoRedoManager.getInstance().openBracket('Connect Ports')
 
-
     def __onEndConnectionManipulationSignal(self):
         UndoRedoManager.getInstance().closeBracket()
-
 
     def __onConnectionAdded(self, connection):
         if not UndoRedoManager.getInstance().isUndoingOrRedoing():
             command = graph_commands.ConnectionAddedCommand(self.graphView, self.guideRig, connection)
             UndoRedoManager.getInstance().addCommand(command)
 
-
     def __onConnectionRemoved(self, connection):
         if not UndoRedoManager.getInstance().isUndoingOrRedoing():
             command = graph_commands.ConnectionRemovedCommand(self.graphView, self.guideRig, connection)
             UndoRedoManager.getInstance().addCommand(command)
-
 
     def __onSelectionChanged(self, deselectedNodes, selectedNodes):
         if not UndoRedoManager.getInstance().isUndoingOrRedoing():
             command = graph_commands.SelectionChangeCommand(self.graphView, deselectedNodes, selectedNodes)
             UndoRedoManager.getInstance().addCommand(command)
 
-
     def __onSelectionMoved(self, nodes, delta):
         if not UndoRedoManager.getInstance().isUndoingOrRedoing():
             command = graph_commands.NodesMoveCommand(self.graphView, nodes, delta)
             UndoRedoManager.getInstance().addCommand(command)
 
-
     def __onBeginDeleteSelection(self):
         UndoRedoManager.getInstance().openBracket('Delete Nodes')
-
 
     def __onEndDeleteSelection(self):
         UndoRedoManager.getInstance().closeBracket()

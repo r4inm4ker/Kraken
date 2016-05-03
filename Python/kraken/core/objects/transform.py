@@ -13,4 +13,3 @@ class Transform(Object3D):
 
     def __init__(self, name, parent=None):
         super(Transform, self).__init__(name, parent=parent)
-

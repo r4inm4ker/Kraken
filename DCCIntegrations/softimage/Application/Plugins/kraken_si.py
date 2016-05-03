@@ -95,7 +95,7 @@ def OpenKrakenEditor_Execute():
     import kraken.ui.kraken_window
     reload(kraken.ui.kraken_window)
     from kraken.ui.kraken_window import KrakenWindow
-    from kraken.ui.kraken_window import createSplash
+    from kraken.ui.kraken_splash import KrakenSplash
 
     sianchor = Application.getQtSoftimageAnchor()
     sianchor = Qt.wrapinstance(long(sianchor), QWidget)
@@ -110,7 +110,7 @@ def OpenKrakenEditor_Execute():
 
                 return
 
-    splash = createSplash(app)
+    splash = KrakenSplash(app)
     splash.show()
 
     window = KrakenWindow(parent=sianchor)

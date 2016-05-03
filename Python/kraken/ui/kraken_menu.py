@@ -1,3 +1,4 @@
+import logging
 import os
 import sys
 import webbrowser
@@ -6,6 +7,9 @@ from PySide import QtGui, QtCore
 from kraken.ui.preference_editor import PreferenceEditor
 from kraken.core.kraken_system import KrakenSystem
 from kraken.core.configs.config import Config
+from kraken.log import getLogger
+
+logger = getLogger('kraken')
 
 
 class KrakenMenu(QtGui.QWidget):
@@ -245,9 +249,9 @@ class KrakenMenu(QtGui.QWidget):
         # Create New Rig And Reload All Components.
         graphViewWidget.newRigPreset()
         if krakenUIWidget.nodeLibrary.componentTreeWidget.generateData():
-            graphViewWidget.reportMessage('Success Reloading Modules', level='information')
+            logger.info('Success Reloading Modules')
         else:
-            graphViewWidget.reportMessage('Error Reloading Modules', level='error', timeOut=0) #Keep this message!
+            logger.error('Error Reloading Modules')
 
         if openedFile:
             self.window().setWindowTitle('Kraken Editor - ' + openedFile + '[*]')

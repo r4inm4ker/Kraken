@@ -46,38 +46,38 @@ class Config(object):
         # for a while until it becomes the norm.
 
         colors = {
-                  "black": [1, [0.00, 0.00, 0.0]],
-                  "lightGrey": [2, [0.75, 0.75, 0.75]],
-                  "darkGrey": [3, [0.50, 0.50, 0.50]],
-                  "fusia": [4, [0.80, 0.00, 0.20]],
-                  "blueDark": [5, [0.00, 0.00, 0.40]],
-                  "blue": [6, [0.00, 0.00, 1.00]],
-                  "green": [7, [0.00, 0.30, 0.00]],
-                  "purpleDark": [8, [0.20, 0.00, 0.30]],
-                  "magenta": [9, [0.80, 0.00, 0.80]],
-                  "brownLight": [10, [0.60, 0.30, 0.20]],
-                  "brownDark": [11, [0.25, 0.13, 0.13]],
-                  "orange": [12, [0.70, 0.20, 0.00]],
-                  "red": [13, [1.00, 0.00, 0.00]],
-                  "greenBright": [14, [0.00, 1.00, 0.00]],
-                  "blueMedium": [15, [0.00, 0.30, 0.60]],
-                  "white": [16, [1.00, 1.00, 1.00]],
-                  "yellow": [17, [1.00, 1.00, 0.00]],
-                  "greenBlue": [18, [0.00, 1.00, 1.00]],
-                  "turqoise": [19, [0.00, 1.00, 0.80]],
-                  "pink": [20, [1.00, 0.70, 0.70]],
-                  "peach": [21, [0.90, 0.70, 0.50]],
-                  "yellowLight": [22, [1.00, 1.00, 0.40]],
-                  "turqoiseDark": [23, [0.00, 0.70, 0.40]],
-                  "brownMuted": [24, [0.60, 0.40, 0.20]],
-                  "yellowMuted": [25, [0.63, 0.63, 0.17]],
-                  "greenMuted": [26, [0.40, 0.60, 0.20]],
-                  "turqoiseMuted": [27, [0.20, 0.63, 0.35]],
-                  "blueLightMuted": [28, [0.18, 0.63, 0.63]],
-                  "blueDarkMuted": [29, [0.18, 0.40, 0.63]],
-                  "purpleLight": [30, [0.43, 0.18, 0.63]],
-                  "mutedMagenta": [31, [0.63, 0.18, 0.40]]
-                 }
+            "black": [1, [0.00, 0.00, 0.0]],
+            "lightGrey": [2, [0.75, 0.75, 0.75]],
+            "darkGrey": [3, [0.50, 0.50, 0.50]],
+            "fusia": [4, [0.80, 0.00, 0.20]],
+            "blueDark": [5, [0.00, 0.00, 0.40]],
+            "blue": [6, [0.00, 0.00, 1.00]],
+            "green": [7, [0.00, 0.30, 0.00]],
+            "purpleDark": [8, [0.20, 0.00, 0.30]],
+            "magenta": [9, [0.80, 0.00, 0.80]],
+            "brownLight": [10, [0.60, 0.30, 0.20]],
+            "brownDark": [11, [0.25, 0.13, 0.13]],
+            "orange": [12, [0.70, 0.20, 0.00]],
+            "red": [13, [1.00, 0.00, 0.00]],
+            "greenBright": [14, [0.00, 1.00, 0.00]],
+            "blueMedium": [15, [0.00, 0.30, 0.60]],
+            "white": [16, [1.00, 1.00, 1.00]],
+            "yellow": [17, [1.00, 1.00, 0.00]],
+            "greenBlue": [18, [0.00, 1.00, 1.00]],
+            "turqoise": [19, [0.00, 1.00, 0.80]],
+            "pink": [20, [1.00, 0.70, 0.70]],
+            "peach": [21, [0.90, 0.70, 0.50]],
+            "yellowLight": [22, [1.00, 1.00, 0.40]],
+            "turqoiseDark": [23, [0.00, 0.70, 0.40]],
+            "brownMuted": [24, [0.60, 0.40, 0.20]],
+            "yellowMuted": [25, [0.63, 0.63, 0.17]],
+            "greenMuted": [26, [0.40, 0.60, 0.20]],
+            "turqoiseMuted": [27, [0.20, 0.63, 0.35]],
+            "blueLightMuted": [28, [0.18, 0.63, 0.63]],
+            "blueDarkMuted": [29, [0.18, 0.40, 0.63]],
+            "purpleLight": [30, [0.43, 0.18, 0.63]],
+            "mutedMagenta": [31, [0.63, 0.18, 0.40]]
+        }
 
         return colors
 
@@ -105,13 +105,13 @@ class Config(object):
         """
 
         colorMap = {
-                    "Control": {
-                                "default": "yellow",
-                                "L": "greenBright",
-                                "M": "yellow",
-                                "R": "red"
-                               }
-                   }
+            "Control": {
+                "default": "yellow",
+                "L": "greenBright",
+                "M": "yellow",
+                "R": "red"
+            }
+        }
 
         return colorMap
 
@@ -139,36 +139,36 @@ class Config(object):
         """
 
         nameTemplate = {
-                        "locations": ["L", "R", "M"],
-                        "mirrorMap": {
-                                      "L": "R",
-                                      "R": "L",
-                                      "M": "M"
-                                     },
-                        "separator": "_",
-                        "types": {
-                                  "default": "null",
-                                  "Component": "",
-                                  "ComponentGroup": "cmp",
-                                  "ComponentInput": "cmpIn",
-                                  "ComponentOutput": "cmpOut",
-                                  "Container": "",
-                                  "Control": "ctrl",
-                                  "Curve": "crv",
-                                  "HierarchyGroup": "hrc",
-                                  "Joint": "def",
-                                  "Layer": "",
-                                  "Locator": "loc",
-                                  "CtrlSpace": "ctrlSpace"
-                                 },
-                        "formats":
-                                  {
-                                   "Container": ["name"],
-                                   "Layer": ["container", "sep", "name"],
-                                   "ComponentGroup": ["name", "sep", "location", "sep", "type"],
-                                   "default": ["component", "sep", "location", "sep", "name", "sep", "type"],
-                                  }
-                       }
+            "locations": ["L", "R", "M"],
+            "mirrorMap": {
+                "L": "R",
+                "R": "L",
+                "M": "M"
+            },
+            "separator": "_",
+            "types": {
+                "default": "null",
+                "Component": "",
+                "ComponentGroup": "cmp",
+                "ComponentInput": "cmpIn",
+                "ComponentOutput": "cmpOut",
+                "Container": "",
+                "Control": "ctrl",
+                "Curve": "crv",
+                "HierarchyGroup": "hrc",
+                "Joint": "def",
+                "Layer": "",
+                "Locator": "loc",
+                "CtrlSpace": "ctrlSpace"
+            },
+            "formats":
+                {
+                    "Container": ["name"],
+                    "Layer": ["container", "sep", "name"],
+                    "ComponentGroup": ["name", "sep", "location", "sep", "type"],
+                    "default": ["component", "sep", "location", "sep", "name", "sep", "type"],
+            }
+        }
 
         return nameTemplate
 
@@ -1044,4 +1044,3 @@ class Config(object):
         Config.__instance = None
 
         return True
-
