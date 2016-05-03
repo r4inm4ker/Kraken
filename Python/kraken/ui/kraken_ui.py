@@ -4,11 +4,13 @@ import sys
 
 from PySide import QtGui, QtCore
 
-from component_library import ComponentLibrary
-from GraphView.kgraph_view_widget import KGraphViewWidget
-
 from kraken.core.kraken_system import KrakenSystem
+from kraken.log import getLogger
+from kraken.ui.component_library import ComponentLibrary
+from kraken.ui.GraphView.kgraph_view_widget import KGraphViewWidget
 import kraken.ui.images_rc
+
+logger = getLogger('kraken')
 
 
 class KrakenUI(QtGui.QWidget):
@@ -51,12 +53,11 @@ class KrakenUI(QtGui.QWidget):
         if hasattr(self, "error_loading_startup"):
 
             if self.error_loading_startup:
-                self.graphViewWidget.reportMessage('Error Loading Modules', level='error', timeOut=0) #Keep this message!
+                logger.error('Error Loading Modules')
             else:
-                self.graphViewWidget.reportMessage('Success Loading Modules', level='information')
+                logger.info('Success Loading Modules')
 
             delattr(self, "error_loading_startup")
-
 
     def resizeSplitter(self):
         splitter = self.horizontalSplitter
@@ -67,17 +68,14 @@ class KrakenUI(QtGui.QWidget):
         else:
             splitter.setSizes([0, sizes[1]])
 
-
     def splitterMoved(self, pos, index):
         self.nodeLibraryExpandedSize = pos
-
 
     def writeSettings(self, settings):
         settings.beginGroup("KrakenUI")
         settings.setValue('horizontalSplitterSizes', self.nodeLibraryExpandedSize)
         settings.setValue('componentLibCollapsed', self.horizontalSplitter.sizes()[0] == 0)
         settings.endGroup()
-
 
     def readSettings(self, settings):
         settings.beginGroup("KrakenUI")

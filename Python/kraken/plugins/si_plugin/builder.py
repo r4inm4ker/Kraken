@@ -5,10 +5,16 @@ Builder -- Component representation.
 
 """
 
+import logging
+
+from kraken.log import getLogger
+
 from kraken.core.kraken_system import ks
 from kraken.core.builder import Builder
 
 from kraken.plugins.si_plugin.utils import *
+
+logger = getLogger('kraken')
 
 
 class Builder(Builder):
