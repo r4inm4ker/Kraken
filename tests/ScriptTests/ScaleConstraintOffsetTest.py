@@ -25,7 +25,7 @@ locator2.xfo.ori.setFromEulerAngles(Vec3(Math_degToRad(45.0),
                                     Math_degToRad(0.0),
                                     Math_degToRad(0.0)))
 
-constraint = locator2.constrainTo(locator1, 'Position', True, 'PositionConstraint')
+constraint = locator2.constrainTo(locator1, 'Scale', True, 'ScaleConstraint')
 
 builder = plugins.getBuilder()
 

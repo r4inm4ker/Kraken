@@ -6,6 +6,11 @@ from kraken.core.objects.locator import Locator
 parentLoc = Locator('parent')
 
 locator1 = Locator("locator", parent=parentLoc)
+
+locator1.xfo.tr.x = 3
+locator1.xfo.tr.y = -1
+locator1.xfo.tr.z = 1
+
 locator2 = Locator("locator2", parent=parentLoc)
 
 locator2.xfo.sc.x = 1
