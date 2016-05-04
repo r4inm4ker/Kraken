@@ -160,7 +160,7 @@ class Quat(MathObject):
         return True
 
 
-    def setIdentity():
+    def setIdentity(self):
         """Sets this quaternion to the identity.
 
         Returns:
@@ -188,7 +188,7 @@ class Quat(MathObject):
         return Quat(self._rtval.setFromEuler('Quat', ks.rtVal('Euler', e)))
 
 
-    def setFromEulerAngles(self, angles, ro):
+    def setFromEulerAnglesWithRotOrder(self, angles, ro):
         """Sets this quat to a given angles vector (in radians) and a rotation
         order.
 
@@ -251,7 +251,7 @@ class Quat(MathObject):
         return Quat(self._rtval.setFromMat33('Quat', ks.rtVal('Mat33', mat)))
 
 
-    def setFrom2Vectors(sourceDirVec, destDirVec, arbitraryIfAmbiguous=True):
+    def setFrom2Vectors(self, sourceDirVec, destDirVec, arbitraryIfAmbiguous=True):
         """Set the quaternion to the rotation required to rotate the source
         vector to the destination vector.
 
@@ -303,8 +303,9 @@ class Quat(MathObject):
         return self._rtval.equal('Boolean', ks.rtVal('Quat', other)).getSimpleType()
 
 
-    def almostEqual(self, other, precision):
-        """Checks almost equality of this Quat with another.
+    def almostEqualWithPrecision(self, other, precision):
+        """Checks almost equality of this Quat with another using a custom
+        precision value.
 
         Args:
             other (Mat33): other matrix to check equality with.
@@ -611,35 +612,39 @@ class Quat(MathObject):
         return Mat33(self._rtval.toMat33('Mat33'))
 
 
-    def toEuler(self, rotationOrder):
+    def toEuler(self, ro):
         """Returns this quaternion as a Euler rotation giving a rotation order.
 
         Args:
-            rotationOrder (RotationOrder): rotation order to use to derive the euler by.
+            ro (RotationOrder): rotation order to use to derive the euler by.
 
         Returns:
             Euler: Euler rotation derived from this quaternion.
 
         """
 
-        return Euler(self._rtval.toEuler('Euler', ks.rtVal('RotationOrder', rotationOrder)))
+        return Euler(self._rtval.toEuler('Euler', ks.rtVal('RotationOrder', ro)))
 
 
-    def toEulerAngles(self, order):
-        """Gets this quaternion as a Euler angles using the rotationorder XYZ.
+    def toEulerAnglesWithRotOrder(self, ro):
+        """Gets this quaternion as Euler angles using the specified rotation
+        order.
 
         Args:
-            order (RotationOrder): rotation order used to derive the euler angles.
+            ro (RotationOrder): rotation order used to derive the
+                euler angles.
 
         Returns:
             Vec3: Euler angles derived from this quaternion.
 
         """
 
-        return Vec3(self._rtval.toEulerAngles('Vec3', ks.rtVal('RotationOrder', rotationOrder)))
+        return Vec3(self._rtval.toEulerAngles(
+            'Vec3',
+            ks.rtVal('RotationOrder', ro)))
 
 
-    def toEulerAngles():
+    def toEulerAngles(self):
         """Gets this quaternion as a Euler angles using the rotationorder XYZ.
 
         Returns:
