@@ -866,7 +866,17 @@ class Builder(Builder):
                     connectionTargets = []
                     for i in xrange(len(connectedObjects)):
                         opObject = connectedObjects[i]
+
                         dccSceneItem = self.getDCCSceneItem(opObject)
+                        if hasattr(opObject, "getName"):
+                            # Handle output connections to visibility attributes.
+                            if opObject.getName() == 'visibility' and opObject.getParent().getName() == 'implicitAttrGrp':
+                                dccItem = self.getDCCSceneItem(opObject.getParent().getParent())
+                                dccSceneItem = dccItem.attr('visibility')
+                            elif opObject.getName() == 'shapeVisibility' and opObject.getParent().getName() == 'implicitAttrGrp':
+                                dccItem = self.getDCCSceneItem(opObject.getParent().getParent())
+                                shape = dccItem.getShape()
+                                dccSceneItem = shape.attr('visibility')
 
                         connectionTargets.append({'opObject': opObject, 'dccSceneItem': dccSceneItem})
                 else:
@@ -877,14 +887,11 @@ class Builder(Builder):
 
                     opObject = connectedObjects
                     dccSceneItem = self.getDCCSceneItem(opObject)
-
-                    if not isinstance(opObject, (str, unicode, int, float, long, bool)):
-
+                    if hasattr(opObject, "getName"):
                         # Handle output connections to visibility attributes.
                         if opObject.getName() == 'visibility' and opObject.getParent().getName() == 'implicitAttrGrp':
                             dccItem = self.getDCCSceneItem(opObject.getParent().getParent())
                             dccSceneItem = dccItem.attr('visibility')
-
                         elif opObject.getName() == 'shapeVisibility' and opObject.getParent().getName() == 'implicitAttrGrp':
                             dccItem = self.getDCCSceneItem(opObject.getParent().getParent())
                             shape = dccItem.getShape()
