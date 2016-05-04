@@ -23,11 +23,13 @@ function Xfo KrakenPositionConstraint.compute?(
 ) {
   Xfo result = xfo;
   result.tr = Vec3();
+  result.ori = Quat(Vec3(0.0, 0.0, 0.0), 0.0);
 
   for(Size i=0;i<this.constrainers.size();i++) {
     result.tr = result.tr.add(this.constrainers[i].tr);
   }
 
+  result.ori.setUnit();
   result.tr *= 1.0 / Float32(this.constrainers.size());
 
   return result * this.offset;
