@@ -9,6 +9,7 @@ import logging
 
 from kraken.log import getLogger
 
+from kraken.core.maths import Math_radToDeg
 from kraken.core.kraken_system import ks
 from kraken.core.builder import Builder
 
@@ -561,6 +562,14 @@ class Builder(Builder):
             constrainers,
             kConstraint.getMaintainOffset())
 
+        if kConstraint.getMaintainOffset() is True:
+            offsetXfo = kConstraint.computeOffset()
+            offsetAngles = offsetXfo.ori.toEulerAngles()
+
+            dccSceneItem.Parameters('offx').Value = Math_radToDeg(offsetAngles.x)
+            dccSceneItem.Parameters('offy').Value = Math_radToDeg(offsetAngles.y)
+            dccSceneItem.Parameters('offz').Value = Math_radToDeg(offsetAngles.z)
+
         self._registerSceneItemPair(kConstraint, dccSceneItem)
 
         return dccSceneItem
@@ -576,79 +585,33 @@ class Builder(Builder):
 
         """
 
-        useXSIConstraint = True
-        if useXSIConstraint:
+        dccConstrainee = self.getDCCSceneItem(kConstraint.getConstrainee())
 
-            constraineeDCCSceneItem = self.getDCCSceneItem(kConstraint.getConstrainee())
-            # if kConstraint.getMaintainOffset():
-            #     constraineeTransform = constraineeDCCSceneItem.Kinematics.Global.Transform
+        constrainingObjs = getCollection()
+        for eachConstrainer in kConstraint.getConstrainers():
+            constrainer = self.getDCCSceneItem(eachConstrainer)
+            constrainingObjs.AddItems(constrainer)
 
-            constrainingObjs = getCollection()
-            for eachConstrainer in kConstraint.getConstrainers():
-                constrainer = self.getDCCSceneItem(eachConstrainer)
+        dccSceneItem = dccConstrainee.Kinematics.AddConstraint(
+            "Pose",
+            constrainingObjs,
+            kConstraint.getMaintainOffset())
 
-                # if kConstraint.getMaintainOffset():
-                #     constrainerTransform = constrainer.Kinematics.Global.Transform
+        if kConstraint.getMaintainOffset() is True:
+            offsetXfo = kConstraint.computeOffset()
+            offsetAngles = offsetXfo.ori.toEulerAngles()
 
-                # si.LogMessage( "%s,%s,%s" % (constrainer.posx.Value, constrainer.posy.Value, constrainer.posz.Value) )
+            dccSceneItem.Parameters('sclx').Value = offsetXfo.sc.x
+            dccSceneItem.Parameters('scly').Value = offsetXfo.sc.y
+            dccSceneItem.Parameters('sclz').Value = offsetXfo.sc.z
+            dccSceneItem.Parameters('rotx').Value = Math_radToDeg(offsetAngles.x)
+            dccSceneItem.Parameters('roty').Value = Math_radToDeg(offsetAngles.y)
+            dccSceneItem.Parameters('rotz').Value = Math_radToDeg(offsetAngles.z)
+            dccSceneItem.Parameters('posx').Value = offsetXfo.tr.x
+            dccSceneItem.Parameters('posy').Value = offsetXfo.tr.y
+            dccSceneItem.Parameters('posz').Value = offsetXfo.tr.z
 
-                constrainingObjs.AddItems(constrainer)
-
-            dccSceneItem = constraineeDCCSceneItem.Kinematics.AddConstraint(
-                "Pose",
-                constrainingObjs,
-                kConstraint.getMaintainOffset())
-
-            self._registerSceneItemPair(kConstraint, dccSceneItem)
-
-        else:
-
-            # Load the Fabric Engine client and construct the RTVal for the Solver
-            ks.loadCoreClient()
-            ks.loadExtension('Kraken')
-            solverTypeName = 'PoseConstraintSolver'
-            target = constraineeDCCSceneItem.FullName  # + ".kine.global"
-            canvasOpPath = target + ".kine.global.CanvasOp"
-
-            si.FabricCanvasOpApply(target, "", True, "", "")
-
-            si.FabricCanvasAddPort(canvasOpPath, "", "solver", "In", solverTypeName, "Kraken")
-            si.FabricCanvasAddPort(canvasOpPath, "", "debug", "In", "Boolean", "")
-            si.FabricCanvasAddPort(canvasOpPath, "", "rightSide", "In", "Boolean", "")
-
-            # connectionTargets = ""
-            # connectionSuffix = ".kine.global"
-            for eachConstrainer in kConstraint.getConstrainers():
-
-                if eachConstrainer is None:
-                    raise Exception("Constraint '" + kConstraint.getPath() + "' has invalid connection.")
-
-                dccSceneItem = self.getDCCSceneItem(eachConstrainer)
-
-                if dccSceneItem is None:
-                    raise Exception("Constraint '" + kConstraint.getPath() + "' of type '" + solverTypeName + "' is connected to object without corresponding SceneItem:" + eachConstrainer.getPath())
-
-                # connectionTargets = dccSceneItem.FullName + connectionSuffix
-                break
-
-            si.FabricCanvasAddPort(canvasOpPath, "", "constrainer", "In", "Mat44", "")
-            # si.fabricSplice("addInputPort", canvasOpPath, "{\"portName\":\"constrainer\", \"dataType\":\"Mat44\", \"extension\":\"\", \"targets\":\"" + connectionTargets + "\"}", "")
-
-            # Generate the operator source code.
-            opSourceCode = ""
-            opSourceCode += "require Kraken;\n"
-            opSourceCode += "operator poseConstraint(\n"
-            opSourceCode += "    io " + solverTypeName + " solver,\n"
-            opSourceCode += "    in Boolean debug,\n"
-            opSourceCode += "    in Boolean rightSide,\n"
-            opSourceCode += "    io Mat44 constrainee,\n"
-            opSourceCode += "    in Mat44 constrainer\n"
-            opSourceCode += "    )\n"
-            opSourceCode += "{\n"
-            opSourceCode += "    solver.solve(debug, rightSide, constrainer, constrainee);"
-            opSourceCode += "}\n"
-
-            si.fabricSplice('addKLOperator', canvasOpPath, '{"opName": "poseConstraint"}', opSourceCode)
+        self._registerSceneItemPair(kConstraint, dccSceneItem)
 
         return dccSceneItem
 
@@ -663,16 +626,23 @@ class Builder(Builder):
 
         """
 
-        constraineeDCCSceneItem = self.getDCCSceneItem(kConstraint.getConstrainee())
+        dccConstrainee = self.getDCCSceneItem(kConstraint.getConstrainee())
 
         constrainers = getCollection()
         for eachConstrainer in kConstraint.getConstrainers():
             constrainers.AddItems(self.getDCCSceneItem(eachConstrainer))
 
-        dccSceneItem = constraineeDCCSceneItem.Kinematics.AddConstraint(
+        dccSceneItem = dccConstrainee.Kinematics.AddConstraint(
             "Position",
             constrainers,
             kConstraint.getMaintainOffset())
+
+        if kConstraint.getMaintainOffset() is True:
+            offsetXfo = kConstraint.computeOffset()
+
+            dccSceneItem.Parameters('off1x').Value = offsetXfo.tr.x
+            dccSceneItem.Parameters('off1y').Value = offsetXfo.tr.y
+            dccSceneItem.Parameters('off1z').Value = offsetXfo.tr.z
 
         self._registerSceneItemPair(kConstraint, dccSceneItem)
 
@@ -689,16 +659,23 @@ class Builder(Builder):
 
         """
 
-        constraineeDCCSceneItem = self.getDCCSceneItem(kConstraint.getConstrainee())
+        dccConstrainee = self.getDCCSceneItem(kConstraint.getConstrainee())
 
         constrainers = getCollection()
         for eachConstrainer in kConstraint.getConstrainers():
             constrainers.AddItems(self.getDCCSceneItem(eachConstrainer))
 
-        dccSceneItem = constraineeDCCSceneItem.Kinematics.AddConstraint(
+        dccSceneItem = dccConstrainee.Kinematics.AddConstraint(
             "Scaling",
             constrainers,
             kConstraint.getMaintainOffset())
+
+        if kConstraint.getMaintainOffset() is True:
+            offsetXfo = kConstraint.computeOffset()
+
+            dccSceneItem.Parameters('offx').Value = offsetXfo.sc.x
+            dccSceneItem.Parameters('offy').Value = offsetXfo.sc.y
+            dccSceneItem.Parameters('offz').Value = offsetXfo.sc.z
 
         self._registerSceneItemPair(kConstraint, dccSceneItem)
 
