@@ -119,13 +119,14 @@ class Constraint(SceneItem):
         """
 
         if not kObject3D.isTypeOf('Object3D'):
-            raise Exception("'kObject3D' argument is not a valid instance type. '"
-                             + kObject3D.getName() + "': " + str(type(kObject3D)) +
-                             ". Must be an instance of 'Object3D'.")
+            raise Exception("'kObject3D' argument is not a valid instance type. '" +
+                            kObject3D.getName() + "': " + str(type(kObject3D)) +
+                            ". Must be an instance of 'Object3D'.")
 
 
         if kObject3D in self._constrainers:
-            raise Exception("'kObject3D' argument is already a constrainer: '" + kObject3D.getName() + "'.")
+            raise Exception("'kObject3D' argument is already a constrainer: '" +
+                            kObject3D.getName() + "'.")
 
         self._constrainers[index] = kObject3D
 
@@ -179,10 +180,12 @@ class Constraint(SceneItem):
         for c in self._constrainers:
             rtVal.addConstrainer('', ks.rtVal('Xfo', c.globalXfo))
 
-        return Xfo(rtVal.compute("Xfo", ks.rtVal('Xfo', self._constrainee.xfo))) # using globalXfo here would cause a recursion
+        # Using globalXfo here would cause a recursion
+        return Xfo(rtVal.compute("Xfo",
+                                 ks.rtVal('Xfo', self._constrainee.xfo)))
 
     def computeOffset(self):
-        """invokes the constraint and computes the offset
+        """Invokes the constraint and computes the offset
 
         Returns:
             xfo: The offset to be used for the constraint.
@@ -204,10 +207,11 @@ class Constraint(SceneItem):
         for c in self._constrainers:
             rtVal.addConstrainer('', ks.rtVal('Xfo', c.globalXfo))
 
-        return Xfo(rtVal.computeOffset("Xfo", ks.rtVal('Xfo', self._constrainee.xfo)))
+        return Xfo(rtVal.computeOffset("Xfo",
+                                       ks.rtVal('Xfo', self._constrainee.xfo)))
 
     def evaluate(self):
-        """invokes the constraint causing the output value to be computed.
+        """Invokes the constraint causing the output value to be computed.
 
         Returns:
             bool: True if successful.
@@ -220,9 +224,9 @@ class Constraint(SceneItem):
 
         return False
 
-    # ================
+    # ====================
     # Persistence Methods
-    # ================
+    # ====================
     def jsonEncode(self, saver):
         """Encodes the object to a JSON structure.
 
@@ -250,7 +254,6 @@ class Constraint(SceneItem):
             jsonData['constrainers'].append(cnstrnr.getName())
 
         return jsonData
-
 
     def jsonDecode(self, loader, jsonData):
         """Returns the color of the object..
