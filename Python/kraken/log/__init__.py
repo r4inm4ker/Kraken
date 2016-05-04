@@ -27,6 +27,7 @@ def getLogger(name):
 
     if 'WidgetHandler' not in handlerNames:
         widgetHandler = WidgetHandler()
-        logger.addHandler(widgetHandler)
+        if widgetHandler is not None:
+            logger.addHandler(widgetHandler)
 
     return logger

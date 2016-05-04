@@ -89,8 +89,15 @@ def getLogHandler():
 
             handler = loaded_class()
 
-    if handler is None:
-        handler = logging.StreamHandler(sys.stdout)
+    # if handler is None:
+
+    #     class DCCHandler(logging.StreamHandler):
+    #         """DCC Handler class for stand alone."""
+
+    #         def __init__(self, stream=None):
+    #             super(DCCHandler, self).__init__(stream)
+
+    #     handler = DCCHandler(sys.stdout)
 
     return handler
 
