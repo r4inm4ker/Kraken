@@ -105,6 +105,7 @@ class Traverser(object):
         for item in self._items:
             if item.isOfAnyType(typeNames):
                 result.append(item)
+
         return result
 
     # =============

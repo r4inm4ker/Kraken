@@ -682,11 +682,14 @@ class Builder(object):
             self._preBuild(kSceneItem)
 
             objects3d = traverser.getItemsOfType('Object3D')
-            attributes = traverser.getItemsOfType(['AttributeGroup',
-                                                   'Attribute'])
+            attributeGroups = traverser.getItemsOfType(['AttributeGroup'])
+            attributes = traverser.getItemsOfType(['Attribute'])
 
             # build all 3D objects and attributes
             self.__buildSceneItemList(objects3d,
+                                      self._buildPhase_3DObjectsAttributes)
+
+            self.__buildSceneItemList(attributeGroups,
                                       self._buildPhase_3DObjectsAttributes)
 
             self.__buildSceneItemList(attributes,
