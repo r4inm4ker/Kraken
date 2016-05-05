@@ -4,8 +4,11 @@ from kraken_components.biped.arm_component import ArmComponentGuide, ArmComponen
 
 # from kraken.core.io.kraken_saver import KrakenSaver
 # from kraken.core.io.kraken_loader import KrakenLoader
+from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
 
+
+Profiler.getInstance().push("arm_persistence")
 
 armGuide = ArmComponentGuide("arm")
 armGuide.loadData({
@@ -31,12 +34,17 @@ armRigData = armGuide.getRigBuildData()
 armLeft = ArmComponentRig()
 armLeft.loadData(armRigData)
 
-print "==armLeft=="
-for each in armLeft.getItems().values():
-    # Only log hierarchy for Layer objects as Layers in this test are added to
-    # the component since there is no rig object.
-    if each.isTypeOf('Layer'):
-        logHierarchy(each)
+Profiler.getInstance().pop()
+
+
+if __name__ == "__main__":
+    print Profiler.getInstance().generateReport()
+else:
+    for each in armLeft.getItems().values():
+        # Only log hierarchy for Layer objects as Layers in this test are added to
+        # the component since there is no rig object.
+        if each.isTypeOf('Layer'):
+            logHierarchy(each)
 
 # saver = KrakenSaver()
 # jsonData1 = armLeft.jsonEncode(saver)

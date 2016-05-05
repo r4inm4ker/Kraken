@@ -3,7 +3,11 @@ from kraken.core.maths import Xfo, Vec3, Quat
 
 from kraken_components.biped.arm_component import ArmComponentGuide, ArmComponentRig
 
+from kraken.core.profiler import Profiler
 from kraken.helpers.utility_methods import logHierarchy
+
+
+Profiler.getInstance().push("arm_component_symmetry")
 
 leftArmGuide = ArmComponentGuide('arm')
 leftArmGuide.loadData({
@@ -38,16 +42,22 @@ armRight.loadData(rightArmGuide.getRigBuildData())
 builder.build(armLeft)
 builder.build(armRight)
 
-print '==armLeft=='
-for each in armLeft.getItems().values():
-    # Only log hierarchy for Layer objects as Layers in this test are added to
-    # the component since there is no rig object.
-    if each.isTypeOf('Layer'):
-        logHierarchy(each)
+Profiler.getInstance().pop()
 
-print '==armRight=='
-for each in armRight.getItems().values():
-    # Only log hierarchy for Layer objects as Layers in this test are added to
-    # the component since there is no rig object.
-    if each.isTypeOf('Layer'):
-        logHierarchy(each)
+
+if __name__ == "__main__":
+    print Profiler.getInstance().generateReport()
+else:
+    print '==armLeft=='
+    for each in armLeft.getItems().values():
+        # Only log hierarchy for Layer objects as Layers in this test are added to
+        # the component since there is no rig object.
+        if each.isTypeOf('Layer'):
+            logHierarchy(each)
+
+    print '==armRight=='
+    for each in armRight.getItems().values():
+        # Only log hierarchy for Layer objects as Layers in this test are added to
+        # the component since there is no rig object.
+        if each.isTypeOf('Layer'):
+            logHierarchy(each)
