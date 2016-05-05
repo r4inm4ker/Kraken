@@ -199,3 +199,47 @@ function Xfo[] solveNBoneIKWithUpVector(
   return solveNBoneIK(alignedPose, goalPosition, rigScale);
 }
 
+
+/// methods for aligning Xforms intuitively
+
+// 'normalizes' Integer so that it returns 1 or -1 respectively if it matches the Input Value or it's negative value.
+function SInt8 SInt8.normalize(SInt8 v) {
+  if (this == v) {
+    return SInt8(1);
+  } else if (this == -v) {
+    return SInt8(-1);
+  } else {
+    return SInt8(0);
+  }
+}
+
+// translates three integer values into a Mat33 for further alignment
+//  1 =  X
+// -1 = -X
+//  2 =  Y
+// -2 = -Y
+//  3 =  Z
+// -3 = -Z
+// any other values that should should be ignored, currently are not (<3; >3; 0)
+
+function Mat33.fromXYZ!(SInt8 x, SInt8 y, SInt8 z) {
+  this.row0 = Vec3(x.normalize(1),x.normalize(2),x.normalize(3));
+  this.row1 = Vec3(y.normalize(1),y.normalize(2),y.normalize(3));
+  this.row2 = Vec3(z.normalize(1),z.normalize(2),z.normalize(3));
+}
+
+function Mat44.align!(SInt8 x, SInt8 y, SInt8 z)
+{
+  Mat33 mat33ori;
+  mat33ori.fromXYZ(x, y, z);
+  Mat44 mat44ori;
+  mat44ori.setFromMat33(mat33ori);
+  this = this*mat44ori;
+}
+
+function Xfo.align!(SInt8 x, SInt8 y, SInt8 z)
+{
+  Mat44 m = this.toMat44();
+  m.align(x, y, z);
+  this.setFromMat44(m);
+}
