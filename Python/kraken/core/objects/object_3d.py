@@ -379,16 +379,17 @@ class Object3D(SceneItem):
             if child in parent.getChildren():
                 parent.getChildren().remove(child)
 
+
         # check for name collision and adjust the name if they exist
         # Increment name if it already exists
         initName = child.getName()
         name = initName
         suffix = 1
 
-        nameWithDecoration = name + child.getNameDecoration()
-        while self.getChildByDecoratedName(nameWithDecoration) is not None:
+        while self.getChildByDecoratedName(name + child.getNameDecoration()) is not None:
             name = initName + str(suffix).zfill(2)
             suffix += 1
+
         if initName != name:
             child.setName(name)
 
