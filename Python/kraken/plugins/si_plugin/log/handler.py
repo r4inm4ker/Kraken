@@ -2,6 +2,8 @@ import logging
 
 from kraken.plugins.si_plugin.utils import *
 
+logging.INFORM = 25
+
 
 class DCCHandler(logging.Handler):
     """Logging Handler for Softimage."""
@@ -19,6 +21,9 @@ class DCCHandler(logging.Handler):
 
         elif record.levelno == logging.WARNING:
             siLevel = constants.siWarning
+
+        elif record.levelno == logging.INFORM:
+            siLevel = constants.siInfo
 
         elif record.levelno == logging.INFO:
             siLevel = constants.siInfo

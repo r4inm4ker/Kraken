@@ -508,8 +508,8 @@ class Builder(object):
         if hasattr(kObject, 'getBuildName'):
             buildName = kObject.getBuildName()
 
-        logger.info("building(" + str(phase) + "): " + kObject.getPath() +
-                    " as: " + buildName + " type: " + kObject.getTypeName())
+        logger.debug("building(" + str(phase) + "): " + kObject.getPath() +
+                     " as: " + buildName + " type: " + kObject.getTypeName())
 
         # Build Object
         if kObject.isTypeOf("Rig"):

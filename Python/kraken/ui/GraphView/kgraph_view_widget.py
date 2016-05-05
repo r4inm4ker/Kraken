@@ -303,7 +303,7 @@ class KGraphViewWidget(GraphViewWidget):
             self._builder = plugins.getBuilder()
             self._builder.build(rig)
 
-            logger.info('Rig Build Success')
+            logger.inform('Rig Build Success')
 
             self.window().krakenMenu.setCurrentConfig(initConfigIndex)
 
