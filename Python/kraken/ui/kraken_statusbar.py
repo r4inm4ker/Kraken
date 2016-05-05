@@ -11,6 +11,7 @@ class KrakenStatusBar(QtGui.QStatusBar):
 
     def __init__(self, parent=None):
         super(KrakenStatusBar, self).__init__(parent)
+        self.setObjectName('krakenStatusBar')
 
         for handler in logger.handlers:
             if type(handler).__name__ == 'WidgetHandler':
@@ -35,6 +36,10 @@ class KrakenStatusBar(QtGui.QStatusBar):
             },
             'INFO': {
                 'color': '#FFFFFF',
+                'timeout': 3500
+            },
+            'INFORM': {
+                'color': '#009900',
                 'timeout': 3500
             },
             'WARNING': {
@@ -67,7 +72,7 @@ class KrakenStatusBar(QtGui.QStatusBar):
             else:
                 msg = msg[:120]
 
-            messageLabel = QtGui.QLabel(msg)
+            messageLabel = QtGui.QLabel(' ' + msg)
             messageLabel.setStyleSheet("QLabel { border-radius: 3px; background-color: " + messageConfig[level]['color'] + "}")
 
             def addMessage():

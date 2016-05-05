@@ -56,8 +56,9 @@ class KGraphViewWidget(GraphViewWidget):
 
         self.setGraphView(graphView)
 
-        #########################
-        ## Setup hotkeys for the following actions.
+        # =========================================
+        # Setup hotkeys for the following actions.
+        # =========================================
 
         undoShortcut = QtGui.QShortcut(QtGui.QKeySequence(QtCore.Qt.CTRL + QtCore.Qt.Key_Z), self)
         undoShortcut.activated.connect(self.undo)
@@ -83,8 +84,6 @@ class KGraphViewWidget(GraphViewWidget):
             self.setGuideRigName(text)
 
     def setGuideRigName(self, text):
-
-
         if text.endswith('_guide') is True:
             text = text.replace('_guide', '')
 
@@ -92,10 +91,7 @@ class KGraphViewWidget(GraphViewWidget):
         self.rigNameChanged.emit()
 
     def newRigPreset(self):
-        logger.info("New Rig Created")
-
         try:
-
             self.guideRig = Rig()
             self.getGraphView().displayGraph(self.guideRig)
             self.setGuideRigName('MyRig')
@@ -104,7 +100,8 @@ class KGraphViewWidget(GraphViewWidget):
 
             self.window().setWindowTitle('Kraken Editor')
 
-        except Exception as e:
+            logger.inform("New Rig Created")
+        except:
             logger.exception("Error Creating New Rig")
 
     def saveRig(self, saveAs=False):
@@ -167,9 +164,9 @@ class KGraphViewWidget(GraphViewWidget):
                 settings.endGroup()
                 self.openedFile = filePath
 
-                logger.info('Saved Rig file: ' + filePath)
+                logger.inform('Saved Rig file: ' + filePath)
 
-            except Exception as e:
+            except:
                 logger.exception('Error Saving Rig File')
                 return False
 
@@ -236,7 +233,7 @@ class KGraphViewWidget(GraphViewWidget):
 
         self.openedFile = filePath
         self.window().setWindowTitle('Kraken Editor - ' + filePath + '[*]')
-        logger.info('Loaded Rig file: ' + filePath)
+        logger.inform('Loaded Rig file: ' + filePath)
 
         self.rigLoaded.emit(filePath)
 
@@ -250,7 +247,6 @@ class KGraphViewWidget(GraphViewWidget):
 
             initConfigIndex = self.window().krakenMenu.configsWidget.currentIndex()
 
-            builder = plugins.getBuilder()
 
             # Append "_guide" to rig name when building guide
             if self.guideRig.getName().endswith('_guide') is False:
@@ -263,11 +259,11 @@ class KGraphViewWidget(GraphViewWidget):
             self._guideBuilder = plugins.getBuilder()
             self._guideBuilder.build(self.guideRig)
 
-            logger.info('Guide Rig Build Success')
+            logger.inform('Guide Rig Build Success')
 
             self.window().krakenMenu.setCurrentConfig(initConfigIndex)
 
-        except Exception as e:
+        except:
             logger.exception('Error Building')
 
         finally:
