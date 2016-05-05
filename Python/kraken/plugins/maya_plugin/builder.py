@@ -12,7 +12,7 @@ from kraken.log import getLogger
 from kraken.core.kraken_system import ks
 from kraken.core.builder import Builder
 from kraken.core.objects.object_3d import Object3D
-from kraken.core.maths.xfo import Xfo, Mat44
+from kraken.core.maths import Xfo, Mat44, Math_radToDeg
 from kraken.core.objects.attributes.attribute import Attribute
 from kraken.plugins.maya_plugin.utils import *
 
@@ -537,6 +537,14 @@ class Builder(Builder):
             name=kConstraint.getName() + "_ori_cns",
             maintainOffset=kConstraint.getMaintainOffset())
 
+        if kConstraint.getMaintainOffset() is True:
+            offsetXfo = kConstraint.computeOffset()
+            offsetAngles = offsetXfo.ori.toEulerAngles()
+
+            dccSceneItem.attr('offset').set([offsetAngles.x,
+                                             offsetAngles.y,
+                                             offsetAngles.z])
+
         self._registerSceneItemPair(kConstraint, dccSceneItem)
 
         return dccSceneItem
@@ -559,11 +567,30 @@ class Builder(Builder):
             name=kConstraint.getName() + "_par_cns",
             maintainOffset=kConstraint.getMaintainOffset())
 
-        pm.scaleConstraint(
+        scaleConstraint = pm.scaleConstraint(
             [self.getDCCSceneItem(x) for x in kConstraint.getConstrainers()],
             constraineeDCCSceneItem,
             name=kConstraint.getName() + "_scl_cns",
             maintainOffset=kConstraint.getMaintainOffset())
+
+        if kConstraint.getMaintainOffset() is True:
+            offsetXfo = kConstraint.computeOffset()
+            offsetAngles = offsetXfo.ori.toEulerAngles()
+
+            # Set offsets on parent constraint
+            dccSceneItem.target[0].targetOffsetTranslate.set([offsetXfo.tr.x,
+                                                              offsetXfo.tr.y,
+                                                              offsetXfo.tr.z])
+
+            dccSceneItem.target[0].targetOffsetRotate.set(
+                [Math_radToDeg(offsetAngles.x),
+                 Math_radToDeg(offsetAngles.y),
+                 Math_radToDeg(offsetAngles.z)])
+
+            # Set offsets on the scale constraint
+            scaleConstraint.offset.set([offsetXfo.sc.x,
+                                        offsetXfo.sc.y,
+                                        offsetXfo.sc.z])
 
         self._registerSceneItemPair(kConstraint, dccSceneItem)
 
@@ -587,6 +614,14 @@ class Builder(Builder):
             name=kConstraint.getName() + "_pos_cns",
             maintainOffset=kConstraint.getMaintainOffset())
 
+        if kConstraint.getMaintainOffset() is True:
+            offsetXfo = kConstraint.computeOffset()
+
+            # Set offsets on the scale constraint
+            dccSceneItem.offset.set([offsetXfo.tr.x,
+                                     offsetXfo.tr.y,
+                                     offsetXfo.tr.z])
+
         self._registerSceneItemPair(kConstraint, dccSceneItem)
 
         return dccSceneItem
@@ -608,6 +643,14 @@ class Builder(Builder):
             constraineeDCCSceneItem,
             name=kConstraint.getName() + "_scl_cns",
             maintainOffset=kConstraint.getMaintainOffset())
+
+        if kConstraint.getMaintainOffset() is True:
+            offsetXfo = kConstraint.computeOffset()
+
+            # Set offsets on the scale constraint
+            dccSceneItem.offset.set([offsetXfo.sc.x,
+                                     offsetXfo.sc.y,
+                                     offsetXfo.sc.z])
 
         self._registerSceneItemPair(kConstraint, dccSceneItem)
 
