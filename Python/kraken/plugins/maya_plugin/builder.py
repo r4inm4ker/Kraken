@@ -11,8 +11,7 @@ from kraken.log import getLogger
 
 from kraken.core.kraken_system import ks
 
-from kraken.core.maths.xfo import Xfo
-from kraken.core.maths.mat44 import Mat44
+from kraken.core.maths import Vec2, Vec3, Vec4, Euler, Quat, Xfo, Mat33, Mat44
 
 from kraken.core.builder import Builder
 
@@ -911,6 +910,10 @@ class Builder(Builder):
                             self.setMat44Attr(tgt.partition(".")[0], tgt.partition(".")[2], opObject.toMat44())
                         elif isinstance(opObject, Mat44):
                             self.setMat44Attr(tgt.partition(".")[0], tgt.partition(".")[2], opObject)
+                        elif isinstance(opObject, Vec2):
+                            pm.setAttr(tgt, opObject.x, opObject.y, type="double2")
+                        elif isinstance(opObject, Vec3):
+                            pm.setAttr(tgt, opObject.x, opObject.y, opObject.z, type="double3")
                         else:
                             validateArg(opObject, portName, portDataType)
 

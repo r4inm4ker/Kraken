@@ -7,7 +7,7 @@ KLOperator - Splice operator object.
 
 import pprint
 
-from kraken.core.maths import Mat44, Xfo
+from kraken.core.maths import MathObject, Mat44, Xfo
 from kraken.core.objects.object_3d import Object3D
 from kraken.core.objects.operators.operator import Operator
 from kraken.core.objects.attributes.attribute import Attribute
@@ -134,6 +134,8 @@ class KLOperator(Operator):
                 return obj.xfo.getRTVal().toMat44('Mat44')
             elif isinstance(obj, Xfo):
                 return obj.getRTVal().toMat44('Mat44')
+            elif isinstance(obj, MathObject):
+                return obj.getRTVal()
             elif isinstance(obj, Attribute):
                 return obj.getRTVal()
             elif type(obj) in (int, float, bool, str):
