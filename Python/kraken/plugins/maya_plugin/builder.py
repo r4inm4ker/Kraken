@@ -556,7 +556,7 @@ class Builder(Builder):
 
             offsetXfo = kConstraint.computeOffset()
             offsetAngles = offsetXfo.ori.toEulerAnglesWithRotOrder(
-                RotationOrder(order + 1))
+                RotationOrder(order))
 
             dccSceneItem.attr('offset').set([offsetAngles.x,
                                              offsetAngles.y,
@@ -607,7 +607,7 @@ class Builder(Builder):
 
             offsetXfo = kConstraint.computeOffset()
             offsetAngles = offsetXfo.ori.toEulerAnglesWithRotOrder(
-                RotationOrder(order + 1))
+                RotationOrder(order))
 
             # Set offsets on parent constraint
             dccSceneItem.target[0].targetOffsetTranslate.set([offsetXfo.tr.x,
