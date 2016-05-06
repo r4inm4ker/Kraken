@@ -614,10 +614,6 @@ class Builder(Builder):
                                                               offsetXfo.tr.y,
                                                               offsetXfo.tr.z])
 
-            logger.inform([Math_radToDeg(offsetAngles.x),
-                           Math_radToDeg(offsetAngles.y),
-                           Math_radToDeg(offsetAngles.z)])
-
             dccSceneItem.target[0].targetOffsetRotate.set(
                 [Math_radToDeg(offsetAngles.x),
                  Math_radToDeg(offsetAngles.y),

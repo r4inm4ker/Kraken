@@ -9,7 +9,7 @@ import logging
 
 from kraken.log import getLogger
 
-from kraken.core.maths import Math_radToDeg
+from kraken.core.maths import Math_radToDeg, RotationOrder
 from kraken.core.kraken_system import ks
 from kraken.core.builder import Builder
 
@@ -35,12 +35,12 @@ class Builder(Builder):
                 continue
 
             node = builtElement['tgt']
-            if node is not None and node.Parent.Name == 'Scene_Root':
-                try:
+            try:
+                if node is not None and node.Parent.Name == 'Scene_Root':
                     si.DeleteObj("B:" + node.FullName)
                     si.Desktop.RedrawUI()
-                except:
-                    continue
+            except:
+                continue
 
         self._buildElements = []
 
@@ -563,8 +563,24 @@ class Builder(Builder):
             kConstraint.getMaintainOffset())
 
         if kConstraint.getMaintainOffset() is True:
+
+            # Softimage's rotation orders remapped
+            # It appears Softimage uses the reversed orders
+            # Not the same orders.
+            rotOrderRemap = {
+                0: 0,
+                1: 3,
+                2: 4,
+                3: 1,
+                4: 5,
+                5: 2
+            }
+
+            order = rotOrderRemap[kConstraint.getConstrainee().ro.order]
+
             offsetXfo = kConstraint.computeOffset()
-            offsetAngles = offsetXfo.ori.toEulerAngles()
+            offsetAngles = offsetXfo.ori.toEulerAnglesWithRotOrder(
+                RotationOrder(order))
 
             dccSceneItem.Parameters('offx').Value = Math_radToDeg(offsetAngles.x)
             dccSceneItem.Parameters('offy').Value = Math_radToDeg(offsetAngles.y)
@@ -598,8 +614,28 @@ class Builder(Builder):
             kConstraint.getMaintainOffset())
 
         if kConstraint.getMaintainOffset() is True:
+
+            # Softimage's rotation orders remapped
+            # It appears Softimage uses the reversed orders
+            # Not the same orders.
+            rotOrderRemap = {
+                0: 4,
+                1: 1,
+                2: 2,
+                3: 3,
+                4: 5,
+                5: 0
+            }
+
+            order = rotOrderRemap[kConstraint.getConstrainee().ro.order]
+
             offsetXfo = kConstraint.computeOffset()
-            offsetAngles = offsetXfo.ori.toEulerAngles()
+            offsetAngles = offsetXfo.ori.toEulerAnglesWithRotOrder(
+                RotationOrder(order))
+
+            logger.inform([Math_radToDeg(offsetAngles.x),
+                           Math_radToDeg(offsetAngles.y),
+                           Math_radToDeg(offsetAngles.z)])
 
             dccSceneItem.Parameters('sclx').Value = offsetXfo.sc.x
             dccSceneItem.Parameters('scly').Value = offsetXfo.sc.y
@@ -1396,7 +1432,18 @@ class Builder(Builder):
 
         dccSceneItem.Kinematics.Global.PutTransform2(None, xfo)
 
-        dccSceneItem.Kinematics.Local.Parameters('rotorder').Value = kSceneItem.ro.order
+        # Softimage's rotation orders remapped:
+        rotOrderRemap = {
+            0: 0,
+            1: 3,
+            2: 4,
+            3: 1,
+            4: 5,
+            5: 2
+        }
+
+        order = rotOrderRemap[kSceneItem.ro.order]
+        dccSceneItem.Kinematics.Local.Parameters('rotorder').Value = order
 
         return True
 
