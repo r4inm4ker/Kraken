@@ -48,12 +48,14 @@ class OutputLogDialog(QtGui.QDialog):
             messageColor = QtGui.QColor("#B4EEB4")
         elif level == 'INFO':
             messageColor = QtGui.QColor(QtCore.Qt.white)
+        elif level == 'INFORM':
+            messageColor = QtGui.QColor("#009900")
         elif level == 'WARNING':
-            messageColor = QtGui.QColor("#CC3300")
+            messageColor = QtGui.QColor("#D89614")
         elif level == 'ERROR':
-            messageColor = QtGui.QColor("#FF0000")
+            messageColor = QtGui.QColor("#CC0000")
         elif level == 'CRITICAL':
-            messageColor = QtGui.QColor("#FF0000")
+            messageColor = QtGui.QColor("#CC0000")
         else:
             messageColor = QtGui.QColor(QtCore.Qt.white)
 
