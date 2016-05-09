@@ -29,12 +29,13 @@ function Xfo KrakenPoseConstraint.compute?(
   for(Size i=0;i<this.constrainers.size();i++) {
     result.tr = result.tr.add(this.constrainers[i].tr);
     result.ori = result.ori.add(this.constrainers[i].ori);
+    // todo: scaling is not maintained here!
   }
 
   result.ori.setUnit();
   result.tr *= 1.0 / Float32(this.constrainers.size());
   
-  return result * this.offset;
+  return result.toMat44() * this.offset.toMat44();
 }
 
 /// \dfgPresetFolder Constraints
@@ -52,8 +53,8 @@ function Xfo KrakenPoseConstraint.computeOffset?(
   KrakenPoseConstraint tmpConstraint(Xfo());
   tmpConstraint.constrainers = this.constrainers;
 
-  Xfo global = tmpConstraint.compute(constrainee);
-  return global.inverse() * constrainee;
+  Mat44 global = tmpConstraint.compute(constrainee).toMat44();
+  return global.inverse() * constrainee.toMat44();
 }
 
 /// \dfgPresetFolder Constraints
