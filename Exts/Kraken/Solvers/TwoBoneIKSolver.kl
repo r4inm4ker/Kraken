@@ -1,4 +1,6 @@
+require Math;
 require InlineDrawing;
+
 
 object TwoBoneIKSolver : KrakenSolver {
   Xfo initPose[];
@@ -23,10 +25,6 @@ function KrakenSolverArg[] TwoBoneIKSolver.getArguments(){
   args.push(KrakenSolverArg('rightSide', 'In', 'Boolean'));
 
   args.push(KrakenSolverArg('ikblend', 'In', 'Scalar'));
-  args.push(KrakenSolverArg('softIK', 'In', 'Boolean'));
-  args.push(KrakenSolverArg('softDist', 'In', 'Scalar'));
-  args.push(KrakenSolverArg('stretch', 'In', 'Boolean'));
-  args.push(KrakenSolverArg('stretchBlend', 'In', 'Scalar'));
 
   args.push(KrakenSolverArg('root', 'In', 'Mat44'));
   args.push(KrakenSolverArg('bone0FK', 'In', 'Mat44'));
@@ -39,12 +37,9 @@ function KrakenSolverArg[] TwoBoneIKSolver.getArguments(){
   args.push(KrakenSolverArg('bone0Out', 'Out', 'Mat44'));
   args.push(KrakenSolverArg('bone1Out', 'Out', 'Mat44'));
   args.push(KrakenSolverArg('bone2Out', 'Out', 'Mat44'));
+  args.push(KrakenSolverArg('midJointOut', 'Out', 'Mat44'));
   return args;
 }
-
-
-require Math;
-require Animation;
 
 
 function solve2BoneIK(
@@ -86,7 +81,6 @@ function solve2BoneIK(
 }
 
 
-
 // Solve
 function TwoBoneIKSolver.solve!
 (
@@ -95,10 +89,6 @@ function TwoBoneIKSolver.solve!
   Boolean rightSide,
 
   Scalar ikblend,
-  Boolean softIK,
-  Scalar softDist,
-  Boolean stretch,
-  Scalar stretchBlend,
 
   Mat44 root,
   Mat44 bone0FK,
@@ -110,19 +100,21 @@ function TwoBoneIKSolver.solve!
   Scalar bone1Len,
   io Mat44 bone0Out,
   io Mat44 bone1Out,
-  io Mat44 bone2Out
-){
+  io Mat44 bone2Out,
+  io Mat44 midJointOut
+) {
   Xfo bone0FkXfo = Xfo(bone0FK);
   Xfo bone1FkXfo = Xfo(bone1FK);
   Xfo bone0Xfo = bone0FkXfo;
   Xfo bone1Xfo = bone1FkXfo;
   Xfo bone2Xfo = bone1Xfo;
   bone2Xfo.tr = bone1Xfo.transformVector(Vec3(bone1Len, 0.0, 0.0));
+  Xfo midJointXfo = Xfo();
 
   Scalar scaledBone0Len = bone0Len * rigScale;
   Scalar scaledBone1Len = bone1Len * rigScale;
 
-  if(ikblend > 0.0){
+  if(ikblend > 0.0) {
     solve2BoneIK(
       scaledBone0Len,
       scaledBone1Len,
@@ -141,15 +133,21 @@ function TwoBoneIKSolver.solve!
   bone2Xfo = bone1Xfo;
   bone2Xfo.tr = bone1Xfo.transformVector(Vec3(bone1Len, 0.0, 0.0));
 
+  // Set Mid Joint Xfo
+  midJointXfo.tr = bone1Xfo.tr;
+  midJointXfo.ori = bone0Xfo.ori.sphericalLinearInterpolate(bone1Xfo.ori, 0.5);
+
   // Set scaling
   Vec3 outScaling = Vec3(rigScale, rigScale, rigScale);
   bone0Xfo.sc = outScaling;
   bone1Xfo.sc = outScaling;
   bone2Xfo.sc = outScaling;
+  midJointXfo.sc = outScaling;
 
   bone0Out = bone0Xfo.toMat44();
   bone1Out = bone1Xfo.toMat44();
   bone2Out = bone2Xfo.toMat44();
+  midJointOut = midJointXfo.toMat44();
 
   // Set debugging visibility.
   this.setDebug(drawDebug);
@@ -159,5 +157,58 @@ function TwoBoneIKSolver.solve!
     Color boneColor(1.0, 1.0, 0);
     etDrawBone(this.handle.rootTransform, 'bone0', bone0Xfo, scaledBone0Len, scaledBone0Len * 0.15, boneColor);
     etDrawBone(this.handle.rootTransform, 'bone1', bone1Xfo, scaledBone1Len, scaledBone1Len * 0.15, boneColor);
+    etDrawBone(this.handle.rootTransform, 'midJoint', bone1Xfo, scaledBone1Len, scaledBone1Len * 0.15, boneColor);
   }
 }
+
+
+// // =========== TwoBoneIK Guide Solver ================ //
+// object TwoBoneIKGuideSolver : KrakenSolver {
+//   Xfo initPose[];
+// };
+
+// // Default Constructor
+// function TwoBoneIKGuideSolver()
+// {
+
+// }
+
+
+// // Return Arguments for Kraken
+// function KrakenSolverArg[] TwoBoneIKGuideSolver.getArguments(){
+//   KrakenSolverArg args[] = this.parent.getArguments();
+
+//   args.push(KrakenSolverArg('root', 'In', 'Mat44'));
+//   args.push(KrakenSolverArg('mid', 'In', 'Mat44'));
+//   args.push(KrakenSolverArg('end', 'In', 'Mat44'));
+
+//   args.push(KrakenSolverArg('bone0Out', 'Out', 'Mat44'));
+//   return args;
+// }
+
+// function TwoBoneIKGuideSolver.solve!(
+//   Boolean drawDebug,
+//   Scalar rigScale,
+
+//   Mat44 root,
+//   Mat44 mid,
+//   Mat44 end
+// ) {
+
+//   Vec3 debugPositions[];
+//   debugPositions.resize(3);
+
+//   debugPositions[0] = root.translation();
+//   debugPositions[1] = mid.translation();
+//   debugPositions[2] = end.translation();
+
+//   // Set debugging visibility.
+//   this.setDebug(drawDebug);
+//   if(this.drawDebug){
+//     if(!this.handle)
+//       this.handle = DrawingHandle();
+//     Color lineColor(1.0, 1.0, 0);
+//     // etDrawBone(this.handle.rootTransform, 'bone0', bone0Xfo, scaledBone0Len, scaledBone0Len * 0.15, boneColor);
+//     drawLineStrip(this.handle.rootTransform, 'TwoBoneIKGuideLines', debugPositions, lineColor);
+//   }
+// }

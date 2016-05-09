@@ -1,0 +1,88 @@
+require Math;
+require Kraken;
+
+operator entry() {
+
+	TwoBoneIKSolver solver();
+
+  Xfo femurXfo = Xfo(Quat(Vec3(0.739961385727, -0.67020791769, -0.0422816127539), 0.0386102125049),
+                    Vec3(0.981100022793, 9.76900005341, -0.457199990749),
+                    Vec3(1.0, 1.0, 1.0));
+
+  Xfo kneeXfo = Xfo(Quat(Vec3(0.734117984772, -0.671135187149, -0.1019872576), -0.0157190468162),
+                    Vec3(1.40799999237, 5.43709993362, -0.504299998283),
+                    Vec3(1.0, 1.0, 1.0));
+
+  Xfo handleXfo = Xfo(Quat(Vec3(0.0, 0.0, 0.0), 1.0),
+                      Vec3(1.75, 1.14999997616, -1.25),
+                      Vec3(1.0, 1.0, 1.0));
+
+  Xfo upVXfo = Xfo(Quat(Vec3(-0.0114182513207, 0.0722338929772, -0.671222090721), 0.737640023232),
+                        Vec3(2.01746797562, 5.03647565842, 4.44221878052),
+                        Vec3(1.0, 1.0, 1.0));
+
+  Mat44 root = femurXfo.toMat44();
+  Mat44 bone0FK = femurXfo.toMat44();
+  Mat44 bone1FK = kneeXfo.toMat44();
+  Mat44 ikHandle = handleXfo.toMat44();
+  Mat44 upV = upVXfo.toMat44();
+  Scalar bone0Len = 4.35313892365;
+  Scalar bone1Len = 4.3648891449;
+
+  Mat44 bone0Out;
+  Mat44 bone1Out;
+  Mat44 bone2Out;
+  Mat44 midJointOut;
+
+  // Solve IK
+  solver.solve(
+    false,
+    Scalar(1.0),
+    false,
+    1.0,
+    root,
+    bone0FK,
+    bone1FK,
+    ikHandle,
+    upV,
+    bone0Len,
+    bone1Len,
+    bone0Out,
+    bone1Out,
+    bone2Out,
+    midJointOut);
+
+  report("Solve IK");
+  report("==========================");
+  report(bone0Out.translation());
+  report(bone1Out.translation());
+  report(bone2Out.translation());
+  report(midJointOut.translation());
+
+  // Solve FK
+  solver.solve(
+    false,
+    Scalar(1.0),
+    false,
+    0.0,
+    root,
+    bone0FK,
+    bone1FK,
+    ikHandle,
+    upV,
+    bone0Len,
+    bone1Len,
+    bone0Out,
+    bone1Out,
+    bone2Out,
+    midJointOut);
+
+  report("");
+  report("Solve FK");
+  report("==========================");
+  report(bone0Out.translation());
+  report(bone1Out.translation());
+  report(bone2Out.translation());
+  report(midJointOut.translation());
+
+}

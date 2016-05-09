@@ -41,6 +41,7 @@ class LegComponent(BaseExampleComponent):
 
         # Declare Output Xfos
         self.femurOutputTgt = self.createOutput('femur', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
+        self.kneeOutputTgt = self.createOutput('knee', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
         self.shinOutputTgt = self.createOutput('shin', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
         self.ikHandleOutputTgt = self.createOutput('ikHandle', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
         self.legEndOutputTgt = self.createOutput('legEnd', dataType='Xfo', parent=self.outputHrcGrp).getTarget()
@@ -241,10 +242,6 @@ class LegComponentRig(LegComponent):
         self.legBone0LenInputAttr = ScalarAttribute('bone0Len', value=1.0, parent=legSettingsAttrGrp)
         self.legBone1LenInputAttr = ScalarAttribute('bone1Len', value=1.0, parent=legSettingsAttrGrp)
         legIKBlendInputAttr = ScalarAttribute('ikblend', value=1.0, minValue=0.0, maxValue=1.0, parent=legSettingsAttrGrp)
-        legSoftIKInputAttr = BoolAttribute('softIK', value=True, parent=legSettingsAttrGrp)
-        legSoftDistInputAttr = ScalarAttribute('softDist', value=0.0, minValue=0.0, parent=legSettingsAttrGrp)
-        legStretchInputAttr = BoolAttribute('stretch', value=True, parent=legSettingsAttrGrp)
-        legStretchBlendInputAttr = ScalarAttribute('stretchBlend', value=0.0, minValue=0.0, maxValue=1.0, parent=legSettingsAttrGrp)
 
         # Util Objects
         self.ikRootPosition = Locator("ikRootPosition", parent=self.ctrlCmpGrp)
@@ -271,6 +268,9 @@ class LegComponentRig(LegComponent):
 
         femurDef = Joint('femur', parent=self.defCmpGrp)
         femurDef.setComponent(self)
+
+        kneeDef = Joint('knee', parent=self.defCmpGrp)
+        kneeDef.setComponent(self)
 
         shinDef = Joint('shin', parent=self.defCmpGrp)
         shinDef.setComponent(self)
@@ -325,10 +325,6 @@ class LegComponentRig(LegComponent):
         self.legIKKLOp.setInput('bone0Len', self.legBone0LenInputAttr)
         self.legIKKLOp.setInput('bone1Len', self.legBone1LenInputAttr)
         self.legIKKLOp.setInput('ikblend', legIKBlendInputAttr)
-        self.legIKKLOp.setInput('softIK', legSoftIKInputAttr)
-        self.legIKKLOp.setInput('softDist', legSoftDistInputAttr)
-        self.legIKKLOp.setInput('stretch', legStretchInputAttr)
-        self.legIKKLOp.setInput('stretchBlend', legStretchBlendInputAttr)
         self.legIKKLOp.setInput('rightSide', self.legRightSideInputAttr)
 
         # Add Xfo Inputs
@@ -342,6 +338,7 @@ class LegComponentRig(LegComponent):
         self.legIKKLOp.setOutput('bone0Out', self.femurOutputTgt)
         self.legIKKLOp.setOutput('bone1Out', self.shinOutputTgt)
         self.legIKKLOp.setOutput('bone2Out', self.legEndOutputTgt)
+        self.legIKKLOp.setOutput('midJointOut', self.kneeOutputTgt)
 
 
         # Add Leg Deformer Splice Op
@@ -353,10 +350,10 @@ class LegComponentRig(LegComponent):
         self.outputsToDeformersKLOp.setInput('rigScale', self.rigScaleInputAttr)
 
         # Add Xfo Inputs
-        self.outputsToDeformersKLOp.setInput('constrainers', [self.femurOutputTgt, self.shinOutputTgt])
+        self.outputsToDeformersKLOp.setInput('constrainers', [self.femurOutputTgt, self.kneeOutputTgt, self.shinOutputTgt])
 
         # Add Xfo Outputs
-        self.outputsToDeformersKLOp.setOutput('constrainees', [femurDef, shinDef])
+        self.outputsToDeformersKLOp.setOutput('constrainees', [femurDef, kneeDef, shinDef])
 
         Profiler.getInstance().pop()
 
@@ -384,6 +381,12 @@ class LegComponentRig(LegComponent):
         femurLen = data.get('femurLen')
         shinLen = data.get('shinLen')
 
+        print femurXfo
+        print kneeXfo
+        print handleXfo
+        print upVXfo
+        print femurLen
+        print shinLen
 
         self.femurFKCtrlSpace.xfo = femurXfo
         self.femurFKCtrl.xfo = femurXfo
