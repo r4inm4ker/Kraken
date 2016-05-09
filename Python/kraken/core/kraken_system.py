@@ -68,11 +68,6 @@ class KrakenSystem(object):
         if self.client is None:
             Profiler.getInstance().push("loadCoreClient")
 
-            fabricHandler = None
-            for handler in logger.handlers:
-                if type(handler).__name__ == 'FabricHandler':
-                    fabricHandler = handler
-
             client = getFabricClient()
             if client is None:
                 options = {
@@ -85,6 +80,8 @@ class KrakenSystem(object):
             self.client = client
 
             self.loadExtension('Math')
+            self.loadExtension('Kraken')
+            self.loadExtension('KrakenForCanvas')
 
             Profiler.getInstance().pop()
 
