@@ -1,4 +1,5 @@
 require InlineDrawing;
+require Animation;
 
 object TentacleSolver : KrakenSolver {
     Vec3 trCurr;
