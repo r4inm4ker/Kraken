@@ -982,8 +982,8 @@ class Component(Object3D):
             dict: The JSON rig data object.
 
         """
-        for obj in self.getHierarchyNodes(classType=classType, inheritedClass=inheritedClass):
-            self.saveObjectData(data, [obj])
+        objects = self.getHierarchyNodes(classType=classType, inheritedClass=inheritedClass)
+        self.saveObjectData(data, objects)
 
         return data
 
@@ -1024,12 +1024,8 @@ class Component(Object3D):
             dict: The JSON rig data object.
 
         """
-        for obj in self.getHierarchyNodes(classType=classType, inheritedClass=inheritedClass):
-            data[obj.getName() + "Xfo"] = obj.xfo
-            try:
-                data[obj.getName() + "CurveData"] = obj.getCurveData()
-            except:
-                pass
+        objects = self.getHierarchyNodes(classType=classType, inheritedClass=inheritedClass)
+        self.loadObjectData(data, objects)
 
         return data
 

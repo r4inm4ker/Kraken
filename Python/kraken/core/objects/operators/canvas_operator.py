@@ -8,7 +8,7 @@ CanvasOperator - Splice operator object.
 import json
 import pprint
 
-from kraken.core.maths import Mat44, Xfo
+from kraken.core.maths import MathObject, Mat44, Xfo
 from kraken.core.objects.object_3d import Object3D
 from kraken.core.objects.operators.operator import Operator
 from kraken.core.objects.attributes.attribute import Attribute
@@ -93,7 +93,7 @@ class CanvasOperator(Operator):
                 return obj.xfo.getRTVal().toMat44('Mat44')
             elif isinstance(obj, Xfo):
                 return obj.getRTVal().toMat44('Mat44')
-            elif isinstance(obj, Mat44):
+            elif isinstance(obj, MathObject):
                 return obj.getRTVal()
             elif isinstance(obj, Attribute):
                 return obj.getRTVal()
