@@ -615,9 +615,26 @@ class Builder(Builder):
 
         if kConstraint.getMaintainOffset() is True:
 
-            # Softimage's rotation orders remapped
-            # It appears Softimage uses the reversed orders
-            # Not the same orders.
+            # Fabric's rotation order enums:
+            # We need to use the negative rotation order
+            # to calculate propery offset values.
+            #
+            # 0 XYZ
+            # 1 YZX
+            # 2 ZXY
+            # 3 XZY
+            # 4 ZYX
+            # 5 YXZ
+
+            # Softimage's rotation orders
+            #
+            # 0 XYZ
+            # 1 XZY
+            # 2 YXZ
+            # 3 YZX
+            # 4 ZXY
+            # 5 ZYX
+
             rotOrderRemap = {
                 0: 4,
                 1: 1,

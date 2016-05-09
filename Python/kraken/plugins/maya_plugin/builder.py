@@ -592,18 +592,31 @@ class Builder(Builder):
 
         if kConstraint.getMaintainOffset() is True:
 
-            # Maya's rotation order enums:
+            # Fabric's rotation order enums:
+            # We need to use the negative rotation order
+            # to calculate propery offset values.
+            #
             # 0 XYZ
             # 1 YZX
             # 2 ZXY
             # 3 XZY
-            # 4 YXZ <-- 5 in Fabric
-            # 5 ZYX <-- 4 in Fabric
-            order = kConstraint.getConstrainee().ro.order
-            if order == 4:
-                order = 5
-            elif order == 5:
-                order = 4
+            # 4 ZYX
+            # 5 YXZ
+
+            rotOrderRemap = {
+                0: 4,
+                1: 3,
+                2: 5,
+                3: 1,
+                4: 0,
+                5: 2
+            }
+
+            order = rotOrderRemap[kConstraint.getConstrainee().ro.order]
+            # if order == 4:
+            #     order = 5
+            # elif order == 5:
+            #     order = 4
 
             offsetXfo = kConstraint.computeOffset()
             offsetAngles = offsetXfo.ori.toEulerAnglesWithRotOrder(

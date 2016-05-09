@@ -22,20 +22,20 @@ from kraken.log import getLogger
 from kraken.log.utils import fabricCallback
 
 
-# krakenSystemModuleDir = os.path.join(os.path.dirname(os.path.realpath(__file__)))
-# krakenDir = os.path.abspath(os.path.join(krakenSystemModuleDir, '..', '..', '..'))
-# os.environ['KRAKEN_PATH'] = krakenDir
+krakenSystemModuleDir = os.path.join(os.path.dirname(os.path.realpath(__file__)))
+krakenDir = os.path.abspath(os.path.join(krakenSystemModuleDir, '..', '..', '..'))
+os.environ['KRAKEN_PATH'] = krakenDir
 
-# krakenExtsDir = os.path.join(krakenDir, 'Exts')
-# if krakenExtsDir not in os.environ['FABRIC_EXTS_PATH']:
-#     os.environ['FABRIC_EXTS_PATH'] = krakenExtsDir + os.pathsep + os.environ['FABRIC_EXTS_PATH']
+krakenExtsDir = os.path.join(krakenDir, 'Exts')
+if krakenExtsDir not in os.environ['FABRIC_EXTS_PATH']:
+    os.environ['FABRIC_EXTS_PATH'] = krakenExtsDir + os.pathsep + os.environ['FABRIC_EXTS_PATH']
 
-# canvasPresetsDir = os.path.join(krakenDir, 'Presets')
-# if 'FABRIC_DFG_PATH' in os.environ:
-#     if canvasPresetsDir not in os.environ['FABRIC_DFG_PATH']:
-#         os.environ['FABRIC_DFG_PATH'] = canvasPresetsDir + os.pathsep + os.environ['FABRIC_DFG_PATH']
-# else:
-#     os.environ['FABRIC_DFG_PATH'] = canvasPresetsDir
+canvasPresetsDir = os.path.join(krakenDir, 'Presets')
+if 'FABRIC_DFG_PATH' in os.environ:
+    if canvasPresetsDir not in os.environ['FABRIC_DFG_PATH']:
+        os.environ['FABRIC_DFG_PATH'] = canvasPresetsDir + os.pathsep + os.environ['FABRIC_DFG_PATH']
+else:
+    os.environ['FABRIC_DFG_PATH'] = canvasPresetsDir
 
 
 logger = getLogger('kraken')
