@@ -78,6 +78,26 @@ class ArmComponentGuide(ArmComponent):
         self.wristCtrl = Control('wrist', parent=self.ctrlCmpGrp, shape="sphere")
         self.wristCtrl.setColor('blue')
 
+        armGuideSettingsAttrGrp = AttributeGroup("DisplayInfo_ArmSettings", parent=self.bicepCtrl)
+        self.armGuideDebugAttr = BoolAttribute('drawDebug', value=True, parent=armGuideSettingsAttrGrp)
+
+        self.guideOpHost = Transform('guideOpHost', self.ctrlCmpGrp)
+
+        # Guide Operator
+        self.neckGuideKLOp = KLOperator(name + 'GuideKLOp', 'TwoBoneIKGuideSolver', 'Kraken')
+        self.addOperator(self.neckGuideKLOp)
+
+        # Add Att Inputs
+        self.neckGuideKLOp.setInput('drawDebug', self.armGuideDebugAttr)
+        self.neckGuideKLOp.setInput('rigScale', self.rigScaleInputAttr)
+
+        # Add Source Inputs
+        self.neckGuideKLOp.setInput('root', self.bicepCtrl)
+        self.neckGuideKLOp.setInput('mid', self.forearmCtrl)
+        self.neckGuideKLOp.setInput('end', self.wristCtrl)
+
+        # Add Target Outputs
+        self.neckGuideKLOp.setOutput('guideOpHost', self.guideOpHost)
 
         self.default_data = {
             "name": name,

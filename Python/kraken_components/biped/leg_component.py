@@ -12,7 +12,7 @@ from kraken.core.objects.attributes.string_attribute import StringAttribute
 from kraken.core.objects.constraints.pose_constraint import PoseConstraint
 
 from kraken.core.objects.component_group import ComponentGroup
-from kraken.core.objects.hierarchy_group import HierarchyGroup
+from kraken.core.objects.transform import Transform
 from kraken.core.objects.locator import Locator
 from kraken.core.objects.joint import Joint
 from kraken.core.objects.ctrlSpace import CtrlSpace
@@ -74,6 +74,28 @@ class LegComponentGuide(LegComponent):
         self.femurCtrl = Control('femur', parent=self.ctrlCmpGrp, shape="sphere")
         self.kneeCtrl = Control('knee', parent=self.ctrlCmpGrp, shape="sphere")
         self.ankleCtrl = Control('ankle', parent=self.ctrlCmpGrp, shape="sphere")
+
+        armGuideSettingsAttrGrp = AttributeGroup("DisplayInfo_ArmSettings", parent=self.femurCtrl)
+        self.armGuideDebugAttr = BoolAttribute('drawDebug', value=True, parent=armGuideSettingsAttrGrp)
+
+        self.guideOpHost = Transform('guideOpHost', self.ctrlCmpGrp)
+
+        # Guide Operator
+        self.neckGuideKLOp = KLOperator(name + 'GuideKLOp', 'TwoBoneIKGuideSolver', 'Kraken')
+        self.addOperator(self.neckGuideKLOp)
+
+        # Add Att Inputs
+        self.neckGuideKLOp.setInput('drawDebug', self.armGuideDebugAttr)
+        self.neckGuideKLOp.setInput('rigScale', self.rigScaleInputAttr)
+
+        # Add Source Inputs
+        self.neckGuideKLOp.setInput('root', self.femurCtrl)
+        self.neckGuideKLOp.setInput('mid', self.kneeCtrl)
+        self.neckGuideKLOp.setInput('end', self.ankleCtrl)
+
+        # Add Target Outputs
+        self.neckGuideKLOp.setOutput('guideOpHost', self.guideOpHost)
+
 
         self.default_data = {
                 "name": name,

@@ -162,53 +162,55 @@ function TwoBoneIKSolver.solve!
 }
 
 
-// // =========== TwoBoneIK Guide Solver ================ //
-// object TwoBoneIKGuideSolver : KrakenSolver {
-//   Xfo initPose[];
-// };
+// =========== TwoBoneIK Guide Solver ================ //
+object TwoBoneIKGuideSolver : KrakenSolver {
+  Xfo initPose[];
+};
 
-// // Default Constructor
-// function TwoBoneIKGuideSolver()
-// {
+// Default Constructor
+function TwoBoneIKGuideSolver()
+{
 
-// }
+}
 
 
-// // Return Arguments for Kraken
-// function KrakenSolverArg[] TwoBoneIKGuideSolver.getArguments(){
-//   KrakenSolverArg args[] = this.parent.getArguments();
+// Return Arguments for Kraken
+function KrakenSolverArg[] TwoBoneIKGuideSolver.getArguments(){
+  KrakenSolverArg args[] = this.parent.getArguments();
 
-//   args.push(KrakenSolverArg('root', 'In', 'Mat44'));
-//   args.push(KrakenSolverArg('mid', 'In', 'Mat44'));
-//   args.push(KrakenSolverArg('end', 'In', 'Mat44'));
+  args.push(KrakenSolverArg('root', 'In', 'Mat44'));
+  args.push(KrakenSolverArg('mid', 'In', 'Mat44'));
+  args.push(KrakenSolverArg('end', 'In', 'Mat44'));
 
-//   args.push(KrakenSolverArg('bone0Out', 'Out', 'Mat44'));
-//   return args;
-// }
+  args.push(KrakenSolverArg('guideOpHost', 'Out', 'Mat44'));
+  return args;
+}
 
-// function TwoBoneIKGuideSolver.solve!(
-//   Boolean drawDebug,
-//   Scalar rigScale,
+function TwoBoneIKGuideSolver.solve!(
+  Boolean drawDebug,
+  Scalar rigScale,
 
-//   Mat44 root,
-//   Mat44 mid,
-//   Mat44 end
-// ) {
+  Mat44 root,
+  Mat44 mid,
+  Mat44 end,
+  io Mat44 guideOpHost
+) {
 
-//   Vec3 debugPositions[];
-//   debugPositions.resize(3);
+  Vec3 debugPositions[];
+  debugPositions.resize(3);
 
-//   debugPositions[0] = root.translation();
-//   debugPositions[1] = mid.translation();
-//   debugPositions[2] = end.translation();
+  debugPositions[0] = root.translation();
+  debugPositions[1] = mid.translation();
+  debugPositions[2] = end.translation();
 
-//   // Set debugging visibility.
-//   this.setDebug(drawDebug);
-//   if(this.drawDebug){
-//     if(!this.handle)
-//       this.handle = DrawingHandle();
-//     Color lineColor(1.0, 1.0, 0);
-//     // etDrawBone(this.handle.rootTransform, 'bone0', bone0Xfo, scaledBone0Len, scaledBone0Len * 0.15, boneColor);
-//     drawLineStrip(this.handle.rootTransform, 'TwoBoneIKGuideLines', debugPositions, lineColor);
-//   }
-// }
+  guideOpHost = Mat44();
+
+  // Set debugging visibility.
+  this.setDebug(drawDebug);
+  if(this.drawDebug){
+    if(!this.handle)
+      this.handle = DrawingHandle();
+    Color lineColor(1.0, 1.0, 0);
+    drawLineStrip(this.handle.rootTransform, 'TwoBoneIKGuideLines', debugPositions, lineColor);
+  }
+}
