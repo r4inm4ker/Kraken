@@ -30,7 +30,7 @@ function Xfo KrakenScaleConstraint.compute?(
 
   result.sc *= 1.0 / Float32(this.constrainers.size());
 
-  return result * this.offset;
+  return result.toMat44() * this.offset.toMat44();
 }
 
 /// \dfgPresetFolder Constraints
@@ -48,8 +48,12 @@ function Xfo KrakenScaleConstraint.computeOffset?(
   KrakenScaleConstraint tmpConstraint(Xfo());
   tmpConstraint.constrainers = this.constrainers;
 
-  Xfo global = tmpConstraint.compute(constrainee);
-  return global.inverse() * constrainee;
+  Mat44 global = tmpConstraint.compute(constrainee).toMat44();
+  Xfo result = global.inverse() * constrainee.toMat44();
+  result.tr = Vec3(0.0);
+  result.ori = Quat();
+
+  return result;
 }
 
 /// \dfgPresetFolder Constraints
